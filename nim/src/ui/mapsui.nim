@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, parsecfg, streams, tables]
+import std/[os, parsecfg, streams, strutils, tables]
 import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
     stories, tk, types]
 import coreui, dialogs, mapsuicommands, utilsui2
@@ -362,6 +362,23 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
         showQuestion(question = "You are dead. Would you like to see your game statistics?",
             res = "showstats")
     currentStory.showText = true
+
+proc drawMap*() =
+  var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
+  if preview and playerShip.speed != docked:
+    tclUnsetVar(varName = "mappreview")
+    preview = false
+  tclEval(script = mapView & " configure -state normal")
+  tclEval(script = mapView & " delete 1.0 end")
+  let
+    mapHeight: Positive = tclEval2(script = mapView & " cget -height").parseInt()
+    mapWidth: Positive = tclEval2(script = mapView & " cget -widht").parseInt()
+  var
+    startX = centerX - (mapHeight / 2).int
+    startY = centerY - (mapWidth / 2).int
+    endY = centerY + (mapHeight / 2).int
+    endX = centerX + (mapWidth / 2).int
+
 
 proc createGameUi*() =
   let
