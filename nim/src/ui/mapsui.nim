@@ -18,7 +18,7 @@
 import std/[os, parsecfg, streams, strutils, tables]
 import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
     stories, tk, types]
-import coreui, dialogs, mapsuicommands, utilsui2
+import coreui, dialogs, mapsuicommands, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -378,7 +378,24 @@ proc drawMap*() =
     startY = centerY - (mapWidth / 2).int
     endY = centerY + (mapHeight / 2).int
     endX = centerX + (mapWidth / 2).int
-
+    storyX = 1
+    storyY = 1
+  if currentStory.index.len > 0:
+    (storyX, storyY) = getStoryLocation()
+    if storyX == playerShip.skyX and storyY == playerShip.skyY:
+      storyX = 0
+      storyY = 0
+  if playerShip.speed == docked and skyMap[playerShip.skyX][playerShip.skyY].baseIndex == 0:
+    playerShip.speed = fullStop
+  let currentTheme = themesList[gameSettings.interfaceTheme]
+  for y in startY .. endY:
+    for x in startX .. endX:
+      var mapTag, mapChar = ""
+      if x == playerShip.skyX and y == playerShip.skyY:
+        mapChar = currentTheme.playerShipIcon
+      else:
+        mapChar = currentTheme.emptyMapIcon
+        mapTag = (if skyMap[x][y].visited: "black" else: "unvisited gray")
 
 proc createGameUi*() =
   let
