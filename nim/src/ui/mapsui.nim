@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables]
-import ../[config, game, maps, messages, shipscargo, shipsmovement, statistics,
-    stories, tk, types]
+import ../[config, game, maps, messages, missions, shipscargo, shipsmovement,
+    statistics, stories, tk, types]
 import coreui, dialogs, mapsuicommands, utilsui2, themes
 
 var
@@ -385,7 +385,8 @@ proc drawMap*() =
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
-  if playerShip.speed == docked and skyMap[playerShip.skyX][playerShip.skyY].baseIndex == 0:
+  if playerShip.speed == docked and skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex == 0:
     playerShip.speed = fullStop
   let currentTheme = themesList[gameSettings.interfaceTheme]
   for y in startY .. endY:
@@ -396,6 +397,45 @@ proc drawMap*() =
       else:
         mapChar = currentTheme.emptyMapIcon
         mapTag = (if skyMap[x][y].visited: "black" else: "unvisited gray")
+        if x == playerShip.destinationX and y == playerShip.destinationY:
+          mapChar = currentTheme.targetIcon
+          mapTag = (if skyMap[x][y].visited: "" else: "unvisited")
+        elif currentStory.index.len > 0 and (x == storyX and y == storyY):
+          mapChar = currentTheme.storyIcon
+          mapTag = "green"
+        elif skyMap[x][y].missionIndex > -1:
+          case acceptedMissions[skyMap[x][y].missionIndex].mType
+          of deliver:
+            mapChar = currentTheme.deliverIcon
+            mapTag = "yellow"
+          of destroy:
+            mapChar = currentTheme.destroyIcon
+            mapTag = "red"
+          of patrol:
+            mapChar = currentTheme.patrolIcon
+            mapTag = "lime"
+          of explore:
+            mapChar = currentTheme.exploreIcon
+            mapTag = "green"
+          of passenger:
+            mapChar = currentTheme.passengerIcon
+            mapTag = "cyan"
+          if not skyMap[x][y].visited:
+            mapTag = mapTag & " unvisited"
+        elif skyMap[x][y].eventIndex > -1:
+          if skyMap[x][y].eventIndex > eventsList.high:
+            skyMap[x][y].eventIndex = -1
+          else:
+            case eventsList[skyMap[x][y].eventIndex].eType
+            of enemyShip:
+              mapChar = currentTheme.enemyShipIcon
+              mapTag = "red"
+            of attackOnBase:
+              mapChar = currentTheme.attackOnBaseIcon
+              mapTag = "red2"
+            of enemyPatrol:
+              mapChar = currentTheme.enemyPatrolIcon
+              mapTag = "red3"
 
 proc createGameUi*() =
   let
