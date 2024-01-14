@@ -436,6 +436,25 @@ proc drawMap*() =
             of enemyPatrol:
               mapChar = currentTheme.enemyPatrolIcon
               mapTag = "red3"
+            of disease:
+              mapChar = currentTheme.diseaseIcon
+              mapTag = "yellow"
+            of fullDocks:
+              mapChar = currentTheme.fullDocksIcon
+              mapTag = "cyan"
+            of doublePrice:
+              mapChar = currentTheme.doublePriceIcon
+              mapTag = "lime"
+            of trader:
+              mapChar = currentTheme.traderIcon
+              mapTag = "green"
+            of friendlyShip:
+              mapChar = currentTheme.friendlyShipIcon
+              mapTag = "green2"
+            of EventsTypes.none, baseRecovery:
+              discard
+            if not skyMap[x][y].visited:
+              mapTag = mapTag & " unvisited"
 
 proc createGameUi*() =
   let
