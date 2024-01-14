@@ -414,6 +414,16 @@ package body Ships.UI.Crew is
       --## rule on IMPROPER_INITIALIZATION
       Frame: Ttk_Frame;
       Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
+      procedure Add_Label(Name, Text: String) is
+      begin
+         Member_Label :=
+           Create(pathName => Frame & Name, options => "-text {" & Text & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Member_Label, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+      end Add_Label;
    begin
       Tcl_Eval
         (interp => Interp,
@@ -562,34 +572,23 @@ package body Ships.UI.Crew is
       end Add_Name_Info_Block;
       if Member.Health < 100 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Member_Label :=
-              Create
-                (pathName => Frame & ".health",
-                 options =>
-                   "-text {Health:" & Natural'Image(Member.Health) & "%}");
+            Add_Label
+              (Name => ".health",
+               Text => "Health:" & Natural'Image(Member.Health) & "%");
          else
             case Member.Health is
                when 81 .. 99 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".health",
-                       options => "-text {Health: Slightly wounded}");
+                  Add_Label
+                    (Name => ".health", Text => "Health: Slightly wounded");
                when 51 .. 80 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".health",
-                       options => "-text {Health: Wounded}");
+                  Add_Label(Name => ".health", Text => "Health: Wounded");
                when 1 .. 50 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".health",
-                       options => "-text {Health: Heavily wounded}");
+                  Add_Label
+                    (Name => ".health", Text => "Health: Heavily wounded");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Member_Label, Options => "-sticky w -padx 5");
       end if;
       Tired_Points :=
         Member.Tired - Member.Attributes(Positive(Condition_Index)).Level;
@@ -598,42 +597,24 @@ package body Ships.UI.Crew is
       end if;
       if Tired_Points > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Member_Label :=
-              Create
-                (pathName => Frame & ".tired",
-                 options =>
-                   "-text {Tiredness:" & Natural'Image(Tired_Points) & "%}");
+            Add_Label
+              (Name => ".tired",
+               Text => "Tiredness:" & Natural'Image(Tired_Points) & "%");
          else
             case Tired_Points is
                when 1 .. 40 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".tired",
-                       options => "-text {Tiredness: Bit tired}");
+                  Add_Label(Name => ".tired", Text => "Tiredness: Bit tired");
                when 41 .. 80 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".tired",
-                       options => "-text {Tiredness: Tired}");
+                  Add_Label(Name => ".tired", Text => "Tiredness: Tired");
                when 81 .. 99 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".tired",
-                       options => "-text {Tiredness: Very tired}");
+                  Add_Label(Name => ".tired", Text => "Tiredness: Very tired");
                when 100 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".tired",
-                       options => "-text {Tiredness: Unconscious}");
+                  Add_Label
+                    (Name => ".tired", Text => "Tiredness: Unconscious");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Thirst > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
@@ -815,21 +796,39 @@ package body Ships.UI.Crew is
       if Faction.Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
         UnboundedString_Container.No_Index then
-         Append
-           (Source => Member_Info,
-            New_Item =>
-              "Gender: " &
-              (if Member.Gender = 'M' then
-                 To_Unbounded_String(Source => "Male")
-               else To_Unbounded_String(Source => "Female")) &
-              LF);
+         Member_Label :=
+           Create
+             (pathName => Frame & ".gender",
+              options =>
+                "-text {Gender: " &
+                (if Member.Gender = 'M' then "Male" else "Female") & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Member_Label, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
-      Append
-        (Source => Member_Info,
-         New_Item =>
-           "Faction: " & To_String(Source => Faction.Name) & LF &
-           "Home base: " &
-           To_String(Source => Sky_Bases(Member.Home_Base).Name));
+      Member_Label :=
+        Create
+          (pathName => Frame & ".faction",
+           options =>
+             "-text {Faction: " & To_String(Source => Faction.Name) & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Member_Label, Options => "-sticky w -padx 5");
+      Tcl_Eval
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+      Member_Label :=
+        Create
+          (pathName => Frame & ".homebase",
+           options =>
+             "-text {Home base: " &
+             To_String(Source => Sky_Bases(Member.Home_Base).Name) & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Member_Label, Options => "-sticky w -padx 5");
+      Tcl_Eval
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       if Skills_Container.Length(Container => Member.Skills) = 0 or
         Member.Contract_Length = 0 then
          Append(Source => Member_Info, New_Item => LF & "Passenger");
@@ -914,7 +913,8 @@ package body Ships.UI.Crew is
                      (Attribute_Level => Member.Attributes(I).Level) &
                    "} -style Golden.TLabel");
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-sticky we -column 1 -row 0 -padx {5 0}");
+              (Slave => Member_Label,
+               Options => "-sticky we -column 1 -row 0 -padx {5 0}");
             Tcl_Eval
               (interp => Interp,
                strng =>
