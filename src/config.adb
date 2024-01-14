@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -134,16 +134,6 @@ package body Config is
       return
         To_Unbounded_String(Source => Value(Item => Get_Ada_Interface_Theme));
    end Get_Interface_Theme;
-
-   procedure Set_Interface_Theme(Value: Unbounded_String) is
-      procedure Set_Ada_Interface_Theme(V: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaInterfaceTheme";
-   begin
-      Set_Ada_Interface_Theme
-        (V => New_String(Str => To_String(Source => Value)));
-   end Set_Interface_Theme;
 
    function Get_String_Setting(Name: String) return String is
       function Get_Ada_String_Setting(N: chars_ptr) return chars_ptr with

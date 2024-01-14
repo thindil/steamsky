@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -143,7 +143,6 @@ package Config is
    function Get_Auto_Save return Auto_Save_Type;
    procedure Set_Auto_Save(Value: Auto_Save_Type);
    function Get_Interface_Theme return Unbounded_String;
-   procedure Set_Interface_Theme(Value: Unbounded_String);
    function Get_String_Setting(Name: String) return String;
    procedure Set_String_Setting(Name, Value: String);
    function Get_Float_Setting(Name: String) return Bonus_Type;

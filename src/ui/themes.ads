@@ -14,8 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Indefinite_Hashed_Maps;
-with Ada.Strings.Hash;
 
 -- ****h* Themes/Themes
 -- FUNCTION
@@ -254,22 +252,6 @@ package Themes is
    end record;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
-
-   -- ****t* Themes/Themes.Themes_Container
-   -- FUNCTION
-   -- Used to store themes data
-   -- SOURCE
-   package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
-     (Key_Type => String, Element_Type => Theme_Record,
-      Hash => Ada.Strings.Hash, Equivalent_Keys => "=");
-   -- ****
-
-   -- ****v* Themes/Themes.Themes_List
-   -- FUNCTION
-   -- List of all available themes
-   -- SOURCE
---    Themes_List: Themes_Container.Map;
-   -- ****
 
    -- ****f* Themes/Themes.Load_Themes
    -- FUNCTION
