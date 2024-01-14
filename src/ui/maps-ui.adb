@@ -41,7 +41,7 @@ with Bases.SchoolUI;
 with Bases.ShipyardUI;
 with Bases.UI;
 with BasesTypes; use BasesTypes;
-with Config; use Config;
+with Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
 with DebugUI;
@@ -702,6 +702,7 @@ package body Maps.UI is
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Winfo;
       use Tcl.Tk.Ada.Wm;
+      use Config;
       use DebugUI;
       use Log;
       use Tiny_String;
