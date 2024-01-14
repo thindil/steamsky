@@ -231,7 +231,7 @@ var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
 let
   defaultThemeIconPath = dataDirectory & "ui" & DirSep & "images" & DirSep &
-      "ui" & DirSep
+      "ui" & DirSep ## The path to the default theme's icons
   defaultTheme = ThemeRecord(name: "Default theme", fileName: dataDirectory &
       DirSep & "ui" & DirSep & "theme.tcl", enemyShipIcon: "\uf51c",
       attackOnBaseIcon: "\uf543", diseaseIcon: "\uf5a6",
@@ -318,6 +318,7 @@ let
       giveColoredIcon: defaultThemeIconPath & "give2.svg",
       dropColoredIcon: defaultThemeIconPath & "drop2.svg",
       editColoredIcon: defaultThemeIconPath & "edit2.svg")
+      ## The default game'st theme
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
     ReadDirEffect, ReadIOEffect, RootEffect].} =
