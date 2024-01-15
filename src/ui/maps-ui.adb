@@ -17,7 +17,7 @@ with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed;
-with Ada.Strings.UTF_Encoding.Wide_Strings;
+-- with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations;
@@ -97,219 +97,219 @@ package body Maps.UI is
       return Map_View;
    end Get_Map_View;
 
-   procedure Draw_Map is
-      use Ada.Strings.UTF_Encoding.Wide_Strings;
-
-      Map_Char: Unbounded_String := Null_Unbounded_String;
-      End_X, End_Y: Integer;
-      Map_Height, Map_Width: Positive;
-      Map_Tag: Unbounded_String := Null_Unbounded_String;
-      Story_X, Story_Y: Natural := 1;
-      Preview: Boolean :=
-        (if
-           Tcl_GetVar(interp => Get_Context, varName => "mappreview")'Length >
-           0
-         then True
-         else False);
-      Center_X, Center_Y: Positive;
-   begin
-      Get_Center_Point(X => Center_X, Y => Center_Y);
-      if Preview and Player_Ship.Speed /= DOCKED then
-         Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
-         Preview := False;
-      end if;
-      configure(Widgt => Get_Map_View, options => "-state normal");
-      Delete
-        (TextWidget => Get_Map_View, StartIndex => "1.0", Indexes => "end");
-      Map_Height :=
-        Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
-      Map_Width :=
-        Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Start_Y := Center_Y - (Map_Height / 2);
-      Start_X := Center_X - (Map_Width / 2);
-      End_Y := Center_Y + (Map_Height / 2);
-      End_X := Center_X + (Map_Width / 2);
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      if Start_Y < 1 then
-         Start_Y := 1;
-         End_Y := Map_Height;
-      end if;
-      if Start_X < 1 then
-         Start_X := 1;
-         End_X := Map_Width;
-      end if;
-      if End_Y > 1_024 then
-         End_Y := 1_024;
-         Start_Y := 1_025 - Map_Height;
-      end if;
-      if End_X > 1_024 then
-         End_X := 1_024;
-         Start_X := 1_025 - Map_Width;
-      end if;
-      if Get_Current_Story.Index /= Null_Unbounded_String then
-         Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
-         if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
-            Story_X := 0;
-            Story_Y := 0;
-         end if;
-      end if;
-      if Player_Ship.Speed = DOCKED and
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index = 0 then
-         Player_Ship.Speed := Ships.FULL_STOP;
-      end if;
-      Draw_Map_Y_Loop :
-      for Y in Start_Y .. End_Y loop
-         Draw_Map_X_Loop :
-         for X in Start_X .. End_X loop
-            Map_Tag := Null_Unbounded_String;
-            if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
-               Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "playerShipIcon"));
-            else
-               Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "emptyMapIcon"));
-               Map_Tag :=
-                 (if Sky_Map(X, Y).Visited then
-                    To_Unbounded_String(Source => "black")
-                  else To_Unbounded_String(Source => "unvisited gray"));
-               if X = Player_Ship.Destination_X and
-                 Y = Player_Ship.Destination_Y then
-                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "targetIcon"));
-                  Map_Tag :=
-                    (if Sky_Map(X, Y).Visited then Null_Unbounded_String
-                     else To_Unbounded_String(Source => "unvisited"));
-               elsif Get_Current_Story.Index /= Null_Unbounded_String
-                 and then (X = Story_X and Y = Story_Y) then
-                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "storyIcon"));
-                  Map_Tag := To_Unbounded_String(Source => "green");
-               elsif Sky_Map(X, Y).Mission_Index > 0 then
-                  case Get_Accepted_Mission
-                    (Mission_Index => Sky_Map(X, Y).Mission_Index)
-                    .M_Type is
-                     when DELIVER =>
-                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "deliverIcon"));
-                        Map_Tag := To_Unbounded_String(Source => "yellow");
-                     when DESTROY =>
-                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "destroyIcon"));
-                        Map_Tag := To_Unbounded_String(Source => "red");
-                     when PATROL =>
-                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "patrolIcon"));
-                        Map_Tag := To_Unbounded_String(Source => "lime");
-                     when EXPLORE =>
-                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "exploreIcon"));
-                        Map_Tag := To_Unbounded_String(Source => "green");
-                     when PASSENGER =>
-                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "passengerIcon"));
-                        Map_Tag := To_Unbounded_String(Source => "cyan");
-                  end case;
-                  if not Sky_Map(X, Y).Visited then
-                     Append(Source => Map_Tag, New_Item => " unvisited");
-                  end if;
-               elsif Sky_Map(X, Y).Event_Index > 0 then
-                  if Sky_Map(X, Y).Event_Index > Get_Events_Amount then
-                     Sky_Map(X, Y).Event_Index := 0;
-                  else
-                     case Get_Event(Index => Sky_Map(X, Y).Event_Index)
-                       .E_Type is
-                        when ENEMYSHIP =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "enemyShipIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "red");
-                        when ATTACKONBASE =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "attackOnBaseIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "red2");
-                        when ENEMYPATROL =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "enemyPatrolIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "red3");
-                        when DISEASE =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "diseaseIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "yellow");
-                        when FULLDOCKS =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "fullDocksIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "cyan");
-                        when DOUBLEPRICE =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "priceIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "lime");
-                        when TRADER =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "traderIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "green");
-                        when FRIENDLYSHIP =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "friendlyShipIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "green2");
-                        when others =>
-                           null;
-                     end case;
-                  end if;
-                  if not Sky_Map(X, Y).Visited then
-                     Append(Source => Map_Tag, New_Item => " unvisited");
-                  end if;
-               elsif Sky_Map(X, Y).Base_Index > 0 then
-                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "notVisitedBaseIcon"));
-                  if Sky_Bases(Sky_Map(X, Y).Base_Index).Known then
-                     if Sky_Bases(Sky_Map(X, Y).Base_Index).Visited.Year >
-                       0 then
-                        Map_Char := To_Unbounded_String(Source => Encode(Item => "" & Get_Faction
-                            (Index =>
-                               Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
-                            .Base_Icon));
-                        Map_Tag :=
-                          To_Unbounded_String
-                            (Source =>
-                               Tiny_String.To_String
-                                 (Source =>
-                                    Sky_Bases(Sky_Map(X, Y).Base_Index)
-                                      .Base_Type));
-                     else
-                        Map_Tag := To_Unbounded_String(Source => "unvisited");
-                     end if;
-                  else
-                     Map_Tag :=
-                       To_Unbounded_String(Source => "unvisited gray");
-                  end if;
-               end if;
-            end if;
-            if Preview then
-               Preview_Mission_Loop :
-               for Mission of Sky_Bases
-                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-                 .Missions loop
-                  if Mission.Target_X = X and Mission.Target_Y = Y then
-                     case Mission.M_Type is
-                        when DELIVER =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "deliverIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "yellow");
-                        when DESTROY =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "destroyIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "red");
-                        when PATROL =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "patrolIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "lime");
-                        when EXPLORE =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "exploreIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "green");
-                        when PASSENGER =>
-                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "passengerIcon"));
-                           Map_Tag := To_Unbounded_String(Source => "cyan");
-                     end case;
-                     if not Sky_Map(X, Y).Visited then
-                        Append(Source => Map_Tag, New_Item => " unvisited");
-                     end if;
-                     exit Preview_Mission_Loop;
-                  end if;
-               end loop Preview_Mission_Loop;
-            end if;
-            Insert
-              (TextWidget => Get_Map_View, Index => "end",
-               Text =>
-                 To_String(Source => Map_Char) & " [list " &
-                 To_String(Source => Map_Tag) & "]");
-         end loop Draw_Map_X_Loop;
-         if Y < End_Y then
-            Insert
-              (TextWidget => Get_Map_View, Index => "end",
-               Text => "{" & LF & "}");
-         end if;
-      end loop Draw_Map_Y_Loop;
-      configure(Widgt => Get_Map_View, options => "-state disable");
-   end Draw_Map;
+--   procedure Draw_Map is
+--      use Ada.Strings.UTF_Encoding.Wide_Strings;
+--
+--      Map_Char: Unbounded_String := Null_Unbounded_String;
+--      End_X, End_Y: Integer;
+--      Map_Height, Map_Width: Positive;
+--      Map_Tag: Unbounded_String := Null_Unbounded_String;
+--      Story_X, Story_Y: Natural := 1;
+--      Preview: Boolean :=
+--        (if
+--           Tcl_GetVar(interp => Get_Context, varName => "mappreview")'Length >
+--           0
+--         then True
+--         else False);
+--      Center_X, Center_Y: Positive;
+--   begin
+--      Get_Center_Point(X => Center_X, Y => Center_Y);
+--      if Preview and Player_Ship.Speed /= DOCKED then
+--         Tcl_UnsetVar(interp => Get_Context, varName => "mappreview");
+--         Preview := False;
+--      end if;
+--      configure(Widgt => Get_Map_View, options => "-state normal");
+--      Delete
+--        (TextWidget => Get_Map_View, StartIndex => "1.0", Indexes => "end");
+--      Map_Height :=
+--        Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
+--      Map_Width :=
+--        Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Start_Y := Center_Y - (Map_Height / 2);
+--      Start_X := Center_X - (Map_Width / 2);
+--      End_Y := Center_Y + (Map_Height / 2);
+--      End_X := Center_X + (Map_Width / 2);
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      if Start_Y < 1 then
+--         Start_Y := 1;
+--         End_Y := Map_Height;
+--      end if;
+--      if Start_X < 1 then
+--         Start_X := 1;
+--         End_X := Map_Width;
+--      end if;
+--      if End_Y > 1_024 then
+--         End_Y := 1_024;
+--         Start_Y := 1_025 - Map_Height;
+--      end if;
+--      if End_X > 1_024 then
+--         End_X := 1_024;
+--         Start_X := 1_025 - Map_Width;
+--      end if;
+--      if Get_Current_Story.Index /= Null_Unbounded_String then
+--         Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
+--         if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
+--            Story_X := 0;
+--            Story_Y := 0;
+--         end if;
+--      end if;
+--      if Player_Ship.Speed = DOCKED and
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index = 0 then
+--         Player_Ship.Speed := Ships.FULL_STOP;
+--      end if;
+--      Draw_Map_Y_Loop :
+--      for Y in Start_Y .. End_Y loop
+--         Draw_Map_X_Loop :
+--         for X in Start_X .. End_X loop
+--            Map_Tag := Null_Unbounded_String;
+--            if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
+--               Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "playerShipIcon"));
+--            else
+--               Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "emptyMapIcon"));
+--               Map_Tag :=
+--                 (if Sky_Map(X, Y).Visited then
+--                    To_Unbounded_String(Source => "black")
+--                  else To_Unbounded_String(Source => "unvisited gray"));
+--               if X = Player_Ship.Destination_X and
+--                 Y = Player_Ship.Destination_Y then
+--                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "targetIcon"));
+--                  Map_Tag :=
+--                    (if Sky_Map(X, Y).Visited then Null_Unbounded_String
+--                     else To_Unbounded_String(Source => "unvisited"));
+--               elsif Get_Current_Story.Index /= Null_Unbounded_String
+--                 and then (X = Story_X and Y = Story_Y) then
+--                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "storyIcon"));
+--                  Map_Tag := To_Unbounded_String(Source => "green");
+--               elsif Sky_Map(X, Y).Mission_Index > 0 then
+--                  case Get_Accepted_Mission
+--                    (Mission_Index => Sky_Map(X, Y).Mission_Index)
+--                    .M_Type is
+--                     when DELIVER =>
+--                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "deliverIcon"));
+--                        Map_Tag := To_Unbounded_String(Source => "yellow");
+--                     when DESTROY =>
+--                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "destroyIcon"));
+--                        Map_Tag := To_Unbounded_String(Source => "red");
+--                     when PATROL =>
+--                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "patrolIcon"));
+--                        Map_Tag := To_Unbounded_String(Source => "lime");
+--                     when EXPLORE =>
+--                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "exploreIcon"));
+--                        Map_Tag := To_Unbounded_String(Source => "green");
+--                     when PASSENGER =>
+--                        Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "passengerIcon"));
+--                        Map_Tag := To_Unbounded_String(Source => "cyan");
+--                  end case;
+--                  if not Sky_Map(X, Y).Visited then
+--                     Append(Source => Map_Tag, New_Item => " unvisited");
+--                  end if;
+--               elsif Sky_Map(X, Y).Event_Index > 0 then
+--                  if Sky_Map(X, Y).Event_Index > Get_Events_Amount then
+--                     Sky_Map(X, Y).Event_Index := 0;
+--                  else
+--                     case Get_Event(Index => Sky_Map(X, Y).Event_Index)
+--                       .E_Type is
+--                        when ENEMYSHIP =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "enemyShipIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "red");
+--                        when ATTACKONBASE =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "attackOnBaseIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "red2");
+--                        when ENEMYPATROL =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "enemyPatrolIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "red3");
+--                        when DISEASE =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "diseaseIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "yellow");
+--                        when FULLDOCKS =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "fullDocksIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "cyan");
+--                        when DOUBLEPRICE =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "priceIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "lime");
+--                        when TRADER =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "traderIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "green");
+--                        when FRIENDLYSHIP =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "friendlyShipIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "green2");
+--                        when others =>
+--                           null;
+--                     end case;
+--                  end if;
+--                  if not Sky_Map(X, Y).Visited then
+--                     Append(Source => Map_Tag, New_Item => " unvisited");
+--                  end if;
+--               elsif Sky_Map(X, Y).Base_Index > 0 then
+--                  Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "notVisitedBaseIcon"));
+--                  if Sky_Bases(Sky_Map(X, Y).Base_Index).Known then
+--                     if Sky_Bases(Sky_Map(X, Y).Base_Index).Visited.Year >
+--                       0 then
+--                        Map_Char := To_Unbounded_String(Source => Encode(Item => "" & Get_Faction
+--                            (Index =>
+--                               Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
+--                            .Base_Icon));
+--                        Map_Tag :=
+--                          To_Unbounded_String
+--                            (Source =>
+--                               Tiny_String.To_String
+--                                 (Source =>
+--                                    Sky_Bases(Sky_Map(X, Y).Base_Index)
+--                                      .Base_Type));
+--                     else
+--                        Map_Tag := To_Unbounded_String(Source => "unvisited");
+--                     end if;
+--                  else
+--                     Map_Tag :=
+--                       To_Unbounded_String(Source => "unvisited gray");
+--                  end if;
+--               end if;
+--            end if;
+--            if Preview then
+--               Preview_Mission_Loop :
+--               for Mission of Sky_Bases
+--                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
+--                 .Missions loop
+--                  if Mission.Target_X = X and Mission.Target_Y = Y then
+--                     case Mission.M_Type is
+--                        when DELIVER =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "deliverIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "yellow");
+--                        when DESTROY =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "destroyIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "red");
+--                        when PATROL =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "patrolIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "lime");
+--                        when EXPLORE =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "exploreIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "green");
+--                        when PASSENGER =>
+--                           Map_Char := To_Unbounded_String(Source => Get_Icon(Name => "passengerIcon"));
+--                           Map_Tag := To_Unbounded_String(Source => "cyan");
+--                     end case;
+--                     if not Sky_Map(X, Y).Visited then
+--                        Append(Source => Map_Tag, New_Item => " unvisited");
+--                     end if;
+--                     exit Preview_Mission_Loop;
+--                  end if;
+--               end loop Preview_Mission_Loop;
+--            end if;
+--            Insert
+--              (TextWidget => Get_Map_View, Index => "end",
+--               Text =>
+--                 To_String(Source => Map_Char) & " [list " &
+--                 To_String(Source => Map_Tag) & "]");
+--         end loop Draw_Map_X_Loop;
+--         if Y < End_Y then
+--            Insert
+--              (TextWidget => Get_Map_View, Index => "end",
+--               Text => "{" & LF & "}");
+--         end if;
+--      end loop Draw_Map_Y_Loop;
+--      configure(Widgt => Get_Map_View, options => "-state disable");
+--   end Draw_Map;
 
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
