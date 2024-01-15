@@ -107,6 +107,7 @@ package body Maps.UI is
          External_Name => "drawAdaMap";
    begin
       Get_Center_Point(X => Center_X, Y => Center_Y);
+      Get_Ada_Ship;
       Map_Height :=
         Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
       Map_Width :=
