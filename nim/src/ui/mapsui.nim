@@ -24,7 +24,7 @@ var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
-  mapView = ""
+  mapView = ".gameframe.paned.mapframe.map"
   menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]
     ## The game menu keyboard shortcuts
@@ -372,10 +372,10 @@ proc drawMap*() =
   tclEval(script = mapView & " delete 1.0 end")
   let
     mapHeight: Positive = tclEval2(script = mapView & " cget -height").parseInt()
-    mapWidth: Positive = tclEval2(script = mapView & " cget -widht").parseInt()
+    mapWidth: Positive = tclEval2(script = mapView & " cget -width").parseInt()
   var
-    startX = centerX - (mapHeight / 2).int
-    startY = centerY - (mapWidth / 2).int
+    startX = centerX - (mapWidth / 2).int
+    startY = centerY - (mapHeight / 2).int
     endY = centerY + (mapHeight / 2).int
     endX = centerX + (mapWidth / 2).int
     storyX = 1
