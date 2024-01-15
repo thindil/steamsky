@@ -465,6 +465,32 @@ proc drawMap*() =
               mapTag = "unvisited"
           else:
             mapTag = "unvisited gray"
+      if preview:
+        for mission in skyBases[skyMap[playerShip.skyX][playerShip.skyY].baseIndex].missions:
+          if mission.targetX == x and mission.targetY == y:
+            case mission.mType
+            of deliver:
+              mapChar = currentTheme.deliverIcon
+              mapTag = "yellow"
+            of destroy:
+              mapChar = currentTheme.destroyIcon
+              mapTag = "red"
+            of patrol:
+              mapChar = currentTheme.patrolIcon
+              mapTag = "lime"
+            of explore:
+              mapChar = currentTheme.exploreIcon
+              mapTag = "green"
+            of passenger:
+              mapChar = currentTheme.passengerIcon
+              mapTag = "cyan"
+            if not skyMap[x][y].visited:
+              mapTag = mapTag & " unvisited"
+            break
+      tclEval(script = mapView & " insert end {" & mapChar & "} [list " & mapTag & "]")
+    if y < endY:
+      tclEval(script = mapView & " insert end {\n}")
+  tclEval(script = mapView & " configure -state disable")
 
 proc createGameUi*() =
   let
@@ -674,3 +700,9 @@ proc getAdaFullScreenAccel(): cstring {.raises: [], tags: [], exportc.} =
 
 proc setAdaFullScreenAccel(value: cstring) {.raises: [], tags: [], exportc.} =
   fullScreenAccel = $value
+
+proc drawAdaMap() {.raises: [], tags: [], exportc.} =
+  try:
+    drawMap()
+  except:
+    discard
