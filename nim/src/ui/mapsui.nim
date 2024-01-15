@@ -455,6 +455,16 @@ proc drawMap*() =
               discard
             if not skyMap[x][y].visited:
               mapTag = mapTag & " unvisited"
+        elif skyMap[x][y].baseIndex > 0:
+          mapChar = currentTheme.notVisitedBaseIcon
+          if skyBases[skyMap[x][y].baseIndex].known:
+            if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
+              mapChar = factionsList[skyBases[skyMap[x][y].baseIndex].owner].baseIcon.toHex(4).parseHexStr
+              mapTag = skyBases[skyMap[x][y].baseIndex].baseType
+            else:
+              mapTag = "unvisited"
+          else:
+            mapTag = "unvisited gray"
 
 proc createGameUi*() =
   let
