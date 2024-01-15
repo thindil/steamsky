@@ -618,120 +618,63 @@ package body Ships.UI.Crew is
       end if;
       if Member.Thirst > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Member_Label :=
-              Create
-                (pathName => Frame & ".thirst",
-                 options =>
-                   "-text {Thirst:" & Natural'Image(Member.Thirst) & "%}");
+            Add_Label
+              (Name => ".thirst",
+               Text => "Thirst:" & Natural'Image(Member.Thirst) & "%");
          else
             case Member.Thirst is
                when 1 .. 40 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".thirst",
-                       options => "-text {Thirst: Bit thirsty}");
+                  Add_Label(Name => ".thirst", Text => "Thirst: Bit thirsty");
                when 41 .. 80 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".thirst",
-                       options => "-text {Thirst: Thirsty}");
+                  Add_Label(Name => ".thirst", Text => "Thirst: Thirsty");
                when 81 .. 99 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".thirst",
-                       options => "-text {Thirst: Very thirsty}");
+                  Add_Label(Name => ".thirst", Text => "Thirst: Very thirsty");
                when 100 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".thirst",
-                       options => "-text {Thirst: Dehydrated}");
+                  Add_Label(Name => ".thirst", Text => "Thirst: Dehydrated");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Hunger > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Member_Label :=
-              Create
-                (pathName => Frame & ".hunger",
-                 options =>
-                   "-text {Hunger:" & Natural'Image(Member.Hunger) & "%}");
+            Add_Label
+              (Name => ".hunger",
+               Text => "Hunger:" & Natural'Image(Member.Hunger) & "%");
          else
             case Member.Hunger is
                when 1 .. 40 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".hunger",
-                       options => "-text {Hunger: Bit hungry}");
+                  Add_Label(Name => ".hunger", Text => "Hunger: Bit hungry");
                when 41 .. 80 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".hunger",
-                       options => "-text {Hunger: Hungry}");
+                  Add_Label(Name => ".hunger", Text => "Hunger: Hungry");
                when 81 .. 99 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".hunger",
-                       options => "-text {Hunger: Very hungry}");
+                  Add_Label(Name => ".hunger", Text => "Hunger: Very hungry");
                when 100 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".hunger",
-                       options => "-text {Hunger: Starving}");
+                  Add_Label(Name => ".hunger", Text => "Hunger: Starving");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Member.Morale(1) /= 50 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Member_Label :=
-              Create
-                (pathName => Frame & ".morale",
-                 options =>
-                   "-text {Morale:" & Natural'Image(Member.Morale(1)) & "%}");
+            Add_Label
+              (Name => ".morale",
+               Text => "Morale:" & Natural'Image(Member.Morale(1)) & "%");
          else
             case Member.Morale(1) is
                when 0 .. 24 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".morale",
-                       options => "-text {Morale: Upset}");
+                  Add_Label(Name => ".morale", Text => "Morale: Upset");
                when 25 .. 49 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".morale",
-                       options => "-text {Morale: Unhappy}");
+                  Add_Label(Name => ".morale", Text => "Morale: Unhappy");
                when 51 .. 74 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".morale",
-                       options => "-text {Morale: Happy}");
+                  Add_Label(Name => ".morale", Text => "Morale: Happy");
                when 75 .. 100 =>
-                  Member_Label :=
-                    Create
-                      (pathName => Frame & ".morale",
-                       options => "-text {Morale: Excited}");
+                  Add_Label(Name => ".morale", Text => "Morale: Excited");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
          Add_Order_Info_Block :
