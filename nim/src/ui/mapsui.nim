@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, parsecfg, streams, strutils, tables]
+import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[config, game, maps, messages, missions, shipscargo, shipsmovement,
     statistics, stories, tk, types]
 import coreui, dialogs, mapsuicommands, utilsui2, themes
@@ -459,7 +459,7 @@ proc drawMap*() =
           mapChar = currentTheme.notVisitedBaseIcon
           if skyBases[skyMap[x][y].baseIndex].known:
             if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
-              mapChar = factionsList[skyBases[skyMap[x][y].baseIndex].owner].baseIcon.toHex(4).parseHexStr
+              mapChar = factionsList[skyBases[skyMap[x][y].baseIndex].owner].baseIcon.Rune.toUTF8
               mapTag = skyBases[skyMap[x][y].baseIndex].baseType
             else:
               mapTag = "unvisited"
