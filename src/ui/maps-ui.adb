@@ -97,6 +97,45 @@ package body Maps.UI is
       return Map_View;
    end Get_Map_View;
 
+   procedure Draw_Map is
+      Center_X, Center_Y: Positive;
+      Map_Height, Map_Width: Positive;
+      End_X, End_Y: Integer;
+      procedure Draw_Ada_Map with
+         Import => True,
+         Convention => C,
+         External_Name => "drawAdaMap";
+   begin
+      Get_Center_Point(X => Center_X, Y => Center_Y);
+      Map_Height :=
+        Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
+      Map_Width :=
+        Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
+      Start_Y := Center_Y - (Map_Height / 2);
+      Start_X := Center_X - (Map_Width / 2);
+      End_Y := Center_Y + (Map_Height / 2);
+      End_X := Center_X + (Map_Width / 2);
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
+      if Start_Y < 1 then
+         Start_Y := 1;
+         End_Y := Map_Height;
+      end if;
+      if Start_X < 1 then
+         Start_X := 1;
+         End_X := Map_Width;
+      end if;
+      if End_Y > 1_024 then
+         End_Y := 1_024;
+         Start_Y := 1_025 - Map_Height;
+      end if;
+      if End_X > 1_024 then
+         End_X := 1_024;
+         Start_X := 1_025 - Map_Width;
+      end if;
+      Draw_Ada_Map;
+   end Draw_Map;
+
 --   procedure Draw_Map is
 --      use Ada.Strings.UTF_Encoding.Wide_Strings;
 --

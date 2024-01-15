@@ -41,10 +41,7 @@ package Maps.UI is
    -- FUNCTION
    -- Draw map on the screen
    -- SOURCE
-   procedure Draw_Map with
-      Import => True,
-      Convention => C,
-      External_Name => "drawAdaMap";
+   procedure Draw_Map;
    -- ****
 
    -- ****f* MUI/MUI.Create_Game_Ui
