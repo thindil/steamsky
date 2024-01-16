@@ -739,39 +739,19 @@ package body Ships.UI.Crew is
       if Faction.Flags.Find_Index
           (Item => To_Unbounded_String(Source => "nogender")) =
         UnboundedString_Container.No_Index then
-         Member_Label :=
-           Create
-             (pathName => Frame & ".gender",
-              options =>
-                "-text {Gender: " &
-                (if Member.Gender = 'M' then "Male" else "Female") & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Member_Label, Options => "-sticky w -padx 5");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+         Add_Label
+           (Name => ".gender",
+            Text =>
+              "Gender: " & (if Member.Gender = 'M' then "Male" else "Female"));
       end if;
-      Member_Label :=
-        Create
-          (pathName => Frame & ".faction",
-           options =>
-             "-text {Faction: " & To_String(Source => Faction.Name) & "}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Member_Label, Options => "-sticky w -padx 5");
-      Tcl_Eval
-        (interp => Interp,
-         strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-      Member_Label :=
-        Create
-          (pathName => Frame & ".homebase",
-           options =>
-             "-text {Home base: " &
-             To_String(Source => Sky_Bases(Member.Home_Base).Name) & "}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Member_Label, Options => "-sticky w -padx 5");
-      Tcl_Eval
-        (interp => Interp,
-         strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+      Add_Label
+        (Name => ".faction",
+         Text => "Faction: " & To_String(Source => Faction.Name));
+      Add_Label
+        (Name => ".homebase",
+         Text =>
+           "Home base: " &
+           To_String(Source => Sky_Bases(Member.Home_Base).Name));
       if Skills_Container.Length(Container => Member.Skills) = 0 or
         Member.Contract_Length = 0 then
          Append(Source => Member_Info, New_Item => LF & "Passenger");
