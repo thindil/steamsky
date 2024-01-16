@@ -14,14 +14,14 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed;
 -- with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
@@ -45,8 +45,8 @@ with Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
 with DebugUI;
-with Events; use Events;
-with Factions; use Factions;
+with Events;
+with Factions;
 with GameOptions;
 with Help.UI;
 with Items;
@@ -60,9 +60,9 @@ with OrdersMenu;
 with Ships.UI;
 with Statistics;
 with Statistics.UI;
-with Stories; use Stories;
+with Stories;
 with Trades.UI;
-with Themes; use Themes;
+with Themes;
 with Utils.UI; use Utils.UI;
 with WaitMenu;
 
@@ -353,7 +353,9 @@ package body Maps.UI is
 
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
+      use Ada.Characters.Latin_1;
       use Items;
+      use Stories;
       use Tiny_String;
 
       Map_Info_Text, Event_Info_Text, Color: Unbounded_String :=
@@ -420,6 +422,7 @@ package body Maps.UI is
          Add_Base_Info_Block :
          declare
             use Ada.Characters.Handling;
+            use Factions;
 
             Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
             Base_Info_Text: Unbounded_String := Null_Unbounded_String;
@@ -637,6 +640,8 @@ package body Maps.UI is
       if Sky_Map(X, Y).Event_Index > 0 then
          Add_Event_Info_Block :
          declare
+            use Events;
+
             Event_Index: constant Natural := Sky_Map(X, Y).Event_Index;
          begin
             if Get_Event(Index => Event_Index).E_Type not in BASERECOVERY |
@@ -737,6 +742,7 @@ package body Maps.UI is
    procedure Create_Game_Ui is
       use Ada.Strings.Fixed;
       use GNAT.Directory_Operations;
+      use Tcl.Ada;
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -745,6 +751,7 @@ package body Maps.UI is
       use Config;
       use DebugUI;
       use Log;
+      use Themes;
       use Tiny_String;
 
       Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
