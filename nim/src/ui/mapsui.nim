@@ -363,7 +363,7 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
             res = "showstats")
     currentStory.showText = true
 
-proc drawMap*() =
+proc drawMap*() {.sideEffect, raises: [], tags: [].} =
   var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
     tclUnsetVar(varName = "mappreview")
@@ -371,8 +371,18 @@ proc drawMap*() =
   tclEval(script = mapView & " configure -state normal")
   tclEval(script = mapView & " delete 1.0 end")
   let
-    mapHeight: Positive = tclEval2(script = mapView & " cget -height").parseInt()
-    mapWidth: Positive = tclEval2(script = mapView & " cget -width").parseInt()
+    mapHeight: Positive = try:
+        tclEval2(script = mapView & " cget -height").parseInt()
+      except:
+        tclEval(script = "bgerror {Can't get map height. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
+    mapWidth: Positive = try:
+        tclEval2(script = mapView & " cget -width").parseInt()
+      except:
+        tclEval(script = "bgerror {Can't get map width. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   var
     startX = centerX - (mapWidth / 2).int
     startY = centerY - (mapHeight / 2).int
@@ -381,14 +391,24 @@ proc drawMap*() =
     storyX = 1
     storyY = 1
   if currentStory.index.len > 0:
-    (storyX, storyY) = getStoryLocation()
+    (storyX, storyY) = try:
+        getStoryLocation()
+      except:
+        tclEval(script = "bgerror {Can't the current story location. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
   if playerShip.speed == docked and skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex == 0:
     playerShip.speed = fullStop
-  let currentTheme = themesList[gameSettings.interfaceTheme]
+  let currentTheme = try:
+        themesList[gameSettings.interfaceTheme]
+      except:
+        tclEval(script = "bgerror {Can't the current game's theme. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   for y in startY .. endY:
     for x in startX .. endX:
       var mapTag, mapChar = ""
@@ -459,8 +479,13 @@ proc drawMap*() =
           mapChar = currentTheme.notVisitedBaseIcon
           if skyBases[skyMap[x][y].baseIndex].known:
             if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
-              mapChar = factionsList[skyBases[skyMap[x][
-                  y].baseIndex].owner].baseIcon.Rune.toUTF8
+              mapChar = try:
+                  factionsList[skyBases[skyMap[x][
+                      y].baseIndex].owner].baseIcon.Rune.toUTF8
+                except:
+                  tclEval(script = "bgerror {Can't the base icon. Reason: " &
+                      getCurrentExceptionMsg() & "}")
+                  return
               mapTag = skyBases[skyMap[x][y].baseIndex].baseType
             else:
               mapTag = "unvisited"
