@@ -459,14 +459,16 @@ proc drawMap*() =
           mapChar = currentTheme.notVisitedBaseIcon
           if skyBases[skyMap[x][y].baseIndex].known:
             if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
-              mapChar = factionsList[skyBases[skyMap[x][y].baseIndex].owner].baseIcon.Rune.toUTF8
+              mapChar = factionsList[skyBases[skyMap[x][
+                  y].baseIndex].owner].baseIcon.Rune.toUTF8
               mapTag = skyBases[skyMap[x][y].baseIndex].baseType
             else:
               mapTag = "unvisited"
           else:
             mapTag = "unvisited gray"
       if preview:
-        for mission in skyBases[skyMap[playerShip.skyX][playerShip.skyY].baseIndex].missions:
+        for mission in skyBases[skyMap[playerShip.skyX][
+            playerShip.skyY].baseIndex].missions:
           if mission.targetX == x and mission.targetY == y:
             case mission.mType
             of deliver:
@@ -487,7 +489,8 @@ proc drawMap*() =
             if not skyMap[x][y].visited:
               mapTag = mapTag & " unvisited"
             break
-      tclEval(script = mapView & " insert end {" & mapChar & "} [list " & mapTag & "]")
+      tclEval(script = mapView & " insert end {" & mapChar & "} [list " &
+          mapTag & "]")
     if y < endY:
       tclEval(script = mapView & " insert end {\n}")
   tclEval(script = mapView & " configure -state disable")
