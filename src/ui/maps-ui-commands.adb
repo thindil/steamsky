@@ -84,9 +84,8 @@ package body Maps.UI.Commands is
       configure
         (Widgt => Map_View,
          options =>
-           "-width [expr [winfo width $mapview] / [font measure MapFont {" & Get_Icon(Name => "emptyMapIcon")
-            &
-           "}]]");
+           "-width [expr [winfo width $mapview] / [font measure MapFont {" &
+           Get_Icon(Name => "emptyMapIcon") & "}]]");
       configure
         (Widgt => Map_View,
          options =>

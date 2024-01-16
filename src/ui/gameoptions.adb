@@ -754,10 +754,7 @@ package body GameOptions is
         New_String(Str => Widget_Image(Win => Options_Frame) & ".theme");
       Set
         (ComboBox => Combo_Box_Widget,
-         Value =>
-           "{" & Get_Icon(Name => "name")
-            &
-           "}");
+         Value => "{" & Get_Icon(Name => "name") & "}");
       Key_Entry.Interp := Interp;
       Options_Frame.Name :=
         New_String(Str => Widget_Image(Win => Options_Canvas) & ".options");

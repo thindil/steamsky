@@ -147,8 +147,7 @@ package body MainMenu is
         (Widgt => Main_Window, Action => "iconphoto",
          Options => "-default " & Icon);
       Tcl_EvalFile
-         (interp => Get_Context,
-         fileName => Get_Icon(Name => "fileName"));
+        (interp => Get_Context, fileName => Get_Icon(Name => "fileName"));
       Theme_Use(ThemeName => To_String(Source => Get_Interface_Theme));
       Load_Theme_Images;
       Tcl_EvalFile

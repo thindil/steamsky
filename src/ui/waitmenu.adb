@@ -314,7 +314,7 @@ package body WaitMenu is
             Time_Needed := Time_Needed * 60;
          end if;
          if Current(ComboBox => Amount_Combo) = "2" then
-            Time_Needed := Time_Needed * 1440;
+            Time_Needed := Time_Needed * 1_440;
          end if;
          Update_Game(Minutes => Time_Needed);
          Wait_In_Place(Minutes => Time_Needed);

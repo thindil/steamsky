@@ -511,8 +511,7 @@ package body Help.UI is
       Tag_Configure
         (TextWidget => Help_View, TagName => "special",
          Options =>
-           "-foreground {" &
-           Get_Icon(Name => "specialHelpColor") &
+           "-foreground {" & Get_Icon(Name => "specialHelpColor") &
            "} -font BoldHelpFont");
       Tag_Configure
         (TextWidget => Help_View, TagName => "underline",
