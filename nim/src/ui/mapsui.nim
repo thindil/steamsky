@@ -364,6 +364,7 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
     currentStory.showText = true
 
 proc drawMap*() {.sideEffect, raises: [], tags: [].} =
+  ## Draw the map on the screen
   var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
     tclUnsetVar(varName = "mappreview")
