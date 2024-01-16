@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, parsecfg, streams, strutils, tables]
+import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[config, game, tk]
 import coreui
 
@@ -351,31 +351,31 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
               of "FileName":
                 theme.fileName = themeDir & DirSep & entry.value
               of "EnemyShipIcon":
-                theme.enemyShipIcon = entry.value.parseHexStr
+                theme.enemyShipIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "attackOnBaseIcon":
-                theme.attackOnBaseIcon = entry.value.parseHexStr
+                theme.attackOnBaseIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "DiseaseIcon":
-                theme.diseaseIcon = entry.value.parseHexStr
+                theme.diseaseIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "DoublePriceIcon":
-                theme.doublePriceIcon = entry.value.parseHexStr
+                theme.doublePriceIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "FullDocksIcon":
-                theme.fullDocksIcon = entry.value.parseHexStr
+                theme.fullDocksIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "EnemyPatrolIcon":
-                theme.enemyPatrolIcon = entry.value.parseHexStr
+                theme.enemyPatrolIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "TraderIcon":
-                theme.traderIcon = entry.value.parseHexStr
+                theme.traderIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "FriendlyShipIcon":
-                theme.friendlyShipIcon = entry.value.parseHexStr
+                theme.friendlyShipIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "DeliverIcon":
-                theme.deliverIcon = entry.value.parseHexStr
+                theme.deliverIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "DestroyIcon":
-                theme.destroyIcon = entry.value.parseHexStr
+                theme.destroyIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "PatrolIcon":
-                theme.patrolIcon = entry.value.parseHexStr
+                theme.patrolIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "ExploreIcon":
-                theme.exploreIcon = entry.value.parseHexStr
+                theme.exploreIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "PassengerIcon":
-                theme.passengerIcon = entry.value.parseHexStr
+                theme.passengerIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "PilotIcon":
                 theme.pilotIcon = entry.value.unixToNativePath
               of "EngineerIcon":
@@ -425,13 +425,13 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
               of "LowDrinksIcon":
                 theme.lowDrinksIcon = entry.value.unixToNativePath
               of "NotVisitedBaseIcon":
-                theme.notVisitedBaseIcon = entry.value.parseHexStr
+                theme.notVisitedBaseIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "EmptyMapIcon":
-                theme.emptyMapIcon = entry.value.parseHexStr
+                theme.emptyMapIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "TargetIcon":
-                theme.targetIcon = entry.value.parseHexStr
+                theme.targetIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "StoryIcon":
-                theme.storyIcon = entry.value.parseHexStr
+                theme.storyIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "OverloadedIcon":
                 theme.overloadedIcon = entry.value.unixToNativePath
               of "ArrowUpIcon":
