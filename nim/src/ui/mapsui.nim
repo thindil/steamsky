@@ -521,6 +521,16 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
       tclEval(script = mapView & " insert end {\n}")
   tclEval(script = mapView & " configure -state disable")
 
+proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let mapView = mainPaned & ".mapframe.map"
+  tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
+      themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
+  tclEval(script = mapView & " configure -height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]")
+  if tclGetVar(varName = "refreshmap") == "1":
+    drawMap()
+  return tclOk
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -674,6 +684,7 @@ proc createGameUi*() =
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
+    addCommand("DrawMap", drawMapCommand)
 
 # Temporary code for interfacing with Ada
 
