@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
-    messages, missions2, shipscargo, shipscrew, tk, types]
+    messages, missions2, shipscargo, shipscrew, shipsmovement, tk, types]
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
@@ -319,6 +319,38 @@ proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   addCommand("CheckAmount", checkAmountCommand)
   addCommand("ValidateAmount", validateAmountCommand)
   addCommand("NimSetTextVariable", setTextVariableCommand)
+
+proc travelInfo*(distance: Positive): array[1 .. 2, Natural] =
+  result = [0, 0]
+  let speed = realSpeed(ship = playerShip, infoOnly = true) / 1_000
+  if speed == 0.0:
+    return
+  var minutesDiff: int = (100.0 / speed).int
+  case playerShip.speed
+  of quarterSpeed:
+    if minutesDiff < 60:
+      minutesDiff = 60
+  of halfSpeed:
+    if minutesDiff < 30:
+      minutesDiff = 30
+  of fullSpeed:
+    if minutesDiff < 15:
+      minutesDiff = 15
+  else:
+    discard
+  minutesDiff = minutesDiff * distance
+  var rest = 0
+  for index, member in playerShip.crew:
+    if member.order notin {pilot, engineer}:
+      continue
+    let tired = (minutesDiff / 15).int + member.tired
+    if (tired / (80 + member.attributes[conditionIndex].level)).int > rest:
+      rest = (tired / (80 + member.attributes[conditionIndex].level)).int
+    if rest > 0:
+      let cabinIndex = findCabin(memberIndex = index)
+      if cabinIndex > -1:
+        let
+          damage = 1.0 - (playerShip.modules[cabinIndex].durability.float / playerShip.modules[cabinIndex].maxDurability.float)
 
 # Temporary code for interfacing with Ada
 
