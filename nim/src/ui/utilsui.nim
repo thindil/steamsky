@@ -380,3 +380,12 @@ proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
 proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
+
+proc travelAdaInfo(distance: cint): array[1 .. 2, cint] {.exportc, raises: [],
+    tags: [].} =
+  result = [0, 0]
+  try:
+    let res = travelInfo(distance = distance.Positive)
+    result = [res[1].cint, res[2].cint]
+  except:
+    discard
