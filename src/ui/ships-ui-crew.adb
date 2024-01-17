@@ -417,7 +417,9 @@ package body Ships.UI.Crew is
       procedure Add_Label(Name, Text: String) is
       begin
          Member_Label :=
-           Create(pathName => Frame & Name, options => "-text {" & Text & "}");
+           Create
+             (pathName => Frame & Name,
+              options => "-text {" & Text & "} -wraplength 360");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Member_Label, Options => "-sticky w -padx 5");
          Tcl_Eval
@@ -754,44 +756,35 @@ package body Ships.UI.Crew is
            To_String(Source => Sky_Bases(Member.Home_Base).Name));
       if Skills_Container.Length(Container => Member.Skills) = 0 or
         Member.Contract_Length = 0 then
-         Append(Source => Member_Info, New_Item => LF & "Passenger");
+         Add_Label(Name => ".passenger", Text => "Passenger");
          if Member.Contract_Length > 0 then
-            Append(Source => Member_Info, New_Item => LF & "Time limit:");
+            Member_Info := Null_Unbounded_String;
             Minutes_To_Date
               (Minutes => Member.Contract_Length, Info_Text => Member_Info);
+            Add_Label
+              (Name => ".timelimit",
+               Text => "Time limit:" & To_String(Source => Member_Info));
          end if;
       else
          if Member_Index > 1 then
-            Append(Source => Member_Info, New_Item => LF & "Contract length:");
-            Append
-              (Source => Member_Info,
-               New_Item =>
+            Add_Label
+              (Name => ".timelimit",
+               Text =>
+                 "Contract length:" &
                  (if Member.Contract_Length > 0 then
-                    Integer'Image(Member.Contract_Length) & " days."
-                  else " pernament.") &
-                 LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
-                 To_String(Source => Money_Name) & " each day");
-            if Member.Payment(2) > 0 then
-               Append
-                 (Source => Member_Info,
-                  New_Item =>
+                    Integer'Image(Member.Contract_Length) & " days"
+                  else " pernament"));
+            Add_Label
+              (Name => ".payment",
+               Text =>
+                 "Payment:" & Natural'Image(Member.Payment(1)) & " " &
+                 To_String(Source => Money_Name) & " each day" &
+                 (if Member.Payment(2) > 0 then
                     " and " & Natural'Image(Member.Payment(2)) &
-                    " percent of profit from each trade");
-            end if;
-            Append(Source => Member_Info, New_Item => ".");
+                    " percent of profit from each trade"
+                  else ""));
          end if;
       end if;
-      Member_Label :=
-        Create
-          (pathName => Frame & ".label",
-           options =>
-             "-text {" & To_String(Source => Member_Info) &
-             "} -wraplength 360");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Member_Label, Options => "-sticky nw -padx 5");
-      Tcl_Eval
-        (interp => Interp,
-         strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       Tcl_Eval
         (interp => Interp,
