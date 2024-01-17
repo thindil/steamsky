@@ -381,11 +381,11 @@ proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
 
-proc travelAdaInfo(distance: cint): array[1 .. 2, cint] {.exportc, raises: [],
-    tags: [].} =
-  result = [0, 0]
+proc travelAdaInfo(distance: cint; res: var array[1 .. 2, cint]) {.exportc,
+    raises: [], tags: [].} =
+  res = [0.cint, 0.cint]
   try:
-    let res = travelInfo(distance = distance.Positive)
-    result = [res[1].cint, res[2].cint]
+    let nimRes = travelInfo(distance = distance.Positive)
+    res = [nimRes[1].cint, nimRes[2].cint]
   except:
     discard
