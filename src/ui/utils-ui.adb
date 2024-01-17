@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ with Messages; use Messages;
 with Missions;
 with Ships.Cargo;
 with Ships.Crew;
-with Ships.Movement;
+-- with Ships.Movement;
 with Ships.UI.Crew;
 with Statistics.UI;
 
@@ -457,98 +457,103 @@ package body Utils.UI is
    end Minutes_To_Date;
 
    function Travel_Info(Distance: Positive) return Travel_Array is
-      use Ships.Movement;
-
-      type Speed_Type is digits 2;
-      Speed: constant Speed_Type :=
-        Speed_Type(Real_Speed(Ship => Player_Ship, Info_Only => True)) /
-        1_000.0;
-      Minutes_Diff: Integer;
-      Rests, Cabin_Index, Rest_Time, Tired, Cabin_Bonus, Temp_Time: Natural :=
-        0;
-      Damage: Damage_Factor := 0.0;
+--      use Ships.Movement;
+--
+--      type Speed_Type is digits 2;
+--      Speed: constant Speed_Type :=
+--        Speed_Type(Real_Speed(Ship => Player_Ship, Info_Only => True)) /
+--        1_000.0;
+--      Minutes_Diff: Integer;
+--      Rests, Cabin_Index, Rest_Time, Tired, Cabin_Bonus, Temp_Time: Natural :=
+--        0;
+--      Damage: Damage_Factor := 0.0;
       Result: Travel_Array := (1 => 0, 2 => 0);
+      procedure Travel_Ada_Info(D: Positive; Res: out Travel_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "travelAdaInfo";
    begin
-      if Speed = 0.0 then
-         return Result;
-      end if;
-      Minutes_Diff := Integer(100.0 / Speed);
-      case Player_Ship.Speed is
-         when QUARTER_SPEED =>
-            if Minutes_Diff < 60 then
-               Minutes_Diff := 60;
-            end if;
-         when HALF_SPEED =>
-            if Minutes_Diff < 30 then
-               Minutes_Diff := 30;
-            end if;
-         when FULL_SPEED =>
-            if Minutes_Diff < 15 then
-               Minutes_Diff := 15;
-            end if;
-         when others =>
-            null;
-      end case;
-      Minutes_Diff := Minutes_Diff * Distance;
-      Count_Rest_Time_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order not in PILOT | ENGINEER then
-            goto End_Of_Count_Loop;
-         end if;
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         Tired := (Minutes_Diff / 15) + Player_Ship.Crew(I).Tired;
-         if
-           (Tired /
-            (80 + Player_Ship.Crew(I).Attributes(Condition_Index).Level)) >
-           Rests then
-            Rests :=
-              (Tired /
-               (80 + Player_Ship.Crew(I).Attributes(Condition_Index).Level));
-         end if;
-         --## rule on SIMPLIFIABLE_EXPRESSIONS
-         if Rests > 0 then
-            Cabin_Index :=
-              Find_Cabin
-                (Member_Index => Crew_Container.To_Index(Position => I));
-            if Cabin_Index > 0 then
-               Damage :=
-                 1.0 -
-                 Damage_Factor
-                   (Float(Player_Ship.Modules(Cabin_Index).Durability) /
-                    Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
-               Cabin_Bonus :=
-                 Player_Ship.Modules(Cabin_Index).Cleanliness -
-                 Natural
-                   (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
-                    Float(Damage));
-               if Cabin_Bonus = 0 then
-                  Cabin_Bonus := 1;
-               end if;
-               Temp_Time :=
-                 ((80 +
-                   Player_Ship.Crew(I).Attributes(Condition_Index).Level) /
-                  Cabin_Bonus) *
-                 15;
-               if Temp_Time = 0 then
-                  Temp_Time := 15;
-               end if;
-            else
-               Temp_Time :=
-                 (80 + Player_Ship.Crew(I).Attributes(Condition_Index).Level) *
-                 15;
-            end if;
-            Temp_Time := Temp_Time + 15;
-            if Temp_Time > Rest_Time then
-               Rest_Time := Temp_Time;
-            end if;
-         end if;
-         <<End_Of_Count_Loop>>
-      end loop Count_Rest_Time_Loop;
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Result(1) := Minutes_Diff + (Rests * Rest_Time);
-      Result(2) :=
-        (abs (Distance * Count_Fuel_Needed) + (Rests * (Rest_Time / 10)));
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
+      Travel_Ada_Info(D => Distance, Res => Result);
+--      if Speed = 0.0 then
+--         return Result;
+--      end if;
+--      Minutes_Diff := Integer(100.0 / Speed);
+--      case Player_Ship.Speed is
+--         when QUARTER_SPEED =>
+--            if Minutes_Diff < 60 then
+--               Minutes_Diff := 60;
+--            end if;
+--         when HALF_SPEED =>
+--            if Minutes_Diff < 30 then
+--               Minutes_Diff := 30;
+--            end if;
+--         when FULL_SPEED =>
+--            if Minutes_Diff < 15 then
+--               Minutes_Diff := 15;
+--            end if;
+--         when others =>
+--            null;
+--      end case;
+--      Minutes_Diff := Minutes_Diff * Distance;
+--      Count_Rest_Time_Loop :
+--      for I in Player_Ship.Crew.Iterate loop
+--         if Player_Ship.Crew(I).Order not in PILOT | ENGINEER then
+--            goto End_Of_Count_Loop;
+--         end if;
+--         --## rule off SIMPLIFIABLE_EXPRESSIONS
+--         Tired := (Minutes_Diff / 15) + Player_Ship.Crew(I).Tired;
+--         if
+--           (Tired /
+--            (80 + Player_Ship.Crew(I).Attributes(Condition_Index).Level)) >
+--           Rests then
+--            Rests :=
+--              (Tired /
+--               (80 + Player_Ship.Crew(I).Attributes(Condition_Index).Level));
+--         end if;
+--         --## rule on SIMPLIFIABLE_EXPRESSIONS
+--         if Rests > 0 then
+--            Cabin_Index :=
+--              Find_Cabin
+--                (Member_Index => Crew_Container.To_Index(Position => I));
+--            if Cabin_Index > 0 then
+--               Damage :=
+--                 1.0 -
+--                 Damage_Factor
+--                   (Float(Player_Ship.Modules(Cabin_Index).Durability) /
+--                    Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
+--               Cabin_Bonus :=
+--                 Player_Ship.Modules(Cabin_Index).Cleanliness -
+--                 Natural
+--                   (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
+--                    Float(Damage));
+--               if Cabin_Bonus = 0 then
+--                  Cabin_Bonus := 1;
+--               end if;
+--               Temp_Time :=
+--                 ((80 +
+--                   Player_Ship.Crew(I).Attributes(Condition_Index).Level) /
+--                  Cabin_Bonus) *
+--                 15;
+--               if Temp_Time = 0 then
+--                  Temp_Time := 15;
+--               end if;
+--            else
+--               Temp_Time :=
+--                 (80 + Player_Ship.Crew(I).Attributes(Condition_Index).Level) *
+--                 15;
+--            end if;
+--            Temp_Time := Temp_Time + 15;
+--            if Temp_Time > Rest_Time then
+--               Rest_Time := Temp_Time;
+--            end if;
+--         end if;
+--         <<End_Of_Count_Loop>>
+--      end loop Count_Rest_Time_Loop;
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Result(1) := Minutes_Diff + (Rests * Rest_Time);
+--      Result(2) :=
+--        (abs (Distance * Count_Fuel_Needed) + (Rests * (Rest_Time / 10)));
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
       return Result;
    end Travel_Info;
 
