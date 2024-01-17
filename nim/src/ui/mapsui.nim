@@ -522,10 +522,14 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = mapView & " configure -state disable")
 
 proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let mapView = mainPaned & ".mapframe.map"
-  tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
-      themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
+  try:
+    discard tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
+        themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
+  except:
+    tclEval(script = "bgerror {Can't set map width. Reason: " & getCurrentExceptionMsg() & "}")
+    return tclOk
   tclEval(script = mapView & " configure -height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]")
   if tclGetVar(varName = "refreshmap") == "1":
     drawMap()
