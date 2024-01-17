@@ -320,9 +320,15 @@ proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   addCommand("ValidateAmount", validateAmountCommand)
   addCommand("NimSetTextVariable", setTextVariableCommand)
 
-proc travelInfo*(distance: Positive): array[1 .. 2, Natural] =
+proc travelInfo*(distance: Positive): array[1 .. 2, Natural] {.sideEffect,
+    raises: [], tags: [].} =
   result = [0, 0]
-  let speed = realSpeed(ship = playerShip, infoOnly = true) / 1_000
+  let speed = try:
+      realSpeed(ship = playerShip, infoOnly = true) / 1_000
+    except:
+      tclEval(script = "bgerror {Can't count the player's ship speed. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return
   if speed == 0.0:
     return
   var minutesDiff: int = (100.0 / speed).int
