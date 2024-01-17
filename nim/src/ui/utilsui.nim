@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
-    messages, missions2, shipscargo, shipscrew, shipsmovement, tk, types]
+import ../[bases, config, crew, crew2, crewinventory, events2, game, game2,
+    maps, messages, missions2, shipscargo, shipscrew, shipsmovement, tk, types]
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
@@ -339,18 +339,35 @@ proc travelInfo*(distance: Positive): array[1 .. 2, Natural] =
   else:
     discard
   minutesDiff = minutesDiff * distance
-  var rest = 0
+  var rests, restTime = 0
   for index, member in playerShip.crew:
     if member.order notin {pilot, engineer}:
       continue
     let tired = (minutesDiff / 15).int + member.tired
-    if (tired / (80 + member.attributes[conditionIndex].level)).int > rest:
-      rest = (tired / (80 + member.attributes[conditionIndex].level)).int
-    if rest > 0:
+    if (tired / (80 + member.attributes[conditionIndex].level)).int > rests:
+      rests = (tired / (80 + member.attributes[conditionIndex].level)).int
+    if rests > 0:
       let cabinIndex = findCabin(memberIndex = index)
+      var tempTime: int = 0
       if cabinIndex > -1:
         let
-          damage = 1.0 - (playerShip.modules[cabinIndex].durability.float / playerShip.modules[cabinIndex].maxDurability.float)
+          damage = 1.0 - (playerShip.modules[cabinIndex].durability.float /
+              playerShip.modules[cabinIndex].maxDurability.float)
+        var cabinBonus = playerShip.modules[cabinIndex].cleanliness - (
+            playerShip.modules[cabinIndex].cleanliness.float * damage).int
+        if cabinBonus == 0:
+          cabinBonus = 1
+        tempTime = ((80.0 + member.attributes[conditionIndex].level.float) /
+            cabinBonus.float).int * 15
+        if tempTime == 0:
+          tempTime = 15
+      else:
+        tempTime = (80 + member.attributes[conditionIndex].level) * 15
+      tempTime = tempTime + 15
+      if tempTime > restTime:
+        restTime = tempTime
+  result[1] = minutesDiff + (rests * restTime)
+  result[2] = abs(distance * countFuelNeeded()) + (rests * (restTime / 10).int)
 
 # Temporary code for interfacing with Ada
 
