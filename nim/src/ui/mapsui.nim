@@ -546,6 +546,26 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
     drawMap()
   return tclOk
 
+proc updateMapInfo*(x: Positive = playerShip.skyX; y: Positive = playerShip.skyY) =
+  let mapInfo = mainPaned & ".mapframe.info"
+  tclEval(script = mapInfo & " configure -state normal")
+  tclEval(script = mapInfo & " delete 1.0 end")
+  var width = 1
+
+  proc insertText(newText: string; tagName: string = "") =
+    if newText.len > width:
+      width = newText.len
+    if width > 21:
+      width = 21
+    tclEval(script = mapInfo & " insert end {" & newText & "}" & (if tagName.len == 0: "" else: " [list " & tagName & "]"))
+
+  insertText(newText = "X:")
+  insertText(newText = " " & $x, tagName = "yellow2")
+  insertText(newText = "X:")
+  insertText(newText = " " & $y, tagName = "yellow2")
+  if playerShip.skyX != y or playerShip.skyY != y:
+    let distance = countDistance(destinationX = x, destinationY = y)
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
