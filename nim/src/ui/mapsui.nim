@@ -561,10 +561,16 @@ proc updateMapInfo*(x: Positive = playerShip.skyX; y: Positive = playerShip.skyY
 
   insertText(newText = "X:")
   insertText(newText = " " & $x, tagName = "yellow2")
-  insertText(newText = "X:")
+  insertText(newText = "Y:")
   insertText(newText = " " & $y, tagName = "yellow2")
   if playerShip.skyX != y or playerShip.skyY != y:
-    let distance = countDistance(destinationX = x, destinationY = y)
+    let
+      distance = countDistance(destinationX = x, destinationY = y)
+      travelValues = travelInfo(distance = distance)
+    insertText(newText = "\nDistance:")
+    insertText(newText = $distance, tagName = "yellow2")
+    if travelValues[1] > 0:
+      insertText(newText = "\nETA:")
 
 proc createGameUi*() =
   let
