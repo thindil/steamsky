@@ -31,7 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases;
 with Combat.UI;
 with CoreUI; use CoreUI;
-with Crew; use Crew;
+with Crew;
 with Events;
 with Items; use Items;
 with Maps;
@@ -126,6 +126,7 @@ package body Utils.UI is
       use Ada.Directories;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Bases;
+      use Crew;
       use Maps;
       use MainMenu;
       use Ships.Crew;
@@ -467,7 +468,7 @@ package body Utils.UI is
 --      Rests, Cabin_Index, Rest_Time, Tired, Cabin_Bonus, Temp_Time: Natural :=
 --        0;
 --      Damage: Damage_Factor := 0.0;
-      Result: Travel_Array := (1 => 0, 2 => 0);
+      Result: Travel_Array;
       procedure Travel_Ada_Info(D: Positive; Res: out Travel_Array) with
          Import => True,
          Convention => C,
