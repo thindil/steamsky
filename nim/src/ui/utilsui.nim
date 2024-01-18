@@ -322,6 +322,13 @@ proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
 
 proc travelInfo*(distance: Positive): array[1 .. 2, Natural] {.sideEffect,
     raises: [], tags: [].} =
+  ## Count the ETA and the fuel usage for the selected distance
+  ##
+  ## * Distance - Distance in map fields to destination point
+  ##
+  ## The result is the array with two values, the first is estimated time to
+  ## travel the distance, the second is the amount of fuel needed to travel
+  ## the distance.
   result = [0, 0]
   let speed = try:
       realSpeed(ship = playerShip, infoOnly = true) / 1_000
