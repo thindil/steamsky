@@ -20,64 +20,6 @@ import ../[bases, config, crew2, crewinventory, events2, game, game2,
     maps, messages, missions2, shipscargo, shipscrew, tk, types]
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules
 
-proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [],
-    tags: [].} =
-  ## Convert the game minutes to the game time in days, hours, etc
-  ##
-  ## * minutes  - the amount of minutes to convert
-  ## * infoText - the string to which the converted time will be added
-  ##
-  ## Returns the updated infoText paramater with converted minutes to the game
-  ## time
-  var
-    travelTime: DateRecord
-    minutesDiff: int = minutes
-  while minutesDiff > 0:
-    if minutesDiff > 518_400:
-      minutesDiff = minutesDiff - 518_400
-      travelTime.year.inc()
-    elif minutesDiff in 43_201 .. 518_400:
-      minutesDiff = minutesDiff - 43_200
-      travelTime.month.inc()
-      if travelTime.month > 12:
-        travelTime.year.inc()
-        travelTime.month = 1
-    elif minutesDiff in 1_441..43_200:
-      minutesDiff = minutesDiff - 1_440
-      travelTime.day.inc()
-      if travelTime.day > 31:
-        travelTime.month.inc()
-        if travelTime.month > 12:
-          travelTime.year.inc()
-          travelTime.month = 1
-    elif minutesDiff in 61..1_440:
-      minutesDiff = minutesDiff - 60
-      travelTime.hour.inc()
-      if travelTime.hour > 23:
-        travelTime.hour = 0
-        travelTime.day.inc()
-        if travelTime.day > 31:
-          travelTime.day = 1
-          travelTime.month.inc()
-          if travelTime.month > 12:
-            travelTime.month = 1
-            travelTime.year.inc()
-    else:
-      travelTime.minutes = minutesDiff
-      minutesDiff = 0
-    if travelTime.year == 4_000_000:
-      break
-  if travelTime.year > 0:
-    infoText = infoText & " " & $travelTime.year & "y"
-  if travelTime.month > 0:
-    infoText = infoText & " " & $travelTime.month & "m"
-  if travelTime.day > 0:
-    infoText = infoText & " " & $travelTime.day & "d"
-  if travelTime.hour > 0:
-    infoText = infoText & " " & $travelTime.hour & "h"
-  if travelTime.minutes > 0:
-    infoText = infoText & " " & $travelTime.minutes & "mins"
-
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   ## Resize the selected canvas
@@ -329,9 +271,3 @@ proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
 proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
-
-proc minutesAdaToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
-    sideEffect, raises: [], tags: [].} =
-  var nimText = $infoText
-  minutesToDate(minutes, nimText)
-  infoText = nimText.cstring
