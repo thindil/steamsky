@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -63,29 +63,6 @@ package Ships.Movement is
       -- Empty string if speed was changed, otherwise message what goes wrong
       -- SOURCE
    function Change_Ship_Speed(Speed_Value: Ship_Speed) return String;
-   -- ****
-
-   -- ****f* SMovement/SMovement.Real_Speed
-   -- FUNCTION
-   -- Count real ship speed in meters per minute
-   -- PARAMETERS
-   -- Ship      - Ship which real speed will be counted
-   -- Info_Only - If true and ship is docked to the base, count max speed
-   --             of the ship. Default is false
-   -- RESULT
-   -- The real speed of the selected ship or 0 if the ship can't move
-   -- SOURCE
-   function Real_Speed
-     (Ship: Ship_Record; Info_Only: Boolean := False) return Natural;
-     -- ****
-
-     -- ****f* SMovement/SMovement.Count_Fuel_Needed
-     -- FUNCTION
-     -- Count amount of fuel needed by player ship to travel
-     -- RESULT
-     -- Amount of fuel needed by player ship to travel
-     -- SOURCE
-   function Count_Fuel_Needed return Integer;
    -- ****
 
    -- ****f* SMovement/SMovement.Wait_In_Place

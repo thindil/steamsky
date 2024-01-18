@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -266,21 +266,6 @@ package Crew is
       return Tiny_String.Bounded_String with
       Pre => Gender in 'M' | 'F' and
       Tiny_String.Length(Source => Faction_Index) > 0;
-      -- ****
-
-      -- ****f* Crew/Crew.Find_Cabin
-      -- FUNCTION
-      -- Find index of cabin which belongs to selected crew member
-      -- PARAMETERS
-      -- Member_Index: Crew index of crew member which cabin is looking for
-      -- RESULT
-      -- Player ship module index of owned cabin or 0 if crew member don't
-      -- have any cabin assigned
-      -- SOURCE
-   function Find_Cabin(Member_Index: Positive) return Natural with
-      Import => True,
-      Convention => C,
-      External_Name => "findAdaCabin";
       -- ****
 
       -- ****f* Crew/Crew.Wait_For_Rest

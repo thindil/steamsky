@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -99,31 +99,6 @@ package body Ships.Movement is
       Get_Ship_From_Nim(Ship => Player_Ship);
       return To_String(Source => Result);
    end Change_Ship_Speed;
-
-   function Real_Speed
-     (Ship: Ship_Record; Info_Only: Boolean := False) return Natural is
-      function Real_Ada_Speed
-        (Of_Player_Ship, I_Only: Integer) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "realAdaSpeed";
-   begin
-      Set_Ship_In_Nim(Ship => Ship);
-      return
-        Real_Ada_Speed
-          (Of_Player_Ship => (if Ship = Player_Ship then 1 else 0),
-           I_Only => (if Info_Only then 1 else 0));
-   end Real_Speed;
-
-   function Count_Fuel_Needed return Integer is
-      function Count_Ada_Fuel_Needed return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "countAdaFuelNeeded";
-   begin
-      Set_Ship_In_Nim;
-      return Count_Ada_Fuel_Needed;
-   end Count_Fuel_Needed;
 
    procedure Wait_In_Place(Minutes: Positive) is
       procedure Wait_Ada_In_Place(M: Positive) with
