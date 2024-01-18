@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[bases, config, crew, crew2, crewinventory, events2, game, game2,
-    maps, messages, missions2, shipscargo, shipscrew, shipsmovement, tk, types]
+import ../[bases, config, crew2, crewinventory, events2, game, game2,
+    maps, messages, missions2, shipscargo, shipscrew, tk, types]
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules
 
 proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
@@ -320,68 +320,6 @@ proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   addCommand("ValidateAmount", validateAmountCommand)
   addCommand("NimSetTextVariable", setTextVariableCommand)
 
-proc travelInfo*(distance: Positive): array[1 .. 2, Natural] {.sideEffect,
-    raises: [], tags: [].} =
-  ## Count the ETA and the fuel usage for the selected distance
-  ##
-  ## * Distance - Distance in map fields to destination point
-  ##
-  ## The result is the array with two values, the first is estimated time to
-  ## travel the distance, the second is the amount of fuel needed to travel
-  ## the distance.
-  result = [0, 0]
-  let speed = try:
-      realSpeed(ship = playerShip, infoOnly = true) / 1_000
-    except:
-      tclEval(script = "bgerror {Can't count the player's ship speed. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return
-  if speed == 0.0:
-    return
-  var minutesDiff: int = (100.0 / speed).int
-  case playerShip.speed
-  of quarterSpeed:
-    if minutesDiff < 60:
-      minutesDiff = 60
-  of halfSpeed:
-    if minutesDiff < 30:
-      minutesDiff = 30
-  of fullSpeed:
-    if minutesDiff < 15:
-      minutesDiff = 15
-  else:
-    discard
-  minutesDiff = minutesDiff * distance
-  var rests, restTime = 0
-  for index, member in playerShip.crew:
-    if member.order notin {pilot, engineer}:
-      continue
-    let tired = (minutesDiff / 15).int + member.tired
-    if (tired / (80 + member.attributes[conditionIndex].level)).int > rests:
-      rests = (tired / (80 + member.attributes[conditionIndex].level)).int
-    if rests > 0:
-      let cabinIndex = findCabin(memberIndex = index)
-      var tempTime: int = 0
-      if cabinIndex > -1:
-        let
-          damage = 1.0 - (playerShip.modules[cabinIndex].durability.float /
-              playerShip.modules[cabinIndex].maxDurability.float)
-        var cabinBonus = playerShip.modules[cabinIndex].cleanliness - (
-            playerShip.modules[cabinIndex].cleanliness.float * damage).int
-        if cabinBonus == 0:
-          cabinBonus = 1
-        tempTime = ((80.0 + member.attributes[conditionIndex].level.float) /
-            cabinBonus.float).int * 15
-        if tempTime == 0:
-          tempTime = 15
-      else:
-        tempTime = (80 + member.attributes[conditionIndex].level) * 15
-      tempTime = tempTime + 15
-      if tempTime > restTime:
-        restTime = tempTime
-  result[1] = minutesDiff + (rests * restTime)
-  result[2] = abs(distance * countFuelNeeded()) + (rests * (restTime / 10).int)
-
 # Temporary code for interfacing with Ada
 
 proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
@@ -393,12 +331,3 @@ proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
 proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
-
-proc travelAdaInfo(distance: cint; res: var array[1 .. 2, cint]) {.exportc,
-    raises: [], tags: [].} =
-  res = [0.cint, 0.cint]
-  try:
-    let nimRes = travelInfo(distance = distance.Positive)
-    res = [nimRes[1].cint, nimRes[2].cint]
-  except:
-    discard
