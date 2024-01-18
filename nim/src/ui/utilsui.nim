@@ -20,8 +20,8 @@ import ../[bases, config, crew2, crewinventory, events2, game, game2,
     maps, messages, missions2, shipscargo, shipscrew, tk, types]
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules
 
-proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
-    sideEffect, raises: [], tags: [].} =
+proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [],
+    tags: [].} =
   ## Convert the game minutes to the game time in days, hours, etc
   ##
   ## * minutes  - the amount of minutes to convert
@@ -67,18 +67,16 @@ proc minutesToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
       minutesDiff = 0
     if travelTime.year == 4_000_000:
       break
-  var timeText: string = $infoText
   if travelTime.year > 0:
-    timeText = timeText & " " & $travelTime.year & "y"
+    infoText = infoText & " " & $travelTime.year & "y"
   if travelTime.month > 0:
-    timeText = timeText & " " & $travelTime.month & "m"
+    infoText = infoText & " " & $travelTime.month & "m"
   if travelTime.day > 0:
-    timeText = timeText & " " & $travelTime.day & "d"
+    infoText = infoText & " " & $travelTime.day & "d"
   if travelTime.hour > 0:
-    timeText = timeText & " " & $travelTime.hour & "h"
+    infoText = infoText & " " & $travelTime.hour & "h"
   if travelTime.minutes > 0:
-    timeText = timeText & " " & $travelTime.minutes & "mins"
-  infoText = timeText.cstring
+    infoText = infoText & " " & $travelTime.minutes & "mins"
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -331,3 +329,9 @@ proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
 proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
+
+proc minutesAdaToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
+    sideEffect, raises: [], tags: [].} =
+  var nimText = $infoText
+  minutesToDate(minutes, nimText)
+  infoText = nimText.cstring

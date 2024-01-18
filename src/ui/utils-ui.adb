@@ -449,7 +449,7 @@ package body Utils.UI is
       procedure Min_To_Date(Mins: Natural; Info: in out chars_ptr) with
          Import => True,
          Convention => C,
-         External_Name => "minutesToDate";
+         External_Name => "minutesAdaToDate";
       New_Text: chars_ptr := New_String(Str => To_String(Source => Info_Text));
    begin
       Min_To_Date(Mins => Minutes, Info => New_Text);
