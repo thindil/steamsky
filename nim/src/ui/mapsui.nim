@@ -684,6 +684,41 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     var eventInfoText = ""
     if eventsList[eventIndex].eType notin {baseRecovery, EventsTypes.none}:
       eventInfoText = "\n\n"
+    var color = ""
+    case eventsList[eventIndex].eType
+    of trader:
+      eventInfoText = eventInfoText & protoShipsList[eventsList[
+          eventIndex].shipIndex].name
+      color = "green"
+    of friendlyShip:
+      eventInfoText = eventInfoText & protoShipsList[eventsList[
+          eventIndex].shipIndex].name
+      color = "green2"
+    of enemyShip:
+      eventInfoText = eventInfoText & protoShipsList[eventsList[
+          eventIndex].shipIndex].name
+      color = "red"
+    of fullDocks:
+      eventInfoText = eventInfoText & "Full docks in base"
+      color = "cyan"
+    of attackOnBase:
+      eventInfoText = eventInfoText & "Base is under attack"
+      color = "red"
+    of disease:
+      eventInfoText = eventInfoText & "Disease in base"
+      color = "yellow"
+    of enemyPatrol:
+      eventInfoText = eventInfoText & "Enemy patrol"
+      color = "red3"
+    of doublePrice:
+      eventInfoText = eventInfoText & itemsList[eventsList[
+          eventIndex].itemIndex].name
+      color = "lime"
+    of EventsTypes.none, baseRecovery:
+      discard
+    insertText(newText = eventInfoText, tagName = color)
+  tclEval(script = mapInfo & " configure -state disabled -width " & $width &
+      " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
 proc createGameUi*() =
   let
@@ -898,5 +933,11 @@ proc setAdaFullScreenAccel(value: cstring) {.raises: [], tags: [], exportc.} =
 proc drawAdaMap() {.raises: [], tags: [], exportc.} =
   try:
     drawMap()
+  except:
+    discard
+
+proc updateAdaMapInfo(x, y: cint) {.raises: [], tags: [], exportc.} =
+  try:
+    updateMapInfo(x = x.Positive, y = y.Positive)
   except:
     discard
