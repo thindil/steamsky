@@ -13,8 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
-with Ada.Characters.Latin_1;
+-- with Ada.Characters.Handling;
+-- with Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed;
 -- with Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -45,11 +45,11 @@ with Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
 with DebugUI;
-with Events;
-with Factions;
+-- with Events;
+-- with Factions;
 with GameOptions;
 with Help.UI;
-with Items;
+-- with Items;
 with Knowledge;
 with Log;
 with Maps.UI.Commands;
@@ -60,7 +60,7 @@ with OrdersMenu;
 with Ships.UI;
 with Statistics;
 with Statistics.UI;
-with Stories;
+-- with Stories;
 with Trades.UI;
 with Themes;
 with Utils.UI; use Utils.UI;
@@ -139,380 +139,385 @@ package body Maps.UI is
 
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
-      use Ada.Characters.Latin_1;
-      use Items;
-      use Stories;
-      use Tiny_String;
-
-      Map_Info_Text, Event_Info_Text, Color: Unbounded_String :=
-        Null_Unbounded_String;
-      Map_Info: constant Tk_Text :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.info");
-      Width: Positive := 1;
-      procedure Insert_Text
-        (New_Text: String;
-         Tag_Name: Unbounded_String := Null_Unbounded_String) is
-      begin
-         if New_Text'Length > Width then
-            Width := New_Text'Length;
-         end if;
-         if Width > 21 then
-            Width := 21;
-         end if;
-         Insert
-           (TextWidget => Map_Info, Index => "end",
-            Text =>
-              "{" & New_Text & "}" &
-              (if Length(Source => Tag_Name) = 0 then ""
-               else " [list " & To_String(Source => Tag_Name) & "]"));
-      end Insert_Text;
+      procedure Update_Ada_Map_Info(X1, Y1: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMapInfo";
+--      use Ada.Characters.Latin_1;
+--      use Items;
+--      use Stories;
+--      use Tiny_String;
+--
+--      Map_Info_Text, Event_Info_Text, Color: Unbounded_String :=
+--        Null_Unbounded_String;
+--      Map_Info: constant Tk_Text :=
+--        Get_Widget(pathName => Main_Paned & ".mapframe.info");
+--      Width: Positive := 1;
+--      procedure Insert_Text
+--        (New_Text: String;
+--         Tag_Name: Unbounded_String := Null_Unbounded_String) is
+--      begin
+--         if New_Text'Length > Width then
+--            Width := New_Text'Length;
+--         end if;
+--         if Width > 21 then
+--            Width := 21;
+--         end if;
+--         Insert
+--           (TextWidget => Map_Info, Index => "end",
+--            Text =>
+--              "{" & New_Text & "}" &
+--              (if Length(Source => Tag_Name) = 0 then ""
+--               else " [list " & To_String(Source => Tag_Name) & "]"));
+--      end Insert_Text;
    begin
-      configure(Widgt => Map_Info, options => "-state normal");
-      Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");
-      Insert_Text(New_Text => "X:");
-      Insert_Text
-        (New_Text => Positive'Image(X),
-         Tag_Name => To_Unbounded_String(Source => "yellow2"));
-      Insert_Text(New_Text => " Y:");
-      Insert_Text
-        (New_Text => Positive'Image(Y),
-         Tag_Name => To_Unbounded_String(Source => "yellow2"));
-      if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
-         Add_Distance_Info_Block :
-         declare
-            Distance: constant Positive :=
-              Count_Distance(Destination_X => X, Destination_Y => Y);
-            Distance_Text: Unbounded_String := Null_Unbounded_String;
-            Travel_Values: constant Travel_Array :=
-              Travel_Info(Distance => Distance);
-         begin
-            Insert_Text(New_Text => LF & "Distance:");
-            Insert_Text
-              (New_Text => Positive'Image(Distance),
-               Tag_Name => To_Unbounded_String(Source => "yellow2"));
-            if Travel_Values(1) > 0 then
-               Insert_Text(New_Text => LF & "ETA:");
-               Minutes_To_Date
-                 (Minutes => Travel_Values(1), Info_Text => Distance_Text);
-               Insert_Text
-                 (New_Text => To_String(Source => Distance_Text),
-                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
-               Insert_Text(New_Text => LF & "Approx fuel usage:");
-               Insert_Text
-                 (New_Text => Positive'Image(Travel_Values(2)),
-                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
-            end if;
-         end Add_Distance_Info_Block;
-      end if;
-      if Sky_Map(X, Y).Base_Index > 0 then
-         Add_Base_Info_Block :
-         declare
-            use Ada.Characters.Handling;
-            use Factions;
-
-            Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
-            Base_Info_Text: Unbounded_String := Null_Unbounded_String;
-         begin
-            if Sky_Bases(Base_Index).Known then
-               Insert_Text
-                 (New_Text => LF & "Base info:",
-                  Tag_Name => To_Unbounded_String(Source => "pink underline"));
-               Insert_Text(New_Text => LF & "Name: ");
-               Insert_Text
-                 (New_Text =>
-                    Tiny_String.To_String
-                      (Source => Sky_Bases(Base_Index).Name),
-                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
-            end if;
-            if Sky_Bases(Base_Index).Visited.Year > 0 then
-               Tag_Configure
-                 (TextWidget => Map_Info, TagName => "basetype",
-                  Options =>
-                    "-foreground #" &
-                    Get_Base_Type_Color
-                      (Base_Type => Sky_Bases(Base_Index).Base_Type));
-               Insert_Text(New_Text => LF & "Type: ");
-               Insert_Text
-                 (New_Text =>
-                    Get_Base_Type_Name
-                      (Base_Type => Sky_Bases(Base_Index).Base_Type),
-                  Tag_Name => To_Unbounded_String(Source => "basetype"));
-               if Sky_Bases(Base_Index).Population > 0 then
-                  Insert_Text(New_Text => LF & "Population: ");
-               end if;
-               if Sky_Bases(Base_Index).Population > 0 and
-                 Sky_Bases(Base_Index).Population < 150 then
-                  Insert_Text
-                    (New_Text => "small",
-                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
-               elsif Sky_Bases(Base_Index).Population > 149 and
-                 Sky_Bases(Base_Index).Population < 300 then
-                  Insert_Text
-                    (New_Text => "medium",
-                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
-               elsif Sky_Bases(Base_Index).Population > 299 then
-                  Insert_Text
-                    (New_Text => "large",
-                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
-               end if;
-               Insert_Text(New_Text => LF & "Size: ");
-               Insert_Text
-                 (New_Text =>
-                    To_Lower
-                      (Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) &
-                    LF,
-                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
-               if Sky_Bases(Base_Index).Population > 0 then
-                  Insert_Text(New_Text => "Owner: ");
-                  Insert_Text
-                    (New_Text =>
-                       Tiny_String.To_String
-                         (Source =>
-                            Get_Faction(Index => Sky_Bases(Base_Index).Owner)
-                              .Name),
-                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
-               else
-                  Insert_Text(New_Text => "Base is abandoned");
-               end if;
-               if Sky_Bases(Base_Index).Population > 0 then
-                  Base_Info_Text := To_Unbounded_String(Source => "" & LF);
-                  case Sky_Bases(Base_Index).Reputation.Level is
-                     when -100 .. -75 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are hated here");
-                        Color := To_Unbounded_String(Source => "red");
-                     when -74 .. -50 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are outlawed here");
-                        Color := To_Unbounded_String(Source => "red");
-                     when -49 .. -25 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are disliked here");
-                        Color := To_Unbounded_String(Source => "red");
-                     when -24 .. -1 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "They are unfriendly to you");
-                        Color := To_Unbounded_String(Source => "red");
-                     when 0 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are unknown here");
-                        Color := Null_Unbounded_String;
-                     when 1 .. 25 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are know here as visitor");
-                        Color := To_Unbounded_String(Source => "green");
-                     when 26 .. 50 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are know here as trader");
-                        Color := To_Unbounded_String(Source => "green");
-                     when 51 .. 75 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are know here as friend");
-                        Color := To_Unbounded_String(Source => "green");
-                     when 76 .. 100 =>
-                        Append
-                          (Source => Base_Info_Text,
-                           New_Item => "You are well known here");
-                        Color := To_Unbounded_String(Source => "green");
-                  end case;
-                  Insert_Text
-                    (New_Text => To_String(Source => Base_Info_Text),
-                     Tag_Name => Color);
-               end if;
-               if Base_Index = Player_Ship.Home_Base then
-                  Insert_Text
-                    (New_Text => LF & "It is your home base",
-                     Tag_Name => To_Unbounded_String(Source => "cyan"));
-               end if;
-            end if;
-         end Add_Base_Info_Block;
-      end if;
-      if Sky_Map(X, Y).Mission_Index > 0 then
-         Add_Mission_Info_Block :
-         declare
-            Mission_Index: constant Mission_Container.Extended_Index :=
-              Sky_Map(X, Y).Mission_Index;
-            Mission_Info_Text: Unbounded_String;
-         begin
-            Mission_Info_Text := To_Unbounded_String(Source => "" & LF);
-            if Sky_Map(X, Y).Base_Index > 0 or
-              Sky_Map(X, Y).Event_Index > 0 then
-               Append(Source => Map_Info_Text, New_Item => LF);
-            end if;
-            case Get_Accepted_Mission(Mission_Index => Mission_Index).M_Type is
-               when DELIVER =>
-                  Append
-                    (Source => Mission_Info_Text,
-                     New_Item =>
-                       "Deliver " &
-                       To_String
-                         (Source =>
-                            Get_Proto_Item
-                              (Index =>
-                                 Get_Accepted_Mission
-                                   (Mission_Index => Mission_Index)
-                                   .Item_Index)
-                              .Name));
-               when DESTROY =>
-                  Append
-                    (Source => Mission_Info_Text,
-                     New_Item =>
-                       "Destroy " &
-                       To_String
-                         (Source =>
-                            Get_Proto_Ship
-                              (Proto_Index =>
-                                 Get_Accepted_Mission
-                                   (Mission_Index => Mission_Index)
-                                   .Ship_Index)
-                              .Name));
-               when PATROL =>
-                  Append
-                    (Source => Mission_Info_Text, New_Item => "Patrol area");
-               when EXPLORE =>
-                  Append
-                    (Source => Mission_Info_Text, New_Item => "Explore area");
-               when PASSENGER =>
-                  Append
-                    (Source => Mission_Info_Text,
-                     New_Item => "Transport passenger");
-            end case;
-            Insert_Text(New_Text => To_String(Source => Mission_Info_Text));
-         end Add_Mission_Info_Block;
-      end if;
-      if Get_Current_Story.Index /= Null_Unbounded_String then
-         Add_Story_Info_Block :
-         declare
-            --## rule off IMPROPER_INITIALIZATION
-            Story_X, Story_Y: Natural := 1;
-            --## rule on IMPROPER_INITIALIZATION
-            Finish_Condition: Step_Condition_Type := ANY;
-         begin
-            Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
-            if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
-               Story_X := 0;
-               Story_Y := 0;
-            end if;
-            if X = Story_X and Y = Story_Y then
-               Finish_Condition :=
-                 (if Get_Current_Story.Current_Step = 0 then
-                    Get_Story(Index => Get_Current_Story.Index).Starting_Step
-                      .Finish_Condition
-                  elsif Get_Current_Story.Current_Step > 0 then
-                    Get_Story(Index => Get_Current_Story.Index).Steps
-                      (Get_Current_Story.Current_Step)
-                      .Finish_Condition
-                  else Get_Story(Index => Get_Current_Story.Index).Final_Step
-                      .Finish_Condition);
-               if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
-                  Insert_Text(New_Text => LF & "Story leads you here");
-               end if;
-            end if;
-         end Add_Story_Info_Block;
-      end if;
-      if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
-         Insert_Text
-           (New_Text => LF & "You are here",
-            Tag_Name => To_Unbounded_String(Source => "yellow"));
-      end if;
-      if Sky_Map(X, Y).Event_Index > 0 then
-         Add_Event_Info_Block :
-         declare
-            use Events;
-
-            Event_Index: constant Natural := Sky_Map(X, Y).Event_Index;
-         begin
-            if Get_Event(Index => Event_Index).E_Type not in BASERECOVERY |
-                  NONE then
-               Event_Info_Text := To_Unbounded_String(Source => LF & LF);
-            end if;
-            case Get_Event(Index => Event_Index).E_Type is
-               when TRADER =>
-                  Append
-                    (Source => Event_Info_Text,
-                     New_Item =>
-                       To_String
-                         (Source =>
-                            Get_Proto_Ship
-                              (Proto_Index =>
-                                 Get_Event(Index => Event_Index).Ship_Index)
-                              .Name));
-                  Color := To_Unbounded_String(Source => "green");
-               when FRIENDLYSHIP =>
-                  Append
-                    (Source => Event_Info_Text,
-                     New_Item =>
-                       To_String
-                         (Source =>
-                            Get_Proto_Ship
-                              (Proto_Index =>
-                                 Get_Event(Index => Event_Index).Ship_Index)
-                              .Name));
-                  Color := To_Unbounded_String(Source => "green2");
-               when ENEMYSHIP =>
-                  Append
-                    (Source => Event_Info_Text,
-                     New_Item =>
-                       To_String
-                         (Source =>
-                            Get_Proto_Ship
-                              (Proto_Index =>
-                                 Get_Event(Index => Event_Index).Ship_Index)
-                              .Name));
-                  Color := To_Unbounded_String(Source => "red");
-               when FULLDOCKS =>
-                  Append
-                    (Source => Event_Info_Text,
-                     New_Item => "Full docks in base");
-                  Color := To_Unbounded_String(Source => "cyan");
-               when ATTACKONBASE =>
-                  Append
-                    (Source => Event_Info_Text,
-                     New_Item => "Base is under attack");
-                  Color := To_Unbounded_String(Source => "red");
-               when DISEASE =>
-                  Append
-                    (Source => Event_Info_Text, New_Item => "Disease in base");
-                  Color := To_Unbounded_String(Source => "yellow");
-               when ENEMYPATROL =>
-                  Append
-                    (Source => Event_Info_Text, New_Item => "Enemy patrol");
-                  Color := To_Unbounded_String(Source => "red3");
-               when DOUBLEPRICE =>
-                  Append
-                    (Source => Event_Info_Text,
-                     New_Item =>
-                       "Double price for " &
-                       To_String
-                         (Source =>
-                            Get_Proto_Item
-                              (Index =>
-                                 Get_Event(Index => Event_Index).Item_Index)
-                              .Name));
-                  Color := To_Unbounded_String(Source => "lime");
-               when NONE | BASERECOVERY =>
-                  null;
-            end case;
-            Insert_Text
-              (New_Text => To_String(Source => Event_Info_Text),
-               Tag_Name => Color);
-         end Add_Event_Info_Block;
-      end if;
-      configure
-        (Widgt => Map_Info,
-         options =>
-           "-state disabled -width" & Positive'Image(Width) & " -height " &
-           Text.Count
-             (TextWidget => Map_Info, Options => "-displaylines",
-              Index1 => "0.0", Index2 => "end"));
+      Update_Ada_Map_Info(X1 => X, Y1 => Y);
+--      configure(Widgt => Map_Info, options => "-state normal");
+--      Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");
+--      Insert_Text(New_Text => "X:");
+--      Insert_Text
+--        (New_Text => Positive'Image(X),
+--         Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--      Insert_Text(New_Text => " Y:");
+--      Insert_Text
+--        (New_Text => Positive'Image(Y),
+--         Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--      if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
+--         Add_Distance_Info_Block :
+--         declare
+--            Distance: constant Positive :=
+--              Count_Distance(Destination_X => X, Destination_Y => Y);
+--            Distance_Text: Unbounded_String := Null_Unbounded_String;
+--            Travel_Values: constant Travel_Array :=
+--              Travel_Info(Distance => Distance);
+--         begin
+--            Insert_Text(New_Text => LF & "Distance:");
+--            Insert_Text
+--              (New_Text => Positive'Image(Distance),
+--               Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--            if Travel_Values(1) > 0 then
+--               Insert_Text(New_Text => LF & "ETA:");
+--               Minutes_To_Date
+--                 (Minutes => Travel_Values(1), Info_Text => Distance_Text);
+--               Insert_Text
+--                 (New_Text => To_String(Source => Distance_Text),
+--                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--               Insert_Text(New_Text => LF & "Approx fuel usage:");
+--               Insert_Text
+--                 (New_Text => Positive'Image(Travel_Values(2)),
+--                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--            end if;
+--         end Add_Distance_Info_Block;
+--      end if;
+--      if Sky_Map(X, Y).Base_Index > 0 then
+--         Add_Base_Info_Block :
+--         declare
+--            use Ada.Characters.Handling;
+--            use Factions;
+--
+--            Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
+--            Base_Info_Text: Unbounded_String := Null_Unbounded_String;
+--         begin
+--            if Sky_Bases(Base_Index).Known then
+--               Insert_Text
+--                 (New_Text => LF & "Base info:",
+--                  Tag_Name => To_Unbounded_String(Source => "pink underline"));
+--               Insert_Text(New_Text => LF & "Name: ");
+--               Insert_Text
+--                 (New_Text =>
+--                    Tiny_String.To_String
+--                      (Source => Sky_Bases(Base_Index).Name),
+--                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--            end if;
+--            if Sky_Bases(Base_Index).Visited.Year > 0 then
+--               Tag_Configure
+--                 (TextWidget => Map_Info, TagName => "basetype",
+--                  Options =>
+--                    "-foreground #" &
+--                    Get_Base_Type_Color
+--                      (Base_Type => Sky_Bases(Base_Index).Base_Type));
+--               Insert_Text(New_Text => LF & "Type: ");
+--               Insert_Text
+--                 (New_Text =>
+--                    Get_Base_Type_Name
+--                      (Base_Type => Sky_Bases(Base_Index).Base_Type),
+--                  Tag_Name => To_Unbounded_String(Source => "basetype"));
+--               if Sky_Bases(Base_Index).Population > 0 then
+--                  Insert_Text(New_Text => LF & "Population: ");
+--               end if;
+--               if Sky_Bases(Base_Index).Population > 0 and
+--                 Sky_Bases(Base_Index).Population < 150 then
+--                  Insert_Text
+--                    (New_Text => "small",
+--                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--               elsif Sky_Bases(Base_Index).Population > 149 and
+--                 Sky_Bases(Base_Index).Population < 300 then
+--                  Insert_Text
+--                    (New_Text => "medium",
+--                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--               elsif Sky_Bases(Base_Index).Population > 299 then
+--                  Insert_Text
+--                    (New_Text => "large",
+--                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--               end if;
+--               Insert_Text(New_Text => LF & "Size: ");
+--               Insert_Text
+--                 (New_Text =>
+--                    To_Lower
+--                      (Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) &
+--                    LF,
+--                  Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--               if Sky_Bases(Base_Index).Population > 0 then
+--                  Insert_Text(New_Text => "Owner: ");
+--                  Insert_Text
+--                    (New_Text =>
+--                       Tiny_String.To_String
+--                         (Source =>
+--                            Get_Faction(Index => Sky_Bases(Base_Index).Owner)
+--                              .Name),
+--                     Tag_Name => To_Unbounded_String(Source => "yellow2"));
+--               else
+--                  Insert_Text(New_Text => "Base is abandoned");
+--               end if;
+--               if Sky_Bases(Base_Index).Population > 0 then
+--                  Base_Info_Text := To_Unbounded_String(Source => "" & LF);
+--                  case Sky_Bases(Base_Index).Reputation.Level is
+--                     when -100 .. -75 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are hated here");
+--                        Color := To_Unbounded_String(Source => "red");
+--                     when -74 .. -50 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are outlawed here");
+--                        Color := To_Unbounded_String(Source => "red");
+--                     when -49 .. -25 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are disliked here");
+--                        Color := To_Unbounded_String(Source => "red");
+--                     when -24 .. -1 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "They are unfriendly to you");
+--                        Color := To_Unbounded_String(Source => "red");
+--                     when 0 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are unknown here");
+--                        Color := Null_Unbounded_String;
+--                     when 1 .. 25 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are know here as visitor");
+--                        Color := To_Unbounded_String(Source => "green");
+--                     when 26 .. 50 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are know here as trader");
+--                        Color := To_Unbounded_String(Source => "green");
+--                     when 51 .. 75 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are know here as friend");
+--                        Color := To_Unbounded_String(Source => "green");
+--                     when 76 .. 100 =>
+--                        Append
+--                          (Source => Base_Info_Text,
+--                           New_Item => "You are well known here");
+--                        Color := To_Unbounded_String(Source => "green");
+--                  end case;
+--                  Insert_Text
+--                    (New_Text => To_String(Source => Base_Info_Text),
+--                     Tag_Name => Color);
+--               end if;
+--               if Base_Index = Player_Ship.Home_Base then
+--                  Insert_Text
+--                    (New_Text => LF & "It is your home base",
+--                     Tag_Name => To_Unbounded_String(Source => "cyan"));
+--               end if;
+--            end if;
+--         end Add_Base_Info_Block;
+--      end if;
+--      if Sky_Map(X, Y).Mission_Index > 0 then
+--         Add_Mission_Info_Block :
+--         declare
+--            Mission_Index: constant Mission_Container.Extended_Index :=
+--              Sky_Map(X, Y).Mission_Index;
+--            Mission_Info_Text: Unbounded_String;
+--         begin
+--            Mission_Info_Text := To_Unbounded_String(Source => "" & LF);
+--            if Sky_Map(X, Y).Base_Index > 0 or
+--              Sky_Map(X, Y).Event_Index > 0 then
+--               Append(Source => Map_Info_Text, New_Item => LF);
+--            end if;
+--            case Get_Accepted_Mission(Mission_Index => Mission_Index).M_Type is
+--               when DELIVER =>
+--                  Append
+--                    (Source => Mission_Info_Text,
+--                     New_Item =>
+--                       "Deliver " &
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Item
+--                              (Index =>
+--                                 Get_Accepted_Mission
+--                                   (Mission_Index => Mission_Index)
+--                                   .Item_Index)
+--                              .Name));
+--               when DESTROY =>
+--                  Append
+--                    (Source => Mission_Info_Text,
+--                     New_Item =>
+--                       "Destroy " &
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Ship
+--                              (Proto_Index =>
+--                                 Get_Accepted_Mission
+--                                   (Mission_Index => Mission_Index)
+--                                   .Ship_Index)
+--                              .Name));
+--               when PATROL =>
+--                  Append
+--                    (Source => Mission_Info_Text, New_Item => "Patrol area");
+--               when EXPLORE =>
+--                  Append
+--                    (Source => Mission_Info_Text, New_Item => "Explore area");
+--               when PASSENGER =>
+--                  Append
+--                    (Source => Mission_Info_Text,
+--                     New_Item => "Transport passenger");
+--            end case;
+--            Insert_Text(New_Text => To_String(Source => Mission_Info_Text));
+--         end Add_Mission_Info_Block;
+--      end if;
+--      if Get_Current_Story.Index /= Null_Unbounded_String then
+--         Add_Story_Info_Block :
+--         declare
+--            --## rule off IMPROPER_INITIALIZATION
+--            Story_X, Story_Y: Natural := 1;
+--            --## rule on IMPROPER_INITIALIZATION
+--            Finish_Condition: Step_Condition_Type := ANY;
+--         begin
+--            Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
+--            if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
+--               Story_X := 0;
+--               Story_Y := 0;
+--            end if;
+--            if X = Story_X and Y = Story_Y then
+--               Finish_Condition :=
+--                 (if Get_Current_Story.Current_Step = 0 then
+--                    Get_Story(Index => Get_Current_Story.Index).Starting_Step
+--                      .Finish_Condition
+--                  elsif Get_Current_Story.Current_Step > 0 then
+--                    Get_Story(Index => Get_Current_Story.Index).Steps
+--                      (Get_Current_Story.Current_Step)
+--                      .Finish_Condition
+--                  else Get_Story(Index => Get_Current_Story.Index).Final_Step
+--                      .Finish_Condition);
+--               if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
+--                  Insert_Text(New_Text => LF & "Story leads you here");
+--               end if;
+--            end if;
+--         end Add_Story_Info_Block;
+--      end if;
+--      if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
+--         Insert_Text
+--           (New_Text => LF & "You are here",
+--            Tag_Name => To_Unbounded_String(Source => "yellow"));
+--      end if;
+--      if Sky_Map(X, Y).Event_Index > 0 then
+--         Add_Event_Info_Block :
+--         declare
+--            use Events;
+--
+--            Event_Index: constant Natural := Sky_Map(X, Y).Event_Index;
+--         begin
+--            if Get_Event(Index => Event_Index).E_Type not in BASERECOVERY |
+--                  NONE then
+--               Event_Info_Text := To_Unbounded_String(Source => LF & LF);
+--            end if;
+--            case Get_Event(Index => Event_Index).E_Type is
+--               when TRADER =>
+--                  Append
+--                    (Source => Event_Info_Text,
+--                     New_Item =>
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Ship
+--                              (Proto_Index =>
+--                                 Get_Event(Index => Event_Index).Ship_Index)
+--                              .Name));
+--                  Color := To_Unbounded_String(Source => "green");
+--               when FRIENDLYSHIP =>
+--                  Append
+--                    (Source => Event_Info_Text,
+--                     New_Item =>
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Ship
+--                              (Proto_Index =>
+--                                 Get_Event(Index => Event_Index).Ship_Index)
+--                              .Name));
+--                  Color := To_Unbounded_String(Source => "green2");
+--               when ENEMYSHIP =>
+--                  Append
+--                    (Source => Event_Info_Text,
+--                     New_Item =>
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Ship
+--                              (Proto_Index =>
+--                                 Get_Event(Index => Event_Index).Ship_Index)
+--                              .Name));
+--                  Color := To_Unbounded_String(Source => "red");
+--               when FULLDOCKS =>
+--                  Append
+--                    (Source => Event_Info_Text,
+--                     New_Item => "Full docks in base");
+--                  Color := To_Unbounded_String(Source => "cyan");
+--               when ATTACKONBASE =>
+--                  Append
+--                    (Source => Event_Info_Text,
+--                     New_Item => "Base is under attack");
+--                  Color := To_Unbounded_String(Source => "red");
+--               when DISEASE =>
+--                  Append
+--                    (Source => Event_Info_Text, New_Item => "Disease in base");
+--                  Color := To_Unbounded_String(Source => "yellow");
+--               when ENEMYPATROL =>
+--                  Append
+--                    (Source => Event_Info_Text, New_Item => "Enemy patrol");
+--                  Color := To_Unbounded_String(Source => "red3");
+--               when DOUBLEPRICE =>
+--                  Append
+--                    (Source => Event_Info_Text,
+--                     New_Item =>
+--                       "Double price for " &
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Item
+--                              (Index =>
+--                                 Get_Event(Index => Event_Index).Item_Index)
+--                              .Name));
+--                  Color := To_Unbounded_String(Source => "lime");
+--               when NONE | BASERECOVERY =>
+--                  null;
+--            end case;
+--            Insert_Text
+--              (New_Text => To_String(Source => Event_Info_Text),
+--               Tag_Name => Color);
+--         end Add_Event_Info_Block;
+--      end if;
+--      configure
+--        (Widgt => Map_Info,
+--         options =>
+--           "-state disabled -width" & Positive'Image(Width) & " -height " &
+--           Text.Count
+--             (TextWidget => Map_Info, Options => "-displaylines",
+--              Index1 => "0.0", Index2 => "end"));
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
