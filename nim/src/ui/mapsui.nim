@@ -589,20 +589,24 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       tclEval(script = mapInfo & " tag configure basetype -foreground #" &
           basesTypesList[skyBases[baseIndex].baseType].color)
       insertText(newText = "\nType: ")
-      insertText(newText = basesTypesList[skyBases[baseIndex].baseType].name, tagName = "basetype")
+      insertText(newText = basesTypesList[skyBases[baseIndex].baseType].name,
+          tagName = "basetype")
       if skyBases[baseIndex].population > 0:
         insertText(newText = "\nPopulation: ")
       if skyBases[baseIndex].population > 0 and skyBases[baseIndex].population < 150:
         insertText(newText = "small", tagName = "yellow2")
-      elif skyBases[baseIndex].population > 149 and skyBases[baseIndex].population < 300:
+      elif skyBases[baseIndex].population > 149 and skyBases[
+          baseIndex].population < 300:
         insertText(newText = "medium", tagName = "yellow2")
       elif skyBases[baseIndex].population > 299:
         insertText(newText = "large", tagName = "yellow2")
       insertText(newText = "\nSize: ")
-      insertText(newText = $skyBases[baseIndex].size & "\n", tagName = "yellow2")
+      insertText(newText = $skyBases[baseIndex].size & "\n",
+          tagName = "yellow2")
       if skyBases[baseIndex].population > 0:
         insertText(newText = "Owner: ")
-        insertText(newText = factionsList[skyBases[baseIndex].owner].name, tagName = "yellow2")
+        insertText(newText = factionsList[skyBases[baseIndex].owner].name,
+            tagName = "yellow2")
       else:
         insertText(newText = "Base is abandoned")
       if skyBases[baseIndex].population > 0:
@@ -646,9 +650,11 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     let missionIndex = skyMap[x][y].missionIndex
     case acceptedMissions[missionIndex].mType
     of deliver:
-      missionInfoText = missionInfoText & "Deliver " & itemsList[acceptedMissions[missionIndex].itemIndex].name
+      missionInfoText = missionInfoText & "Deliver " & itemsList[
+          acceptedMissions[missionIndex].itemIndex].name
     of destroy:
-      missionInfoText = missionInfoText & "Destroy " & protoShipsList[acceptedMissions[missionIndex].shipIndex].name
+      missionInfoText = missionInfoText & "Destroy " & protoShipsList[
+          acceptedMissions[missionIndex].shipIndex].name
     of patrol:
       missionInfoText = missionInfoText & "Patrol area"
     of explore:
@@ -656,6 +662,28 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     of passenger:
       missionInfoText = missionInfoText & "Transport passenger"
     insertText(newText = missionInfoText)
+  if currentStory.index.len > 0:
+    var storyX, storyY: Natural = 1
+    (storyX, storyY) = getStoryLocation()
+    if storyX == playerShip.skyX and storyY == playerShip.skyY:
+      storyX = 0
+      storyY = 0
+    var finishCondition: StepConditionType = any
+    if y == storyX and y == storyY:
+      finishCondition = (if currentStory.currentStep == 0: storiesList[
+          currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
+          0: storiesList[currentStory.index].steps[
+          currentStory.currentStep].finishCondition else: storiesList[
+          currentStory.index].finalStep.finishCondition)
+      if finishCondition in {askInBase, destroyShip, explore}:
+        insertText(newText = "\nStory leads you here")
+  if x == playerShip.skyX and y == playerShip.skyY:
+    insertText(newText = "\nYou are here", tagName = "yellow")
+  if skyMap[x][y].eventIndex > -1:
+    let eventIndex = skyMap[x][y].eventIndex
+    var eventInfoText = ""
+    if eventsList[eventIndex].eType notin {baseRecovery, EventsTypes.none}:
+      eventInfoText = "\n\n"
 
 proc createGameUi*() =
   let
