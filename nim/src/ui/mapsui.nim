@@ -583,11 +583,47 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     let baseIndex = skyMap[x][y].baseIndex
     if skyBases[baseIndex].known:
       insertText(newText = "\nBase info:", tagName = "pink underline")
-      insertText(newText = "\nName:")
+      insertText(newText = "\nName: ")
       insertText(newText = skyBases[baseIndex].name, tagName = "yellow2")
     if skyBases[baseIndex].visited.year > 0:
       tclEval(script = mapInfo & " tag configure basetype -foreground #" &
           basesTypesList[skyBases[baseIndex].baseType].color)
+      insertText(newText = "\nType: ")
+      insertText(newText = basesTypesList[skyBases[baseIndex].baseType].name, tagName = "basetype")
+      if skyBases[baseIndex].population > 0:
+        insertText(newText = "\nPopulation: ")
+      if skyBases[baseIndex].population > 0 and skyBases[baseIndex].population < 150:
+        insertText(newText = "small", tagName = "yellow2")
+      elif skyBases[baseIndex].population > 149 and skyBases[baseIndex].population < 300:
+        insertText(newText = "medium", tagName = "yellow2")
+      elif skyBases[baseIndex].population > 299:
+        insertText(newText = "large", tagName = "yellow2")
+      insertText(newText = "\nSize: ")
+      insertText(newText = $skyBases[baseIndex].size & "\n", tagName = "yellow2")
+      if skyBases[baseIndex].population > 0:
+        insertText(newText = "Owner: ")
+        insertText(newText = factionsList[skyBases[baseIndex].owner].name, tagName = "yellow2")
+      else:
+        insertText(newText = "Base is abandoned")
+      if skyBases[baseIndex].population > 0:
+        var
+          baseInfoText = "\n"
+          color = ""
+        case skyBases[baseIndex].reputation.level
+        of -100 .. -75:
+          baseInfoText = baseInfoText & "You are hated here"
+          color = "red"
+        of -74 .. -50:
+          baseInfoText = baseInfoText & "You are outlawed here"
+          color = "red"
+        of -49 .. -25:
+          baseInfoText = baseInfoText & "You are disliked here"
+          color = "red"
+        of -24 .. -1:
+          baseInfoText = baseInfoText & "They are unfriendly to you"
+          color = "red"
+        of 0:
+          baseInfoText = baseInfoText & "You are unknown here"
 
 proc createGameUi*() =
   let
