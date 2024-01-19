@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -35,7 +35,7 @@ type
     ##                 etc.
     ## * description - the description of the base type, show in the new game screen
     name*: string
-    color: string
+    color*: string
     trades: Table[Positive, PricesArray]
     recipes*: seq[string]
     flags*: seq[string]
