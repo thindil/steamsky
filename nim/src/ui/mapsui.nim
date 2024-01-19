@@ -624,6 +624,38 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           color = "red"
         of 0:
           baseInfoText = baseInfoText & "You are unknown here"
+        of 1 .. 25:
+          baseInfoText = baseInfoText & "You are know here as visitor"
+          color = "green"
+        of 26 .. 50:
+          baseInfoText = baseInfoText & "You are know here as trader"
+          color = "green"
+        of 51 .. 75:
+          baseInfoText = baseInfoText & "You are know here as friend"
+          color = "green"
+        of 76 .. 100:
+          baseInfoText = baseInfoText & "You are well known here"
+          color = "green"
+        insertText(newText = baseInfoText, tagName = color)
+      if baseIndex == playerShip.homeBase:
+        insertText(newText = "\nIt is your home base", tagName = "cyan")
+  if skyMap[x][y].missionIndex > -1:
+    var missionInfoText = "\n"
+    if skyMap[x][y].baseIndex > 0 or skyMap[x][y].eventIndex > -1:
+      missionInfoText = missionInfoText & "\n"
+    let missionIndex = skyMap[x][y].missionIndex
+    case acceptedMissions[missionIndex].mType
+    of deliver:
+      missionInfoText = missionInfoText & "Deliver " & itemsList[acceptedMissions[missionIndex].itemIndex].name
+    of destroy:
+      missionInfoText = missionInfoText & "Destroy " & protoShipsList[acceptedMissions[missionIndex].shipIndex].name
+    of patrol:
+      missionInfoText = missionInfoText & "Patrol area"
+    of explore:
+      missionInfoText = missionInfoText & "Explore area"
+    of passenger:
+      missionInfoText = missionInfoText & "Transport passenger"
+    insertText(newText = missionInfoText)
 
 proc createGameUi*() =
   let
