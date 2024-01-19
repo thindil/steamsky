@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
-import ../[config, game, maps, messages, missions, shipscargo, shipsmovement,
-    statistics, stories, tk, types]
+import ../[basestypes, config, game, maps, messages, missions, shipscargo,
+    shipsmovement, statistics, stories, tk, types]
 import coreui, dialogs, mapsuicommands, utilsui2, themes
 
 var
@@ -539,14 +539,16 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
     discard tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
         themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
   except:
-    tclEval(script = "bgerror {Can't set map width. Reason: " & getCurrentExceptionMsg() & "}")
+    tclEval(script = "bgerror {Can't set map width. Reason: " &
+        getCurrentExceptionMsg() & "}")
     return tclOk
   tclEval(script = mapView & " configure -height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]")
   if tclGetVar(varName = "refreshmap") == "1":
     drawMap()
   return tclOk
 
-proc updateMapInfo*(x: Positive = playerShip.skyX; y: Positive = playerShip.skyY) =
+proc updateMapInfo*(x: Positive = playerShip.skyX;
+    y: Positive = playerShip.skyY) =
   let mapInfo = mainPaned & ".mapframe.info"
   tclEval(script = mapInfo & " configure -state normal")
   tclEval(script = mapInfo & " delete 1.0 end")
@@ -557,7 +559,8 @@ proc updateMapInfo*(x: Positive = playerShip.skyX; y: Positive = playerShip.skyY
       width = newText.len
     if width > 21:
       width = 21
-    tclEval(script = mapInfo & " insert end {" & newText & "}" & (if tagName.len == 0: "" else: " [list " & tagName & "]"))
+    tclEval(script = mapInfo & " insert end {" & newText & "}" & (
+        if tagName.len == 0: "" else: " [list " & tagName & "]"))
 
   insertText(newText = "X:")
   insertText(newText = " " & $x, tagName = "yellow2")
@@ -582,6 +585,9 @@ proc updateMapInfo*(x: Positive = playerShip.skyX; y: Positive = playerShip.skyY
       insertText(newText = "\nBase info:", tagName = "pink underline")
       insertText(newText = "\nName:")
       insertText(newText = skyBases[baseIndex].name, tagName = "yellow2")
+    if skyBases[baseIndex].visited.year > 0:
+      tclEval(script = mapInfo & " tag configure basetype -foreground #" &
+          basesTypesList[skyBases[baseIndex].baseType].color)
 
 proc createGameUi*() =
   let
