@@ -415,7 +415,9 @@ package body Ships.UI.Crew is
       Frame: Ttk_Frame;
       Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
       Row: Natural := 0;
-      procedure Add_Label(Name, Text: String; Secondary: Boolean := False) is
+      procedure Add_Label
+        (Name, Text: String; Secondary: Boolean := False;
+         With_Padding: Boolean := True) is
       begin
          Member_Label :=
            Create
@@ -427,11 +429,14 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Member_Label,
                Options =>
-                 "-row" & Natural'Image(Row) & " -column 1 -sticky w -padx 5");
+                 "-row" & Natural'Image(Row) & " -column 1 -sticky w" &
+                 (if With_Padding then " -padx 5" else ""));
             Row := Row + 1;
          else
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-sticky w -padx 5");
+              (Slave => Member_Label,
+               Options =>
+                 "-sticky w" & (if With_Padding then " -padx 5" else ""));
          end if;
          Tcl_Eval
            (interp => Interp,
@@ -546,16 +551,10 @@ package body Ships.UI.Crew is
          Name_Box: constant Ttk_Frame :=
            Create(pathName => Frame & ".nameinfo", options => "-width 360");
       begin
-         Member_Label :=
-           Create
-             (pathName => Name_Box & ".info",
-              options =>
-                "-text {Name: " & To_String(Source => Member.Name) &
-                " } -wraplength 325");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+         Add_Label
+           (Name => Name_Box & ".info",
+            Text => "Name: " & To_String(Source => Member.Name),
+            With_Padding => False);
          Info_Button :=
            Create
              (pathName => Name_Box & ".button",
@@ -717,21 +716,13 @@ package body Ships.UI.Crew is
               Create
                 (pathName => Frame & ".orderinfo", options => "-width 360");
          begin
-            Member_Label :=
-              Create
-                (pathName => Order_Box & ".info",
-                 options =>
-                   "-text {Order: " &
-                   To_String
-                     (Source =>
-                        Get_Current_Order(Member_Index => Member_Index)) &
-                   " } -wraplength 325");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-sticky w");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+            Add_Label
+              (Name => Order_Box & ".info",
+               Text =>
+                 "Order: " &
+                 To_String
+                   (Source => Get_Current_Order(Member_Index => Member_Index)),
+               With_Padding => False);
             Info_Button :=
               Create
                 (pathName => Order_Box & ".button",
