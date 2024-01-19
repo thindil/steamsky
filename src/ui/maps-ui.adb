@@ -171,6 +171,7 @@ package body Maps.UI is
 --               else " [list " & To_String(Source => Tag_Name) & "]"));
 --      end Insert_Text;
    begin
+      Get_Ada_Ship;
       Update_Ada_Map_Info(X1 => X, Y1 => Y);
 --      configure(Widgt => Map_Info, options => "-state normal");
 --      Delete(TextWidget => Map_Info, StartIndex => "1.0", Indexes => "end");

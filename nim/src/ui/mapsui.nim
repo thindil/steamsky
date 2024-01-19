@@ -564,20 +564,20 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
 
   insertText(newText = "X:")
   insertText(newText = " " & $x, tagName = "yellow2")
-  insertText(newText = "Y:")
+  insertText(newText = " Y:")
   insertText(newText = " " & $y, tagName = "yellow2")
-  if playerShip.skyX != y or playerShip.skyY != y:
+  if playerShip.skyX != x or playerShip.skyY != y:
     let
       distance = countDistance(destinationX = x, destinationY = y)
       travelValues = travelInfo(distance = distance)
-    insertText(newText = "\nDistance:")
+    insertText(newText = "\nDistance: ")
     insertText(newText = $distance, tagName = "yellow2")
     if travelValues[1] > 0:
       insertText(newText = "\nETA:")
       var distanceText = ""
       minutesToDate(minutes = travelValues[1], infoText = distanceText)
       insertText(newText = distanceText, tagName = "yellow2")
-      insertText(newText = "\nApprox fuel usage:")
+      insertText(newText = "\nApprox fuel usage: ")
       insertText(newText = $travelValues[2], tagName = "yellow2")
   if skyMap[x][y].baseIndex > 0:
     let baseIndex = skyMap[x][y].baseIndex

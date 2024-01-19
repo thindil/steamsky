@@ -128,7 +128,7 @@ proc getSkillMarks*(skillIndex: Positive;
   if memberIndex == crewIndex:
     result = result & "+"
 
-proc travelInfo*(distance: Positive): array[1 .. 2, Natural] {.sideEffect,
+proc travelInfo*(distance: Natural): array[1 .. 2, Natural] {.sideEffect,
     raises: [], tags: [].} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
@@ -138,6 +138,8 @@ proc travelInfo*(distance: Positive): array[1 .. 2, Natural] {.sideEffect,
   ## travel the distance, the second is the amount of fuel needed to travel
   ## the distance.
   result = [0, 0]
+  if distance == 0:
+    return
   let speed = try:
       realSpeed(ship = playerShip, infoOnly = true) / 1_000
     except:
