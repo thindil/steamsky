@@ -549,6 +549,11 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateMapInfo*(x: Positive = playerShip.skyX;
     y: Positive = playerShip.skyY) {.sideEffect, raises: [], tags: [].} =
+  ## Update frame with information about the map cell on which the player
+  ## currently points.
+  ##
+  ## * x - the X coordinate of the map's cell
+  ## * y - the Y coordinate of the map's cell
   let mapInfo = mainPaned & ".mapframe.info"
   tclEval(script = mapInfo & " configure -state normal")
   tclEval(script = mapInfo & " delete 1.0 end")
