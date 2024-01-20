@@ -781,6 +781,17 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
+var mapX, mapY = 0
+
+proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    mapView = mainPaned & ".mapframe.map"
+    mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
+  if startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1 < 1:
+    return tclOk
+  return tclOk
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
