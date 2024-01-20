@@ -99,13 +99,6 @@ package Maps.UI is
 
 private
 
-   -- ****v* MUI/MUI.Start_X_(private)
-   -- FUNCTION
-   -- Top left map coordinate
-   -- SOURCE
-   Start_X, Start_Y: Integer;
-   -- ****
-
    -- ****f* MUI/MUI.Update_Map_Info_(private)
    -- FUNCTION
    -- Update information about map cell
@@ -123,5 +116,11 @@ private
    -- SOURCE
    procedure Update_Move_Buttons;
    -- ****
+
+-- Temporary code to interact with Nim
+   procedure Get_Start_Point(X, Y: out Positive) with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaStartPoint";
 
 end Maps.UI;

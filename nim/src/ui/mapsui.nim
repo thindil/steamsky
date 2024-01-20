@@ -22,6 +22,7 @@ import coreui, dialogs, mapsuicommands, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
+  startX, startY: int ## Coordinates of the top left point on the map
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
   mapView = ".gameframe.paned.mapframe.map"
@@ -1013,3 +1014,7 @@ proc updateAdaMapInfo(x, y: cint) {.raises: [], tags: [], exportc.} =
     updateMapInfo(x = x.Positive, y = y.Positive)
   except:
     discard
+
+proc getAdaStartPoint(x, y: var cint) {.raises: [], tags: [], exportc.} =
+  x = startX.cint
+  y = startY.cint
