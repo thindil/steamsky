@@ -552,9 +552,11 @@ package body Ships.UI.Crew is
            Create(pathName => Frame & ".nameinfo", options => "-width 360");
       begin
          Add_Label
-           (Name => Name_Box & ".info",
-            Text => "Name: " & To_String(Source => Member.Name),
+           (Name => Name_Box & ".info", Text => "Name: ",
             With_Padding => False);
+         Add_Label
+           (Name => Name_Box & ".info2",
+            Text => To_String(Source => Member.Name), Secondary => True);
          Info_Button :=
            Create
              (pathName => Name_Box & ".button",
@@ -569,7 +571,7 @@ package body Ships.UI.Crew is
             Message => "Set a new name for the crew member");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Info_Button,
-            Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+            Options => "-row 0 -column 2 -sticky n -padx {5 0}");
          Bind
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Button & " invoke;break}");
@@ -577,29 +579,34 @@ package body Ships.UI.Crew is
            (interp => Interp,
             strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Name_Box, Options => "-sticky w -padx 5");
+           (Slave => Name_Box, Options => "-sticky w -padx 5 -columnspan 2");
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
       end Add_Name_Info_Block;
       if Member.Health < 100 then
          if Get_Boolean_Setting(Name => "showNumbers") then
+            Add_Label(Name => Frame & ".health", Text => "Health:");
             Add_Label
-              (Name => Frame & ".health",
-               Text => "Health:" & Natural'Image(Member.Health) & "%");
+              (Name => Frame & ".health2",
+               Text => Natural'Image(Member.Health) & "%", Secondary => True);
          else
             case Member.Health is
                when 81 .. 99 =>
+                  Add_Label(Name => Frame & ".health", Text => "Health: ");
                   Add_Label
-                    (Name => Frame & ".health",
-                     Text => "Health: Slightly wounded");
+                    (Name => Frame & ".health2", Text => "Slightly wounded",
+                     Secondary => True);
                when 51 .. 80 =>
+                  Add_Label(Name => Frame & ".health", Text => "Health: ");
                   Add_Label
-                    (Name => Frame & ".health", Text => "Health: Wounded");
+                    (Name => Frame & ".health2", Text => "Wounded",
+                     Secondary => True);
                when 1 .. 50 =>
+                  Add_Label(Name => Frame & ".health", Text => "Health: ");
                   Add_Label
-                    (Name => Frame & ".health",
-                     Text => "Health: Heavily wounded");
+                    (Name => Frame & ".health2", Text => "Heavily wounded",
+                     Secondary => True);
                when others =>
                   null;
             end case;
@@ -612,25 +619,32 @@ package body Ships.UI.Crew is
       end if;
       if Tired_Points > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
+            Add_Label(Name => Frame & ".tired", Text => "Tiredness:");
             Add_Label
-              (Name => Frame & ".tired",
-               Text => "Tiredness:" & Natural'Image(Tired_Points) & "%");
+              (Name => Frame & ".tired2",
+               Text => Natural'Image(Tired_Points) & "%", Secondary => True);
          else
             case Tired_Points is
                when 1 .. 40 =>
+                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired", Text => "Tiredness: Bit tired");
+                    (Name => Frame & ".tired2", Text => "Bit tired",
+                     Secondary => True);
                when 41 .. 80 =>
+                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired", Text => "Tiredness: Tired");
+                    (Name => Frame & ".tired2", Text => "Tired",
+                     Secondary => True);
                when 81 .. 99 =>
+                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired",
-                     Text => "Tiredness: Very tired");
+                    (Name => Frame & ".tired2", Text => "Very tired",
+                     Secondary => True);
                when 100 =>
+                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired",
-                     Text => "Tiredness: Unconscious");
+                    (Name => Frame & ".tired2", Text => "Unconscious",
+                     Secondary => True);
                when others =>
                   null;
             end case;
@@ -638,24 +652,32 @@ package body Ships.UI.Crew is
       end if;
       if Member.Thirst > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
+            Add_Label(Name => Frame & ".thirst", Text => "Thirst:");
             Add_Label
-              (Name => Frame & ".thirst",
-               Text => "Thirst:" & Natural'Image(Member.Thirst) & "%");
+              (Name => Frame & ".thirst2",
+               Text => Natural'Image(Member.Thirst) & "%", Secondary => True);
          else
             case Member.Thirst is
                when 1 .. 40 =>
+                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst", Text => "Thirst: Bit thirsty");
+                    (Name => Frame & ".thirst2", Text => "Bit thirsty",
+                     Secondary => True);
                when 41 .. 80 =>
+                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst", Text => "Thirst: Thirsty");
+                    (Name => Frame & ".thirst2", Text => "Thirsty",
+                     Secondary => True);
                when 81 .. 99 =>
+                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst",
-                     Text => "Thirst: Very thirsty");
+                    (Name => Frame & ".thirst2", Text => "Very thirsty",
+                     Secondary => True);
                when 100 =>
+                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst", Text => "Thirst: Dehydrated");
+                    (Name => Frame & ".thirst2", Text => "Dehydrated",
+                     Secondary => True);
                when others =>
                   null;
             end case;
@@ -744,7 +766,7 @@ package body Ships.UI.Crew is
                strng =>
                  "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
             Tcl.Tk.Ada.Grid.Grid
-              (Slave => Order_Box, Options => "-sticky w -padx 5");
+              (Slave => Order_Box, Options => "-sticky w -padx 5 -columnspan 2");
             Tcl_Eval
               (interp => Interp,
                strng => "SetScrollbarBindings " & Order_Box & " " & Y_Scroll);
