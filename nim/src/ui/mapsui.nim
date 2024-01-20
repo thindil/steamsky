@@ -548,7 +548,7 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMapInfo*(x: Positive = playerShip.skyX;
-    y: Positive = playerShip.skyY) =
+    y: Positive = playerShip.skyY) {.sideEffect, raises: [], tags: [].} =
   let mapInfo = mainPaned & ".mapframe.info"
   tclEval(script = mapInfo & " configure -state normal")
   tclEval(script = mapInfo & " delete 1.0 end")
@@ -586,11 +586,22 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       insertText(newText = "\nName: ")
       insertText(newText = skyBases[baseIndex].name, tagName = "yellow2")
     if skyBases[baseIndex].visited.year > 0:
-      tclEval(script = mapInfo & " tag configure basetype -foreground #" &
-          basesTypesList[skyBases[baseIndex].baseType].color)
+      try:
+        discard tclEval(script = mapInfo &
+            " tag configure basetype -foreground #" & basesTypesList[skyBases[
+            baseIndex].baseType].color)
+      except:
+        tclEval(script = "bgerror {Can't get the color of the base's type. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
       insertText(newText = "\nType: ")
-      insertText(newText = basesTypesList[skyBases[baseIndex].baseType].name,
-          tagName = "basetype")
+      try:
+        insertText(newText = basesTypesList[skyBases[baseIndex].baseType].name,
+            tagName = "basetype")
+      except:
+        tclEval(script = "bgerror {Can't get the name of the base's type. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
       if skyBases[baseIndex].population > 0:
         insertText(newText = "\nPopulation: ")
       if skyBases[baseIndex].population > 0 and skyBases[baseIndex].population < 150:
@@ -605,8 +616,13 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           tagName = "yellow2")
       if skyBases[baseIndex].population > 0:
         insertText(newText = "Owner: ")
-        insertText(newText = factionsList[skyBases[baseIndex].owner].name,
-            tagName = "yellow2")
+        try:
+          insertText(newText = factionsList[skyBases[baseIndex].owner].name,
+              tagName = "yellow2")
+        except:
+          tclEval(script = "bgerror {Can't get the name of the owner's faction. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
       else:
         insertText(newText = "Base is abandoned")
       if skyBases[baseIndex].population > 0:
@@ -650,11 +666,21 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     let missionIndex = skyMap[x][y].missionIndex
     case acceptedMissions[missionIndex].mType
     of deliver:
-      missionInfoText = missionInfoText & "Deliver " & itemsList[
-          acceptedMissions[missionIndex].itemIndex].name
+      try:
+        missionInfoText = missionInfoText & "Deliver " & itemsList[
+            acceptedMissions[missionIndex].itemIndex].name
+      except:
+        tclEval(script = "bgerror {Can't get the name of the item to deliver. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     of destroy:
-      missionInfoText = missionInfoText & "Destroy " & protoShipsList[
-          acceptedMissions[missionIndex].shipIndex].name
+      try:
+        missionInfoText = missionInfoText & "Destroy " & protoShipsList[
+            acceptedMissions[missionIndex].shipIndex].name
+      except:
+        tclEval(script = "bgerror {Can't get the name of the ship to destroy. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     of patrol:
       missionInfoText = missionInfoText & "Patrol area"
     of explore:
@@ -664,19 +690,29 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     insertText(newText = missionInfoText)
   if currentStory.index.len > 0:
     var storyX, storyY: Natural = 1
-    (storyX, storyY) = getStoryLocation()
+    try:
+      (storyX, storyY) = getStoryLocation()
+    except:
+      tclEval(script = "bgerror {Can't get the location of the current story. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
     var finishCondition: StepConditionType = any
     if y == storyX and y == storyY:
-      finishCondition = (if currentStory.currentStep == 0: storiesList[
-          currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
-          0: storiesList[currentStory.index].steps[
-          currentStory.currentStep].finishCondition else: storiesList[
-          currentStory.index].finalStep.finishCondition)
-      if finishCondition in {askInBase, destroyShip, explore}:
-        insertText(newText = "\nStory leads you here")
+      try:
+        finishCondition = (if currentStory.currentStep == 0: storiesList[
+            currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
+            0: storiesList[currentStory.index].steps[
+            currentStory.currentStep].finishCondition else: storiesList[
+            currentStory.index].finalStep.finishCondition)
+        if finishCondition in {askInBase, destroyShip, explore}:
+          insertText(newText = "\nStory leads you here")
+      except:
+        tclEval(script = "bgerror {Can't get the finish condition of the current story. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   if x == playerShip.skyX and y == playerShip.skyY:
     insertText(newText = "\nYou are here", tagName = "yellow")
   if skyMap[x][y].eventIndex > -1:
@@ -687,16 +723,31 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     var color = ""
     case eventsList[eventIndex].eType
     of trader:
-      eventInfoText = eventInfoText & protoShipsList[eventsList[
-          eventIndex].shipIndex].name
+      try:
+        eventInfoText = eventInfoText & protoShipsList[eventsList[
+            eventIndex].shipIndex].name
+      except:
+        tclEval(script = "bgerror {Can't get the name of the ship for the event. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
       color = "green"
     of friendlyShip:
-      eventInfoText = eventInfoText & protoShipsList[eventsList[
-          eventIndex].shipIndex].name
+      try:
+        eventInfoText = eventInfoText & protoShipsList[eventsList[
+            eventIndex].shipIndex].name
+      except:
+        tclEval(script = "bgerror {Can't get the name of the ship for the event. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
       color = "green2"
     of enemyShip:
-      eventInfoText = eventInfoText & protoShipsList[eventsList[
-          eventIndex].shipIndex].name
+      try:
+        eventInfoText = eventInfoText & protoShipsList[eventsList[
+            eventIndex].shipIndex].name
+      except:
+        tclEval(script = "bgerror {Can't get the name of the ship for the event. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
       color = "red"
     of fullDocks:
       eventInfoText = eventInfoText & "Full docks in base"
@@ -711,8 +762,13 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       eventInfoText = eventInfoText & "Enemy patrol"
       color = "red3"
     of doublePrice:
-      eventInfoText = eventInfoText & itemsList[eventsList[
-          eventIndex].itemIndex].name
+      try:
+        eventInfoText = eventInfoText & itemsList[eventsList[
+            eventIndex].itemIndex].name
+      except:
+        tclEval(script = "bgerror {Can't get the name of the item for the event. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
       color = "lime"
     of EventsTypes.none, baseRecovery:
       discard
