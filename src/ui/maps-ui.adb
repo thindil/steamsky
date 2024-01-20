@@ -34,13 +34,13 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
-with Bases; use Bases;
+with Bases;
 with Bases.LootUI;
 with Bases.RecruitUI;
 with Bases.SchoolUI;
 with Bases.ShipyardUI;
 with Bases.UI;
-with BasesTypes; use BasesTypes;
+with BasesTypes;
 with Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
@@ -63,7 +63,7 @@ with Statistics.UI;
 -- with Stories;
 with Trades.UI;
 with Themes;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 with WaitMenu;
 
 package body Maps.UI is
@@ -540,11 +540,14 @@ package body Maps.UI is
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Winfo;
       use Tcl.Tk.Ada.Wm;
+      use Bases;
+      use BasesTypes;
       use Config;
       use DebugUI;
       use Log;
       use Themes;
       use Tiny_String;
+      use Utils.UI;
 
       Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
       Paned: constant Ttk_PanedWindow :=
