@@ -791,6 +791,15 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
   if startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1 < 1:
     return tclOk
+  mapY = startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1
+  if mapY > 1_024:
+    return tclOk
+  if startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt < 1:
+    return tclOk
+  mapX = startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt
+  if mapX > 1_024:
+    return tclOk
+  updateMapInfo(x = mapX, y = mapY)
   return tclOk
 
 proc createGameUi*() =
@@ -947,6 +956,7 @@ proc createGameUi*() =
         mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
     addCommand("DrawMap", drawMapCommand)
+    addCommand("UpdateMapInfo", updateMapInfoCommand)
 
 # Temporary code for interfacing with Ada
 
