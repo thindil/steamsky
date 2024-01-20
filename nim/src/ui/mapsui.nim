@@ -22,7 +22,7 @@ import coreui, dialogs, mapsuicommands, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
-  startX, startY: int ## Coordinates of the top left point on the map
+  startX, startY: int           ## Coordinates of the top left point on the map
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
   mapView = ".gameframe.paned.mapframe.map"
@@ -785,19 +785,29 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
 var mapX, mapY = 0
 
 proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
     mapView = mainPaned & ".mapframe.map"
     mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
-  if startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1 < 1:
+  try:
+    if startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1 < 1:
+      return tclOk
+    mapY = startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1
+    if mapY > 1_024:
+      return tclOk
+  except:
+    tclEval(script = "bgerror {Can't set map Y coordinate. Reason: " &
+        getCurrentExceptionMsg() & "}")
     return tclOk
-  mapY = startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1
-  if mapY > 1_024:
-    return tclOk
-  if startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt < 1:
-    return tclOk
-  mapX = startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt
-  if mapX > 1_024:
+  try:
+    if startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt < 1:
+      return tclOk
+    mapX = startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt
+    if mapX > 1_024:
+      return tclOk
+  except:
+    tclEval(script = "bgerror {Can't set map X coordinate. Reason: " &
+        getCurrentExceptionMsg() & "}")
     return tclOk
   updateMapInfo(x = mapX, y = mapY)
   return tclOk
