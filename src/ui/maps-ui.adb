@@ -100,6 +100,7 @@ package body Maps.UI is
    procedure Draw_Map is
       Center_X, Center_Y: Positive;
       Map_Height, Map_Width: Positive;
+      Start_X, Start_Y: Integer;
       End_X, End_Y: Integer;
       procedure Draw_Ada_Map with
          Import => True,
@@ -107,6 +108,7 @@ package body Maps.UI is
          External_Name => "drawAdaMap";
    begin
       Get_Center_Point(X => Center_X, Y => Center_Y);
+      Get_Start_Point(X => Start_X, Y => Start_Y);
       Get_Ada_Ship;
       Map_Height :=
         Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
@@ -134,6 +136,7 @@ package body Maps.UI is
          End_X := 1_024;
          Start_X := 1_025 - Map_Width;
       end if;
+      Set_Start_Point(X => Start_X, Y => Start_Y);
       Draw_Ada_Map;
    end Draw_Map;
 

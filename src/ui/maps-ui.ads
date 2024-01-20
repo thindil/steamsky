@@ -118,9 +118,13 @@ private
    -- ****
 
 -- Temporary code to interact with Nim
-   procedure Get_Start_Point(X, Y: out Positive) with
+   procedure Get_Start_Point(X, Y: out Integer) with
       Import => True,
       Convention => C,
       External_Name => "getAdaStartPoint";
+   procedure Set_Start_Point(X, Y: Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaStartPoint";
 
 end Maps.UI;

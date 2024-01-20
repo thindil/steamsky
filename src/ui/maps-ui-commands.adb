@@ -138,7 +138,9 @@ package body Maps.UI.Commands is
       Map_View: constant Tk_Text :=
         Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
       Map_Index: Unbounded_String;
+      Start_X, Start_Y: Integer;
    begin
+      Get_Start_Point(X => Start_X, Y => Start_Y);
       Map_Index :=
         To_Unbounded_String
           (Source =>

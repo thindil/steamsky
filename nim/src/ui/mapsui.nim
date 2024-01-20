@@ -1018,3 +1018,7 @@ proc updateAdaMapInfo(x, y: cint) {.raises: [], tags: [], exportc.} =
 proc getAdaStartPoint(x, y: var cint) {.raises: [], tags: [], exportc.} =
   x = startX.cint
   y = startY.cint
+
+proc setAdaStartPoint(x, y: cint) {.raises: [], tags: [], exportc.} =
+  startX = x.Positive
+  startY = y.Positive
