@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.6] - 2024-01-21
 
 ### Added
 - Ability to set the amount of time to wait for the "Wait" button
