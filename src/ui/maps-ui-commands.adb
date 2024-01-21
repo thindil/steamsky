@@ -191,7 +191,6 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Update_Map_Info_Command;
 
-   -- ****o* MapCommands/MapCommands.Move_Map_Info_Command
    -- FUNCTION
    -- Move map info frame when mouse enter it
    -- PARAMETERS

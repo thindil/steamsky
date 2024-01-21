@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.5 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,18 +31,18 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo752">GameOptions/GameOptions.Show_Options_Tab_Command</a></li>
-<li>2. <a href="#robo751">GameOptions/GameOptions.Show_Options_Command</a></li>
-<li>3. <a href="#robo750">GameOptions/GameOptions.Set_Fonts_Command</a></li>
-<li>4. <a href="#robo749">GameOptions/GameOptions.Set_Default_Fonts_Command</a></li>
-<li>5. <a href="#robo748">GameOptions/GameOptions.Reset_Keys_Command</a></li>
-<li>6. <a href="#robo747">GameOptions/GameOptions.Close_Options_Command</a></li>
-<li>7. <a href="#robo372">GameOptions/GameOptions.Accels</a></li>
-<li>8. <a href="#robo122">GameOptions/GameOptions.Accel_Data</a></li>
+<li>1. <a href="#robo722">GameOptions/GameOptions.Show_Options_Tab_Command</a></li>
+<li>2. <a href="#robo721">GameOptions/GameOptions.Show_Options_Command</a></li>
+<li>3. <a href="#robo720">GameOptions/GameOptions.Set_Fonts_Command</a></li>
+<li>4. <a href="#robo719">GameOptions/GameOptions.Set_Default_Fonts_Command</a></li>
+<li>5. <a href="#robo718">GameOptions/GameOptions.Reset_Keys_Command</a></li>
+<li>6. <a href="#robo717">GameOptions/GameOptions.Close_Options_Command</a></li>
+<li>7. <a href="#robo365">GameOptions/GameOptions.Accels</a></li>
+<li>8. <a href="#robo121">GameOptions/GameOptions.Accel_Data</a></li>
 </ul>
 <hr />
 <a name="GameOptions2fGameOptions2eAccel5fData"></a>
-<a name="robo122"></a><h2>GameOptions/GameOptions.Accel_Data [ Types ]</h2>
+<a name="robo121"></a><h2>GameOptions/GameOptions.Accel_Data [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -63,7 +63,7 @@
 
 <hr />
 <a name="GameOptions2fGameOptions2eAccels"></a>
-<a name="robo372"></a><h2>GameOptions/GameOptions.Accels [ Variables ]</h2>
+<a name="robo365"></a><h2>GameOptions/GameOptions.Accels [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -72,199 +72,247 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   Accels<span class="sign">:</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 53<span class="sign">)</span> <span class="keyword">of</span> Accel_Data <span class="sign">:</span><span class="sign">=</span>
      <span class="sign">(</span>1 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>1<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.shipinfo"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"ShipInfo"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       2 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>2<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 2<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.orders"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Orders"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       3 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>3<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 3<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.crafts"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Crafting"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       4 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>4<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 4<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.messages"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"LastMessages"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       5 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>5<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 5<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.knowledge"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"<a href="./knowledge_ads.html#robo36">Knowledge</a>"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       6 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>6<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.waitorders"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"WaitOrders"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       7 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>7<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 7<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.gamestats"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"GameStats"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       8 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>8<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 8<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.help"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"<a href="../help_ads.html#robo30">Help</a>"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       9 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>9<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 9<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.gameoptions"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"<a href="./gameoptions_ads.html#robo26">GameOptions</a>"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       10 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>10<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 10<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.quit"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Quit"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       11 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Menu_Accelerators<span class="sign">(</span>11<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Menu_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 11<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.resign"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Resign"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       12 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>1<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".menu.menu"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"GameMenu"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       13 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>2<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 2<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapoptions"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MapOptions"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       14 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>3<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 3<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.zoomin"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"ZoomInMap"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       15 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>4<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 4<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.zoomout"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"ZoomOutMap"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       16 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>5<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 5<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.upleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveUpLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       17 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>6<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.up"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveUp"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       18 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>7<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 7<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.upright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveUpRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       19 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>8<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 8<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.left"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       20 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>10<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 10<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.wait"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"WaitInPlace"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       21 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>9<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 9<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.right"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       22 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>11<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 11<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.downleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveDownRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       23 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>12<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 12<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.down"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveDown"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       24 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>13<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 13<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.downright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveDownRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       25 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>14<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 14<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.moveto"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveTo"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       26 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>15<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 15<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.center"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"CenterMap"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       27 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>16<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 16<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.centerhomebase"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"CenterMapOnHomeBase"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       28 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>17<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 17<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapupleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapUpLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       29 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>18<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 18<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapup"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapUp"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       30 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>19<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 19<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapupright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapUpRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       31 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>20<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 20<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       32 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>21<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 21<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       33 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>22<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 22<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapdownleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapDownLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       34 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>23<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 23<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapdown"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapDown"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       35 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>24<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 24<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.mapdownright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveMapDownRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       36 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>25<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 25<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursorupleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorUpLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       37 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>26<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 26<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursorup"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorUp"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       38 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>27<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 27<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursorupright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorUpRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       39 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>28<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 28<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursorleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       40 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>29<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 29<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursorright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       41 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>30<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 30<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursordownleft"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorDownLeft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       42 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>31<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 31<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursordown"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorDown"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       43 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>32<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 32<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.cursordownright"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"MoveCursorDownRight"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       44 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>33<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 33<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".map.clickmouse"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"LeftClickMouse"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       45 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>34<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 34<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.fullstop"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"FullStop"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       46 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>35<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 35<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.quarterspeed"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"QuarterSpeed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       47 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>36<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 36<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.halfspeed"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"HalfSpeed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       48 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Map_Accelerators<span class="sign">(</span>37<span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span>
+           To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Map_Accelerator<span class="sign">(</span>Index <span class="sign">=</span><span class="sign">&gt;</span> 37<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".movement.fullspeed"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"FullSpeed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       49 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> Full_Screen_Accel<span class="sign">,</span>
+        <span class="sign">(</span>Shortcut <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Get_Full_Screen_Accel<span class="sign">)</span><span class="sign">,</span>
          Entry_Name <span class="sign">=</span><span class="sign">&gt;</span>
            To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">".interface.fullscreenkey"</span><span class="sign">)</span><span class="sign">,</span>
          Config_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"FullScreen"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
@@ -292,7 +340,7 @@
 
 <hr />
 <a name="GameOptions2fGameOptions2eClose5fOptions5fCommand"></a>
-<a name="robo747"></a><h2>GameOptions/GameOptions.Close_Options_Command [ Commands ]</h2>
+<a name="robo717"></a><h2>GameOptions/GameOptions.Close_Options_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -321,7 +369,7 @@
 
 <hr />
 <a name="GameOptions2fGameOptions2eReset5fKeys5fCommand"></a>
-<a name="robo748"></a><h2>GameOptions/GameOptions.Reset_Keys_Command [ Commands ]</h2>
+<a name="robo718"></a><h2>GameOptions/GameOptions.Reset_Keys_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -350,7 +398,7 @@
 
 <hr />
 <a name="GameOptions2fGameOptions2eSet5fDefault5fFonts5fCommand"></a>
-<a name="robo749"></a><h2>GameOptions/GameOptions.Set_Default_Fonts_Command [ Commands ]</h2>
+<a name="robo719"></a><h2>GameOptions/GameOptions.Set_Default_Fonts_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -377,7 +425,7 @@
 
 <hr />
 <a name="GameOptions2fGameOptions2eSet5fFonts5fCommand"></a>
-<a name="robo750"></a><h2>GameOptions/GameOptions.Set_Fonts_Command [ Commands ]</h2>
+<a name="robo720"></a><h2>GameOptions/GameOptions.Set_Fonts_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -405,7 +453,7 @@
 
 <hr />
 <a name="GameOptions2fGameOptions2eShow5fOptions5fCommand"></a>
-<a name="robo751"></a><h2>GameOptions/GameOptions.Show_Options_Command [ Commands ]</h2>
+<a name="robo721"></a><h2>GameOptions/GameOptions.Show_Options_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -432,7 +480,7 @@
 
 <hr />
 <a name="GameOptions2fGameOptions2eShow5fOptions5fTab5fCommand"></a>
-<a name="robo752"></a><h2>GameOptions/GameOptions.Show_Options_Tab_Command [ Commands ]</h2>
+<a name="robo722"></a><h2>GameOptions/GameOptions.Show_Options_Tab_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo26">GameOptions</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -459,7 +507,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/gameoptions.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2023-12-24 04:19:24</p>
+<p>Generated from ./src/ui/gameoptions.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-01-21 04:13:30</p>
 </div> <!-- footer -->
 </body>
 </html>
