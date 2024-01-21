@@ -414,33 +414,37 @@ package body Ships.UI.Crew is
       --## rule on IMPROPER_INITIALIZATION
       Frame: Ttk_Frame;
       Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
-      Row: Natural := 0;
-      procedure Add_Label
-        (Name, Text: String; Secondary: Boolean := False;
-         With_Padding: Boolean := True) is
+      procedure Add_Label(Name, Text: String; Text_2: String := "") is
+         Label_Box: constant Ttk_Frame :=
+           Create(pathName => Name, options => "-width 360");
       begin
          Member_Label :=
            Create
-             (pathName => Name,
-              options =>
-                "-text {" & Text & "} -wraplength 360" &
-                (if Secondary then " -style Golden.TLabel" else ""));
-         if Secondary then
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label,
-               Options =>
-                 "-row" & Natural'Image(Row) & " -column 1 -sticky w" &
-                 (if With_Padding then " -padx 5" else ""));
-            Row := Row + 1;
-         else
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label,
-               Options =>
-                 "-sticky w" & (if With_Padding then " -padx 5" else ""));
-         end if;
+             (pathName => Label_Box & ".label1",
+              options => "-text {" & Text & "} -wraplength 360");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
          Tcl_Eval
            (interp => Interp,
             strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+         if Text_2'Length > 0 then
+            Member_Label :=
+              Create
+                (pathName => Label_Box & ".label2",
+                 options =>
+                   "-text {" & Text_2 &
+                   "} -wraplength 360 -style Golden.TLabel");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Member_Label, Options => "-row 0 -column 1 -sticky w");
+            Tcl_Eval
+              (interp => Interp,
+               strng =>
+                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+         end if;
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label_Box, Options => "-sticky w -padx 5");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Label_Box & " " & Y_Scroll);
       end Add_Label;
    begin
       Tcl_Eval
@@ -546,67 +550,49 @@ package body Ships.UI.Crew is
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
       Frame := Create(pathName => Member_Canvas & ".general");
-      Add_Name_Info_Block :
-      declare
-         Name_Box: constant Ttk_Frame :=
-           Create(pathName => Frame & ".nameinfo", options => "-width 360");
-      begin
-         Add_Label
-           (Name => Name_Box & ".info", Text => "Name: ",
-            With_Padding => False);
-         Add_Label
-           (Name => Name_Box & ".info2",
-            Text => To_String(Source => Member.Name), Secondary => True);
-         Info_Button :=
-           Create
-             (pathName => Name_Box & ".button",
-              options =>
-                "-image editicon -command {" & Close_Button &
-                " invoke;GetString {Enter a new name for the " &
-                To_String(Source => Member.Name) & ":} crewname" &
-                CArgv.Arg(Argv => Argv, N => 1) &
-                " {Renaming crew member} {Rename}" & "} -style Small.TButton");
-         Add
-           (Widget => Info_Button,
-            Message => "Set a new name for the crew member");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button,
-            Options => "-row 0 -column 2 -sticky n -padx {5 0}");
-         Bind
-           (Widgt => Info_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Name_Box, Options => "-sticky w -padx 5 -columnspan 2");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Name_Box & " " & Y_Scroll);
-      end Add_Name_Info_Block;
+      Add_Label
+        (Name => Frame & ".nameinfo", Text => "Name: ",
+         Text_2 => To_String(Source => Member.Name));
+      Info_Button :=
+        Create
+          (pathName => Frame & ".nameinfo.button",
+           options =>
+             "-image editicon -command {" & Close_Button &
+             " invoke;GetString {Enter a new name for the " &
+             To_String(Source => Member.Name) & ":} crewname" &
+             CArgv.Arg(Argv => Argv, N => 1) &
+             " {Renaming crew member} {Rename}" & "} -style Small.TButton");
+      Add
+        (Widget => Info_Button,
+         Message => "Set a new name for the crew member");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Info_Button,
+         Options => "-row 0 -column 2 -sticky n -padx {5 0}");
+      Bind
+        (Widgt => Info_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
+      Tcl_Eval
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
       if Member.Health < 100 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label(Name => Frame & ".health", Text => "Health:");
             Add_Label
-              (Name => Frame & ".health2",
-               Text => Natural'Image(Member.Health) & "%", Secondary => True);
+              (Name => Frame & ".health", Text => "Health:",
+               Text_2 => Natural'Image(Member.Health) & "%");
          else
             case Member.Health is
                when 81 .. 99 =>
-                  Add_Label(Name => Frame & ".health", Text => "Health: ");
                   Add_Label
-                    (Name => Frame & ".health2", Text => "Slightly wounded",
-                     Secondary => True);
+                    (Name => Frame & ".health", Text => "Health: ",
+                     Text_2 => "Slightly wounded");
                when 51 .. 80 =>
-                  Add_Label(Name => Frame & ".health", Text => "Health: ");
                   Add_Label
-                    (Name => Frame & ".health2", Text => "Wounded",
-                     Secondary => True);
+                    (Name => Frame & ".health", Text => "Health: ",
+                     Text_2 => "Wounded");
                when 1 .. 50 =>
-                  Add_Label(Name => Frame & ".health", Text => "Health: ");
                   Add_Label
-                    (Name => Frame & ".health2", Text => "Heavily wounded",
-                     Secondary => True);
+                    (Name => Frame & ".health", Text => "Health: ",
+                     Text_2 => "Heavily wounded");
                when others =>
                   null;
             end case;
@@ -619,32 +605,27 @@ package body Ships.UI.Crew is
       end if;
       if Tired_Points > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label(Name => Frame & ".tired", Text => "Tiredness:");
             Add_Label
-              (Name => Frame & ".tired2",
-               Text => Natural'Image(Tired_Points) & "%", Secondary => True);
+              (Name => Frame & ".tired", Text => "Tiredness:",
+               Text_2 => Natural'Image(Tired_Points) & "%");
          else
             case Tired_Points is
                when 1 .. 40 =>
-                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired2", Text => "Bit tired",
-                     Secondary => True);
+                    (Name => Frame & ".tired", Text => "Tiredness: ",
+                     Text_2 => "Bit tired");
                when 41 .. 80 =>
-                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired2", Text => "Tired",
-                     Secondary => True);
+                    (Name => Frame & ".tired", Text => "Tiredness: ",
+                     Text_2 => "Tired");
                when 81 .. 99 =>
-                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired2", Text => "Very tired",
-                     Secondary => True);
+                    (Name => Frame & ".tired", Text => "Tiredness: ",
+                     Text_2 => "Very tired");
                when 100 =>
-                  Add_Label(Name => Frame & ".tired", Text => "Tiredness: ");
                   Add_Label
-                    (Name => Frame & ".tired2", Text => "Unconscious",
-                     Secondary => True);
+                    (Name => Frame & ".tired", Text => "Tiredness: ",
+                     Text_2 => "Unconscious");
                when others =>
                   null;
             end case;
@@ -652,32 +633,27 @@ package body Ships.UI.Crew is
       end if;
       if Member.Thirst > 0 then
          if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label(Name => Frame & ".thirst", Text => "Thirst:");
             Add_Label
-              (Name => Frame & ".thirst2",
-               Text => Natural'Image(Member.Thirst) & "%", Secondary => True);
+              (Name => Frame & ".thirst", Text => "Thirst:",
+               Text_2 => Natural'Image(Member.Thirst) & "%");
          else
             case Member.Thirst is
                when 1 .. 40 =>
-                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst2", Text => "Bit thirsty",
-                     Secondary => True);
+                    (Name => Frame & ".thirst", Text => "Thirst: ",
+                     Text_2 => "Bit thirsty");
                when 41 .. 80 =>
-                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst2", Text => "Thirsty",
-                     Secondary => True);
+                    (Name => Frame & ".thirst", Text => "Thirst: ",
+                     Text_2 => "Thirsty");
                when 81 .. 99 =>
-                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst2", Text => "Very thirsty",
-                     Secondary => True);
+                    (Name => Frame & ".thirst", Text => "Thirst: ",
+                     Text_2 => "Very thirsty");
                when 100 =>
-                  Add_Label(Name => Frame & ".thirst", Text => "Thirst: ");
                   Add_Label
-                    (Name => Frame & ".thirst2", Text => "Dehydrated",
-                     Secondary => True);
+                    (Name => Frame & ".thirst", Text => "Thirst: ",
+                     Text_2 => "Dehydrated");
                when others =>
                   null;
             end case;
@@ -732,52 +708,38 @@ package body Ships.UI.Crew is
          end if;
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
-         Add_Order_Info_Block :
-         declare
-            Order_Box: constant Ttk_Frame :=
-              Create
-                (pathName => Frame & ".orderinfo", options => "-width 360");
-         begin
-            Add_Label
-              (Name => Order_Box & ".info",
-               Text =>
-                 "Order: " &
-                 To_String
-                   (Source => Get_Current_Order(Member_Index => Member_Index)),
-               With_Padding => False);
-            Info_Button :=
-              Create
-                (pathName => Order_Box & ".button",
-                 options =>
-                   "-image giveordericon -command {" & Close_Button &
-                   " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
-                   "} -style Small.TButton");
-            Add
-              (Widget => Info_Button,
-               Message => "Set the new order for the crew member");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Info_Button,
-               Options => "-row 0 -column 1 -sticky n -padx {5 0}");
-            Bind
-              (Widgt => Info_Button, Sequence => "<Escape>",
-               Script => "{" & Close_Button & " invoke;break}");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Order_Box, Options => "-sticky w -padx 5 -columnspan 2");
-            Tcl_Eval
-              (interp => Interp,
-               strng => "SetScrollbarBindings " & Order_Box & " " & Y_Scroll);
-            Bind
-              (Widgt => Info_Button, Sequence => "<Tab>",
-               Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
-            Info_Button := Get_Widget(pathName => Frame & ".nameinfo.button");
-            Bind
-              (Widgt => Info_Button, Sequence => "<Tab>",
-               Script => "{focus " & Order_Box & ".button;break}");
-         end Add_Order_Info_Block;
+         Add_Label
+           (Name => Frame & ".orderinfo",
+            Text =>
+              "Order: " &
+              To_String
+                (Source => Get_Current_Order(Member_Index => Member_Index)));
+         Info_Button :=
+           Create
+             (pathName => Frame & ".orderinfo.button",
+              options =>
+                "-image giveordericon -command {" & Close_Button &
+                " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
+                "} -style Small.TButton");
+         Add
+           (Widget => Info_Button,
+            Message => "Set the new order for the crew member");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button,
+            Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+         Bind
+           (Widgt => Info_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
+         Tcl_Eval
+           (interp => Interp,
+            strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+         Bind
+           (Widgt => Info_Button, Sequence => "<Tab>",
+            Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
+         Info_Button := Get_Widget(pathName => Frame & ".nameinfo.button");
+         Bind
+           (Widgt => Info_Button, Sequence => "<Tab>",
+            Script => "{focus " & Frame & ".orderinfo.button;break}");
       else
          Bind
            (Widgt => Info_Button, Sequence => "<Tab>",
