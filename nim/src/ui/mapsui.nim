@@ -786,6 +786,18 @@ var mapX, mapY = 0
 
 proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Update the information about the selected map's cell
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## UpdateMapInfo x y
+  ## X and Y are coordinates of the map cell which info will be show
   let
     mapView = mainPaned & ".mapframe.map"
     mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
