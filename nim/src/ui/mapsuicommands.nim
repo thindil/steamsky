@@ -93,7 +93,7 @@ proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let mapInfoFrame = mainPaned & ".mapframe.info"
   tclEval(script = "grid configure " & mapInfoFrame & " -sticky " & (
       if tclEval2(script = "grid info " & mapInfoFrame).find("-sticky ne") ==
