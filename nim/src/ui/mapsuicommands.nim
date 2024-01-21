@@ -94,6 +94,17 @@ proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Move the map cell info frame when the mouse enters it
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MoveMapInfo
   let mapInfoFrame = mainPaned & ".mapframe.info"
   tclEval(script = "grid configure " & mapInfoFrame & " -sticky " & (
       if tclEval2(script = "grid info " & mapInfoFrame).find("-sticky ne") ==
