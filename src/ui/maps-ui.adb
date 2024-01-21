@@ -97,6 +97,11 @@ package body Maps.UI is
       return Map_View;
    end Get_Map_View;
 
+   procedure Set_Start_Point(X, Y: Integer) with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaStartPoint";
+
    procedure Draw_Map is
       Center_X, Center_Y: Positive;
       Map_Height, Map_Width: Positive;

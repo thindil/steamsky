@@ -122,9 +122,5 @@ private
       Import => True,
       Convention => C,
       External_Name => "getAdaStartPoint";
-   procedure Set_Start_Point(X, Y: Integer) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaStartPoint";
 
 end Maps.UI;
