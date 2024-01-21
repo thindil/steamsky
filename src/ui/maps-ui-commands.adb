@@ -14,8 +14,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors;
-with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings;
+-- with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with CArgv; use CArgv;
@@ -204,35 +204,35 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- MoveMapInfo
    -- SOURCE
-   function Move_Map_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Move_Map_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Strings.Fixed;
-
-      Map_Info_Frame: constant Ttk_Frame :=
-        Get_Widget
-          (pathName => Main_Paned & ".mapframe.info", Interp => Interp);
-   begin
-      Tcl.Tk.Ada.Grid.Grid_Configure
-        (Slave => Map_Info_Frame,
-         Options =>
-           "-sticky " &
-           (if
-              Index
-                (Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Map_Info_Frame),
-                 Pattern => "-sticky ne") =
-              0
-            then "ne"
-            else "wn"));
-      return TCL_OK;
-   end Move_Map_Info_Command;
+--   function Move_Map_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Move_Map_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Ada.Strings.Fixed;
+--
+--      Map_Info_Frame: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".mapframe.info", Interp => Interp);
+--   begin
+--      Tcl.Tk.Ada.Grid.Grid_Configure
+--        (Slave => Map_Info_Frame,
+--         Options =>
+--           "-sticky " &
+--           (if
+--              Index
+--                (Source => Tcl.Tk.Ada.Grid.Grid_Info(Slave => Map_Info_Frame),
+--                 Pattern => "-sticky ne") =
+--              0
+--            then "ne"
+--            else "wn"));
+--      return TCL_OK;
+--   end Move_Map_Info_Command;
 
    -- ****o* MapCommands/MapCommands.Show_Destination_Menu_Command
    -- FUNCTION
@@ -1404,8 +1404,8 @@ package body Maps.UI.Commands is
       Add_Command
         (Name => "UpdateMapInfo",
          Ada_Command => Update_Map_Info_Command'Access);
-      Add_Command
-        (Name => "MoveMapInfo", Ada_Command => Move_Map_Info_Command'Access);
+--      Add_Command
+--        (Name => "MoveMapInfo", Ada_Command => Move_Map_Info_Command'Access);
       Add_Command
         (Name => "ShowDestinationMenu",
          Ada_Command => Show_Destination_Menu_Command'Access);

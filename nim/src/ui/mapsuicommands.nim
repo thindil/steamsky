@@ -92,10 +92,19 @@ proc moveMapButtonsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & button)
   return tclOk
 
+proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let mapInfoFrame = mainPaned & ".mapframe.info"
+  tclEval(script = "grid configure " & mapInfoFrame & " -sticky " & (
+      if tclEval2(script = "grid info " & mapInfoFrame).find("-sticky ne") ==
+      -1: "ne" else: "wn"))
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
   addCommand("MoveMapButtons", moveMapButtonsCommand)
+  addCommand("MoveMapInfo", moveMapInfoCommand)
 
 # Temporary code for interfacing with Ada
 
