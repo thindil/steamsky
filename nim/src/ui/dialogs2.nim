@@ -36,6 +36,11 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "focus " & frame)
     tclEval(script = "destroy " & dialog)
     return tclOk
+  if tclEval2(script = "busy status " & frame) == "1":
+    tclEval(script = "busy forget " & frame)
+    frame = ".gameframe.paned"
+    tclEval(script = "busy forget " & frame)
+  tclEval(script = "destroy " & dialog)
   return tclOk
 
 proc addCommands*() =
