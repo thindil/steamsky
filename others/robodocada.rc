@@ -11,7 +11,7 @@ options:
   --multidoc
   --index
   --internal
-  --documenttitle "Steam Sky 9.6 code documentation"
+  --documenttitle "Steam Sky 9.7 code documentation"
   --syntaxcolors
   --sections
   --toc
