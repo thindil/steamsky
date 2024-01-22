@@ -19,7 +19,7 @@ import ../tk
 import dialogs
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   if timerId.len > 0:
     tclEval(script = "after cancel " & timerId)
     timerId = ""
