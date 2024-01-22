@@ -20,6 +20,18 @@ import dialogs
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Close the selected dialog
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## CloseDialog dialogname
+  ## Dialogname is name of the dialog to close
   if timerId.len > 0:
     tclEval(script = "after cancel " & timerId)
     timerId = ""
