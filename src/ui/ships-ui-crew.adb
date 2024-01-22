@@ -404,7 +404,7 @@ package body Ships.UI.Crew is
       Close_Button: constant Ttk_Button :=
         Get_Widget(pathName => Buttons_Frame & ".button", Interp => Interp);
       Member_Info: Unbounded_String := Null_Unbounded_String;
-      Tired_Points: Integer := 0;
+      Tired_Points: Integer;
       Tab_Button: Ttk_RadioButton;
       --## rule off IMPROPER_INITIALIZATION
       Info_Button, Button: Ttk_Button;
@@ -668,16 +668,20 @@ package body Ships.UI.Crew is
             case Member.Hunger is
                when 1 .. 40 =>
                   Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: Bit hungry");
+                    (Name => Frame & ".hunger", Text => "Hunger: ",
+                     Text_2 => "Bit hungry");
                when 41 .. 80 =>
                   Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: Hungry");
+                    (Name => Frame & ".hunger", Text => "Hunger: ",
+                     Text_2 => "Hungry");
                when 81 .. 99 =>
                   Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: Very hungry");
+                    (Name => Frame & ".hunger", Text => "Hunger: ",
+                     Text_2 => "Very hungry");
                when 100 =>
                   Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: Starving");
+                    (Name => Frame & ".hunger", Text => "Hunger: ",
+                     Text_2 => "Starving");
                when others =>
                   null;
             end case;
@@ -692,16 +696,20 @@ package body Ships.UI.Crew is
             case Member.Morale(1) is
                when 0 .. 24 =>
                   Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: Upset");
+                    (Name => Frame & ".morale", Text => "Morale: ",
+                     Text_2 => "Upset");
                when 25 .. 49 =>
                   Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: Unhappy");
+                    (Name => Frame & ".morale", Text => "Morale: ",
+                     Text_2 => "Unhappy");
                when 51 .. 74 =>
                   Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: Happy");
+                    (Name => Frame & ".morale", Text => "Morale: ",
+                     Text_2 => "Happy");
                when 75 .. 100 =>
                   Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: Excited");
+                    (Name => Frame & ".morale", Text => "Morale: ",
+                     Text_2 => "Excited");
                when others =>
                   null;
             end case;
@@ -709,9 +717,8 @@ package body Ships.UI.Crew is
       end if;
       if Skills_Container.Length(Container => Member.Skills) > 0 then
          Add_Label
-           (Name => Frame & ".orderinfo",
-            Text =>
-              "Order: " &
+           (Name => Frame & ".orderinfo", Text => "Order: ",
+            Text_2 =>
               To_String
                 (Source => Get_Current_Order(Member_Index => Member_Index)));
          Info_Button :=
@@ -726,7 +733,7 @@ package body Ships.UI.Crew is
             Message => "Set the new order for the crew member");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Info_Button,
-            Options => "-row 0 -column 1 -sticky n -padx {5 0}");
+            Options => "-row 0 -column 2 -sticky n -padx {5 0}");
          Bind
            (Widgt => Info_Button, Sequence => "<Escape>",
             Script => "{" & Close_Button & " invoke;break}");
@@ -749,18 +756,15 @@ package body Ships.UI.Crew is
           (Item => To_Unbounded_String(Source => "nogender")) =
         UnboundedString_Container.No_Index then
          Add_Label
-           (Name => Frame & ".gender",
-            Text =>
-              "Gender: " & (if Member.Gender = 'M' then "Male" else "Female"));
+           (Name => Frame & ".gender", Text => "Gender: ",
+            Text_2 => (if Member.Gender = 'M' then "Male" else "Female"));
       end if;
       Add_Label
-        (Name => Frame & ".faction",
-         Text => "Faction: " & To_String(Source => Faction.Name));
+        (Name => Frame & ".faction", Text => "Faction: ",
+         Text_2 => To_String(Source => Faction.Name));
       Add_Label
-        (Name => Frame & ".homebase",
-         Text =>
-           "Home base: " &
-           To_String(Source => Sky_Bases(Member.Home_Base).Name));
+        (Name => Frame & ".homebase", Text => "Home base: ",
+         Text_2 => To_String(Source => Sky_Bases(Member.Home_Base).Name));
       if Skills_Container.Length(Container => Member.Skills) = 0 or
         Member.Contract_Length = 0 then
          Add_Label(Name => Frame & ".passenger", Text => "Passenger");
@@ -769,22 +773,21 @@ package body Ships.UI.Crew is
             Minutes_To_Date
               (Minutes => Member.Contract_Length, Info_Text => Member_Info);
             Add_Label
-              (Name => Frame & ".timelimit",
-               Text => "Time limit:" & To_String(Source => Member_Info));
+              (Name => Frame & ".timelimit", Text => "Time limit:",
+               Text_2 => To_String(Source => Member_Info));
          end if;
       else
          if Member_Index > 1 then
             Add_Label
-              (Name => Frame & ".timelimit",
-               Text =>
-                 "Contract length:" &
+              (Name => Frame & ".timelimit", Text => "Contract length:",
+               Text_2 =>
                  (if Member.Contract_Length > 0 then
                     Integer'Image(Member.Contract_Length) & " days"
                   else " pernament"));
             Add_Label
-              (Name => Frame & ".payment",
-               Text =>
-                 "Payment:" & Natural'Image(Member.Payment(1)) & " " &
+              (Name => Frame & ".payment", Text => "Payment:",
+               Text_2 =>
+                 Natural'Image(Member.Payment(1)) & " " &
                  To_String(Source => Money_Name) & " each day" &
                  (if Member.Payment(2) > 0 then
                     " and " & Natural'Image(Member.Payment(2)) &
