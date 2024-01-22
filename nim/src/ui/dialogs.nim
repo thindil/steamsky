@@ -25,7 +25,7 @@ type ButtonSettings* = object
 const emptyButtonSettings = ButtonSettings(text: "", command: "", icon: "",
     tooltip: "", color: "")
 
-var timerId: string = "" ## Id of the timer for auto close command
+var timerId*: string = "" ## Id of the timer for auto close command
 
 proc createDialog*(name, title: string; titleWidth: Positive = 275;
     columns: Positive = 1;
