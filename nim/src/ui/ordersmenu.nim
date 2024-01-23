@@ -134,6 +134,27 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
             missionLimit.dec
         if missionsLimit > 0:
           addButton(name = ".missions", label = "Missions", command = "ShowBaseMissions", shortcut = "m", underline = 0)
+      if playerShip.homeBase != baseIndex:
+        addButton(name = ".home", label = "Set as home", command = "SetAsHome", shorcut = "h", underline = 7)
+    if skyBases[baseIndex].population == 0:
+      addButton(name = ".loot", label = "Loot", command = "ShowLoot", shortcut = "l", underline = 0)
+  else:
+    var event = none
+    if skyMap[playerShip.skyX][playerShip.skyY].evenIndex > -1:
+      event = eventsList[skyMap[playerShip.skyX][playerShip.skyY].evenIndex]
+    case event
+    of enemyShip, enemyPatrol:
+      addButton(name = ".event", label = "Attack", command = "Attack", shortcut = "a", underline = 0)
+    of fullDocks:
+      addButton(name = ".event", label = "Wait (full docks)", command = "ShowWait", shortcut = "w", underline = 0)
+    of attackOnBase:
+      addButton(name = ".event", label = "Defend", command = "Attack", shortcut = "d", underline = 0)
+    of disease:
+      if haveTrader:
+        let itemIndex = findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[baseIndex].owner].healingTools)
+        if itemIndex > -1:
+          addButton(name = ".deliverfree", label = "Deliver medicines for free", command = "DeliverMedicines free", shortcut = "d", underline = 0)
+          addButton(name = ".deliverprice", label = "Deliver medicines for price", command = "DeliverMedicines paid", shortcut = "m", underline = 8)
   return tclOk
 
 proc addCommands*() =
