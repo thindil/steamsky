@@ -155,6 +155,18 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
         if itemIndex > -1:
           addButton(name = ".deliverfree", label = "Deliver medicines for free", command = "DeliverMedicines free", shortcut = "d", underline = 0)
           addButton(name = ".deliverprice", label = "Deliver medicines for price", command = "DeliverMedicines paid", shortcut = "m", underline = 8)
+    of none, doublePrice, baseRecovery:
+      if baseIndex > 0:
+        if skyBases[baseIndex].reputation.level > -25:
+          var dockingCost = 1
+          for module in playerShip.modules:
+            if module.mType == hull:
+              dockingCost = module.maxModules
+              break
+          if skyBases[baseIndex].population > 0:
+            addButton(name = ".dock", label = "Dock (" & $dockingCost & " " & moneyName & ")", command = "Docking", shortcut = "d", underline = 0)
+          else:
+            addButton(name = ".dock", label = "Dock", command = "Docking", shortcut = "d", underline = 0)
   return tclOk
 
 proc addCommands*() =
