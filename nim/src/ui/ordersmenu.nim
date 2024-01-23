@@ -33,12 +33,35 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
   var haveTrader = false
   if findMember(order = talk) > -1:
     haveTrader = true
+  let
+    baseIndex = skyMap[playerShip.skyX, playerShip.skyY].baseIndex
+    dialogCloseButton = ordersMenu & ".closebutton"
+  tclEval(script = "ttk::button " & dialogCloseButton & " -text Close -command {CloseDialog " & ordersMenu & "}")
+  type OrderShortcut = object
+    buttonName: stirng
+    shortcut: char
+  var
+    lastButton = "."
+    shortcuts = seq[OrderShortcut]
+
+  proc addButton(name, label, command, shortcut: string; underline: Natural; row: int = -1):
+    let button = ordersMenu & name
+    tclEval(script = "ttk::button " & button & " -text {" & label & "} -command {CloseDialog " & ordersMenu & ";" & command & "} -underline " & $underline)
+    tclEval(script = "grid " & button & " -sticky we -padx 5" & (if row == -1: "" else: " -row " & $row))
+    tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
+    lastButton = button
+    shortcuts.add(OrderShortcut(buttonName: button, shortcut: shortcut[0]))
+
   if currentStory.index.len > 0:
     let step = (if currentStory.currentStep == -1: storiesList[
         currentStory.index].startingStep elif currentStory.currentStep >
         -1: storiesList[currentStory.index].steps[
         currentStory.currentStep] else: storiesList[
         currentStory.index].finalStep)
+    case step.finishCondition
+    of askInBase:
+      if baseIndex > 0:
+        if currentStory.data.len == 0 or currentStory.data == skyBases[baseIndex].name:
   return tclOk
 
 proc addCommands*() =
