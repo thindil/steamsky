@@ -167,6 +167,33 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
             addButton(name = ".dock", label = "Dock (" & $dockingCost & " " & moneyName & ")", command = "Docking", shortcut = "d", underline = 0)
           else:
             addButton(name = ".dock", label = "Dock", command = "Docking", shortcut = "d", underline = 0)
+        for mission in acceptedMissions:
+          if haveTrader and mission.targetX == playerShip.skyX and mission.targetY == playerShip.skyY and mission.finished:
+            case mission.mType
+            of deliver:
+              addButton(name = ".mission", label = "Complete delivery of " & itemsList[mission.itemIndex].name, command = "CompleteMission", shortcut = "c", underline = 0)
+            of destroy:
+              addButton(name = ".mission", label = "Complete destroy " & protoShipsList[mission.shipIndex].name, command = "CompleteMission", shortcut = "c", underline = 0)
+            of patrol:
+              addButton(name = ".mission", label = "Complete Patrol area mission", command = "CompleteMission", shortcut = "c", underline = 0)
+            of explore:
+              addButton(name = ".mission", label = "Complete Explore area mission", command = "CompleteMission", shortcut = "c", underline = 0)
+            of passenger:
+              addButton(name = ".mission", label = "Complete Transport passenger mission", command = "CompleteMission", shortcut = "c", underline = 0)
+      else:
+        for mission in acceptedMissions:
+          if haveTrader and mission.targetX == playerShip.skyX and mission.targetY == playerShip.skyY and not mission.finished:
+            case mission.mType
+            of deliver, passenger:
+              discard
+            of destroy:
+              addButton(name = ".mission", label = "Search for " & protoShipsList[mission.shipIndex], command = "StartMission", shortcut = "s", underline = 0)
+            of patrol:
+              addButton(name = ".mission", label = "Patrol area", command = "StartMission", shortcut = "p", underline = 0)
+            of explore:
+              addButton(name = ".mission", label = "Explore area", command = "StartMission", shortcut = "e", underline = 0)
+    of trader:
+      if haveTrader
   return tclOk
 
 proc addCommands*() =
