@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated look of the dialog with information about the player's ship's crew
+  members
+
 ## [9.6] - 2024-01-21
 
 ### Added
