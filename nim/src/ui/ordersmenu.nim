@@ -62,6 +62,19 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
     of askInBase:
       if baseIndex > 0:
         if currentStory.data.len == 0 or currentStory.data == skyBases[baseIndex].name:
+          addButton(name = ".story", label = "Ask for " & itemsList[getStepData(finishData = step.finishData, name = "item")].name, command = "ExecuteStory", Shortcut = "f", underLine = 4)
+    of destroyShip:
+      let parts = currentStory.data.split(';')
+      if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
+        addButton(name = ".story", label = "Search for " & protoShipsList[parts[3].parseInt].name, command = "ExecuteStory", shortcut = "s", underline = 0)
+    of explore:
+      let parts = currentStory.data.split(';')
+      if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
+        addButton(name = ".story", label = "Search area", command = "ExecuteStory", shortcut = "s", underline = 0)
+    of any, loot:
+      discard
+  if playerShip.speed = docked:
+    discard
   return tclOk
 
 proc addCommands*() =
