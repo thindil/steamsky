@@ -99,6 +99,41 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
         addButton(name = ".shipyard", label = "Shipyard", command = "ShowShipyard", shortcut = "i", underline = 2)
       for index, recipe in recipesList:
         if not isKnownRecipe(recipeIndex = index) and hasRecipe(baseType = skyBases[baseIndex].baseType, recipe = index) and recipe.reputation <= skyBases[baseIndex].reputation.level:
+          addButton(name = ".recipes", label = "Buy recipes", command = "ShowBaseUI recipes", shortcut = "y", underline = 2)
+          break
+      if skyBases[baseIndex].missions.length > 0:
+        var missionsLimit = case skyBases[baseIndex].reputation.level
+            of 0 .. 25:
+              1
+            of 26 .. 50:
+              3
+            of 51 .. 75:
+              5
+            of 76 .. 100:
+              10
+            else:
+              0
+        for mission in acceptedMissions:
+          if (mission.finished and mission.startBase == baseIndex) or (mission.targetX == playerShip.skyX and mission.targetY == playerShip.targetY):
+            case mission.mType
+            of deliver:
+              addButton(name = ".mission", label = "Complete delivery of " & itemsList[mission.itemIndex].name, command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+            of destroy:
+              if mission.finished:
+                addButton(name = ".mission", label = "Complete destroy " & protoShipsList[mission.shipIndex].name, command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+            of patrol:
+              if mission.finished:
+                addButton(name = ".mission", label = "Complete Patrol area mission", command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+            of explore:
+              if mission.finished:
+                addButton(name = ".mission", label = "Complete Explore area mission", command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+            of passenger:
+              if mission.finished:
+                addButton(name = ".mission", label = "Complete Transport passenger mission", command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+          if mission.startBase == baseIndex:
+            missionLimit.dec
+        if missionsLimit > 0:
+          addButton(name = ".missions", label = "Missions", command = "ShowBaseMissions", shortcut = "m", underline = 0)
   return tclOk
 
 proc addCommands*() =
