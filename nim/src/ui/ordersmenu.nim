@@ -141,7 +141,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     var event = none
     if skyMap[playerShip.skyX][playerShip.skyY].evenIndex > -1:
-      event = eventsList[skyMap[playerShip.skyX][playerShip.skyY].evenIndex]
+      event = eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType
     case event
     of enemyShip, enemyPatrol:
       addButton(name = ".event", label = "Attack", command = "Attack", shortcut = "a", underline = 0)
@@ -193,7 +193,24 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
             of explore:
               addButton(name = ".mission", label = "Explore area", command = "StartMission", shortcut = "e", underline = 0)
     of trader:
-      if haveTrader
+      if haveTrader:
+        addButton(name = ".trade", label = "Trade", command = "ShowTrader " & $eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].shipIndex, shortcut = "t", underline = 0)
+        addButton(name = ".askevents", label = "Ask for events", command = "AskForEvents", shortcut = "e", underline = 8)
+        addButton(name = ".askbases", label = "Ask for bases", command = "AskForBases", shortcut = "b", underline = 8)
+      addButton(name = ".attack", label = "Attack", command = "Attack", shortcut = "a", underline = 0)
+    of friendlyShip:
+      if haveTrader:
+        if tradersName in protoShipsList[eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].shipIndex].name:
+          addButton(name = ".trade", label = "Trade", command = "ShowTrader " & $eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].shipIndex, shortcut = "t", underline = 0)
+          addButton(name = ".askbases", label = "Ask for bases", command = "AskForBases", shortcut = "b", underline = 8)
+        addButton(name = ".askevents", label = "Ask for events", command = "AskForEvents", shortcut = "e", underline = 8)
+      addButton(name = ".attack", label = "Attack", command = "Attack", shortcut = "a", underline = 0)
+  if lastButton = ".":
+    showMessage(text = "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.", title = "No orders available")
+  else:
+    tclEval(script = "grid " & dialogCloseButton & " -sticky we -padx 5 -pady {0 5}")
+    tclEval(script = "bind " & dialogCloseButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
+    tclEval(script = "bind " & lastButton & "<Tab> {focus " & dialogCloseButton & ";break}")
   return tclOk
 
 proc addCommands*() =
