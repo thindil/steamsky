@@ -74,7 +74,31 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
     of any, loot:
       discard
   if playerShip.speed = docked:
-    discard
+    addButton(name = ".undock", label = "Undock", command = "Docking", shortcut = "d", underline = 2)
+    if skyBases[baseIndex].population > 0:
+      addButton(name = ".escape", label = "Escape", command = "Docking escape", shortcut = "a", underline = 3)
+      if haveTrader and skyBases[baseIndex].population > 0:
+        addButton(name = ".trade", label = "Trade", command = "ShowTrade", shortcut = "t", underline = 0)
+        if skyBases[baseIndex].recruits.len > 0:
+          addButton(name = ".recruits", label = "Recruit", command = "ShowRecruit", shortcut = "r", underline = 0)
+      if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
+        addButton(name = ".events", label = "Ask for events", command = "AskForEvents", shortcut = "e", underline = 8)
+      if not skyBases[baseIndex].askedForBases:
+        addButton(name = ".bases", label = "Ask for bases", command = "AskForBases", shortcut = "b", underline = 8)
+      if hasFlag(baseType = skyBases[baseIndex].baseType, flag = "temple"):
+        addButton(name = ".pray", Label = "Pray", command = "Pray", shortcut = "p", underline = 0)
+      for member in playerShip.crew:
+        if member.health < 100:
+          addButton(name = ".heal", label = "Heal wounded", command = "ShowBaseUI heal", shortcut = "w", underline = 5)
+          break
+      for module in playerShip.modules:
+        if module.durability < module.maxDurability:
+          addButton(name = ".repair", label = "Repair ship", command = "ShowBaseUI repair", shortcut = "p", underline = 2)
+          break
+      if hasFlag(baseType = skyBases[baseIndex].baseType, flag = "shipyard"):
+        addButton(name = ".shipyard", label = "Shipyard", command = "ShowShipyard", shortcut = "i", underline = 2)
+      for index, recipe in recipesList:
+        if not isKnownRecipe(recipeIndex = index) and hasRecipe(baseType = skyBases[baseIndex].baseType, recipe = index) and recipe.reputation <= skyBases[baseIndex].reputation.level:
   return tclOk
 
 proc addCommands*() =
