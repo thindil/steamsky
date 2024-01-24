@@ -21,7 +21,7 @@ import ../[basestypes, crewinventory, game, maps, missions, shipscrew, stories,
 import coreui, dialogs, dialogs2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   var ordersMenu = createDialog(name = ".gameframe.orders",
       title = "Ship orders")
   if tclEval2(script = "winfo ismapped " & ordersMenu) == "1":
@@ -60,29 +60,56 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     shortcuts.add(OrderShortcut(buttonName: button, shortcut: shortcut[0]))
 
   if currentStory.index.len > 0:
-    let step = (if currentStory.currentStep == -1: storiesList[
-        currentStory.index].startingStep elif currentStory.currentStep >
-        -1: storiesList[currentStory.index].steps[
-        currentStory.currentStep] else: storiesList[
-        currentStory.index].finalStep)
+    let step = try:
+        (if currentStory.currentStep == -1: storiesList[
+          currentStory.index].startingStep elif currentStory.currentStep >
+          -1: storiesList[currentStory.index].steps[
+          currentStory.currentStep] else: storiesList[
+          currentStory.index].finalStep)
+      except:
+        tclEval(script = "bgerror {Can't get the current story step. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     case step.finishCondition
     of askInBase:
       if baseIndex > 0:
         if currentStory.data.len == 0 or currentStory.data == skyBases[
             baseIndex].name:
-          addButton(name = ".story", label = "Ask for " & itemsList[getStepData(
-              finishData = step.finishData, name = "item").parseInt].name,
-              command = "ExecuteStory", shortcut = "f", underLine = 4)
+          try:
+            addButton(name = ".story", label = "Ask for " & itemsList[
+                getStepData(finishData = step.finishData,
+                    name = "item").parseInt].name,
+                command = "ExecuteStory", shortcut = "f", underLine = 4)
+          except:
+            tclEval(script = "bgerror {Can't add the story button. Reason: " &
+                getCurrentExceptionMsg() & "}")
+            return tclOk
     of destroyShip:
       let parts = currentStory.data.split(';')
-      if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
-        addButton(name = ".story", label = "Search for " & protoShipsList[parts[
-            3].parseInt].name, command = "ExecuteStory", shortcut = "s", underline = 0)
+      try:
+        if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
+          try:
+            addButton(name = ".story", label = "Search for " & protoShipsList[
+                parts[3].parseInt].name, command = "ExecuteStory",
+                    shortcut = "s", underline = 0)
+          except:
+            tclEval(script = "bgerror {Can't add the story button. Reason: " &
+                getCurrentExceptionMsg() & "}")
+            return tclOk
+      except:
+        tclEval(script = "bgerror {Can't get the story step location. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     of explore:
       let parts = currentStory.data.split(';')
-      if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
-        addButton(name = ".story", label = "Search area",
-            command = "ExecuteStory", shortcut = "s", underline = 0)
+      try:
+        if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
+          addButton(name = ".story", label = "Search area",
+              command = "ExecuteStory", shortcut = "s", underline = 0)
+      except:
+        tclEval(script = "bgerror {Can't get the story step location. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     of any, loot:
       discard
   if playerShip.speed == docked:
@@ -104,9 +131,14 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
       if not skyBases[baseIndex].askedForBases:
         addButton(name = ".bases", label = "Ask for bases",
             command = "AskForBases", shortcut = "b", underline = 8)
-      if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
-        addButton(name = ".pray", label = "Pray", command = "Pray",
-            shortcut = "p", underline = 0)
+      try:
+        if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
+          addButton(name = ".pray", label = "Pray", command = "Pray",
+              shortcut = "p", underline = 0)
+      except:
+        tclEval(script = "bgerror {Can't check if the base has temple flag. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
       for member in playerShip.crew:
         if member.health < 100:
           addButton(name = ".heal", label = "Heal wounded",
@@ -117,16 +149,26 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           addButton(name = ".repair", label = "Repair ship",
               command = "ShowBaseUI repair", shortcut = "p", underline = 2)
           break
-      if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
-        addButton(name = ".shipyard", label = "Shipyard",
-            command = "ShowShipyard", shortcut = "i", underline = 2)
+      try:
+        if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
+          addButton(name = ".shipyard", label = "Shipyard",
+              command = "ShowShipyard", shortcut = "i", underline = 2)
+      except:
+        tclEval(script = "bgerror {Can't check if the base has shipyard flag. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
       for index, recipe in recipesList:
-        if index notin knownRecipes and index in basesTypesList[skyBases[
-            baseIndex].baseType].recipes and recipe.reputation <= skyBases[
-            baseIndex].reputation.level:
-          addButton(name = ".recipes", label = "Buy recipes",
-              command = "ShowBaseUI recipes", shortcut = "y", underline = 2)
-          break
+        try:
+          if index notin knownRecipes and index in basesTypesList[skyBases[
+              baseIndex].baseType].recipes and recipe.reputation <= skyBases[
+              baseIndex].reputation.level:
+            addButton(name = ".recipes", label = "Buy recipes",
+                command = "ShowBaseUI recipes", shortcut = "y", underline = 2)
+            break
+        except:
+          tclEval(script = "bgerror {Can't check if base has recipes for sale. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
       if skyBases[baseIndex].missions.len > 0:
         var missionsLimit = case skyBases[baseIndex].reputation.level
           of 0 .. 25:
@@ -145,14 +187,25 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
               playerShip.skyY):
             case mission.mType
             of deliver:
-              addButton(name = ".mission", label = "Complete delivery of " &
-                  itemsList[mission.itemIndex].name,
-                  command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+              try:
+                addButton(name = ".mission", label = "Complete delivery of " &
+                    itemsList[mission.itemIndex].name,
+                    command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+              except:
+                tclEval(script = "bgerror {Can't add mission button. Reason: " &
+                    getCurrentExceptionMsg() & "}")
+                return tclOk
             of destroy:
               if mission.finished:
-                addButton(name = ".mission", label = "Complete destroy " &
-                    protoShipsList[mission.shipIndex].name,
-                    command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+                try:
+                  addButton(name = ".mission", label = "Complete destroy " &
+                      protoShipsList[mission.shipIndex].name,
+                      command = "CompleteMission", shortcut = "c",
+                          underline = 0, row = 0)
+                except:
+                  tclEval(script = "bgerror {Can't add mission button. Reason: " &
+                      getCurrentExceptionMsg() & "}")
+                  return tclOk
             of patrol:
               if mission.finished:
                 addButton(name = ".mission",
@@ -196,8 +249,13 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           shortcut = "d", underline = 0)
     of disease:
       if haveTrader:
-        let itemIndex = findItem(inventory = playerShip.cargo,
-            itemType = factionsList[skyBases[baseIndex].owner].healingTools)
+        let itemIndex = try:
+            findItem(inventory = playerShip.cargo,
+              itemType = factionsList[skyBases[baseIndex].owner].healingTools)
+          except:
+            tclEval(script = "bgerror {Can't find medicines in the ship cargo. Reason: " &
+                getCurrentExceptionMsg() & "}")
+            return tclOk
         if itemIndex > -1:
           addButton(name = ".deliverfree", label = "Deliver medicines for free",
               command = "DeliverMedicines free", shortcut = "d", underline = 0)
@@ -223,13 +281,23 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
               mission.targetY == playerShip.skyY and mission.finished:
             case mission.mType
             of deliver:
-              addButton(name = ".mission", label = "Complete delivery of " &
-                  itemsList[mission.itemIndex].name,
-                  command = "CompleteMission", shortcut = "c", underline = 0)
+              try:
+                addButton(name = ".mission", label = "Complete delivery of " &
+                    itemsList[mission.itemIndex].name,
+                    command = "CompleteMission", shortcut = "c", underline = 0)
+              except:
+                tclEval(script = "bgerror {Can't add accepted mission button. Reason: " &
+                    getCurrentExceptionMsg() & "}")
+                return tclOk
             of destroy:
-              addButton(name = ".mission", label = "Complete destroy " &
-                  protoShipsList[mission.shipIndex].name,
-                  command = "CompleteMission", shortcut = "c", underline = 0)
+              try:
+                addButton(name = ".mission", label = "Complete destroy " &
+                    protoShipsList[mission.shipIndex].name,
+                    command = "CompleteMission", shortcut = "c", underline = 0)
+              except:
+                tclEval(script = "bgerror {Can't add accepted mission button. Reason: " &
+                    getCurrentExceptionMsg() & "}")
+                return tclOk
             of patrol:
               addButton(name = ".mission",
                   label = "Complete Patrol area mission",
@@ -250,9 +318,14 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
             of deliver, passenger:
               discard
             of destroy:
-              addButton(name = ".mission", label = "Search for " &
-                  protoShipsList[mission.shipIndex].name,
-                  command = "StartMission", shortcut = "s", underline = 0)
+              try:
+                addButton(name = ".mission", label = "Search for " &
+                    protoShipsList[mission.shipIndex].name,
+                    command = "StartMission", shortcut = "s", underline = 0)
+              except:
+                tclEval(script = "bgerror {Can't add accepted mission button. Reason: " &
+                    getCurrentExceptionMsg() & "}")
+                return tclOk
             of patrol:
               addButton(name = ".mission", label = "Patrol area",
                   command = "StartMission", shortcut = "p", underline = 0)
@@ -272,13 +345,18 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           shortcut = "a", underline = 0)
     of friendlyShip:
       if haveTrader:
-        if tradersName in protoShipsList[eventsList[skyMap[playerShip.skyX][
-            playerShip.skyY].eventIndex].shipIndex].name:
-          addButton(name = ".trade", label = "Trade", command = "ShowTrader " &
-              $eventsList[skyMap[playerShip.skyX][
-              playerShip.skyY].eventIndex].shipIndex, shortcut = "t", underline = 0)
-          addButton(name = ".askbases", label = "Ask for bases",
-              command = "AskForBases", shortcut = "b", underline = 8)
+        try:
+          if tradersName in protoShipsList[eventsList[skyMap[playerShip.skyX][
+              playerShip.skyY].eventIndex].shipIndex].name:
+            addButton(name = ".trade", label = "Trade",
+                command = "ShowTrader " & $eventsList[skyMap[playerShip.skyX][
+                playerShip.skyY].eventIndex].shipIndex, shortcut = "t", underline = 0)
+            addButton(name = ".askbases", label = "Ask for bases",
+                command = "AskForBases", shortcut = "b", underline = 8)
+        except:
+          tclEval(script = "bgerror {Can't check if ship is trader. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
         addButton(name = ".askevents", label = "Ask for events",
             command = "AskForEvents", shortcut = "e", underline = 8)
       addButton(name = ".attack", label = "Attack", command = "Attack",
