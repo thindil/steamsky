@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[basestypes, game, maps, shipscrew, stories, tk, types, utils]
+import ../[basestypes, game, maps, missions, shipscrew, stories, tk, types, utils]
 import coreui, dialogs, dialogs2
 
 proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -99,10 +99,10 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
       if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
         addButton(name = ".shipyard", label = "Shipyard", command = "ShowShipyard", shortcut = "i", underline = 2)
       for index, recipe in recipesList:
-        if not isKnownRecipe(recipeIndex = index) and hasRecipe(baseType = skyBases[baseIndex].baseType, recipe = index) and recipe.reputation <= skyBases[baseIndex].reputation.level:
+        if index notin knownRecipes and index in basesTypesList[skyBases[baseIndex].baseType].recipes and recipe.reputation <= skyBases[baseIndex].reputation.level:
           addButton(name = ".recipes", label = "Buy recipes", command = "ShowBaseUI recipes", shortcut = "y", underline = 2)
           break
-      if skyBases[baseIndex].missions.length > 0:
+      if skyBases[baseIndex].missions.len > 0:
         var missionsLimit = case skyBases[baseIndex].reputation.level
             of 0 .. 25:
               1
@@ -115,7 +115,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
             else:
               0
         for mission in acceptedMissions:
-          if (mission.finished and mission.startBase == baseIndex) or (mission.targetX == playerShip.skyX and mission.targetY == playerShip.targetY):
+          if (mission.finished and mission.startBase == baseIndex) or (mission.targetX == playerShip.skyX and mission.targetY == playerShip.skyY):
             case mission.mType
             of deliver:
               addButton(name = ".mission", label = "Complete delivery of " & itemsList[mission.itemIndex].name, command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
@@ -132,16 +132,16 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
               if mission.finished:
                 addButton(name = ".mission", label = "Complete Transport passenger mission", command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
           if mission.startBase == baseIndex:
-            missionLimit.dec
+            missionsLimit.dec
         if missionsLimit > 0:
           addButton(name = ".missions", label = "Missions", command = "ShowBaseMissions", shortcut = "m", underline = 0)
       if playerShip.homeBase != baseIndex:
-        addButton(name = ".home", label = "Set as home", command = "SetAsHome", shorcut = "h", underline = 7)
+        addButton(name = ".home", label = "Set as home", command = "SetAsHome", shortcut = "h", underline = 7)
     if skyBases[baseIndex].population == 0:
       addButton(name = ".loot", label = "Loot", command = "ShowLoot", shortcut = "l", underline = 0)
   else:
-    var event = none
-    if skyMap[playerShip.skyX][playerShip.skyY].evenIndex > -1:
+    var event = EventsTypes.none
+    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
       event = eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType
     case event
     of enemyShip, enemyPatrol:
