@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[basestypes, game, maps, missions, shipscrew, stories, tk, types, utils]
+import ../[basestypes, crewinventory, game, maps, missions, shipscrew, stories, tk, types, utils]
 import coreui, dialogs, dialogs2
 
 proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -161,7 +161,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
         if skyBases[baseIndex].reputation.level > -25:
           var dockingCost = 1
           for module in playerShip.modules:
-            if module.mType == hull:
+            if module.mType == ModuleType2.hull:
               dockingCost = module.maxModules
               break
           if skyBases[baseIndex].population > 0:
@@ -188,7 +188,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
             of deliver, passenger:
               discard
             of destroy:
-              addButton(name = ".mission", label = "Search for " & protoShipsList[mission.shipIndex], command = "StartMission", shortcut = "s", underline = 0)
+              addButton(name = ".mission", label = "Search for " & protoShipsList[mission.shipIndex].name, command = "StartMission", shortcut = "s", underline = 0)
             of patrol:
               addButton(name = ".mission", label = "Patrol area", command = "StartMission", shortcut = "p", underline = 0)
             of explore:
@@ -213,7 +213,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & dialogCloseButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
     tclEval(script = "bind " & lastButton & "<Tab> {focus " & dialogCloseButton & ";break}")
     for shortcut in shortcuts:
-      tclEval(script = "bind " dialogCloseButton & " <Alt-" & shortcut.shortcut & "> {" & shortcut.buttonName & " invoke;break}")
+      tclEval(script = "bind " & dialogCloseButton & " <Alt-" & shortcut.shortcut & "> {" & shortcut.buttonName & " invoke;break}")
     for button in shortcuts:
       let menuButton = button.buttonName
       for shortcut in shortcuts:
