@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../[shipscrew, stories, tk, types]
+import std/[tables, strutils]
+import ../[basestypes, game, maps, shipscrew, stories, tk, types, utils]
 import coreui, dialogs, dialogs2
 
 proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -34,17 +35,17 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
   if findMember(order = talk) > -1:
     haveTrader = true
   let
-    baseIndex = skyMap[playerShip.skyX, playerShip.skyY].baseIndex
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     dialogCloseButton = ordersMenu & ".closebutton"
   tclEval(script = "ttk::button " & dialogCloseButton & " -text Close -command {CloseDialog " & ordersMenu & "}")
   type OrderShortcut = object
-    buttonName: stirng
+    buttonName: string
     shortcut: char
   var
     lastButton = "."
-    shortcuts = seq[OrderShortcut]
+    shortcuts: seq[OrderShortcut]
 
-  proc addButton(name, label, command, shortcut: string; underline: Natural; row: int = -1):
+  proc addButton(name, label, command, shortcut: string; underline: Natural; row: int = -1) =
     let button = ordersMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label & "} -command {CloseDialog " & ordersMenu & ";" & command & "} -underline " & $underline)
     tclEval(script = "grid " & button & " -sticky we -padx 5" & (if row == -1: "" else: " -row " & $row))
@@ -62,7 +63,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
     of askInBase:
       if baseIndex > 0:
         if currentStory.data.len == 0 or currentStory.data == skyBases[baseIndex].name:
-          addButton(name = ".story", label = "Ask for " & itemsList[getStepData(finishData = step.finishData, name = "item")].name, command = "ExecuteStory", Shortcut = "f", underLine = 4)
+          addButton(name = ".story", label = "Ask for " & itemsList[getStepData(finishData = step.finishData, name = "item").parseInt].name, command = "ExecuteStory", shortcut = "f", underLine = 4)
     of destroyShip:
       let parts = currentStory.data.split(';')
       if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
@@ -73,7 +74,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
         addButton(name = ".story", label = "Search area", command = "ExecuteStory", shortcut = "s", underline = 0)
     of any, loot:
       discard
-  if playerShip.speed = docked:
+  if playerShip.speed == docked:
     addButton(name = ".undock", label = "Undock", command = "Docking", shortcut = "d", underline = 2)
     if skyBases[baseIndex].population > 0:
       addButton(name = ".escape", label = "Escape", command = "Docking escape", shortcut = "a", underline = 3)
@@ -81,12 +82,12 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
         addButton(name = ".trade", label = "Trade", command = "ShowTrade", shortcut = "t", underline = 0)
         if skyBases[baseIndex].recruits.len > 0:
           addButton(name = ".recruits", label = "Recruit", command = "ShowRecruit", shortcut = "r", underline = 0)
-      if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
+      if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents, currentDate = gameDate) > 6:
         addButton(name = ".events", label = "Ask for events", command = "AskForEvents", shortcut = "e", underline = 8)
       if not skyBases[baseIndex].askedForBases:
         addButton(name = ".bases", label = "Ask for bases", command = "AskForBases", shortcut = "b", underline = 8)
-      if hasFlag(baseType = skyBases[baseIndex].baseType, flag = "temple"):
-        addButton(name = ".pray", Label = "Pray", command = "Pray", shortcut = "p", underline = 0)
+      if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
+        addButton(name = ".pray", label = "Pray", command = "Pray", shortcut = "p", underline = 0)
       for member in playerShip.crew:
         if member.health < 100:
           addButton(name = ".heal", label = "Heal wounded", command = "ShowBaseUI heal", shortcut = "w", underline = 5)
@@ -95,7 +96,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
         if module.durability < module.maxDurability:
           addButton(name = ".repair", label = "Repair ship", command = "ShowBaseUI repair", shortcut = "p", underline = 2)
           break
-      if hasFlag(baseType = skyBases[baseIndex].baseType, flag = "shipyard"):
+      if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
         addButton(name = ".shipyard", label = "Shipyard", command = "ShowShipyard", shortcut = "i", underline = 2)
       for index, recipe in recipesList:
         if not isKnownRecipe(recipeIndex = index) and hasRecipe(baseType = skyBases[baseIndex].baseType, recipe = index) and recipe.reputation <= skyBases[baseIndex].reputation.level:
@@ -205,7 +206,7 @@ proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
           addButton(name = ".askbases", label = "Ask for bases", command = "AskForBases", shortcut = "b", underline = 8)
         addButton(name = ".askevents", label = "Ask for events", command = "AskForEvents", shortcut = "e", underline = 8)
       addButton(name = ".attack", label = "Attack", command = "Attack", shortcut = "a", underline = 0)
-  if lastButton = ".":
+  if lastButton == ".":
     showMessage(text = "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.", title = "No orders available")
   else:
     tclEval(script = "grid " & dialogCloseButton & " -sticky we -padx 5 -pady {0 5}")
