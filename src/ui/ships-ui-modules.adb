@@ -148,14 +148,15 @@ package body Ships.UI.Modules is
       procedure Add_Label
         (Name, Label_Text: String;
          Row, Column, Column_Span, Wrap_Length: Natural := 0;
-         Count_Height: Boolean := False) is
+         Count_Height, Secondary: Boolean := False) is
       begin
          Label :=
            Create
              (pathName => Name,
               options =>
                 "-text {" & Label_Text & "} -wraplength" &
-                (if Wrap_Length > 0 then Wrap_Length'Img else " 380"));
+                (if Wrap_Length > 0 then Wrap_Length'Img else " 380") &
+                (if Secondary then " -style Golden.TLabel" else ""));
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Label,
             Options =>
@@ -208,7 +209,7 @@ package body Ships.UI.Modules is
          Add_Label
            (Name => Module_Frame & ".lblowners2",
             Label_Text => To_String(Source => Owners_Text), Row => Row,
-            Column => 1);
+            Column => 1, Secondary => True);
          if Add_Button then
             Info_Button :=
               Create
@@ -298,7 +299,7 @@ package body Ships.UI.Modules is
       Add_Label
         (Name => Module_Frame & ".nameinfo2",
          Label_Text => To_String(Source => Module.Name), Row => Current_Row,
-         Column => 1);
+         Column => 1, Secondary => True);
       Info_Button :=
         Create
           (pathName => Module_Frame & ".namebutton",
@@ -424,7 +425,8 @@ package body Ships.UI.Modules is
       Add_Label
         (Name => Module_Frame & ".weightlbl2",
          Label_Text => Integer'Image(Module.Weight) & " kg",
-         Row => Current_Row, Column => 1, Count_Height => True);
+         Row => Current_Row, Column => 1, Count_Height => True,
+         Secondary => True);
       -- Show the module's size
       Current_Row := Current_Row + 1;
       Add_Label
@@ -434,7 +436,8 @@ package body Ships.UI.Modules is
         (Name => Module_Frame & ".lblsize2",
          Label_Text =>
            Natural'Image(Get_Module(Index => Module.Proto_Index).Size),
-         Row => Current_Row, Column => 1, Count_Height => True);
+         Row => Current_Row, Column => 1, Count_Height => True,
+         Secondary => True);
       -- Show the modules' repair material
       Current_Row := Current_Row + 1;
       Add_Label
@@ -450,6 +453,15 @@ package body Ships.UI.Modules is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
+      Tag_Configure
+        (TextWidget => Module_Text, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
       Find_Repair_Material_Loop :
       for I in 1 .. Get_Proto_Amount loop
          if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
@@ -471,7 +483,7 @@ package body Ships.UI.Modules is
                        Item_Type => Get_Proto_Item(Index => I).I_Type) =
                     0
                   then " [list red]"
-                  else ""));
+                  else " [list gold]"));
             M_Amount := M_Amount + 1;
          end if;
       end loop Find_Repair_Material_Loop;
@@ -529,7 +541,7 @@ package body Ships.UI.Modules is
                           Get_Module(Index => Module.Proto_Index).Repair_Skill)
                        .Attribute)
                   .Name),
-         Row => Current_Row, Column => 1);
+         Row => Current_Row, Column => 1, Secondary => True);
       -- Show the module's upgrade action
       if Module.Upgrade_Action /= NONE then
          Current_Row := Current_Row + 1;
@@ -657,7 +669,7 @@ package body Ships.UI.Modules is
                  Integer'Image(Module.Power) &
                  (if Module.Power = Module_Max_Value then " (max upgrade)"
                   else ""),
-               Row => Current_Row, Column => 1);
+               Row => Current_Row, Column => 1, Secondary => True);
             if Module.Power < Module_Max_Value then
                Add_Upgrade_Button
                  (Upgrade_Type => MAX_VALUE,
@@ -688,7 +700,7 @@ package body Ships.UI.Modules is
                  Integer'Image(Module.Fuel_Usage) &
                  (if Module_Max_Value = Module.Fuel_Usage then " (max upgrade)"
                   else ""),
-               Row => Current_Row, Column => 1);
+               Row => Current_Row, Column => 1, Secondary => True);
             if Module.Fuel_Usage > Module_Max_Value then
                Add_Upgrade_Button
                  (Upgrade_Type => VALUE,
@@ -714,7 +726,7 @@ package body Ships.UI.Modules is
               (Name => Module_Frame & ".statelbl2",
                Label_Text =>
                  (if Module.Disabled then "Disabled" else "Enabled"),
-               Row => Current_Row, Column => 1);
+               Row => Current_Row, Column => 1, Secondary => True);
             Info_Button :=
               Create
                 (pathName => Module_Frame & ".statebutton",
@@ -751,7 +763,8 @@ package body Ships.UI.Modules is
                  Integer'Image
                    (Get_Module(Index => Module.Proto_Index).Max_Value) &
                  " kg",
-               Row => Current_Row, Column => 1, Count_Height => True);
+               Row => Current_Row, Column => 1, Count_Height => True,
+               Secondary => True);
          -- Show information about hull
          when HULL =>
             Current_Row := Current_Row + 1;
@@ -763,7 +776,7 @@ package body Ships.UI.Modules is
                Label_Text =>
                  Integer'Image(Module.Installed_Modules) & " /" &
                  Integer'Image(Module.Max_Modules),
-               Row => Current_Row, Column => 1);
+               Row => Current_Row, Column => 1, Secondary => True);
             Module_Max_Value :=
               Positive
                 (Float(Get_Module(Index => Module.Proto_Index).Max_Value) *
@@ -944,7 +957,7 @@ package body Ships.UI.Modules is
                     (if Module_Strength = Module_Max_Value then
                        " (max upgrade)"
                      else ""),
-                  Row => Current_Row, Column => 1);
+                  Row => Current_Row, Column => 1, Secondary => True);
                if Module_Strength < Module_Max_Value then
                   Add_Upgrade_Button
                     (Upgrade_Type => MAX_VALUE,
