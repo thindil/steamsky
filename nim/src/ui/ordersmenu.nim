@@ -22,6 +22,17 @@ import coreui, dialogs, dialogs2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Show available the player's ship's orders to the player
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowOrders
   var ordersMenu = createDialog(name = ".gameframe.orders",
       title = "Ship orders")
   if tclEval2(script = "winfo ismapped " & ordersMenu) == "1":
