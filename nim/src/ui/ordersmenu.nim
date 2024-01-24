@@ -20,7 +20,7 @@ import ../[basestypes, crewinventory, game, maps, missions, shipscrew, stories,
     tk, types, utils]
 import coreui, dialogs, dialogs2
 
-proc showOrdersCommand(clientData: cint; interp: PInterp; argc: cint;
+proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   var ordersMenu = createDialog(name = ".gameframe.orders",
       title = "Ship orders")

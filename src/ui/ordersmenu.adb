@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1294,9 +1294,12 @@ package body OrdersMenu is
    end Deliver_Medicines_Command;
 
    procedure Add_Commands is
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaOrdersMenuCommands";
    begin
-      Add_Command
-        (Name => "ShowOrders", Ada_Command => Show_Orders_Command'Access);
+      Add_Ada_Commands;
       Add_Command(Name => "Docking", Ada_Command => Docking_Command'Access);
       Add_Command
         (Name => "AskForBases", Ada_Command => Ask_For_Bases_Command'Access);
