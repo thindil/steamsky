@@ -882,7 +882,7 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   playerShip.destinationX = mapX
   playerShip.destinationY = mapY
   addMessage(message = "You set the travel destination for your ship.",
