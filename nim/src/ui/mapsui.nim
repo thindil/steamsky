@@ -840,6 +840,22 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text {Set destination} -command {SetDestination;CloseDialog " &
       destinationDialog & "}")
   tclEval(script = "grid " & button & " -sticky we -padx 5")
+  let dialogCloseButton = destinationDialog & ".button"
+  tclEval(script = "ttk::button " & dialogCloseButton & " -text Close -command {CloseDialog " & destinationDialog & "}")
+  tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  if playerShip.speed != docked:
+    tclEval(script = "bind " & button & " <Tab> {focus " & destinationDialog & ".setandmove;break}")
+    button = destinationDialog & ".setandmove"
+    tclEval(script = "ttk::button " & button & " -text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " & destinationDialog & "}")
+    tclEval(script = "grid " & button & " -sticky we -padx 5")
+    tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
+    if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+      tclEval(script = "bind " & button & " <Tab> {focus " & destinationDialog & ".move;break}")
+      button = destinationDialog & ".move"
+      tclEval(script = "ttk::button " & button & " -text {Move to} -command {MoveShip moveto;CloseDialog " & destinationDialog & "}")
+      tclEval(script = "grid " & button & " -sticky we -padx 5")
+      tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
+      tclEval(script = "bind " & button & " <Tab> {focus " & destinationDialog & ".button;break}")
   return tclOk
 
 proc createGameUi*() =
