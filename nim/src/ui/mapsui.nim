@@ -825,7 +825,7 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   if mapX == 0 or mapY == 0 and updateMapInfoCommand(clientData = clientData,
       interp = interp, argc = argc, argv = argv) != tclOk:
     return tclError
