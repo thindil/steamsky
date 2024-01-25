@@ -883,6 +883,17 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Set the current map cell as the destination for the player's ship
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetDestination
   playerShip.destinationX = mapX
   playerShip.destinationY = mapY
   addMessage(message = "You set the travel destination for your ship.",
@@ -1050,7 +1061,7 @@ proc createGameUi*() =
     addCommand("DrawMap", drawMapCommand)
     addCommand("UpdateMapInfo", updateMapInfoCommand)
     addCommand("ShowDestinationMenu", showDestinationMenuCommand)
-    addCommand("SetShipDestination", setShipDestinationCommand)
+    addCommand("SetDestination", setShipDestinationCommand)
 
 # Temporary code for interfacing with Ada
 
