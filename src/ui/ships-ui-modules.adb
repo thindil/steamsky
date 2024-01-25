@@ -1011,6 +1011,16 @@ package body Ships.UI.Modules is
                          "ttk::theme::" &
                          To_String(Source => Get_Interface_Theme) &
                          "::colors(-red)"));
+               Tag_Configure
+                 (TextWidget => Ammo_Text, TagName => "gold",
+                  Options =>
+                    "-foreground " &
+                    Tcl_GetVar
+                      (interp => Interp,
+                       varName =>
+                         "ttk::theme::" &
+                         To_String(Source => Get_Interface_Theme) &
+                         "::colors(-goldenyellow)"));
                Have_Ammo := False;
                if Ammo_Index in
                    Inventory_Container.First_Index
@@ -1040,7 +1050,7 @@ package body Ships.UI.Modules is
                                     Index => Ammo_Index)
                                    .Proto_Index)
                               .Name) &
-                       " (assigned)}");
+                       " (assigned)} [list gold]");
                   Have_Ammo := True;
                end if;
                if not Have_Ammo then
@@ -1166,7 +1176,8 @@ package body Ships.UI.Modules is
                          (abs
                           (Get_Module(Index => Module.Proto_Index).Speed)) &
                        " turns"),
-                  Row => Current_Row, Column => 1, Count_Height => True);
+                  Row => Current_Row, Column => 1, Count_Height => True,
+                  Secondary => True);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          -- Show information about turrets
@@ -1182,7 +1193,8 @@ package body Ships.UI.Modules is
                     To_String
                       (Source => Player_Ship.Modules(Module.Gun_Index).Name)
                   else "none"),
-               Row => Current_Row, Column => 1, Count_Height => True);
+               Row => Current_Row, Column => 1, Count_Height => True,
+               Secondary => True);
          -- Show information about workshops
          when WORKSHOP =>
             -- Show information about workshop's owners
@@ -1210,7 +1222,7 @@ package body Ships.UI.Modules is
                   Add_Label
                     (Name => Module_Frame & ".orderlbl2",
                      Label_Text => Recipe_Name, Row => Current_Row,
-                     Column => 1, Count_Height => True);
+                     Column => 1, Count_Height => True, Secondary => True);
                   Current_Row := Current_Row + 1;
                   Add_Label
                     (Name => Module_Frame & ".ordertimelbl",
@@ -1219,7 +1231,7 @@ package body Ships.UI.Modules is
                     (Name => Module_Frame & ".ordertimelbl2",
                      Label_Text =>
                        Positive'Image(Module.Crafting_Time) & " mins",
-                     Row => Current_Row, Column => 1);
+                     Row => Current_Row, Column => 1, Secondary => True);
                   Info_Button :=
                     Create
                       (pathName => Module_Frame & ".orderbutton",
@@ -1250,7 +1262,7 @@ package body Ships.UI.Modules is
                   Add_Label
                     (Name => Module_Frame & ".orderlbl2",
                      Label_Text => "not set", Row => Current_Row, Column => 1,
-                     Count_Height => True);
+                     Count_Height => True, Secondary => True);
                end if;
             end Show_Order_Info_Block;
          -- Show information about medical rooms
@@ -1313,7 +1325,7 @@ package body Ships.UI.Modules is
                Add_Label
                  (Name => Module_Frame & ".trainlbl2",
                   Label_Text => To_String(Source => Train_Text),
-                  Row => Current_Row, Column => 1);
+                  Row => Current_Row, Column => 1, Secondary => True);
                Info_Button :=
                  Create
                    (pathName => Module_Frame & ".trainbutton",
@@ -1355,7 +1367,8 @@ package body Ships.UI.Modules is
                  Positive'Image(Module.Damage2) &
                  (if Module.Damage2 = Module_Max_Value then " (max upgrade)"
                   else ""),
-               Row => Current_Row, Column => 1, Count_Height => True);
+               Row => Current_Row, Column => 1, Count_Height => True,
+               Secondary => True);
             if Module.Damage2 < Module_Max_Value then
                Add_Upgrade_Button
                  (Upgrade_Type => MAX_VALUE,
