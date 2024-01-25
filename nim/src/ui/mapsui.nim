@@ -881,6 +881,19 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = destinationDialog, parentFrame = ".gameframe")
   return tclOk
 
+proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  playerShip.destinationX = mapX
+  playerShip.destinationY = mapY
+  addMessage(message = "You set the travel destination for your ship.",
+      mType = orderMessage)
+  if gameSettings.autoCenter:
+    centerX = playerShip.skyX
+    centerY = playerShip.skyY
+  drawMap()
+  updateMoveButtons()
+  return tclOk
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -1037,6 +1050,7 @@ proc createGameUi*() =
     addCommand("DrawMap", drawMapCommand)
     addCommand("UpdateMapInfo", updateMapInfoCommand)
     addCommand("ShowDestinationMenu", showDestinationMenuCommand)
+    addCommand("SetShipDestination", setShipDestinationCommand)
 
 # Temporary code for interfacing with Ada
 
