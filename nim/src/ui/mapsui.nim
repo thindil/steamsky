@@ -18,7 +18,7 @@
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, statistics, stories, tk, types]
-import coreui, dialogs, mapsuicommands, utilsui2, themes
+import coreui, dialogs, mapsuicommands, ordersmenu, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -824,6 +824,24 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMapInfo(x = mapX, y = mapY)
   return tclOk
 
+proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if mapX == 0 or mapY == 0 and updateMapInfoCommand(clientData = clientData,
+      interp = interp, argc = argc, argv = argv) != tclOk:
+    return tclError
+  let destinationDialog = createDialog(name = ".gameframe.destinationmenu",
+      title = "Set destination", parentName = ".gameframe")
+  if playerShip.skyX == mapX and playerShip.skyY == mapY:
+    tclEval(script = "CloseDialog " & destinationDialog)
+    return showOrdersCommand(clientData = clientData, interp = interp,
+        argc = argc, argv = argv)
+  var button = destinationDialog & ".set"
+  tclEval(script = "ttk::button " & button &
+      " -text {Set destination} -command {SetDestination;CloseDialog " &
+      destinationDialog & "}")
+  tclEval(script = "grid " & button & " -sticky we -padx 5")
+  return tclOk
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -979,6 +997,7 @@ proc createGameUi*() =
     mapsuicommands.addCommands()
     addCommand("DrawMap", drawMapCommand)
     addCommand("UpdateMapInfo", updateMapInfoCommand)
+    addCommand("ShowDestinationMenu", showDestinationMenuCommand)
 
 # Temporary code for interfacing with Ada
 
