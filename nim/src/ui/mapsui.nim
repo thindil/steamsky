@@ -826,6 +826,18 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Create and show the destination menu dialog
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowDestinationMenu x y
+  ## X and Y are the map coordinates for which the destination menu will be show
   if mapX == 0 or mapY == 0 and updateMapInfoCommand(clientData = clientData,
       interp = interp, argc = argc, argv = argv) != tclOk:
     return tclError
