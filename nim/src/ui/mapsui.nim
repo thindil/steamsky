@@ -992,6 +992,18 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
   drawMap()
   return tclOk
 
+proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  gameSettings.mapFontSize = (if argv[1] == "raise": gameSettings.mapFontSize +
+      1 else: gameSettings.mapFontSize - 1)
+  if gameSettings.mapFontSize < 3:
+    gameSettings.mapFontSize = 3
+  elif gameSettings.mapFontSize > 50:
+    gameSettings.mapFontSize = 50
+  tclEval(script = "font configure MapFont -size " & $gameSettings.mapFontSize)
+  tclSetVar(varName = "refreshmap", newValue = "1")
+  return drawMapCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -1150,6 +1162,7 @@ proc createGameUi*() =
     addCommand("ShowDestinationMenu", showDestinationMenuCommand)
     addCommand("SetDestination", setShipDestinationCommand)
     addCommand("MoveMap", moveMapCommand)
+    addCommand("ZoomMap", zoomMapCommand)
 
 # Temporary code for interfacing with Ada
 
