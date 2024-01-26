@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
-import ../[basestypes, config, game, maps, messages, missions, shipscargo,
-    shipsmovement, statistics, stories, tk, types]
+import ../[basestypes, config, game, game2, maps, messages, missions,
+    missions2, shipscargo, shipsmovement, statistics, stories, tk, types]
 import coreui, dialogs, mapsuicommands, ordersmenu, utilsui2, themes
 
 var
@@ -1015,6 +1015,56 @@ proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = "refreshmap", newValue = "1")
   return drawMapCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
+proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var
+    res = 0
+    message = ""
+    newX, newY = 0
+
+  proc updateCoordinates() =
+    if playerShip.destinationX > playerShip.skyX:
+      newX = 1
+    elif playerShip.destinationX < playerShip.skyX:
+      newX = -1
+    if playerShip.destinationY > playerShip.skyY:
+      newY = 1
+    elif playerShip.destinationY < playerShip.skyY:
+      newY = -1
+
+  if argv[1] == "n":
+    res = moveShip(x = 0, y = -1, message = message)
+  elif argv[1] == "s":
+    res = moveShip(x = 0, y = 1, message = message)
+  elif argv[1] == "e":
+    res = moveShip(x = 1, y = 0, message = message)
+  elif argv[1] == "w":
+    res = moveShip(x = -1, y = 0, message = message)
+  elif argv[1] == "sw":
+    res = moveShip(x = -1, y = 1, message = message)
+  elif argv[1] == "se":
+    res = moveShip(x = 1, y = 1, message = message)
+  elif argv[1] == "nw":
+    res = moveShip(x = -1, y = -1, message = message)
+  elif argv[1] == "ne":
+    res = moveShip(x = 1, y = -1, message = message)
+  elif argv[1] == "waitormove":
+    if playerShip.destinationX == 0 and playerShip.destinationY == 0:
+      res = 1
+      updateGame(minutes = gameSettings.waitMinutes)
+      waitInPlace(minutes = gameSettings.waitMinutes)
+    else:
+      updateCoordinates()
+      res = moveShip(x = newX, y = newY, message = message)
+      if playerShip.destinationX == playerShip.skyX and playerShip.destinationY == playerShip.skyY:
+        addMessage(message = "You reached your travel destination.", mType = orderMessage)
+        playerShip.destinationX = 0
+        playerShip.destinationY = 0
+        if gameSettings.autoFinish:
+          message = autoFinishMissions()
+        res = 4
+  return tclOk
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -1174,6 +1224,7 @@ proc createGameUi*() =
     addCommand("SetDestination", setShipDestinationCommand)
     addCommand("MoveMap", moveMapCommand)
     addCommand("ZoomMap", zoomMapCommand)
+    addCommand("MoveShip", moveShipCommand)
 
 # Temporary code for interfacing with Ada
 
