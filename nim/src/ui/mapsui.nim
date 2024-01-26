@@ -907,6 +907,18 @@ proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Move the map in the selected direction
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MoveMap direction
+  ## Direction in which the map will be moved
   let mapView = mainPaned & ".mapframe.map"
   if tclEval2(script = "winfo ismapped " & mapView) == "0":
     return tclOk
