@@ -994,6 +994,17 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Zoom in or our the sky map
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ZoomMap
   gameSettings.mapFontSize = (if argv[1] == "raise": gameSettings.mapFontSize +
       1 else: gameSettings.mapFontSize - 1)
   if gameSettings.mapFontSize < 3:
