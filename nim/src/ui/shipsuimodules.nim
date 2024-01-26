@@ -40,7 +40,7 @@ proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
       if module.ammoIndex in 0 ..
           playerShip.cargo.high and itemsList[playerShip.cargo[
               module.ammoIndex].protoIndex].itemType == itemsTypesList[
-              modulesList[module.protoIndex].value]:
+              modulesList[module.protoIndex].value - 1]:
         result = "Uses " & itemsList[playerShip.cargo[
             module.ammoIndex].protoIndex].name & ", "
       else:
