@@ -906,22 +906,42 @@ proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let mapView = mainPaned & ".mapframe.map"
   if tclEval2(script = "winfo ismapped " & mapView) == "0":
     return tclOk
   let
-    mapHeight = tclEval2(script = mapView & " cget -height").parseInt
-    mapWidth = tclEval2(script = mapView & " cget -width").parseInt
+    mapHeight = try:
+        tclEval2(script = mapView & " cget -height").parseInt
+      except:
+        tclEval(script = "bgerror {Can't get the map's height. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
+    mapWidth = try:
+        tclEval2(script = mapView & " cget -width").parseInt
+      except:
+        tclEval(script = "bgerror {Can't get the map's width. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     dialogName = ".gameframe.movemapdialog"
   if argv[1] == "centeronship":
     centerX = playerShip.skyX
     centerY = playerShip.skyY
   elif argv[1] == "movemapto":
     var spinBox = dialogName & ".x"
-    centerX = tclEval2(script = spinBox & " get").parseInt
+    centerX = try:
+        tclEval2(script = spinBox & " get").parseInt
+      except:
+        tclEval(script = "bgerror {Can't set center X. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     spinBox = dialogName & ".y"
-    centerY = tclEval2(script = spinBox & " get").parseInt
+    centerY = try:
+        tclEval2(script = spinBox & " get").parseInt
+      except:
+        tclEval(script = "bgerror {Can't set center Y. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   elif argv[1] == "n":
     centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
         3).int else: centerY - (mapHeight / 3).int)
