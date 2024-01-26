@@ -934,6 +934,30 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
   elif argv[1] == "e":
     centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
         3).int else: centerX + (mapWidth / 3).int)
+  elif argv[1] == "nw":
+    centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
+        3).int else: centerY - (mapHeight / 3).int)
+    centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
+        3).int else: centerX - (mapWidth / 3).int)
+  elif argv[1] == "ne":
+    centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
+        3).int else: centerY - (mapHeight / 3).int)
+    centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
+        3).int else: centerX + (mapWidth / 3).int)
+  elif argv[1] == "sw":
+    centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
+        3).int else: centerY + (mapHeight / 3).int)
+    centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
+        3).int else: centerX - (mapWidth / 3).int)
+  elif argv[1] == "se":
+    centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
+        3).int else: centerY + (mapHeight / 3).int)
+    centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
+        3).int else: centerX + (mapWidth / 3).int)
+  elif argv[1] == "centeronhome":
+    centerX = skyBases[playerShip.homeBase].skyX
+    centerY = skyBases[playerShip.homeBase].skyY
+  drawMap()
   return tclOk
 
 proc createGameUi*() =
