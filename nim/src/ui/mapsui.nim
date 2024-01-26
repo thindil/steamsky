@@ -993,7 +993,7 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   gameSettings.mapFontSize = (if argv[1] == "raise": gameSettings.mapFontSize +
       1 else: gameSettings.mapFontSize - 1)
   if gameSettings.mapFontSize < 3:
