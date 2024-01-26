@@ -905,6 +905,37 @@ proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMoveButtons()
   return tclOk
 
+proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let mapView = mainPaned & ".mapframe.map"
+  if tclEval2(script = "winfo ismapped " & mapView) == "0":
+    return tclOk
+  let
+    mapHeight = tclEval2(script = mapView & " cget -height").parseInt
+    mapWidth = tclEval2(script = mapView & " cget -width").parseInt
+    dialogName = ".gameframe.movemapdialog"
+  if argv[1] == "centeronship":
+    centerX = playerShip.skyX
+    centerY = playerShip.skyY
+  elif argv[1] == "movemapto":
+    var spinBox = dialogName & ".x"
+    centerX = tclEval2(script = spinBox & " get").parseInt
+    spinBox = dialogName & ".y"
+    centerY = tclEval2(script = spinBox & " get").parseInt
+  elif argv[1] == "n":
+    centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
+        3).int else: centerY - (mapHeight / 3).int)
+  elif argv[1] == "s":
+    centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
+        3).int else: centerY + (mapHeight / 3).int)
+  elif argv[1] == "w":
+    centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
+        3).int else: centerX - (mapWidth / 3).int)
+  elif argv[1] == "e":
+    centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
+        3).int else: centerX + (mapWidth / 3).int)
+  return tclOk
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -1062,6 +1093,7 @@ proc createGameUi*() =
     addCommand("UpdateMapInfo", updateMapInfoCommand)
     addCommand("ShowDestinationMenu", showDestinationMenuCommand)
     addCommand("SetDestination", setShipDestinationCommand)
+    addCommand("MoveMap", moveMapCommand)
 
 # Temporary code for interfacing with Ada
 
