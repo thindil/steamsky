@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated look of the dialog with information about the player's ship's crew
   members
+- Updated look of the dialog with information about the player's ship's modules
 
 ## Fixed
 - Showing assigned ammunition to a gun on the player's ship's module's list
