@@ -16,8 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
-import ../[basestypes, config, game, game2, maps, messages, missions,
-    missions2, shipscargo, shipsmovement, statistics, stories, tk, types]
+import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
+    missions, missions2, shipscargo, shipscrew, shipsmovement, statistics,
+    stories, tk, types]
 import coreui, dialogs, mapsuicommands, ordersmenu, utilsui2, themes
 
 var
@@ -1021,6 +1022,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     res = 0
     message = ""
     newX, newY = 0
+    startsCombat = false
 
   proc updateCoordinates() =
     if playerShip.destinationX > playerShip.skyX:
@@ -1056,13 +1058,56 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       updateCoordinates()
       res = moveShip(x = newX, y = newY, message = message)
-      if playerShip.destinationX == playerShip.skyX and playerShip.destinationY == playerShip.skyY:
-        addMessage(message = "You reached your travel destination.", mType = orderMessage)
+      if playerShip.destinationX == playerShip.skyX and
+          playerShip.destinationY == playerShip.skyY:
+        addMessage(message = "You reached your travel destination.",
+            mType = orderMessage)
         playerShip.destinationX = 0
         playerShip.destinationY = 0
         if gameSettings.autoFinish:
           message = autoFinishMissions()
         res = 4
+  elif argv[1] == "moveto":
+    while true:
+      newX = 0
+      newY = 0
+      updateCoordinates()
+      res = moveShip(x = newX, y = newY, message = message)
+      if res == 0:
+        break
+      startsCombat = checkForEvent()
+      if startsCombat:
+        res = 4
+        break
+      if res == 8:
+        waitForRest()
+        if "sentientships" notin factionsList[playerShip.crew[
+            0].faction].flags and (findMember(order = pilot) == -1 or
+            findMember(order = engineer) == 0):
+          waitForRest()
+        res = 1
+        startsCombat = checkForEvent()
+        if startsCombat:
+          res = 4
+          break
+      if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
+          playerShip.skyY].eventIndex > -1:
+        let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+        case gameSettings.autoMoveStop
+        of any:
+          if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
+            res = 0
+            break
+        of friendly:
+          if eventsList[eventIndex].eType in {trader, friendlyShip}:
+            res = 0
+            break
+        of enemy:
+          if eventsList[eventIndex].eType in {enemyShip, enemyPatrol}:
+            res = 0
+            break
+        of never:
+          discard
   return tclOk
 
 proc createGameUi*() =
