@@ -24,8 +24,6 @@ import combatui, coreui, dialogs, mapsuicommands, ordersmenu, utilsui2, themes
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
   startX, startY: int           ## Coordinates of the top left point on the map
-  generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
-    ## The list of keyboard shortcuts used in some places
   mapView = ".gameframe.paned.mapframe.map"
   menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]

@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -22,3 +22,6 @@ const
     ## The name of the header Tk frame (with menu button, time, icons, etc.)
   closeButton* = gameHeader & ".closebutton"
     ## The name of the button used to close all screens in the game
+
+var generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
+      ## The list of keyboard shortcuts used in some places
