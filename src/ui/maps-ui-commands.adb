@@ -455,52 +455,6 @@ package body Maps.UI.Commands is
            Argv => Empty & "CloseDialog" & Dialog_Name);
    end Move_Map_Command;
 
-   -- ****o* MapCommands/MapCommands.Zoom_Map_Command
-   -- FUNCTION
-   -- Zoom the sky map
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command.
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command.
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ZoomMap
-   -- SOURCE
---   function Zoom_Map_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Zoom_Map_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---   begin
---      Set_Integer_Setting
---        (Name => "mapFontSize",
---         Value =>
---           (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then
---              Get_Integer_Setting(Name => "mapFontSize") + 1
---            else Get_Integer_Setting(Name => "mapFontSize") - 1));
---      if Get_Integer_Setting(Name => "mapFontSize") < 3 then
---         Set_Integer_Setting(Name => "mapFontSize", Value => 3);
---      elsif Get_Integer_Setting(Name => "mapFontSize") > 50 then
---         Set_Integer_Setting(Name => "mapFontSize", Value => 50);
---      end if;
---      Tcl_Eval
---        (interp => Interp,
---         strng =>
---           "font configure MapFont -size" &
---           Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
---      Tcl_SetVar(interp => Interp, varName => "refreshmap", newValue => "1");
---      return
---        Draw_Map_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---           Argv => Argv);
---   end Zoom_Map_Command;
-
    -- ****o* MapCommands/MapCommands.Move_Command
    -- FUNCTION
    -- Move the player ship in the selected location and check what happens
@@ -1366,7 +1320,6 @@ package body Maps.UI.Commands is
         (Name => "SetDestination",
          Ada_Command => Set_Ship_Destination_Command'Access);
       Add_Command(Name => "MoveMap", Ada_Command => Move_Map_Command'Access);
---      Add_Command(Name => "ZoomMap", Ada_Command => Zoom_Map_Command'Access);
       Add_Command(Name => "MoveShip", Ada_Command => Move_Ship_Command'Access);
       Add_Command(Name => "QuitGame", Ada_Command => Quit_Game_Command'Access);
       Add_Command

@@ -13,11 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Characters.Handling;
--- with Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed;
--- with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations;
@@ -45,11 +42,8 @@ with Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
 with DebugUI;
--- with Events;
--- with Factions;
 with GameOptions;
 with Help.UI;
--- with Items;
 with Knowledge;
 with Log;
 with Maps.UI.Commands;
@@ -60,7 +54,6 @@ with OrdersMenu;
 with Ships.UI;
 with Statistics;
 with Statistics.UI;
--- with Stories;
 with Trades.UI;
 with Themes;
 with Utils.UI;
