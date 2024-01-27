@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 import std/[os, math, strutils, tables]
 import ../[combat, config, crewinventory, game, items, maps, messages,
     shipscrew, shipmodules, shipsmovement, tk, types]
-import coreui, dialogs, mapsui, utilsui2
+import coreui, dialogs, utilsui2, updateheader
 
 proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
   ## Update the list of in-game messages in combat, delete old ones and show
