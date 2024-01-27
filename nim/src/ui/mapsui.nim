@@ -19,7 +19,7 @@ import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
     missions, missions2, shipscargo, shipscrew, shipsmovement, statistics,
     stories, tk, types]
-import combatui, coreui, dialogs, mapsuicommands, ordersmenu, updateheader, utilsui2, themes
+import combatui, coreui, dialogs, ordersmenu, updateheader, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -289,32 +289,6 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
     if y < endY:
       tclEval(script = mapView & " insert end {\n}")
   tclEval(script = mapView & " configure -state disable")
-
-proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
-  ## Draw the sky map
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## DrawMap
-  let mapView = mainPaned & ".mapframe.map"
-  try:
-    discard tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
-        themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
-  except:
-    tclEval(script = "bgerror {Can't set map width. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
-  tclEval(script = mapView & " configure -height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]")
-  if tclGetVar(varName = "refreshmap") == "1":
-    drawMap()
-  return tclOk
 
 proc updateMapInfo*(x: Positive = playerShip.skyX;
     y: Positive = playerShip.skyY) {.sideEffect, raises: [], tags: [].} =
@@ -760,29 +734,6 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
   drawMap()
   return tclOk
 
-proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
-  ## Zoom in or our the sky map
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ZoomMap
-  gameSettings.mapFontSize = (if argv[1] == "raise": gameSettings.mapFontSize +
-      1 else: gameSettings.mapFontSize - 1)
-  if gameSettings.mapFontSize < 3:
-    gameSettings.mapFontSize = 3
-  elif gameSettings.mapFontSize > 50:
-    gameSettings.mapFontSize = 50
-  tclEval(script = "font configure MapFont -size " & $gameSettings.mapFontSize)
-  tclSetVar(varName = "refreshmap", newValue = "1")
-  return drawMapCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
-
 proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   var
@@ -941,6 +892,8 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     showSkyMap()
   return tclOk
 
+import mapsuicommands
+
 proc createGameUi*() =
   let
     gameFrame = ".gameframe"
@@ -1094,12 +1047,10 @@ proc createGameUi*() =
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
-    addCommand("DrawMap", drawMapCommand)
     addCommand("UpdateMapInfo", updateMapInfoCommand)
     addCommand("ShowDestinationMenu", showDestinationMenuCommand)
     addCommand("SetDestination", setShipDestinationCommand)
     addCommand("MoveMap", moveMapCommand)
-    addCommand("ZoomMap", zoomMapCommand)
     addCommand("MoveShip", moveShipCommand)
 
 # Temporary code for interfacing with Ada

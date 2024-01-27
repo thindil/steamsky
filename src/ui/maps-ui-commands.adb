@@ -46,7 +46,7 @@ with Ships.Cargo;
 with Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Statistics.UI;
-with Themes;
+--  with Themes;
 with Utils.UI;
 
 package body Maps.UI.Commands is
@@ -64,36 +64,36 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- DrawMap
    -- SOURCE
-   function Draw_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Draw_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Themes;
-
-      Map_View: constant Tk_Text :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
-   begin
-      configure
-        (Widgt => Map_View,
-         options =>
-           "-width [expr [winfo width $mapview] / [font measure MapFont {" &
-           Get_Icon(Name => "emptyMapIcon") & "}]]");
-      configure
-        (Widgt => Map_View,
-         options =>
-           "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
-      if Tcl_GetVar(interp => Interp, varName => "refreshmap") = "1" then
-         Draw_Map;
-         Tcl_UnsetVar(interp => Interp, varName => "refreshmap");
-      end if;
-      return TCL_OK;
-   end Draw_Map_Command;
+--   function Draw_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Draw_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Themes;
+--
+--      Map_View: constant Tk_Text :=
+--        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
+--   begin
+--      configure
+--        (Widgt => Map_View,
+--         options =>
+--           "-width [expr [winfo width $mapview] / [font measure MapFont {" &
+--           Get_Icon(Name => "emptyMapIcon") & "}]]");
+--      configure
+--        (Widgt => Map_View,
+--         options =>
+--           "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
+--      if Tcl_GetVar(interp => Interp, varName => "refreshmap") = "1" then
+--         Draw_Map;
+--         Tcl_UnsetVar(interp => Interp, varName => "refreshmap");
+--      end if;
+--      return TCL_OK;
+--   end Draw_Map_Command;
 
    -- ****iv* MapCommands/MapCommands.Map_X
    -- FUNCTION
@@ -468,38 +468,38 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- ZoomMap
    -- SOURCE
-   function Zoom_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Zoom_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-   begin
-      Set_Integer_Setting
-        (Name => "mapFontSize",
-         Value =>
-           (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then
-              Get_Integer_Setting(Name => "mapFontSize") + 1
-            else Get_Integer_Setting(Name => "mapFontSize") - 1));
-      if Get_Integer_Setting(Name => "mapFontSize") < 3 then
-         Set_Integer_Setting(Name => "mapFontSize", Value => 3);
-      elsif Get_Integer_Setting(Name => "mapFontSize") > 50 then
-         Set_Integer_Setting(Name => "mapFontSize", Value => 50);
-      end if;
-      Tcl_Eval
-        (interp => Interp,
-         strng =>
-           "font configure MapFont -size" &
-           Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
-      Tcl_SetVar(interp => Interp, varName => "refreshmap", newValue => "1");
-      return
-        Draw_Map_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
-   end Zoom_Map_Command;
+--   function Zoom_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Zoom_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--   begin
+--      Set_Integer_Setting
+--        (Name => "mapFontSize",
+--         Value =>
+--           (if CArgv.Arg(Argv => Argv, N => 1) = "raise" then
+--              Get_Integer_Setting(Name => "mapFontSize") + 1
+--            else Get_Integer_Setting(Name => "mapFontSize") - 1));
+--      if Get_Integer_Setting(Name => "mapFontSize") < 3 then
+--         Set_Integer_Setting(Name => "mapFontSize", Value => 3);
+--      elsif Get_Integer_Setting(Name => "mapFontSize") > 50 then
+--         Set_Integer_Setting(Name => "mapFontSize", Value => 50);
+--      end if;
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng =>
+--           "font configure MapFont -size" &
+--           Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
+--      Tcl_SetVar(interp => Interp, varName => "refreshmap", newValue => "1");
+--      return
+--        Draw_Map_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv);
+--   end Zoom_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Command
    -- FUNCTION
@@ -1355,7 +1355,7 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command(Name => "DrawMap", Ada_Command => Draw_Map_Command'Access);
+--      Add_Command(Name => "DrawMap", Ada_Command => Draw_Map_Command'Access);
       Add_Command
         (Name => "UpdateMapInfo",
          Ada_Command => Update_Map_Info_Command'Access);
@@ -1366,7 +1366,7 @@ package body Maps.UI.Commands is
         (Name => "SetDestination",
          Ada_Command => Set_Ship_Destination_Command'Access);
       Add_Command(Name => "MoveMap", Ada_Command => Move_Map_Command'Access);
-      Add_Command(Name => "ZoomMap", Ada_Command => Zoom_Map_Command'Access);
+--      Add_Command(Name => "ZoomMap", Ada_Command => Zoom_Map_Command'Access);
       Add_Command(Name => "MoveShip", Ada_Command => Move_Ship_Command'Access);
       Add_Command(Name => "QuitGame", Ada_Command => Quit_Game_Command'Access);
       Add_Command

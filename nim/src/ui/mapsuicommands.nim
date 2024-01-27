@@ -111,11 +111,71 @@ proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       -1: "ne" else: "wn"))
   return tclOk
 
+proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+  ## Draw the sky map
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## DrawMap
+proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+  ## Zoom in or our the sky map
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ZoomMap
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
   addCommand("MoveMapButtons", moveMapButtonsCommand)
   addCommand("MoveMapInfo", moveMapInfoCommand)
+  addCommand("DrawMap", drawMapCommand)
+  addCommand("ZoomMap", zoomMapCommand)
+
+import std/tables
+import ../config
+import mapsui, themes
+
+proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let mapView = mainPaned & ".mapframe.map"
+  try:
+    discard tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
+        themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
+  except:
+    tclEval(script = "bgerror {Can't set map width. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
+  tclEval(script = mapView & " configure -height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]")
+  if tclGetVar(varName = "refreshmap") == "1":
+    drawMap()
+  return tclOk
+
+proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  gameSettings.mapFontSize = (if argv[1] == "raise": gameSettings.mapFontSize +
+      1 else: gameSettings.mapFontSize - 1)
+  if gameSettings.mapFontSize < 3:
+    gameSettings.mapFontSize = 3
+  elif gameSettings.mapFontSize > 50:
+    gameSettings.mapFontSize = 50
+  tclEval(script = "font configure MapFont -size " & $gameSettings.mapFontSize)
+  tclSetVar(varName = "refreshmap", newValue = "1")
+  return drawMapCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 # Temporary code for interfacing with Ada
 
