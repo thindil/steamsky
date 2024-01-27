@@ -19,7 +19,7 @@ import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
     missions, missions2, shipscargo, shipscrew, shipsmovement, statistics,
     stories, tk, types]
-import coreui, dialogs, mapsuicommands, ordersmenu, utilsui2, themes
+import combatui, coreui, dialogs, mapsuicommands, ordersmenu, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -1111,18 +1111,22 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
       let messageDialog = ".message"
       if tclEval2(script = "winfo exists " & messageDialog) == "0":
         if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
-          showMessage(text = "Your fuel level is dangerously low.", title = "Low fuel level")
+          showMessage(text = "Your fuel level is dangerously low.",
+              title = "Low fuel level")
           res = 4
           break
         elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
-          showMessage(text = "Your food level is dangerously low.", title = "Low food level")
+          showMessage(text = "Your food level is dangerously low.",
+              title = "Low food level")
           res = 4
           break
         elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
-          showMessage(text = "Your drinks level is dangerously low.", title = "Low drinks level")
+          showMessage(text = "Your drinks level is dangerously low.",
+              title = "Low drinks level")
           res = 4
           break
-      if playerShip.destinationX == playerShip.skyX and playerShip.destinationY == playerShip.skyY:
+      if playerShip.destinationX == playerShip.skyX and
+          playerShip.destinationY == playerShip.skyY:
         addMessage("You reached your travel destination.", mType = orderMessage)
         playerShip.destinationX = 0
         playerShip.destinationY = 0
@@ -1140,14 +1144,34 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
       message = autoFinishMissions()
   # Ship moved, but pilot needs rest, confirm
   of 6:
-    showQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?", res = "nopilot")
+    showQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
+        res = "nopilot")
     return tclOk
   # Ship moved, but engineer needs rest, confirm
   of 7:
-    showQuestion(question = "You don't have engineer on duty. Do you want to wait until your pilot rest?", res = "nopilot")
+    showQuestion(question = "You don't have engineer on duty. Do you want to wait until your pilot rest?",
+        res = "nopilot")
     return tclOk
+  # Ship moved, but crew needs rest, autorest
+  of 8:
+    startsCombat = checkForEvent()
+    if not startsCombat:
+      waitForRest()
+      if "sentientships" notin factionsList[playerShip.crew[
+          0].faction].flags and (findMember(order = pilot) == -1 or findMember(
+          order = engineer) == -1):
+        waitForRest()
+      startsCombat = checkForEvent()
+    if not startsCombat and gameSettings.autoFinish:
+      message = autoFinishMissions()
   else:
     discard
+  if message.len > 0:
+    showMessage(text = message, title = "Message")
+  if startsCombat:
+    showCombatUi()
+  else:
+    showSkyMap()
   return tclOk
 
 proc createGameUi*() =
