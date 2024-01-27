@@ -1108,6 +1108,46 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
             break
         of never:
           discard
+      let messageDialog = ".message"
+      if tclEval2(script = "winfo exists " & messageDialog) == "0":
+        if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
+          showMessage(text = "Your fuel level is dangerously low.", title = "Low fuel level")
+          res = 4
+          break
+        elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
+          showMessage(text = "Your food level is dangerously low.", title = "Low food level")
+          res = 4
+          break
+        elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
+          showMessage(text = "Your drinks level is dangerously low.", title = "Low drinks level")
+          res = 4
+          break
+      if playerShip.destinationX == playerShip.skyX and playerShip.destinationY == playerShip.skyY:
+        addMessage("You reached your travel destination.", mType = orderMessage)
+        playerShip.destinationX = 0
+        playerShip.destinationY = 0
+        if gameSettings.autoFinish:
+          message = autoFinishMissions()
+        res = 4
+        break
+      if res in 6 .. 7:
+        break
+  case res
+  # Ship moved, check for events
+  of 1:
+    startsCombat = checkForEvent()
+    if not startsCombat and gameSettings.autoFinish:
+      message = autoFinishMissions()
+  # Ship moved, but pilot needs rest, confirm
+  of 6:
+    showQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?", res = "nopilot")
+    return tclOk
+  # Ship moved, but engineer needs rest, confirm
+  of 7:
+    showQuestion(question = "You don't have engineer on duty. Do you want to wait until your pilot rest?", res = "nopilot")
+    return tclOk
+  else:
+    discard
   return tclOk
 
 proc createGameUi*() =
