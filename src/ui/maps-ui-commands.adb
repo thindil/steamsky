@@ -46,54 +46,9 @@ with Ships.Cargo;
 with Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Statistics.UI;
---  with Themes;
 with Utils.UI;
 
 package body Maps.UI.Commands is
-
-   -- ****o* MapCommands/MapCommands.Draw_Map_Command
-   -- FUNCTION
-   -- Draw the sky map
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- DrawMap
-   -- SOURCE
---   function Draw_Map_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Draw_Map_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      use Themes;
---
---      Map_View: constant Tk_Text :=
---        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
---   begin
---      configure
---        (Widgt => Map_View,
---         options =>
---           "-width [expr [winfo width $mapview] / [font measure MapFont {" &
---           Get_Icon(Name => "emptyMapIcon") & "}]]");
---      configure
---        (Widgt => Map_View,
---         options =>
---           "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
---      if Tcl_GetVar(interp => Interp, varName => "refreshmap") = "1" then
---         Draw_Map;
---         Tcl_UnsetVar(interp => Interp, varName => "refreshmap");
---      end if;
---      return TCL_OK;
---   end Draw_Map_Command;
 
    -- ****iv* MapCommands/MapCommands.Map_X
    -- FUNCTION

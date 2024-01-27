@@ -90,53 +90,6 @@ package body Maps.UI is
       return Map_View;
    end Get_Map_View;
 
-   procedure Draw_Map is
-      Center_X, Center_Y: Positive;
-      Map_Height, Map_Width: Positive;
-      Start_X, Start_Y: Integer;
-      End_X, End_Y: Integer;
-      procedure Draw_Ada_Map with
-         Import => True,
-         Convention => C,
-         External_Name => "drawAdaMap";
-      procedure Set_Start_Point(X, Y: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaStartPoint";
-   begin
-      Get_Center_Point(X => Center_X, Y => Center_Y);
-      Get_Start_Point(X => Start_X, Y => Start_Y);
-      Get_Ada_Ship;
-      Map_Height :=
-        Positive'Value(cget(Widgt => Get_Map_View, option => "-height"));
-      Map_Width :=
-        Positive'Value(cget(Widgt => Get_Map_View, option => "-width"));
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Start_Y := Center_Y - (Map_Height / 2);
-      Start_X := Center_X - (Map_Width / 2);
-      End_Y := Center_Y + (Map_Height / 2);
-      End_X := Center_X + (Map_Width / 2);
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      if Start_Y < 1 then
-         Start_Y := 1;
-         End_Y := Map_Height;
-      end if;
-      if Start_X < 1 then
-         Start_X := 1;
-         End_X := Map_Width;
-      end if;
-      if End_Y > 1_024 then
-         End_Y := 1_024;
-         Start_Y := 1_025 - Map_Height;
-      end if;
-      if End_X > 1_024 then
-         End_X := 1_024;
-         Start_X := 1_025 - Map_Width;
-      end if;
-      Set_Start_Point(X => Start_X, Y => Start_Y);
-      Draw_Ada_Map;
-   end Draw_Map;
-
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
       procedure Update_Ada_Map_Info(X1, Y1: Positive) with
