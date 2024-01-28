@@ -41,7 +41,7 @@ with Dialogs; use Dialogs;
 with Events;
 with Factions;
 with Messages; use Messages;
-with OrdersMenu;
+-- with OrdersMenu;
 with Ships.Cargo;
 with Ships.Crew;
 with Ships.Movement; use Ships.Movement;
@@ -54,14 +54,14 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Current map cell X coordinate (where mouse is hovering)
    -- SOURCE
-   Map_X: Natural := 0;
+--   Map_X: Natural := 0;
    -- ****
 
    -- ****iv* MapCommands/MapCommands.Map_Y
    -- FUNCTION
    -- Current map cell Y coordinate (where mouse is hovering)
    -- SOURCE
-   Map_Y: Natural := 0;
+--   Map_Y: Natural := 0;
    -- ****
 
    -- ****o* MapCommands/MapCommands.Update_Map_Info_Command
@@ -78,71 +78,71 @@ package body Maps.UI.Commands is
    -- UpdateMapInfo x y
    -- X and Y are coordinates of the map cell which info will be show
    -- SOURCE
-   function Update_Map_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Update_Map_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      Map_View: constant Tk_Text :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
-      Map_Index: Unbounded_String;
-      Start_X, Start_Y: Integer;
-   begin
-      Get_Start_Point(X => Start_X, Y => Start_Y);
-      Map_Index :=
-        To_Unbounded_String
-          (Source =>
-             Index
-               (TextWidget => Map_View,
-                TextIndex =>
-                  "@" & CArgv.Arg(Argv => Argv, N => 1) & "," &
-                  CArgv.Arg(Argv => Argv, N => 2)));
-      if Start_Y +
-        Integer'Value
-          (Slice
-             (Source => Map_Index, Low => 1,
-              High => Index(Source => Map_Index, Pattern => ".") - 1)) -
-        1 <
-        1 then
-         return TCL_OK;
-      end if;
-      Map_Y :=
-        Start_Y +
-        Integer'Value
-          (Slice
-             (Source => Map_Index, Low => 1,
-              High => Index(Source => Map_Index, Pattern => ".") - 1)) -
-        1;
-      if Map_Y > 1_024 then
-         return TCL_OK;
-      end if;
-      if Start_X +
-        Integer'Value
-          (Slice
-             (Source => Map_Index,
-              Low => Index(Source => Map_Index, Pattern => ".") + 1,
-              High => Length(Source => Map_Index))) <
-        1 then
-         return TCL_OK;
-      end if;
-      Map_X :=
-        Start_X +
-        Integer'Value
-          (Slice
-             (Source => Map_Index,
-              Low => Index(Source => Map_Index, Pattern => ".") + 1,
-              High => Length(Source => Map_Index)));
-      if Map_X > 1_024 then
-         return TCL_OK;
-      end if;
-      Update_Map_Info(X => Map_X, Y => Map_Y);
-      return TCL_OK;
-   end Update_Map_Info_Command;
+--   function Update_Map_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Update_Map_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      Map_View: constant Tk_Text :=
+--        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
+--      Map_Index: Unbounded_String;
+--      Start_X, Start_Y: Integer;
+--   begin
+--      Get_Start_Point(X => Start_X, Y => Start_Y);
+--      Map_Index :=
+--        To_Unbounded_String
+--          (Source =>
+--             Index
+--               (TextWidget => Map_View,
+--                TextIndex =>
+--                  "@" & CArgv.Arg(Argv => Argv, N => 1) & "," &
+--                  CArgv.Arg(Argv => Argv, N => 2)));
+--      if Start_Y +
+--        Integer'Value
+--          (Slice
+--             (Source => Map_Index, Low => 1,
+--              High => Index(Source => Map_Index, Pattern => ".") - 1)) -
+--        1 <
+--        1 then
+--         return TCL_OK;
+--      end if;
+--      Map_Y :=
+--        Start_Y +
+--        Integer'Value
+--          (Slice
+--             (Source => Map_Index, Low => 1,
+--              High => Index(Source => Map_Index, Pattern => ".") - 1)) -
+--        1;
+--      if Map_Y > 1_024 then
+--         return TCL_OK;
+--      end if;
+--      if Start_X +
+--        Integer'Value
+--          (Slice
+--             (Source => Map_Index,
+--              Low => Index(Source => Map_Index, Pattern => ".") + 1,
+--              High => Length(Source => Map_Index))) <
+--        1 then
+--         return TCL_OK;
+--      end if;
+--      Map_X :=
+--        Start_X +
+--        Integer'Value
+--          (Slice
+--             (Source => Map_Index,
+--              Low => Index(Source => Map_Index, Pattern => ".") + 1,
+--              High => Length(Source => Map_Index)));
+--      if Map_X > 1_024 then
+--         return TCL_OK;
+--      end if;
+--      Update_Map_Info(X => Map_X, Y => Map_Y);
+--      return TCL_OK;
+--   end Update_Map_Info_Command;
 
    -- ****o* MapCommands/MapCommands.Show_Destination_Menu_Command
    -- FUNCTION
@@ -158,107 +158,107 @@ package body Maps.UI.Commands is
    -- ShowDestinationMenu x y
    -- X and Y are mouse coordinates on which the destination menu will be show
    -- SOURCE
-   function Show_Destination_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Destination_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use OrdersMenu;
-
-      Destination_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".gameframe.destinationmenu", Title => "Set destination",
-           Parent_Name => ".gameframe");
-      Button: Ttk_Button :=
-        Create
-          (pathName => Destination_Dialog & ".set",
-           options =>
-             "-text {Set destination} -command {SetDestination;CloseDialog " &
-             Destination_Dialog & "}");
-      Dialog_Close_Button: constant Ttk_Button :=
-        Create
-          (pathName => Destination_Dialog & ".button",
-           options =>
-             "-text Close -command {CloseDialog " & Destination_Dialog & "}");
-   begin
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      if (Map_X = 0 or Map_Y = 0)
-        and then
-          Update_Map_Info_Command
-            (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-             Argv => Argv) /=
-          TCL_OK then
-         Tcl_Eval
-           (interp => Interp, strng => "CloseDialog " & Destination_Dialog);
-         return TCL_ERROR;
-      end if;
-      if Player_Ship.Sky_X = Map_X and Player_Ship.Sky_Y = Map_Y then
-         Tcl_Eval
-           (interp => Interp, strng => "CloseDialog " & Destination_Dialog);
-         return
-           Show_Orders_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-              Argv => Argv);
-      end if;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      if Player_Ship.Speed /= DOCKED then
-         Bind
-           (Widgt => Button, Sequence => "<Tab>",
-            Script => "{focus " & Destination_Dialog & ".setandmove;break}");
-         Button :=
-           Create
-             (pathName => Destination_Dialog & ".setandmove",
-              options =>
-                "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
-                Destination_Dialog & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-sticky we -padx 5");
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{" & Dialog_Close_Button & " invoke;break}");
-         if Player_Ship.Destination_X > 0 and
-           Player_Ship.Destination_Y > 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Destination_Dialog & ".move;break}");
-            Button :=
-              Create
-                (pathName => Destination_Dialog & ".move",
-                 options =>
-                   "-text {Move to} -command {MoveShip moveto;CloseDialog " &
-                   Destination_Dialog & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Button, Options => "-sticky we -padx 5");
-            Bind
-              (Widgt => Button, Sequence => "<Escape>",
-               Script => "{" & Dialog_Close_Button & " invoke;break}");
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Destination_Dialog & ".button;break}");
-         end if;
-      end if;
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Dialog_Close_Button,
-         Options => "-sticky we -padx 5 -pady {0 5}");
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Destination_Dialog & ".set;break}");
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Show_Dialog
-        (Dialog => Destination_Dialog, Parent_Frame => ".gameframe",
-         Relative_X => 0.4);
-      return TCL_OK;
-   end Show_Destination_Menu_Command;
+--   function Show_Destination_Menu_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Destination_Menu_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use OrdersMenu;
+--
+--      Destination_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".gameframe.destinationmenu", Title => "Set destination",
+--           Parent_Name => ".gameframe");
+--      Button: Ttk_Button :=
+--        Create
+--          (pathName => Destination_Dialog & ".set",
+--           options =>
+--             "-text {Set destination} -command {SetDestination;CloseDialog " &
+--             Destination_Dialog & "}");
+--      Dialog_Close_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Destination_Dialog & ".button",
+--           options =>
+--             "-text Close -command {CloseDialog " & Destination_Dialog & "}");
+--   begin
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      if (Map_X = 0 or Map_Y = 0)
+--        and then
+--          Update_Map_Info_Command
+--            (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--             Argv => Argv) /=
+--          TCL_OK then
+--         Tcl_Eval
+--           (interp => Interp, strng => "CloseDialog " & Destination_Dialog);
+--         return TCL_ERROR;
+--      end if;
+--      if Player_Ship.Sky_X = Map_X and Player_Ship.Sky_Y = Map_Y then
+--         Tcl_Eval
+--           (interp => Interp, strng => "CloseDialog " & Destination_Dialog);
+--         return
+--           Show_Orders_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--              Argv => Argv);
+--      end if;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky we -padx 5");
+--      Bind
+--        (Widgt => Button, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      if Player_Ship.Speed /= DOCKED then
+--         Bind
+--           (Widgt => Button, Sequence => "<Tab>",
+--            Script => "{focus " & Destination_Dialog & ".setandmove;break}");
+--         Button :=
+--           Create
+--             (pathName => Destination_Dialog & ".setandmove",
+--              options =>
+--                "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
+--                Destination_Dialog & "}");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button, Options => "-sticky we -padx 5");
+--         Bind
+--           (Widgt => Button, Sequence => "<Escape>",
+--            Script => "{" & Dialog_Close_Button & " invoke;break}");
+--         if Player_Ship.Destination_X > 0 and
+--           Player_Ship.Destination_Y > 0 then
+--            Bind
+--              (Widgt => Button, Sequence => "<Tab>",
+--               Script => "{focus " & Destination_Dialog & ".move;break}");
+--            Button :=
+--              Create
+--                (pathName => Destination_Dialog & ".move",
+--                 options =>
+--                   "-text {Move to} -command {MoveShip moveto;CloseDialog " &
+--                   Destination_Dialog & "}");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Button, Options => "-sticky we -padx 5");
+--            Bind
+--              (Widgt => Button, Sequence => "<Escape>",
+--               Script => "{" & Dialog_Close_Button & " invoke;break}");
+--            Bind
+--              (Widgt => Button, Sequence => "<Tab>",
+--               Script => "{focus " & Destination_Dialog & ".button;break}");
+--         end if;
+--      end if;
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Dialog_Close_Button,
+--         Options => "-sticky we -padx 5 -pady {0 5}");
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
+--         Script => "{focus " & Destination_Dialog & ".set;break}");
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Show_Dialog
+--        (Dialog => Destination_Dialog, Parent_Frame => ".gameframe",
+--         Relative_X => 0.4);
+--      return TCL_OK;
+--   end Show_Destination_Menu_Command;
 
    -- ****o* MapCommands/MapCommands.Set_Ship_Destination_Command
    -- FUNCTION
@@ -273,31 +273,31 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- SetDestination
    -- SOURCE
-   function Set_Ship_Destination_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Ship_Destination_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-   begin
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Player_Ship.Destination_X := Map_X;
-      Player_Ship.Destination_Y := Map_Y;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Add_Message
-        (Message => "You set the travel destination for your ship.",
-         M_Type => ORDERMESSAGE);
-      if Get_Boolean_Setting(Name => "autoCenter") then
-         Set_Center_Point(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
-      end if;
-      Draw_Map;
-      Update_Move_Buttons;
-      return TCL_OK;
-   end Set_Ship_Destination_Command;
+--   function Set_Ship_Destination_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Set_Ship_Destination_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--   begin
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Player_Ship.Destination_X := Map_X;
+--      Player_Ship.Destination_Y := Map_Y;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Add_Message
+--        (Message => "You set the travel destination for your ship.",
+--         M_Type => ORDERMESSAGE);
+--      if Get_Boolean_Setting(Name => "autoCenter") then
+--         Set_Center_Point(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
+--      end if;
+--      Draw_Map;
+--      Update_Move_Buttons;
+--      return TCL_OK;
+--   end Set_Ship_Destination_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Map_Command
    -- FUNCTION
@@ -1265,15 +1265,15 @@ package body Maps.UI.Commands is
    begin
       Add_Ada_Commands;
 --      Add_Command(Name => "DrawMap", Ada_Command => Draw_Map_Command'Access);
-      Add_Command
-        (Name => "UpdateMapInfo",
-         Ada_Command => Update_Map_Info_Command'Access);
-      Add_Command
-        (Name => "ShowDestinationMenu",
-         Ada_Command => Show_Destination_Menu_Command'Access);
-      Add_Command
-        (Name => "SetDestination",
-         Ada_Command => Set_Ship_Destination_Command'Access);
+--      Add_Command
+--        (Name => "UpdateMapInfo",
+--         Ada_Command => Update_Map_Info_Command'Access);
+--      Add_Command
+--        (Name => "ShowDestinationMenu",
+--         Ada_Command => Show_Destination_Menu_Command'Access);
+--      Add_Command
+--        (Name => "SetDestination",
+--         Ada_Command => Set_Ship_Destination_Command'Access);
       Add_Command(Name => "MoveMap", Ada_Command => Move_Map_Command'Access);
       Add_Command(Name => "MoveShip", Ada_Command => Move_Ship_Command'Access);
       Add_Command(Name => "QuitGame", Ada_Command => Quit_Game_Command'Access);
