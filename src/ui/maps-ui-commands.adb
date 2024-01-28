@@ -15,7 +15,7 @@
 
 with Ada.Containers.Vectors;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings;
+-- with Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -28,11 +28,11 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
-with Bases;
+-- with Bases;
 with Combat.UI;
 with Config; use Config;
 with CoreUI; use CoreUI;
@@ -63,102 +63,102 @@ package body Maps.UI.Commands is
    -- MoveMap direction
    -- Direction in which the map will be moved
    -- SOURCE
-   function Move_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Move_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Interfaces.C.Strings;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-      use Bases;
-
-      Map_View: constant Tk_Text :=
-        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
-      Map_Height, Map_Width: Positive;
-      Dialog_Name: constant String := ".gameframe.movemapdialog";
-      Spin_Box: Ttk_SpinBox :=
-        Get_Widget(pathName => Dialog_Name & ".x", Interp => Interp);
-      Center_X, Center_Y: Positive;
-   begin
-      Get_Center_Point(X => Center_X, Y => Center_Y);
-      if Winfo_Get(Widgt => Map_View, Info => "ismapped") = "0" then
-         return TCL_OK;
-      end if;
-      Map_Height :=
-        Positive'Value(cget(Widgt => Map_View, option => "-height"));
-      Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      if CArgv.Arg(Argv => Argv, N => 1) = "centeronship" then
-         Center_X := Player_Ship.Sky_X;
-         Center_Y := Player_Ship.Sky_Y;
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "movemapto" then
-         Center_X := Positive'Value(Get(Widgt => Spin_Box));
-         Spin_Box.Name := New_String(Str => Dialog_Name & ".y");
-         Center_Y := Positive'Value(Get(Widgt => Spin_Box));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "n" then
-         Center_Y :=
-           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
-            else Center_Y - (Map_Height / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
-         Center_Y :=
-           (if Center_Y + (Map_Height / 3) > 1_024 then
-              1_024 - (Map_Height / 3)
-            else Center_Y + (Map_Height / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then
-         Center_X :=
-           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
-            else Center_X - (Map_Width / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "e" then
-         Center_X :=
-           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
-            else Center_X + (Map_Width / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then
-         Center_Y :=
-           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
-            else Center_Y - (Map_Height / 3));
-         Center_X :=
-           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
-            else Center_X - (Map_Width / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then
-         Center_Y :=
-           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
-            else Center_Y - (Map_Height / 3));
-         Center_X :=
-           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
-            else Center_X + (Map_Width / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "sw" then
-         Center_Y :=
-           (if Center_Y + (Map_Height / 3) > 1_024 then
-              1_024 - (Map_Height / 3)
-            else Center_Y + (Map_Height / 3));
-         Center_X :=
-           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
-            else Center_X - (Map_Width / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "se" then
-         Center_Y :=
-           (if Center_Y + (Map_Height / 3) > 1_024 then
-              1_024 - (Map_Height / 3)
-            else Center_Y + (Map_Height / 3));
-         Center_X :=
-           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
-            else Center_X + (Map_Width / 3));
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "centeronhome" then
-         Center_X := Sky_Bases(Player_Ship.Home_Base).Sky_X;
-         Center_Y := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
-      end if;
-      Set_Center_Point(X => Center_X, Y => Center_Y);
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Draw_Map;
-      return
-        Close_Dialog_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => Empty & "CloseDialog" & Dialog_Name);
-   end Move_Map_Command;
+--   function Move_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Move_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Interfaces.C.Strings;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+--      use Bases;
+--
+--      Map_View: constant Tk_Text :=
+--        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
+--      Map_Height, Map_Width: Positive;
+--      Dialog_Name: constant String := ".gameframe.movemapdialog";
+--      Spin_Box: Ttk_SpinBox :=
+--        Get_Widget(pathName => Dialog_Name & ".x", Interp => Interp);
+--      Center_X, Center_Y: Positive;
+--   begin
+--      Get_Center_Point(X => Center_X, Y => Center_Y);
+--      if Winfo_Get(Widgt => Map_View, Info => "ismapped") = "0" then
+--         return TCL_OK;
+--      end if;
+--      Map_Height :=
+--        Positive'Value(cget(Widgt => Map_View, option => "-height"));
+--      Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      if CArgv.Arg(Argv => Argv, N => 1) = "centeronship" then
+--         Center_X := Player_Ship.Sky_X;
+--         Center_Y := Player_Ship.Sky_Y;
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "movemapto" then
+--         Center_X := Positive'Value(Get(Widgt => Spin_Box));
+--         Spin_Box.Name := New_String(Str => Dialog_Name & ".y");
+--         Center_Y := Positive'Value(Get(Widgt => Spin_Box));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "n" then
+--         Center_Y :=
+--           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
+--            else Center_Y - (Map_Height / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
+--         Center_Y :=
+--           (if Center_Y + (Map_Height / 3) > 1_024 then
+--              1_024 - (Map_Height / 3)
+--            else Center_Y + (Map_Height / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then
+--         Center_X :=
+--           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
+--            else Center_X - (Map_Width / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "e" then
+--         Center_X :=
+--           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
+--            else Center_X + (Map_Width / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then
+--         Center_Y :=
+--           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
+--            else Center_Y - (Map_Height / 3));
+--         Center_X :=
+--           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
+--            else Center_X - (Map_Width / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then
+--         Center_Y :=
+--           (if Center_Y - (Map_Height / 3) < 1 then Map_Height / 3
+--            else Center_Y - (Map_Height / 3));
+--         Center_X :=
+--           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
+--            else Center_X + (Map_Width / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "sw" then
+--         Center_Y :=
+--           (if Center_Y + (Map_Height / 3) > 1_024 then
+--              1_024 - (Map_Height / 3)
+--            else Center_Y + (Map_Height / 3));
+--         Center_X :=
+--           (if Center_X - (Map_Width / 3) < 1 then Map_Width / 3
+--            else Center_X - (Map_Width / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "se" then
+--         Center_Y :=
+--           (if Center_Y + (Map_Height / 3) > 1_024 then
+--              1_024 - (Map_Height / 3)
+--            else Center_Y + (Map_Height / 3));
+--         Center_X :=
+--           (if Center_X + (Map_Width / 3) > 1_024 then 1_024 - (Map_Width / 3)
+--            else Center_X + (Map_Width / 3));
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "centeronhome" then
+--         Center_X := Sky_Bases(Player_Ship.Home_Base).Sky_X;
+--         Center_Y := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
+--      end if;
+--      Set_Center_Point(X => Center_X, Y => Center_Y);
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      Draw_Map;
+--      return
+--        Close_Dialog_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => Empty & "CloseDialog" & Dialog_Name);
+--   end Move_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Command
    -- FUNCTION
@@ -1014,7 +1014,7 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command(Name => "MoveMap", Ada_Command => Move_Map_Command'Access);
+--      Add_Command(Name => "MoveMap", Ada_Command => Move_Map_Command'Access);
       Add_Command(Name => "MoveShip", Ada_Command => Move_Ship_Command'Access);
       Add_Command(Name => "QuitGame", Ada_Command => Quit_Game_Command'Access);
       Add_Command

@@ -523,93 +523,6 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
-  ## Move the map in the selected direction
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## MoveMap direction
-  ## Direction in which the map will be moved
-  let mapView = mainPaned & ".mapframe.map"
-  if tclEval2(script = "winfo ismapped " & mapView) == "0":
-    return tclOk
-  let
-    mapHeight = try:
-        tclEval2(script = mapView & " cget -height").parseInt
-      except:
-        tclEval(script = "bgerror {Can't get the map's height. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
-    mapWidth = try:
-        tclEval2(script = mapView & " cget -width").parseInt
-      except:
-        tclEval(script = "bgerror {Can't get the map's width. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
-    dialogName = ".gameframe.movemapdialog"
-  if argv[1] == "centeronship":
-    centerX = playerShip.skyX
-    centerY = playerShip.skyY
-  elif argv[1] == "movemapto":
-    var spinBox = dialogName & ".x"
-    centerX = try:
-        tclEval2(script = spinBox & " get").parseInt
-      except:
-        tclEval(script = "bgerror {Can't set center X. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
-    spinBox = dialogName & ".y"
-    centerY = try:
-        tclEval2(script = spinBox & " get").parseInt
-      except:
-        tclEval(script = "bgerror {Can't set center Y. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
-  elif argv[1] == "n":
-    centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
-        3).int else: centerY - (mapHeight / 3).int)
-  elif argv[1] == "s":
-    centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
-        3).int else: centerY + (mapHeight / 3).int)
-  elif argv[1] == "w":
-    centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
-        3).int else: centerX - (mapWidth / 3).int)
-  elif argv[1] == "e":
-    centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
-        3).int else: centerX + (mapWidth / 3).int)
-  elif argv[1] == "nw":
-    centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
-        3).int else: centerY - (mapHeight / 3).int)
-    centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
-        3).int else: centerX - (mapWidth / 3).int)
-  elif argv[1] == "ne":
-    centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
-        3).int else: centerY - (mapHeight / 3).int)
-    centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
-        3).int else: centerX + (mapWidth / 3).int)
-  elif argv[1] == "sw":
-    centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
-        3).int else: centerY + (mapHeight / 3).int)
-    centerX = (if centerX - (mapWidth / 3).int < 1: (mapWidth /
-        3).int else: centerX - (mapWidth / 3).int)
-  elif argv[1] == "se":
-    centerY = (if centerY + (mapHeight / 3).int > 1_024: (mapHeight /
-        3).int else: centerY + (mapHeight / 3).int)
-    centerX = (if centerX + (mapWidth / 3).int > 1_024: (mapWidth /
-        3).int else: centerX + (mapWidth / 3).int)
-  elif argv[1] == "centeronhome":
-    centerX = skyBases[playerShip.homeBase].skyX
-    centerY = skyBases[playerShip.homeBase].skyY
-  drawMap()
-  return tclOk
-
 proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   var
@@ -923,7 +836,6 @@ proc createGameUi*() =
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
-    addCommand("MoveMap", moveMapCommand)
     addCommand("MoveShip", moveShipCommand)
 
 # Temporary code for interfacing with Ada
