@@ -19,11 +19,10 @@ import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
     missions, missions2, shipscargo, shipscrew, shipsmovement, statistics,
     stories, tk, types]
-import combatui, coreui, dialogs, ordersmenu, updateheader, utilsui2, themes
+import combatui, coreui, dialogs, updateheader, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
-  startX, startY: int           ## Coordinates of the top left point on the map
   mapView = ".gameframe.paned.mapframe.map"
   menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]
@@ -524,129 +523,6 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-var mapX, mapY = 0
-
-proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
-  ## Update the information about the selected map's cell
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## UpdateMapInfo x y
-  ## X and Y are coordinates of the map cell which info will be show
-  let
-    mapView = mainPaned & ".mapframe.map"
-    mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
-  try:
-    if startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1 < 1:
-      return tclOk
-    mapY = startY + (mapIndex[0 .. mapIndex.find(".") - 1]).parseInt - 1
-    if mapY > 1_024:
-      return tclOk
-  except:
-    tclEval(script = "bgerror {Can't set map Y coordinate. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
-  try:
-    if startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt < 1:
-      return tclOk
-    mapX = startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt
-    if mapX > 1_024:
-      return tclOk
-  except:
-    tclEval(script = "bgerror {Can't set map X coordinate. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
-  updateMapInfo(x = mapX, y = mapY)
-  return tclOk
-
-proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
-  ## Create and show the destination menu dialog
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## ShowDestinationMenu x y
-  ## X and Y are the map coordinates for which the destination menu will be show
-  if mapX == 0 or mapY == 0 and updateMapInfoCommand(clientData = clientData,
-      interp = interp, argc = argc, argv = argv) != tclOk:
-    return tclError
-  let destinationDialog = createDialog(name = ".gameframe.destinationmenu",
-      title = "Set destination", parentName = ".gameframe")
-  if playerShip.skyX == mapX and playerShip.skyY == mapY:
-    tclEval(script = "CloseDialog " & destinationDialog)
-    return showOrdersCommand(clientData = clientData, interp = interp,
-        argc = argc, argv = argv)
-  var button = destinationDialog & ".set"
-  tclEval(script = "ttk::button " & button &
-      " -text {Set destination} -command {SetDestination;CloseDialog " &
-      destinationDialog & "}")
-  tclEval(script = "grid " & button & " -sticky we -padx 5")
-  let dialogCloseButton = destinationDialog & ".button"
-  tclEval(script = "ttk::button " & dialogCloseButton &
-      " -text Close -command {CloseDialog " & destinationDialog & "}")
-  tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
-  if playerShip.speed != docked:
-    tclEval(script = "bind " & button & " <Tab> {focus " & destinationDialog & ".setandmove;break}")
-    button = destinationDialog & ".setandmove"
-    tclEval(script = "ttk::button " & button &
-        " -text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
-        destinationDialog & "}")
-    tclEval(script = "grid " & button & " -sticky we -padx 5")
-    tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
-    if playerShip.destinationX > 0 and playerShip.destinationY > 0:
-      tclEval(script = "bind " & button & " <Tab> {focus " & destinationDialog & ".move;break}")
-      button = destinationDialog & ".move"
-      tclEval(script = "ttk::button " & button &
-          " -text {Move to} -command {MoveShip moveto;CloseDialog " &
-          destinationDialog & "}")
-      tclEval(script = "grid " & button & " -sticky we -padx 5")
-      tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
-      tclEval(script = "bind " & button & " <Tab> {focus " & destinationDialog & ".button;break}")
-  tclEval(script = "grid " & dialogCloseButton & " -sticky we -padx 5 -pady {0 5}")
-  tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " &
-      destinationDialog & ".set;break}")
-  tclEval(script = "bind " & dialogCloseButton & " <Escape> {" &
-      dialogCloseButton & " invoke;break}")
-  showDialog(dialog = destinationDialog, parentFrame = ".gameframe")
-  return tclOk
-
-proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
-  ## Set the current map cell as the destination for the player's ship
-  ##
-  ## * clientData - the additional data for the Tcl command
-  ## * interp     - the Tcl interpreter on which the command was executed
-  ## * argc       - the amount of arguments entered for the command
-  ## * argv       - the list of the command's arguments
-  ##
-  ## The procedure always return tclOk
-  ##
-  ## Tcl:
-  ## SetDestination
-  playerShip.destinationX = mapX
-  playerShip.destinationY = mapY
-  addMessage(message = "You set the travel destination for your ship.",
-      mType = orderMessage)
-  if gameSettings.autoCenter:
-    centerX = playerShip.skyX
-    centerY = playerShip.skyY
-  drawMap()
-  updateMoveButtons()
-  return tclOk
-
 proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   ## Move the map in the selected direction
@@ -1047,9 +923,6 @@ proc createGameUi*() =
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
-    addCommand("UpdateMapInfo", updateMapInfoCommand)
-    addCommand("ShowDestinationMenu", showDestinationMenuCommand)
-    addCommand("SetDestination", setShipDestinationCommand)
     addCommand("MoveMap", moveMapCommand)
     addCommand("MoveShip", moveShipCommand)
 
