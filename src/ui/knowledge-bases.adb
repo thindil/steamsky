@@ -26,9 +26,11 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -416,6 +418,8 @@ package body Knowledge.Bases is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada.Font;
+      use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tklib.Ada.Tooltip;
@@ -430,7 +434,10 @@ package body Knowledge.Bases is
           (Name => ".basedialog",
            Title => To_String(Source => Sky_Bases(Base_Index).Name),
            Columns => 3);
-      Base_Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
+      Base_Label: constant Tk_Text :=
+        Create
+          (pathName => Base_Dialog & ".info",
+           options => "-wrap char -height 5 -width 30");
       Base_Info: Unbounded_String;
       Base_Button: Ttk_Button :=
         Create
@@ -596,11 +603,19 @@ package body Knowledge.Bases is
       else
          Append(Source => Base_Info, New_Item => LF & "Not visited yet.");
       end if;
-      Base_Label :=
-        Create
-          (pathName => Base_Dialog & ".info",
-           options =>
-             "-text {" & To_String(Source => Base_Info) & "} -wraplength 400");
+      Insert
+         (TextWidget => Base_Label, Index => "end", Text => "{" & To_String(Source => Base_Info) & "}");
+      configure
+        (Widgt => Base_Label,
+         options =>
+           "-state disabled -height" &
+           Positive'Image
+             (Positive'Value
+                (Count
+                   (TextWidget => Base_Label, Options => "-displaylines",
+                    Index1 => "0.0", Index2 => "end")) /
+              Positive'Value
+                (Metrics(Font => "InterfaceFont", Option => "-linespace")) - 1));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Base_Label,
          Options => "-row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w");
