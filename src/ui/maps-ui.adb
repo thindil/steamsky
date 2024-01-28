@@ -78,6 +78,7 @@ package body Maps.UI is
    Map_View: Tk_Text;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****if* MUI/MUI.Get_Map_View
    -- FUNCTION
    -- Get the text widget with the sky map
@@ -89,6 +90,7 @@ package body Maps.UI is
    begin
       return Map_View;
    end Get_Map_View;
+   --## rule on REDUCEABLE_SCOPE
 
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
