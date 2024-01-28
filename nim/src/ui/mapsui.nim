@@ -152,9 +152,9 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
         tclEval(script = "bgerror {Can't get map width. Reason: " &
             getCurrentExceptionMsg() & "}")
         return
+  startX = centerX - (mapWidth / 2).int
+  startY = centerY - (mapHeight / 2).int
   var
-    startX = centerX - (mapWidth / 2).int
-    startY = centerY - (mapHeight / 2).int
     endY = centerY + (mapHeight / 2).int
     endX = centerX + (mapWidth / 2).int
     storyX = 1
