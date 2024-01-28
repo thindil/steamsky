@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Run AdaControl - all checks
       run: |
@@ -26,7 +26,7 @@ jobs:
          cd ..
 
     - name: Upload the log
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
          name: adacontrol.log
@@ -46,7 +46,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build the program
       run: others/build.nims x86_64-linux-gnu
@@ -55,7 +55,7 @@ jobs:
       run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
 
     - name: Upload the artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
          name: steamsky-development-linux.tar
          path: steamsky-development-linux.tar
@@ -71,7 +71,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build the program
       run: others/build.nims x86_64-windows
@@ -80,7 +80,7 @@ jobs:
       run: tar -cf steamsky-development-windows.tar -C release steamsky-windows
 
     - name: Upload the artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
          name: steamsky-development-windows.tar
          path: steamsky-development-windows.tar
