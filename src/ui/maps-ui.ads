@@ -91,10 +91,6 @@ package Maps.UI is
    procedure Set_Map_Accelerator(Index: Positive; Value: String);
    function Get_Full_Screen_Accel return String;
    procedure Set_Full_Screen_Accel(Value: String);
-   procedure Get_Center_Point(X, Y: out Positive) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaCenterPoint";
    procedure Set_Center_Point(X, Y: Positive) with
       Import => True,
       Convention => C,
@@ -119,11 +115,5 @@ private
    -- SOURCE
    procedure Update_Move_Buttons;
    -- ****
-
--- Temporary code to interact with Nim
-   procedure Get_Start_Point(X, Y: out Integer) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaStartPoint";
 
 end Maps.UI;
