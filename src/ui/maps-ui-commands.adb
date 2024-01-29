@@ -54,21 +54,21 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- QuitGame
    -- SOURCE
-   function Quit_Game_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Quit_Game_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-   begin
-      Show_Question
-        (Question => "Are you sure want to quit?", Result => "quit");
-      return TCL_OK;
-   end Quit_Game_Command;
+--   function Quit_Game_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Quit_Game_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--   begin
+--      Show_Question
+--        (Question => "Are you sure want to quit?", Result => "quit");
+--      return TCL_OK;
+--   end Quit_Game_Command;
 
    -- ****o* MapCommands/MapCommands.Resign_Game_Command
    -- FUNCTION
@@ -642,9 +642,7 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
---      Add_Command(Name => "MoveMap", Ada_Command => Move_Map_Command'Access);
---      Add_Command(Name => "MoveShip", Ada_Command => Move_Ship_Command'Access);
-      Add_Command(Name => "QuitGame", Ada_Command => Quit_Game_Command'Access);
+--      Add_Command(Name => "QuitGame", Ada_Command => Quit_Game_Command'Access);
       Add_Command
         (Name => "ResignGame", Ada_Command => Resign_Game_Command'Access);
       Add_Command

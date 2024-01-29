@@ -214,6 +214,11 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   ## MoveShip direction
   ## Direction in which the player's ship will be moved
 
+proc quitGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  showQuestion(question = "Are you sure want to quit?", res = "quit")
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -226,6 +231,7 @@ proc addCommands*() =
   addCommand("SetDestination", setShipDestinationCommand)
   addCommand("MoveMap", moveMapCommand)
   addCommand("MoveShip", moveShipCommand)
+  addCommand("QuitGame", quitGameCommand)
 
 import std/tables
 import ../config
