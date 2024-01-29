@@ -41,6 +41,7 @@ with Dialogs; use Dialogs;
 -- with Events;
 -- with Factions;
 -- with Messages; use Messages;
+with Ships;
 -- with Ships.Cargo;
 -- with Ships.Crew;
 with Ships.Movement; use Ships.Movement;
@@ -996,6 +997,8 @@ package body Maps.UI.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ships;
+
       Message: constant String :=
         Change_Ship_Speed
           (Speed_Value =>

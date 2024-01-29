@@ -51,6 +51,7 @@ with Messages;
 with Messages.UI;
 with Missions.UI;
 with OrdersMenu;
+with Ships; use Ships;
 with Ships.UI;
 with Statistics;
 with Statistics.UI;
@@ -92,8 +93,16 @@ package body Maps.UI is
    end Get_Map_View;
    --## rule on REDUCEABLE_SCOPE
 
+   -- ****f* MUI/MUI.Update_Map_Info
+   -- FUNCTION
+   -- Update information about map cell
+   -- PARAMETERS
+   -- X - X coordinate of the map cell
+   -- Y - Y coordinate of the map cell
+   -- SOURCE
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
+     -- ****
       procedure Update_Ada_Map_Info(X1, Y1: Positive) with
          Import => True,
          Convention => C,
@@ -103,7 +112,12 @@ package body Maps.UI is
       Update_Ada_Map_Info(X1 => X, Y1 => Y);
    end Update_Map_Info;
 
+   -- ****f* MUI/MUI.Update_Move_Buttons
+   -- FUNCTION
+   -- Updated the player ship movement buttons
+   -- SOURCE
    procedure Update_Move_Buttons is
+      -- ****
       procedure Update_Ada_Move_Buttons with
          Import => True,
          Convention => C,

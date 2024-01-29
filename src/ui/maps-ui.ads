@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ships; use Ships;
 
 -- ****h* Maps/MUI
 -- FUNCTION
@@ -95,25 +94,5 @@ package Maps.UI is
       Import => True,
       Convention => C,
       External_Name => "setAdaCenterPoint";
-
-private
-
-   -- ****f* MUI/MUI.Update_Map_Info_(private)
-   -- FUNCTION
-   -- Update information about map cell
-   -- PARAMETERS
-   -- X - X coordinate of the map cell
-   -- Y - Y coordinate of the map cell
-   -- SOURCE
-   procedure Update_Map_Info
-     (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y);
-   -- ****
-
-   -- ****f* MUI/MUI.Update_Move_Buttons_(private)
-   -- FUNCTION
-   -- Updated the player ship movement buttons
-   -- SOURCE
-   procedure Update_Move_Buttons;
-   -- ****
 
 end Maps.UI;
