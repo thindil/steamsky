@@ -16,10 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
-import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
-    missions, missions2, shipscargo, shipscrew, shipsmovement, statistics,
-    stories, tk, types]
-import combatui, coreui, dialogs, updateheader, utilsui2, themes
+import ../[basestypes, config, game, maps, missions, statistics, stories, tk, types]
+import coreui, dialogs, updateheader, utilsui2, themes
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -523,164 +521,6 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  var
-    res = 0
-    message = ""
-    newX, newY = 0
-    startsCombat = false
-
-  proc updateCoordinates() =
-    if playerShip.destinationX > playerShip.skyX:
-      newX = 1
-    elif playerShip.destinationX < playerShip.skyX:
-      newX = -1
-    if playerShip.destinationY > playerShip.skyY:
-      newY = 1
-    elif playerShip.destinationY < playerShip.skyY:
-      newY = -1
-
-  if argv[1] == "n":
-    res = moveShip(x = 0, y = -1, message = message)
-  elif argv[1] == "s":
-    res = moveShip(x = 0, y = 1, message = message)
-  elif argv[1] == "e":
-    res = moveShip(x = 1, y = 0, message = message)
-  elif argv[1] == "w":
-    res = moveShip(x = -1, y = 0, message = message)
-  elif argv[1] == "sw":
-    res = moveShip(x = -1, y = 1, message = message)
-  elif argv[1] == "se":
-    res = moveShip(x = 1, y = 1, message = message)
-  elif argv[1] == "nw":
-    res = moveShip(x = -1, y = -1, message = message)
-  elif argv[1] == "ne":
-    res = moveShip(x = 1, y = -1, message = message)
-  elif argv[1] == "waitormove":
-    if playerShip.destinationX == 0 and playerShip.destinationY == 0:
-      res = 1
-      updateGame(minutes = gameSettings.waitMinutes)
-      waitInPlace(minutes = gameSettings.waitMinutes)
-    else:
-      updateCoordinates()
-      res = moveShip(x = newX, y = newY, message = message)
-      if playerShip.destinationX == playerShip.skyX and
-          playerShip.destinationY == playerShip.skyY:
-        addMessage(message = "You reached your travel destination.",
-            mType = orderMessage)
-        playerShip.destinationX = 0
-        playerShip.destinationY = 0
-        if gameSettings.autoFinish:
-          message = autoFinishMissions()
-        res = 4
-  elif argv[1] == "moveto":
-    while true:
-      newX = 0
-      newY = 0
-      updateCoordinates()
-      res = moveShip(x = newX, y = newY, message = message)
-      if res == 0:
-        break
-      startsCombat = checkForEvent()
-      if startsCombat:
-        res = 4
-        break
-      if res == 8:
-        waitForRest()
-        if "sentientships" notin factionsList[playerShip.crew[
-            0].faction].flags and (findMember(order = pilot) == -1 or
-            findMember(order = engineer) == 0):
-          waitForRest()
-        res = 1
-        startsCombat = checkForEvent()
-        if startsCombat:
-          res = 4
-          break
-      if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
-          playerShip.skyY].eventIndex > -1:
-        let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-        case gameSettings.autoMoveStop
-        of any:
-          if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
-            res = 0
-            break
-        of friendly:
-          if eventsList[eventIndex].eType in {trader, friendlyShip}:
-            res = 0
-            break
-        of enemy:
-          if eventsList[eventIndex].eType in {enemyShip, enemyPatrol}:
-            res = 0
-            break
-        of never:
-          discard
-      let messageDialog = ".message"
-      if tclEval2(script = "winfo exists " & messageDialog) == "0":
-        if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
-          showMessage(text = "Your fuel level is dangerously low.",
-              title = "Low fuel level")
-          res = 4
-          break
-        elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
-          showMessage(text = "Your food level is dangerously low.",
-              title = "Low food level")
-          res = 4
-          break
-        elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
-          showMessage(text = "Your drinks level is dangerously low.",
-              title = "Low drinks level")
-          res = 4
-          break
-      if playerShip.destinationX == playerShip.skyX and
-          playerShip.destinationY == playerShip.skyY:
-        addMessage("You reached your travel destination.", mType = orderMessage)
-        playerShip.destinationX = 0
-        playerShip.destinationY = 0
-        if gameSettings.autoFinish:
-          message = autoFinishMissions()
-        res = 4
-        break
-      if res in 6 .. 7:
-        break
-  case res
-  # Ship moved, check for events
-  of 1:
-    startsCombat = checkForEvent()
-    if not startsCombat and gameSettings.autoFinish:
-      message = autoFinishMissions()
-  # Ship moved, but pilot needs rest, confirm
-  of 6:
-    showQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
-        res = "nopilot")
-    return tclOk
-  # Ship moved, but engineer needs rest, confirm
-  of 7:
-    showQuestion(question = "You don't have engineer on duty. Do you want to wait until your pilot rest?",
-        res = "nopilot")
-    return tclOk
-  # Ship moved, but crew needs rest, autorest
-  of 8:
-    startsCombat = checkForEvent()
-    if not startsCombat:
-      waitForRest()
-      if "sentientships" notin factionsList[playerShip.crew[
-          0].faction].flags and (findMember(order = pilot) == -1 or findMember(
-          order = engineer) == -1):
-        waitForRest()
-      startsCombat = checkForEvent()
-    if not startsCombat and gameSettings.autoFinish:
-      message = autoFinishMissions()
-  else:
-    discard
-  if message.len > 0:
-    showMessage(text = message, title = "Message")
-  if startsCombat:
-    showCombatUi()
-  else:
-    showSkyMap()
-  return tclOk
-
 import mapsuicommands
 
 proc createGameUi*() =
@@ -836,7 +676,6 @@ proc createGameUi*() =
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
-    addCommand("MoveShip", moveShipCommand)
 
 # Temporary code for interfacing with Ada
 
