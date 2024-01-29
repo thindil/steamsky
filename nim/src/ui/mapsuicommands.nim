@@ -201,6 +201,18 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
 proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect].}
+  ## Move the player's ship in the selected direction and check what happened
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MoveShip direction
+  ## Direction in which the player's ship will be moved
 
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
