@@ -50,8 +50,30 @@ with Trades; use Trades;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with WaitMenu;
+with Interfaces.C; use Interfaces.C;
+with CArgv;
+with Tcl; use Tcl;
 
 package body OrdersMenu is
+
+   -- ****o* OrdersMenu/OrdersMenu.Show_Orders_Command
+   -- FUNCTION
+   -- Add available options and show orders menu to the player
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOrders
+   -- SOURCE
+   function Show_Orders_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
 
    function Show_Orders_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
