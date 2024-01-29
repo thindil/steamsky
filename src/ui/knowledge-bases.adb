@@ -40,7 +40,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes;
-with Config;
+with Config; use Config;
 with CoreUI;
 with Dialogs;
 with Factions;
@@ -112,7 +112,6 @@ package body Knowledge.Bases is
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
       use BasesTypes;
-      use Config;
       use CoreUI;
       use Factions;
       use Tiny_String;
@@ -416,7 +415,7 @@ package body Knowledge.Bases is
    function Show_Base_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Ada.Characters.Latin_1;
       use Tcl.Tk.Ada.Font;
       use Tcl.Tk.Ada.Widgets.Text;
@@ -508,17 +507,37 @@ package body Knowledge.Bases is
             Options => "-row 2 -sticky w -padx {5 0}");
       end Set_Reputation_Text;
    begin
-      Base_Info :=
-        To_Unbounded_String
-          (Source =>
-             "Coordinates X:" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
-             " Y:" & Positive'Image(Sky_Bases(Base_Index).Sky_Y));
+      Tag_Configure
+        (TextWidget => Base_Label, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
+      Insert
+        (TextWidget => Base_Label, Index => "end", Text => "{Coordinates X:}");
+      Insert
+        (TextWidget => Base_Label, Index => "end",
+         Text =>
+           "{" & Positive'Image(Sky_Bases(Base_Index).Sky_X) &
+           "} [list gold]");
+      Insert(TextWidget => Base_Label, Index => "end", Text => "{ Y:}");
+      Insert
+        (TextWidget => Base_Label, Index => "end",
+         Text =>
+           "{" & Positive'Image(Sky_Bases(Base_Index).Sky_Y) &
+           "} [list gold]");
       if Sky_Bases(Base_Index).Visited.Year > 0 then
-         Append
-           (Source => Base_Info,
-            New_Item =>
-              LF & "Last visited: " &
-              Formated_Time(Time => Sky_Bases(Base_Index).Visited));
+         Insert
+           (TextWidget => Base_Label, Index => "end",
+            Text => "{ " & LF & "Last visited: }");
+         Insert
+           (TextWidget => Base_Label, Index => "end",
+            Text =>
+              "{ " & Formated_Time(Time => Sky_Bases(Base_Index).Visited) &
+              "} [list gold]");
          Show_Mission_And_Recruits_Info_Block :
          declare
             use Utils;
@@ -604,7 +623,8 @@ package body Knowledge.Bases is
          Append(Source => Base_Info, New_Item => LF & "Not visited yet.");
       end if;
       Insert
-         (TextWidget => Base_Label, Index => "end", Text => "{" & To_String(Source => Base_Info) & "}");
+        (TextWidget => Base_Label, Index => "end",
+         Text => "{" & To_String(Source => Base_Info) & "}");
       configure
         (Widgt => Base_Label,
          options =>
@@ -615,7 +635,8 @@ package body Knowledge.Bases is
                    (TextWidget => Base_Label, Options => "-displaylines",
                     Index1 => "0.0", Index2 => "end")) /
               Positive'Value
-                (Metrics(Font => "InterfaceFont", Option => "-linespace")) - 1));
+                (Metrics(Font => "InterfaceFont", Option => "-linespace")) -
+              1));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Base_Label,
          Options => "-row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w");
