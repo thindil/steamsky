@@ -420,7 +420,6 @@ package body Knowledge.Bases is
       use Tcl.Tk.Ada.Font;
       use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tklib.Ada.Tooltip;
       use Dialogs;
       use Messages;
@@ -449,6 +448,7 @@ package body Knowledge.Bases is
              "} -style Dialog.TButton");
       procedure Set_Reputation_Text(Reputation_Text: String) is
          use Ada.Strings;
+         use Tcl.Tk.Ada.Widgets.TtkLabel;
 
          Reputation_Bar: constant Ttk_Frame :=
            Create
