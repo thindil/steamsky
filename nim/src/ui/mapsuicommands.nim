@@ -199,7 +199,8 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Direction in which the map will be moved
 
 proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
@@ -427,29 +428,79 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
       newY = -1
 
   if argv[1] == "n":
-    res = moveShip(x = 0, y = -1, message = message)
+    res = try:
+        moveShip(x = 0, y = -1, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "s":
-    res = moveShip(x = 0, y = 1, message = message)
+    res = try:
+        moveShip(x = 0, y = 1, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "e":
-    res = moveShip(x = 1, y = 0, message = message)
+    res = try:
+        moveShip(x = 1, y = 0, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "w":
-    res = moveShip(x = -1, y = 0, message = message)
+    res = try:
+        moveShip(x = -1, y = 0, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "sw":
-    res = moveShip(x = -1, y = 1, message = message)
+    res = try:
+        moveShip(x = -1, y = 1, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "se":
-    res = moveShip(x = 1, y = 1, message = message)
+    res = try:
+        moveShip(x = 1, y = 1, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "nw":
-    res = moveShip(x = -1, y = -1, message = message)
+    res = try:
+        moveShip(x = -1, y = -1, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "ne":
-    res = moveShip(x = 1, y = -1, message = message)
+    res = try:
+        moveShip(x = 1, y = -1, message = message)
+      except:
+        tclEval(script = "bgerror {Can't move the ship. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
   elif argv[1] == "waitormove":
     if playerShip.destinationX == 0 and playerShip.destinationY == 0:
       res = 1
-      updateGame(minutes = gameSettings.waitMinutes)
-      waitInPlace(minutes = gameSettings.waitMinutes)
+      try:
+        updateGame(minutes = gameSettings.waitMinutes)
+        waitInPlace(minutes = gameSettings.waitMinutes)
+      except:
+        tclEval(script = "bgerror {Can't update the game. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     else:
       updateCoordinates()
-      res = moveShip(x = newX, y = newY, message = message)
+      res = try:
+          moveShip(x = newX, y = newY, message = message)
+        except:
+          tclEval(script = "bgerror {Can't move the ship. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
       if playerShip.destinationX == playerShip.skyX and
           playerShip.destinationY == playerShip.skyY:
         addMessage(message = "You reached your travel destination.",
@@ -457,28 +508,63 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
         playerShip.destinationX = 0
         playerShip.destinationY = 0
         if gameSettings.autoFinish:
-          message = autoFinishMissions()
+          message = try:
+              autoFinishMissions()
+            except:
+              tclEval(script = "bgerror {Can't finish missions. Reason: " &
+                  getCurrentExceptionMsg() & "}")
+              return
         res = 4
   elif argv[1] == "moveto":
     while true:
       newX = 0
       newY = 0
       updateCoordinates()
-      res = moveShip(x = newX, y = newY, message = message)
+      res = try:
+          moveShip(x = newX, y = newY, message = message)
+        except:
+          tclEval(script = "bgerror {Can't move the ship. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
       if res == 0:
         break
-      startsCombat = checkForEvent()
+      startsCombat = try:
+          checkForEvent()
+        except:
+          tclEval(script = "bgerror {Can't check for events. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
       if startsCombat:
         res = 4
         break
       if res == 8:
-        waitForRest()
-        if "sentientships" notin factionsList[playerShip.crew[
-            0].faction].flags and (findMember(order = pilot) == -1 or
-            findMember(order = engineer) == 0):
+        try:
           waitForRest()
+        except:
+          tclEval(script = "bgerror {Can't wait for rest of the crew. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
+        try:
+          if "sentientships" notin factionsList[playerShip.crew[
+              0].faction].flags and (findMember(order = pilot) == -1 or
+              findMember(order = engineer) == 0):
+            try:
+              waitForRest()
+            except:
+              tclEval(script = "bgerror {Can't wait for rest of the crew. Reason: " &
+                  getCurrentExceptionMsg() & "}")
+              return
+        except:
+          tclEval(script = "bgerror {Can't check do faction has sentientships flags. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
         res = 1
-        startsCombat = checkForEvent()
+        startsCombat = try:
+            checkForEvent()
+          except:
+            tclEval(script = "bgerror {Can't check for events. Reason: " &
+                getCurrentExceptionMsg() & "}")
+            return
         if startsCombat:
           res = 4
           break
@@ -502,28 +588,38 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
           discard
       let messageDialog = ".message"
       if tclEval2(script = "winfo exists " & messageDialog) == "0":
-        if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
-          showMessage(text = "Your fuel level is dangerously low.",
-              title = "Low fuel level")
-          res = 4
-          break
-        elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
-          showMessage(text = "Your food level is dangerously low.",
-              title = "Low food level")
-          res = 4
-          break
-        elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
-          showMessage(text = "Your drinks level is dangerously low.",
-              title = "Low drinks level")
-          res = 4
-          break
+        try:
+          if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
+            showMessage(text = "Your fuel level is dangerously low.",
+                title = "Low fuel level")
+            res = 4
+            break
+          elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
+            showMessage(text = "Your food level is dangerously low.",
+                title = "Low food level")
+            res = 4
+            break
+          elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
+            showMessage(text = "Your drinks level is dangerously low.",
+                title = "Low drinks level")
+            res = 4
+            break
+        except:
+          tclEval(script = "bgerror {Can't check low level of items. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
       if playerShip.destinationX == playerShip.skyX and
           playerShip.destinationY == playerShip.skyY:
         addMessage("You reached your travel destination.", mType = orderMessage)
         playerShip.destinationX = 0
         playerShip.destinationY = 0
         if gameSettings.autoFinish:
-          message = autoFinishMissions()
+          message = try:
+              autoFinishMissions()
+            except:
+              tclEval(script = "bgerror {Can't finish missions. Reason: " &
+                  getCurrentExceptionMsg() & "}")
+              return
         res = 4
         break
       if res in 6 .. 7:
@@ -531,9 +627,19 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   case res
   # Ship moved, check for events
   of 1:
-    startsCombat = checkForEvent()
+    startsCombat = try:
+        checkForEvent()
+      except:
+        tclEval(script = "bgerror {Can't check for events. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     if not startsCombat and gameSettings.autoFinish:
-      message = autoFinishMissions()
+      message = try:
+          autoFinishMissions()
+        except:
+          tclEval(script = "bgerror {Can't finish missions. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
   # Ship moved, but pilot needs rest, confirm
   of 6:
     showQuestion(question = "You don't have pilot on duty. Do you want to wait until your pilot rest?",
@@ -546,16 +652,42 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   # Ship moved, but crew needs rest, autorest
   of 8:
-    startsCombat = checkForEvent()
+    startsCombat = try:
+        checkForEvent()
+      except:
+        tclEval(script = "bgerror {Can't check for events. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     if not startsCombat:
-      waitForRest()
-      if "sentientships" notin factionsList[playerShip.crew[
-          0].faction].flags and (findMember(order = pilot) == -1 or findMember(
-          order = engineer) == -1):
+      try:
         waitForRest()
-      startsCombat = checkForEvent()
+      except:
+        tclEval(script = "bgerror {Can't wait for rest of the crew. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
+      try:
+        if "sentientships" notin factionsList[playerShip.crew[
+            0].faction].flags and (findMember(order = pilot) == -1 or
+                findMember(
+            order = engineer) == -1):
+          waitForRest()
+      except:
+        tclEval(script = "bgerror {Can't check do faction has sentientships flags. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
+      startsCombat = try:
+          checkForEvent()
+        except:
+          tclEval(script = "bgerror {Can't check for events. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
     if not startsCombat and gameSettings.autoFinish:
-      message = autoFinishMissions()
+      message = try:
+          autoFinishMissions()
+        except:
+          tclEval(script = "bgerror {Can't finish missions. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return
   else:
     discard
   if message.len > 0:
