@@ -94,17 +94,4 @@ package body Ships.Cargo is
           (I_Type => New_String(Str => To_String(Source => Item_Type)));
    end Get_Item_Amount;
 
-   function Get_Items_Amount(I_Type: String) return Natural is
-      function Get_Ada_Items_Amount(It: chars_ptr) return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaItemsAmount";
-   begin
-      Get_Ada_Ship_Cargo
-        (Cargo => Inventory_To_Nim(Inventory => Player_Ship.Cargo),
-         Get_Player_Ship => 1);
-      Get_Ada_Crew;
-      return Get_Ada_Items_Amount(It => New_String(Str => I_Type));
-   end Get_Items_Amount;
-
 end Ships.Cargo;

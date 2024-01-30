@@ -24,21 +24,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Ships.Movement is
 -- ****
 
-   -- ****f* SMovement/SMovement.MoveShip
-   -- FUNCTION
-   -- Move player ship
-   -- PARAMETERS
-   -- X       - Amount of X coordinate fields to move player ship
-   -- Y       - Amount of Y coordinate fields to move player ship
-   -- Message - If ship cannot be moved, here will be reason of why
-   -- RESULT
-   -- State after move (or not, then return 0) player ship and parameter
-   -- Message
-   -- SOURCE
-   function Move_Ship
-     (X, Y: Integer; Message: in out Unbounded_String) return Natural;
-     -- ****
-
      -- ****f* SMovement/SMovement.Dock_Ship
      -- FUNCTION
      -- Dock/Undock ship at base

@@ -21,37 +21,6 @@ with Maps; use Maps;
 
 package body Ships.Movement is
 
-   function Move_Ship
-     (X, Y: Integer; Message: in out Unbounded_String) return Natural is
-      Nim_Message: chars_ptr;
-      Result: Natural;
-      function Move_Ada_Ship
-        (Nx, Ny: Integer; Msg: out chars_ptr) return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "moveAdaShip";
-   begin
-      Get_Game_Date;
-      Set_Ship_In_Nim;
-      Get_Ada_Map_Cell
-        (X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y,
-         Base_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
-         Visited =>
-           (if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then 1
-            else 0),
-         Event_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index,
-         Mission_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
-      Result := Move_Ada_Ship(Nx => X, Ny => Y, Msg => Nim_Message);
-      Message := To_Unbounded_String(Source => Value(Item => Nim_Message));
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Game_Date;
-      Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
-      return Result;
-   end Move_Ship;
-
    function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String is
       use Bases;

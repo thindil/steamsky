@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -74,18 +74,6 @@ package Ships.Cargo is
    function Get_Item_Amount
      (Item_Type: Tiny_String.Bounded_String) return Natural with
       Pre => Tiny_String.Length(Source => Item_Type) > 0;
-      -- ****
-
-      -- ****f* SCargo/SCargo.Get_Items_Amount
-      -- FUNCTION
-      -- Check amount of selected consumables on player ship
-      -- PARAMETERS
-      -- I_Type - "Drinks" or "Food". Type of items which will be looking for
-      -- RESULT
-      -- Amount of drinks or food, depends on IType on the player ship
-      -- SOURCE
-   function Get_Items_Amount(I_Type: String) return Natural with
-      Pre => I_Type in "Drinks" | "Food";
       -- ****
 
 end Ships.Cargo;
