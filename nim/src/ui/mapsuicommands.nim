@@ -231,6 +231,11 @@ proc quitGameCommand(clientData: cint; interp: PInterp; argc: cint;
   showQuestion(question = "Are you sure want to quit?", res = "quit")
   return tclOk
 
+proc resignGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  showQuestion(question = "Are you sure want to resign from game?", res = "resign")
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -244,6 +249,7 @@ proc addCommands*() =
   addCommand("MoveMap", moveMapCommand)
   addCommand("MoveShip", moveShipCommand)
   addCommand("QuitGame", quitGameCommand)
+  addCommand("ResignGame", resignGameCommand)
 
 import std/tables
 import ../config
