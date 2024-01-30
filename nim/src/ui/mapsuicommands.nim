@@ -215,7 +215,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Direction in which the player's ship will be moved
 
 proc quitGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   showQuestion(question = "Are you sure want to quit?", res = "quit")
   return tclOk
 
