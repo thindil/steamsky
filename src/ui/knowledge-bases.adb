@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -436,7 +436,6 @@ package body Knowledge.Bases is
         Create
           (pathName => Base_Dialog & ".info",
            options => "-wrap char -height 5 -width 30");
-      Base_Info: Unbounded_String;
       Base_Button: Ttk_Button :=
         Create
           (pathName => Base_Dialog & ".destination",
@@ -516,6 +515,33 @@ package body Knowledge.Bases is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-goldenyellow)"));
+      Tag_Configure
+        (TextWidget => Base_Label, TagName => "red",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-red)"));
+      Tag_Configure
+        (TextWidget => Base_Label, TagName => "green",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-green)"));
+      Tag_Configure
+        (TextWidget => Base_Label, TagName => "cyan",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-cyan)"));
       Insert
         (TextWidget => Base_Label, Index => "end", Text => "{Coordinates X:}");
       Insert
@@ -551,21 +577,27 @@ package body Knowledge.Bases is
                  Days_Difference
                    (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date);
                if Time_Diff > 0 then
-                  Append
-                    (Source => Base_Info,
-                     New_Item =>
-                       LF & "New recruits available in" &
-                       Natural'Image(Time_Diff) & " days.");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{" & LF & "New recruits available in}");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{" & Natural'Image(Time_Diff) & "} [list gold]");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{ days.}");
                else
-                  Append
-                    (Source => Base_Info,
-                     New_Item => LF & "New recruits available now.");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text =>
+                       "{" & LF & "New recruits available now.} [list green]");
                end if;
             else
-               Append
-                 (Source => Base_Info,
-                  New_Item =>
-                    LF & "You can't recruit crew members at this base.");
+               Insert
+                 (TextWidget => Base_Label, Index => "end",
+                  Text =>
+                    "{" & LF &
+                    "You can't recruit crew members at this base.} [list red]");
             end if;
             if Sky_Bases(Base_Index).Population > 0 and
               Sky_Bases(Base_Index).Reputation.Level > -25 then
@@ -573,20 +605,28 @@ package body Knowledge.Bases is
                  Days_Difference
                    (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events);
                if Time_Diff < 7 then
-                  Append
-                    (Source => Base_Info,
-                     New_Item =>
-                       LF & "You asked for events" & Natural'Image(Time_Diff) &
-                       " days ago.");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{" & LF & "You asked for events}");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{" & Natural'Image(Time_Diff) & "} [list gold]");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{ days ago.}");
                else
-                  Append
-                    (Source => Base_Info,
-                     New_Item => LF & "You can ask for events again.");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text =>
+                       "{" & LF &
+                       "You can ask for events again.} [list green]");
                end if;
             else
-               Append
-                 (Source => Base_Info,
-                  New_Item => LF & "You can't ask for events at this base.");
+               Insert
+                 (TextWidget => Base_Label, Index => "end",
+                  Text =>
+                    "{" & LF &
+                    "You can't ask for events at this base.} [list red]");
             end if;
             if Sky_Bases(Base_Index).Population > 0 and
               Sky_Bases(Base_Index).Reputation.Level > -1 then
@@ -595,20 +635,27 @@ package body Knowledge.Bases is
                  Days_Difference
                    (Date_To_Compare => Sky_Bases(Base_Index).Missions_Date);
                if Time_Diff > 0 then
-                  Append
-                    (Source => Base_Info,
-                     New_Item =>
-                       LF & "New missions available in" &
-                       Natural'Image(Time_Diff) & " days.");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{" & LF & "New missions available in}");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{" & Natural'Image(Time_Diff) & "} [list gold]");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text => "{ days.}");
                else
-                  Append
-                    (Source => Base_Info,
-                     New_Item => LF & "New missions available now.");
+                  Insert
+                    (TextWidget => Base_Label, Index => "end",
+                     Text =>
+                       "{" & LF & "New missions available now.} [list green]");
                end if;
             else
-               Append
-                 (Source => Base_Info,
-                  New_Item => LF & "You can't take missions at this base.");
+               Insert
+                 (TextWidget => Base_Label, Index => "end",
+                  Text =>
+                    "{" & LF &
+                    "You can't take missions at this base.} [list red]");
             end if;
          end Show_Mission_And_Recruits_Info_Block;
          Set_Reputation_Text
@@ -616,15 +663,15 @@ package body Knowledge.Bases is
               Get_Reputation_Text
                 (Reputation_Level => Sky_Bases(Base_Index).Reputation.Level));
          if Base_Index = Player_Ship.Home_Base then
-            Append
-              (Source => Base_Info, New_Item => LF & "It is your home base.");
+            Insert
+              (TextWidget => Base_Label, Index => "end",
+               Text => "{" & LF & "It is your home base.} [list cyan]");
          end if;
       else
-         Append(Source => Base_Info, New_Item => LF & "Not visited yet.");
+         Insert
+           (TextWidget => Base_Label, Index => "end",
+            Text => "{" & LF & "Not visited yet.} [list red]");
       end if;
-      Insert
-        (TextWidget => Base_Label, Index => "end",
-         Text => "{" & To_String(Source => Base_Info) & "}");
       configure
         (Widgt => Base_Label,
          options =>
