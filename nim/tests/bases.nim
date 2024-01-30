@@ -1,5 +1,6 @@
-import ../src/[bases, basestypes, careers, factions, game, items, maps, types]
 import unittest2
+import ../src/careers
+include ../src/bases
 
 suite "Unit tests for bases module":
 
