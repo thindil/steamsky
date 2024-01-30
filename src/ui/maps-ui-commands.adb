@@ -34,7 +34,7 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Ships;
-with Ships.Movement; use Ships.Movement;
+with Ships.Movement;
 with Statistics.UI;
 with Utils.UI;
 
@@ -621,6 +621,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Ships;
+      use Ships.Movement;
 
       Message: constant String :=
         Change_Ship_Speed
