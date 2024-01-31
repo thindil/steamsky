@@ -56,7 +56,7 @@ with Tcl; use Tcl;
 
 package body OrdersMenu is
 
-   -- rule off REDUCEABLE_SCOPE
+   --## rule off REDUCEABLE_SCOPE
    -- ****o* OrdersMenu/OrdersMenu.Show_Orders_Command
    -- FUNCTION
    -- Add available options and show orders menu to the player
@@ -75,7 +75,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
-   -- rule on REDUCEABLE_SCOPE
+   --## rule on REDUCEABLE_SCOPE
 
    function Show_Orders_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
