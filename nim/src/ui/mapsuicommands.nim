@@ -232,8 +232,9 @@ proc quitGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resignGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  showQuestion(question = "Are you sure want to resign from game?", res = "resign")
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  showQuestion(question = "Are you sure want to resign from game?",
+      res = "resign")
   return tclOk
 
 proc addCommands*() =
