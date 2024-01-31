@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -92,41 +92,46 @@ package body Knowledge.Events is
       Event_Info :=
         To_Unbounded_String
           (Source =>
-             "X:" & Positive'Image(Get_Event(Index => Event_Index).Sky_X) &
-             " Y:" & Positive'Image(Get_Event(Index => Event_Index).Sky_Y));
+             "X:{gold}" &
+             Positive'Image(Get_Event(Index => Event_Index).Sky_X) &
+             "{/gold} Y:{gold}" &
+             Positive'Image(Get_Event(Index => Event_Index).Sky_Y) &
+             "{/gold}");
       case Get_Event(Index => Event_Index).E_Type is
          when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Append
               (Source => Event_Info,
                New_Item =>
-                 LF & "Ship type: " &
+                 LF & "Ship type: {gold}" &
                  To_String
                    (Source =>
                       Get_Proto_Ship
                         (Proto_Index =>
                            Get_Event(Index => Event_Index).Ship_Index)
-                        .Name));
+                        .Name) &
+                 "{/gold}");
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
               (Source => Event_Info,
                New_Item =>
-                 LF & "Base name: " &
-                 To_String(Source => Sky_Bases(Base_Index).Name));
+                 LF & "Base name: {gold}" &
+                 To_String(Source => Sky_Bases(Base_Index).Name) & "{/gold}");
          when DOUBLEPRICE =>
             Append
               (Source => Event_Info,
                New_Item =>
-                 LF & "Base name: " &
-                 To_String(Source => Sky_Bases(Base_Index).Name));
+                 LF & "Base name: {gold}" &
+                 To_String(Source => Sky_Bases(Base_Index).Name) & "{/gold}");
             Append
               (Source => Event_Info,
                New_Item =>
-                 LF & "Item: " &
+                 LF & "Item: {gold}" &
                  To_String
                    (Source =>
                       Get_Proto_Item
                         (Index => Get_Event(Index => Event_Index).Item_Index)
-                        .Name));
+                        .Name) &
+                 "{/gold}");
          when NONE | BASERECOVERY =>
             null;
       end case;
