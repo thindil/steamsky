@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Ships.Cargo is
 
@@ -79,6 +79,7 @@ package body Ships.Cargo is
 
    function Get_Item_Amount
      (Item_Type: Tiny_String.Bounded_String) return Natural is
+      use Interfaces.C.Strings;
       use Tiny_String;
 
       function Get_Ada_Item_Amount(I_Type: chars_ptr) return Natural with

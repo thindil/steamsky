@@ -17,13 +17,14 @@
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases;
-with Maps; use Maps;
+with Maps;
 
 package body Ships.Movement is
 
    function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String is
       use Bases;
+      use Maps;
       function Dock_Ada_Ship(D, E: Integer) return chars_ptr with
          Import => True,
          Convention => C,
