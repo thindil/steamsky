@@ -1,6 +1,6 @@
-import ../src/[bases2, basestypes, careers, crafts, factions, game, items, maps,
-    mobs, shipmodules, ships, types, utils]
+import ../src/[careers, crafts, items, mobs, ships, shipmodules]
 import unittest2
+include ../src/bases2
 
 suite "Unit tests for bases2 module":
 
