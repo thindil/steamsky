@@ -37,8 +37,22 @@ proc showStatistics*(refresh: bool = false) =
   label = statsCanvas & ".stats.left.time"
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"In game time which was passed since it started\"")
-  let visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
+  var visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
   statsText = "Bases visited: " & $gameStats.basesVisited & "(" & fmt"{visitedPercent:5.3f}" & "%)"
   label = statsCanvas & ".stats.left.bases"
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of sky bases visited and total percentage of all bases\"")
+  visitedPercent = (gameStats.mapVisited.float / (1_024.0 * 1_024.0)) * 100.0
+  if visitedPercent < 0.001:
+    visitedPercent = 0.001
+  statsText = "Map discovered: " & fmt"{visitedPercent:5.3f}" & "%"
+  label = statsCanvas & ".stats.left.map"
+  tclEval(script = label & " configure -text {" & statsText & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The amount of unique map's fields visited\"")
+  statsText = "Distance traveled: " & $gameStats.distanceTraveled
+  label = statsCanvas & ".stats.left.distance"
+  tclEval(script = label & " configure -text {" & statsText & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of map's fields visited\"")
+  var totalFinished = 0
+  for craftingOrder in gameStats.craftingOrders:
+    totalFinished = totalFinished + craftingOrder.amount
