@@ -57,8 +57,10 @@ proc showStatistics*(refresh: bool = false) =
   label = statsCanvas & ".stats.left.distance"
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of map's fields visited\"")
-  var totalFinished = 0
-  for craftingOrder in gameStats.craftingOrders:
+  var
+    totalFinished = 0
+    statsList = gameStats.craftingOrders
+  for craftingOrder in statsList:
     totalFinished = totalFinished + craftingOrder.amount
   label = statsFrame & ".left.crafts"
   tclEval(script = label & " configure -text {Crafting orders finished: " &
@@ -69,11 +71,28 @@ proc showStatistics*(refresh: bool = false) =
     tclEval(script = treeView & " delete [list " & tclEval2(script = treeView &
         " children {}") & "]")
   if totalFinished > 0:
-    if craftingIndexes.len != gameStats.craftingOrders.len:
+    if craftingIndexes.len != statsList.len:
       craftingIndexes = @[]
-      for index, order in gameStats.craftingOrders:
+      for index, order in statsList:
         craftingIndexes.add(index)
     for item in craftingIndexes:
       tclEval(script = treeView & " insert {} end -values [list {" & itemsList[
-          recipesList[gameStats.craftingOrders[item].index].resultIndex].name &
-          "} {" & $gameStats.craftingOrders[item].amount & "}]")
+          recipesList[statsList[item].index].resultIndex].name &
+          "} {" & $statsList[item].amount & "}]")
+    tclEval(script = treeView & " configure -height " & (if statsList.len <
+        10: $statsList.len else: "10"))
+    tclEval(script = "grid " & statsFrame)
+  else:
+    tclEval(script = "grid " & statsFrame)
+  totalFinished = 0
+  statsList = gameStats.finishedMissions
+  for finishedMission in statsList:
+    totalFinished = totalFinished + finishedMission.amount
+  label = statsCanvas & ".stats.left.missions"
+  var missionsPercent = 0
+  if gameStats.acceptedMissions > 0:
+    missionsPercent = ((totalFinished.float /
+        gameStats.acceptedMissions.float) * 100.0).int
+  tclEval(script = label & " configure -text {Missions completed: " &
+      $totalFinished & " (" & $missionsPercent & "%)}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of missions finished in this game\"")
