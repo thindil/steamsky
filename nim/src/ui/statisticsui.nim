@@ -19,7 +19,8 @@ import std/[os, strformat, strutils, tables]
 import ../[game, goals, statistics, tk, types]
 import coreui, utilsui2
 
-var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes: seq[Positive]
+var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes,
+  killedIndexes: seq[Positive]
 
 proc showStatistics*(refresh: bool = false) =
   var statsFrame = mainPaned & ".statsframe"
@@ -158,8 +159,8 @@ proc showStatistics*(refresh: bool = false) =
         if goalsList[j].index == statsList[item].index:
           protoIndex = j
           break
-      tclEval(script = treeView & " insert {} end -values [list {" & goalText(index = protoIndex) & "} {" &
-          $statsList[item].amount & "}]")
+      tclEval(script = treeView & " insert {} end -values [list {" & goalText(
+          index = protoIndex) & "} {" & $statsList[item].amount & "}]")
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
@@ -168,16 +169,48 @@ proc showStatistics*(refresh: bool = false) =
   statsFrame = statsCanvas & ".stats.right.destroyedframe"
   treeView = statsFrame & ".destroyedview"
   statsList = gameStats.destroyedShips
+  var totalDestroyed = 0
   if statsList.len > 0:
     if tclEval2(script = treeView & " children {}") != "{}":
-      tclEval(script = treeView & " delete [list " & tclEval2(script = treeView &
-          " children {}") & "]")
+      tclEval(script = treeView & " delete [list " & tclEval2(
+          script = treeView & " children {}") & "]")
     if destroyedIndexes.len != statsList.len:
       destroyedIndexes = @[]
       for index, ship in statsList:
         destroyedIndexes.add(index)
     for item in destroyedIndexes:
       for index, ship in protoShipsList:
-        if index == statsList[i].index:
-          tclEval(script = treeView & " insert {} end -values [list {" & goalText(index = protoIndex) & "} {" &
-              $statsList[item].amount & "}]")
+        if $index == statsList[item].index:
+          tclEval(script = treeView & " insert {} end -values [list {" &
+              ship.name & "} {" & $statsList[item].amount & "}]")
+      totalDestroyed = totalDestroyed + statsList[item].amount
+    tclEval(script = treeView & " configure -height " & (if statsList.len <
+        10: $statsList.len else: "10"))
+    tclEval(script = "grid " & statsFrame)
+  else:
+    tclEval(script = "grid " & statsFrame)
+  label = statsCanvas & ".stats.right.destroyed"
+  tclEval(script = label & " configure -text {Destroyed ships (Total: " &
+      $totalDestroyed & ")}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of destroyed ships in this game\"")
+  statsFrame = statsCanvas & ".stats.right.killedframe"
+  treeView = statsFrame & ".killedview"
+  totalDestroyed = 0
+  statsList = gameStats.killedMobs
+  if statsList.len > 0:
+    if tclEval2(script = treeView & " children {}") != "{}":
+      tclEval(script = treeView & " delete [list " & tclEval2(
+          script = treeView & " children {}") & "]")
+    if killedIndexes.len != statsList.len:
+      killedIndexes = @[]
+      for index, mob in statsList:
+        killedIndexes.add(index)
+    for mob in statsList:
+      tclEval(script = treeView & " insert {} end -values [list {" &
+          mob.index & "} {" & $mob.amount & "}]")
+      totalDestroyed = totalDestroyed + mob.amount
+    tclEval(script = treeView & " configure -height " & (if statsList.len <
+        10: $statsList.len else: "10"))
+    tclEval(script = "grid " & statsFrame)
+  else:
+    tclEval(script = "grid " & statsFrame)
