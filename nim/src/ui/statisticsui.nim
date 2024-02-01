@@ -214,3 +214,25 @@ proc showStatistics*(refresh: bool = false) =
     tclEval(script = "grid " & statsFrame)
   else:
     tclEval(script = "grid " & statsFrame)
+  label = statsCanvas & ".stats.right.killed"
+  tclEval(script = label & " configure -text {Killed enemies (Total: " &
+      $totalDestroyed & ")}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of enemies killed in melee combat in this game\"")
+  tclEval(script = statsCanvas & " configure -height [expr & " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  statsFrame = statsCanvas & ".stats"
+  tclEval(script = statsCanvas & " create window 0 0 -anchor nw -window " & statsFrame)
+  tclEval(script = "update")
+  tclEval(script = statsCanvas & " configure -scrollregion [list " & tclEval2(
+      script = statsCanvas & " bbox all") & "]")
+  showScreen(newScreenName = "statsFrame")
+
+# Temporary code for interfacing with Ada
+
+proc showAdaStatistics() {.raises: [], tags: [], exportc.} =
+  try:
+    showStatistics()
+  except:
+    echo getCurrentExceptionMsg()
