@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strformat, tables]
-import ../[game, statistics, tk]
+import std/[os, strformat, strutils, tables]
+import ../[game, statistics, tk, types]
 import coreui, utilsui2
 
-var craftingIndexes: seq[Positive]
+var craftingIndexes, missionsIndexes: seq[Positive]
 
 proc showStatistics*(refresh: bool = false) =
   var statsFrame = mainPaned & ".statsframe"
@@ -66,6 +66,7 @@ proc showStatistics*(refresh: bool = false) =
   tclEval(script = label & " configure -text {Crafting orders finished: " &
       $totalFinished & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of crafting orders finished in this game\"")
+  statsFrame = statsCanvas & ".stats.left.craftsframe"
   var treeView = statsFrame & ".craftsview"
   if tclEval2(script = treeView & " children {}") != "{}":
     tclEval(script = treeView & " delete [list " & tclEval2(script = treeView &
@@ -96,3 +97,36 @@ proc showStatistics*(refresh: bool = false) =
   tclEval(script = label & " configure -text {Missions completed: " &
       $totalFinished & " (" & $missionsPercent & "%)}")
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of missions finished in this game\"")
+  statsFrame = statsCanvas & ".stats.left.missionsframe"
+  treeView = statsFrame & ".missionsview"
+  if tclEval2(script = treeView & " children {}") != "{}":
+    tclEval(script = treeView & " delete [list " & tclEval2(script = treeView &
+        " children {}") & "]")
+  if totalFinished > 0:
+    if missionsIndexes.len != statsList.len:
+      missionsIndexes = @[]
+      for index, mission in statsList:
+        missionsIndexes.add(index)
+    for item in missionsIndexes:
+      case parseEnum[MissionsTypes](statsList[item].index)
+      of deliver:
+        tclEval(script = treeView & " insert {} end -values [list {Delivered items} {" &
+            $statsList[item].amount & "}]")
+      of patrol:
+        tclEval(script = treeView & " insert {} end -values [list {Patroled areas} {" &
+            $statsList[item].amount & "}]")
+      of destroy:
+        tclEval(script = treeView & " insert {} end -values [list {Destroyed ships} {" &
+            $statsList[item].amount & "}]")
+      of explore:
+        tclEval(script = treeView & " insert {} end -values [list {Explored areas} {" &
+            $statsList[item].amount & "}]")
+      of passenger:
+        tclEval(script = treeView & " insert {} end -values [list {Passengers transported} {" &
+            $statsList[item].amount & "}]")
+    tclEval(script = treeView & " configure -height " & (if statsList.len <
+        10: $statsList.len else: "10"))
+    tclEval(script = "grid " & statsFrame)
+  else:
+    tclEval(script = "grid " & statsFrame)
+  label = statsCanvas & ".stats.left.goal"
