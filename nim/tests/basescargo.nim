@@ -1,5 +1,6 @@
-import ../src/[basescargo, basestypes, careers, factions, game, items, maps, types]
 import unittest2
+import ../src/[careers, factions, items]
+include ../src/basescargo
 
 suite "Unit tests for basescargo module.":
   checkpoint "Loading the game data."
