@@ -19,7 +19,7 @@ import std/[os, strformat, strutils, tables]
 import ../[game, goals, statistics, tk, types]
 import coreui, utilsui2
 
-var craftingIndexes, missionsIndexes, goalsIndexes: seq[Positive]
+var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes: seq[Positive]
 
 proc showStatistics*(refresh: bool = false) =
   var statsFrame = mainPaned & ".statsframe"
@@ -152,3 +152,32 @@ proc showStatistics*(refresh: bool = false) =
       goalsIndexes = @[]
       for index, goal in statsList:
         goalsIndexes.add(index)
+    for item in goalsIndexes:
+      var protoIndex = 0
+      for j in 1 .. 256:
+        if goalsList[j].index == statsList[item].index:
+          protoIndex = j
+          break
+      tclEval(script = treeView & " insert {} end -values [list {" & goalText(index = protoIndex) & "} {" &
+          $statsList[item].amount & "}]")
+    tclEval(script = treeView & " configure -height " & (if statsList.len <
+        10: $statsList.len else: "10"))
+    tclEval(script = "grid " & statsFrame)
+  else:
+    tclEval(script = "grid " & statsFrame)
+  statsFrame = statsCanvas & ".stats.right.destroyedframe"
+  treeView = statsFrame & ".destroyedview"
+  statsList = gameStats.destroyedShips
+  if statsList.len > 0:
+    if tclEval2(script = treeView & " children {}") != "{}":
+      tclEval(script = treeView & " delete [list " & tclEval2(script = treeView &
+          " children {}") & "]")
+    if destroyedIndexes.len != statsList.len:
+      destroyedIndexes = @[]
+      for index, ship in statsList:
+        destroyedIndexes.add(index)
+    for item in destroyedIndexes:
+      for index, ship in protoShipsList:
+        if index == statsList[i].index:
+          tclEval(script = treeView & " insert {} end -values [list {" & goalText(index = protoIndex) & "} {" &
+              $statsList[item].amount & "}]")
