@@ -16,10 +16,10 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strformat, strutils, tables]
-import ../[game, statistics, tk, types]
+import ../[game, goals, statistics, tk, types]
 import coreui, utilsui2
 
-var craftingIndexes, missionsIndexes: seq[Positive]
+var craftingIndexes, missionsIndexes, goalsIndexes: seq[Positive]
 
 proc showStatistics*(refresh: bool = false) =
   var statsFrame = mainPaned & ".statsframe"
@@ -130,3 +130,25 @@ proc showStatistics*(refresh: bool = false) =
   else:
     tclEval(script = "grid " & statsFrame)
   label = statsCanvas & ".stats.left.goal"
+  tclEval(script = label & " configure -text {" & (if goalText(0).len <
+      22: goalText(0) else: goalText(0)[0 .. 21] & "...") & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The current goal: " &
+      goalText(0) & "\"")
+  totalFinished = 0
+  statsList = gameStats.finishedGoals
+  for finishedGoal in statsList:
+    totalFinished = totalFinished + finishedGoal.amount
+  label = statsCanvas & ".stats.left.goals"
+  tclEval(script = label & " configure -text {Finished goals: " &
+      $totalFinished & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of goals finished in this game\"")
+  statsFrame = statsCanvas & ".stats.left.goalsframe"
+  treeView = statsFrame & ".goalsview"
+  if tclEval2(script = treeView & " children {}") != "{}":
+    tclEval(script = treeView & " delete [list " & tclEval2(script = treeView &
+        " children {}") & "]")
+  if totalFinished > 0:
+    if goalsIndexes.len != statsList.len:
+      goalsIndexes = @[]
+      for index, goal in statsList:
+        goalsIndexes.add(index)
