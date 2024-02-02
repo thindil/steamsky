@@ -20,7 +20,7 @@ import ../[game, goals, statistics, tk, types]
 import coreui, utilsui2
 
 var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes,
-  killedIndexes: seq[Positive]
+  killedIndexes: seq[Natural]
 
 proc showStatistics*(refresh: bool = false) =
   var statsFrame = mainPaned & ".statsframe"
