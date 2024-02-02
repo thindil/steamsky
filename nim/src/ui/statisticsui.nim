@@ -86,7 +86,7 @@ proc showStatistics*(refresh: bool = false) =
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
   else:
-    tclEval(script = "grid " & statsFrame)
+    tclEval(script = "grid remove " & statsFrame)
   totalFinished = 0
   statsList = gameStats.finishedMissions
   for finishedMission in statsList:
@@ -130,7 +130,7 @@ proc showStatistics*(refresh: bool = false) =
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
   else:
-    tclEval(script = "grid " & statsFrame)
+    tclEval(script = "grid remove " & statsFrame)
   label = statsCanvas & ".stats.left.goal"
   tclEval(script = label & " configure -text {" & (if goalText(0).len <
       22: goalText(0) else: goalText(0)[0 .. 21] & "...") & "}")
@@ -166,7 +166,7 @@ proc showStatistics*(refresh: bool = false) =
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
   else:
-    tclEval(script = "grid " & statsFrame)
+    tclEval(script = "grid remove " & statsFrame)
   statsFrame = statsCanvas & ".stats.right.destroyedframe"
   treeView = statsFrame & ".destroyedview"
   statsList = gameStats.destroyedShips
@@ -189,7 +189,7 @@ proc showStatistics*(refresh: bool = false) =
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
   else:
-    tclEval(script = "grid " & statsFrame)
+    tclEval(script = "grid remove " & statsFrame)
   label = statsCanvas & ".stats.right.destroyed"
   tclEval(script = label & " configure -text {Destroyed ships (Total: " &
       $totalDestroyed & ")}")
@@ -214,7 +214,7 @@ proc showStatistics*(refresh: bool = false) =
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
   else:
-    tclEval(script = "grid " & statsFrame)
+    tclEval(script = "grid remove " & statsFrame)
   label = statsCanvas & ".stats.right.killed"
   tclEval(script = label & " configure -text {Killed enemies (Total: " &
       $totalDestroyed & ")}")
