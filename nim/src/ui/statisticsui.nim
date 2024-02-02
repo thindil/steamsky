@@ -58,6 +58,7 @@ proc showStatistics*(refresh: bool = false) =
   label = statsCanvas & ".stats.left.distance"
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of map's fields visited\"")
+  statsFrame = statsCanvas & ".stats"
   var
     totalFinished = 0
     statsList = gameStats.craftingOrders
