@@ -42,7 +42,7 @@ proc showStatistics*(refresh: bool = false) =
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"In game time which was passed since it started\"")
   var visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
-  statsText = "Bases visited: " & $gameStats.basesVisited & "(" &
+  statsText = "Bases visited: " & $gameStats.basesVisited & " (" &
       fmt"{visitedPercent:5.3f}" & "%)"
   label = statsCanvas & ".stats.left.bases"
   tclEval(script = label & " configure -text {" & statsText & "}")
