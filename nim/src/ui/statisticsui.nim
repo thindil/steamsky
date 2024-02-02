@@ -22,7 +22,7 @@ import coreui, utilsui2
 var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes,
   killedIndexes: seq[Natural]
 
-proc showStatistics*(refresh: bool = false) =
+proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].} =
   var statsFrame = mainPaned & ".statsframe"
   let statsCanvas = statsFrame & ".canvas"
   var label = statsCanvas & ".stats.left.points"
@@ -42,15 +42,25 @@ proc showStatistics*(refresh: bool = false) =
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"In game time which was passed since it started\"")
   var visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
-  statsText = "Bases visited: " & $gameStats.basesVisited & " (" &
-      fmt"{visitedPercent:5.3f}" & "%)"
+  statsText = try:
+      "Bases visited: " & $gameStats.basesVisited & " (" &
+         fmt"{visitedPercent:5.3f}" & "%)"
+    except:
+      tclEval(script = "bgerror {Can't show info about visited bases. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return
   label = statsCanvas & ".stats.left.bases"
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of sky bases visited and total percentage of all bases\"")
   visitedPercent = (gameStats.mapVisited.float / (1_024.0 * 1_024.0)) * 100.0
   if visitedPercent < 0.001:
     visitedPercent = 0.001
-  statsText = "Map discovered: " & fmt"{visitedPercent:5.3f}" & "%"
+  statsText = try:
+      "Map discovered: " & fmt"{visitedPercent:5.3f}" & "%"
+    except:
+      tclEval(script = "bgerror {Can't show info about discovered map. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return
   label = statsCanvas & ".stats.left.map"
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of unique map's fields visited\"")
@@ -79,9 +89,14 @@ proc showStatistics*(refresh: bool = false) =
       for index, order in statsList:
         craftingIndexes.add(index)
     for item in craftingIndexes:
-      tclEval(script = treeView & " insert {} end -values [list {" & itemsList[
-          recipesList[statsList[item].index].resultIndex].name &
-          "} {" & $statsList[item].amount & "}]")
+      try:
+        discard tclEval(script = treeView & " insert {} end -values [list {" &
+            itemsList[recipesList[statsList[item].index].resultIndex].name &
+            "} {" & $statsList[item].amount & "}]")
+      except:
+        tclEval(script = "bgerror {Can't show finished crafting orders. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
@@ -110,32 +125,43 @@ proc showStatistics*(refresh: bool = false) =
       for index, mission in statsList:
         missionsIndexes.add(index)
     for item in missionsIndexes:
-      case parseEnum[MissionsTypes](statsList[item].index)
-      of deliver:
-        tclEval(script = treeView & " insert {} end -values [list {Delivered items} {" &
-            $statsList[item].amount & "}]")
-      of patrol:
-        tclEval(script = treeView & " insert {} end -values [list {Patroled areas} {" &
-            $statsList[item].amount & "}]")
-      of destroy:
-        tclEval(script = treeView & " insert {} end -values [list {Destroyed ships} {" &
-            $statsList[item].amount & "}]")
-      of explore:
-        tclEval(script = treeView & " insert {} end -values [list {Explored areas} {" &
-            $statsList[item].amount & "}]")
-      of passenger:
-        tclEval(script = treeView & " insert {} end -values [list {Passengers transported} {" &
-            $statsList[item].amount & "}]")
+      try:
+        case parseEnum[MissionsTypes](statsList[item].index)
+        of deliver:
+          tclEval(script = treeView & " insert {} end -values [list {Delivered items} {" &
+              $statsList[item].amount & "}]")
+        of patrol:
+          tclEval(script = treeView & " insert {} end -values [list {Patroled areas} {" &
+              $statsList[item].amount & "}]")
+        of destroy:
+          tclEval(script = treeView & " insert {} end -values [list {Destroyed ships} {" &
+              $statsList[item].amount & "}]")
+        of explore:
+          tclEval(script = treeView & " insert {} end -values [list {Explored areas} {" &
+              $statsList[item].amount & "}]")
+        of passenger:
+          discard tclEval(script = treeView &
+              " insert {} end -values [list {Passengers transported} {" &
+              $statsList[item].amount & "}]")
+      except:
+        tclEval(script = "bgerror {Can't show finished missions. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
   else:
     tclEval(script = "grid remove " & statsFrame)
   label = statsCanvas & ".stats.left.goal"
-  tclEval(script = label & " configure -text {" & (if goalText(0).len <
-      22: goalText(0) else: goalText(0)[0 .. 21] & "...") & "}")
-  tclEval(script = "tooltip::tooltip " & label & " \"The current goal: " &
-      goalText(0) & "\"")
+  try:
+    discard tclEval(script = label & " configure -text {" & (if goalText(
+        0).len < 22: goalText(0) else: goalText(0)[0 .. 21] & "...") & "}")
+    discard tclEval(script = "tooltip::tooltip " & label &
+        " \"The current goal: " & goalText(0) & "\"")
+  except:
+    tclEval(script = "bgerror {Can't show the current goal. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return
   totalFinished = 0
   statsList = gameStats.finishedGoals
   for finishedGoal in statsList:
@@ -156,12 +182,17 @@ proc showStatistics*(refresh: bool = false) =
         goalsIndexes.add(index)
     for item in goalsIndexes:
       var protoIndex = 0
-      for j in 1 .. 256:
-        if goalsList[j].index == statsList[item].index:
-          protoIndex = j
-          break
-      tclEval(script = treeView & " insert {} end -values [list {" & goalText(
-          index = protoIndex) & "} {" & $statsList[item].amount & "}]")
+      try:
+        for j in 1 .. 256:
+          if goalsList[j].index == statsList[item].index:
+            protoIndex = j
+            break
+        discard tclEval(script = treeView & " insert {} end -values [list {" &
+            goalText(index = protoIndex) & "} {" & $statsList[item].amount & "}]")
+      except:
+        tclEval(script = "bgerror {Can't show finished goals. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
