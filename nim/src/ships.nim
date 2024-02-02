@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -747,8 +747,6 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
     playerShip.skyY = shipData.skyY
     playerShip.speed = shipData.speed.ShipSpeed
     playerShip.upgradeModule = shipData.upgradeModule - 1
-    playerShip.destinationX = shipData.destinationX
-    playerShip.destinationY = shipData.destinationY
     playerShip.repairModule = shipData.repairModule - 1
     playerShip.description = $shipData.description
     playerShip.homeBase = shipData.homeBase
@@ -758,8 +756,6 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
     npcShip.skyY = shipData.skyY
     npcShip.speed = shipData.speed.ShipSpeed
     npcShip.upgradeModule = shipData.upgradeModule - 1
-    npcShip.destinationX = shipData.destinationX
-    npcShip.destinationY = shipData.destinationY
     npcShip.repairModule = shipData.repairModule - 1
     npcShip.description = $shipData.description
     npcShip.homeBase = shipData.homeBase
