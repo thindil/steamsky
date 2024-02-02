@@ -231,8 +231,8 @@ proc showStatistics*(refresh: bool = false) =
 
 # Temporary code for interfacing with Ada
 
-proc showAdaStatistics() {.raises: [], tags: [], exportc.} =
+proc showAdaStatistics(refresh: cint) {.raises: [], tags: [], exportc.} =
   try:
-    showStatistics()
+    showStatistics(refresh = refresh == 1)
   except:
     echo getCurrentExceptionMsg()
