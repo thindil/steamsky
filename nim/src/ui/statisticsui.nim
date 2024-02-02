@@ -227,7 +227,7 @@ proc showStatistics*(refresh: bool = false) =
   tclEval(script = "update")
   tclEval(script = statsCanvas & " configure -scrollregion [list " & tclEval2(
       script = statsCanvas & " bbox all") & "]")
-  showScreen(newScreenName = "statsFrame")
+  showScreen(newScreenName = "statsframe")
 
 # Temporary code for interfacing with Ada
 
