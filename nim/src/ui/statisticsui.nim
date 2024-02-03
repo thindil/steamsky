@@ -23,6 +23,9 @@ var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes,
   killedIndexes: seq[Natural]
 
 proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].} =
+  ## Show the game statistics to the player
+  ##
+  ## * refresh - if true, refresh the view, otherwise back to the sky map
   var statsFrame = mainPaned & ".statsframe"
   let statsCanvas = statsFrame & ".canvas"
   var label = statsCanvas & ".stats.left.points"
