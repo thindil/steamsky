@@ -35,7 +35,7 @@ with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Ships;
 with Ships.Movement;
-with Statistics.UI;
+-- with Statistics.UI;
 with Utils.UI;
 
 package body Maps.UI.Commands is
@@ -53,24 +53,24 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- ShowStats
    -- SOURCE
-   function Show_Stats_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Stats_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      use Statistics.UI;
-
-   begin
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-row 0 -column 1");
-      Show_Statistics;
-      return TCL_OK;
-   end Show_Stats_Command;
+--   function Show_Stats_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Stats_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--      use Statistics.UI;
+--
+--   begin
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Close_Button, Options => "-row 0 -column 1");
+--      Show_Statistics;
+--      return TCL_OK;
+--   end Show_Stats_Command;
 
    -- ****o* MapCommands/MapCommands.Show_Sky_Map_Command
    -- FUNCTION
@@ -582,8 +582,8 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowStats", Ada_Command => Show_Stats_Command'Access);
+--      Add_Command
+--        (Name => "ShowStats", Ada_Command => Show_Stats_Command'Access);
       Add_Command
         (Name => "ShowSkyMap", Ada_Command => Show_Sky_Map_Command'Access);
       Add_Command
