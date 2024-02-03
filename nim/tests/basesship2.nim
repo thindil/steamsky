@@ -1,9 +1,9 @@
-import std/tables
-import ../src/[basescargo, basesship2, basestypes, careers, crafts, factions,
-    game, items, maps, mobs, ships, shipmodules, types, utils]
 import unittest2
+import ../src/[basestypes, careers, crafts, factions, items, mobs, ships,
+    shipmodules, utils]
+include ../src/basesship2
 
-suite "Unit tests for basesships2 module":
+suite "Unit tests for basesship2 module":
 
   checkpoint "Loading the game data."
   if basesTypesList.len == 0:
@@ -27,14 +27,18 @@ suite "Unit tests for basesships2 module":
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-      1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
-      experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+      1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4,
+      level: 4,
+      experience: 0)], attributes: @[MobAttributeRecord(level: 3,
+          experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
-      1, 0, 0], order: gunner, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
-      experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+      1, 0, 0], order: gunner, loyalty: 100, skills: @[SkillInfo(index: 4,
+      level: 4,
+      experience: 0)], attributes: @[MobAttributeRecord(level: 3,
+          experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
   playerShip.modules = @[]
