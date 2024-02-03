@@ -14,19 +14,19 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
-with Crafts; use Crafts;
+with Crafts;
 with Game; use Game;
 use Game.Tiny_String;
-with Goals; use Goals;
-with Items; use Items;
-with Missions; use Missions;
-with Ships; use Ships;
-with Utils.UI; use Utils.UI;
+with Goals;
+with Items;
+with Missions;
+with Ships;
+with Utils.UI;
 
 package body Statistics.UI is
 
@@ -188,6 +188,9 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Crafts;
+      use Items;
+
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Crafting_Orders: constant Statistics_Container.Vector :=
@@ -300,6 +303,8 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Missions;
+
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Finished_Missions: constant Statistics_Container.Vector :=
@@ -411,6 +416,8 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Goals;
+
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Proto_Index: Positive := 1;
@@ -510,6 +517,10 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      use Ships;
+
       Column: constant Positive :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Destroyed_Ships: constant Statistics_Container.Vector :=
@@ -657,6 +668,7 @@ package body Statistics.UI is
    end Sort_Killed_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "SortFinishedCrafting",
