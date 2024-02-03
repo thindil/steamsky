@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Colored version of icon for show something on the map
+
 ### Changed
 - Updated look of the dialog with information about the player's ship's crew
   members
