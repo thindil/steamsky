@@ -30,6 +30,7 @@ with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* SUI/SUI.Crafting_Indexes
    -- FUNCTION
    -- Indexes of the finished crafting orders
@@ -64,6 +65,7 @@ package body Statistics.UI is
    -- SOURCE
    Killed_Indexes: Positive_Container.Vector;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    procedure Show_Statistics(Refresh: Boolean := False) is
       procedure Show_Ada_Statistics(Refr: Integer) with
