@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -74,7 +74,6 @@ package Statistics is
 
 -- Temporary code to interact with Nim
 
-   function Get_Game_Stats_Number(Name: String) return Natural;
    function Get_Game_Stats_List
      (Name: String) return Statistics_Container.Vector;
 

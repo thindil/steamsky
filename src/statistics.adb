@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,19 +37,6 @@ package body Statistics is
    begin
       return Get_Ada_Game_Points;
    end Get_Game_Points;
-
-   function Get_Game_Stats_Number(Name: String) return Natural is
-      Value: Natural;
-      procedure Set_Ada_Game_Stats_Number
-        (N: chars_ptr; Stats_Value: out Natural) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaGameStatsNumber";
-   begin
-      Set_Ada_Game_Stats_Number
-        (N => New_String(Str => Name), Stats_Value => Value);
-      return Value;
-   end Get_Game_Stats_Number;
 
    function Get_Game_Stats_List
      (Name: String) return Statistics_Container.Vector is
