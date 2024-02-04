@@ -250,7 +250,7 @@ proc resignGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showStatsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   showStatistics()
   return tclOk
