@@ -1,7 +1,6 @@
-import std/tables
-import ../src/[bases, basescargo, basestrade, basestypes, careers, crafts,
-    factions, game, items, maps, mobs, ships, shipmodules, types]
 import unittest2
+import ../src/[careers, crafts, factions, mobs, ships, shipmodules]
+include ../src/basestrade
 
 suite "Unit tests for basestrade module":
   checkpoint "Loading the game data."
@@ -55,6 +54,10 @@ suite "Unit tests for basestrade module":
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   playerCareer = "general"
   generateCargo()
+
+  test "Testing checkMoney.":
+    check:
+      checkMoney(1) > -1
 
   test "Testing hireRecruit.":
     generateRecruits()
