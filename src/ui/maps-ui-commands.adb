@@ -54,26 +54,26 @@ package body Maps.UI.Commands is
    -- Previouscommand is command to show previous screen. Some screens require
    -- to do special actions when closing them
    -- SOURCE
-   function Show_Sky_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Sky_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
-   begin
-      if Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
-         Show_Sky_Map(Clear => True);
-      else
-         Tcl_Eval(interp => Interp, strng => CArgv.Arg(Argv => Argv, N => 1));
-      end if;
-      Focus(Widgt => Get_Main_Window(Interp => Interp));
-      return TCL_OK;
-   end Show_Sky_Map_Command;
+--   function Show_Sky_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Sky_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data);
+--   begin
+--      if Argc = 1 then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+--         Show_Sky_Map(Clear => True);
+--      else
+--         Tcl_Eval(interp => Interp, strng => CArgv.Arg(Argv => Argv, N => 1));
+--      end if;
+--      Focus(Widgt => Get_Main_Window(Interp => Interp));
+--      return TCL_OK;
+--   end Show_Sky_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Mouse_Command
    -- FUNCTION
@@ -550,9 +550,7 @@ package body Maps.UI.Commands is
    begin
       Add_Ada_Commands;
 --      Add_Command
---        (Name => "ShowStats", Ada_Command => Show_Stats_Command'Access);
-      Add_Command
-        (Name => "ShowSkyMap", Ada_Command => Show_Sky_Map_Command'Access);
+--        (Name => "ShowSkyMap", Ada_Command => Show_Sky_Map_Command'Access);
       Add_Command
         (Name => "MoveCursor", Ada_Command => Move_Mouse_Command'Access);
       Add_Command

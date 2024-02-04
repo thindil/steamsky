@@ -266,6 +266,9 @@ proc showStatsCommand(clientData: cint; interp: PInterp; argc: cint;
   showStatistics()
   return tclOk
 
+proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -281,6 +284,7 @@ proc addCommands*() =
   addCommand("QuitGame", quitGameCommand)
   addCommand("ResignGame", resignGameCommand)
   addCommand("ShowStats", showStatsCommand)
+  addCommand("ShowSkyMap", showSkyMapCommand)
 
 import std/tables
 import ../config
@@ -763,6 +767,16 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     showCombatUi()
   else:
     showSkyMap()
+  return tclOk
+
+proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if argc == 1:
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+  else:
+    tclEval(script = $argv[1])
+  tclEval(script = "focus .")
   return tclOk
 
 # Temporary code for interfacing with Ada
