@@ -111,21 +111,22 @@ type ThemeRecord* = object
   ## * giveOrderIcon       - Icon used for give order to the crew member button
   ## * noPilotIcon         - Icon used for Pilot info in sentient ships
   ## * noEngineerIcon      - Icon used for Engineer info in sentient ships
-  ## * destinationIcon      - Icon used for set the ship destination button
-  ## * inventoryIcon        - Icon used for show inventory button
-  ## * dismissIcon          - Icon used for dismiss crew member button
+  ## * destinationIcon     - Icon used for set the ship destination button
+  ## * inventoryIcon       - Icon used for show inventory button
+  ## * dismissIcon         - Icon used for dismiss crew member button
   ## * goRestIcon          - Icon used for give order to go rest for the whole crew
   ## * repairPriorityIcon  - Icon used for set the repair priority button
   ## * upgradeButtonIcon   - Icon used for the upgrade button
-  ## * powerIcon            - Icon used for the enable or disable engine button
+  ## * powerIcon           - Icon used for the enable or disable engine button
   ## * assignCrewIcon      - Icon used for assign crew members to ship's modules
   ## * assignAmmoIcon      - Icon used for assign ammo to ship's guns
   ## * buyDefaultIcon      - Icon used for buy items button with default color
   ## * sellDefaultIcon     - Icon used for sell items button with default color
-  ## * moveIcon             - Icon used for moving items from inventory to cargo
+  ## * moveIcon            - Icon used for moving items from inventory to cargo
   ## * giveColoredIcon     - Icon used for give items button with green color
   ## * dropColoredIcon     - Icon used for drop items button with green color
   ## * editColoredIcon     - Icon used for edit button with green color
+  ## * showColoredIcon     - Icon used for show button with green color
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -226,6 +227,7 @@ type ThemeRecord* = object
   giveColoredIcon*: string
   dropColoredIcon*: string
   editColoredIcon*: string
+  showColoredIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -317,7 +319,8 @@ let
       moveIcon: defaultThemeIconPath & "cargo2.svg",
       giveColoredIcon: defaultThemeIconPath & "give2.svg",
       dropColoredIcon: defaultThemeIconPath & "drop2.svg",
-      editColoredIcon: defaultThemeIconPath & "edit2.svg")
+      editColoredIcon: defaultThemeIconPath & "edit2.svg",
+      showColoredIcon: defaultThemeIconPath & "show2.svg")
       ## The default game'st theme
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
@@ -544,6 +547,8 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
                 theme.dropColoredIcon = entry.value.unixToNativePath
               of "EditColoredIcon":
                 theme.editColoredIcon = entry.value.unixToNativePath
+              of "ShowColoredIcon":
+                theme.showColoredIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -585,7 +590,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
       "nopiloticon", "noengineericon", "destinationicon", "inventoryicon",
       "dismissicon", "goresticon", "repairpriorityicon", "upgradebuttonicon",
       "powericon", "assigncrewicon", "assignammoicon", "buy2icon", "sell2icon",
-      "moveicon", "give2icon", "drop2icon", "edit2icon"]
+      "moveicon", "give2icon", "drop2icon", "edit2icon", "show2icon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -617,7 +622,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
         theme.upgradeButtonIcon, theme.powerIcon, theme.assignCrewIcon,
         theme.assignAmmoIcon, theme.buyDefaultIcon, theme.sellDefaultIcon,
         theme.moveIcon, theme.giveColoredIcon, theme.dropColoredIcon,
-        theme.editColoredIcon]
+        theme.editColoredIcon, theme.showColoredIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
@@ -884,6 +889,8 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
     return theme.dropColoredIcon.cstring
   of "editColoredIcon":
     return theme.editColoredIcon.cstring
+  of "showColoredIcon":
+    return theme.showColoredIcon.cstring
   else:
     tclEval(script = "bgerror {Unknown theme setting: '" & $name & "'}")
     return "".cstring
