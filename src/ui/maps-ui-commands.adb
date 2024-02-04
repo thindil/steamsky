@@ -35,42 +35,9 @@ with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Ships;
 with Ships.Movement;
--- with Statistics.UI;
 with Utils.UI;
 
 package body Maps.UI.Commands is
-
-   -- ****o* MapCommands/MapCommands.Show_Stats_Command
-   -- FUNCTION
-   -- Show the player's game statistics
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowStats
-   -- SOURCE
---   function Show_Stats_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Show_Stats_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
---      use Statistics.UI;
---
---   begin
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Close_Button, Options => "-row 0 -column 1");
---      Show_Statistics;
---      return TCL_OK;
---   end Show_Stats_Command;
 
    -- ****o* MapCommands/MapCommands.Show_Sky_Map_Command
    -- FUNCTION
