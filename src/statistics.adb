@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Statistics is
 
@@ -41,6 +41,7 @@ package body Statistics is
    function Get_Game_Stats_List
      (Name: String) return Statistics_Container.Vector is
       use Interfaces.C;
+      use Interfaces.C.Strings;
 
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Statistics_Data is record
