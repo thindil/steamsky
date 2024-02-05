@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[crew2, events2, game, game2, maps, messages, missions2, shipscargo,
-    shipscrew, shipsmovement, tk, types]
+import ../[config, crew2, events2, game, game2, maps, messages, missions2,
+    shipscargo, shipscrew, shipsmovement, tk, types]
 import combatui, coreui, dialogs, ordersmenu, statisticsui
 
 const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
@@ -282,6 +282,18 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Previouscommand is command to show previous screen. Some screens require
   ## to do special actions when closing them
 
+proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let mapView = mainPaned & ".mapframe.map"
+  if tclEval2(script = "focus") != mapView:
+    tclEval(script = "focus -force " & mapView)
+    return tclOk
+  if argv[1] == "click":
+    tclEval(script = "event generate " & mapView & " <Button-" & (
+        if gameSettings.rightButton: "3" else: "1") & "> -x " & $argv[2] &
+        " -y " & $argv[3])
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -298,9 +310,9 @@ proc addCommands*() =
   addCommand("ResignGame", resignGameCommand)
   addCommand("ShowStats", showStatsCommand)
   addCommand("ShowSkyMap", showSkyMapCommand)
+  addCommand("MoveCursor", moveMouseCommand)
 
 import std/tables
-import ../config
 import mapsui, themes
 
 proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
