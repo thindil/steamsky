@@ -1,5 +1,6 @@
-import ../src/[basestypes, game, items]
 import unittest2
+import ../src/items
+include ../src/basestypes
 
 suite "Unit tests for basestypes module":
   checkpoint "Loading the game data."
