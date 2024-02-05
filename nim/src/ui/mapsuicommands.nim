@@ -296,7 +296,7 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y [expr " & $argv[3] & "-5]")
   elif argv[1] == "n":
-    tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x & " &
+    tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x " &
         $argv[2] & " -y [expr " & $argv[3] & "-5]")
   elif argv[1] == "ne":
     tclEval(script = "event generate " & mapView &
@@ -311,7 +311,7 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "event generate " & mapView &
         " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y [expr " & $argv[3] & "+5]")
   elif argv[1] == "s":
-    tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x & " &
+    tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x " &
         $argv[2] & " -y [expr " & $argv[3] & "+5]")
   elif argv[1] == "se":
     tclEval(script = "event generate " & mapView &
