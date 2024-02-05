@@ -267,7 +267,7 @@ proc showStatsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
 
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
