@@ -1135,6 +1135,8 @@ story.
 * Key `EditColoredIcon`: Path to the SVG image which will be used for rename
   button in the rename various things dialogs (like the player's ship, modules,
   crew members, etc.). Optional.
+* Key `ShowColoredIcon`: Path to the SVG image which will be used for show something
+  on map on various dialog's buttons. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
