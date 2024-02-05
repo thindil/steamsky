@@ -283,7 +283,7 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## to do special actions when closing them
 
 proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let mapView = mainPaned & ".mapframe.map"
   if tclEval2(script = "focus") != mapView:
     tclEval(script = "focus -force " & mapView)
