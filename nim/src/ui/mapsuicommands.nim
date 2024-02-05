@@ -292,6 +292,30 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "event generate " & mapView & " <Button-" & (
         if gameSettings.rightButton: "3" else: "1") & "> -x " & $argv[2] &
         " -y " & $argv[3])
+  elif argv[1] == "nw":
+    tclEval(script = "event generate " & mapView &
+        " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y [expr " & $argv[3] & "-5]")
+  elif argv[1] == "n":
+    tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x & " &
+        $argv[2] & " -y [expr " & $argv[3] & "-5]")
+  elif argv[1] == "ne":
+    tclEval(script = "event generate " & mapView &
+        " <Motion> -warp 1 -x [expr " & $argv[2] & "+5] -y [expr " & $argv[3] & "-5]")
+  elif argv[1] == "w":
+    tclEval(script = "event generate " & mapView &
+        " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y " & $argv[3])
+  elif argv[1] == "e":
+    tclEval(script = "event generate " & mapView &
+        " <Motion> -warp 1 -x [expr " & $argv[2] & "+5] -y " & $argv[3])
+  elif argv[1] == "sw":
+    tclEval(script = "event generate " & mapView &
+        " <Motion> -warp 1 -x [expr " & $argv[2] & "-5] -y [expr " & $argv[3] & "+5]")
+  elif argv[1] == "s":
+    tclEval(script = "event generate " & mapView & " <Motion> -warp 1 -x & " &
+        $argv[2] & " -y [expr " & $argv[3] & "+5]")
+  elif argv[1] == "se":
+    tclEval(script = "event generate " & mapView &
+        " <Motion> -warp 1 -x [expr " & $argv[2] & "+5] -y [expr " & $argv[3] & "+5]")
   return tclOk
 
 proc addCommands*() =
