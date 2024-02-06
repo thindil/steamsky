@@ -331,6 +331,16 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
         " <Motion> -warp 1 -x [expr " & $argv[2] & "+5] -y [expr " & $argv[3] & "+5]")
   return tclOk
 
+proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if tclEval2(script = "wm attributes . -fullscreen") == "0":
+    tclEval(script = "wm attributes . -fullscreen 1")
+    gameSettings.fullScreen = true
+  else:
+    tclEval(script = "wm attributes . -fullscreen 0")
+    gameSettings.fullScreen = false
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -348,6 +358,7 @@ proc addCommands*() =
   addCommand("ShowStats", showStatsCommand)
   addCommand("ShowSkyMap", showSkyMapCommand)
   addCommand("MoveCursor", moveMouseCommand)
+  addCommand("ToggleFullScreen", toggleFullScreenCommand)
 
 import std/tables
 import mapsui, themes
