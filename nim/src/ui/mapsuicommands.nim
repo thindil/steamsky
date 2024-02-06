@@ -352,6 +352,21 @@ proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
     gameSettings.fullScreen = false
   return tclOk
 
+proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  gameSettings.windowWidth = tclEval2(script = "winfo width .").parseInt
+  gameSettings.windowHeight = tclEval2(script = "winfo height .").parseInt
+  var panedPosition = (if gameSettings.windowHeight -
+      gameSettings.messagesPosition <
+      0: gameSettings.windowHeight else: gameSettings.windowHeight -
+      gameSettings.messagesPosition)
+  let sashPosition = tclEval2(script = mainPaned & " sashpos 0").parseInt
+  if sashPosition > 0 and sashPosition != panedPosition:
+    if gameSettings.windowHeight - sashPosition > -1:
+      gameSettings.messagesPosition = gameSettings.windowHeight - sashPosition
+    panedPosition = sashPosition
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -370,6 +385,7 @@ proc addCommands*() =
   addCommand("ShowSkyMap", showSkyMapCommand)
   addCommand("MoveCursor", moveMouseCommand)
   addCommand("ToggleFullScreen", toggleFullScreenCommand)
+  addCommand("ResizeLastMessages", resizeLastMessagesCommand)
 
 import std/tables
 import mapsui, themes

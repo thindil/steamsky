@@ -21,13 +21,13 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+-- with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+-- use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+-- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Config; use Config;
+-- with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Ships;
@@ -49,62 +49,62 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- ResizeLastMessages
    -- SOURCE
-   function Resize_Last_Messages_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Resize_Last_Messages_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-
-      Paned_Position: Positive;
-      Sash_Position: constant Natural :=
-        Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
-      procedure Set_Ada_Messages_Position(New_Value: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaMessagesPosition";
-   begin
-      Set_Integer_Setting
-        (Name => "windowWidth",
-         Value =>
-           Positive'Value
-             (Winfo_Get
-                (Widgt => Get_Main_Window(Interp => Interp),
-                 Info => "width")));
-      Set_Integer_Setting
-        (Name => "windowHeight",
-         Value =>
-           Positive'Value
-             (Winfo_Get
-                (Widgt => Get_Main_Window(Interp => Interp),
-                 Info => "height")));
-      Paned_Position :=
-        (if
-           Get_Integer_Setting(Name => "windowHeight") -
-           Get_Integer_Setting(Name => "messagesPosition") <
-           0
-         then Get_Integer_Setting(Name => "windowHeight")
-         else Get_Integer_Setting(Name => "windowHeight") -
-           Get_Integer_Setting(Name => "messagesPosition"));
-      if Sash_Position > 0 and then Sash_Position /= Paned_Position then
-         if Get_Integer_Setting(Name => "windowHeight") - Sash_Position >
-           -1 then
-            Set_Integer_Setting
-              (Name => "messagesPosition",
-               Value =>
-                 Get_Integer_Setting(Name => "windowHeight") - Sash_Position);
-            Set_Ada_Messages_Position
-              (New_Value => Get_Integer_Setting(Name => "messagesPosition"));
-         end if;
-         Paned_Position := Sash_Position;
-      end if;
-      return TCL_OK;
-   end Resize_Last_Messages_Command;
+--   function Resize_Last_Messages_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Resize_Last_Messages_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+--
+--      Paned_Position: Positive;
+--      Sash_Position: constant Natural :=
+--        Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
+--      procedure Set_Ada_Messages_Position(New_Value: Integer) with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "setAdaMessagesPosition";
+--   begin
+--      Set_Integer_Setting
+--        (Name => "windowWidth",
+--         Value =>
+--           Positive'Value
+--             (Winfo_Get
+--                (Widgt => Get_Main_Window(Interp => Interp),
+--                 Info => "width")));
+--      Set_Integer_Setting
+--        (Name => "windowHeight",
+--         Value =>
+--           Positive'Value
+--             (Winfo_Get
+--                (Widgt => Get_Main_Window(Interp => Interp),
+--                 Info => "height")));
+--      Paned_Position :=
+--        (if
+--           Get_Integer_Setting(Name => "windowHeight") -
+--           Get_Integer_Setting(Name => "messagesPosition") <
+--           0
+--         then Get_Integer_Setting(Name => "windowHeight")
+--         else Get_Integer_Setting(Name => "windowHeight") -
+--           Get_Integer_Setting(Name => "messagesPosition"));
+--      if Sash_Position > 0 and then Sash_Position /= Paned_Position then
+--         if Get_Integer_Setting(Name => "windowHeight") - Sash_Position >
+--           -1 then
+--            Set_Integer_Setting
+--              (Name => "messagesPosition",
+--               Value =>
+--                 Get_Integer_Setting(Name => "windowHeight") - Sash_Position);
+--            Set_Ada_Messages_Position
+--              (New_Value => Get_Integer_Setting(Name => "messagesPosition"));
+--         end if;
+--         Paned_Position := Sash_Position;
+--      end if;
+--      return TCL_OK;
+--   end Resize_Last_Messages_Command;
 
    -- ****o* MapCommands/MapCommands.Show_Game_Menu_Command
    -- FUNCTION
@@ -371,9 +371,9 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ResizeLastMessages",
-         Ada_Command => Resize_Last_Messages_Command'Access);
+--      Add_Command
+--        (Name => "ResizeLastMessages",
+--         Ada_Command => Resize_Last_Messages_Command'Access);
       Add_Command
         (Name => "ShowGameMenu", Ada_Command => Show_Game_Menu_Command'Access);
       Add_Command
