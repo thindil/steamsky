@@ -332,7 +332,7 @@ proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   if tclEval2(script = "wm attributes . -fullscreen") == "0":
     tclEval(script = "wm attributes . -fullscreen 1")
     gameSettings.fullScreen = true
