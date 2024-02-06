@@ -284,6 +284,19 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveMouseCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Move the mouse cursor with keyboard
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MoveCursor direction
+  ## Direction is the direction in which the mouse cursor should be moves or
+  ## click if emulate clicking with the left or right button
   let mapView = mainPaned & ".mapframe.map"
   if tclEval2(script = "focus") != mapView:
     tclEval(script = "focus -force " & mapView)
