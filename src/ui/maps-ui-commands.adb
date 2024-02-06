@@ -27,7 +27,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm;
+-- with Tcl.Tk.Ada.Wm;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
@@ -50,33 +50,33 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- ToggleFullScreen
    -- SOURCE
-   function Toggle_Full_Screen_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Toggle_Full_Screen_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tcl.Tk.Ada.Wm;
-
-   begin
-      Tcl_Eval(interp => Interp, strng => "wm attributes . -fullscreen");
-      if Tcl_GetResult(interp => Interp) = "0" then
-         Wm_Set
-           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
-            Options => "-fullscreen 1");
-         Set_Boolean_Setting(Name => "fullScreen", Value => True);
-      else
-         Wm_Set
-           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
-            Options => "-fullscreen 0");
-         Set_Boolean_Setting(Name => "fullScreen", Value => False);
-      end if;
-      return TCL_OK;
-   end Toggle_Full_Screen_Command;
+--   function Toggle_Full_Screen_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Toggle_Full_Screen_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tcl.Tk.Ada.Wm;
+--
+--   begin
+--      Tcl_Eval(interp => Interp, strng => "wm attributes . -fullscreen");
+--      if Tcl_GetResult(interp => Interp) = "0" then
+--         Wm_Set
+--           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
+--            Options => "-fullscreen 1");
+--         Set_Boolean_Setting(Name => "fullScreen", Value => True);
+--      else
+--         Wm_Set
+--           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
+--            Options => "-fullscreen 0");
+--         Set_Boolean_Setting(Name => "fullScreen", Value => False);
+--      end if;
+--      return TCL_OK;
+--   end Toggle_Full_Screen_Command;
 
    -- ****o* MapCommands/MapCommands.Resize_Last_Messages_Command
    -- FUNCTION
@@ -413,9 +413,9 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ToggleFullScreen",
-         Ada_Command => Toggle_Full_Screen_Command'Access);
+--      Add_Command
+--        (Name => "ToggleFullScreen",
+--         Ada_Command => Toggle_Full_Screen_Command'Access);
       Add_Command
         (Name => "ResizeLastMessages",
          Ada_Command => Resize_Last_Messages_Command'Access);
