@@ -19,10 +19,8 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Busy;
--- with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton;
@@ -38,104 +36,6 @@ with Ships.Movement;
 with Utils.UI;
 
 package body Maps.UI.Commands is
-
-   -- ****o* MapCommands/MapCommands.Move_Mouse_Command
-   -- FUNCTION
-   -- Move mouse cursor with keyboard
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- MoveCursor direction
-   -- Direction is the direction in which the mouse cursor should be moves or
-   -- click if emulate clicking with the left or right button
-   -- SOURCE
---   function Move_Mouse_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Move_Mouse_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      use Tcl.Tk.Ada.Event;
---      use Tcl.Tk.Ada.Widgets.Text;
---
---      Map_View: constant Tk_Text :=
---        Get_Widget(pathName => Main_Paned & ".mapframe.map", Interp => Interp);
---   begin
---      if Focus /= Widget_Image(Win => Map_View) then
---         Focus(Widgt => Map_View, Option => "-force");
---         return TCL_OK;
---      end if;
---      if CArgv.Arg(Argv => Argv, N => 1) = "click" then
---         Generate
---           (Window => Map_View,
---            EventName =>
---              "<Button-" &
---              (if Get_Boolean_Setting(Name => "rightButton") then "3"
---               else "1") &
---              ">",
---            Options =>
---              "-x " & CArgv.Arg(Argv => Argv, N => 2) & " -y " &
---              CArgv.Arg(Argv => Argv, N => 3));
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "nw" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
---              "-5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "-5]");
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "n" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
---              CArgv.Arg(Argv => Argv, N => 3) & "-5]");
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "ne" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
---              "+5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "-5]");
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "w" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
---              "-5] -y " & CArgv.Arg(Argv => Argv, N => 3));
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "e" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
---              "+5] -y " & CArgv.Arg(Argv => Argv, N => 3));
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "sw" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
---              "-5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "+5]");
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "s" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x " & CArgv.Arg(Argv => Argv, N => 2) & " -y [expr " &
---              CArgv.Arg(Argv => Argv, N => 3) & "+5]");
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "se" then
---         Generate
---           (Window => Map_View, EventName => "<Motion>",
---            Options =>
---              "-warp 1 -x [expr " & CArgv.Arg(Argv => Argv, N => 2) &
---              "+5] -y [expr " & CArgv.Arg(Argv => Argv, N => 3) & "+5]");
---      end if;
---      return TCL_OK;
---   end Move_Mouse_Command;
 
    -- ****o* MapCommands/MapCommands.Toggle_Full_Screen_Command
    -- FUNCTION
@@ -513,8 +413,6 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "MoveCursor", Ada_Command => Move_Mouse_Command'Access);
       Add_Command
         (Name => "ToggleFullScreen",
          Ada_Command => Toggle_Full_Screen_Command'Access);
