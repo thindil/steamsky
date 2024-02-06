@@ -1,6 +1,6 @@
-import ../src/[basestypes, careers, combat, crafts, factions, game, items, mobs,
-    shipmodules, ships, types]
+import ../src/[basestypes, careers, crafts, factions, items, mobs, shipmodules]
 import unittest2
+include ../src/combat
 
 suite "Unit tests for combat module":
   checkpoint "Loading the game data."
