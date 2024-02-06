@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   members
 - Updated look of the dialog with information about the player's ship's modules
 - Color of image for target action
+- Updated modding guide
 
 ## Fixed
 - Showing assigned ammunition to a gun on the player's ship's module's list
