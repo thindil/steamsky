@@ -354,6 +354,17 @@ proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Resize the last messages window
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ResizeLastMessages
   try:
     gameSettings.windowWidth = tclEval2(script = "winfo width .").parseInt
   except:
