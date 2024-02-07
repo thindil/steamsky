@@ -709,7 +709,7 @@ package body Knowledge.Bases is
         Create
           (pathName => Base_Dialog & ".show",
            options =>
-             "-text Show -image showicon -command {CloseDialog " &
+             "-text Show -image show2icon -command {CloseDialog " &
              Base_Dialog & ";ShowOnMap" &
              Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
              Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
