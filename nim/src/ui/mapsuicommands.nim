@@ -394,27 +394,7 @@ proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  var gameMenu = ".gameframe.gamemenu"
-  if tclEval2(script = "winfo exists " & gameMenu) == "1":
-    tclEval(script = "CloseDialog " & gameMenu)
-    return tclOk
-  gameMenu = createDialog(name = gameMenu, title = "Game menu")
-  type menuShortcut = object
-    buttonName, shortcut: string
-  var shortcuts: seq[menuShortcut]
-
-  proc addButton(name, label, command, shortcut: string; last: bool = false) =
-    let button = gameMenu & name
-    tclEval(script = "ttk::button " & button & " -text {" & label & "[" & shortcut & "]} -command {CloseDialog " & gameMenu & ";" & command & "}")
-    if last:
-      tclEval(script = "bind " & button & " <Tab> {focus " & shortcuts[0].buttonName & ";break}")
-      tclEval(script = "grid " & button & " -sticky we -padx 5 -pady {0 3}")
-      tclEval(script = "focus " & button)
-    else:
-      tclEval(script = "grid " & button & " -sticky we -padx 5")
-
-  return tclOk
+    argv: openArray[cstring]): TclResults
 
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
@@ -927,6 +907,51 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     tclEval(script = $argv[1])
   tclEval(script = "focus .")
+  return tclOk
+
+proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var gameMenu = ".gameframe.gamemenu"
+  if tclEval2(script = "winfo exists " & gameMenu) == "1":
+    tclEval(script = "CloseDialog " & gameMenu)
+    return tclOk
+  gameMenu = createDialog(name = gameMenu, title = "Game menu")
+  type MenuShortcut = object
+    buttonName, shortcut: string
+  var
+    shortcuts: seq[MenuShortcut]
+    row = 1
+
+  proc addButton(name, label, command, shortcut: string; last: bool = false) =
+    let button = gameMenu & name
+    tclEval(script = "ttk::button " & button & " -text {" & label & "[" &
+        shortcut & "]} -command {CloseDialog " & gameMenu & ";" & command & "}")
+    if last:
+      tclEval(script = "bind " & button & " <Tab> {focus " & shortcuts[
+          0].buttonName & ";break}")
+      tclEval(script = "grid " & button & " -sticky we -padx 5 -pady {0 3}")
+      tclEval(script = "focus " & button)
+    else:
+      tclEval(script = "grid " & button & " -sticky we -padx 5")
+    shortcuts.add(MenuShortcut(buttonName: gameMenu & name, shortcut: shortcut))
+    row.inc
+
+  addButton(name = ".shipinfo", label = "Ship information",
+      command = "ShowShipInfo", shortcut = menuAccelerators[1])
+  let state = tclGetVar(varName = "gameState")
+  if state notin ["combat", "dead"]:
+    addButton(name = ".shiporders", label = "Ship orders",
+        command = "ShowOrders", shortcut = menuAccelerators[2])
+  if state != "dead":
+    addButton(name = ".crafting", label = "Crafting", command = "ShowCrafting",
+        shortcut = menuAccelerators[3])
+  addButton(name = ".messages", label = "Last messages",
+      command = "ShowLastMessages", shortcut = menuAccelerators[4])
+  addButton(name = ".knowledge", label = "Knowledge lists",
+      command = "ShowKnowledge", shortcut = menuAccelerators[5])
+  if state notin ["combat", "dead"]:
+    addButton(name = ".wait", label = "Wait orders", command = "ShowWait",
+        shortcut = menuAccelerators[6])
   return tclOk
 
 # Temporary code for interfacing with Ada
