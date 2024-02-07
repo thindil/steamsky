@@ -952,6 +952,26 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   if state notin ["combat", "dead"]:
     addButton(name = ".wait", label = "Wait orders", command = "ShowWait",
         shortcut = menuAccelerators[6])
+  addButton(name = ".stats", label = "Game statistics", command = "ShowStats",
+      shortcut = menuAccelerators[7])
+  if state != "dead":
+    addButton(name = ".help", label = "Help", command = "ShowHelp " & state,
+        shortcut = menuAccelerators[8])
+    addButton(name = ".options", label = "Game options",
+        command = "ShowOptions", shortcut = menuAccelerators[9])
+    addButton(name = ".quit", label = "Quit from game", command = "QuitGame",
+        shortcut = menuAccelerators[10])
+    addButton(name = ".resign", label = "Resign from game",
+        command = "ResignGame", shortcut = menuAccelerators[11])
+  addButton(name = ".close", label = "Close", command = "CloseDialog " &
+      gameMenu, shortcut = "Escape", last = true)
+  for button in shortcuts:
+    let menuButton = button.buttonName
+    for shortcut in shortcuts:
+      tclEval(script = "bind " & menuButton & " <KeyPress-" &
+          shortcut.shortcut & "> {" & shortcut.buttonName & " invoke;break}")
+    tclEval(script = "bind " & menuButton & "KeyPress-" & mapAccelerators[1] & "> {ShowGameMenu;break}")
+  showDialog(dialog = gameMenu, relativeX = 0.4, relativeY = 0.1)
   return tclOk
 
 # Temporary code for interfacing with Ada
