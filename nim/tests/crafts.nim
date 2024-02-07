@@ -1,5 +1,6 @@
-import ../src/[careers, crafts, factions, game, items, shipmodules, shipscargo, types]
+import ../src/[careers, factions, shipmodules]
 import unittest2
+include ../src/crafts
 
 suite "Unit tests for crafts module":
 
@@ -34,3 +35,12 @@ suite "Unit tests for crafts module":
   test "Testing manufacturing.":
     manufacturing(15)
 
+  test "Testing setRecipeData":
+    let recipe = setRecipeData("1")
+    check:
+      recipe.tool == "CookingSet"
+
+  test "Testing getWorkshopRecipeName":
+    setRecipe(0, 10, "1")
+    check:
+      getWorkshopRecipeName(0) == "Manufacturing 10x Basic Ration"
