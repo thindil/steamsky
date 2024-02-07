@@ -393,6 +393,29 @@ proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     panedPosition = sashPosition
   return tclOk
 
+proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var gameMenu = ".gameframe.gamemenu"
+  if tclEval2(script = "winfo exists " & gameMenu) == "1":
+    tclEval(script = "CloseDialog " & gameMenu)
+    return tclOk
+  gameMenu = createDialog(name = gameMenu, title = "Game menu")
+  type menuShortcut = object
+    buttonName, shortcut: string
+  var shortcuts: seq[menuShortcut]
+
+  proc addButton(name, label, command, shortcut: string; last: bool = false) =
+    let button = gameMenu & name
+    tclEval(script = "ttk::button " & button & " -text {" & label & "[" & shortcut & "]} -command {CloseDialog " & gameMenu & ";" & command & "}")
+    if last:
+      tclEval(script = "bind " & button & " <Tab> {focus " & shortcuts[0].buttonName & ";break}")
+      tclEval(script = "grid " & button & " -sticky we -padx 5 -pady {0 3}")
+      tclEval(script = "focus " & button)
+    else:
+      tclEval(script = "grid " & button & " -sticky we -padx 5")
+
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -412,6 +435,7 @@ proc addCommands*() =
   addCommand("MoveCursor", moveMouseCommand)
   addCommand("ToggleFullScreen", toggleFullScreenCommand)
   addCommand("ResizeLastMessages", resizeLastMessagesCommand)
+  addCommand("ShowGameMenu", showGameMenuCommand)
 
 import std/tables
 import mapsui, themes
