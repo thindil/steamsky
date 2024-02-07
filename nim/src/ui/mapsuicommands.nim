@@ -353,14 +353,29 @@ proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  gameSettings.windowWidth = tclEval2(script = "winfo width .").parseInt
-  gameSettings.windowHeight = tclEval2(script = "winfo height .").parseInt
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  try:
+    gameSettings.windowWidth = tclEval2(script = "winfo width .").parseInt
+  except:
+    tclEval(script = "bgerror {Can't set window width. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
+  try:
+    gameSettings.windowHeight = tclEval2(script = "winfo height .").parseInt
+  except:
+    tclEval(script = "bgerror {Can't set window height. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   var panedPosition = (if gameSettings.windowHeight -
       gameSettings.messagesPosition <
       0: gameSettings.windowHeight else: gameSettings.windowHeight -
       gameSettings.messagesPosition)
-  let sashPosition = tclEval2(script = mainPaned & " sashpos 0").parseInt
+  let sashPosition = try:
+        tclEval2(script = mainPaned & " sashpos 0").parseInt
+      except:
+        tclEval(script = "bgerror {Can't set sash position. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   if sashPosition > 0 and sashPosition != panedPosition:
     if gameSettings.windowHeight - sashPosition > -1:
       gameSettings.messagesPosition = gameSettings.windowHeight - sashPosition
