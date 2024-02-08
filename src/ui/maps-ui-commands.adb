@@ -16,12 +16,12 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with CoreUI;
+-- with Tcl.Ada; use Tcl.Ada;
+-- with Tcl.Tk.Ada.Busy;
+-- with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+-- with CoreUI;
 with Dialogs; use Dialogs;
 with Ships;
 with Ships.Movement;
@@ -43,49 +43,49 @@ package body Maps.UI.Commands is
    -- InvokeMenu shortcut
    -- Shortcut, the keyboard shortcut which was pressed
    -- SOURCE
-   function Invoke_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Invoke_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use CoreUI;
-
-      Focused_Widget: constant Ttk_Frame :=
-        Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
-      Menu_Commands: constant array(1 .. 11) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "ShowShipInfo"),
-         2 => To_Unbounded_String(Source => "ShowOrders"),
-         3 => To_Unbounded_String(Source => "ShowCrafting"),
-         4 => To_Unbounded_String(Source => "ShowLastMessages"),
-         5 => To_Unbounded_String(Source => "ShowKnowledge"),
-         6 => To_Unbounded_String(Source => "ShowWait"),
-         7 => To_Unbounded_String(Source => "ShowStats"),
-         8 => To_Unbounded_String(Source => "ShowHelp"),
-         9 => To_Unbounded_String(Source => "ShowOptions"),
-         10 => To_Unbounded_String(Source => "QuitGame"),
-         11 => To_Unbounded_String(Source => "ResignGame"));
-   begin
-      if Winfo_Get(Widgt => Focused_Widget, Info => "class") = "TEntry" or
-        Tcl.Tk.Ada.Busy.Status(Window => Game_Header) = "1" then
-         return TCL_OK;
-      end if;
-      Invoke_Button_Loop :
-      for I in 1 .. 11 loop
-         if Get_Menu_Accelerator(Index => I) =
-           CArgv.Arg(Argv => Argv, N => 1) then
-            Tcl_Eval
-              (interp => Interp,
-               strng => To_String(Source => Menu_Commands(I)));
-            return TCL_OK;
-         end if;
-      end loop Invoke_Button_Loop;
-      return TCL_OK;
-   end Invoke_Menu_Command;
+--   function Invoke_Menu_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Invoke_Menu_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use CoreUI;
+--
+--      Focused_Widget: constant Ttk_Frame :=
+--        Get_Widget(pathName => Focus(Interp => Interp), Interp => Interp);
+--      Menu_Commands: constant array(1 .. 11) of Unbounded_String :=
+--        (1 => To_Unbounded_String(Source => "ShowShipInfo"),
+--         2 => To_Unbounded_String(Source => "ShowOrders"),
+--         3 => To_Unbounded_String(Source => "ShowCrafting"),
+--         4 => To_Unbounded_String(Source => "ShowLastMessages"),
+--         5 => To_Unbounded_String(Source => "ShowKnowledge"),
+--         6 => To_Unbounded_String(Source => "ShowWait"),
+--         7 => To_Unbounded_String(Source => "ShowStats"),
+--         8 => To_Unbounded_String(Source => "ShowHelp"),
+--         9 => To_Unbounded_String(Source => "ShowOptions"),
+--         10 => To_Unbounded_String(Source => "QuitGame"),
+--         11 => To_Unbounded_String(Source => "ResignGame"));
+--   begin
+--      if Winfo_Get(Widgt => Focused_Widget, Info => "class") = "TEntry" or
+--        Tcl.Tk.Ada.Busy.Status(Window => Game_Header) = "1" then
+--         return TCL_OK;
+--      end if;
+--      Invoke_Button_Loop :
+--      for I in 1 .. 11 loop
+--         if Get_Menu_Accelerator(Index => I) =
+--           CArgv.Arg(Argv => Argv, N => 1) then
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng => To_String(Source => Menu_Commands(I)));
+--            return TCL_OK;
+--         end if;
+--      end loop Invoke_Button_Loop;
+--      return TCL_OK;
+--   end Invoke_Menu_Command;
 
    -- ****o* MapCommands/MapCommands.Set_Ship_Speed_Command
    -- FUNCTION
@@ -134,8 +134,8 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "InvokeMenu", Ada_Command => Invoke_Menu_Command'Access);
+--      Add_Command
+--        (Name => "InvokeMenu", Ada_Command => Invoke_Menu_Command'Access);
       Add_Command
         (Name => "SetShipSpeed", Ada_Command => Set_Ship_Speed_Command'Access);
    end Add_Commands;
