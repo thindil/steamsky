@@ -407,6 +407,9 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowGameMenu
 
+proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -427,6 +430,7 @@ proc addCommands*() =
   addCommand("ToggleFullScreen", toggleFullScreenCommand)
   addCommand("ResizeLastMessages", resizeLastMessagesCommand)
   addCommand("ShowGameMenu", showGameMenuCommand)
+  addCommand("InvokeMenu", invokeMenuCommand)
 
 import std/tables
 import mapsui, themes
@@ -983,6 +987,21 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
           shortcut.shortcut & "> {" & shortcut.buttonName & " invoke;break}")
     tclEval(script = "bind " & menuButton & "KeyPress-" & mapAccelerators[1] & "> {ShowGameMenu;break}")
   showDialog(dialog = gameMenu, relativeX = 0.4, relativeY = 0.1)
+  return tclOk
+
+proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let focusedWidget = tclEval2(script = "focus")
+  if tclEval2(script = "winfo class " & focusedWidget) == "TEntry" or tclEval2(
+      script = "busy status " & gameHeader) == "1":
+    return tclOk
+  let menuCommands: array[1 .. 11, string] = ["ShowShipInfo", "ShowOrders",
+      "ShowCrafting", "ShowLastMessages", "ShowKnowledge", "ShowWait",
+      "ShowStats", "ShowHelp", "ShowOptions", "QuitGame", "ResignGame"]
+  for index, accel in menuAccelerators:
+    if accel == $argv[1]:
+      tclEval(script = menuCommands[index])
+      return tclOk
   return tclOk
 
 # Temporary code for interfacing with Ada
