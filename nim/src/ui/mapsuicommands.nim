@@ -408,7 +408,7 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowGameMenu
 
 proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
 
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
