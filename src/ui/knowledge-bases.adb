@@ -444,7 +444,7 @@ package body Knowledge.Bases is
              Base_Dialog & ";SetDestination2" &
              Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
              Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
-             "} -style Dialog.TButton");
+             "} -style Dialoggreen.TButton");
       procedure Set_Reputation_Text(Reputation_Text: String) is
          use Ada.Strings;
          use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -713,7 +713,7 @@ package body Knowledge.Bases is
              Base_Dialog & ";ShowOnMap" &
              Map_X_Range'Image(Sky_Bases(Base_Index).Sky_X) &
              Map_Y_Range'Image(Sky_Bases(Base_Index).Sky_Y) &
-             "} -style Dialog.TButton");
+             "} -style Dialoggreen.TButton");
       Add(Widget => Base_Button, Message => "Show the base on the map");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Base_Button, Options => "-row 3 -column 2 -padx 5");
