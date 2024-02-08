@@ -13,15 +13,15 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors;
+-- with Ada.Containers.Vectors;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with CoreUI;
@@ -45,154 +45,154 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- ShowGameMenu
    -- SOURCE
-   function Show_Game_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Game_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Containers;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-
-      Row: Positive := 1;
-      State: constant String :=
-        Tcl_GetVar(interp => Interp, varName => "gamestate");
-      --## rule off TYPE_INITIAL_VALUES
-      type Menu_Shortcut is record
-         Button_Name: Unbounded_String;
-         Shortcut: Unbounded_String;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      package Shortcuts_Container is new Vectors
-        (Index_Type => Positive, Element_Type => Menu_Shortcut);
-      --## rule off IMPROPER_INITIALIZATION
-      Shortcuts: Shortcuts_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Game_Menu: Ttk_Frame := Get_Widget(pathName => ".gameframe.gamemenu");
-      procedure Add_Button
-        (Name, Label, Command: String; Shortcut: String;
-         Last: Boolean := False) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Game_Menu & Name,
-              options =>
-                "-text {" & Label & " [" & Shortcut &
-                "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
-      begin
-         if Last then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script =>
-                 "{focus " &
-                 To_String(Source => Shortcuts.First_Element.Button_Name) &
-                 ";break}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Button, Options => "-sticky we -padx 5 -pady {0 3}");
-            Focus(Widgt => Button);
-         else
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Button, Options => "-sticky we -padx 5");
-         end if;
-         Shortcuts.Append
-           (New_Item =>
-              (Button_Name => To_Unbounded_String(Source => Game_Menu & Name),
-               Shortcut => To_Unbounded_String(Source => Shortcut)));
-         Row := Row + 1;
-      end Add_Button;
-   begin
-      if Winfo_Get(Widgt => Game_Menu, Info => "exists") = "1" then
-         Tcl_Eval(interp => Interp, strng => "CloseDialog " & Game_Menu);
-         return TCL_OK;
-      end if;
-      Game_Menu :=
-        Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
-      Add_Button
-        (Name => ".shipinfo", Label => "Ship information",
-         Command => "ShowShipInfo",
-         Shortcut => Get_Menu_Accelerator(Index => 1));
-      if State not in "combat" | "dead" then
-         Add_Button
-           (Name => ".shiporders", Label => "Ship orders",
-            Command => "ShowOrders",
-            Shortcut => Get_Menu_Accelerator(Index => 2));
-      end if;
-      if State /= "dead" then
-         Add_Button
-           (Name => ".crafting", Label => "Crafting",
-            Command => "ShowCrafting",
-            Shortcut => Get_Menu_Accelerator(Index => 3));
-      end if;
-      Add_Button
-        (Name => ".messages", Label => "Last messages",
-         Command => "ShowLastMessages",
-         Shortcut => Get_Menu_Accelerator(Index => 4));
-      Add_Button
-        (Name => ".knowledge", Label => "Knowledge lists",
-         Command => "ShowKnowledge",
-         Shortcut => Get_Menu_Accelerator(Index => 5));
-      if State not in "combat" | "dead" then
-         Add_Button
-           (Name => ".wait", Label => "Wait orders", Command => "ShowWait",
-            Shortcut => Get_Menu_Accelerator(Index => 6));
-      end if;
-      Add_Button
-        (Name => ".stats", Label => "Game statistics", Command => "ShowStats",
-         Shortcut => Get_Menu_Accelerator(Index => 7));
-      if State /= "dead" then
-         Add_Button
-           (Name => ".help", Label => "Help", Command => "ShowHelp " & State,
-            Shortcut => Get_Menu_Accelerator(Index => 8));
-         Add_Button
-           (Name => ".options", Label => "Game options",
-            Command => "ShowOptions",
-            Shortcut => Get_Menu_Accelerator(Index => 9));
-         Add_Button
-           (Name => ".quit", Label => "Quit from game", Command => "QuitGame",
-            Shortcut => Get_Menu_Accelerator(Index => 10));
-         Add_Button
-           (Name => ".resign", Label => "Resign from game",
-            Command => "ResignGame",
-            Shortcut => Get_Menu_Accelerator(Index => 11));
-      end if;
-      Add_Button
-        (Name => ".close", Label => "Close",
-         Command => "CloseDialog " & Game_Menu, Shortcut => "Escape",
-         Last => True);
-      Add_Bindings_Block :
-      declare
-         --## rule off IMPROPER_INITIALIZATION
-         Menu_Button: Ttk_Button;
-         --## rule on IMPROPER_INITIALIZATION
-      begin
-         Buttons_Loop :
-         for Button of Shortcuts loop
-            Menu_Button :=
-              Get_Widget(pathName => To_String(Source => Button.Button_Name));
-            Add_Bindings_Loop :
-            for Shortcut of Shortcuts loop
-               Bind
-                 (Widgt => Menu_Button,
-                  Sequence =>
-                    "<KeyPress-" & To_String(Source => Shortcut.Shortcut) &
-                    ">",
-                  Script =>
-                    "{" & To_String(Source => Shortcut.Button_Name) &
-                    " invoke;break}");
-            end loop Add_Bindings_Loop;
-            Bind
-              (Widgt => Menu_Button,
-               Sequence =>
-                 "<KeyPress-" & Get_Map_Accelerator(Index => 1) & ">",
-               Script => "{ShowGameMenu;break}");
-         end loop Buttons_Loop;
-      end Add_Bindings_Block;
-      Show_Dialog(Dialog => Game_Menu, Relative_X => 0.4, Relative_Y => 0.1);
-      return TCL_OK;
-   end Show_Game_Menu_Command;
+--   function Show_Game_Menu_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Game_Menu_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Ada.Containers;
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--
+--      Row: Positive := 1;
+--      State: constant String :=
+--        Tcl_GetVar(interp => Interp, varName => "gamestate");
+--      --## rule off TYPE_INITIAL_VALUES
+--      type Menu_Shortcut is record
+--         Button_Name: Unbounded_String;
+--         Shortcut: Unbounded_String;
+--      end record;
+--      --## rule on TYPE_INITIAL_VALUES
+--      package Shortcuts_Container is new Vectors
+--        (Index_Type => Positive, Element_Type => Menu_Shortcut);
+--      --## rule off IMPROPER_INITIALIZATION
+--      Shortcuts: Shortcuts_Container.Vector;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Game_Menu: Ttk_Frame := Get_Widget(pathName => ".gameframe.gamemenu");
+--      procedure Add_Button
+--        (Name, Label, Command: String; Shortcut: String;
+--         Last: Boolean := False) is
+--         Button: constant Ttk_Button :=
+--           Create
+--             (pathName => Game_Menu & Name,
+--              options =>
+--                "-text {" & Label & " [" & Shortcut &
+--                "]} -command {CloseDialog " & Game_Menu & ";" & Command & "}");
+--      begin
+--         if Last then
+--            Bind
+--              (Widgt => Button, Sequence => "<Tab>",
+--               Script =>
+--                 "{focus " &
+--                 To_String(Source => Shortcuts.First_Element.Button_Name) &
+--                 ";break}");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Button, Options => "-sticky we -padx 5 -pady {0 3}");
+--            Focus(Widgt => Button);
+--         else
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Button, Options => "-sticky we -padx 5");
+--         end if;
+--         Shortcuts.Append
+--           (New_Item =>
+--              (Button_Name => To_Unbounded_String(Source => Game_Menu & Name),
+--               Shortcut => To_Unbounded_String(Source => Shortcut)));
+--         Row := Row + 1;
+--      end Add_Button;
+--   begin
+--      if Winfo_Get(Widgt => Game_Menu, Info => "exists") = "1" then
+--         Tcl_Eval(interp => Interp, strng => "CloseDialog " & Game_Menu);
+--         return TCL_OK;
+--      end if;
+--      Game_Menu :=
+--        Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
+--      Add_Button
+--        (Name => ".shipinfo", Label => "Ship information",
+--         Command => "ShowShipInfo",
+--         Shortcut => Get_Menu_Accelerator(Index => 1));
+--      if State not in "combat" | "dead" then
+--         Add_Button
+--           (Name => ".shiporders", Label => "Ship orders",
+--            Command => "ShowOrders",
+--            Shortcut => Get_Menu_Accelerator(Index => 2));
+--      end if;
+--      if State /= "dead" then
+--         Add_Button
+--           (Name => ".crafting", Label => "Crafting",
+--            Command => "ShowCrafting",
+--            Shortcut => Get_Menu_Accelerator(Index => 3));
+--      end if;
+--      Add_Button
+--        (Name => ".messages", Label => "Last messages",
+--         Command => "ShowLastMessages",
+--         Shortcut => Get_Menu_Accelerator(Index => 4));
+--      Add_Button
+--        (Name => ".knowledge", Label => "Knowledge lists",
+--         Command => "ShowKnowledge",
+--         Shortcut => Get_Menu_Accelerator(Index => 5));
+--      if State not in "combat" | "dead" then
+--         Add_Button
+--           (Name => ".wait", Label => "Wait orders", Command => "ShowWait",
+--            Shortcut => Get_Menu_Accelerator(Index => 6));
+--      end if;
+--      Add_Button
+--        (Name => ".stats", Label => "Game statistics", Command => "ShowStats",
+--         Shortcut => Get_Menu_Accelerator(Index => 7));
+--      if State /= "dead" then
+--         Add_Button
+--           (Name => ".help", Label => "Help", Command => "ShowHelp " & State,
+--            Shortcut => Get_Menu_Accelerator(Index => 8));
+--         Add_Button
+--           (Name => ".options", Label => "Game options",
+--            Command => "ShowOptions",
+--            Shortcut => Get_Menu_Accelerator(Index => 9));
+--         Add_Button
+--           (Name => ".quit", Label => "Quit from game", Command => "QuitGame",
+--            Shortcut => Get_Menu_Accelerator(Index => 10));
+--         Add_Button
+--           (Name => ".resign", Label => "Resign from game",
+--            Command => "ResignGame",
+--            Shortcut => Get_Menu_Accelerator(Index => 11));
+--      end if;
+--      Add_Button
+--        (Name => ".close", Label => "Close",
+--         Command => "CloseDialog " & Game_Menu, Shortcut => "Escape",
+--         Last => True);
+--      Add_Bindings_Block :
+--      declare
+--         --## rule off IMPROPER_INITIALIZATION
+--         Menu_Button: Ttk_Button;
+--         --## rule on IMPROPER_INITIALIZATION
+--      begin
+--         Buttons_Loop :
+--         for Button of Shortcuts loop
+--            Menu_Button :=
+--              Get_Widget(pathName => To_String(Source => Button.Button_Name));
+--            Add_Bindings_Loop :
+--            for Shortcut of Shortcuts loop
+--               Bind
+--                 (Widgt => Menu_Button,
+--                  Sequence =>
+--                    "<KeyPress-" & To_String(Source => Shortcut.Shortcut) &
+--                    ">",
+--                  Script =>
+--                    "{" & To_String(Source => Shortcut.Button_Name) &
+--                    " invoke;break}");
+--            end loop Add_Bindings_Loop;
+--            Bind
+--              (Widgt => Menu_Button,
+--               Sequence =>
+--                 "<KeyPress-" & Get_Map_Accelerator(Index => 1) & ">",
+--               Script => "{ShowGameMenu;break}");
+--         end loop Buttons_Loop;
+--      end Add_Bindings_Block;
+--      Show_Dialog(Dialog => Game_Menu, Relative_X => 0.4, Relative_Y => 0.1);
+--      return TCL_OK;
+--   end Show_Game_Menu_Command;
 
    -- ****o* MapCommands/MapCommands.Invoke_Menu_Command
    -- FUNCTION
@@ -299,8 +299,8 @@ package body Maps.UI.Commands is
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowGameMenu", Ada_Command => Show_Game_Menu_Command'Access);
+--      Add_Command
+--        (Name => "ShowGameMenu", Ada_Command => Show_Game_Menu_Command'Access);
       Add_Command
         (Name => "InvokeMenu", Ada_Command => Invoke_Menu_Command'Access);
       Add_Command
