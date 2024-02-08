@@ -1,5 +1,6 @@
-import ../src/[careers, config, crew, factions, game, items, maps, types]
+import ../src/[careers, factions]
 import unittest2
+include ../src/crew
 
 suite "Unit tests for crew module":
 
