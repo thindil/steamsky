@@ -924,7 +924,7 @@ proc showGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addButton(name, label, command, shortcut: string; last: bool = false) =
     let button = gameMenu & name
-    tclEval(script = "ttk::button " & button & " -text {" & label & "[" &
+    tclEval(script = "ttk::button " & button & " -text {" & label & " [" &
         shortcut & "]} -command {CloseDialog " & gameMenu & ";" & command & "}")
     if last:
       tclEval(script = "bind " & button & " <Tab> {focus " & shortcuts[
