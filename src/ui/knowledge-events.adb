@@ -159,7 +159,7 @@ package body Knowledge.Events is
                    "ShowOnMap" &
                    Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
                    Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
-            Icon => To_Unbounded_String(Source => "showicon"),
+            Icon => To_Unbounded_String(Source => "show2icon"),
             Text => To_Unbounded_String(Source => "Show"),
             Color => To_Unbounded_String(Source => "green")));
       return TCL_OK;
