@@ -422,6 +422,13 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## InvokeMenu shortcut
   ## Shortcut, the keyboard shortcut which was pressed
 
+proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let message = changeShipSpeed(speedValue = (($argv[1]).parseInt + 1).ShipSpeed)
+  if message.len > 0:
+    showMessage(text = message, title = "Changing the ship's speed.")
+  return tclOk
+
 proc addCommands*() =
   addCommand("HideMapButtons", hideMapButtonsCommand)
   addCommand("ShowMapButtons", showMapButtonsCommand)
@@ -443,6 +450,7 @@ proc addCommands*() =
   addCommand("ResizeLastMessages", resizeLastMessagesCommand)
   addCommand("ShowGameMenu", showGameMenuCommand)
   addCommand("InvokeMenu", invokeMenuCommand)
+  addCommand("SetShipSpeed", setShipSpeedCommand)
 
 import std/tables
 import mapsui, themes
