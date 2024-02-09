@@ -13,13 +13,13 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C;
-with CArgv;
-with Tcl;
-with Dialogs;
-with Ships;
-with Ships.Movement;
-with Utils.UI;
+-- with Interfaces.C;
+-- with CArgv;
+-- with Tcl;
+-- with Dialogs;
+-- with Ships;
+-- with Ships.Movement;
+-- with Utils.UI;
 
 package body Maps.UI.Commands is
 
@@ -37,43 +37,43 @@ package body Maps.UI.Commands is
    -- SetShipSpeed speed
    -- Speed is the new speed order for the player's ship.
    -- SOURCE
-   function Set_Ship_Speed_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Ship_Speed_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tcl;
-      use Dialogs;
-      use Ships;
-      use Ships.Movement;
-
-      Message: constant String :=
-        Change_Ship_Speed
-          (Speed_Value =>
-             Ship_Speed'Val
-               (Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) + 1));
-   begin
-      if Message'Length > 0 then
-         Show_Message(Text => Message, Title => "Changing the ship's speed.");
-      end if;
-      return TCL_OK;
-   end Set_Ship_Speed_Command;
+--   function Set_Ship_Speed_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Set_Ship_Speed_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Tcl;
+--      use Dialogs;
+--      use Ships;
+--      use Ships.Movement;
+--
+--      Message: constant String :=
+--        Change_Ship_Speed
+--          (Speed_Value =>
+--             Ship_Speed'Val
+--               (Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) + 1));
+--   begin
+--      if Message'Length > 0 then
+--         Show_Message(Text => Message, Title => "Changing the ship's speed.");
+--      end if;
+--      return TCL_OK;
+--   end Set_Ship_Speed_Command;
 
    procedure Add_Commands is
-      use Utils.UI;
+--      use Utils.UI;
       procedure Add_Ada_Commands with
          Import => True,
          Convention => C,
          External_Name => "addAdaMapsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "SetShipSpeed", Ada_Command => Set_Ship_Speed_Command'Access);
+--      Add_Command
+--        (Name => "SetShipSpeed", Ada_Command => Set_Ship_Speed_Command'Access);
    end Add_Commands;
 
 end Maps.UI.Commands;
