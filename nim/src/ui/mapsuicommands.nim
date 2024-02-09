@@ -423,8 +423,13 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Shortcut, the keyboard shortcut which was pressed
 
 proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let message = changeShipSpeed(speedValue = (($argv[1]).parseInt + 1).ShipSpeed)
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let message = try:
+      changeShipSpeed(speedValue = (($argv[1]).parseInt + 1).ShipSpeed)
+    except:
+      tclEval(script = "bgerror {Can't change the player's ship speed. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   if message.len > 0:
     showMessage(text = message, title = "Changing the ship's speed.")
   return tclOk
