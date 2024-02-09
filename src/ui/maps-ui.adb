@@ -46,7 +46,6 @@ with GameOptions;
 with Help.UI;
 with Knowledge;
 with Log;
-with Maps.UI.Commands;
 with Messages;
 with Messages.UI;
 with Missions.UI;
@@ -142,6 +141,10 @@ package body Maps.UI is
          Get_Ada_Ship;
          Update_Ada_Map_Info(X1 => X, Y1 => Y);
       end Update_Map_Info;
+      procedure Add_Maps_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaMapsCommands";
 
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
@@ -412,7 +415,7 @@ package body Maps.UI is
                   Set_Map_Accelerator(Index => 32, Value => "Control-Next");
                end if;
          end Load_Keys_Block;
-         Maps.UI.Commands.Add_Commands;
+         Add_Maps_Commands;
          Tcl_EvalFile
            (interp => Get_Context,
             fileName =>
