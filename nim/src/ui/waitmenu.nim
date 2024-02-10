@@ -60,5 +60,37 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
   if tclGetVar(varName = "customwaittime").len == 0:
     tclEval(script = amountBox & " set 1")
-  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of time:\nfrom 1 to 1440 (the whole day)\"")
+  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of time:\nfrom 1 to 1440\"")
+  let amountCombo = waitDialog & ".mins"
+  tclEval(script = "ttk::combobox " & amountCombo & " -state readonly -values [list minutes hours days] -width 8")
+  tclEval(script = amountCombo & " current 0")
+  tclEval(script = "grid " & amountCombo & " -row 7 -column 2 -padx {0 5}")
+  var needRest, needHealing = false
+  for index, member of playerShip.crew:
+    if member.tired > 0 and member.order == rest:
+      needRest = true
+    if member.health in 1 .. 99 and order == rest:
+      for module in playerShip.modules:
+        if module.mType == cabin:
+          for owner in module.owner:
+            if owner == i:
+              needHealing = true
+              break
+  if needRest:
+    button = waitDialog & ".rest"
+    tclEval(script = "ttk::button " & button & " -text {Wait until crew is rested} -command {Wait rest}")
+    tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5")
+    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
+    tclEval(script = "tooltip::tooltip " & button & " \"Wait in place until the whole ship's crew is rested.\"")
+  if needHealing:
+    button = waitDialog & ".heal"
+    tclEval(script = "ttk::button " & button & " -text {Wait until crew is healed} -command {Wait heal}")
+    tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5")
+    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
+    tclEval(script = "tooltip::tooltip " & button & " \"Wait in place until the whole ship's crew is rested\nCan take a large amount of time.\"")
+  button = waitDialog & ".close"
+  tclEval(script = "ttk::button " & button & " -text {Close} -command {CloseDialog & " & waitDialog & ";break}")
+  tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx {0 5}")
+  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
+  tclEval(script = "tooltip::tooltip " & button & " \"Close dialog [Escape]\"")
   return tclOk
