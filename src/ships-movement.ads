@@ -39,17 +39,6 @@ package Ships.Movement is
      (Docking: Boolean; Escape: Boolean := False) return String;
       -- ****
 
-      -- ****f* SMovement/SMovement.Change_Ship_Speed
-      -- FUNCTION
-      -- Change speed of ship
-      -- PARAMETERS
-      -- Speed_Value - New speed for the ship
-      -- RESULT
-      -- Empty string if speed was changed, otherwise message what goes wrong
-      -- SOURCE
-   function Change_Ship_Speed(Speed_Value: Ship_Speed) return String;
-   -- ****
-
    -- ****f* SMovement/SMovement.Wait_In_Place
    -- FUNCTION
    -- Use fuel when ship wait in place

@@ -51,25 +51,6 @@ package body Ships.Movement is
       return To_String(Source => Message);
    end Dock_Ship;
 
-   function Change_Ship_Speed(Speed_Value: Ship_Speed) return String is
-      Result: Unbounded_String;
-      function Change_Ada_Ship_Speed(S_Value: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "changeAdaShipSpeed";
-   begin
-      Set_Ship_In_Nim;
-      Result :=
-        To_Unbounded_String
-          (Source =>
-             Value
-               (Item =>
-                  Change_Ada_Ship_Speed
-                    (S_Value => Ship_Speed'Pos(Speed_Value))));
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      return To_String(Source => Result);
-   end Change_Ship_Speed;
-
    procedure Wait_In_Place(Minutes: Positive) is
       procedure Wait_Ada_In_Place(M: Positive) with
          Import => True,
