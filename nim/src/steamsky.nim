@@ -21,7 +21,7 @@ import game, log, tk
 import goals, help, mobs, shipmodules, ships, basescargo, crew, events,
     missions, stories, bases, combat, crew2, events2, missions2, basestrade,
     basesship2
-import ui/[mainmenu, utilsui, utilsui2]
+import ui/[mainmenu, utilsui, utilsui2, waitmenu]
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
     OSError, ValueError], tags: [ReadIOEffect, RootEffect].} =
