@@ -1,6 +1,6 @@
-import ../src/[basestypes, careers, crafts, events2, factions, game, items,
-    maps, mobs, ships, shipmodules, types]
+import ../src/[careers, crafts, mobs, ships, shipmodules]
 import unittest2
+include ../src/events2
 
 suite "Unit tests for events2 module":
 
