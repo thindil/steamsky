@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ package body Knowledge.Missions is
          Command =>
            "ShowOnMap" & Map_X_Range'Image(Accepted_Mission.Target_X) &
            Map_Y_Range'Image(Accepted_Mission.Target_Y),
-         Icon => "show", Label => "Show", Column => 2);
+         Icon => "show2", Label => "Show", Column => 2);
       Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Missions_Menu_Command;
