@@ -17,7 +17,7 @@
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, game, maps, missions, statistics, stories, tk, types]
-import coreui, dialogs, updateheader, utilsui2, themes
+import coreui, dialogs, ordersmenu, themes, updateheader, utilsui2
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -676,6 +676,9 @@ proc createGameUi*() =
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
+    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "game.tcl")
+    setTheme()
+    ordersmenu.addCommands()
 
 # Temporary code for interfacing with Ada
 
