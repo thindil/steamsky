@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[basestypes, crewinventory, game, maps, missions, shipscrew, stories,
-    tk, types, utils]
+import ../[basestypes, crewinventory, game, maps, missions, shipscrew,
+    shipsmovement, stories, tk, types, utils]
 import coreui, dialogs, dialogs2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -392,6 +392,17 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     showDialog(dialog = ordersMenu, parentFrame = ".gameframe", relativeX = 0.4,
         relativeY = (if playerShip.speed == docked: 0.1 else: 0.3))
     tclEval(script = "focus " & dialogCloseButton)
+  return tclOk
+
+proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var message = ""
+  if playerShip.speed == docked:
+    message = (if argc == 1: dockShip(docking = false) else: dockShip(
+        docking = false, escape = true))
+    if message.len > 0:
+      showMessage(text = message, title = "Can't undock from base")
+      return tclOk
   return tclOk
 
 proc addCommands*() =
