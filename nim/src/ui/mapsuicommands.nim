@@ -424,6 +424,18 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Set the new speed for the player's ship
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetShipSpeed speed
+  ## Speed is the new speed order for the player's ship.
   let message = try:
       changeShipSpeed(speedValue = (($argv[1]).parseInt + 1).ShipSpeed)
     except:
