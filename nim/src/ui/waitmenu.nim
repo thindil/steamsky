@@ -38,4 +38,27 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
         $time & " minute" & (if time > 1: "s" else: "") & "\"")
 
   addButton(time = 1)
+  addButton(time = 5)
+  addButton(time = 10)
+  addButton(time = 15)
+  addButton(time = 30)
+  var button = waitDialog & ".wait1h"
+  tclEval(script = "ttk::button " & button & " -text {Wait 1 hour} -command {Wait 60}")
+  tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5")
+  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for 1 hour\"")
+  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
+  button = waitDialog & ".wait"
+  tclEval(script = "ttk::button " & button & " -text Wait -command {Wait amount}")
+  tclEval(script = "grid " & button & " -padx {5 0}")
+  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
+  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of minutes:\nfrom 1 to 1440 (the whole day)\"")
+  let amountBox = waitDialog & ".amount"
+  tclEval(script = "ttk::spinbox " & amountBox &
+      "-from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
+      button & "} -textvariable customwaittime")
+  tclEval(script = "grid " & amountBox & " -row 7 -column 1")
+  tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
+  if tclGetVar(varName = "customwaittime").len == 0:
+    tclEval(script = amountBox & " set 1")
+  tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of time:\nfrom 1 to 1440 (the whole day)\"")
   return tclOk
