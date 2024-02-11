@@ -344,8 +344,12 @@ package body WaitMenu is
    end Wait_Command;
 
    procedure Add_Commands is
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaWaitCommands";
    begin
-      Add_Command(Name => "ShowWait", Ada_Command => Show_Wait_Command'Access);
+      Add_Ada_Commands;
       Add_Command(Name => "Wait", Ada_Command => Wait_Command'Access);
    end Add_Commands;
 
