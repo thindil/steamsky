@@ -87,7 +87,8 @@ package body Knowledge.Missions is
              " mission actions",
            Parent_Name => ".", Columns => 3);
       procedure Add_Button
-        (Name, Label, Command, Icon, Tooltip_Text: String; Column: Natural) is
+        (Name, Label, Command, Icon, Tooltip_Text: String; Column: Natural;
+         Color: String := "") is
          use Tcl.Tk.Ada.Widgets.TtkButton;
          use Tcl.Tklib.Ada.Tooltip;
 
@@ -96,8 +97,8 @@ package body Knowledge.Missions is
              (pathName => Mission_Menu & Name,
               options =>
                 "-text {" & Label & "} -command {CloseDialog " & Mission_Menu &
-                " .;" & Command & "} -image " & Icon &
-                "icon -style Dialog.TButton");
+                " .;" & Command & "} -image " & Icon & "icon -style Dialog" &
+                Color & ".TButton");
       begin
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button,
@@ -122,7 +123,8 @@ package body Knowledge.Missions is
          Command =>
            "SetDestination2 " & Map_X_Range'Image(Accepted_Mission.Target_X) &
            Map_Y_Range'Image(Accepted_Mission.Target_Y),
-         Icon => "destination", Label => "Target", Column => 0);
+         Icon => "destination", Label => "Target", Column => 0,
+         Color => "green");
       Add_Button
         (Name => ".close", Label => "Close", Command => "", Icon => "exit",
          Tooltip_Text => "Close the dialog.", Column => 1);
@@ -131,7 +133,7 @@ package body Knowledge.Missions is
          Command =>
            "ShowOnMap" & Map_X_Range'Image(Accepted_Mission.Target_X) &
            Map_Y_Range'Image(Accepted_Mission.Target_Y),
-         Icon => "show2", Label => "Show", Column => 2);
+         Icon => "show2", Label => "Show", Column => 2, Color => "green");
       Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Missions_Menu_Command;
