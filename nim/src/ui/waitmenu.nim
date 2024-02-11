@@ -15,14 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../[tk]
+import ../[game, tk, types]
 import dialogs
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   var waitDialog = ".gameframe.wait"
   if tclEval2(script = "winfo exists " & waitDialog) == "1":
-    let button = waitDialog & ".frame.close"
+    let button = waitDialog & ".close"
     tclEval(script = button & " invoke")
     return tclOk
   waitDialog = createDialog(name = ".gameframe.wait", title = "Wait in place", columns = 3)
@@ -54,7 +54,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of minutes:\nfrom 1 to 1440 (the whole day)\"")
   let amountBox = waitDialog & ".amount"
   tclEval(script = "ttk::spinbox " & amountBox &
-      "-from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
+      " -from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
       button & "} -textvariable customwaittime")
   tclEval(script = "grid " & amountBox & " -row 7 -column 1")
   tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
@@ -66,14 +66,14 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = amountCombo & " current 0")
   tclEval(script = "grid " & amountCombo & " -row 7 -column 2 -padx {0 5}")
   var needRest, needHealing = false
-  for index, member of playerShip.crew:
+  for index, member in playerShip.crew:
     if member.tired > 0 and member.order == rest:
       needRest = true
-    if member.health in 1 .. 99 and order == rest:
+    if member.health in 1 .. 99 and member.order == rest:
       for module in playerShip.modules:
-        if module.mType == cabin:
+        if module.mType == ModuleType2.cabin:
           for owner in module.owner:
-            if owner == i:
+            if owner == index:
               needHealing = true
               break
   if needRest:
@@ -89,8 +89,23 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
     tclEval(script = "tooltip::tooltip " & button & " \"Wait in place until the whole ship's crew is rested\nCan take a large amount of time.\"")
   button = waitDialog & ".close"
-  tclEval(script = "ttk::button " & button & " -text {Close} -command {CloseDialog & " & waitDialog & ";break}")
+  tclEval(script = "ttk::button " & button &
+      " -text {Close} -command {CloseDialog " & waitDialog & ";break}")
   tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx {0 5}")
   tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
-  tclEval(script = "tooltip::tooltip " & button & " \"Close dialog [Escape]\"")
+  tclEval(script = "tooltip::tooltip " & button & " \"Close dialog \\[Escape\\]\"")
+  tclEval(script = "focus " & button)
+  tclEval(script = "bind " & button & " <Tab> {focus " & waitDialog & ".wait1;break}")
+  showDialog(dialog = waitDialog, relativeY = 0.15)
   return tclOk
+
+proc addCommands*() =
+  addCommand("ShowWait", showWaitCommand)
+
+# Temporary code for interfacing with Ada
+
+proc addAdaWaitCommands() {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    addCommands()
+  except:
+    echo getCurrentExceptionMsg()
