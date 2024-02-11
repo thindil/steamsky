@@ -1,6 +1,5 @@
-import std/tables
-import ../src/[factions, careers, game, items]
 import unittest2
+include ../src/factions
 
 suite "Unit tests for factions module":
 
