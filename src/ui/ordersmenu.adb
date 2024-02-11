@@ -13,25 +13,25 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors;
+-- with Ada.Containers.Vectors;
 with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Winfo;
+-- with Tcl.Tk.Ada.Busy;
+-- with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
-with BasesTypes;
+-- with BasesTypes;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
-with Crafts;
+-- with Crafts;
 with Crew; use Crew;
-with CoreUI;
+-- with CoreUI;
 with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
@@ -49,8 +49,8 @@ with Stories; use Stories;
 with Trades; use Trades;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
-with WaitMenu;
-with Interfaces.C; use Interfaces.C;
+-- with WaitMenu;
+with Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 
@@ -70,658 +70,658 @@ package body OrdersMenu is
    -- COMMANDS
    -- ShowOrders
    -- SOURCE
-   function Show_Orders_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-   --## rule on REDUCEABLE_SCOPE
-
-   function Show_Orders_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Ada.Containers;
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Tcl.Tk.Ada.Widgets;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
-      use Tcl.Tk.Ada.Winfo;
-      use BasesTypes;
-      use Crafts;
-      use CoreUI;
-      use Tiny_String;
-
-      Have_Trader: Boolean := False;
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Missions_Limit: Integer := 0;
-      Event: Events_Types := NONE;
-      Item_Index: Natural := 0;
-      Orders_Menu: Ttk_Frame :=
-        Create_Dialog(Name => ".gameframe.orders", Title => "Ship orders");
-      Dialog_Close_Button: constant Ttk_Button :=
-        Create
-          (pathName => Orders_Menu & ".closebutton",
-           options =>
-             "-text Close -command {CloseDialog " & Orders_Menu & "}");
-      Last_Button: Ttk_Button := Get_Widget(pathName => ".", Interp => Interp);
-      --## rule off TYPE_INITIAL_VALUES
-      type Order_Shortcut is record
-         Button_Name: Unbounded_String;
-         Shortcut: Character;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      Mission: Mission_Data := Empty_Mission;
-      package Shortcuts_Container is new Vectors
-        (Index_Type => Positive, Element_Type => Order_Shortcut);
-      --## rule off IMPROPER_INITIALIZATION
-      Shortcuts: Shortcuts_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Add_Button
-        (Name, Label, Command, Shortcut: String; Underline: Natural;
-         Row: Integer := -1) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Orders_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Orders_Menu &
-                ";" & Command & "} -underline" & Natural'Image(Underline));
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Row = -1 then "" else " -row" & Integer'Image(Row)));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{" & Dialog_Close_Button & " invoke;break}");
-         Last_Button := Button;
-         Shortcuts.Append
-           (New_Item =>
-              (Button_Name =>
-                 To_Unbounded_String(Source => Orders_Menu & Name),
-               Shortcut => Shortcut(Shortcut'First)));
-      end Add_Button;
-   begin
-      if Winfo_Get(Widgt => Orders_Menu, Info => "ismapped") = "1" then
-         return
-           Close_Dialog_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-              Argv => Argv);
-      end if;
-      if Tcl_GetVar(interp => Interp, varName => "gamestate") = "combat" then
-         Tcl.Tk.Ada.Busy.Forget(Window => Main_Paned);
-         Tcl.Tk.Ada.Busy.Forget(Window => Game_Header);
-         Destroy(Widgt => Orders_Menu);
-         return TCL_OK;
-      end if;
-      if Find_Member(Order => TALK) > 0 then
-         Have_Trader := True;
-      end if;
-      if Get_Current_Story.Index /= Null_Unbounded_String then
-         Show_Story_Button_Block :
-         declare
-            Step: constant Step_Data :=
-              (if Get_Current_Story.Current_Step = 0 then
-                 Get_Story(Index => Get_Current_Story.Index).Starting_Step
-               elsif Get_Current_Story.Current_Step > 0 then
-                 Get_Story(Index => Get_Current_Story.Index).Steps
-                   (Get_Current_Story.Current_Step)
-               else Get_Story(Index => Get_Current_Story.Index).Final_Step);
-         begin
-            case Step.Finish_Condition is
-               when ASKINBASE =>
-                  if Base_Index > 0 then
-                     if Get_Current_Story.Data = Null_Unbounded_String or
-                       To_String(Source => Get_Current_Story.Data) =
-                         To_String(Source => Sky_Bases(Base_Index).Name) then
-                        Add_Button
-                          (Name => ".story",
-                           Label =>
-                             "Ask for " &
-                             To_String
-                               (Source =>
-                                  Get_Proto_Item
-                                    (Index =>
-                                       Positive'Value
-                                         (To_String
-                                            (Source =>
-                                               Get_Step_Data
-                                                 (Finish_Data =>
-                                                    Step.Finish_Data,
-                                                  Name => "item"))))
-                                    .Name),
-                           Command => "ExecuteStory", Shortcut => "f",
-                           Underline => 4);
-                     end if;
-                  end if;
-               when DESTROYSHIP =>
-                  Show_Destroy_Ship_Button_Block :
-                  declare
-                     Tokens: Slice_Set;
-                  begin
-                     Create
-                       (S => Tokens,
-                        From => To_String(Source => Get_Current_Story.Data),
-                        Separators => ";");
-                     if Player_Ship.Sky_X =
-                       Positive'Value(Slice(S => Tokens, Index => 1)) and
-                       Player_Ship.Sky_Y =
-                         Positive'Value(Slice(S => Tokens, Index => 2)) then
-                        Add_Button
-                          (Name => ".story",
-                           Label =>
-                             "Search for " &
-                             To_String
-                               (Source =>
-                                  Get_Proto_Ship
-                                    (Proto_Index =>
-                                       Positive'Value
-                                         (Slice(S => Tokens, Index => 3)))
-                                    .Name),
-                           Command => "ExecuteStory", Shortcut => "s",
-                           Underline => 0);
-                     end if;
-                  end Show_Destroy_Ship_Button_Block;
-               when EXPLORE =>
-                  Show_Explore_Story_Button_Block :
-                  declare
-                     Tokens: Slice_Set;
-                  begin
-                     Create
-                       (S => Tokens,
-                        From => To_String(Source => Get_Current_Story.Data),
-                        Separators => ";");
-                     if Player_Ship.Sky_X =
-                       Positive'Value(Slice(S => Tokens, Index => 1)) and
-                       Player_Ship.Sky_Y =
-                         Positive'Value(Slice(S => Tokens, Index => 2)) then
-                        Add_Button
-                          (Name => ".story", Label => "Search area",
-                           Command => "ExecuteStory", Shortcut => "s",
-                           Underline => 0);
-                     end if;
-                  end Show_Explore_Story_Button_Block;
-               when ANY | LOOT =>
-                  null;
-            end case;
-         end Show_Story_Button_Block;
-      end if;
-      if Player_Ship.Speed = DOCKED then
-         Add_Button
-           (Name => ".undock", Label => "Undock", Command => "Docking",
-            Shortcut => "d", Underline => 2);
-         if Sky_Bases(Base_Index).Population > 0 then
-            Add_Button
-              (Name => ".escape", Label => "Escape",
-               Command => "Docking escape", Shortcut => "a", Underline => 3);
-         end if;
-         if Have_Trader and Sky_Bases(Base_Index).Population > 0 then
-            Add_Button
-              (Name => ".trade", Label => "Trade", Command => "ShowTrade",
-               Shortcut => "t", Underline => 0);
-            Add_Button
-              (Name => ".school", Label => "School", Command => "ShowSchool",
-               Shortcut => "s", Underline => 0);
-            if Recruit_Container.Length
-                (Container => Sky_Bases(Base_Index).Recruits) >
-              0 then
-               Add_Button
-                 (Name => ".recruits", Label => "Recruit",
-                  Command => "ShowRecruit", Shortcut => "r", Underline => 0);
-            end if;
-            Get_Game_Date;
-            if Days_Difference
-                (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events) >
-              6 then
-               Add_Button
-                 (Name => ".events", Label => "Ask for events",
-                  Command => "AskForEvents", Shortcut => "e", Underline => 8);
-            end if;
-            if not Sky_Bases(Base_Index).Asked_For_Bases then
-               Add_Button
-                 (Name => ".bases", Label => "Ask for bases",
-                  Command => "AskForBases", Shortcut => "b", Underline => 8);
-            end if;
-            if Has_Flag
-                (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                 Flag => "temple") then
-               Add_Button
-                 (Name => ".pray", Label => "Pray", Command => "Pray",
-                  Shortcut => "p", Underline => 0);
-            end if;
-            Add_Heal_Wounded_Menu_Loop :
-            for Member of Player_Ship.Crew loop
-               if Member.Health < 100 then
-                  Add_Button
-                    (Name => ".heal", Label => "Heal wounded",
-                     Command => "ShowBaseUI heal", Shortcut => "w",
-                     Underline => 5);
-                  exit Add_Heal_Wounded_Menu_Loop;
-               end if;
-            end loop Add_Heal_Wounded_Menu_Loop;
-            Add_Repair_Ship_Menu_Loop :
-            for Module of Player_Ship.Modules loop
-               if Module.Durability < Module.Max_Durability then
-                  Add_Button
-                    (Name => ".repair", Label => "Repair ship",
-                     Command => "ShowBaseUI repair", Shortcut => "p",
-                     Underline => 2);
-                  exit Add_Repair_Ship_Menu_Loop;
-               end if;
-            end loop Add_Repair_Ship_Menu_Loop;
-            if Has_Flag
-                (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                 Flag => "shipyard") then
-               Add_Button
-                 (Name => ".shipyard", Label => "Shipyard",
-                  Command => "ShowShipyard", Shortcut => "i", Underline => 2);
-            end if;
-            Add_Buy_Recipes_Menu_Loop :
-            for I in 1 .. Get_Recipes_Amount loop
-               if not Is_Known_Recipe
-                   (Recipe_Index =>
-                      To_Bounded_String
-                        (Source => Trim(Source => I'Img, Side => Both))) and
-                 Has_Recipe
-                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                    Recipe => Trim(Source => I'Img, Side => Both)) and
-                 Get_Recipe
-                     (Recipe_Index =>
-                        To_Bounded_String
-                          (Source => Trim(Source => I'Img, Side => Both)))
-                     .Reputation <=
-                   Sky_Bases(Base_Index).Reputation.Level then
-                  Add_Button
-                    (Name => ".recipes", Label => "Buy recipes",
-                     Command => "ShowBaseUI recipes", Shortcut => "y",
-                     Underline => 2);
-                  exit Add_Buy_Recipes_Menu_Loop;
-               end if;
-            end loop Add_Buy_Recipes_Menu_Loop;
-            if Sky_Bases(Base_Index).Missions.Length > 0 then
-               Missions_Limit :=
-                 (case Sky_Bases(Base_Index).Reputation.Level is
-                    when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
-                    when 76 .. 100 => 10, when others => 0);
-               Add_Mission_Menu_Loop :
-               for I in 1 .. Get_Accepted_Missions_Amount loop
-                  Mission := Get_Accepted_Mission(Mission_Index => I);
-                  if (Mission.Finished and Mission.Start_Base = Base_Index) or
-                    (Mission.Target_X = Player_Ship.Sky_X and
-                     Mission.Target_Y = Player_Ship.Sky_Y) then
-                     case Mission.M_Type is
-                        when DELIVER =>
-                           Add_Button
-                             (Name => ".mission",
-                              Label =>
-                                "Complete delivery of " &
-                                To_String
-                                  (Source =>
-                                     Get_Proto_Item
-                                       (Index => Mission.Item_Index)
-                                       .Name),
-                              Command => "CompleteMission", Shortcut => "c",
-                              Underline => 0, Row => 0);
-                        when DESTROY =>
-                           if Mission.Finished then
-                              Add_Button
-                                (Name => ".mission",
-                                 Label =>
-                                   "Complete destroy " &
-                                   To_String
-                                     (Source =>
-                                        Get_Proto_Ship
-                                          (Proto_Index => Mission.Ship_Index)
-                                          .Name),
-                                 Command => "CompleteMission", Shortcut => "c",
-                                 Underline => 0, Row => 0);
-                           end if;
-                        when PATROL =>
-                           if Mission.Finished then
-                              Add_Button
-                                (Name => ".mission",
-                                 Label => "Complete Patrol area mission",
-                                 Command => "CompleteMission", Shortcut => "c",
-                                 Underline => 0, Row => 0);
-                           end if;
-                        when EXPLORE =>
-                           if Mission.Finished then
-                              Add_Button
-                                (Name => ".mission",
-                                 Label => "Complete Explore area mission",
-                                 Command => "CompleteMission", Shortcut => "c",
-                                 Underline => 0, Row => 0);
-                           end if;
-                        when PASSENGER =>
-                           if Mission.Finished then
-                              Add_Button
-                                (Name => ".mission",
-                                 Label =>
-                                   "Complete Transport passenger mission",
-                                 Command => "CompleteMission", Shortcut => "c",
-                                 Underline => 0, Row => 0);
-                           end if;
-                     end case;
-                  end if;
-                  if Mission.Start_Base = Base_Index then
-                     Missions_Limit := Missions_Limit - 1;
-                  end if;
-               end loop Add_Mission_Menu_Loop;
-               if Missions_Limit > 0 then
-                  Add_Button
-                    (Name => ".missions", Label => "Missions",
-                     Command => "ShowBaseMissions", Shortcut => "m",
-                     Underline => 0);
-               end if;
-            end if;
-            if Player_Ship.Home_Base /= Base_Index then
-               Add_Button
-                 (Name => ".home", Label => "Set as home",
-                  Command => "SetAsHome", Shortcut => "h", Underline => 7);
-            end if;
-         end if;
-         if Sky_Bases(Base_Index).Population = 0 then
-            Add_Button
-              (Name => ".loot", Label => "Loot", Command => "ShowLoot",
-               Shortcut => "l", Underline => 0);
-         end if;
-      else
-         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
-            Event :=
-              Get_Event
-                (Index =>
-                   Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-                .E_Type;
-         end if;
-         case Event is
-            when ENEMYSHIP | ENEMYPATROL =>
-               Add_Button
-                 (Name => ".event", Label => "Attack", Command => "Attack",
-                  Shortcut => "a", Underline => 0);
-            when FULLDOCKS =>
-               Add_Button
-                 (Name => ".event", Label => "Wait (full docks)",
-                  Command => "ShowWait", Shortcut => "w", Underline => 0);
-            when ATTACKONBASE =>
-               Add_Button
-                 (Name => ".event", Label => "Defend", Command => "Attack",
-                  Shortcut => "d", Underline => 0);
-            when DISEASE =>
-               if Have_Trader then
-                  Item_Index :=
-                    Find_Item
-                      (Inventory => Player_Ship.Cargo,
-                       Item_Type =>
-                         Get_Faction(Index => Sky_Bases(Base_Index).Owner)
-                           .Healing_Tools);
-                  if Item_Index > 0 then
-                     Add_Button
-                       (Name => ".deliverfree",
-                        Label => "Deliver medicines for free",
-                        Command => "DeliverMedicines free", Shortcut => "d",
-                        Underline => 0);
-                     Add_Button
-                       (Name => ".deliverprice",
-                        Label => "Deliver medicines for price",
-                        Command => "DeliverMedicines paid", Shortcut => "m",
-                        Underline => 8);
-                  end if;
-               end if;
-            when NONE | DOUBLEPRICE | BASERECOVERY =>
-               if Base_Index > 0 then
-                  if Sky_Bases(Base_Index).Reputation.Level > -25 then
-                     Show_Docking_Button_Block :
-                     declare
-                        Docking_Cost: Positive := 1;
-                     begin
-                        Count_Docking_Cost_Loop :
-                        for Module of Player_Ship.Modules loop
-                           if Module.M_Type = HULL then
-                              Docking_Cost := Module.Max_Modules;
-                              exit Count_Docking_Cost_Loop;
-                           end if;
-                        end loop Count_Docking_Cost_Loop;
-                        if Sky_Bases(Base_Index).Population > 0 then
-                           Add_Button
-                             (Name => ".dock",
-                              Label =>
-                                "Dock (" &
-                                Trim
-                                  (Source => Positive'Image(Docking_Cost),
-                                   Side => Left) &
-                                " " & To_String(Source => Money_Name) & ")",
-                              Command => "Docking", Shortcut => "d",
-                              Underline => 0);
-                        else
-                           Add_Button
-                             (Name => ".dock", Label => "Dock",
-                              Command => "Docking", Shortcut => "d",
-                              Underline => 0);
-                        end if;
-                     end Show_Docking_Button_Block;
-                  end if;
-                  Complete_Mission_Menu_Loop :
-                  for I in 1 .. Get_Accepted_Missions_Amount loop
-                     Mission := Get_Accepted_Mission(Mission_Index => I);
-                     if Have_Trader and
-                       Mission.Target_X = Player_Ship.Sky_X and
-                       Mission.Target_Y = Player_Ship.Sky_Y and
-                       Mission.Finished then
-                        case Mission.M_Type is
-                           when DELIVER =>
-                              Add_Button
-                                (Name => ".mission",
-                                 Label =>
-                                   "Complete delivery of " &
-                                   To_String
-                                     (Source =>
-                                        Get_Proto_Item
-                                          (Index => Mission.Item_Index)
-                                          .Name),
-                                 Command => "CompleteMission", Shortcut => "c",
-                                 Underline => 0);
-                           when DESTROY =>
-                              if Mission.Finished then
-                                 Add_Button
-                                   (Name => ".mission",
-                                    Label =>
-                                      "Complete destroy " &
-                                      To_String
-                                        (Source =>
-                                           Get_Proto_Ship
-                                             (Proto_Index =>
-                                                Mission.Ship_Index)
-                                             .Name),
-                                    Command => "CompleteMission",
-                                    Shortcut => "c", Underline => 0);
-                              end if;
-                           when PATROL =>
-                              if Mission.Finished then
-                                 Add_Button
-                                   (Name => ".mission",
-                                    Label => "Complete Patrol area mission",
-                                    Command => "CompleteMission",
-                                    Shortcut => "c", Underline => 0);
-                              end if;
-                           when EXPLORE =>
-                              if Mission.Finished then
-                                 Add_Button
-                                   (Name => ".mission",
-                                    Label => "Complete Explore area mission",
-                                    Command => "CompleteMission",
-                                    Shortcut => "c", Underline => 0);
-                              end if;
-                           when PASSENGER =>
-                              if Mission.Finished then
-                                 Add_Button
-                                   (Name => ".mission",
-                                    Label =>
-                                      "Complete Transport passenger mission",
-                                    Command => "CompleteMission",
-                                    Shortcut => "c", Underline => 0);
-                              end if;
-                        end case;
-                     end if;
-                  end loop Complete_Mission_Menu_Loop;
-               else
-                  Progress_Mission_Loop :
-                  for I in 1 .. Get_Accepted_Missions_Amount loop
-                     Mission := Get_Accepted_Mission(Mission_Index => I);
-                     if Mission.Target_X = Player_Ship.Sky_X and
-                       Mission.Target_Y = Player_Ship.Sky_Y and
-                       not Mission.Finished then
-                        case Mission.M_Type is
-                           when DELIVER | PASSENGER =>
-                              null;
-                           when DESTROY =>
-                              Add_Button
-                                (Name => ".mission",
-                                 Label =>
-                                   "Search for " &
-                                   To_String
-                                     (Source =>
-                                        Get_Proto_Ship
-                                          (Proto_Index => Mission.Ship_Index)
-                                          .Name),
-                                 Command => "StartMission", Shortcut => "s",
-                                 Underline => 0);
-                           when PATROL =>
-                              Add_Button
-                                (Name => ".mission", Label => "Patrol area",
-                                 Command => "StartMission", Shortcut => "p",
-                                 Underline => 0);
-                           when EXPLORE =>
-                              Add_Button
-                                (Name => ".mission", Label => "Explore area",
-                                 Command => "StartMission", Shortcut => "e",
-                                 Underline => 0);
-                        end case;
-                     end if;
-                  end loop Progress_Mission_Loop;
-               end if;
-            when TRADER =>
-               if Have_Trader then
-                  Add_Button
-                    (Name => ".trade", Label => "Trade",
-                     Command =>
-                       "ShowTrader " &
-                       Positive'Image
-                         (Get_Event
-                            (Index =>
-                               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                 .Event_Index)
-                            .Ship_Index),
-                     Shortcut => "t", Underline => 0);
-                  Add_Button
-                    (Name => ".askevents", Label => "Ask for events",
-                     Command => "AskForEvents", Shortcut => "e",
-                     Underline => 8);
-                  Add_Button
-                    (Name => ".askbases", Label => "Ask for bases",
-                     Command => "AskForBases", Shortcut => "b",
-                     Underline => 8);
-               end if;
-               Add_Button
-                 (Name => ".attack", Label => "Attack", Command => "Attack",
-                  Shortcut => "a", Underline => 0);
-            when FRIENDLYSHIP =>
-               if Have_Trader then
-                  if Index
-                      (Source =>
-                         Get_Proto_Ship
-                           (Proto_Index =>
-                              Get_Event
-                                (Index =>
-                                   Sky_Map
-                                     (Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                     .Event_Index)
-                                .Ship_Index)
-                           .Name,
-                       Pattern => To_String(Source => Traders_Name)) >
-                    0 then
-                     Add_Button
-                       (Name => ".trade", Label => "Trade",
-                        Command =>
-                          "ShowTrader " &
-                          Positive'Image
-                            (Get_Event
-                               (Index =>
-                                  Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                    .Event_Index)
-                               .Ship_Index),
-                        Shortcut => "t", Underline => 0);
-                     Add_Button
-                       (Name => ".askbases", Label => "Ask for bases",
-                        Command => "AskForBases", Shortcut => "b",
-                        Underline => 8);
-                  end if;
-                  Add_Button
-                    (Name => ".askevents", Label => "Ask for events",
-                     Command => "AskForEvents", Shortcut => "e",
-                     Underline => 8);
-               end if;
-               Add_Button
-                 (Name => ".attack", Label => "Attack", Command => "Attack",
-                  Shortcut => "a", Underline => 0);
-         end case;
-      end if;
-      if Last_Button = Get_Widget(pathName => ".", Interp => Interp) then
-         Show_Message
-           (Text =>
-              "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
-            Title => "No orders available");
-      else
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Dialog_Close_Button,
-            Options => "-sticky we -padx 5 -pady {0 5}");
-         Bind
-           (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
-            Script => "{" & Dialog_Close_Button & " invoke;break}");
-         Bind
-           (Widgt => Last_Button, Sequence => "<Tab>",
-            Script => "{focus " & Dialog_Close_Button & ";break}");
-         Set_Shortcuts_Loop :
-         for Shortcut of Shortcuts loop
-            Bind
-              (Widgt => Dialog_Close_Button,
-               Sequence => "<Alt-" & Shortcut.Shortcut & ">",
-               Script =>
-                 "{" & To_String(Source => Shortcut.Button_Name) &
-                 " invoke;break}");
-         end loop Set_Shortcuts_Loop;
-         Add_Shortcuts_To_Buttons_Block :
-         declare
-            --## rule off IMPROPER_INITIALIZATION
-            Menu_Button: Ttk_Button;
-            --## rule on IMPROPER_INITIALIZATION
-         begin
-            Set_Buttons_Loop :
-            for Button of Shortcuts loop
-               Menu_Button :=
-                 Get_Widget
-                   (pathName => To_String(Source => Button.Button_Name),
-                    Interp => Interp);
-               Set_Button_Shortcuts_Loop :
-               for Shortcut of Shortcuts loop
-                  Bind
-                    (Widgt => Menu_Button,
-                     Sequence => "<Alt-" & Shortcut.Shortcut & ">",
-                     Script =>
-                       "{" & To_String(Source => Shortcut.Button_Name) &
-                       " invoke;break}");
-               end loop Set_Button_Shortcuts_Loop;
-            end loop Set_Buttons_Loop;
-         end Add_Shortcuts_To_Buttons_Block;
-         Show_Dialog
-           (Dialog => Orders_Menu, Parent_Frame => ".gameframe",
-            Relative_X => 0.4,
-            Relative_Y => (if Player_Ship.Speed = DOCKED then 0.1 else 0.3));
-         Focus(Widgt => Dialog_Close_Button);
-      end if;
-      return TCL_OK;
-   end Show_Orders_Command;
+--   function Show_Orders_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--   --## rule on REDUCEABLE_SCOPE
+--
+--   function Show_Orders_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Ada.Containers;
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Tcl.Tk.Ada.Widgets;
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--      use Tcl.Tk.Ada.Winfo;
+--      use BasesTypes;
+--      use Crafts;
+--      use CoreUI;
+--      use Tiny_String;
+--
+--      Have_Trader: Boolean := False;
+--      Base_Index: constant Natural :=
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Missions_Limit: Integer := 0;
+--      Event: Events_Types := NONE;
+--      Item_Index: Natural := 0;
+--      Orders_Menu: Ttk_Frame :=
+--        Create_Dialog(Name => ".gameframe.orders", Title => "Ship orders");
+--      Dialog_Close_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Orders_Menu & ".closebutton",
+--           options =>
+--             "-text Close -command {CloseDialog " & Orders_Menu & "}");
+--      Last_Button: Ttk_Button := Get_Widget(pathName => ".", Interp => Interp);
+--      --## rule off TYPE_INITIAL_VALUES
+--      type Order_Shortcut is record
+--         Button_Name: Unbounded_String;
+--         Shortcut: Character;
+--      end record;
+--      --## rule on TYPE_INITIAL_VALUES
+--      Mission: Mission_Data := Empty_Mission;
+--      package Shortcuts_Container is new Vectors
+--        (Index_Type => Positive, Element_Type => Order_Shortcut);
+--      --## rule off IMPROPER_INITIALIZATION
+--      Shortcuts: Shortcuts_Container.Vector;
+--      --## rule on IMPROPER_INITIALIZATION
+--      procedure Add_Button
+--        (Name, Label, Command, Shortcut: String; Underline: Natural;
+--         Row: Integer := -1) is
+--         Button: constant Ttk_Button :=
+--           Create
+--             (pathName => Orders_Menu & Name,
+--              options =>
+--                "-text {" & Label & "} -command {CloseDialog " & Orders_Menu &
+--                ";" & Command & "} -underline" & Natural'Image(Underline));
+--      begin
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button,
+--            Options =>
+--              "-sticky we -padx 5" &
+--              (if Row = -1 then "" else " -row" & Integer'Image(Row)));
+--         Bind
+--           (Widgt => Button, Sequence => "<Escape>",
+--            Script => "{" & Dialog_Close_Button & " invoke;break}");
+--         Last_Button := Button;
+--         Shortcuts.Append
+--           (New_Item =>
+--              (Button_Name =>
+--                 To_Unbounded_String(Source => Orders_Menu & Name),
+--               Shortcut => Shortcut(Shortcut'First)));
+--      end Add_Button;
+--   begin
+--      if Winfo_Get(Widgt => Orders_Menu, Info => "ismapped") = "1" then
+--         return
+--           Close_Dialog_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--              Argv => Argv);
+--      end if;
+--      if Tcl_GetVar(interp => Interp, varName => "gamestate") = "combat" then
+--         Tcl.Tk.Ada.Busy.Forget(Window => Main_Paned);
+--         Tcl.Tk.Ada.Busy.Forget(Window => Game_Header);
+--         Destroy(Widgt => Orders_Menu);
+--         return TCL_OK;
+--      end if;
+--      if Find_Member(Order => TALK) > 0 then
+--         Have_Trader := True;
+--      end if;
+--      if Get_Current_Story.Index /= Null_Unbounded_String then
+--         Show_Story_Button_Block :
+--         declare
+--            Step: constant Step_Data :=
+--              (if Get_Current_Story.Current_Step = 0 then
+--                 Get_Story(Index => Get_Current_Story.Index).Starting_Step
+--               elsif Get_Current_Story.Current_Step > 0 then
+--                 Get_Story(Index => Get_Current_Story.Index).Steps
+--                   (Get_Current_Story.Current_Step)
+--               else Get_Story(Index => Get_Current_Story.Index).Final_Step);
+--         begin
+--            case Step.Finish_Condition is
+--               when ASKINBASE =>
+--                  if Base_Index > 0 then
+--                     if Get_Current_Story.Data = Null_Unbounded_String or
+--                       To_String(Source => Get_Current_Story.Data) =
+--                         To_String(Source => Sky_Bases(Base_Index).Name) then
+--                        Add_Button
+--                          (Name => ".story",
+--                           Label =>
+--                             "Ask for " &
+--                             To_String
+--                               (Source =>
+--                                  Get_Proto_Item
+--                                    (Index =>
+--                                       Positive'Value
+--                                         (To_String
+--                                            (Source =>
+--                                               Get_Step_Data
+--                                                 (Finish_Data =>
+--                                                    Step.Finish_Data,
+--                                                  Name => "item"))))
+--                                    .Name),
+--                           Command => "ExecuteStory", Shortcut => "f",
+--                           Underline => 4);
+--                     end if;
+--                  end if;
+--               when DESTROYSHIP =>
+--                  Show_Destroy_Ship_Button_Block :
+--                  declare
+--                     Tokens: Slice_Set;
+--                  begin
+--                     Create
+--                       (S => Tokens,
+--                        From => To_String(Source => Get_Current_Story.Data),
+--                        Separators => ";");
+--                     if Player_Ship.Sky_X =
+--                       Positive'Value(Slice(S => Tokens, Index => 1)) and
+--                       Player_Ship.Sky_Y =
+--                         Positive'Value(Slice(S => Tokens, Index => 2)) then
+--                        Add_Button
+--                          (Name => ".story",
+--                           Label =>
+--                             "Search for " &
+--                             To_String
+--                               (Source =>
+--                                  Get_Proto_Ship
+--                                    (Proto_Index =>
+--                                       Positive'Value
+--                                         (Slice(S => Tokens, Index => 3)))
+--                                    .Name),
+--                           Command => "ExecuteStory", Shortcut => "s",
+--                           Underline => 0);
+--                     end if;
+--                  end Show_Destroy_Ship_Button_Block;
+--               when EXPLORE =>
+--                  Show_Explore_Story_Button_Block :
+--                  declare
+--                     Tokens: Slice_Set;
+--                  begin
+--                     Create
+--                       (S => Tokens,
+--                        From => To_String(Source => Get_Current_Story.Data),
+--                        Separators => ";");
+--                     if Player_Ship.Sky_X =
+--                       Positive'Value(Slice(S => Tokens, Index => 1)) and
+--                       Player_Ship.Sky_Y =
+--                         Positive'Value(Slice(S => Tokens, Index => 2)) then
+--                        Add_Button
+--                          (Name => ".story", Label => "Search area",
+--                           Command => "ExecuteStory", Shortcut => "s",
+--                           Underline => 0);
+--                     end if;
+--                  end Show_Explore_Story_Button_Block;
+--               when ANY | LOOT =>
+--                  null;
+--            end case;
+--         end Show_Story_Button_Block;
+--      end if;
+--      if Player_Ship.Speed = DOCKED then
+--         Add_Button
+--           (Name => ".undock", Label => "Undock", Command => "Docking",
+--            Shortcut => "d", Underline => 2);
+--         if Sky_Bases(Base_Index).Population > 0 then
+--            Add_Button
+--              (Name => ".escape", Label => "Escape",
+--               Command => "Docking escape", Shortcut => "a", Underline => 3);
+--         end if;
+--         if Have_Trader and Sky_Bases(Base_Index).Population > 0 then
+--            Add_Button
+--              (Name => ".trade", Label => "Trade", Command => "ShowTrade",
+--               Shortcut => "t", Underline => 0);
+--            Add_Button
+--              (Name => ".school", Label => "School", Command => "ShowSchool",
+--               Shortcut => "s", Underline => 0);
+--            if Recruit_Container.Length
+--                (Container => Sky_Bases(Base_Index).Recruits) >
+--              0 then
+--               Add_Button
+--                 (Name => ".recruits", Label => "Recruit",
+--                  Command => "ShowRecruit", Shortcut => "r", Underline => 0);
+--            end if;
+--            Get_Game_Date;
+--            if Days_Difference
+--                (Date_To_Compare => Sky_Bases(Base_Index).Asked_For_Events) >
+--              6 then
+--               Add_Button
+--                 (Name => ".events", Label => "Ask for events",
+--                  Command => "AskForEvents", Shortcut => "e", Underline => 8);
+--            end if;
+--            if not Sky_Bases(Base_Index).Asked_For_Bases then
+--               Add_Button
+--                 (Name => ".bases", Label => "Ask for bases",
+--                  Command => "AskForBases", Shortcut => "b", Underline => 8);
+--            end if;
+--            if Has_Flag
+--                (Base_Type => Sky_Bases(Base_Index).Base_Type,
+--                 Flag => "temple") then
+--               Add_Button
+--                 (Name => ".pray", Label => "Pray", Command => "Pray",
+--                  Shortcut => "p", Underline => 0);
+--            end if;
+--            Add_Heal_Wounded_Menu_Loop :
+--            for Member of Player_Ship.Crew loop
+--               if Member.Health < 100 then
+--                  Add_Button
+--                    (Name => ".heal", Label => "Heal wounded",
+--                     Command => "ShowBaseUI heal", Shortcut => "w",
+--                     Underline => 5);
+--                  exit Add_Heal_Wounded_Menu_Loop;
+--               end if;
+--            end loop Add_Heal_Wounded_Menu_Loop;
+--            Add_Repair_Ship_Menu_Loop :
+--            for Module of Player_Ship.Modules loop
+--               if Module.Durability < Module.Max_Durability then
+--                  Add_Button
+--                    (Name => ".repair", Label => "Repair ship",
+--                     Command => "ShowBaseUI repair", Shortcut => "p",
+--                     Underline => 2);
+--                  exit Add_Repair_Ship_Menu_Loop;
+--               end if;
+--            end loop Add_Repair_Ship_Menu_Loop;
+--            if Has_Flag
+--                (Base_Type => Sky_Bases(Base_Index).Base_Type,
+--                 Flag => "shipyard") then
+--               Add_Button
+--                 (Name => ".shipyard", Label => "Shipyard",
+--                  Command => "ShowShipyard", Shortcut => "i", Underline => 2);
+--            end if;
+--            Add_Buy_Recipes_Menu_Loop :
+--            for I in 1 .. Get_Recipes_Amount loop
+--               if not Is_Known_Recipe
+--                   (Recipe_Index =>
+--                      To_Bounded_String
+--                        (Source => Trim(Source => I'Img, Side => Both))) and
+--                 Has_Recipe
+--                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
+--                    Recipe => Trim(Source => I'Img, Side => Both)) and
+--                 Get_Recipe
+--                     (Recipe_Index =>
+--                        To_Bounded_String
+--                          (Source => Trim(Source => I'Img, Side => Both)))
+--                     .Reputation <=
+--                   Sky_Bases(Base_Index).Reputation.Level then
+--                  Add_Button
+--                    (Name => ".recipes", Label => "Buy recipes",
+--                     Command => "ShowBaseUI recipes", Shortcut => "y",
+--                     Underline => 2);
+--                  exit Add_Buy_Recipes_Menu_Loop;
+--               end if;
+--            end loop Add_Buy_Recipes_Menu_Loop;
+--            if Sky_Bases(Base_Index).Missions.Length > 0 then
+--               Missions_Limit :=
+--                 (case Sky_Bases(Base_Index).Reputation.Level is
+--                    when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
+--                    when 76 .. 100 => 10, when others => 0);
+--               Add_Mission_Menu_Loop :
+--               for I in 1 .. Get_Accepted_Missions_Amount loop
+--                  Mission := Get_Accepted_Mission(Mission_Index => I);
+--                  if (Mission.Finished and Mission.Start_Base = Base_Index) or
+--                    (Mission.Target_X = Player_Ship.Sky_X and
+--                     Mission.Target_Y = Player_Ship.Sky_Y) then
+--                     case Mission.M_Type is
+--                        when DELIVER =>
+--                           Add_Button
+--                             (Name => ".mission",
+--                              Label =>
+--                                "Complete delivery of " &
+--                                To_String
+--                                  (Source =>
+--                                     Get_Proto_Item
+--                                       (Index => Mission.Item_Index)
+--                                       .Name),
+--                              Command => "CompleteMission", Shortcut => "c",
+--                              Underline => 0, Row => 0);
+--                        when DESTROY =>
+--                           if Mission.Finished then
+--                              Add_Button
+--                                (Name => ".mission",
+--                                 Label =>
+--                                   "Complete destroy " &
+--                                   To_String
+--                                     (Source =>
+--                                        Get_Proto_Ship
+--                                          (Proto_Index => Mission.Ship_Index)
+--                                          .Name),
+--                                 Command => "CompleteMission", Shortcut => "c",
+--                                 Underline => 0, Row => 0);
+--                           end if;
+--                        when PATROL =>
+--                           if Mission.Finished then
+--                              Add_Button
+--                                (Name => ".mission",
+--                                 Label => "Complete Patrol area mission",
+--                                 Command => "CompleteMission", Shortcut => "c",
+--                                 Underline => 0, Row => 0);
+--                           end if;
+--                        when EXPLORE =>
+--                           if Mission.Finished then
+--                              Add_Button
+--                                (Name => ".mission",
+--                                 Label => "Complete Explore area mission",
+--                                 Command => "CompleteMission", Shortcut => "c",
+--                                 Underline => 0, Row => 0);
+--                           end if;
+--                        when PASSENGER =>
+--                           if Mission.Finished then
+--                              Add_Button
+--                                (Name => ".mission",
+--                                 Label =>
+--                                   "Complete Transport passenger mission",
+--                                 Command => "CompleteMission", Shortcut => "c",
+--                                 Underline => 0, Row => 0);
+--                           end if;
+--                     end case;
+--                  end if;
+--                  if Mission.Start_Base = Base_Index then
+--                     Missions_Limit := Missions_Limit - 1;
+--                  end if;
+--               end loop Add_Mission_Menu_Loop;
+--               if Missions_Limit > 0 then
+--                  Add_Button
+--                    (Name => ".missions", Label => "Missions",
+--                     Command => "ShowBaseMissions", Shortcut => "m",
+--                     Underline => 0);
+--               end if;
+--            end if;
+--            if Player_Ship.Home_Base /= Base_Index then
+--               Add_Button
+--                 (Name => ".home", Label => "Set as home",
+--                  Command => "SetAsHome", Shortcut => "h", Underline => 7);
+--            end if;
+--         end if;
+--         if Sky_Bases(Base_Index).Population = 0 then
+--            Add_Button
+--              (Name => ".loot", Label => "Loot", Command => "ShowLoot",
+--               Shortcut => "l", Underline => 0);
+--         end if;
+--      else
+--         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
+--            Event :=
+--              Get_Event
+--                (Index =>
+--                   Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+--                .E_Type;
+--         end if;
+--         case Event is
+--            when ENEMYSHIP | ENEMYPATROL =>
+--               Add_Button
+--                 (Name => ".event", Label => "Attack", Command => "Attack",
+--                  Shortcut => "a", Underline => 0);
+--            when FULLDOCKS =>
+--               Add_Button
+--                 (Name => ".event", Label => "Wait (full docks)",
+--                  Command => "ShowWait", Shortcut => "w", Underline => 0);
+--            when ATTACKONBASE =>
+--               Add_Button
+--                 (Name => ".event", Label => "Defend", Command => "Attack",
+--                  Shortcut => "d", Underline => 0);
+--            when DISEASE =>
+--               if Have_Trader then
+--                  Item_Index :=
+--                    Find_Item
+--                      (Inventory => Player_Ship.Cargo,
+--                       Item_Type =>
+--                         Get_Faction(Index => Sky_Bases(Base_Index).Owner)
+--                           .Healing_Tools);
+--                  if Item_Index > 0 then
+--                     Add_Button
+--                       (Name => ".deliverfree",
+--                        Label => "Deliver medicines for free",
+--                        Command => "DeliverMedicines free", Shortcut => "d",
+--                        Underline => 0);
+--                     Add_Button
+--                       (Name => ".deliverprice",
+--                        Label => "Deliver medicines for price",
+--                        Command => "DeliverMedicines paid", Shortcut => "m",
+--                        Underline => 8);
+--                  end if;
+--               end if;
+--            when NONE | DOUBLEPRICE | BASERECOVERY =>
+--               if Base_Index > 0 then
+--                  if Sky_Bases(Base_Index).Reputation.Level > -25 then
+--                     Show_Docking_Button_Block :
+--                     declare
+--                        Docking_Cost: Positive := 1;
+--                     begin
+--                        Count_Docking_Cost_Loop :
+--                        for Module of Player_Ship.Modules loop
+--                           if Module.M_Type = HULL then
+--                              Docking_Cost := Module.Max_Modules;
+--                              exit Count_Docking_Cost_Loop;
+--                           end if;
+--                        end loop Count_Docking_Cost_Loop;
+--                        if Sky_Bases(Base_Index).Population > 0 then
+--                           Add_Button
+--                             (Name => ".dock",
+--                              Label =>
+--                                "Dock (" &
+--                                Trim
+--                                  (Source => Positive'Image(Docking_Cost),
+--                                   Side => Left) &
+--                                " " & To_String(Source => Money_Name) & ")",
+--                              Command => "Docking", Shortcut => "d",
+--                              Underline => 0);
+--                        else
+--                           Add_Button
+--                             (Name => ".dock", Label => "Dock",
+--                              Command => "Docking", Shortcut => "d",
+--                              Underline => 0);
+--                        end if;
+--                     end Show_Docking_Button_Block;
+--                  end if;
+--                  Complete_Mission_Menu_Loop :
+--                  for I in 1 .. Get_Accepted_Missions_Amount loop
+--                     Mission := Get_Accepted_Mission(Mission_Index => I);
+--                     if Have_Trader and
+--                       Mission.Target_X = Player_Ship.Sky_X and
+--                       Mission.Target_Y = Player_Ship.Sky_Y and
+--                       Mission.Finished then
+--                        case Mission.M_Type is
+--                           when DELIVER =>
+--                              Add_Button
+--                                (Name => ".mission",
+--                                 Label =>
+--                                   "Complete delivery of " &
+--                                   To_String
+--                                     (Source =>
+--                                        Get_Proto_Item
+--                                          (Index => Mission.Item_Index)
+--                                          .Name),
+--                                 Command => "CompleteMission", Shortcut => "c",
+--                                 Underline => 0);
+--                           when DESTROY =>
+--                              if Mission.Finished then
+--                                 Add_Button
+--                                   (Name => ".mission",
+--                                    Label =>
+--                                      "Complete destroy " &
+--                                      To_String
+--                                        (Source =>
+--                                           Get_Proto_Ship
+--                                             (Proto_Index =>
+--                                                Mission.Ship_Index)
+--                                             .Name),
+--                                    Command => "CompleteMission",
+--                                    Shortcut => "c", Underline => 0);
+--                              end if;
+--                           when PATROL =>
+--                              if Mission.Finished then
+--                                 Add_Button
+--                                   (Name => ".mission",
+--                                    Label => "Complete Patrol area mission",
+--                                    Command => "CompleteMission",
+--                                    Shortcut => "c", Underline => 0);
+--                              end if;
+--                           when EXPLORE =>
+--                              if Mission.Finished then
+--                                 Add_Button
+--                                   (Name => ".mission",
+--                                    Label => "Complete Explore area mission",
+--                                    Command => "CompleteMission",
+--                                    Shortcut => "c", Underline => 0);
+--                              end if;
+--                           when PASSENGER =>
+--                              if Mission.Finished then
+--                                 Add_Button
+--                                   (Name => ".mission",
+--                                    Label =>
+--                                      "Complete Transport passenger mission",
+--                                    Command => "CompleteMission",
+--                                    Shortcut => "c", Underline => 0);
+--                              end if;
+--                        end case;
+--                     end if;
+--                  end loop Complete_Mission_Menu_Loop;
+--               else
+--                  Progress_Mission_Loop :
+--                  for I in 1 .. Get_Accepted_Missions_Amount loop
+--                     Mission := Get_Accepted_Mission(Mission_Index => I);
+--                     if Mission.Target_X = Player_Ship.Sky_X and
+--                       Mission.Target_Y = Player_Ship.Sky_Y and
+--                       not Mission.Finished then
+--                        case Mission.M_Type is
+--                           when DELIVER | PASSENGER =>
+--                              null;
+--                           when DESTROY =>
+--                              Add_Button
+--                                (Name => ".mission",
+--                                 Label =>
+--                                   "Search for " &
+--                                   To_String
+--                                     (Source =>
+--                                        Get_Proto_Ship
+--                                          (Proto_Index => Mission.Ship_Index)
+--                                          .Name),
+--                                 Command => "StartMission", Shortcut => "s",
+--                                 Underline => 0);
+--                           when PATROL =>
+--                              Add_Button
+--                                (Name => ".mission", Label => "Patrol area",
+--                                 Command => "StartMission", Shortcut => "p",
+--                                 Underline => 0);
+--                           when EXPLORE =>
+--                              Add_Button
+--                                (Name => ".mission", Label => "Explore area",
+--                                 Command => "StartMission", Shortcut => "e",
+--                                 Underline => 0);
+--                        end case;
+--                     end if;
+--                  end loop Progress_Mission_Loop;
+--               end if;
+--            when TRADER =>
+--               if Have_Trader then
+--                  Add_Button
+--                    (Name => ".trade", Label => "Trade",
+--                     Command =>
+--                       "ShowTrader " &
+--                       Positive'Image
+--                         (Get_Event
+--                            (Index =>
+--                               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+--                                 .Event_Index)
+--                            .Ship_Index),
+--                     Shortcut => "t", Underline => 0);
+--                  Add_Button
+--                    (Name => ".askevents", Label => "Ask for events",
+--                     Command => "AskForEvents", Shortcut => "e",
+--                     Underline => 8);
+--                  Add_Button
+--                    (Name => ".askbases", Label => "Ask for bases",
+--                     Command => "AskForBases", Shortcut => "b",
+--                     Underline => 8);
+--               end if;
+--               Add_Button
+--                 (Name => ".attack", Label => "Attack", Command => "Attack",
+--                  Shortcut => "a", Underline => 0);
+--            when FRIENDLYSHIP =>
+--               if Have_Trader then
+--                  if Index
+--                      (Source =>
+--                         Get_Proto_Ship
+--                           (Proto_Index =>
+--                              Get_Event
+--                                (Index =>
+--                                   Sky_Map
+--                                     (Player_Ship.Sky_X, Player_Ship.Sky_Y)
+--                                     .Event_Index)
+--                                .Ship_Index)
+--                           .Name,
+--                       Pattern => To_String(Source => Traders_Name)) >
+--                    0 then
+--                     Add_Button
+--                       (Name => ".trade", Label => "Trade",
+--                        Command =>
+--                          "ShowTrader " &
+--                          Positive'Image
+--                            (Get_Event
+--                               (Index =>
+--                                  Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+--                                    .Event_Index)
+--                               .Ship_Index),
+--                        Shortcut => "t", Underline => 0);
+--                     Add_Button
+--                       (Name => ".askbases", Label => "Ask for bases",
+--                        Command => "AskForBases", Shortcut => "b",
+--                        Underline => 8);
+--                  end if;
+--                  Add_Button
+--                    (Name => ".askevents", Label => "Ask for events",
+--                     Command => "AskForEvents", Shortcut => "e",
+--                     Underline => 8);
+--               end if;
+--               Add_Button
+--                 (Name => ".attack", Label => "Attack", Command => "Attack",
+--                  Shortcut => "a", Underline => 0);
+--         end case;
+--      end if;
+--      if Last_Button = Get_Widget(pathName => ".", Interp => Interp) then
+--         Show_Message
+--           (Text =>
+--              "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
+--            Title => "No orders available");
+--      else
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Dialog_Close_Button,
+--            Options => "-sticky we -padx 5 -pady {0 5}");
+--         Bind
+--           (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+--            Script => "{" & Dialog_Close_Button & " invoke;break}");
+--         Bind
+--           (Widgt => Last_Button, Sequence => "<Tab>",
+--            Script => "{focus " & Dialog_Close_Button & ";break}");
+--         Set_Shortcuts_Loop :
+--         for Shortcut of Shortcuts loop
+--            Bind
+--              (Widgt => Dialog_Close_Button,
+--               Sequence => "<Alt-" & Shortcut.Shortcut & ">",
+--               Script =>
+--                 "{" & To_String(Source => Shortcut.Button_Name) &
+--                 " invoke;break}");
+--         end loop Set_Shortcuts_Loop;
+--         Add_Shortcuts_To_Buttons_Block :
+--         declare
+--            --## rule off IMPROPER_INITIALIZATION
+--            Menu_Button: Ttk_Button;
+--            --## rule on IMPROPER_INITIALIZATION
+--         begin
+--            Set_Buttons_Loop :
+--            for Button of Shortcuts loop
+--               Menu_Button :=
+--                 Get_Widget
+--                   (pathName => To_String(Source => Button.Button_Name),
+--                    Interp => Interp);
+--               Set_Button_Shortcuts_Loop :
+--               for Shortcut of Shortcuts loop
+--                  Bind
+--                    (Widgt => Menu_Button,
+--                     Sequence => "<Alt-" & Shortcut.Shortcut & ">",
+--                     Script =>
+--                       "{" & To_String(Source => Shortcut.Button_Name) &
+--                       " invoke;break}");
+--               end loop Set_Button_Shortcuts_Loop;
+--            end loop Set_Buttons_Loop;
+--         end Add_Shortcuts_To_Buttons_Block;
+--         Show_Dialog
+--           (Dialog => Orders_Menu, Parent_Frame => ".gameframe",
+--            Relative_X => 0.4,
+--            Relative_Y => (if Player_Ship.Speed = DOCKED then 0.1 else 0.3));
+--         Focus(Widgt => Dialog_Close_Button);
+--      end if;
+--      return TCL_OK;
+--   end Show_Orders_Command;
 
    -- ****o* OrdersMenu/OrdersMenu.Docking_Command
    -- FUNCTION
@@ -738,61 +738,61 @@ package body OrdersMenu is
    -- If argument escape is present, escape from the base without paying,
    -- otherwise normal docking or undocking operation
    -- SOURCE
-   function Docking_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Docking_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use WaitMenu;
-
-      Message: Unbounded_String;
-   begin
-      if Player_Ship.Speed = DOCKED then
-         Message :=
-           (if Argc = 1 then
-              To_Unbounded_String(Source => Dock_Ship(Docking => False))
-            else To_Unbounded_String
-                (Source => Dock_Ship(Docking => False, Escape => True)));
-         if Length(Source => Message) > 0 then
-            Show_Message
-              (Text => To_String(Source => Message),
-               Title => "Can't undock from base");
-            return TCL_OK;
-         end if;
-      else
-         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
-            if Get_Event
-                (Index =>
-                   Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-                .E_Type =
-              FULLDOCKS then
-               return
-                 Show_Wait_Command
-                   (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-                    Argv => Argv);
-            end if;
-         end if;
-         Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
-         if Length(Source => Message) > 0 then
-            Show_Message
-              (Text => To_String(Source => Message),
-               Title => "Can't dock to base");
-            return TCL_OK;
-         end if;
-      end if;
-      Show_Sky_Map;
-      if Player_Ship.Speed = DOCKED then
-         return
-           Show_Orders_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-              Argv => Argv);
-      end if;
-      return TCL_OK;
-   end Docking_Command;
+--   function Docking_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Docking_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use WaitMenu;
+--
+--      Message: Unbounded_String;
+--   begin
+--      if Player_Ship.Speed = DOCKED then
+--         Message :=
+--           (if Argc = 1 then
+--              To_Unbounded_String(Source => Dock_Ship(Docking => False))
+--            else To_Unbounded_String
+--                (Source => Dock_Ship(Docking => False, Escape => True)));
+--         if Length(Source => Message) > 0 then
+--            Show_Message
+--              (Text => To_String(Source => Message),
+--               Title => "Can't undock from base");
+--            return TCL_OK;
+--         end if;
+--      else
+--         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
+--            if Get_Event
+--                (Index =>
+--                   Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+--                .E_Type =
+--              FULLDOCKS then
+--               return
+--                 Show_Wait_Command
+--                   (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--                    Argv => Argv);
+--            end if;
+--         end if;
+--         Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
+--         if Length(Source => Message) > 0 then
+--            Show_Message
+--              (Text => To_String(Source => Message),
+--               Title => "Can't dock to base");
+--            return TCL_OK;
+--         end if;
+--      end if;
+--      Show_Sky_Map;
+--      if Player_Ship.Speed = DOCKED then
+--         return
+--           Show_Orders_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--              Argv => Argv);
+--      end if;
+--      return TCL_OK;
+--   end Docking_Command;
 
    -- ****o* OrdersMenu/OrdersMenu.Ask_For_Bases_Command
    -- FUNCTION
@@ -1324,7 +1324,7 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command(Name => "Docking", Ada_Command => Docking_Command'Access);
+--      Add_Command(Name => "Docking", Ada_Command => Docking_Command'Access);
       Add_Command
         (Name => "AskForBases", Ada_Command => Ask_For_Bases_Command'Access);
       Add_Command
