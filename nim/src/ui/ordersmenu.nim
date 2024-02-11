@@ -18,7 +18,7 @@
 import std/[tables, strutils]
 import ../[basestypes, crewinventory, game, maps, missions, shipscrew,
     shipsmovement, stories, tk, types, utils]
-import coreui, dialogs, dialogs2
+import coreui, dialogs, dialogs2, waitmenu
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -395,6 +395,15 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
+proc addCommands*() =
+  addCommand("ShowOrders", showOrdersCommand)
+  addCommand("Docking", dockingCommand)
+
+import mapsui
+
+proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   var message = ""
   if playerShip.speed == docked:
@@ -403,10 +412,21 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     if message.len > 0:
       showMessage(text = message, title = "Can't undock from base")
       return tclOk
+  else:
+    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
+      if eventsList[skyMap[playerShip.skyX][
+          playerShip.skyY].eventIndex].eType == fullDocks:
+        return showWaitCommand(clientData = clientData, interp = interp,
+            argc = argc, argv = argv)
+    message = dockShip(docking = true)
+    if message.len > 0:
+      showMessage(text = message, title = "Can't dock to base")
+      return tclOk
+  showSkyMap()
+  if playerShip.speed == docked:
+    return showOrdersCommand(clientData = clientData, interp = interp,
+        argc = argc, argv = argv)
   return tclOk
-
-proc addCommands*() =
-  addCommand("ShowOrders", showOrdersCommand)
 
 # Temporary code for interfacing with Ada
 
