@@ -19,7 +19,7 @@ import ../[game, tk, types]
 import dialogs
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   var waitDialog = ".gameframe.wait"
   if tclEval2(script = "winfo exists " & waitDialog) == "1":
     let button = waitDialog & ".close"
