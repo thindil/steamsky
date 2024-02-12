@@ -1,5 +1,5 @@
-import ../src/game
 import unittest2
+include ../src/game
 
 suite "Unit tests for game module":
 
