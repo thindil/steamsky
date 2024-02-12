@@ -15,7 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Ada.Strings.Unbounded;
+with Interfaces.C.Strings;
 with Bases;
 with Maps;
 
@@ -23,8 +24,11 @@ package body Ships.Movement is
 
    function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String is
+      use Ada.Strings.Unbounded;
+      use Interfaces.C.Strings;
       use Bases;
       use Maps;
+
       function Dock_Ada_Ship(D, E: Integer) return chars_ptr with
          Import => True,
          Convention => C,
