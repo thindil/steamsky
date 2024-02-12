@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 - Updated look of the dialog with information about the player's ship's crew
   members
 - Updated look of the dialog with information about the player's ship's modules
+- Updated look of the dialog with information about a known base
+- Updated look of the dialog with information about a known event
+- Updated look of the dialog with information about an accepted mission
 - Color of image for target action
 - Updated modding guide
 
