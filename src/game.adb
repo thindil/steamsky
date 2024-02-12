@@ -283,8 +283,6 @@ package body Game is
            To_Unbounded_String(Source => Value(Item => Nim_Strings(3)));
          Fuel_Type :=
            To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
-         Traders_Name :=
-           To_Unbounded_String(Source => Value(Item => Nim_Strings(5)));
          Head_Armor :=
            To_Bounded_String(Source => Value(Item => Nim_Strings(6)));
          Chest_Armor :=

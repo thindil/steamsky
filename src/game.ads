@@ -407,13 +407,6 @@ package Game is
      To_Unbounded_String(Source => "data" & Dir_Separator);
    -- ****
 
-   -- ****v* Game/Game.Traders_Name
-   -- FUNCTION
-   -- Word used in ships names for traders ships (for events)
-   -- SOURCE
-   Traders_Name: Unbounded_String;
-   -- ****
-
    -- ****v* Game/Game.Attributes_List
    -- FUNCTION
    -- Contains data for all characters attributes
