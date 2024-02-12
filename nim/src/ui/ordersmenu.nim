@@ -132,6 +132,8 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
       if haveTrader and skyBases[baseIndex].population > 0:
         addButton(name = ".trade", label = "Trade", command = "ShowTrade",
             shortcut = "t", underline = 0)
+        addButton(name = ".school", label = "School", command = "ShowSchool",
+            shortcut = "s", underline = 0)
         if skyBases[baseIndex].recruits.len > 0:
           addButton(name = ".recruits", label = "Recruit",
               command = "ShowRecruit", shortcut = "r", underline = 0)
@@ -395,7 +397,8 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -407,8 +410,13 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   var message = ""
   if playerShip.speed == docked:
-    message = (if argc == 1: dockShip(docking = false) else: dockShip(
-        docking = false, escape = true))
+    try:
+      message = (if argc == 1: dockShip(docking = false) else: dockShip(
+          docking = false, escape = true))
+    except:
+      tclEval(script = "bgerror {Can't undock from the base. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
     if message.len > 0:
       showMessage(text = message, title = "Can't undock from base")
       return tclOk
@@ -418,7 +426,12 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
           playerShip.skyY].eventIndex].eType == fullDocks:
         return showWaitCommand(clientData = clientData, interp = interp,
             argc = argc, argv = argv)
-    message = dockShip(docking = true)
+    try:
+      message = dockShip(docking = true)
+    except:
+      tclEval(script = "bgerror {Can't dock to the base. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
     if message.len > 0:
       showMessage(text = message, title = "Can't dock to base")
       return tclOk
