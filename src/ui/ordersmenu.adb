@@ -57,21 +57,21 @@ package body OrdersMenu is
    -- COMMANDS
    -- AskForBases
    -- SOURCE
-   function Ask_For_Bases_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Ask_For_Bases_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-   begin
-      Ask_For_Bases;
-      Show_Sky_Map;
-      return TCL_OK;
-   end Ask_For_Bases_Command;
+--   function Ask_For_Bases_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Ask_For_Bases_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--   begin
+--      Ask_For_Bases;
+--      Show_Sky_Map;
+--      return TCL_OK;
+--   end Ask_For_Bases_Command;
 
    -- ****o* OrdersMenu/OrdersMenu.Ask_For_Events_Command
    -- FUNCTION
@@ -586,8 +586,8 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "AskForBases", Ada_Command => Ask_For_Bases_Command'Access);
+--      Add_Command
+--        (Name => "AskForBases", Ada_Command => Ask_For_Bases_Command'Access);
       Add_Command
         (Name => "AskForEvents", Ada_Command => Ask_For_Events_Command'Access);
       Add_Command(Name => "Attack", Ada_Command => Attack_Command'Access);

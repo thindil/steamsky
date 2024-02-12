@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[basestypes, crewinventory, game, maps, missions, shipscrew,
+import ../[bases2, basestypes, crewinventory, game, maps, missions, shipscrew,
     shipsmovement, stories, tk, types, utils]
 import coreui, dialogs, dialogs2, waitmenu
 
@@ -413,9 +413,13 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## If argument escape is present, escape from the base without paying,
   ## otherwise normal docking or undocking operation
 
+proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
+  addCommand("AskForBases", askForBasesCommand)
 
 import mapsui
 
@@ -452,6 +456,12 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
   if playerShip.speed == docked:
     return showOrdersCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
+  return tclOk
+
+proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  askForBases()
+  showSkyMap()
   return tclOk
 
 # Temporary code for interfacing with Ada
