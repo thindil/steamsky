@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -13,35 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C;
-with CArgv;
-with Tcl; use Tcl;
-
 -- ****h* WaitMenu/WaitMenu
 -- FUNCTION
 -- Provide code for wait orders
 -- SOURCE
 package WaitMenu is
 -- ****
-
-   -- ****o* WaitMenu/WaitMenu.Show_Wait_Command
-   -- FUNCTION
-   -- Show available wait orders to the player
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowWait
-   -- SOURCE
-   function Show_Wait_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
 
    -- ****f* WaitMenu/WaitMenu.Add_Commands
    -- FUNCTION

@@ -13,12 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1;
-with Ada.Strings;
-with Ada.Strings.Fixed;
+with Interfaces.C;
+with CArgv;
+with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -27,10 +26,8 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip;
 with CoreUI;
 with Crew; use Crew;
-with Dialogs;
 with Game;
 with Maps.UI;
 with Ships; use Ships;
@@ -38,188 +35,6 @@ with Ships.Movement;
 with Utils.UI; use Utils.UI;
 
 package body WaitMenu is
-
-   function Show_Wait_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Characters.Latin_1;
-      use Tcl.Tk.Ada;
-      use Tcl.Tklib.Ada.Tooltip;
-      use Dialogs;
-
-      Wait_Dialog: Ttk_Frame :=
-        Get_Widget(pathName => ".gameframe.wait", Interp => Interp);
-      Button: Ttk_Button;
-      Amount_Box: Ttk_SpinBox;
-      Amount_Combo: Ttk_ComboBox;
-      Need_Healing, Need_Rest: Boolean := False;
-      procedure Add_Button(Time: Positive) is
-         use Ada.Strings;
-         use Ada.Strings.Fixed;
-      begin
-         Button :=
-           Create
-             (pathName =>
-                Wait_Dialog & ".wait" &
-                Trim(Source => Positive'Image(Time), Side => Left),
-              options =>
-                "-text {Wait" & Positive'Image(Time) & " minute" &
-                (if Time > 1 then "s" else "") & "} -command {Wait" &
-                Positive'Image(Time) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -columnspan 3 -padx 5" &
-              (if Time = 1 then " -pady {5 0}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Wait_Dialog & ";break}");
-         Add
-           (Widget => Button,
-            Message =>
-              "Wait in place for" & Positive'Image(Time) & " minute" &
-              (if Time > 1 then "s" else ""));
-      end Add_Button;
-   begin
-      if Winfo_Get(Widgt => Wait_Dialog, Info => "exists") = "1" then
-         Button := Get_Widget(pathName => Wait_Dialog & ".frame.close");
-         if Invoke(Buttn => Button) /= "" then
-            return TCL_ERROR;
-         end if;
-         return TCL_OK;
-      end if;
-      Wait_Dialog :=
-        Create_Dialog
-          (Name => ".gameframe.wait", Title => "Wait in place", Columns => 3);
-      Add_Button(Time => 1);
-      Add_Button(Time => 5);
-      Add_Button(Time => 10);
-      Add_Button(Time => 15);
-      Add_Button(Time => 30);
-      Button :=
-        Create
-          (pathName => Wait_Dialog & ".wait1h",
-           options => "-text {Wait 1 hour} -command {Wait 60}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
-      Add(Widget => Button, Message => "Wait in place for 1 hour");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{CloseDialog " & Wait_Dialog & ";break}");
-      Button :=
-        Create
-          (pathName => Wait_Dialog & ".wait",
-           options => "-text Wait -command {Wait amount}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 0}");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{CloseDialog " & Wait_Dialog & ";break}");
-      Add
-        (Widget => Button,
-         Message =>
-           "Wait in place for the selected amount of minutes:" & LF &
-           "from 1 to 1440 (the whole day)");
-      Amount_Box :=
-        Create
-          (pathName => Wait_Dialog & ".amount",
-           options =>
-             "-from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
-             Button & "} -textvariable customwaittime");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-row 7 -column 1");
-      Bind
-        (Widgt => Amount_Box, Sequence => "<Escape>",
-         Script => "{CloseDialog " & Wait_Dialog & ";break}");
-      if Tcl_GetVar(interp => Interp, varName => "customwaittime")'Length =
-        0 then
-         Set(SpinBox => Amount_Box, Value => "1");
-      end if;
-      Add
-        (Widget => Amount_Box,
-         Message =>
-           "Wait in place for the selected amount of time:" & LF &
-           "from 1 to 1440");
-      Amount_Combo :=
-        Create
-          (pathName => Wait_Dialog & ".mins",
-           options =>
-             "-state readonly -values [list minutes hours days] -width 8");
-      Current(ComboBox => Amount_Combo, NewIndex => "0");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Amount_Combo, Options => "-row 7 -column 2 -padx {0 5}");
-      Check_Crew_Rest_Loop :
-      for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-         if Player_Ship.Crew(I).Tired > 0 and
-           Player_Ship.Crew(I).Order = REST then
-            Need_Rest := True;
-         end if;
-         if Player_Ship.Crew(I).Health in 1 .. 99 and
-           Player_Ship.Crew(I).Order = REST then
-            Modules_Loop :
-            for Module of Player_Ship.Modules loop
-               if Module.M_Type = CABIN then
-                  Owners_Loop :
-                  for Owner of Module.Owner loop
-                     if Owner = I then
-                        Need_Healing := True;
-                        exit Modules_Loop;
-                     end if;
-                  end loop Owners_Loop;
-               end if;
-            end loop Modules_Loop;
-         end if;
-      end loop Check_Crew_Rest_Loop;
-      if Need_Rest then
-         Button :=
-           Create
-             (pathName => Wait_Dialog & ".rest",
-              options =>
-                "-text {Wait until crew is rested} -command {Wait rest}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Wait_Dialog & ";break}");
-         Add
-           (Widget => Button,
-            Message => "Wait in place until the whole ship's crew is rested.");
-      end if;
-      if Need_Healing then
-         Button :=
-           Create
-             (pathName => Wait_Dialog & ".heal",
-              options =>
-                "-text {Wait until crew is healed} -command {Wait heal}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-sticky we -columnspan 3 -padx 5");
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Wait_Dialog & ";break}");
-         Add
-           (Widget => Button,
-            Message =>
-              "Wait in place until the whole ship's crew is healed." & LF &
-              "Can take a large amount of time.");
-      end if;
-      Button :=
-        Create
-          (pathName => Wait_Dialog & ".close",
-           options =>
-             "-text {Close} -command {CloseDialog " & Wait_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button,
-         Options => "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{CloseDialog " & Wait_Dialog & ";break}");
-      Add(Widget => Button, Message => "Close dialog \[Escape\]");
-      Focus(Widgt => Button);
-      Bind
-        (Widgt => Button, Sequence => "<Tab>",
-         Script => "{focus " & Wait_Dialog & ".wait1;break}");
-      Show_Dialog(Dialog => Wait_Dialog, Relative_Y => 0.15);
-      return TCL_OK;
-   end Show_Wait_Command;
 
    -- ****o* WaitMenu/WaitMenu.Wait_Command
    -- FUNCTION
