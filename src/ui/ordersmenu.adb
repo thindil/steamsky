@@ -17,8 +17,8 @@
 with Ada.Strings;
 -- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.String_Split; use GNAT.String_Split;
-with Tcl.Ada; use Tcl.Ada;
+with GNAT.String_Split;
+with Tcl.Ada;
 -- with Tcl.Tk.Ada.Busy;
 -- with Tcl.Tk.Ada.Grid;
 -- with Tcl.Tk.Ada.Widgets;
@@ -30,13 +30,13 @@ with Bases; use Bases;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
 -- with Crafts;
-with Crew; use Crew;
+with Crew;
 -- with CoreUI;
 with Dialogs; use Dialogs;
 with Events; use Events;
-with Factions; use Factions;
+with Factions;
 with Game; use Game;
-with Items; use Items;
+with Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
@@ -44,10 +44,10 @@ with Missions; use Missions;
 with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
-with Ships.Movement; use Ships.Movement;
-with Stories; use Stories;
+with Ships.Movement;
+with Stories;
 with Trades; use Trades;
-with Utils; use Utils;
+with Utils;
 with Utils.UI; use Utils.UI;
 -- with WaitMenu;
 with Interfaces.C;
@@ -943,6 +943,8 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use Crew;
+
       Trader_Index: constant Natural := Find_Member(Order => TALK);
       Price: Positive := 1_000;
    begin
@@ -981,6 +983,8 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Ada;
+
    begin
       Generate_Trader_Cargo
         (Proto_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
@@ -1011,6 +1015,8 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use Utils;
+
       Starts_Combat, U_Mission: Boolean := False;
       Mission: Mission_Data := Empty_Mission;
    begin
@@ -1123,6 +1129,10 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use GNAT.String_Split;
+      use Ships.Movement;
+      use Stories;
+
       Step: Step_Data :=
         (if Get_Current_Story.Current_Step = 0 then
            Get_Story(Index => Get_Current_Story.Index).Starting_Step
@@ -1218,6 +1228,8 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Factions;
+      use Items;
       use Ships.Cargo;
       use Tiny_String;
 
