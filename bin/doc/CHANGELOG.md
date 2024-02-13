@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ## Fixed
 - Showing assigned ammunition to a gun on the player's ship's module's list
+- Loading recruits in bases from saved games
 
 ## [9.6] - 2024-01-21
 
