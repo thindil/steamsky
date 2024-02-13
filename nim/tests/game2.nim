@@ -1,5 +1,5 @@
-import ../src/[basestypes, careers, factions, game, game2, items, messages, types]
 import unittest2
+include ../src/game2
 
 suite "Unit tests for game2 module":
 
@@ -7,8 +7,13 @@ suite "Unit tests for game2 module":
   loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
   loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
   loadBasesTypes("../bin/data/bases.dat")
+  loadFactions("../bin/data/factions.dat")
+  loadModules("../bin/data/shipmodules.dat")
+  loadRecipes("../bin/data/recipes.dat")
+  loadMobs("../bin/data/mobs.dat")
+  loadShips("../bin/data/ships.dat")
+  loadGoals("../bin/data/goals.dat")
 
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   playerShip.modules = @[]
@@ -33,3 +38,11 @@ suite "Unit tests for game2 module":
     saveDirectory = oldSaveDir
     check:
       messagesAmount() == 0
+
+  test "Testing newGame.":
+    let oldSaveDir = saveDirectory
+    saveDirectory = "."
+    newGame()
+    saveDirectory = oldSaveDir
+    check:
+      playerShip.crew.len > 1
