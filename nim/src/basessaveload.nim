@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -180,16 +180,16 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [].
       for equipment in baseRecruit.findAll("equipment"):
         var eqIndex = (equipment.attr("slot").parseInt - 1)
         recruit.equipment[eqIndex.EquipmentLocations] = equipment.attr(
-            "index").parseInt
-      let payment = baseRecruit.child("payment")
-      if payment != nil:
-        recruit.payment = payment.attr("payment").parseInt
-      let homeBase = baseRecruit.child("homebase")
-      if homeBase != nil:
-        recruit.homeBase = homeBase.attr("homebase").parseInt
-      let faction = baseRecruit.child("faction")
-      if faction != nil:
-        recruit.faction = faction.attr("faction")
+            "index").parseInt - 1
+      let payment = baseRecruit.attr("payment")
+      if payment.len > 0:
+        recruit.payment = payment.parseInt
+      let homeBase = baseRecruit.attr("homebase")
+      if homeBase.len > 0:
+        recruit.homeBase = homeBase.parseInt
+      let faction = baseRecruit.attr("faction")
+      if faction.len > 0:
+        recruit.faction = faction
       skyBases[baseIndex].recruits.add(recruit)
     let reputation = base.child("reputation")
     if reputation != nil:
