@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -242,13 +242,6 @@ package Bases is
       return Tiny_String.Bounded_String with
       Post => Tiny_String.Length(Source => Generate_Base_Name'Result) > 0;
       -- ****
-
-   -- ****f* Bases/Bases.Ask_For_Bases
-   -- FUNCTION
-   -- Ask in base for direction for other bases
-   -- SOURCE
-   procedure Ask_For_Bases;
-   -- ****
 
    -- ****f* Bases/Bases.Ask_For_Events
    -- FUNCTION

@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -101,50 +101,6 @@ package body Bases is
       Import => True,
       Convention => C,
       External_Name => "setAdaBaseKnown";
-
-   procedure Ask_For_Bases is
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Trader_Index: constant Natural := Find_Member(Order => TALK);
-      Known: Natural := 0;
-      procedure Ask_Ada_For_Bases with
-         Import => True,
-         Convention => C,
-         External_Name => "askAdaForBases";
-   begin
-      if Trader_Index = 0 then
-         return;
-      end if;
-      Get_Map_Y_Loop :
-      for Y in 1 .. 1_024 loop
-         Get_Map_X_Loop :
-         for X in 1 .. 1_024 loop
-            Get_Ada_Map_Cell
-              (X => X, Y => Y, Base_Index => Sky_Map(X, Y).Base_Index,
-               Visited => (if Sky_Map(X, Y).Visited then 1 else 0),
-               Event_Index => Sky_Map(X, Y).Event_Index,
-               Mission_Index => Sky_Map(X, Y).Mission_Index);
-         end loop Get_Map_X_Loop;
-      end loop Get_Map_Y_Loop;
-      Get_Game_Date;
-      Set_Base_In_Nim(Base_Index => Base_Index);
-      Set_Ship_In_Nim;
-      Ask_Ada_For_Bases;
-      Update_Known_Bases_Loop :
-      for I in Sky_Bases'Range loop
-         Set_Ada_Base_Known(B_Index => I, B_Known => Known);
-         if Known = 1 then
-            Sky_Bases(I).Known := True;
-         end if;
-      end loop Update_Known_Bases_Loop;
-      Set_Events_In_Ada_Loop :
-      for I in 1 .. Get_Events_Amount loop
-         Set_Event(Index => I);
-      end loop Set_Events_In_Ada_Loop;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Get_Base_From_Nim(Base_Index => Base_Index);
-      Set_Game_Date;
-   end Ask_For_Bases;
 
    procedure Ask_For_Events is
       Base_Index: constant Extended_Base_Range :=
