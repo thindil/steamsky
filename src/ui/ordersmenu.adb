@@ -379,7 +379,6 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      use GNAT.String_Split;
       use Ships.Movement;
       use Stories;
 
@@ -404,6 +403,8 @@ package body OrdersMenu is
       if Progress_Story then
          Progress_Story_Block :
          declare
+            use GNAT.String_Split;
+
             Tokens: Slice_Set;
          begin
             Create
