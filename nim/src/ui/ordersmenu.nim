@@ -414,7 +414,8 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## otherwise normal docking or undocking operation
 
 proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -460,7 +461,12 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  askForBases()
+  try:
+    askForBases()
+  except:
+    tclEval(script = "bgerror {Can't ask for bases. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   showSkyMap()
   return tclOk
 
