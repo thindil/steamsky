@@ -18,7 +18,7 @@
 import std/[tables, strutils]
 import ../[bases2, basestypes, crewinventory, game, maps, missions, shipscrew,
     shipsmovement, stories, tk, types, utils]
-import coreui, dialogs, dialogs2, waitmenu
+import combatui, coreui, dialogs, dialogs2, waitmenu
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -443,11 +443,17 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## AskForEvents
 
+proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+    showCombatUi()
+    return tclOk
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
   addCommand("AskForBases", askForBasesCommand)
   addCommand("AskForEvents", askForEventsCommand)
+  addCommand("Attack", attackCommand)
 
 import mapsui
 
