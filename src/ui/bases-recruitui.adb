@@ -27,6 +27,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -38,7 +39,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade;
@@ -183,6 +184,7 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Tcl.Tk.Ada.Winfo;
       use Config;
       use CoreUI;
       use Maps.UI;
@@ -394,6 +396,7 @@ package body Bases.RecruitUI is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Characters.Handling;
       use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -423,6 +426,7 @@ package body Bases.RecruitUI is
       Progress_Bar: Ttk_ProgressBar;
       Progress_Frame: Ttk_Frame;
       Recruit_Label: Ttk_Label;
+      Recruit_Text: Tk_Text;
       Tab_Button: Ttk_RadioButton;
       --## rule on IMPROPER_INITIALIZATION
       Frame: Ttk_Frame := Create(pathName => Recruit_Dialog & ".buttonbox");
@@ -502,7 +506,7 @@ package body Bases.RecruitUI is
       -- General info about the selected recruit
       Frame :=
         Create
-          (pathName => Recruit_Canvas & ".general", options => "-width 360");
+          (pathName => Recruit_Canvas & ".general");
       if not Faction.Flags.Contains
           (Item => To_Unbounded_String(Source => "nogender")) then
          Recruit_Info :=
@@ -516,13 +520,13 @@ package body Bases.RecruitUI is
            LF & "Faction: " & To_String(Source => Faction.Name) & LF &
            "Home base: " &
            To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
-      Recruit_Label :=
-        Create
-          (pathName => Frame & ".label",
-           options =>
-             "-text {" & To_String(Source => Recruit_Info) &
-             "} -wraplength 360");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky we");
+      Recruit_Text :=
+        Create(pathName => Frame & ".label", options => "-height 3 -width 30");
+      Insert
+        (TextWidget => Recruit_Text, Index => "end",
+         Text => "{" & To_String(Source => Recruit_Info) & "}");
+      configure(Widgt => Recruit_Text, options => "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       -- Statistics of the selected recruit
       Frame :=
@@ -667,7 +671,7 @@ package body Bases.RecruitUI is
       -- Equipment of the selected recruit
       Frame :=
         Create
-          (pathName => Recruit_Canvas & ".inventory", options => "-width 360");
+          (pathName => Recruit_Canvas & ".inventory");
       Recruit_Info := Null_Unbounded_String;
       Show_Recruit_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
@@ -693,13 +697,17 @@ package body Bases.RecruitUI is
                  LF);
          end if;
       end loop Show_Recruit_Equipment_Loop;
-      Recruit_Label :=
+      Recruit_Text :=
         Create
           (pathName => Frame & ".label",
            options =>
-             "-text {" & To_String(Source => Recruit_Info) &
-             "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
+             "-height" & Natural'Image(Recruit.Equipment'Length) &
+             " -width 30");
+      Insert
+        (TextWidget => Recruit_Text, Index => "end",
+         Text => "{" & To_String(Source => Recruit_Info) & "}");
+      configure(Widgt => Recruit_Text, options => "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
       Frame := Get_Widget(pathName => Recruit_Canvas & ".general");
       Canvas_Create
         (Parent => Recruit_Canvas, Child_Type => "window",
@@ -932,8 +940,7 @@ package body Bases.RecruitUI is
       Delete(CanvasWidget => Recruit_Canvas, TagOrId => "info");
       Canvas_Create
         (Parent => Recruit_Canvas, Child_Type => "window",
-         Options =>
-           "32 0 -anchor nw -window " & Frame & " -tag info");
+         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
       Tcl_Eval(interp => Interp, strng => "update");
       configure
         (Widgt => Recruit_Canvas,
