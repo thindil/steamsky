@@ -1,5 +1,5 @@
-import ../src/[game, gamesaveload, types]
 import unittest2
+include ../src/gamesaveload
 
 suite "Unit tests for gamesaveload module":
 
