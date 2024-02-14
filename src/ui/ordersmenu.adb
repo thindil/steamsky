@@ -44,35 +44,6 @@ with Tcl; use Tcl;
 
 package body OrdersMenu is
 
-   -- ****o* OrdersMenu/OrdersMenu.Ask_For_Bases_Command
-   -- FUNCTION
-   -- Ask for bases in the currently visited base
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- AskForBases
-   -- SOURCE
---   function Ask_For_Bases_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Ask_For_Bases_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
---   begin
---      Ask_For_Bases;
---      Show_Sky_Map;
---      return TCL_OK;
---   end Ask_For_Bases_Command;
-
    -- ****o* OrdersMenu/OrdersMenu.Ask_For_Events_Command
    -- FUNCTION
    -- Ask for events in the currently visited base
