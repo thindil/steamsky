@@ -444,9 +444,9 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## AskForEvents
 
 proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-    showCombatUi()
-    return tclOk
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  showCombatUi()
+  return tclOk
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
