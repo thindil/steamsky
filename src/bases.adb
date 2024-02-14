@@ -15,8 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ships.Crew; use Ships.Crew;
-with Events; use Events;
+with Ships.Crew;
+with Events;
 with Maps; use Maps;
 with Trades; use Trades;
 
@@ -97,12 +97,10 @@ package body Bases is
                          (Str => To_String(Source => Faction_Index)))));
    end Generate_Base_Name;
 
-   procedure Set_Ada_Base_Known(B_Index: Integer; B_Known: out Integer) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaBaseKnown";
-
    procedure Ask_For_Events is
+      use Events;
+      use Ships.Crew;
+
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
@@ -549,6 +547,10 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseDate";
+      procedure Set_Ada_Base_Known(B_Index: Integer; B_Known: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaBaseKnown";
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
