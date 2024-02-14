@@ -429,7 +429,8 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## AskForBases
 
 proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -487,7 +488,12 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  askForEvents()
+  try:
+    askForEvents()
+  except:
+    tclEval(script = "bgerror {Can't ask for events. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   showSkyMap()
   return tclOk
 
