@@ -428,10 +428,14 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## AskForBases
 
+proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
   addCommand("AskForBases", askForBasesCommand)
+  addCommand("AskForEvents", askForEventsCommand)
 
 import mapsui
 
@@ -478,6 +482,12 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bgerror {Can't ask for bases. Reason: " &
         getCurrentExceptionMsg() & "}")
     return tclOk
+  showSkyMap()
+  return tclOk
+
+proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  askForEvents()
   showSkyMap()
   return tclOk
 
