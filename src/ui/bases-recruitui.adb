@@ -43,7 +43,7 @@ with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade;
-with Config;
+with Config; use Config;
 with CoreUI;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
@@ -185,7 +185,6 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
       use Tcl.Tk.Ada.Winfo;
-      use Config;
       use CoreUI;
       use Maps.UI;
       use Tiny_String;
@@ -504,27 +503,42 @@ package body Bases.RecruitUI is
       Focus(Widgt => Dialog_Close_Button);
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected recruit
-      Frame :=
-        Create
-          (pathName => Recruit_Canvas & ".general");
-      if not Faction.Flags.Contains
-          (Item => To_Unbounded_String(Source => "nogender")) then
-         Recruit_Info :=
-           (if Recruit.Gender = 'M' then
-              To_Unbounded_String(Source => "Gender: Male")
-            else To_Unbounded_String(Source => "Gender: Female"));
-      end if;
-      Append
-        (Source => Recruit_Info,
-         New_Item =>
-           LF & "Faction: " & To_String(Source => Faction.Name) & LF &
-           "Home base: " &
-           To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
+      Frame := Create(pathName => Recruit_Canvas & ".general");
       Recruit_Text :=
         Create(pathName => Frame & ".label", options => "-height 3 -width 30");
+      Tag_Configure
+        (TextWidget => Recruit_Text, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
+      if not Faction.Flags.Contains
+          (Item => To_Unbounded_String(Source => "nogender")) then
+         Insert
+           (TextWidget => Recruit_Text, Index => "end", Text => "{Gender: }");
+         Insert
+           (TextWidget => Recruit_Text, Index => "end",
+            Text =>
+              "{" & (if Recruit.Gender = 'M' then "Male" else "Female") &
+              "} [list gold]");
+      end if;
       Insert
         (TextWidget => Recruit_Text, Index => "end",
-         Text => "{" & To_String(Source => Recruit_Info) & "}");
+         Text => "{" & LF & "Faction: }");
+      Insert
+        (TextWidget => Recruit_Text, Index => "end",
+         Text => "{" & To_String(Source => Faction.Name) & "} [list gold]");
+      Insert
+        (TextWidget => Recruit_Text, Index => "end",
+         Text => "{" & LF & "Home base: }");
+      Insert
+        (TextWidget => Recruit_Text, Index => "end",
+         Text =>
+           "{" & To_String(Source => Sky_Bases(Recruit.Home_Base).Name) &
+           "} [list gold]");
       configure(Widgt => Recruit_Text, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
@@ -669,9 +683,7 @@ package body Bases.RecruitUI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
       end loop Show_Recruit_Skills_Loop;
       -- Equipment of the selected recruit
-      Frame :=
-        Create
-          (pathName => Recruit_Canvas & ".inventory");
+      Frame := Create(pathName => Recruit_Canvas & ".inventory");
       Recruit_Info := Null_Unbounded_String;
       Show_Recruit_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
