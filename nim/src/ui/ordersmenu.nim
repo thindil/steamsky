@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[bases2, basestypes, crewinventory, game, maps, missions, shipscrew,
-    shipsmovement, stories, tk, types, utils]
+import ../[bases2, basestypes, crewinventory, game, game2, maps, messages,
+    missions, shipscrew, shipsmovement, stories, tk, types, utils]
 import combatui, coreui, dialogs, dialogs2, waitmenu
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -459,12 +459,16 @@ proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
   showCombatUi()
   return tclOk
 
+proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
   addCommand("AskForBases", askForBasesCommand)
   addCommand("AskForEvents", askForEventsCommand)
   addCommand("Attack", attackCommand)
+  addCommand("Pray", prayCommand)
 
 import mapsui
 
@@ -522,6 +526,16 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bgerror {Can't ask for events. Reason: " &
         getCurrentExceptionMsg() & "}")
     return tclOk
+  showSkyMap()
+  return tclOk
+
+proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  for index, _ in playerShip.crew:
+    updateMorale(ship = playerShip, memberIndex = index, value = 10)
+  addMessage(message = "You and your crew were praying for some time. Now you all feel a bit better.",
+      mType = orderMessage)
+  updateGame(minutes = 30)
   showSkyMap()
   return tclOk
 

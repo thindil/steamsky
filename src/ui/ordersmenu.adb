@@ -57,32 +57,32 @@ package body OrdersMenu is
    -- COMMANDS
    -- Pray
    -- SOURCE
-   function Pray_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Pray_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-   begin
-      Update_Morale_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         Update_Morale
-           (Ship => Player_Ship,
-            Member_Index => Crew_Container.To_Index(Position => I),
-            Amount => 10);
-      end loop Update_Morale_Loop;
-      Add_Message
-        (Message =>
-           "You and your crew were praying for some time. Now you all feel a bit better.",
-         M_Type => ORDERMESSAGE);
-      Update_Game(Minutes => 30);
-      Show_Sky_Map;
-      return TCL_OK;
-   end Pray_Command;
+--   function Pray_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Pray_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--   begin
+--      Update_Morale_Loop :
+--      for I in Player_Ship.Crew.Iterate loop
+--         Update_Morale
+--           (Ship => Player_Ship,
+--            Member_Index => Crew_Container.To_Index(Position => I),
+--            Amount => 10);
+--      end loop Update_Morale_Loop;
+--      Add_Message
+--        (Message =>
+--           "You and your crew were praying for some time. Now you all feel a bit better.",
+--         M_Type => ORDERMESSAGE);
+--      Update_Game(Minutes => 30);
+--      Show_Sky_Map;
+--      return TCL_OK;
+--   end Pray_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Set_As_Home_Command
    -- FUNCTION
@@ -501,7 +501,7 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command(Name => "Pray", Ada_Command => Pray_Command'Access);
+--       Add_Command(Name => "Pray", Ada_Command => Pray_Command'Access);
       Add_Command
         (Name => "SetAsHome", Ada_Command => Set_As_Home_Command'Access);
       Add_Command
