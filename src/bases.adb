@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ships.Crew;
-with Events;
 with Maps; use Maps;
 with Trades; use Trades;
 
@@ -96,55 +94,6 @@ package body Bases is
                        New_String
                          (Str => To_String(Source => Faction_Index)))));
    end Generate_Base_Name;
-
-   procedure Ask_For_Events is
-      use Events;
-      use Ships.Crew;
-
-      Base_Index: constant Extended_Base_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
-      Trader_Index: constant Crew_Container.Extended_Index :=
-        Find_Member(Order => TALK);
-      procedure Ask_Ada_For_Events with
-         Import => True,
-         Convention => C,
-         External_Name => "askAdaForEvents";
-   begin
-      if Trader_Index = 0 then
-         return;
-      end if;
-      Min_X := Player_Ship.Sky_X - 100;
-      Normalize_Coord(Coord => Min_X);
-      Max_X := Player_Ship.Sky_X + 100;
-      Normalize_Coord(Coord => Max_X);
-      Min_Y := Player_Ship.Sky_Y - 100;
-      Normalize_Coord(Coord => Min_Y, Is_X_Axis => False);
-      Max_Y := Player_Ship.Sky_Y + 100;
-      Normalize_Coord(Coord => Max_Y, Is_X_Axis => False);
-      Get_Map_Y_Loop :
-      for Y in Min_Y .. Max_Y loop
-         Get_Map_X_Loop :
-         for X in Min_X .. Max_X loop
-            Get_Ada_Map_Cell
-              (X => X, Y => Y, Base_Index => Sky_Map(X, Y).Base_Index,
-               Visited => (if Sky_Map(X, Y).Visited then 1 else 0),
-               Event_Index => Sky_Map(X, Y).Event_Index,
-               Mission_Index => Sky_Map(X, Y).Mission_Index);
-         end loop Get_Map_X_Loop;
-      end loop Get_Map_Y_Loop;
-      Get_Game_Date;
-      Set_Base_In_Nim(Base_Index => Base_Index);
-      Set_Ship_In_Nim;
-      Ask_Ada_For_Events;
-      Set_Events_In_Ada_Loop :
-      for I in 1 .. Get_Events_Amount loop
-         Set_Event(Index => I);
-      end loop Set_Events_In_Ada_Loop;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Get_Base_From_Nim(Base_Index => Base_Index);
-      Set_Game_Date;
-   end Ask_For_Events;
 
    function Recruit_To_Nim(Recruit: Recruit_Data) return Nim_Recruit_Data is
       use Tiny_String;

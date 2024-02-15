@@ -243,13 +243,6 @@ package Bases is
       Post => Tiny_String.Length(Source => Generate_Base_Name'Result) > 0;
       -- ****
 
-   -- ****f* Bases/Bases.Ask_For_Events
-   -- FUNCTION
-   -- Ask in base for direction for random events
-   -- SOURCE
-   procedure Ask_For_Events;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    procedure Get_Ada_Base_Location
