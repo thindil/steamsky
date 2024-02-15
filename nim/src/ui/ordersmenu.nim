@@ -460,7 +460,8 @@ proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -532,10 +533,20 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   for index, _ in playerShip.crew:
-    updateMorale(ship = playerShip, memberIndex = index, value = 10)
+    try:
+      updateMorale(ship = playerShip, memberIndex = index, value = 10)
+    except:
+      tclEval(script = "bgerror {Can't update morale of crew member. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   addMessage(message = "You and your crew were praying for some time. Now you all feel a bit better.",
       mType = orderMessage)
-  updateGame(minutes = 30)
+  try:
+    updateGame(minutes = 30)
+  except:
+    tclEval(script = "bgerror {Can't update the game. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   showSkyMap()
   return tclOk
 
