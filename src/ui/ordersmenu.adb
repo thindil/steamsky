@@ -44,34 +44,6 @@ with Tcl; use Tcl;
 
 package body OrdersMenu is
 
-   -- ****o* OrdersMenu/OrdersMenu.Attack_Command
-   -- FUNCTION
-   -- Start the combat
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- Attack
-   -- SOURCE
---   function Attack_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Attack_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
---   begin
---      Show_Combat_Ui;
---      return TCL_OK;
---   end Attack_Command;
-
    -- ****f* OrdersMenu/OrdersMenu.Pray_Command
    -- FUNCTION
    -- Pray in the selected base
@@ -529,7 +501,6 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
---      Add_Command(Name => "Attack", Ada_Command => Attack_Command'Access);
       Add_Command(Name => "Pray", Ada_Command => Pray_Command'Access);
       Add_Command
         (Name => "SetAsHome", Ada_Command => Set_As_Home_Command'Access);
