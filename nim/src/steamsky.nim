@@ -18,10 +18,10 @@
 import std/[os, parseopt, strutils]
 import game, log, tk
 # Temporary imports
-import goals, help, mobs, shipmodules, ships, basescargo, crew, events,
-    missions, stories, bases, combat, crew2, events2, missions2, basestrade,
+import mobs, shipmodules, ships, basescargo, crew,
+    missions, bases, combat, crew2, events2, missions2, basestrade,
     basesship2
-import ui/[mainmenu, utilsui, utilsui2, waitmenu]
+import ui/[mainmenu, utilsui]
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
     OSError, ValueError], tags: [ReadIOEffect, RootEffect].} =
