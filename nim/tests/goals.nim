@@ -1,6 +1,5 @@
-import std/tables
-import ../src/[game, goals, types]
 import unittest2
+include ../src/goals
 
 suite "Unit tests for goals module":
 
