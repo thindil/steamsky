@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,21 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 package body Maps is
-
-   procedure Normalize_Coord
-     (Coord: in out Integer; Is_X_Axis: Boolean := True) is
-      procedure Normalize_Coord_Nim
-        (Coordinate: in out Integer; Xaxis: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "normalizeCoord";
-   begin
-      if Is_X_Axis then
-         Normalize_Coord_Nim(Coordinate => Coord, Xaxis => 1);
-      else
-         Normalize_Coord_Nim(Coordinate => Coord, Xaxis => 0);
-      end if;
-   end Normalize_Coord;
 
    procedure Set_Map_Cell(X, Y: Integer) is
       Base_Index, Visited, Event_Index, Mission_Index: Integer;

@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -74,21 +74,6 @@ package Maps is
       Import => True,
       Convention => C,
       External_Name => "countAdaDistance";
-      -- ****
-
-      -- ****f* Maps/Maps.Normalize_Coord
-      -- FUNCTION
-      -- Normalize map coordinates
-      -- PARAMETERS
-      -- Coord   - Coordinate to normalize
-      -- Is_X_Axis - If true, coordinate is in X axis
-      -- RESULT
-      -- Parameter Coord
-      -- SOURCE
-   procedure Normalize_Coord
-     (Coord: in out Integer; Is_X_Axis: Boolean := True) with
-      Post =>
-      (if Is_X_Axis then Coord in Map_X_Range else Coord in Map_Y_Range);
       -- ****
 
 -- Temporary code to interact with Nim
