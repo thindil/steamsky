@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Maps; use Maps;
+with Maps;
 with Trades; use Trades;
 
 package body Bases is
@@ -60,6 +60,8 @@ package body Bases is
    procedure Count_Price
      (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
+      use Maps;
+
       procedure Count_Ada_Price(P: in out Integer; T_Index, R: Integer) with
          Import => True,
          Convention => C,
