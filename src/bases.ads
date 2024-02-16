@@ -21,7 +21,9 @@ with Game; use Game;
 with Crew; use Crew;
 with Items; use Items;
 with Missions; use Missions;
+--## rule off REDUCEABLE_SCOPE
 with Ships; use Ships;
+--## rule on REDUCEABLE_SCOPE
 
 -- ****h* Bases/Bases
 -- FUNCTION
