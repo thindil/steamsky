@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[bases2, basestypes, crewinventory, game, game2, maps, messages,
-    missions, shipscrew, shipsmovement, stories, tk, types, utils]
+import ../[bases, bases2, basestypes, crewinventory, game, game2, maps,
+    messages, missions, shipscrew, shipsmovement, stories, tk, types, utils]
 import combatui, coreui, dialogs, dialogs2, waitmenu
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -474,6 +474,15 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Pray
 
+proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let traderIndex = findMember(order = talk)
+  var price: Natural = 1_000
+  countPrice(price = price, traderIndex = traderIndex)
+  showQuestion(question = "Are you sure want to change your home base (it cost " &
+      $price & " " & moneyName & ")?", res = "sethomebase")
+  return tclOk
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
@@ -481,6 +490,7 @@ proc addCommands*() =
   addCommand("AskForEvents", askForEventsCommand)
   addCommand("Attack", attackCommand)
   addCommand("Pray", prayCommand)
+  addCommand("SetAsHome", setAsHomeCommand)
 
 import mapsui
 
