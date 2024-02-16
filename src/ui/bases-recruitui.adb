@@ -402,7 +402,6 @@ package body Bases.RecruitUI is
       use Tcl.Tklib.Ada.Autoscroll;
       use Tiny_String;
 
-      Recruit_Info: Unbounded_String := Null_Unbounded_String;
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: Recruit_Data
@@ -684,20 +683,38 @@ package body Bases.RecruitUI is
       end loop Show_Recruit_Skills_Loop;
       -- Equipment of the selected recruit
       Frame := Create(pathName => Recruit_Canvas & ".inventory");
-      Recruit_Info := Null_Unbounded_String;
+      Recruit_Text :=
+        Create
+          (pathName => Frame & ".label",
+           options =>
+             "-height" & Natural'Image(Recruit.Equipment'Length) &
+             " -width 30");
+      Tag_Configure
+        (TextWidget => Recruit_Text, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
       Show_Recruit_Equipment_Loop :
       for I in Recruit.Equipment'Range loop
          if Recruit.Equipment(I) > 0 then
-            Append
-              (Source => Recruit_Info,
-               New_Item =>
-                 Equipment_Locations'Image(I)(1) &
+            Insert
+              (TextWidget => Recruit_Text, Index => "end",
+               Text =>
+                 "{" & Equipment_Locations'Image(I)(1) &
                  To_Lower
                    (Item =>
                       Equipment_Locations'Image(I)
                         (Equipment_Locations'Image(I)'First + 1 ..
                              Equipment_Locations'Image(I)'Last)) &
-                 ": " &
+                 ": }");
+            Insert
+              (TextWidget => Recruit_Text, Index => "end",
+               Text =>
+                 "{" &
                  To_String
                    (Source =>
                       Get_Proto_Item
@@ -706,18 +723,9 @@ package body Bases.RecruitUI is
                              (Container => Recruit.Inventory,
                               Index => Recruit.Equipment(I)))
                         .Name) &
-                 LF);
+                 LF & "} [list gold]");
          end if;
       end loop Show_Recruit_Equipment_Loop;
-      Recruit_Text :=
-        Create
-          (pathName => Frame & ".label",
-           options =>
-             "-height" & Natural'Image(Recruit.Equipment'Length) &
-             " -width 30");
-      Insert
-        (TextWidget => Recruit_Text, Index => "end",
-         Text => "{" & To_String(Source => Recruit_Info) & "}");
       configure(Widgt => Recruit_Text, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
       Frame := Get_Widget(pathName => Recruit_Canvas & ".general");
