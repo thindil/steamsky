@@ -475,10 +475,15 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Pray
 
 proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let traderIndex = findMember(order = talk)
   var price: Natural = 1_000
-  countPrice(price = price, traderIndex = traderIndex)
+  try:
+    countPrice(price = price, traderIndex = traderIndex)
+  except:
+    tclEval(script = "bgerror {Can't count the price for set as home. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   showQuestion(question = "Are you sure want to change your home base (it cost " &
       $price & " " & moneyName & ")?", res = "sethomebase")
   return tclOk
