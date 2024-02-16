@@ -20,7 +20,7 @@ with Tcl.Ada;
 with Bases; use Bases;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
-with Crew;
+-- with Crew;
 with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions;
@@ -28,11 +28,11 @@ with Game; use Game;
 with Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
+with Messages;
 with Missions; use Missions;
 with Ships; use Ships;
 with Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
+-- with Ships.Crew; use Ships.Crew;
 with Ships.Movement;
 with Stories;
 with Trades; use Trades;
@@ -43,46 +43,6 @@ with CArgv;
 with Tcl; use Tcl;
 
 package body OrdersMenu is
-
-   -- ****f* OrdersMenu/OrdersMenu.Pray_Command
-   -- FUNCTION
-   -- Pray in the selected base
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- Pray
-   -- SOURCE
---   function Pray_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Pray_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
---   begin
---      Update_Morale_Loop :
---      for I in Player_Ship.Crew.Iterate loop
---         Update_Morale
---           (Ship => Player_Ship,
---            Member_Index => Crew_Container.To_Index(Position => I),
---            Amount => 10);
---      end loop Update_Morale_Loop;
---      Add_Message
---        (Message =>
---           "You and your crew were praying for some time. Now you all feel a bit better.",
---         M_Type => ORDERMESSAGE);
---      Update_Game(Minutes => 30);
---      Show_Sky_Map;
---      return TCL_OK;
---   end Pray_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Set_As_Home_Command
    -- FUNCTION
@@ -97,30 +57,30 @@ package body OrdersMenu is
    -- COMMANDS
    -- SetAsHome
    -- SOURCE
-   function Set_As_Home_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_As_Home_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      use Crew;
-
-      Trader_Index: constant Natural := Find_Member(Order => TALK);
-      Price: Positive := 1_000;
-   begin
-      Count_Price(Price => Price, Trader_Index => Trader_Index);
-      Show_Question
-        (Question =>
-           "Are you sure want to change your home base (it cost" &
-           Positive'Image(Price) & " " & To_String(Source => Money_Name) &
-           ")?",
-         Result => "sethomebase");
-      return TCL_OK;
-   end Set_As_Home_Command;
+--   function Set_As_Home_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Set_As_Home_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--      use Crew;
+--
+--      Trader_Index: constant Natural := Find_Member(Order => TALK);
+--      Price: Positive := 1_000;
+--   begin
+--      Count_Price(Price => Price, Trader_Index => Trader_Index);
+--      Show_Question
+--        (Question =>
+--           "Are you sure want to change your home base (it cost" &
+--           Positive'Image(Price) & " " & To_String(Source => Money_Name) &
+--           ")?",
+--         Result => "sethomebase");
+--      return TCL_OK;
+--   end Set_As_Home_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Show_Trader_Command
    -- FUNCTION
@@ -395,6 +355,7 @@ package body OrdersMenu is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Factions;
       use Items;
+      use Messages;
       use Ships.Cargo;
       use Tiny_String;
 
@@ -501,9 +462,8 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
---       Add_Command(Name => "Pray", Ada_Command => Pray_Command'Access);
-      Add_Command
-        (Name => "SetAsHome", Ada_Command => Set_As_Home_Command'Access);
+--      Add_Command
+--        (Name => "SetAsHome", Ada_Command => Set_As_Home_Command'Access);
       Add_Command
         (Name => "ShowTrader", Ada_Command => Show_Trader_Command'Access);
       Add_Command
