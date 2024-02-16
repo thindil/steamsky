@@ -1,5 +1,5 @@
-import ../src/[game, halloffame, statistics]
 import unittest2
+include ../src/halloffame
 
 suite "Unit tests for halloffame module":
   for entry in hallOfFameArray.mitems:
