@@ -17,7 +17,7 @@
 
 import std/[tables, strutils]
 import ../[bases, bases2, basestypes, crewinventory, game, game2, maps,
-    messages, missions, shipscrew, shipsmovement, stories, tk, types, utils]
+    messages, missions, shipscrew, shipsmovement, stories, tk, trades, types, utils]
 import combatui, coreui, dialogs, dialogs2, waitmenu
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -499,6 +499,12 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
       $price & " " & moneyName & ")?", res = "sethomebase")
   return tclOk
 
+proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  generateTraderCargo(protoIndex = ($argv[1]).parseInt)
+  tclEval(script = "ShowTrade");
+  return tclOk
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
@@ -507,6 +513,7 @@ proc addCommands*() =
   addCommand("Attack", attackCommand)
   addCommand("Pray", prayCommand)
   addCommand("SetAsHome", setAsHomeCommand)
+  addCommand("ShowTrader", showTraderCommand)
 
 import mapsui
 
