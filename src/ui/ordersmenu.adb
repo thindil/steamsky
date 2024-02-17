@@ -16,7 +16,6 @@
 with Ada.Strings;
 with Ada.Strings.Unbounded;
 with GNAT.String_Split;
--- with Tcl.Ada;
 with Bases;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
@@ -41,40 +40,6 @@ with CArgv;
 with Tcl; use Tcl;
 
 package body OrdersMenu is
-
-   -- ****f* OrdersMenu/OrdersMenu.Show_Trader_Command
-   -- FUNCTION
-   -- Generate cargo for trader and show trading UI
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowTrader protoindex
-   -- Protoindex is the index of ship prototype on which trader cargo will be
-   -- generated
-   -- SOURCE
---   function Show_Trader_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Show_Trader_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      use Tcl.Ada;
---
---   begin
---      Generate_Trader_Cargo
---        (Proto_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
---      Tcl_Eval(interp => Interp, strng => "ShowTrade");
---      return TCL_OK;
---   end Show_Trader_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Start_Mission_Command
    -- FUNCTION
@@ -424,8 +389,6 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "ShowTrader", Ada_Command => Show_Trader_Command'Access);
       Add_Command
         (Name => "StartMission", Ada_Command => Start_Mission_Command'Access);
       Add_Command
