@@ -1,5 +1,5 @@
-import ../src/[game, log]
 import unittest2
+include ../src/log
 
 suite "Unit tests for log module":
 
