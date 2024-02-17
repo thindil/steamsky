@@ -14,10 +14,10 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with GNAT.String_Split;
-with Tcl.Ada;
-with Bases; use Bases;
+-- with Tcl.Ada;
+with Bases;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
 with Dialogs; use Dialogs;
@@ -57,24 +57,24 @@ package body OrdersMenu is
    -- Protoindex is the index of ship prototype on which trader cargo will be
    -- generated
    -- SOURCE
-   function Show_Trader_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Trader_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Ada;
-
-   begin
-      Generate_Trader_Cargo
-        (Proto_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      Tcl_Eval(interp => Interp, strng => "ShowTrade");
-      return TCL_OK;
-   end Show_Trader_Command;
+--   function Show_Trader_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Trader_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Tcl.Ada;
+--
+--   begin
+--      Generate_Trader_Cargo
+--        (Proto_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--      Tcl_Eval(interp => Interp, strng => "ShowTrade");
+--      return TCL_OK;
+--   end Show_Trader_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Start_Mission_Command
    -- FUNCTION
@@ -213,6 +213,7 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use Ada.Strings.Unbounded;
       use Ships.Movement;
       use Stories;
 
@@ -313,6 +314,7 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Bases;
       use Factions;
       use Items;
       use Messages;
@@ -422,8 +424,8 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowTrader", Ada_Command => Show_Trader_Command'Access);
+--      Add_Command
+--        (Name => "ShowTrader", Ada_Command => Show_Trader_Command'Access);
       Add_Command
         (Name => "StartMission", Ada_Command => Start_Mission_Command'Access);
       Add_Command
