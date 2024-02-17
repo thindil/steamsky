@@ -16,9 +16,10 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[bases, bases2, basestypes, crewinventory, game, game2, maps,
-    messages, missions, shipscrew, shipsmovement, stories, tk, trades, types, utils]
-import combatui, coreui, dialogs, dialogs2, waitmenu
+import ../[bases, bases2, basestypes, combat, crewinventory, events2, game,
+    game2, maps, messages, missions, shipscrew, shipsmovement, stories, tk,
+    trades, types, utils]
+import combatui, coreui, dialogs, dialogs2, updateheader, waitmenu, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -522,6 +523,9 @@ proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ShowTrade");
   return tclOk
 
+proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
@@ -531,6 +535,7 @@ proc addCommands*() =
   addCommand("Pray", prayCommand)
   addCommand("SetAsHome", setAsHomeCommand)
   addCommand("ShowTrader", showTraderCommand)
+  addCommand("StartMission", startMissionCommand)
 
 import mapsui
 
@@ -608,6 +613,41 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bgerror {Can't update the game. Reason: " &
         getCurrentExceptionMsg() & "}")
     return tclOk
+  showSkyMap()
+  return tclOk
+
+proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var startsCombat, uMission = false
+  for mission in acceptedMissions:
+    if mission.targetX == playerShip.skyX and mission.targetY ==
+        playerShip.skyY and not mission.finished:
+      case mission.mType
+      of deliver, passenger:
+        discard
+      of destroy:
+        updateGame(minutes = getRandom(min = 15, max = 45))
+        startsCombat = checkForEvent()
+        if not startsCombat:
+          startsCombat = startCombat(enemyIndex = mission.shipIndex,
+              newCombat = false)
+      of patrol:
+        updateGame(minutes = getRandom(min = 45, max = 75))
+        startsCombat = checkForEvent()
+        if not startsCombat:
+          uMission = true
+      of explore:
+        updateGame(minutes = getRandom(min = 30, max = 60))
+        startsCombat = checkForEvent()
+        if not startsCombat:
+          uMission = true
+  if startsCombat:
+    showCombatUi()
+    return tclOk
+  if uMission:
+    updateMission(missionIndex = skyMap[playerShip.skyX][playerShip.skyY].missionIndex)
+  updateHeader()
+  updateMessages()
   showSkyMap()
   return tclOk
 

@@ -22,7 +22,7 @@ with Combat.UI; use Combat.UI;
 with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions;
-with Game; use Game;
+with Game;
 with Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -54,73 +54,73 @@ package body OrdersMenu is
    -- COMMANDS
    -- StartMission
    -- SOURCE
-   function Start_Mission_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Start_Mission_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      use Utils;
-
-      Starts_Combat, U_Mission: Boolean := False;
-      Mission: Mission_Data := Empty_Mission;
-   begin
-      Check_Missions_Loop :
-      for I in 1 .. Get_Accepted_Missions_Amount loop
-         Mission := Get_Accepted_Mission(Mission_Index => I);
-         if Mission.Target_X = Player_Ship.Sky_X and
-           Mission.Target_Y = Player_Ship.Sky_Y and not Mission.Finished then
-            case Mission.M_Type is
-               when DELIVER | PASSENGER =>
-                  null;
-               when DESTROY =>
-                  Update_Game(Minutes => Get_Random(Min => 15, Max => 45));
-                  Starts_Combat := Check_For_Event;
-                  if not Starts_Combat then
-                     Starts_Combat :=
-                       Start_Combat
-                         (Enemy_Index =>
-                            Get_Accepted_Mission
-                              (Mission_Index =>
-                                 Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                   .Mission_Index)
-                              .Ship_Index,
-                          New_Combat => False);
-                  end if;
-               when PATROL =>
-                  Update_Game(Minutes => Get_Random(Min => 45, Max => 75));
-                  Starts_Combat := Check_For_Event;
-                  if not Starts_Combat then
-                     U_Mission := True;
-                  end if;
-               when EXPLORE =>
-                  Update_Game(Minutes => Get_Random(Min => 30, Max => 60));
-                  Starts_Combat := Check_For_Event;
-                  if not Starts_Combat then
-                     U_Mission := True;
-                  end if;
-            end case;
-            exit Check_Missions_Loop;
-         end if;
-      end loop Check_Missions_Loop;
-      if Starts_Combat then
-         Show_Combat_Ui;
-         return TCL_OK;
-      end if;
-      if U_Mission then
-         Update_Mission
-           (Mission_Index =>
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
-      end if;
-      Update_Header;
-      Update_Messages;
-      Show_Sky_Map;
-      return TCL_OK;
-   end Start_Mission_Command;
+--   function Start_Mission_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Start_Mission_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--      use Utils;
+--
+--      Starts_Combat, U_Mission: Boolean := False;
+--      Mission: Mission_Data := Empty_Mission;
+--   begin
+--      Check_Missions_Loop :
+--      for I in 1 .. Get_Accepted_Missions_Amount loop
+--         Mission := Get_Accepted_Mission(Mission_Index => I);
+--         if Mission.Target_X = Player_Ship.Sky_X and
+--           Mission.Target_Y = Player_Ship.Sky_Y and not Mission.Finished then
+--            case Mission.M_Type is
+--               when DELIVER | PASSENGER =>
+--                  null;
+--               when DESTROY =>
+--                  Update_Game(Minutes => Get_Random(Min => 15, Max => 45));
+--                  Starts_Combat := Check_For_Event;
+--                  if not Starts_Combat then
+--                     Starts_Combat :=
+--                       Start_Combat
+--                         (Enemy_Index =>
+--                            Get_Accepted_Mission
+--                              (Mission_Index =>
+--                                 Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+--                                   .Mission_Index)
+--                              .Ship_Index,
+--                          New_Combat => False);
+--                  end if;
+--               when PATROL =>
+--                  Update_Game(Minutes => Get_Random(Min => 45, Max => 75));
+--                  Starts_Combat := Check_For_Event;
+--                  if not Starts_Combat then
+--                     U_Mission := True;
+--                  end if;
+--               when EXPLORE =>
+--                  Update_Game(Minutes => Get_Random(Min => 30, Max => 60));
+--                  Starts_Combat := Check_For_Event;
+--                  if not Starts_Combat then
+--                     U_Mission := True;
+--                  end if;
+--            end case;
+--            exit Check_Missions_Loop;
+--         end if;
+--      end loop Check_Missions_Loop;
+--      if Starts_Combat then
+--         Show_Combat_Ui;
+--         return TCL_OK;
+--      end if;
+--      if U_Mission then
+--         Update_Mission
+--           (Mission_Index =>
+--              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
+--      end if;
+--      Update_Header;
+--      Update_Messages;
+--      Show_Sky_Map;
+--      return TCL_OK;
+--   end Start_Mission_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Complete_Mission_Command
    -- FUNCTION
@@ -284,7 +284,7 @@ package body OrdersMenu is
       use Items;
       use Messages;
       use Ships.Cargo;
-      use Tiny_String;
+      use Game.Tiny_String;
 
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -389,8 +389,8 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "StartMission", Ada_Command => Start_Mission_Command'Access);
+--      Add_Command
+--        (Name => "StartMission", Ada_Command => Start_Mission_Command'Access);
       Add_Command
         (Name => "CompleteMission",
          Ada_Command => Complete_Mission_Command'Access);
