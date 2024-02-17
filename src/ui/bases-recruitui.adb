@@ -542,10 +542,7 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       -- Statistics of the selected recruit
-      Frame :=
-        Create
-          (pathName => Recruit_Canvas & ".attributes",
-           options => "-width 360");
+      Frame := Create(pathName => Recruit_Canvas & ".attributes");
       Show_Recruit_Stats_Loop :
       for I in Recruit.Attributes'Range loop
          Progress_Frame :=
@@ -563,11 +560,25 @@ package body Bases.RecruitUI is
                      AttributesData_Container.Element
                        (Container => Attributes_List, Index => I)
                        .Name) &
-                ": " &
+                ": }");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
+         Recruit_Label :=
+           Create
+             (pathName => Progress_Frame & ".label2",
+              options =>
+                "-text {" &
                 Get_Attribute_Level_Name
                   (Attribute_Level => Recruit.Attributes(I).Level) &
-                "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label);
+                "} -style Golden.TLabel");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Recruit_Label,
+            Options => "-sticky we -column 1 -row 0 -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Column_Configure
+           (Master => Progress_Frame, Slave => Recruit_Label,
+            Options => "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure
+           (Master => Progress_Frame, Slave => Recruit_Label,
+            Options => "-weight 1");
          Info_Button :=
            Create
              (pathName => Progress_Frame & ".button",
@@ -579,8 +590,11 @@ package body Bases.RecruitUI is
             Message =>
               "Show detailed information about the selected attribute.");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button, Options => "-column 1 -row 0");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame);
+           (Slave => Info_Button, Options => "-column 2 -row 0");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Progress_Frame,
+            Options => "-sticky we -padx 5 -pady {5 0}");
+         Tcl_Eval(interp => Interp, strng => "update");
          Progress_Bar :=
            Create
              (pathName =>
@@ -588,7 +602,7 @@ package body Bases.RecruitUI is
                 Trim(Source => Positive'Image(I), Side => Left),
               options =>
                 "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
-                " -length 200");
+                " -length 360");
          Tcl.Tklib.Ada.Tooltip.Add
            (Widget => Progress_Bar,
             Message => "The current level of the attribute.");
