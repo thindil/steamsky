@@ -85,6 +85,7 @@ package body Ships.UI is
           (pathName =>
              Main_Paned & ".shipinfoframe.general.canvas.frame.rename");
    begin
+      Get_Ship_From_Nim(Ship => Player_Ship);
       if Winfo_Get(Widgt => Ship_Info_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,

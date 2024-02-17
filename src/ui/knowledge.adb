@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ with Stories; use Stories;
 --## rule on REDUCEABLE_SCOPE
 with Knowledge.Stories;
 with Utils.UI; use Utils.UI;
+with Ships;
 
 package body Knowledge is
 
@@ -85,6 +86,7 @@ package body Knowledge is
       use Factions;
       use Game;
       use Maps.UI;
+      use Ships;
       use Tiny_String;
 
       Knowledge_Frame: Ttk_Frame :=
@@ -101,6 +103,7 @@ package body Knowledge is
         Get_Widget(pathName => Knowledge_Canvas & ".frame.options.types");
       Combo_Values: Unbounded_String := Null_Unbounded_String;
    begin
+      Get_Ship_From_Nim(Ship => Player_Ship);
       if Winfo_Get(Widgt => Knowledge_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
