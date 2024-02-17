@@ -524,7 +524,8 @@ proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -626,26 +627,47 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
       of deliver, passenger:
         discard
       of destroy:
-        updateGame(minutes = getRandom(min = 15, max = 45))
-        startsCombat = checkForEvent()
-        if not startsCombat:
-          startsCombat = startCombat(enemyIndex = mission.shipIndex,
-              newCombat = false)
+        try:
+          updateGame(minutes = getRandom(min = 15, max = 45))
+          startsCombat = checkForEvent()
+          if not startsCombat:
+            startsCombat = startCombat(enemyIndex = mission.shipIndex,
+                newCombat = false)
+        except:
+          tclEval(script = "bgerror {Can't start destroy mission. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
       of patrol:
-        updateGame(minutes = getRandom(min = 45, max = 75))
-        startsCombat = checkForEvent()
+        try:
+          updateGame(minutes = getRandom(min = 45, max = 75))
+          startsCombat = checkForEvent()
+        except:
+          tclEval(script = "bgerror {Can't start patrol mission. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
         if not startsCombat:
           uMission = true
       of explore:
-        updateGame(minutes = getRandom(min = 30, max = 60))
-        startsCombat = checkForEvent()
+        try:
+          updateGame(minutes = getRandom(min = 30, max = 60))
+          startsCombat = checkForEvent()
+        except:
+          tclEval(script = "bgerror {Can't start explore mission. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
         if not startsCombat:
           uMission = true
   if startsCombat:
     showCombatUi()
     return tclOk
   if uMission:
-    updateMission(missionIndex = skyMap[playerShip.skyX][playerShip.skyY].missionIndex)
+    try:
+      updateMission(missionIndex = skyMap[playerShip.skyX][
+          playerShip.skyY].missionIndex)
+    except:
+      tclEval(script = "bgerror {Can't update the mission. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   updateHeader()
   updateMessages()
   showSkyMap()
