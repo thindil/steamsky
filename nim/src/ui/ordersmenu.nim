@@ -500,8 +500,13 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  generateTraderCargo(protoIndex = ($argv[1]).parseInt)
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  try:
+    generateTraderCargo(protoIndex = ($argv[1]).parseInt)
+  except:
+    tclEval(script = "bgerror {Can't generate the trader's cargo. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   tclEval(script = "ShowTrade");
   return tclOk
 
