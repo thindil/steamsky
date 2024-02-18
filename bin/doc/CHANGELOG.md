@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.7] - 2024-02-18
 
 ### Added
 - Colored version of icon for show something on the map
