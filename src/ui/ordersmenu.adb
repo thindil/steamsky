@@ -17,22 +17,22 @@ with Ada.Strings;
 with Ada.Strings.Unbounded;
 with GNAT.String_Split;
 with Bases;
-with Combat; use Combat;
-with Combat.UI; use Combat.UI;
+with Combat;
+with Combat.UI;
 with Dialogs; use Dialogs;
-with Events; use Events;
+with Events;
 with Factions;
 with Game;
 with Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages;
-with Missions; use Missions;
+with Missions;
 with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Movement;
 with Stories;
-with Trades; use Trades;
+with Trades;
 with Utils;
 with Utils.UI; use Utils.UI;
 with Interfaces.C;
@@ -40,87 +40,6 @@ with CArgv;
 with Tcl; use Tcl;
 
 package body OrdersMenu is
-
-   -- ****f* OrdersMenu/OrdersMenu.Start_Mission_Command
-   -- FUNCTION
-   -- Start the selected mission
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- StartMission
-   -- SOURCE
---   function Start_Mission_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Start_Mission_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
---      use Utils;
---
---      Starts_Combat, U_Mission: Boolean := False;
---      Mission: Mission_Data := Empty_Mission;
---   begin
---      Check_Missions_Loop :
---      for I in 1 .. Get_Accepted_Missions_Amount loop
---         Mission := Get_Accepted_Mission(Mission_Index => I);
---         if Mission.Target_X = Player_Ship.Sky_X and
---           Mission.Target_Y = Player_Ship.Sky_Y and not Mission.Finished then
---            case Mission.M_Type is
---               when DELIVER | PASSENGER =>
---                  null;
---               when DESTROY =>
---                  Update_Game(Minutes => Get_Random(Min => 15, Max => 45));
---                  Starts_Combat := Check_For_Event;
---                  if not Starts_Combat then
---                     Starts_Combat :=
---                       Start_Combat
---                         (Enemy_Index =>
---                            Get_Accepted_Mission
---                              (Mission_Index =>
---                                 Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
---                                   .Mission_Index)
---                              .Ship_Index,
---                          New_Combat => False);
---                  end if;
---               when PATROL =>
---                  Update_Game(Minutes => Get_Random(Min => 45, Max => 75));
---                  Starts_Combat := Check_For_Event;
---                  if not Starts_Combat then
---                     U_Mission := True;
---                  end if;
---               when EXPLORE =>
---                  Update_Game(Minutes => Get_Random(Min => 30, Max => 60));
---                  Starts_Combat := Check_For_Event;
---                  if not Starts_Combat then
---                     U_Mission := True;
---                  end if;
---            end case;
---            exit Check_Missions_Loop;
---         end if;
---      end loop Check_Missions_Loop;
---      if Starts_Combat then
---         Show_Combat_Ui;
---         return TCL_OK;
---      end if;
---      if U_Mission then
---         Update_Mission
---           (Mission_Index =>
---              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
---      end if;
---      Update_Header;
---      Update_Messages;
---      Show_Sky_Map;
---      return TCL_OK;
---   end Start_Mission_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Complete_Mission_Command
    -- FUNCTION
@@ -145,6 +64,8 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      use Missions;
+
    begin
       Finish_Mission
         (Mission_Index =>
@@ -204,6 +125,8 @@ package body OrdersMenu is
          Progress_Story_Block :
          declare
             use GNAT.String_Split;
+            use Combat;
+            use Combat.UI;
 
             Tokens: Slice_Set;
          begin
@@ -280,6 +203,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Bases;
+      use Events;
       use Factions;
       use Items;
       use Messages;
@@ -345,6 +269,8 @@ package body OrdersMenu is
          --## rule on SIMPLIFIABLE_EXPRESSIONS
       else
          Sell_Medicines_Block :
+         declare
+            use Trades;
          begin
             --## rule off SIMPLIFIABLE_EXPRESSIONS
             Gain_Rep
@@ -389,8 +315,6 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "StartMission", Ada_Command => Start_Mission_Command'Access);
       Add_Command
         (Name => "CompleteMission",
          Ada_Command => Complete_Mission_Command'Access);
