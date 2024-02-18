@@ -526,6 +526,17 @@ proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
 proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect].}
+  ## Start the selected mission
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## StartMission
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
