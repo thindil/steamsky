@@ -609,9 +609,7 @@ package body Bases.RecruitUI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
       end loop Show_Recruit_Stats_Loop;
       -- Skills of the selected recruit
-      Frame :=
-        Create
-          (pathName => Recruit_Canvas & ".skills", options => "-width 360");
+      Frame := Create(pathName => Recruit_Canvas & ".skills");
       Show_Recruit_Skills_Loop :
       for I in
         Skills_Container.First_Index(Container => Recruit.Skills) ..
@@ -637,14 +635,30 @@ package body Bases.RecruitUI is
                             (Container => Recruit.Skills, Index => I)
                             .Index)
                        .Name) &
-                ": " &
+                ": }");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
+         Recruit_Label :=
+           Create
+             (pathName =>
+                Progress_Frame & ".label2" &
+                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options =>
+                "-text {" &
                 Get_Skill_Level_Name
                   (Skill_Level =>
                      Skills_Container.Element
                        (Container => Recruit.Skills, Index => I)
                        .Level) &
-                "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label);
+                "} -style Golden.TLabel");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Recruit_Label,
+            Options => "-sticky we -column 1 -row 0 -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Column_Configure
+           (Master => Progress_Frame, Slave => Recruit_Label,
+            Options => "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure
+           (Master => Progress_Frame, Slave => Recruit_Label,
+            Options => "-weight 1");
          Add_Help_Button_Block :
          declare
             Tool_Quality: Positive := 100;
@@ -676,8 +690,8 @@ package body Bases.RecruitUI is
            (Widget => Info_Button,
             Message => "Show detailed information about the selected skill.");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button, Options => "-column 1 -row 0");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame);
+           (Slave => Info_Button, Options => "-column 2 -row 0");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame, Options => "-sticky we");
          Progress_Bar :=
            Create
              (pathName =>
@@ -689,7 +703,7 @@ package body Bases.RecruitUI is
                   (Skills_Container.Element
                      (Container => Recruit.Skills, Index => I)
                      .Level) &
-                " -length 200");
+                " -length 360");
          Tcl.Tklib.Ada.Tooltip.Add
            (Widget => Progress_Bar,
             Message => "The current level of the skill.");
