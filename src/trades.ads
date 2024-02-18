@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -133,15 +133,5 @@ package Trades is
                 (Container => Player_Ship.Cargo) and
       Amount'Length > 0;
       -- ****
-
-      -- ****f* Trades/Trades.Generate_Trader_Cargo
-      -- FUNCTION
-      -- Generate list of cargo to trade
-      -- PARAMETERS
-      -- Proto_Index - Index of prototype ship which will be used to generate
-      --               cargo
-      -- SOURCE
-   procedure Generate_Trader_Cargo(Proto_Index: Positive);
-   -- ****
 
 end Trades;

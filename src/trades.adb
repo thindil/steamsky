@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -116,16 +116,5 @@ package body Trades is
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Base_Cargo(Base_Index => Base_Index);
    end Sell_Items;
-
-   procedure Generate_Trader_Cargo(Proto_Index: Positive) is
-      procedure Generate_Ada_Trader_Cargo(P_Index: Positive) with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaTraderCargo";
-   begin
-      BaseCargo_Container.Clear(Container => Trader_Cargo);
-      Generate_Ada_Trader_Cargo(P_Index => Proto_Index);
-      Set_Base_Cargo(Base_Index => 0);
-   end Generate_Trader_Cargo;
 
 end Trades;
