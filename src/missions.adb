@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -136,25 +136,6 @@ package body Missions is
          end if;
       end loop Update_Map_Loop;
    end Delete_Mission;
-
-   procedure Update_Mission(Mission_Index: Positive) is
-      Mission: constant Mission_Data :=
-        Get_Accepted_Mission(Mission_Index => Mission_Index);
-      procedure Update_Ada_Mission(M_Index: Positive) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaMission";
-   begin
-      Set_Ship_In_Nim;
-      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
-      Sky_Map
-        (Sky_Bases(Mission.Start_Base).Sky_X,
-         Sky_Bases(Mission.Start_Base).Sky_Y)
-        .Mission_Index :=
-        Mission_Index;
-      Update_Ada_Mission(M_Index => Mission_Index);
-      Get_Ship_From_Nim(Ship => Player_Ship);
-   end Update_Mission;
 
    function Auto_Finish_Missions return String is
       Base_Index: constant Natural :=

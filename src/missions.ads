@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -148,16 +148,6 @@ package Missions is
    -- Failed        - If true, it is failed mission. Default is true.
    -- SOURCE
    procedure Delete_Mission(Mission_Index: Positive; Failed: Boolean := True);
-   -- ****
-
-   -- ****f* Missions/Missions.Update_Mission
-   -- FUNCTION
-   -- Update status of mission
-   -- PARAMETERS
-   -- Mission_Index - Player ship list of accepted missions index of mission
-   --                 to update
-   -- SOURCE
-   procedure Update_Mission(Mission_Index: Positive);
    -- ****
 
    -- ****f* Missions/Missions.Auto_Finish_Missions
