@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of the dialog with information about an accepted mission
 - Color of image for target action
 - Updated modding guide
+- Updated look of the dialog with information about a recruit
 
 ## Fixed
 - Showing assigned ammunition to a gun on the player's ship's module's list
