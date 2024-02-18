@@ -1,5 +1,5 @@
-import ../src/[game, maps]
 import unittest2
+include ../src/maps
 
 suite "Unit tests for maps module":
 
