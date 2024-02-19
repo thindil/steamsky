@@ -17,8 +17,8 @@
 
 import std/[tables, strutils]
 import ../[bases, bases2, basestypes, combat, crewinventory, events2, game,
-    game2, maps, messages, missions, shipscrew, shipsmovement, stories, tk,
-    trades, types, utils]
+    game2, maps, messages, missions, missions2, shipscrew, shipsmovement,
+    stories, tk, trades, types, utils]
 import combatui, coreui, dialogs, dialogs2, updateheader, waitmenu, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -538,6 +538,9 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## StartMission
 
+proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
@@ -548,6 +551,7 @@ proc addCommands*() =
   addCommand("SetAsHome", setAsHomeCommand)
   addCommand("ShowTrader", showTraderCommand)
   addCommand("StartMission", startMissionCommand)
+  addCommand("CompleteMission", completeMissionCommand)
 
 import mapsui
 
@@ -679,6 +683,15 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "bgerror {Can't update the mission. Reason: " &
           getCurrentExceptionMsg() & "}")
       return tclOk
+  updateHeader()
+  updateMessages()
+  showSkyMap()
+  return tclOk
+
+proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  finishMission(missionIndex = skyMap[playerShip.skyX][
+      playerShip.skyY].missionIndex)
   updateHeader()
   updateMessages()
   showSkyMap()
