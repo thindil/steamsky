@@ -492,7 +492,7 @@ package body Bases.RecruitUI is
           (pathName => Recruit_Dialog & ".buttonbox2.button",
            options =>
              "-text Close -command {CloseDialog " & Recruit_Dialog &
-             "} -image cancelicon -style Dialog.TButton");
+             "} -image exiticon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
       Add
