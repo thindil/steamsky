@@ -539,7 +539,8 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## StartMission
 
 proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -690,8 +691,16 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  finishMission(missionIndex = skyMap[playerShip.skyX][
-      playerShip.skyY].missionIndex)
+  try:
+    finishMission(missionIndex = skyMap[playerShip.skyX][
+        playerShip.skyY].missionIndex)
+  except MissionFinishingError:
+    showMessage(text = getCurrentExceptionMsg(), title = "Finishing mission")
+    return tclOk
+  except:
+    tclEval(script = "bgerror {Can't finish the mission. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   updateHeader()
   updateMessages()
   showSkyMap()
