@@ -18,7 +18,7 @@
 import std/[tables, strutils]
 import ../[bases, bases2, basestypes, combat, crewinventory, events2, game,
     game2, maps, messages, missions, missions2, shipscrew, shipsmovement,
-    stories, tk, trades, types, utils]
+    stories, stories2, tk, trades, types, utils]
 import combatui, coreui, dialogs, dialogs2, updateheader, waitmenu, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -553,6 +553,9 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## CompleteMission
 
+proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
@@ -564,6 +567,7 @@ proc addCommands*() =
   addCommand("ShowTrader", showTraderCommand)
   addCommand("StartMission", startMissionCommand)
   addCommand("CompleteMission", completeMissionCommand)
+  addCommand("ExecuteStory", executeStoryCommand)
 
 import mapsui
 
@@ -706,7 +710,8 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     finishMission(missionIndex = skyMap[playerShip.skyX][
         playerShip.skyY].missionIndex)
   except MissionFinishingError:
-    showMessage(text = getCurrentExceptionMsg(), title = "Finishing mission")
+    showInfo(text = getCurrentExceptionMsg(),
+        title = "Can't finish the mission")
     return tclOk
   except:
     tclEval(script = "bgerror {Can't finish the mission. Reason: " &
@@ -715,6 +720,36 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   updateHeader()
   updateMessages()
   showSkyMap()
+  return tclOk
+
+proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var step = (if currentStory.currentStep == -1: storiesList[
+      currentStory.index].startingStep elif currentStory.currentStep >
+      -1: storiesList[currentStory.index].steps[
+      currentStory.currentStep] else: storiesList[currentStory.index].finalStep)
+  if playerShip.speed != docked and step.finishCondition == askInBase:
+    let message = dockShip(docking = true)
+    if message.len > 0:
+      showInfo(text = message, title = "Can't dock to base")
+      return tclOk
+  if progressStory():
+    let tokens = currentStory.data.split(';')
+    case step.finishCondition
+    of destroyShip:
+      if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
+        showCombatUi()
+        return tclOk
+    else:
+      discard
+    if currentStory.currentStep > -3:
+      step = (if currentStory.currentStep > -1: storiesList[currentStory.index].steps[currentStory.currentStep] else: storiesList[currentStory.index].finalStep)
+      for text in step.texts:
+        if currentStory.finishedStep == text.condition:
+          showInfo(text = text.text, title = "Story")
+          break
+    else:
+      finishStory()
   return tclOk
 
 # Temporary code for interfacing with Ada
