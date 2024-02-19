@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -31,7 +31,7 @@ type
     ##
     ## * condition - the requirement for the previous step of a story
     ## * text      - uhe text which will be shown to the player when the step starts
-    condition: StepConditionType
+    condition*: StepConditionType
     text*: string
 
   StepFinishData = object
