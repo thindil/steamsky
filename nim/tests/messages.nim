@@ -1,5 +1,5 @@
-import ../src/[game, types, messages]
 import unittest2
+include ../src/messages
 
 suite "Unit tests for messages module":
 
