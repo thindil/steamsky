@@ -27,7 +27,7 @@ with Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages;
-with Missions;
+-- with Missions;
 with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Movement;
@@ -54,27 +54,27 @@ package body OrdersMenu is
    -- COMMANDS
    -- CompleteMission
    -- SOURCE
-   function Complete_Mission_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Complete_Mission_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      use Missions;
-
-   begin
-      Finish_Mission
-        (Mission_Index =>
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
-      Update_Header;
-      Update_Messages;
-      Show_Sky_Map;
-      return TCL_OK;
-   end Complete_Mission_Command;
+--   function Complete_Mission_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Complete_Mission_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--      use Missions;
+--
+--   begin
+--      Finish_Mission
+--        (Mission_Index =>
+--           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
+--      Update_Header;
+--      Update_Messages;
+--      Show_Sky_Map;
+--      return TCL_OK;
+--   end Complete_Mission_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Execute_Story_Command
    -- FUNCTION
@@ -315,9 +315,9 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "CompleteMission",
-         Ada_Command => Complete_Mission_Command'Access);
+--      Add_Command
+--        (Name => "CompleteMission",
+--         Ada_Command => Complete_Mission_Command'Access);
       Add_Command
         (Name => "ExecuteStory", Ada_Command => Execute_Story_Command'Access);
       Add_Command
