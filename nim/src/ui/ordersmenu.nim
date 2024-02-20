@@ -743,13 +743,21 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       discard
     if currentStory.currentStep > -3:
-      step = (if currentStory.currentStep > -1: storiesList[currentStory.index].steps[currentStory.currentStep] else: storiesList[currentStory.index].finalStep)
+      step = (if currentStory.currentStep > -1: storiesList[
+          currentStory.index].steps[currentStory.currentStep] else: storiesList[
+          currentStory.index].finalStep)
       for text in step.texts:
         if currentStory.finishedStep == text.condition:
           showInfo(text = text.text, title = "Story")
           break
     else:
       finishStory()
+  else:
+    showInfo(text = step.failText, title = "Story")
+    currentStory.showText = false
+  updateHeader()
+  updateMessages()
+  showSkyMap()
   return tclOk
 
 # Temporary code for interfacing with Ada
