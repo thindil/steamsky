@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated look of the dialog with information about a recruit
+
 ## [9.7] - 2024-02-18
 
 ### Added
