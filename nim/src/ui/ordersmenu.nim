@@ -554,7 +554,8 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## CompleteMission
 
 proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -724,37 +725,53 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  var step = (if currentStory.currentStep == -1: storiesList[
-      currentStory.index].startingStep elif currentStory.currentStep >
-      -1: storiesList[currentStory.index].steps[
-      currentStory.currentStep] else: storiesList[currentStory.index].finalStep)
+  var step = try:
+        (if currentStory.currentStep == -1: storiesList[
+        currentStory.index].startingStep elif currentStory.currentStep >
+        -1: storiesList[currentStory.index].steps[
+        currentStory.currentStep] else: storiesList[
+            currentStory.index].finalStep)
+      except:
+        tclEval(script = "bgerror {Can't get the current story step. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   if playerShip.speed != docked and step.finishCondition == askInBase:
-    let message = dockShip(docking = true)
+    let message = try:
+        dockShip(docking = true)
+      except:
+        tclEval(script = "bgerror {Can't dock to the base. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     if message.len > 0:
       showInfo(text = message, title = "Can't dock to base")
       return tclOk
-  if progressStory():
-    let tokens = currentStory.data.split(';')
-    case step.finishCondition
-    of destroyShip:
-      if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
-        showCombatUi()
-        return tclOk
+  try:
+    if progressStory():
+      let tokens = currentStory.data.split(';')
+      case step.finishCondition
+      of destroyShip:
+        if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
+          showCombatUi()
+          return tclOk
+      else:
+        discard
+      if currentStory.currentStep > -3:
+        step = (if currentStory.currentStep > -1: storiesList[
+            currentStory.index].steps[currentStory.currentStep] else: storiesList[
+            currentStory.index].finalStep)
+        for text in step.texts:
+          if currentStory.finishedStep == text.condition:
+            showInfo(text = text.text, title = "Story")
+            break
+      else:
+        finishStory()
     else:
-      discard
-    if currentStory.currentStep > -3:
-      step = (if currentStory.currentStep > -1: storiesList[
-          currentStory.index].steps[currentStory.currentStep] else: storiesList[
-          currentStory.index].finalStep)
-      for text in step.texts:
-        if currentStory.finishedStep == text.condition:
-          showInfo(text = text.text, title = "Story")
-          break
-    else:
-      finishStory()
-  else:
-    showInfo(text = step.failText, title = "Story")
-    currentStory.showText = false
+      showInfo(text = step.failText, title = "Story")
+      currentStory.showText = false
+  except:
+    tclEval(script = "bgerror {Can't progress the current story. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   updateHeader()
   updateMessages()
   showSkyMap()
