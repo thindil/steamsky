@@ -50,52 +50,6 @@ package body Missions is
         Get_Accepted_Missions_Amount;
    end Accept_Mission;
 
-   procedure Finish_Mission(Mission_Index: Positive) is
-      use Interfaces.C;
-
-      Mission: constant Mission_Data :=
-        Get_Accepted_Mission(Mission_Index => Mission_Index);
-      Base_Index: constant Bases_Range := Mission.Start_Base;
-      Message: chars_ptr;
-      Missions_Finishing_Error: exception;
-      function Finish_Ada_Mission(M_Index: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "finishAdaMission";
-   begin
-      Set_Ship_In_Nim;
-      Get_Ada_Base_Location
-        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
-         Y => Sky_Bases(Base_Index).Sky_Y);
-      Message := Finish_Ada_Mission(M_Index => Mission_Index);
-      if Strlen(Item => Message) > 0 then
-         raise Missions_Finishing_Error with Value(Item => Message);
-      end if;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
-      Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
-        .Mission_Index :=
-        0;
-      Update_Map_Loop :
-      for I in 1 .. Get_Accepted_Missions_Amount loop
-         if Get_Accepted_Mission(Mission_Index => I).Finished then
-            Sky_Map
-              (Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base)
-                 .Sky_X,
-               Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base)
-                 .Sky_Y)
-              .Mission_Index :=
-              I;
-         else
-            Sky_Map
-              (Get_Accepted_Mission(Mission_Index => I).Target_X,
-               Get_Accepted_Mission(Mission_Index => I).Target_Y)
-              .Mission_Index :=
-              I;
-         end if;
-      end loop Update_Map_Loop;
-   end Finish_Mission;
-
    procedure Delete_Mission
      (Mission_Index: Positive; Failed: Boolean := True) is
       Mission: constant Mission_Data :=

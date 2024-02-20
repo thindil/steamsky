@@ -129,16 +129,6 @@ package Missions is
    procedure Accept_Mission(Mission_Index: Positive);
    -- ****
 
-   -- ****f* Missions/Missions.Finish_Mission
-   -- FUNCTION
-   -- Finish selected mission
-   -- PARAMETERS
-   -- Mission_Index - Player ship list of accepted missions index of mission
-   --                 to finish
-   -- SOURCE
-   procedure Finish_Mission(Mission_Index: Positive);
-   -- ****
-
    -- ****f* Missions/Missions.Delete_Mission
    -- FUNCTION
    -- Delete selected mission
