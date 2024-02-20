@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Updated look of the dialog with information about a recruit
 
-## Fixed
+### Fixed
 - Showing assigned ammunition to a gun on the player's ship's module's list
 - Loading recruits in bases from saved games
 
