@@ -13,12 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Strings;
--- with Ada.Strings.Unbounded;
--- with GNAT.String_Split;
 with Bases;
--- with Combat;
--- with Combat.UI;
 with Dialogs; use Dialogs;
 with Events;
 with Factions;
@@ -29,8 +24,6 @@ with Maps.UI; use Maps.UI;
 with Messages;
 with Ships; use Ships;
 with Ships.Cargo;
--- with Ships.Movement;
--- with Stories;
 with Trades;
 with Utils;
 with Utils.UI; use Utils.UI;
@@ -39,107 +32,6 @@ with CArgv;
 with Tcl; use Tcl;
 
 package body OrdersMenu is
-
-   -- ****f* OrdersMenu/OrdersMenu.Execute_Story_Command
-   -- FUNCTION
-   -- Execute the current step in the current story
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ExecuteStory
-   -- SOURCE
---   function Execute_Story_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Execute_Story_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
---      use Ada.Strings.Unbounded;
---      use Ships.Movement;
---      use Stories;
---
---      Step: Step_Data :=
---        (if Get_Current_Story.Current_Step = 0 then
---           Get_Story(Index => Get_Current_Story.Index).Starting_Step
---         elsif Get_Current_Story.Current_Step > 0 then
---           Get_Story(Index => Get_Current_Story.Index).Steps
---             (Get_Current_Story.Current_Step)
---         else Get_Story(Index => Get_Current_Story.Index).Final_Step);
---      Message: Unbounded_String := Null_Unbounded_String;
---   begin
---      if Player_Ship.Speed /= DOCKED and Step.Finish_Condition = ASKINBASE then
---         Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
---         if Message /= Null_Unbounded_String then
---            Show_Info
---              (Text => To_String(Source => Message),
---               Title => "Can't dock to base");
---            return TCL_OK;
---         end if;
---      end if;
---      if Progress_Story then
---         Progress_Story_Block :
---         declare
---            use GNAT.String_Split;
---            use Combat;
---            use Combat.UI;
---
---            Tokens: Slice_Set;
---         begin
---            Create
---              (S => Tokens,
---               From => To_String(Source => Get_Current_Story.Data),
---               Separators => ";");
---            case Step.Finish_Condition is
---               when DESTROYSHIP =>
---                  if Start_Combat
---                      (Enemy_Index =>
---                         Positive'Value(Slice(S => Tokens, Index => 3)),
---                       New_Combat => False) then
---                     Show_Combat_Ui;
---                     return TCL_OK;
---                  end if;
---               when others =>
---                  null;
---            end case;
---            if Get_Current_Story.Current_Step > -2 then
---               Step :=
---                 (if Get_Current_Story.Current_Step > 0 then
---                    Get_Story(Index => Get_Current_Story.Index).Steps
---                      (Get_Current_Story.Current_Step)
---                  else Get_Story(Index => Get_Current_Story.Index).Final_Step);
---               Show_Current_Story_Loop :
---               for Text of Step.Texts loop
---                  if Get_Current_Story.Finished_Step = Text.Condition then
---                     Show_Info
---                       (Text => To_String(Source => Text.Text),
---                        Title => "Story");
---                     Set_Story_Show_Text;
---                     exit Show_Current_Story_Loop;
---                  end if;
---               end loop Show_Current_Story_Loop;
---            else
---               Finish_Story;
---            end if;
---         end Progress_Story_Block;
---      else
---         Show_Info
---           (Text => To_String(Source => Step.Fail_Text), Title => "Story");
---         Set_Story_Show_Text;
---      end if;
---      Update_Header;
---      Update_Messages;
---      Show_Sky_Map;
---      return TCL_OK;
---   end Execute_Story_Command;
 
    -- ****f* OrdersMenu/OrdersMenu.Deliver_Medicines_Command
    -- FUNCTION
@@ -280,8 +172,6 @@ package body OrdersMenu is
          External_Name => "addAdaOrdersMenuCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "ExecuteStory", Ada_Command => Execute_Story_Command'Access);
       Add_Command
         (Name => "DeliverMedicines",
          Ada_Command => Deliver_Medicines_Command'Access);
