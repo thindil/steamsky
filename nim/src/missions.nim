@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -127,14 +127,14 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
   for index, item in itemsList.pairs:
     if item.itemType == missionItemsType:
       missionsItems.add(y = index)
-  var minX: cint = playerShip.skyX.cint - 100
+  var minX: int = playerShip.skyX - 100
   normalizeCoord(coord = minX)
-  var maxX: cint = playerShip.skyX.cint + 100
+  var maxX: int = playerShip.skyX + 100
   normalizeCoord(coord = maxX)
-  var minY: cint = playerShip.skyY.cint - 100
-  normalizeCoord(coord = minY, isXAxis = 0)
-  var maxY: cint = playerShip.skyY.cint + 100
-  normalizeCoord(coord = maxY, isXAxis = 0)
+  var minY: int = playerShip.skyY - 100
+  normalizeCoord(coord = minY, isXAxis = false)
+  var maxY: int = playerShip.skyY + 100
+  normalizeCoord(coord = maxY, isXAxis = false)
   var basesInRange: seq[Positive]
   for index, base in skyBases.pairs:
     if index != baseIndex and skyBases[index].skyX in minX .. maxX and skyBases[

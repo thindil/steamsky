@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -49,14 +49,14 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
         playerShip.skyY].eventIndex)
     updateOrders(ship = playerShip)
   let eventsAmount = getRandom(min = 1, max = maxEvents)
-  var minX: cint = playerShip.skyX.cint - 100
+  var minX: int = playerShip.skyX - 100
   normalizeCoord(coord = minX)
-  var maxX: cint = playerShip.skyX.cint + 100
+  var maxX: int = playerShip.skyX + 100
   normalizeCoord(coord = maxX)
-  var minY: cint = playerShip.skyY.cint - 100
-  normalizeCoord(coord = minY, isXAxis = 0)
-  var maxY: cint = playerShip.skyY.cint + 100
-  normalizeCoord(coord = maxY, isXAxis = 0)
+  var minY: int = playerShip.skyY - 100
+  normalizeCoord(coord = minY, isXAxis = false)
+  var maxY: int = playerShip.skyY + 100
+  normalizeCoord(coord = maxY, isXAxis = false)
   var enemies: seq[Positive]
   generateEnemies(enemies)
   for i in 1 .. eventsAmount:
@@ -191,10 +191,10 @@ proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
     for x in -radius .. radius:
       for y in -radius .. radius:
         var
-          tempX: cint = (playerShip.skyX + x).cint
-          tempY: cint = (playerShip.skyY + y).cint
+          tempX: int = playerShip.skyX + x
+          tempY: int = playerShip.skyY + y
         normalizeCoord(coord = tempX)
-        normalizeCoord(coord = tempY, isXAxis = 0)
+        normalizeCoord(coord = tempY, isXAxis = false)
         let tmpBaseIndex = skyMap[tempX][tempY].baseIndex
         if tmpBaseIndex > 0 and not skyBases[tmpBaseIndex].known:
           skyBases[tmpBaseIndex].known = true

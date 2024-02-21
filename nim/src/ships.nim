@@ -671,15 +671,15 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
   if skyMap[x][y].baseIndex > 0:
     result.homeBase = skyMap[x][y].baseIndex
   else:
-    var startX, startY, endX, endY: cint
-    startX = x.cint - 100
+    var startX, startY, endX, endY: int
+    startX = x - 100
     normalizeCoord(coord = startX)
-    startY = y.cint - 100
-    normalizeCoord(coord = startY, isXAxis = 0)
-    endX = x.cint + 100
+    startY = y - 100
+    normalizeCoord(coord = startY, isXAxis = false)
+    endX = x + 100
     normalizeCoord(coord = endX)
-    endY = y.cint + 100
-    normalizeCoord(coord = endY, isXAxis = 0)
+    endY = y + 100
+    normalizeCoord(coord = endY, isXAxis = false)
     block basesLoop:
       for skyX in startX .. endX:
         for skyY in startY .. endY:

@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -304,32 +304,32 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     for index, faction in factionBases:
       var
         attempts = 1
-        posX, posY: cint = 0
+        posX, posY: int = 0
       while true:
         var validLocation = true
         if index == factionBases.low or ("loner" in factionsList[skyBases[
             factionBases[0]].owner].flags and "loner" in factionsList[skyBases[
             faction].owner].flags):
-          posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
-          posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
+          posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
+          posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
         else:
           posX = getRandom(min = skyBases[factionBases[index - 1]].skyX - 20,
-              max = skyBases[factionBases[index - 1]].skyX + 20).cint
+              max = skyBases[factionBases[index - 1]].skyX + 20)
           normalizeCoord(coord = posX)
           posY = getRandom(min = skyBases[factionBases[index - 1]].skyY - 20,
-              max = skyBases[factionBases[index - 1]].skyY + 20).cint
-          normalizeCoord(coord = posY, isXAxis = 0)
+              max = skyBases[factionBases[index - 1]].skyY + 20)
+          normalizeCoord(coord = posY, isXAxis = false)
           attempts.inc
           if attempts > 250:
-            posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
-            posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5).cint
+            posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
+            posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
             attempts = 1
         for j in -5 .. 5:
-          var tempX: cint = posX + j.cint
+          var tempX: int = posX + j
           normalizeCoord(coord = tempX)
           for k in -5 .. 5:
-            var tempY: cint = posY + k.cint
-            normalizeCoord(coord = tempY, isXAxis = 0)
+            var tempY: int = posY + k
+            normalizeCoord(coord = tempY, isXAxis = false)
             if skyMap[tempX][tempY].baseIndex > 0:
               validLocation = false
               break
