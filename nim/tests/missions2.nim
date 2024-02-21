@@ -1,6 +1,6 @@
-import ../src/[basestypes, careers, factions, game, items, maps, missions,
-    missions2, shipmodules, types]
+import ../src/[basestypes, careers, factions, items, shipmodules]
 import unittest2
+include ../src/missions2
 
 suite "Unit tests for missions2 module":
 
