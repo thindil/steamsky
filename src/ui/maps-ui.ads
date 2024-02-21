@@ -70,16 +70,6 @@ package Maps.UI is
    procedure Set_Keys;
    -- ****
 
-   -- ****f* MUI/MUI.Finish_Story
-   -- FUNCTION
-   -- Finish the current story
-   -- SOURCE
-   procedure Finish_Story with
-      Import => True,
-      Convention => C,
-      External_Name => "finishAdaStory";
-   -- ****
-
 -- Temporary code to interact with Nim
 
    function Get_General_Accelerator(Index: Positive) return String;
