@@ -15,45 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded;
-with Interfaces.C.Strings;
-with Bases;
-with Maps;
-
 package body Ships.Movement is
-
-   function Dock_Ship
-     (Docking: Boolean; Escape: Boolean := False) return String is
-      use Ada.Strings.Unbounded;
-      use Interfaces.C.Strings;
-      use Bases;
-      use Maps;
-
-      function Dock_Ada_Ship(D, E: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "dockAdaShip";
-      Message: Unbounded_String;
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-   begin
-      if Base_Index > 0 then
-         Set_Base_In_Nim(Base_Index => Base_Index);
-      end if;
-      Get_Game_Date;
-      Set_Ship_In_Nim;
-      Message :=
-        To_Unbounded_String
-          (Source =>
-             Value
-               (Item =>
-                  Dock_Ada_Ship
-                    (D => (if Docking then 1 else 0),
-                     E => (if Escape then 1 else 0))));
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Game_Date;
-      return To_String(Source => Message);
-   end Dock_Ship;
 
    procedure Wait_In_Place(Minutes: Positive) is
       procedure Wait_Ada_In_Place(M: Positive) with

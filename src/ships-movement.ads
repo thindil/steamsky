@@ -22,21 +22,6 @@
 package Ships.Movement is
 -- ****
 
-     -- ****f* SMovement/SMovement.Dock_Ship
-     -- FUNCTION
-     -- Dock/Undock ship at base
-     -- PARAMETERS
-     -- Docking - If true, ship docks to the base, otherwise false
-     -- Escape  - If true, the player is trying to escape from the base
-     --           without paying. Default value is False
-     -- RESULT
-     -- Empty string if operation was succesfull, otherwise message what goes
-     -- wrong
-     -- SOURCE
-   function Dock_Ship
-     (Docking: Boolean; Escape: Boolean := False) return String;
-      -- ****
-
    -- ****f* SMovement/SMovement.Wait_In_Place
    -- FUNCTION
    -- Use fuel when ship wait in place
