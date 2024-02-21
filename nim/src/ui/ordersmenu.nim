@@ -16,9 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
-import ../[bases, bases2, basestypes, combat, crewinventory, events2, game,
-    game2, maps, messages, missions, missions2, shipscrew, shipsmovement,
-    stories, stories2, tk, trades, types, utils]
+import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
+    game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
+    shipsmovement, stories, stories2, tk, trades, types, utils]
 import combatui, coreui, dialogs, dialogs2, updateheader, waitmenu, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -568,6 +568,9 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ExecuteStory
 
+proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
   addCommand("Docking", dockingCommand)
@@ -580,6 +583,7 @@ proc addCommands*() =
   addCommand("StartMission", startMissionCommand)
   addCommand("CompleteMission", completeMissionCommand)
   addCommand("ExecuteStory", executeStoryCommand)
+#  addCommand("DeliverMedicines", deliverMedicinesCommand)
 
 import mapsui
 
@@ -786,6 +790,27 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   updateHeader()
   updateMessages()
   showSkyMap()
+  return tclOk
+
+proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+    itemIndex = findItem(inventory = playerShip.cargo, itemType = factionsList[
+        skyBases[baseIndex].owner].healingTools)
+    event = eventsList[eventIndex]
+    newTime = event.time - playerShip.cargo[itemIndex].amount
+  if newTime < 1:
+    deleteEvent(eventIndex = eventIndex)
+  if argv[1] == "free":
+    gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
+        itemIndex].amount / 10).Natural)
+    addMessage(message = "You gave " & itemsList[playerShip.cargo[
+        itemIndex].protoIndex].name & " for free to base.",
+        mType = tradeMessage)
+    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
   return tclOk
 
 # Temporary code for interfacing with Ada
