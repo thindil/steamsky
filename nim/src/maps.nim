@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/math
+import contracts
 import game, types
 
 type SkyCell* = object
@@ -32,25 +33,31 @@ type SkyCell* = object
 
 var skyMap*: array[MapXRange, array[MapYRange, SkyCell]] ## The list of all map's cells
 
-func normalizeCoord*(coord: var cint; isXAxis: cint = 1) {.gcsafe, raises: [],
-    tags: [], exportc.} =
+proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.sideEffect,
+    raises: [], tags: [], contractual.} =
   ## Normalize (fix to be in range of) the map's coordinates
   ##
   ## * coord   - The coordinate which will be normalized
-  ## * isXAxis - If 1 the coordinate to be normalized is in X axis, otherwise
+  ## * isXAxis - If true the coordinate to be normalized is in X axis, otherwise
   ##             it is in Y axis
   ##
   ## Returns the updated coord argument
-  if isXAxis == 1:
-    if coord < MapXRange.low:
-      coord = MapXRange.low
-    elif coord > MapXRange.high:
-      coord = MapXRange.high
-  else:
-    if coord < MapYRange.low:
-      coord = MapYRange.low
-    elif coord > MapYRange.high:
-      coord = MapYRange.high
+  ensure:
+    if isXAxis:
+      coord >= MapXRange.low and coord <= MapXRange.high
+    else:
+      coord >= MapYRange.low and coord <= MapYRange.high
+  body:
+    if isXAxis:
+      if coord < MapXRange.low:
+        coord = MapXRange.low
+      elif coord > MapXRange.high:
+        coord = MapXRange.high
+    else:
+      if coord < MapYRange.low:
+        coord = MapYRange.low
+      elif coord > MapYRange.high:
+        coord = MapYRange.high
 
 proc countDistance*(destinationX: MapXRange;
     destinationY: MapYRange): Natural {.sideEffect, raises: [], tags: [].} =
