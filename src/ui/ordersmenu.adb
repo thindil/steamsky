@@ -14,22 +14,22 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Bases;
-with Dialogs; use Dialogs;
+with Dialogs;
 with Events;
 with Factions;
 with Game;
 with Items;
 with Maps;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
 with Messages;
-with Ships; use Ships;
+with Ships;
 with Ships.Cargo;
 with Trades;
 with Utils;
 with Utils.UI; use Utils.UI;
 with Interfaces.C;
 with CArgv;
-with Tcl; use Tcl;
+with Tcl;
 
 package body OrdersMenu is
 
@@ -58,12 +58,15 @@ package body OrdersMenu is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl;
       use Bases;
       use Events;
       use Factions;
       use Items;
       use Maps;
+      use Maps.UI;
       use Messages;
+      use Ships;
       use Ships.Cargo;
       use Game.Tiny_String;
 
@@ -128,6 +131,7 @@ package body OrdersMenu is
          Sell_Medicines_Block :
          declare
             use Trades;
+            use Dialogs;
          begin
             --## rule off SIMPLIFIABLE_EXPRESSIONS
             Gain_Rep
