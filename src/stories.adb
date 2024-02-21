@@ -1,4 +1,4 @@
---    Copyright 2018-2023 Bartek thindil Jasicki
+--    Copyright 2018-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,10 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Bases;
-with Events;
-with Maps;
-with Ships;
 
 package body Stories is
 
@@ -72,38 +68,6 @@ package body Stories is
            Step_Condition_Type'Val(Nim_Current_Story.Finished_Step));
       return New_Current_Story;
    end Get_Current_Story;
-
-   function Progress_Story(Next_Step: Boolean := False) return Boolean is
-      use Bases;
-      use Events;
-      use Maps;
-      use Ships;
-
-      Result: Boolean;
-      Base_Index: constant Extended_Base_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      function Progress_Ada_Story(N_Step: Integer) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "progressAdaStory";
-   begin
-      Get_Game_Date;
-      Set_Ship_In_Nim;
-      if Base_Index > 0 then
-         Set_Base_In_Nim(Base_Index => Base_Index);
-      end if;
-      Result := Progress_Ada_Story(N_Step => (if Next_Step then 1 else 0)) = 1;
-      if Base_Index > 0 then
-         Get_Base_From_Nim(Base_Index => Base_Index);
-      end if;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Events_In_Ada_Loop :
-      for I in 1 .. Get_Events_Amount loop
-         Set_Event(Index => I);
-      end loop Set_Events_In_Ada_Loop;
-      Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
-      return Result;
-   end Progress_Story;
 
    function Get_Current_Story_Text return Unbounded_String is
       function Get_Ada_Current_Story_Text return chars_ptr with
@@ -181,15 +145,6 @@ package body Stories is
       end loop Convert_Text_Loop;
       return Story;
    end Get_Finished_Story;
-
-   procedure Set_Story_Show_Text(New_Value: Boolean := False) is
-      procedure Set_Ada_Story_Show_Text(New_V: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaStoryShowText";
-   begin
-      Set_Ada_Story_Show_Text(New_V => (if New_Value then 1 else 0));
-   end Set_Story_Show_Text;
 
    function Get_Story(Index: Unbounded_String) return Story_Data is
       use Interfaces.C;

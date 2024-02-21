@@ -1,4 +1,4 @@
---    Copyright 2018-2023 Bartek thindil Jasicki
+--    Copyright 2018-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -266,18 +266,6 @@ package Stories is
       External_Name => "clearAdaCurrentStory";
       -- ****
 
-      -- ****f* Stories/Stories.Progress_Story
-      -- FUNCTION
-      -- Progress current story one step
-      -- PARAMETERS
-      -- Next_Step - Used with DESTROYSHIP condition. If false, progress to the
-      --             next step in story. Default is false.
-      -- RESULT
-      -- True if story goes to next step, otherwise false
-      -- SOURCE
-   function Progress_Story(Next_Step: Boolean := False) return Boolean;
-   -- ****
-
    -- ****f* Stories/Stories.Get_Current_Story_Text
    -- FUNCTION
    -- Get text of current step in story
@@ -322,7 +310,6 @@ package Stories is
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data;
    function Get_Current_Story return Current_Story_Data;
-   procedure Set_Story_Show_Text(New_Value: Boolean := False);
    function Get_Story(Index: Unbounded_String) return Story_Data;
 
 end Stories;
