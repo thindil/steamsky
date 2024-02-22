@@ -1039,13 +1039,13 @@ package body Bases.RecruitUI is
         Create
           (pathName => Frame & ".hirebutton",
            options =>
-             "-text Hire -command {Hire} -image negotiateicon -style Dialog.TButton");
+             "-text Hire -command {Hire} -image negotiateicon -style Dialoggreen.TButton");
       Dialog_Close_Button: constant Ttk_Button :=
         Create
           (pathName => Negotiate_Dialog & ".buttonbox.button",
            options =>
              "-text Close -command {CloseDialog " & Negotiate_Dialog &
-             "} -image cancelicon -style Dialog.TButton");
+             "} -image cancelicon -style Dialogred.TButton");
       Label: Ttk_Label;
       Scale: Ttk_Scale;
       Spinbox: Ttk_SpinBox;
