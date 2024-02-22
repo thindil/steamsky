@@ -583,7 +583,7 @@ proc addCommands*() =
   addCommand("StartMission", startMissionCommand)
   addCommand("CompleteMission", completeMissionCommand)
   addCommand("ExecuteStory", executeStoryCommand)
-#  addCommand("DeliverMedicines", deliverMedicinesCommand)
+  addCommand("DeliverMedicines", deliverMedicinesCommand)
 
 import mapsui
 
@@ -811,6 +811,21 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
         mType = tradeMessage)
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
         itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
+  else:
+    gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
+        itemIndex].amount / 20).int * (-1))
+    try:
+      sellItems(itemIndex = itemIndex, amount = $playerShip.cargo[
+          itemIndex].amount)
+    except TradeNoFreeCargoError:
+      showMessage(text = "You can't sell medicines to the base because you don't have enough free cargo space for money.",
+          title = "No free cargo space")
+    except NoMoneyInBaseError:
+      showMessage(text = "You can't sell medicines to the base because the base don't have enough money to buy them.",
+          title = "Can't sell medicines")
+  updateHeader()
+  updateMessages()
+  showSkyMap()
   return tclOk
 
 # Temporary code for interfacing with Ada
