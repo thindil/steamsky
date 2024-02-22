@@ -7,6 +7,7 @@ task debug, "builds the project in debug mode":
   switch("define", "debug")
   switch("styleCheck", "error")
   switch("spellSuggest", "auto")
+  switch("NimblePath", "/root/.nimble/pkgs2")
   setCommand("c", "src" & DirSep & "steamsky.nim")
 
 task release, "builds the project in release mode":
@@ -14,6 +15,7 @@ task release, "builds the project in release mode":
   switch("noLinking")
   switch("nimcache", "obj")
   switch("define", "release")
+  switch("NimblePath", "/root/.nimble/pkgs2")
   setCommand("c", "src" & DirSep & "steamsky.nim")
 
 task windows, "builds the project in release mode for Windows":
@@ -25,4 +27,5 @@ task windows, "builds the project in release mode for Windows":
   switch("os", "windows")
   switch("cpu", "amd64")
   switch("amd64.windows.gcc.exe", "x86_64-w64-mingw32-gcc")
+  switch("NimblePath", "/root/.nimble/pkgs2")
   setCommand("c", "src" & DirSep & "steamsky.nim")
