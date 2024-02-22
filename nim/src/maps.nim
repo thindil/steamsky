@@ -15,8 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the in-game map, like data structure and
+## counting distance between the player's ship and destination point.
+
 import std/math
-import contracts
+import contracts, nimalyzer
 import game, types
 
 type SkyCell* = object
@@ -31,7 +34,9 @@ type SkyCell* = object
   eventIndex*: int
   missionIndex*: int
 
+{.push ruleOff: "varDeclared".}
 var skyMap*: array[MapXRange, array[MapYRange, SkyCell]] ## The list of all map's cells
+{.push ruleOn: "varDeclared".}
 
 proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.sideEffect,
     raises: [], tags: [], contractual.} =
@@ -60,7 +65,8 @@ proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.sideEffect,
         coord = MapYRange.high
 
 proc countDistance*(destinationX: MapXRange;
-    destinationY: MapYRange): Natural {.sideEffect, raises: [], tags: [].} =
+    destinationY: MapYRange): Natural {.sideEffect, raises: [], tags: [],
+    contractual.} =
   ## Count the distance between the player's ship and the point on the map
   ##
   ## * destinationX - the X position of the point to which the distance will be count
@@ -68,27 +74,32 @@ proc countDistance*(destinationX: MapXRange;
   ##
   ## The distance between the player's ship position and the selected point on the
   ## map.
-  var
-    diffX: float = ((playerShip.skyX - destinationX).abs).float
-    diffY: float = ((playerShip.skyY - destinationY).abs).float
-  return (sqrt((diffX^2) + (diffY^2))).floor.Natural
+  body:
+    var
+      diffX: float = ((playerShip.skyX - destinationX).abs).float
+      diffY: float = ((playerShip.skyY - destinationY).abs).float
+    return (sqrt(x = (diffX^2) + (diffY^2))).floor.Natural
 
 
 # Temporary code for interfacing with Ada
 
 proc getAdaMapCell(x, y, baseIndex, visited, eventIndex,
-    missionIndex: cint) {.raises: [], tags: [], exportc.} =
+    missionIndex: cint) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   skyMap[x][y] = SkyCell(baseIndex: baseIndex, visited: (if visited ==
       1: true else: false), eventIndex: eventIndex - 1,
       missionIndex: missionIndex - 1)
 
 proc setAdaMapCell(x, y: cint; baseIndex, visited, eventIndex,
-    missionIndex: var cint) {.raises: [], tags: [], exportc.} =
+    missionIndex: var cint) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   baseIndex = skyMap[x][y].baseIndex
   visited = skyMap[x][y].visited.ord.cint
   eventIndex = skyMap[x][y].eventIndex.cint + 1
   missionIndex = skyMap[x][y].missionIndex.cint + 1
 
 proc countAdaDistance(destinationX, destinationY: cint): cint {.raises: [],
-    tags: [], exportc.} =
-  return countDistance(destinationX, destinationY).cint
+    tags: [], exportc, contractual.} =
+  ## Temporary C binding
+  return countDistance(destinationX = destinationX,
+      destinationY = destinationY).cint
