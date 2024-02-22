@@ -569,7 +569,8 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ExecuteStory
 
 proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowOrders", showOrdersCommand)
@@ -797,8 +798,13 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-    itemIndex = findItem(inventory = playerShip.cargo, itemType = factionsList[
-        skyBases[baseIndex].owner].healingTools)
+    itemIndex = try:
+        findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[
+            baseIndex].owner].healingTools)
+      except:
+        tclEval(script = "bgerror {Can't get index of medicines. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     event = eventsList[eventIndex]
     newTime = event.time - playerShip.cargo[itemIndex].amount
   if newTime < 1:
@@ -806,9 +812,14 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   if argv[1] == "free":
     gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
         itemIndex].amount / 10).Natural)
-    addMessage(message = "You gave " & itemsList[playerShip.cargo[
-        itemIndex].protoIndex].name & " for free to base.",
-        mType = tradeMessage)
+    try:
+      addMessage(message = "You gave " & itemsList[playerShip.cargo[
+          itemIndex].protoIndex].name & " for free to base.",
+          mType = tradeMessage)
+    except:
+      tclEval(script = "bgerror {Can't show message. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
         itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
   else:
@@ -823,6 +834,10 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     except NoMoneyInBaseError:
       showMessage(text = "You can't sell medicines to the base because the base don't have enough money to buy them.",
           title = "Can't sell medicines")
+    except:
+      tclEval(script = "bgerror {Can't sell medicines to base. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   updateHeader()
   updateMessages()
   showSkyMap()
