@@ -1,5 +1,6 @@
-import ../src/[careers, factions, game, items, mobs, types]
+import ../src/careers
 import unittest2
+include ../src/mobs
 
 suite "Unit tests for mobs module":
 
