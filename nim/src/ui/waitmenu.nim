@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/strutils
 import ../[crew2, game, game2, shipsmovement, tk, types]
-import dialogs
+import coreui, dialogs, updateheader, utilsui2
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -148,6 +149,19 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
       return tclOk
     updateGame(minutes = timeNeeded)
     waitInPlace(minutes = timeNeeded)
+  elif argv[1] == "amount":
+    let amountBox = ".gameframe.wait.amount"
+    var timeNeeded = tclEval2(script = amountBox & " get").parseInt
+    let amountCombo = ".gameframe.wait.mins"
+    if tclEval2(script = amountCombo & " current") == "1":
+      timeNeeded = timeNeeded * 60
+    elif tclEval2(script = amountCombo & " current") == "2":
+      timeNeeded = timeNeeded * 1_440
+    updateGame(minutes = timeNeeded)
+    waitInPlace(minutes = timeNeeded)
+  updateHeader()
+  updateMessages()
+  var currentFrame = mainPaned & ".shipinfoframe"
   return tclOk
 
 proc addCommands*() =
