@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../[game, tk, types]
+import ../[crew2, game, game2, shipsmovement, tk, types]
 import dialogs
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -108,6 +108,46 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus " & button)
   tclEval(script = "bind " & button & " <Tab> {focus " & waitDialog & ".wait1;break}")
   showDialog(dialog = waitDialog, relativeY = 0.15)
+  return tclOk
+
+proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if argv[1] == "1":
+    updateGame(minutes = 1)
+    waitInPlace(minutes = 1)
+  elif argv[1] == "5":
+    updateGame(minutes = 5)
+    waitInPlace(minutes = 5)
+  elif argv[1] == "10":
+    updateGame(minutes = 10)
+    waitInPlace(minutes = 10)
+  elif argv[1] == "15":
+    updateGame(minutes = 15)
+    waitInPlace(minutes = 15)
+  elif argv[1] == "30":
+    updateGame(minutes = 30)
+    waitInPlace(minutes = 30)
+  elif argv[1] == "60":
+    updateGame(minutes = 60)
+    waitInPlace(minutes = 60)
+  elif argv[1] == "rest":
+    waitForRest()
+  elif argv[1] == "heal":
+    var timeNeeded = 0
+    for index, member in playerShip.crew:
+      if member.health in 1 .. 99 and member.order == rest:
+        block checkModules:
+          for module in playerShip.modules:
+            if module.mType == ModuleType2.cabin:
+              for owner in module.owner:
+                if owner == index:
+                  if timeNeeded < (100 - member.health) * 15:
+                    timeNeeded = (100 - member.health) * 15
+                    break checkModules
+    if timeNeeded == 0:
+      return tclOk
+    updateGame(minutes = timeNeeded)
+    waitInPlace(minutes = timeNeeded)
   return tclOk
 
 proc addCommands*() =
