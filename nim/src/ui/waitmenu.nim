@@ -112,6 +112,15 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
+proc addCommands*() =
+  addCommand("ShowWait", showWaitCommand)
+  addCommand("Wait", waitCommand)
+
+import mapsui
+
+proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   if argv[1] == "1":
     updateGame(minutes = 1)
@@ -162,10 +171,17 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   updateHeader()
   updateMessages()
   var currentFrame = mainPaned & ".shipinfoframe"
+  if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(script = "winfo ismapped " & currentFrame) == "1":
+    tclEval(script = "ShowShipInfo 1")
+  else:
+    currentFrame = mainPaned & ".knowledgeframe"
+    if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(script = "winfo ismapped " & currentFrame) == "1":
+      tclEval(script = "ShowKnowledge 1")
+    else:
+      drawMap()
+  let dialogCloseButton = ".gameframe.wait.close"
+  tclEval(script = dialogCloseButton & " invoke")
   return tclOk
-
-proc addCommands*() =
-  addCommand("ShowWait", showWaitCommand)
 
 # Temporary code for interfacing with Ada
 
