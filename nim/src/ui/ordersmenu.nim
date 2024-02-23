@@ -19,7 +19,7 @@ import std/[tables, strutils]
 import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
     shipsmovement, stories, stories2, tk, trades, types, utils]
-import combatui, coreui, dialogs, dialogs2, updateheader, waitmenu, utilsui2
+import combatui, coreui, dialogs, dialogs2, updateheader, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -599,7 +599,7 @@ proc addCommands*() =
   addCommand("ExecuteStory", executeStoryCommand)
   addCommand("DeliverMedicines", deliverMedicinesCommand)
 
-import mapsui
+import mapsui, waitmenu
 
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =

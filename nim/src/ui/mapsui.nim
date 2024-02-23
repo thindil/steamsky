@@ -17,7 +17,7 @@
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, game, maps, missions, statistics, stories, tk, types]
-import coreui, dialogs, themes, updateheader, utilsui2, waitmenu
+import coreui, dialogs, themes, updateheader, utilsui2
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -521,7 +521,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-import mapsuicommands, ordersmenu
+import mapsuicommands, ordersmenu, waitmenu
 
 proc createGameUi*() =
   let
