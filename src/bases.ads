@@ -203,16 +203,6 @@ package Bases is
    Sky_Bases: array(Bases_Range) of Base_Record;
    -- ****
 
-   -- ****f* Bases/Bases.Gain_Rep
-   -- FUNCTION
-   -- Gain reputation in selected base
-   -- PARAMETERS
-   -- Base_Index - Index of the base in which player gained or lose reputation
-   -- Points     - Amount of reputation points to gain or lose
-   -- SOURCE
-   procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer);
-   -- ****
-
    -- ****f* Bases/Bases.Count_Price
    -- FUNCTION
    -- Count price for actions with bases (buying/selling/docking/ect)

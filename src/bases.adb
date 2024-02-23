@@ -46,17 +46,6 @@ package body Bases is
          Experience => Sky_Bases(Base_Index).Reputation.Experience);
    end Set_Base_Reputation;
 
-   procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
-      procedure Gain_Ada_Rep(B_Index, Pnts: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "gainAdaRep";
-   begin
-      Get_Base_Reputation(Base_Index => Base_Index);
-      Gain_Ada_Rep(B_Index => Base_Index, Pnts => Points);
-      Set_Base_Reputation(Base_Index => Base_Index);
-   end Gain_Rep;
-
    procedure Count_Price
      (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
