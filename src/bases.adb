@@ -33,19 +33,6 @@ package body Bases is
          Experience => Sky_Bases(Base_Index).Reputation.Experience);
    end Get_Base_Reputation;
 
-   procedure Set_Base_Reputation(Base_Index: Bases_Range) is
-      procedure Set_Ada_Base_Reputation
-        (B_Index: Integer; Level, Experience: out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBaseReputation";
-   begin
-      Set_Ada_Base_Reputation
-        (B_Index => Base_Index,
-         Level => Sky_Bases(Base_Index).Reputation.Level,
-         Experience => Sky_Bases(Base_Index).Reputation.Experience);
-   end Set_Base_Reputation;
-
    procedure Count_Price
      (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
@@ -491,6 +478,18 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseKnown";
+      procedure Set_Base_Reputation(Base_Index: Bases_Range) is
+         procedure Set_Ada_Base_Reputation
+           (B_Index: Integer; Level, Experience: out Integer) with
+            Import => True,
+            Convention => C,
+            External_Name => "setAdaBaseReputation";
+      begin
+         Set_Ada_Base_Reputation
+           (B_Index => Base_Index,
+            Level => Sky_Bases(Base_Index).Reputation.Level,
+            Experience => Sky_Bases(Base_Index).Reputation.Experience);
+      end Set_Base_Reputation;
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
