@@ -1,5 +1,6 @@
-import ../src/[careers, crafts, factions, game, items, maps, mobs, ships, shipmodules, types]
+import ../src/[careers, crafts, factions, items, shipmodules]
 import unittest2
+include ../src/ships
 
 suite "Unit tests for ships module":
 
