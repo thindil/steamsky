@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Colored version of icon for accept negotiations with a recruit in a base
+
 ### Changed
 - Updated look of the dialog with information about a recruit
 
