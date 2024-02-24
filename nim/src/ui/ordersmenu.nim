@@ -585,19 +585,23 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## If argument type is free, deliver medicines for free, otherwise deliver
   ## medicines for a price
 
-proc addCommands*() =
-  addCommand("ShowOrders", showOrdersCommand)
-  addCommand("Docking", dockingCommand)
-  addCommand("AskForBases", askForBasesCommand)
-  addCommand("AskForEvents", askForEventsCommand)
-  addCommand("Attack", attackCommand)
-  addCommand("Pray", prayCommand)
-  addCommand("SetAsHome", setAsHomeCommand)
-  addCommand("ShowTrader", showTraderCommand)
-  addCommand("StartMission", startMissionCommand)
-  addCommand("CompleteMission", completeMissionCommand)
-  addCommand("ExecuteStory", executeStoryCommand)
-  addCommand("DeliverMedicines", deliverMedicinesCommand)
+proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  try:
+    addCommand("ShowOrders", showOrdersCommand)
+    addCommand("Docking", dockingCommand)
+    addCommand("AskForBases", askForBasesCommand)
+    addCommand("AskForEvents", askForEventsCommand)
+    addCommand("Attack", attackCommand)
+    addCommand("Pray", prayCommand)
+    addCommand("SetAsHome", setAsHomeCommand)
+    addCommand("ShowTrader", showTraderCommand)
+    addCommand("StartMission", startMissionCommand)
+    addCommand("CompleteMission", completeMissionCommand)
+    addCommand("ExecuteStory", executeStoryCommand)
+    addCommand("DeliverMedicines", deliverMedicinesCommand)
+  except:
+    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
+        getCurrentExceptionMsg() & "}")
 
 import mapsui, waitmenu
 
