@@ -112,7 +112,8 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect].}
 
 proc addCommands*() =
   addCommand("ShowWait", showWaitCommand)
@@ -122,60 +123,72 @@ import mapsui
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  if argv[1] == "1":
-    updateGame(minutes = 1)
-    waitInPlace(minutes = 1)
-  elif argv[1] == "5":
-    updateGame(minutes = 5)
-    waitInPlace(minutes = 5)
-  elif argv[1] == "10":
-    updateGame(minutes = 10)
-    waitInPlace(minutes = 10)
-  elif argv[1] == "15":
-    updateGame(minutes = 15)
-    waitInPlace(minutes = 15)
-  elif argv[1] == "30":
-    updateGame(minutes = 30)
-    waitInPlace(minutes = 30)
-  elif argv[1] == "60":
-    updateGame(minutes = 60)
-    waitInPlace(minutes = 60)
-  elif argv[1] == "rest":
-    waitForRest()
-  elif argv[1] == "heal":
-    var timeNeeded = 0
-    for index, member in playerShip.crew:
-      if member.health in 1 .. 99 and member.order == rest:
-        block checkModules:
-          for module in playerShip.modules:
-            if module.mType == ModuleType2.cabin:
-              for owner in module.owner:
-                if owner == index:
-                  if timeNeeded < (100 - member.health) * 15:
-                    timeNeeded = (100 - member.health) * 15
-                    break checkModules
-    if timeNeeded == 0:
-      return tclOk
-    updateGame(minutes = timeNeeded)
-    waitInPlace(minutes = timeNeeded)
-  elif argv[1] == "amount":
-    let amountBox = ".gameframe.wait.amount"
-    var timeNeeded = tclEval2(script = amountBox & " get").parseInt
-    let amountCombo = ".gameframe.wait.mins"
-    if tclEval2(script = amountCombo & " current") == "1":
-      timeNeeded = timeNeeded * 60
-    elif tclEval2(script = amountCombo & " current") == "2":
-      timeNeeded = timeNeeded * 1_440
-    updateGame(minutes = timeNeeded)
-    waitInPlace(minutes = timeNeeded)
+  try:
+    if argv[1] == "1":
+      updateGame(minutes = 1)
+      waitInPlace(minutes = 1)
+    elif argv[1] == "5":
+      updateGame(minutes = 5)
+      waitInPlace(minutes = 5)
+    elif argv[1] == "10":
+      updateGame(minutes = 10)
+      waitInPlace(minutes = 10)
+    elif argv[1] == "15":
+      updateGame(minutes = 15)
+      waitInPlace(minutes = 15)
+    elif argv[1] == "30":
+      updateGame(minutes = 30)
+      waitInPlace(minutes = 30)
+    elif argv[1] == "60":
+      updateGame(minutes = 60)
+      waitInPlace(minutes = 60)
+    elif argv[1] == "rest":
+      waitForRest()
+    elif argv[1] == "heal":
+      var timeNeeded = 0
+      for index, member in playerShip.crew:
+        if member.health in 1 .. 99 and member.order == rest:
+          block checkModules:
+            for module in playerShip.modules:
+              if module.mType == ModuleType2.cabin:
+                for owner in module.owner:
+                  if owner == index:
+                    if timeNeeded < (100 - member.health) * 15:
+                      timeNeeded = (100 - member.health) * 15
+                      break checkModules
+      if timeNeeded == 0:
+        return tclOk
+      updateGame(minutes = timeNeeded)
+      waitInPlace(minutes = timeNeeded)
+    elif argv[1] == "amount":
+      let amountBox = ".gameframe.wait.amount"
+      var timeNeeded = try:
+          tclEval2(script = amountBox & " get").parseInt
+        except:
+          tclEval(script = "bgerror {Can't get type of time to wait. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
+      let amountCombo = ".gameframe.wait.mins"
+      if tclEval2(script = amountCombo & " current") == "1":
+        timeNeeded = timeNeeded * 60
+      elif tclEval2(script = amountCombo & " current") == "2":
+        timeNeeded = timeNeeded * 1_440
+      updateGame(minutes = timeNeeded)
+      waitInPlace(minutes = timeNeeded)
+  except:
+    tclEval(script = "bgerror {Can't wait selected amount of time. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   updateHeader()
   updateMessages()
   var currentFrame = mainPaned & ".shipinfoframe"
-  if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(script = "winfo ismapped " & currentFrame) == "1":
+  if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(
+      script = "winfo ismapped " & currentFrame) == "1":
     tclEval(script = "ShowShipInfo 1")
   else:
     currentFrame = mainPaned & ".knowledgeframe"
-    if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(script = "winfo ismapped " & currentFrame) == "1":
+    if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(
+        script = "winfo ismapped " & currentFrame) == "1":
       tclEval(script = "ShowKnowledge 1")
     else:
       drawMap()
