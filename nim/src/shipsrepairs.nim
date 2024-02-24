@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to repair the player's ship's modules by the selected
+## amount of time
+
 import std/tables
 import contracts
 import crewinventory, game, items, messages, shipscargo, shipscrew, types
@@ -26,10 +29,10 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
   ## * minutes - the amount of minutes spent on repairs
   body:
     var
-      crewRepairPoints: seq[Natural]
+      crewRepairPoints: seq[Natural] = @[]
       repairPoints: int = 0
-      repairStopped = false
-      repairNeeded = true
+      repairStopped: bool = false
+      repairNeeded: bool = true
 
     proc repairModule(moduleIndex: Natural) {.sideEffect, raises: [KeyError,
         Exception], tags: [RootEffect], contractual.} =
@@ -40,8 +43,8 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
         moduleIndex < playerShip.modules.len
       body:
         var
-          pointsIndex = -1
-          pointsBonus: int
+          pointsIndex: int = -1
+          pointsBonus: int = 0
         repairStopped = false
         for index, member in playerShip.crew.mpairs:
           if member.order == repair:
@@ -52,7 +55,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
                   moduleIndex].protoIndex].repairSkill) / 10).int *
                   crewRepairPoints[pointsIndex]
               repairPoints = crewRepairPoints[pointsIndex] + pointsBonus
-              var toolsIndex = findTools(memberIndex = index,
+              var toolsIndex: int = findTools(memberIndex = index,
                   itemType = repairTools, order = repair)
               if toolsIndex == -1:
                 if pointsIndex == 0:
@@ -65,7 +68,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
                       mType = orderMessage, color = red)
                 repairStopped = true
                 return
-              var repairMaterial = findItem(inventory = playerShip.cargo,
+              var repairMaterial: int = findItem(inventory = playerShip.cargo,
                   itemType = modulesList[playerShip.modules[
                   moduleIndex].protoIndex].repairMaterial)
               if repairMaterial > -1 and playerShip.cargo[
@@ -77,7 +80,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
                     mType = orderMessage, color = red)
                 repairStopped = true
                 return
-              var repairValue = 0
+              var repairValue: Natural = 0
               if playerShip.modules[moduleIndex].durability + repairPoints >=
                   playerShip.modules[moduleIndex].maxDurability:
                 repairValue = playerShip.modules[moduleIndex].maxDurability -
@@ -90,8 +93,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
                 toolsIndex.dec
               updateCargo(ship = playerShip, cargoIndex = repairMaterial,
                   amount = -(repairValue))
-              playerShip.modules[moduleIndex].durability = playerShip.modules[
-                  moduleIndex].durability + repairValue
+              playerShip.modules[moduleIndex].durability += repairValue
               if repairValue > crewRepairPoints[pointsIndex]:
                 repairValue = crewRepairPoints[pointsIndex]
                 repairPoints = 0
@@ -109,7 +111,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
               if not repairNeeded:
                 break
 
-    var currentMinutes, orderTime = 0
+    var currentMinutes, orderTime: int = 0
     for member in playerShip.crew.mitems:
       if member.order == repair:
         currentMinutes = minutes
@@ -117,11 +119,11 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
         repairPoints = 0
         while currentMinutes > 0:
           if currentMinutes >= orderTime:
-            currentMinutes = currentMinutes - orderTime
+            currentMinutes -= orderTime
             repairPoints.inc
             orderTime = 15
           else:
-            orderTime = orderTime - currentMinutes
+            orderTime -= currentMinutes
             currentMinutes = 0
         crewRepairPoints.add(y = repairPoints)
         member.orderTime = orderTime
@@ -131,7 +133,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
         playerShip.repairModule].durability < playerShip.modules[
         playerShip.repairModule].maxDurability:
       repairModule(moduleIndex = playerShip.repairModule)
-    for index, module in playerShip.modules.pairs:
+    for index, module in playerShip.modules:
       if module.durability < module.maxDurability:
         repairModule(moduleIndex = index)
     if not repairNeeded or repairStopped:
@@ -146,6 +148,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
 
 proc repairAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     repairShip(minutes = minutes)
   except KeyError, Exception:
