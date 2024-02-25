@@ -17,7 +17,7 @@
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, game, maps, missions, statistics, stories, tk, types]
-import coreui, dialogs, themes, updateheader, utilsui2
+import coreui, dialogs, helpui, themes, updateheader, utilsui2
 
 var
   centerX*, centerY*: Positive  ## Coordinates of the center point on the map
@@ -680,6 +680,7 @@ proc createGameUi*() =
     setTheme()
     ordersmenu.addCommands()
     waitmenu.addCommands()
+    helpui.addCommands()
 
 # Temporary code for interfacing with Ada
 
