@@ -22,71 +22,71 @@ import coreui
 type ThemeRecord* = object
   ## Data structure for themes settings
   ##
-  ## * name                  - Name of theme
-  ## * fileName             - Name of .tcl file of theme
+  ## * name                - Name of theme
+  ## * fileName            - Name of .tcl file of theme
   ## * enemyShipIcon       - Icon used for Enemy Ship event
-  ## * attackOnBaseIcon   - Icon used for Attack on Base event
-  ## * diseaseIcon          - Icon used for Disease event
-  ## * doublePriceIcon      - Icon used for Double Price event
+  ## * attackOnBaseIcon    - Icon used for Attack on Base event
+  ## * diseaseIcon         - Icon used for Disease event
+  ## * doublePriceIcon     - Icon used for Double Price event
   ## * fullDocksIcon       - Icon used for Full Docks event
   ## * enemyPatrolIcon     - Icon used for Enemy Patrol event
-  ## * traderIcon           - Icon used for Trader event
+  ## * traderIcon          - Icon used for Trader event
   ## * friendlyShipIcon    - Icon used for Friendly Ship event
-  ## * deliverIcon          - Icon used for Deliver Item mission
-  ## * destroyIcon          - Icon used for Destroy Ship mission
-  ## * patrolIcon           - Icon used for Patrol Area mission
-  ## * exploreIcon          - Icon used for Explore Area mission
-  ## * passengerIcon        - Icon used for Transport Passenger mission
-  ## * pilotIcon            - Icon used for Pilot info
-  ## * engineerIcon         - Icon used for Engineer info
-  ## * gunnerIcon           - Icon used for Gunners info
+  ## * deliverIcon         - Icon used for Deliver Item mission
+  ## * destroyIcon         - Icon used for Destroy Ship mission
+  ## * patrolIcon          - Icon used for Patrol Area mission
+  ## * exploreIcon         - Icon used for Explore Area mission
+  ## * passengerIcon       - Icon used for Transport Passenger mission
+  ## * pilotIcon           - Icon used for Pilot info
+  ## * engineerIcon        - Icon used for Engineer info
+  ## * gunnerIcon          - Icon used for Gunners info
   ## * crewTraderIcon      - Icon used for Trader info
-  ## * repairIcon           - Icon used for Repairs info when repairs are on
+  ## * repairIcon          - Icon used for Repairs info when repairs are on
   ## * noRepairIcon        - Icon used for Repairs info when noone is assigned
   ## * repairOrderIcon     - Icon used for giving repair order to all crew members
-  ## * upgradeIcon          - Icon used for Upgrade info when upgrade is on
+  ## * upgradeIcon         - Icon used for Upgrade info when upgrade is on
   ## * noUpgradeIcon       - Icon used for Upgrade info when noone is assigned
-  ## * cleanIcon            - Icon used for Clean Ship info when cleaning is on
+  ## * cleanIcon           - Icon used for Clean Ship info when cleaning is on
   ## * noCleanIcon         - Icon used for Clean Ship info when noone is assigned
   ## * cleanOrderIcon      - Icon used for giving clean ship order to all crew members
-  ## * manufactureIcon      - Icon used for Manufacturing info when someone working on it
+  ## * manufactureIcon     - Icon used for Manufacturing info when someone working on it
   ## * noManufactureIcon   - Icon used for Manufacturing info when noone is assigned
-  ## * moveMapUpIcon      - Icon used for move map up button
-  ## * moveMapDownIcon    - Icon used for move map down button
-  ## * moveMapLeftIcon    - Icon used for move map left button
-  ## * moveMapRightIcon   - Icon used for move map right button
+  ## * moveMapUpIcon       - Icon used for move map up button
+  ## * moveMapDownIcon     - Icon used for move map down button
+  ## * moveMapLeftIcon     - Icon used for move map left button
+  ## * moveMapRightIcon    - Icon used for move map right button
   ## * noFuelIcon          - Icon used for show warning about no fuel
   ## * lowFuelIcon         - Icon used for show warning about low level of fuel
   ## * noFoodIcon          - Icon used for show warning about no food
   ## * lowFoodIcon         - Icon used for show warning about low level of food
   ## * noDrinksIcon        - Icon used for show warning about no drinks
   ## * lowDrinksIcon       - Icon used for show warning about low level of drinks
-  ## * notVisitedBaseIcon - Icon used for show not visited bases on map
+  ## * notVisitedBaseIcon  - Icon used for show not visited bases on map
   ## * playerShipIcon      - Icon used for show player ship on map
   ## * emptyMapIcon        - Icon used for empty map fields
-  ## * targetIcon           - Icon used for player selected target on map
-  ## * storyIcon            - Icon used for show story event location on map
-  ## * overloadedIcon       - Icon used for show warning about overloaded ship
+  ## * targetIcon          - Icon used for player selected target on map
+  ## * storyIcon           - Icon used for show story event location on map
+  ## * overloadedIcon      - Icon used for show warning about overloaded ship
   ## * arrowUpIcon         - Icon used for moving map or ship up
   ## * arrowDownIcon       - Icon used for moving map or ship down
   ## * arrowLeftIcon       - Icon used for moving map or ship left
   ## * arrowRightIcon      - Icon used for moving map or ship right
-  ## * arrowUpLeftIcon    - Icon used for moving map or ship up and left
-  ## * arrowUpRightIcon   - Icon used for moving map or ship up and right
-  ## * arrowDownRightIcon - Icon used for moving map or ship down and right
-  ## * arrowDownLeftIcon  - Icon used for moving map or ship down and left
-  ## * waitIcon             - Icon used for wait one minute
+  ## * arrowUpLeftIcon     - Icon used for moving map or ship up and left
+  ## * arrowUpRightIcon    - Icon used for moving map or ship up and right
+  ## * arrowDownRightIcon  - Icon used for moving map or ship down and right
+  ## * arrowDownLeftIcon   - Icon used for moving map or ship down and left
+  ## * waitIcon            - Icon used for wait one minute
   ## * moveStepIcon        - Icon used for move one step towards destination
   ## * moveToIcon          - Icon used for move ship to destination
-  ## * menuIcon             - Icon used for showing menus
-  ## * exitIcon             - Icon used for exit button
-  ## * randomIcon           - Icon used for setting random value buttons
-  ## * maleIcon             - Icon used for male gender
-  ## * femaleIcon           - Icon used for female gender
-  ## * editIcon             - Icon used for edit button
-  ## * showIcon             - Icon used for show button
-  ## * cancelIcon           - Icon used for cancel actions
-  ## * helpIcon             - Icon used for showing help
+  ## * menuIcon            - Icon used for showing menus
+  ## * exitIcon            - Icon used for exit button
+  ## * randomIcon          - Icon used for setting random value buttons
+  ## * maleIcon            - Icon used for male gender
+  ## * femaleIcon          - Icon used for female gender
+  ## * editIcon            - Icon used for edit button
+  ## * showIcon            - Icon used for show button
+  ## * cancelIcon          - Icon used for cancel actions
+  ## * helpIcon            - Icon used for showing help
   ## * specialHelpColor    - Name of color used to show keys and special names in the help.
   ##                           Can be any value accepted by Tcl.
   ## * underlineHelpColor  - Name of color used for underlined text in the help. Can be any
@@ -95,17 +95,17 @@ type ThemeRecord* = object
   ##                           accepted by Tcl.
   ## * italicHelpColor     - Name of color used for italic text in the help. Can be any value
   ##                           accepted by Tcl.
-  ## * giveIcon             - Icon used for give items button
-  ## * dropIcon             - Icon used for drop items button
-  ## * buyIcon              - Icon used for buy items button
-  ## * sellIcon             - Icon used for sell items button
-  ## * craftIcon            - Icon used for set crafting order button
-  ## * studyIcon            - Icon used for set study order button
-  ## * deconstructIcon      - Icon used for set deconstruct order button
-  ## * negotiateIcon        - Icon used for negotiation button
-  ## * cargoIcon            - Icon used for represent the player's ship's cargo
-  ## * equipIcon            - Icon used for equip item action
-  ## * unequipIcon          - Icon used for unequip item action
+  ## * giveIcon            - Icon used for give items button
+  ## * dropIcon            - Icon used for drop items button
+  ## * buyIcon             - Icon used for buy items button
+  ## * sellIcon            - Icon used for sell items button
+  ## * craftIcon           - Icon used for set crafting order button
+  ## * studyIcon           - Icon used for set study order button
+  ## * deconstructIcon     - Icon used for set deconstruct order button
+  ## * negotiateIcon       - Icon used for negotiation button
+  ## * cargoIcon           - Icon used for represent the player's ship's cargo
+  ## * equipIcon           - Icon used for equip item action
+  ## * unequipIcon         - Icon used for unequip item action
   ## * selectAllIcon       - Icon used for select all items on a list button
   ## * unselectAllIcon     - Icon used for unselect all items on a list button
   ## * giveOrderIcon       - Icon used for give order to the crew member button
@@ -127,6 +127,7 @@ type ThemeRecord* = object
   ## * dropColoredIcon     - Icon used for drop items button with green color
   ## * editColoredIcon     - Icon used for edit button with green color
   ## * showColoredIcon     - Icon used for show button with green color
+  ## * negotiateColoredIcon - Icon used for negotiation button with green color
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -228,6 +229,7 @@ type ThemeRecord* = object
   dropColoredIcon*: string
   editColoredIcon*: string
   showColoredIcon*: string
+  negotiateColoredIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -320,8 +322,9 @@ let
       giveColoredIcon: defaultThemeIconPath & "give2.svg",
       dropColoredIcon: defaultThemeIconPath & "drop2.svg",
       editColoredIcon: defaultThemeIconPath & "edit2.svg",
-      showColoredIcon: defaultThemeIconPath & "show2.svg")
-      ## The default game'st theme
+      showColoredIcon: defaultThemeIconPath & "show2.svg",
+      negotiateColoredIcon: defaultThemeIconPath & "negotiate2.svg")
+    ## The default game'st theme
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
     ReadDirEffect, ReadIOEffect, RootEffect].} =
@@ -428,7 +431,8 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
               of "LowDrinksIcon":
                 theme.lowDrinksIcon = entry.value.unixToNativePath
               of "NotVisitedBaseIcon":
-                theme.notVisitedBaseIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.notVisitedBaseIcon = fromHex[int32](
+                    entry.value).Rune.toUTF8
               of "EmptyMapIcon":
                 theme.emptyMapIcon = fromHex[int32](entry.value).Rune.toUTF8
               of "TargetIcon":
@@ -549,6 +553,8 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
                 theme.editColoredIcon = entry.value.unixToNativePath
               of "ShowColoredIcon":
                 theme.showColoredIcon = entry.value.unixToNativePath
+              of "NegotiateColoredIcon":
+                theme.negotiateColoredIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -590,7 +596,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
       "nopiloticon", "noengineericon", "destinationicon", "inventoryicon",
       "dismissicon", "goresticon", "repairpriorityicon", "upgradebuttonicon",
       "powericon", "assigncrewicon", "assignammoicon", "buy2icon", "sell2icon",
-      "moveicon", "give2icon", "drop2icon", "edit2icon", "show2icon"]
+      "moveicon", "give2icon", "drop2icon", "edit2icon", "show2icon", "negotiate2icon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -622,7 +628,8 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
         theme.upgradeButtonIcon, theme.powerIcon, theme.assignCrewIcon,
         theme.assignAmmoIcon, theme.buyDefaultIcon, theme.sellDefaultIcon,
         theme.moveIcon, theme.giveColoredIcon, theme.dropColoredIcon,
-        theme.editColoredIcon, theme.showColoredIcon]
+        theme.editColoredIcon, theme.showColoredIcon,
+        theme.negotiateColoredIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
