@@ -586,6 +586,7 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## medicines for a price
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  ## Adds Tcl commands related to the orders menu
   try:
     addCommand("ShowOrders", showOrdersCommand)
     addCommand("Docking", dockingCommand)
