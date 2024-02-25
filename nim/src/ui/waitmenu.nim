@@ -127,6 +127,7 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Wait
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowWait", showWaitCommand)
     addCommand("Wait", waitCommand)
