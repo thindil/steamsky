@@ -126,9 +126,13 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Wait
 
-proc addCommands*() =
-  addCommand("ShowWait", showWaitCommand)
-  addCommand("Wait", waitCommand)
+proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  try:
+    addCommand("ShowWait", showWaitCommand)
+    addCommand("Wait", waitCommand)
+  except:
+    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
+        getCurrentExceptionMsg() & "}")
 
 import mapsui
 
