@@ -478,7 +478,7 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "setAdaBaseKnown";
-      procedure Set_Base_Reputation(Base_Index: Bases_Range) is
+      procedure Set_Base_Reputation(Ba_Index: Bases_Range) is
          procedure Set_Ada_Base_Reputation
            (B_Index: Integer; Level, Experience: out Integer) with
             Import => True,
@@ -486,9 +486,9 @@ package body Bases is
             External_Name => "setAdaBaseReputation";
       begin
          Set_Ada_Base_Reputation
-           (B_Index => Base_Index,
-            Level => Sky_Bases(Base_Index).Reputation.Level,
-            Experience => Sky_Bases(Base_Index).Reputation.Experience);
+           (B_Index => Ba_Index,
+            Level => Sky_Bases(Ba_Index).Reputation.Level,
+            Experience => Sky_Bases(Ba_Index).Reputation.Experience);
       end Set_Base_Reputation;
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
@@ -538,7 +538,7 @@ package body Bases is
          Hour => Sky_Bases(Base_Index).Asked_For_Events.Hour,
          Minutes => Sky_Bases(Base_Index).Asked_For_Events.Minutes,
          Date_Type => 3);
-      Set_Base_Reputation(Base_Index => Base_Index);
+      Set_Base_Reputation(Ba_Index => Base_Index);
       Set_Ada_Base_Date
         (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Missions_Date.Year,
