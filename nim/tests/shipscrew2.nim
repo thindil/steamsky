@@ -1,5 +1,6 @@
-import ../src/[careers, factions, game, maps, items, shipscrew2, types]
+import ../src/[careers, factions, items, maps]
 import unittest2
+include ../src/shipscrew2
 
 suite "Unit tests for shipscrew2 module":
 
@@ -42,3 +43,7 @@ suite "Unit tests for shipscrew2 module":
     checkpoint "Check if the body was created"
     check:
       playerShip.cargo.len == 1
+
+  test "Testing getCurrentOrder.":
+    check:
+      getCurrentOrder(0) == "Talking with others"
