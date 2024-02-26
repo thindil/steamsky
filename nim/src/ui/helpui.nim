@@ -15,12 +15,26 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../tk
+import std/tables
+import ../[help, tk]
+
+proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let helpView = ".help.paned.content.view"
+  tclEval(script = helpView & " configure -state normal")
+  tclEval(script = helpView & " delete 1.0 end")
+  let topicsView = ".help.paned.topics.view"
+  var newText = ""
+  for entry in helpList.values:
+    if entry.index == tclEval2(script = topicsView & " selection"):
+      newText = entry.text
+      break
+  return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the help system
   try:
-    discard
+    addCommand("ShowTopic", showTopicCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
