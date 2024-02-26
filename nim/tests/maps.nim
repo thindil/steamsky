@@ -7,7 +7,7 @@ suite "Unit tests for maps module":
   playerShip.skyY = 1
 
   test "Testing normalizeCoord.":
-    var coord: cint = 0
+    var coord: int = 0
     normalizeCoord(coord)
     checkpoint "Normalize an invalid coordinate."
     check:
