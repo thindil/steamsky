@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[strutils, tables]
 import ../[help, tk]
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -29,6 +29,16 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     if entry.index == tclEval2(script = topicsView & " selection"):
       newText = entry.text
       break
+  var oldIndex = 0
+  while true:
+    let startIndex = newText.find(sub = '{', start = oldIndex)
+    if startIndex == -1:
+      tclEval(script = helpView & " insert end {" & newText[oldIndex .. ^1] & "}")
+      break
+    tclEval(script = helpView & " insert end {" & newText[oldIndex .. startIndex - 1] & "}")
+    let
+      endIndex = newText.find(sub = '}', start = startIndex) - 1
+      tagText = newText[startIndex + 1 .. endIndex]
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
