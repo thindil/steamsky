@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -19,8 +19,8 @@ import std/[strutils, tables, xmlparser, xmltree]
 import basestypes, careers, game, log, types
 
 type HelpData = object
-  index: string
-  text: string
+  index*: string
+  text*: string
 
 var helpList* = initOrderedTable[string, HelpData]()
 
