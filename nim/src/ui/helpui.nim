@@ -19,6 +19,19 @@ import std/[strutils, tables]
 import ../[game, help, items, tk]
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
+proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  ## Adds Tcl commands related to the help system
+  try:
+    addCommand("ShowTopic", showTopicCommand)
+  except:
+    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
+        getCurrentExceptionMsg() & "}")
+
+import mapsui
+
+proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let helpView = ".help.paned.content.view"
   tclEval(script = helpView & " configure -state normal")
@@ -32,7 +45,8 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
   var oldIndex = 0
   type VariablesData = object
     name, value: string
-  let variables: array[1 .. 11, VariablesData] = [VariablesData(
+  let
+    variables: array[1 .. 11, VariablesData] = [VariablesData(
       name: "MoneyName", value: moneyName), VariablesData(name: "FuelName",
       value: itemsList[findProtoItem(itemType = fuelType)].name), VariablesData(
       name: "StrengthName", value: attributesList[strengthIndex].name),
@@ -46,6 +60,15 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
       value: attributesList[conditionIndex].name), VariablesData(
       name: "DodgeSkill", value: skillsList[dodgeSkill].name), VariablesData(
       name: "UnarmedSkill", value: skillsList[unarmedSkill].name)]
+    accelNames: array[1 .. 25, string] = [mapAccelerators[5], mapAccelerators[
+        6], mapAccelerators[7], mapAccelerators[8], mapAccelerators[9],
+        mapAccelerators[10], mapAccelerators[11], mapAccelerators[12],
+        mapAccelerators[13], mapAccelerators[14], menuAccelerators[1],
+        menuAccelerators[2], menuAccelerators[3], menuAccelerators[4],
+        menuAccelerators[5], menuAccelerators[6], mapAccelerators[2],
+        menuAccelerators[7], menuAccelerators[9], menuAccelerators[10],
+        menuAccelerators[11], mapAccelerators[1], menuAccelerators[8],
+        mapAccelerators[3], mapAccelerators[4]]
   while true:
     let startIndex = newText.find(sub = '{', start = oldIndex)
     if startIndex == -1:
@@ -60,15 +83,11 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
       if tagText == variable.name:
         tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
         break
+    for index, accel in accelNames:
+      if tagText == "GameKey" & $index:
+        tclEval(script = helpView & " insert end {" & accel & "} [list special]")
+        break
   return tclOk
-
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
-  ## Adds Tcl commands related to the help system
-  try:
-    addCommand("ShowTopic", showTopicCommand)
-  except:
-    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-        getCurrentExceptionMsg() & "}")
 
 # Temporary code for interfacing with Ada
 
