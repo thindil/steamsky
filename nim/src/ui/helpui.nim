@@ -43,8 +43,11 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
       newText = entry.text
       break
   var oldIndex = 0
-  type VariablesData = object
-    name, value: string
+  type
+    VariablesData = object
+      name, value: string
+    FontTag = object
+      tag, textTag: string
   let
     variables: array[1 .. 11, VariablesData] = [VariablesData(
       name: "MoneyName", value: moneyName), VariablesData(name: "FuelName",
@@ -69,16 +72,18 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         menuAccelerators[7], menuAccelerators[9], menuAccelerators[10],
         menuAccelerators[11], mapAccelerators[1], menuAccelerators[8],
         mapAccelerators[3], mapAccelerators[4]]
+    fontTags: array[1 .. 3, FontTag] = [FontTag(tag: "b", textTag: "bold"),
+        FontTag(tag: "u", textTag: "underline"), FontTag(tag: "i",
+        textTag: "italic")]
   while true:
-    let startIndex = newText.find(sub = '{', start = oldIndex)
+    var startIndex = newText.find(sub = '{', start = oldIndex)
     if startIndex == -1:
       tclEval(script = helpView & " insert end {" & newText[oldIndex .. ^1] & "}")
       break
     tclEval(script = helpView & " insert end {" & newText[oldIndex ..
         startIndex - 1] & "}")
-    let
-      endIndex = newText.find(sub = '}', start = startIndex) - 1
-      tagText = newText[startIndex + 1 .. endIndex]
+    var endIndex = newText.find(sub = '}', start = startIndex) - 1
+    let tagText = newText[startIndex + 1 .. endIndex]
     for variable in variables:
       if tagText == variable.name:
         tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
@@ -86,6 +91,13 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, accel in accelNames:
       if tagText == "GameKey" & $index:
         tclEval(script = helpView & " insert end {" & accel & "} [list special]")
+        break
+    for tag in fontTags:
+      if tagText == tag.tag:
+        startIndex = newText.find(sub = '{', start = endIndex) - 1
+        tclEval(script = helpView & " insert end {" & newText[endIndex + 2 ..
+            startIndex] & "} [list " & tag.textTag & "]")
+        endIndex = newText.find(sub = '}', start = startIndex) - 1
         break
   return tclOk
 
