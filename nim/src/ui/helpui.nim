@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[help, tk]
+import ../[game, help, items, tk]
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -30,15 +30,36 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
       newText = entry.text
       break
   var oldIndex = 0
+  type VariablesData = object
+    name, value: string
+  let variables: array[1 .. 11, VariablesData] = [VariablesData(
+      name: "MoneyName", value: moneyName), VariablesData(name: "FuelName",
+      value: itemsList[findProtoItem(itemType = fuelType)].name), VariablesData(
+      name: "StrengthName", value: attributesList[strengthIndex].name),
+      VariablesData(name: "PilotingSkill", value: skillsList[
+      pilotingSkill].name), VariablesData(name: "EngineeringSkill",
+      value: skillsList[engineeringSkill].name), VariablesData(
+      name: "GunnerySkill", value: skillsList[gunnerySkill].name),
+      VariablesData(name: "TalkingSkill", value: skillsList[talkingSkill].name),
+      VariablesData(name: "PerceptionSkill", value: skillsList[
+      perceptionSkill].name), VariablesData(name: "ConditionName",
+      value: attributesList[conditionIndex].name), VariablesData(
+      name: "DodgeSkill", value: skillsList[dodgeSkill].name), VariablesData(
+      name: "UnarmedSkill", value: skillsList[unarmedSkill].name)]
   while true:
     let startIndex = newText.find(sub = '{', start = oldIndex)
     if startIndex == -1:
       tclEval(script = helpView & " insert end {" & newText[oldIndex .. ^1] & "}")
       break
-    tclEval(script = helpView & " insert end {" & newText[oldIndex .. startIndex - 1] & "}")
+    tclEval(script = helpView & " insert end {" & newText[oldIndex ..
+        startIndex - 1] & "}")
     let
       endIndex = newText.find(sub = '}', start = startIndex) - 1
       tagText = newText[startIndex + 1 .. endIndex]
+    for variable in variables:
+      if tagText == variable.name:
+        tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
+        break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
