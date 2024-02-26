@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -14,6 +14,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+## Provides code related items used by the player and NPC's, like loading
+## them from files, getting random item, etc.
 
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
@@ -67,7 +70,8 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError,
                 message = "Can't add item '" & itemNode.attr(name = "index") & "', invalid index.")
         itemAction: DataAction = try:
-            parseEnum[DataAction](itemNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = itemNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if itemAction in [update, remove]:
@@ -344,7 +348,8 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
 
 proc getRandomItem*(itemsIndexes: seq[Positive]; equipIndex: EquipmentLocations;
     highestLevel, weaponSkillLevel: Positive;
-    factionIndex: string): Natural {.sideEffect, raises: [], tags: [].} =
+    factionIndex: string): Natural {.sideEffect, raises: [], tags: [],
+        contractual.} =
   ## Get the random index of the item of the selected type
   ##
   ## * itemsIndexes     - the list of indexes of the items from which the index will be get
@@ -355,69 +360,76 @@ proc getRandomItem*(itemsIndexes: seq[Positive]; equipIndex: EquipmentLocations;
   ##
   ## Returns the random index from the selected itemsIndexes list of 0 if the item
   ## can't be get
-  var
-    itemIndex, maxIndex: Natural
-    newIndexes: seq[Positive]
-    added: bool
-  if equipIndex > weapon:
-    try:
-      for index in itemsIndexes:
-        added = false
-        for j in 0..<newIndexes.len:
-          if itemsList[index].price < itemsList[newIndexes[j]].price:
-            {.warning[UnsafeSetLen]: off.}
-            newIndexes.insert(item = index, i = j)
-            {.warning[UnsafeSetLen]: on.}
-            added = true
+  require:
+    itemsIndexes.len > 0
+    highestLevel <= SkillRange.high
+    factionIndex in factionsList
+  body:
+    var
+      itemIndex, maxIndex: Natural
+      newIndexes: seq[Positive]
+      added: bool
+    if equipIndex > weapon:
+      try:
+        for index in itemsIndexes:
+          added = false
+          for j in 0..<newIndexes.len:
+            if itemsList[index].price < itemsList[newIndexes[j]].price:
+              {.warning[UnsafeSetLen]: off.}
+              newIndexes.insert(item = index, i = j)
+              {.warning[UnsafeSetLen]: on.}
+              added = true
+              break
+          if not added:
+            newIndexes.add(y = index)
+      except KeyError:
+        return 0
+      maxIndex = ((newIndexes.len - 1).float * (highestLevel.float / 100.0) + 1.0).Positive
+      if maxIndex > newIndexes.len - 1:
+        maxIndex = newIndexes.len - 1
+      itemIndex = getRandom(min = 0, max = maxIndex)
+    else:
+      try:
+        for index in itemsIndexes:
+          added = false
+          for j in 0..<newIndexes.len:
+            if itemsList[index].price < itemsList[newIndexes[j]].price and
+                itemsList[index].value[3] == factionsList[
+                    factionIndex].weaponSkill:
+              {.warning[UnsafeSetLen]: off.}
+              newIndexes.insert(item = index, i = j)
+              {.warning[UnsafeSetLen]: on.}
+              added = true
+              break
+          if not added and itemsList[index].value[3] == factionsList[
+              factionIndex].weaponSkill:
+            newIndexes.add(y = index)
+      except KeyError:
+        return 0
+      if newIndexes.len == 0:
+        return 0
+      maxIndex = ((newIndexes.len - 1).float * (weaponSkillLevel.float /
+          100.0) + 1.0).Positive
+      if maxIndex > newIndexes.len - 1:
+        maxIndex = newIndexes.len - 1
+      try:
+        while true:
+          itemIndex = getRandom(min = 0, max = maxIndex)
+          if itemsList[newIndexes[itemIndex]].value[3] == factionsList[
+              factionIndex].weaponSkill:
             break
-        if not added:
-          newIndexes.add(y = index)
-    except KeyError:
-      return 0
-    maxIndex = ((newIndexes.len - 1).float * (highestLevel.float / 100.0) + 1.0).Positive
-    if maxIndex > newIndexes.len - 1:
-      maxIndex = newIndexes.len - 1
-    itemIndex = getRandom(min = 0, max = maxIndex)
-  else:
-    try:
-      for index in itemsIndexes:
-        added = false
-        for j in 0..<newIndexes.len:
-          if itemsList[index].price < itemsList[newIndexes[j]].price and
-              itemsList[index].value[3] == factionsList[
-                  factionIndex].weaponSkill:
-            {.warning[UnsafeSetLen]: off.}
-            newIndexes.insert(item = index, i = j)
-            {.warning[UnsafeSetLen]: on.}
-            added = true
-            break
-        if not added and itemsList[index].value[3] == factionsList[
-            factionIndex].weaponSkill:
-          newIndexes.add(y = index)
-    except KeyError:
-      return 0
-    if newIndexes.len == 0:
-      return 0
-    maxIndex = ((newIndexes.len - 1).float * (weaponSkillLevel.float / 100.0) + 1.0).Positive
-    if maxIndex > newIndexes.len - 1:
-      maxIndex = newIndexes.len - 1
-    try:
-      while true:
-        itemIndex = getRandom(min = 0, max = maxIndex)
-        if itemsList[newIndexes[itemIndex]].value[3] == factionsList[
-            factionIndex].weaponSkill:
-          break
-    except KeyError:
-      return 0
-  for index in itemsIndexes:
-    if index == newIndexes[itemIndex]:
-      return newIndexes[itemIndex]
-  return 0
+      except KeyError:
+        return 0
+    for index in itemsIndexes:
+      if index == newIndexes[itemIndex]:
+        return newIndexes[itemIndex]
+    return 0
 
 # Temporary code for interfacing with Ada
 
 type
   AdaObjectData* = object
+    ## Temporary object for C binding
     name: cstring
     weight: cint
     itemType: cstring
@@ -428,7 +440,8 @@ type
     reputation: cint
 
 proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
-    ], tags: [], exportc.} =
+    ], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   var values: array[5, cint]
   adaItem = AdaObjectData(name: "".cstring, weight: 0, itemType: "".cstring,
       price: 0, value: values, showType: "".cstring, description: "".cstring,
@@ -450,37 +463,50 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
   adaItem.description = item.description.cstring
   adaItem.reputation = item.reputation.cint
 
-proc findAdaProtoItem(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
+proc findAdaProtoItem(itemType: cstring): cint {.sideEffect, raises: [], tags: [
+    ], exportc, contractual.} =
+  ## Temporary C binding
   return findProtoItem(itemType = $itemType).cint
 
 func getAdaItemDamage(itemDurability: cint; toLower,
-    withColors: cint): cstring {.raises: [], tags: [], exportc.} =
-  return getItemDamage(itemDurability.ItemsDurability, toLower == 1,
-      withColors == 1).cstring
+    withColors: cint): cstring {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
+  return getItemDamage(itemDurability = itemDurability.ItemsDurability,
+      toLower = toLower == 1, withColors = withColors == 1).cstring
 
 proc getAdaItemName(name: cstring; protoIndex, durability, damageInfo,
-    toLower: cint): cstring {.sideEffect, raises: [], tags: [], exportc.} =
-  return getItemName(InventoryData(protoIndex: protoIndex, amount: 1,
-      name: $name, durability: durability, price: 0), damageInfo == 1,
-      toLower == 1).cstring
+    toLower: cint): cstring {.sideEffect, raises: [], tags: [], exportc,
+        contractual.} =
+  ## Temporary C binding
+  return getItemName(item = InventoryData(protoIndex: protoIndex, amount: 1,
+      name: $name, durability: durability, price: 0), damageInfo = damageInfo == 1,
+      toLower = toLower == 1).cstring
 
 proc getAdaItemChanceToDamage(itemData: cint): cstring {.sideEffect, raises: [
-    ], tags: [], exportc.} =
-  return getItemChanceToDamage(itemData).cstring
+    ], tags: [], exportc, contractual.} =
+  ## Temporary C binding
+  return getItemChanceToDamage(itemData = itemData).cstring
 
-proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc.} =
+proc setAdaToolsList() {.sideEffect, raises: [], tags: [], exportc,
+    contractual.} =
+  ## Temporary C binding
   setToolsList()
 
-proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [], exportc.} =
+proc isAdaTool(itemType: cstring): cint {.sideEffect, raises: [], tags: [],
+    exportc, contractual.} =
+  ## Temporary C binding
   if $itemType in toolsList:
     return 1
   return 0
 
-proc getAdaProtoAmount(): cint {.raises: [], tags: [], exportc.} =
+proc getAdaProtoAmount(): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return itemsList.len.cint
 
 proc findAdaTools(memberIndex: cint; itemType: cstring; order,
-    toolQuality: cint): cint {.raises: [], tags: [RootEffect], exportc.} =
+    toolQuality: cint): cint {.raises: [], tags: [RootEffect], exportc,
+        contractual.} =
+  ## Temporary C binding
   try:
     return findTools(memberIndex = (memberIndex - 1).Natural,
         itemType = $itemType, order = order.CrewOrders,
@@ -490,7 +516,9 @@ proc findAdaTools(memberIndex: cint; itemType: cstring; order,
 
 proc getAdaRandomItem(items: cstring; equipIndex, highestLevel,
     weaponSkillLevel: cint; factionIndex: cstring;
-        highestSkill: cint): cint {.sideEffect, raises: [], tags: [], exportc.} =
+        highestSkill: cint): cint {.sideEffect, raises: [], tags: [], exportc,
+            contractual.} =
+  ## Temporary C binding
   case $items
   of "weapon":
     return getRandomItem(itemsIndexes = weaponsList,
