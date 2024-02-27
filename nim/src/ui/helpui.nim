@@ -19,7 +19,7 @@ import std/[strutils, tables]
 import ../[basestypes, game, help, items, tk]
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
   ## Show the content of the selected topic help
   ##
   ## * clientData - the additional data for the Tcl command
@@ -60,20 +60,26 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     FontTag = object
       tag, textTag: string
   let
-    variables: array[1 .. 11, VariablesData] = [VariablesData(
-      name: "MoneyName", value: moneyName), VariablesData(name: "FuelName",
-      value: itemsList[findProtoItem(itemType = fuelType)].name), VariablesData(
-      name: "StrengthName", value: attributesList[strengthIndex].name),
-      VariablesData(name: "PilotingSkill", value: skillsList[
-      pilotingSkill].name), VariablesData(name: "EngineeringSkill",
-      value: skillsList[engineeringSkill].name), VariablesData(
-      name: "GunnerySkill", value: skillsList[gunnerySkill].name),
-      VariablesData(name: "TalkingSkill", value: skillsList[talkingSkill].name),
-      VariablesData(name: "PerceptionSkill", value: skillsList[
-      perceptionSkill].name), VariablesData(name: "ConditionName",
-      value: attributesList[conditionIndex].name), VariablesData(
-      name: "DodgeSkill", value: skillsList[dodgeSkill].name), VariablesData(
-      name: "UnarmedSkill", value: skillsList[unarmedSkill].name)]
+    variables: array[1 .. 11, VariablesData] = try:
+        [VariablesData(name: "MoneyName", value: moneyName), VariablesData(
+            name: "FuelName", value: itemsList[findProtoItem(
+            itemType = fuelType)].name), VariablesData(name: "StrengthName",
+            value: attributesList[strengthIndex].name), VariablesData(
+            name: "PilotingSkill", value: skillsList[pilotingSkill].name),
+            VariablesData(name: "EngineeringSkill", value: skillsList[
+            engineeringSkill].name), VariablesData(name: "GunnerySkill",
+            value: skillsList[gunnerySkill].name), VariablesData(
+            name: "TalkingSkill", value: skillsList[talkingSkill].name),
+            VariablesData(name: "PerceptionSkill", value: skillsList[
+            perceptionSkill].name), VariablesData(name: "ConditionName",
+            value: attributesList[conditionIndex].name), VariablesData(
+            name: "DodgeSkill", value: skillsList[dodgeSkill].name),
+            VariablesData(name: "UnarmedSkill", value: skillsList[
+            unarmedSkill].name)]
+      except:
+        tclEval(script = "bgerror {Can't set help variables. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     accelNames: array[1 .. 25, string] = [mapAccelerators[5], mapAccelerators[
         6], mapAccelerators[7], mapAccelerators[8], mapAccelerators[9],
         mapAccelerators[10], mapAccelerators[11], mapAccelerators[12],
