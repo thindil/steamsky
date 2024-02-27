@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, help, items, tk]
+import ../[basestypes, game, help, items, tk]
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults
@@ -78,6 +78,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     flagsTags: array[1 .. 8, string] = ["diseaseimmune", "nofatigue",
         "nomorale", "naturalarmor", "toxicattack", "sentientships",
         "fanaticism", "loner"]
+    basesFlags: array[1 .. 4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
   while true:
     var startIndex = newText.find(sub = '{', start = oldIndex)
     if startIndex == -1:
@@ -113,6 +114,20 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         factionsWithFlag.removeSuffix(", ")
         tclEval(script = helpView & " insert end {" & factionsWithFlag & "}")
         break
+    for tag in basesFlags:
+      if tagText != tag:
+        continue
+      var basesWithFlag = ""
+      for baseType in basesTypesList.values:
+        if tagText in baseType.flags:
+          if basesWithFlag.len > 0:
+            basesWithFlag.add(", ")
+          basesWithFlag.add(baseType.name)
+      basesWithFlag.removeSuffix(", ")
+      tclEval(script = helpView & " insert end {" & basesWithFlag & "}")
+      break
+    oldIndex = endIndex + 2
+  tclEval(script = helpView & " configure -state disabled")
   return tclOk
 
 # Temporary code for interfacing with Ada
