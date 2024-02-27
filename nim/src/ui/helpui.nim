@@ -75,6 +75,9 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     fontTags: array[1 .. 3, FontTag] = [FontTag(tag: "b", textTag: "bold"),
         FontTag(tag: "u", textTag: "underline"), FontTag(tag: "i",
         textTag: "italic")]
+    flagsTags: array[1 .. 8, string] = ["diseaseimmune", "nofatigue",
+        "nomorale", "naturalarmor", "toxicattack", "sentientships",
+        "fanaticism", "loner"]
   while true:
     var startIndex = newText.find(sub = '{', start = oldIndex)
     if startIndex == -1:
@@ -98,6 +101,17 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = helpView & " insert end {" & newText[endIndex + 2 ..
             startIndex] & "} [list " & tag.textTag & "]")
         endIndex = newText.find(sub = '}', start = startIndex) - 1
+        break
+    for tag in flagsTags:
+      if tagText == tag:
+        var factionsWithFlag = ""
+        for faction in factionsList.values:
+          if tagText in faction.flags:
+            if factionsWithFlag.len > 0:
+              factionsWithFlag.add(", ")
+            factionsWithFlag.add(faction.name)
+        factionsWithFlag.removeSuffix(", ")
+        tclEval(script = helpView & " insert end {" & factionsWithFlag & "}")
         break
   return tclOk
 
