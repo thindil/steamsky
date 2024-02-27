@@ -4,6 +4,7 @@ import unittest2
 suite "Unit tests for crewinventory module":
 
   checkpoint "Loading the game data."
+  loadData("../bin/data/game.dat")
   loadItems("../bin/data/items.dat")
 
   playerShip.crew = @[]
