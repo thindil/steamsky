@@ -19,23 +19,23 @@
 ## them from files, getting random item, etc.
 
 import std/[strutils, tables, xmlparser, xmltree]
-import contracts
+import contracts, nimalyzer
 import config, crewinventory, game, log, messages, shipscargo, shipscrew, types, utils
 
 var
-  weaponsList*: seq[Positive]
+  weaponsList*: seq[Positive] = @[]
     ## The list of all weapons prototypes indexes
-  shieldsList*: seq[Positive]
+  shieldsList*: seq[Positive] = @[]
     ## The list of all shields prototypes indexes
-  headArmorsList*: seq[Positive]
+  headArmorsList*: seq[Positive] = @[]
     ## The list of all head armors prototypes indexes
-  chestArmorsList*: seq[Positive]
+  chestArmorsList*: seq[Positive] = @[]
     ## The list of all chest armors prototypes indexes
-  armsArmorsList*: seq[Positive]
+  armsArmorsList*: seq[Positive] = @[]
     ## The list of all arms armors prototypes indexes
-  legsArmorsList*: seq[Positive]
+  legsArmorsList*: seq[Positive] = @[]
     ## The list of all legs armors prototypes indexes
-  toolsList*: seq[string]
+  toolsList*: seq[string] = @[]
     ## The list of all tools prototypes indexes
 
 proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
@@ -54,7 +54,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     armsArmorsList.len > 0
     legsArmorsList.len > 0
   body:
-    let itemsXml = try:
+    let itemsXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -97,7 +97,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             ObjectData(weight: 1, reputation: -100)
         else:
           ObjectData(weight: 1, reputation: -100)
-      var attribute = itemNode.attr(name = "name")
+      var attribute: string = itemNode.attr(name = "name")
       if attribute.len() > 0:
         item.name = attribute
       attribute = itemNode.attr(name = "weight")
@@ -150,6 +150,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       itemsList[itemIndex] = item
       if itemIndex == moneyIndex:
         moneyName = item.name
+      {.ruleOff: "ifstatements".}
       if item.itemType == weaponType:
         weaponsList.add(y = itemIndex)
       elif item.itemType == shieldType:
@@ -162,6 +163,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         armsArmorsList.add(y = itemIndex)
       elif item.itemType == legsArmor:
         legsArmorsList.add(y = itemIndex)
+      {.ruleOn: "ifstatements".}
 
 proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
     ], contractual.} =
@@ -174,7 +176,7 @@ proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
   require:
     itemType.len > 0
   body:
-    for index, item in itemsList.pairs():
+    for index, item in itemsList:
       if item.itemType == itemType:
         return index
     return 0
@@ -191,6 +193,7 @@ func getItemDamage*(itemDurability: ItemsDurability; toLower: bool = false;
   ## damaged
   let damage: float = 1.0 - (itemDurability.float / 100.0)
   result = ""
+  {.ruleOff: "ifstatements".}
   if damage < 0.2:
     result = (if withColors: "{green}" else: "") & "Slightly used" & (
         if withColors: "{/green}" else: "")
@@ -203,6 +206,7 @@ func getItemDamage*(itemDurability: ItemsDurability; toLower: bool = false;
   else:
     result = (if withColors: "{red}" else: "") & "Almost destroyed" & (
         if withColors: "{/gold}" else: "")
+  {.ruleOn: "ifstatements".}
   if toLower:
     result = toLowerAscii(s = result)
 
@@ -294,7 +298,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
   body:
     result = playerShip.crew[memberIndex].equipment[tool]
     if result > -1:
-      let protoIndex = playerShip.crew[memberIndex].inventory[result].protoIndex
+      let protoIndex: Natural = playerShip.crew[memberIndex].inventory[result].protoIndex
       if itemsList[protoIndex].itemType != itemType or itemsList[
           protoIndex].value[1] < toolQuality:
         updateCargo(ship = playerShip, protoIndex = protoIndex, amount = 1,
@@ -366,9 +370,9 @@ proc getRandomItem*(itemsIndexes: seq[Positive]; equipIndex: EquipmentLocations;
     factionIndex in factionsList
   body:
     var
-      itemIndex, maxIndex: Natural
-      newIndexes: seq[Positive]
-      added: bool
+      itemIndex, maxIndex: Natural = 0
+      newIndexes: seq[Positive] = @[]
+      added: bool = false
     if equipIndex > weapon:
       try:
         for index in itemsIndexes:
@@ -442,13 +446,13 @@ type
 proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
     ], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  var values: array[5, cint]
+  var values: array[5, cint] = [0, 0, 0, 0, 0]
   adaItem = AdaObjectData(name: "".cstring, weight: 0, itemType: "".cstring,
       price: 0, value: values, showType: "".cstring, description: "".cstring,
       reputation: -100)
   if not itemsList.hasKey(key = index):
     return
-  let item = try:
+  let item: ObjectData = try:
       itemsList[index]
     except KeyError:
       return
@@ -456,7 +460,7 @@ proc getAdaItem(index: cint; adaItem: var AdaObjectData) {.sideEffect, raises: [
   adaItem.weight = item.weight.cint
   adaItem.itemType = item.itemType.cstring
   adaItem.price = item.price.cint
-  for index, item in item.value.pairs:
+  for index, item in item.value:
     values[index - 1] = item.cint
   adaItem.value = values
   adaItem.showType = item.showType.cstring
@@ -545,10 +549,10 @@ proc getAdaRandomItem(items: cstring; equipIndex, highestLevel,
         equipIndex = equipIndex.EquipmentLocations, highestLevel = highestLevel,
         weaponSkillLevel = weaponSkillLevel, factionIndex = $factionIndex).cint
   of "tool":
-    var tempToolsList: seq[Positive]
+    var tempToolsList: seq[Positive] = @[]
     for recipe in recipesList.values:
       if highestSkill == recipe.skill:
-        for index, item in itemsList.pairs:
+        for index, item in itemsList:
           if item.itemType == recipe.tool:
             tempToolsList.add(y = index)
         break
