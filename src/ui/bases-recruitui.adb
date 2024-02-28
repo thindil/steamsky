@@ -1039,7 +1039,7 @@ package body Bases.RecruitUI is
         Create
           (pathName => Frame & ".hirebutton",
            options =>
-             "-text Hire -command {Hire} -image negotiateicon -style Dialoggreen.TButton");
+             "-text Hire -command {Hire} -image negotiate2icon -style Dialoggreen.TButton");
       Dialog_Close_Button: constant Ttk_Button :=
         Create
           (pathName => Negotiate_Dialog & ".buttonbox.button",
