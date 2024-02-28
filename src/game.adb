@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -300,14 +300,7 @@ package body Game is
          Get_Ada_Game_Integers(Values => Nim_Integers);
          Money_Index := Nim_Integers(1);
          Condition_Index := Nim_Integers(2);
-         Strength_Index := Nim_Integers(3);
-         Piloting_Skill := Count_Type(Nim_Integers(4));
-         Engineering_Skill := Count_Type(Nim_Integers(5));
-         Gunnery_Skill := Count_Type(Nim_Integers(6));
          Talking_Skill := Count_Type(Nim_Integers(7));
-         Perception_Skill := Count_Type(Nim_Integers(8));
-         Dodge_Skill := Count_Type(Nim_Integers(9));
-         Unarmed_Skill := Count_Type(Nim_Integers(10));
       end Load_Data;
    begin
       if Get_Proto_Ship(Proto_Index => 1) /= Empty_Proto_Ship then
