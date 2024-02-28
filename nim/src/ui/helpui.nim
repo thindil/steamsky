@@ -34,6 +34,18 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Destroy the help window and save the sash position to the game
+  ## configuration
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## CloseHelp
   let
     helpWindow = ".help"
     paned = helpWindow & ".paned"
