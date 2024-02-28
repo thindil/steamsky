@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[basestypes, game, help, items, tk]
+import ../[basestypes, config, game, help, items, tk]
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
@@ -32,10 +32,20 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowTopic
 
+proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    helpWindow = ".help"
+    paned = helpWindow & ".paned"
+  gameSettings.topicsPosition = tclEval2(script = paned & " sashpos 0").parseInt
+  tclEval(script = "destroy " & helpWindow)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the help system
   try:
     addCommand("ShowTopic", showTopicCommand)
+    addCommand("CloseHelp", closeHelpCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
