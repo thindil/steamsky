@@ -898,6 +898,8 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
     return theme.editColoredIcon.cstring
   of "showColoredIcon":
     return theme.showColoredIcon.cstring
+  of "negotiateColoredIcon":
+    return theme.negotiateColoredIcon.cstring
   else:
     tclEval(script = "bgerror {Unknown theme setting: '" & $name & "'}")
     return "".cstring
