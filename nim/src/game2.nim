@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables, xmlparser, xmltree]
+import contracts
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
     messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
@@ -23,14 +24,15 @@ import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
 
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Update the game (player ship, bases, crafting, etc)
   ##
   ## * minutes  - the amount of in-game minutes which passes
   ## * inCombat - if true, the player is in combat
   var needCleaning, needSaveGame = false
 
-  proc updateDay() =
+  proc updateDay() {.sideEffect, raises: [CrewOrderError, KeyError,
+      CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
     gameDate.day.inc
     for module in playerShip.modules.mitems:
       if module.mType == ModuleType2.cabin and module.cleanliness > 0:
@@ -98,7 +100,7 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   updateMissions(minutes = minutes)
 
 proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
-    OSError], tags: [WriteIOEffect, RootEffect].} =
+    OSError], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Load the game's data from files
   ##
   ## Returns empty string if the data loaded properly, otherwise message with
@@ -110,57 +112,64 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
   {.hint[XCannotRaiseY]: off.}
   proc loadSelectedData(dataName, fileName: string): string {.sideEffect,
       raises: [DataLoadingError, KeyError, OSError], tags: [WriteIOEffect,
-      RootEffect].} =
+      RootEffect], contractual.} =
+    require:
+      dataName.len > 0
+      fileName.len > 0
+    body:
+      var localFileName: string
+      proc loadDataFile(localDataName: string): string {.sideEffect, raises: [
+          DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect],
+              contractual.} =
+        require:
+          localDataName.len > 0
+        body:
+          let dataXml = try:
+              loadXml(path = localFileName)
+            except XmlError, ValueError, IOError, OSError, Exception:
+              return getCurrentExceptionMsg()
+          var dataType: string
+          dataType = dataXml.tag
+          if dataType == localDataName or localDataName.len == 0:
+            logMessage(message = "Loading " & dataType & " file: " &
+                localFileName, debugType = everything)
+            case dataType
+            of "factions":
+              loadFactions(fileName = localFileName)
+            of "goals":
+              loadGoals(fileName = localFileName)
+            of "help":
+              loadHelp(fileName = localFileName)
+            of "items":
+              loadItems(fileName = localFileName)
+            of "mobiles":
+              loadMobs(fileName = localFileName)
+            of "recipes":
+              loadRecipes(fileName = localFileName)
+            of "bases":
+              loadBasesTypes(fileName = localFileName)
+            of "modules":
+              loadModules(fileName = localFileName)
+            of "ships":
+              loadShips(fileName = localFileName)
+            of "stories":
+              loadStories(fileName = localFileName)
+            of "data":
+              loadData(fileName = localFileName)
+            of "careers":
+              loadCareers(fileName = localFileName)
+            else:
+              return "Can't load the game data. Unknown type of data: " & dataType
 
-    var localFileName: string
-    proc loadDataFile(localDataName: string): string {.sideEffect, raises: [
-        DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect].} =
-      let dataXml = try:
-          loadXml(path = localFileName)
-        except XmlError, ValueError, IOError, OSError, Exception:
-          return getCurrentExceptionMsg()
-      var dataType: string
-      dataType = dataXml.tag
-      if dataType == localDataName or localDataName.len == 0:
-        logMessage(message = "Loading " & dataType & " file: " & localFileName,
-            debugType = everything)
-        case dataType
-        of "factions":
-          loadFactions(fileName = localFileName)
-        of "goals":
-          loadGoals(fileName = localFileName)
-        of "help":
-          loadHelp(fileName = localFileName)
-        of "items":
-          loadItems(fileName = localFileName)
-        of "mobiles":
-          loadMobs(fileName = localFileName)
-        of "recipes":
-          loadRecipes(fileName = localFileName)
-        of "bases":
-          loadBasesTypes(fileName = localFileName)
-        of "modules":
-          loadModules(fileName = localFileName)
-        of "ships":
-          loadShips(fileName = localFileName)
-        of "stories":
-          loadStories(fileName = localFileName)
-        of "data":
-          loadData(fileName = localFileName)
-        of "careers":
-          loadCareers(fileName = localFileName)
-        else:
-          return "Can't load the game data. Unknown type of data: " & dataType
-
-    if fileName.len == 0:
-      for file in walkFiles(dataName & DirSep & "*.dat"):
-        localFileName = file
-        result = loadDataFile(localDataName = "")
-        if result.len > 0:
-          return
-    else:
-      localFileName = dataDirectory & fileName
-      result = loadDataFile(localDataName = dataName)
+      if fileName.len == 0:
+        for file in walkFiles(dataName & DirSep & "*.dat"):
+          localFileName = file
+          result = loadDataFile(localDataName = "")
+          if result.len > 0:
+            return
+      else:
+        localFileName = dataDirectory & fileName
+        result = loadDataFile(localDataName = dataName)
   {.hint[XCannotRaiseY]: on.}
 
   type DataTypeRecord = object
@@ -193,7 +202,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
   setToolsList()
 
 proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
-    tags: [WriteIOEffect, RootEffect].} =
+    tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Save or not the game and clear the temporary data
   ##
   ## * save - if true, save the current game
@@ -209,235 +218,243 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
   eventsList = @[]
 
 proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
-    Exception], tags: [WriteIOEffect, ReadIOEffect].} =
+    Exception], tags: [WriteIOEffect, ReadIOEffect], contractual.} =
   ## Start a new game, save configuration, create bases, fill the map, create
   ## the player's ship and put it on the map
   # Save the game configuration
-  saveConfig()
-  # Set the game statistics
-  clearGameStats()
-  if newGameSettings.playerFaction == "random":
-    newGameSettings.playerCareer = "random"
-    var index = 1
-    let roll = getRandom(1, factionsList.len)
-    for faction in factionsList.keys:
-      if index == roll:
-        newGameSettings.playerFaction = faction
-        break
-      index.inc
-  let playerFaction = factionsList[newGameSettings.playerFaction]
-  if newGameSettings.playerCareer == "random":
-    let roll = getRandom(1, playerFaction.careers.len)
-    var index = 1
-    for career in playerFaction.careers.keys:
-      if index == roll:
-        newGameSettings.playerCareer = career
-        break
-      index.inc
-  # Set the game time
-  gameDate = startDate
-  # Generate the game's world
-  for x in MapXRange.low .. MapXRange.high:
-    for y in MapYRange.low .. MapYRange.high:
-      skyMap[x][y] = SkyCell(baseIndex: 0, visited: false, eventIndex: -1,
-          missionIndex: -1)
-  var
-    maxSpawnRoll = 0
-    basesArray = initTable[string, seq[Positive]]()
-  for index, faction in factionsList:
-    maxSpawnRoll = maxSpawnRoll + faction.spawnChance
-    basesArray[index] = @[]
-  var
-    baseOwner, baseType: string
-    basePopulation: Natural
-    baseReputation: ReputationRange
-    baseSize: BasesSize
-  for i in skyBases.low .. skyBases.high:
-    var factionRoll = getRandom(1, maxSpawnRoll)
+  ensure:
+    playerShip.crew.len > 0
+  body:
+    saveConfig()
+    # Set the game statistics
+    clearGameStats()
+    if newGameSettings.playerFaction == "random":
+      newGameSettings.playerCareer = "random"
+      var index = 1
+      let roll = getRandom(1, factionsList.len)
+      for faction in factionsList.keys:
+        if index == roll:
+          newGameSettings.playerFaction = faction
+          break
+        index.inc
+    let playerFaction = factionsList[newGameSettings.playerFaction]
+    if newGameSettings.playerCareer == "random":
+      let roll = getRandom(1, playerFaction.careers.len)
+      var index = 1
+      for career in playerFaction.careers.keys:
+        if index == roll:
+          newGameSettings.playerCareer = career
+          break
+        index.inc
+    # Set the game time
+    gameDate = startDate
+    # Generate the game's world
+    for x in MapXRange.low .. MapXRange.high:
+      for y in MapYRange.low .. MapYRange.high:
+        skyMap[x][y] = SkyCell(baseIndex: 0, visited: false, eventIndex: -1,
+            missionIndex: -1)
+    var
+      maxSpawnRoll = 0
+      basesArray = initTable[string, seq[Positive]]()
     for index, faction in factionsList:
-      if factionRoll < faction.spawnChance:
-        baseOwner = index
-        basePopulation = (if faction.population[2] == 0: faction.population[
-            1] else: getRandom(faction.population[1], faction.population[2]))
-        baseReputation = getReputation(sourceFaction = newGameSettings.playerFaction,
-            targetFaction = index)
-        var maxBaseSpawnRoll = 0
-        for spawnChance in faction.basesTypes.values:
-          maxBaseSpawnRoll = maxBaseSpawnRoll + spawnChance
-        var baseTypeRoll = getRandom(min = 1, max = maxBaseSpawnRoll)
-        for tindex, baseTypeChance in faction.basesTypes:
-          if baseTypeRoll <= baseTypeChance:
-            baseType = tindex
-            break
-          baseTypeRoll = baseTypeRoll - baseTypeChance
-        break
-      factionRoll = factionRoll - faction.spawnChance
-    baseSize = (if basePopulation == 0: getRandom(0,
-        2).BasesSize elif basePopulation < 150: small elif basePopulation <
-        300: medium else: big)
-    skyBases[i].name = generateBaseName(factionIndex = baseOwner)
-    skyBases[i].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-    skyBases[i].skyX = 1
-    skyBases[i].skyY = 1
-    skyBases[i].baseType = baseType
-    skyBases[i].population = basePopulation
-    skyBases[i].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-    skyBases[i].known = false
-    skyBases[i].askedForBases = false
-    skyBases[i].askedForEvents = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-    skyBases[i].reputation = ReputationData(level: baseReputation, experience: 0)
-    skyBases[i].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-    skyBases[i].missions = @[]
-    skyBases[i].owner = baseOwner
-    skyBases[i].size = baseSize
-    skyBases[i].recruits = @[]
-    let baseFaction = factionsList[baseOwner]
-    if "loner" in baseFaction.flags:
-      factionRoll = getRandom(min = 1, max = maxSpawnRoll)
+      maxSpawnRoll = maxSpawnRoll + faction.spawnChance
+      basesArray[index] = @[]
+    var
+      baseOwner, baseType: string
+      basePopulation: Natural
+      baseReputation: ReputationRange
+      baseSize: BasesSize
+    for i in skyBases.low .. skyBases.high:
+      var factionRoll = getRandom(1, maxSpawnRoll)
       for index, faction in factionsList:
-        if factionRoll > faction.spawnChance:
-          factionRoll = factionRoll - faction.spawnChance
-        else:
+        if factionRoll < faction.spawnChance:
           baseOwner = index
-    basesArray[baseOwner].add(i)
-  for factionBases in basesArray.values:
-    for index, faction in factionBases:
-      var
-        attempts = 1
-        posX, posY: int = 0
-      while true:
-        var validLocation = true
-        if index == factionBases.low or ("loner" in factionsList[skyBases[
-            factionBases[0]].owner].flags and "loner" in factionsList[skyBases[
-            faction].owner].flags):
-          posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
-          posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
-        else:
-          posX = getRandom(min = skyBases[factionBases[index - 1]].skyX - 20,
-              max = skyBases[factionBases[index - 1]].skyX + 20)
-          normalizeCoord(coord = posX)
-          posY = getRandom(min = skyBases[factionBases[index - 1]].skyY - 20,
-              max = skyBases[factionBases[index - 1]].skyY + 20)
-          normalizeCoord(coord = posY, isXAxis = false)
-          attempts.inc
-          if attempts > 250:
+          basePopulation = (if faction.population[2] == 0: faction.population[
+              1] else: getRandom(faction.population[1], faction.population[2]))
+          baseReputation = getReputation(
+              sourceFaction = newGameSettings.playerFaction,
+
+targetFaction = index)
+          var maxBaseSpawnRoll = 0
+          for spawnChance in faction.basesTypes.values:
+            maxBaseSpawnRoll = maxBaseSpawnRoll + spawnChance
+          var baseTypeRoll = getRandom(min = 1, max = maxBaseSpawnRoll)
+          for tindex, baseTypeChance in faction.basesTypes:
+            if baseTypeRoll <= baseTypeChance:
+              baseType = tindex
+              break
+            baseTypeRoll = baseTypeRoll - baseTypeChance
+          break
+        factionRoll = factionRoll - faction.spawnChance
+      baseSize = (if basePopulation == 0: getRandom(0,
+          2).BasesSize elif basePopulation < 150: small elif basePopulation <
+          300: medium else: big)
+      skyBases[i].name = generateBaseName(factionIndex = baseOwner)
+      skyBases[i].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+      skyBases[i].skyX = 1
+      skyBases[i].skyY = 1
+      skyBases[i].baseType = baseType
+      skyBases[i].population = basePopulation
+      skyBases[i].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+      skyBases[i].known = false
+      skyBases[i].askedForBases = false
+      skyBases[i].askedForEvents = DateRecord(year: 0, month: 0, day: 0,
+          hour: 0, minutes: 0)
+      skyBases[i].reputation = ReputationData(level: baseReputation, experience: 0)
+      skyBases[i].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+      skyBases[i].missions = @[]
+      skyBases[i].owner = baseOwner
+      skyBases[i].size = baseSize
+      skyBases[i].recruits = @[]
+      let baseFaction = factionsList[baseOwner]
+      if "loner" in baseFaction.flags:
+        factionRoll = getRandom(min = 1, max = maxSpawnRoll)
+        for index, faction in factionsList:
+          if factionRoll > faction.spawnChance:
+            factionRoll = factionRoll - faction.spawnChance
+          else:
+            baseOwner = index
+      basesArray[baseOwner].add(i)
+    for factionBases in basesArray.values:
+      for index, faction in factionBases:
+        var
+          attempts = 1
+          posX, posY: int = 0
+        while true:
+          var validLocation = true
+          if index == factionBases.low or ("loner" in factionsList[skyBases[
+              factionBases[0]].owner].flags and "loner" in factionsList[skyBases[
+              faction].owner].flags):
             posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
             posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
-            attempts = 1
-        for j in -5 .. 5:
-          var tempX: int = posX + j
-          normalizeCoord(coord = tempX)
-          for k in -5 .. 5:
-            var tempY: int = posY + k
-            normalizeCoord(coord = tempY, isXAxis = false)
-            if skyMap[tempX][tempY].baseIndex > 0:
-              validLocation = false
+          else:
+            posX = getRandom(min = skyBases[factionBases[index - 1]].skyX - 20,
+                max = skyBases[factionBases[index - 1]].skyX + 20)
+            normalizeCoord(coord = posX)
+            posY = getRandom(min = skyBases[factionBases[index - 1]].skyY - 20,
+                max = skyBases[factionBases[index - 1]].skyY + 20)
+            normalizeCoord(coord = posY, isXAxis = false)
+            attempts.inc
+            if attempts > 250:
+              posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
+              posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
+              attempts = 1
+          for j in -5 .. 5:
+            var tempX: int = posX + j
+            normalizeCoord(coord = tempX)
+            for k in -5 .. 5:
+              var tempY: int = posY + k
+              normalizeCoord(coord = tempY, isXAxis = false)
+              if skyMap[tempX][tempY].baseIndex > 0:
+                validLocation = false
+                break
+            if not validLocation:
               break
-          if not validLocation:
+          if skyMap[posX][posY].baseIndex > 0:
+            validLocation = false
+          if validLocation:
             break
-        if skyMap[posX][posY].baseIndex > 0:
-          validLocation = false
-        if validLocation:
+        skyMap[posX][posY] = SkyCell(baseIndex: faction, visited: false,
+            eventIndex: -1, missionIndex: -1)
+        skyBases[faction].skyX = posX
+        skyBases[faction].skyY = posY
+    # Place the player's ship in a random large base
+    var randomBase, attempts: Positive = 1
+    while true:
+      randomBase = getRandom(min = 1, max = 1024)
+      if (attempts < 250 and skyBases[randomBase].population > 299 and skyBases[
+          randomBase].owner == newGameSettings.playerFaction) or attempts > 249:
+        if newGameSettings.startingBase == "Any":
           break
-      skyMap[posX][posY] = SkyCell(baseIndex: faction, visited: false,
-          eventIndex: -1, missionIndex: -1)
-      skyBases[faction].skyX = posX
-      skyBases[faction].skyY = posY
-  # Place the player's ship in a random large base
-  var randomBase, attempts: Positive = 1
-  while true:
-    randomBase = getRandom(min = 1, max = 1024)
-    if (attempts < 250 and skyBases[randomBase].population > 299 and skyBases[
-        randomBase].owner == newGameSettings.playerFaction) or attempts > 249:
-      if newGameSettings.startingBase == "Any":
-        break
-      elif skyBases[randomBase].baseType == newGameSettings.startingBase:
-        break
-    attempts.inc
-  # Create the player's ship
-  playerShip = createShip(protoIndex = playerFaction.careers[
-      newGameSettings.playerCareer].shipIndex, name = newGameSettings.shipName,
-      x = skyBases[randomBase].skyX, y = skyBases[randomBase].skyY,
-      speed = docked, randomUpgrades = false)
-  # Add the player to the ship
-  let
-    playerIndex2 = playerFaction.careers[
-        newGameSettings.playerCareer].playerIndex.parseInt
-    protoPlayer = protoMobsList[playerIndex2]
-    playerMorale: Natural = (if "nomorale" in playerFaction.flags: 50 else: 100)
-  var tmpInventory: seq[InventoryData]
-  for item in protoPlayer.inventory:
-    let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
-        max = item.maxAmount) else: item.minAmount)
-    tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
-        amount: amount, name: "", durability: 100, price: 0))
-  {.warning[UnsafeSetLen]: off.}
-  playerShip.crew.insert(item = MemberData(name: newGameSettings.playerName,
-      gender: newGameSettings.playerGender, health: 100, tired: 0,
-      skills: protoPlayer.skills, hunger: 0, thirst: 0,
-      order: protoPlayer.order, previousOrder: rest, orderTime: 15,
-      orders: protoPlayer.priorities, attributes: protoPlayer.attributes,
-      inventory: tmpInventory, equipment: protoPlayer.equipment, payment: [0,
-      0], contractLength: -1, morale: [1: playerMorale, 2: 0], loyalty: 100,
-      homeBase: randomBase, faction: newGameSettings.playerFaction), i = 0)
-  {.warning[UnsafeSetLen]: on.}
-  var cabinAssigned = false
-  for module in playerShip.modules.mitems:
-    for owner in module.owner.mitems:
-      if owner > -1:
-        owner.inc
-    if modulesList[module.protoIndex].mType == ModuleType.cabin and
-        not cabinAssigned:
-      for index, owner in module.owner.mpairs:
-        if owner == -1:
-          owner = 1
-          if index == 0:
-            module.name = newGameSettings.playerName & "'s Cabin"
-          cabinAssigned = true
+        elif skyBases[randomBase].baseType == newGameSettings.startingBase:
           break
-  # Set current map field and sky base info
-  skyBases[randomBase].visited = gameDate
-  skyBases[randomBase].known = true
-  skyMap[playerShip.skyX][playerShip.skyY].visited = true
-  generateRecruits()
-  generateMissions()
-  generateCargo()
-  # Set the player's goal if not set yet
-  if currentGoal.goalType == random:
-    var goalIndex = getRandom(min = 1, max = goalsList.len)
-    while not goalsList.hasKey(goalIndex):
-      goalIndex = getRandom(min = 1, max = goalsList.len)
-    currentGoal = goalsList[goalIndex]
-  # Set the name of the savegame file
-  generateSaveName()
-  # Set the player's career
-  playerCareer = newGameSettings.playerCareer
-  # Add the welcoming message
-  addMessage(message = "Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
-      mType = otherMessage)
+      attempts.inc
+    # Create the player's ship
+    playerShip = createShip(protoIndex = playerFaction.careers[
+        newGameSettings.playerCareer].shipIndex,
+        name = newGameSettings.shipName,
+        x = skyBases[randomBase].skyX, y = skyBases[randomBase].skyY,
+        speed = docked, randomUpgrades = false)
+    # Add the player to the ship
+    let
+      playerIndex2 = playerFaction.careers[
+          newGameSettings.playerCareer].playerIndex.parseInt
+      protoPlayer = protoMobsList[playerIndex2]
+      playerMorale: Natural = (if "nomorale" in
+          playerFaction.flags: 50 else: 100)
+    var tmpInventory: seq[InventoryData]
+    for item in protoPlayer.inventory:
+      let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
+          max = item.maxAmount) else: item.minAmount)
+      tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
+          amount: amount, name: "", durability: 100, price: 0))
+    {.warning[UnsafeSetLen]: off.}
+    playerShip.crew.insert(item = MemberData(name: newGameSettings.playerName,
+        gender: newGameSettings.playerGender, health: 100, tired: 0,
+        skills: protoPlayer.skills, hunger: 0, thirst: 0,
+        order: protoPlayer.order, previousOrder: rest, orderTime: 15,
+        orders: protoPlayer.priorities, attributes: protoPlayer.attributes,
+        inventory: tmpInventory, equipment: protoPlayer.equipment, payment: [0,
+        0], contractLength: -1, morale: [1: playerMorale, 2: 0], loyalty: 100,
+        homeBase: randomBase, faction: newGameSettings.playerFaction), i = 0)
+    {.warning[UnsafeSetLen]: on.}
+    var cabinAssigned = false
+    for module in playerShip.modules.mitems:
+      for owner in module.owner.mitems:
+        if owner > -1:
+          owner.inc
+      if modulesList[module.protoIndex].mType == ModuleType.cabin and
+          not cabinAssigned:
+        for index, owner in module.owner.mpairs:
+          if owner == -1:
+            owner = 1
+            if index == 0:
+              module.name = newGameSettings.playerName & "'s Cabin"
+            cabinAssigned = true
+            break
+    # Set current map field and sky base info
+    skyBases[randomBase].visited = gameDate
+    skyBases[randomBase].known = true
+    skyMap[playerShip.skyX][playerShip.skyY].visited = true
+    generateRecruits()
+    generateMissions()
+    generateCargo()
+    # Set the player's goal if not set yet
+    if currentGoal.goalType == random:
+      var goalIndex = getRandom(min = 1, max = goalsList.len)
+      while not goalsList.hasKey(goalIndex):
+        goalIndex = getRandom(min = 1, max = goalsList.len)
+      currentGoal = goalsList[goalIndex]
+    # Set the name of the savegame file
+    generateSaveName()
+    # Set the player's career
+    playerCareer = newGameSettings.playerCareer
+    # Add the welcoming message
+    addMessage(message = "Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
+        mType = otherMessage)
 
 # Temporary code for interfacing with Ada
 
 proc updateAdaGame(minutes, inCombat: cint) {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc.} =
+    RootEffect], exportc, contractual.} =
   try:
     updateGame(minutes = minutes, inCombat = inCombat == 1)
   except ValueError, IOError, Exception:
     discard
 
-proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
   try:
     return loadGameData().cstring
   except DataLoadingError, KeyError, OSError:
     return getCurrentExceptionMsg().cstring
 
-proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
   try:
     endGame(save = (if save == 1: true else: false))
   except KeyError, OSError, IOError:
     discard
 
-proc newAdaGame() {.raises: [], tags: [WriteIOEffect, ReadIOEffect], exportc.} =
+proc newAdaGame() {.raises: [], tags: [WriteIOEffect, ReadIOEffect], exportc, contractual.} =
   try:
     newGame()
   except ValueError, OSError, IOError, Exception:
