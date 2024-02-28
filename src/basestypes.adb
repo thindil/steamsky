@@ -1,4 +1,4 @@
---    Copyright 2019-2023 Bartek thindil Jasicki
+--    Copyright 2019-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -90,24 +90,6 @@ package body BasesTypes is
              New_String(Str => Tiny_String.To_String(Source => Base_Type)),
            I_Index => Item_Index);
    end Get_Price;
-
-   function Has_Flag
-     (Base_Type: Tiny_String.Bounded_String; Flag: String) return Boolean is
-      function Has_Ada_Flag
-        (B_Type, Flag_To_Check: chars_ptr) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "hasAdaFlag";
-   begin
-      if Has_Ada_Flag
-          (B_Type =>
-             New_String(Str => Tiny_String.To_String(Source => Base_Type)),
-           Flag_To_Check => New_String(Str => Flag)) =
-        0 then
-         return False;
-      end if;
-      return True;
-   end Has_Flag;
 
    function Get_Base_Type_Name
      (Base_Type: Tiny_String.Bounded_String) return String is
