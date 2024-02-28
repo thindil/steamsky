@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
+with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with GNAT.Directory_Operations;
@@ -21,15 +21,15 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
 with Config; use Config;
 with Dialogs;
-with Game; use Game;
+with Game;
 with Themes;
 with Utils.UI;
 
@@ -93,12 +93,16 @@ package body Help.UI is
    function Show_Help_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Ada.Strings;
       use Ada.Strings.Fixed;
       use GNAT.Directory_Operations;
       use Tcl.Ada;
+      use Tcl.Tk.Ada.Widgets.Text;
+      use Tcl.Tk.Ada.Widgets.TtkTreeView;
       use Tcl.Tk.Ada.Winfo;
       use Tcl.Tk.Ada.Wm;
       use Dialogs;
+      use Game;
       use Themes;
 
       Help_Window: constant Tk_Toplevel :=
@@ -222,11 +226,9 @@ package body Help.UI is
          External_Name => "addAdaHelpCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "ShowTopic", Ada_Command => Show_Topic_Command'Access);
       Add_Command(Name => "ShowHelp", Ada_Command => Show_Help_Command'Access);
-      Add_Command
-        (Name => "CloseHelp", Ada_Command => Close_Help_Command'Access);
+--      Add_Command
+--        (Name => "CloseHelp", Ada_Command => Close_Help_Command'Access);
    end Add_Commands;
 
 end Help.UI;
