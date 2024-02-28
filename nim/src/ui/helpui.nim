@@ -33,11 +33,17 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowTopic
 
 proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
     helpWindow = ".help"
     paned = helpWindow & ".paned"
-  gameSettings.topicsPosition = tclEval2(script = paned & " sashpos 0").parseInt
+    topicPosition = tclEval2(script = paned & " sashpos 0")
+  gameSettings.topicsPosition = try:
+      topicPosition.parseInt
+    except:
+      tclEval(script = "bgerror {Can't set topic position. Reason: " &
+          topicPosition & "}")
+      return tclOk
   tclEval(script = "destroy " & helpWindow)
   return tclOk
 
