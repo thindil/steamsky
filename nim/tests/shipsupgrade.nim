@@ -1,5 +1,6 @@
-import ../src/[game, careers, factions, items, shipmodules, shipsupgrade, types]
+import ../src/[careers, factions, shipmodules]
 import unittest2
+include ../src/shipsupgrade
 
 suite "Unit tests for shipsupgrade module":
 
