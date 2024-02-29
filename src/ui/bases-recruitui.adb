@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling;
-with Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -27,7 +27,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -394,8 +394,6 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Characters.Handling;
-      use Ada.Characters.Latin_1;
-      use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -691,7 +689,8 @@ package body Bases.RecruitUI is
             Message => "Show detailed information about the selected skill.");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Info_Button, Options => "-column 2 -row 0");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame, Options => "-sticky we");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Progress_Frame, Options => "-sticky we");
          Progress_Bar :=
            Create
              (pathName =>
@@ -1058,6 +1057,10 @@ package body Bases.RecruitUI is
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Cost: Positive;
+      Money_Info: constant Tk_Text :=
+        Create
+          (pathName => Negotiate_Dialog & ".money",
+           options => "-height 2 -width 22 -wrap char");
    begin
       Label_Frame := Create(pathName => Negotiate_Dialog & ".dailylbl");
       Label :=
@@ -1139,20 +1142,19 @@ package body Bases.RecruitUI is
       Bind
         (Widgt => Contract_Box, Sequence => "<Escape>",
          Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
-      Label := Create(pathName => Negotiate_Dialog & ".money");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Money_Info);
       Cost := Recruit.Price;
       Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       if Money_Index_2 > 0 then
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {You have" &
+         Insert
+           (TextWidget => Money_Info, Index => "end",
+            Text =>
+              "{You have" &
               Natural'Image
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Money_Index_2)
                    .Amount) &
-              " " & To_String(Source => Money_Name) & ".}");
+              " " & To_String(Source => Money_Name) & "}");
          if Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
@@ -1162,19 +1164,17 @@ package body Bases.RecruitUI is
             configure(Widgt => Hire_Button, options => "-state !disabled");
          end if;
       else
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {You don't have enough money to recruit anyone}");
+         Insert
+           (TextWidget => Money_Info, Index => "end",
+            Text => "{You don't have enough money to recruit anyone}");
          configure(Widgt => Hire_Button, options => "-state disabled");
       end if;
-      Label := Create(pathName => Negotiate_Dialog & ".cost");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {Hire for" & Positive'Image(Cost) & " " &
+      Insert
+        (TextWidget => Money_Info, Index => "end",
+         Text =>
+           "{" & LF & "Hire for" & Positive'Image(Cost) & " " &
            To_String(Source => Money_Name) & "}");
+      configure(Widgt => Money_Info, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
