@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[basestypes, config, game, help, items, tk]
-import themes
+import dialogs, themes
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
@@ -100,6 +100,11 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   for title, help in helpList:
     tclEval(script = topicsView & " insert {} end -id {" & help.index &
         "} -text {" & title & "}")
+  tclEval(script = "bind " & topicsView & "<<TreeviewSelect>> ShowTopic")
+  let topicIndex: string = (if argc == 1: tclGetVar(varName = "gamestate") else: $argv[1])
+  if tclEval2(script = topicsView & " exists " & topicIndex) == "0":
+    showMessage(text = "The selected help topic doesn't exist. Showing the first avaiable instead.", parentFrame = ".help", title = "Can't find help topic")
+    tclEval(script = topicsView & " selection set " & helpList[helpList.low].index)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
