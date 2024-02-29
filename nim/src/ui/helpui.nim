@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[os, strutils, tables]
 import ../[basestypes, config, game, help, items, tk]
+import themes
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
@@ -57,6 +58,32 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
           topicPosition & "}")
       return tclOk
   tclEval(script = "destroy " & helpWindow)
+  return tclOk
+
+proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let helpWindow = ".help"
+  if tclEval2(script = "winfo exists " & helpWindow) == "1":
+    return closeHelpCommand(clientData = clientData, interp = interp,
+        argc = argc, argv = argv)
+  tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "help.tcl")
+  let
+    paned = helpWindow & ".paned"
+    helpView = paned & ".content.view"
+  let theme = try:
+        themesList[gameSettings.interfaceTheme]
+      except:
+        tclEval(script = "bgerror {Can't find theme '" &
+            gameSettings.interfaceTheme & "'}")
+        return
+  tclEval(script = helpView & " tag configure special -foreground {" &
+      theme.specialHelpColor & "} -font BoldHelpFont")
+  tclEval(script = helpView & " tag configure underline -foreground {" &
+      theme.underlineHelpColor & "} -font UnderlineHelpFont")
+  tclEval(script = helpView & " tag configure bold -foreground {" &
+      theme.boldHelpColor & "} -font BoldHelpFont")
+  tclEval(script = helpView & " tag configure italic -foreground {" &
+      theme.italicHelpColor & "} -font ItalicHelpFont")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
