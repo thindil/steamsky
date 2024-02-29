@@ -61,7 +61,7 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let helpWindow = ".help"
   if tclEval2(script = "winfo exists " & helpWindow) == "1":
     return closeHelpCommand(clientData = clientData, interp = interp,
@@ -84,12 +84,22 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
       theme.boldHelpColor & "} -font BoldHelpFont")
   tclEval(script = helpView & " tag configure italic -foreground {" &
       theme.italicHelpColor & "} -font ItalicHelpFont")
-  var x = ((tclEval2(script = "winfo vrootwidth " & helpWindow).parseInt -
-      gameSettings.windowWidth) / 2).int
+  var x = try:
+        ((tclEval2(script = "winfo vrootwidth " & helpWindow).parseInt -
+            gameSettings.windowWidth) / 2).int
+      except:
+        tclEval(script = "bgerror {Can't count X position of help window. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   if x < 0:
     x = 0
-  var y = ((tclEval2(script = "winfo vrootheight " & helpWindow).parseInt -
-      gameSettings.windowHeight) / 2).int
+  var y = try:
+        ((tclEval2(script = "winfo vrootheight " & helpWindow).parseInt -
+            gameSettings.windowHeight) / 2).int
+      except:
+        tclEval(script = "bgerror {Can't count Y position of help window. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   if y < 0:
     y = 0
   tclEval(script = "wm geometry " & helpWindow & " " &
