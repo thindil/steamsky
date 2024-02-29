@@ -35,6 +35,7 @@ with Utils.UI;
 
 package body Help.UI is
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****o* HUI/HUI.Close_Help_Command
    -- FUNCTION
    -- Destroy help window and save sash position to the game configuration
@@ -53,6 +54,7 @@ package body Help.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
+      --## rule on REDUCEABLE_SCOPE
 
    function Close_Help_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
