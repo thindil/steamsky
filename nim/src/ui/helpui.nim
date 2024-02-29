@@ -101,10 +101,18 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = topicsView & " insert {} end -id {" & help.index &
         "} -text {" & title & "}")
   tclEval(script = "bind " & topicsView & "<<TreeviewSelect>> ShowTopic")
-  let topicIndex: string = (if argc == 1: tclGetVar(varName = "gamestate") else: $argv[1])
+  let topicIndex: string = (if argc == 1: tclGetVar(
+      varName = "gamestate") else: $argv[1])
   if tclEval2(script = topicsView & " exists " & topicIndex) == "0":
-    showMessage(text = "The selected help topic doesn't exist. Showing the first avaiable instead.", parentFrame = ".help", title = "Can't find help topic")
-    tclEval(script = topicsView & " selection set " & helpList[helpList.low].index)
+    showMessage(text = "The selected help topic doesn't exist. Showing the first avaiable instead.",
+        parentFrame = ".help", title = "Can't find help topic")
+    for help in helpList.values:
+      tclEval(script = topicsView & " selection set " & help.index)
+      break
+    return tclOk
+  tclEval(script = topicsView & " selection set " & topicIndex)
+  tclEval(script = "update")
+  tclEval(script = topicsView & " see " & topicIndex)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -112,6 +120,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   try:
     addCommand("ShowTopic", showTopicCommand)
     addCommand("CloseHelp", closeHelpCommand)
+    addCommand("ShowHelp", showHelpCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
