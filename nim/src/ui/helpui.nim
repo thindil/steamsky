@@ -75,7 +75,7 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         tclEval(script = "bgerror {Can't find theme '" &
             gameSettings.interfaceTheme & "'}")
-        return
+        return tclOk
   tclEval(script = helpView & " tag configure special -foreground {" &
       theme.specialHelpColor & "} -font BoldHelpFont")
   tclEval(script = helpView & " tag configure underline -foreground {" &
@@ -92,15 +92,16 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
       gameSettings.windowHeight) / 2).int
   if y < 0:
     y = 0
-  tclEval(script = "wm geometry " & $gameSettings.windowWidth & "x" &
-      $gameSettings.windowHeight & "+" & $x & "+" & $y)
+  tclEval(script = "wm geometry " & helpWindow & " " &
+      $gameSettings.windowWidth & "x" & $gameSettings.windowHeight & "+" & $x &
+      "+" & $y)
   tclEval(script = "update")
   tclEval(script = paned & " sashpos 0 " & $gameSettings.topicsPosition)
   let topicsView = paned & ".topics.view"
   for title, help in helpList:
     tclEval(script = topicsView & " insert {} end -id {" & help.index &
         "} -text {" & title & "}")
-  tclEval(script = "bind " & topicsView & "<<TreeviewSelect>> ShowTopic")
+  tclEval(script = "bind " & topicsView & " <<TreeviewSelect>> {ShowTopic}")
   let topicIndex: string = (if argc == 1: tclGetVar(
       varName = "gamestate") else: $argv[1])
   if tclEval2(script = topicsView & " exists " & topicIndex) == "0":
