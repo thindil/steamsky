@@ -1,6 +1,6 @@
-import std/tables
-import ../src/[factions, careers, game, items, stories, types]
+import ../src/[careers, factions, items]
 import unittest2
+include ../src/stories
 
 suite "Unit tests for stories module":
 
