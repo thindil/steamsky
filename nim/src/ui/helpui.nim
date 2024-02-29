@@ -84,6 +84,22 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
       theme.boldHelpColor & "} -font BoldHelpFont")
   tclEval(script = helpView & " tag configure italic -foreground {" &
       theme.italicHelpColor & "} -font ItalicHelpFont")
+  var x = ((tclEval2(script = "winfo vrootwidth " & helpWindow).parseInt -
+      gameSettings.windowWidth) / 2).int
+  if x < 0:
+    x = 0
+  var y = ((tclEval2(script = "winfo vrootheight " & helpWindow).parseInt -
+      gameSettings.windowHeight) / 2).int
+  if y < 0:
+    y = 0
+  tclEval(script = "wm geometry " & $gameSettings.windowWidth & "x" &
+      $gameSettings.windowHeight & "+" & $x & "+" & $y)
+  tclEval(script = "update")
+  tclEval(script = paned & " sashpos 0 " & $gameSettings.topicsPosition)
+  let topicsView = paned & ".topics.view"
+  for title, help in helpList:
+    tclEval(script = topicsView & " insert {} end -id {" & help.index &
+        "} -text {" & title & "}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
