@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to update the state of the game, like next turn,
+## finishing the game or load the game's data. Split from game module to
+## avoid circular dependencies.
+
 import std/[os, strutils, tables, xmlparser, xmltree]
 import contracts
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
@@ -33,6 +37,8 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
 
   proc updateDay() {.sideEffect, raises: [CrewOrderError, KeyError,
       CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
+    ## Update the in-game day, check if the player's ship need cleaning, pay
+    ## for docks and to the crew member and check if the game has to be saved
     gameDate.day.inc
     for module in playerShip.modules.mitems:
       if module.mType == ModuleType2.cabin and module.cleanliness > 0:
@@ -113,6 +119,13 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
   proc loadSelectedData(dataName, fileName: string): string {.sideEffect,
       raises: [DataLoadingError, KeyError, OSError], tags: [WriteIOEffect,
       RootEffect], contractual.} =
+    ## Load the selected game's data from the file
+    ##
+    ## * dataName - the name of the data to load
+    ## * fileName - the path to the file from which the data will be loaded
+    ##
+    ## Returns an empty string if the data was loaded correctly, otherwise the
+    ## message with information what was wrong.
     require:
       dataName.len > 0
       fileName.len > 0
@@ -121,6 +134,13 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
       proc loadDataFile(localDataName: string): string {.sideEffect, raises: [
           DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect],
               contractual.} =
+        ## Load the data from the selected file
+        ##
+        ## * localDataName - the name of the data which will be loaded from the
+        ##                   file
+        ##
+        ## Returns an empty string if the data was loaded correctly, otherwise
+        ## the message with information what was wrong.
         require:
           localDataName.len > 0
         body:
@@ -162,7 +182,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
               return "Can't load the game data. Unknown type of data: " & dataType
 
       if fileName.len == 0:
-        for file in walkFiles(dataName & DirSep & "*.dat"):
+        for file in walkFiles(pattern = dataName & DirSep & "*.dat"):
           localFileName = file
           result = loadDataFile(localDataName = "")
           if result.len > 0:
@@ -195,7 +215,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
     if result.len > 0:
       return
   # Load the modifications
-  for modDirectory in walkDirs(modsDirectory & "*"):
+  for modDirectory in walkDirs(pattern = modsDirectory & "*"):
     result = loadSelectedData(dataName = modDirectory, fileName = "")
     if result.len > 0:
       return
@@ -209,7 +229,7 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
   if save:
     saveGame()
   else:
-    removeFile(saveName)
+    removeFile(file = saveName)
   saveConfig()
   clearGameStats()
   clearCurrentGoal()
@@ -231,7 +251,7 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     if newGameSettings.playerFaction == "random":
       newGameSettings.playerCareer = "random"
       var index = 1
-      let roll = getRandom(1, factionsList.len)
+      let roll = getRandom(min = 1, max = factionsList.len)
       for faction in factionsList.keys:
         if index == roll:
           newGameSettings.playerFaction = faction
@@ -239,7 +259,7 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
         index.inc
     let playerFaction = factionsList[newGameSettings.playerFaction]
     if newGameSettings.playerCareer == "random":
-      let roll = getRandom(1, playerFaction.careers.len)
+      let roll = getRandom(min = 1, max = playerFaction.careers.len)
       var index = 1
       for career in playerFaction.careers.keys:
         if index == roll:
@@ -265,12 +285,12 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
       baseReputation: ReputationRange
       baseSize: BasesSize
     for i in skyBases.low .. skyBases.high:
-      var factionRoll = getRandom(1, maxSpawnRoll)
+      var factionRoll = getRandom(min = 1, max = maxSpawnRoll)
       for index, faction in factionsList:
         if factionRoll < faction.spawnChance:
           baseOwner = index
           basePopulation = (if faction.population[2] == 0: faction.population[
-              1] else: getRandom(faction.population[1], faction.population[2]))
+              1] else: getRandom(min = faction.population[1], max = faction.population[2]))
           baseReputation = getReputation(
               sourceFaction = newGameSettings.playerFaction,
 
@@ -286,8 +306,8 @@ targetFaction = index)
             baseTypeRoll = baseTypeRoll - baseTypeChance
           break
         factionRoll = factionRoll - faction.spawnChance
-      baseSize = (if basePopulation == 0: getRandom(0,
-          2).BasesSize elif basePopulation < 150: small elif basePopulation <
+      baseSize = (if basePopulation == 0: getRandom(min = 0,
+          max = 2).BasesSize elif basePopulation < 150: small elif basePopulation <
           300: medium else: big)
       skyBases[i].name = generateBaseName(factionIndex = baseOwner)
       skyBases[i].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
@@ -314,7 +334,7 @@ targetFaction = index)
             factionRoll = factionRoll - faction.spawnChance
           else:
             baseOwner = index
-      basesArray[baseOwner].add(i)
+      basesArray[baseOwner].add(y = i)
     for factionBases in basesArray.values:
       for index, faction in factionBases:
         var
@@ -422,7 +442,7 @@ targetFaction = index)
     # Set the player's goal if not set yet
     if currentGoal.goalType == random:
       var goalIndex = getRandom(min = 1, max = goalsList.len)
-      while not goalsList.hasKey(goalIndex):
+      while not goalsList.hasKey(key = goalIndex):
         goalIndex = getRandom(min = 1, max = goalsList.len)
       currentGoal = goalsList[goalIndex]
     # Set the name of the savegame file
@@ -437,24 +457,28 @@ targetFaction = index)
 
 proc updateAdaGame(minutes, inCombat: cint) {.raises: [], tags: [WriteIOEffect,
     RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     updateGame(minutes = minutes, inCombat = inCombat == 1)
   except ValueError, IOError, Exception:
     discard
 
 proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return loadGameData().cstring
   except DataLoadingError, KeyError, OSError:
     return getCurrentExceptionMsg().cstring
 
 proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     endGame(save = (if save == 1: true else: false))
   except KeyError, OSError, IOError:
     discard
 
 proc newAdaGame() {.raises: [], tags: [WriteIOEffect, ReadIOEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     newGame()
   except ValueError, OSError, IOError, Exception:
