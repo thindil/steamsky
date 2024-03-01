@@ -47,9 +47,4 @@ package Help is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
--- Temporary code to interact with Nim
-
-   function Get_Help
-     (Title: out Unbounded_String; Help_Index: Integer := -1) return Help_Data;
-
 end Help;
