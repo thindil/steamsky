@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typo in the changelog
+- No icon on sell button in the trade screen if selling is the only option
 
 ## [9.7] - 2024-02-18
 
