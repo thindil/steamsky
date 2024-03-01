@@ -1,5 +1,6 @@
-import ../src/[factions, careers, game, items, stories, stories2, types]
+import ../src/[careers, factions, items]
 import unittest2
+include ../src/stories2
 
 suite "Unit tests for stories2 module":
 
