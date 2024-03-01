@@ -820,7 +820,7 @@ package body Bases.RecruitUI is
       Trade_Payment: constant Natural :=
         Natural
           (Float'Value(Tcl_GetVar(interp => Interp, varName => "percent")));
-      Label: constant Ttk_Label :=
+      Money_Info: constant Tk_Text :=
         Get_Widget(pathName => Dialog_Name & ".cost", Interp => Interp);
       Hire_Button: constant Ttk_Button :=
         Get_Widget
@@ -853,11 +853,18 @@ package body Bases.RecruitUI is
          Cost := 1;
       end if;
       Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {Hire for" & Natural'Image(Cost) & " " &
-           To_String(Source => Money_Name) & "}");
+      configure(Widgt => Money_Info, options => "-state normal");
+      Delete(TextWidget => Money_Info, StartIndex => "2.0", Indexes => "end");
+      Insert
+        (TextWidget => Money_Info, Index => "end",
+         Text => "{" & LF & "Hire for}");
+      Insert
+        (TextWidget => Money_Info, Index => "end",
+         Text => "{" & Positive'Image(Cost) & "} [list gold]");
+      Insert
+        (TextWidget => Money_Info, Index => "end",
+         Text => "{ " & To_String(Source => Money_Name) & "}");
+      configure(Widgt => Money_Info, options => "-state disabled");
       if Money_Index_2 > 0
         and then
           Inventory_Container.Element
@@ -1059,7 +1066,7 @@ package body Bases.RecruitUI is
       Cost: Positive;
       Money_Info: constant Tk_Text :=
         Create
-          (pathName => Negotiate_Dialog & ".money",
+          (pathName => Negotiate_Dialog & ".cost",
            options => "-height 2 -width 22 -wrap char");
    begin
       Label_Frame := Create(pathName => Negotiate_Dialog & ".dailylbl");
@@ -1145,16 +1152,39 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Money_Info);
       Cost := Recruit.Price;
       Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+      Tag_Configure
+        (TextWidget => Money_Info, TagName => "red",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-red)"));
+      Tag_Configure
+        (TextWidget => Money_Info, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
       if Money_Index_2 > 0 then
+         Insert
+           (TextWidget => Money_Info, Index => "end", Text => "{You have}");
          Insert
            (TextWidget => Money_Info, Index => "end",
             Text =>
-              "{You have" &
+              "{" &
               Natural'Image
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Money_Index_2)
                    .Amount) &
-              " " & To_String(Source => Money_Name) & "}");
+              "} [list gold]");
+         Insert
+           (TextWidget => Money_Info, Index => "end",
+            Text => "{ " & To_String(Source => Money_Name) & "}");
          if Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
@@ -1166,14 +1196,19 @@ package body Bases.RecruitUI is
       else
          Insert
            (TextWidget => Money_Info, Index => "end",
-            Text => "{You don't have enough money to recruit anyone}");
+            Text =>
+              "{You don't have enough money to recruit anyone} [list red]");
          configure(Widgt => Hire_Button, options => "-state disabled");
       end if;
       Insert
         (TextWidget => Money_Info, Index => "end",
-         Text =>
-           "{" & LF & "Hire for" & Positive'Image(Cost) & " " &
-           To_String(Source => Money_Name) & "}");
+         Text => "{" & LF & "Hire for}");
+      Insert
+        (TextWidget => Money_Info, Index => "end",
+         Text => "{" & Positive'Image(Cost) & "} [list gold]");
+      Insert
+        (TextWidget => Money_Info, Index => "end",
+         Text => "{ " & To_String(Source => Money_Name) & "}");
       configure(Widgt => Money_Info, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
       Tcl.Tk.Ada.Grid.Grid
