@@ -33,7 +33,7 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   ##
   ## * minutes  - the amount of in-game minutes which passes
   ## * inCombat - if true, the player is in combat
-  var needCleaning, needSaveGame = false
+  var needCleaning, needSaveGame: bool = false
 
   proc updateDay() {.sideEffect, raises: [CrewOrderError, KeyError,
       CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
@@ -52,16 +52,16 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     if $gameSettings.autoSave == $daily:
       needSaveGame = true
 
-  var tiredPoints = 0
+  var tiredPoints: Natural = 0
   for i in 1 .. minutes:
     if (gameDate.minutes + i) mod 15 == 0:
       tiredPoints.inc
-  let addedMinutes = minutes mod 60
+  let addedMinutes: Natural = minutes mod 60
   gameDate.minutes = gameDate.minutes + addedMinutes
   if gameDate.minutes > 59:
     gameDate.minutes = gameDate.minutes - 60
     gameDate.hour.inc
-  var addedHours = (minutes / 60).int
+  var addedHours: Natural = (minutes / 60).int
   while addedHours > 23:
     addedHours = addedHours - 24
     updateDay()
@@ -80,7 +80,7 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   repairShip(minutes = minutes)
   manufacturing(minutes = minutes)
   upgradeShip(minutes = minutes)
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if baseIndex > 0:
     if skyBases[baseIndex].visited.year == 0:
       gameStats.basesVisited.inc
@@ -130,7 +130,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
       dataName.len > 0
       fileName.len > 0
     body:
-      var localFileName: string
+      var localFileName: string = ""
       proc loadDataFile(localDataName: string): string {.sideEffect, raises: [
           DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect],
               contractual.} =
@@ -144,11 +144,11 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
         require:
           localDataName.len > 0
         body:
-          let dataXml = try:
+          let dataXml: XmlNode = try:
               loadXml(path = localFileName)
             except XmlError, ValueError, IOError, OSError, Exception:
               return getCurrentExceptionMsg()
-          var dataType: string
+          var dataType: string = ""
           dataType = dataXml.tag
           if dataType == localDataName or localDataName.len == 0:
             logMessage(message = "Loading " & dataType & " file: " &
@@ -250,17 +250,17 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     clearGameStats()
     if newGameSettings.playerFaction == "random":
       newGameSettings.playerCareer = "random"
-      var index = 1
-      let roll = getRandom(min = 1, max = factionsList.len)
+      var index: Positive = 1
+      let roll: Positive = getRandom(min = 1, max = factionsList.len)
       for faction in factionsList.keys:
         if index == roll:
           newGameSettings.playerFaction = faction
           break
         index.inc
-    let playerFaction = factionsList[newGameSettings.playerFaction]
+    let playerFaction: FactionData = factionsList[newGameSettings.playerFaction]
     if newGameSettings.playerCareer == "random":
-      let roll = getRandom(min = 1, max = playerFaction.careers.len)
-      var index = 1
+      let roll: Positive = getRandom(min = 1, max = playerFaction.careers.len)
+      var index: Positive = 1
       for career in playerFaction.careers.keys:
         if index == roll:
           newGameSettings.playerCareer = career
@@ -274,18 +274,18 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
         skyMap[x][y] = SkyCell(baseIndex: 0, visited: false, eventIndex: -1,
             missionIndex: -1)
     var
-      maxSpawnRoll = 0
-      basesArray = initTable[string, seq[Positive]]()
+      maxSpawnRoll: Natural = 0
+      basesArray: Table[string, seq[Positive]] = initTable[string, seq[Positive]]()
     for index, faction in factionsList:
       maxSpawnRoll = maxSpawnRoll + faction.spawnChance
       basesArray[index] = @[]
     var
-      baseOwner, baseType: string
-      basePopulation: Natural
-      baseReputation: ReputationRange
-      baseSize: BasesSize
+      baseOwner, baseType: string = ""
+      basePopulation: Natural = 0
+      baseReputation: ReputationRange = 0
+      baseSize: BasesSize = unknown
     for i in skyBases.low .. skyBases.high:
-      var factionRoll = getRandom(min = 1, max = maxSpawnRoll)
+      var factionRoll: Natural = getRandom(min = 1, max = maxSpawnRoll)
       for index, faction in factionsList:
         if factionRoll < faction.spawnChance:
           baseOwner = index
@@ -295,7 +295,7 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
               sourceFaction = newGameSettings.playerFaction,
 
 targetFaction = index)
-          var maxBaseSpawnRoll = 0
+          var maxBaseSpawnRoll: Natural = 0
           for spawnChance in faction.basesTypes.values:
             maxBaseSpawnRoll = maxBaseSpawnRoll + spawnChance
           var baseTypeRoll = getRandom(min = 1, max = maxBaseSpawnRoll)
