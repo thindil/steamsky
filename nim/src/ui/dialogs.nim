@@ -247,7 +247,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button2;break}")
     button = buttonsFrame & ".button2"
     tclEval(script = "ttk::button " & button & " -text {" & button2.text & "}" &
-        (if button1.icon.len > 0: " -image {" & button2.icon & "}" else: "") &
+        (if button2.icon.len > 0: " -image {" & button2.icon & "}" else: "") &
         " -command {" & closeCommand & ";" & button2.command &
         "} -style Dialog" & button2.color & ".TButton")
     tclEval(script = "tooltip::tooltip " & button & " \"" & button2.tooltip & "\"")
