@@ -15,13 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/os
+import std/[os, tables]
 import ../[game, tk]
 import coreui
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].} =
+    argv: openArray[cstring]): TclResults =
   var
     shipInfoFrame = mainPaned & ".shipinfoframe"
     button = mainPaned & ".shipinfoframe.general.canvas.frame.rename"
@@ -60,6 +59,43 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & label)
     tclEval(script = "grid remove " & upgradeProgress)
     tclEval(script = "grid remove " & cancelButton)
+  else:
+    var
+      upgradeInfo = "Upgrade:" & playerShip.modules[
+          playerShip.upgradeModule].name & " "
+      maxUpgrade = 0
+    case playerShip.modules[playerShip.upgradeModule].upgradeAction
+    of durability:
+      upgradeInfo.add("(durability)")
+      maxUpgrade = modulesList[playerShip.modules[
+          playerShip.upgradeModule].protoIndex].durability
+    of maxValue:
+      case modulesList[playerShip.modules[
+          playerShip.upgradeModule].protoIndex].mType
+      of engine:
+        upgradeInfo.add("(power)")
+        maxUpgrade = (modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].maxValue / 20).int
+      of cabin:
+        upgradeInfo.add("(quality)")
+        maxUpgrade = modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].maxValue
+      of gun, batteringRam:
+        upgradeInfo.add("(quality)")
+        maxUpgrade = modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].maxValue * 2
+      of hull:
+        upgradeInfo.add("(enlarge)")
+        maxUpgrade = modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].maxValue * 40
+      of harpoonGun:
+        upgradeInfo.add("(strength)")
+        maxUpgrade = modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].maxValue * 10
+      else:
+        discard
+    else:
+      discard
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
