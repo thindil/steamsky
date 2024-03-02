@@ -37,9 +37,29 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   elif tclEval2(script = "winfo exists " & shipInfoFrame) == "1" and argc == 1:
     tclEval(script = "InvokeButton " & closeButton)
     tclEval(script = "grid remove " & closeButton)
-    for i in 1 .. 4:
+    for i in 0 .. 3:
       tclEval(script = "bind . <" & generalAccelerators[i] & "> {}")
     return tclOk
+  let shipCanvas = shipInfoFrame & ".general.canvas"
+  tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
+      shipCanvas & ".frame.maxmin}")
+  tclEval(script = "bind . <" & generalAccelerators[2] & "> {InvokeButton " &
+      shipInfoFrame & ".modules.canvas.frame.maxmin}")
+  tclEval(script = "bind . <" & generalAccelerators[1] & "> {InvokeButton " &
+      shipInfoFrame & ".crew.canvas.frame.maxmin}")
+  tclEval(script = "bind . <" & generalAccelerators[3] & "> {InvokeButton " &
+      shipInfoFrame & ".cargo.canvas.frame.maxmin}")
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  shipInfoFrame = mainPaned & ".shipinfoframe.general.canvas.frame"
+  var label = shipInfoFrame & ".name"
+  tclEval(script = label & " configure -text {Name: " & playerShip.name & "}")
+  label = shipInfoFrame & ".upgradelabel"
+  let upgradeProgress = shipInfoFrame & ".upgrade"
+  var cancelButton = shipInfoFrame & ".cancelupgrade"
+  if playerShip.upgradeModule == -1:
+    tclEval(script = "grid remove " & label)
+    tclEval(script = "grid remove " & upgradeProgress)
+    tclEval(script = "grid remove " & cancelButton)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
