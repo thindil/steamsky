@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated look of the dialog with information about a recruit
+- Updated look of the dialog used to negotiate hiring a recruit
 - Updated modding guide
 
 ### Fixed
