@@ -17,7 +17,7 @@
 
 import std/[os, tables]
 import ../[config, game, maps, ships, tk]
-import coreui
+import coreui, shipsuicrew, shipsuimodules, utilsui2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -162,9 +162,15 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = shipCanvas & " xview moveto 0.0")
   tclEval(script = shipCanvas & " yview moveto 0.0")
   # Setting ship module info
+  updateModulesInfo()
   # Setting crew info
+  updateCrewInfo()
   # Setting cargo info
+  let typeBox = mainPaned & "shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  tclEval(script = typeBox & " set All")
+  tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
   # Show ship info
+  showScreen(newScreenName = "shipinfoframe")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
