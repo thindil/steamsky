@@ -20,7 +20,7 @@
 ## avoid circular dependencies.
 
 import std/[os, strutils, tables, xmlparser, xmltree]
-import contracts
+import contracts, nimalyzer
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
     messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
@@ -57,17 +57,17 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
     if (gameDate.minutes + i) mod 15 == 0:
       tiredPoints.inc
   let addedMinutes: Natural = minutes mod 60
-  gameDate.minutes = gameDate.minutes + addedMinutes
+  gameDate.minutes += addedMinutes
   if gameDate.minutes > 59:
     gameDate.minutes = gameDate.minutes - 60
     gameDate.hour.inc
   var addedHours: Natural = (minutes / 60).int
   while addedHours > 23:
-    addedHours = addedHours - 24
+    addedHours -= 24
     updateDay()
-  gameDate.hour = gameDate.hour + addedHours
+  gameDate.hour += addedHours
   while gameDate.hour > 23:
-    gameDate.hour = gameDate.hour - 24
+    gameDate.hour -= 24
     updateDay()
   if needSaveGame:
     saveGame()
@@ -80,7 +80,8 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   repairShip(minutes = minutes)
   manufacturing(minutes = minutes)
   upgradeShip(minutes = minutes)
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if baseIndex > 0:
     if skyBases[baseIndex].visited.year == 0:
       gameStats.basesVisited.inc
@@ -275,9 +276,10 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
             missionIndex: -1)
     var
       maxSpawnRoll: Natural = 0
-      basesArray: Table[string, seq[Positive]] = initTable[string, seq[Positive]]()
+      basesArray: Table[string, seq[Positive]] = initTable[string, seq[
+          Positive]]()
     for index, faction in factionsList:
-      maxSpawnRoll = maxSpawnRoll + faction.spawnChance
+      maxSpawnRoll += faction.spawnChance
       basesArray[index] = @[]
     var
       baseOwner, baseType: string = ""
@@ -290,25 +292,29 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
         if factionRoll < faction.spawnChance:
           baseOwner = index
           basePopulation = (if faction.population[2] == 0: faction.population[
-              1] else: getRandom(min = faction.population[1], max = faction.population[2]))
+              1] else: getRandom(min = faction.population[1],
+                  max = faction.population[2]))
           baseReputation = getReputation(
               sourceFaction = newGameSettings.playerFaction,
-
-targetFaction = index)
+              targetFaction = index)
           var maxBaseSpawnRoll: Natural = 0
           for spawnChance in faction.basesTypes.values:
             maxBaseSpawnRoll = maxBaseSpawnRoll + spawnChance
-          var baseTypeRoll = getRandom(min = 1, max = maxBaseSpawnRoll)
+          var baseTypeRoll: Positive = getRandom(min = 1,
+              max = maxBaseSpawnRoll)
           for tindex, baseTypeChance in faction.basesTypes:
             if baseTypeRoll <= baseTypeChance:
               baseType = tindex
               break
             baseTypeRoll = baseTypeRoll - baseTypeChance
           break
-        factionRoll = factionRoll - faction.spawnChance
+        factionRoll -= faction.spawnChance
+      {.ruleOff: "ifstatements".}
       baseSize = (if basePopulation == 0: getRandom(min = 0,
-          max = 2).BasesSize elif basePopulation < 150: small elif basePopulation <
+          max = 2).BasesSize elif basePopulation <
+          150: small elif basePopulation <
           300: medium else: big)
+      {.ruleOn: "ifstatements".}
       skyBases[i].name = generateBaseName(factionIndex = baseOwner)
       skyBases[i].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
       skyBases[i].skyX = 1
@@ -326,22 +332,22 @@ targetFaction = index)
       skyBases[i].owner = baseOwner
       skyBases[i].size = baseSize
       skyBases[i].recruits = @[]
-      let baseFaction = factionsList[baseOwner]
+      let baseFaction: FactionData = factionsList[baseOwner]
       if "loner" in baseFaction.flags:
         factionRoll = getRandom(min = 1, max = maxSpawnRoll)
         for index, faction in factionsList:
           if factionRoll > faction.spawnChance:
-            factionRoll = factionRoll - faction.spawnChance
+            factionRoll -= faction.spawnChance
           else:
             baseOwner = index
       basesArray[baseOwner].add(y = i)
     for factionBases in basesArray.values:
       for index, faction in factionBases:
         var
-          attempts = 1
+          attempts: Positive = 1
           posX, posY: int = 0
         while true:
-          var validLocation = true
+          var validLocation: bool = true
           if index == factionBases.low or ("loner" in factionsList[skyBases[
               factionBases[0]].owner].flags and "loner" in factionsList[skyBases[
               faction].owner].flags):
@@ -397,15 +403,15 @@ targetFaction = index)
         speed = docked, randomUpgrades = false)
     # Add the player to the ship
     let
-      playerIndex2 = playerFaction.careers[
+      playerIndex2: Natural = playerFaction.careers[
           newGameSettings.playerCareer].playerIndex.parseInt
-      protoPlayer = protoMobsList[playerIndex2]
+      protoPlayer: ProtoMobRecord = protoMobsList[playerIndex2]
       playerMorale: Natural = (if "nomorale" in
           playerFaction.flags: 50 else: 100)
-    var tmpInventory: seq[InventoryData]
+    var tmpInventory: seq[InventoryData] = @[]
     for item in protoPlayer.inventory:
-      let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
-          max = item.maxAmount) else: item.minAmount)
+      let amount: Positive = (if item.maxAmount > 0: getRandom(
+          min = item.minAmount, max = item.maxAmount) else: item.minAmount)
       tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
           amount: amount, name: "", durability: 100, price: 0))
     {.warning[UnsafeSetLen]: off.}
@@ -418,7 +424,7 @@ targetFaction = index)
         0], contractLength: -1, morale: [1: playerMorale, 2: 0], loyalty: 100,
         homeBase: randomBase, faction: newGameSettings.playerFaction), i = 0)
     {.warning[UnsafeSetLen]: on.}
-    var cabinAssigned = false
+    var cabinAssigned: bool = false
     for module in playerShip.modules.mitems:
       for owner in module.owner.mitems:
         if owner > -1:
@@ -441,7 +447,7 @@ targetFaction = index)
     generateCargo()
     # Set the player's goal if not set yet
     if currentGoal.goalType == random:
-      var goalIndex = getRandom(min = 1, max = goalsList.len)
+      var goalIndex: Positive = getRandom(min = 1, max = goalsList.len)
       while not goalsList.hasKey(key = goalIndex):
         goalIndex = getRandom(min = 1, max = goalsList.len)
       currentGoal = goalsList[goalIndex]
@@ -463,21 +469,24 @@ proc updateAdaGame(minutes, inCombat: cint) {.raises: [], tags: [WriteIOEffect,
   except ValueError, IOError, Exception:
     discard
 
-proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
+proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect],
+    exportc, contractual.} =
   ## Temporary C binding
   try:
     return loadGameData().cstring
   except DataLoadingError, KeyError, OSError:
     return getCurrentExceptionMsg().cstring
 
-proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
+proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect],
+    exportc, contractual.} =
   ## Temporary C binding
   try:
     endGame(save = (if save == 1: true else: false))
   except KeyError, OSError, IOError:
     discard
 
-proc newAdaGame() {.raises: [], tags: [WriteIOEffect, ReadIOEffect], exportc, contractual.} =
+proc newAdaGame() {.raises: [], tags: [WriteIOEffect, ReadIOEffect], exportc,
+    contractual.} =
   ## Temporary C binding
   try:
     newGame()
