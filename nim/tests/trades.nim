@@ -1,6 +1,6 @@
-import ../src/[basescargo, basestypes, careers, crafts, factions, game,
-    items, maps, mobs, ships, shipmodules, trades, types]
+import ../src/[careers, crafts, factions, items, mobs, shipmodules]
 import unittest2
+include ../src/trades
 
 suite "Unit tests for trades module":
 
