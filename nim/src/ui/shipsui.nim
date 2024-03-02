@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
-import ../[game, tk]
+import ../[config, game, tk]
 import coreui
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -94,8 +94,44 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
             playerShip.upgradeModule].protoIndex].maxValue * 10
       else:
         discard
+    of value:
+      case modulesList[playerShip.modules[
+          playerShip.upgradeModule].protoIndex].mType
+      of engine:
+        upgradeInfo.add("(fuel usage)")
+        maxUpgrade = modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].value * 20
+      else:
+        discard
     else:
       discard
+    maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
+    if maxUpgrade == 0:
+      maxUpgrade = 1
+    let
+      upgradePercent = 1.0 - (playerShip.modules[
+          playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float)
+      progressBarStyle = if upgradePercent > 0.74:
+          " -style green.Horizontal.TProgressbar"
+        elif upgradePercent > 0.24:
+          " -style yellow.Horizontal.TProgressbar"
+        else:
+          " -style Horizontal.TProgressbar"
+    tclEval(script = upgradeProgress & " configure -value " & $upgradePercent & progressBarStyle)
+    tclEval(script = label & " configure -text {" & upgradeInfo & "}")
+    tclEval(script = "grid " & label)
+    tclEval(script = "grid " & upgradeProgress)
+    tclEval(script = "grid " & cancelButton)
+  label = shipInfoFrame & ".repairlabel"
+  cancelButton = shipInfoFrame & ".cancelpriority"
+  if playerShip.repairModule == -1:
+    tclEval(script = "grid remove " & label)
+    tclEval(script = "grid remove " & cancelButton)
+  else:
+    tclEval(script = label & " configure -text {Repair first: " &
+        playerShip.modules[playerShip.repairModule].name & "}")
+    tclEval(script = "grid " & label)
+    tclEval(script = "grid " & cancelButton)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
