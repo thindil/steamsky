@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
-import ../[config, game, tk]
+import ../[config, game, maps, ships, tk]
 import coreui
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -55,6 +55,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   label = shipInfoFrame & ".upgradelabel"
   let upgradeProgress = shipInfoFrame & ".upgrade"
   var cancelButton = shipInfoFrame & ".cancelupgrade"
+  # Show or hide upgrade module info
   if playerShip.upgradeModule == -1:
     tclEval(script = "grid remove " & label)
     tclEval(script = "grid remove " & upgradeProgress)
@@ -122,6 +123,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & label)
     tclEval(script = "grid " & upgradeProgress)
     tclEval(script = "grid " & cancelButton)
+  # Show or hide repair priority info
   label = shipInfoFrame & ".repairlabel"
   cancelButton = shipInfoFrame & ".cancelpriority"
   if playerShip.repairModule == -1:
@@ -132,6 +134,37 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         playerShip.modules[playerShip.repairModule].name & "}")
     tclEval(script = "grid " & label)
     tclEval(script = "grid " & cancelButton)
+  # Show or hide destination info
+  label = shipInfoFrame & ".destinationlabel"
+  cancelButton = shipInfoFrame & ".canceldestination"
+  if playerShip.destinationX == 0 and playerShip.destinationY == 0:
+    tclEval(script = "grid remove " & label)
+    tclEval(script = "grid remove " & cancelButton)
+  else:
+    if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
+      tclEval(script = label & " configure -text {Destination: " & skyBases[
+          skyMap[playerShip.destinationX][
+          playerShip.destinationY].baseIndex].name & "}")
+    else:
+      tclEval(script = label & " configure -text {Destination: X: " &
+          $playerShip.destinationX & " Y: " & $playerShip.destinationY & "}")
+    tclEval(script = "grid " & label)
+    tclEval(script = "grid " & cancelButton)
+  label = shipInfoFrame & ".homelabel"
+  tclEval(script = label & " configure -text {Home: " & skyBases[
+      playerShip.homeBase].name & "}")
+  label = shipInfoFrame & ".weight"
+  tclEval(script = label & " configure -text {Weight: " & $countShipWeight(
+      ship = playerShip) & "kg}")
+  tclEval(script = "update")
+  tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
+      script = shipCanvas & " bbox all") & "]")
+  tclEval(script = shipCanvas & " xview moveto 0.0")
+  tclEval(script = shipCanvas & " yview moveto 0.0")
+  # Setting ship module info
+  # Setting crew info
+  # Setting cargo info
+  # Show ship info
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
