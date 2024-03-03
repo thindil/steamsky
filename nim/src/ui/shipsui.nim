@@ -20,7 +20,7 @@ import ../[config, game, maps, ships, tk]
 import coreui, shipsuicrew, shipsuimodules, utilsui2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   var
     shipInfoFrame = mainPaned & ".shipinfoframe"
     button = mainPaned & ".shipinfoframe.general.canvas.frame.rename"
@@ -68,42 +68,57 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     case playerShip.modules[playerShip.upgradeModule].upgradeAction
     of durability:
       upgradeInfo.add("(durability)")
-      maxUpgrade = modulesList[playerShip.modules[
-          playerShip.upgradeModule].protoIndex].durability
+      maxUpgrade = try:
+          modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].durability
+        except:
+          tclEval(script = "bgerror {Can't set max upgrade info. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
     of maxValue:
-      case modulesList[playerShip.modules[
-          playerShip.upgradeModule].protoIndex].mType
-      of engine:
-        upgradeInfo.add("(power)")
-        maxUpgrade = (modulesList[playerShip.modules[
-            playerShip.upgradeModule].protoIndex].maxValue / 20).int
-      of cabin:
-        upgradeInfo.add("(quality)")
-        maxUpgrade = modulesList[playerShip.modules[
-            playerShip.upgradeModule].protoIndex].maxValue
-      of gun, batteringRam:
-        upgradeInfo.add("(quality)")
-        maxUpgrade = modulesList[playerShip.modules[
-            playerShip.upgradeModule].protoIndex].maxValue * 2
-      of hull:
-        upgradeInfo.add("(enlarge)")
-        maxUpgrade = modulesList[playerShip.modules[
-            playerShip.upgradeModule].protoIndex].maxValue * 40
-      of harpoonGun:
-        upgradeInfo.add("(strength)")
-        maxUpgrade = modulesList[playerShip.modules[
-            playerShip.upgradeModule].protoIndex].maxValue * 10
-      else:
-        discard
+      try:
+        case modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].mType
+        of engine:
+          upgradeInfo.add("(power)")
+          maxUpgrade = (modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue / 20).int
+        of cabin:
+          upgradeInfo.add("(quality)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue
+        of gun, batteringRam:
+          upgradeInfo.add("(quality)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 2
+        of hull:
+          upgradeInfo.add("(enlarge)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 40
+        of harpoonGun:
+          upgradeInfo.add("(strength)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].maxValue * 10
+        else:
+          discard
+      except:
+        tclEval(script = "bgerror {Can't set upgrade info. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     of value:
-      case modulesList[playerShip.modules[
-          playerShip.upgradeModule].protoIndex].mType
-      of engine:
-        upgradeInfo.add("(fuel usage)")
-        maxUpgrade = modulesList[playerShip.modules[
-            playerShip.upgradeModule].protoIndex].value * 20
-      else:
-        discard
+      try:
+        case modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].mType
+        of engine:
+          upgradeInfo.add("(fuel usage)")
+          maxUpgrade = modulesList[playerShip.modules[
+              playerShip.upgradeModule].protoIndex].value * 20
+        else:
+          discard
+      except:
+        tclEval(script = "bgerror {Can't set upgrade fuel usage info. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     else:
       discard
     maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
@@ -154,8 +169,13 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = label & " configure -text {Home: " & skyBases[
       playerShip.homeBase].name & "}")
   label = shipInfoFrame & ".weight"
-  tclEval(script = label & " configure -text {Weight: " & $countShipWeight(
-      ship = playerShip) & "kg}")
+  try:
+    discard tclEval(script = label & " configure -text {Weight: " &
+        $countShipWeight(ship = playerShip) & "kg}")
+  except:
+    tclEval(script = "bgerror {Can't show the weight of the ship. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   tclEval(script = "update")
   tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
       script = shipCanvas & " bbox all") & "]")
