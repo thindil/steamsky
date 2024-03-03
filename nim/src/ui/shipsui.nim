@@ -166,7 +166,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   # Setting crew info
   updateCrewInfo()
   # Setting cargo info
-  let typeBox = mainPaned & "shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
   tclEval(script = typeBox & " set All")
   tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
   # Show ship info
