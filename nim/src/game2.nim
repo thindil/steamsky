@@ -238,6 +238,60 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
   knownRecipes = @[]
   eventsList = @[]
 
+proc createPlayerShip(randomBase: Positive;
+    playerFaction: FactionData) {.sideEffect, raises: [ValueError], tags: [],
+    contractual.} =
+  ## Create the player's ship and add the player's character to it
+  ##
+  ## * randomBase    - the index of the base to which the player's ship will
+  ##                   be docked
+  ## * playerFaction - the faction to which the player's character belongs
+  require:
+    randomBase < skyBases.len
+  body:
+    playerShip = createShip(protoIndex = playerFaction.careers[
+        newGameSettings.playerCareer].shipIndex,
+        name = newGameSettings.shipName,
+        x = skyBases[randomBase].skyX, y = skyBases[randomBase].skyY,
+        speed = docked, randomUpgrades = false)
+    # Add the player to the ship
+    let
+      playerIndex2: Natural = playerFaction.careers[
+          newGameSettings.playerCareer].playerIndex.parseInt
+      protoPlayer: ProtoMobRecord = protoMobsList[playerIndex2]
+      playerMorale: Natural = (if "nomorale" in
+          playerFaction.flags: 50 else: 100)
+    var tmpInventory: seq[InventoryData] = @[]
+    for item in protoPlayer.inventory:
+      let amount: Positive = (if item.maxAmount > 0: getRandom(
+          min = item.minAmount, max = item.maxAmount) else: item.minAmount)
+      tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
+          amount: amount, name: "", durability: 100, price: 0))
+    {.warning[UnsafeSetLen]: off.}
+    playerShip.crew.insert(item = MemberData(name: newGameSettings.playerName,
+        gender: newGameSettings.playerGender, health: 100, tired: 0,
+        skills: protoPlayer.skills, hunger: 0, thirst: 0,
+        order: protoPlayer.order, previousOrder: rest, orderTime: 15,
+        orders: protoPlayer.priorities, attributes: protoPlayer.attributes,
+        inventory: tmpInventory, equipment: protoPlayer.equipment, payment: [0,
+        0], contractLength: -1, morale: [1: playerMorale, 2: 0], loyalty: 100,
+        homeBase: randomBase, faction: newGameSettings.playerFaction), i = 0)
+    {.warning[UnsafeSetLen]: on.}
+    var cabinAssigned: bool = false
+    for module in playerShip.modules.mitems:
+      for owner in module.owner.mitems:
+        if owner > -1:
+          owner.inc
+      if modulesList[module.protoIndex].mType == ModuleType.cabin and
+          not cabinAssigned:
+        for index, owner in module.owner.mpairs:
+          if owner == -1:
+            owner = 1
+            if index == 0:
+              module.name = newGameSettings.playerName & "'s Cabin"
+            cabinAssigned = true
+            break
+
 proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect], contractual.} =
   ## Start a new game, save configuration, create bases, fill the map, create
@@ -396,48 +450,7 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
           break
       attempts.inc
     # Create the player's ship
-    playerShip = createShip(protoIndex = playerFaction.careers[
-        newGameSettings.playerCareer].shipIndex,
-        name = newGameSettings.shipName,
-        x = skyBases[randomBase].skyX, y = skyBases[randomBase].skyY,
-        speed = docked, randomUpgrades = false)
-    # Add the player to the ship
-    let
-      playerIndex2: Natural = playerFaction.careers[
-          newGameSettings.playerCareer].playerIndex.parseInt
-      protoPlayer: ProtoMobRecord = protoMobsList[playerIndex2]
-      playerMorale: Natural = (if "nomorale" in
-          playerFaction.flags: 50 else: 100)
-    var tmpInventory: seq[InventoryData] = @[]
-    for item in protoPlayer.inventory:
-      let amount: Positive = (if item.maxAmount > 0: getRandom(
-          min = item.minAmount, max = item.maxAmount) else: item.minAmount)
-      tmpInventory.add(y = InventoryData(protoIndex: item.protoIndex,
-          amount: amount, name: "", durability: 100, price: 0))
-    {.warning[UnsafeSetLen]: off.}
-    playerShip.crew.insert(item = MemberData(name: newGameSettings.playerName,
-        gender: newGameSettings.playerGender, health: 100, tired: 0,
-        skills: protoPlayer.skills, hunger: 0, thirst: 0,
-        order: protoPlayer.order, previousOrder: rest, orderTime: 15,
-        orders: protoPlayer.priorities, attributes: protoPlayer.attributes,
-        inventory: tmpInventory, equipment: protoPlayer.equipment, payment: [0,
-        0], contractLength: -1, morale: [1: playerMorale, 2: 0], loyalty: 100,
-        homeBase: randomBase, faction: newGameSettings.playerFaction), i = 0)
-    {.warning[UnsafeSetLen]: on.}
-    var cabinAssigned: bool = false
-    for module in playerShip.modules.mitems:
-      for owner in module.owner.mitems:
-        if owner > -1:
-          owner.inc
-      if modulesList[module.protoIndex].mType == ModuleType.cabin and
-          not cabinAssigned:
-        for index, owner in module.owner.mpairs:
-          if owner == -1:
-            owner = 1
-            if index == 0:
-              module.name = newGameSettings.playerName & "'s Cabin"
-            cabinAssigned = true
-            break
+    createPlayerShip(randomBase = randomBase, playerFaction = playerFaction)
     # Set current map field and sky base info
     skyBases[randomBase].visited = gameDate
     skyBases[randomBase].known = true
