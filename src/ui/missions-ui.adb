@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -719,13 +719,13 @@ package body Missions.UI is
         Create
           (pathName => Buttons_Frame & ".button1",
            options =>
-             "-text Show -image showicon -command {CloseDialog " &
+             "-text Show -image show2icon -command {CloseDialog " &
              Mission_Dialog & ";set mappreview 1;ShowOnMap " &
              Map_X_Range'Image
                (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_X) &
              Map_Y_Range'Image
                (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_Y) &
-             "} -style Dialog.TButton");
+             "} -style Dialoggreen.TButton");
       Add(Widget => Button, Message => "Show the mission on the map");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
       Bind
