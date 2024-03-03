@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -525,9 +525,12 @@ package body Ships.UI is
    end Ship_Max_Min_Command;
 
    procedure Add_Commands is
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaShipsCommands";
    begin
-      Add_Command
-        (Name => "ShowShipInfo", Ada_Command => Show_Ship_Info_Command'Access);
+      Add_Ada_Commands;
       Add_Command
         (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
       Add_Command
