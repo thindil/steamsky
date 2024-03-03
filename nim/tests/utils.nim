@@ -1,5 +1,5 @@
-import ../src/[types, utils]
 import unittest2
+include ../src/utils
 
 suite "Unit tests for utils module":
 
