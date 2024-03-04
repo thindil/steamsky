@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -17,7 +17,7 @@
 
 import std/tables
 import bases, basescargo, basesship, crewinventory, game, game2, maps, messages,
-    shipscargo, shipscrew, trades, types
+    shipscargo, shipscrew, types
 
 type
   NothingToRepairError* = object of CatchableError
