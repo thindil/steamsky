@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -25,6 +25,23 @@ type
   CrewOrderError* = object of CatchableError
     ## Used to mark problems during giving orders to the crew members
 
+  NoTraderError* = object of CatchableError
+    ## Raised when there is no crew member assigned to talk
+
+  NoFreeCargoError* = object of CatchableError
+    ## Raised when there is no free space in the player's ship cargo
+
+  NoMoneyInBaseError* = object of CatchableError
+    ## Raised when there is not enough money in the base for trade
+
+  NoMoneyError* = object of CatchableError
+    ## Raised when the player doesn't have money to buy an item
+
+  NotEnoughMoneyError* = object of CatchableError
+    ## Raised when the player doesn't have enough money to buy an item
+
+  CantBuyError* = object of CatchableError
+    ## Raised when the item is not available for sale
   ShipUpgrade* = enum
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value
