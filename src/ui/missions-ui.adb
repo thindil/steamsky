@@ -28,6 +28,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -583,8 +584,9 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tiny_String;
       use Ada.Characters.Latin_1;
+      use Tcl.Tk.Ada.Widgets.Text;
+      use Tiny_String;
 
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
@@ -597,10 +599,10 @@ package body Missions.UI is
              "More info about " & Get_Mission_Type(M_Type => Mission.M_Type));
       Can_Accept: Boolean := True;
       Cabin_Taken: Boolean := False;
-      Label: constant Ttk_Label :=
+      Label: constant Tk_Text :=
         Create
           (pathName => Mission_Dialog & ".infolabel",
-           options => "-wraplength 400");
+           options => "-height 5 -width 30");
       Mission_Info: Unbounded_String := Null_Unbounded_String;
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Mission_Dialog & ".buttons");
@@ -637,10 +639,10 @@ package body Missions.UI is
       end if;
       case Mission.M_Type is
          when DELIVER =>
-            configure
-              (Widgt => Label,
-               options =>
-                 "-text {Item: " &
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{Item: " &
                  To_String
                    (Source =>
                       Get_Proto_Item(Index => Mission.Item_Index).Name) &
@@ -656,26 +658,26 @@ package body Missions.UI is
                         .Name) &
                  To_String(Source => Mission_Info) & "}");
          when PATROL =>
-            configure
-              (Widgt => Label,
-               options =>
-                 "-text {Patrol selected area" &
-                 To_String(Source => Mission_Info) & "}");
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{Patrol selected area" & To_String(Source => Mission_Info) &
+                 "}");
          when DESTROY =>
-            configure
-              (Widgt => Label,
-               options =>
-                 "-text {Target: " &
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{Target: " &
                  To_String
                    (Source =>
                       Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
                  To_String(Source => Mission_Info) & "}");
          when EXPLORE =>
-            configure
-              (Widgt => Label,
-               options =>
-                 "-text {Explore selected area" &
-                 To_String(Source => Mission_Info) & "}");
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{Explore selected area" & To_String(Source => Mission_Info) &
+                 "}");
          when PASSENGER =>
             Can_Accept := False;
             Modules_Loop :
@@ -698,10 +700,10 @@ package body Missions.UI is
             if Get_Base_Index = 0 then
                Can_Accept := True;
             end if;
-            configure
-              (Widgt => Label,
-               options =>
-                 "-text {Needed quality of cabin: " &
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{Needed quality of cabin: " &
                  Get_Cabin_Quality(Quality => Mission.Data) &
                  (if Can_Accept then "" elsif Cabin_Taken then " (taken)"
                   else " (no cabin)") &
@@ -714,6 +716,7 @@ package body Missions.UI is
                         .Name) &
                  To_String(Source => Mission_Info) & "}");
       end case;
+      configure(Widgt => Label, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 5");
       Button :=
         Create
