@@ -204,10 +204,20 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   showScreen(newScreenName = "shipinfoframe")
   return tclOk
 
+proc setShipNameCommand*(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if argc == 1:
+    return tclOk
+  let nameEntry = mainPaned & ".shipinfoframe.general.canvas.frame.name"
+  playerShip.name = $argv[1]
+  tclEval(script = nameEntry & " configure -text {Name: " & $argv[1] & "}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowShipInfo", showShipInfoCommand)
+    addCommand("SetShipName", setShipNameCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
