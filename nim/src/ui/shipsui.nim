@@ -205,7 +205,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setShipNameCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   if argc == 1:
     return tclOk
   let nameEntry = mainPaned & ".shipinfoframe.general.canvas.frame.name"
