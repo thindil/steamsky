@@ -206,6 +206,18 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc setShipNameCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Change name of the player's ship
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetShipName shipname
+  ## Shipname is the new name for the player's ship
   if argc == 1:
     return tclOk
   let nameEntry = mainPaned & ".shipinfoframe.general.canvas.frame.name"
