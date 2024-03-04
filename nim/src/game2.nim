@@ -292,16 +292,13 @@ proc createPlayerShip(randomBase: Positive;
             cabinAssigned = true
             break
 
-proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
-    Exception], tags: [WriteIOEffect, ReadIOEffect], contractual.} =
-  ## Start a new game, save configuration, create bases, fill the map, create
-  ## the player's ship and put it on the map
-  # Save the game configuration
-  ensure:
-    playerShip.crew.len > 0
+proc setGameStats(): FactionData {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
+  ## Set the game statistics and the player's faction, needed for starting
+  ## a new game
+  ##
+  ## Returns the player's faction's data
   body:
-    saveConfig()
-    # Set the game statistics
     clearGameStats()
     if newGameSettings.playerFaction == "random":
       newGameSettings.playerCareer = "random"
@@ -312,15 +309,27 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
           newGameSettings.playerFaction = faction
           break
         index.inc
-    let playerFaction: FactionData = factionsList[newGameSettings.playerFaction]
+    result = factionsList[newGameSettings.playerFaction]
     if newGameSettings.playerCareer == "random":
-      let roll: Positive = getRandom(min = 1, max = playerFaction.careers.len)
+      let roll: Positive = getRandom(min = 1, max = result.careers.len)
       var index: Positive = 1
-      for career in playerFaction.careers.keys:
+      for career in result.careers.keys:
         if index == roll:
           newGameSettings.playerCareer = career
           break
         index.inc
+
+proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
+    Exception], tags: [WriteIOEffect, ReadIOEffect], contractual.} =
+  ## Start a new game, save configuration, create bases, fill the map, create
+  ## the player's ship and put it on the map
+  # Save the game configuration
+  ensure:
+    playerShip.crew.len > 0
+  body:
+    saveConfig()
+    # Set the game statistics
+    let playerFaction: FactionData = setGameStats()
     # Set the game time
     gameDate = startDate
     # Generate the game's world
