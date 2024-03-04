@@ -392,32 +392,32 @@ package body Ships.UI is
    -- SetShipName shipname
    -- Shipname is the new name for the player's ship
    -- SOURCE
-   function Set_Ship_Name_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Ship_Name_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
-      Name_Entry: constant Ttk_Label :=
-        Get_Widget
-          (pathName => Main_Paned & ".shipinfoframe.general.canvas.frame.name",
-           Interp => Interp);
-   begin
-      if Argc = 1 then
-         return TCL_OK;
-      end if;
-      Player_Ship.Name :=
-        Tiny_String.To_Bounded_String
-          (Source => CArgv.Arg(Argv => Argv, N => 1));
-      configure
-        (Widgt => Name_Entry,
-         options => "-text {Name: " & CArgv.Arg(Argv => Argv, N => 1) & "}");
-      return TCL_OK;
-   end Set_Ship_Name_Command;
+--   function Set_Ship_Name_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Set_Ship_Name_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data);
+--      Name_Entry: constant Ttk_Label :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".shipinfoframe.general.canvas.frame.name",
+--           Interp => Interp);
+--   begin
+--      if Argc = 1 then
+--         return TCL_OK;
+--      end if;
+--      Player_Ship.Name :=
+--        Tiny_String.To_Bounded_String
+--          (Source => CArgv.Arg(Argv => Argv, N => 1));
+--      configure
+--        (Widgt => Name_Entry,
+--         options => "-text {Name: " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+--      return TCL_OK;
+--   end Set_Ship_Name_Command;
 
    -- ****o* SUI2/SUI2.Ship_Max_Min_Command
    -- FUNCTION
@@ -531,8 +531,8 @@ package body Ships.UI is
          External_Name => "addAdaShipsCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
+--      Add_Command
+--        (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
       Add_Command
         (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
       Ships.UI.Modules.Add_Modules_Commands;
