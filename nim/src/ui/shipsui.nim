@@ -226,7 +226,7 @@ proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   type FrameInfo = object
     name: string
     column: range[0 .. 1]
