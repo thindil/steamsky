@@ -245,7 +245,18 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         tclEval(script = "grid remove " & frame)
     tclEval(script = button & " configure -image movemapdownicon -command {ShipMaxMin " &
-        $argv[1] & "hide}")
+        $argv[1] & " hide}")
+  else:
+    for frameInfo in frames:
+      let frame = shipFrame & "." & frameInfo.name
+      if frameInfo.name == $argv[1]:
+        tclEval(script = "grid configure " & frame &
+            " -columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
+            $frameInfo.column)
+      else:
+        tclEval(script = "grid " & frame)
+    tclEval(script = button & " configure -image movemapupicon -command {ShipMaxMin " &
+        $argv[1] & " show}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -253,6 +264,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   try:
     addCommand("ShowShipInfo", showShipInfoCommand)
     addCommand("SetShipName", setShipNameCommand)
+    addCommand("ShipMaxMin", shipMaxMinCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
