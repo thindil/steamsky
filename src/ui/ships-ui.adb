@@ -379,111 +379,6 @@ package body Ships.UI is
       return TCL_OK;
    end Show_Ship_Info_Command;
 
-   -- ****o* SUI2/SUI2.Ship_Max_Min_Command
-   -- FUNCTION
-   -- Maximize or minimize the selected section of ship info
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShipMaxMin framename
-   -- Framename is name of the frame to maximize or minimize
-   -- SOURCE
---   function Ship_Max_Min_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Ship_Max_Min_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      --## rule off TYPE_INITIAL_VALUES
---      type Frame_Info is record
---         Name: Unbounded_String;
---         Column: Natural range 0 .. 1;
---         Row: Natural range 0 .. 1;
---      end record;
---      --## rule on TYPE_INITIAL_VALUES
---      Frames: constant array(1 .. 4) of Frame_Info :=
---        (1 =>
---           (Name => To_Unbounded_String(Source => "general"), Column => 0,
---            Row => 0),
---         2 =>
---           (Name => To_Unbounded_String(Source => "modules"), Column => 0,
---            Row => 1),
---         3 =>
---           (Name => To_Unbounded_String(Source => "crew"), Column => 1,
---            Row => 0),
---         4 =>
---           (Name => To_Unbounded_String(Source => "cargo"), Column => 1,
---            Row => 1));
---      Frame: Ttk_Frame :=
---        Get_Widget
---          (pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
---      Button: constant Ttk_Button :=
---        Get_Widget
---          (pathName =>
---             Frame & "." & CArgv.Arg(Argv => Argv, N => 1) &
---             ".canvas.frame.maxmin",
---           Interp => Interp);
---   begin
---      if CArgv.Arg(Argv => Argv, N => 2) = "show" then
---         Hide_Frames_Loop :
---         for FrameInfo of Frames loop
---            Frame.Name :=
---              New_String
---                (Str =>
---                   Main_Paned & ".shipinfoframe." &
---                   To_String(Source => FrameInfo.Name));
---            if To_String(Source => FrameInfo.Name) =
---              CArgv.Arg(Argv => Argv, N => 1) then
---               Tcl.Tk.Ada.Grid.Grid_Configure
---                 (Slave => Frame,
---                  Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
---            else
---               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
---            end if;
---         end loop Hide_Frames_Loop;
---         configure
---           (Widgt => Button,
---            options =>
---              "-image movemapdownicon -command {ShipMaxMin " &
---              CArgv.Arg(Argv => Argv, N => 1) & " hide}");
---      else
---         Show_Frames_Loop :
---         for FrameInfo of Frames loop
---            Frame.Name :=
---              New_String
---                (Str =>
---                   Main_Paned & ".shipinfoframe." &
---                   To_String(Source => FrameInfo.Name));
---            if To_String(Source => FrameInfo.Name) =
---              CArgv.Arg(Argv => Argv, N => 1) then
---               Tcl.Tk.Ada.Grid.Grid_Configure
---                 (Slave => Frame,
---                  Options =>
---                    "-columnspan 1 -rowspan 1 -column" &
---                    Natural'Image(FrameInfo.Column) & " -row" &
---                    Natural'Image(FrameInfo.Row));
---            else
---               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
---            end if;
---         end loop Show_Frames_Loop;
---         configure
---           (Widgt => Button,
---            options =>
---              "-image movemapupicon -command {ShipMaxMin " &
---              CArgv.Arg(Argv => Argv, N => 1) & " show}");
---      end if;
---      return TCL_OK;
---   end Ship_Max_Min_Command;
-
    procedure Add_Commands is
       procedure Add_Ada_Commands with
          Import => True,
@@ -491,8 +386,6 @@ package body Ships.UI is
          External_Name => "addAdaShipsCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
       Ships.UI.Modules.Add_Modules_Commands;
       Ships.UI.Crew.Add_Crew_Commands;
       Ships.UI.Cargo.Add_Cargo_Commands;
