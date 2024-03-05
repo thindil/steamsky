@@ -26,7 +26,7 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo;
 with Bases;
@@ -52,6 +52,7 @@ package body Ships.UI is
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tk.Ada.Winfo;
       use Bases;
@@ -378,47 +379,6 @@ package body Ships.UI is
       return TCL_OK;
    end Show_Ship_Info_Command;
 
-   -- ****o* SUI2/SUI2.Set_Ship_Name_Command
-   -- FUNCTION
-   -- Change name of the player's ship
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command.
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetShipName shipname
-   -- Shipname is the new name for the player's ship
-   -- SOURCE
---   function Set_Ship_Name_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Set_Ship_Name_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data);
---      Name_Entry: constant Ttk_Label :=
---        Get_Widget
---          (pathName => Main_Paned & ".shipinfoframe.general.canvas.frame.name",
---           Interp => Interp);
---   begin
---      if Argc = 1 then
---         return TCL_OK;
---      end if;
---      Player_Ship.Name :=
---        Tiny_String.To_Bounded_String
---          (Source => CArgv.Arg(Argv => Argv, N => 1));
---      configure
---        (Widgt => Name_Entry,
---         options => "-text {Name: " & CArgv.Arg(Argv => Argv, N => 1) & "}");
---      return TCL_OK;
---   end Set_Ship_Name_Command;
-
    -- ****o* SUI2/SUI2.Ship_Max_Min_Command
    -- FUNCTION
    -- Maximize or minimize the selected section of ship info
@@ -531,8 +491,6 @@ package body Ships.UI is
          External_Name => "addAdaShipsCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
       Add_Command
         (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
       Ships.UI.Modules.Add_Modules_Commands;
