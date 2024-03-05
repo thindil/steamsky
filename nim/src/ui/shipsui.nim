@@ -227,6 +227,18 @@ proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Maximize or minimize the selected section of the player's ship info
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShipMaxMin framename
+  ## Framename is name of the frame to maximize or minimize
   type FrameInfo = object
     name: string
     column: range[0 .. 1]
