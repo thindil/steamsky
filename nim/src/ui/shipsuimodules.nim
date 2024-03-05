@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,15 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[strutils, tables]
 import ../[game, config, crafts, tk, types]
-import coreui, table
+import coreui, dialogs, table
 
 var
   modulesTable: TableWidget
     ## The UI table with all the installed the player's ship's modules
   modulesIndexes: seq[Natural]
     ## The list of indexes of the installed modules
+
+proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    moduleIndex = ($argv[1]).parseInt
+    moduleDialog = createDialog(name = ".moduledialog",
+        title = playerShip.modules[moduleIndex].name, columns = 2)
+    moduleCanvas = moduleDialog & ".canvas"
+    yScroll = moduleDialog & ".yscroll"
+  tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .moduledialog.canvas yview]")
+  tclEval(script = "canvas " & moduleCanvas & " -yscrollcommand [list " &
+      yScroll & " set]")
+  return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
     tags: [].} =
@@ -152,6 +165,14 @@ proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [],
     tclEval(script = shipCanvas & " xview moveto 0.0")
     tclEval(script = shipCanvas & " yview moveto 0.0")
 
+proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  ## Adds Tcl commands related to the wait menu
+  try:
+    addCommand("ShowModuleInfo", showModuleInfoCommand)
+  except:
+    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
+        getCurrentExceptionMsg() & "}")
+
 # Temporary code for interfacing with Ada
 
 proc getAdaModuleInfo(moduleIndex: cint): cstring {.raises: [], tags: [], exportc.} =
@@ -170,3 +191,9 @@ proc updateAdaModulesInfo(page: cint; mIndexes: array[50, cint];
     discard
   for index, width in modulesTable.columnsWidth:
     columnsWidth[index] = width.cint
+
+proc addAdaModulesCommands() {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    addCommands()
+  except:
+    echo getCurrentExceptionMsg()
