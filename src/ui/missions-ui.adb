@@ -40,6 +40,7 @@ with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with CoreUI; use CoreUI;
+with Config;
 with Dialogs; use Dialogs;
 with Events;
 with Items; use Items;
@@ -583,9 +584,10 @@ package body Missions.UI is
    function Mission_More_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Ada.Characters.Latin_1;
       use Tcl.Tk.Ada.Widgets.Text;
+      use Config;
       use Tiny_String;
 
       Mission_Index: constant Positive :=
@@ -619,24 +621,15 @@ package body Missions.UI is
                    Destination_Y => Mission.Target_Y) *
                 2));
    begin
-      if Travel_Values(1) > 0 then
-         Mission_Info := LF & To_Unbounded_String(Source => "ETA:");
-         Minutes_To_Date
-           (Minutes => Travel_Values(1), Info_Text => Mission_Info);
-         Append
-           (Source => Mission_Info,
-            New_Item =>
-              LF & "Approx fuel usage:" & Positive'Image(Travel_Values(2)) &
-              " ");
-         Append
-           (Source => Mission_Info,
-            New_Item =>
-              To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index => Find_Proto_Item(Item_Type => Fuel_Type))
-                     .Name));
-      end if;
+      Tag_Configure
+        (TextWidget => Label, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
       case Mission.M_Type is
          when DELIVER =>
             Insert
@@ -656,13 +649,11 @@ package body Missions.UI is
                         (Sky_Map(Mission.Target_X, Mission.Target_Y)
                            .Base_Index)
                         .Name) &
-                 To_String(Source => Mission_Info) & "}");
+                 "}");
          when PATROL =>
             Insert
               (TextWidget => Label, Index => "end",
-               Text =>
-                 "{Patrol selected area" & To_String(Source => Mission_Info) &
-                 "}");
+               Text => "{Patrol selected area" & "}");
          when DESTROY =>
             Insert
               (TextWidget => Label, Index => "end",
@@ -671,7 +662,7 @@ package body Missions.UI is
                  To_String
                    (Source =>
                       Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
-                 To_String(Source => Mission_Info) & "}");
+                 "}");
          when EXPLORE =>
             Insert
               (TextWidget => Label, Index => "end",
@@ -714,8 +705,33 @@ package body Missions.UI is
                         (Sky_Map(Mission.Target_X, Mission.Target_Y)
                            .Base_Index)
                         .Name) &
-                 To_String(Source => Mission_Info) & "}");
+                 "}");
       end case;
+      if Travel_Values(1) > 0 then
+         Minutes_To_Date
+           (Minutes => Travel_Values(1), Info_Text => Mission_Info);
+         Insert
+           (TextWidget => Label, Index => "end", Text => "{" & LF & "ETA:}");
+         Insert
+           (TextWidget => Label, Index => "end",
+            Text => "{" & To_String(Source => Mission_Info) & "} [list gold]");
+         Insert
+           (TextWidget => Label, Index => "end",
+            Text => "{" & LF & "Approx fuel usage:}");
+         Insert
+           (TextWidget => Label, Index => "end",
+            Text => "{" & Positive'Image(Travel_Values(2)) & " } [list gold]");
+         Insert
+           (TextWidget => Label, Index => "end",
+            Text =>
+              "{" &
+              To_String
+                (Source =>
+                   Get_Proto_Item
+                     (Index => Find_Proto_Item(Item_Type => Fuel_Type))
+                     .Name) &
+              "}");
+      end if;
       configure(Widgt => Label, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 5");
       Button :=
