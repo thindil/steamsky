@@ -204,7 +204,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   showScreen(newScreenName = "shipinfoframe")
   return tclOk
 
-proc setShipNameCommand*(clientData: cint; interp: PInterp; argc: cint;
+proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   ## Change name of the player's ship
   ##
@@ -223,6 +223,29 @@ proc setShipNameCommand*(clientData: cint; interp: PInterp; argc: cint;
   let nameEntry = mainPaned & ".shipinfoframe.general.canvas.frame.name"
   playerShip.name = $argv[1]
   tclEval(script = nameEntry & " configure -text {Name: " & $argv[1] & "}")
+  return tclOk
+
+proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  type FrameInfo = object
+    name: string
+    column: range[0 .. 1]
+    row: range[0 .. 1]
+  let
+    frames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "general", column: 0,
+        row: 0), FrameInfo(name: "modules", column: 0, row: 1), FrameInfo(
+        name: "crew", column: 1, row: 0), FrameInfo(name: "cargo", column: 1, row: 1)]
+    shipFrame = mainPaned & ".shipinfoframe"
+    button = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin"
+  if argv[2] == "show":
+    for frameInfo in frames:
+      let frame = shipFrame & "." & frameInfo.name
+      if frameInfo.name == $argv[1]:
+        tclEval(script = "grid configure " & frame & " -columnspan 2 -rowspan 2 -row 0 -column 0")
+      else:
+        tclEval(script = "grid remove " & frame)
+    tclEval(script = button & " configure -image movemapdownicon -command {ShipMaxMin " &
+        $argv[1] & "hide}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
