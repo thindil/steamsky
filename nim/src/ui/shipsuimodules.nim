@@ -78,7 +78,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
   tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
   height = height + tclEval2(script = "winfo reqheight " & infoButton).parseInt
-  ## Show the module's damage
+  # Show the module's damage
   currentRow.inc
   addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
       row = currentRow)
@@ -125,7 +125,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip, box: string;
       shipModule: ModuleData; column: Positive = 1;
-      buttonName: string = "button"; Row: Natural = 0) =
+      buttonName: string = "button"; row: Natural = 0) =
     let upgradeNumber = case upgradeType
       of maxValue:
         "2"
@@ -146,6 +146,29 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           " invoke;SetUpgrade " & upgradeNumber & " " & $argv[1] & "} -style Small.TButton")
       tclEval(script = "tooltip::tooltip " & infoButton &
           " \"Start upgrading the " & buttonTooltip & "\"")
+    tclEval(script = "grid " & infoButton & " -row " & $row & " -column " &
+        $column & " -sticky n -padx {5 0}")
+    tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
+
+  if module.maxDurability < moduleMaxValue:
+    addUpgradeButton(upgradeType = durability,
+        buttonTooltip = "module's durability", box = moduleFrame,
+        shipModule = module, column = 3, buttonName = "durabilitybutton",
+        row = currentRow)
+  height = height + tclEval2(script = "winfo reqheight " & infoButton).parseInt
+  # Show the module's weight
+  currentRow.inc
+  addLabel(name = moduleFrame & ".weightlbl", labelText = "Weight: ",
+      row = currentRow)
+  addLabel(name = moduleFrame & ".weightlbl2", labelText = $module.weight &
+      " kg", row = currentRow, column = 1, countHeight = true, secondary = true)
+  # Show the module's size
+  currentRow.inc
+  addLabel(name = moduleFrame & ".lblsize", labelText = "Size: ",
+      row = currentRow)
+  addLabel(name = moduleFrame & ".lblsize2", labelText = $modulesList[
+      module.protoIndex].size, row = currentRow, column = 1, countHeight = true,
+      secondary = true)
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
