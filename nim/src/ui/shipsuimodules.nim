@@ -66,9 +66,27 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::frame " & moduleFrame)
   addLabel(name = moduleFrame & ".nameinfo", labelText = "Name:")
   var currentRow = 0
-  addLabel(name = moduleFrame & ".nameinfo2", labelText = module.name, row = currentRow, column = 1, secondary = true)
+  addLabel(name = moduleFrame & ".nameinfo2", labelText = module.name,
+      row = currentRow, column = 1, secondary = true)
   var infoButton = moduleFrame & ".namebutton"
-  tclEval(script = "ttk::button " & infoButton & " -image editicon -command {" & closeDialogButton & " invoke;GetString {Enter a new name for the " & module.name & ":} modulename" & argv[1] & " {Renaming the module} {Rename}} -style Small.TButton")
+  let closeDialogButton = moduleFrame & ".button"
+  tclEval(script = "ttk::button " & infoButton & " -image editicon -command {" &
+      closeDialogButton & " invoke;GetString {Enter a new name for the " &
+      module.name & ":} modulename" & $argv[1] & " {Renaming the module} {Rename}} -style Small.TButton")
+  tclEval(script = "tooltip::tooltip " & infoButton & " \"Set the name for the crew member\"")
+  tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
+  tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
+  tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+  height = height + tclEval2(script = "winfo reqheight " & infoButton).parseInt
+  ## Show the module's damage
+  currentRow.inc
+  addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
+      row = currentRow)
+  let damagePercent = (module.durability.float / module.maxDurability.float)
+  var progressBarStyle, statusTooltip = ""
+  if damagePercent < 1.0 and damagePercent > 0.79:
+    progressBarStyle = " -style green.Horizontal.TProgressbar"
+    statusTooltip = "Damaged"
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
