@@ -36,6 +36,25 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .moduledialog.canvas yview]")
   tclEval(script = "canvas " & moduleCanvas & " -yscrollcommand [list " &
       yScroll & " set]")
+  tclEval(script = "grid " & moduleCanvas & " -sticky nwes -padx 5 -pady 5")
+  tclEval(script = "grid " & yScroll & " -sticky ns -column 1 -row 1 -padx {0 5} -pady 5")
+  tclEval(script = "grid propagate " & moduleDialog & " off")
+  tclEval(script = "grid columnconfigure " & moduleDialog & " " & moduleCanvas & " -weight 1")
+  tclEval(script = "grid rowconfigure " & moduleDialog & " " & moduleCanvas & " -weight 1")
+  tclEval(script = "::autoscroll::autoscroll " & yScroll)
+  var label = ""
+
+  proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
+      columnSpan: Natural = 0; wrapLength: Natural = 0;
+      countHeight: bool = false; secondary: bool = false) =
+    label = name
+    tclEval(script = "ttk::label " & label & " -text {" & labelText &
+        "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
+        if secondary: " -style Golden.TLabel" else: ""))
+    tclEval(script = "grid " & label & " -sticky w -row " & $row & " -column " &
+        $column & (if columnSpan > 0: " -columnspan " & $columnSpan else: ""))
+
+  # Show the module's name
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
