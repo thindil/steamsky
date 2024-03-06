@@ -137,13 +137,13 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if shipModule.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
       tclEval(script = "ttk::button " & infoButton &
           " -image cancelicon -command {" & closeDialogButton &
-          " invoke;StopUpgrading " & $argv[1] & "} -style Small.TButton")
+          " invoke;StopUpgrading " & $(moduleIndex + 1) & "} -style Small.TButton")
       tclEval(script = "tooltip::tooltip " & infoButton &
           " \"Stop upgrading the " & buttonTooltip & "\"")
     else:
       tclEval(script = "ttk::button " & infoButton &
           " -image upgradebuttonicon -command {" & closeDialogButton &
-          " invoke;SetUpgrade " & upgradeNumber & " " & $argv[1] & "} -style Small.TButton")
+          " invoke;SetUpgrade " & upgradeNumber & " " & $(moduleIndex + 1) & "} -style Small.TButton")
       tclEval(script = "tooltip::tooltip " & infoButton &
           " \"Start upgrading the " & buttonTooltip & "\"")
     tclEval(script = "grid " & infoButton & " -row " & $row & " -column " &
@@ -169,6 +169,18 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   addLabel(name = moduleFrame & ".lblsize2", labelText = $modulesList[
       module.protoIndex].size, row = currentRow, column = 1, countHeight = true,
       secondary = true)
+  # Show the module's repair material
+  currentRow.inc
+  addLabel(name = moduleFrame & ".lblrepairmaterial",
+      labelText = "Repair material: ", row = currentRow, wrapLength = 200)
+  let moduleText = moduleFrame & ".info"
+  tclEval(script = "text " & moduleText & " -wrap char -height 5 -width 30")
+  tclEval(script = moduleText & " tag configure red -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-red)"))
+  tclEval(script = moduleText & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
