@@ -28,7 +28,7 @@ var
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
-    moduleIndex = ($argv[1]).parseInt
+    moduleIndex = ($argv[1]).parseInt - 1
     moduleDialog = createDialog(name = ".moduledialog",
         title = playerShip.modules[moduleIndex].name, columns = 2)
     moduleCanvas = moduleDialog & ".canvas"
@@ -42,7 +42,9 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid columnconfigure " & moduleDialog & " " & moduleCanvas & " -weight 1")
   tclEval(script = "grid rowconfigure " & moduleDialog & " " & moduleCanvas & " -weight 1")
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
-  var label = ""
+  var
+    label = ""
+    height: Positive = 10
 
   proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
       columnSpan: Natural = 0; wrapLength: Natural = 0;
@@ -53,8 +55,20 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if secondary: " -style Golden.TLabel" else: ""))
     tclEval(script = "grid " & label & " -sticky w -row " & $row & " -column " &
         $column & (if columnSpan > 0: " -columnspan " & $columnSpan else: ""))
+    tclEval(script = "SetScrollbarBindings " & label & " " & yScroll)
+    if countHeight:
+      height = height + tclEval2(script = "winfo reqheight " & label).parseInt
 
   # Show the module's name
+  let
+    moduleFrame = moduleCanvas & ".frame"
+    module = playerShip.modules[moduleIndex]
+  tclEval(script = "ttk::frame " & moduleFrame)
+  addLabel(name = moduleFrame & ".nameinfo", labelText = "Name:")
+  var currentRow = 0
+  addLabel(name = moduleFrame & ".nameinfo2", labelText = module.name, row = currentRow, column = 1, secondary = true)
+  var infoButton = moduleFrame & ".namebutton"
+  tclEval(script = "ttk::button " & infoButton & " -image editicon -command {" & closeDialogButton & " invoke;GetString {Enter a new name for the " & module.name & ":} modulename" & argv[1] & " {Renaming the module} {Rename}} -style Small.TButton")
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
