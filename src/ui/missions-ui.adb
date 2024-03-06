@@ -630,45 +630,79 @@ package body Missions.UI is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-goldenyellow)"));
+      Tag_Configure
+        (TextWidget => Label, TagName => "red",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-red)"));
+      Tag_Configure
+        (TextWidget => Label, TagName => "green",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-green)"));
       case Mission.M_Type is
          when DELIVER =>
+            Insert(TextWidget => Label, Index => "end", Text => "{Item: }");
             Insert
               (TextWidget => Label, Index => "end",
                Text =>
-                 "{Item: " &
+                 "{" &
                  To_String
                    (Source =>
                       Get_Proto_Item(Index => Mission.Item_Index).Name) &
-                 LF & "Weight:" &
+                 "} [list gold]");
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text => "{" & LF & "Weight:}");
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{" &
                  Positive'Image
                    (Get_Proto_Item(Index => Mission.Item_Index).Weight) &
-                 " kg" & LF & "To base: " &
+                 " kg} [list gold]");
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text => "{" & LF & "To base: }");
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{" &
                  To_String
                    (Source =>
                       Sky_Bases
                         (Sky_Map(Mission.Target_X, Mission.Target_Y)
                            .Base_Index)
                         .Name) &
-                 "}");
+                 "} [list gold]");
          when PATROL =>
             Insert
               (TextWidget => Label, Index => "end",
-               Text => "{Patrol selected area" & "}");
+               Text => "{Patrol selected area" & "} [list gold]");
          when DESTROY =>
+            Insert(TextWidget => Label, Index => "end", Text => "{Target: }");
             Insert
               (TextWidget => Label, Index => "end",
                Text =>
-                 "{Target: " &
+                 "{" &
                  To_String
                    (Source =>
                       Get_Proto_Ship(Proto_Index => Mission.Ship_Index).Name) &
-                 "}");
+                 "} [list gold]");
          when EXPLORE =>
             Insert
               (TextWidget => Label, Index => "end",
                Text =>
                  "{Explore selected area" & To_String(Source => Mission_Info) &
-                 "}");
+                 "} [list gold]");
          when PASSENGER =>
             Can_Accept := False;
             Modules_Loop :
@@ -693,19 +727,28 @@ package body Missions.UI is
             end if;
             Insert
               (TextWidget => Label, Index => "end",
+               Text => "{Needed quality of cabin: }");
+            Insert
+              (TextWidget => Label, Index => "end",
                Text =>
-                 "{Needed quality of cabin: " &
-                 Get_Cabin_Quality(Quality => Mission.Data) &
-                 (if Can_Accept then "" elsif Cabin_Taken then " (taken)"
-                  else " (no cabin)") &
-                 LF & "To base: " &
+                 "{" & Get_Cabin_Quality(Quality => Mission.Data) &
+                 (if Can_Accept then " [list green]"
+                  elsif Cabin_Taken then " (taken)} [list gold]"
+                  else " (no cabin)} [list red]"));
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text => "{" & LF & "To base: }");
+            Insert
+              (TextWidget => Label, Index => "end",
+               Text =>
+                 "{" &
                  To_String
                    (Source =>
                       Sky_Bases
                         (Sky_Map(Mission.Target_X, Mission.Target_Y)
                            .Base_Index)
                         .Name) &
-                 "}");
+                 "} [list gold]");
       end case;
       if Travel_Values(1) > 0 then
          Minutes_To_Date
