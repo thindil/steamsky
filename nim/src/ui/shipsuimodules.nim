@@ -115,6 +115,37 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::button " & infoButton &
         " -image cancelicon -command {" & closeDialogButton & " invoke;SetRepair remove} -style Small.TButton")
     tclEval(script = "tooltip::tooltip " & infoButton & " \"Remove the repair priority\"")
+  else:
+    tclEval(script = "ttk::button " & infoButton &
+        " -image repairpriorityicon -command {" & closeDialogButton &
+        " invoke;SetRepair assign " & $moduleIndex & "} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Repair selected module as first when damaged\"")
+  tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
+  tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
+
+  proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip, box: string;
+      shipModule: ModuleData; column: Positive = 1;
+      buttonName: string = "button"; Row: Natural = 0) =
+    let upgradeNumber = case upgradeType
+      of maxValue:
+        "2"
+      of value:
+        "3"
+      else:
+        "1"
+    infoButton = box & "." & buttonName
+    if shipModule.upgradeAction == upgradeType and playerShip.upgradeModule == moduleIndex:
+      tclEval(script = "ttk::button " & infoButton &
+          " -image cancelicon -command {" & closeDialogButton &
+          " invoke;StopUpgrading " & $argv[1] & "} -style Small.TButton")
+      tclEval(script = "tooltip::tooltip " & infoButton &
+          " \"Stop upgrading the " & buttonTooltip & "\"")
+    else:
+      tclEval(script = "ttk::button " & infoButton &
+          " -image upgradebuttonicon -command {" & closeDialogButton &
+          " invoke;SetUpgrade " & upgradeNumber & " " & $argv[1] & "} -style Small.TButton")
+      tclEval(script = "tooltip::tooltip " & infoButton &
+          " \"Start upgrading the " & buttonTooltip & "\"")
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
