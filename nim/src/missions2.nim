@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -14,6 +14,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+## Provides code related to update the state of the accepted mission,
+## like finishing it or accept. Split from missions module to avoid
+## circular dependencies.
 
 import std/tables
 import contracts
@@ -36,9 +40,9 @@ proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
   require:
     missionIndex < acceptedMissions.len
   body:
-    let missionsAmount = acceptedMissions.len
+    let missionsAmount: Natural = acceptedMissions.len
     if playerShip.speed != docked:
-      let message = dockShip(docking = true)
+      let message: string = dockShip(docking = true)
       if message.len > 0:
         raise newException(exceptn = MissionFinishingError, message = message)
     updateGame(minutes = 5)
@@ -74,7 +78,8 @@ proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
   ## Returns empty string if finishing was successfull, otherwise returns
   ## message with information what goes wrong.
   result = ""
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if baseIndex == 0:
     return
   if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and eventsList[
@@ -82,7 +87,7 @@ proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
     return
   if findMember(order = talk) == -1:
     return
-  var i = 0
+  var i: int = 0
   while i <= acceptedMissions.high:
     if (acceptedMissions[i].finished and acceptedMissions[i].startBase ==
         baseIndex) or (acceptedMissions[i].targetX == playerShip.skyX and
@@ -100,11 +105,12 @@ proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
   ## Accept the selected mission from the base
   ##
   ## * missionIndex - the index of the mission in the base which will be accepted
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if skyBases[baseIndex].reputation.level < 0:
     raise newException(exceptn = MissionAcceptingError,
         message = "Your reputation in this base is too low to receive any mission.")
-  var missionsLimit = case skyBases[baseIndex].reputation.level
+  var missionsLimit: int = case skyBases[baseIndex].reputation.level
     of 0..25:
       1
     of 26..50:
@@ -123,13 +129,13 @@ proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
   if missionsLimit < 1:
     raise newException(exceptn = MissionAcceptingError,
         message = "You can't take any more missions from this base.")
-  var mission = skyBases[baseIndex].missions[missionIndex]
+  var mission: MissionData = skyBases[baseIndex].missions[missionIndex]
   if mission.mType == deliver and freeCargo(amount = -(itemsList[
       mission.itemIndex].weight)) < 0:
     raise newException(exceptn = MissionAcceptingError,
         message = "You don't have enough cargo space for take this mission.")
   if mission.mType == passenger:
-    var haveCabin = false
+    var haveCabin: bool = false
     for module in playerShip.modules:
       if module.mType == ModuleType2.cabin and not haveCabin and
           module.quality >= mission.data:
@@ -145,7 +151,7 @@ proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
           message = "You don't have proper (or free) cabin for this passenger.")
   mission.startBase = baseIndex
   mission.finished = false
-  var acceptMessage = "You accepted the mission to "
+  var acceptMessage: string = "You accepted the mission to "
   case mission.mType
   of deliver:
     acceptMessage.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
@@ -159,30 +165,30 @@ proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
   of passenger:
     acceptMessage.add(y = "'Transpor passenger to base'.")
     let
-      passengerBase = (if getRandom(min = 1, max = 100) <
+      passengerBase: ExtendedBasesRange = (if getRandom(min = 1, max = 100) <
           60: baseIndex else: getRandom(min = skyBases.low,
           max = skyBases.high))
-      faction = factionsList[skyBases[passengerBase].owner]
-    var gender: char
+      faction: FactionData = factionsList[skyBases[passengerBase].owner]
+    var gender: char = 'M'
     if "nogender" in faction.flags:
       gender = 'M'
     else:
       gender = (if getRandom(min = 1, max = 2) == 1: 'M' else: 'F')
-    var morale: int
+    var morale: int = 50
     if "nomorale" in faction.flags:
       morale = 50
     else:
       morale = 50 + skyBases[passengerBase].reputation.level
       if morale < 50:
         morale = 50
-    var maxAttributeLevel = skyBases[baseIndex].reputation.level
+    var maxAttributeLevel: int = skyBases[baseIndex].reputation.level
     if maxAttributeLevel < 10:
       maxAttributeLevel = 10
     if getRandom(min = 1, max = 100) > 90:
       maxAttributeLevel = getRandom(min = maxAttributeLevel, max = 100)
     if maxAttributeLevel > 50:
       maxAttributeLevel = 50
-    var attributes: seq[MobAttributeRecord]
+    var attributes: seq[MobAttributeRecord] = @[]
     for j in 1 .. attributesList.len:
       attributes.add(y = MobAttributeRecord(level: getRandom(min = 3,
           max = maxAttributeLevel), experience: 0))
@@ -205,7 +211,7 @@ proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
   acceptedMissions.add(y = mission)
   skyMap[mission.targetX][mission.targetY].missionIndex = acceptedMissions.high
   addMessage(message = acceptMessage, mType = missionMessage)
-  let traderIndex = findMember(order = talk)
+  let traderIndex: int = findMember(order = talk)
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   gameStats.acceptedMissions.inc
   updateGame(minutes = 5)
@@ -214,6 +220,7 @@ proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
 
 proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     finishMission(missionIndex = (missionIndex - 1).Natural)
   except MissionFinishingError:
@@ -224,6 +231,7 @@ proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
 
 proc autoAdaFinishMissions(): cstring {.raises: [], tags: [WriteIOEffect,
     RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return autoFinishMissions().cstring
   except KeyError, IOError, Exception:
@@ -231,6 +239,7 @@ proc autoAdaFinishMissions(): cstring {.raises: [], tags: [WriteIOEffect,
 
 proc acceptAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     acceptMission(missionIndex = missionIndex - 1)
     return "".cstring
