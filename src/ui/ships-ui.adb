@@ -13,31 +13,31 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Ada.Strings.Unbounded;
+with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo;
 with Bases;
 with Config;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Maps;
 with Maps.UI;
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
 with Ships.UI.Modules;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 with ShipModules;
 
 package body Ships.UI is
@@ -46,20 +46,30 @@ package body Ships.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argv);
+      use Ada.Strings.Unbounded;
+      use Interfaces.C;
+      use Interfaces.C.Strings;
       use GNAT.Directory_Operations;
+      use Tcl;
       use Tcl.Ada;
+      use Tcl.Tk.Ada;
       use Tcl.Tk.Ada.Event;
+      use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tk.Ada.Winfo;
       use Bases;
       use Config;
+      use CoreUI;
       use Maps;
       use Maps.UI;
       use ShipModules;
+      use Utils.UI;
       use Tiny_String;
 
       Ship_Info_Frame: Ttk_Frame :=

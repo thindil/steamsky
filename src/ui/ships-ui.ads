@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C; use Interfaces.C;
-with CArgv; use CArgv;
-with Tcl; use Tcl;
+with Interfaces.C;
+with CArgv;
+with Tcl;
 
 -- ****h* Ships/SUI2
 -- FUNCTION
