@@ -194,6 +194,30 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval2(script = moduleText & " count -displaylines 0.0 end").parseInt /
       tclEval2(script = "font metrics InterfaceFont -linespace").parseInt))
   tclEval(script = "grid " & moduleText & " -row " & $currentRow & " -column 1 -sticky nw")
+  var newHeight = tclEval2(script = "winfo reqheight " & moduleText).parseInt
+  if newHeight < tclEval2(script = "winfo reqheight " & label).parseInt:
+    newHeight = tclEval2(script = "winfo reqheight " & label).parseInt
+  height = height + newHeight
+  # Show the module's upgrade skill
+  currentRow.inc
+  addLabel(name = moduleFrame & ".upgradeskill", labelText = "Repair skill:",
+      row = currentRow, wrapLength = 200, countHeight = true)
+  addLabel(name = moduleFrame & ".upgradeskill2", labelText = skillsList[
+      modulesList[module.protoIndex].repairSkill].name & "/" & attributesList[
+      skillsList[modulesList[module.protoIndex].repairSkill].attribute].name,
+      row = currentRow, column = 1, secondary = true)
+  # Show the module's upgrade action
+  if module.upgradeAction != none:
+    currentRow.inc
+    var
+      moduleInfo = ""
+      maxUpgrade = 0
+    case module.upgradeAction
+    of durability:
+      moduleInfo.add("Durability")
+      maxUpgrade = modulesList[module.protoIndex].durability
+    else:
+      discard
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
