@@ -269,6 +269,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           " -image cancelicon -command {" & closeDialogButton &
           " invoke;StopUpgrading " & $argv[1] & "} -style Small.TButton")
       tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading cabin quality\"")
+      tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
       tclEval(script = "bind " & infoButton & " <Escape> {" &
           closeDialogButton & " invoke; break}")
     height = height + tclEval2(script = "winfo reqheight " &
@@ -289,6 +290,23 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           ownersText.add(", ")
         haveOwner = true
         ownersText.add(playerShip.crew[owner].name)
+    if not haveOwner:
+      ownersText.add("none")
+    addLabel(name = moduleFrame & ".lblowners2", labelText = ownersText,
+        row = row, column = 1, secondary = true)
+    if addButton:
+      infoButton = moduleFrame & ".ownersbutton"
+      tclEval(script = "ttk::button " & infoButton &
+          " -image cancelicon -command {" & closeDialogButton &
+          " invoke;ShowAssignCrew " & $(moduleIndex + 1) & "} -style Small.TButton")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign crew members to the module.\"")
+      tclEval(script = "grid " & infoButton & " -row " & $row & " -column 2 -sticky n -padx {5 0}")
+      tclEval(script = "bind " & infoButton & " <Escape> {" &
+          closeDialogButton & " invoke; break}")
+      tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+    height = height + tclEval2(script = "winfo reqheight " &
+        infoButton).parseInt
+
 
   # Show information specific to the module's type
   case module.mType
@@ -373,6 +391,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           infoButton).parseInt
   # Show information about cabin
   of cabin:
+    # Show information about cabin's owners
     currentRow.inc
     var isPassenger = false
     block missionLoop:
@@ -382,6 +401,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             if mission.data == owner:
               isPassenger = true
               break missionLoop
+    addOwnersInfo(ownersName = "Owner", addButton = not isPassenger,
+        row = currentRow)
   else:
     discard
   return tclOk
