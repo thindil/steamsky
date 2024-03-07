@@ -216,8 +216,49 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     of durability:
       moduleInfo.add("Durability")
       maxUpgrade = modulesList[module.protoIndex].durability
+    of maxValue:
+      case modulesList[module.protoIndex].mType
+      of engine:
+        moduleInfo.add("Power")
+        maxUpgrade = (modulesList[module.protoIndex].maxValue / 20).int
+      of cabin:
+        moduleInfo.add("Quality")
+        maxUpgrade = modulesList[module.protoIndex].maxValue
+      of gun, batteringRam:
+        moduleInfo.add("Damage")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 2
+      of hull:
+        moduleInfo.add("Enlarge")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 40
+      of harpoonGun:
+        moduleInfo.add("Strength")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 10
+      else:
+        discard
+    of value:
+      case modulesList[module.protoIndex].mType:
+      of engine:
+        moduleInfo.add("Fuel usage")
+        maxUpgrade = modulesList[module.protoIndex].value * 20
+      else:
+        discard
     else:
       discard
+    maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
+    if maxUpgrade == 0:
+      maxUpgrade = 1
+    let
+      upgradePercent = 1.0 - (module.upgradeProgress.float / maxUpgrade.float)
+      progressBarStyle = if upgradePercent > 0.74:
+          " -style green.Horizontal.TProgressbar"
+        elif upgradePercent > 0.24:
+          " -style yellow.Horizontal.TProgressbar"
+        else:
+          " -style Horizontal.TProgressbar"
+      progressBar = moduleFrame & ".upgradebar"
+    tclEval(script = "ttk::progressbar " & progressBar &
+        " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
+        "}" & progressBarStyle)
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
