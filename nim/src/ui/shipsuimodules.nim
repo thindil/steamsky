@@ -259,6 +259,34 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
         "}" & progressBarStyle)
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"" & moduleInfo & "\"")
+    addLabel(name = moduleFrame & ".upgradelbl",
+        labelText = "Upgrade progress:", row = currentRow)
+    tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we -padx {5 0}")
+    if playerShip.upgradeModule == moduleIndex:
+      infoButton = moduleFrame & ".upgradebutton"
+      tclEval(script = "ttk::button " & infoButton &
+          " -image cancelicon -command {" & closeDialogButton &
+          " invoke;StopUpgrading " & $argv[1] & "} -style Small.TButton")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading cabin quality\"")
+      tclEval(script = "bind " & infoButton & " <Escape> {" &
+          closeDialogButton & " invoke; break}")
+    height = height + tclEval2(script = "winfo reqheight " &
+        infoButton).parseInt
+  # Show information specific to the module's type
+  case module.mType
+  # Show information about engine
+  of engine:
+    # Show engine power
+    currentRow.inc
+    var moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).int
+    addLabel(moduleFrame & ".powerlbl", labelText = "Max power: ",
+        row = currentRow)
+    addLabel(moduleFrame & ".powerlbl", labelText = $module.power & (
+        if module.power == moduleMaxValue: " (max upgrade)" else: ""),
+        row = currentRow, column = 1, secondary = true)
+  else:
+    discard
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
