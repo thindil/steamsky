@@ -280,11 +280,42 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     # Show engine power
     currentRow.inc
     var moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).int
-    addLabel(moduleFrame & ".powerlbl", labelText = "Max power: ",
+    addLabel(name = moduleFrame & ".powerlbl", labelText = "Max power: ",
         row = currentRow)
-    addLabel(moduleFrame & ".powerlbl", labelText = $module.power & (
+    addLabel(name = moduleFrame & ".powerlbl", labelText = $module.power & (
         if module.power == moduleMaxValue: " (max upgrade)" else: ""),
         row = currentRow, column = 1, secondary = true)
+    if module.power < moduleMaxValue:
+      addUpgradeButton(upgradeType = maxValue, buttonTooltip = "engine's power",
+          box = moduleFrame, shipModule = module, column = 2,
+          buttonName = "powerbutton", row = currentRow)
+      height = height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+    else:
+      height = height + tclEval2(script = "winfo reqheight " & label).parseInt
+    # Show engine fuel usage
+    currentRow.inc
+    moduleMaxValue = (modulesList[module.protoIndex].value.float / 2.0).int
+    addLabel(name = moduleFrame & ".fuellbl", labelText = "Fuel usage: ",
+        row = currentRow)
+    addLabel(name = moduleFrame & ".fuellbl2", labelText = $module.fuelUsage & (
+        if moduleMaxValue == module.fuelUsage: " (max upgrade)" else: ""),
+        row = currentRow, column = 1, secondary = true)
+    if module.fuelUsage > moduleMaxValue:
+      addUpgradeButton(upgradeType = maxValue,
+          buttonTooltip = "engine's fuel usage", box = moduleFrame,
+          shipModule = module, column = 2, buttonName = "fuelbutton",
+          row = currentRow)
+      height = height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+    else:
+      height = height + tclEval2(script = "winfo reqheight " & label).parseInt
+    # Show engine state
+    addLabel(name = moduleFrame & ".statelbl", labelText = "State: ",
+        row = currentRow)
+    addLabel(name = moduleFrame & ".statelbl2", labelText = (
+        if module.disabled: "Disabled" else: "Enabled"), row = currentRow,
+        column = 1, secondary = true)
   else:
     discard
   return tclOk
