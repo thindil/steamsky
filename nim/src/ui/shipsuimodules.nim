@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, tk, types]
+import ../[game, config, crafts, crewinventory, missions, tk, types]
 import coreui, dialogs, table
 
 var
@@ -273,6 +273,23 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           closeDialogButton & " invoke; break}")
     height = height + tclEval2(script = "winfo reqheight " &
         infoButton).parseInt
+
+  proc addOwnersInfo(ownersName: string; addButton: bool = false;
+      row: Natural = 0) =
+    var ownersText = ownersName
+    if module.owner.len > 1:
+      ownersText.add("s")
+    ownersText.add(" (max " & $module.owner.len & "):")
+    addLabel(name = moduleFrame & ".lblowners", labelText = ownersText, row = row)
+    ownersText = ""
+    var haveOwner = false
+    for owner in module.owner:
+      if owner > -1:
+        if haveOwner:
+          ownersText.add(", ")
+        haveOwner = true
+        ownersText.add(playerShip.crew[owner].name)
+
   # Show information specific to the module's type
   case module.mType
   # Show information about engine
@@ -346,6 +363,25 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if module.maxModules == moduleMaxValue:
       tclEval(script = label & " configure -text {" & tclEval2(script = label &
           " cget -text") & " (max upgrade)}")
+      height = height + tclEval2(script = "winfo reqheight " & label).parseInt
+    else:
+      addUpgradeButton(upgradeType = maxValue,
+          buttonTooltip = "hull's size so it can have more modules installed",
+          box = moduleFrame, shipModule = module, column = 2,
+          buttonName = "resizebutton", row = currentRow)
+      height = height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+  # Show information about cabin
+  of cabin:
+    currentRow.inc
+    var isPassenger = false
+    block missionLoop:
+      for mission in acceptedMissions:
+        if mission.mType == passenger:
+          for owner in module.owner:
+            if mission.data == owner:
+              isPassenger = true
+              break missionLoop
   else:
     discard
   return tclOk
