@@ -316,6 +316,36 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addLabel(name = moduleFrame & ".statelbl2", labelText = (
         if module.disabled: "Disabled" else: "Enabled"), row = currentRow,
         column = 1, secondary = true)
+    infoButton = moduleFrame & ".statebutton"
+    tclEval(script = "ttk::button " & infoButton &
+        " -image powericon -command {" & closeDialogButton &
+        " invoke;DisableEngine " & $argv[1] & "} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Turn" & (
+        if module.disabled: " on " else: " off ") & "the engine.\"")
+    tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
+    tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
+    height = height + tclEval2(script = "winfo reqheight " &
+        infoButton).parseInt
+  # Show information about cargo room
+  of cargoRoom:
+    currentRow.inc
+    addLabel(name = moduleFrame & ".maxcargolbl", labelText = "Max cargo: ",
+        row = currentRow)
+    addLabel(name = moduleFrame & ".maxcargolbl2", labelText = $modulesList[
+        module.protoIndex].maxValue & " kg", row = currentRow, column = 1,
+        countHeight = true, secondary = true)
+  # Show information about hull
+  of hull:
+    currentRow.inc
+    addLabel(name = moduleFrame & ".modules", labelText = "Modules installed: ",
+        row = currentRow)
+    addLabel(name = moduleFrame & ".modules2",
+        labelText = $module.installedModules & " / " & $module.maxModules,
+        row = currentRow, column = 1, secondary = true)
+    var moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).int
+    if module.maxModules == moduleMaxValue:
+      tclEval(script = label & " configure -text {" & tclEval2(script = label &
+          " cget -text") & " (max upgrade)}")
   else:
     discard
   return tclOk
