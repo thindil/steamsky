@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, tk, types]
+import ../[game, config, crafts, crewinventory, tk, types]
 import coreui, dialogs, table
 
 var
@@ -181,6 +181,19 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moduleText & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
+  var mAmount: Natural = 0
+  for item in itemsList.values:
+    if item.itemType == modulesList[module.protoIndex].repairMaterial:
+      if mAmount > 0:
+        tclEval(script = moduleText & " insert end { or }")
+      tclEval(script = moduleText & " insert end {" & item.name & "}" & (
+          if findItem(inventory = playerShip.cargo, itemType = item.itemType) ==
+          -1: " [list red]" else: " [list gold]"))
+      mAmount.inc
+  tclEval(script = moduleText & " configure -state disabled -height " & $(
+      tclEval2(script = moduleText & " count -displaylines 0.0 end").parseInt /
+      tclEval2(script = "font metrics InterfaceFont -linespace").parseInt))
+  tclEval(script = "grid " & moduleText & " -row " & $currentRow & " -column 1 -sticky nw")
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
