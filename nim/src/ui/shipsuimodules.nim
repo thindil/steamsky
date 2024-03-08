@@ -525,6 +525,29 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = "bind " & infoButton & " <Escape> {" &
             closeDialogButton & " invoke; break}")
         tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+    var ammoHeight = (tclEval2(script = ammoText &
+        " count -displaylines 0.0 end").parseInt / tclEval2(
+        script = "font metrics InterfaceFont -linespace").parseInt).int - 1
+    if ammoHeight < 1:
+      ammoHeight = 1
+    tclEval(script = ammoText & " configure -state disabled -height " & $ammoHeight)
+    tclEval(script = "grid " & ammoText & " -sticky w -row " & $currentRow & " -column 1")
+    height = height + tclEval2(script = "winfo reqheight " & ammoText).parseInt
+    # Show information about gun's fire rate
+    if module.mType == ModuleType2.gun:
+      currentRow.inc
+      addLabel(name = moduleFrame & ".lblfirerate",
+          labelText = "Max fire rate: ", row = currentRow)
+      addLabel(name = moduleFrame & ".lblfirerate2", labelText = (
+          if modulesList[module.protoIndex].speed > 0: $modulesList[
+          module.protoIndex].speed & " each turn" else: "1 every " &
+          $(modulesList[module.protoIndex].speed.abs) & " turns"),
+          row = currentRow, column = 1, countHeight = true, secondary = true)
+  # Show information about turrets
+  of turret:
+    currentRow.inc
+    addLabel(name = moduleFrame & ".lblturretgun", labelText = "Weapon:",
+        row = currentRow)
   else:
     discard
   return tclOk
