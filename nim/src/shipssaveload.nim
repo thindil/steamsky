@@ -24,8 +24,8 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
   ## Save the player's ship data from the current game into a file
   ##
   ## * saveData - the XML structure to which the ship will be saved
-  var shipTree = newXmlTree("playership", [], {"name": playerShip.name,
-      "x": $playerShip.skyX, "y": $playerShip.skyY,
+  var shipTree = newXmlTree(tag = "playership", children = [], attributes = {
+      "name": playerShip.name, "x": $playerShip.skyX, "y": $playerShip.skyY,
       "speed": $playerShip.speed.ord,
       "upgrademodule": $(playerShip.upgradeModule + 1),
       "destinationx": $playerShip.destinationX,
@@ -37,60 +37,61 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
         $module.protoIndex), ("weight", $module.weight), ("durability",
         $module.durability), ("maxdurability", $module.maxDurability)]
     if module.upgradeProgress > 0:
-      attrs.add(("upgradeprogress", $module.upgradeProgress))
+      attrs.add(y = ("upgradeprogress", $module.upgradeProgress))
     if module.upgradeAction != none:
-      attrs.add(("upgradeaction", $module.upgradeAction.ord))
-    var moduleTree = newXmlTree("module", [], attrs.toXmlAttributes)
+      attrs.add(y = ("upgradeaction", $module.upgradeAction.ord))
+    var moduleTree = newXmlTree(tag = "module", children = [],
+        attributes = attrs.toXmlAttributes)
     for owner in module.owner:
-      var ownerElement = newElement("owner")
+      var ownerElement = newElement(tag = "owner")
       ownerElement.attrs = {"value": $(owner + 1)}.toXmlAttributes
-      moduleTree.add(ownerElement)
+      moduleTree.add(son = ownerElement)
     case module.mType
     of ModuleType2.workshop:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": module.craftingIndex}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.craftingTime}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.craftingAmount}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.trainingRoom:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.trainedSkill}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.medicalRoom, ModuleType2.cockpit, ModuleType2.armor,
         ModuleType2.any, ModuleType2.cargoRoom:
       discard
     of ModuleType2.engine:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.fuelUsage}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.power}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": (if module.disabled: "1" else: "0")}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.cabin:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.cleanliness}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.quality}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.turret:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $(module.gunIndex + 1)}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.gun:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $(module.ammoIndex + 1)}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.damage}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.hull:
       var dataElement = newElement("data")
       dataElement.attrs = {"value": $module.installedModules}.toXmlAttributes
