@@ -438,10 +438,46 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     # Show information about cabin's quality
     currentRow.inc
     progressBar = moduleFrame & ".qualitybar"
-    tclEval(script = "ttk::progressbar " & progressBar & " -orient horizontal -maximum 1.0 value {" & $(module.quality.float / 100.0) & "}")
-    addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:", row = currentRow)
-    var moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
-    tclEval(script = "tooltip::tooltip " & progressBar & " \"" & getCabinQuality(quality = module.quality) & (if module.quality == moduleMaxValue: " (max upgrade)" else: "") & "\"")
+    tclEval(script = "ttk::progressbar " & progressBar &
+        " -orient horizontal -maximum 1.0 value {" & $(module.quality.float /
+        100.0) & "}")
+    addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
+        row = currentRow)
+    let moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"" &
+        getCabinQuality(quality = module.quality) & (if module.quality ==
+        moduleMaxValue: " (max upgrade)" else: "") & "\"")
+    tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
+    if module.quality < moduleMaxValue:
+      addUpgradeButton(upgradeType = maxValue,
+          buttonTooltip = "cabin's quality",
+          box = moduleFrame, shipModule = module, column = 2,
+          buttonName = "qualitybutton", row = currentRow)
+      height = height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+    else:
+      height = height + tclEval2(script = "winfo reqheight " &
+          label).parseInt
+  # Show information about guns and harpoon guns
+  of gun, harpoonGun:
+    currentRow.inc
+    addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength: ",
+        row = currentRow)
+    let
+      moduleStrength = (if modulesList[module.protoIndex].mType ==
+          ModuleType.gun: module.damage else: module.duration)
+      moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
+    addLabel(name = moduleFrame & ".strengthlbl2", labelText = $moduleStrength &
+        (if moduleStrength == moduleMaxValue: " (max upgrade)" else: ""),
+        row = currentRow, column = 1, secondary = true)
+    if moduleStrength < moduleMaxValue:
+      addUpgradeButton(upgradeType = maxValue,
+          buttonTooltip = (if modulesList[module.protoIndex].mType ==
+              ModuleType.gun: "damage" else: "strength") & " of gun",
+          box = moduleFrame, shipModule = module, column = 2,
+          buttonName = "strengthbutton", row = currentRow)
+      height = height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
   else:
     discard
   return tclOk
