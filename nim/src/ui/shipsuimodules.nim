@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, missions, tk, types]
+import ../[game, config, crafts, crewinventory, missions, ships, tk, types]
 import coreui, dialogs, table
 
 var
@@ -428,7 +428,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       newStatusTooltip = "Ruined"
       progressBarStyle = ""
-    let progressBar = moduleFrame & ".cleanbar"
+    var progressBar = moduleFrame & ".cleanbar"
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent) &
         "}" & progressBarStyle)
@@ -436,6 +436,12 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         newStatusTooltip & "\"")
     tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
     # Show information about cabin's quality
+    currentRow.inc
+    progressBar = moduleFrame & ".qualitybar"
+    tclEval(script = "ttk::progressbar " & progressBar & " -orient horizontal -maximum 1.0 value {" & $(module.quality.float / 100.0) & "}")
+    addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:", row = currentRow)
+    var moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"" & getCabinQuality(quality = module.quality) & (if module.quality == moduleMaxValue: " (max upgrade)" else: "") & "\"")
   else:
     discard
   return tclOk
