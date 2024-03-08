@@ -873,7 +873,7 @@ package body Missions.UI is
            options =>
              "-text Accept -command {CloseDialog " & Mission_Dialog &
              ";SetMission " & CArgv.Arg(Argv => Argv, N => 1) &
-             "} -image negotiateicon -style Dialog.TButton");
+             "} -image negotiate2icon -style Dialog.TButton");
       Reward_Label: Ttk_Label :=
         Create
           (pathName => Mission_Dialog & ".rewardlbl",
