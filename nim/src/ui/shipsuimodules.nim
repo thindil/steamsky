@@ -548,6 +548,49 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     currentRow.inc
     addLabel(name = moduleFrame & ".lblturretgun", labelText = "Weapon:",
         row = currentRow)
+    addLabel(name = moduleFrame & "lblturretgun2", labelText = (
+        if module.gunIndex > -1: playerShip.modules[
+        module.gunIndex].name else: "none"), row = currentRow, column = 1,
+        countHeight = true, secondary = true)
+  # Show information about workshops
+  of workshop:
+    # Show information about workshop owners
+    currentRow.inc
+    addOwnersInfo(ownersName = "Worker", addButton = module.craftingIndex.len >
+        0, row = currentRow)
+    # Show information about workshop order
+    currentRow.inc
+    let recipeName = getWorkshopRecipeName(workshop = moduleIndex)
+    if recipeName.len > 0:
+      addLabel(name = moduleFrame & ".orderlbl", labelText = "Order:",
+          row = currentRow)
+      addLabel(name = moduleFrame & ".orderlbl2", labelText = recipeName,
+          row = currentRow, column = 1, countHeight = true, secondary = true)
+      currentRow.inc
+      addLabel(name = moduleFrame & ".ordertimelbl",
+          labelText = "Finish order in:", row = currentRow)
+      addLabel(name = moduleFrame & ".ordertimelbl2",
+          labelText = $module.craftingTime & " mins", row = currentRow,
+          column = 1, secondary = true)
+      infoButton = moduleFrame & ".orderbutton"
+      tclEval(script = "ttk::button " & infoButton &
+          " -image cancelicon -command {" & closeDialogButton &
+          " invoke;CancelOrder " & $argv[1] & "} -style Small.TButton")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Cancel current crafting order\"")
+      tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky w -padx {5 0}")
+      tclEval(script = "bind " & infoButton & " <Escape> {" &
+          closeDialogButton & " invoke; break}")
+      tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+      height = height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+    else:
+      addLabel(name = moduleFrame & ".orderlbl", labelText = "Order:",
+          row = currentRow)
+      addLabel(name = moduleFrame & ".orderlbl2", labelText = "not set",
+          row = currentRow, column = 1, countHeight = true, secondary = true)
+  # Show information about workshops
+  of medicalRoom:
+    currentRow.inc
   else:
     discard
   return tclOk
