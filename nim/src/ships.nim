@@ -18,7 +18,7 @@
 import std/[strutils, tables, xmlparser, xmltree]
 import game, log, maps, mobs, shipscrew2, types, utils
 
-func getCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
+func getCabinQuality*(quality: Natural): string {.raises: [], tags: [].} =
   ## Get the description of quality of the selected cabin in the player's ship
   ##
   ## * quality - The numerical value of the cabin's quality which will be
@@ -1096,3 +1096,6 @@ proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed,
 
 proc getAdaProtoShipsAmount(): cint {.raises: [], tags: [], exportc.} =
   return protoShipsList.len.cint
+
+func getAdaCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
+  return getCabinQuality(quality = quality.Natural).cstring

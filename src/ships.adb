@@ -57,7 +57,7 @@ package body Ships is
       function Get_Cabin_Quality_Nim(Q: Natural) return chars_ptr with
          Import => True,
          Convention => C,
-         External_Name => "getCabinQuality";
+         External_Name => "getAdaCabinQuality";
    begin
       return Value(Item => Get_Cabin_Quality_Nim(Q => Quality));
    end Get_Cabin_Quality;
