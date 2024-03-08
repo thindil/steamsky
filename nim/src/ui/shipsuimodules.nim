@@ -504,9 +504,27 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       haveAmmo = true
     if not haveAmmo:
       mAmount = 0
-      for item in itemsList.values:
-        if item.itemType == itemsTypesList[modulesList[module.protoIndex].value - 1]:
-          discard
+      for index, item in itemsList:
+        if item.itemType == itemsTypesList[modulesList[
+            module.protoIndex].value - 1]:
+          if mAmount > 0:
+            tclEval(script = ammoText & " insert end { or }")
+          tclEval(script = ammoText & " insert end {" & item.name & "}" & (
+              if findItem(inventory = playerShip.cargo, protoIndex = index) >
+              -1: "" else: " [list red]"))
+          mAmount.inc
+    for index, item in playerShip.cargo:
+      if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
+          module.protoIndex].value - 1] and index != ammoIndex:
+        infoButton = moduleFrame & ".ammobutton"
+        tclEval(script = "ttk::button " & infoButton &
+            " -image assignammoicon -command {" & closeDialogButton &
+            " invoke;ShowAssignAmmo " & $argv[1] & "} -style Small.TButton")
+        tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign an ammo to the gun.\"")
+        tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky w -padx {5 0}")
+        tclEval(script = "bind " & infoButton & " <Escape> {" &
+            closeDialogButton & " invoke; break}")
+        tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
   else:
     discard
   return tclOk
