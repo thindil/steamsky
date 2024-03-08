@@ -460,6 +460,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           label).parseInt
   # Show information about guns and harpoon guns
   of gun, harpoonGun:
+    # Show information about gun's strength
     currentRow.inc
     addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength: ",
         row = currentRow)
@@ -478,6 +479,34 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           buttonName = "strengthbutton", row = currentRow)
       height = height + tclEval2(script = "winfo reqheight " &
           infoButton).parseInt
+    else:
+      height = height + tclEval2(script = "winfo reqheight " &
+          label).parseInt
+    # Show information about gun's owners
+    currentRow.inc
+    addLabel(name = moduleFrame & ".ammolbl", labelText = "Ammunition:",
+        row = currentRow)
+    let ammoText = moduleFrame & ".ammoinfo"
+    tclEval(script = "text " & ammoText & " -wrap char -height 5 -width 30")
+    tclEval(script = ammoText & " tag configure red -foreground " & tclGetVar(
+        varName = "ttk::theme::" & gameSettings.interfaceTheme &
+        "::colors(-red)"))
+    tclEval(script = ammoText & " tag configure gold -foreground " & tclGetVar(
+        varName = "ttk::theme::" & gameSettings.interfaceTheme &
+        "::colors(-goldenyellow)"))
+    var haveAmmo = false
+    let ammoIndex = (if module.mType == ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
+    if ammoIndex in playerShip.cargo.low .. playerShip.cargo.high and itemsList[
+        playerShip.cargo[ammoIndex].protoIndex].itemType == itemsTypesList[
+        modulesList[module.protoIndex].value - 1]:
+      tclEval(script = ammoText & " insert end {" & itemsList[playerShip.cargo[
+          ammoIndex].protoIndex].name & "} [list gold]")
+      haveAmmo = true
+    if not haveAmmo:
+      mAmount = 0
+      for item in itemsList.values:
+        if item.itemType == itemsTypesList[modulesList[module.protoIndex].value - 1]:
+          discard
   else:
     discard
   return tclOk
