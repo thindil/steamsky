@@ -403,6 +403,39 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
               break missionLoop
     addOwnersInfo(ownersName = "Owner", addButton = not isPassenger,
         row = currentRow)
+    # Show information about cabin's cleanliness
+    currentRow.inc
+    addLabel(name = moduleFrame & ".cleanlbl", labelText = "Cleanliness:",
+        row = currentRow, countHeight = true)
+    var
+      damagePercent = 1.0 - (module.cleanliness.float / module.quality.float)
+      newStatusTooltip = ""
+    if damagePercent == 0.0:
+      newStatusTooltip = "Clean"
+      progressBarStyle = " -style green.Horizontal.TProgressbar"
+    elif damagePercent > 0.0 and damagePercent < 0.2:
+      newStatusTooltip = "Bit dusty"
+      progressBarStyle = " -style green.Horizontal.TProgressbar"
+    elif damagePercent > 0.19 and damagePercent < 0.5:
+      newStatusTooltip = "Dusty"
+      progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+    elif damagePercent > 0.49 and damagePercent < 0.8:
+      newStatusTooltip = "Dirty"
+      progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+    elif damagePercent > 0.79 and damagePercent < 1.0:
+      newStatusTooltip = "Very dirty"
+      progressBarStyle = ""
+    else:
+      newStatusTooltip = "Ruined"
+      progressBarStyle = ""
+    let progressBar = moduleFrame & ".cleanbar"
+    tclEval(script = "ttk::progressbar " & progressBar &
+        " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent) &
+        "}" & progressBarStyle)
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"" &
+        newStatusTooltip & "\"")
+    tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
+    # Show information about cabin's quality
   else:
     discard
   return tclOk
