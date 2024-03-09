@@ -588,9 +588,41 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           row = currentRow)
       addLabel(name = moduleFrame & ".orderlbl2", labelText = "not set",
           row = currentRow, column = 1, countHeight = true, secondary = true)
-  # Show information about workshops
+  # Show information about medical rooms
   of medicalRoom:
     currentRow.inc
+    var hasHealingTool = false
+    for member in playerShip.crew:
+      if member.health < 100 and findItem(inventory = playerShip.cargo,
+          itemType = factionsList[playerShip.crew[0].faction].healingTools) > -1:
+        hasHealingTool = true
+        break
+    addOwnersInfo(ownersName = "Medic", addButton = hasHealingTool,
+        row = currentRow)
+  # Show information about training rooms
+  of trainingRoom:
+    # Show information about trainees
+    currentRow.inc
+    addOwnersInfo(ownersName = "Trainee", addButton = module.trainedSkill > 0,
+        row = currentRow)
+    # Show information about trained skill
+    let trainText = (if module.trainedSkill > 0: skillsList[
+        module.trainedSkill].name else: "not set")
+    currentRow.inc
+    addLabel(name = moduleFrame & ".trainlbl", labelText = "Trained skill:",
+        row = currentRow)
+    addLabel(name = moduleFrame & ".trainlbl2", labelText = trainText,
+        row = currentRow, column = 1, secondary = true)
+    infoButton = moduleFrame & ".orderbutton"
+    tclEval(script = "ttk::button " & infoButton &
+        " -image assigncrewicon -command {" & closeDialogButton &
+        " invoke;ShowAssignSkill " & $argv[1] & "} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign a skill which will be trained in the training room.\"")
+    tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky w -padx {5 0}")
+    tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
+    tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+    height = height + tclEval2(script = "winfo reqheight " &
+        infoButton).parseInt
   else:
     discard
   return tclOk
