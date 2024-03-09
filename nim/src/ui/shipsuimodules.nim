@@ -623,8 +623,32 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
     height = height + tclEval2(script = "winfo reqheight " &
         infoButton).parseInt
+  # Show information about training battering rams
+  of batteringRam:
+    currentRow.inc
+    addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength:",
+        row = currentRow)
+    let moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).int
+    addLabel(name = moduleFrame & ".strengthlbl2", labelText = $module.damage2 &
+        (if module.damage2 == moduleMaxValue: " (max upgrade)" else: ""),
+        row = currentRow, column = 1, countHeight = true, secondary = true)
+    if module.damage2 < moduleMaxValue:
+      addUpgradeButton(upgradeType = maxValue,
+          buttonTooltip = "damage of battering ram",
+          box = moduleFrame, shipModule = module, column = 2,
+          buttonName = "damagebutton", row = currentRow)
   else:
     discard
+  if modulesList[module.protoIndex].description.len > 0:
+    currentRow.inc
+    tclEval(script = "update")
+    addLabel(name = moduleFrame & ".lbldescription", labelText = "\n" &
+        modulesList[module.protoIndex].description, row = currentRow,
+        countHeight = true, columnSpan = 4, wrapLength = tclEval2(
+        script = "winfo reqwidth " & moduleFrame).parseInt)
+  addCloseButton(name = moduleFrame & ".button", text = "Close",
+      command = "CloseDialog " & moduleDialog, columnSpan = 4,
+      row = currentRow + 1)
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
