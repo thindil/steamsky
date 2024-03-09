@@ -649,6 +649,22 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   addCloseButton(name = moduleFrame & ".button", text = "Close",
       command = "CloseDialog " & moduleDialog, columnSpan = 4,
       row = currentRow + 1)
+  tclEval(script = "bind " & closeDialogButton & " <Tab> {focus " &
+      moduleFrame & ".nameinfo.button;break}")
+  height = height + tclEval2(script = "winfo reqheight " & moduleFrame &
+      ".button").parseInt
+  if height > 500:
+    height = 500
+  tclEval(script = moduleCanvas & " create window 0 0 -anchor nw -window " & moduleFrame)
+  tclEval(script = moduleCanvas & " configure -scrollregion [list " & tclEval2(
+      script = moduleCanvas & " bbox all") & "]")
+  height = height + 15 + tclEval2(script = "winfo reqheight " & moduleDialog &
+      ".header").parseInt
+  tclEval(script = "update")
+  let width = tclEval2(script = "winfo reqwidth " & moduleFrame).parseInt +
+      tclEval2(script = "winfo reqwidth " & yScroll).parseInt + 5
+  tclEval(script = moduleDialog & " -height " & $height & " -width " & $width)
+  showDialog(dialog = moduleDialog, relativeX = 0.12, relativeY = 0.1)
   return tclOk
 
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
