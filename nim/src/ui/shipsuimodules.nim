@@ -439,8 +439,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     currentRow.inc
     progressBar = moduleFrame & ".qualitybar"
     tclEval(script = "ttk::progressbar " & progressBar &
-        " -orient horizontal -maximum 1.0 value {" & $(module.quality.float /
-        100.0) & "}")
+        " -orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
+        $(module.quality.float / 100.0) & "}")
     addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
         row = currentRow)
     let moduleMaxValue = (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
