@@ -548,7 +548,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     currentRow.inc
     addLabel(name = moduleFrame & ".lblturretgun", labelText = "Weapon:",
         row = currentRow)
-    addLabel(name = moduleFrame & "lblturretgun2", labelText = (
+    addLabel(name = moduleFrame & ".lblturretgun2", labelText = (
         if module.gunIndex > -1: playerShip.modules[
         module.gunIndex].name else: "none"), row = currentRow, column = 1,
         countHeight = true, secondary = true)
