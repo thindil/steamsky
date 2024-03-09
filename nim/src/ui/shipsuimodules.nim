@@ -110,8 +110,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
   tclEval(script = "tooltip::tooltip " & progressBar & " \"" & statusTooltip & "\"")
   tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
+  infoButton = moduleFrame & ".repairbutton"
   if playerShip.repairModule == moduleIndex:
-    infoButton = moduleFrame & ".repairbutton"
     tclEval(script = "ttk::button " & infoButton &
         " -image cancelicon -command {" & closeDialogButton & " invoke;SetRepair remove} -style Small.TButton")
     tclEval(script = "tooltip::tooltip " & infoButton & " \"Remove the repair priority\"")
@@ -297,7 +297,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if addButton:
       infoButton = moduleFrame & ".ownersbutton"
       tclEval(script = "ttk::button " & infoButton &
-          " -image cancelicon -command {" & closeDialogButton &
+          " -image assigncrewicon -command {" & closeDialogButton &
           " invoke;ShowAssignCrew " & $(moduleIndex + 1) & "} -style Small.TButton")
       tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign crew members to the module.\"")
       tclEval(script = "grid " & infoButton & " -row " & $row & " -column 2 -sticky n -padx {5 0}")
