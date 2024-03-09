@@ -873,7 +873,7 @@ package body Missions.UI is
            options =>
              "-text Accept -command {CloseDialog " & Mission_Dialog &
              ";SetMission " & CArgv.Arg(Argv => Argv, N => 1) &
-             "} -image negotiate2icon -style Dialog.TButton");
+             "} -image negotiate2icon -style Dialoggreen.TButton");
       Reward_Label: Ttk_Label :=
         Create
           (pathName => Mission_Dialog & ".rewardlbl",
@@ -934,7 +934,7 @@ package body Missions.UI is
           (pathName => Buttons_Box & ".cancel",
            options =>
              "-text Cancel -command {CloseDialog " & Mission_Dialog &
-             "} -image cancelicon -style Dialog.TButton");
+             "} -image cancelicon -style Dialogred.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-row 0 -column 1 -pady 5 -padx 5");
       Bind
