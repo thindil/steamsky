@@ -663,7 +663,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "update")
   let width = tclEval2(script = "winfo reqwidth " & moduleFrame).parseInt +
       tclEval2(script = "winfo reqwidth " & yScroll).parseInt + 5
-  tclEval(script = moduleDialog & " -height " & $height & " -width " & $width)
+  tclEval(script = moduleDialog & " configure -height " & $height & " -width " & $width)
   showDialog(dialog = moduleDialog, relativeX = 0.12, relativeY = 0.1)
   return tclOk
 
