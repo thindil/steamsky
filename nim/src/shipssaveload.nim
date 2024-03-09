@@ -93,34 +93,34 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
       dataElement.attrs = {"value": $module.damage}.toXmlAttributes
       moduleTree.add(son = dataElement)
     of ModuleType2.hull:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.installedModules}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.maxModules}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.batteringRam:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.damage2}.toXmlAttributes
-      moduleTree.add(dataElement)
+      moduleTree.add(son = dataElement)
     of ModuleType2.harpoonGun:
-      var dataElement = newElement("data")
+      var dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $(module.harpoonIndex + 1)}.toXmlAttributes
-      moduleTree.add(dataElement)
-      dataElement = newElement("data")
+      moduleTree.add(son = dataElement)
+      dataElement = newElement(tag = "data")
       dataElement.attrs = {"value": $module.duration}.toXmlAttributes
-      moduleTree.add(dataElement)
-    shipTree.add(moduleTree)
+      moduleTree.add(son = dataElement)
+    shipTree.add(son = moduleTree)
   for item in playerShip.cargo:
     var attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
         "amount", $item.amount), ("durability", $item.durability)]
     if item.name.len > 0:
-      attrs.add(("name", item.name))
+      attrs.add(y = ("name", item.name))
     if item.price > 0:
-      attrs.add(("price", $item.price))
-    var itemElement = newElement("cargo")
+      attrs.add(y = ("price", $item.price))
+    var itemElement = newElement(tag = "cargo")
     itemElement.attrs = attrs.toXmlAttributes
-    shipTree.add(itemElement)
+    shipTree.add(son = itemElement)
   const attributesNames = ["health", "tired", "hunger", "thirst", "order",
       "previousorder", "ordertime", "dailypay", "tradepay", "contractlength",
       "moralelevel", "moralepoints", "loyalty", "homebase"]
@@ -131,42 +131,43 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
         member.payment[1], member.payment[2], member.contractLength,
         member.morale[1], member.morale[2], member.loyalty, member.homeBase]
     for index, name in attributesNames.pairs:
-      attrs.add((name, $values[index]))
-    attrs.add(("name", member.name))
-    attrs.add(("gender", $member.gender))
-    attrs.add(("faction", member.faction))
-    var memberTree = newXmlTree("member", [], attrs.toXmlAttributes)
+      attrs.add(y = (name, $values[index]))
+    attrs.add(y = ("name", member.name))
+    attrs.add(y = ("gender", $member.gender))
+    attrs.add(y = ("faction", member.faction))
+    var memberTree = newXmlTree(tag = "member", children = [],
+        attributes = attrs.toXmlAttributes)
     for skill in member.skills:
-      var skillElement = newElement("skill")
+      var skillElement = newElement(tag = "skill")
       skillElement.attrs = {"index": $skill.index, "level": $skill.level,
           "experience": $skill.experience}.toXmlAttributes
-      memberTree.add(skillElement)
+      memberTree.add(son = skillElement)
     for priority in member.orders:
-      var priorityElement = newElement("priority")
+      var priorityElement = newElement(tag = "priority")
       priorityElement.attrs = {"value": $priority}.toXmlAttributes
-      memberTree.add(priorityElement)
+      memberTree.add(son = priorityElement)
     for attribute in member.attributes:
-      var attributeElement = newElement("attribute")
+      var attributeElement = newElement(tag = "attribute")
       attributeElement.attrs = {"level": $attribute.level,
           "experience": $attribute.experience}.toXmlAttributes
-      memberTree.add(attributeElement)
+      memberTree.add(son = attributeElement)
     for item in member.inventory:
       var
-        itemElement = newElement("item")
+        itemElement = newElement(tag = "item")
         attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
             "amount", $item.amount), ("durability", $item.durability)]
       if item.name.len > 0:
-        attrs.add(("name", item.name))
+        attrs.add(y = ("name", item.name))
       if item.price > 0:
-        attrs.add(("price", $item.price))
+        attrs.add(y = ("price", $item.price))
       itemElement.attrs = attrs.toXmlAttributes
-      memberTree.add(itemElement)
+      memberTree.add(son = itemElement)
     for item in member.equipment:
-      var itemElement = newElement("equipment")
+      var itemElement = newElement(tag = "equipment")
       itemElement.attrs = {"index": $(item + 1)}.toXmlAttributes
-      memberTree.add(itemElement)
-    shipTree.add(memberTree)
-  saveData.add(shipTree)
+      memberTree.add(son = itemElement)
+    shipTree.add(son = memberTree)
+  saveData.add(son = shipTree)
 
 proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
     tags: [], contractual.} =
