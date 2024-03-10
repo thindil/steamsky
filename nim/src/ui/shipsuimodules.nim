@@ -511,10 +511,10 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if item.itemType == itemsTypesList[modulesList[
             module.protoIndex].value - 1]:
           if mAmount > 0:
-            tclEval(script = ammoText & " insert end { or }")
+            tclEval(script = ammoText & " insert end { or } [list gold]")
           tclEval(script = ammoText & " insert end {" & item.name & "}" & (
               if findItem(inventory = playerShip.cargo, protoIndex = index) >
-              -1: "" else: " [list red]"))
+              -1: " [list gold]" else: " [list red]"))
           mAmount.inc
     for index, item in playerShip.cargo:
       if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
