@@ -874,14 +874,12 @@ package body Missions.UI is
              "-text Accept -command {CloseDialog " & Mission_Dialog &
              ";SetMission " & CArgv.Arg(Argv => Argv, N => 1) &
              "} -image negotiate2icon -style Dialoggreen.TButton");
+      Reward_Box: constant Ttk_Frame :=
+        Create(pathName => Mission_Dialog & ".rewardbox");
       Reward_Label: Ttk_Label :=
         Create
-          (pathName => Mission_Dialog & ".rewardlbl",
-           options =>
-             "-text {Reward:" &
-             Natural'Image
-               (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-             " " & To_String(Source => Money_Name) & "}");
+          (pathName => Reward_Box & ".rewardlbl",
+           options => "-text {Reward:}");
       Reward_Scale: constant Ttk_Scale :=
         Create
           (pathName => Mission_Dialog & ".reward",
@@ -903,8 +901,19 @@ package body Missions.UI is
         (Widget => Reward_Field,
          Message =>
            "Lower value - more reputation from mission but less money,\nhigher value - more money from mission but less reputation.");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Reward_Label, Options => "-stick w");
+      Reward_Label :=
+        Create
+          (pathName => Reward_Box & ".rewardlbl2",
+           options =>
+             "-text {" &
+             Natural'Image
+               (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
+             " " & To_String(Source => Money_Name) & "} -style Golden.TLabel");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Reward_Label, Options => "-columnspan 2 -padx 5 -stick w");
+        (Slave => Reward_Label, Options => "-row 0 -column 1 -stick w");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Reward_Box, Options => "-columnspan 2 -padx 5 -stick w");
       Reward_Label :=
         Create
           (pathName => Mission_Dialog & ".rewardinfo",
@@ -983,7 +992,9 @@ package body Missions.UI is
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Reward_Label: constant Ttk_Label :=
-        Get_Widget(pathName => ".missiondialog.rewardlbl", Interp => Interp);
+        Get_Widget
+          (pathName => ".missiondialog.rewardbox.rewardlbl2",
+           Interp => Interp);
       Mission: constant Mission_Data :=
         Sky_Bases(Get_Base_Index).Missions(Mission_Index);
       Value: constant Natural :=
@@ -996,7 +1007,7 @@ package body Missions.UI is
       configure
         (Widgt => Reward_Label,
          options =>
-           "-text {Reward:" &
+           "-text {" &
            Natural'Image
              (Natural(Float(Mission.Reward) * (Float(Value) / 100.0))) &
            " " & To_String(Source => Money_Name) & "}");
