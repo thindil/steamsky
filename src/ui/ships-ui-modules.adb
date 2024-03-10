@@ -37,13 +37,13 @@ use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 -- with Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Autoscroll;
 -- with Tcl.Tklib.Ada.Tooltip;
-with Config; use Config;
-with Crafts; use Crafts;
+with Config;
+with Crafts;
 with Dialogs; use Dialogs;
 -- with Factions;
 with Maps;
@@ -2000,6 +2000,9 @@ package body Ships.UI.Modules is
    function Show_Assign_Crew_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Tcl.Tklib.Ada.Autoscroll;
+      use Crafts;
       use Tiny_String;
 
       Module_Index: constant Positive :=
@@ -2179,6 +2182,7 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Config;
       use Ships.Cargo;
       use Tiny_String;
 
