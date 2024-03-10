@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -101,22 +101,6 @@ package Crafts is
       Recipe_Index: Tiny_String.Bounded_String) with
       Pre => Workshop <= Player_Ship.Modules.Last_Index and
       Tiny_String.Length(Source => Recipe_Index) > 0;
-      -- ****
-
-      -- ****f* Crafts/Crafts.Get_Workshop_Recipe_Name
-      -- FUNCTION
-      -- Get the name of the recipe set for the selected workshop
-      -- PARAMETERS
-      -- Workshop - Index of player ship module (workplace) which recipe will
-      --            be get
-      -- RESULT
-      -- The name of the recipe set to craft in the selected workshop or empty
-      -- string if nothing is set
-      -- HISTORY
-      -- 7.9 - Added
-      -- SOURCE
-   function Get_Workshop_Recipe_Name(Workshop: Positive) return String with
-      Pre => Workshop <= Player_Ship.Modules.Last_Index;
       -- ****
 
 -- Temporary code to interact with Nim

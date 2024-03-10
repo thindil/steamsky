@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -147,16 +147,6 @@ package body Crafts is
            New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
       Get_Ship_From_Nim(Ship => Player_Ship);
    end Set_Recipe;
-
-   function Get_Workshop_Recipe_Name(Workshop: Positive) return String is
-      function Get_Ada_Workshop_Recipe_Name(W: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaWorkshopRecipeName";
-   begin
-      Get_Ada_Modules;
-      return Value(Item => Get_Ada_Workshop_Recipe_Name(W => Workshop - 1));
-   end Get_Workshop_Recipe_Name;
 
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
