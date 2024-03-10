@@ -484,6 +484,9 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           label).parseInt
     # Show information about gun's owners
     currentRow.inc
+    addOwnersInfo(ownersName = "Gunner", addButton = true, row = currentRow)
+    # Show information about gun's ammunition
+    currentRow.inc
     addLabel(name = moduleFrame & ".ammolbl", labelText = "Ammunition:",
         row = currentRow)
     let ammoText = moduleFrame & ".ammoinfo"
