@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, missions, ships, shipscrew, shipsupgrade, tk, types]
+import ../[game, config, crafts, crewinventory, missions, ships, shipscrew,
+    shipsupgrade, tk, types]
 import dialogs, updateheader, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -236,7 +237,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       return tclOk
   try:
     discard tclEval(script = moduleText &
-        " configure -state disabled -height " & $(tclEval2(script = moduleText & " count -displaylines 0.0 end").parseInt /
+        " configure -state disabled -height " & $(tclEval2(script = moduleText &
+            " count -displaylines 0.0 end").parseInt /
         tclEval2(script = "font metrics InterfaceFont -linespace").parseInt))
   except:
     tclEval(script = "bgerror {Can't configure moduleText. Reason: " &
@@ -931,7 +933,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
@@ -946,11 +948,21 @@ import shipsui
 
 proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  startUpgrading(moduleIndex = ($argv[2]).parseInt() - 1, upgradeType = ($argv[1]).parseInt)
-  updateOrders(ship = playerShip)
+  try:
+    startUpgrading(moduleIndex = ($argv[2]).parseInt() - 1, upgradeType = (
+        $argv[1]).parseInt)
+  except:
+    tclEval(script = "bgerror {Can't set upgrade for the module. Reason: " &
+        getCurrentExceptionMsg() & "}")
+  try:
+    updateOrders(ship = playerShip)
+  except:
+    tclEval(script = "brerror {Can't update crew orders. Reason: " &
+        getCurrentExceptionMsg() & "}")
   updateMessages()
   updateHeader()
-  return showShipInfoCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
+  return showShipInfoCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
 
 # Temporary code for interfacing with Ada
 
