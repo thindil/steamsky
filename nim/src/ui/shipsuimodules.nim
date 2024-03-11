@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, missions, ships, tk, types]
-import coreui, dialogs, table
+import ../[game, config, crafts, crewinventory, missions, ships, shipscrew, shipsupgrade, tk, types]
+import coreui, dialogs, table, updateheader, utilsui2
 
 var
   modulesTable: TableWidget
@@ -936,6 +936,9 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = moduleDialog, relativeX = 0.12, relativeY = 0.1)
   return tclOk
 
+proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
     tags: [].} =
   ## Get the additional information about the module
@@ -1067,9 +1070,20 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowModuleInfo", showModuleInfoCommand)
+    addCommand("SetUpgrade", setUpgradeCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
+
+import shipsui
+
+proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  startUpgrading(moduleIndex = ($argv[2]).parseInt() - 1, upgradeType = ($argv[1]).parseInt)
+  updateOrders(ship = playerShip)
+  updateMessages()
+  updateHeader()
+  return showShipInfoCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 # Temporary code for interfacing with Ada
 
