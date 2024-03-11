@@ -19,7 +19,7 @@ import std/[os, parseopt, strutils]
 import game, log, tk
 # Temporary imports
 import basestrade, basesship2
-import ui/[mainmenu, utilsui]
+import ui/[mainmenu, shipsuimodules, utilsui]
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
     OSError, ValueError], tags: [ReadIOEffect, RootEffect].} =

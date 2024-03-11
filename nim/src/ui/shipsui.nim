@@ -17,7 +17,7 @@
 
 import std/[os, tables]
 import ../[config, game, maps, ships, tk]
-import coreui, shipsuicrew, shipsuimodules, utilsui2
+import coreui, shipsuicrew, utilsui2, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
