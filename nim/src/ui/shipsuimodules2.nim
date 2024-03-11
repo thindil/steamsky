@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, missions, ships, shipscrew, shipsupgrade, tk, types]
-import coreui, dialogs, table, updateheader, utilsui2
+import std/tables
+import ../[game, config, crafts, tk, types]
+import coreui, table
 
 var
   modulesTable: TableWidget
