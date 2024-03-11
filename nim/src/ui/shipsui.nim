@@ -44,7 +44,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = button & " configure -image cancelicon")
     button = mainPaned & ".shipinfoframe.general.canvas.frame.canceldestination"
     tclEval(script = button & " configure -image cancelicon")
-  elif tclEval2(script = "winfo exists " & shipInfoFrame) == "1" and argc == 1:
+  elif tclEval2(script = "winfo ismapped " & shipInfoFrame) == "1" and argc == 1:
     tclEval(script = "InvokeButton " & closeButton)
     tclEval(script = "grid remove " & closeButton)
     for i in 0 .. 3:
