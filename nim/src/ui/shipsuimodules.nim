@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, messages, missions, ships, shipscrew,
-    shipsupgrade, tk, types]
+import ../[game, config, crafts, crewinventory, messages, missions, ships,
+    shipscrew, shipsupgrade, tk, types]
 import dialogs, updateheader, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -956,6 +956,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   try:
     addCommand("ShowModuleInfo", showModuleInfoCommand)
     addCommand("SetUpgrade", setUpgradeCommand)
+    addCommand("AssignModule", assignModuleCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
@@ -988,9 +989,11 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   if argv[1] == "crew":
 
     proc updateOrder(order: CrewOrders) =
-      giveOrders(ship = playerShip, memberIndex = assignIndex, givenOrder = order, moduleIndex = moduleIndex)
+      giveOrders(ship = playerShip, memberIndex = assignIndex,
+          givenOrder = order, moduleIndex = moduleIndex)
       if playerShip.crew[assignIndex].order != order:
-        tclSetVar(varName = ".moduledialog.canvas.frame.crewbutton" & $argv[3], newValue = "0")
+        tclSetVar(varName = ".moduledialog.canvas.frame.crewbutton" & $(assignIndex + 1),
+            newValue = "0")
 
     case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
     of cabin:
@@ -1009,7 +1012,9 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
           break
       if not assigned:
         playerShip.modules[moduleIndex].owner[0] = assignIndex
-      addMessage(message = "You assigned " & playerShip.modules[moduleIndex].name & " to " & playerShip.crew[assignIndex].name & ".", mType = orderMessage)
+      addMessage(message = "You assigned " & playerShip.modules[
+          moduleIndex].name & " to " & playerShip.crew[assignIndex].name & ".",
+          mType = orderMessage)
     of gun, harpoonGun:
       updateOrder(order = gunner)
     of alchemyLab .. greenhouse:
@@ -1025,7 +1030,21 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       playerShip.modules[moduleIndex].ammoIndex = assignIndex
     else:
       playerShip.modules[moduleIndex].harpoonIndex = assignIndex
-  return tclOk
+    addMessage(message = "You assigned " & itemsList[playerShip.cargo[
+        assignIndex].protoIndex].name & " to " & playerShip.modules[
+        moduleIndex].name & ".", mType = orderMessage)
+  elif argv[1] == "skill":
+    if playerShip.modules[moduleIndex].trainedSkill == assignIndex:
+      return tclOk
+    playerShip.modules[moduleIndex].trainedSkill = assignIndex
+    addMessage(message = "You prepared " & playerShip.modules[
+        moduleIndex].name & " for training " & skillsList[assignIndex].name &
+        ".", mType = orderMessage)
+    updateMessages()
+    return tclOk
+  updateMessages()
+  return showShipInfoCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
 
 # Temporary code for interfacing with Ada
 
