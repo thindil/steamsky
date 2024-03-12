@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, missions, ships, shipscrew,
+import ../[game, config, crafts, crewinventory, messages, missions, ships, shipscrew,
     shipsupgrade, tk, types]
 import dialogs, updateheader, utilsui2
 
@@ -986,6 +986,12 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = ($argv[2]).parseInt - 1
     assignIndex = ($argv[3]).parseInt - 1
   if argv[1] == "crew":
+
+    proc updateOrder(order: CrewOrders) =
+      giveOrders(ship = playerShip, memberIndex = assignIndex, givenOrder = order, moduleIndex = moduleIndex)
+      if playerShip.crew[assignIndex].order != order:
+        tclSetVar(varName = ".moduledialog.canvas.frame.crewbutton" & $argv[3], newValue = "0")
+
     case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
     of cabin:
       block modulesLoop:
@@ -1001,6 +1007,24 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
           owner = assignIndex
           assigned = true
           break
+      if not assigned:
+        playerShip.modules[moduleIndex].owner[0] = assignIndex
+      addMessage(message = "You assigned " & playerShip.modules[moduleIndex].name & " to " & playerShip.crew[assignIndex].name & ".", mType = orderMessage)
+    of gun, harpoonGun:
+      updateOrder(order = gunner)
+    of alchemyLab .. greenhouse:
+      updateOrder(order = craft)
+    of medicalRoom:
+      updateOrder(order = heal)
+    of trainingRoom:
+      updateOrder(order = train)
+    else:
+      discard
+  elif argv[1] == "ammo":
+    if playerShip.modules[moduleIndex].mType == ModuleType2.gun:
+      playerShip.modules[moduleIndex].ammoIndex = assignIndex
+    else:
+      playerShip.modules[moduleIndex].harpoonIndex = assignIndex
   return tclOk
 
 # Temporary code for interfacing with Ada
