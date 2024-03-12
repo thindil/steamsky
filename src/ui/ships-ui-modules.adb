@@ -1335,8 +1335,8 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "AssignModule", Ada_Command => Assign_Module_Command'Access);
+--      Add_Command
+--        (Name => "AssignModule", Ada_Command => Assign_Module_Command'Access);
       Add_Command
         (Name => "DisableEngine",
          Ada_Command => Disable_Engine_Command'Access);
