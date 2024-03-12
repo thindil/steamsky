@@ -948,6 +948,9 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
   ## upgradetype is type of upgrade to start: 1, 2 or 3. moduleindex is the
   ## index of the player ship module which will be upgraded
 
+proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
@@ -976,6 +979,29 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
   updateHeader()
   return showShipInfoCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
+
+proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    moduleIndex = ($argv[2]).parseInt - 1
+    assignIndex = ($argv[3]).parseInt - 1
+  if argv[1] == "crew":
+    case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
+    of cabin:
+      block modulesLoop:
+        for module in playerShip.modules.mitems:
+          if module.mType == ModuleType2.cabin:
+            for owner in module.owner.mitems:
+              if owner == assignIndex:
+                owner = -1
+                break modulesLoop
+      var assigned = false
+      for owner in playerShip.modules[moduleIndex].owner.mitems:
+        if owner == -1:
+          owner = assignIndex
+          assigned = true
+          break
+  return tclOk
 
 # Temporary code for interfacing with Ada
 
