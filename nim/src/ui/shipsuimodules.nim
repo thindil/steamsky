@@ -934,6 +934,19 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
+  ## Set the selected upgrade for the selected module
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetUpgrade upgradetype moduleindex
+  ## upgradetype is type of upgrade to start: 1, 2 or 3. moduleindex is the
+  ## index of the player ship module which will be upgraded
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
