@@ -46,7 +46,6 @@ with Messages; use Messages;
 with Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew; use Ships.UI.Crew;
--- with Ships.Upgrade;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 with ShipModules; use ShipModules;
@@ -66,45 +65,6 @@ package body Ships.UI.Modules is
    -- SOURCE
    Modules_Indexes: Positive_Container.Vector;
    -- ****
-
-   -- ****o* SUModules/SUModules.Set_Upgrade_Command
-   -- FUNCTION
-   -- Set the selected upgrade for the selected module
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command.
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command.
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetUpgrade upgradetype moduleindex
-   -- upgradetype is type of upgrade to start: 1, 2 or 3. moduleindex is the
-   -- index of the player ship module which will be upgraded
-   -- SOURCE
---   function Set_Upgrade_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Set_Upgrade_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---
---      use Ships.Upgrade;
---   begin
---      Start_Upgrading
---        (Module_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
---         Upgrade_Type => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
---      Update_Orders(Ship => Player_Ship);
---      Update_Messages;
---      Update_Header;
---      return
---        Show_Ship_Info_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---           Argv => Argv);
---   end Set_Upgrade_Command;
 
    -- ****o* SUModules/SUModules.Assign_Module_Command
    -- FUNCTION
@@ -1375,8 +1335,6 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "SetUpgrade", Ada_Command => Set_Upgrade_Command'Access);
       Add_Command
         (Name => "AssignModule", Ada_Command => Assign_Module_Command'Access);
       Add_Command
