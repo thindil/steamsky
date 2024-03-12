@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1073,6 +1073,15 @@ package body Crafts.UI is
               varName =>
                 "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
                 "::colors(-red)"));
+      Tag_Configure
+        (TextWidget => Recipe_Text, TagName => "gold",
+         Options =>
+           "-foreground " &
+           Tcl_GetVar
+             (interp => Interp,
+              varName =>
+                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+                "::colors(-goldenyellow)"));
       if Recipe_Type = "Study" then
          --## rule off IMPROPER_INITIALIZATION
          Recipe.Material_Types.Append
@@ -1195,9 +1204,12 @@ package body Crafts.UI is
       else
          Recipe := Get_Recipe(Recipe_Index => Recipe_Index);
          Insert
+           (TextWidget => Recipe_Text, Index => "end", Text => "{Amount:}");
+         Insert
            (TextWidget => Recipe_Text, Index => "end",
             Text =>
-              "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
+              "{" & Integer'Image(Recipe.Result_Amount) & LF &
+              "} [list gold]");
       end if;
       Insert
         (TextWidget => Recipe_Text, Index => "end",
@@ -1208,7 +1220,7 @@ package body Crafts.UI is
           Recipe.Material_Types.Last_Index loop
          Insert
            (TextWidget => Recipe_Text, Index => "end",
-            Text => "{" & LF & "-}");
+            Text => "{" & LF & "-} [list gold]");
          M_Amount := 0;
          Find_Materials_Loop :
          for J in 1 .. Get_Proto_Amount loop
@@ -1240,7 +1252,7 @@ package body Crafts.UI is
                if M_Amount > 0 then
                   Insert
                     (TextWidget => Recipe_Text, Index => "end",
-                     Text => "{ or}");
+                     Text => "{ or} [list gold]");
                end if;
                Cargo_Index :=
                  Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => J);
@@ -1268,7 +1280,7 @@ package body Crafts.UI is
                              Index => Cargo_Index)
                             .Amount)
                          (2 .. Text_Length) &
-                       ")}");
+                       ")} [list gold]");
                else
                   Insert
                     (TextWidget => Recipe_Text, Index => "end",
@@ -1297,7 +1309,7 @@ package body Crafts.UI is
                if M_Amount > 0 then
                   Insert
                     (TextWidget => Recipe_Text, Index => "end",
-                     Text => "{ or }");
+                     Text => "{ or } [list gold]");
                end if;
                Cargo_Index :=
                  Find_Item
@@ -1311,7 +1323,8 @@ package body Crafts.UI is
                   Text =>
                     "{" &
                     To_String(Source => Get_Proto_Item(Index => I).Name) &
-                    "}" & (if not Have_Tool then " [list red]" else ""));
+                    "}" &
+                    (if not Have_Tool then " [list red]" else " [list gold]"));
                M_Amount := M_Amount + 1;
             end if;
          end loop Check_Tool_Loop;
@@ -1346,11 +1359,14 @@ package body Crafts.UI is
         (TextWidget => Recipe_Text, Index => "end",
          Text =>
            "{" & To_String(Source => Workplace_Name) & "}" &
-           (if not Have_Workplace then " [list red]" else ""));
+           (if not Have_Workplace then " [list red]" else " [list gold]"));
+      Insert
+        (TextWidget => Recipe_Text, Index => "end",
+         Text => "{" & LF & "Skill: }");
       Insert
         (TextWidget => Recipe_Text, Index => "end",
          Text =>
-           "{" & LF & "Skill: " &
+           "{" &
            To_String
              (Source =>
                 SkillsData_Container.Element
@@ -1366,7 +1382,13 @@ package body Crafts.UI is
                        (Container => Skills_List, Index => Recipe.Skill)
                        .Attribute)
                   .Name) &
-           LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
+           "} [list gold]");
+      Insert
+        (TextWidget => Recipe_Text, Index => "end",
+         Text => "{" & LF & "Time needed:}");
+      Insert
+        (TextWidget => Recipe_Text, Index => "end",
+         Text => "{" & Positive'Image(Recipe.Time) & " minutes} [list gold]");
       configure(Widgt => Recipe_Text, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Recipe_Text, Options => "-padx 5");
       if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then
