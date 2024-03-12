@@ -949,7 +949,7 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
   ## index of the player ship module which will be upgraded
 
 proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
@@ -984,62 +984,92 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
 proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
-    moduleIndex = ($argv[2]).parseInt - 1
-    assignIndex = ($argv[3]).parseInt - 1
+    moduleIndex = try:
+        ($argv[2]).parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the module index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
+    assignIndex = try:
+        ($argv[3]).parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the assing index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   if argv[1] == "crew":
 
-    proc updateOrder(order: CrewOrders) =
+    proc updateOrder(order: CrewOrders) {.sideEffect, raises: [KeyError,
+        CrewOrderError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
       giveOrders(ship = playerShip, memberIndex = assignIndex,
           givenOrder = order, moduleIndex = moduleIndex)
       if playerShip.crew[assignIndex].order != order:
-        tclSetVar(varName = ".moduledialog.canvas.frame.crewbutton" & $(assignIndex + 1),
-            newValue = "0")
+        tclSetVar(varName = ".moduledialog.canvas.frame.crewbutton" & $(
+            assignIndex + 1), newValue = "0")
 
-    case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
-    of cabin:
-      block modulesLoop:
-        for module in playerShip.modules.mitems:
-          if module.mType == ModuleType2.cabin:
-            for owner in module.owner.mitems:
-              if owner == assignIndex:
-                owner = -1
-                break modulesLoop
-      var assigned = false
-      for owner in playerShip.modules[moduleIndex].owner.mitems:
-        if owner == -1:
-          owner = assignIndex
-          assigned = true
-          break
-      if not assigned:
-        playerShip.modules[moduleIndex].owner[0] = assignIndex
-      addMessage(message = "You assigned " & playerShip.modules[
-          moduleIndex].name & " to " & playerShip.crew[assignIndex].name & ".",
-          mType = orderMessage)
-    of gun, harpoonGun:
-      updateOrder(order = gunner)
-    of alchemyLab .. greenhouse:
-      updateOrder(order = craft)
-    of medicalRoom:
-      updateOrder(order = heal)
-    of trainingRoom:
-      updateOrder(order = train)
-    else:
-      discard
+    try:
+      case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
+      of cabin:
+        block modulesLoop:
+          for module in playerShip.modules.mitems:
+            if module.mType == ModuleType2.cabin:
+              for owner in module.owner.mitems:
+                if owner == assignIndex:
+                  owner = -1
+                  break modulesLoop
+        var assigned = false
+        for owner in playerShip.modules[moduleIndex].owner.mitems:
+          if owner == -1:
+            owner = assignIndex
+            assigned = true
+            break
+        if not assigned:
+          playerShip.modules[moduleIndex].owner[0] = assignIndex
+        addMessage(message = "You assigned " & playerShip.modules[
+            moduleIndex].name & " to " & playerShip.crew[assignIndex].name &
+                ".",
+            mType = orderMessage)
+      of gun, harpoonGun:
+        updateOrder(order = gunner)
+      of alchemyLab .. greenhouse:
+        updateOrder(order = craft)
+      of medicalRoom:
+        updateOrder(order = heal)
+      of trainingRoom:
+        updateOrder(order = train)
+      else:
+        discard
+    except CrewNoSpaceError, CrewOrderError:
+      showMessage(text = getCurrentExceptionMsg(), title = "Can't assign crew")
+      return tclOk
+    except:
+      tclEval(script = "bgerror {Can't assign crew member to the module. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   elif argv[1] == "ammo":
     if playerShip.modules[moduleIndex].mType == ModuleType2.gun:
       playerShip.modules[moduleIndex].ammoIndex = assignIndex
     else:
       playerShip.modules[moduleIndex].harpoonIndex = assignIndex
-    addMessage(message = "You assigned " & itemsList[playerShip.cargo[
-        assignIndex].protoIndex].name & " to " & playerShip.modules[
-        moduleIndex].name & ".", mType = orderMessage)
+    try:
+      addMessage(message = "You assigned " & itemsList[playerShip.cargo[
+          assignIndex].protoIndex].name & " to " & playerShip.modules[
+          moduleIndex].name & ".", mType = orderMessage)
+    except:
+      tclEval(script = "bgerror {Can't show message about assigned ammo. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   elif argv[1] == "skill":
     if playerShip.modules[moduleIndex].trainedSkill == assignIndex:
       return tclOk
     playerShip.modules[moduleIndex].trainedSkill = assignIndex
-    addMessage(message = "You prepared " & playerShip.modules[
-        moduleIndex].name & " for training " & skillsList[assignIndex].name &
-        ".", mType = orderMessage)
+    try:
+      addMessage(message = "You prepared " & playerShip.modules[
+          moduleIndex].name & " for training " & skillsList[assignIndex].name &
+          ".", mType = orderMessage)
+    except:
+      tclEval(script = "bgerror {Can't show message about assigned skill. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
     updateMessages()
     return tclOk
   updateMessages()
