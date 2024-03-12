@@ -950,6 +950,21 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
+  ## Assign member, ammo or skill to module
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## AssignModule assigntype moduleindex assignindex
+  ## assigntype is type of item to assing to module: crew, ammo, skills.
+  ## moduleindex is the index of the Player_Ship module to which item will be
+  ## assigned. assignindex is the index of the item which will be assigned
+  ## to the module
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
