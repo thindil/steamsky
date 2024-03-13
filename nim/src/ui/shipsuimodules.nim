@@ -969,6 +969,18 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
+  ## Enable or disable selected engine
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## DisableEngine engineindex
+  ## engineindex is the index of the engine module in the player ship
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
