@@ -130,36 +130,36 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
       "contractlength",
       "moralelevel", "moralepoints", "loyalty", "homebase"]
   for member in playerShip.crew:
-    var attrs: seq[tuple[key, val: string]] = @[]
+    var attrs2: seq[tuple[key, val: string]] = @[]
     let values: array[14, int] = [member.health, member.tired, member.hunger,
         member.thirst, member.order.ord, member.previousOrder.ord,
         member.orderTime,
         member.payment[1], member.payment[2], member.contractLength,
         member.morale[1], member.morale[2], member.loyalty, member.homeBase]
-    for index, name in attributesNames.pairs:
-      attrs.add(y = (name, $values[index]))
-    attrs.add(y = ("name", member.name))
-    attrs.add(y = ("gender", $member.gender))
-    attrs.add(y = ("faction", member.faction))
+    for index, name in attributesNames:
+      attrs2.add(y = (name, $values[index]))
+    attrs2.add(y = ("name", member.name))
+    attrs2.add(y = ("gender", $member.gender))
+    attrs2.add(y = ("faction", member.faction))
     var memberTree: XmlNode = newXmlTree(tag = "member", children = [],
-        attributes = attrs.toXmlAttributes)
+        attributes = attrs2.toXmlAttributes)
     for skill in member.skills:
       var skillElement: XmlNode = newElement(tag = "skill")
       skillElement.attrs = {"index": $skill.index, "level": $skill.level,
           "experience": $skill.experience}.toXmlAttributes
       memberTree.add(son = skillElement)
     for priority in member.orders:
-      var priorityElement = newElement(tag = "priority")
+      var priorityElement: XmlNode = newElement(tag = "priority")
       priorityElement.attrs = {"value": $priority}.toXmlAttributes
       memberTree.add(son = priorityElement)
     for attribute in member.attributes:
-      var attributeElement = newElement(tag = "attribute")
+      var attributeElement: XmlNode = newElement(tag = "attribute")
       attributeElement.attrs = {"level": $attribute.level,
           "experience": $attribute.experience}.toXmlAttributes
       memberTree.add(son = attributeElement)
     for item in member.inventory:
       var
-        itemElement = newElement(tag = "item")
+        itemElement: XmlNode = newElement(tag = "item")
         attrs: seq[tuple[key, val: string]] = @[("index", $item.protoIndex), (
             "amount", $item.amount), ("durability", $item.durability)]
       if item.name.len > 0:
@@ -169,7 +169,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
       itemElement.attrs = attrs.toXmlAttributes
       memberTree.add(son = itemElement)
     for item in member.equipment:
-      var itemElement = newElement(tag = "equipment")
+      var itemElement: XmlNode = newElement(tag = "equipment")
       itemElement.attrs = {"index": $(item + 1)}.toXmlAttributes
       memberTree.add(son = itemElement)
     shipTree.add(son = memberTree)
@@ -183,7 +183,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
   require:
     saveData != nil
   body:
-    let shipNode = saveData.child(name = "playership")
+    let shipNode: XmlNode = saveData.child(name = "playership")
     playerShip.name = shipNode.attr(name = "name")
     playerShip.skyX = shipNode.attr(name = "x").parseInt
     playerShip.skyY = shipNode.attr(name = "y").parseInt
@@ -198,15 +198,15 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
     playerShip.crew = @[]
     for module in shipNode.findAll(tag = "module"):
       let
-        name = module.attr(name = "name")
-        protoIndex = module.attr(name = "index").parseInt
-        weight = module.attr(name = "weight").parseInt
-        modDur = module.attr(name = "durability").parseInt
-        maxDur = module.attr(name = "maxdurability").parseInt
+        name: string = module.attr(name = "name")
+        protoIndex: int = module.attr(name = "index").parseInt
+        weight: Positive = module.attr(name = "weight").parseInt
+        modDur: Natural = module.attr(name = "durability").parseInt
+        maxDur: Positive = module.attr(name = "maxdurability").parseInt
       var
-        owners: seq[int]
+        owners: seq[int] = @[]
         upgradeAction: ShipUpgrade = none
-        upgradeProgress = 0
+        upgradeProgress: int = 0
         mType: ModuleType2 = any
       if module.attr(name = "owner") == "":
         for owner in module.findAll(tag = "owner"):
@@ -277,7 +277,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
           mType = parseEnum[ModuleType2](s = module.attr(name = "mtype"))
       var
         data: array[1..3, int] = [0, 0, 0]
-        dataIndex = 1
+        dataIndex: int = 1
       case mType
       of any:
         for modData in module.findAll(tag = "data"):
@@ -289,8 +289,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction, data: data))
       of engine:
         var
-          fuelUsage, power = 0
-          disabled = false
+          fuelUsage, power: int = 0
+          disabled: bool = false
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -308,7 +308,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
             fuelUsage: fuelUsage, power: power, disabled: disabled))
       of cabin:
-        var cleanliness, quality = 0
+        var cleanliness, quality: int = 0
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -330,8 +330,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
       of workshop:
         var
-          craftingIndex = ""
-          craftingTime, craftingAmount = 0
+          craftingIndex: string = ""
+          craftingTime, craftingAmount: int = 0
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -357,7 +357,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             maxDurability: maxDur, owner: owners,
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
       of trainingRoom:
-        var trainedSkill = 0
+        var trainedSkill: int = 0
         for modData in module.findAll(tag = "data"):
           if dataIndex == 1:
             trainedSkill = modData.attr(name = "value").parseInt
@@ -368,7 +368,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction,
             trainedSkill: trainedSkill))
       of turret:
-        var gunIndex = -1
+        var gunIndex: int = -1
         for modData in module.findAll(tag = "data"):
           if dataIndex == 1:
             gunIndex = modData.attr(name = "value").parseInt - 1
@@ -380,8 +380,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             gunIndex: gunIndex))
       of gun:
         var
-          damage = 0
-          ammoIndex = -1
+          damage: int = 0
+          ammoIndex: int = -1
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -402,7 +402,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             maxDurability: maxDur, owner: owners,
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
       of hull:
-        var installedModules, maxModules = 0
+        var installedModules, maxModules: int = 0
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -423,7 +423,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             maxDurability: maxDur, owner: owners,
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction))
       of batteringRam:
-        var damage = 0
+        var damage: Natural = 0
         for modData in module.findAll(tag = "data"):
           if dataIndex == 1:
             damage = modData.attr(name = "value").parseInt
@@ -435,8 +435,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             damage2: damage, coolingDown: false))
       of harpoonGun:
         var
-          duration = 0
-          harpoonIndex = -1
+          duration: Natural = 0
+          harpoonIndex: int = -1
         for modData in module.findAll(tag = "data"):
           case dataIndex
           of 1:
@@ -453,16 +453,16 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
             duration: duration, harpoonIndex: harpoonIndex))
     for cargo in shipNode.findAll(tag = "cargo"):
       let
-        protoIndex = cargo.attr(name = "index").parseInt
-        amount = cargo.attr(name = "amount").parseInt
-        name = cargo.attr(name = "name")
-        itemDurability = cargo.attr(name = "durability").parseInt
-        price = (if cargo.attr(name = "price").len == 0: 0 else: cargo.attr(
+        protoIndex: int = cargo.attr(name = "index").parseInt
+        amount: Natural = cargo.attr(name = "amount").parseInt
+        name: string = cargo.attr(name = "name")
+        itemDurability: int = cargo.attr(name = "durability").parseInt
+        price: int = (if cargo.attr(name = "price").len == 0: 0 else: cargo.attr(
             name = "price").parseInt)
       playerShip.cargo.add(y = InventoryData(protoIndex: protoIndex,
           amount: amount, name: name, durability: itemDurability, price: price))
     for crew in shipNode.findAll(tag = "member"):
-      var member: MemberData
+      var member: MemberData = MemberData()
       member.name = crew.attr(name = "name")
       member.gender = crew.attr(name = "gender")[0]
       member.health = crew.attr(name = "health").parseInt
@@ -480,34 +480,34 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
       member.loyalty = crew.attr(name = "loyalty").parseInt
       for skill in crew.findAll(tag = "skill"):
         let
-          index = skill.attr(name = "index").parseInt
-          level = skill.attr(name = "level").parseInt
-          experience = (if skill.attr(name = "experience").len > 0: skill.attr(
+          index: int = skill.attr(name = "index").parseInt
+          level: Natural = skill.attr(name = "level").parseInt
+          experience: Natural = (if skill.attr(name = "experience").len > 0: skill.attr(
               name = "experience").parseInt else: 0)
         member.skills.add(y = SkillInfo(index: index, level: level,
             experience: experience))
-      var priorityIndex = 1
+      var priorityIndex: int = 1
       for priority in crew.findAll(tag = "priority"):
         member.orders[priorityIndex] = priority.attr(name = "value").parseInt
         priorityIndex.inc
       for attribute in crew.findAll(tag = "attribute"):
         let
-          level = attribute.attr(name = "level").parseInt
-          experience = (if attribute.attr(name = "experience").len >
+          level: int = attribute.attr(name = "level").parseInt
+          experience: Natural = (if attribute.attr(name = "experience").len >
               0: attribute.attr(name = "experience").parseInt else: 0)
         member.attributes.add(y = MobAttributeRecord(level: level,
             experience: experience))
       for item in crew.findAll(tag = "item"):
         let
-          itemIndex = item.attr(name = "index").parseInt
-          amount = item.attr(name = "amount").parseInt
-          itemName = item.attr(name = "name")
-          itemDurability = item.attr(name = "durability").parseInt
-          price = (if item.attr(name = "price").len > 0: item.attr(
+          itemIndex: int = item.attr(name = "index").parseInt
+          amount: Natural = item.attr(name = "amount").parseInt
+          itemName: string = item.attr(name = "name")
+          itemDurability: int = item.attr(name = "durability").parseInt
+          price: int = (if item.attr(name = "price").len > 0: item.attr(
               name = "price").parseInt else: 0)
         member.inventory.add(y = InventoryData(protoIndex: itemIndex,
             amount: amount, name: itemName, durability: itemDurability, price: price))
-      var equipmentIndex = 1
+      var equipmentIndex: int = 1
       for item in crew.findAll(tag = "equipment"):
         member.equipment[(equipmentIndex - 1).EquipmentLocations] = item.attr(
             name = "index").parseInt - 1
