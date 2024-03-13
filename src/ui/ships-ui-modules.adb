@@ -66,6 +66,7 @@ package body Ships.UI.Modules is
    Modules_Indexes: Positive_Container.Vector;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****o* SUModules/SUModules.Assign_Module_Command
    -- FUNCTION
    -- Assign member, ammo or skill to module
@@ -222,6 +223,7 @@ package body Ships.UI.Modules is
             Title => "Can't assign crew");
          return TCL_OK;
    end Assign_Module_Command;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUModules/SUModules.Disable_Engine_Command
    -- FUNCTION
@@ -237,62 +239,62 @@ package body Ships.UI.Modules is
    -- DisableEngine engineindex
    -- engineindex is the index of the engine module in the player ship
    -- SOURCE
-   function Disable_Engine_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Disable_Engine_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Tiny_String;
-
-      Can_Disable: Boolean := False;
-      Module_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-   begin
-      if Player_Ship.Modules(Module_Index).Disabled then
-         Player_Ship.Modules(Module_Index).Disabled := False;
-         Add_Message
-           (Message =>
-              "You enabled " &
-              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-              ".",
-            M_Type => ORDERMESSAGE);
-      else
-         Check_Can_Disable_Loop :
-         for I in Player_Ship.Modules.Iterate loop
-            if Player_Ship.Modules(I).M_Type = ENGINE
-              and then
-              (not Player_Ship.Modules(I).Disabled and
-               Modules_Container.To_Index(Position => I) /= Module_Index) then
-               Can_Disable := True;
-               exit Check_Can_Disable_Loop;
-            end if;
-         end loop Check_Can_Disable_Loop;
-         if not Can_Disable then
-            Show_Message
-              (Text =>
-                 "You can't disable this engine because it is your last working engine.",
-               Title => "Can't disable engine");
-            return TCL_OK;
-         end if;
-         Player_Ship.Modules(Module_Index).Disabled := True;
-         Add_Message
-           (Message =>
-              "You disabled " &
-              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-              ".",
-            M_Type => ORDERMESSAGE);
-      end if;
-      Update_Messages;
-      return
-        Show_Ship_Info_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => Argv);
-   end Disable_Engine_Command;
+--   function Disable_Engine_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Disable_Engine_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Tiny_String;
+--
+--      Can_Disable: Boolean := False;
+--      Module_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--   begin
+--      if Player_Ship.Modules(Module_Index).Disabled then
+--         Player_Ship.Modules(Module_Index).Disabled := False;
+--         Add_Message
+--           (Message =>
+--              "You enabled " &
+--              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+--              ".",
+--            M_Type => ORDERMESSAGE);
+--      else
+--         Check_Can_Disable_Loop :
+--         for I in Player_Ship.Modules.Iterate loop
+--            if Player_Ship.Modules(I).M_Type = ENGINE
+--              and then
+--              (not Player_Ship.Modules(I).Disabled and
+--               Modules_Container.To_Index(Position => I) /= Module_Index) then
+--               Can_Disable := True;
+--               exit Check_Can_Disable_Loop;
+--            end if;
+--         end loop Check_Can_Disable_Loop;
+--         if not Can_Disable then
+--            Show_Message
+--              (Text =>
+--                 "You can't disable this engine because it is your last working engine.",
+--               Title => "Can't disable engine");
+--            return TCL_OK;
+--         end if;
+--         Player_Ship.Modules(Module_Index).Disabled := True;
+--         Add_Message
+--           (Message =>
+--              "You disabled " &
+--              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+--              ".",
+--            M_Type => ORDERMESSAGE);
+--      end if;
+--      Update_Messages;
+--      return
+--        Show_Ship_Info_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => Argv);
+--   end Disable_Engine_Command;
 
    -- ****o* SUModules/SUModules.Stop_Upgrading_Command
    -- FUNCTION
@@ -1336,10 +1338,8 @@ package body Ships.UI.Modules is
    begin
       Add_Ada_Commands;
 --      Add_Command
---        (Name => "AssignModule", Ada_Command => Assign_Module_Command'Access);
-      Add_Command
-        (Name => "DisableEngine",
-         Ada_Command => Disable_Engine_Command'Access);
+--        (Name => "DisableEngine",
+--         Ada_Command => Disable_Engine_Command'Access);
       Add_Command
         (Name => "StopUpgrading",
          Ada_Command => Stop_Upgrading_Command'Access);
