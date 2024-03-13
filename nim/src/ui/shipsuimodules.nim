@@ -966,12 +966,16 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   ## assigned. assignindex is the index of the item which will be assigned
   ## to the module
 
+proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowModuleInfo", showModuleInfoCommand)
     addCommand("SetUpgrade", setUpgradeCommand)
     addCommand("AssignModule", assignModuleCommand)
+    addCommand("DisableEngine", disableEngineCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
@@ -1087,6 +1091,31 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       return tclOk
     updateMessages()
     return tclOk
+  updateMessages()
+  return showShipInfoCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+
+proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let moduleIndex = ($argv[1]).parseInt - 1
+  if playerShip.modules[moduleIndex].disabled:
+    playerShip.modules[moduleIndex].disabled = false
+    addMessage(message = "You enabled " & playerShip.modules[moduleIndex].name &
+        ".", mType = orderMessage)
+  else:
+    var canDisable = false
+    for index, module in playerShip.modules:
+      if module.mType == ModuleType2.engine and (not module.disabled and
+          index != moduleIndex):
+        canDisable = true
+        break
+    if not canDisable:
+      showMessage(text = "You can't disable this engine because it is your last working engine.",
+          title = "Can't disable engine")
+      return tclOk
+    playerShip.modules[moduleIndex].disabled = true
+    addMessage(message = "You disabled " & playerShip.modules[
+        moduleIndex].name & ".", mType = orderMessage)
   updateMessages()
   return showShipInfoCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
