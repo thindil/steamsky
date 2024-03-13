@@ -982,6 +982,9 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
   ## DisableEngine engineindex
   ## engineindex is the index of the engine module in the player ship
 
+proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
@@ -989,6 +992,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SetUpgrade", setUpgradeCommand)
     addCommand("AssignModule", assignModuleCommand)
     addCommand("DisableEngine", disableEngineCommand)
+    addCommand("StopUpgrading", stopUpgradingCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
@@ -1135,6 +1139,19 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     addMessage(message = "You disabled " & playerShip.modules[
         moduleIndex].name & ".", mType = orderMessage)
   updateMessages()
+  return showShipInfoCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+
+proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  playerShip.upgradeModule = -1
+  for index, member in playerShip.crew:
+    if member.order == upgrading:
+      giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+      break
+  addMessage(message = "You stopped current upgrade.", mType = orderMessage)
+  updateMessages()
+  updateHeader()
   return showShipInfoCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
 
