@@ -413,7 +413,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         return tclOk
     addLabel(name = moduleFrame & ".powerlbl", labelText = "Max power: ",
         row = currentRow)
-    addLabel(name = moduleFrame & ".powerlbl", labelText = $module.power & (
+    addLabel(name = moduleFrame & ".powerlbl2", labelText = $module.power & (
         if module.power == moduleMaxValue: " (max upgrade)" else: ""),
         row = currentRow, column = 1, secondary = true)
     if module.power < moduleMaxValue:
@@ -467,6 +467,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             getCurrentExceptionMsg() & "}")
         return tclOk
     # Show engine state
+    currentRow.inc
     addLabel(name = moduleFrame & ".statelbl", labelText = "State: ",
         row = currentRow)
     addLabel(name = moduleFrame & ".statelbl2", labelText = (
