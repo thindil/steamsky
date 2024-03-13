@@ -968,7 +968,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   ## to the module
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
@@ -1098,7 +1098,12 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  let moduleIndex = ($argv[1]).parseInt - 1
+  let moduleIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      tclEval(script = "bgerror {Can't set module index. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   if playerShip.modules[moduleIndex].disabled:
     playerShip.modules[moduleIndex].disabled = false
     addMessage(message = "You enabled " & playerShip.modules[moduleIndex].name &
