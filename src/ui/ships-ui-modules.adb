@@ -238,35 +238,35 @@ package body Ships.UI.Modules is
    -- COMMANDS
    -- StopUpgrading
    -- SOURCE
-   function Stop_Upgrading_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Stop_Upgrading_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-   begin
-      Player_Ship.Upgrade_Module := 0;
-      Give_Orders_Loop :
-      for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-         if Player_Ship.Crew(I).Order = UPGRADING then
-            Give_Orders
-              (Ship => Player_Ship, Member_Index => I, Given_Order => REST);
-            exit Give_Orders_Loop;
-         end if;
-      end loop Give_Orders_Loop;
-      Add_Message
-        (Message => "You stopped current upgrade.", M_Type => ORDERMESSAGE);
-      Update_Messages;
-      Update_Header;
-      return
-        Show_Ship_Info_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => Argv);
-   end Stop_Upgrading_Command;
+--   function Stop_Upgrading_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Stop_Upgrading_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--   begin
+--      Player_Ship.Upgrade_Module := 0;
+--      Give_Orders_Loop :
+--      for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+--         if Player_Ship.Crew(I).Order = UPGRADING then
+--            Give_Orders
+--              (Ship => Player_Ship, Member_Index => I, Given_Order => REST);
+--            exit Give_Orders_Loop;
+--         end if;
+--      end loop Give_Orders_Loop;
+--      Add_Message
+--        (Message => "You stopped current upgrade.", M_Type => ORDERMESSAGE);
+--      Update_Messages;
+--      Update_Header;
+--      return
+--        Show_Ship_Info_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => Argv);
+--   end Stop_Upgrading_Command;
 
    -- ****o* SUModules/SUModules.Set_Repair_Command
    -- FUNCTION
@@ -1267,11 +1267,8 @@ package body Ships.UI.Modules is
    begin
       Add_Ada_Commands;
 --      Add_Command
---        (Name => "DisableEngine",
---         Ada_Command => Disable_Engine_Command'Access);
-      Add_Command
-        (Name => "StopUpgrading",
-         Ada_Command => Stop_Upgrading_Command'Access);
+--        (Name => "StopUpgrading",
+--         Ada_Command => Stop_Upgrading_Command'Access);
       Add_Command
         (Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
       Add_Command
