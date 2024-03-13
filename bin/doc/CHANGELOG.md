@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Updated look of the dialog with information about a recruit
 - Updated look of the dialog used to negotiate hiring a recruit
 - Updated look of the dialog with information about an available mission in a base
-- Updated look of the dialog uset to accept an available mission in a base
+- Updated look of the dialog used to accept an available mission in a base
+- Updated look of the dialog with information about a crafting recipe
 - Updated modding guide
 
 ### Fixed
