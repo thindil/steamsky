@@ -996,6 +996,9 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## StopUpgrading
 
+proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
@@ -1004,6 +1007,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("AssignModule", assignModuleCommand)
     addCommand("DisableEngine", disableEngineCommand)
     addCommand("StopUpgrading", stopUpgradingCommand)
+    addCommand("SetRepair", setRepairCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
@@ -1174,6 +1178,20 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
   updateHeader()
   return showShipInfoCommand(clientData = clientData, interp = interp,
       argc = 2, argv = argv)
+
+proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if argv[1] == "assign":
+    playerShip.repairModule = ($argv[2]).parseInt - 1
+    addMessage(message = "You assigned " & playerShip.modules[
+        playerShip.repairModule].name & " as repair priority.",
+        mType = orderMessage)
+  else:
+    playerShip.repairModule = -1
+    addMessage(message = "You removed repair priority.", mType = orderMessage)
+  updateMessages()
+  return showShipInfoCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
 
 # Temporary code for interfacing with Ada
 
