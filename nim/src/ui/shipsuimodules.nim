@@ -1153,7 +1153,7 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMessages()
   updateHeader()
   return showShipInfoCommand(clientData = clientData, interp = interp,
-      argc = argc, argv = argv)
+      argc = 2, argv = argv)
 
 # Temporary code for interfacing with Ada
 
