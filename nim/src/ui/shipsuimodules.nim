@@ -997,7 +997,7 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## StopUpgrading
 
 proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
@@ -1182,7 +1182,12 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
 proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   if argv[1] == "assign":
-    playerShip.repairModule = ($argv[2]).parseInt - 1
+    playerShip.repairModule = try:
+        ($argv[2]).parseInt
+      except:
+        tclEval(script = "bgerror {Can't set the repair priority. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     addMessage(message = "You assigned " & playerShip.modules[
         playerShip.repairModule].name & " as repair priority.",
         mType = orderMessage)
