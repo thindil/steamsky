@@ -241,42 +241,42 @@ package body Ships.UI.Modules is
    -- selected module as the repair first, otherwise clear current priority
    -- setting
    -- SOURCE
-   function Set_Repair_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Repair_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tiny_String;
-
-   begin
-      if CArgv.Arg(Argv => Argv, N => 1) = "assign" then
-         Player_Ship.Repair_Module :=
-           Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-         Add_Message
-           (Message =>
-              "You assigned " &
-              To_String
-                (Source =>
-                   Player_Ship.Modules
-                     (Positive'Value(CArgv.Arg(Argv => Argv, N => 2)))
-                     .Name) &
-              " as repair priority.",
-            M_Type => ORDERMESSAGE);
-      else
-         Player_Ship.Repair_Module := 0;
-         Add_Message
-           (Message => "You removed repair priority.", M_Type => ORDERMESSAGE);
-      end if;
-      Update_Messages;
-      return
-        Show_Ship_Info_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
-   end Set_Repair_Command;
+--   function Set_Repair_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Set_Repair_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tiny_String;
+--
+--   begin
+--      if CArgv.Arg(Argv => Argv, N => 1) = "assign" then
+--         Player_Ship.Repair_Module :=
+--           Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+--         Add_Message
+--           (Message =>
+--              "You assigned " &
+--              To_String
+--                (Source =>
+--                   Player_Ship.Modules
+--                     (Positive'Value(CArgv.Arg(Argv => Argv, N => 2)))
+--                     .Name) &
+--              " as repair priority.",
+--            M_Type => ORDERMESSAGE);
+--      else
+--         Player_Ship.Repair_Module := 0;
+--         Add_Message
+--           (Message => "You removed repair priority.", M_Type => ORDERMESSAGE);
+--      end if;
+--      Update_Messages;
+--      return
+--        Show_Ship_Info_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv);
+--   end Set_Repair_Command;
 
    -- ****o* SUModules/SUModules.Reset_Destination_Command
    -- FUNCTION
@@ -1224,10 +1224,7 @@ package body Ships.UI.Modules is
    begin
       Add_Ada_Commands;
 --      Add_Command
---        (Name => "StopUpgrading",
---         Ada_Command => Stop_Upgrading_Command'Access);
-      Add_Command
-        (Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
+--        (Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
       Add_Command
         (Name => "ResetDestination",
          Ada_Command => Reset_Destination_Command'Access);
