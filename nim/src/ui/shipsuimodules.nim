@@ -983,7 +983,7 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
   ## engineindex is the index of the engine module in the player ship
 
 proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
@@ -1147,7 +1147,16 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
   playerShip.upgradeModule = -1
   for index, member in playerShip.crew:
     if member.order == upgrading:
-      giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+      try:
+        giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
+      except CrewOrderError:
+        showMessage(text = getCurrentExceptionMsg(),
+            title = "Can't give orders")
+        return tclOk
+      except:
+        tclEval(script = "bgerror {Can't give orders to a crew member. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
       break
   addMessage(message = "You stopped current upgrade.", mType = orderMessage)
   updateMessages()
