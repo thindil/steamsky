@@ -42,6 +42,8 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = button & " configure -image showicon")
     button = mainPaned & ".shipinfoframe.general.canvas.frame.cancelupgrade"
     tclEval(script = button & " configure -image cancelicon")
+    button = mainPaned & ".shipinfoframe.general.canvas.frame.cancelpriority"
+    tclEval(script = button & " configure -image cancelicon")
     button = mainPaned & ".shipinfoframe.general.canvas.frame.canceldestination"
     tclEval(script = button & " configure -image cancelicon")
   elif tclEval2(script = "winfo ismapped " & shipInfoFrame) == "1" and argc == 1:
