@@ -1014,7 +1014,7 @@ proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
   ## setting
 
 proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
