@@ -225,59 +225,6 @@ package body Ships.UI.Modules is
    end Assign_Module_Command;
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****o* SUModules/SUModules.Set_Repair_Command
-   -- FUNCTION
-   -- Set or remove the repair priority from the selected module
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command.
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetRepair action
-   -- Action can be assing or remove. If assing, then assing the currently
-   -- selected module as the repair first, otherwise clear current priority
-   -- setting
-   -- SOURCE
---   function Set_Repair_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Set_Repair_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use Tiny_String;
---
---   begin
---      if CArgv.Arg(Argv => Argv, N => 1) = "assign" then
---         Player_Ship.Repair_Module :=
---           Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
---         Add_Message
---           (Message =>
---              "You assigned " &
---              To_String
---                (Source =>
---                   Player_Ship.Modules
---                     (Positive'Value(CArgv.Arg(Argv => Argv, N => 2)))
---                     .Name) &
---              " as repair priority.",
---            M_Type => ORDERMESSAGE);
---      else
---         Player_Ship.Repair_Module := 0;
---         Add_Message
---           (Message => "You removed repair priority.", M_Type => ORDERMESSAGE);
---      end if;
---      Update_Messages;
---      return
---        Show_Ship_Info_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---           Argv => Argv);
---   end Set_Repair_Command;
-
    -- ****o* SUModules/SUModules.Reset_Destination_Command
    -- FUNCTION
    -- Reset the current destination point for the player's ship
@@ -1223,8 +1170,6 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
       Add_Command
         (Name => "ResetDestination",
          Ada_Command => Reset_Destination_Command'Access);
