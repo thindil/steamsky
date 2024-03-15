@@ -225,38 +225,6 @@ package body Ships.UI.Modules is
    end Assign_Module_Command;
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****o* SUModules/SUModules.Reset_Destination_Command
-   -- FUNCTION
-   -- Reset the current destination point for the player's ship
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ResetDestination
-   -- SOURCE
---   function Reset_Destination_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Reset_Destination_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---   begin
---      Player_Ship.Destination_X := 0;
---      Player_Ship.Destination_Y := 0;
---      return
---        Show_Ship_Info_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---           Argv => Argv);
---   end Reset_Destination_Command;
-
    -- ****o* SUModules/SUModules.Update_Assign_Crew_Command
    -- FUNCTION
    -- Update assign the crew member UI
@@ -1170,9 +1138,6 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "ResetDestination",
---         Ada_Command => Reset_Destination_Command'Access);
       Add_Command
         (Name => "ShowAssignCrew",
          Ada_Command => Show_Assign_Crew_Command'Access);
