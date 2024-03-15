@@ -998,6 +998,20 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+  ## Set or remove the repair priority from the selected module
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetRepair action
+  ## Action can be assing or remove. If assing, then assing the currently
+  ## selected module as the repair first, otherwise clear current priority
+  ## setting
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
