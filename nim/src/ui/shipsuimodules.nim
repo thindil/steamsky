@@ -1027,6 +1027,26 @@ proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ResetDestination
 
+proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    moduleIndex = ($argv[1]).parseInt
+    module = playerShip.modules[moduleIndex]
+    moduleDialog = createDialog(name = ".moduleDialog",
+        title = "Assign a crew member to " & module.name, titleWidth = 250)
+    yScroll = moduleDialog & ".yscroll"
+    crewCanvas = moduleDialog & ".canvas"
+  tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .moduledialog.canvas yview]")
+  tclEval(script = "canvas " & crewCanvas & " -yscrollcommand [list " &
+      yScroll & " set]")
+  tclEval(script = "grid " & crewCanvas & " -sticky nwes -padx 5 -pady 5")
+  tclEval(script = "grid " & yScroll & " -sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1")
+  let closeButton = moduleDialog & ".button"
+  tclEval(script = "ttk::button " & closeButton &
+      "  -text Close -command {CloseDialog " & moduleDialog & "}")
+  tclEval(script = "grid " & closeButton & " -pady {0 5} -columnspan 2")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
