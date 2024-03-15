@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the player's ship's crew members' inventories,
+## like finding items in them, counting free space, damaging items, etc.
+
 import std/tables
 import contracts
 import game, shipscargo, types, utils
@@ -131,7 +134,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
   require:
     memberIndex in playerShip.crew.low .. playerShip.crew.high
   body:
-    var itemIndex: int
+    var itemIndex: int = -1
     if inventoryIndex == -1:
       if durability > 0:
         itemIndex = findItem(inventory = ship.crew[memberIndex].inventory,
@@ -142,7 +145,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
     else:
       itemIndex = inventoryIndex
     if amount > 0:
-      let weight = if itemIndex > 0:
+      let weight: Positive = if itemIndex > 0:
           itemsList[ship.crew[memberIndex].inventory[
               itemIndex].protoIndex].weight * amount
         else:
@@ -158,7 +161,8 @@ proc updateInventory*(memberIndex: Natural; amount: int;
           protoIndex: protoIndex, amount: amount, name: itemsList[
           protoIndex].name, durability: durability, price: price))
     else:
-      let newAmount = ship.crew[memberIndex].inventory[itemIndex].amount + amount
+      let newAmount: Natural = ship.crew[memberIndex].inventory[
+          itemIndex].amount + amount
       if newAmount == 0:
         {.warning[UnsafeSetLen]: off.}
         ship.crew[memberIndex].inventory.delete(i = itemIndex)
@@ -183,8 +187,8 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
   ##
   ## Returns the updated parameters inventory and ship
   var
-    item = inventory[itemIndex]
-    damageChance = itemsList[item.protoIndex].value[1]
+    item: InventoryData = inventory[itemIndex]
+    damageChance: int = itemsList[item.protoIndex].value[1]
   if skillLevel > 0:
     damageChance = damageChance - (skillLevel / 5).int
     if damageChance < 1:
@@ -207,7 +211,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
           inventoryIndex = itemIndex, ship = ship)
     return
   inventory[itemIndex] = item
-  var i = 0
+  var i: int = 0
   while i <= inventory.high:
     for j in inventory.low..inventory.high:
       if inventory[i].protoIndex == inventory[j].protoIndex and inventory[
@@ -249,25 +253,30 @@ proc getTrainingToolQuality*(memberIndex: Natural;
 proc findAdaItem(inventory: array[128, AdaInventoryData]; protoIndex: cint;
     itemType: cstring; durability: cint; quality: cint): cint {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return (findItem(inventory = inventoryToNim(inventory = inventory),
       protoIndex = protoIndex, itemType = $itemType, durability = durability,
       quality = quality) + 1).cint
 
 proc freeAdaInventory(memberIndex, amount: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   return freeInventory(memberIndex = (memberIndex - 1).Natural,
       amount = amount).cint
 
 proc itemAdaIsUsed(memberIndex, itemIndex: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   return itemIsUsed(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1)).ord.cint
 
 proc takeAdaOffItem(memberIndex, itemIndex: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   takeOffItem(memberIndex = (memberIndex - 1), itemIndex = (itemIndex - 1))
 
 proc equipmentToAda(memberIndex: cint; equipment: var array[0..6,
     cint]) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for i in 0..6:
     equipment[i] = playerShip.crew[(memberIndex - 1)].equipment[
         i.EquipmentLocations].cint + 1
@@ -275,6 +284,7 @@ proc equipmentToAda(memberIndex: cint; equipment: var array[0..6,
 proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
     inventoryIndex, price, inPlayerShip: cint): cint {.raises: [], tags: [],
         exportc, contractual.} =
+  ## Temporary C binding
   try:
     if inPlayerShip == 1:
       updateInventory(memberIndex = (memberIndex - 1), amount = amount,
@@ -291,20 +301,24 @@ proc updateAdaInventory(memberIndex, amount, protoIndex, durability,
 proc damageAdaItem(inventory: var array[128, AdaInventoryData]; itemIndex,
     skillLevel, memberIndex, inPlayerShip: cint) {.raises: [], tags: [],
         exportc, contractual.} =
-  var nimInventory = inventoryToNim(inventory = inventory)
+  ## Temporary C binding
+  var nimInventory: seq[InventoryData] = inventoryToNim(inventory = inventory)
   try:
     if inPlayerShip == 1:
       damageItem(inventory = nimInventory, itemIndex = (itemIndex - 1),
-          skillLevel = skillLevel, memberIndex = (memberIndex - 1), playerShip)
+          skillLevel = skillLevel, memberIndex = (memberIndex - 1),
+              ship = playerShip)
     else:
       damageItem(inventory = nimInventory, itemIndex = (itemIndex - 1),
-          skillLevel = skillLevel, memberIndex = (memberIndex - 1), npcShip)
+          skillLevel = skillLevel, memberIndex = (memberIndex - 1),
+              ship = npcShip)
   except KeyError, CrewNoSpaceError:
     discard
   inventory = inventoryToAda(inventory = nimInventory)
 
 proc getAdaTrainingToolQuality(memberIndex, skillIndex: cint): cint {.raises: [
     ], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return getTrainingToolQuality(memberIndex = memberIndex - 1,
         skillIndex = skillIndex).cint
