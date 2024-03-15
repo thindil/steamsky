@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Colored version of icon for accept negotiations with a recruit in a base
+- Colored version of icons for accept negotiations with a recruit in a base and
+  setting a crafting order
 
 ### Changed
 - Updated look of the dialog with information about a recruit
