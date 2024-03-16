@@ -1043,6 +1043,28 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
           ModuleType.cabin:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
             givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+    elif assignModuleCommand(clientData = clientData, interp = interp, argc = 4,
+        argv = ["assignModule".cstring, "crew", argv[1], argv[2]]) != tclOk:
+      return tclError
+  for index, _ in playerShip.crew:
+    let crewButton = frameName & ".crewbutton" & $index
+    tclEval(script = crewButton & " state !disabled")
+    tclEval(script = crewButton & " configure -takefocus 1")
+  var assigned = 0
+  for owner in playerShip.modules[moduleIndex].owner:
+    if owner > -1:
+      assigned.inc
+  if assigned == playerShip.modules[moduleIndex].owner.len:
+    for index, _ in playerShip.crew:
+      let crewButton = frameName & ".crewbutton" & $index
+      if tclGetVar(varName = crewButton) == "0":
+        tclEval(script = crewButton & " state disabled")
+        tclEval(script = crewButton & " configure -takefocus 0")
+  let infoLabel = frameName & ".infolabel"
+  if tclEval2(script = "winfo exists " & infoLabel) == "1":
+    tclEval(script = infoLabel & " configure -text {Available: " &
+        $playerShip.modules[moduleIndex].owner.len & "}")
+    updateHeader()
   return tclOk
 
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
