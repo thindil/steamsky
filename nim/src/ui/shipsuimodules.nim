@@ -1027,6 +1027,24 @@ proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ResetDestination
 
+proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    moduleIndex = ($argv[1]).parseInt
+    frameName = ".moduledialog.canvas.frame"
+    crewIndex = (if argc == 3: ($argv[2]).parseInt else: -1)
+  if argc == 3:
+    if tclGetVar(varName = frameName & ".crewbutton" & $argv[2]) == "0":
+      for owner in playerShip.modules[moduleIndex].owner.mitems:
+        if owner == crewIndex:
+          owner = -1
+          break
+      if modulesList[playerShip.modules[moduleIndex].protoIndex].mType !=
+          ModuleType.cabin:
+        giveOrders(ship = playerShip, memberIndex = crewIndex,
+            givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+  return tclOk
+
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
