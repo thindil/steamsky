@@ -1045,6 +1045,26 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & closeButton &
       "  -text Close -command {CloseDialog " & moduleDialog & "}")
   tclEval(script = "grid " & closeButton & " -pady {0 5} -columnspan 2")
+  tclEval(script = "focus " & closeButton)
+  tclEval(script = "::autoscroll::autoscroll " & yScroll)
+  let
+    crewFrame = crewCanvas & ".frame"
+    recipe = if module.mType == ModuleType2.workshop:
+        setRecipeData(recipeIndex = module.craftingIndex)
+      else:
+        CraftData()
+  for index, member in playerShip.crew:
+    let crewButton = crewFrame & ".crewbutton" & $index
+    tclEval(script = "ttk::button " & crewButton & " -text {" & member.name & (
+        if module.mType == ModuleType2.workshop: getSkillMarks(
+        skillIndex = recipe.skill, memberIndex = index) else: "") &
+        "} -command {UpdateAssignCrew " & $moduleIndex & " " & $index & "}")
+    tclSetVar(varName = crewButton, newValue = "0")
+    for owner in module.owner:
+      if owner == index:
+        tclSetVar(varName = crewButton, newValue = "1")
+        break
+    tclEval(script = "pack " & crewButton & " -anchor w")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
