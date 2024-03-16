@@ -1028,21 +1028,40 @@ proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ResetDestination
 
 proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   let
-    moduleIndex = ($argv[1]).parseInt
+    moduleIndex = try:
+        ($argv[1]).parseInt
+      except:
+        tclEval(script = "bgerror {Can't get the module index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     frameName = ".moduledialog.canvas.frame"
-    crewIndex = (if argc == 3: ($argv[2]).parseInt else: -1)
+    crewIndex = try:
+        (if argc == 3: ($argv[2]).parseInt else: -1)
+      except:
+        tclEval(script = "bgerror {Can't get the crew index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   if argc == 3:
     if tclGetVar(varName = frameName & ".crewbutton" & $argv[2]) == "0":
       for owner in playerShip.modules[moduleIndex].owner.mitems:
         if owner == crewIndex:
           owner = -1
           break
-      if modulesList[playerShip.modules[moduleIndex].protoIndex].mType !=
-          ModuleType.cabin:
-        giveOrders(ship = playerShip, memberIndex = crewIndex,
-            givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+      try:
+        if modulesList[playerShip.modules[moduleIndex].protoIndex].mType !=
+            ModuleType.cabin:
+          giveOrders(ship = playerShip, memberIndex = crewIndex,
+              givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+      except CrewOrderError, CrewNoSpaceError:
+        showMessage(text = getCurrentExceptionMsg(),
+            title = "Can't give a order")
+        return tclOk
+      except:
+        tclEval(script = "bgerror {Can't give order to a crew member. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     elif assignModuleCommand(clientData = clientData, interp = interp, argc = 4,
         argv = ["assignModule".cstring, "crew", argv[1], argv[2]]) != tclOk:
       return tclError
