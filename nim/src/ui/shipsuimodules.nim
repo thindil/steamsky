@@ -1053,6 +1053,9 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
         setRecipeData(recipeIndex = module.craftingIndex)
       else:
         CraftData()
+  var
+    height = 10
+    width = 250
   for index, member in playerShip.crew:
     let crewButton = crewFrame & ".crewbutton" & $index
     tclEval(script = "ttk::button " & crewButton & " -text {" & member.name & (
@@ -1065,6 +1068,13 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
         tclSetVar(varName = crewButton, newValue = "1")
         break
     tclEval(script = "pack " & crewButton & " -anchor w")
+    height = height + tclEval2(script = "winfo reqheight " &
+        crewButton).parseInt
+    if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
+      width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
+    tclEval(script = "bind " & crewButton & " <Escape> {" & closeButton & " invoke;break}")
+    tclEval(script = "bind " & crewButton & " <Tab> {focus [GetActiveButton " &
+        $index & "];break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
