@@ -54,10 +54,9 @@ proc findItem*(inventory: seq[InventoryData];
         for index, item in inventory.pairs:
           if itemsList[item.protoIndex].itemType == itemType and itemsList[
               item.protoIndex].value[1] <= quality:
-            if durability < ItemsDurability.high and item.durability == durability:
-              return index
-            else:
-              return index
+            if durability < ItemsDurability.high and item.durability != durability:
+              continue
+            return index
     except KeyError:
       discard
 
