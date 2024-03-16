@@ -1141,9 +1141,9 @@ package body Ships.UI.Modules is
       Add_Command
         (Name => "ShowAssignCrew",
          Ada_Command => Show_Assign_Crew_Command'Access);
-      Add_Command
-        (Name => "UpdateAssignCrew",
-         Ada_Command => Update_Assign_Crew_Command'Access);
+--      Add_Command
+--        (Name => "UpdateAssignCrew",
+--         Ada_Command => Update_Assign_Crew_Command'Access);
       Add_Command
         (Name => "ShowAssignSkill",
          Ada_Command => Show_Assign_Skill_Command'Access);

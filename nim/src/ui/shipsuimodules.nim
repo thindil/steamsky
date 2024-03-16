@@ -18,7 +18,7 @@
 import std/[strutils, tables]
 import ../[game, config, crafts, crewinventory, messages, missions, ships,
     shipscrew, shipsupgrade, tk, types]
-import dialogs, updateheader, utilsui2
+import dialogs, updateheader, shipsuicrew, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -1065,6 +1065,7 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = infoLabel & " configure -text {Available: " &
         $playerShip.modules[moduleIndex].owner.len & "}")
     updateHeader()
+    updateCrewInfo()
   return tclOk
 
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -1127,6 +1128,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("StopUpgrading", stopUpgradingCommand)
     addCommand("SetRepair", setRepairCommand)
     addCommand("ResetDestination", resetDestinationCommand)
+    addCommand("UpdateAssignCrew", updateAssignCrewCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
