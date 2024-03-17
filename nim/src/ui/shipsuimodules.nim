@@ -1045,7 +1045,7 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   ## assigned or removed
   let
     moduleIndex = try:
-        ($argv[1]).parseInt
+        ($argv[1]).parseInt - 1
       except:
         tclEval(script = "bgerror {Can't get the module index. Reason: " &
             getCurrentExceptionMsg() & "}")
