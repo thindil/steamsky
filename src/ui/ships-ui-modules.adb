@@ -223,7 +223,6 @@ package body Ships.UI.Modules is
             Title => "Can't assign crew");
          return TCL_OK;
    end Assign_Module_Command;
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUModules/SUModules.Update_Assign_Crew_Command
    -- FUNCTION
@@ -355,6 +354,7 @@ package body Ships.UI.Modules is
       end if;
       return TCL_OK;
    end Update_Assign_Crew_Command;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUModules/SUModules.Show_Assign_Crew_Command
    -- FUNCTION
