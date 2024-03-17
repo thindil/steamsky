@@ -15,7 +15,7 @@
 
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Exceptions;
+-- with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -25,20 +25,20 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
+-- with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll;
+-- with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+-- with Tcl.Tklib.Ada.Autoscroll;
 with Config;
-with Crafts;
+-- with Crafts;
 with Dialogs; use Dialogs;
 with Maps;
 with Maps.UI; use Maps.UI;
@@ -84,145 +84,145 @@ package body Ships.UI.Modules is
    -- assigned. assignindex is the index of the item which will be assigned
    -- to the module
    -- SOURCE
-   function Assign_Module_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Assign_Module_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Ada.Exceptions;
-      use Tiny_String;
-
-      Module_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Assign_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
-      Assigned: Boolean := False;
-      procedure Update_Order(Order: Crew_Orders) is
-      begin
-         Give_Orders
-           (Ship => Player_Ship, Member_Index => Assign_Index,
-            Given_Order => Order, Module_Index => Module_Index);
-         if Player_Ship.Crew(Assign_Index).Order /= Order then
-            Tcl_SetVar
-              (interp => Interp,
-               varName =>
-                 ".moduledialog.canvas.frame.crewbutton" &
-                 CArgv.Arg(Argv => Argv, N => 3),
-               newValue => "0");
-         end if;
-      end Update_Order;
-   begin
-      if CArgv.Arg(Argv => Argv, N => 1) = "crew" then
-         case Get_Module
-           (Index => Player_Ship.Modules(Module_Index).Proto_Index)
-           .M_Type is
-            when CABIN =>
-               Modules_Loop :
-               for Module of Player_Ship.Modules loop
-                  if Module.M_Type = CABIN then
-                     Find_Owner_Loop :
-                     for Owner of Module.Owner loop
-                        if Owner = Assign_Index then
-                           Owner := 0;
-                           exit Modules_Loop;
-                        end if;
-                     end loop Find_Owner_Loop;
-                  end if;
-               end loop Modules_Loop;
-               Assigned := False;
-               Check_Assigned_Loop :
-               for Owner of Player_Ship.Modules(Module_Index).Owner loop
-                  if Owner = 0 then
-                     Owner := Assign_Index;
-                     Assigned := True;
-                     exit Check_Assigned_Loop;
-                  end if;
-               end loop Check_Assigned_Loop;
-               if not Assigned then
-                  Player_Ship.Modules(Module_Index).Owner(1) := Assign_Index;
-               end if;
-               Add_Message
-                 (Message =>
-                    "You assigned " &
-                    To_String
-                      (Source => Player_Ship.Modules(Module_Index).Name) &
-                    " to " &
-                    To_String(Source => Player_Ship.Crew(Assign_Index).Name) &
-                    ".",
-                  M_Type => ORDERMESSAGE);
-            when GUN | HARPOON_GUN =>
-               Update_Order(Order => GUNNER);
-            when ALCHEMY_LAB .. GREENHOUSE =>
-               Update_Order(Order => CRAFT);
-            when MEDICAL_ROOM =>
-               Update_Order(Order => HEAL);
-            when TRAINING_ROOM =>
-               Update_Order(Order => TRAIN);
-            when others =>
-               null;
-         end case;
-         Update_Header;
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "ammo" then
-         if Player_Ship.Modules(Module_Index).M_Type = GUN then
-            Player_Ship.Modules(Module_Index).Ammo_Index := Assign_Index;
-         else
-            Player_Ship.Modules(Module_Index).Harpoon_Index := Assign_Index;
-         end if;
-         Add_Message
-           (Message =>
-              "You assigned " &
-              To_String
-                (Source =>
-                   Get_Proto_Item
-                     (Index =>
-                        Inventory_Container.Element
-                          (Container => Player_Ship.Cargo,
-                           Index => Assign_Index)
-                          .Proto_Index)
-                     .Name) &
-              " to " &
-              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-              ".",
-            M_Type => ORDERMESSAGE);
-      elsif CArgv.Arg(Argv => Argv, N => 1) = "skill" then
-         if Player_Ship.Modules(Module_Index).Trained_Skill =
-           Skills_Amount_Range(Assign_Index) then
-            return TCL_OK;
-         end if;
-         Player_Ship.Modules(Module_Index).Trained_Skill :=
-           Skills_Amount_Range(Assign_Index);
-         Add_Message
-           (Message =>
-              "You prepared " &
-              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-              " for training " &
-              To_String
-                (Source =>
-                   SkillsData_Container.Element
-                     (Container => Skills_List,
-                      Index => Skills_Amount_Range(Assign_Index))
-                     .Name) &
-              ".",
-            M_Type => ORDERMESSAGE);
-         Update_Messages;
-         return TCL_OK;
-      end if;
-      Update_Messages;
-      return
-        Show_Ship_Info_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
-   exception
-      when An_Exception : Crew_Order_Error =>
-         Show_Message
-           (Text => Exception_Message(X => An_Exception),
-            Title => "Can't assign crew");
-         return TCL_OK;
-   end Assign_Module_Command;
+--   function Assign_Module_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Assign_Module_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Ada.Exceptions;
+--      use Tiny_String;
+--
+--      Module_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+--      Assign_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
+--      Assigned: Boolean := False;
+--      procedure Update_Order(Order: Crew_Orders) is
+--      begin
+--         Give_Orders
+--           (Ship => Player_Ship, Member_Index => Assign_Index,
+--            Given_Order => Order, Module_Index => Module_Index);
+--         if Player_Ship.Crew(Assign_Index).Order /= Order then
+--            Tcl_SetVar
+--              (interp => Interp,
+--               varName =>
+--                 ".moduledialog.canvas.frame.crewbutton" &
+--                 CArgv.Arg(Argv => Argv, N => 3),
+--               newValue => "0");
+--         end if;
+--      end Update_Order;
+--   begin
+--      if CArgv.Arg(Argv => Argv, N => 1) = "crew" then
+--         case Get_Module
+--           (Index => Player_Ship.Modules(Module_Index).Proto_Index)
+--           .M_Type is
+--            when CABIN =>
+--               Modules_Loop :
+--               for Module of Player_Ship.Modules loop
+--                  if Module.M_Type = CABIN then
+--                     Find_Owner_Loop :
+--                     for Owner of Module.Owner loop
+--                        if Owner = Assign_Index then
+--                           Owner := 0;
+--                           exit Modules_Loop;
+--                        end if;
+--                     end loop Find_Owner_Loop;
+--                  end if;
+--               end loop Modules_Loop;
+--               Assigned := False;
+--               Check_Assigned_Loop :
+--               for Owner of Player_Ship.Modules(Module_Index).Owner loop
+--                  if Owner = 0 then
+--                     Owner := Assign_Index;
+--                     Assigned := True;
+--                     exit Check_Assigned_Loop;
+--                  end if;
+--               end loop Check_Assigned_Loop;
+--               if not Assigned then
+--                  Player_Ship.Modules(Module_Index).Owner(1) := Assign_Index;
+--               end if;
+--               Add_Message
+--                 (Message =>
+--                    "You assigned " &
+--                    To_String
+--                      (Source => Player_Ship.Modules(Module_Index).Name) &
+--                    " to " &
+--                    To_String(Source => Player_Ship.Crew(Assign_Index).Name) &
+--                    ".",
+--                  M_Type => ORDERMESSAGE);
+--            when GUN | HARPOON_GUN =>
+--               Update_Order(Order => GUNNER);
+--            when ALCHEMY_LAB .. GREENHOUSE =>
+--               Update_Order(Order => CRAFT);
+--            when MEDICAL_ROOM =>
+--               Update_Order(Order => HEAL);
+--            when TRAINING_ROOM =>
+--               Update_Order(Order => TRAIN);
+--            when others =>
+--               null;
+--         end case;
+--         Update_Header;
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "ammo" then
+--         if Player_Ship.Modules(Module_Index).M_Type = GUN then
+--            Player_Ship.Modules(Module_Index).Ammo_Index := Assign_Index;
+--         else
+--            Player_Ship.Modules(Module_Index).Harpoon_Index := Assign_Index;
+--         end if;
+--         Add_Message
+--           (Message =>
+--              "You assigned " &
+--              To_String
+--                (Source =>
+--                   Get_Proto_Item
+--                     (Index =>
+--                        Inventory_Container.Element
+--                          (Container => Player_Ship.Cargo,
+--                           Index => Assign_Index)
+--                          .Proto_Index)
+--                     .Name) &
+--              " to " &
+--              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+--              ".",
+--            M_Type => ORDERMESSAGE);
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = "skill" then
+--         if Player_Ship.Modules(Module_Index).Trained_Skill =
+--           Skills_Amount_Range(Assign_Index) then
+--            return TCL_OK;
+--         end if;
+--         Player_Ship.Modules(Module_Index).Trained_Skill :=
+--           Skills_Amount_Range(Assign_Index);
+--         Add_Message
+--           (Message =>
+--              "You prepared " &
+--              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+--              " for training " &
+--              To_String
+--                (Source =>
+--                   SkillsData_Container.Element
+--                     (Container => Skills_List,
+--                      Index => Skills_Amount_Range(Assign_Index))
+--                     .Name) &
+--              ".",
+--            M_Type => ORDERMESSAGE);
+--         Update_Messages;
+--         return TCL_OK;
+--      end if;
+--      Update_Messages;
+--      return
+--        Show_Ship_Info_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv);
+--   exception
+--      when An_Exception : Crew_Order_Error =>
+--         Show_Message
+--           (Text => Exception_Message(X => An_Exception),
+--            Title => "Can't assign crew");
+--         return TCL_OK;
+--   end Assign_Module_Command;
 
    -- ****o* SUModules/SUModules.Update_Assign_Crew_Command
    -- FUNCTION
@@ -240,120 +240,120 @@ package body Ships.UI.Modules is
    -- be assigned. Crewindex is the index of the crew member which will be
    -- assigned or removed
    -- SOURCE
-   function Update_Assign_Crew_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Update_Assign_Crew_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Interfaces.C.Strings;
-
-      Module_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Assigned: Natural := 0;
-      Frame_Name: constant String := ".moduledialog.canvas.frame";
-      --## rule off IMPROPER_INITIALIZATION
-      Crew_Button: Ttk_CheckButton;
-      Button_Name: Unbounded_String;
-      --## rule on IMPROPER_INITIALIZATION
-      Crew_Index: constant Natural :=
-        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
-         else 0);
-      Info_Label: constant Ttk_Label :=
-        Get_Widget(pathName => Frame_Name & ".infolabel", Interp => Interp);
-   begin
-      if Argc = 3 then
-         if Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                Frame_Name & ".crewbutton" & CArgv.Arg(Argv => Argv, N => 2)) =
-           "0" then
-            Remove_Owner_Loop :
-            for Owner of Player_Ship.Modules(Module_Index).Owner loop
-               if Owner = Crew_Index then
-                  Owner := 0;
-                  exit Remove_Owner_Loop;
-               end if;
-            end loop Remove_Owner_Loop;
-            if Get_Module
-                (Index => Player_Ship.Modules(Module_Index).Proto_Index)
-                .M_Type /=
-              CABIN then
-               Give_Orders
-                 (Ship => Player_Ship, Member_Index => Crew_Index,
-                  Given_Order => REST, Module_Index => 0,
-                  Check_Priorities => False);
-            end if;
-         elsif Assign_Module_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 4,
-              Argv =>
-                CArgv.Empty & "AssignModule" & "crew" &
-                CArgv.Arg(Argv => Argv, N => 1) &
-                CArgv.Arg(Argv => Argv, N => 2)) /=
-           TCL_OK then
-            return TCL_ERROR;
-         end if;
-      end if;
-      Crew_Button.Interp := Interp;
-      Enable_Buttons_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         Crew_Button.Name :=
-           New_String
-             (Str =>
-                Frame_Name & ".crewbutton" &
-                Trim
-                  (Source =>
-                     Positive'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left));
-         State(Widget => Crew_Button, StateSpec => "!disabled");
-         configure(Widgt => Crew_Button, options => "-takefocus 1");
-      end loop Enable_Buttons_Loop;
-      Count_Owners_Loop :
-      for Owner of Player_Ship.Modules(Module_Index).Owner loop
-         if Owner /= 0 then
-            Assigned := Assigned + 1;
-         end if;
-      end loop Count_Owners_Loop;
-      if Assigned =
-        Positive(Player_Ship.Modules(Module_Index).Owner.Length) then
-         Disable_Buttons_Loop :
-         for I in Player_Ship.Crew.Iterate loop
-            Button_Name :=
-              To_Unbounded_String
-                (Source =>
-                   Frame_Name & ".crewbutton" &
-                   Trim
-                     (Source =>
-                        Positive'Image(Crew_Container.To_Index(Position => I)),
-                      Side => Left));
-            if Tcl_GetVar
-                (interp => Interp,
-                 varName => To_String(Source => Button_Name)) =
-              "0" then
-               Crew_Button.Name :=
-                 New_String(Str => To_String(Source => Button_Name));
-               State(Widget => Crew_Button, StateSpec => "disabled");
-               configure(Widgt => Crew_Button, options => "-takefocus 0");
-            end if;
-         end loop Disable_Buttons_Loop;
-      end if;
-      if Winfo_Get(Widgt => Info_Label, Info => "exists") = "1" then
-         configure
-           (Widgt => Info_Label,
-            options =>
-              "-text {Available:" &
-              Natural'Image
-                (Positive(Player_Ship.Modules(Module_Index).Owner.Length) -
-                 Assigned) &
-              "}");
-         Update_Header;
-         Update_Crew_Info;
-      end if;
-      return TCL_OK;
-   end Update_Assign_Crew_Command;
+--   function Update_Assign_Crew_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Update_Assign_Crew_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Interfaces.C.Strings;
+--
+--      Module_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Assigned: Natural := 0;
+--      Frame_Name: constant String := ".moduledialog.canvas.frame";
+--      --## rule off IMPROPER_INITIALIZATION
+--      Crew_Button: Ttk_CheckButton;
+--      Button_Name: Unbounded_String;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Crew_Index: constant Natural :=
+--        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
+--         else 0);
+--      Info_Label: constant Ttk_Label :=
+--        Get_Widget(pathName => Frame_Name & ".infolabel", Interp => Interp);
+--   begin
+--      if Argc = 3 then
+--         if Tcl_GetVar
+--             (interp => Interp,
+--              varName =>
+--                Frame_Name & ".crewbutton" & CArgv.Arg(Argv => Argv, N => 2)) =
+--           "0" then
+--            Remove_Owner_Loop :
+--            for Owner of Player_Ship.Modules(Module_Index).Owner loop
+--               if Owner = Crew_Index then
+--                  Owner := 0;
+--                  exit Remove_Owner_Loop;
+--               end if;
+--            end loop Remove_Owner_Loop;
+--            if Get_Module
+--                (Index => Player_Ship.Modules(Module_Index).Proto_Index)
+--                .M_Type /=
+--              CABIN then
+--               Give_Orders
+--                 (Ship => Player_Ship, Member_Index => Crew_Index,
+--                  Given_Order => REST, Module_Index => 0,
+--                  Check_Priorities => False);
+--            end if;
+--         elsif Assign_Module_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => 4,
+--              Argv =>
+--                CArgv.Empty & "AssignModule" & "crew" &
+--                CArgv.Arg(Argv => Argv, N => 1) &
+--                CArgv.Arg(Argv => Argv, N => 2)) /=
+--           TCL_OK then
+--            return TCL_ERROR;
+--         end if;
+--      end if;
+--      Crew_Button.Interp := Interp;
+--      Enable_Buttons_Loop :
+--      for I in Player_Ship.Crew.Iterate loop
+--         Crew_Button.Name :=
+--           New_String
+--             (Str =>
+--                Frame_Name & ".crewbutton" &
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left));
+--         State(Widget => Crew_Button, StateSpec => "!disabled");
+--         configure(Widgt => Crew_Button, options => "-takefocus 1");
+--      end loop Enable_Buttons_Loop;
+--      Count_Owners_Loop :
+--      for Owner of Player_Ship.Modules(Module_Index).Owner loop
+--         if Owner /= 0 then
+--            Assigned := Assigned + 1;
+--         end if;
+--      end loop Count_Owners_Loop;
+--      if Assigned =
+--        Positive(Player_Ship.Modules(Module_Index).Owner.Length) then
+--         Disable_Buttons_Loop :
+--         for I in Player_Ship.Crew.Iterate loop
+--            Button_Name :=
+--              To_Unbounded_String
+--                (Source =>
+--                   Frame_Name & ".crewbutton" &
+--                   Trim
+--                     (Source =>
+--                        Positive'Image(Crew_Container.To_Index(Position => I)),
+--                      Side => Left));
+--            if Tcl_GetVar
+--                (interp => Interp,
+--                 varName => To_String(Source => Button_Name)) =
+--              "0" then
+--               Crew_Button.Name :=
+--                 New_String(Str => To_String(Source => Button_Name));
+--               State(Widget => Crew_Button, StateSpec => "disabled");
+--               configure(Widgt => Crew_Button, options => "-takefocus 0");
+--            end if;
+--         end loop Disable_Buttons_Loop;
+--      end if;
+--      if Winfo_Get(Widgt => Info_Label, Info => "exists") = "1" then
+--         configure
+--           (Widgt => Info_Label,
+--            options =>
+--              "-text {Available:" &
+--              Natural'Image
+--                (Positive(Player_Ship.Modules(Module_Index).Owner.Length) -
+--                 Assigned) &
+--              "}");
+--         Update_Header;
+--         Update_Crew_Info;
+--      end if;
+--      return TCL_OK;
+--   end Update_Assign_Crew_Command;
    --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUModules/SUModules.Show_Assign_Crew_Command
@@ -371,171 +371,171 @@ package body Ships.UI.Modules is
    -- Moduleindex is the index of the module to which a new crew members will
    -- be assigned.
    -- SOURCE
-   function Show_Assign_Crew_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Assign_Crew_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Tcl.Tklib.Ada.Autoscroll;
-      use Crafts;
-      use Tiny_String;
-
-      Module_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Module: constant Module_Data := Player_Ship.Modules(Module_Index);
-      Module_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".moduledialog",
-           Title =>
-             "Assign a crew member to " & To_String(Source => Module.Name),
-           Title_Width => 250);
-      Y_Scroll: constant Ttk_Scrollbar :=
-        Create
-          (pathName => Module_Dialog & ".yscroll",
-           options =>
-             "-orient vertical -command [list .moduledialog.canvas yview]");
-      Crew_Canvas: constant Tk_Canvas :=
-        Create
-          (pathName => Module_Dialog & ".canvas",
-           options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      Crew_Frame: constant Ttk_Frame :=
-        Create(pathName => Crew_Canvas & ".frame");
-      Close_Button: constant Ttk_Button :=
-        Create
-          (pathName => Module_Dialog & ".button",
-           options =>
-             "-text Close -command {CloseDialog " &
-             Widget_Image(Win => Module_Dialog) & "}");
-      Height: Positive := 10;
-      Width: Positive := 250;
-      --## rule off IMPROPER_INITIALIZATION
-      Crew_Button: Ttk_CheckButton;
-      Info_Label: Ttk_Label;
-      --## rule on IMPROPER_INITIALIZATION
-      Assigned: Natural := 0;
-      Recipe: constant Craft_Data :=
-        (if Module.M_Type = WORKSHOP then
-           Set_Recipe_Data
-             (Recipe_Index =>
-                To_Bounded_String
-                  (Source => To_String(Source => Module.Crafting_Index)))
-         else Craft_Data'(others => <>));
-   begin
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Crew_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Y_Scroll,
-         Options => "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
-      Focus(Widgt => Close_Button);
-      Autoscroll(Scroll => Y_Scroll);
-      Load_Crew_List_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         Crew_Button :=
-           Create
-             (pathName =>
-                Crew_Frame & ".crewbutton" &
-                Trim
-                  (Source =>
-                     Positive'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left),
-              options =>
-                "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
-                (if Module.M_Type = WORKSHOP then
-                   Get_Skill_Marks
-                     (Skill_Index => Recipe.Skill,
-                      Member_Index => Crew_Container.To_Index(Position => I))
-                 else "") &
-                "} -command {UpdateAssignCrew" & Positive'Image(Module_Index) &
-                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
-         Tcl_SetVar
-           (interp => Interp, varName => Widget_Image(Win => Crew_Button),
-            newValue => "0");
-         Count_Assigned_Loop :
-         for Owner of Module.Owner loop
-            if Owner = Crew_Container.To_Index(Position => I) then
-               Tcl_SetVar
-                 (interp => Interp,
-                  varName => Widget_Image(Win => Crew_Button),
-                  newValue => "1");
-               Assigned := Assigned + 1;
-               exit Count_Assigned_Loop;
-            end if;
-         end loop Count_Assigned_Loop;
-         Tcl.Tk.Ada.Pack.Pack(Slave => Crew_Button, Options => "-anchor w");
-         Height :=
-           Height +
-           Positive'Value
-             (Winfo_Get(Widgt => Crew_Button, Info => "reqheight"));
-         if Positive'Value
-             (Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) +
-           10 >
-           Width then
-            Width :=
-              Positive'Value
-                (Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) +
-              10;
-         end if;
-         Bind
-           (Widgt => Crew_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
-         Bind
-           (Widgt => Crew_Button, Sequence => "<Tab>",
-            Script =>
-              "{focus [GetActiveButton" &
-              Positive'Image(Crew_Container.To_Index(Position => I)) &
-              "];break}");
-      end loop Load_Crew_List_Loop;
-      if Update_Assign_Crew_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv) /=
-        TCL_OK then
-         return TCL_ERROR;
-      end if;
-      Info_Label :=
-        Create
-          (pathName => Crew_Frame & ".infolabel",
-           options =>
-             "-text {Available:" &
-             Natural'Image(Positive(Module.Owner.Length) - Assigned) & "}");
-      Tcl.Tk.Ada.Pack.Pack(Slave => Info_Label);
-      Height :=
-        Height +
-        Positive'Value(Winfo_Get(Widgt => Info_Label, Info => "reqheight"));
-      if Positive'Value(Winfo_Get(Widgt => Info_Label, Info => "reqwidth")) >
-        Width then
-         Width :=
-           Positive'Value(Winfo_Get(Widgt => Info_Label, Info => "reqwidth"));
-      end if;
-      if Height > 500 then
-         Height := 500;
-      end if;
-      Canvas_Create
-        (Parent => Crew_Canvas, Child_Type => "window",
-         Options =>
-           "0 0 -anchor nw -window " & Widget_Image(Win => Crew_Frame));
-      Tcl_Eval(interp => Interp, strng => "update");
-      configure
-        (Widgt => Crew_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Crew_Canvas, TagOrId => "all") & "] -height" &
-           Positive'Image(Height) & " -width" & Positive'Image(Width));
-      Bind
-        (Widgt => Close_Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
-      Bind
-        (Widgt => Close_Button, Sequence => "<Tab>",
-         Script => "{focus [GetActiveButton 0];break}");
-      Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
-      return TCL_OK;
-   end Show_Assign_Crew_Command;
+--   function Show_Assign_Crew_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Assign_Crew_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+--      use Tcl.Tklib.Ada.Autoscroll;
+--      use Crafts;
+--      use Tiny_String;
+--
+--      Module_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Module: constant Module_Data := Player_Ship.Modules(Module_Index);
+--      Module_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".moduledialog",
+--           Title =>
+--             "Assign a crew member to " & To_String(Source => Module.Name),
+--           Title_Width => 250);
+--      Y_Scroll: constant Ttk_Scrollbar :=
+--        Create
+--          (pathName => Module_Dialog & ".yscroll",
+--           options =>
+--             "-orient vertical -command [list .moduledialog.canvas yview]");
+--      Crew_Canvas: constant Tk_Canvas :=
+--        Create
+--          (pathName => Module_Dialog & ".canvas",
+--           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+--      Crew_Frame: constant Ttk_Frame :=
+--        Create(pathName => Crew_Canvas & ".frame");
+--      Close_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Module_Dialog & ".button",
+--           options =>
+--             "-text Close -command {CloseDialog " &
+--             Widget_Image(Win => Module_Dialog) & "}");
+--      Height: Positive := 10;
+--      Width: Positive := 250;
+--      --## rule off IMPROPER_INITIALIZATION
+--      Crew_Button: Ttk_CheckButton;
+--      Info_Label: Ttk_Label;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Assigned: Natural := 0;
+--      Recipe: constant Craft_Data :=
+--        (if Module.M_Type = WORKSHOP then
+--           Set_Recipe_Data
+--             (Recipe_Index =>
+--                To_Bounded_String
+--                  (Source => To_String(Source => Module.Crafting_Index)))
+--         else Craft_Data'(others => <>));
+--   begin
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Crew_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Y_Scroll,
+--         Options => "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
+--      Focus(Widgt => Close_Button);
+--      Autoscroll(Scroll => Y_Scroll);
+--      Load_Crew_List_Loop :
+--      for I in Player_Ship.Crew.Iterate loop
+--         Crew_Button :=
+--           Create
+--             (pathName =>
+--                Crew_Frame & ".crewbutton" &
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left),
+--              options =>
+--                "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
+--                (if Module.M_Type = WORKSHOP then
+--                   Get_Skill_Marks
+--                     (Skill_Index => Recipe.Skill,
+--                      Member_Index => Crew_Container.To_Index(Position => I))
+--                 else "") &
+--                "} -command {UpdateAssignCrew" & Positive'Image(Module_Index) &
+--                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
+--         Tcl_SetVar
+--           (interp => Interp, varName => Widget_Image(Win => Crew_Button),
+--            newValue => "0");
+--         Count_Assigned_Loop :
+--         for Owner of Module.Owner loop
+--            if Owner = Crew_Container.To_Index(Position => I) then
+--               Tcl_SetVar
+--                 (interp => Interp,
+--                  varName => Widget_Image(Win => Crew_Button),
+--                  newValue => "1");
+--               Assigned := Assigned + 1;
+--               exit Count_Assigned_Loop;
+--            end if;
+--         end loop Count_Assigned_Loop;
+--         Tcl.Tk.Ada.Pack.Pack(Slave => Crew_Button, Options => "-anchor w");
+--         Height :=
+--           Height +
+--           Positive'Value
+--             (Winfo_Get(Widgt => Crew_Button, Info => "reqheight"));
+--         if Positive'Value
+--             (Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) +
+--           10 >
+--           Width then
+--            Width :=
+--              Positive'Value
+--                (Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) +
+--              10;
+--         end if;
+--         Bind
+--           (Widgt => Crew_Button, Sequence => "<Escape>",
+--            Script => "{" & Close_Button & " invoke;break}");
+--         Bind
+--           (Widgt => Crew_Button, Sequence => "<Tab>",
+--            Script =>
+--              "{focus [GetActiveButton" &
+--              Positive'Image(Crew_Container.To_Index(Position => I)) &
+--              "];break}");
+--      end loop Load_Crew_List_Loop;
+--      if Update_Assign_Crew_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv) /=
+--        TCL_OK then
+--         return TCL_ERROR;
+--      end if;
+--      Info_Label :=
+--        Create
+--          (pathName => Crew_Frame & ".infolabel",
+--           options =>
+--             "-text {Available:" &
+--             Natural'Image(Positive(Module.Owner.Length) - Assigned) & "}");
+--      Tcl.Tk.Ada.Pack.Pack(Slave => Info_Label);
+--      Height :=
+--        Height +
+--        Positive'Value(Winfo_Get(Widgt => Info_Label, Info => "reqheight"));
+--      if Positive'Value(Winfo_Get(Widgt => Info_Label, Info => "reqwidth")) >
+--        Width then
+--         Width :=
+--           Positive'Value(Winfo_Get(Widgt => Info_Label, Info => "reqwidth"));
+--      end if;
+--      if Height > 500 then
+--         Height := 500;
+--      end if;
+--      Canvas_Create
+--        (Parent => Crew_Canvas, Child_Type => "window",
+--         Options =>
+--           "0 0 -anchor nw -window " & Widget_Image(Win => Crew_Frame));
+--      Tcl_Eval(interp => Interp, strng => "update");
+--      configure
+--        (Widgt => Crew_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Crew_Canvas, TagOrId => "all") & "] -height" &
+--           Positive'Image(Height) & " -width" & Positive'Image(Width));
+--      Bind
+--        (Widgt => Close_Button, Sequence => "<Escape>",
+--         Script => "{" & Close_Button & " invoke;break}");
+--      Bind
+--        (Widgt => Close_Button, Sequence => "<Tab>",
+--         Script => "{focus [GetActiveButton 0];break}");
+--      Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
+--      return TCL_OK;
+--   end Show_Assign_Crew_Command;
 
    -- ****o* SUModules/SUModules.Show_Assign_Skill_Command
    -- FUNCTION
@@ -1138,12 +1138,9 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowAssignCrew",
-         Ada_Command => Show_Assign_Crew_Command'Access);
 --      Add_Command
---        (Name => "UpdateAssignCrew",
---         Ada_Command => Update_Assign_Crew_Command'Access);
+--        (Name => "ShowAssignCrew",
+--         Ada_Command => Show_Assign_Crew_Command'Access);
       Add_Command
         (Name => "ShowAssignSkill",
          Ada_Command => Show_Assign_Skill_Command'Access);

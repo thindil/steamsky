@@ -1167,6 +1167,9 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "update")
   tclEval(script = crewCanvas & " configure -scrollregion [list " & tclEval2(
       script = crewCanvas & " bbox all") & "] -height " & $height & " -width " & $width)
+  tclEval(script = "bind " & closeButton & " <Escape> {" & closeButton & " invoke;break}")
+  tclEval(script = "bind " & closeButton & " <Tab> {focus [GetActiveButton 0];break}")
+  showDialog(dialog = moduleDialog, relativeY = 0.2)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -1180,6 +1183,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SetRepair", setRepairCommand)
     addCommand("ResetDestination", resetDestinationCommand)
     addCommand("UpdateAssignCrew", updateAssignCrewCommand)
+    addCommand("ShowAssignCrew", showAssignCrewCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
