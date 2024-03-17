@@ -67,7 +67,6 @@ package body Ships.UI.Modules is
    -- ****
 
    --## rule off REDUCEABLE_SCOPE
-   -- ****o* SUModules/SUModules.Assign_Module_Command
    -- FUNCTION
    -- Assign member, ammo or skill to module
    -- PARAMETERS
@@ -224,7 +223,6 @@ package body Ships.UI.Modules is
 --         return TCL_OK;
 --   end Assign_Module_Command;
 
-   -- ****o* SUModules/SUModules.Update_Assign_Crew_Command
    -- FUNCTION
    -- Update assign the crew member UI
    -- PARAMETERS
@@ -356,7 +354,6 @@ package body Ships.UI.Modules is
 --   end Update_Assign_Crew_Command;
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****o* SUModules/SUModules.Show_Assign_Crew_Command
    -- FUNCTION
    -- Show assign the crew member UI
    -- PARAMETERS
