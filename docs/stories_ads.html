@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.7 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -52,12 +52,11 @@
 <li>1.17. <a href="#robo299">Stories/Stories.Empty_Step</a></li>
 <li>1.18. <a href="#robo300">Stories/Stories.Empty_Step_Text</a></li>
 <li>1.19. <a href="#robo301">Stories/Stories.Empty_Story</a></li>
-<li>1.20. <a href="./stories_adb.html#robo614">Stories/Set_Current_Story</a></li>
-<li>1.21. <a href="#robo615">Stories/Stories.Clear_Current_Story</a></li>
-<li>1.22. <a href="#robo616">Stories/Stories.Get_Current_Story_Text</a></li>
-<li>1.23. <a href="#robo617">Stories/Stories.Get_Step_Data</a></li>
-<li>1.24. <a href="#robo618">Stories/Stories.Get_Story_Location</a></li>
-<li>1.25. <a href="#robo619">Stories/Stories.Progress_Story</a></li>
+<li>1.20. <a href="./stories_adb.html#robo598">Stories/Set_Current_Story</a></li>
+<li>1.21. <a href="#robo599">Stories/Stories.Clear_Current_Story</a></li>
+<li>1.22. <a href="#robo600">Stories/Stories.Get_Current_Story_Text</a></li>
+<li>1.23. <a href="#robo601">Stories/Stories.Get_Step_Data</a></li>
+<li>1.24. <a href="#robo602">Stories/Stories.Get_Story_Location</a></li>
 </ul>
 </ul>
 <hr />
@@ -391,7 +390,7 @@
 
 <hr />
 <a name="Stories2fStories2eClear5fCurrent5fStory"></a>
-<a name="robo615"></a><h2>Stories/Stories.Clear_Current_Story [ Subprograms ]</h2>
+<a name="robo599"></a><h2>Stories/Stories.Clear_Current_Story [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -406,7 +405,7 @@
 
 <hr />
 <a name="Stories2fStories2eGet5fCurrent5fStory5fText"></a>
-<a name="robo616"></a><h2>Stories/Stories.Get_Current_Story_Text [ Subprograms ]</h2>
+<a name="robo600"></a><h2>Stories/Stories.Get_Current_Story_Text [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -421,7 +420,7 @@
 
 <hr />
 <a name="Stories2fStories2eGet5fStep5fData"></a>
-<a name="robo617"></a><h2>Stories/Stories.Get_Step_Data [ Subprograms ]</h2>
+<a name="robo601"></a><h2>Stories/Stories.Get_Step_Data [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -443,7 +442,7 @@
 
 <hr />
 <a name="Stories2fStories2eGet5fStory5fLocation"></a>
-<a name="robo618"></a><h2>Stories/Stories.Get_Story_Location [ Subprograms ]</h2>
+<a name="robo602"></a><h2>Stories/Stories.Get_Story_Location [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -464,28 +463,9 @@
 <pre> Parameters X and Y
 </pre>
 
-<hr />
-<a name="Stories2fStories2eProgress5fStory"></a>
-<a name="robo619"></a><h2>Stories/Stories.Progress_Story [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Progress current story one step
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Progress_Story<span class="sign">(</span>Next_Step<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> Boolean<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Next_Step - Used with DESTROYSHIP condition. If false, progress to the
-             next step in story. Default is false.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> True if story goes to next step, otherwise false
-</pre>
-
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-02-18 04:09:27</p>
+<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-03-17 04:44:38</p>
 </div> <!-- footer -->
 </body>
 </html>

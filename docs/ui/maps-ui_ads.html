@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.7 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 9.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -33,15 +33,13 @@
 <ul>
 <li>1. <a href="#robo42">Maps/MUI</a></li>
 <ul>
-<li>1.1. <a href="#robo382">MUI/MUI.Default_Fonts_Sizes</a></li>
-<li>1.2. <a href="./maps-ui_adb.html#robo383">MUI/MUI.MapView</a></li>
-<li>1.3. <a href="#robo559">MUI/MUI.Create_Game_Ui</a></li>
-<li>1.4. <a href="#robo560">MUI/MUI.Draw_Map</a></li>
-<li>1.5. <a href="#robo561">MUI/MUI.Finish_Story</a></li>
-<li>1.6. <a href="./maps-ui_adb.html#robo562">MUI/MUI.Get_Map_View</a></li>
-<li>1.7. <a href="#robo563">MUI/MUI.Set_Keys</a></li>
-<li>1.8. <a href="#robo564">MUI/MUI.Show_Sky_Map</a></li>
-<li>1.9. <a href="#robo565">MUI/MUI.Update_Header</a></li>
+<li>1.1. <a href="#robo375">MUI/MUI.Default_Fonts_Sizes</a></li>
+<li>1.2. <a href="./maps-ui_adb.html#robo376">MUI/MUI.MapView</a></li>
+<li>1.3. <a href="#robo549">MUI/MUI.Create_Game_Ui</a></li>
+<li>1.4. <a href="./maps-ui_adb.html#robo550">MUI/MUI.Get_Map_View</a></li>
+<li>1.5. <a href="#robo551">MUI/MUI.Set_Keys</a></li>
+<li>1.6. <a href="#robo552">MUI/MUI.Show_Sky_Map</a></li>
+<li>1.7. <a href="#robo553">MUI/MUI.Update_Header</a></li>
 </ul>
 </ul>
 <hr />
@@ -58,7 +56,7 @@
 
 <hr />
 <a name="MUI2fMUI2eDefault5fFonts5fSizes"></a>
-<a name="robo382"></a><h2>MUI/MUI.Default_Fonts_Sizes [ Variables ]</h2>
+<a name="robo375"></a><h2>MUI/MUI.Default_Fonts_Sizes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -70,7 +68,7 @@
 
 <hr />
 <a name="MUI2fMUI2eCreate5fGame5fUi"></a>
-<a name="robo559"></a><h2>MUI/MUI.Create_Game_Ui [ Subprograms ]</h2>
+<a name="robo549"></a><h2>MUI/MUI.Create_Game_Ui [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -81,38 +79,8 @@
 </pre>
 
 <hr />
-<a name="MUI2fMUI2eDraw5fMap"></a>
-<a name="robo560"></a><h2>MUI/MUI.Draw_Map [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Draw map on the screen
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Draw_Map <span class="keyword">with</span>
-      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
-      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"drawAdaMap"</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="MUI2fMUI2eFinish5fStory"></a>
-<a name="robo561"></a><h2>MUI/MUI.Finish_Story [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Finish the current story
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Finish_Story <span class="keyword">with</span>
-      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
-      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"finishAdaStory"</span><span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="MUI2fMUI2eSet5fKeys"></a>
-<a name="robo563"></a><h2>MUI/MUI.Set_Keys [ Subprograms ]</h2>
+<a name="robo551"></a><h2>MUI/MUI.Set_Keys [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -124,7 +92,7 @@
 
 <hr />
 <a name="MUI2fMUI2eShow5fSky5fMap"></a>
-<a name="robo564"></a><h2>MUI/MUI.Show_Sky_Map [ Subprograms ]</h2>
+<a name="robo552"></a><h2>MUI/MUI.Show_Sky_Map [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -140,7 +108,7 @@
 
 <hr />
 <a name="MUI2fMUI2eUpdate5fHeader"></a>
-<a name="robo565"></a><h2>MUI/MUI.Update_Header [ Subprograms ]</h2>
+<a name="robo553"></a><h2>MUI/MUI.Update_Header [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -152,7 +120,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/maps-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-02-18 04:09:27</p>
+<p>Generated from ./src/ui/maps-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-03-17 04:44:38</p>
 </div> <!-- footer -->
 </body>
 </html>
