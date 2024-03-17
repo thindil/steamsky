@@ -1104,9 +1104,9 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
-    moduleIndex = ($argv[1]).parseInt
+    moduleIndex = ($argv[1]).parseInt - 1
     module = playerShip.modules[moduleIndex]
-    moduleDialog = createDialog(name = ".moduleDialog",
+    moduleDialog = createDialog(name = ".moduledialog",
         title = "Assign a crew member to " & module.name, titleWidth = 250)
     yScroll = moduleDialog & ".yscroll"
     crewCanvas = moduleDialog & ".canvas"
@@ -1131,12 +1131,13 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     height = 10
     width = 250
     assigned = 0
+  tclEval(script = "ttk::frame " & crewFrame)
   for index, member in playerShip.crew:
     let crewButton = crewFrame & ".crewbutton" & $index
-    tclEval(script = "ttk::button " & crewButton & " -text {" & member.name & (
+    tclEval(script = "ttk::checkbutton " & crewButton & " -text {" & member.name & (
         if module.mType == ModuleType2.workshop: getSkillMarks(
         skillIndex = recipe.skill, memberIndex = index) else: "") &
-        "} -command {UpdateAssignCrew " & $moduleIndex & " " & $index & "}")
+        "} -command {UpdateAssignCrew " & $argv[2] & " " & $index & "}")
     tclSetVar(varName = crewButton, newValue = "0")
     for owner in module.owner:
       if owner == index:
@@ -1159,8 +1160,8 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
       module.owner.len - assigned) & "}")
   tclEval(script = "pack " & infoLabel)
   height = height + tclEval2(script = "winfo reqheight " & infoLabel).parseInt
-  if tclEval2(script = "winf reqwidth " & infoLabel).parseInt > width:
-    width = tclEval2(script = "winf reqwidth " & infoLabel).parseInt
+  if tclEval2(script = "winfo reqwidth " & infoLabel).parseInt > width:
+    width = tclEval2(script = "winfo reqwidth " & infoLabel).parseInt
   if height > 500:
     height = 500
   tclEval(script = crewCanvas & " create window 0 0 -anchor nw -window " & crewFrame)
