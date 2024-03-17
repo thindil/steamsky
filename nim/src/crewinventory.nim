@@ -45,13 +45,13 @@ proc findItem*(inventory: seq[InventoryData];
     result = -1
     try:
       if protoIndex > 0:
-        for index, item in inventory.pairs:
+        for index, item in inventory:
           if item.protoIndex == protoIndex and itemsList[protoIndex].value[1] <= quality:
             if durability < ItemsDurability.high and item.durability != durability:
               continue
             return index
       elif itemType.len > 0:
-        for index, item in inventory.pairs:
+        for index, item in inventory:
           if itemsList[item.protoIndex].itemType == itemType and itemsList[
               item.protoIndex].value[1] <= quality:
             if durability < ItemsDurability.high and item.durability != durability:
@@ -75,10 +75,10 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
     result = 50 + playerShip.crew[memberIndex].attributes[strengthIndex].level
     for item in playerShip.crew[memberIndex].inventory:
       try:
-        result = result - (itemsList[item.protoIndex].weight * item.amount)
+        result -= (itemsList[item.protoIndex].weight * item.amount)
       except KeyError:
         discard
-    result = result + amount
+    result += amount
 
 proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
     ], tags: [], contractual.} =
