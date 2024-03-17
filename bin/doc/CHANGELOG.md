@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.8] - 2024-03-17
 
 ### Added
 - Colored version of icons for accept negotiations with a recruit in a base and
