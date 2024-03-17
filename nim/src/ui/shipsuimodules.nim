@@ -1130,6 +1130,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   var
     height = 10
     width = 250
+    assigned = 0
   for index, member in playerShip.crew:
     let crewButton = crewFrame & ".crewbutton" & $index
     tclEval(script = "ttk::button " & crewButton & " -text {" & member.name & (
@@ -1140,6 +1141,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     for owner in module.owner:
       if owner == index:
         tclSetVar(varName = crewButton, newValue = "1")
+        assigned.inc
         break
     tclEval(script = "pack " & crewButton & " -anchor w")
     height = height + tclEval2(script = "winfo reqheight " &
@@ -1149,6 +1151,22 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & crewButton & " <Escape> {" & closeButton & " invoke;break}")
     tclEval(script = "bind " & crewButton & " <Tab> {focus [GetActiveButton " &
         $index & "];break}")
+  if updateAssignCrewCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv) != tclOk:
+    return tclError
+  let infoLabel = crewFrame & ".infolabel"
+  tclEval(script = "ttk::label " & infoLabel & " -text {Available: " & $(
+      module.owner.len - assigned) & "}")
+  tclEval(script = "pack " & infoLabel)
+  height = height + tclEval2(script = "winfo reqheight " & infoLabel).parseInt
+  if tclEval2(script = "winf reqwidth " & infoLabel).parseInt > width:
+    width = tclEval2(script = "winf reqwidth " & infoLabel).parseInt
+  if height > 500:
+    height = 500
+  tclEval(script = crewCanvas & " create window 0 0 -anchor nw -window " & crewFrame)
+  tclEval(script = "update")
+  tclEval(script = crewCanvas & " configure -scrollregion [list " & tclEval2(
+      script = crewCanvas & " bbox all") & "] -height " & $height & " -width " & $width)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
