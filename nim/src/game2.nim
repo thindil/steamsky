@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -390,7 +390,7 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
         not cabinAssigned:
       for index, owner in module.owner.mpairs:
         if owner == -1:
-          owner = 1
+          owner = 0
           if index == 0:
             module.name = newGameSettings.playerName & "'s Cabin"
           cabinAssigned = true
