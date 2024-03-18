@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 
+### Fixed
+- Setting the player's cabin in the ship during starting the new game
+
 ## [9.8] - 2024-03-17
 
 ### Added
