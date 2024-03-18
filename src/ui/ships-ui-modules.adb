@@ -22,33 +22,32 @@ with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 -- with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
-use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 -- with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 -- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
+with Tcl.Tk.Ada.Widgets.TtkWidget;
 -- with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 -- with Tcl.Tklib.Ada.Autoscroll;
 with Config;
 -- with Crafts;
 with Dialogs; use Dialogs;
 with Maps;
-with Maps.UI; use Maps.UI;
-with Messages; use Messages;
+with Maps.UI;
+with Messages;
 with Ships.Cargo;
-with Ships.Crew; use Ships.Crew;
-with Ships.UI.Crew; use Ships.UI.Crew;
+with Ships.Crew;
+with Ships.UI.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
-with ShipModules; use ShipModules;
+with ShipModules;
 
 package body Ships.UI.Modules is
 
@@ -559,6 +558,8 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Widgets.Canvas;
       use Config;
       use Ships.Cargo;
       use Tiny_String;
@@ -691,6 +692,10 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Maps.UI;
+      use Messages;
+      use Ships.Crew;
+      use Ships.UI.Crew;
       use Tiny_String;
 
       Module_Index: constant Positive :=
@@ -743,6 +748,9 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
+      use Tcl.Tk.Ada.Widgets.TtkWidget;
+
       Crew_Index: constant Natural :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Button_Name: Unbounded_String := Null_Unbounded_String;
@@ -1052,6 +1060,7 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use ShipModules;
       use Tiny_String;
 
       Module_Index: constant Positive :=
