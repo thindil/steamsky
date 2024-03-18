@@ -1096,7 +1096,7 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   let infoLabel = frameName & ".infolabel"
   if tclEval2(script = "winfo exists " & infoLabel) == "1":
     tclEval(script = infoLabel & " configure -text {Available: " &
-        $playerShip.modules[moduleIndex].owner.len & "}")
+        $(playerShip.modules[moduleIndex].owner.len - assigned) & "}")
     updateHeader()
     updateCrewInfo()
   return tclOk
@@ -1134,10 +1134,10 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::frame " & crewFrame)
   for index, member in playerShip.crew:
     let crewButton = crewFrame & ".crewbutton" & $index
-    tclEval(script = "ttk::checkbutton " & crewButton & " -text {" & member.name & (
-        if module.mType == ModuleType2.workshop: getSkillMarks(
+    tclEval(script = "ttk::checkbutton " & crewButton & " -text {" &
+        member.name & (if module.mType == ModuleType2.workshop: getSkillMarks(
         skillIndex = recipe.skill, memberIndex = index) else: "") &
-        "} -command {UpdateAssignCrew " & $argv[2] & " " & $index & "}")
+        "} -command {UpdateAssignCrew " & $argv[1] & " " & $index & "}")
     tclSetVar(varName = crewButton, newValue = "0")
     for owner in module.owner:
       if owner == index:
