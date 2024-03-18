@@ -1219,7 +1219,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
             getCurrentExceptionMsg() & "}")
         return tclOk
     assignIndex = try:
-        ($argv[3]).parseInt - 1
+        ($argv[3]).parseInt
       except:
         tclEval(script = "bgerror {Can't get the assing index. Reason: " &
             getCurrentExceptionMsg() & "}")
@@ -1232,7 +1232,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
           givenOrder = order, moduleIndex = moduleIndex)
       if playerShip.crew[assignIndex].order != order:
         tclSetVar(varName = ".moduledialog.canvas.frame.crewbutton" & $(
-            assignIndex + 1), newValue = "0")
+            assignIndex), newValue = "0")
 
     try:
       case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
@@ -1301,8 +1301,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     updateMessages()
     return tclOk
   updateMessages()
-  return showShipInfoCommand(clientData = clientData, interp = interp,
-      argc = argc, argv = argv)
+  return tclOk
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
