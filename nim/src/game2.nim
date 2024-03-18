@@ -286,7 +286,7 @@ proc createPlayerShip(randomBase: Positive;
           not cabinAssigned:
         for index, owner in module.owner.mpairs:
           if owner == -1:
-            owner = 1
+            owner = 0
             if index == 0:
               module.name = newGameSettings.playerName & "'s Cabin"
             cabinAssigned = true
