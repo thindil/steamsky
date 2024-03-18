@@ -7,7 +7,7 @@ to the game, you may freely play until your character dies. The game is
 currently in constant development, but is in a playable state. Steam Sky is
 available for Linux and Windows 64-bit platforms. If you read this file
 on GitHub: **please don't send pull requests here**. All will be automatically
-closed. Any code propositions should go to the [Fossil](https://www.laeran.pl/repositories/steamsky) repository.
+closed. Any code propositions should go to the [Fossil](https://www.laeran.pl.eu.org/repositories/steamsky) repository.
 
 ## Game versions
 
