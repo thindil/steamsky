@@ -1102,9 +1102,14 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   let
-    moduleIndex = ($argv[1]).parseInt - 1
+    moduleIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the module index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     module = playerShip.modules[moduleIndex]
     moduleDialog = createDialog(name = ".moduledialog",
         title = "Assign a crew member to " & module.name, titleWidth = 250)
@@ -1124,7 +1129,12 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     crewFrame = crewCanvas & ".frame"
     recipe = if module.mType == ModuleType2.workshop:
-        setRecipeData(recipeIndex = module.craftingIndex)
+        try:
+          setRecipeData(recipeIndex = module.craftingIndex)
+        except:
+          tclEval(script = "bgerror {Can't set the recipe. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
       else:
         CraftData()
   var
@@ -1145,10 +1155,19 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
         assigned.inc
         break
     tclEval(script = "pack " & crewButton & " -anchor w")
-    height = height + tclEval2(script = "winfo reqheight " &
-        crewButton).parseInt
-    if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
-      width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
+    height = try:
+          height + tclEval2(script = "winfo reqheight " & crewButton).parseInt
+      except:
+        tclEval(script = "bgerror {Can't set the height. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
+    try:
+      if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
+        width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
+    except:
+      tclEval(script = "bgerror {Can't set the width. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
     tclEval(script = "bind " & crewButton & " <Escape> {" & closeButton & " invoke;break}")
     tclEval(script = "bind " & crewButton & " <Tab> {focus [GetActiveButton " &
         $index & "];break}")
@@ -1159,9 +1178,19 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::label " & infoLabel & " -text {Available: " & $(
       module.owner.len - assigned) & "}")
   tclEval(script = "pack " & infoLabel)
-  height = height + tclEval2(script = "winfo reqheight " & infoLabel).parseInt
-  if tclEval2(script = "winfo reqwidth " & infoLabel).parseInt > width:
-    width = tclEval2(script = "winfo reqwidth " & infoLabel).parseInt
+  height = try:
+      height + tclEval2(script = "winfo reqheight " & infoLabel).parseInt
+    except:
+      tclEval(script = "bgerror {Can't set the height2. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
+  try:
+    if tclEval2(script = "winfo reqwidth " & infoLabel).parseInt > width:
+      width = tclEval2(script = "winfo reqwidth " & infoLabel).parseInt
+  except:
+    tclEval(script = "bgerror {Can't set the width2. Reason: " &
+        getCurrentExceptionMsg() & "}")
+    return tclOk
   if height > 500:
     height = 500
   tclEval(script = crewCanvas & " create window 0 0 -anchor nw -window " & crewFrame)
@@ -1301,7 +1330,8 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     updateMessages()
     return tclOk
   updateMessages()
-  return tclOk
+  return showShipInfoCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
