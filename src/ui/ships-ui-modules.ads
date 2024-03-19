@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -25,15 +25,6 @@ package Ships.UI.Modules is
    -- Add Tcl commands related to the player's ship modules information
    -- SOURCE
    procedure Add_Modules_Commands;
-   -- ****
-
-   -- ****f* SUModules/SUModules.Update_Modules_Info
-   -- FUNCTION
-   -- Update information about the player ship modules
-   -- PARAMETERS
-   -- Page - The number of current page of modules list to show
-   -- SOURCE
-   procedure Update_Modules_Info(Page: Positive := 1);
    -- ****
 
 end Ships.UI.Modules;
