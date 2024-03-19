@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -371,25 +371,14 @@ package Ships is
    Player_Ship: Ship_Record;
    -- ****
 
-   -- ****f* Ships/Ships.Count_Ship_Weight
+   -- ****f* Ships/Ships.Generate_Ship_Name
    -- FUNCTION
-   -- Count weight of ship (with modules and cargo)
+   -- Generate random name for ship
    -- PARAMETERS
-   -- Ship - Ship which weight will be counted
+   -- Owner - Index of faction to which ship belongs
    -- RESULT
-   -- Ship weight in kilograms
+   -- Random name for a ship
    -- SOURCE
-   function Count_Ship_Weight(Ship: Ship_Record) return Positive;
-      -- ****
-
-      -- ****f* Ships/Ships.Generate_Ship_Name
-      -- FUNCTION
-      -- Generate random name for ship
-      -- PARAMETERS
-      -- Owner - Index of faction to which ship belongs
-      -- RESULT
-      -- Random name for a ship
-      -- SOURCE
    function Generate_Ship_Name
      (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
       Pre => Tiny_String.Length(Source => Owner) > 0;

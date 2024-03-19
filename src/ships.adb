@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -20,19 +20,6 @@ with Maps;
 with ShipModules;
 
 package body Ships is
-
-   function Count_Ship_Weight(Ship: Ship_Record) return Positive is
-      function Count_Ada_Ship_Weight
-        (In_Player_Ship: Integer) return Positive with
-         Import => True,
-         Convention => C,
-         External_Name => "countAdaShipWeight";
-   begin
-      Set_Ship_In_Nim(Ship => Ship);
-      return
-        Count_Ada_Ship_Weight
-          (In_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-   end Count_Ship_Weight;
 
    function Generate_Ship_Name
      (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
