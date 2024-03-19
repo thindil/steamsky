@@ -16,9 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, messages, missions, ships,
-    shipscrew, shipsupgrade, tk, types]
-import dialogs, updateheader, shipsuicrew, utilsui2
+import ../[game, config, crafts, crewinventory, items, messages, missions, ships,
+    shipscargo, shipscrew, shipsupgrade, tk, types]
+import dialogs, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -1213,6 +1213,29 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & closeButton & " <Escape> {" & closeButton & " invoke;break}")
   tclEval(script = "bind " & closeButton & " <Tab> {focus [GetActiveButton 0];break}")
   showDialog(dialog = moduleDialog, relativeY = 0.2)
+  return tclOk
+
+proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    moduleIndex = ($argv[1]).parseInt
+    moduleDialog = createDialog(name = ".moduledialog", title = "Assign skill to " & playerShip.modules[moduleIndex].name, titleWidth = 400)
+    skillsFrame = moduleDialog & ".frame"
+  var skillsTable = createTable(parent = skillsFrame, headers = @["Skill", "Training tool"])
+  for index, skill in skillsList:
+    var
+      protoIndex = -1
+      toolName = ""
+    if skill.tool.len > 0:
+      protoIndex = findProtoItem(itemType = skill.tool)
+      toolName = (if itemsList[protoIndex].showType.len > 0: itemsList[protoIndex].showType else: itemsList[protoIndex].itemType)
+    var
+      skillName = skill.name
+      toolColor = "green"
+    if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
+      skillName.add(y = " (no tool)")
+      toolColor = "red"
+    addButton(table = skillsTable, text = skillName, tooltip = "Press mouse " & (if gameSettings.rightButton: "right" else: "left") & " button to set as trained skill", command = "AssignModule skill " & $moduleIndex & " index", column = 1)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
