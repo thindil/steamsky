@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, config, crafts, crewinventory, items, messages, missions, ships,
-    shipscargo, shipscrew, shipsupgrade, tk, types]
+import ../[game, config, crafts, crewinventory, items, messages, missions,
+    ships, shipscargo, shipscrew, shipsupgrade, tk, types]
 import dialogs, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -1219,23 +1219,50 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
     moduleIndex = ($argv[1]).parseInt
-    moduleDialog = createDialog(name = ".moduledialog", title = "Assign skill to " & playerShip.modules[moduleIndex].name, titleWidth = 400)
+    moduleDialog = createDialog(name = ".moduledialog",
+        title = "Assign skill to " & playerShip.modules[moduleIndex].name,
+        titleWidth = 400)
     skillsFrame = moduleDialog & ".frame"
-  var skillsTable = createTable(parent = skillsFrame, headers = @["Skill", "Training tool"])
+  var skillsTable = createTable(parent = skillsFrame, headers = @["Skill",
+      "Training tool"])
   for index, skill in skillsList:
     var
       protoIndex = -1
       toolName = ""
     if skill.tool.len > 0:
       protoIndex = findProtoItem(itemType = skill.tool)
-      toolName = (if itemsList[protoIndex].showType.len > 0: itemsList[protoIndex].showType else: itemsList[protoIndex].itemType)
+      toolName = (if itemsList[protoIndex].showType.len > 0: itemsList[
+          protoIndex].showType else: itemsList[protoIndex].itemType)
     var
       skillName = skill.name
       toolColor = "green"
     if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
       skillName.add(y = " (no tool)")
       toolColor = "red"
-    addButton(table = skillsTable, text = skillName, tooltip = "Press mouse " & (if gameSettings.rightButton: "right" else: "left") & " button to set as trained skill", command = "AssignModule skill " & $moduleIndex & " index", column = 1)
+    addButton(table = skillsTable, text = skillName, tooltip = "Press mouse " &
+        (if gameSettings.rightButton: "right" else: "left") &
+        " button to set as trained skill", command = "AssignModule skill " &
+        $moduleIndex & " " & $index, column = 1)
+    addButton(table = skillsTable, text = toolName, tooltip = "Press mouse " & (
+        if gameSettings.rightButton: "right" else: "left") &
+        " button to set as trained skill", command = "AssignModule skill " &
+        $moduleIndex & " " & $index, column = 2, newRow = true,
+        color = toolColor)
+  updateTable(table = skillsTable)
+  tclEval(script = "grid " & skillsFrame & " -padx 2")
+  tclEval(script = "update")
+  tclEval(script = skillsTable.canvas & " configure -scrollregion [list " &
+      tclEval2(script = skillsTable.canvas & " bbox all") & "]")
+  tclEval(script = skillsTable.canvas & " xview moveto 0.0")
+  tclEval(script = skillsTable.canvas & " yview moveto 0.0")
+  addCloseButton(name = moduleDialog & ".button", text = "Close",
+      command = "CloseDialog " & moduleDialog, row = 2)
+  let dialogCloseButton = moduleDialog & ".button"
+  tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " &
+      skillsTable.canvas & ";break}")
+  tclEval(script = "bind " & skillsTable.canvas & " <Escape> {" &
+      dialogCloseButton & "invoke;break}")
+  showDialog(dialog = moduleDialog, relativeY = 0.2)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -1250,6 +1277,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ResetDestination", resetDestinationCommand)
     addCommand("UpdateAssignCrew", updateAssignCrewCommand)
     addCommand("ShowAssignCrew", showAssignCrewCommand)
+    addCommand("ShowAssignSkill", showAssignSkillCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
