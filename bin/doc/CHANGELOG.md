@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Setting the player's cabin in the ship during starting the new game
+- Crash when removing the player's ship's modules in shipyards
 
 ## [9.0.7] - 2024-01-07
 
