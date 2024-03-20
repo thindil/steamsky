@@ -17,7 +17,6 @@
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Maps;
-with ShipModules;
 
 package body Ships is
 
@@ -337,7 +336,6 @@ package body Ships is
          exit Convert_Modules_Loop when Strlen(Item => Module.Name) = 0;
          Convert_Module_Block :
          declare
-            use ShipModules;
             use Tiny_String;
 
             M_Type: constant Module_Type_2 := Module_Type_2'Val(Module.M_Type);
@@ -348,8 +346,7 @@ package body Ships is
          begin
             Convert_Owners_Loop :
             for Index in Module.Owner'Range loop
-               exit Convert_Owners_Loop when Index >
-                 Get_Module(Index => Module.Proto_Index).Max_Owners;
+               exit Convert_Owners_Loop when Module.Owner(Index) = -1;
                Owners.Append(New_Item => Module.Owner(Index));
             end loop Convert_Owners_Loop;
             if Owners.Length = 0 then

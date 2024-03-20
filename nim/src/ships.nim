@@ -982,6 +982,8 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
       adaModule.data = [module.duration.cint, (module.harpoonIndex + 1).cint, 0.cint]
     else:
       discard
+    for owner in adaModule.owner.mitems:
+      owner = -1
     for owner in module.owner:
       adaModule.owner[secondIndex] = (owner + 1).cint
       secondIndex.inc
