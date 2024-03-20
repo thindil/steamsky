@@ -1218,11 +1218,12 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
-    moduleIndex = ($argv[1]).parseInt
+    moduleIndex = ($argv[1]).parseInt - 1
     moduleDialog = createDialog(name = ".moduledialog",
         title = "Assign skill to " & playerShip.modules[moduleIndex].name,
         titleWidth = 400)
     skillsFrame = moduleDialog & ".frame"
+  tclEval(script = "ttk::frame " & skillsFrame)
   var skillsTable = createTable(parent = skillsFrame, headers = @["Skill",
       "Training tool"])
   for index, skill in skillsList:
@@ -1242,11 +1243,11 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = skillsTable, text = skillName, tooltip = "Press mouse " &
         (if gameSettings.rightButton: "right" else: "left") &
         " button to set as trained skill", command = "AssignModule skill " &
-        $moduleIndex & " " & $index, column = 1)
+        $argv[1] & " " & $index, column = 1)
     addButton(table = skillsTable, text = toolName, tooltip = "Press mouse " & (
         if gameSettings.rightButton: "right" else: "left") &
         " button to set as trained skill", command = "AssignModule skill " &
-        $moduleIndex & " " & $index, column = 2, newRow = true,
+        $argv[1] & " " & $index, column = 2, newRow = true,
         color = toolColor)
   updateTable(table = skillsTable)
   tclEval(script = "grid " & skillsFrame & " -padx 2")
