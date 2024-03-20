@@ -1216,9 +1216,14 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
-    moduleIndex = ($argv[1]).parseInt - 1
+    moduleIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get module index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
     moduleDialog = createDialog(name = ".moduledialog",
         title = "Assign skill to " & playerShip.modules[moduleIndex].name,
         titleWidth = 400)
@@ -1232,14 +1237,24 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
       toolName = ""
     if skill.tool.len > 0:
       protoIndex = findProtoItem(itemType = skill.tool)
-      toolName = (if itemsList[protoIndex].showType.len > 0: itemsList[
-          protoIndex].showType else: itemsList[protoIndex].itemType)
+      toolName = try:
+          (if itemsList[protoIndex].showType.len > 0: itemsList[
+              protoIndex].showType else: itemsList[protoIndex].itemType)
+        except:
+          tclEval(script = "bgerror {Can't get the tool name. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
     var
       skillName = skill.name
       toolColor = "green"
-    if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
-      skillName.add(y = " (no tool)")
-      toolColor = "red"
+    try:
+      if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
+        skillName.add(y = " (no tool)")
+        toolColor = "red"
+    except:
+      tclEval(script = "bgerror {Can't check item amount. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
     addButton(table = skillsTable, text = skillName, tooltip = "Press mouse " &
         (if gameSettings.rightButton: "right" else: "left") &
         " button to set as trained skill", command = "AssignModule skill " &
