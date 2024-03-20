@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Setting the player's cabin in the ship during starting the new game
 - Assigning crew members to the player's ship's modules
+- Showing a module's name in the player's ship's information screen
 
 ## [9.8] - 2024-03-17
 
