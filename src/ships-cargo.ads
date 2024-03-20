@@ -63,17 +63,4 @@ package Ships.Cargo is
      (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer;
       -- ****
 
-      -- ****f* SCargo/SCargo.Get_Item_Amount
-      -- FUNCTION
-      -- Check how much selected items is in player ship cargo
-      -- PARAMETERS
-      -- Item_Type - Type of items which will be looking for
-      -- RESULT
-      -- Amount of items of selected type on player ship
-      -- SOURCE
-   function Get_Item_Amount
-     (Item_Type: Tiny_String.Bounded_String) return Natural with
-      Pre => Tiny_String.Length(Source => Item_Type) > 0;
-      -- ****
-
 end Ships.Cargo;

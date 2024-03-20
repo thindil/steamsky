@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
-
 package body Ships.Cargo is
 
    --## rule off LOCAL_HIDING
@@ -76,23 +74,5 @@ package body Ships.Cargo is
           (A => Amount,
            Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
    end Free_Cargo;
-
-   function Get_Item_Amount
-     (Item_Type: Tiny_String.Bounded_String) return Natural is
-      use Interfaces.C.Strings;
-      use Tiny_String;
-
-      function Get_Ada_Item_Amount(I_Type: chars_ptr) return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaItemAmount";
-   begin
-      Get_Ada_Ship_Cargo
-        (Cargo => Inventory_To_Nim(Inventory => Player_Ship.Cargo),
-         Get_Player_Ship => 1);
-      return
-        Get_Ada_Item_Amount
-          (I_Type => New_String(Str => To_String(Source => Item_Type)));
-   end Get_Item_Amount;
 
 end Ships.Cargo;
