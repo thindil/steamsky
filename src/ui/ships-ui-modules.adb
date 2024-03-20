@@ -21,23 +21,19 @@ with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
--- with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkWidget;
--- with Config;
 with Dialogs;
-with Maps;
-with Maps.UI;
-with Messages;
--- with Ships.Cargo;
-with Ships.Crew;
-with Ships.UI.Crew;
+-- with Maps;
+-- with Maps.UI;
+-- with Messages;
+-- with Ships.Crew;
+-- with Ships.UI.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 with ShipModules;
@@ -73,46 +69,46 @@ package body Ships.UI.Modules is
    -- Moduleindex is the index of the module which the crafting order will
    -- be canceled
    -- SOURCE
-   function Cancel_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Cancel_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Maps.UI;
-      use Messages;
-      use Ships.Crew;
-      use Ships.UI.Crew;
-      use Tiny_String;
-
-      Module_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-   begin
-      Player_Ship.Modules(Module_Index).Crafting_Index := Null_Bounded_String;
-      Player_Ship.Modules(Module_Index).Crafting_Amount := 0;
-      Player_Ship.Modules(Module_Index).Crafting_Time := 0;
-      Give_Orders_Loop :
-      for Owner of Player_Ship.Modules(Module_Index).Owner loop
-         if Owner > 0 then
-            Give_Orders
-              (Ship => Player_Ship, Member_Index => Owner,
-               Given_Order => REST);
-         end if;
-      end loop Give_Orders_Loop;
-      Add_Message
-        (Message =>
-           "You cancelled crafting order in " &
-           To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
-         M_Type => CRAFTMESSAGE, Color => RED);
-      Update_Messages;
-      Update_Header;
-      Update_Crew_Info;
-      return TCL_OK;
-   end Cancel_Order_Command;
+--   function Cancel_Order_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Cancel_Order_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Maps.UI;
+--      use Messages;
+--      use Ships.Crew;
+--      use Ships.UI.Crew;
+--      use Tiny_String;
+--
+--      Module_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--   begin
+--      Player_Ship.Modules(Module_Index).Crafting_Index := Null_Bounded_String;
+--      Player_Ship.Modules(Module_Index).Crafting_Amount := 0;
+--      Player_Ship.Modules(Module_Index).Crafting_Time := 0;
+--      Give_Orders_Loop :
+--      for Owner of Player_Ship.Modules(Module_Index).Owner loop
+--         if Owner > 0 then
+--            Give_Orders
+--              (Ship => Player_Ship, Member_Index => Owner,
+--               Given_Order => REST);
+--         end if;
+--      end loop Give_Orders_Loop;
+--      Add_Message
+--        (Message =>
+--           "You cancelled crafting order in " &
+--           To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
+--         M_Type => CRAFTMESSAGE, Color => RED);
+--      Update_Messages;
+--      Update_Header;
+--      Update_Crew_Info;
+--      return TCL_OK;
+--   end Cancel_Order_Command;
 
    -- ****o* SUModules/SUModules.Get_Active_Button_Command
    -- FUNCTION
@@ -538,10 +534,7 @@ package body Ships.UI.Modules is
    begin
       Add_Ada_Commands;
 --      Add_Command
---        (Name => "ShowAssignSkill",
---         Ada_Command => Show_Assign_Skill_Command'Access);
-      Add_Command
-        (Name => "CancelOrder", Ada_Command => Cancel_Order_Command'Access);
+--        (Name => "CancelOrder", Ada_Command => Cancel_Order_Command'Access);
       Add_Command
         (Name => "GetActiveButton",
          Ada_Command => Get_Active_Button_Command'Access);

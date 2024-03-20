@@ -1294,6 +1294,22 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = moduleDialog, relativeY = 0.2)
   return tclOk
 
+proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let moduleIndex = ($argv[1]).parseInt - 1
+  playerShip.modules[moduleIndex].craftingIndex = ""
+  playerShip.modules[moduleIndex].craftingAmount = 0
+  playerShip.modules[moduleIndex].craftingTime = 0
+  for owner in playerShip.modules[moduleIndex].owner:
+    if owner > -1:
+      giveOrders(ship = playerShip, memberIndex = owner, givenOrder = rest)
+  addMessage(message = "You cancelled crafting order in " & playerShip.modules[
+      moduleIndex].name & ".", mType = craftMessage, color = red)
+  updateMessages()
+  updateHeader()
+  updateCrewInfo()
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
@@ -1307,6 +1323,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("UpdateAssignCrew", updateAssignCrewCommand)
     addCommand("ShowAssignCrew", showAssignCrewCommand)
     addCommand("ShowAssignSkill", showAssignSkillCommand)
+    addCommand("CancelOrder", cancelOrderCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
