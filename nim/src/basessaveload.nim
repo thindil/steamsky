@@ -137,10 +137,10 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
     for base in saveData.findAll(tag = "base"):
       skyBases[baseIndex].name = base.attr(name = "name")
       skyBases[baseIndex].visited = DateRecord()
-      skyBases[baseIndex].skyX = base.attr("x").parseInt
-      skyBases[baseIndex].skyY = base.attr("y").parseInt
-      skyBases[baseIndex].baseType = base.attr("type")
-      skyBases[baseIndex].population = base.attr("population").parseInt
+      skyBases[baseIndex].skyX = base.attr(name = "x").parseInt
+      skyBases[baseIndex].skyY = base.attr(name = "y").parseInt
+      skyBases[baseIndex].baseType = base.attr(name = "type")
+      skyBases[baseIndex].population = base.attr(name = "population").parseInt
       skyBases[baseIndex].recruitDate = DateRecord()
       skyBases[baseIndex].recruits = @[]
       skyBases[baseIndex].known = false
@@ -149,46 +149,46 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
       skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
       skyBases[baseIndex].missionsDate = DateRecord()
       skyBases[baseIndex].missions = @[]
-      skyBases[baseIndex].owner = base.attr("owner")
-      skyBases[baseIndex].size = parseEnum[BasesSize](base.attr(
-          "size").toLowerAscii)
-      if base.attr("askedforbases") == "Y":
+      skyBases[baseIndex].owner = base.attr(name = "owner")
+      skyBases[baseIndex].size = parseEnum[BasesSize](s = base.attr(
+          name = "size").toLowerAscii)
+      if base.attr(name = "askedforbases") == "Y":
         skyBases[baseIndex].askedForBases = true
-      if base.attr("known") == "Y":
+      if base.attr(name = "known") == "Y":
         skyBases[baseIndex].known = true
-      let visitDate = base.child("visiteddate")
+      let visitDate = base.child(name = "visiteddate")
       if visitDate != nil:
         skyBases[baseIndex].visited = DateRecord(year: visitDate.attr(
-            "year").parseInt, month: visitDate.attr("month").parseInt,
-            day: visitDate.attr("day").parseInt, hour: visitDate.attr(
-            "hour").parseInt, minutes: visitDate.attr("minutes").parseInt)
-      let recruitDate = base.child("recruitdate")
+            name = "year").parseInt, month: visitDate.attr(name = "month").parseInt,
+            day: visitDate.attr(name = "day").parseInt, hour: visitDate.attr(
+            name = "hour").parseInt, minutes: visitDate.attr(name = "minutes").parseInt)
+      let recruitDate = base.child(name = "recruitdate")
       if recruitDate != nil:
         skyBases[baseIndex].recruitDate = DateRecord(year: recruitDate.attr(
-            "year").parseInt, month: recruitDate.attr("month").parseInt,
-            day: recruitDate.attr("day").parseInt, hour: 0, minutes: 0)
-      let askDate = base.child("askedforeventsdate")
+            name = "year").parseInt, month: recruitDate.attr(name = "month").parseInt,
+            day: recruitDate.attr(name = "day").parseInt, hour: 0, minutes: 0)
+      let askDate = base.child(name = "askedforeventsdate")
       if askDate != nil:
         skyBases[baseIndex].askedForEvents = DateRecord(year: askDate.attr(
-            "year").parseInt, month: askDate.attr("month").parseInt,
-            day: askDate.attr("day").parseInt, hour: 0, minutes: 0)
-      for baseRecruit in base.findAll("recruit"):
+            name = "year").parseInt, month: askDate.attr(name = "month").parseInt,
+            day: askDate.attr(name = "day").parseInt, hour: 0, minutes: 0)
+      for baseRecruit in base.findAll(tag = "recruit"):
         var recruit = RecruitData()
-        recruit.name = baseRecruit.attr("name")
-        recruit.gender = baseRecruit.attr("gender")[0]
-        recruit.price = baseRecruit.attr("price").parseInt
+        recruit.name = baseRecruit.attr(name = "name")
+        recruit.gender = baseRecruit.attr(name = "gender")[0]
+        recruit.price = baseRecruit.attr(name = "price").parseInt
         recruit.payment = 20
         recruit.homeBase = 1
-        for recruitSkill in baseRecruit.findAll("skill"):
+        for recruitSkill in baseRecruit.findAll(tag = "skill"):
           var skill = SkillInfo()
-          skill.index = recruitSkill.attr("index").parseInt
-          skill.level = recruitSkill.attr("level").parseInt
-          recruit.skills.add(skill)
-        for recruitAttr in baseRecruit.findAll("attribute"):
-          recruit.attributes.add(MobAttributeRecord(level: recruitAttr.attr(
-              "level").parseInt, experience: 0))
-        for item in baseRecruit.findAll("item"):
-          recruit.inventory.add(item.attr("index").parseInt)
+          skill.index = recruitSkill.attr(name = "index").parseInt
+          skill.level = recruitSkill.attr(name = "level").parseInt
+          recruit.skills.add(y = skill)
+        for recruitAttr in baseRecruit.findAll(tag = "attribute"):
+          recruit.attributes.add(y = MobAttributeRecord(level: recruitAttr.attr(
+              name = "level").parseInt, experience: 0))
+        for item in baseRecruit.findAll(tag = "item"):
+          recruit.inventory.add(y = item.attr(name = "index").parseInt)
         for equipment in baseRecruit.findAll("equipment"):
           var eqIndex = (equipment.attr("slot").parseInt - 1)
           recruit.equipment[eqIndex.EquipmentLocations] = equipment.attr(
