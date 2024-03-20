@@ -542,11 +542,14 @@ package body Bases.Ship is
            (Base_Index =>
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
             Points => 1);
-         Update_Game
-           (Minutes =>
-              Get_Module
+         Update_Game_Block:
+         declare
+            Update_Time: constant Positive := Get_Module
                 (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                .Install_Time);
+                .Install_Time;
+         begin
+            Update_Game(Minutes => Update_Time);
+         end Update_Game_Block;
          Add_Message
            (Message =>
               "You removed " &
