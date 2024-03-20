@@ -28,10 +28,10 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 -- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkWidget;
 -- with Config;
-with Dialogs; use Dialogs;
+with Dialogs;
 with Maps;
 with Maps.UI;
 with Messages;
@@ -585,6 +585,8 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Dialogs;
       use ShipModules;
       use Tiny_String;
 
