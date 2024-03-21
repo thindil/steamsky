@@ -345,9 +345,9 @@ package body Ships is
             --## rule on IMPROPER_INITIALIZATION
          begin
             Convert_Owners_Loop :
-            for Index in Module.Owner'Range loop
-               exit Convert_Owners_Loop when Module.Owner(Index) = -1;
-               Owners.Append(New_Item => Module.Owner(Index));
+            for Owner of Module.Owner loop
+               exit Convert_Owners_Loop when Owner = -1;
+               Owners.Append(New_Item => Owner);
             end loop Convert_Owners_Loop;
             if Owners.Length = 0 then
                Owners.Append(New_Item => 0);
