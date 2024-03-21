@@ -1295,14 +1295,28 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let moduleIndex = ($argv[1]).parseInt - 1
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  let moduleIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      tclEval(script = "bgerror {Can't get the module index. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   playerShip.modules[moduleIndex].craftingIndex = ""
   playerShip.modules[moduleIndex].craftingAmount = 0
   playerShip.modules[moduleIndex].craftingTime = 0
   for owner in playerShip.modules[moduleIndex].owner:
     if owner > -1:
-      giveOrders(ship = playerShip, memberIndex = owner, givenOrder = rest)
+      try:
+        giveOrders(ship = playerShip, memberIndex = owner, givenOrder = rest)
+      except CrewOrderError, CrewNoSpaceError:
+        showMessage(text = getCurrentExceptionMsg(),
+            title = "Can't give a order")
+        return tclOk
+      except:
+        tclEval(script = "bgerror {Can't give rest order. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   addMessage(message = "You cancelled crafting order in " & playerShip.modules[
       moduleIndex].name & ".", mType = craftMessage, color = red)
   updateMessages()
