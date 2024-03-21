@@ -787,12 +787,6 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           row = currentRow)
       addLabel(name = moduleFrame & ".orderlbl2", labelText = recipeName,
           row = currentRow, column = 1, countHeight = true, secondary = true)
-      currentRow.inc
-      addLabel(name = moduleFrame & ".ordertimelbl",
-          labelText = "Finish order in:", row = currentRow)
-      addLabel(name = moduleFrame & ".ordertimelbl2",
-          labelText = $module.craftingTime & " mins", row = currentRow,
-          column = 1, secondary = true)
       infoButton = moduleFrame & ".orderbutton"
       tclEval(script = "ttk::button " & infoButton &
           " -image cancelicon -command {" & closeDialogButton &
@@ -809,6 +803,12 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           tclEval(script = "bgerror {Can't count the height of the workshop's button. Reason: " &
               getCurrentExceptionMsg() & "}")
           return tclOk
+      currentRow.inc
+      addLabel(name = moduleFrame & ".ordertimelbl",
+          labelText = "Finish order in:", row = currentRow)
+      addLabel(name = moduleFrame & ".ordertimelbl2",
+          labelText = $module.craftingTime & " mins", row = currentRow,
+          column = 1, secondary = true)
     else:
       addLabel(name = moduleFrame & ".orderlbl", labelText = "Order:",
           row = currentRow)
