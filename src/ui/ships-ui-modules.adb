@@ -1198,15 +1198,6 @@ package body Ships.UI.Modules is
                     (Name => Module_Frame & ".orderlbl2",
                      Label_Text => Recipe_Name, Row => Current_Row,
                      Column => 1, Count_Height => True);
-                  Current_Row := Current_Row + 1;
-                  Add_Label
-                    (Name => Module_Frame & ".ordertimelbl",
-                     Label_Text => "Finish order in:", Row => Current_Row);
-                  Add_Label
-                    (Name => Module_Frame & ".ordertimelbl2",
-                     Label_Text =>
-                       Positive'Image(Module.Crafting_Time) & " mins",
-                     Row => Current_Row, Column => 1);
                   Info_Button :=
                     Create
                       (pathName => Module_Frame & ".orderbutton",
@@ -1230,6 +1221,15 @@ package body Ships.UI.Modules is
                     Height +
                     Positive'Value
                       (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+                  Current_Row := Current_Row + 1;
+                  Add_Label
+                    (Name => Module_Frame & ".ordertimelbl",
+                     Label_Text => "Finish order in:", Row => Current_Row);
+                  Add_Label
+                    (Name => Module_Frame & ".ordertimelbl2",
+                     Label_Text =>
+                       Positive'Image(Module.Crafting_Time) & " mins",
+                     Row => Current_Row, Column => 1);
                else
                   Add_Label
                     (Name => Module_Frame & ".orderlbl",
