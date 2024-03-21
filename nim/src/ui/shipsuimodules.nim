@@ -1338,8 +1338,13 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let crewIndex = ($argv[1]).parseInt
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let crewIndex = try:
+      ($argv[1]).parseInt
+    except:
+      tclEval(script = "bgerror {Can't get the crew index. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   var buttonName = ""
   for index, _ in playerShip.crew:
     buttonName = ".moduledialog.canvas.frame.crewbutton" & $index
