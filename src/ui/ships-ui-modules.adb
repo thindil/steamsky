@@ -35,7 +35,7 @@ with Dialogs;
 -- with Ships.Crew;
 -- with Ships.UI.Crew;
 with Table; use Table;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 with ShipModules;
 
 package body Ships.UI.Modules is
@@ -527,6 +527,7 @@ package body Ships.UI.Modules is
    end Show_Assign_Ammo_Command;
 
    procedure Add_Modules_Commands is
+      use Utils.UI;
       procedure Add_Ada_Commands with
          Import => True,
          Convention => C,
