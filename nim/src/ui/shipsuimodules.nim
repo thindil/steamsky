@@ -1337,6 +1337,20 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   updateCrewInfo()
   return tclOk
 
+proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let crewIndex = ($argv[1]).parseInt
+  var buttonName = ""
+  for index, _ in playerShip.crew:
+    buttonName = ".moduledialog.canvas.frame.crewbutton" & $index
+    if tclEval2(script = buttonName & " instate disabled") == "0" and index > crewIndex:
+      break
+    buttonName = ""
+  if buttonName.len == 0:
+    buttonName = ".moduledialog.button"
+  tclEval(script = "focus " & buttonName)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
@@ -1351,6 +1365,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowAssignCrew", showAssignCrewCommand)
     addCommand("ShowAssignSkill", showAssignSkillCommand)
     addCommand("CancelOrder", cancelOrderCommand)
+    addCommand("GetActiveButton", getActiveButtonCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")

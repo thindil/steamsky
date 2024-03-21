@@ -25,9 +25,9 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
+-- with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkWidget;
+-- with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Dialogs;
 with Table; use Table;
 with Utils.UI;
@@ -64,52 +64,52 @@ package body Ships.UI.Modules is
    -- Crewindex is the index of the crew member which is currently selected
    -- or 0 for close button
    -- SOURCE
-   function Get_Active_Button_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Get_Active_Button_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
-      use Tcl.Tk.Ada.Widgets.TtkWidget;
-
-      Crew_Index: constant Natural :=
-        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Button_Name: Unbounded_String := Null_Unbounded_String;
-      Button: Ttk_CheckButton; --## rule line off IMPROPER_INITIALIZATION
-   begin
-      Find_Active_Button_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         Button_Name :=
-           To_Unbounded_String
-             (Source =>
-                ".moduledialog.canvas.frame.crewbutton" &
-                Trim
-                  (Source =>
-                     Positive'Image(Crew_Container.To_Index(Position => I)),
-                   Side => Left));
-         Button :=
-           Get_Widget
-             (pathName => To_String(Source => Button_Name), Interp => Interp);
-         exit Find_Active_Button_Loop when InState
-             (Widget => Button, StateSpec => "disabled") =
-           "0" and
-           Crew_Container.To_Index(Position => I) > Crew_Index;
-         Button_Name := Null_Unbounded_String;
-      end loop Find_Active_Button_Loop;
-      if Button_Name = Null_Unbounded_String then
-         Button_Name := To_Unbounded_String(Source => ".moduledialog.button");
-      end if;
-      Button :=
-        Get_Widget
-          (pathName => To_String(Source => Button_Name), Interp => Interp);
-      Focus(Widgt => Button);
-      return TCL_OK;
-   end Get_Active_Button_Command;
+--   function Get_Active_Button_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Get_Active_Button_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
+--      use Tcl.Tk.Ada.Widgets.TtkWidget;
+--
+--      Crew_Index: constant Natural :=
+--        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Button_Name: Unbounded_String := Null_Unbounded_String;
+--      Button: Ttk_CheckButton; --## rule line off IMPROPER_INITIALIZATION
+--   begin
+--      Find_Active_Button_Loop :
+--      for I in Player_Ship.Crew.Iterate loop
+--         Button_Name :=
+--           To_Unbounded_String
+--             (Source =>
+--                ".moduledialog.canvas.frame.crewbutton" &
+--                Trim
+--                  (Source =>
+--                     Positive'Image(Crew_Container.To_Index(Position => I)),
+--                   Side => Left));
+--         Button :=
+--           Get_Widget
+--             (pathName => To_String(Source => Button_Name), Interp => Interp);
+--         exit Find_Active_Button_Loop when InState
+--             (Widget => Button, StateSpec => "disabled") =
+--           "0" and
+--           Crew_Container.To_Index(Position => I) > Crew_Index;
+--         Button_Name := Null_Unbounded_String;
+--      end loop Find_Active_Button_Loop;
+--      if Button_Name = Null_Unbounded_String then
+--         Button_Name := To_Unbounded_String(Source => ".moduledialog.button");
+--      end if;
+--      Button :=
+--        Get_Widget
+--          (pathName => To_String(Source => Button_Name), Interp => Interp);
+--      Focus(Widgt => Button);
+--      return TCL_OK;
+--   end Get_Active_Button_Command;
 
    procedure Update_Modules_Info(Page: Positive := 1) is
       --## rule off TYPE_INITIAL_VALUES
@@ -473,9 +473,9 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "GetActiveButton",
-         Ada_Command => Get_Active_Button_Command'Access);
+--      Add_Command
+--        (Name => "GetActiveButton",
+--         Ada_Command => Get_Active_Button_Command'Access);
       Add_Command
         (Name => "ShowModules", Ada_Command => Show_Modules_Command'Access);
       Add_Command
