@@ -147,7 +147,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::button " & infoButton &
         " -image repairpriorityicon -command {" & closeDialogButton &
         " invoke;SetRepair assign " & $moduleIndex & "} -style Small.TButton")
-    tclEval(script = "tooltip::tooltip " & infoButton & " \"Repair selected module as first when damaged\"")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Repair the selected module as first when damaged\"")
   tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
   tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
 
@@ -349,7 +349,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "ttk::button " & infoButton &
           " -image cancelicon -command {" & closeDialogButton &
           " invoke;StopUpgrading " & $argv[1] & "} -style Small.TButton")
-      tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading cabin quality\"")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading the cabin's quality\"")
       tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
       tclEval(script = "bind " & infoButton & " <Escape> {" &
           closeDialogButton & " invoke; break}")
@@ -717,7 +717,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           tclEval(script = "ttk::button " & infoButton &
               " -image assignammoicon -command {" & closeDialogButton &
               " invoke;ShowAssignAmmo " & $argv[1] & "} -style Small.TButton")
-          tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign an ammo to the gun.\"")
+          tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign an ammunition to the gun.\"")
           tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky w -padx {5 0}")
           tclEval(script = "bind " & infoButton & " <Escape> {" &
               closeDialogButton & " invoke; break}")
@@ -791,7 +791,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "ttk::button " & infoButton &
           " -image cancelicon -command {" & closeDialogButton &
           " invoke;CancelOrder " & $argv[1] & "} -style Small.TButton")
-      tclEval(script = "tooltip::tooltip " & infoButton & " \"Cancel current crafting order\"")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Cancel the current crafting order\"")
       tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky w -padx {5 0}")
       tclEval(script = "bind " & infoButton & " <Escape> {" &
           closeDialogButton & " invoke; break}")
@@ -1552,11 +1552,11 @@ proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
             getCurrentExceptionMsg() & "}")
         return tclOk
     addMessage(message = "You assigned " & playerShip.modules[
-        playerShip.repairModule].name & " as repair priority.",
+        playerShip.repairModule].name & " as the repair's priority.",
         mType = orderMessage)
   else:
     playerShip.repairModule = -1
-    addMessage(message = "You removed repair priority.", mType = orderMessage)
+    addMessage(message = "You removed the repair's priority.", mType = orderMessage)
   updateMessages()
   return showShipInfoCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
