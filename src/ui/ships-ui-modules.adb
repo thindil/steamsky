@@ -98,21 +98,21 @@ package body Ships.UI.Modules is
    -- Page parameter is a index of page from which starts showing
    -- modules.
    -- SOURCE
-   function Show_Modules_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Modules_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-   begin
-      Update_Modules_Info
-        (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      return TCL_OK;
-   end Show_Modules_Command;
+--   function Show_Modules_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Modules_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--   begin
+--      Update_Modules_Info
+--        (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--      return TCL_OK;
+--   end Show_Modules_Command;
 
    -- ****it* SUModules/SUModules.Modules_Sort_Orders
    -- FUNCTION
@@ -415,8 +415,8 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowModules", Ada_Command => Show_Modules_Command'Access);
+--      Add_Command
+--        (Name => "ShowModules", Ada_Command => Show_Modules_Command'Access);
       Add_Command
         (Name => "SortShipModules",
          Ada_Command => Sort_Modules_Command'Access);

@@ -1369,6 +1369,9 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus " & buttonName)
   return tclOk
 
+proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
@@ -1384,6 +1387,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowAssignSkill", showAssignSkillCommand)
     addCommand("CancelOrder", cancelOrderCommand)
     addCommand("GetActiveButton", getActiveButtonCommand)
+    addCommand("ShowModules", showModulesCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
@@ -1580,6 +1584,13 @@ proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   playerShip.destinationY = 0
   return showShipInfoCommand(clientData = clientData, interp = interp,
       argc = 2, argv = argv)
+
+import shipsuimodules2
+
+proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  updateModulesInfo(page = ($argv[1]).parseInt)
+  return tclOk
 
 # Temporary code for interfacing with Ada
 
