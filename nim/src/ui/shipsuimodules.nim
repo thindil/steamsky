@@ -1339,6 +1339,19 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Get the next active button in assing crew dialog
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## GetActiveButton crewindex
+  ## Crewindex is the index of the crew member which is currently selected
+  ## or 0 for close button
   let crewIndex = try:
       ($argv[1]).parseInt
     except:
