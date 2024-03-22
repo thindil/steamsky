@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -398,7 +398,7 @@ package body Ships.UI.Modules is
                 "} -style Small.TButton");
          Add
            (Widget => Info_Button,
-            Message => "Repair selected module as first when damaged");
+            Message => "Repair the selected module as first when damaged");
       end if;
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Button,
@@ -623,7 +623,7 @@ package body Ships.UI.Modules is
                    "} -style Small.TButton");
             Add
               (Widget => Info_Button,
-               Message => "Stop upgrading cabin quality");
+               Message => "Stop upgrading the cabin's quality");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Info_Button,
                Options =>
@@ -1092,7 +1092,7 @@ package body Ships.UI.Modules is
                             "} -style Small.TButton");
                      Add
                        (Widget => Info_Button,
-                        Message => "Assign an ammo to the gun.");
+                        Message => "Assign an ammunition to the gun.");
                      Tcl.Tk.Ada.Grid.Grid
                        (Slave => Info_Button,
                         Options =>
@@ -1208,7 +1208,7 @@ package body Ships.UI.Modules is
                          "} -style Small.TButton");
                   Add
                     (Widget => Info_Button,
-                     Message => "Cancel current crafting order");
+                     Message => "Cancel the current crafting order");
                   Tcl.Tk.Ada.Grid.Grid
                     (Slave => Info_Button,
                      Options =>
@@ -1773,12 +1773,12 @@ package body Ships.UI.Modules is
                    Player_Ship.Modules
                      (Positive'Value(CArgv.Arg(Argv => Argv, N => 2)))
                      .Name) &
-              " as repair priority.",
+              " as the repair's priority.",
             M_Type => ORDERMESSAGE);
       else
          Player_Ship.Repair_Module := 0;
          Add_Message
-           (Message => "You removed repair priority.", M_Type => ORDERMESSAGE);
+           (Message => "You removed the repair's priority.", M_Type => ORDERMESSAGE);
       end if;
       Update_Messages;
       return
