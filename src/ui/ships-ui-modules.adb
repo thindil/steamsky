@@ -14,17 +14,17 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 -- with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 -- with Tcl.Tk.Ada.Widgets.TtkWidget;
@@ -242,6 +242,7 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Strings.Unbounded;
       use Tiny_String;
 
       --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -386,6 +387,9 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+      use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Dialogs;
       use ShipModules;
@@ -402,6 +406,8 @@ package body Ships.UI.Modules is
           (Name => ".ammomenu", Title => "Available ammo", Parent_Name => ".");
       Row: Positive := 1;
       procedure Add_Button(Name, Label, Command: String) is
+         use Tcl.Tk.Ada.Widgets.TtkButton;
+
          Button: constant Ttk_Button :=
            Create
              (pathName => Ammo_Menu & Name,
