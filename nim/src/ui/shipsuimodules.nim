@@ -1370,7 +1370,7 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
@@ -1573,7 +1573,8 @@ proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
         mType = orderMessage)
   else:
     playerShip.repairModule = -1
-    addMessage(message = "You removed the repair's priority.", mType = orderMessage)
+    addMessage(message = "You removed the repair's priority.",
+        mType = orderMessage)
   updateMessages()
   return showShipInfoCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
@@ -1589,7 +1590,11 @@ import shipsuimodules2
 
 proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  updateModulesInfo(page = ($argv[1]).parseInt)
+  try:
+    updateModulesInfo(page = ($argv[1]).parseInt)
+  except:
+    tclEval(script = "bgerror {Can't update modules info. Reason: " &
+        getCurrentExceptionMsg() & "}")
   return tclOk
 
 # Temporary code for interfacing with Ada
