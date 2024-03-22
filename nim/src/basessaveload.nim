@@ -30,7 +30,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
   require:
     saveData != nil
   body:
-    for skyBase in skyBases.items:
+    for skyBase in skyBases:
       let
         askedForBases: string = (if skyBase.askedForBases: "Y" else: "N")
         knownBase: string = (if skyBase.known: "Y" else: "N")
@@ -113,7 +113,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
               "reward": $mission.reward}.toXmlAttributes
           baseTree.add(son = missionElement)
       if skyBase.reputation.level != 0:
-        var repElement = newElement(tag = "reputation")
+        var repElement: XmlNode = newElement(tag = "reputation")
         if skyBase.reputation.experience > 0:
           repElement.attrs = {"level": $skyBase.reputation.level,
               "progress": $skyBase.reputation.experience}.toXmlAttributes
@@ -121,7 +121,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
           repElement.attrs = {"level": $skyBase.reputation.level}.toXmlAttributes
         baseTree.add(son = repElement)
       for item in skyBase.cargo:
-        var itemElement = newElement(tag = "item")
+        var itemElement: XmlNode = newElement(tag = "item")
         itemElement.attrs = {"index": $item.protoIndex, "amount": $item.amount,
             "durability": $item.durability,
             "price": $item.price}.toXmlAttributes
@@ -136,7 +136,7 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
   require:
     saveData != nil
   body:
-    var baseIndex = 1
+    var baseIndex: BasesRange = 1
     for base in saveData.findAll(tag = "base"):
       skyBases[baseIndex].name = base.attr(name = "name")
       skyBases[baseIndex].visited = DateRecord()
@@ -159,31 +159,31 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
         skyBases[baseIndex].askedForBases = true
       if base.attr(name = "known") == "Y":
         skyBases[baseIndex].known = true
-      let visitDate = base.child(name = "visiteddate")
+      let visitDate: XmlNode = base.child(name = "visiteddate")
       if visitDate != nil:
         skyBases[baseIndex].visited = DateRecord(year: visitDate.attr(
             name = "year").parseInt, month: visitDate.attr(name = "month").parseInt,
             day: visitDate.attr(name = "day").parseInt, hour: visitDate.attr(
             name = "hour").parseInt, minutes: visitDate.attr(name = "minutes").parseInt)
-      let recruitDate = base.child(name = "recruitdate")
+      let recruitDate: XmlNode = base.child(name = "recruitdate")
       if recruitDate != nil:
         skyBases[baseIndex].recruitDate = DateRecord(year: recruitDate.attr(
             name = "year").parseInt, month: recruitDate.attr(name = "month").parseInt,
             day: recruitDate.attr(name = "day").parseInt, hour: 0, minutes: 0)
-      let askDate = base.child(name = "askedforeventsdate")
+      let askDate: XmlNode = base.child(name = "askedforeventsdate")
       if askDate != nil:
         skyBases[baseIndex].askedForEvents = DateRecord(year: askDate.attr(
             name = "year").parseInt, month: askDate.attr(name = "month").parseInt,
             day: askDate.attr(name = "day").parseInt, hour: 0, minutes: 0)
       for baseRecruit in base.findAll(tag = "recruit"):
-        var recruit = RecruitData()
+        var recruit: RecruitData = RecruitData()
         recruit.name = baseRecruit.attr(name = "name")
         recruit.gender = baseRecruit.attr(name = "gender")[0]
         recruit.price = baseRecruit.attr(name = "price").parseInt
         recruit.payment = 20
         recruit.homeBase = 1
         for recruitSkill in baseRecruit.findAll(tag = "skill"):
-          var skill = SkillInfo()
+          var skill: SkillInfo = SkillInfo()
           skill.index = recruitSkill.attr(name = "index").parseInt
           skill.level = recruitSkill.attr(name = "level").parseInt
           recruit.skills.add(y = skill)
@@ -193,44 +193,44 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
         for item in baseRecruit.findAll(tag = "item"):
           recruit.inventory.add(y = item.attr(name = "index").parseInt)
         for equipment in baseRecruit.findAll(tag = "equipment"):
-          var eqIndex = (equipment.attr(name = "slot").parseInt - 1)
+          var eqIndex: int = (equipment.attr(name = "slot").parseInt - 1)
           recruit.equipment[eqIndex.EquipmentLocations] = equipment.attr(
               name = "index").parseInt - 1
-        let payment = baseRecruit.attr(name = "payment")
+        let payment: string = baseRecruit.attr(name = "payment")
         if payment.len > 0:
           recruit.payment = payment.parseInt
-        let homeBase = baseRecruit.attr(name = "homebase")
+        let homeBase: string = baseRecruit.attr(name = "homebase")
         if homeBase.len > 0:
           recruit.homeBase = homeBase.parseInt
-        let faction = baseRecruit.attr(name = "faction")
+        let faction: string = baseRecruit.attr(name = "faction")
         if faction.len > 0:
           recruit.faction = faction
         skyBases[baseIndex].recruits.add(y = recruit)
-      let reputation = base.child(name = "reputation")
+      let reputation: XmlNode = base.child(name = "reputation")
       if reputation != nil:
         skyBases[baseIndex].reputation.level = reputation.attr(name = "level").parseInt
-        let progress = reputation.attr(name = "progress")
+        let progress: string = reputation.attr(name = "progress")
         if progress.len > 0:
           skyBases[baseIndex].reputation.experience = progress.parseInt
-      let missionsDate = base.child(name = "missionsdate")
+      let missionsDate: XmlNode = base.child(name = "missionsdate")
       if missionsDate != nil:
         skyBases[baseIndex].missionsDate = DateRecord(year: missionsDate.attr(
             name = "year").parseInt, month: missionsDate.attr(name = "month").parseInt,
             day: missionsDate.attr(name = "day").parseInt, hour: 0, minutes: 0)
       for mission in base.findAll(tag = "mission"):
-        let mType = mission.attr(name = "type").parseInt.MissionsTypes
+        let mType: MissionsTypes = mission.attr(name = "type").parseInt.MissionsTypes
         var
-          targetIndex: string
-          target: int
+          targetIndex: string = ""
+          target: int = -1
         if mType in {deliver, destroy}:
           targetIndex = mission.attr(name = "target")
         else:
           target = mission.attr(name = "target").parseInt
         let
-          time = mission.attr(name = "time").parseInt
-          targetX = mission.attr(name = "targetx").parseInt
-          targetY = mission.attr(name = "targety").parseInt
-          reward = mission.attr(name = "reward").parseInt
+          time: int = mission.attr(name = "time").parseInt
+          targetX: int = mission.attr(name = "targetx").parseInt
+          targetY: int = mission.attr(name = "targety").parseInt
+          reward: int = mission.attr(name = "reward").parseInt
         case mType
         of deliver:
           skyBases[baseIndex].missions.add(y = MissionData(mType: deliver,
@@ -262,7 +262,7 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
       for baseItem in base.findAll(tag = "item"):
         if baseItem.attr(name = "durability").len == 0:
           continue
-        var item = BaseCargo()
+        var item: BaseCargo = BaseCargo()
         item.protoIndex = baseItem.attr(name = "index").parseInt
         item.durability = baseItem.attr(name = "durability").parseInt
         item.amount = baseItem.attr(name = "amount").parseInt
