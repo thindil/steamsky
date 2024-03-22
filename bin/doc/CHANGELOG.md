@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Assigning crew members to the player's ship's modules
 - Showing a module's name in the player's ship's information screen
 - Position of the button to cancel crafting order in the module's info dialog
+- Typos in tooltips in the player's ship's module's info dialog
 
 ## [9.8] - 2024-03-17
 
