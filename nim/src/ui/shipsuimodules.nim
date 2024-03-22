@@ -1371,6 +1371,19 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+  ## Show the list of the player's ship modules to a player
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowModules ?page?
+  ## Page parameter is a index of page from which starts showing
+  ## modules.
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
