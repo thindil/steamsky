@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Setting the player's cabin in the ship during starting the new game
 - Crash when removing the player's ship's modules in shipyards
 - Position of the button to cancel crafting order in the module's info dialog
+- Typos in tooltips in the player's ship's module's info dialog
 
 ## [9.0.7] - 2024-01-07
 
