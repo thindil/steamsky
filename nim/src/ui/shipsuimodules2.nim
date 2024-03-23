@@ -20,12 +20,12 @@ import ../[game, config, crafts, tk, types]
 import coreui, table
 
 var
-  modulesTable: TableWidget
+  modulesTable*: TableWidget
     ## The UI table with all the installed the player's ship's modules
   modulesIndexes: seq[Natural]
     ## The list of indexes of the installed modules
 
-proc getModuleInfo(moduleIndex: Natural): string {.sideEffect, raises: [],
+proc getModuleInfo*(moduleIndex: Natural): string {.sideEffect, raises: [],
     tags: [].} =
   ## Get the additional information about the module
   ##
