@@ -13,12 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Generic_Array_Sort;
-with Ada.Strings.Unbounded;
+-- with Ada.Containers.Generic_Array_Sort;
+-- with Ada.Strings.Unbounded;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings;
+-- with Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada;
@@ -27,7 +27,7 @@ with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Dialogs;
-with Table; use Table;
+-- with Table; use Table;
 with Utils.UI;
 with ShipModules;
 
@@ -37,52 +37,52 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Table with info about the installed modules on the player ship
    -- SOURCE
-   Modules_Table: Table_Widget (Amount => 3);
+--   Modules_Table: Table_Widget (Amount => 3);
    -- ****
 
    -- ****iv* SUModules/SUModules.Modules_Indexes
    -- FUNCTION
    -- Indexes of the player ship modules
    -- SOURCE
-   Modules_Indexes: Positive_Container.Vector;
+--   Modules_Indexes: Positive_Container.Vector;
    -- ****
 
    --## rule off REDUCEABLE_SCOPE
-   procedure Update_Modules_Info(Page: Positive := 1) is
-      --## rule off TYPE_INITIAL_VALUES
-      type Modules_Array is array(0 .. 50) of Natural;
-      --## rule on TYPE_INITIAL_VALUES
-      M_Array: Modules_Array := (others => 0);
-      N_Width: Nim_Width := (others => 0);
-      Index: Natural := 0;
-      procedure Update_Ada_Modules_Info
-        (P: Positive; M: Modules_Array; W: out Nim_Width) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaModulesInfo";
-   begin
-      if Modules_Indexes.Length /= Player_Ship.Modules.Length then
-         Modules_Indexes.Clear;
-         Update_Modules_Indexes_Loop :
-         for I in Player_Ship.Modules.Iterate loop
-            Modules_Indexes.Append
-              (New_Item => Modules_Container.To_Index(Position => I));
-         end loop Update_Modules_Indexes_Loop;
-      end if;
-      Convert_Modules_Indexes_Loop :
-      for M_Index of Modules_Indexes loop
-         M_Array(Index) := M_Index;
-         Index := Index + 1;
-      end loop Convert_Modules_Indexes_Loop;
-      Update_Ada_Modules_Info(P => Page, M => M_Array, W => N_Width);
-      Index := 1;
-      Convert_Headers_Width_Loop :
-      for Width of N_Width loop
-         exit Convert_Headers_Width_Loop when Width = 0;
-         Modules_Table.Columns_Width(Index) := Width;
-         Index := Index + 1;
-      end loop Convert_Headers_Width_Loop;
-   end Update_Modules_Info;
+--   procedure Update_Modules_Info(Page: Positive := 1) is
+--      --## rule off TYPE_INITIAL_VALUES
+--      type Modules_Array is array(0 .. 50) of Natural;
+--      --## rule on TYPE_INITIAL_VALUES
+--      M_Array: Modules_Array := (others => 0);
+--      N_Width: Nim_Width := (others => 0);
+--      Index: Natural := 0;
+--      procedure Update_Ada_Modules_Info
+--        (P: Positive; M: Modules_Array; W: out Nim_Width) with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "updateAdaModulesInfo";
+--   begin
+--      if Modules_Indexes.Length /= Player_Ship.Modules.Length then
+--         Modules_Indexes.Clear;
+--         Update_Modules_Indexes_Loop :
+--         for I in Player_Ship.Modules.Iterate loop
+--            Modules_Indexes.Append
+--              (New_Item => Modules_Container.To_Index(Position => I));
+--         end loop Update_Modules_Indexes_Loop;
+--      end if;
+--      Convert_Modules_Indexes_Loop :
+--      for M_Index of Modules_Indexes loop
+--         M_Array(Index) := M_Index;
+--         Index := Index + 1;
+--      end loop Convert_Modules_Indexes_Loop;
+--      Update_Ada_Modules_Info(P => Page, M => M_Array, W => N_Width);
+--      Index := 1;
+--      Convert_Headers_Width_Loop :
+--      for Width of N_Width loop
+--         exit Convert_Headers_Width_Loop when Width = 0;
+--         Modules_Table.Columns_Width(Index) := Width;
+--         Index := Index + 1;
+--      end loop Convert_Headers_Width_Loop;
+--   end Update_Modules_Info;
    --## rule on REDUCEABLE_SCOPE
 
    -- ****it* SUModules/SUModules.Modules_Sort_Orders
@@ -100,9 +100,9 @@ package body Ships.UI.Modules is
    -- 6.4 - Added
    -- 8.9 - Added sorting by info column
    -- SOURCE
-   type Modules_Sort_Orders is
-     (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, INFOASC, INFODESC, NONE) with
-      Default_Value => NONE;
+--   type Modules_Sort_Orders is
+--     (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, INFOASC, INFODESC, NONE) with
+--      Default_Value => NONE;
       -- ****
 
       -- ****id* SUModules/SUModules.Default_Modules_Sort_Order
@@ -111,7 +111,7 @@ package body Ships.UI.Modules is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NONE;
+--   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NONE;
    -- ****
 
    --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -121,7 +121,7 @@ package body Ships.UI.Modules is
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   Modules_Sort_Order: Modules_Sort_Orders := Default_Modules_Sort_Order;
+--   Modules_Sort_Order: Modules_Sort_Orders := Default_Modules_Sort_Order;
    -- ****
    --## rule on DIRECTLY_ACCESSED_GLOBALS
 
@@ -139,135 +139,135 @@ package body Ships.UI.Modules is
    -- SortShipModules x
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
-   function Sort_Modules_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Sort_Modules_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Ada.Strings.Unbounded;
-      use Tiny_String;
-
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Column: constant Positive :=
-        Get_Column_Number
-          (Table => Modules_Table,
-           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      --## rule off TYPE_INITIAL_VALUES
-      type Local_Module_Data is record
-         Name: Bounded_String;
-         Damage: Float;
-         Id: Positive;
-         Info: Unbounded_String;
-      end record;
-      type Modules_Array is array(Positive range <>) of Local_Module_Data;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
-      Local_Modules: Modules_Array(1 .. Positive(Player_Ship.Modules.Length));
-      --## rule on IMPROPER_INITIALIZATION
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      function Get_Modules_Sort_Order return Modules_Sort_Orders is
-      begin
-         return Modules_Sort_Order;
-      end Get_Modules_Sort_Order;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      function "<"(Left, Right: Local_Module_Data) return Boolean is
-      begin
-         if Get_Modules_Sort_Order = NAMEASC
-           and then Left.Name < Right.Name then
-            return True;
-         end if;
-         if Get_Modules_Sort_Order = NAMEDESC
-           and then Left.Name > Right.Name then
-            return True;
-         end if;
-         if Get_Modules_Sort_Order = DAMAGEASC
-           and then Left.Damage < Right.Damage then
-            return True;
-         end if;
-         if Get_Modules_Sort_Order = DAMAGEDESC
-           and then Left.Damage > Right.Damage then
-            return True;
-         end if;
-         if Get_Modules_Sort_Order = INFOASC
-           and then Left.Info < Right.Info then
-            return True;
-         end if;
-         if Get_Modules_Sort_Order = INFODESC
-           and then Left.Info > Right.Info then
-            return True;
-         end if;
-         return False;
-      end "<";
-      procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Local_Module_Data,
-         Array_Type => Modules_Array);
-      function Get_Module_Info(Module_Index: Positive) return String is
-         use Interfaces.C.Strings;
-         function Get_Ada_Module_Info(M_Index: Positive) return chars_ptr with
-            Import => True,
-            Convention => C,
-            External_Name => "getAdaModuleInfo";
-      begin
-         return Value(Item => Get_Ada_Module_Info(M_Index => Module_Index));
-      end Get_Module_Info;
-   begin
-      case Column is
-         when 1 =>
-            if Get_Modules_Sort_Order = NAMEASC then
-               Modules_Sort_Order := NAMEDESC;
-            else
-               Modules_Sort_Order := NAMEASC;
-            end if;
-         when 2 =>
-            if Get_Modules_Sort_Order = DAMAGEASC then
-               Modules_Sort_Order := DAMAGEDESC;
-            else
-               Modules_Sort_Order := DAMAGEASC;
-            end if;
-         when 3 =>
-            if Get_Modules_Sort_Order = INFOASC then
-               Modules_Sort_Order := INFODESC;
-            else
-               Modules_Sort_Order := INFOASC;
-            end if;
-         when others =>
-            null;
-      end case;
-      if Get_Modules_Sort_Order = NONE then
-         return TCL_OK;
-      end if;
-      Fill_Local_Modules_Loop :
-      for I in Player_Ship.Modules.Iterate loop
-         Local_Modules(Modules_Container.To_Index(Position => I)) :=
-           (Name => Player_Ship.Modules(I).Name,
-            Damage =>
-              Float(Player_Ship.Modules(I).Durability) /
-              Float(Player_Ship.Modules(I).Max_Durability),
-            Id => Modules_Container.To_Index(Position => I),
-            Info =>
-              To_Unbounded_String
-                (Source =>
-                   Get_Module_Info
-                     (Module_Index =>
-                        Modules_Container.To_Index(Position => I))));
-      end loop Fill_Local_Modules_Loop;
-      Sort_Modules(Container => Local_Modules);
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Modules_Indexes.Clear;
-      Fill_Modules_Indexes_Loop :
-      for Module of Local_Modules loop
-         Modules_Indexes.Append(New_Item => Module.Id);
-      end loop Fill_Modules_Indexes_Loop;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Update_Modules_Info;
-      return TCL_OK;
-   end Sort_Modules_Command;
+--   function Sort_Modules_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Sort_Modules_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Ada.Strings.Unbounded;
+--      use Tiny_String;
+--
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Column: constant Positive :=
+--        Get_Column_Number
+--          (Table => Modules_Table,
+--           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      --## rule off TYPE_INITIAL_VALUES
+--      type Local_Module_Data is record
+--         Name: Bounded_String;
+--         Damage: Float;
+--         Id: Positive;
+--         Info: Unbounded_String;
+--      end record;
+--      type Modules_Array is array(Positive range <>) of Local_Module_Data;
+--      --## rule on TYPE_INITIAL_VALUES
+--      --## rule off IMPROPER_INITIALIZATION
+--      Local_Modules: Modules_Array(1 .. Positive(Player_Ship.Modules.Length));
+--      --## rule on IMPROPER_INITIALIZATION
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      function Get_Modules_Sort_Order return Modules_Sort_Orders is
+--      begin
+--         return Modules_Sort_Order;
+--      end Get_Modules_Sort_Order;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      function "<"(Left, Right: Local_Module_Data) return Boolean is
+--      begin
+--         if Get_Modules_Sort_Order = NAMEASC
+--           and then Left.Name < Right.Name then
+--            return True;
+--         end if;
+--         if Get_Modules_Sort_Order = NAMEDESC
+--           and then Left.Name > Right.Name then
+--            return True;
+--         end if;
+--         if Get_Modules_Sort_Order = DAMAGEASC
+--           and then Left.Damage < Right.Damage then
+--            return True;
+--         end if;
+--         if Get_Modules_Sort_Order = DAMAGEDESC
+--           and then Left.Damage > Right.Damage then
+--            return True;
+--         end if;
+--         if Get_Modules_Sort_Order = INFOASC
+--           and then Left.Info < Right.Info then
+--            return True;
+--         end if;
+--         if Get_Modules_Sort_Order = INFODESC
+--           and then Left.Info > Right.Info then
+--            return True;
+--         end if;
+--         return False;
+--      end "<";
+--      procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
+--        (Index_Type => Positive, Element_Type => Local_Module_Data,
+--         Array_Type => Modules_Array);
+--      function Get_Module_Info(Module_Index: Positive) return String is
+--         use Interfaces.C.Strings;
+--         function Get_Ada_Module_Info(M_Index: Positive) return chars_ptr with
+--            Import => True,
+--            Convention => C,
+--            External_Name => "getAdaModuleInfo";
+--      begin
+--         return Value(Item => Get_Ada_Module_Info(M_Index => Module_Index));
+--      end Get_Module_Info;
+--   begin
+--      case Column is
+--         when 1 =>
+--            if Get_Modules_Sort_Order = NAMEASC then
+--               Modules_Sort_Order := NAMEDESC;
+--            else
+--               Modules_Sort_Order := NAMEASC;
+--            end if;
+--         when 2 =>
+--            if Get_Modules_Sort_Order = DAMAGEASC then
+--               Modules_Sort_Order := DAMAGEDESC;
+--            else
+--               Modules_Sort_Order := DAMAGEASC;
+--            end if;
+--         when 3 =>
+--            if Get_Modules_Sort_Order = INFOASC then
+--               Modules_Sort_Order := INFODESC;
+--            else
+--               Modules_Sort_Order := INFOASC;
+--            end if;
+--         when others =>
+--            null;
+--      end case;
+--      if Get_Modules_Sort_Order = NONE then
+--         return TCL_OK;
+--      end if;
+--      Fill_Local_Modules_Loop :
+--      for I in Player_Ship.Modules.Iterate loop
+--         Local_Modules(Modules_Container.To_Index(Position => I)) :=
+--           (Name => Player_Ship.Modules(I).Name,
+--            Damage =>
+--              Float(Player_Ship.Modules(I).Durability) /
+--              Float(Player_Ship.Modules(I).Max_Durability),
+--            Id => Modules_Container.To_Index(Position => I),
+--            Info =>
+--              To_Unbounded_String
+--                (Source =>
+--                   Get_Module_Info
+--                     (Module_Index =>
+--                        Modules_Container.To_Index(Position => I))));
+--      end loop Fill_Local_Modules_Loop;
+--      Sort_Modules(Container => Local_Modules);
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Modules_Indexes.Clear;
+--      Fill_Modules_Indexes_Loop :
+--      for Module of Local_Modules loop
+--         Modules_Indexes.Append(New_Item => Module.Id);
+--      end loop Fill_Modules_Indexes_Loop;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Update_Modules_Info;
+--      return TCL_OK;
+--   end Sort_Modules_Command;
 
    -- ****o* SUModules/SUModules.Show_Assign_Ammo_Command
    -- FUNCTION
@@ -386,9 +386,9 @@ package body Ships.UI.Modules is
          External_Name => "addAdaModulesCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "SortShipModules",
-         Ada_Command => Sort_Modules_Command'Access);
+--      Add_Command
+--        (Name => "SortShipModules",
+--         Ada_Command => Sort_Modules_Command'Access);
       Add_Command
         (Name => "ShowAssignAmmo",
          Ada_Command => Show_Assign_Ammo_Command'Access);
