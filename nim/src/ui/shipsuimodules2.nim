@@ -22,7 +22,7 @@ import coreui, table
 var
   modulesTable*: TableWidget
     ## The UI table with all the installed the player's ship's modules
-  modulesIndexes: seq[Natural]
+  modulesIndexes*: seq[Natural]
     ## The list of indexes of the installed modules
 
 proc getModuleInfo*(moduleIndex: Natural): string {.sideEffect, raises: [],
