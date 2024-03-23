@@ -47,6 +47,7 @@ package body Ships.UI.Modules is
    Modules_Indexes: Positive_Container.Vector;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    procedure Update_Modules_Info(Page: Positive := 1) is
       --## rule off TYPE_INITIAL_VALUES
       type Modules_Array is array(0 .. 50) of Natural;
@@ -82,6 +83,7 @@ package body Ships.UI.Modules is
          Index := Index + 1;
       end loop Convert_Headers_Width_Loop;
    end Update_Modules_Info;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****it* SUModules/SUModules.Modules_Sort_Orders
    -- FUNCTION
