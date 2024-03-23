@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[game, config, crafts, crewinventory, items, messages, missions,
     ships, shipscargo, shipscrew, shipsupgrade, tk, types]
 import dialogs, updateheader, shipsuicrew, table, utilsui2
@@ -1404,6 +1404,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("CancelOrder", cancelOrderCommand)
     addCommand("GetActiveButton", getActiveButtonCommand)
     addCommand("ShowModules", showModulesCommand)
+    addCommand("SortShipModules", sortShipModulesCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
@@ -1653,6 +1654,45 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     localModules.add(LocalModuleData(name: module.name, damage: (
         module.durability / module.maxDurability).float, id: index,
         info: getModuleInfo(moduleIndex = index)))
+  proc sortModules(x, y: LocalModuleData): int =
+    case modulesSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of damageAsc:
+      if x.damage < y.damage:
+        return 1
+      else:
+        return -1
+    of damageDesc:
+      if x.damage > y.damage:
+        return 1
+      else:
+        return -1
+    of infoAsc:
+      if x.info < y.info:
+        return 1
+      else:
+        return -1
+    of infoDesc:
+      if x.info > y.info:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localModules.sort(cmp = sortModules)
+  modulesIndexes = @[]
+  for module in localModules:
+    modulesIndexes.add(y = module.id)
+  updateModulesInfo()
   return tclOk
 
 # Temporary code for interfacing with Ada
