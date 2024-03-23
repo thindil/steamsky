@@ -1385,6 +1385,9 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Page parameter is a index of page from which starts showing
   ## modules.
 
+proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
@@ -1608,6 +1611,48 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     tclEval(script = "bgerror {Can't update modules info. Reason: " &
         getCurrentExceptionMsg() & "}")
+  return tclOk
+
+type ModulesSortOrders = enum
+  nameAsc, nameDesc, damageAsc, damageDesc, infoAsc, infoDesc, none
+
+const defaultModulesSortOrder = none
+
+var modulesSortOrder = defaultModulesSortOrder
+
+proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let column = getColumnNumber(table = modulesTable, xPosition = ($argv[1]).parseInt)
+  case column
+  of 1:
+    if modulesSortOrder == nameAsc:
+      modulesSortOrder = nameDesc
+    else:
+      modulesSortOrder = nameAsc
+  of 2:
+    if modulesSortOrder == damageAsc:
+      modulesSortOrder = damageDesc
+    else:
+      modulesSortOrder = damageAsc
+  of 3:
+    if modulesSortOrder == infoAsc:
+      modulesSortOrder = infoDesc
+    else:
+      modulesSortOrder = infoAsc
+  else:
+    discard
+  if modulesSortOrder == none:
+    return tclOk
+  type LocalModuleData = object
+    name: string
+    damage: float
+    id: Natural
+    info: string
+  var localModules: seq[LocalModuleData]
+  for index, module in playerShip.modules:
+    localModules.add(LocalModuleData(name: module.name, damage: (
+        module.durability / module.maxDurability).float, id: index,
+        info: getModuleInfo(moduleIndex = index)))
   return tclOk
 
 # Temporary code for interfacing with Ada
