@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to repair and upgrade the player's ship in sky bases.
+## Split from basesships module to avoid circular dependencies.
+
 import std/tables
 import contracts
 import bases, basescargo, basesship, crewinventory, game, game2, maps, messages,
@@ -47,9 +50,9 @@ proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
     repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
     if cost == 0:
       raise newException(exceptn = NothingToRepairError, message = "")
-    let traderIndex = findMember(order = talk)
+    let traderIndex: int = findMember(order = talk)
     countPrice(price = cost, traderIndex = traderIndex)
-    let moneyIndex2 = findItem(inventory = playerShip.cargo,
+    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
     if playerShip.cargo[moneyIndex2].amount < cost:
       raise newException(exceptn = NotEnoughMoneyError, message = "")
@@ -86,11 +89,11 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
   require:
     moduleIndex in playerShip.modules.low .. playerShip.modules.high
   body:
-    let moneyIndex2 = findItem(inventory = playerShip.cargo,
+    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
     if moneyIndex2 == -1:
       raise newException(exceptn = NoMoneyError, message = "")
-    var hullIndex, modulesAmount, freeTurretIndex = 0
+    var hullIndex, modulesAmount, freeTurretIndex: int = 0
     for index, module in playerShip.modules:
       case module.mType
       of hull:
@@ -103,8 +106,8 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
       else:
         discard
     let
-      traderIndex = findMember(order = talk)
-      baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      traderIndex: int = findMember(order = talk)
+      baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     var price: Natural = 0
     if install:
       price = modulesList[moduleIndex].price
@@ -125,7 +128,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
         if modulesList[moduleIndex].maxValue < modulesAmount:
           raise newException(exceptn = InstallationError,
               message = "This hull is too small for your ship. Remove some modules first.")
-        playerShip.modules.delete(hullIndex)
+        playerShip.modules.delete(i = hullIndex)
       else:
         if modulesList[moduleIndex].size > modulesList[playerShip.modules[
             hullIndex].protoIndex].value:
@@ -147,32 +150,32 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
       gainRep(baseIndex = baseIndex, points = 1)
       updateGame(minutes = modulesList[moduleIndex].installTime)
       if modulesList[moduleIndex].mType == ModuleType.hull:
-        playerShip.modules.insert(ModuleData(mType: hull, name: modulesList[
+        playerShip.modules.insert(item = ModuleData(mType: hull, name: modulesList[
             moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
             moduleIndex].weight, durability: modulesList[moduleIndex].durability,
             maxDurability: modulesList[moduleIndex].durability,
             upgradeAction: none, installedModules: modulesList[moduleIndex].value,
-            maxModules: modulesList[moduleIndex].maxValue), hullIndex)
+            maxModules: modulesList[moduleIndex].maxValue), i = hullIndex)
       else:
         var owners: seq[int] = @[]
         for i in 1 .. modulesList[moduleIndex].maxOwners:
-          owners.add(-1)
+          owners.add(y = -1)
         case modulesList[moduleIndex].mType
         of alchemyLab .. greenhouse:
-          playerShip.modules.add(ModuleData(mType: workshop, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: workshop, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none,
               craftingIndex: "", craftingTime: 0, craftingAmount: 0))
         of medicalRoom:
-          playerShip.modules.add(ModuleData(mType: medicalRoom, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: medicalRoom, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none))
         of trainingRoom:
-          playerShip.modules.add(ModuleData(mType: trainingRoom,
+          playerShip.modules.add(y = ModuleData(mType: trainingRoom,
               name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
                   weight: modulesList[
               moduleIndex].weight, durability: modulesList[
@@ -180,20 +183,20 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
               moduleIndex].durability, owner: owners, upgradeAction: none,
               trainedSkill: 0))
         of cockpit:
-          playerShip.modules.add(ModuleData(mType: cockpit, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: cockpit, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none))
         of turret:
-          playerShip.modules.add(ModuleData(mType: turret, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: turret, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none,
               gunIndex: -1))
         of cabin:
-          playerShip.modules.add(ModuleData(mType: cabin, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: cabin, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
@@ -201,13 +204,13 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
               cleanliness: modulesList[moduleIndex].value, quality: modulesList[
               moduleIndex].maxValue))
         of cargo:
-          playerShip.modules.add(ModuleData(mType: cargoRoom, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: cargoRoom, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none))
         of engine:
-          playerShip.modules.add(ModuleData(mType: engine, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: engine, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
@@ -215,27 +218,27 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
               fuelUsage: modulesList[moduleIndex].value, power: modulesList[
               moduleIndex].maxValue, disabled: false))
         of armor:
-          playerShip.modules.add(ModuleData(mType: armor, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: armor, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none))
         of batteringRam:
-          playerShip.modules.add(ModuleData(mType: batteringRam,
+          playerShip.modules.add(y = ModuleData(mType: batteringRam,
               name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
               weight: modulesList[moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none,
               damage2: modulesList[moduleIndex].maxValue, coolingDown: false))
         of gun:
-          playerShip.modules.add(ModuleData(mType: gun, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: gun, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
               moduleIndex].durability, owner: owners, upgradeAction: none,
               damage: modulesList[moduleIndex].maxValue, ammoIndex: -1))
         of harpoonGun:
-          playerShip.modules.add(ModuleData(mType: harpoonGun, name: modulesList[
+          playerShip.modules.add(y = ModuleData(mType: harpoonGun, name: modulesList[
               moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
               moduleIndex].weight, durability: modulesList[
               moduleIndex].durability, maxDurability: modulesList[
@@ -253,8 +256,8 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
           mType = tradeMessage)
     else:
       let
-        shipModuleIndex = moduleIndex
-        damage = 1.0 - (playerShip.modules[shipModuleIndex].durability.float /
+        shipModuleIndex: int = moduleIndex
+        damage: float = 1.0 - (playerShip.modules[shipModuleIndex].durability.float /
             playerShip.modules[shipModuleIndex].maxDurability.float)
       price = modulesList[playerShip.modules[shipModuleIndex].protoIndex].price -
           (modulesList[playerShip.modules[
@@ -283,7 +286,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
         discard
       if modulesList[playerShip.modules[shipModuleIndex].protoIndex].mType notin {
           ModuleType.hull, armor, gun, harpoonGun}:
-        modulesAmount = modulesAmount - modulesList[playerShip.modules[
+        modulesAmount -= modulesList[playerShip.modules[
             shipModuleIndex].protoIndex].size
         playerShip.modules[hullIndex].installedModules = modulesAmount
       if playerShip.upgradeModule == shipModuleIndex:
@@ -306,7 +309,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
       addMessage(message = "You removed " & playerShip.modules[
           shipModuleIndex].name & " from your ship and received " & $price & " " &
           moneyName & ".", mType = tradeMessage)
-      playerShip.modules.delete(shipModuleIndex)
+      playerShip.modules.delete(i = shipModuleIndex)
       if playerShip.repairModule > shipModuleIndex:
         playerShip.repairModule.dec
       elif playerShip.repairModule == shipModuleIndex:
@@ -321,6 +324,7 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
 
 proc repairAdaShip2(moduleIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     repairShip(moduleIndex = moduleIndex - 1)
     return "".cstring
@@ -329,6 +333,7 @@ proc repairAdaShip2(moduleIndex: cint): cstring {.raises: [], tags: [
 
 proc upgradeAdaShip2(install, moduleIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     upgradeShip(install = install == 1, moduleIndex = (if install ==
         1: moduleIndex else: moduleIndex - 1))
