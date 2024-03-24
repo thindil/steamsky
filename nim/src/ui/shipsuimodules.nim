@@ -1400,6 +1400,23 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SortShipModules x
   ## X is X axis coordinate where the player clicked the mouse button
 
+proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    moduleIndex = ($argv[1]).parseInt
+    ammoIndex = (if playerShip.modules[moduleIndex].mType == ModuleType2.gun: playerShip.modules[moduleIndex].ammoIndex else: playerShip.modules[moduleIndex].harpoonIndex)
+    ammoMenu = createDialog(name = ".ammomenu", title = "Available ammo", parentName = ".")
+
+  proc addButton(name, label, command: string) =
+    let button = ammoMenu & name
+    tclEval(script = "ttk::button " & button & " -text {" & label & "} -command {CloseDialog " & ammoMenu & " .;" & command & "}")
+    tclEval(script = "grid " & button & " -sticky we -padx 5" & (if command.len == 0: " -pady {0 3}" else: ""))
+
+  for index, item in playerShip.cargo:
+    if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[playerShip.modules[moduleIndex].protoIndex].value - 1] and index != ammoIndex:
+      discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
