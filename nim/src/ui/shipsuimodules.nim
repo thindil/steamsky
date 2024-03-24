@@ -1386,7 +1386,7 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## modules.
 
 proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
@@ -1623,7 +1623,12 @@ var modulesSortOrder = defaultModulesSortOrder
 
 proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  let column = getColumnNumber(table = modulesTable, xPosition = ($argv[1]).parseInt)
+  let column = getColumnNumber(table = modulesTable, xPosition = try:
+        ($argv[1]).parseInt
+      except:
+        tclEval(script = "bgerror {Can't get the column number. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk)
   case column
   of 1:
     if modulesSortOrder == nameAsc:
