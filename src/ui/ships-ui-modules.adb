@@ -15,9 +15,9 @@
 
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Interfaces.C; use Interfaces.C;
-with CArgv; use CArgv;
-with Tcl; use Tcl;
+with Interfaces.C;
+with CArgv;
+with Tcl;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets;
@@ -56,6 +56,7 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Tcl;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Dialogs;
