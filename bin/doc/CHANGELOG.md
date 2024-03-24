@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Colored version of icon for setting a study order
+
 ### Changed
 - Updated README.md
 
