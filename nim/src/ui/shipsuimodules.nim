@@ -1401,9 +1401,14 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## X is X axis coordinate where the player clicked the mouse button
 
 proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
-    moduleIndex = ($argv[1]).parseInt - 1
+    moduleIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the module index. Reason: " &
+          getCurrentExceptionMsg() & "}")
+        return tclOk
     ammoIndex = (if playerShip.modules[moduleIndex].mType ==
         ModuleType2.gun: playerShip.modules[
         moduleIndex].ammoIndex else: playerShip.modules[
@@ -1423,11 +1428,17 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   var row = 1
   for index, item in playerShip.cargo:
-    if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
-        playerShip.modules[moduleIndex].protoIndex].value - 1] and index != ammoIndex:
-      addButton(name = ".ammo" & $row, label = itemsList[item.protoIndex].name,
-          command = "AssignModule ammo " & $argv[1] & " " & $index)
-      row.inc
+    try:
+      if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
+          playerShip.modules[moduleIndex].protoIndex].value - 1] and index != ammoIndex:
+        addButton(name = ".ammo" & $row, label = itemsList[
+            item.protoIndex].name, command = "AssignModule ammo " & $argv[1] &
+                " " & $index)
+        row.inc
+    except:
+      tclEval(script = "bgerror {Can't add button. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
   addButton(name = ".close", label = "Close", command = "")
   showDialog(dialog = ammoMenu, parentFrame = ".")
   return tclOk
