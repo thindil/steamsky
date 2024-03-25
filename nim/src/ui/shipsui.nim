@@ -17,7 +17,7 @@
 
 import std/[os, tables]
 import ../[config, game, maps, ships, tk]
-import coreui, shipsuicrew, utilsui2, shipsuimodules2
+import coreui, shipsuicrew, utilsui2, shipsuimodules, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
@@ -279,6 +279,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowShipInfo", showShipInfoCommand)
     addCommand("SetShipName", setShipNameCommand)
     addCommand("ShipMaxMin", shipMaxMinCommand)
+    shipsuimodules.addCommands()
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
