@@ -129,6 +129,7 @@ type ThemeRecord* = object
   ## * showColoredIcon     - Icon used for show button with green color
   ## * negotiateColoredIcon - Icon used for negotiation button with green color
   ## * craftColoredIcon    - Icon used for set crafting order button with green color
+  ## * studyColoredIcon    - Icon used for set study order button with green color
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -232,6 +233,7 @@ type ThemeRecord* = object
   showColoredIcon*: string
   negotiateColoredIcon*: string
   craftColoredIcon*: string
+  studyColoredIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -326,7 +328,8 @@ let
       editColoredIcon: defaultThemeIconPath & "edit2.svg",
       showColoredIcon: defaultThemeIconPath & "show2.svg",
       negotiateColoredIcon: defaultThemeIconPath & "negotiate2.svg",
-      craftColoredIcon: defaultThemeIconPath & "craft-order2.svg")
+      craftColoredIcon: defaultThemeIconPath & "craft-order2.svg",
+      studyColoredIcon: defaultThemeIconPath & "study2.svg")
     ## The default game'st theme
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
@@ -560,6 +563,8 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
                 theme.negotiateColoredIcon = entry.value.unixToNativePath
               of "CraftColoredIcon":
                 theme.craftColoredIcon = entry.value.unixToNativePath
+              of "StudyColoredIcon":
+                theme.studyColoredIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -602,7 +607,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
       "dismissicon", "goresticon", "repairpriorityicon", "upgradebuttonicon",
       "powericon", "assigncrewicon", "assignammoicon", "buy2icon", "sell2icon",
       "moveicon", "give2icon", "drop2icon", "edit2icon", "show2icon",
-      "negotiate2icon", "craft2icon"]
+      "negotiate2icon", "craft2icon", "study2icon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -635,7 +640,8 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
         theme.assignAmmoIcon, theme.buyDefaultIcon, theme.sellDefaultIcon,
         theme.moveIcon, theme.giveColoredIcon, theme.dropColoredIcon,
         theme.editColoredIcon, theme.showColoredIcon,
-        theme.negotiateColoredIcon, theme.craftColoredIcon]
+        theme.negotiateColoredIcon, theme.craftColoredIcon,
+        theme.studyColoredIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
@@ -908,6 +914,8 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
     return theme.negotiateColoredIcon.cstring
   of "craftColoredIcon":
     return theme.craftColoredIcon.cstring
+  of "studyColoredIcon":
+    return theme.studyColoredIcon.cstring
   else:
     tclEval(script = "bgerror {Unknown theme setting: '" & $name & "'}")
     return "".cstring
