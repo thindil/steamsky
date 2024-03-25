@@ -15,7 +15,6 @@
 
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
-with Ships.UI.Modules;
 
 package body Ships.UI is
 
@@ -26,7 +25,6 @@ package body Ships.UI is
          External_Name => "addAdaShipsCommands";
    begin
       Add_Ada_Commands;
-      Ships.UI.Modules.Add_Modules_Commands;
       Ships.UI.Crew.Add_Crew_Commands;
       Ships.UI.Cargo.Add_Cargo_Commands;
    end Add_Commands;
