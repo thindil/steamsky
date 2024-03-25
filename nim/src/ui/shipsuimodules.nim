@@ -1403,7 +1403,7 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
-    moduleIndex = ($argv[1]).parseInt
+    moduleIndex = ($argv[1]).parseInt - 1
     ammoIndex = (if playerShip.modules[moduleIndex].mType ==
         ModuleType2.gun: playerShip.modules[
         moduleIndex].ammoIndex else: playerShip.modules[
@@ -1449,6 +1449,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("GetActiveButton", getActiveButtonCommand)
     addCommand("ShowModules", showModulesCommand)
     addCommand("SortShipModules", sortShipModulesCommand)
+    addCommand("ShowAssignAmmo", showAssignAmmoCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
