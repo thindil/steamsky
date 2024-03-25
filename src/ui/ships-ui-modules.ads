@@ -24,7 +24,10 @@ package Ships.UI.Modules is
    -- FUNCTION
    -- Add Tcl commands related to the player's ship modules information
    -- SOURCE
-   procedure Add_Modules_Commands;
+   procedure Add_Modules_Commands with
+      Import => True,
+      Convention => C,
+      External_Name => "addAdaModulesCommands";
    -- ****
 
 end Ships.UI.Modules;
