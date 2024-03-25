@@ -1402,6 +1402,19 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Show the list of available ammo for the selected gun
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowAssingAmmo index
+  ## Index is the module index of the selected gun which will be have
+  ## assigned a new ammo
   let
     moduleIndex = try:
         ($argv[1]).parseInt - 1
