@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[config, crew, game, shipscrew, tk, types]
+import ../[config, crew, game, messages, shipscrew, tk, types]
 import coreui, table, updateheader, utilsui2
 
 var
@@ -241,16 +241,36 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
   tclEval(script = shipCanvas & " yview moveto 0.0")
 
 proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   if hasSelection():
     for i in playerShip.crew.low .. playerShip.crew.high:
       if tclGetVar(varName = "crewindex" & $(i + 1)) == "1":
-        giveOrders(ship = playerShip, memberIndex = i, givenOrder = parseEnum[
-            CrewOrders](s = ($argv[1]).toLowerAscii))
+        try:
+          giveOrders(ship = playerShip, memberIndex = i, givenOrder = parseEnum[
+              CrewOrders](s = ($argv[1]).toLowerAscii))
+        except CrewOrderError:
+          addMessage(message = getCurrentExceptionMsg(), mType = orderMessage)
+          updateHeader()
+          updateMessages()
+          return tclOk
+        except:
+          tclEval(script = "bgerror {Can't give orders. Reason: " &
+              getCurrentExceptionMsg() & "}")
+          return tclOk
   else:
     for i in playerShip.crew.low .. playerShip.crew.high:
-      giveOrders(ship = playerShip, memberIndex = i, givenOrder = parseEnum[
-          CrewOrders](s = ($argv[1]).toLowerAscii))
+      try:
+        giveOrders(ship = playerShip, memberIndex = i, givenOrder = parseEnum[
+            CrewOrders](s = ($argv[1]).toLowerAscii))
+      except CrewOrderError:
+        addMessage(message = getCurrentExceptionMsg(), mType = orderMessage)
+        updateHeader()
+        updateMessages()
+        return tclOk
+      except:
+        tclEval(script = "bgerror {Can't give orders. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   updateHeader()
   updateMessages()
   updateCrewInfo()
