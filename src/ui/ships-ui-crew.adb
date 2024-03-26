@@ -2270,42 +2270,42 @@ package body Ships.UI.Crew is
    -- Rowindex is the index of the row in which is the selected crew member,
    -- crewindex is the index of the selected crew member.
    -- SOURCE
-   function Toggle_Crew_Member_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Toggle_Crew_Member_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      procedure Update_Tooltips with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaTooltips";
-   begin
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Toggle_Checked_Button
-        (Table => Crew_Table,
-         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
-      if Is_Checked
-          (Table => Crew_Table,
-           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
-           Column => 1) then
-         Tcl_SetVar
-           (interp => Interp,
-            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2),
-            newValue => "1");
-      else
-         Tcl_UnsetVar
-           (interp => Interp,
-            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2));
-      end if;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Update_Tooltips;
-      return TCL_OK;
-   end Toggle_Crew_Member_Command;
+--   function Toggle_Crew_Member_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Toggle_Crew_Member_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      procedure Update_Tooltips with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "updateAdaTooltips";
+--   begin
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Toggle_Checked_Button
+--        (Table => Crew_Table,
+--         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
+--      if Is_Checked
+--          (Table => Crew_Table,
+--           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
+--           Column => 1) then
+--         Tcl_SetVar
+--           (interp => Interp,
+--            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2),
+--            newValue => "1");
+--      else
+--         Tcl_UnsetVar
+--           (interp => Interp,
+--            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2));
+--      end if;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Update_Tooltips;
+--      return TCL_OK;
+--   end Toggle_Crew_Member_Command;
 
    -- ****o* SUCrew/SUCrew.Toggle_All_Crew_Command
    -- FUNCTION
@@ -2404,9 +2404,9 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "SelectCrewOrder",
          Ada_Command => Select_Crew_Order_Command'Access);
-      Add_Command
-        (Name => "ToggleCrewMember",
-         Ada_Command => Toggle_Crew_Member_Command'Access);
+--      Add_Command
+--        (Name => "ToggleCrewMember",
+--         Ada_Command => Toggle_Crew_Member_Command'Access);
       Add_Command
         (Name => "ToggleAllCrew",
          Ada_Command => Toggle_All_Crew_Command'Access);

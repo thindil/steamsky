@@ -290,10 +290,21 @@ proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
   updateCrewInfo()
   return tclOk
 
+proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  toggleCheckedButton(table = crewTable, row = ($argv[1]).parseInt, column = 1)
+  if isChecked(table = crewTable, row = ($argv[1]).parseInt, column = 1):
+    tclSetVar(varName = "crewindex" & $argv[2], newValue = "1")
+  else:
+    tclUnsetVar(varName = "crewindex" & $argv[2])
+  updateTooltips()
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("OrderForAll", orderForAllCommand)
+    addCommand("ToggleCrewMember", toggleCrewMemberCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
