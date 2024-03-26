@@ -132,66 +132,66 @@ package body Ships.UI.Crew is
    -- Order is the name of the order which will be assigned to the whole
    -- player ship crew or to the selected crew members
    -- SOURCE
-   function Order_For_All_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Order_For_All_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      function Has_Selection return Boolean is
-         function Has_Ada_Selection return Integer with
-            Import => True,
-            Convention => C,
-            External_Name => "hasAdaSelection";
-      begin
-         return (if Has_Ada_Selection = 1 then True else False);
-      end Has_Selection;
-   begin
-      if Has_Selection then
-         Give_Orders_To_Selected_Loop :
-         for I in
-           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-            if Tcl_GetVar
-                (interp => Get_Context,
-                 varName =>
-                   "crewindex" &
-                   Trim
-                     (Source => Crew_Container.Extended_Index'Image(I),
-                      Side => Left)) =
-              "1" then
-               Give_Orders
-                 (Ship => Player_Ship, Member_Index => I,
-                  Given_Order =>
-                    Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
-            end if;
-         end loop Give_Orders_To_Selected_Loop;
-      else
-         Give_Orders_To_All_Loop :
-         for I in Player_Ship.Crew.Iterate loop
-            Give_Orders
-              (Ship => Player_Ship,
-               Member_Index => Crew_Container.To_Index(Position => I),
-               Given_Order =>
-                 Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
-         end loop Give_Orders_To_All_Loop;
-      end if;
-      Update_Header;
-      Update_Messages;
-      Update_Crew_Info;
-      return TCL_OK;
-   exception
-      when An_Exception : Crew_Order_Error =>
-         Add_Message
-           (Message => Exception_Message(X => An_Exception),
-            M_Type => ORDERMESSAGE);
-         Update_Header;
-         Update_Messages;
-         return TCL_OK;
-   end Order_For_All_Command;
+--   function Order_For_All_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Order_For_All_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      function Has_Selection return Boolean is
+--         function Has_Ada_Selection return Integer with
+--            Import => True,
+--            Convention => C,
+--            External_Name => "hasAdaSelection";
+--      begin
+--         return (if Has_Ada_Selection = 1 then True else False);
+--      end Has_Selection;
+--   begin
+--      if Has_Selection then
+--         Give_Orders_To_Selected_Loop :
+--         for I in
+--           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+--            if Tcl_GetVar
+--                (interp => Get_Context,
+--                 varName =>
+--                   "crewindex" &
+--                   Trim
+--                     (Source => Crew_Container.Extended_Index'Image(I),
+--                      Side => Left)) =
+--              "1" then
+--               Give_Orders
+--                 (Ship => Player_Ship, Member_Index => I,
+--                  Given_Order =>
+--                    Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--            end if;
+--         end loop Give_Orders_To_Selected_Loop;
+--      else
+--         Give_Orders_To_All_Loop :
+--         for I in Player_Ship.Crew.Iterate loop
+--            Give_Orders
+--              (Ship => Player_Ship,
+--               Member_Index => Crew_Container.To_Index(Position => I),
+--               Given_Order =>
+--                 Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--         end loop Give_Orders_To_All_Loop;
+--      end if;
+--      Update_Header;
+--      Update_Messages;
+--      Update_Crew_Info;
+--      return TCL_OK;
+--   exception
+--      when An_Exception : Crew_Order_Error =>
+--         Add_Message
+--           (Message => Exception_Message(X => An_Exception),
+--            M_Type => ORDERMESSAGE);
+--         Update_Header;
+--         Update_Messages;
+--         return TCL_OK;
+--   end Order_For_All_Command;
 
    -- ****o* SUCrew/SUCrew.Dismiss_Command
    -- FUNCTION
@@ -2446,9 +2446,14 @@ package body Ships.UI.Crew is
    end Toggle_All_Crew_Command;
 
    procedure Add_Crew_Commands is
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaCrewCommands";
    begin
-      Add_Command
-        (Name => "OrderForAll", Ada_Command => Order_For_All_Command'Access);
+      Add_Ada_Commands;
+--      Add_Command
+--        (Name => "OrderForAll", Ada_Command => Order_For_All_Command'Access);
       Add_Command(Name => "Dismiss", Ada_Command => Dismiss_Command'Access);
       Add_Command
         (Name => "SetCrewOrder", Ada_Command => Set_Crew_Order_Command'Access);
