@@ -291,9 +291,15 @@ proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  toggleCheckedButton(table = crewTable, row = ($argv[1]).parseInt, column = 1)
-  if isChecked(table = crewTable, row = ($argv[1]).parseInt, column = 1):
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let row = try:
+      ($argv[1]).parseInt
+    except:
+      tclEval(script = "bgerror {Can't get the row. Reason: " &
+          getCurrentExceptionMsg() & "}")
+      return tclOk
+  toggleCheckedButton(table = crewTable, row = row, column = 1)
+  if isChecked(table = crewTable, row = row, column = 1):
     tclSetVar(varName = "crewindex" & $argv[2], newValue = "1")
   else:
     tclUnsetVar(varName = "crewindex" & $argv[2])
