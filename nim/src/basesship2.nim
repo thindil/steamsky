@@ -79,153 +79,170 @@ proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
 
 proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
     modulesAmount, freeTurretIndex: var int; baseIndex: ExtendedBasesRange;
-    price: var Natural) =
-  price = modulesList[moduleIndex].price
-  countPrice(price = price, traderIndex = traderIndex)
-  if playerShip.cargo[moneyIndex2].amount < price:
-    raise newException(exceptn = NotEnoughMoneyError, message = modulesList[
-        moduleIndex].name)
-  for module in playerShip.modules:
-    if modulesList[module.protoIndex].mType == modulesList[
-        moduleIndex].mType and modulesList[moduleIndex].unique:
-      raise newException(exceptn = UniqueModuleError, message = modulesList[
+    price: var Natural) {.sideEffect, raises: [KeyError, NotEnoughMoneyError,
+    UniqueModuleError, InstallationError, IOError, Exception], tags: [
+    WriteIOEffect, RootEffect], contractual.} =
+  ## Install the selected module on the player's ship
+  ##
+  ## * moduleIndex     - the index of the proto module to install
+  ## * traderIndex     - the index of the trader in the player's ship's crew
+  ## * moneyIndex2     - the index of the money in the player's ship's cargo
+  ## * hullIndex       - the index of the hull in the player's ship modules' list
+  ## * modulesAmount   - the amount of modules installed on the player's ship
+  ## * freeTurretIndex - the index of the free turret in the player's ship
+  ## * baseIndex       - the index of the base in which the module will be installed
+  ## * price           - the price of the module
+  ##
+  ## Returns modified arguments freeTurretIndex and price
+  body:
+    price = modulesList[moduleIndex].price
+    countPrice(price = price, traderIndex = traderIndex)
+    if playerShip.cargo[moneyIndex2].amount < price:
+      raise newException(exceptn = NotEnoughMoneyError, message = modulesList[
           moduleIndex].name)
-  if modulesList[moduleIndex].mType == ModuleType.hull:
     for module in playerShip.modules:
-      if modulesList[module.protoIndex].size > modulesList[moduleIndex].value:
+      if modulesList[module.protoIndex].mType == modulesList[
+          moduleIndex].mType and modulesList[moduleIndex].unique:
+        raise newException(exceptn = UniqueModuleError, message = modulesList[
+            moduleIndex].name)
+    if modulesList[moduleIndex].mType == ModuleType.hull:
+      for module in playerShip.modules:
+        if modulesList[module.protoIndex].size > modulesList[moduleIndex].value:
+          raise newException(exceptn = InstallationError,
+              message = "This hull don't allow to have installed that big modules what you currently have.")
+      if modulesList[moduleIndex].maxValue < modulesAmount:
         raise newException(exceptn = InstallationError,
-            message = "This hull don't allow to have installed that big modules what you currently have.")
-    if modulesList[moduleIndex].maxValue < modulesAmount:
-      raise newException(exceptn = InstallationError,
-          message = "This hull is too small for your ship. Remove some modules first.")
-    playerShip.modules.delete(i = hullIndex)
-  else:
-    if modulesList[moduleIndex].size > modulesList[playerShip.modules[
-        hullIndex].protoIndex].value:
-      raise newException(exceptn = InstallationError,
-          message = "You can't install this module because it is too big for this hull.")
-    if modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, armor}:
-      modulesAmount = modulesAmount + modulesList[moduleIndex].size
-    if modulesAmount > playerShip.modules[hullIndex].maxModules and
-        modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, armor}:
-      raise newException(exceptn = InstallationError,
-          message = "You don't have free modules space for more modules.")
-    if modulesList[moduleIndex].mType in {ModuleType.gun, harpoonGun} and
-        freeTurretIndex == -1:
-      raise newException(exceptn = InstallationError,
-          message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
-  updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
-  updateBaseCargo(protoIndex = moneyIndex, amount = price)
-  gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-  gainRep(baseIndex = baseIndex, points = 1)
-  updateGame(minutes = modulesList[moduleIndex].installTime)
-  if modulesList[moduleIndex].mType == ModuleType.hull:
-    playerShip.modules.insert(item = ModuleData(mType: hull, name: modulesList[
-        moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-        moduleIndex].weight, durability: modulesList[moduleIndex].durability,
-        maxDurability: modulesList[moduleIndex].durability,
-        upgradeAction: none, installedModules: modulesList[moduleIndex].value,
-        maxModules: modulesList[moduleIndex].maxValue), i = hullIndex)
-  else:
-    var owners: seq[int] = @[]
-    for i in 1 .. modulesList[moduleIndex].maxOwners:
-      owners.add(y = -1)
-    case modulesList[moduleIndex].mType
-    of alchemyLab .. greenhouse:
-      playerShip.modules.add(y = ModuleData(mType: workshop, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          craftingIndex: "", craftingTime: 0, craftingAmount: 0))
-    of medicalRoom:
-      playerShip.modules.add(y = ModuleData(mType: medicalRoom,
-          name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
-              weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none))
-    of trainingRoom:
-      playerShip.modules.add(y = ModuleData(mType: trainingRoom,
-          name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
-              weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          trainedSkill: 0))
-    of cockpit:
-      playerShip.modules.add(y = ModuleData(mType: cockpit, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none))
-    of turret:
-      playerShip.modules.add(y = ModuleData(mType: turret, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          gunIndex: -1))
-    of cabin:
-      playerShip.modules.add(y = ModuleData(mType: cabin, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          cleanliness: modulesList[moduleIndex].value, quality: modulesList[
-          moduleIndex].maxValue))
-    of cargo:
-      playerShip.modules.add(y = ModuleData(mType: cargoRoom, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none))
-    of engine:
-      playerShip.modules.add(y = ModuleData(mType: engine, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          fuelUsage: modulesList[moduleIndex].value, power: modulesList[
-          moduleIndex].maxValue, disabled: false))
-    of armor:
-      playerShip.modules.add(y = ModuleData(mType: armor, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none))
-    of batteringRam:
-      playerShip.modules.add(y = ModuleData(mType: batteringRam,
-          name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
-          weight: modulesList[moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          damage2: modulesList[moduleIndex].maxValue, coolingDown: false))
-    of gun:
-      playerShip.modules.add(y = ModuleData(mType: gun, name: modulesList[
-          moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          damage: modulesList[moduleIndex].maxValue, ammoIndex: -1))
-    of harpoonGun:
-      playerShip.modules.add(y = ModuleData(mType: harpoonGun,
-          name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
-              weight: modulesList[
-          moduleIndex].weight, durability: modulesList[
-          moduleIndex].durability, maxDurability: modulesList[
-          moduleIndex].durability, owner: owners, upgradeAction: none,
-          duration: modulesList[moduleIndex].maxValue, harpoonIndex: -1))
+            message = "This hull is too small for your ship. Remove some modules first.")
+      playerShip.modules.delete(i = hullIndex)
     else:
-      discard
-  case modulesList[moduleIndex].mType
-  of gun, harpoonGun:
-    playerShip.modules[freeTurretIndex].gunIndex = playerShip.modules.high
-  else:
-    playerShip.modules[hullIndex].installedModules = modulesAmount
-  addMessage(message = "You installed " & modulesList[moduleIndex].name &
-      " on your ship for " & $price & " " & moneyName & ".",
-      mType = tradeMessage)
+      if modulesList[moduleIndex].size > modulesList[playerShip.modules[
+          hullIndex].protoIndex].value:
+        raise newException(exceptn = InstallationError,
+            message = "You can't install this module because it is too big for this hull.")
+      if modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, armor}:
+        modulesAmount += modulesList[moduleIndex].size
+      if modulesAmount > playerShip.modules[hullIndex].maxModules and
+          modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, armor}:
+        raise newException(exceptn = InstallationError,
+            message = "You don't have free modules space for more modules.")
+      if modulesList[moduleIndex].mType in {ModuleType.gun, harpoonGun} and
+          freeTurretIndex == -1:
+        raise newException(exceptn = InstallationError,
+            message = "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.")
+    updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+    updateBaseCargo(protoIndex = moneyIndex, amount = price)
+    gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+    gainRep(baseIndex = baseIndex, points = 1)
+    updateGame(minutes = modulesList[moduleIndex].installTime)
+    if modulesList[moduleIndex].mType == ModuleType.hull:
+      playerShip.modules.insert(item = ModuleData(mType: hull,
+          name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+              weight: modulesList[
+          moduleIndex].weight, durability: modulesList[moduleIndex].durability,
+          maxDurability: modulesList[moduleIndex].durability,
+          upgradeAction: none, installedModules: modulesList[moduleIndex].value,
+          maxModules: modulesList[moduleIndex].maxValue), i = hullIndex)
+    else:
+      var owners: seq[int] = @[]
+      for i in 1 .. modulesList[moduleIndex].maxOwners:
+        owners.add(y = -1)
+      case modulesList[moduleIndex].mType
+      of alchemyLab .. greenhouse:
+        playerShip.modules.add(y = ModuleData(mType: workshop,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+                weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            craftingIndex: "", craftingTime: 0, craftingAmount: 0))
+      of medicalRoom:
+        playerShip.modules.add(y = ModuleData(mType: medicalRoom,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+                weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      of trainingRoom:
+        playerShip.modules.add(y = ModuleData(mType: trainingRoom,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+                weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            trainedSkill: 0))
+      of cockpit:
+        playerShip.modules.add(y = ModuleData(mType: cockpit, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      of turret:
+        playerShip.modules.add(y = ModuleData(mType: turret, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            gunIndex: -1))
+      of cabin:
+        playerShip.modules.add(y = ModuleData(mType: cabin, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            cleanliness: modulesList[moduleIndex].value, quality: modulesList[
+            moduleIndex].maxValue))
+      of cargo:
+        playerShip.modules.add(y = ModuleData(mType: cargoRoom,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+                weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      of engine:
+        playerShip.modules.add(y = ModuleData(mType: engine, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            fuelUsage: modulesList[moduleIndex].value, power: modulesList[
+            moduleIndex].maxValue, disabled: false))
+      of armor:
+        playerShip.modules.add(y = ModuleData(mType: armor, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none))
+      of batteringRam:
+        playerShip.modules.add(y = ModuleData(mType: batteringRam,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+            weight: modulesList[moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            damage2: modulesList[moduleIndex].maxValue, coolingDown: false))
+      of gun:
+        playerShip.modules.add(y = ModuleData(mType: gun, name: modulesList[
+            moduleIndex].name, protoIndex: moduleIndex, weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            damage: modulesList[moduleIndex].maxValue, ammoIndex: -1))
+      of harpoonGun:
+        playerShip.modules.add(y = ModuleData(mType: harpoonGun,
+            name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
+                weight: modulesList[
+            moduleIndex].weight, durability: modulesList[
+            moduleIndex].durability, maxDurability: modulesList[
+            moduleIndex].durability, owner: owners, upgradeAction: none,
+            duration: modulesList[moduleIndex].maxValue, harpoonIndex: -1))
+      else:
+        discard
+    if modulesList[moduleIndex].mType in {ModuleType.gun, harpoonGun}:
+      playerShip.modules[freeTurretIndex].gunIndex = playerShip.modules.high
+    else:
+      playerShip.modules[hullIndex].installedModules = modulesAmount
+    addMessage(message = "You installed " & modulesList[moduleIndex].name &
+        " on your ship for " & $price & " " & moneyName & ".",
+        mType = tradeMessage)
 
 proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
     NoMoneyError, KeyError, NotEnoughMoneyError, UniqueModuleError,
