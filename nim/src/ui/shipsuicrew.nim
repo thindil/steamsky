@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[config, crew, game, shipscrew, tk, types]
-import coreui, table
+import coreui, table, updateheader, utilsui2
 
 var
   crewTable: TableWidget
@@ -61,7 +61,8 @@ proc updateTooltips() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = "tooltip::tooltip " & button & " \"Repair the ship " & (
         if selection: "selected crew members" else: "everyone") & "\"")
 
-proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
+proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [],
+    tags: [].} =
   ## Get the name of the highest skill of the selected crew member
   ##
   ## * memberIndex - the crew index of the member which the highest skill will
@@ -78,7 +79,8 @@ proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [], tag
   try:
     return skillsList[highestIndex].name
   except KeyError:
-    tclEval(script = "bgerror {Can't get the highest skill. Index: " & $highestIndex & "}")
+    tclEval(script = "bgerror {Can't get the highest skill. Index: " &
+        $highestIndex & "}")
     return "Unknown"
 
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
@@ -93,7 +95,8 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
     rows = try:
         gridSize[1].parseInt
       except ValueError:
-        tclEval(script = "bgerror {Can't get the size of the grid. Result: " & $gridSize & "}")
+        tclEval(script = "bgerror {Can't get the size of the grid. Result: " &
+            $gridSize & "}")
         return
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = crewInfoFrame)
   var needRepair, needClean = false
@@ -237,6 +240,30 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
   tclEval(script = shipCanvas & " xview moveto 0.0")
   tclEval(script = shipCanvas & " yview moveto 0.0")
 
+proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if hasSelection():
+    for i in playerShip.crew.low .. playerShip.crew.high:
+      if tclGetVar(varName = "crewindex" & $(i + 1)) == "1":
+        giveOrders(ship = playerShip, memberIndex = i, givenOrder = parseEnum[
+            CrewOrders](s = ($argv[1]).toLowerAscii))
+  else:
+    for i in playerShip.crew.low .. playerShip.crew.high:
+      giveOrders(ship = playerShip, memberIndex = i, givenOrder = parseEnum[
+          CrewOrders](s = ($argv[1]).toLowerAscii))
+  updateHeader()
+  updateMessages()
+  updateCrewInfo()
+  return tclOk
+
+proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  ## Adds Tcl commands related to the crew UI
+  try:
+    addCommand("OrderForAll", orderForAllCommand)
+  except:
+    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
+        getCurrentExceptionMsg() & "}")
+
 # Temporary code for interfacing with Ada
 
 proc hasAdaSelection(): cint {.raises: [], tags: [], exportc.} =
@@ -268,3 +295,9 @@ proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
     columnsWidth[index] = width.cint
   row = crewTable.row.cint
   rowHeight = crewTable.rowHeight.cint
+
+proc addAdaCrewCommands() {.raises: [], tags: [RootEffect], exportc.} =
+  try:
+    addCommands()
+  except:
+    echo getCurrentExceptionMsg()
