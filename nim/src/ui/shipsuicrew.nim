@@ -242,6 +242,20 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
 
 proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Set the selected order for the whole crew or only to the selected crew
+  ## members if any is selected
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## OrderForAll order
+  ## Order is the name of the order which will be assigned to the whole
+  ## player ship crew or to the selected crew members
   if hasSelection():
     for i in playerShip.crew.low .. playerShip.crew.high:
       if tclGetVar(varName = "crewindex" & $(i + 1)) == "1":
