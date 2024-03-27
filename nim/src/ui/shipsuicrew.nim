@@ -320,8 +320,12 @@ proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let memberIndex = ($argv[1]).parseInt
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let memberIndex = try:
+      ($argv[1]).parseInt
+    except:
+      tclEval(script = "bgerror {Can't get the crew member index. Reason: " & getCurrentExceptionMsg() & "}")
+      return tclOk
   showQuestion(question = "Are you sure want to dismiss " & playerShip.crew[
       memberIndex - 1].name & "?", res = $argv[1])
   return tclOk
