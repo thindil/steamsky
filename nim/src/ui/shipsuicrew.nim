@@ -337,10 +337,29 @@ proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
   let memberIndex = try:
       ($argv[1]).parseInt
     except:
-      tclEval(script = "bgerror {Can't get the crew member index. Reason: " & getCurrentExceptionMsg() & "}")
+      tclEval(script = "bgerror {Can't get the crew member index. Reason: " &
+          getCurrentExceptionMsg() & "}")
       return tclOk
   showQuestion(question = "Are you sure want to dismiss " & playerShip.crew[
       memberIndex - 1].name & "?", res = $argv[1])
+  return tclOk
+
+proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  var moduleIndex = -1
+  if argc == 4:
+    moduleIndex = ($argv[3]).parseInt - 1
+  try:
+    giveOrders(ship = playerShip, memberIndex = ($argv[2]).parseInt - 1,
+        givenOrder = parseEnum[CrewOrders](s = $argv[1]),
+        moduleIndex = moduleIndex)
+  except CrewOrderError, CrewNoSpaceError:
+    addMessage(message = getCurrentExceptionMsg(), mType = orderMessage, color = red)
+    updateMessages()
+    return tclOk
+  updateHeader()
+  updateMessages()
+  updateCrewInfo()
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -349,6 +368,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("OrderForAll", orderForAllCommand)
     addCommand("ToggleCrewMember", toggleCrewMemberCommand)
     addCommand("Dismiss", dismissCommand)
+    addCommand("SetCrewOrder", setCrewOrderCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
