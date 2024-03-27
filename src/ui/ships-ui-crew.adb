@@ -15,7 +15,7 @@
 
 with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -51,7 +51,7 @@ with Factions;
 with Game; use Game.Tiny_String;
 with Maps;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
+with Messages;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew.Inventory;
 with Table; use Table;
@@ -179,6 +179,9 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp);
+      use Ada.Exceptions;
+      use Messages;
+
       Module_Index: Natural := 0;
    begin
       if Argc = 4 then
@@ -2255,58 +2258,6 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Select_Crew_Order_Command;
 
-   -- ****o* SUCrew/SUCrew.Toggle_Crew_Member_Command
-   -- FUNCTION
-   -- Select or deselect the selected crew member
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command.
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ToggleCrewMember rowindex crewindex
-   -- Rowindex is the index of the row in which is the selected crew member,
-   -- crewindex is the index of the selected crew member.
-   -- SOURCE
---   function Toggle_Crew_Member_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Toggle_Crew_Member_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      procedure Update_Tooltips with
---         Import => True,
---         Convention => C,
---         External_Name => "updateAdaTooltips";
---   begin
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Toggle_Checked_Button
---        (Table => Crew_Table,
---         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
---      if Is_Checked
---          (Table => Crew_Table,
---           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
---           Column => 1) then
---         Tcl_SetVar
---           (interp => Interp,
---            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2),
---            newValue => "1");
---      else
---         Tcl_UnsetVar
---           (interp => Interp,
---            varName => "crewindex" & CArgv.Arg(Argv => Argv, N => 2));
---      end if;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      Update_Tooltips;
---      return TCL_OK;
---   end Toggle_Crew_Member_Command;
-
    -- ****o* SUCrew/SUCrew.Toggle_All_Crew_Command
    -- FUNCTION
    -- Select or deselect all crew members
@@ -2404,9 +2355,6 @@ package body Ships.UI.Crew is
       Add_Command
         (Name => "SelectCrewOrder",
          Ada_Command => Select_Crew_Order_Command'Access);
---      Add_Command
---        (Name => "ToggleCrewMember",
---         Ada_Command => Toggle_Crew_Member_Command'Access);
       Add_Command
         (Name => "ToggleAllCrew",
          Ada_Command => Toggle_All_Crew_Command'Access);
