@@ -131,26 +131,26 @@ package body Ships.UI.Crew is
    -- Memberindex is the index of the player ship crew member which will be
    -- dismissed
    -- SOURCE
-   function Dismiss_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Dismiss_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-   begin
-      Show_Question
-        (Question =>
-           "Are you sure want to dismiss " &
-           To_String(Source => Player_Ship.Crew(Member_Index).Name) & "?",
-         Result => CArgv.Arg(Argv => Argv, N => 1));
-      return TCL_OK;
-   end Dismiss_Command;
+--   function Dismiss_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Dismiss_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      Member_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--   begin
+--      Show_Question
+--        (Question =>
+--           "Are you sure want to dismiss " &
+--           To_String(Source => Player_Ship.Crew(Member_Index).Name) & "?",
+--         Result => CArgv.Arg(Argv => Argv, N => 1));
+--      return TCL_OK;
+--   end Dismiss_Command;
 
    -- ****o* SUCrew/SUCrew.Set_Crew_Order_Command
    -- FUNCTION
@@ -2326,7 +2326,7 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
-      Add_Command(Name => "Dismiss", Ada_Command => Dismiss_Command'Access);
+--      Add_Command(Name => "Dismiss", Ada_Command => Dismiss_Command'Access);
       Add_Command
         (Name => "SetCrewOrder", Ada_Command => Set_Crew_Order_Command'Access);
       Add_Command

@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[config, crew, game, messages, shipscrew, tk, types]
-import coreui, table, updateheader, utilsui2
+import coreui, dialogs, table, updateheader, utilsui2
 
 var
   crewTable: TableWidget
@@ -319,11 +319,19 @@ proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   updateTooltips()
   return tclOk
 
+proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let memberIndex = ($argv[1]).parseInt
+  showQuestion(question = "Are you sure want to dismiss " & playerShip.crew[
+      memberIndex - 1].name & "?", res = $argv[1])
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("OrderForAll", orderForAllCommand)
     addCommand("ToggleCrewMember", toggleCrewMemberCommand)
+    addCommand("Dismiss", dismissCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
