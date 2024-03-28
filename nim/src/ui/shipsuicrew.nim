@@ -346,6 +346,21 @@ proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Set order for the selected crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetCrewOrder order memberindex ?moduleindex?
+  ## Order is an index for the order which will be set, memberindex is an
+  ## index of the member in the player ship crew which will be have order set
+  ## and optional parameter moduleindex is index of module in player ship
+  ## which will be assigned to the crew member
   var moduleIndex = -1
   if argc == 4:
     moduleIndex = try:
