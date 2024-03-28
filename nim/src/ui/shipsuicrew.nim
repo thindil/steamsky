@@ -345,10 +345,15 @@ proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   var moduleIndex = -1
   if argc == 4:
-    moduleIndex = ($argv[3]).parseInt - 1
+    moduleIndex = try:
+        ($argv[3]).parseInt - 1
+      except:
+        tclEval(script = "bgerror {Can't get the module index. Reason: " &
+            getCurrentExceptionMsg() & "}")
+        return tclOk
   try:
     giveOrders(ship = playerShip, memberIndex = ($argv[2]).parseInt - 1,
         givenOrder = parseEnum[CrewOrders](s = $argv[1]),
@@ -356,6 +361,10 @@ proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   except CrewOrderError, CrewNoSpaceError:
     addMessage(message = getCurrentExceptionMsg(), mType = orderMessage, color = red)
     updateMessages()
+    return tclOk
+  except:
+    tclEval(script = "bgerror {Can't give order. Reason: " &
+        getCurrentExceptionMsg() & "}")
     return tclOk
   updateHeader()
   updateMessages()
