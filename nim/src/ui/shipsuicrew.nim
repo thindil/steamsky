@@ -423,6 +423,32 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.priorities.level1.button;break}")
   return tclOk
 
+proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    memberIndex = ($argv[1]).parseInt
+    member = playerShip.crew[memberIndex]
+    memberDialog = createDialog(name = ".memberdialog", title = member.name &
+        "'s details", columns = 2)
+    yScroll = memberDialog & ".yscroll"
+  tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .memberdialog.canvas yview]")
+  tclEval(script = "SetScrollbarBindings " & memberDialog & " " & yScroll)
+  let memberCanvas = memberDialog & ".canvas"
+  tclEval(script = "canvas " & memberCanvas & " -yscrollcommand [list " &
+      yScroll & " set]")
+  tclEval(script = "SetScrollbarBindings " & memberCanvas & " " & yScroll)
+  var frame = memberDialog & ".buttonbox"
+  tclEval(script = "ttk::frame " & frame)
+  tclSetVar(varName = "newtab", newValue = "general")
+  var tabButton = frame & ".general"
+  tclEval(script = "ttk::radiobutton " & tabButton & " -text General -stat selected -style Radio.Toolbutton -value general -variable newtab command ShowMemberTab")
+  tclEval(script = "grid " & tabButton)
+  let buttonsFrame = memberDialog & ".buttons"
+  tclEval(script = "ttk::frame " & buttonsFrame)
+  let closeButton = buttonsFrame & ".button"
+  tclEval(script = "bind " & tabButton & " <Escape> {" & closeButton & " invoke;break}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
