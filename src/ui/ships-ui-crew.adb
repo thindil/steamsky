@@ -116,6 +116,7 @@ package body Ships.UI.Crew is
           (pathName => Main_Paned & ".shipinfoframe.crew.canvas.frame.table");
    end Update_Crew_Info;
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****o* SUCrew/SUCrew.Set_Crew_Order_Command
    -- FUNCTION
    -- Set order for the selected crew member
@@ -168,6 +169,7 @@ package body Ships.UI.Crew is
          Update_Messages;
          return TCL_OK;
    end Set_Crew_Order_Command;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCrew/SUCrew.Show_Member_Tab_Command
    -- FUNCTION
