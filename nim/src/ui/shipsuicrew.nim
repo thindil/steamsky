@@ -387,7 +387,7 @@ proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let memberCanvas = ".memberdialog.canvas"
   tclEval(script = memberCanvas & " delete info")
   let
