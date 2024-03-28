@@ -386,6 +386,32 @@ proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   updateCrewInfo()
   return tclOk
 
+proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let memberCanvas = ".memberdialog.canvas"
+  tclEval(script = memberCanvas & " delete info")
+  let
+    tabName = tclGetVar(varName = "newtab")
+    frame = memberCanvas & "." & tabName
+  tclEval(script = memberCanvas & " create window 32 0 -anchor nw -window " &
+      frame & " -tag info")
+  tclEval(script = "update")
+  tclEval(script = memberCanvas & " configure -scrollregion [list " & tclEval2(
+      script = memberCanvas & " bbox all") & "]")
+  var tabButton = ".memberdialog.buttonbox.priorities"
+  if tclEval2(script = "winfo ismapped " & tabButton) == "0":
+    tabButton = ".memberdialog.buttonbox.general"
+  tclEval(script = "bind " & tabButton & " <Tab> {}")
+  if tabName == "general":
+    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.general.nameinfo.button;break}")
+  elif tabName == "stats":
+    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.stats.statinfo1.button;break}")
+  elif tabName == "skills":
+    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.skills.skillinfo1.button;break}")
+  elif tabName == "priorities":
+    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.priorities.level1.button;break}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -393,6 +419,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ToggleCrewMember", toggleCrewMemberCommand)
     addCommand("Dismiss", dismissCommand)
     addCommand("SetCrewOrder", setCrewOrderCommand)
+    addCommand("ShowMemberTab", showMemberTabCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")

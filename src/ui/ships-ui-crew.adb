@@ -2292,14 +2292,12 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "SetCrewOrder", Ada_Command => Set_Crew_Order_Command'Access);
       Add_Command
         (Name => "ShowMemberInfo",
          Ada_Command => Show_Member_Info_Command'Access);
-      Add_Command
-        (Name => "ShowMemberTab",
-         Ada_Command => Show_Member_Tab_Command'Access);
+--      Add_Command
+--        (Name => "ShowMemberTab",
+--         Ada_Command => Show_Member_Tab_Command'Access);
       Add_Command
         (Name => "ShowCrewStatsInfo",
          Ada_Command => Show_Crew_Stats_Info_Command'Access);
