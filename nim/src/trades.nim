@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to trading with NPC, in bases and ships like buying or
+## selling items.
+
 import std/[strutils, tables]
 import contracts
 import bases, basescargo, basestypes, crewinventory, game, game2, maps,
@@ -29,30 +32,30 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
   require:
     protoShipsList.hasKey(key = protoIndex)
   body:
-    var traderShip = createShip(protoIndex = protoIndex, name = "",
+    var traderShip: ShipRecord = createShip(protoIndex = protoIndex, name = "",
           x = playerShip.skyX, y = playerShip.skyY, speed = fullStop)
     traderCargo = @[]
     for item in traderShip.cargo:
-      traderCargo.add(BaseCargo(protoIndex: item.protoIndex,
+      traderCargo.add(y = BaseCargo(protoIndex: item.protoIndex,
           amount: item.amount, durability: defaultItemDurability,
           price: itemsList[
           item.protoIndex].price))
-    var cargoAmount = if traderShip.crew.len < 5: getRandom(min = 1, max = 3)
+    var cargoAmount: Natural = if traderShip.crew.len < 5: getRandom(min = 1, max = 3)
         elif traderShip.crew.len < 10: getRandom(min = 1, max = 5)
         else: getRandom(min = 1, max = 10)
     while cargoAmount > 0:
       var
-        itemAmount = if traderShip.crew.len < 5: getRandom(min = 1, max = 100)
+        itemAmount: Positive = if traderShip.crew.len < 5: getRandom(min = 1, max = 100)
           elif traderShip.crew.len < 10: getRandom(min = 1, max = 500)
           else: getRandom(min = 1, max = 1000)
-        itemIndex = getRandom(min = 1, max = itemsList.len)
-        newItemIndex = 0
+        itemIndex: Positive = getRandom(min = 1, max = itemsList.len)
+        newItemIndex: Natural = 0
       for i in 1 .. itemsList.len:
         itemIndex.dec
         if itemIndex == 0:
           newItemIndex = i
           break
-      let cargoItemIndex = findItem(inventory = traderShip.cargo,
+      let cargoItemIndex: int = findItem(inventory = traderShip.cargo,
           protoIndex = newItemIndex)
       if cargoItemIndex > -1:
         traderCargo[cargoItemIndex].amount = traderCargo[
@@ -62,11 +65,11 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
       else:
         if freeCargo(amount = 0 - (itemsList[newItemIndex].weight *
             itemAmount)) > -1:
-          traderCargo.add(BaseCargo(protoIndex: newItemIndex,
+          traderCargo.add(y = BaseCargo(protoIndex: newItemIndex,
               amount: itemAmount, durability: defaultItemDurability,
               price: itemsList[
               newItemIndex].price))
-          traderShip.cargo.add(InventoryData(protoIndex: newItemIndex,
+          traderShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
               amount: itemAmount, durability: defaultItemDurability, name: "", price: 0))
         else:
           cargoAmount = 1
@@ -82,13 +85,13 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
   require:
     itemIndex < playerShip.cargo.len
   body:
-    let traderIndex = findMember(order = talk)
+    let traderIndex: int = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     let
-      baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-      protoIndex = playerShip.cargo[itemIndex].protoIndex
-    var baseItemIndex = -1
+      baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
+    var baseItemIndex: int = -1
     if baseIndex > -1:
       baseItemIndex = findBaseCargo(protoIndex = protoIndex)
     else:
@@ -153,7 +156,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
           cargoAdded = true
           break
       if not cargoAdded:
-        traderCargo.add(BaseCargo(protoIndex: protoIndex, amount: sellAmount,
+        traderCargo.add(y = BaseCargo(protoIndex: protoIndex, amount: sellAmount,
             durability: playerShip.cargo[itemIndex].durability,
                 price: itemsList[
             protoIndex].price))
@@ -233,7 +236,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
         durability = traderCargo[baseItemIndex].durability, price = price)
     traderCargo[baseItemIndex].amount = traderCargo[baseItemIndex].amount - buyAmount
     if traderCargo[baseItemIndex].amount == 0:
-      traderCargo.delete(baseItemIndex)
+      traderCargo.delete(i = baseItemIndex)
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   let gain = (buyAmount * price) - cost
   addMessage(message = "You bought " & $buyAmount & " " & itemName & " for " &
@@ -248,6 +251,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
 
 proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     generateTraderCargo(protoIndex = protoIndex)
   except KeyError:
@@ -255,6 +259,7 @@ proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc,
 
 proc sellAdaItems(itemIndex: cint; amount: cstring): cstring {.raises: [],
     tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     sellItems(itemIndex = itemIndex.Natural - 1, amount = $amount)
     return "".cstring
@@ -263,6 +268,7 @@ proc sellAdaItems(itemIndex: cint; amount: cstring): cstring {.raises: [],
 
 proc buyAdaItems(baseItemIndex: cint; amount: cstring): cstring {.raises: [],
     tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     buyItems(baseItemIndex = baseItemIndex.Natural - 1, amount = $amount)
     return "".cstring
