@@ -169,7 +169,6 @@ package body Ships.UI.Crew is
          Update_Messages;
          return TCL_OK;
    end Set_Crew_Order_Command;
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCrew/SUCrew.Show_Member_Tab_Command
    -- FUNCTION
@@ -242,6 +241,7 @@ package body Ships.UI.Crew is
       end if;
       return TCL_OK;
    end Show_Member_Tab_Command;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCrew/SUCrew.Show_Member_Info_Command
    -- FUNCTION
