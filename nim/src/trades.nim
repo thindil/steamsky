@@ -108,12 +108,12 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
           skyBases[baseIndex].cargo[baseItemIndex].price
         else:
           traderCargo[baseItemIndex].price
-    let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+    let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
     if eventIndex > -1 and eventsList[eventIndex].eType == doublePrice and
         eventsList[eventIndex].itemIndex == protoIndex:
       price = price * 2
-    let sellAmount = amount.parseInt
-    var profit = price * sellAmount
+    let sellAmount: Positive = amount.parseInt
+    var profit: Natural = price * sellAmount
     if playerShip.cargo[itemIndex].durability < 100:
       profit = (profit.float * (playerShip.cargo[itemIndex].durability.float / 100.0)).int
     countPrice(price = price, traderIndex = traderIndex, reduce = false)
@@ -128,7 +128,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
             mType = tradeMessage, color = red)
         profit = 0
         continue
-      profit = profit - (profit.float * (member.payment[2].float / 100.0)).int
+      profit -= (profit.float * (member.payment[2].float / 100.0)).int
       if profit < 1:
         if profit < 0:
           updateMorale(ship = playerShip, memberIndex = index,
@@ -139,7 +139,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
         profit = 0
     if freeCargo(amount = itemsList[protoIndex].weight * sellAmount) - profit < 0:
       raise newException(exceptn = NoFreeCargoError, message = "")
-    let itemName = itemsList[protoIndex].name
+    let itemName: string = itemsList[protoIndex].name
     if baseIndex > 0:
       if profit > skyBases[baseIndex].cargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
@@ -148,11 +148,11 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
     else:
       if profit > traderCargo[0].amount:
         raise newException(exceptn = NoMoneyInBaseError, message = itemName)
-      var cargoAdded = false
+      var cargoAdded: bool = false
       for item in traderCargo.mitems:
         if item.protoIndex == protoIndex and item.durability ==
             playerShip.cargo[itemIndex].durability:
-          item.amount = item.amount + sellAmount
+          item.amount += sellAmount
           cargoAdded = true
           break
       if not cargoAdded:
@@ -172,7 +172,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
     else:
       traderCargo[0].amount = traderCargo[0].amount - profit
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-    let gain = profit - (sellAmount * price)
+    let gain: int = profit - (sellAmount * price)
     addMessage(message = "You sold " & $sellAmount & " " & itemName & " for " &
         $profit & " " & moneyName & "." & (if gain == 0: "" else: " You " & (
         if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
@@ -189,32 +189,32 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
   ##
   ## * baseItemIndex - the index of the item to buy in the trader's cargo
   ## * amount        - the amount of the item to buy
-  let traderIndex = findMember(order = talk)
+  let traderIndex: int = findMember(order = talk)
   if traderIndex == -1:
     raise newException(exceptn = NoTraderError, message = "")
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   var
-    itemIndex, price = 0
-    itemName = ""
+    itemIndex, price: Natural = 0
+    itemName: string = ""
   if baseIndex > 0:
     itemIndex = skyBases[baseIndex].cargo[baseItemIndex].protoIndex
     itemName = itemsList[itemIndex].name
     price = skyBases[baseIndex].cargo[baseItemIndex].price
     if eventIndex > -1 and eventsList[eventIndex].eType == doublePrice and
         eventsList[eventIndex].itemIndex == itemIndex:
-      price = price * 2
+      price *= 2
   else:
     itemIndex = traderCargo[baseItemIndex].protoIndex
     itemName = itemsList[itemIndex].name
     price = traderCargo[baseItemIndex].price
-  let buyAmount = amount.parseInt
+  let buyAmount: Positive = amount.parseInt
   var cost: Natural = buyAmount * price
   countPrice(price = cost, traderIndex = traderIndex)
   if freeCargo(amount = cost - (itemsList[itemIndex].weight * buyAmount)) < 0:
     raise newException(exceptn = NoFreeCargoError, message = "")
-  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   if moneyIndex2 == -1:
     raise newException(exceptn = NoMoneyError, message = itemName)
@@ -238,7 +238,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
     if traderCargo[baseItemIndex].amount == 0:
       traderCargo.delete(i = baseItemIndex)
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-  let gain = (buyAmount * price) - cost
+  let gain: int = (buyAmount * price) - cost
   addMessage(message = "You bought " & $buyAmount & " " & itemName & " for " &
       $cost & " " & moneyName & "." & (if gain == 0: "" else: "You " & (
       if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
