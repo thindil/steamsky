@@ -92,7 +92,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
       baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
       protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
     var baseItemIndex: int = -1
-    if baseIndex > -1:
+    if baseIndex > 0:
       baseItemIndex = findBaseCargo(protoIndex = protoIndex)
     else:
       for index, item in traderCargo:
