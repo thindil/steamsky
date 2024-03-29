@@ -470,6 +470,24 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text {Inventory} -image {inventoryicon} -command {" & closeButton &
       " invoke;ShowMemberInventory " & $argv[1] & "} -style Dialog.TButton")
   tclEval(script = "tooltip::tooltip " & button & " \"Show the crew member inventory\"")
+  tclEval(script = "grid " & button & " -padx 5")
+  tclEval(script = "bind " & button & " <Tab> {focus " & closeButton & ";break}")
+  tclEval(script = "bind " & button & " <Escape> {" & closeButton & " invoke;break}")
+  addCloseButton(name = buttonsFrame & ".button", text = "Close",
+      command = "CloseDialog " & memberDialog, row = 0, column = 1)
+  if argv[1] == "1" and playerShip.speed == docked:
+    button = buttonsFrame & ".button2"
+    tclEval(script = "ttk::button " & button &
+        " -text {Dismiss} -image {dismissicon} -command {" & closeButton &
+        " invoke;Dismiss " & $argv[1] & "} -style Dialog.TButton")
+    tclEval(script = "tooltip::tooltip " & button & " \"Remove the crew member from the ship's crew.\"")
+    tclEval(script = "grid " & button & " -padx 5 -row 0 -column 2")
+    tclEval(script = "bind " & button & " <Tab> {focus " & memberDialog & ".buttonbox.general;break}")
+    tclEval(script = "bind " & button & " <Escape> {" & closeButton & " invoke;break}")
+  tclEval(script = "::autoscroll::autoscroll " & yScroll)
+  # General info about the selected crew member
+  frame = memberCanvas & ".general"
+  tclEval(script = "ttk::frame " & frame)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
