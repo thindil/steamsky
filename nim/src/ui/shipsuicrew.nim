@@ -441,12 +441,35 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::frame " & frame)
   tclSetVar(varName = "newtab", newValue = "general")
   var tabButton = frame & ".general"
-  tclEval(script = "ttk::radiobutton " & tabButton & " -text General -stat selected -style Radio.Toolbutton -value general -variable newtab command ShowMemberTab")
+  tclEval(script = "ttk::radiobutton " & tabButton & " -text General -stat selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab")
   tclEval(script = "grid " & tabButton)
   let buttonsFrame = memberDialog & ".buttons"
   tclEval(script = "ttk::frame " & buttonsFrame)
   let closeButton = buttonsFrame & ".button"
   tclEval(script = "bind " & tabButton & " <Escape> {" & closeButton & " invoke;break}")
+  if member.skills.len > 0 and member.contractLength != 0:
+    tabButton = frame & ".stats"
+    tclEval(script = "ttk::radiobutton " & tabButton & " -text Attributes -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab")
+    tclEval(script = "grid " & tabButton & " -column 1 -row 0")
+    tclEval(script = "bind " & tabButton & " <Escape> {" & closeButton & " invoke;break}")
+    tabButton = frame & ".skills"
+    tclEval(script = "ttk::radiobutton " & tabButton & " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab")
+    tclEval(script = "grid " & tabButton & " -column 2 -row 0")
+    tclEval(script = "bind " & tabButton & " <Escape> {" & closeButton & " invoke;break}")
+    tabButton = frame & ".priorities"
+    tclEval(script = "ttk::radiobutton " & tabButton & " -text Priorirites -style Radio.Toolbutton -value priorities -variable newtab -command ShowMemberTab")
+    tclEval(script = "grid " & tabButton & " -column 3 -row 0")
+    tclEval(script = "bind " & tabButton & " <Escape> {" & closeButton & " invoke;break}")
+  else:
+    tclEval(script = "bind " & tabButton & " <Tab> {focus " & closeButton & ";break}")
+  tclEval(script = "grid " & frame & " -pady {5 0} -columnspan 2")
+  tclEval(script = "grid " & memberCanvas & " -sticky nwes -pady 5 -padx 5")
+  tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -row 2 -column 1")
+  var button = buttonsFrame & ".button1"
+  tclEval(script = "ttk::button " & button &
+      " -text {Inventory} -image {inventoryicon} -command {" & closeButton &
+      " invoke;ShowMemberInventory " & $argv[1] & "} -style Dialog.TButton")
+  tclEval(script = "tooltip::tooltip " & button & " \"Show the crew member inventory\"")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
