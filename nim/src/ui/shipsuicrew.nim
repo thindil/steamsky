@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[config, crew, game, messages, shipscrew, tk, types]
+import ../[config, crew, game, messages, shipscrew, shipscrew2, tk, types]
 import coreui, dialogs, table, updateheader, utilsui2
 
 var
@@ -572,6 +572,58 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             text2 = "Dehydrated")
       else:
         discard
+  if member.hunger > 0:
+    if gameSettings.showNumbers:
+      addLabel(name = frame & ".hunger", text = "Hunger: ",
+          text2 = $member.thirst & "%")
+    else:
+      case member.hunger
+      of 1 .. 40:
+        addLabel(name = frame & ".hunger", text = "Hunger: ",
+            text2 = "Bit hungry")
+      of 41 .. 80:
+        addLabel(name = frame & ".hunger", text = "Hunger: ",
+            text2 = "Hungry")
+      of 81 .. 99:
+        addLabel(name = frame & ".hunger", text = "Hunger: ",
+            text2 = "Very hungry")
+      of 100:
+        addLabel(name = frame & ".hunger", text = "Hungre: ",
+            text2 = "Starving")
+      else:
+        discard
+  if member.morale[1] != 50:
+    if gameSettings.showNumbers:
+      addLabel(name = frame & ".morale", text = "Morale: ",
+          text2 = $member.morale[1] & "%")
+    else:
+      case member.morale[1]
+      of 0 .. 24:
+        addLabel(name = frame & ".morale", text = "Morale: ",
+            text2 = "Upset")
+      of 25 .. 49:
+        addLabel(name = frame & ".morale", text = "Morale: ",
+            text2 = "Unhappy")
+      of 51 .. 74:
+        addLabel(name = frame & ".morale", text = "Morale: ",
+            text2 = "Happy")
+      of 75 .. 100:
+        addLabel(name = frame & ".morale", text = "Morale: ",
+            text2 = "Excited")
+      else:
+        discard
+  if member.skills.len > 0:
+    addLabel(name = frame & ".orderinfo", text = "Order: ",
+        text2 = getCurrentOrder(memberIndex = memberIndex))
+    infoButton = frame & ".orderinfo.button"
+    tclEval(script = "ttk::button " & infoButton &
+        " -image giveordericon -command {" & closeButton &
+        " invoke;ShowCrewOrder " & $memberIndex & "} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Set the new order for the crew member\"")
+    tclEval(script = "grid " & infoButton & " -row 0 -column 2 -sticky n -padx {5 0}")
+    tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
+    tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+    tclEval(script = "bind " & infoButton & " <Tab> {focus " & buttonsFrame & ".button1;break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
