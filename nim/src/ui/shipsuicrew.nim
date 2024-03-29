@@ -510,6 +510,68 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & infoButton & " -image editicon -command {" &
       closeButton & " invoke;GetString {Enter a new name for the " &
       member.name & ":} crewname" & $argv[1] & " {Renaming crew member} {Rename}} -style Small.TButton")
+  tclEval(script = "tooltip::tooltip " & infoButton & " \"Set a new name for the crew member\"")
+  tclEval(script = "grid " & infoButton & " -row 0 -column 2 -sticky n -padx {5 0}")
+  tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
+  tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+  if member.health < 100:
+    if gameSettings.showNumbers:
+      addLabel(name = frame & ".health", text = "Health: ",
+          text2 = $member.health & "%")
+    else:
+      case member.health:
+      of 81 .. 99:
+        addLabel(name = frame & ".health", text = "Health: ",
+            text2 = "Slightly wounded")
+      of 51 .. 80:
+        addLabel(name = frame & ".health", text = "Health: ", text2 = "Wounded")
+      of 1 .. 50:
+        addLabel(name = frame & ".health", text = "Health: ",
+            text2 = "Heavily wounded")
+      else:
+        discard
+  var tiredPoints = member.tired - member.attributes[conditionIndex].level
+  if tiredPoints < 0:
+    tiredPoints = 0
+  if tiredPoints > 0:
+    if gameSettings.showNumbers:
+      addLabel(name = frame & ".tired", text = "Tiredness: ",
+          text2 = $tiredPoints & "%")
+    else:
+      case tiredPoints
+      of 1 .. 40:
+        addLabel(name = frame & ".tired", text = "Tiredness: ",
+            text2 = "Bit tired")
+      of 41 .. 80:
+        addLabel(name = frame & ".tired", text = "Tiredness: ", text2 = "Tired")
+      of 81 .. 99:
+        addLabel(name = frame & ".tired", text = "Tiredness: ",
+            text2 = "Very tired")
+      of 100:
+        addLabel(name = frame & ".tired", text = "Tiredness: ",
+            text2 = "Unconscious")
+      else:
+        discard
+  if member.thirst > 0:
+    if gameSettings.showNumbers:
+      addLabel(name = frame & ".thirst", text = "Thirst: ",
+          text2 = $member.thirst & "%")
+    else:
+      case member.thirst
+      of 1 .. 40:
+        addLabel(name = frame & ".thirst", text = "Thirst: ",
+            text2 = "Bit thirsty")
+      of 41 .. 80:
+        addLabel(name = frame & ".thirst", text = "Thirst: ",
+            text2 = "Thirsty")
+      of 81 .. 99:
+        addLabel(name = frame & ".thirst", text = "Thirst: ",
+            text2 = "Very thirsty")
+      of 100:
+        addLabel(name = frame & ".thirst", text = "Thirst: ",
+            text2 = "Dehydrated")
+      else:
+        discard
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
