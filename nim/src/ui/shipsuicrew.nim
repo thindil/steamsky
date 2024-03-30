@@ -659,7 +659,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::frame " & frame)
     tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
     for index, attrib in member.attributes:
-      let progressFrame = frame & ".statinfo" & $index
+      var progressFrame = frame & ".statinfo" & $index
       tclEval(script = "ttk::frame " & progressFrame)
       var memberLabel = progressFrame & ".label"
       tclEval(script = "ttk::label " & memberLabel & " -text {" &
@@ -675,6 +675,31 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           memberLabel & " -weight 1")
       tclEval(script = "grid rowconfigure " & progressFrame & " " &
           memberLabel & " -weight 1")
+      infoButton = progressFrame & ".button"
+      tclEval(script = "ttk::button " & infoButton &
+          " -image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo " &
+          $index & " .memberdialog}")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected attribute.\"")
+      tclEval(script = "grid " & infoButton & " -column 2 -row 0 -padx {5 0}")
+      tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
+      if index < member.attributes.high:
+        tclEval(script = "bind " & infoButton & " <Tab> {focus " & frame &
+            ".statinfo" & $(index + 1) & ";break}")
+      else:
+        tclEval(script = "bind " & infoButton & " <Tab> {focus " &
+            buttonsFrame & ".button1;break}")
+      tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+      tclEval(script = "grid " & progressFrame & " -sticky we -padx 5")
+      tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
+      tclEval(script = "update")
+      let progressBar = frame & ".level"
+      tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
+          if attrib.level > 2: attrib.level * 2 else: 6))
+      tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
+      tclEval(script = "grid " & progressBar & " -sticky w -padx 5")
+      tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
+      progressFrame = frame & ".experienceframe" & $index
+      tclEval(script = "ttk::frame " & progressFrame & " -height 12")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
