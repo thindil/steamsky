@@ -651,6 +651,30 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           text2 = $member.payment[1] & " " & moneyName & " each day" & (
           if member.payment[2] > 0: " and " & $member.payment[2] &
           " percent of profit from each trade" else: ""))
+  tclEval(script = "grid " & frame)
+  tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
+  if member.skills.len > 0 and member.contractLength != 0:
+    # Statistics of the selected crew member
+    frame = memberCanvas & ".stats"
+    tclEval(script = "ttk::frame " & frame)
+    tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
+    for index, attrib in member.attributes:
+      let progressFrame = frame & ".statinfo" & $index
+      tclEval(script = "ttk::frame " & progressFrame)
+      var memberLabel = progressFrame & ".label"
+      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+          attributesList[index].name & ":}")
+      tclEval(script = "grid " & memberLabel & " -sticky w")
+      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      memberLabel = progressFrame & ".label2"
+      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+          getAttributeLevelName(attributeLevel = attrib.level) & " -style Golden.TLabel}")
+      tclEval(script = "grid " & memberLabel & " -sticky we -column 1 -row 0 -padx {5 0}")
+      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      tclEval(script = "grid columnconfigure " & progressFrame & " " &
+          memberLabel & " -weight 1")
+      tclEval(script = "grid rowconfigure " & progressFrame & " " &
+          memberLabel & " -weight 1")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
