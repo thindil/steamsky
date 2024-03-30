@@ -48,7 +48,7 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
         itemAmount: Positive = if traderShip.crew.len < 5: getRandom(min = 1, max = 100)
           elif traderShip.crew.len < 10: getRandom(min = 1, max = 500)
           else: getRandom(min = 1, max = 1000)
-        itemIndex: Positive = getRandom(min = 1, max = itemsList.len)
+        itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
         newItemIndex: Natural = 0
       for i in 1 .. itemsList.len:
         itemIndex.dec
