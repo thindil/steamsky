@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Colored version of icon for setting a study order
+- Colored version of icons for setting study or deconstruct orders
 
 ### Changed
 - Updated README.md
