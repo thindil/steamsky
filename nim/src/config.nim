@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[parsecfg, streams, strutils]
+import contracts
 import game, types
 
 type
@@ -179,7 +180,7 @@ var
   newGameSettings*: NewGameRecord = defaultNewGameSettings ## The settings for new game
   gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
 
-proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
+proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
   ## Load the game and new game settings from the file
   let fileName = saveDirectory & "game.cfg"
   var configFile = newFileStream(filename = fileName, mode = fmRead)
@@ -193,14 +194,23 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         getCurrentExceptionMsg()
     return
 
-  proc parseAdaFloat(value: string): cfloat =
+  proc parseAdaFloat(value: string): cfloat {.sideEffect, raises: [ValueError],
+      tags: [], contractual.} =
     ## Temporary function, for backward compatibility with Ada code
-    var newValue = value
-    newValue.removeSuffix(c = 'E')
-    return newValue.parseFloat().cfloat
-  proc parseAdaBool(value: string): bool =
+    require:
+      value.len > 0
+    body:
+      var newValue = value
+      newValue.removeSuffix(c = 'E')
+      return newValue.parseFloat().cfloat
+
+  proc parseAdaBool(value: string): bool {.sideEffect, raises: [], tags: [],
+      contractual.} =
     ## Temporary function, for backward compatibility with Ada code
-    return value == "Yes"
+    require:
+      value.len > 0
+    body:
+      return value == "Yes"
 
   while true:
     try:
@@ -324,16 +334,20 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect].} =
         getCurrentExceptionMsg()
 
 proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
-    WriteIOEffect].} =
+    WriteIOEffect], contractual.} =
   ## Save the new game and the game itself configuration to the file
   var config = newConfig()
 
-  proc saveAdaBoolean(value: bool, name: string) =
+  proc saveAdaBoolean(value: bool, name: string) {.sideEffect, raises: [
+      KeyError], tags: [], contractual.} =
     ## Temporary function, for backward compatibility with Ada code
-    if value:
-      config.setSectionKey("", name, "Yes")
-    else:
-      config.setSectionKey("", name, "No")
+    require:
+      name.len > 0
+    body:
+      if value:
+        config.setSectionKey("", name, "Yes")
+      else:
+        config.setSectionKey("", name, "No")
 
   config.setSectionKey("", "PlayerName", $newGameSettings.playerName)
   config.setSectionKey("", "PlayerGender", $newGameSettings.playerGender)
@@ -397,19 +411,23 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
 
 # Temporary code for interfacing with Ada
 
-proc loadAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+proc loadAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc,
+    contractual.} =
   loadConfig()
 
-proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
+proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [],
+    exportc, contractual.} =
   gameSettings.messagesPosition = newValue
 
-proc saveAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+proc saveAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc,
+    contractual.} =
   try:
     saveConfig()
   except KeyError, IOError, OSError, ValueError:
     discard
 
-proc getAdaBooleanSetting(name: cstring): cint {.raises: [], tags: [], exportc.} =
+proc getAdaBooleanSetting(name: cstring): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   case $name
   of "autoRest":
     result = gameSettings.autoRest.cint
@@ -436,7 +454,8 @@ proc getAdaBooleanSetting(name: cstring): cint {.raises: [], tags: [], exportc.}
   else:
     result = 0
 
-proc setAdaBooleanSetting(name: cstring; value: cint) {.raises: [], tags: [], exportc.} =
+proc setAdaBooleanSetting(name: cstring; value: cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   case $name
   of "autoRest":
     gameSettings.autoRest = value == 1
@@ -463,7 +482,8 @@ proc setAdaBooleanSetting(name: cstring; value: cint) {.raises: [], tags: [], ex
   else:
     discard
 
-proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc.} =
+proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   case $name
   of "lowFuel":
     result = gameSettings.lowFuel.cint
@@ -508,7 +528,8 @@ proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc.}
   else:
     result = 0
 
-proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [], exportc.} =
+proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   case $name
   of "lowFuel":
     gameSettings.lowFuel = value
@@ -553,13 +574,16 @@ proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [], ex
   else:
     discard
 
-proc getAdaInterfaceTheme(): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaInterfaceTheme(): cstring {.raises: [], tags: [], exportc,
+    contractual.} =
   return gameSettings.interfaceTheme.cstring
 
-proc setAdaInterfaceTheme(value: cstring) {.raises: [], tags: [], exportc.} =
+proc setAdaInterfaceTheme(value: cstring) {.raises: [], tags: [], exportc,
+    contractual.} =
   gameSettings.interfaceTheme = $value
 
-proc getAdaStringSetting(name: cstring): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaStringSetting(name: cstring): cstring {.raises: [], tags: [],
+    exportc, contractual.} =
   case $name
   of "playerName":
     return newGameSettings.playerName.cstring
@@ -572,7 +596,8 @@ proc getAdaStringSetting(name: cstring): cstring {.raises: [], tags: [], exportc
   of "startingBase":
     return newGameSettings.startingBase.cstring
 
-proc setAdaStringSetting(name, value: cstring) {.raises: [], tags: [], exportc.} =
+proc setAdaStringSetting(name, value: cstring) {.raises: [], tags: [], exportc,
+    contractual.} =
   case $name
   of "playerName":
     newGameSettings.playerName = $value
@@ -585,7 +610,8 @@ proc setAdaStringSetting(name, value: cstring) {.raises: [], tags: [], exportc.}
   of "startingBase":
     newGameSettings.startingBase = $value
 
-proc getAdaFloatSetting(name: cstring): cfloat {.raises: [], tags: [], exportc.} =
+proc getAdaFloatSetting(name: cstring): cfloat {.raises: [], tags: [], exportc,
+    contractual.} =
   case $name
   of "enemyDamageBonus":
     return newGameSettings.enemyDamageBonus.cfloat
@@ -604,7 +630,8 @@ proc getAdaFloatSetting(name: cstring): cfloat {.raises: [], tags: [], exportc.}
   of "pricesBonus":
     return newGameSettings.pricesBonus.cfloat
 
-proc setAdaFloatSetting(name: cstring; value: cfloat) {.raises: [], tags: [], exportc.} =
+proc setAdaFloatSetting(name: cstring; value: cfloat) {.raises: [], tags: [],
+    exportc, contractual.} =
   case $name
   of "enemyDamageBonus":
     newGameSettings.enemyDamageBonus = value
@@ -623,8 +650,8 @@ proc setAdaFloatSetting(name: cstring; value: cfloat) {.raises: [], tags: [], ex
   of "pricesBonus":
     newGameSettings.pricesBonus = value
 
-proc getAdaGender(): char {.raises: [], tags: [], exportc.} =
+proc getAdaGender(): char {.raises: [], tags: [], exportc, contractual.} =
   return newGameSettings.playerGender
 
-proc setAdaGender(value: char) {.raises: [], tags: [], exportc.} =
+proc setAdaGender(value: char) {.raises: [], tags: [], exportc, contractual.} =
   newGameSettings.playerGender = value
