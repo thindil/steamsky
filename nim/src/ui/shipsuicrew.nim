@@ -692,7 +692,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "grid " & progressFrame & " -sticky we -padx 5")
       tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
       tclEval(script = "update")
-      let progressBar = frame & ".level"
+      var progressBar = frame & ".level"
       tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
           if attrib.level > 2: attrib.level * 2 else: 6))
       tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
@@ -700,6 +700,31 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
       progressFrame = frame & ".experienceframe" & $index
       tclEval(script = "ttk::frame " & progressFrame & " -height 12")
+      tclEval(script = "grid " & progressFrame & " -sticky w -padx 5")
+      tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
+      progressBar = progressFrame & ".experience" & $index
+      tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
+          attrib.experience.float / (attrib.level.float * 250.0)) & " -maximum 1.0 -style experience.Horizontal.TProgressbar")
+      tclEval(script = "tooltip::tooltip " & progressBar & " \"Experience need to reach the next level\"")
+      tclEval(script = "place " & progressBar & " -in " & progressFrame & " -relheight 1.0 -relwidth 1.0")
+      tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
+    for index, attrib in member.attributes:
+      var progressBar = frame & ".level" & $index
+      tclEval(script = progressBar & " configure -length 360")
+      let progressFrame = frame & ".experienceframe" & $index
+      tclEval(script = progressFrame & " configure -length 360")
+      progressBar = progressFrame & ".experience" & $index
+      tclEval(script = progressBar & " configure -length 360")
+    # Skills of the selected crew member
+    frame = memberCanvas & ".skills"
+    tclEval(script = "ttk::frame " & frame)
+    tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
+    for index, skill in member.skills:
+      let progressFrame = frame & ".skillinfo" & $index
+      tclEval(script = "ttk::frame " & progressFrame)
+      var memberLabel = progressFrame & ".label" & $index
+      tclEval(script = "ttk::label " & memberLabel & " -text {" & skillsList[
+          skill.index].name & ":}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
