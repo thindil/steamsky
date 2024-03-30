@@ -769,6 +769,37 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "place " & progressBar & " -in " & progressFrame & " -relheight 1.0 -relwidth 1.0")
       tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
       tclEval(script = "update")
+    for index, skill in member.skills:
+      var progressBar = frame & ".level" & $index
+      tclEval(script = progressBar & " configure -length 360")
+      let progressFrame = frame & ".experienceframe" & $index
+      tclEval(script = progressFrame & " configure -length 360")
+      progressBar = progressFrame & ".experience" & $index
+      tclEval(script = progressBar & " configure -length 360")
+    # Order priorities of the selected crew member
+    frame = memberCanvas & ".priorities"
+    tclEval(script = "ttk::frame " & frame)
+    tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
+    var memberLabel = frame & ".label1"
+    tclEval(script = "ttk::label " & memberLabel & " -text {Priority}")
+    tclEval(script = "grid " & memberLabel)
+    tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+    memberLabel = frame & ".label2"
+    tclEval(script = "ttk::label " & memberLabel & " -text {Level}")
+    tclEval(script = "grid " & memberLabel & " -row 0 -column 1")
+    tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+    const prioritesNames = ["Piloting:", "Engineering:", "Operating guns:",
+        "Repair ship:", "Manufacturing:", "Upgrading ship:",
+        "Talking in bases:", "Healing wounded:", "Cleaning ship:",
+        "Defend ship:", "Board enemy ship", "Train skill:"]
+    for index, order in member.orders:
+      var memberLabel = frame & ".name" & $index
+      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+          prioritesNames[index] & " -takefocus 0}")
+      tclEval(script = "grid " & memberLabel & " -sticky w -padx {5 0}")
+      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      let comboBox = frame & ".level" & $index
+      tclEval(script = "ttk::combobox " & comboBox & " -values [list None Normal Highest] -state readonly -width 8")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
