@@ -720,11 +720,55 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::frame " & frame)
     tclEval(script = "SetScrollbarBindings " & frame & " " & yScroll)
     for index, skill in member.skills:
-      let progressFrame = frame & ".skillinfo" & $index
+      var progressFrame = frame & ".skillinfo" & $index
       tclEval(script = "ttk::frame " & progressFrame)
       var memberLabel = progressFrame & ".label" & $index
       tclEval(script = "ttk::label " & memberLabel & " -text {" & skillsList[
           skill.index].name & ":}")
+      tclEval(script = "grid " & memberLabel & " -sticky w")
+      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      memberLabel = progressFrame & ".label2" & $index
+      tclEval(script = "ttk::label " & memberLabel & " -text {" &
+          getSkillLevelName(skillLevel = skill.level) & "} -style Golden.TLabel")
+      tclEval(script = "grid " & memberLabel & " -sticky we -column 1 -row 0 -padx {5 0}")
+      tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
+      tclEval(script = "grid columnconfigure " & progressFrame & " " &
+          memberLabel & " -weight 1")
+      tclEval(script = "grid rowconfigure " & progressFrame & " " &
+          memberLabel & " -weight 1")
+      infoButton = progressFrame & ".button"
+      tclEval(script = "ttk::button " & infoButton &
+          " -image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo " &
+          $index & " .memberdialog}")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected skill.\"")
+      tclEval(script = "grid " & infoButton & " -column 2 -row 0 -padx {5 0}")
+      tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
+      tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+      if index < member.skills.high:
+        tclEval(script = "bind " & infoButton & " <Tab> {focus " & frame &
+            ".skillinfo" & $(index + 1) & ";break}")
+      else:
+        tclEval(script = "bind " & infoButton & " <Tab> {focus " &
+            buttonsFrame & ".button1;break}")
+      tclEval(script = "grid " & progressFrame & " -sticky we -padx 5")
+      tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
+      tclEval(script = "update")
+      var progressBar = frame & ".level"
+      tclEval(script = "ttk::progressbar " & progressBar & " -value " & $skill.level)
+      tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
+      tclEval(script = "grid " & progressBar & " -sticky w -padx 5")
+      tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
+      progressFrame = frame & ".experienceframe" & $index
+      tclEval(script = "ttk::frame " & progressFrame & " -height 12")
+      tclEval(script = "grid " & progressFrame & " -sticky w -padx 5")
+      tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
+      progressBar = progressFrame & ".experience" & $index
+      tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
+          skill.experience.float / (skill.level.float * 25.0)) & " -maximum 1.0 -style experience.Horizontal.TProgressbar")
+      tclEval(script = "tooltip::tooltip " & progressBar & " \"Experience need to reach the next level\"")
+      tclEval(script = "place " & progressBar & " -in " & progressFrame & " -relheight 1.0 -relwidth 1.0")
+      tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
+      tclEval(script = "update")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
