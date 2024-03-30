@@ -624,6 +624,33 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
     tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
     tclEval(script = "bind " & infoButton & " <Tab> {focus " & buttonsFrame & ".button1;break}")
+    infoButton = frame & ".nameinfo.button"
+    tclEval(script = "bind " & infoButton & " <Tab> {focus " & frame & ".orderinfo.button;break}")
+  else:
+    tclEval(script = "bind " & infoButton & " <Tab> {focus " & closeButton & ";break}")
+  let faction = factionsList[member.faction]
+  if "nogender" notin faction.flags:
+    addLabel(name = frame & ".gender", text = "Gender: ", text2 = (
+        if member.gender == 'M': "Male" else: "Female"))
+  addLabel(name = frame & ".faction", text = "Faction: ", text2 = faction.name)
+  addLabel(name = frame & ".homebase", text = "Home base: ", text2 = skyBases[
+      member.homeBase].name)
+  if member.skills.len == 0 or member.contractLength == 0:
+    addLabel(name = frame & ".passenger", text = "Passenger")
+    if member.contractLength > 0:
+      var memberInfo = ""
+      minutesToDate(minutes = member.contractLength, infoText = memberInfo)
+      addLabel(name = frame & ".timelimit", text = "Time limit: ",
+          text2 = memberInfo)
+  else:
+    if memberIndex > 0:
+      addLabel(name = frame & ".timelimit", text = "Contract length: ",
+          text2 = (if member.contractLength > 0: $member.contractLength &
+          " days" else: "pernament"))
+      addLabel(name = frame & ".payment", text = "Payment: ",
+          text2 = $member.payment[1] & " " & moneyName & " each day" & (
+          if member.payment[2] > 0: " and " & $member.payment[2] &
+          " percent of profit from each trade" else: ""))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
