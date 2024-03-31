@@ -192,8 +192,8 @@ proc travelInfo*(distance: Natural): array[1 .. 2, Natural] {.sideEffect,
   result[1] = minutesDiff + (rests * restTime)
   result[2] = abs(distance * countFuelNeeded()) + (rests * (restTime / 10).int)
 
-proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [],
-    tags: [].} =
+proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [
+    ], tags: [].} =
   ## Convert the game minutes to the game time in days, hours, etc
   ##
   ## * minutes  - the amount of minutes to convert
