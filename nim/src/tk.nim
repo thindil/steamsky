@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -239,4 +239,20 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) =
     let tclResult = $interp.tclGetResult()
     for widget in tclResult.split():
       tclEval(script = "destroy " & widget)
+
+proc showError*(message: string; e: ref Exception = getCurrentException()): TclResults {.discardable,
+    sideEffect, raises: [], tags: [].} =
+  ## Show the error dialog with the message containing technical details about the issue
+  ##
+  ## * message - the message to show in the error dialog
+  ## * e       - the exception which happened. Default value is the current exception
+  ##
+  ## This procedure always returns tclOk
+  var debugInfo = message
+  if e != nil:
+    debugInfo.add(y = " Reason: " & getCurrentExceptionMsg())
+    when defined(debug):
+      debugInfo.add(y = "\nStack trace:\n" & e.getStackTrace)
+  tclEval(script = "bgerror {" & debugInfo & "}")
+  return tclOk
 
