@@ -792,15 +792,30 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         "Repair ship:", "Manufacturing:", "Upgrading ship:",
         "Talking in bases:", "Healing wounded:", "Cleaning ship:",
         "Defend ship:", "Board enemy ship", "Train skill:"]
+    var comboBox = ""
     for index, order in member.orders:
       var memberLabel = frame & ".name" & $index
       tclEval(script = "ttk::label " & memberLabel & " -text {" &
           prioritesNames[index] & " -takefocus 0}")
       tclEval(script = "grid " & memberLabel & " -sticky w -padx {5 0}")
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
-      let comboBox = frame & ".level" & $index
+      comboBox = frame & ".level" & $index
       tclEval(script = "ttk::combobox " & comboBox & " -values [list None Normal Highest] -state readonly -width 8")
-  return tclOk
+      tclEval(script = comboBox & " current " & $(order.ord))
+      tclEval(script = "bind " & comboBox &
+          " <<ComboboxSelected>> {SetPriority " & $index & " [" & comboBox &
+          " current] " & $memberIndex & "}")
+      tclEval(script = "grid " & comboBox & " -column 1 -row " & $index & " -padx {0 5}")
+      tclEval(script = comboBox & " <Escape> {" & closeButton & " invoke;break}")
+    tclEval(script = "bind " & comboBox & " <Tab> {focus " & buttonsFrame & ".button1;break}")
+  if argv[1] == "1" or playerShip.speed != docked:
+    tclEval(script = "bind " & closeButton & " <Tab> {focus " & memberDialog & ".buttonbox.general;break}")
+  else:
+    tclEval(script = "bind " & closeButton & " <Tab> {focus " & memberDialog & ".buttons.button2;break}")
+  tclEval(script = "grid " & buttonsFrame & " -padx 5 -pady 5")
+  showDialog(dialog = memberDialog, relativeY = 0.2, relativeX = 0.2)
+  return showMemberTabCommand(clientData = clientData, interp = interp,
+      argc = 1, argv = ["ShowMemberTab".cstring])
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
