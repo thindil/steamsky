@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.0.8] - 2024-03-31
 
 ### Fixed
 - Setting the player's cabin in the ship during starting the new game
