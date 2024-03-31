@@ -27,27 +27,27 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Place;
+-- with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
-use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+-- with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+-- use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.Tooltip;
-with Bases;
-with Config;
+-- with Tcl.Tk.Ada.Widgets.TtkProgressBar;
+-- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+-- with Tcl.Tk.Ada.Winfo;
+-- with Tcl.Tklib.Ada.Autoscroll;
+-- with Tcl.Tklib.Ada.Tooltip;
+-- with Bases;
+-- with Config;
 with CoreUI; use CoreUI;
 with Crafts;
 with Dialogs; use Dialogs;
-with Factions;
+-- with Factions;
 with Game; use Game.Tiny_String;
 with Maps;
 with Maps.UI; use Maps.UI;
@@ -183,64 +183,64 @@ package body Ships.UI.Crew is
    -- COMMANDS
    -- ShowMemberTab
    -- SOURCE
-   function Show_Member_Tab_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Member_Tab_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tcl.Tk.Ada.Winfo;
-
-      Member_Canvas: constant Tk_Canvas :=
-        Get_Widget(pathName => ".memberdialog.canvas", Interp => Interp);
-      Tab_Name: constant String :=
-        Tcl_GetVar(interp => Interp, varName => "newtab");
-      Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Member_Canvas & "." & Tab_Name);
-      Tab_Button: Ttk_RadioButton :=
-        Get_Widget(pathName => ".memberdialog.buttonbox.priorities");
-   begin
-      Delete(CanvasWidget => Member_Canvas, TagOrId => "info");
-      Canvas_Create
-        (Parent => Member_Canvas, Child_Type => "window",
-         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
-      Tcl_Eval(interp => Interp, strng => "update");
-      configure
-        (Widgt => Member_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
-      if Winfo_Get(Widgt => Tab_Button, Info => "ismapped") = "0" then
-         Tab_Button :=
-           Get_Widget(pathName => ".memberdialog.buttonbox.general");
-      end if;
-      Unbind(Widgt => Tab_Button, Sequence => "<Tab>");
-      if Tab_Name = "general" then
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Tab>",
-            Script =>
-              "{focus .memberdialog.canvas.general.nameinfo.button;break}");
-      elsif Tab_Name = "stats" then
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Tab>",
-            Script =>
-              "{focus .memberdialog.canvas.stats.statinfo1.button;break}");
-      elsif Tab_Name = "skills" then
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Tab>",
-            Script =>
-              "{focus .memberdialog.canvas.skills.skillinfo1.button;break}");
-      elsif Tab_Name = "priorities" then
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Tab>",
-            Script => "{focus .memberdialog.canvas.priorities.level1;break}");
-      end if;
-      return TCL_OK;
-   end Show_Member_Tab_Command;
+--   function Show_Member_Tab_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Member_Tab_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tcl.Tk.Ada.Winfo;
+--
+--      Member_Canvas: constant Tk_Canvas :=
+--        Get_Widget(pathName => ".memberdialog.canvas", Interp => Interp);
+--      Tab_Name: constant String :=
+--        Tcl_GetVar(interp => Interp, varName => "newtab");
+--      Frame: constant Ttk_Frame :=
+--        Get_Widget(pathName => Member_Canvas & "." & Tab_Name);
+--      Tab_Button: Ttk_RadioButton :=
+--        Get_Widget(pathName => ".memberdialog.buttonbox.priorities");
+--   begin
+--      Delete(CanvasWidget => Member_Canvas, TagOrId => "info");
+--      Canvas_Create
+--        (Parent => Member_Canvas, Child_Type => "window",
+--         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
+--      Tcl_Eval(interp => Interp, strng => "update");
+--      configure
+--        (Widgt => Member_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
+--      if Winfo_Get(Widgt => Tab_Button, Info => "ismapped") = "0" then
+--         Tab_Button :=
+--           Get_Widget(pathName => ".memberdialog.buttonbox.general");
+--      end if;
+--      Unbind(Widgt => Tab_Button, Sequence => "<Tab>");
+--      if Tab_Name = "general" then
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Tab>",
+--            Script =>
+--              "{focus .memberdialog.canvas.general.nameinfo.button;break}");
+--      elsif Tab_Name = "stats" then
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Tab>",
+--            Script =>
+--              "{focus .memberdialog.canvas.stats.statinfo1.button;break}");
+--      elsif Tab_Name = "skills" then
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Tab>",
+--            Script =>
+--              "{focus .memberdialog.canvas.skills.skillinfo1.button;break}");
+--      elsif Tab_Name = "priorities" then
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Tab>",
+--            Script => "{focus .memberdialog.canvas.priorities.level1;break}");
+--      end if;
+--      return TCL_OK;
+--   end Show_Member_Tab_Command;
    --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCrew/SUCrew.Show_Member_Info_Command
@@ -257,904 +257,904 @@ package body Ships.UI.Crew is
    -- ShowMemberInfo memberindex
    -- MemberIndex is the index of the crew member to show
    -- SOURCE
-   function Show_Member_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Member_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Tcl.Tklib.Ada.Autoscroll;
-      use Tcl.Tklib.Ada.Tooltip;
-      use Bases;
-      use Config;
-      use Factions;
-
-      Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
-      Member_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".memberdialog",
-           Title => To_String(Source => Member.Name) & "'s details",
-           Columns => 2);
-      Y_Scroll: constant Ttk_Scrollbar :=
-        Create
-          (pathName => Member_Dialog & ".yscroll",
-           options =>
-             "-orient vertical -command [list .memberdialog.canvas yview]");
-      Member_Canvas: constant Tk_Canvas :=
-        Create
-          (pathName => Member_Dialog & ".canvas",
-           options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      Buttons_Frame: constant Ttk_Frame :=
-        Create(pathName => Member_Dialog & ".buttons");
-      Close_Button: constant Ttk_Button :=
-        Get_Widget(pathName => Buttons_Frame & ".button", Interp => Interp);
-      Member_Info: Unbounded_String := Null_Unbounded_String;
-      Tired_Points: Integer;
-      Tab_Button: Ttk_RadioButton;
-      --## rule off IMPROPER_INITIALIZATION
-      Info_Button, Button: Ttk_Button;
-      Member_Label: Ttk_Label;
-      Progress_Frame: Ttk_Frame;
-      Progress_Bar: Ttk_ProgressBar;
-      --## rule on IMPROPER_INITIALIZATION
-      Frame: Ttk_Frame;
-      Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
-      procedure Add_Label(Name, Text: String; Text_2: String := "") is
-         Label_Box: constant Ttk_Frame :=
-           Create(pathName => Name, options => "-width 360");
-      begin
-         Member_Label :=
-           Create
-             (pathName => Label_Box & ".label1",
-              options => "-text {" & Text & "} -wraplength 360");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-         if Text_2'Length > 0 then
-            Member_Label :=
-              Create
-                (pathName => Label_Box & ".label2",
-                 options =>
-                   "-text {" & Text_2 &
-                   "} -wraplength 360 -style Golden.TLabel");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-row 0 -column 1 -sticky w");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-         end if;
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label_Box, Options => "-sticky w -padx 5");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Label_Box & " " & Y_Scroll);
-      end Add_Label;
-   begin
-      Tcl_Eval
-        (interp => Interp,
-         strng => "SetScrollbarBindings " & Member_Dialog & " " & Y_Scroll);
-      Tcl_Eval
-        (interp => Interp,
-         strng => "SetScrollbarBindings " & Member_Canvas & " " & Y_Scroll);
-      Frame := Create(pathName => Member_Dialog & ".buttonbox");
-      Tcl_SetVar(interp => Interp, varName => "newtab", newValue => "general");
-      Tab_Button :=
-        Create
-          (pathName => Frame & ".general",
-           options =>
-             " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Tab_Button);
-      Bind
-        (Widgt => Tab_Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
-      if Skills_Container.Length(Container => Member.Skills) > 0 and
-        Member.Contract_Length /= 0 then
-         Tab_Button :=
-           Create
-             (pathName => Frame & ".stats",
-              options =>
-                " -text Attributes -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Tab_Button, Options => "-column 1 -row 0");
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
-         Tab_Button :=
-           Create
-             (pathName => Frame & ".skills",
-              options =>
-                " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Tab_Button, Options => "-column 2 -row 0");
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
-         Tab_Button :=
-           Create
-             (pathName => Frame & ".priorities",
-              options =>
-                " -text Priorities -style Radio.Toolbutton -value priorities -variable newtab -command ShowMemberTab");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Tab_Button, Options => "-column 3 -row 0");
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
-      else
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Tab>",
-            Script => "{focus " & Close_Button & ";break}");
-      end if;
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Frame, Options => "-pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Member_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Y_Scroll,
-         Options => " -sticky ns -pady 5 -padx {0 5} -row 2 -column 1");
-      Button :=
-        Create
-          (pathName => Buttons_Frame & ".button1",
-           options =>
-             "-text {Inventory} -image {inventoryicon} -command {" &
-             Close_Button & " invoke;ShowMemberInventory " &
-             CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
-      Add(Widget => Button, Message => "Show the crew member inventory");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
-      Bind
-        (Widgt => Button, Sequence => "<Tab>",
-         Script => "{focus " & Close_Button & ";break}");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
-      Add_Close_Button
-        (Name => Buttons_Frame & ".button", Text => "Close",
-         Command => "CloseDialog " & Member_Dialog, Row => 0, Column => 1);
-      if CArgv.Arg(Argv => Argv, N => 1) /= "1" and
-        Player_Ship.Speed = DOCKED then
-         Button :=
-           Create
-             (pathName => Buttons_Frame & ".button2",
-              options =>
-                "-text {Dismiss} -image {dismissicon} -command {" &
-                Close_Button & " invoke;Dismiss " &
-                CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
-         Add
-           (Widget => Button,
-            Message => "Remove the crew member from the ship's crew.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-padx 5 -row 0 -column 2");
-         Bind
-           (Widgt => Button, Sequence => "<Tab>",
-            Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
-      end if;
-      Autoscroll(Scroll => Y_Scroll);
-      -- General info about the selected crew member
-      Frame := Create(pathName => Member_Canvas & ".general");
-      Add_Label
-        (Name => Frame & ".nameinfo", Text => "Name: ",
-         Text_2 => To_String(Source => Member.Name));
-      Info_Button :=
-        Create
-          (pathName => Frame & ".nameinfo.button",
-           options =>
-             "-image editicon -command {" & Close_Button &
-             " invoke;GetString {Enter a new name for the " &
-             To_String(Source => Member.Name) & ":} crewname" &
-             CArgv.Arg(Argv => Argv, N => 1) &
-             " {Renaming crew member} {Rename}" & "} -style Small.TButton");
-      Add
-        (Widget => Info_Button,
-         Message => "Set a new name for the crew member");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Info_Button,
-         Options => "-row 0 -column 2 -sticky n -padx {5 0}");
-      Bind
-        (Widgt => Info_Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
-      Tcl_Eval
-        (interp => Interp,
-         strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-      if Member.Health < 100 then
-         if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label
-              (Name => Frame & ".health", Text => "Health:",
-               Text_2 => Natural'Image(Member.Health) & "%");
-         else
-            case Member.Health is
-               when 81 .. 99 =>
-                  Add_Label
-                    (Name => Frame & ".health", Text => "Health: ",
-                     Text_2 => "Slightly wounded");
-               when 51 .. 80 =>
-                  Add_Label
-                    (Name => Frame & ".health", Text => "Health: ",
-                     Text_2 => "Wounded");
-               when 1 .. 50 =>
-                  Add_Label
-                    (Name => Frame & ".health", Text => "Health: ",
-                     Text_2 => "Heavily wounded");
-               when others =>
-                  null;
-            end case;
-         end if;
-      end if;
-      Tired_Points :=
-        Member.Tired - Member.Attributes(Positive(Condition_Index)).Level;
-      if Tired_Points < 0 then
-         Tired_Points := 0;
-      end if;
-      if Tired_Points > 0 then
-         if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label
-              (Name => Frame & ".tired", Text => "Tiredness:",
-               Text_2 => Natural'Image(Tired_Points) & "%");
-         else
-            case Tired_Points is
-               when 1 .. 40 =>
-                  Add_Label
-                    (Name => Frame & ".tired", Text => "Tiredness: ",
-                     Text_2 => "Bit tired");
-               when 41 .. 80 =>
-                  Add_Label
-                    (Name => Frame & ".tired", Text => "Tiredness: ",
-                     Text_2 => "Tired");
-               when 81 .. 99 =>
-                  Add_Label
-                    (Name => Frame & ".tired", Text => "Tiredness: ",
-                     Text_2 => "Very tired");
-               when 100 =>
-                  Add_Label
-                    (Name => Frame & ".tired", Text => "Tiredness: ",
-                     Text_2 => "Unconscious");
-               when others =>
-                  null;
-            end case;
-         end if;
-      end if;
-      if Member.Thirst > 0 then
-         if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label
-              (Name => Frame & ".thirst", Text => "Thirst:",
-               Text_2 => Natural'Image(Member.Thirst) & "%");
-         else
-            case Member.Thirst is
-               when 1 .. 40 =>
-                  Add_Label
-                    (Name => Frame & ".thirst", Text => "Thirst: ",
-                     Text_2 => "Bit thirsty");
-               when 41 .. 80 =>
-                  Add_Label
-                    (Name => Frame & ".thirst", Text => "Thirst: ",
-                     Text_2 => "Thirsty");
-               when 81 .. 99 =>
-                  Add_Label
-                    (Name => Frame & ".thirst", Text => "Thirst: ",
-                     Text_2 => "Very thirsty");
-               when 100 =>
-                  Add_Label
-                    (Name => Frame & ".thirst", Text => "Thirst: ",
-                     Text_2 => "Dehydrated");
-               when others =>
-                  null;
-            end case;
-         end if;
-      end if;
-      if Member.Hunger > 0 then
-         if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label
-              (Name => ".hunger",
-               Text => Frame & "Hunger:" & Natural'Image(Member.Hunger) & "%");
-         else
-            case Member.Hunger is
-               when 1 .. 40 =>
-                  Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: ",
-                     Text_2 => "Bit hungry");
-               when 41 .. 80 =>
-                  Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: ",
-                     Text_2 => "Hungry");
-               when 81 .. 99 =>
-                  Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: ",
-                     Text_2 => "Very hungry");
-               when 100 =>
-                  Add_Label
-                    (Name => Frame & ".hunger", Text => "Hunger: ",
-                     Text_2 => "Starving");
-               when others =>
-                  null;
-            end case;
-         end if;
-      end if;
-      if Member.Morale(1) /= 50 then
-         if Get_Boolean_Setting(Name => "showNumbers") then
-            Add_Label
-              (Name => Frame & ".morale",
-               Text => "Morale:" & Natural'Image(Member.Morale(1)) & "%");
-         else
-            case Member.Morale(1) is
-               when 0 .. 24 =>
-                  Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: ",
-                     Text_2 => "Upset");
-               when 25 .. 49 =>
-                  Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: ",
-                     Text_2 => "Unhappy");
-               when 51 .. 74 =>
-                  Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: ",
-                     Text_2 => "Happy");
-               when 75 .. 100 =>
-                  Add_Label
-                    (Name => Frame & ".morale", Text => "Morale: ",
-                     Text_2 => "Excited");
-               when others =>
-                  null;
-            end case;
-         end if;
-      end if;
-      if Skills_Container.Length(Container => Member.Skills) > 0 then
-         Add_Label
-           (Name => Frame & ".orderinfo", Text => "Order: ",
-            Text_2 =>
-              To_String
-                (Source => Get_Current_Order(Member_Index => Member_Index)));
-         Info_Button :=
-           Create
-             (pathName => Frame & ".orderinfo.button",
-              options =>
-                "-image giveordericon -command {" & Close_Button &
-                " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
-                "} -style Small.TButton");
-         Add
-           (Widget => Info_Button,
-            Message => "Set the new order for the crew member");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button,
-            Options => "-row 0 -column 2 -sticky n -padx {5 0}");
-         Bind
-           (Widgt => Info_Button, Sequence => "<Escape>",
-            Script => "{" & Close_Button & " invoke;break}");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-         Bind
-           (Widgt => Info_Button, Sequence => "<Tab>",
-            Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
-         Info_Button := Get_Widget(pathName => Frame & ".nameinfo.button");
-         Bind
-           (Widgt => Info_Button, Sequence => "<Tab>",
-            Script => "{focus " & Frame & ".orderinfo.button;break}");
-      else
-         Bind
-           (Widgt => Info_Button, Sequence => "<Tab>",
-            Script => "{focus " & Close_Button & ";break}");
-      end if;
-      if Faction.Flags.Find_Index
-          (Item => To_Unbounded_String(Source => "nogender")) =
-        UnboundedString_Container.No_Index then
-         Add_Label
-           (Name => Frame & ".gender", Text => "Gender: ",
-            Text_2 => (if Member.Gender = 'M' then "Male" else "Female"));
-      end if;
-      Add_Label
-        (Name => Frame & ".faction", Text => "Faction: ",
-         Text_2 => To_String(Source => Faction.Name));
-      Add_Label
-        (Name => Frame & ".homebase", Text => "Home base: ",
-         Text_2 => To_String(Source => Sky_Bases(Member.Home_Base).Name));
-      if Skills_Container.Length(Container => Member.Skills) = 0 or
-        Member.Contract_Length = 0 then
-         Add_Label(Name => Frame & ".passenger", Text => "Passenger");
-         if Member.Contract_Length > 0 then
-            Member_Info := Null_Unbounded_String;
-            Minutes_To_Date
-              (Minutes => Member.Contract_Length, Info_Text => Member_Info);
-            Add_Label
-              (Name => Frame & ".timelimit", Text => "Time limit:",
-               Text_2 => To_String(Source => Member_Info));
-         end if;
-      else
-         if Member_Index > 1 then
-            Add_Label
-              (Name => Frame & ".timelimit", Text => "Contract length:",
-               Text_2 =>
-                 (if Member.Contract_Length > 0 then
-                    Integer'Image(Member.Contract_Length) & " days"
-                  else " pernament"));
-            Add_Label
-              (Name => Frame & ".payment", Text => "Payment:",
-               Text_2 =>
-                 Natural'Image(Member.Payment(1)) & " " &
-                 To_String(Source => Money_Name) & " each day" &
-                 (if Member.Payment(2) > 0 then
-                    " and " & Natural'Image(Member.Payment(2)) &
-                    " percent of profit from each trade"
-                  else ""));
-         end if;
-      end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
-      Tcl_Eval
-        (interp => Interp,
-         strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
-      if Skills_Container.Length(Container => Member.Skills) > 0 and
-        Member.Contract_Length /= 0 then
-         -- Statistics of the selected crew member
-         Frame := Create(pathName => Member_Canvas & ".stats");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
-         Load_Statistics_Loop :
-         for I in Member.Attributes'Range loop
-            Progress_Frame :=
-              Create
-                (pathName =>
-                   Frame & ".statinfo" &
-                   Trim(Source => Positive'Image(I), Side => Left));
-            Member_Label :=
-              Create
-                (pathName => Progress_Frame & ".label",
-                 options =>
-                   "-text {" &
-                   To_String
-                     (Source =>
-                        AttributesData_Container.Element
-                          (Container => Attributes_List, Index => I)
-                          .Name) &
-                   ":}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-sticky w");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-            Member_Label :=
-              Create
-                (pathName => Progress_Frame & ".label2",
-                 options =>
-                   "-text {" &
-                   Get_Attribute_Level_Name
-                     (Attribute_Level => Member.Attributes(I).Level) &
-                   "} -style Golden.TLabel");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label,
-               Options => "-sticky we -column 1 -row 0 -padx {5 0}");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-            Tcl.Tk.Ada.Grid.Column_Configure
-              (Master => Progress_Frame, Slave => Member_Label,
-               Options => "-weight 1");
-            Tcl.Tk.Ada.Grid.Row_Configure
-              (Master => Progress_Frame, Slave => Member_Label,
-               Options => "-weight 1");
-            Info_Button :=
-              Create
-                (pathName => Progress_Frame & ".button",
-                 options =>
-                   "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
-                   Positive'Image(I) & " .memberdialog}");
-            Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Info_Button,
-               Message =>
-                 "Show detailed information about the selected attribute.");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Info_Button,
-               Options => "-column 2 -row 0 -padx {5 0}");
-            Bind
-              (Widgt => Info_Button, Sequence => "<Escape>",
-               Script => "{" & Close_Button & " invoke;break}");
-            if I < Member.Attributes'Length then
-               Bind
-                 (Widgt => Info_Button, Sequence => "<Tab>",
-                  Script =>
-                    "{focus " & Frame & ".statinfo" &
-                    Trim(Source => Positive'Image(I + 1), Side => Left) &
-                    ".button;break}");
-            else
-               Bind
-                 (Widgt => Info_Button, Sequence => "<Tab>",
-                  Script =>
-                    "{focus " & Buttons_Frame & ".button1" & ";break}");
-            end if;
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Progress_Frame, Options => "-sticky we -padx 5");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
-            Tcl_Eval(interp => Interp, strng => "update");
-            Progress_Bar :=
-              Create
-                (pathName =>
-                   Frame & ".level" &
-                   Trim(Source => Positive'Image(I), Side => Left),
-                 options =>
-                   "-value" &
-                   Positive'Image
-                     (if Member.Attributes(I).Level > 2 then
-                        Member.Attributes(I).Level * 2
-                      else 6));
-            Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Progress_Bar,
-               Message => "The current level of the attribute.");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Progress_Bar, Options => "-sticky w -padx 5");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
-            Progress_Frame :=
-              Create
-                (pathName =>
-                   Frame & ".experienceframe" &
-                   Trim(Source => Positive'Image(I), Side => Left),
-                 options => "-height 12");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Progress_Frame, Options => "-sticky w -padx 5");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
-            Progress_Bar :=
-              Create
-                (pathName =>
-                   Progress_Frame & ".experience" &
-                   Trim(Source => Positive'Image(I), Side => Left),
-                 options =>
-                   "-value" &
-                   Float'Image
-                     (Float(Member.Attributes(I).Experience) /
-                      Float(Member.Attributes(I).Level * 250)) &
-                   " -maximum 1.0 -style experience.Horizontal.TProgressbar");
-            Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Progress_Bar,
-               Message => "Experience need to reach the next level");
-            Tcl.Tk.Ada.Place.Place
-              (Slave => Progress_Bar,
-               Options =>
-                 "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
-         end loop Load_Statistics_Loop;
-         Load_Statistics_Experience_Loop :
-         for I in Member.Attributes'Range loop
-            Progress_Bar :=
-              Get_Widget
-                (pathName =>
-                   Frame & ".level" &
-                   Trim(Source => Positive'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 360");
-            Progress_Frame :=
-              Get_Widget
-                (pathName =>
-                   Frame & ".experienceframe" &
-                   Trim(Source => Positive'Image(I), Side => Left));
-            configure(Widgt => Progress_Frame, options => "-width 360");
-            Progress_Bar :=
-              Get_Widget
-                (pathName =>
-                   Progress_Frame & ".experience" &
-                   Trim(Source => Positive'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 360");
-         end loop Load_Statistics_Experience_Loop;
-         -- Skills of the selected crew member
-         Frame := Create(pathName => Member_Canvas & ".skills");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
-         Load_Skills_Loop :
-         for I in
-           Skills_Container.First_Index(Container => Member.Skills) ..
-             Skills_Container.Last_Index(Container => Member.Skills) loop
-            Progress_Frame :=
-              Create
-                (pathName =>
-                   Frame & ".skillinfo" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-            Member_Label :=
-              Create
-                (pathName =>
-                   Progress_Frame & ".label" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-                 options =>
-                   "-text {" &
-                   To_String
-                     (Source =>
-                        SkillsData_Container.Element
-                          (Container => Skills_List,
-                           Index =>
-                             Skills_Container.Element
-                               (Container => Member.Skills, Index => I)
-                               .Index)
-                          .Name) &
-                   ":}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label, Options => "-sticky w");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-            Member_Label :=
-              Create
-                (pathName =>
-                   Progress_Frame & ".label2" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-                 options =>
-                   "-text {" &
-                   Get_Skill_Level_Name
-                     (Skill_Level =>
-                        Skills_Container.Element
-                          (Container => Member.Skills, Index => I)
-                          .Level) &
-                   "} -style Golden.TLabel");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Member_Label,
-               Options => "-sticky we -column 1 -row 0 -padx {5 0}");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-            Tcl.Tk.Ada.Grid.Column_Configure
-              (Master => Progress_Frame, Slave => Member_Label,
-               Options => "-weight 1");
-            Tcl.Tk.Ada.Grid.Row_Configure
-              (Master => Progress_Frame, Slave => Member_Label,
-               Options => "-weight 1");
-            Info_Button :=
-              Create
-                (pathName => Progress_Frame & ".button",
-                 options =>
-                   "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                   Skills_Amount_Range'Image
-                     (Skills_Container.Element
-                        (Container => Member.Skills, Index => I)
-                        .Index) &
-                   " " & CArgv.Arg(Argv => Argv, N => 1) & " .memberdialog}");
-            Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Info_Button,
-               Message =>
-                 "Show detailed information about the selected skill.");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Info_Button,
-               Options => "-column 2 -row 0 -padx {5 0}");
-            Bind
-              (Widgt => Info_Button, Sequence => "<Escape>",
-               Script => "{" & Close_Button & " invoke;break}");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
-            if I < Skills_Container.Last_Index(Container => Member.Skills) then
-               Bind
-                 (Widgt => Info_Button, Sequence => "<Tab>",
-                  Script =>
-                    "{focus " & Frame & ".skillinfo" &
-                    Trim(Source => Count_Type'Image(I + 1), Side => Left) &
-                    ".button;break}");
-            else
-               Bind
-                 (Widgt => Info_Button, Sequence => "<Tab>",
-                  Script =>
-                    "{focus " & Buttons_Frame & ".button1" & ";break}");
-            end if;
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Progress_Frame, Options => "-sticky we -padx 5");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
-            Tcl_Eval(interp => Interp, strng => "update");
-            Progress_Bar :=
-              Create
-                (pathName =>
-                   Frame & ".level" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-                 options =>
-                   "-value" &
-                   Positive'Image
-                     (Skills_Container.Element
-                        (Container => Member.Skills, Index => I)
-                        .Level));
-            Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Progress_Bar,
-               Message => "The current level of the skill.");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Progress_Bar, Options => "-sticky w -padx 5");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
-            Progress_Frame :=
-              Create
-                (pathName =>
-                   Frame & ".experienceframe" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-                 options => "-height 12");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Progress_Frame, Options => "-sticky w -padx 5");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
-            --## rule off SIMPLIFIABLE_EXPRESSIONS
-            Progress_Bar :=
-              Create
-                (pathName =>
-                   Progress_Frame & ".experience" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-                 options =>
-                   "-value" &
-                   Float'Image
-                     (Float
-                        (Skills_Container.Element
-                           (Container => Member.Skills, Index => I)
-                           .Experience) /
-                      Float
-                        ((Skills_Container.Element
-                            (Container => Member.Skills, Index => I)
-                            .Level *
-                          25))) &
-                   " -maximum 1.0 -style experience.Horizontal.TProgressbar");
-            --## rule on SIMPLIFIABLE_EXPRESSIONS
-            Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Progress_Bar,
-               Message => "Experience need to reach the next level");
-            Tcl.Tk.Ada.Place.Place
-              (Slave => Progress_Bar,
-               Options =>
-                 "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
-            Tcl_Eval
-              (interp => Interp,
-               strng =>
-                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
-            Tcl_Eval(interp => Interp, strng => "update");
-         end loop Load_Skills_Loop;
-         Load_Skill_Experience_Loop :
-         for I in
-           Skills_Container.First_Index(Container => Member.Skills) ..
-             Skills_Container.Last_Index(Container => Member.Skills) loop
-            Progress_Bar :=
-              Get_Widget
-                (pathName =>
-                   Frame & ".level" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 360");
-            Progress_Frame :=
-              Get_Widget
-                (pathName =>
-                   Frame & ".experienceframe" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-            configure(Widgt => Progress_Frame, options => "-width 360");
-            Progress_Bar :=
-              Get_Widget
-                (pathName =>
-                   Progress_Frame & ".experience" &
-                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-            configure(Widgt => Progress_Bar, options => "-length 360");
-         end loop Load_Skill_Experience_Loop;
-         -- Orders priorities of the selected crew member
-         Frame := Create(pathName => Member_Canvas & ".priorities");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
-         Member_Label :=
-           Create
-             (pathName => Frame & ".label1", options => "-text {Priority}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label);
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-         Member_Label :=
-           Create(pathName => Frame & ".label2", options => "-text {Level}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Member_Label, Options => "-row 0 -column 1");
-         Tcl_Eval
-           (interp => Interp,
-            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-         Show_Priorities_Block :
-         declare
-            Priorities_Names: constant array
-              (Member.Orders'Range) of Unbounded_String :=
-              (1 => To_Unbounded_String(Source => "Piloting:"),
-               2 => To_Unbounded_String(Source => "Engineering:"),
-               3 => To_Unbounded_String(Source => "Operating guns:"),
-               4 => To_Unbounded_String(Source => "Repair ship:"),
-               5 => To_Unbounded_String(Source => "Manufacturing:"),
-               6 => To_Unbounded_String(Source => "Upgrading ship:"),
-               7 => To_Unbounded_String(Source => "Talking in bases:"),
-               8 => To_Unbounded_String(Source => "Healing wounded:"),
-               9 => To_Unbounded_String(Source => "Cleaning ship:"),
-               10 => To_Unbounded_String(Source => "Defend ship:"),
-               11 => To_Unbounded_String(Source => "Board enemy ship:"),
-               12 => To_Unbounded_String(Source => "Train skill:"));
-            Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
-         begin
-            Load_Priorities_Loop :
-            for I in Member.Orders'Range loop
-               Member_Label :=
-                 Create
-                   (pathName =>
-                      Frame & ".name" &
-                      Trim(Source => Positive'Image(I), Side => Left),
-                    options =>
-                      "-text {" & To_String(Source => Priorities_Names(I)) &
-                      "} -takefocus 0");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Member_Label, Options => "-sticky w -padx {5 0}");
-               Tcl_Eval
-                 (interp => Interp,
-                  strng =>
-                    "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
-               Combo_Box :=
-                 Create
-                   (pathName =>
-                      Frame & ".level" &
-                      Trim(Source => Positive'Image(I), Side => Left),
-                    options =>
-                      "-values [list None Normal Highest] -state readonly -width 8");
-               Current
-                 (ComboBox => Combo_Box,
-                  NewIndex => Natural'Image(Member.Orders(I)));
-               Bind
-                 (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
-                  Script =>
-                    "{SetPriority" & Positive'Image(I) & " [" & Combo_Box &
-                    " current]" & Positive'Image(Member_Index) & "}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Combo_Box,
-                  Options =>
-                    "-column 1 -row" & Positive'Image(I) & " -padx {0 5}");
-               Bind
-                 (Widgt => Combo_Box, Sequence => "<Escape>",
-                  Script => "{" & Close_Button & " invoke;break}");
-            end loop Load_Priorities_Loop;
-            Bind
-              (Widgt => Combo_Box, Sequence => "<Tab>",
-               Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
-         end Show_Priorities_Block;
-      end if;
-      if CArgv.Arg(Argv => Argv, N => 1) = "1" or
-        Player_Ship.Speed /= DOCKED then
-         Bind
-           (Widgt => Close_Button, Sequence => "<Tab>",
-            Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
-      else
-         Bind
-           (Widgt => Close_Button, Sequence => "<Tab>",
-            Script => "{focus " & Member_Dialog & ".buttons.button2;break}");
-      end if;
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
-      Show_Dialog
-        (Dialog => Member_Dialog, Relative_Y => 0.2, Relative_X => 0.2);
-      return
-        Show_Member_Tab_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 1,
-           Argv => CArgv.Empty & "ShowMemberTab");
-   end Show_Member_Info_Command;
+--   function Show_Member_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Member_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+--      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+--      use Tcl.Tklib.Ada.Autoscroll;
+--      use Tcl.Tklib.Ada.Tooltip;
+--      use Bases;
+--      use Config;
+--      use Factions;
+--
+--      Member_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
+--      Member_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".memberdialog",
+--           Title => To_String(Source => Member.Name) & "'s details",
+--           Columns => 2);
+--      Y_Scroll: constant Ttk_Scrollbar :=
+--        Create
+--          (pathName => Member_Dialog & ".yscroll",
+--           options =>
+--             "-orient vertical -command [list .memberdialog.canvas yview]");
+--      Member_Canvas: constant Tk_Canvas :=
+--        Create
+--          (pathName => Member_Dialog & ".canvas",
+--           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+--      Buttons_Frame: constant Ttk_Frame :=
+--        Create(pathName => Member_Dialog & ".buttons");
+--      Close_Button: constant Ttk_Button :=
+--        Get_Widget(pathName => Buttons_Frame & ".button", Interp => Interp);
+--      Member_Info: Unbounded_String := Null_Unbounded_String;
+--      Tired_Points: Integer;
+--      Tab_Button: Ttk_RadioButton;
+--      --## rule off IMPROPER_INITIALIZATION
+--      Info_Button, Button: Ttk_Button;
+--      Member_Label: Ttk_Label;
+--      Progress_Frame: Ttk_Frame;
+--      Progress_Bar: Ttk_ProgressBar;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Frame: Ttk_Frame;
+--      Faction: constant Faction_Record := Get_Faction(Index => Member.Faction);
+--      procedure Add_Label(Name, Text: String; Text_2: String := "") is
+--         Label_Box: constant Ttk_Frame :=
+--           Create(pathName => Name, options => "-width 360");
+--      begin
+--         Member_Label :=
+--           Create
+--             (pathName => Label_Box & ".label1",
+--              options => "-text {" & Text & "} -wraplength 360");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--         if Text_2'Length > 0 then
+--            Member_Label :=
+--              Create
+--                (pathName => Label_Box & ".label2",
+--                 options =>
+--                   "-text {" & Text_2 &
+--                   "} -wraplength 360 -style Golden.TLabel");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Member_Label, Options => "-row 0 -column 1 -sticky w");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--         end if;
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label_Box, Options => "-sticky w -padx 5");
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Label_Box & " " & Y_Scroll);
+--      end Add_Label;
+--   begin
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng => "SetScrollbarBindings " & Member_Dialog & " " & Y_Scroll);
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng => "SetScrollbarBindings " & Member_Canvas & " " & Y_Scroll);
+--      Frame := Create(pathName => Member_Dialog & ".buttonbox");
+--      Tcl_SetVar(interp => Interp, varName => "newtab", newValue => "general");
+--      Tab_Button :=
+--        Create
+--          (pathName => Frame & ".general",
+--           options =>
+--             " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Tab_Button);
+--      Bind
+--        (Widgt => Tab_Button, Sequence => "<Escape>",
+--         Script => "{" & Close_Button & " invoke;break}");
+--      if Skills_Container.Length(Container => Member.Skills) > 0 and
+--        Member.Contract_Length /= 0 then
+--         Tab_Button :=
+--           Create
+--             (pathName => Frame & ".stats",
+--              options =>
+--                " -text Attributes -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Tab_Button, Options => "-column 1 -row 0");
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Escape>",
+--            Script => "{" & Close_Button & " invoke;break}");
+--         Tab_Button :=
+--           Create
+--             (pathName => Frame & ".skills",
+--              options =>
+--                " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Tab_Button, Options => "-column 2 -row 0");
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Escape>",
+--            Script => "{" & Close_Button & " invoke;break}");
+--         Tab_Button :=
+--           Create
+--             (pathName => Frame & ".priorities",
+--              options =>
+--                " -text Priorities -style Radio.Toolbutton -value priorities -variable newtab -command ShowMemberTab");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Tab_Button, Options => "-column 3 -row 0");
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Escape>",
+--            Script => "{" & Close_Button & " invoke;break}");
+--      else
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Tab>",
+--            Script => "{focus " & Close_Button & ";break}");
+--      end if;
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Frame, Options => "-pady {5 0} -columnspan 2");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Member_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Y_Scroll,
+--         Options => " -sticky ns -pady 5 -padx {0 5} -row 2 -column 1");
+--      Button :=
+--        Create
+--          (pathName => Buttons_Frame & ".button1",
+--           options =>
+--             "-text {Inventory} -image {inventoryicon} -command {" &
+--             Close_Button & " invoke;ShowMemberInventory " &
+--             CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
+--      Add(Widget => Button, Message => "Show the crew member inventory");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
+--      Bind
+--        (Widgt => Button, Sequence => "<Tab>",
+--         Script => "{focus " & Close_Button & ";break}");
+--      Bind
+--        (Widgt => Button, Sequence => "<Escape>",
+--         Script => "{" & Close_Button & " invoke;break}");
+--      Add_Close_Button
+--        (Name => Buttons_Frame & ".button", Text => "Close",
+--         Command => "CloseDialog " & Member_Dialog, Row => 0, Column => 1);
+--      if CArgv.Arg(Argv => Argv, N => 1) /= "1" and
+--        Player_Ship.Speed = DOCKED then
+--         Button :=
+--           Create
+--             (pathName => Buttons_Frame & ".button2",
+--              options =>
+--                "-text {Dismiss} -image {dismissicon} -command {" &
+--                Close_Button & " invoke;Dismiss " &
+--                CArgv.Arg(Argv => Argv, N => 1) & "} -style Dialog.TButton");
+--         Add
+--           (Widget => Button,
+--            Message => "Remove the crew member from the ship's crew.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button, Options => "-padx 5 -row 0 -column 2");
+--         Bind
+--           (Widgt => Button, Sequence => "<Tab>",
+--            Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+--         Bind
+--           (Widgt => Button, Sequence => "<Escape>",
+--            Script => "{" & Close_Button & " invoke;break}");
+--      end if;
+--      Autoscroll(Scroll => Y_Scroll);
+--      -- General info about the selected crew member
+--      Frame := Create(pathName => Member_Canvas & ".general");
+--      Add_Label
+--        (Name => Frame & ".nameinfo", Text => "Name: ",
+--         Text_2 => To_String(Source => Member.Name));
+--      Info_Button :=
+--        Create
+--          (pathName => Frame & ".nameinfo.button",
+--           options =>
+--             "-image editicon -command {" & Close_Button &
+--             " invoke;GetString {Enter a new name for the " &
+--             To_String(Source => Member.Name) & ":} crewname" &
+--             CArgv.Arg(Argv => Argv, N => 1) &
+--             " {Renaming crew member} {Rename}" & "} -style Small.TButton");
+--      Add
+--        (Widget => Info_Button,
+--         Message => "Set a new name for the crew member");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Info_Button,
+--         Options => "-row 0 -column 2 -sticky n -padx {5 0}");
+--      Bind
+--        (Widgt => Info_Button, Sequence => "<Escape>",
+--         Script => "{" & Close_Button & " invoke;break}");
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+--      if Member.Health < 100 then
+--         if Get_Boolean_Setting(Name => "showNumbers") then
+--            Add_Label
+--              (Name => Frame & ".health", Text => "Health:",
+--               Text_2 => Natural'Image(Member.Health) & "%");
+--         else
+--            case Member.Health is
+--               when 81 .. 99 =>
+--                  Add_Label
+--                    (Name => Frame & ".health", Text => "Health: ",
+--                     Text_2 => "Slightly wounded");
+--               when 51 .. 80 =>
+--                  Add_Label
+--                    (Name => Frame & ".health", Text => "Health: ",
+--                     Text_2 => "Wounded");
+--               when 1 .. 50 =>
+--                  Add_Label
+--                    (Name => Frame & ".health", Text => "Health: ",
+--                     Text_2 => "Heavily wounded");
+--               when others =>
+--                  null;
+--            end case;
+--         end if;
+--      end if;
+--      Tired_Points :=
+--        Member.Tired - Member.Attributes(Positive(Condition_Index)).Level;
+--      if Tired_Points < 0 then
+--         Tired_Points := 0;
+--      end if;
+--      if Tired_Points > 0 then
+--         if Get_Boolean_Setting(Name => "showNumbers") then
+--            Add_Label
+--              (Name => Frame & ".tired", Text => "Tiredness:",
+--               Text_2 => Natural'Image(Tired_Points) & "%");
+--         else
+--            case Tired_Points is
+--               when 1 .. 40 =>
+--                  Add_Label
+--                    (Name => Frame & ".tired", Text => "Tiredness: ",
+--                     Text_2 => "Bit tired");
+--               when 41 .. 80 =>
+--                  Add_Label
+--                    (Name => Frame & ".tired", Text => "Tiredness: ",
+--                     Text_2 => "Tired");
+--               when 81 .. 99 =>
+--                  Add_Label
+--                    (Name => Frame & ".tired", Text => "Tiredness: ",
+--                     Text_2 => "Very tired");
+--               when 100 =>
+--                  Add_Label
+--                    (Name => Frame & ".tired", Text => "Tiredness: ",
+--                     Text_2 => "Unconscious");
+--               when others =>
+--                  null;
+--            end case;
+--         end if;
+--      end if;
+--      if Member.Thirst > 0 then
+--         if Get_Boolean_Setting(Name => "showNumbers") then
+--            Add_Label
+--              (Name => Frame & ".thirst", Text => "Thirst:",
+--               Text_2 => Natural'Image(Member.Thirst) & "%");
+--         else
+--            case Member.Thirst is
+--               when 1 .. 40 =>
+--                  Add_Label
+--                    (Name => Frame & ".thirst", Text => "Thirst: ",
+--                     Text_2 => "Bit thirsty");
+--               when 41 .. 80 =>
+--                  Add_Label
+--                    (Name => Frame & ".thirst", Text => "Thirst: ",
+--                     Text_2 => "Thirsty");
+--               when 81 .. 99 =>
+--                  Add_Label
+--                    (Name => Frame & ".thirst", Text => "Thirst: ",
+--                     Text_2 => "Very thirsty");
+--               when 100 =>
+--                  Add_Label
+--                    (Name => Frame & ".thirst", Text => "Thirst: ",
+--                     Text_2 => "Dehydrated");
+--               when others =>
+--                  null;
+--            end case;
+--         end if;
+--      end if;
+--      if Member.Hunger > 0 then
+--         if Get_Boolean_Setting(Name => "showNumbers") then
+--            Add_Label
+--              (Name => ".hunger",
+--               Text => Frame & "Hunger:" & Natural'Image(Member.Hunger) & "%");
+--         else
+--            case Member.Hunger is
+--               when 1 .. 40 =>
+--                  Add_Label
+--                    (Name => Frame & ".hunger", Text => "Hunger: ",
+--                     Text_2 => "Bit hungry");
+--               when 41 .. 80 =>
+--                  Add_Label
+--                    (Name => Frame & ".hunger", Text => "Hunger: ",
+--                     Text_2 => "Hungry");
+--               when 81 .. 99 =>
+--                  Add_Label
+--                    (Name => Frame & ".hunger", Text => "Hunger: ",
+--                     Text_2 => "Very hungry");
+--               when 100 =>
+--                  Add_Label
+--                    (Name => Frame & ".hunger", Text => "Hunger: ",
+--                     Text_2 => "Starving");
+--               when others =>
+--                  null;
+--            end case;
+--         end if;
+--      end if;
+--      if Member.Morale(1) /= 50 then
+--         if Get_Boolean_Setting(Name => "showNumbers") then
+--            Add_Label
+--              (Name => Frame & ".morale",
+--               Text => "Morale:" & Natural'Image(Member.Morale(1)) & "%");
+--         else
+--            case Member.Morale(1) is
+--               when 0 .. 24 =>
+--                  Add_Label
+--                    (Name => Frame & ".morale", Text => "Morale: ",
+--                     Text_2 => "Upset");
+--               when 25 .. 49 =>
+--                  Add_Label
+--                    (Name => Frame & ".morale", Text => "Morale: ",
+--                     Text_2 => "Unhappy");
+--               when 51 .. 74 =>
+--                  Add_Label
+--                    (Name => Frame & ".morale", Text => "Morale: ",
+--                     Text_2 => "Happy");
+--               when 75 .. 100 =>
+--                  Add_Label
+--                    (Name => Frame & ".morale", Text => "Morale: ",
+--                     Text_2 => "Excited");
+--               when others =>
+--                  null;
+--            end case;
+--         end if;
+--      end if;
+--      if Skills_Container.Length(Container => Member.Skills) > 0 then
+--         Add_Label
+--           (Name => Frame & ".orderinfo", Text => "Order: ",
+--            Text_2 =>
+--              To_String
+--                (Source => Get_Current_Order(Member_Index => Member_Index)));
+--         Info_Button :=
+--           Create
+--             (pathName => Frame & ".orderinfo.button",
+--              options =>
+--                "-image giveordericon -command {" & Close_Button &
+--                " invoke;ShowCrewOrder " & Positive'Image(Member_Index) &
+--                "} -style Small.TButton");
+--         Add
+--           (Widget => Info_Button,
+--            Message => "Set the new order for the crew member");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Info_Button,
+--            Options => "-row 0 -column 2 -sticky n -padx {5 0}");
+--         Bind
+--           (Widgt => Info_Button, Sequence => "<Escape>",
+--            Script => "{" & Close_Button & " invoke;break}");
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+--         Bind
+--           (Widgt => Info_Button, Sequence => "<Tab>",
+--            Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
+--         Info_Button := Get_Widget(pathName => Frame & ".nameinfo.button");
+--         Bind
+--           (Widgt => Info_Button, Sequence => "<Tab>",
+--            Script => "{focus " & Frame & ".orderinfo.button;break}");
+--      else
+--         Bind
+--           (Widgt => Info_Button, Sequence => "<Tab>",
+--            Script => "{focus " & Close_Button & ";break}");
+--      end if;
+--      if Faction.Flags.Find_Index
+--          (Item => To_Unbounded_String(Source => "nogender")) =
+--        UnboundedString_Container.No_Index then
+--         Add_Label
+--           (Name => Frame & ".gender", Text => "Gender: ",
+--            Text_2 => (if Member.Gender = 'M' then "Male" else "Female"));
+--      end if;
+--      Add_Label
+--        (Name => Frame & ".faction", Text => "Faction: ",
+--         Text_2 => To_String(Source => Faction.Name));
+--      Add_Label
+--        (Name => Frame & ".homebase", Text => "Home base: ",
+--         Text_2 => To_String(Source => Sky_Bases(Member.Home_Base).Name));
+--      if Skills_Container.Length(Container => Member.Skills) = 0 or
+--        Member.Contract_Length = 0 then
+--         Add_Label(Name => Frame & ".passenger", Text => "Passenger");
+--         if Member.Contract_Length > 0 then
+--            Member_Info := Null_Unbounded_String;
+--            Minutes_To_Date
+--              (Minutes => Member.Contract_Length, Info_Text => Member_Info);
+--            Add_Label
+--              (Name => Frame & ".timelimit", Text => "Time limit:",
+--               Text_2 => To_String(Source => Member_Info));
+--         end if;
+--      else
+--         if Member_Index > 1 then
+--            Add_Label
+--              (Name => Frame & ".timelimit", Text => "Contract length:",
+--               Text_2 =>
+--                 (if Member.Contract_Length > 0 then
+--                    Integer'Image(Member.Contract_Length) & " days"
+--                  else " pernament"));
+--            Add_Label
+--              (Name => Frame & ".payment", Text => "Payment:",
+--               Text_2 =>
+--                 Natural'Image(Member.Payment(1)) & " " &
+--                 To_String(Source => Money_Name) & " each day" &
+--                 (if Member.Payment(2) > 0 then
+--                    " and " & Natural'Image(Member.Payment(2)) &
+--                    " percent of profit from each trade"
+--                  else ""));
+--         end if;
+--      end if;
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
+--      if Skills_Container.Length(Container => Member.Skills) > 0 and
+--        Member.Contract_Length /= 0 then
+--         -- Statistics of the selected crew member
+--         Frame := Create(pathName => Member_Canvas & ".stats");
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
+--         Load_Statistics_Loop :
+--         for I in Member.Attributes'Range loop
+--            Progress_Frame :=
+--              Create
+--                (pathName =>
+--                   Frame & ".statinfo" &
+--                   Trim(Source => Positive'Image(I), Side => Left));
+--            Member_Label :=
+--              Create
+--                (pathName => Progress_Frame & ".label",
+--                 options =>
+--                   "-text {" &
+--                   To_String
+--                     (Source =>
+--                        AttributesData_Container.Element
+--                          (Container => Attributes_List, Index => I)
+--                          .Name) &
+--                   ":}");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Member_Label, Options => "-sticky w");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--            Member_Label :=
+--              Create
+--                (pathName => Progress_Frame & ".label2",
+--                 options =>
+--                   "-text {" &
+--                   Get_Attribute_Level_Name
+--                     (Attribute_Level => Member.Attributes(I).Level) &
+--                   "} -style Golden.TLabel");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Member_Label,
+--               Options => "-sticky we -column 1 -row 0 -padx {5 0}");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--            Tcl.Tk.Ada.Grid.Column_Configure
+--              (Master => Progress_Frame, Slave => Member_Label,
+--               Options => "-weight 1");
+--            Tcl.Tk.Ada.Grid.Row_Configure
+--              (Master => Progress_Frame, Slave => Member_Label,
+--               Options => "-weight 1");
+--            Info_Button :=
+--              Create
+--                (pathName => Progress_Frame & ".button",
+--                 options =>
+--                   "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+--                   Positive'Image(I) & " .memberdialog}");
+--            Tcl.Tklib.Ada.Tooltip.Add
+--              (Widget => Info_Button,
+--               Message =>
+--                 "Show detailed information about the selected attribute.");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Info_Button,
+--               Options => "-column 2 -row 0 -padx {5 0}");
+--            Bind
+--              (Widgt => Info_Button, Sequence => "<Escape>",
+--               Script => "{" & Close_Button & " invoke;break}");
+--            if I < Member.Attributes'Length then
+--               Bind
+--                 (Widgt => Info_Button, Sequence => "<Tab>",
+--                  Script =>
+--                    "{focus " & Frame & ".statinfo" &
+--                    Trim(Source => Positive'Image(I + 1), Side => Left) &
+--                    ".button;break}");
+--            else
+--               Bind
+--                 (Widgt => Info_Button, Sequence => "<Tab>",
+--                  Script =>
+--                    "{focus " & Buttons_Frame & ".button1" & ";break}");
+--            end if;
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Progress_Frame, Options => "-sticky we -padx 5");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
+--            Tcl_Eval(interp => Interp, strng => "update");
+--            Progress_Bar :=
+--              Create
+--                (pathName =>
+--                   Frame & ".level" &
+--                   Trim(Source => Positive'Image(I), Side => Left),
+--                 options =>
+--                   "-value" &
+--                   Positive'Image
+--                     (if Member.Attributes(I).Level > 2 then
+--                        Member.Attributes(I).Level * 2
+--                      else 6));
+--            Tcl.Tklib.Ada.Tooltip.Add
+--              (Widget => Progress_Bar,
+--               Message => "The current level of the attribute.");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Progress_Bar, Options => "-sticky w -padx 5");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
+--            Progress_Frame :=
+--              Create
+--                (pathName =>
+--                   Frame & ".experienceframe" &
+--                   Trim(Source => Positive'Image(I), Side => Left),
+--                 options => "-height 12");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Progress_Frame, Options => "-sticky w -padx 5");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
+--            Progress_Bar :=
+--              Create
+--                (pathName =>
+--                   Progress_Frame & ".experience" &
+--                   Trim(Source => Positive'Image(I), Side => Left),
+--                 options =>
+--                   "-value" &
+--                   Float'Image
+--                     (Float(Member.Attributes(I).Experience) /
+--                      Float(Member.Attributes(I).Level * 250)) &
+--                   " -maximum 1.0 -style experience.Horizontal.TProgressbar");
+--            Tcl.Tklib.Ada.Tooltip.Add
+--              (Widget => Progress_Bar,
+--               Message => "Experience need to reach the next level");
+--            Tcl.Tk.Ada.Place.Place
+--              (Slave => Progress_Bar,
+--               Options =>
+--                 "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
+--         end loop Load_Statistics_Loop;
+--         Load_Statistics_Experience_Loop :
+--         for I in Member.Attributes'Range loop
+--            Progress_Bar :=
+--              Get_Widget
+--                (pathName =>
+--                   Frame & ".level" &
+--                   Trim(Source => Positive'Image(I), Side => Left));
+--            configure(Widgt => Progress_Bar, options => "-length 360");
+--            Progress_Frame :=
+--              Get_Widget
+--                (pathName =>
+--                   Frame & ".experienceframe" &
+--                   Trim(Source => Positive'Image(I), Side => Left));
+--            configure(Widgt => Progress_Frame, options => "-width 360");
+--            Progress_Bar :=
+--              Get_Widget
+--                (pathName =>
+--                   Progress_Frame & ".experience" &
+--                   Trim(Source => Positive'Image(I), Side => Left));
+--            configure(Widgt => Progress_Bar, options => "-length 360");
+--         end loop Load_Statistics_Experience_Loop;
+--         -- Skills of the selected crew member
+--         Frame := Create(pathName => Member_Canvas & ".skills");
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
+--         Load_Skills_Loop :
+--         for I in
+--           Skills_Container.First_Index(Container => Member.Skills) ..
+--             Skills_Container.Last_Index(Container => Member.Skills) loop
+--            Progress_Frame :=
+--              Create
+--                (pathName =>
+--                   Frame & ".skillinfo" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+--            Member_Label :=
+--              Create
+--                (pathName =>
+--                   Progress_Frame & ".label" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--                 options =>
+--                   "-text {" &
+--                   To_String
+--                     (Source =>
+--                        SkillsData_Container.Element
+--                          (Container => Skills_List,
+--                           Index =>
+--                             Skills_Container.Element
+--                               (Container => Member.Skills, Index => I)
+--                               .Index)
+--                          .Name) &
+--                   ":}");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Member_Label, Options => "-sticky w");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--            Member_Label :=
+--              Create
+--                (pathName =>
+--                   Progress_Frame & ".label2" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--                 options =>
+--                   "-text {" &
+--                   Get_Skill_Level_Name
+--                     (Skill_Level =>
+--                        Skills_Container.Element
+--                          (Container => Member.Skills, Index => I)
+--                          .Level) &
+--                   "} -style Golden.TLabel");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Member_Label,
+--               Options => "-sticky we -column 1 -row 0 -padx {5 0}");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--            Tcl.Tk.Ada.Grid.Column_Configure
+--              (Master => Progress_Frame, Slave => Member_Label,
+--               Options => "-weight 1");
+--            Tcl.Tk.Ada.Grid.Row_Configure
+--              (Master => Progress_Frame, Slave => Member_Label,
+--               Options => "-weight 1");
+--            Info_Button :=
+--              Create
+--                (pathName => Progress_Frame & ".button",
+--                 options =>
+--                   "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+--                   Skills_Amount_Range'Image
+--                     (Skills_Container.Element
+--                        (Container => Member.Skills, Index => I)
+--                        .Index) &
+--                   " " & CArgv.Arg(Argv => Argv, N => 1) & " .memberdialog}");
+--            Tcl.Tklib.Ada.Tooltip.Add
+--              (Widget => Info_Button,
+--               Message =>
+--                 "Show detailed information about the selected skill.");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Info_Button,
+--               Options => "-column 2 -row 0 -padx {5 0}");
+--            Bind
+--              (Widgt => Info_Button, Sequence => "<Escape>",
+--               Script => "{" & Close_Button & " invoke;break}");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Info_Button & " " & Y_Scroll);
+--            if I < Skills_Container.Last_Index(Container => Member.Skills) then
+--               Bind
+--                 (Widgt => Info_Button, Sequence => "<Tab>",
+--                  Script =>
+--                    "{focus " & Frame & ".skillinfo" &
+--                    Trim(Source => Count_Type'Image(I + 1), Side => Left) &
+--                    ".button;break}");
+--            else
+--               Bind
+--                 (Widgt => Info_Button, Sequence => "<Tab>",
+--                  Script =>
+--                    "{focus " & Buttons_Frame & ".button1" & ";break}");
+--            end if;
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Progress_Frame, Options => "-sticky we -padx 5");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
+--            Tcl_Eval(interp => Interp, strng => "update");
+--            Progress_Bar :=
+--              Create
+--                (pathName =>
+--                   Frame & ".level" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--                 options =>
+--                   "-value" &
+--                   Positive'Image
+--                     (Skills_Container.Element
+--                        (Container => Member.Skills, Index => I)
+--                        .Level));
+--            Tcl.Tklib.Ada.Tooltip.Add
+--              (Widget => Progress_Bar,
+--               Message => "The current level of the skill.");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Progress_Bar, Options => "-sticky w -padx 5");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
+--            Progress_Frame :=
+--              Create
+--                (pathName =>
+--                   Frame & ".experienceframe" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--                 options => "-height 12");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Progress_Frame, Options => "-sticky w -padx 5");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Frame & " " & Y_Scroll);
+--            --## rule off SIMPLIFIABLE_EXPRESSIONS
+--            Progress_Bar :=
+--              Create
+--                (pathName =>
+--                   Progress_Frame & ".experience" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--                 options =>
+--                   "-value" &
+--                   Float'Image
+--                     (Float
+--                        (Skills_Container.Element
+--                           (Container => Member.Skills, Index => I)
+--                           .Experience) /
+--                      Float
+--                        ((Skills_Container.Element
+--                            (Container => Member.Skills, Index => I)
+--                            .Level *
+--                          25))) &
+--                   " -maximum 1.0 -style experience.Horizontal.TProgressbar");
+--            --## rule on SIMPLIFIABLE_EXPRESSIONS
+--            Tcl.Tklib.Ada.Tooltip.Add
+--              (Widget => Progress_Bar,
+--               Message => "Experience need to reach the next level");
+--            Tcl.Tk.Ada.Place.Place
+--              (Slave => Progress_Bar,
+--               Options =>
+--                 "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+--            Tcl_Eval
+--              (interp => Interp,
+--               strng =>
+--                 "SetScrollbarBindings " & Progress_Bar & " " & Y_Scroll);
+--            Tcl_Eval(interp => Interp, strng => "update");
+--         end loop Load_Skills_Loop;
+--         Load_Skill_Experience_Loop :
+--         for I in
+--           Skills_Container.First_Index(Container => Member.Skills) ..
+--             Skills_Container.Last_Index(Container => Member.Skills) loop
+--            Progress_Bar :=
+--              Get_Widget
+--                (pathName =>
+--                   Frame & ".level" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+--            configure(Widgt => Progress_Bar, options => "-length 360");
+--            Progress_Frame :=
+--              Get_Widget
+--                (pathName =>
+--                   Frame & ".experienceframe" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+--            configure(Widgt => Progress_Frame, options => "-width 360");
+--            Progress_Bar :=
+--              Get_Widget
+--                (pathName =>
+--                   Progress_Frame & ".experience" &
+--                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+--            configure(Widgt => Progress_Bar, options => "-length 360");
+--         end loop Load_Skill_Experience_Loop;
+--         -- Orders priorities of the selected crew member
+--         Frame := Create(pathName => Member_Canvas & ".priorities");
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Frame & " " & Y_Scroll);
+--         Member_Label :=
+--           Create
+--             (pathName => Frame & ".label1", options => "-text {Priority}");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label);
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--         Member_Label :=
+--           Create(pathName => Frame & ".label2", options => "-text {Level}");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Member_Label, Options => "-row 0 -column 1");
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng => "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--         Show_Priorities_Block :
+--         declare
+--            Priorities_Names: constant array
+--              (Member.Orders'Range) of Unbounded_String :=
+--              (1 => To_Unbounded_String(Source => "Piloting:"),
+--               2 => To_Unbounded_String(Source => "Engineering:"),
+--               3 => To_Unbounded_String(Source => "Operating guns:"),
+--               4 => To_Unbounded_String(Source => "Repair ship:"),
+--               5 => To_Unbounded_String(Source => "Manufacturing:"),
+--               6 => To_Unbounded_String(Source => "Upgrading ship:"),
+--               7 => To_Unbounded_String(Source => "Talking in bases:"),
+--               8 => To_Unbounded_String(Source => "Healing wounded:"),
+--               9 => To_Unbounded_String(Source => "Cleaning ship:"),
+--               10 => To_Unbounded_String(Source => "Defend ship:"),
+--               11 => To_Unbounded_String(Source => "Board enemy ship:"),
+--               12 => To_Unbounded_String(Source => "Train skill:"));
+--            Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
+--         begin
+--            Load_Priorities_Loop :
+--            for I in Member.Orders'Range loop
+--               Member_Label :=
+--                 Create
+--                   (pathName =>
+--                      Frame & ".name" &
+--                      Trim(Source => Positive'Image(I), Side => Left),
+--                    options =>
+--                      "-text {" & To_String(Source => Priorities_Names(I)) &
+--                      "} -takefocus 0");
+--               Tcl.Tk.Ada.Grid.Grid
+--                 (Slave => Member_Label, Options => "-sticky w -padx {5 0}");
+--               Tcl_Eval
+--                 (interp => Interp,
+--                  strng =>
+--                    "SetScrollbarBindings " & Member_Label & " " & Y_Scroll);
+--               Combo_Box :=
+--                 Create
+--                   (pathName =>
+--                      Frame & ".level" &
+--                      Trim(Source => Positive'Image(I), Side => Left),
+--                    options =>
+--                      "-values [list None Normal Highest] -state readonly -width 8");
+--               Current
+--                 (ComboBox => Combo_Box,
+--                  NewIndex => Natural'Image(Member.Orders(I)));
+--               Bind
+--                 (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+--                  Script =>
+--                    "{SetPriority" & Positive'Image(I) & " [" & Combo_Box &
+--                    " current]" & Positive'Image(Member_Index) & "}");
+--               Tcl.Tk.Ada.Grid.Grid
+--                 (Slave => Combo_Box,
+--                  Options =>
+--                    "-column 1 -row" & Positive'Image(I) & " -padx {0 5}");
+--               Bind
+--                 (Widgt => Combo_Box, Sequence => "<Escape>",
+--                  Script => "{" & Close_Button & " invoke;break}");
+--            end loop Load_Priorities_Loop;
+--            Bind
+--              (Widgt => Combo_Box, Sequence => "<Tab>",
+--               Script => "{focus " & Buttons_Frame & ".button1" & ";break}");
+--         end Show_Priorities_Block;
+--      end if;
+--      if CArgv.Arg(Argv => Argv, N => 1) = "1" or
+--        Player_Ship.Speed /= DOCKED then
+--         Bind
+--           (Widgt => Close_Button, Sequence => "<Tab>",
+--            Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
+--      else
+--         Bind
+--           (Widgt => Close_Button, Sequence => "<Tab>",
+--            Script => "{focus " & Member_Dialog & ".buttons.button2;break}");
+--      end if;
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
+--      Show_Dialog
+--        (Dialog => Member_Dialog, Relative_Y => 0.2, Relative_X => 0.2);
+--      return
+--        Show_Member_Tab_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 1,
+--           Argv => CArgv.Empty & "ShowMemberTab");
+--   end Show_Member_Info_Command;
 
    -- ****o* SUCrew/SUCrew.Show_Crew_Stats_Info_Command
    -- FUNCTION
@@ -2292,12 +2292,9 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowMemberInfo",
-         Ada_Command => Show_Member_Info_Command'Access);
 --      Add_Command
---        (Name => "ShowMemberTab",
---         Ada_Command => Show_Member_Tab_Command'Access);
+--        (Name => "ShowMemberInfo",
+--         Ada_Command => Show_Member_Info_Command'Access);
       Add_Command
         (Name => "ShowCrewStatsInfo",
          Ada_Command => Show_Crew_Stats_Info_Command'Access);

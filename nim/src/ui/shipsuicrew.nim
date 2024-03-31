@@ -825,6 +825,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("Dismiss", dismissCommand)
     addCommand("SetCrewOrder", setCrewOrderCommand)
     addCommand("ShowMemberTab", showMemberTabCommand)
+    addCommand("ShowMemberInfo", showMemberInfoCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
