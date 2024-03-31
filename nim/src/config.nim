@@ -249,13 +249,13 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
         of "PricesBonus":
           newGameSettings.pricesBonus = entry.value.parseAdaFloat()
         of "DifficultyLevel":
-          newGameSettings.difficultyLevel = parseEnum[DifficultyType](
-              entry.value.toLowerAscii)
+          newGameSettings.difficultyLevel = parseEnum[DifficultyType](s =
+            entry.value.toLowerAscii)
         of "AutoRest":
           gameSettings.autoRest = entry.value.parseAdaBool()
         of "UndockSpeed":
-          gameSettings.undockSpeed = parseEnum[ShipSpeed](
-              entry.value.toLowerAscii)
+          gameSettings.undockSpeed = parseEnum[ShipSpeed](s =
+            entry.value.toLowerAscii)
         of "AutoCenter":
           gameSettings.autoCenter = entry.value.parseAdaBool()
         of "AutoReturn":
@@ -269,8 +269,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
         of "LowFood":
           gameSettings.lowFood = entry.value.parseInt().cint
         of "AutoMoveStop":
-          gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](
-              entry.value.toLowerAscii)
+          gameSettings.autoMoveStop = parseEnum[AutoMoveBreak](s =
+            entry.value.toLowerAscii)
         of "WindowWidth":
           gameSettings.windowWidth = entry.value.parseInt().cint
         of "WindowHeight":
@@ -288,8 +288,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
         of "InterfaceTheme":
           gameSettings.interfaceTheme = entry.value
         of "MessagesOrder":
-          gameSettings.messagesOrder = parseEnum[MessagesOrder](
-              entry.value.toLowerAscii)
+          gameSettings.messagesOrder = parseEnum[MessagesOrder](s =
+            entry.value.toLowerAscii)
         of "AutoAskForBases":
           gameSettings.autoAskForBases = entry.value.parseAdaBool()
         of "AutoAskForEvents":
@@ -305,8 +305,8 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
         of "AutoCloseMessagesTime":
           gameSettings.autoCloseMessagesTime = entry.value.parseInt().cint
         of "AutoSave":
-          gameSettings.autoSave = parseEnum[AutoSaveTime](
-              entry.value.toLowerAscii)
+          gameSettings.autoSave = parseEnum[AutoSaveTime](s =
+            entry.value.toLowerAscii)
         of "TopicsPosition":
           gameSettings.topicsPosition = entry.value.parseInt().cint
         of "ShowNumbers":
@@ -345,30 +345,39 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
       name.len > 0
     body:
       if value:
-        config.setSectionKey("", name, "Yes")
+        config.setSectionKey(section = "", key = name, value = "Yes")
       else:
-        config.setSectionKey("", name, "No")
+        config.setSectionKey(section = "", key = name, value = "No")
 
-  config.setSectionKey("", "PlayerName", $newGameSettings.playerName)
-  config.setSectionKey("", "PlayerGender", $newGameSettings.playerGender)
-  config.setSectionKey("", "ShipName", $newGameSettings.shipName)
-  config.setSectionKey("", "PlayerFaction", $newGameSettings.playerFaction)
-  config.setSectionKey("", "PlayerCareer", $newGameSettings.playerCareer)
-  config.setSectionKey("", "StartingBase", $newGameSettings.startingBase)
-  config.setSectionKey("", "EnemyDamageBonus",
-      $newGameSettings.enemyDamageBonus)
-  config.setSectionKey("", "PlayerDamageBonus",
-      $newGameSettings.playerDamageBonus)
-  config.setSectionKey("", "EnemyMeleeDamageBonus",
-      $newGameSettings.enemyMeleeDamageBonus)
-  config.setSectionKey("", "PlayerMeleeDamageBonus",
-      $newGameSettings.playerMeleeDamageBonus)
-  config.setSectionKey("", "ExperienceBonus", $newGameSettings.experienceBonus)
-  config.setSectionKey("", "ReputationBonus", $newGameSettings.reputationBonus)
-  config.setSectionKey("", "UpgradeCostBonus",
-      $newGameSettings.upgradeCostBonus)
-  config.setSectionKey("", "PricesBonus", $newGameSettings.pricesBonus)
-  config.setSectionKey("", "DifficultyLevel", (
+  config.setSectionKey(section = "", key = "PlayerName",
+      value = $newGameSettings.playerName)
+  config.setSectionKey(section = "", key = "PlayerGender",
+      value = $newGameSettings.playerGender)
+  config.setSectionKey(section = "", key = "ShipName",
+      value = $newGameSettings.shipName)
+  config.setSectionKey(section = "", key = "PlayerFaction",
+      value = $newGameSettings.playerFaction)
+  config.setSectionKey(section = "", key = "PlayerCareer",
+      value = $newGameSettings.playerCareer)
+  config.setSectionKey(section = "", key = "StartingBase",
+      value = $newGameSettings.startingBase)
+  config.setSectionKey(section = "", key = "EnemyDamageBonus",
+      value = $newGameSettings.enemyDamageBonus)
+  config.setSectionKey(section = "", key = "PlayerDamageBonus",
+      value = $newGameSettings.playerDamageBonus)
+  config.setSectionKey(section = "", key = "EnemyMeleeDamageBonus",
+      value = $newGameSettings.enemyMeleeDamageBonus)
+  config.setSectionKey(section = "", key = "PlayerMeleeDamageBonus",
+      value = $newGameSettings.playerMeleeDamageBonus)
+  config.setSectionKey(section = "", key = "ExperienceBonus",
+      value = $newGameSettings.experienceBonus)
+  config.setSectionKey(section = "", key = "ReputationBonus",
+      value = $newGameSettings.reputationBonus)
+  config.setSectionKey(section = "", key = "UpgradeCostBonus",
+      value = $newGameSettings.upgradeCostBonus)
+  config.setSectionKey(section = "", key = "PricesBonus",
+      value = $newGameSettings.pricesBonus)
+  config.setSectionKey(section = "", key = "DifficultyLevel", value = (
       $newGameSettings.difficultyLevel).toUpperAscii)
   saveAdaBoolean(value = gameSettings.autoRest, name = "AutoRest")
   config.setSectionKey("", "UndockSpeed", (
