@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's configuration, like load and save it to
+## the file.
+
 import std/[parsecfg, streams, strutils]
 import contracts
 import game, types
@@ -380,25 +383,36 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
   config.setSectionKey(section = "", key = "DifficultyLevel", value = (
       $newGameSettings.difficultyLevel).toUpperAscii)
   saveAdaBoolean(value = gameSettings.autoRest, name = "AutoRest")
-  config.setSectionKey("", "UndockSpeed", (
+  config.setSectionKey(section = "", key = "UndockSpeed", value = (
       $gameSettings.undockSpeed).toUpperAscii)
   saveAdaBoolean(value = gameSettings.autoCenter, name = "AutoCenter")
   saveAdaBoolean(value = gameSettings.autoReturn, name = "AutoReturn")
   saveAdaBoolean(value = gameSettings.autoFinish, name = "AutoFinish")
-  config.setSectionKey("", "LowFuel", $gameSettings.lowFuel)
-  config.setSectionKey("", "LowDrinks", $gameSettings.lowDrinks)
-  config.setSectionKey("", "LowFood", $gameSettings.lowFood)
-  config.setSectionKey("", "AutoMoveStop", (
+  config.setSectionKey(section = "", key = "LowFuel",
+      value = $gameSettings.lowFuel)
+  config.setSectionKey(section = "", key = "LowDrinks",
+      value = $gameSettings.lowDrinks)
+  config.setSectionKey(section = "", key = "LowFood",
+      value = $gameSettings.lowFood)
+  config.setSectionKey(section = "", key = "AutoMoveStop", value = (
       $gameSettings.autoMoveStop).toUpperAscii)
-  config.setSectionKey("", "WindowWidth", $gameSettings.windowWidth)
-  config.setSectionKey("", "WindowHeight", $gameSettings.windowHeight)
-  config.setSectionKey("", "MessagesLimit", $gameSettings.messagesLimit)
-  config.setSectionKey("", "SavedMessages", $gameSettings.savedMessages)
-  config.setSectionKey("", "HelpFontSize", $gameSettings.helpFontSize)
-  config.setSectionKey("", "MapFontSize", $gameSettings.mapFontSize)
-  config.setSectionKey("", "InterfaceFontSize", $gameSettings.interfaceFontSize)
-  config.setSectionKey("", "InterfaceTheme", $gameSettings.interfaceTheme)
-  config.setSectionKey("", "MessagesOrder", (
+  config.setSectionKey(section = "", key = "WindowWidth",
+      value = $gameSettings.windowWidth)
+  config.setSectionKey(section = "", key = "WindowHeight",
+      value = $gameSettings.windowHeight)
+  config.setSectionKey(section = "", key = "MessagesLimit",
+      value = $gameSettings.messagesLimit)
+  config.setSectionKey(section = "", key = "SavedMessages",
+      value = $gameSettings.savedMessages)
+  config.setSectionKey(section = "", key = "HelpFontSize",
+      value = $gameSettings.helpFontSize)
+  config.setSectionKey(section = "", key = "MapFontSize",
+      value = $gameSettings.mapFontSize)
+  config.setSectionKey(section = "", key = "InterfaceFontSize",
+      value = $gameSettings.interfaceFontSize)
+  config.setSectionKey(section = "", key = "InterfaceTheme",
+      value = $gameSettings.interfaceTheme)
+  config.setSectionKey(section = "", key = "MessagesOrder", value = (
       $gameSettings.messagesOrder).toUpperAscii)
   saveAdaBoolean(value = gameSettings.autoAskForBases, name = "AutoAskForBases")
   saveAdaBoolean(value = gameSettings.autoAskForEvents,
@@ -406,30 +420,38 @@ proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
   saveAdaBoolean(value = gameSettings.showTooltips, name = "ShowTooltips")
   saveAdaBoolean(value = gameSettings.showLastMessages,
       name = "ShowLastMessages")
-  config.setSectionKey("", "MessagesPosition", $gameSettings.messagesPosition)
+  config.setSectionKey(section = "", key = "MessagesPosition",
+      value = $gameSettings.messagesPosition)
   saveAdaBoolean(value = gameSettings.fullScreen, name = "FullScreen")
-  config.setSectionKey("", "AutoCloseMessagesTime",
-      $gameSettings.autoCloseMessagesTime)
-  config.setSectionKey("", "AutoSave", ($gameSettings.autoSave).toUpperAscii)
-  config.setSectionKey("", "TopicsPosition", $gameSettings.topicsPosition)
+  config.setSectionKey(section = "", key = "AutoCloseMessagesTime", value =
+    $gameSettings.autoCloseMessagesTime)
+  config.setSectionKey(section = "", key = "AutoSave", value = (
+      $gameSettings.autoSave).toUpperAscii)
+  config.setSectionKey(section = "", key = "TopicsPosition",
+      value = $gameSettings.topicsPosition)
   saveAdaBoolean(value = gameSettings.showNumbers, name = "ShowNumbers")
   saveAdaBoolean(value = gameSettings.rightButton, name = "RightButton")
-  config.setSectionKey("", "ListsLimit", $gameSettings.listsLimit)
-  config.setSectionKey("", "WaitMinutes", $gameSettings.waitMinutes)
-  config.writeConfig(saveDirectory & "game.cfg")
+  config.setSectionKey(section = "", key = "ListsLimit",
+      value = $gameSettings.listsLimit)
+  config.setSectionKey(section = "", key = "WaitMinutes",
+      value = $gameSettings.waitMinutes)
+  config.writeConfig(filename = saveDirectory & "game.cfg")
 
 # Temporary code for interfacing with Ada
 
 proc loadAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   loadConfig()
 
 proc setAdaMessagesPosition(newValue: cint) {.sideEffect, raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   gameSettings.messagesPosition = newValue
 
 proc saveAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     saveConfig()
   except KeyError, IOError, OSError, ValueError:
@@ -437,6 +459,7 @@ proc saveAdaConfig() {.sideEffect, raises: [], tags: [RootEffect], exportc,
 
 proc getAdaBooleanSetting(name: cstring): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   case $name
   of "autoRest":
     result = gameSettings.autoRest.cint
@@ -465,6 +488,7 @@ proc getAdaBooleanSetting(name: cstring): cint {.raises: [], tags: [], exportc,
 
 proc setAdaBooleanSetting(name: cstring; value: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   case $name
   of "autoRest":
     gameSettings.autoRest = value == 1
@@ -493,6 +517,7 @@ proc setAdaBooleanSetting(name: cstring; value: cint) {.raises: [], tags: [],
 
 proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   case $name
   of "lowFuel":
     result = gameSettings.lowFuel.cint
@@ -539,6 +564,7 @@ proc getAdaIntegerSetting(name: cstring): cint {.raises: [], tags: [], exportc,
 
 proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   case $name
   of "lowFuel":
     gameSettings.lowFuel = value
@@ -585,14 +611,17 @@ proc setAdaIntegerSetting(name: cstring; value: cint) {.raises: [], tags: [],
 
 proc getAdaInterfaceTheme(): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return gameSettings.interfaceTheme.cstring
 
 proc setAdaInterfaceTheme(value: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   gameSettings.interfaceTheme = $value
 
 proc getAdaStringSetting(name: cstring): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   case $name
   of "playerName":
     return newGameSettings.playerName.cstring
@@ -607,6 +636,7 @@ proc getAdaStringSetting(name: cstring): cstring {.raises: [], tags: [],
 
 proc setAdaStringSetting(name, value: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   case $name
   of "playerName":
     newGameSettings.playerName = $value
@@ -621,6 +651,7 @@ proc setAdaStringSetting(name, value: cstring) {.raises: [], tags: [], exportc,
 
 proc getAdaFloatSetting(name: cstring): cfloat {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   case $name
   of "enemyDamageBonus":
     return newGameSettings.enemyDamageBonus.cfloat
@@ -641,6 +672,7 @@ proc getAdaFloatSetting(name: cstring): cfloat {.raises: [], tags: [], exportc,
 
 proc setAdaFloatSetting(name: cstring; value: cfloat) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   case $name
   of "enemyDamageBonus":
     newGameSettings.enemyDamageBonus = value
@@ -660,7 +692,9 @@ proc setAdaFloatSetting(name: cstring; value: cfloat) {.raises: [], tags: [],
     newGameSettings.pricesBonus = value
 
 proc getAdaGender(): char {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return newGameSettings.playerGender
 
 proc setAdaGender(value: char) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   newGameSettings.playerGender = value
