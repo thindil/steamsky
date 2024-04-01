@@ -475,7 +475,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & button & " <Escape> {" & closeButton & " invoke;break}")
   addCloseButton(name = buttonsFrame & ".button", text = "Close",
       command = "CloseDialog " & memberDialog, row = 0, column = 1)
-  if argv[1] == "1" and playerShip.speed == docked:
+  if argv[1] != "1" and playerShip.speed == docked:
     button = buttonsFrame & ".button2"
     tclEval(script = "ttk::button " & button &
         " -text {Dismiss} -image {dismissicon} -command {" & closeButton &
@@ -668,7 +668,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
       memberLabel = progressFrame & ".label2"
       tclEval(script = "ttk::label " & memberLabel & " -text {" &
-          getAttributeLevelName(attributeLevel = attrib.level) & " -style Golden.TLabel}")
+          getAttributeLevelName(attributeLevel = attrib.level) & "} -style Golden.TLabel")
       tclEval(script = "grid " & memberLabel & " -sticky we -column 1 -row 0 -padx {5 0}")
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
       tclEval(script = "grid columnconfigure " & progressFrame & " " &
@@ -678,7 +678,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       infoButton = progressFrame & ".button"
       tclEval(script = "ttk::button " & infoButton &
           " -image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo " &
-          $index & " .memberdialog}")
+          $(index + 1) & " .memberdialog}")
       tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected attribute.\"")
       tclEval(script = "grid " & infoButton & " -column 2 -row 0 -padx {5 0}")
       tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
@@ -692,7 +692,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "grid " & progressFrame & " -sticky we -padx 5")
       tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
       tclEval(script = "update")
-      var progressBar = frame & ".level"
+      var progressBar = frame & ".level" & $index
       tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
           if attrib.level > 2: attrib.level * 2 else: 6))
       tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
@@ -712,7 +712,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       var progressBar = frame & ".level" & $index
       tclEval(script = progressBar & " configure -length 360")
       let progressFrame = frame & ".experienceframe" & $index
-      tclEval(script = progressFrame & " configure -length 360")
+      tclEval(script = progressFrame & " configure -width 360")
       progressBar = progressFrame & ".experience" & $index
       tclEval(script = progressBar & " configure -length 360")
     # Skills of the selected crew member
@@ -739,7 +739,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       infoButton = progressFrame & ".button"
       tclEval(script = "ttk::button " & infoButton &
           " -image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo " &
-          $index & " .memberdialog}")
+          $skill.index & " " & $argv[1] & " .memberdialog}")
       tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected skill.\"")
       tclEval(script = "grid " & infoButton & " -column 2 -row 0 -padx {5 0}")
       tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
@@ -753,7 +753,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "grid " & progressFrame & " -sticky we -padx 5")
       tclEval(script = "SetScrollbarBindings " & progressFrame & " " & yScroll)
       tclEval(script = "update")
-      var progressBar = frame & ".level"
+      var progressBar = frame & ".level" & $index
       tclEval(script = "ttk::progressbar " & progressBar & " -value " & $skill.level)
       tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
       tclEval(script = "grid " & progressBar & " -sticky w -padx 5")
@@ -773,7 +773,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       var progressBar = frame & ".level" & $index
       tclEval(script = progressBar & " configure -length 360")
       let progressFrame = frame & ".experienceframe" & $index
-      tclEval(script = progressFrame & " configure -length 360")
+      tclEval(script = progressFrame & " configure -width 360")
       progressBar = progressFrame & ".experience" & $index
       tclEval(script = progressBar & " configure -length 360")
     # Order priorities of the selected crew member
