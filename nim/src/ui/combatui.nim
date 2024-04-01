@@ -91,8 +91,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   let faction = try:
       factionsList[playerShip.crew[0].faction]
     except:
-      tclEval(script = "bgerror {Can't update combat UI, no faction: " &
-          playerShip.crew[0].faction & "}")
+      showError(message = "Can't update combat UI, no faction: " &
+          playerShip.crew[0].faction, e = nil)
       return
   if "sentientships" notin faction.flags and findMember(order = pilot) == -1:
     tclEval(script = "grid remove " & comboBox)
@@ -152,8 +152,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
         ammoAmount = playerShip.cargo[aIndex].amount
         haveAmmo = true
     except:
-      tclEval(script = "bgerror {Can't show the player's ship's gun settings. No proto item with index: " &
-          $playerShip.cargo[aIndex].protoIndex & "}")
+      showError(message = "Can't show the player's ship's gun settings. No proto item with index: " &
+          $playerShip.cargo[aIndex].protoIndex, e = nil)
       return
     if not haveAmmo:
       ammoAmount = 0
@@ -166,8 +166,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
             if ammoIndex > -1:
               ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
         except:
-          tclEval(script = "bgerror {Can't show the gun's ammo information. No proto module with index: " &
-              $playerShip.modules[gun[1]].protoIndex & "}")
+          showError(message = "Can't show the gun's ammo information. No proto module with index: " &
+              $playerShip.modules[gun[1]].protoIndex, e = nil)
           return
     let label = frame & ".gunlabel" & $gunIndex
     tclEval(script = "ttk::label " & label & " -text {" & playerShip.modules[
@@ -198,8 +198,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
         gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
             position = gunIndex, index = orderIndex) & "}"
       except:
-        tclEval(script = "bgerror {Can't show gunner's order. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't show gunner's order.")
         return
     comboBox = frame & ".gunorder" & $(gunIndex + 1)
     if tclEval2(script = "winfo exists " & comboBox) == "0":
@@ -260,8 +259,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
       else:
         tclEval(script = label & " configure -text {" & defenders & "}")
   except:
-    tclEval(script = "bgerror {Can't show information about boarding party and defenders. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't show information about boarding party and defenders.")
     return
   tclEval(script = "update")
   var combatCanvas = mainPaned & ".combatframe.crew.canvas"
@@ -340,8 +338,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
           else:
             discard
         except:
-          tclEval(script = "bgerror {Can't show information about the enemy's ship. No proto module with index:" &
-              $module.protoIndex & "}")
+          showError(message = "Can't show information about the enemy's ship. No proto module with index:" &
+              $module.protoIndex, e = nil)
           return
   else:
     enemyInfo = enemyInfo & "Unknown"
@@ -362,8 +360,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
       let speedDiff = try:
           realSpeed(ship = game.enemy.ship) - realSpeed(ship = playerShip)
         except:
-          tclEval(script = "bgerror {Can't count the speed difference. Reason:" &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't count the speed difference.")
           return
       if speedDiff > 250:
         enemyInfo = enemyInfo & " (much faster)"
@@ -394,8 +391,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
     rows = tclResult[1].parseInt()
     deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
   except:
-    tclEval(script = "bgerror {Can't show the information about the enemy's ship's status. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't show the information about the enemy's ship's status.")
     return
   row = 1
   if endCombat:
@@ -405,14 +401,14 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
       module.durability = 0
     label = frame & ".lbl" & $row
     try:
-      tclEval(script = "ttk::label " & label & " -text {" & (
+      discard tclEval(script = "ttk::label " & label & " -text {" & (
           if game.enemy.distance > 1_000: getModuleType(
           moduleIndex = module.protoIndex) else: modulesList[
           module.protoIndex].name) & "}" & (if module.durability ==
           0: " -font OverstrikedFont -style Gray.TLabel" else: ""))
     except:
-      tclEval(script = "bgerror {Can't create the label with enemy module info. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't create the label with enemy module info.")
+      return
     tclEval(script = "grid " & label & " -row " & $row & " -column 0 -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.status.scrolly")
     let
