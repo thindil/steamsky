@@ -796,7 +796,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, order in member.orders:
       var memberLabel = frame & ".name" & $index
       tclEval(script = "ttk::label " & memberLabel & " -text {" &
-          prioritesNames[index] & " -takefocus 0}")
+          prioritesNames[index] & "} -takefocus 0}")
       tclEval(script = "grid " & memberLabel & " -sticky w -padx {5 0}")
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
       comboBox = frame & ".level" & $index
@@ -804,7 +804,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = comboBox & " current " & $(order.ord))
       tclEval(script = "bind " & comboBox &
           " <<ComboboxSelected>> {SetPriority " & $index & " [" & comboBox &
-          " current] " & $memberIndex & "}")
+          " current] " & $(memberIndex + 1) & "}")
       tclEval(script = "grid " & comboBox & " -column 1 -row " & $index & " -padx {0 5}")
       tclEval(script = "bind " & comboBox & " <Escape> {" & closeButton & " invoke;break}")
     tclEval(script = "bind " & comboBox & " <Tab> {focus " & buttonsFrame & ".button1;break}")
