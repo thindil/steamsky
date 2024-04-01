@@ -1143,6 +1143,8 @@ story.
   order button in the assign crafting order dialog. Optional.
 * Key `StudyColoredIcon`: Path to the SVG image which will be used for set study
   order button in the assign crafting order dialog. Optional.
+* Key `DeconstructColoredIcon`: Path to the SVG image which will be used for set
+  deconstruct order button in the assing crafting order dialog. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
