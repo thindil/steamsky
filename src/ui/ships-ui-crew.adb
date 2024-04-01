@@ -25,17 +25,17 @@ with GNAT.String_Split;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 -- with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 -- with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 -- use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 -- with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 -- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -75,6 +75,8 @@ package body Ships.UI.Crew is
    -- ****
 
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
+      use Tcl.Tk.Ada.Widgets.Canvas;
+
       --## rule off TYPE_INITIAL_VALUES
       type Crew_Array is array(0 .. 50) of Natural;
       --## rule on TYPE_INITIAL_VALUES
@@ -2069,6 +2071,8 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+
       Member_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
