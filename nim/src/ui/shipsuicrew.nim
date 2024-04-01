@@ -424,9 +424,12 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
-    memberIndex = ($argv[1]).parseInt - 1
+    memberIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the member index.")
     member = playerShip.crew[memberIndex]
     memberDialog = createDialog(name = ".memberdialog", title = member.name &
         "'s details", columns = 2)
@@ -613,8 +616,11 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         discard
   if member.skills.len > 0:
-    addLabel(name = frame & ".orderinfo", text = "Order: ",
-        text2 = getCurrentOrder(memberIndex = memberIndex))
+    try:
+      addLabel(name = frame & ".orderinfo", text = "Order: ",
+          text2 = getCurrentOrder(memberIndex = memberIndex))
+    except:
+      return showError(message = "Can't show the order label.")
     infoButton = frame & ".orderinfo.button"
     tclEval(script = "ttk::button " & infoButton &
         " -image giveordericon -command {" & closeButton &
@@ -628,7 +634,10 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & infoButton & " <Tab> {focus " & frame & ".orderinfo.button;break}")
   else:
     tclEval(script = "bind " & infoButton & " <Tab> {focus " & closeButton & ";break}")
-  let faction = factionsList[member.faction]
+  let faction = try:
+      factionsList[member.faction]
+    except:
+      return showError(message = "Can't get the crew member's faction.")
   if "nogender" notin faction.flags:
     addLabel(name = frame & ".gender", text = "Gender: ", text2 = (
         if member.gender == 'M': "Male" else: "Female"))
@@ -723,8 +732,11 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       var progressFrame = frame & ".skillinfo" & $index
       tclEval(script = "ttk::frame " & progressFrame)
       var memberLabel = progressFrame & ".label" & $index
-      tclEval(script = "ttk::label " & memberLabel & " -text {" & skillsList[
-          skill.index].name & ":}")
+      try:
+        tclEval(script = "ttk::label " & memberLabel & " -text {" & skillsList[
+            skill.index].name & ":}")
+      except:
+        return showError(message = "Can't show the crew member skill name.")
       tclEval(script = "grid " & memberLabel & " -sticky w")
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
       memberLabel = progressFrame & ".label2" & $index
