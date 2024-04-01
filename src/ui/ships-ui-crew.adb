@@ -176,29 +176,29 @@ package body Ships.UI.Crew is
    -- ShowCrewStatsInfo statindex
    -- Statindex is the index of statistic which info will be show
    -- SOURCE
-   function Show_Crew_Stats_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Crew_Stats_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Short_String;
-      Attribute: constant Attribute_Record :=
-        AttributesData_Container.Element
-          (Container => Attributes_List,
-           Index =>
-             Attributes_Amount_Range'Value(CArgv.Arg(Argv => Argv, N => 1)));
-   begin
-      Show_Info
-        (Text => To_String(Source => Attribute.Description),
-         Parent_Name => CArgv.Arg(Argv => Argv, N => 2),
-         Title => To_String(Source => Attribute.Name));
-      return TCL_OK;
-   end Show_Crew_Stats_Info_Command;
+--   function Show_Crew_Stats_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Crew_Stats_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Short_String;
+--      Attribute: constant Attribute_Record :=
+--        AttributesData_Container.Element
+--          (Container => Attributes_List,
+--           Index =>
+--             Attributes_Amount_Range'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--   begin
+--      Show_Info
+--        (Text => To_String(Source => Attribute.Description),
+--         Parent_Name => CArgv.Arg(Argv => Argv, N => 2),
+--         Title => To_String(Source => Attribute.Name));
+--      return TCL_OK;
+--   end Show_Crew_Stats_Info_Command;
 
    -- ****o* SUCrew/SUCrew.Show_Crew_Skill_Info_Command
    -- FUNCTION
@@ -1300,9 +1300,9 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "ShowCrewStatsInfo",
-         Ada_Command => Show_Crew_Stats_Info_Command'Access);
+--      Add_Command
+--        (Name => "ShowCrewStatsInfo",
+--         Ada_Command => Show_Crew_Stats_Info_Command'Access);
       Add_Command
         (Name => "ShowCrewSkillInfo",
          Ada_Command => Show_Crew_Skill_Info_Command'Access);

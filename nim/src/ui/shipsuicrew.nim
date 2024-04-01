@@ -841,6 +841,13 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return showMemberTabCommand(clientData = clientData, interp = interp,
       argc = 1, argv = ["ShowMemberTab".cstring])
 
+proc showCrewStatsInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let attribute = attributesList[($argv[1]).parseInt - 1]
+  showInfo(text = attribute.description, parentName = $argv[2],
+      title = attribute.name)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -850,6 +857,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SetCrewOrder", setCrewOrderCommand)
     addCommand("ShowMemberTab", showMemberTabCommand)
     addCommand("ShowMemberInfo", showMemberInfoCommand)
+    addCommand("ShowCrewStatsInfo", showCrewStatsInfoCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
