@@ -889,6 +889,9 @@ proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             itemIndex = index
             quality = item.value[1]
     messageText.add(itemsList[itemIndex].name)
+  messageText.add(".\n" & skillsList[skillIndex].description)
+  showInfo(text = messageText, parentName = $argv[3], title = skillsList[
+      skillIndex].name)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -901,6 +904,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowMemberTab", showMemberTabCommand)
     addCommand("ShowMemberInfo", showMemberInfoCommand)
     addCommand("ShowCrewStatsInfo", showCrewStatsInfoCommand)
+    addCommand("ShowCrewSkillInfo", showCrewSkillInfoCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
