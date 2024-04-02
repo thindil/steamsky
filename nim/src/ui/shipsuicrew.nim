@@ -842,8 +842,11 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 1, argv = ["ShowMemberTab".cstring])
 
 proc showCrewStatsInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let attribute = attributesList[($argv[1]).parseInt - 1]
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let attribute = try:
+      attributesList[($argv[1]).parseInt - 1]
+    except:
+      return showError(message = "Can't get the attribute data.")
   showInfo(text = attribute.description, parentName = $argv[2],
       title = attribute.name)
   return tclOk
