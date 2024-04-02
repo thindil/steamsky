@@ -562,9 +562,7 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     combatTurn()
   except:
-    tclEval(script = "bgerror {Can't make next turn in combat, reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't make next turn in combat.")
   updateHeader()
   let combatFrame = mainPaned & ".combatframe"
   var frame = combatFrame & ".crew"
@@ -618,8 +616,7 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     showCombatUi(newCombat = false)
   except:
-    tclEval(script = "bgerror {Can't show the combat UI. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't show the combat UI.")
   return tclOk
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -642,17 +639,13 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     faction = try:
         factionsList[playerShip.crew[0].faction]
       except:
-        tclEval(script = "bgerror {Can't get the player's faction. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the player's faction.")
   if argv[1] == "pilot":
     let comboBox = frameName & ".pilotorder"
     pilotOrder = try:
         tclEval2(script = comboBox & " current").parseInt + 1
       except:
-        tclEval(script = "bgerror {Can't get the pilot's order. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the pilot order.")
     if "sentientships" in faction.flags:
       addMessage(message = "Order for ship was set on: " & tclEval2(
           script = comboBox & " get"), mType = combatMessage)
@@ -665,9 +658,7 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     engineerOrder = try:
         tclEval2(script = comboBox & " current").parseInt + 1
       except:
-        tclEval(script = "bgerror {Can't get the engineer's order. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the engineer's order.")
     if "sentientships" in faction.flags:
       addMessage(message = "Order for ship was set on: " & tclEval2(
           script = comboBox & " get"), mType = combatMessage)
@@ -682,23 +673,17 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
       gunIndex = try:
           ($argv[1]).parseInt - 1
         except:
-          tclEval(script = "bgerror {Can't get the gun's index. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't get the gun's index.")
     guns[gunIndex][2] = try:
         tclEval2(script = comboBox & " current").parseInt + 1
       except:
-        tclEval(script = "bgerror {Can't set the gunners's order. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the gunner's order.")
     guns[gunIndex][3] = (if tclEval2(script = comboBox & " current") ==
       "0": 0 else:
         try:
           modulesList[playerShip.modules[guns[gunIndex][1]].protoIndex].speed
         except:
-          tclEval(script = "bgerror {Can't set the gunners's shooting order. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk)
+          return showError(message = "Can't set the gunner's shooting order."))
     addMessage(message = "Order for " & playerShip.crew[playerShip.modules[guns[
         gunIndex][1]].owner[0]].name & " was set on: " & tclEval2(
         script = comboBox &
@@ -726,15 +711,12 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     newOrder = try:
         tclEval2(script = comboBox & " current").parseInt + 1
       except:
-        tclEval(script = "bgerror {Can't get the boarding order for a crew member. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the boarding order for a crew member.")
   try:
     boardingOrders[($argv[2]).parseInt] = if newOrder >
         game.enemy.ship.crew.len: -1 else: newOrder
   except:
-    tclEval(script = "bgerror {Can't set the boarding order for a crew member. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't set the boarding order for a crew member.")
   return tclOk
 
 proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -812,16 +794,12 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     height = try:
         height + tclEval2(script = "winfo reqheight " & crewButton).parseInt
       except:
-        tclEval(script = "bgerror {Can't set the height of the dialog. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set the height of the dialog.")
     try:
       if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
         width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
     except:
-      tclEval(script = "bgerror {Can't set the width of the dialog. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't set the width of the dialog.")
     tclEval(script = "bind " & crewButton & " <Escape> {" & closeDialogButton & " invoke;break}")
     tclEval(script = "bind " & crewButton & " <Tab> {focus [GetActiveButton " &
         $(index + 1) & "];break}")
@@ -859,17 +837,13 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
     var crewIndex = try:
         tclEval2(script = comboBox & " current").parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the pilot index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the pilot index.")
     if crewIndex > -1:
       try:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
             givenOrder = pilot)
       except:
-        tclEval(script = "bgerror {Can't give order to the pilot. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give order to the pilot.")
     else:
       crewIndex = findMember(order = pilot)
       if crewIndex > -1:
@@ -877,25 +851,19 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
           giveOrders(ship = playerShip, memberIndex = crewIndex,
               givenOrder = rest)
         except:
-          tclEval(script = "bgerror {Can't give rest order to the pilot. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't give rest order to the pilot.")
   elif argv[1] == "engineer":
     comboBox = frameName & ".engineercrew"
     var crewIndex = try:
         tclEval2(script = comboBox & " current").parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the engineer index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the engineer index.")
     if crewIndex > -1:
       try:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
             givenOrder = engineer)
       except:
-        tclEval(script = "bgerror {Can't give order to the engineer. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give order to the engineer.")
     else:
       crewIndex = findMember(order = engineer)
       if crewIndex > -1:
@@ -903,31 +871,23 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
           giveOrders(ship = playerShip, memberIndex = crewIndex,
               givenOrder = rest)
         except:
-          tclEval(script = "bgerror {Can't give rest order to the engineer. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't give rest order to the engineer.")
   else:
     comboBox = frameName & ".guncrew" & $argv[2]
     let gunIndex = try:
         ($argv[2]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the gun index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the gun index.")
     var crewIndex = try:
           tclEval2(script = comboBox & " current").parseInt - 1
         except:
-          tclEval(script = "bgerror {Can't get the gunner index. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't get the gunner index.")
     if crewIndex > -1:
       try:
         giveOrders(ship = playerShip, memberIndex = crewIndex,
             givenOrder = gunner, moduleIndex = guns[gunIndex][1])
       except:
-        tclEval(script = "bgerror {Can't give order to the gunner. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give order to the gunner.")
     else:
       crewIndex = playerShip.modules[guns[gunIndex][1]].owner[0]
       if crewIndex > -1:
@@ -935,9 +895,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
           giveOrders(ship = playerShip, memberIndex = crewIndex,
               givenOrder = rest)
         except:
-          tclEval(script = "bgerror {Can't give rest order to the gunner. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't give rest order to the gunner.")
   updateCombatUi()
   return tclOk
 
@@ -959,9 +917,7 @@ proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   let crewIndex = try:
       ($argv[2]).parseInt - 1
     except:
-      tclEval(script = "bgerror {Can't get the index of the crew member. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't get the idnex of the crew member.")
   var info = "Uses: "
   if argv[1] == "player":
     for item in playerShip.crew[crewIndex].equipment:
@@ -1074,17 +1030,13 @@ proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
       try:
         giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
       except:
-        tclEval(script = "bgerror {Can't give order to not selected crew member. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give order to not selected crew member.")
     elif selected and member.order != order:
       try:
         giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
             moduleIndex = -1)
       except:
-        tclEval(script = "bgerror {Can't give order to selected crew member. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give order to selected crew member.")
       if order == boarding:
         boardingOrders.add(0)
   updateCombatUi()
@@ -1105,8 +1057,7 @@ proc showCombatUi(newCombat: bool = true) =
         if not combatStarted:
           return
     except:
-      tclEval(script = "bgerror {Can't start the combat. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't start the combat.")
       return
     if tclEval2(script = "winfo exists " & combatFrame) == "0":
       tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "combat.tcl")
@@ -1124,8 +1075,7 @@ proc showCombatUi(newCombat: bool = true) =
         addCommand("ToggleAllCombat", toggleAllCombatCommand)
         addCommand("SetParty", setPartyCommand)
       except:
-        tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't add a Tcl command.")
         return
     else:
       let
