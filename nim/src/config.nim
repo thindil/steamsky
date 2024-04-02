@@ -157,7 +157,7 @@ type
     difficultyLevel*: DifficultyType
 
 const
-  defaultGameSettings* = GameSettingsRecord(autoRest: true,
+  defaultGameSettings*: GameSettingsRecord = GameSettingsRecord(autoRest: true,
     undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
     autoFinish: true, lowFuel: 100, lowDrinks: 50, lowFood: 25,
     autoMoveStop: never, windowWidth: 800, windowHeight: 600,
@@ -171,7 +171,7 @@ const
     waitMinutes: 1)
     ## The default setting for the game
 
-  defaultNewGameSettings* = NewGameRecord(playerName: "Laeran",
+  defaultNewGameSettings*: NewGameRecord = NewGameRecord(playerName: "Laeran",
     playerGender: 'M', shipName: "Anaria", playerFaction: "POLEIS",
     playerCareer: "general", startingBase: "Any", enemyDamageBonus: 1.0,
     playerDamageBonus: 1.0, enemyMeleeDamageBonus: 1.0,
@@ -185,11 +185,11 @@ var
 
 proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
   ## Load the game and new game settings from the file
-  let fileName = saveDirectory & "game.cfg"
-  var configFile = newFileStream(filename = fileName, mode = fmRead)
+  let fileName: string = saveDirectory & "game.cfg"
+  var configFile: FileStream = newFileStream(filename = fileName, mode = fmRead)
   if configFile == nil:
     return
-  var parser: CfgParser
+  var parser: CfgParser = CfgParser()
   try:
     parser.open(input = configFile, filename = fileName)
   except OSError, IOError, Exception:
@@ -203,7 +203,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
     require:
       value.len > 0
     body:
-      var newValue = value
+      var newValue: string = value
       newValue.removeSuffix(c = 'E')
       return newValue.parseFloat().cfloat
 
@@ -217,7 +217,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
 
   while true:
     try:
-      let entry = parser.next()
+      let entry: CfgEvent = parser.next()
       case entry.kind
       of cfgEof:
         break
@@ -339,7 +339,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
 proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
     WriteIOEffect], contractual.} =
   ## Save the new game and the game itself configuration to the file
-  var config = newConfig()
+  var config: Config = newConfig()
 
   proc saveAdaBoolean(value: bool, name: string) {.sideEffect, raises: [
       KeyError], tags: [], contractual.} =
