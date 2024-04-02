@@ -40,7 +40,7 @@ type
     ## * tool         - The type of items used to train the skill
     ## * toolsQuality - The quality of tool needed for training
     name*: string
-    attribute*: Positive
+    attribute*: Natural
     description*: string
     tool*: string
     toolsQuality*: seq[ToolQuality]
@@ -227,7 +227,7 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       let attributeName = gameNode.attr(name = "attribute")
       for index, attribute in attributesList.pairs():
         if attribute.name == attributeName:
-          newSkill.attribute = index + 1
+          newSkill.attribute = index
           break
       for childNode in gameNode:
         if childNode.kind != xnElement:

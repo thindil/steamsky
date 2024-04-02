@@ -257,7 +257,7 @@ package body Game is
                     (Quality_Amount => Tools_Quality'Length,
                      Name =>
                        To_Bounded_String(Source => Value(Item => Skill.Name)),
-                     Attribute => Skill.Attribute,
+                     Attribute => Skill.Attribute + 1,
                      Description =>
                        Short_String.To_Bounded_String
                          (Source => Value(Item => Skill.Description)),
