@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[config, crew, game, messages, shipscrew, shipscrew2, tk, types]
+import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
 import coreui, dialogs, table, updateheader, utilsui2
 
 var
@@ -861,6 +861,34 @@ proc showCrewStatsInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't get the attribute data.")
   showInfo(text = attribute.description, parentName = $argv[2],
       title = attribute.name)
+  return tclOk
+
+proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let skillIndex = ($argv[1]).parseInt
+  var messageText = "Related attribute: " & attributesList[skillsList[
+      skillIndex].attribute].name
+  if skillsList[skillIndex].tool.len > 0:
+    messageText.add(y = ".\nTraining tool: ")
+    var
+      quality = 0
+      itemIndex = -1
+    if argv[3] == ".memberdialog":
+      for index, item in itemsList:
+        if item.itemType == skillsList[skillIndex].tool and item.value[1] <=
+            getTrainingToolQuality(memberIndex = ($argv[2]).parseInt - 1,
+            skillIndex = skillIndex):
+          if item.value[1] > quality:
+            itemIndex = index
+            quality = item.value[1]
+    else:
+      for index, item in itemsList:
+        if item.itemType == skillsList[skillIndex].tool and item.value[1] <= (
+            $argv[2]).parseInt:
+          if item.value[1] > quality:
+            itemIndex = index
+            quality = item.value[1]
+    messageText.add(itemsList[itemIndex].name)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
