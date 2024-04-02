@@ -941,7 +941,7 @@ package body Crafts.UI is
              "-text {" & Recipe_Type & "} -command {SetCrafting {" &
              CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " &
              Craft_Dialog & "} -image " & To_Lower(Item => Recipe_Type) &
-             "icon -style Dialog.TButton");
+             "2icon -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5 -padx 5");
       Add(Widget => Button, Message => "Set the crafting order.");
       Bind
