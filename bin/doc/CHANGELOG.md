@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Position of the button to cancel crafting order in the module's info dialog
 - Typos in tooltips in the player's ship's module's info dialog
 - Possible crash when trading with another ship
+- Skills use wrong attributes
 
 ## [9.8] - 2024-03-17
 
