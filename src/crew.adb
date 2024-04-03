@@ -103,20 +103,6 @@ package body Crew is
           (Item => Get_Ada_Attribute_Level_Name(A_Level => Attribute_Level));
    end Get_Attribute_Level_Name;
 
-   function Get_Training_Tool_Quality
-     (Member_Index, Skill_Index: Positive) return Positive is
-      function Get_Ada_Training_Tool_Quality
-        (M_Index, S_Index: Positive) return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaTrainingToolQuality";
-   begin
-      Get_Ada_Crew;
-      return
-        Get_Ada_Training_Tool_Quality
-          (M_Index => Member_Index, S_Index => Skill_Index);
-   end Get_Training_Tool_Quality;
-
    function Member_To_Nim(Member: Member_Data) return Nim_Member_Data is
       use Tiny_String;
       Nim_Member: Nim_Member_Data :=
