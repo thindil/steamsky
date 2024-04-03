@@ -220,7 +220,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     discard tclEval(script = infoLabel & " configure -state disabled -height " & $(
         tclEval2(script = infoLabel & " index end").parseFloat + 1.0))
   except ValueError:
-    tclEval(script = "bgerror {Can't show the info. Result: " & tclGetResult2() & "}")
+    showError(message = "Can't show the info. Tcl result: " & tclGetResult2())
     return
   tclEval(script = "grid " & infoLabel & " -sticky we -padx 5 -pady {5 0}")
   let
