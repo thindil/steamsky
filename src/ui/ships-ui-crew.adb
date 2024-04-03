@@ -178,53 +178,53 @@ package body Ships.UI.Crew is
    -- memberindex is the index of the crew member which priority order will
    -- be set
    -- SOURCE
-   function Set_Priority_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Priority_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Interfaces.C.Strings;
-
-      Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
-      Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
-   begin
-      if CArgv.Arg(Argv => Argv, N => 2) = "2" then
-         Set_Priority_Loop :
-         for Order of Player_Ship.Crew(Member_Index).Orders loop
-            if Order = 2 then
-               Order := 1;
-               exit Set_Priority_Loop;
-            end if;
-         end loop Set_Priority_Loop;
-      end if;
-      Player_Ship.Crew(Member_Index).Orders
-        (Positive'Value(CArgv.Arg(Argv => Argv, N => 1))) :=
-        Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Update_Orders(Ship => Player_Ship);
-      Update_Header;
-      Update_Messages;
-      Update_Crew_Info;
-      Combo_Box.Interp := Interp;
-      Update_Priority_Info_Loop :
-      for I in Player_Ship.Crew(Member_Index).Orders'Range loop
-         Combo_Box.Name :=
-           New_String
-             (Str =>
-                ".memberdialog.canvas.priorities.level" &
-                Trim(Source => Positive'Image(I), Side => Left));
-         Current
-           (ComboBox => Combo_Box,
-            NewIndex =>
-              Natural'Image(Player_Ship.Crew(Member_Index).Orders(I)));
-      end loop Update_Priority_Info_Loop;
-      return TCL_OK;
-   end Set_Priority_Command;
+--   function Set_Priority_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Set_Priority_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Interfaces.C.Strings;
+--
+--      Combo_Box: Ttk_ComboBox; --## rule line off IMPROPER_INITIALIZATION
+--      Member_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
+--   begin
+--      if CArgv.Arg(Argv => Argv, N => 2) = "2" then
+--         Set_Priority_Loop :
+--         for Order of Player_Ship.Crew(Member_Index).Orders loop
+--            if Order = 2 then
+--               Order := 1;
+--               exit Set_Priority_Loop;
+--            end if;
+--         end loop Set_Priority_Loop;
+--      end if;
+--      Player_Ship.Crew(Member_Index).Orders
+--        (Positive'Value(CArgv.Arg(Argv => Argv, N => 1))) :=
+--        Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
+--      Update_Orders(Ship => Player_Ship);
+--      Update_Header;
+--      Update_Messages;
+--      Update_Crew_Info;
+--      Combo_Box.Interp := Interp;
+--      Update_Priority_Info_Loop :
+--      for I in Player_Ship.Crew(Member_Index).Orders'Range loop
+--         Combo_Box.Name :=
+--           New_String
+--             (Str =>
+--                ".memberdialog.canvas.priorities.level" &
+--                Trim(Source => Positive'Image(I), Side => Left));
+--         Current
+--           (ComboBox => Combo_Box,
+--            NewIndex =>
+--              Natural'Image(Player_Ship.Crew(Member_Index).Orders(I)));
+--      end loop Update_Priority_Info_Loop;
+--      return TCL_OK;
+--   end Set_Priority_Command;
 
    -- ****o* SUCrew/SUCrew.Show_Crew_Command
    -- FUNCTION
@@ -1148,8 +1148,8 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "SetPriority", Ada_Command => Set_Priority_Command'Access);
+--      Add_Command
+--        (Name => "SetPriority", Ada_Command => Set_Priority_Command'Access);
       Add_Command(Name => "ShowCrew", Ada_Command => Show_Crew_Command'Access);
       Add_Command
         (Name => "SortShipCrew", Ada_Command => Sort_Crew_Command'Access);

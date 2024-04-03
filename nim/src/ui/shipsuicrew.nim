@@ -925,6 +925,24 @@ proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showInfo(text = messageText, parentName = $argv[3], title = skill.name)
   return tclOk
 
+proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let memberIndex = ($argv[3]).parseInt - 1
+  if argv[2] == "2":
+    for order in playerShip.crew[memberIndex].orders.mitems:
+      if order == 2:
+        order = 1
+        break
+  playerShip.crew[memberIndex].orders[($argv[1]).parseInt] = ($argv[2]).parseInt
+  updateOrders(ship = playerShip)
+  updateHeader()
+  updateMessages()
+  updateCrewInfo()
+  for index, order in playerShip.crew[memberIndex].orders:
+    let comboBox = ".memberdialog.canvas.priorities.level" & $index
+    tclEval(script = comboBox & " current " & $order)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -936,6 +954,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowMemberInfo", showMemberInfoCommand)
     addCommand("ShowCrewStatsInfo", showCrewStatsInfoCommand)
     addCommand("ShowCrewSkillInfo", showCrewSkillInfoCommand)
+    addCommand("SetPriority", setPriorityCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
