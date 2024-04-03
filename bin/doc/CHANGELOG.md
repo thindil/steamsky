@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 - Updated modding guide
+- Updated look of the dialog used to start a crafting order
 
 ### Fixed
 - Setting the player's cabin in the ship during starting the new game
