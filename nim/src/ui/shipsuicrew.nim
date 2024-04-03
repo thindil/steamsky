@@ -864,34 +864,52 @@ proc showCrewStatsInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let skillIndex = ($argv[1]).parseInt
-  var messageText = "Related attribute: " & attributesList[skillsList[
-      skillIndex].attribute].name
-  if skillsList[skillIndex].tool.len > 0:
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let
+    skillIndex = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the skill index.")
+    skill = try:
+        skillsList[skillIndex]
+      except:
+        return showError(message = "Can't get the skill.")
+  var messageText = try:
+        "Related attribute: " & attributesList[skill.attribute].name
+      except:
+        return showError(message = "Can't set messageText.")
+  if skill.tool.len > 0:
     messageText.add(y = ".\nTraining tool: ")
     var
       quality = 0
       itemIndex = -1
     if argv[3] == ".memberdialog":
       for index, item in itemsList:
-        if item.itemType == skillsList[skillIndex].tool and item.value[1] <=
-            getTrainingToolQuality(memberIndex = ($argv[2]).parseInt - 1,
-            skillIndex = skillIndex):
-          if item.value[1] > quality:
-            itemIndex = index
-            quality = item.value[1]
+        try:
+          if item.itemType == skill.tool and item.value[1] <=
+              getTrainingToolQuality(memberIndex = ($argv[2]).parseInt - 1,
+              skillIndex = skillIndex):
+            if item.value[1] > quality:
+              itemIndex = index
+              quality = item.value[1]
+        except:
+          return showError(message = "Can't get member index.")
     else:
       for index, item in itemsList:
-        if item.itemType == skillsList[skillIndex].tool and item.value[1] <= (
-            $argv[2]).parseInt:
-          if item.value[1] > quality:
-            itemIndex = index
-            quality = item.value[1]
-    messageText.add(itemsList[itemIndex].name)
-  messageText.add(".\n" & skillsList[skillIndex].description)
-  showInfo(text = messageText, parentName = $argv[3], title = skillsList[
-      skillIndex].name)
+        try:
+          if item.itemType == skill.tool and item.value[1] <= (
+              $argv[2]).parseInt:
+            if item.value[1] > quality:
+              itemIndex = index
+              quality = item.value[1]
+        except:
+          return showError(message = "Can't get the item value.")
+    try:
+      messageText.add(itemsList[itemIndex].name)
+    except:
+      return showError(message = "Can't add the tool name to text.")
+  messageText.add(".\n" & skill.description)
+  showInfo(text = messageText, parentName = $argv[3], title = skill.name)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
