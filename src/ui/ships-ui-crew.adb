@@ -36,7 +36,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with CoreUI; use CoreUI;
 with Crafts;
-with Dialogs; use Dialogs;
+with Dialogs;
 with Game; use Game.Tiny_String;
 with Maps;
 with Maps.UI; use Maps.UI;
@@ -1038,6 +1038,7 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Dialogs;
 
       Member_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
