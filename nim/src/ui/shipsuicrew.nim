@@ -636,7 +636,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     infoButton = frame & ".orderinfo.button"
     tclEval(script = "ttk::button " & infoButton &
         " -image giveordericon -command {" & closeButton &
-        " invoke;ShowCrewOrder " & $memberIndex & "} -style Small.TButton")
+        " invoke;ShowCrewOrder " & $(memberIndex + 1) & "} -style Small.TButton")
     tclEval(script = "tooltip::tooltip " & infoButton & " \"Set the new order for the crew member\"")
     tclEval(script = "grid " & infoButton & " -row 0 -column 2 -sticky n -padx {5 0}")
     tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
