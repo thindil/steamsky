@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
@@ -161,120 +160,6 @@ package body Ships.UI.Crew is
          return TCL_OK;
    end Set_Crew_Order_Command;
    --## rule on REDUCEABLE_SCOPE
-
-   -- ****o* SUCrew/SUCrew.Show_Crew_Skill_Info_Command
-   -- FUNCTION
-   -- Show the detailed information about the selected crew member skill
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowCrewSkillInfo skillindex memberindex
-   -- Skillindex is the index of skill which info will be show.
-   -- Memberindex is the index of the crew member which skill will be show.
-   -- SOURCE
---   function Show_Crew_Skill_Info_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Show_Crew_Skill_Info_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Ada.Characters.Latin_1;
---      use Short_String;
---
---      Skill_Index: constant Skills_Amount_Range :=
---        Skills_Amount_Range'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Message_Text: Unbounded_String := Null_Unbounded_String;
---      Item_Index: Natural := 0;
---      Quality: Natural := 0;
---   begin
---      Append(Source => Message_Text, New_Item => "Related attribute: ");
---      Append
---        (Source => Message_Text,
---         New_Item =>
---           To_String
---             (Source =>
---                AttributesData_Container.Element
---                  (Container => Attributes_List,
---                   Index =>
---                     SkillsData_Container.Element
---                       (Container => Skills_List, Index => Skill_Index)
---                       .Attribute)
---                  .Name));
---      if SkillsData_Container.Element
---          (Container => Skills_List, Index => Skill_Index)
---          .Tool /=
---        Tiny_String.Null_Bounded_String then
---         Append
---           (Source => Message_Text, New_Item => "." & LF & "Training tool: ");
---         Quality := 0;
---         if CArgv.Arg(Argv => Argv, N => 3) = ".memberdialog" then
---            Find_Training_Tool_Loop :
---            for I in 1 .. Get_Proto_Amount loop
---               if Get_Proto_Item(Index => I).I_Type =
---                 SkillsData_Container.Element
---                   (Container => Skills_List, Index => Skill_Index)
---                   .Tool
---                 and then Get_Proto_Item(Index => I).Value(1) <=
---                   Get_Training_Tool_Quality
---                     (Member_Index =>
---                        Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
---                      Skill_Index => Natural(Skill_Index)) then
---                  if Get_Proto_Item(Index => I).Value(1) > Quality then
---                     Item_Index := I;
---                     Quality := Get_Proto_Item(Index => I).Value(1);
---                  end if;
---               end if;
---            end loop Find_Training_Tool_Loop;
---         else
---            Find_Training_Tool_2_Loop :
---            for I in 1 .. Get_Proto_Amount loop
---               if Get_Proto_Item(Index => I).I_Type =
---                 SkillsData_Container.Element
---                   (Container => Skills_List, Index => Skill_Index)
---                   .Tool
---                 and then Get_Proto_Item(Index => I).Value(1) <=
---                   Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) then
---                  if Get_Proto_Item(Index => I).Value(1) > Quality then
---                     Item_Index := I;
---                     Quality := Get_Proto_Item(Index => I).Value(1);
---                  end if;
---               end if;
---            end loop Find_Training_Tool_2_Loop;
---         end if;
---         Append
---           (Source => Message_Text,
---            New_Item =>
---              To_String(Source => Get_Proto_Item(Index => Item_Index).Name));
---      end if;
---      Append(Source => Message_Text, New_Item => "." & LF);
---      Append
---        (Source => Message_Text,
---         New_Item =>
---           To_String
---             (Source =>
---                SkillsData_Container.Element
---                  (Container => Skills_List, Index => Skill_Index)
---                  .Description));
---      Show_Info
---        (Text => To_String(Source => Message_Text),
---         Parent_Name => CArgv.Arg(Argv => Argv, N => 3),
---         Title =>
---           To_String
---             (Source =>
---                SkillsData_Container.Element
---                  (Container => Skills_List, Index => Skill_Index)
---                  .Name));
---      return TCL_OK;
---   end Show_Crew_Skill_Info_Command;
 
    -- ****o* SUCrew/SUCrew.Set_Priority_Command
    -- FUNCTION
@@ -1263,9 +1148,6 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "ShowCrewSkillInfo",
---         Ada_Command => Show_Crew_Skill_Info_Command'Access);
       Add_Command
         (Name => "SetPriority", Ada_Command => Set_Priority_Command'Access);
       Add_Command(Name => "ShowCrew", Ada_Command => Show_Crew_Command'Access);
