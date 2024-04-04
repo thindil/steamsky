@@ -926,15 +926,28 @@ proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let memberIndex = ($argv[3]).parseInt - 1
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  let memberIndex = try:
+      ($argv[3]).parseInt - 1
+    except:
+      return showError(message = "Can't get the crew member's index.")
   if argv[2] == "2":
     for order in playerShip.crew[memberIndex].orders.mitems:
       if order == 2:
         order = 1
         break
-  playerShip.crew[memberIndex].orders[($argv[1]).parseInt] = ($argv[2]).parseInt
-  updateOrders(ship = playerShip)
+  try:
+    playerShip.crew[memberIndex].orders[($argv[1]).parseInt] = ($argv[2]).parseInt
+  except:
+    return showError(message = "Can't set the crew member orders priority.")
+  try:
+    updateOrders(ship = playerShip)
+  except CrewOrderError, CrewNoSpaceError:
+    showMessage(text = getCurrentExceptionMsg(),
+        title = "Can't give an order")
+    return tclOk
+  except:
+    return showError(message = "Can't update orders.")
   updateHeader()
   updateMessages()
   updateCrewInfo()
