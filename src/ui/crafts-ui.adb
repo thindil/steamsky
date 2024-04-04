@@ -941,7 +941,7 @@ package body Crafts.UI is
              "-text {" & Recipe_Type & "} -command {SetCrafting {" &
              CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " &
              Craft_Dialog & "} -image " & To_Lower(Item => Recipe_Type) &
-             "2icon -style Dialog.TButton");
+             "2icon -style Dialoggreen.TButton");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5 -padx 5");
       Add(Widget => Button, Message => "Set the crafting order.");
       Bind
@@ -952,7 +952,7 @@ package body Crafts.UI is
           (pathName => Craft_Dialog & ".cancel",
            options =>
              "-text {Cancel} -command {CloseDialog " & Craft_Dialog &
-             "} -image cancelicon -style Dialog.TButton");
+             "} -image cancelicon -style Dialogred.TButton");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options =>
