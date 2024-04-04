@@ -54,9 +54,7 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   gameSettings.topicsPosition = try:
       topicPosition.parseInt
     except:
-      tclEval(script = "bgerror {Can't set topic position. Reason: " &
-          topicPosition & "}")
-      return tclOk
+      return showError(message = "Can't set topic position.")
   tclEval(script = "destroy " & helpWindow)
   return tclOk
 
@@ -85,9 +83,7 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   let theme = try:
         themesList[gameSettings.interfaceTheme]
       except:
-        tclEval(script = "bgerror {Can't find theme '" &
-            gameSettings.interfaceTheme & "'}")
-        return tclOk
+        return showError(message = "Can't find theme '" & gameSettings.interfaceTheme & "'")
   tclEval(script = helpView & " tag configure special -foreground {" &
       theme.specialHelpColor & "} -font BoldHelpFont")
   tclEval(script = helpView & " tag configure underline -foreground {" &
@@ -100,18 +96,14 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
         ((tclEval2(script = "winfo vrootwidth " & helpWindow).parseInt -
             gameSettings.windowWidth) / 2).int
       except:
-        tclEval(script = "bgerror {Can't count X position of help window. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't count X position of help window.")
   if x < 0:
     x = 0
   var y = try:
         ((tclEval2(script = "winfo vrootheight " & helpWindow).parseInt -
             gameSettings.windowHeight) / 2).int
       except:
-        tclEval(script = "bgerror {Can't count Y position of help window. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't count Y position of help window.")
   if y < 0:
     y = 0
   tclEval(script = "wm geometry " & helpWindow & " " &
@@ -145,8 +137,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("CloseHelp", closeHelpCommand)
     addCommand("ShowHelp", showHelpCommand)
   except:
-    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't add a Tcl command.")
 
 import mapsui
 
