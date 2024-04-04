@@ -972,8 +972,11 @@ proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  updateCrewInfo(page = ($argv[1]).parseInt, skill = ($argv[2]).parseInt)
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  try:
+    updateCrewInfo(page = ($argv[1]).parseInt, skill = ($argv[2]).parseInt)
+  except:
+    showError(message = "Can't update the crew info.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
