@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to crafting items in the player's ship, like setting
+## a crafting recipe in a workshop, or checking a recipe's dependecies.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import crewinventory, game, goals, items, log, messages, shipscargo, shipscrew,
@@ -38,7 +41,7 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let recipesXml = try:
+    let recipesXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -50,7 +53,7 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       let
         recipeIndex: string = recipeNode.attr(name = "index")
         recipeAction: DataAction = try:
-            parseEnum[DataAction](recipeNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = recipeNode.attr(name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if recipeAction in [update, remove]:
@@ -78,11 +81,11 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           CraftData(time: 1, difficulty: 1, toolQuality: 1)
       for material in recipeNode.findAll(tag = "material"):
         let
-          amount = try:
+          amount: Natural = try:
               material.attr(name = "amount").parseInt()
             except ValueError:
               0
-          materialType = material.attr(name = "type")
+          materialType: string = material.attr(name = "type")
         if amount > 0:
           if materialType notin recipe.materialTypes:
             recipe.materialTypes.add(y = materialType)
@@ -97,7 +100,7 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           {.warning[UnsafeSetLen]: off.}
           recipe.materialAmounts.delete(i = deleteIndex)
           {.warning[UnsafeSetLen]: on.}
-      var attribute = recipeNode.attr(name = "result")
+      var attribute: string = recipeNode.attr(name = "result")
       if attribute.len() > 0:
         recipe.resultIndex = try:
           attribute.parseInt()
@@ -114,13 +117,13 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       attribute = recipeNode.attr(name = "workplace")
       if attribute.len() > 0:
         recipe.workplace = try:
-            parseEnum[ModuleType](attribute.toLowerAscii)
+            parseEnum[ModuleType](s = attribute.toLowerAscii)
           except ValueError:
             raise newException(exceptn = DataLoadingError, message = "Can't " &
                 $recipeAction & " recipe '" & $recipeIndex & "', invalid value for recipe workplace.")
       attribute = recipeNode.attr(name = "skill")
       if attribute.len() > 0:
-        let skillIndex = findSkillIndex(skillName = attribute)
+        let skillIndex: int = findSkillIndex(skillName = attribute)
         if skillIndex == 0:
           raise newException(exceptn = DataLoadingError, message = "Can't " &
               $recipeAction & " recipe '" & $recipeIndex &
@@ -186,7 +189,7 @@ proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
     recipeIndex.len > 0
   body:
     result = CraftData(time: 15, difficulty: 1, toolQuality: 100)
-    var itemIndex = 0
+    var itemIndex: int = 0
     if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
       itemIndex = recipeIndex[6..^1].strip.parseInt
       result.materialTypes.add(y = itemsList[itemIndex].itemType)
@@ -234,23 +237,21 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
   require:
     recipeIndex.len > 0
   body:
-    let recipe = setRecipeData(recipeIndex = recipeIndex)
+    let recipe: CraftData = setRecipeData(recipeIndex = recipeIndex)
     var
-      recipeName = ""
-      itemIndex = 0
-      mType: ModuleType
+      recipeName: string = ""
+      itemIndex: Natural = 0
+      mType: ModuleType = alchemyLab
     if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
       itemIndex = recipeIndex[6..^1].strip.parseInt
       recipeName = "studying " & itemsList[itemIndex].name
-      mType = alchemyLab
     elif recipeIndex.len > 12 and recipeIndex[0..10] == "Deconstruct":
       itemIndex = recipeIndex[12..^1].strip.parseInt
       recipeName = "deconstructing " & itemsList[itemIndex].name
-      mType = alchemyLab
     else:
       recipeName = "manufacturing " & itemsList[recipe.resultIndex].name
       mType = recipesList[recipeIndex].workplace
-    var haveWorkshop = false
+    var haveWorkshop: bool = false
     for module in playerShip.modules:
       if modulesList[module.protoIndex].mType == mType and module.durability > 0:
         haveWorkshop = true
@@ -259,7 +260,7 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
       raise newException(exceptn = CraftingNoWorkshopError,
           message = recipeName)
     result = Positive.high
-    var materialIndexes: seq[Natural]
+    var materialIndexes: seq[Natural] = @[]
     if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
       for i in playerShip.cargo.low..playerShip.cargo.high:
         if itemsList[playerShip.cargo[i].protoIndex].name == itemsList[
@@ -286,13 +287,13 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
     if materialIndexes.len < recipe.materialTypes.len:
       raise newException(exceptn = CraftingNoMaterialsError,
           message = recipeName)
-    var haveTool = false
+    var haveTool: bool = false
     if recipe.tool != "None" and findItem(inventory = playerShip.cargo,
         itemType = recipe.tool, quality = recipe.toolQuality) > 0:
       haveTool = true
       if not haveTool:
         raise newException(exceptn = CraftingNoToolsError, message = recipeName)
-    var spaceNeeded = 0
+    var spaceNeeded: Natural = 0
     for i in materialIndexes.low..materialIndexes.high:
       spaceNeeded = spaceNeeded + (itemsList[playerShip.cargo[materialIndexes[
           i]].protoIndex].weight * recipe.materialAmounts[i])
@@ -305,7 +306,7 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
   ## Execute the currently set crafting orders in the player's ship
   ##
   ## * minutes - the amount of minutes passed in the game time
-  var toolIndex, crafterIndex: int
+  var toolIndex, crafterIndex: int = -1
 
   proc resetOrder(module: var ModuleData; moduleOwner: int) {.sideEffect,
       raises: [KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
@@ -324,7 +325,7 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
           toolIndex].durability)
       updateInventory(memberIndex = crafterIndex, amount = -1,
           inventoryIndex = toolIndex, ship = playerShip)
-    var haveWorker = false
+    var haveWorker: bool = false
     for i in module.owner.low..module.owner.high:
       if module.owner[i] == moduleOwner or moduleOwner == -1:
         if module.owner[i] in 0..playerShip.crew.high:
@@ -351,8 +352,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
         var
           currentMinutes: int = minutes
           recipeTime: int = module.craftingTime
-          recipeName = ""
-        let recipe = setRecipeData(recipeIndex = module.craftingIndex)
+          recipeName: string = ""
+        let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex)
         if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
           recipeName = "studying " & itemsList[recipe.resultIndex].name
         elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
@@ -367,8 +368,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
           resetOrder(module = module, moduleOwner = owner)
           currentMinutes = 0
         var
-          workTime = playerShip.crew[crafterIndex].orderTime
-          craftedAmount = 0
+          workTime: int = playerShip.crew[crafterIndex].orderTime
+          craftedAmount: Natural = 0
         while currentMinutes > 0:
           if currentMinutes < recipeTime:
             recipeTime.dec(y = currentMinutes)
@@ -379,7 +380,7 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
           workTime = workTime - currentMinutes - recipeTime
           currentMinutes = 0 - recipeTime
           recipeTime = recipe.time
-          var materialIndexes: seq[Positive]
+          var materialIndexes: seq[Positive] = @[]
           if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
             for j in 1..itemsList.len:
               if itemsList[j].name == itemsList[recipe.resultIndex].name:
@@ -616,6 +617,7 @@ type
 
 proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
       skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
       toolQuality: 1)
@@ -644,13 +646,15 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
 
 proc getAdaWorkshopRecipeName(workshop: cint): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
-    return getWorkshopRecipeName(workshop).cstring
+    return getWorkshopRecipeName(workshop = workshop).cstring
   except ValueError:
     return "".cstring
 
 proc setAdaRecipe(workshop, amount: cint; recipeIndex: cstring) {.raises: [],
     tags: [RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     setRecipe(workshop = workshop.Natural - 1, amount = amount.Positive,
         recipeIndex = $recipeIndex)
@@ -660,6 +664,7 @@ proc setAdaRecipe(workshop, amount: cint; recipeIndex: cstring) {.raises: [],
 proc setAdaRecipeData(recipeIndex: cstring;
     adaRecipe: var AdaCraftData) {.raises: [], tags: [], exportc,
         contractual.} =
+  ## Temporary C binding
   adaRecipe = AdaCraftData(resultIndex: 0, resultAmount: 0, workplace: 0,
       skill: 0, time: 1, difficulty: 1, tool: "".cstring, reputation: -100,
       toolQuality: 1)
@@ -685,6 +690,7 @@ proc setAdaRecipeData(recipeIndex: cstring;
 
 proc checkAdaRecipe(recipeIndex: cstring): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     return checkRecipe(recipeIndex = $recipeIndex).cint
   except ValueError:
@@ -700,6 +706,7 @@ proc checkAdaRecipe(recipeIndex: cstring): cint {.raises: [], tags: [], exportc,
 
 proc adaManufacturing(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     manufacturing(minutes = minutes.Positive)
   except ValueError, Exception:
@@ -707,24 +714,29 @@ proc adaManufacturing(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
 
 proc getAdaRecipesAmount(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return recipesList.len.cint
 
 proc isAdaKnownRecipe(recipeIndex: cstring): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   if $recipeIndex in knownRecipes:
     return 1
   return 0
 
 proc addAdaKnownRecipe(recipeIndex: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   knownRecipes.add(y = $recipeIndex)
 
 proc getAdaKnownRecipe(index: cint): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   if index < knownRecipes.len:
     return knownRecipes[index].cstring
   return "".cstring
 
 proc getAdaKnownRecipesAmount(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return knownRecipes.len.cint
