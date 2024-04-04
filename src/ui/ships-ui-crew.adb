@@ -38,7 +38,7 @@ with Crafts;
 with Dialogs;
 with Game; use Game.Tiny_String;
 with Maps;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
 with Messages;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew.Inventory;
@@ -135,6 +135,7 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp);
       use Ada.Exceptions;
+      use Maps.UI;
       use Messages;
 
       Module_Index: Natural := 0;
