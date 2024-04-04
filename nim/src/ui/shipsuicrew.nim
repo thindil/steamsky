@@ -927,6 +927,21 @@ proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Set the selected priority of the selected crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetPriority orderindex priority memberindex
+  ## Orderindex is the index of the order priority which will be changed,
+  ## priority is the new level of the priority of the selected order,
+  ## memberindex is the index of the crew member which priority order will
+  ## be set
   let memberIndex = try:
       ($argv[3]).parseInt - 1
     except:
