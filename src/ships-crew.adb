@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -122,20 +122,6 @@ package body Ships.Crew is
       end if;
       Get_Ship_From_Nim(Ship => Ship);
    end Give_Orders;
-
-   procedure Update_Orders
-     (Ship: in out Ship_Record; Combat: Boolean := False) is
-      procedure Update_Ada_Orders(Get_Player_Ship, Comb: Natural) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaOrders";
-   begin
-      Set_Ship_In_Nim(Ship => Ship);
-      Update_Ada_Orders
-        (Get_Player_Ship => (if Ship = Player_Ship then 1 else 0),
-         Comb => (if Combat then 1 else 0));
-      Get_Ship_From_Nim(Ship => Ship);
-   end Update_Orders;
 
    procedure Update_Morale
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;

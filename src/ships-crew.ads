@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -109,18 +109,6 @@ package Ships.Crew is
       Check_Priorities: Boolean := True) with
       Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
       Module_Index <= Ship.Modules.Last_Index;
-      -- ****
-
-      -- ****f* SCrew/SCrew.Update_Orders
-      -- FUNCTION
-      -- Update crew orders based on their orders priorities
-      -- PARAMETERS
-      -- Ship   - Ship in which crew will be check
-      -- Combat - If true, ship is in combat. Default is false
-      -- RESULT
-      -- Parameter Ship with modified data (crew, modules, cargo)
-      -- SOURCE
-   procedure Update_Orders(Ship: in out Ship_Record; Combat: Boolean := False);
       -- ****
 
       -- ****f* SCrew/SCrew.Update_Morale
