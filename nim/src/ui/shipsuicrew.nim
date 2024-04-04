@@ -971,6 +971,11 @@ proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = comboBox & " current " & $order)
   return tclOk
 
+proc showCrewCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  updateCrewInfo(page = ($argv[1]).parseInt, skill = ($argv[2]).parseInt)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -983,6 +988,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowCrewStatsInfo", showCrewStatsInfoCommand)
     addCommand("ShowCrewSkillInfo", showCrewSkillInfoCommand)
     addCommand("SetPriority", setPriorityCommand)
+    addCommand("ShowCrew", showCrewCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")

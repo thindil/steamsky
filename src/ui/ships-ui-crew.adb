@@ -177,22 +177,22 @@ package body Ships.UI.Crew is
    -- Page parameter is a index of page from which starts showing
    -- crew. Skill is the index of skill to show
    -- SOURCE
-   function Show_Crew_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Crew_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-   begin
-      Update_Crew_Info
-        (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-         Skill => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
-      return TCL_OK;
-   end Show_Crew_Command;
+--   function Show_Crew_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Crew_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--   begin
+--      Update_Crew_Info
+--        (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+--         Skill => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
+--      return TCL_OK;
+--   end Show_Crew_Command;
 
    -- ****it* SUCrew/SUCrew.Crew_Sort_Orders
    -- FUNCTION
@@ -1084,9 +1084,7 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "SetPriority", Ada_Command => Set_Priority_Command'Access);
-      Add_Command(Name => "ShowCrew", Ada_Command => Show_Crew_Command'Access);
+--      Add_Command(Name => "ShowCrew", Ada_Command => Show_Crew_Command'Access);
       Add_Command
         (Name => "SortShipCrew", Ada_Command => Sort_Crew_Command'Access);
       Add_Command
