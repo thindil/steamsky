@@ -69,11 +69,10 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
                   "yyyy-MM-dd hh:mm:ss"),
               fileName: file))
       except:
-        tclEval(script = "bgerror {Can't add information about the save file. Reason:" &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't add information about the save file.")
         return
   except:
-    tclEval(script = "bgerror {Can't read saved games files. Reason: " & getCurrentExceptionMsg() & "}")
+    showError(message = "Can't read saved games files")
 
   proc sortSaves(x, y: SaveRecord): int =
     case saveSortOrder
@@ -132,8 +131,7 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       showMainMenu()
     except:
-      tclEval(script = "bgerror {Can't show the main menu. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't show the main menu.")
   return tclOk
 
 proc createMainMenu*() =
