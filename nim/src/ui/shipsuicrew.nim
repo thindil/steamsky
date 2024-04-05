@@ -992,6 +992,69 @@ proc showCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     showError(message = "Can't update the crew info.")
   return tclOk
 
+type CrewSortOrders = enum
+  selectedAsc, selectedDesc, nameAsc, nameDesc, orderAsc, orderDesc, skillAsc,
+    skillDesc, healthAsc, healthDesc, fatigueAsc, fatigueDesc, thirstAsc,
+    thirstDesc, hungerAsc, hungerDesc, moraleAsc, moraleDesc, none
+
+const defaultCrewSortOrder: CrewSortOrders = none
+
+var crewSortOrder = defaultCrewSortOrder
+
+proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(
+      table = crewTable, xPosition = ($argv[1]).parseInt))
+  case column
+  of 1:
+    if crewSortOrder == selectedAsc:
+      crewSortOrder = selectedDesc
+    else:
+      crewSortOrder = selectedAsc
+  of 2:
+    if crewSortOrder == nameAsc:
+      crewSortOrder = nameDesc
+    else:
+      crewSortOrder = nameAsc
+  of 3:
+    if crewSortOrder == orderAsc:
+      crewSortOrder = orderDesc
+    else:
+      crewSortOrder = orderAsc
+  of 4:
+    if crewSortOrder == skillAsc:
+      crewSortOrder = skillDesc
+    else:
+      crewSortOrder = skillAsc
+  of 5:
+    if crewSortOrder == healthAsc:
+      crewSortOrder = healthDesc
+    else:
+      crewSortOrder = healthAsc
+  of 6:
+    if crewSortOrder == fatigueAsc:
+      crewSortOrder = fatigueDesc
+    else:
+      crewSortOrder = fatigueAsc
+  of 7:
+    if crewSortOrder == thirstAsc:
+      crewSortOrder = thirstDesc
+    else:
+      crewSortOrder = thirstAsc
+  of 8:
+    if crewSortOrder == hungerAsc:
+      crewSortOrder = hungerDesc
+    else:
+      crewSortOrder = hungerAsc
+  of 9:
+    if crewSortOrder == moraleAsc:
+      crewSortOrder = moraleDesc
+    else:
+      crewSortOrder = moraleAsc
+  else:
+    discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
