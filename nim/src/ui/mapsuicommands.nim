@@ -368,9 +368,7 @@ proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     gameSettings.windowWidth = tclEval2(script = "winfo width .").parseInt
   except:
-    tclEval(script = "bgerror {Can't set window width. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't set the window width.")
   try:
     gameSettings.windowHeight = tclEval2(script = "winfo height .").parseInt
   except:
