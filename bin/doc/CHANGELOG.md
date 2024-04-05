@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Typos in tooltips in the player's ship's module's info dialog
 - Possible crash when trading with another ship
 - Skills use wrong attributes
+- Crash on loading a saved game
 
 ## [9.8] - 2024-03-17
 
