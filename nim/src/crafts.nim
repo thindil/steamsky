@@ -295,7 +295,7 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
         raise newException(exceptn = CraftingNoToolsError, message = recipeName)
     var spaceNeeded: Natural = 0
     for i in materialIndexes.low..materialIndexes.high:
-      spaceNeeded = spaceNeeded + (itemsList[playerShip.cargo[materialIndexes[
+      spaceNeeded += (itemsList[playerShip.cargo[materialIndexes[
           i]].protoIndex].weight * recipe.materialAmounts[i])
       if freeCargo(amount = spaceNeeded - (itemsList[
           recipe.resultIndex].weight * recipe.resultAmount)) < 0:
@@ -394,7 +394,7 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
                 if itemsList[j].itemType == materialType:
                   materialIndexes.add(y = j)
                   break
-          var craftingMaterial = -1
+          var craftingMaterial: int = -1
           for materialIndex in materialIndexes.mitems:
             craftingMaterial = findItem(inventory = playerShip.cargo,
                 itemType = itemsList[materialIndex].itemType)
@@ -407,7 +407,6 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
               materialIndex = playerShip.cargo[craftingMaterial].protoIndex
           if craftingMaterial == -1:
             break
-          var toolIndex = -1
           if recipe.tool == "None":
             toolIndex = -1
           else:
@@ -418,19 +417,19 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
               addMessage(message = "You don't have the tool for " & recipeName &
                   ".", mType = craftMessage, color = red)
               break
-          var amount = 0
+          var amount: Natural = 0
           for j in 0..materialIndexes.high:
             amount = amount + (itemsList[materialIndexes[j]].weight *
                 recipe.materialAmounts[j])
-          var resultAmount = recipe.resultAmount + (recipe.resultAmount.float *
+          var resultAmount: Natural = recipe.resultAmount + (recipe.resultAmount.float *
               (getSkillLevel(member = playerShip.crew[crafterIndex],
               skillIndex = recipe.skill).float / 100.0)).int
-          let damage = 1.0 - (module.durability.float /
+          let damage: float = 1.0 - (module.durability.float /
               module.maxDurability.float)
           resultAmount = resultAmount - (resultAmount.float * damage).int
           if resultAmount == 0:
             resultAmount = 1
-          var haveMaterial = false
+          var haveMaterial: bool = false
           for j in 0..materialIndexes.high:
             haveMaterial = false
             for item in playerShip.cargo:
@@ -449,13 +448,13 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
           craftedAmount = craftedAmount + resultAmount
           module.craftingAmount.dec
           for j in 0..materialIndexes.high:
-            var cargoIndex = 0
+            var cargoIndex: Natural = 0
             while cargoIndex <= playerShip.cargo.high:
-              var material = playerShip.cargo[cargoIndex]
+              var material: InventoryData = playerShip.cargo[cargoIndex]
               if itemsList[material.protoIndex].itemType == itemsList[
                   materialIndexes[j]].itemType:
                 if material.amount > recipe.materialAmounts[j]:
-                  let newAmount = material.amount - recipe.materialAmounts[j]
+                  let newAmount: Natural = material.amount - recipe.materialAmounts[j]
                   material.amount = newAmount
                   playerShip.cargo[cargoIndex] = material
                   break
@@ -473,7 +472,7 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
                 ship = playerShip)
           if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
               module.craftingIndex[0..4] != "Study"):
-            amount = amount - (itemsList[recipe.resultIndex].weight * resultAmount)
+            amount -= (itemsList[recipe.resultIndex].weight * resultAmount)
             if freeCargo(amount = amount) < 0:
               addMessage(message = "You don't have the free cargo space for " &
                   recipeName, mType = craftMessage, color = red)
@@ -485,12 +484,12 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
             else:
               updateCargo(ship = playerShip, protoIndex = recipesList[
                   module.craftingIndex].resultIndex, amount = resultAmount)
-            for key, protoRecipe in recipesList.pairs:
+            for key, protoRecipe in recipesList:
               if protoRecipe.resultIndex == recipe.resultIndex:
                 updateCraftingOrders(index = key)
                 break
           else:
-            for key, recipe in recipesList.pairs:
+            for key, recipe in recipesList:
               if recipe.resultIndex == recipe.resultIndex:
                 knownRecipes.add(y = key)
         module.craftingTime = recipeTime
@@ -521,10 +520,10 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
                 recipe.resultIndex].name, mType = craftMessage, color = green)
             updateGoal(goalType = GoalTypes.craft, targetIndex = "")
         if playerShip.crew[crafterIndex].order == craft:
-          var gainedExp = 0
+          var gainedExp: Natural = 0
           while workTime <= 0:
             gainedExp.inc
-            workTime = workTime + 15
+            workTime += 15
           if gainedExp > 0:
             gainExp(amount = gainedExp, skillNumber = recipe.skill,
                 crewIndex = crafterIndex)
@@ -547,8 +546,8 @@ proc setRecipe*(workshop: Natural; amount: Positive;
   body:
     playerShip.modules[workshop].craftingAmount = amount
     var
-      itemIndex = 0
-      recipeName = ""
+      itemIndex: Natural = 0
+      recipeName: string = ""
     if recipeIndex.len > 6 and recipeIndex[0..4] == "Study":
       itemIndex = recipeIndex[6..^1].strip.parseInt
       for recipe in recipesList.values:
@@ -586,7 +585,7 @@ proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
   require:
     workshop < playerShip.modules.len
   body:
-    let module = playerShip.modules[workshop]
+    let module: ModuleData = playerShip.modules[workshop]
     if module.craftingIndex.len > 0:
       if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
         return "Studying " & itemsList[module.craftingIndex[
@@ -624,10 +623,10 @@ proc getAdaCraftData(index: cstring; adaRecipe: var AdaCraftData) {.sideEffect,
   for i in 0..4:
     adaRecipe.materialTypes[i] = "".cstring
     adaRecipe.materialAmounts[i] = 0
-  let recipeKey = strip(s = $index)
+  let recipeKey: string = strip(s = $index)
   if not recipesList.hasKey(key = recipeKey):
     return
-  let recipe = try:
+  let recipe: CraftData = try:
       recipesList[recipeKey]
     except KeyError:
       return
@@ -672,7 +671,7 @@ proc setAdaRecipeData(recipeIndex: cstring;
     adaRecipe.materialTypes[i] = "".cstring
     adaRecipe.materialAmounts[i] = 0
   try:
-    let recipe = setRecipeData(recipeIndex = $recipeIndex)
+    let recipe: CraftData = setRecipeData(recipeIndex = $recipeIndex)
     adaRecipe.resultIndex = recipe.resultIndex.cint
     adaRecipe.resultAmount = recipe.resultAmount.cint
     adaRecipe.workplace = recipe.workplace.ord().cint
