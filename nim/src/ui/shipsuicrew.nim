@@ -973,6 +973,19 @@ proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Show the list of the player's ship crew to a player
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowCrew page skill
+  ## Page parameter is a index of page from which starts showing
+  ## crew. Skill is the index of skill to show
   try:
     updateCrewInfo(page = ($argv[1]).parseInt, skill = ($argv[2]).parseInt)
   except:
