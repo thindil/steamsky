@@ -1053,6 +1053,27 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
       crewSortOrder = moraleAsc
   else:
     discard
+  let
+    skillBox = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
+    skillIndex = findSkillIndex(skillName = tclEval2(script = skillBox & " get"))
+  if crewSortOrder == none:
+    if column == Positive.high:
+      updateCrewInfo(skill = skillIndex)
+    return tclOk
+  type LocalMemberData = object
+    selected: bool
+    name: string
+    order: CrewOrders
+    skill: string
+    health: SkillRange
+    fatigue: int
+    thirst: SkillRange
+    hunger: SkillRange
+    morale: SkillRange
+    id: Natural
+  var localCrew: seq[LocalMemberData]
+  for index, member in playerShip.crew:
+    localCrew.add(y = LocalMemberData(selected: tclGetVar(varName = "crewindex" & $(index + 1)) == "1"))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
