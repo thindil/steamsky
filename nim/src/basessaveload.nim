@@ -270,4 +270,5 @@ proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
         skyBases[baseIndex].cargo.add(y = item)
       skyMap[skyBases[baseIndex].skyX][skyBases[
           baseIndex].skyY].baseIndex = baseIndex
-      baseIndex.inc
+      if baseIndex < BasesRange.high:
+        baseIndex.inc
