@@ -1073,7 +1073,77 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     id: Natural
   var localCrew: seq[LocalMemberData]
   for index, member in playerShip.crew:
-    localCrew.add(y = LocalMemberData(selected: tclGetVar(varName = "crewindex" & $(index + 1)) == "1"))
+    localCrew.add(y = LocalMemberData(selected: tclGetVar(
+        varName = "crewindex" & $(index + 1)) == "1", name: member.name,
+        order: member.order, skill: (if skillIndex == -1: getHighestSkill(
+        memberIndex = index) else: getSkillLevelName(skillLevel = getSkillLevel(
+        member = member, skillIndex = skillIndex))), health: member.health,
+        fatigue: member.tired - member.attributes[conditionIndex].level,
+        thirst: member.thirst, hunger: member.hunger, morale: member.morale[1], id: index))
+  proc sortCrew(x, y: LocalMemberData): int =
+    case crewSortOrder
+    of selectedAsc:
+      if x.selected < y.selected:
+        return 1
+      else:
+        return -1
+    of selectedDesc:
+      if x.selected > y.selected:
+        return 1
+      else:
+        return -1
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of orderAsc:
+      if x.order < y.order:
+        return 1
+      else:
+        return -1
+    of orderDesc:
+      if x.order > y.order:
+        return 1
+      else:
+        return -1
+    of skillAsc:
+      if x.skill < y.skill:
+        return 1
+      else:
+        return -1
+    of skillDesc:
+      if x.skill > y.skill:
+        return 1
+      else:
+        return -1
+    of healthAsc:
+      if x.health < y.health:
+        return 1
+      else:
+        return -1
+    of healthDesc:
+      if x.health > y.health:
+        return 1
+      else:
+        return -1
+    of fatigueAsc:
+      if x.fatigue < y.fatigue:
+        return 1
+      else:
+        return -1
+    of fatigueDesc:
+      if x.fatigue > y.fatigue:
+        return 1
+      else:
+        return -1
+    else:
+      discard
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
