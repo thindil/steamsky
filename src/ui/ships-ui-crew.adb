@@ -1052,9 +1052,8 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
---      Add_Command(Name => "ShowCrew", Ada_Command => Show_Crew_Command'Access);
-      Add_Command
-        (Name => "SortShipCrew", Ada_Command => Sort_Crew_Command'Access);
+--      Add_Command
+--        (Name => "SortShipCrew", Ada_Command => Sort_Crew_Command'Access);
       Add_Command
         (Name => "SelectCrewSkill",
          Ada_Command => Select_Crew_Skill_Command'Access);
