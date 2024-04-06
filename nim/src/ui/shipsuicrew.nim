@@ -1003,6 +1003,18 @@ var crewSortOrder = defaultCrewSortOrder
 
 proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Sort the player's ship's crew list
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortShipCrew x
+  ## X is X axis coordinate where the player clicked the mouse button
   let column = try:
         (if argv[1] == "-1": Positive.high else: getColumnNumber(
             table = crewTable, xPosition = ($argv[1]).parseInt))
