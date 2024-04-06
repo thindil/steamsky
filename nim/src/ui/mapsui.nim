@@ -157,6 +157,18 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
     endX = centerX + (mapWidth / 2).int
     storyX = 1
     storyY = 1
+  if startY < 1:
+    startY = 1
+    endY = mapHeight
+  if startX < 1:
+    startX = 1
+    endX = mapWidth
+  if endY > 1_024:
+    endY = 1_024
+    startY = 1_025 - mapHeight
+  if endX > 1_024:
+    endX = 1_024
+    startX = 1_025 - mapWidth
   if currentStory.index.len > 0:
     (storyX, storyY) = try:
         getStoryLocation()
