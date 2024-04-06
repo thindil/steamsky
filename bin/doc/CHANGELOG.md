@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash when trading with another ship
 - Skills use wrong attributes
 - Crash on loading a saved game
+- Crash on starting a new game
 
 ## [9.8] - 2024-03-17
 
