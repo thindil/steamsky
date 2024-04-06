@@ -1002,9 +1002,12 @@ const defaultCrewSortOrder: CrewSortOrders = none
 var crewSortOrder = defaultCrewSortOrder
 
 proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(
-      table = crewTable, xPosition = ($argv[1]).parseInt))
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let column = try:
+        (if argv[1] == "-1": Positive.high else: getColumnNumber(
+            table = crewTable, xPosition = ($argv[1]).parseInt))
+      except:
+        return showError(message = "Can't get the column number.")
   case column
   of 1:
     if crewSortOrder == selectedAsc:
@@ -1073,13 +1076,18 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     id: Natural
   var localCrew: seq[LocalMemberData]
   for index, member in playerShip.crew:
-    localCrew.add(y = LocalMemberData(selected: tclGetVar(
-        varName = "crewindex" & $(index + 1)) == "1", name: member.name,
-        order: member.order, skill: (if skillIndex == 0: getHighestSkill(
-        memberIndex = index) else: getSkillLevelName(skillLevel = getSkillLevel(
-        member = member, skillIndex = skillIndex))), health: member.health,
-        fatigue: member.tired - member.attributes[conditionIndex].level,
-        thirst: member.thirst, hunger: member.hunger, morale: member.morale[1], id: index))
+    try:
+      localCrew.add(y = LocalMemberData(selected: tclGetVar(
+          varName = "crewindex" & $(index + 1)) == "1", name: member.name,
+          order: member.order, skill: (if skillIndex == 0: getHighestSkill(
+          memberIndex = index) else: getSkillLevelName(
+          skillLevel = getSkillLevel(
+          member = member, skillIndex = skillIndex))), health: member.health,
+          fatigue: member.tired - member.attributes[conditionIndex].level,
+          thirst: member.thirst, hunger: member.hunger, morale: member.morale[
+              1], id: index))
+    except:
+      return showError(message = "Can't add local crew member.")
   proc sortCrew(x, y: LocalMemberData): int =
     case crewSortOrder
     of selectedAsc:
@@ -1178,7 +1186,10 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   crewIndexes = @[]
   for member in localCrew:
     crewIndexes.add(y = member.id)
-  updateCrewInfo(skill = tclEval2(script = skillBox & " current").parseInt)
+  try:
+    updateCrewInfo(skill = tclEval2(script = skillBox & " current").parseInt)
+  except:
+    showError(message = "Can't update the crew info.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
