@@ -71,11 +71,13 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   # Show or hide upgrade module info
   if playerShip.upgradeModule == -1:
     tclEval(script = "grid remove " & label)
+    label = shipInfoFrame & ".upgradelbl"
+    tclEval(script = "grid remove " & label)
     tclEval(script = "grid remove " & upgradeProgress)
     tclEval(script = "grid remove " & cancelButton)
   else:
     var
-      upgradeInfo = "Upgrade:" & playerShip.modules[
+      upgradeInfo = playerShip.modules[
           playerShip.upgradeModule].name & " "
       maxUpgrade = 0
     case playerShip.modules[playerShip.upgradeModule].upgradeAction
@@ -147,8 +149,10 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         else:
           " -style Horizontal.TProgressbar"
     tclEval(script = upgradeProgress & " configure -value " & $upgradePercent & progressBarStyle)
-    tclEval(script = label & " configure -text {" & upgradeInfo & "}")
     tclEval(script = "grid " & label)
+    label = shipInfoFrame & ".upgradelbl"
+    tclEval(script = "grid " & label)
+    tclEval(script = label & " configure -text {" & upgradeInfo & "}")
     tclEval(script = "grid " & upgradeProgress)
     tclEval(script = "grid " & cancelButton)
   # Show or hide repair priority info

@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ tooltip::tooltip $shipcanvas.frame.maxmin \
 grid [ttk::label $shipcanvas.frame.namelbl -text {Name:}] -sticky w -padx 5
 tooltip::tooltip $shipcanvas.frame.namelbl {The name of your ship}
 SetScrollbarBindings $shipcanvas.frame.namelbl $shipinfoframe.general.scrolly
-grid [ttk::label $shipcanvas.frame.name -textvariable shipname] -column 1 \
-   -row 1 -sticky w
+grid [ttk::label $shipcanvas.frame.name -textvariable shipname \
+   -style Golden.TLabel] -column 1 -row 1 -sticky w
 tooltip::tooltip $shipcanvas.frame.name {The name of your ship}
 SetScrollbarBindings $shipcanvas.frame.name $shipinfoframe.general.scrolly
 grid [ttk::button $shipcanvas.frame.rename -style Small.TButton -command {
@@ -53,8 +53,12 @@ grid [ttk::label $shipcanvas.frame.upgradelabel -text {Upgrade:}] -sticky w \
    -columnspan 3 -padx 5
 SetScrollbarBindings $shipcanvas.frame.upgradelabel \
    $shipinfoframe.general.scrolly
+grid [ttk::label $shipcanvas.frame.upgradelbl -style Golden.TLabel] -column 1 \
+   -row 2 -columnspan 2 -sticky w
+SetScrollbarBindings $shipcanvas.frame.upgradelbl \
+   $shipinfoframe.general.scrolly
 grid [ttk::progressbar $shipcanvas.frame.upgrade \
-   -orient horizontal -maximum 1.0] -sticky we -columnspan 2 -padx 5
+   -orient horizontal -maximum 1.0] -sticky we -columnspan 3 -padx 5
 SetScrollbarBindings $shipcanvas.frame.upgrade $shipinfoframe.general.scrolly
 tooltip::tooltip $shipcanvas.frame.upgrade \
    {The current ship's upgrade progress}
@@ -91,7 +95,7 @@ grid [ttk::button $shipcanvas.frame.showhome -style Small.TButton \
    -sticky w
 tooltip::tooltip $shipcanvas.frame.showhome {Show the home base on map}
 # Ship weight
-grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we -padx 5
+grid [ttk::label $shipcanvas.frame.weight] -columnspan 3 -sticky we -padx 5
 tooltip::tooltip $shipcanvas.frame.weight \
    "The ship weight. The more heavy is ship, the slower it fly\nand need stronger engines"
 SetScrollbarBindings $shipcanvas.frame.weight $shipinfoframe.general.scrolly
