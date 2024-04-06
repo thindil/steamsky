@@ -38,9 +38,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
         findExe(exe = (if hostOs == "windows": "start" elif hostOs ==
           "macosx": "open" else: "xdg-open"))
       except:
-        tclEval(script = "bgerror {Can't find the program to open the link. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't find the program to open the link")
   if command.len == 0:
     showMessage(text = "Can't open the link. Reason: no program to open it.",
         parentFrame = ".", title = "Can't open the link.")
@@ -48,8 +46,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
   try:
     discard execCmd(command = command & " " & $argv[1])
   except:
-    tclEval(script = "bgerror {Can't open the link. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't open the link")
   return tclOk
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -77,8 +74,7 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
       for line in lines(docDirectory & fileName):
         tclEval(script = textView & " insert end {" & line & "\n}")
     except:
-      tclEval(script = "bgerror {Can't read file '" & fileName & "'. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't read file '" & fileName & "'.")
   else:
     tclEval(script = textView & " insert end {Can't find file to load. Did '" &
         fileName & "' file is in '" & docDirectory & "' directory?}")
@@ -128,8 +124,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
           break
         tclEval(script = textView & " insert end {" & line & "\n}")
     except:
-      tclEval(script = "bgerror {Can't read file 'CHANGELOG.md'. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't read file 'CHANGELOG.md'")
   else:
     tclEval(script = textView & " insert end {Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?}")
