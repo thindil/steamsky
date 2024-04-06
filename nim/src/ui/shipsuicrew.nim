@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
 import coreui, dialogs, table, updateheader, utilsui2
 
@@ -1142,8 +1142,43 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
         return 1
       else:
         return -1
-    else:
-      discard
+    of thirstAsc:
+      if x.thirst < y.thirst:
+        return 1
+      else:
+        return -1
+    of thirstDesc:
+      if x.thirst > y.thirst:
+        return 1
+      else:
+        return -1
+    of hungerAsc:
+      if x.hunger < y.hunger:
+        return 1
+      else:
+        return -1
+    of hungerDesc:
+      if x.hunger > y.hunger:
+        return 1
+      else:
+        return -1
+    of moraleAsc:
+      if x.morale < y.morale:
+        return 1
+      else:
+        return -1
+    of moraleDesc:
+      if x.morale > y.morale:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localCrew.sort(cmp = sortCrew)
+  crewIndexes = @[]
+  for member in localCrew:
+    crewIndexes.add(y = member.id)
+  updateCrewInfo()
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -1159,6 +1194,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowCrewSkillInfo", showCrewSkillInfoCommand)
     addCommand("SetPriority", setPriorityCommand)
     addCommand("ShowCrew", showCrewCommand)
+    addCommand("SortShipCrew", sortCrewCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
