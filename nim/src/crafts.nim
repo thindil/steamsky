@@ -349,188 +349,189 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
       if owner == -1:
         continue
       crafterIndex = owner
-      if playerShip.crew[crafterIndex].order == craft:
-        var
-          currentMinutes: int = minutes
-          recipeTime: int = module.craftingTime
-          recipeName: string = ""
-        let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex)
-        if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
-          recipeName = "studying " & itemsList[recipe.resultIndex].name
-        elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
-          recipeName = "deconstructing " & itemsList[module.craftingIndex[
-              12..^1].strip.parseInt].name
-        else:
-          recipeName = "manufacturing " & itemsList[recipe.resultIndex].name
-        if module.durability == 0:
-          addMessage(message = module.name & " is destroyed, so " &
-              playerShip.crew[crafterIndex].name & " can't work on " &
-              recipeName & ".", mType = craftMessage, color = red)
-          resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+      if playerShip.crew[crafterIndex].order != craft:
+        continue
+      var
+        currentMinutes: int = minutes
+        recipeTime: int = module.craftingTime
+        recipeName: string = ""
+      let recipe: CraftData = setRecipeData(recipeIndex = module.craftingIndex)
+      if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+        recipeName = "studying " & itemsList[recipe.resultIndex].name
+      elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+        recipeName = "deconstructing " & itemsList[module.craftingIndex[
+            12..^1].strip.parseInt].name
+      else:
+        recipeName = "manufacturing " & itemsList[recipe.resultIndex].name
+      if module.durability == 0:
+        addMessage(message = module.name & " is destroyed, so " &
+            playerShip.crew[crafterIndex].name & " can't work on " &
+            recipeName & ".", mType = craftMessage, color = red)
+        resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+        currentMinutes = 0
+      var
+        workTime: int = playerShip.crew[crafterIndex].orderTime
+        craftedAmount: Natural = 0
+      while currentMinutes > 0:
+        if currentMinutes < recipeTime:
+          recipeTime.dec(y = currentMinutes)
+          workTime.dec(y = currentMinutes)
           currentMinutes = 0
-        var
-          workTime: int = playerShip.crew[crafterIndex].orderTime
-          craftedAmount: Natural = 0
-        while currentMinutes > 0:
-          if currentMinutes < recipeTime:
-            recipeTime.dec(y = currentMinutes)
-            workTime.dec(y = currentMinutes)
-            currentMinutes = 0
-            break
-          recipeTime = recipeTime - currentMinutes
-          workTime = workTime - currentMinutes - recipeTime
-          currentMinutes = 0 - recipeTime
-          recipeTime = recipe.time
-          var materialIndexes: seq[Positive] = @[]
-          if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+          break
+        recipeTime -= currentMinutes
+        workTime = workTime - currentMinutes - recipeTime
+        currentMinutes = 0 - recipeTime
+        recipeTime = recipe.time
+        var materialIndexes: seq[Positive] = @[]
+        if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+          for j in 1..itemsList.len:
+            if itemsList[j].name == itemsList[recipe.resultIndex].name:
+              materialIndexes.add(y = j)
+              break
+        elif module.craftingIndex.len > 12 and module.craftingIndex[1..10] == "Deconstruct":
+          materialIndexes.add(y = module.craftingIndex[12..^1].strip.parseInt)
+        else:
+          for materialType in recipe.materialTypes:
             for j in 1..itemsList.len:
-              if itemsList[j].name == itemsList[recipe.resultIndex].name:
+              if itemsList[j].itemType == materialType:
                 materialIndexes.add(y = j)
                 break
-          elif module.craftingIndex.len > 12 and module.craftingIndex[1..10] == "Deconstruct":
-            materialIndexes.add(y = module.craftingIndex[12..^1].strip.parseInt)
-          else:
-            for materialType in recipe.materialTypes:
-              for j in 1..itemsList.len:
-                if itemsList[j].itemType == materialType:
-                  materialIndexes.add(y = j)
-                  break
-          var craftingMaterial: int = -1
-          for materialIndex in materialIndexes.mitems:
-            craftingMaterial = findItem(inventory = playerShip.cargo,
-                itemType = itemsList[materialIndex].itemType)
-            if craftingMaterial == -1:
-              addMessage(message = "You don't have the crafting materials for " &
-                  recipeName & ".", mType = craftMessage, color = red)
-              resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
-              break
-            elif playerShip.cargo[craftingMaterial].protoIndex != materialIndex:
-              materialIndex = playerShip.cargo[craftingMaterial].protoIndex
+        var craftingMaterial: int = -1
+        for materialIndex in materialIndexes.mitems:
+          craftingMaterial = findItem(inventory = playerShip.cargo,
+              itemType = itemsList[materialIndex].itemType)
           if craftingMaterial == -1:
-            break
-          if recipe.tool == "None":
-            toolIndex = -1
-          else:
-            toolIndex = findTools(memberIndex = crafterIndex,
-                itemType = recipe.tool, order = craft,
-                toolQuality = recipe.toolQuality)
-            if toolIndex == -1:
-              addMessage(message = "You don't have the tool for " & recipeName &
-                  ".", mType = craftMessage, color = red)
-              break
-          var amount: Natural = 0
-          for j in 0..materialIndexes.high:
-            amount = amount + (itemsList[materialIndexes[j]].weight *
-                recipe.materialAmounts[j])
-          var resultAmount: Natural = recipe.resultAmount + (recipe.resultAmount.float *
-              (getSkillLevel(member = playerShip.crew[crafterIndex],
-              skillIndex = recipe.skill).float / 100.0)).int
-          let damage: float = 1.0 - (module.durability.float /
-              module.maxDurability.float)
-          resultAmount = resultAmount - (resultAmount.float * damage).int
-          if resultAmount == 0:
-            resultAmount = 1
-          var haveMaterial: bool = false
-          for j in 0..materialIndexes.high:
-            haveMaterial = false
-            for item in playerShip.cargo:
-              if itemsList[item.protoIndex].itemType == itemsList[
-                  materialIndexes[j]].itemType and item.amount >=
-                      recipe.materialAmounts[j]:
-                haveMaterial = true
-                break
-            if not haveMaterial:
-              break
-          if not haveMaterial:
-            addMessage(message = "You don't have enough crafting materials for " &
+            addMessage(message = "You don't have the crafting materials for " &
                 recipeName & ".", mType = craftMessage, color = red)
             resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
             break
-          craftedAmount = craftedAmount + resultAmount
-          module.craftingAmount.dec
-          for j in 0..materialIndexes.high:
-            var cargoIndex: Natural = 0
-            while cargoIndex <= playerShip.cargo.high:
-              var material: InventoryData = playerShip.cargo[cargoIndex]
-              if itemsList[material.protoIndex].itemType == itemsList[
-                  materialIndexes[j]].itemType:
-                if material.amount > recipe.materialAmounts[j]:
-                  let newAmount: Natural = material.amount - recipe.materialAmounts[j]
-                  material.amount = newAmount
-                  playerShip.cargo[cargoIndex] = material
-                  break
-                elif material.amount == recipe.materialAmounts[j]:
-                  playerShip.cargo.delete(i = cargoIndex)
-                  if toolIndex > cargoIndex:
-                    toolIndex.dec
-                  break
-              cargoIndex.inc
-          if toolIndex > -1:
-            damageItem(inventory = playerShip.crew[crafterIndex].inventory,
-                itemIndex = toolIndex, skillLevel = getSkillLevel(
-                member = playerShip.crew[crafterIndex],
-                skillIndex = recipe.skill), memberIndex = crafterIndex,
-                ship = playerShip)
-          if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
-              module.craftingIndex[0..4] != "Study"):
-            amount -= (itemsList[recipe.resultIndex].weight * resultAmount)
-            if freeCargo(amount = amount) < 0:
-              addMessage(message = "You don't have the free cargo space for " &
-                  recipeName, mType = craftMessage, color = red)
-              resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+          elif playerShip.cargo[craftingMaterial].protoIndex != materialIndex:
+            materialIndex = playerShip.cargo[craftingMaterial].protoIndex
+        if craftingMaterial == -1:
+          break
+        if recipe.tool == "None":
+          toolIndex = -1
+        else:
+          toolIndex = findTools(memberIndex = crafterIndex,
+              itemType = recipe.tool, order = craft,
+              toolQuality = recipe.toolQuality)
+          if toolIndex == -1:
+            addMessage(message = "You don't have the tool for " & recipeName &
+                ".", mType = craftMessage, color = red)
+            break
+        var amount: Natural = 0
+        for j in 0..materialIndexes.high:
+          amount += (itemsList[materialIndexes[j]].weight *
+              recipe.materialAmounts[j])
+        var resultAmount: Natural = recipe.resultAmount + (recipe.resultAmount.float *
+            (getSkillLevel(member = playerShip.crew[crafterIndex],
+            skillIndex = recipe.skill).float / 100.0)).int
+        let damage: float = 1.0 - (module.durability.float /
+            module.maxDurability.float)
+        resultAmount -= (resultAmount.float * damage).int
+        if resultAmount == 0:
+          resultAmount = 1
+        var haveMaterial: bool = false
+        for j in 0..materialIndexes.high:
+          haveMaterial = false
+          for item in playerShip.cargo:
+            if itemsList[item.protoIndex].itemType == itemsList[
+                materialIndexes[j]].itemType and item.amount >=
+                    recipe.materialAmounts[j]:
+              haveMaterial = true
               break
-            if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
-              updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
-                  amount = resultAmount)
-            else:
-              updateCargo(ship = playerShip, protoIndex = recipesList[
-                  module.craftingIndex].resultIndex, amount = resultAmount)
-            for key, protoRecipe in recipesList:
-              if protoRecipe.resultIndex == recipe.resultIndex:
-                updateCraftingOrders(index = key)
+          if not haveMaterial:
+            break
+        if not haveMaterial:
+          addMessage(message = "You don't have enough crafting materials for " &
+              recipeName & ".", mType = craftMessage, color = red)
+          resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+          break
+        craftedAmount += resultAmount
+        module.craftingAmount.dec
+        for j in 0..materialIndexes.high:
+          var cargoIndex: Natural = 0
+          while cargoIndex <= playerShip.cargo.high:
+            var material: InventoryData = playerShip.cargo[cargoIndex]
+            if itemsList[material.protoIndex].itemType == itemsList[
+                materialIndexes[j]].itemType:
+              if material.amount > recipe.materialAmounts[j]:
+                let newAmount: Natural = material.amount - recipe.materialAmounts[j]
+                material.amount = newAmount
+                playerShip.cargo[cargoIndex] = material
                 break
+              elif material.amount == recipe.materialAmounts[j]:
+                playerShip.cargo.delete(i = cargoIndex)
+                if toolIndex > cargoIndex:
+                  toolIndex.dec
+                break
+            cargoIndex.inc
+        if toolIndex > -1:
+          damageItem(inventory = playerShip.crew[crafterIndex].inventory,
+              itemIndex = toolIndex, skillLevel = getSkillLevel(
+              member = playerShip.crew[crafterIndex],
+              skillIndex = recipe.skill), memberIndex = crafterIndex,
+              ship = playerShip)
+        if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
+            module.craftingIndex[0..4] != "Study"):
+          amount -= (itemsList[recipe.resultIndex].weight * resultAmount)
+          if freeCargo(amount = amount) < 0:
+            addMessage(message = "You don't have the free cargo space for " &
+                recipeName, mType = craftMessage, color = red)
+            resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+            break
+          if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
+            updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
+                amount = resultAmount)
           else:
-            for key, recipe in recipesList:
-              if recipe.resultIndex == recipe.resultIndex:
-                knownRecipes.add(y = key)
-        module.craftingTime = recipeTime
-        if craftedAmount > 0:
-          if recipe.resultAmount > 0:
-            if module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
-              addMessage(message = playerShip.crew[crafterIndex].name &
-                  " has recovered " & $craftedAmount & " " & itemsList[
-                  recipe.resultIndex].name & ".", mType = craftMessage, color = green)
-            else:
-              addMessage(message = playerShip.crew[crafterIndex].name &
-                  " has manufactured " & $craftedAmount & " " & itemsList[
-                  recipe.resultIndex].name & ".", mType = craftMessage, color = green)
-            for key, protoRecipe in recipesList.pairs:
-              if protoRecipe.resultIndex == recipe.resultIndex:
-                updateGoal(goalType = GoalTypes.craft, targetIndex = key,
-                    amount = craftedAmount)
-                break
-            if currentGoal.targetIndex.len > 0:
-              updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
-                  recipe.resultIndex].itemType, amount = craftedAmount)
-              if itemsList[recipe.resultIndex].showType.len > 0:
-                updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
-                    recipe.resultIndex].showType, amount = craftedAmount)
+            updateCargo(ship = playerShip, protoIndex = recipesList[
+                module.craftingIndex].resultIndex, amount = resultAmount)
+          for key, protoRecipe in recipesList:
+            if protoRecipe.resultIndex == recipe.resultIndex:
+              updateCraftingOrders(index = key)
+              break
+        else:
+          for key, recipe in recipesList:
+            if recipe.resultIndex == recipe.resultIndex:
+              knownRecipes.add(y = key)
+      module.craftingTime = recipeTime
+      if craftedAmount > 0:
+        if recipe.resultAmount > 0:
+          if module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+            addMessage(message = playerShip.crew[crafterIndex].name &
+                " has recovered " & $craftedAmount & " " & itemsList[
+                recipe.resultIndex].name & ".", mType = craftMessage, color = green)
           else:
             addMessage(message = playerShip.crew[crafterIndex].name &
-                " has discovered recipe for " & itemsList[
-                recipe.resultIndex].name, mType = craftMessage, color = green)
-            updateGoal(goalType = GoalTypes.craft, targetIndex = "")
-        if playerShip.crew[crafterIndex].order == craft:
-          var gainedExp: Natural = 0
-          while workTime <= 0:
-            gainedExp.inc
-            workTime += 15
-          if gainedExp > 0:
-            gainExp(amount = gainedExp, skillNumber = recipe.skill,
-                crewIndex = crafterIndex)
-          playerShip.crew[crafterIndex].orderTime = workTime
-          if module.craftingAmount == 0:
-            resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+                " has manufactured " & $craftedAmount & " " & itemsList[
+                recipe.resultIndex].name & ".", mType = craftMessage, color = green)
+          for key, protoRecipe in recipesList:
+            if protoRecipe.resultIndex == recipe.resultIndex:
+              updateGoal(goalType = GoalTypes.craft, targetIndex = key,
+                  amount = craftedAmount)
+              break
+          if currentGoal.targetIndex.len > 0:
+            updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
+                recipe.resultIndex].itemType, amount = craftedAmount)
+            if itemsList[recipe.resultIndex].showType.len > 0:
+              updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
+                  recipe.resultIndex].showType, amount = craftedAmount)
+        else:
+          addMessage(message = playerShip.crew[crafterIndex].name &
+              " has discovered recipe for " & itemsList[
+              recipe.resultIndex].name, mType = craftMessage, color = green)
+          updateGoal(goalType = GoalTypes.craft, targetIndex = "")
+      if playerShip.crew[crafterIndex].order == craft:
+        var gainedExp: Natural = 0
+        while workTime <= 0:
+          gainedExp.inc
+          workTime += 15
+        if gainedExp > 0:
+          gainExp(amount = gainedExp, skillNumber = recipe.skill,
+              crewIndex = crafterIndex)
+        playerShip.crew[crafterIndex].orderTime = workTime
+        if module.craftingAmount == 0:
+          resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
