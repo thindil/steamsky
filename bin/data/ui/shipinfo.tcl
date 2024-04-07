@@ -58,7 +58,7 @@ grid [ttk::label $shipcanvas.frame.upgradelbl -style Golden.TLabel] -column 1 \
 SetScrollbarBindings $shipcanvas.frame.upgradelbl \
    $shipinfoframe.general.scrolly
 grid [ttk::progressbar $shipcanvas.frame.upgrade \
-   -orient horizontal -maximum 1.0] -sticky we -columnspan 3 -padx 5
+   -orient horizontal -maximum 1.0] -sticky we -columnspan 2 -padx 5
 SetScrollbarBindings $shipcanvas.frame.upgrade $shipinfoframe.general.scrolly
 tooltip::tooltip $shipcanvas.frame.upgrade \
    {The current ship's upgrade progress}
@@ -66,21 +66,31 @@ grid [ttk::button $shipcanvas.frame.cancelupgrade -style Small.TButton \
    -command StopUpgrading] -row 3 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
 # Repair priority
-grid [ttk::label $shipcanvas.frame.repairlabel] -columnspan 2 -sticky we \
-   -padx 5
+grid [ttk::label $shipcanvas.frame.repairlabel] -sticky we -padx 5
 tooltip::tooltip $shipcanvas.frame.repairlabel \
    {If damaged, the module will be repaired as the first}
 SetScrollbarBindings $shipcanvas.frame.repairlabel \
    $shipinfoframe.general.scrolly
+grid [ttk::label $shipcanvas.frame.repairlbl -style Golden.TLabel] -column 1 \
+   -row 4 -sticky w
+SetScrollbarBindings $shipcanvas.frame.upgradelbl \
+   $shipinfoframe.general.scrolly
+tooltip::tooltip $shipcanvas.frame.repairlbl \
+   {If damaged, the module will be repaired as the first}
 grid [ttk::button $shipcanvas.frame.cancelpriority -style Small.TButton \
    -command {SetRepair remove}] -row 4 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship destination
-grid [ttk::label $shipcanvas.frame.destinationlabel] -columnspan 2 -sticky we \
-   -padx 5
+grid [ttk::label $shipcanvas.frame.destinationlabel] -sticky we -padx 5
 tooltip::tooltip $shipcanvas.frame.destinationlabel \
    {The current travel destination of your ship}
 SetScrollbarBindings $shipcanvas.frame.destinationlabel \
+   $shipinfoframe.general.scrolly
+grid [ttk::label $shipcanvas.frame.destinationlbl -style Golden.TLabel] -column 1 \
+   -row 5 -sticky w
+tooltip::tooltip $shipcanvas.frame.destinationlbl \
+   {The current travel destination of your ship}
+SetScrollbarBindings $shipcanvas.frame.upgradelbl \
    $shipinfoframe.general.scrolly
 grid [ttk::button $shipcanvas.frame.canceldestination -style Small.TButton \
    -command {ResetDestination}] -row 5 -column 2 -sticky w

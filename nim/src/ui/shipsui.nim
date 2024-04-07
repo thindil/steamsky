@@ -160,9 +160,14 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   cancelButton = shipInfoFrame & ".cancelpriority"
   if playerShip.repairModule == -1:
     tclEval(script = "grid remove " & label)
+    label = shipInfoFrame & ".repairlbl"
+    tclEval(script = "grid remove " & label)
     tclEval(script = "grid remove " & cancelButton)
   else:
-    tclEval(script = label & " configure -text {Repair first: " &
+    tclEval(script = label & " configure -text {Repair first: }")
+    tclEval(script = "grid " & label)
+    label = shipInfoFrame & ".repairlbl"
+    tclEval(script = label & " configure -text {" &
         playerShip.modules[playerShip.repairModule].name & "}")
     tclEval(script = "grid " & label)
     tclEval(script = "grid " & cancelButton)
@@ -171,15 +176,23 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   cancelButton = shipInfoFrame & ".canceldestination"
   if playerShip.destinationX == 0 and playerShip.destinationY == 0:
     tclEval(script = "grid remove " & label)
+    label = shipInfoFrame & ".destinationlbl"
+    tclEval(script = "grid remove " & label)
     tclEval(script = "grid remove " & cancelButton)
   else:
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
-      tclEval(script = label & " configure -text {Destination: " & skyBases[
+      tclEval(script = label & " configure -text {Destination: }")
+      let label2 = shipInfoFrame & ".destinationlbl"
+      tclEval(script = label2 & " configure -text {" & skyBases[
           skyMap[playerShip.destinationX][
           playerShip.destinationY].baseIndex].name & "}")
     else:
-      tclEval(script = label & " configure -text {Destination: X: " &
+      tclEval(script = label & " configure -text {Destination: }")
+      let label2 = shipInfoFrame & ".destinationlbl"
+      tclEval(script = label2 & " configure -text {X: " &
           $playerShip.destinationX & " Y: " & $playerShip.destinationY & "}")
+    tclEval(script = "grid " & label)
+    label = shipInfoFrame & ".destinationlbl"
     tclEval(script = "grid " & label)
     tclEval(script = "grid " & cancelButton)
   label = shipInfoFrame & ".homelabel"
