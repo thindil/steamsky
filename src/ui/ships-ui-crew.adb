@@ -160,7 +160,6 @@ package body Ships.UI.Crew is
          Update_Messages;
          return TCL_OK;
    end Set_Crew_Order_Command;
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****it* SUCrew/SUCrew.Crew_Sort_Orders
    -- FUNCTION
@@ -484,6 +483,7 @@ package body Ships.UI.Crew is
       Update_Crew_Info(Skill => Natural'Value(Current(ComboBox => Skill_Box)));
       return TCL_OK;
    end Sort_Crew_Command;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCrew/SUCrew.Select_Crew_Skill_Command
    -- FUNCTION
@@ -498,26 +498,26 @@ package body Ships.UI.Crew is
    -- COMMANDS
    -- SelectCrewSkill
    -- SOURCE
-   function Select_Crew_Skill_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Select_Crew_Skill_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      Skill_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName =>
-             Main_Paned &
-             ".shipinfoframe.crew.canvas.frame.selectskill.combox",
-           Interp => Interp);
-   begin
-      Update_Crew_Info(Skill => Natural'Value(Current(ComboBox => Skill_Box)));
-      return TCL_OK;
-   end Select_Crew_Skill_Command;
+--   function Select_Crew_Skill_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Select_Crew_Skill_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      Skill_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName =>
+--             Main_Paned &
+--             ".shipinfoframe.crew.canvas.frame.selectskill.combox",
+--           Interp => Interp);
+--   begin
+--      Update_Crew_Info(Skill => Natural'Value(Current(ComboBox => Skill_Box)));
+--      return TCL_OK;
+--   end Select_Crew_Skill_Command;
 
    -- ****if* SUCrew/SUCrew.Set_Available_Orders
    -- FUNCTION
@@ -1053,10 +1053,8 @@ package body Ships.UI.Crew is
    begin
       Add_Ada_Commands;
 --      Add_Command
---        (Name => "SortShipCrew", Ada_Command => Sort_Crew_Command'Access);
-      Add_Command
-        (Name => "SelectCrewSkill",
-         Ada_Command => Select_Crew_Skill_Command'Access);
+--        (Name => "SelectCrewSkill",
+--         Ada_Command => Select_Crew_Skill_Command'Access);
       Add_Command
         (Name => "ShowCrewOrder",
          Ada_Command => Show_Crew_Order_Command'Access);

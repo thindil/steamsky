@@ -1204,6 +1204,12 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     showError(message = "Can't update the crew info.")
   return tclOk
 
+proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let skillBox = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
+  updateCrewInfo(skill = tclEval2(script = skillBox & " current").parseInt)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -1218,6 +1224,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SetPriority", setPriorityCommand)
     addCommand("ShowCrew", showCrewCommand)
     addCommand("SortShipCrew", sortCrewCommand)
+    addCommand("SelectCrewSkill", selectCrewSkillCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
