@@ -91,8 +91,8 @@ proc finishStory*() {.raises: [], tags: [], exportc.} =
     showQuestion(question = storiesList[currentStory.index].endText &
         " Do you want to finish the game?", res = "retire")
   except KeyError:
-    tclEval(script = "bgerror {Can't get the end text of the current story. Result: " &
-        tclGetResult2() & "}")
+    showError(message = "Can't get the end text of the current story. Result: " &
+        tclGetResult2())
 
 proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
   ## Show the sky map, draw the map, update the header, etc
@@ -120,8 +120,7 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
       try:
         showInfo(text = getCurrentStoryText(), title = "Story")
       except KeyError:
-        tclEval(script = "bgerror {Can't show the story text. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't show the story text.")
     else:
       finishStory()
       if playerShip.crew[0].health == 0:
@@ -141,14 +140,12 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
     mapHeight: Positive = try:
         tclEval2(script = mapView & " cget -height").parseInt()
       except:
-        tclEval(script = "bgerror {Can't get map height. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get map height.")
         return
     mapWidth: Positive = try:
         tclEval2(script = mapView & " cget -width").parseInt()
       except:
-        tclEval(script = "bgerror {Can't get map width. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get map width.")
         return
   startX = centerX - (mapWidth / 2).int
   startY = centerY - (mapHeight / 2).int
@@ -173,8 +170,7 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
     (storyX, storyY) = try:
         getStoryLocation()
       except:
-        tclEval(script = "bgerror {Can't the current story location. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the current story location.")
         return
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
@@ -185,8 +181,7 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
   let currentTheme = try:
         themesList[gameSettings.interfaceTheme]
       except:
-        tclEval(script = "bgerror {Can't the current game's theme. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the curernt game's theme.")
         return
   for y in startY .. endY:
     for x in startX .. endX:
@@ -262,8 +257,7 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
                   factionsList[skyBases[skyMap[x][
                       y].baseIndex].owner].baseIcon.Rune.toUTF8
                 except:
-                  tclEval(script = "bgerror {Can't the base icon. Reason: " &
-                      getCurrentExceptionMsg() & "}")
+                  showError(message = "Can't get the base icon.")
                   return
               mapTag = skyBases[skyMap[x][y].baseIndex].baseType
             else:
@@ -348,16 +342,14 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
             " tag configure basetype -foreground #" & basesTypesList[skyBases[
             baseIndex].baseType].color)
       except:
-        tclEval(script = "bgerror {Can't get the color of the base's type. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the color of the base's type.")
         return
       insertText(newText = "\nType: ")
       try:
         insertText(newText = basesTypesList[skyBases[baseIndex].baseType].name,
             tagName = "basetype")
       except:
-        tclEval(script = "bgerror {Can't get the name of the base's type. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the name of the base's type.")
         return
       if skyBases[baseIndex].population > 0:
         insertText(newText = "\nPopulation: ")
@@ -377,8 +369,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           insertText(newText = factionsList[skyBases[baseIndex].owner].name,
               tagName = "yellow2")
         except:
-          tclEval(script = "bgerror {Can't get the name of the owner's faction. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't get the name of the owner's faction.")
           return
       else:
         insertText(newText = "Base is abandoned")
@@ -427,16 +418,14 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         missionInfoText = missionInfoText & "Deliver " & itemsList[
             acceptedMissions[missionIndex].itemIndex].name
       except:
-        tclEval(script = "bgerror {Can't get the name of the item to deliver. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the name of the item to deliver.")
         return
     of destroy:
       try:
         missionInfoText = missionInfoText & "Destroy " & protoShipsList[
             acceptedMissions[missionIndex].shipIndex].name
       except:
-        tclEval(script = "bgerror {Can't get the name of the ship to destroy. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the name of the ship to destroy.")
         return
     of patrol:
       missionInfoText = missionInfoText & "Patrol area"
@@ -450,8 +439,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     try:
       (storyX, storyY) = getStoryLocation()
     except:
-      tclEval(script = "bgerror {Can't get the location of the current story. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't get the location of the current story.")
       return
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
@@ -467,8 +455,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         if finishCondition in {askInBase, destroyShip, explore}:
           insertText(newText = "\nStory leads you here")
       except:
-        tclEval(script = "bgerror {Can't get the finish condition of the current story. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the finish condition of the current story.")
         return
   if x == playerShip.skyX and y == playerShip.skyY:
     insertText(newText = "\nYou are here", tagName = "yellow")
@@ -484,8 +471,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         eventInfoText = eventInfoText & protoShipsList[eventsList[
             eventIndex].shipIndex].name
       except:
-        tclEval(script = "bgerror {Can't get the name of the ship for the event. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the name of the trader's ship for the event.")
         return
       color = "green"
     of friendlyShip:
@@ -493,8 +479,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         eventInfoText = eventInfoText & protoShipsList[eventsList[
             eventIndex].shipIndex].name
       except:
-        tclEval(script = "bgerror {Can't get the name of the ship for the event. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the name of the friendly ship for the event.")
         return
       color = "green2"
     of enemyShip:
@@ -502,8 +487,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         eventInfoText = eventInfoText & protoShipsList[eventsList[
             eventIndex].shipIndex].name
       except:
-        tclEval(script = "bgerror {Can't get the name of the ship for the event. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the name of the enemy's ship for the event.")
         return
       color = "red"
     of fullDocks:
@@ -523,8 +507,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         eventInfoText = eventInfoText & itemsList[eventsList[
             eventIndex].itemIndex].name
       except:
-        tclEval(script = "bgerror {Can't get the name of the item for the event. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get the name of the item for the event.")
         return
       color = "lime"
     of EventsTypes.none, baseRecovery:
@@ -656,8 +639,7 @@ proc createGameUi*() =
             of "FullScreen":
               fullScreenAccel = entry.value
           of cfgError:
-            tclEval(script = "bgerror {Can't set keyboard shortcuts. Reason: " &
-                entry.msg & "}")
+            showError(message = "Can't set keyboard shortcuts. Message: " & entry.msg)
       parser.close()
     else:
       if DirSep == '\\':
