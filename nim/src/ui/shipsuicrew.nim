@@ -1205,7 +1205,7 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   ## Show the list of the player's ship crew with selected skill from combobox
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1218,7 +1218,10 @@ proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SelectCrewSkill
   let skillBox = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
-  updateCrewInfo(skill = tclEval2(script = skillBox & " current").parseInt)
+  try:
+    updateCrewInfo(skill = tclEval2(script = skillBox & " current").parseInt)
+  except:
+    showError(message = "Can't update the crew info.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
