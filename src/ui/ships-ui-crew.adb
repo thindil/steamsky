@@ -485,40 +485,6 @@ package body Ships.UI.Crew is
    end Sort_Crew_Command;
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****o* SUCrew/SUCrew.Select_Crew_Skill_Command
-   -- FUNCTION
-   -- Show the list of the player's ship crew with selected skill from combobox
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SelectCrewSkill
-   -- SOURCE
---   function Select_Crew_Skill_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Select_Crew_Skill_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      Skill_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName =>
---             Main_Paned &
---             ".shipinfoframe.crew.canvas.frame.selectskill.combox",
---           Interp => Interp);
---   begin
---      Update_Crew_Info(Skill => Natural'Value(Current(ComboBox => Skill_Box)));
---      return TCL_OK;
---   end Select_Crew_Skill_Command;
-
    -- ****if* SUCrew/SUCrew.Set_Available_Orders
    -- FUNCTION
    -- Set the list of available orders for the selected crew member
@@ -1052,9 +1018,6 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "SelectCrewSkill",
---         Ada_Command => Select_Crew_Skill_Command'Access);
       Add_Command
         (Name => "ShowCrewOrder",
          Ada_Command => Show_Crew_Order_Command'Access);
