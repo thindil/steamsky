@@ -1224,6 +1224,27 @@ proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     showError(message = "Can't update the crew info.")
   return tclOk
 
+proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    memberIndex = ($argv[1]).parseInt
+    member = playerShip.crew[memberIndex]
+    memberDialog = createDialog(name = ".memberdialog", title = "Change order for " & member.name, columns = 2)
+    orderInfo = memberDialog & ".orderinfo"
+  tclEval(script = "ttk::label " & orderInfo & " -text {Current order:}")
+  tclEval(script = "grid " & orderInfo & " -padx 5")
+  let orderLabel = memberDialog & ".current"
+  tclEval(script = "ttk::label " & orderLabel & " -text {" & getCurrentOrder(memberIndex = memberIndex) & "} -wraplength 275")
+  tclEval(script = "grid " & orderLabel & " -padx 5 -column 1 -row 1 -sticky w")
+  let ordersInfo = memberDialog & ".ordersinfo"
+  tclEval(script = "ttk::label " & ordersInfo & " -text {New order:}")
+  tclEval(script = "grid " & ordersInfo & " -padx 5 -sticky w")
+  let ordersBox = memberDialog & ".list"
+  tclEval(script = "ttk::combobox " & ordersBox & " -state readonly")
+  let buttonsBox = memberDialog & ".buttons"
+  tclEval(script = "ttk::frame " & buttonsBox)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
