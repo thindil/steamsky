@@ -1206,6 +1206,17 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
+  ## Show the list of the player's ship crew with selected skill from combobox
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SelectCrewSkill
   let skillBox = mainPaned & ".shipinfoframe.crew.canvas.frame.selectskill.combox"
   updateCrewInfo(skill = tclEval2(script = skillBox & " current").parseInt)
   return tclOk
