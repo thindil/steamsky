@@ -1256,8 +1256,6 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
       return false
 
     for index, module in playerShip.modules:
-      if module.durability < module.maxDurability:
-        needRepair = true
       if module.durability > 0:
         case module.mType
         of gun, harpoonGun:
@@ -1291,6 +1289,26 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
                 index + 1) & "}")
         else:
           discard
+        if needRepair:
+          availableOrders.add(y = " {Repair ship}")
+          tclCommands.add(y = " {Repair " & $(memberIndex + 1) & "}")
+    for index, member2 in playerShip.crew:
+      if member2.health < 100 and index != memberIndex and member2.order != heal:
+        availableOrders.add(y = " {Heal wounded crew members}")
+        tclCommands.add(y = " {Heal " & $(memberIndex + 1) & "}")
+        break
+    if playerShip.upgradeModule > -1 and member.order != upgrading:
+      availableOrders.add(y = " {Upgrade module}")
+      tclCommands.add(y = " {Upgrading " & $(memberIndex + 1) & "}")
+    if member.order != talk:
+      availableOrders.add(y = " {Talk with others}")
+      tclCommands.add(y = " {Talk " & $(memberIndex + 1) & "}")
+    if member.order != rest:
+      availableOrders.add(y = " {Go on break}")
+      tclCommands.add(y = " {Rest " & $(memberIndex + 1) & "}")
+  tclEval(script = ordersBox & " configure -values [list " & availableOrders & "]")
+  tclEval(script = button & " configure -command {SelectCrewOrder {" &
+      tclCommands & "} " & $(memberIndex + 1) & ";CloseDialog .memberdialog}")
 
 proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -1374,6 +1392,11 @@ proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
     columnsWidth[index] = width.cint
   row = crewTable.row.cint
   rowHeight = crewTable.rowHeight.cint
+
+proc setAdaAvailableOrders(memberIndex: cint; ordersBox,
+    button: cstring) {.exportc.} =
+  setAvailableOrders(memberIndex = memberIndex, ordersBox = $ordersBox,
+      button = $button)
 
 proc addAdaCrewCommands() {.raises: [], tags: [RootEffect], exportc.} =
   try:
