@@ -97,18 +97,27 @@ grid [ttk::button $shipcanvas.frame.canceldestination -style Small.TButton \
 tooltip::tooltip $shipcanvas.frame.canceldestination \
    {Reset the ship destination}
 # Ship home base
-grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 2 -sticky we -padx 5
+grid [ttk::label $shipcanvas.frame.homelabel] -sticky we -padx 5
 tooltip::tooltip $shipcanvas.frame.homelabel {Your ship the current home base}
 SetScrollbarBindings $shipcanvas.frame.homelabel $shipinfoframe.general.scrolly
+grid [ttk::label $shipcanvas.frame.homelbl -style Golden.TLabel] -sticky we \
+   -padx 5 -row 6 -column 1
+tooltip::tooltip $shipcanvas.frame.homelbl {Your ship the current home base}
+SetScrollbarBindings $shipcanvas.frame.homelbl $shipinfoframe.general.scrolly
 grid [ttk::button $shipcanvas.frame.showhome -style Small.TButton \
    -command {ShowShipInfo;update;MoveMap centeronhome}] -row 6 -column 2 \
    -sticky w
 tooltip::tooltip $shipcanvas.frame.showhome {Show the home base on map}
 # Ship weight
-grid [ttk::label $shipcanvas.frame.weight] -columnspan 3 -sticky we -padx 5
+grid [ttk::label $shipcanvas.frame.weight] -sticky we -padx 5
 tooltip::tooltip $shipcanvas.frame.weight \
    "The ship weight. The more heavy is ship, the slower it fly\nand need stronger engines"
 SetScrollbarBindings $shipcanvas.frame.weight $shipinfoframe.general.scrolly
+grid [ttk::label $shipcanvas.frame.weight2 -style Golden.TLabel] -columnspan 2 \
+   -sticky w -padx 5 -row 7 -column 1
+tooltip::tooltip $shipcanvas.frame.weight2 \
+   "The ship weight. The more heavy is ship, the slower it fly\nand need stronger engines"
+SetScrollbarBindings $shipcanvas.frame.weight2 $shipinfoframe.general.scrolly
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.general.scrolly
 ::autoscroll::autoscroll $shipinfoframe.general.scrollx

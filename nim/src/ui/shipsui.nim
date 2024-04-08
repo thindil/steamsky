@@ -196,11 +196,15 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & label)
     tclEval(script = "grid " & cancelButton)
   label = shipInfoFrame & ".homelabel"
-  tclEval(script = label & " configure -text {Home: " & skyBases[
+  tclEval(script = label & " configure -text {Home: }")
+  label = shipInfoFrame & ".homelbl"
+  tclEval(script = label & " configure -text {" & skyBases[
       playerShip.homeBase].name & "}")
   label = shipInfoFrame & ".weight"
+  tclEval(script = label & " configure -text {Weight: }")
+  label = shipInfoFrame & ".weight2"
   try:
-    discard tclEval(script = label & " configure -text {Weight: " &
+    discard tclEval(script = label & " configure -text {" &
         $countShipWeight(ship = playerShip) & "kg}")
   except:
     tclEval(script = "bgerror {Can't show the weight of the ship. Reason: " &
