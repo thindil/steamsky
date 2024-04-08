@@ -1229,12 +1229,14 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     memberIndex = ($argv[1]).parseInt
     member = playerShip.crew[memberIndex]
-    memberDialog = createDialog(name = ".memberdialog", title = "Change order for " & member.name, columns = 2)
+    memberDialog = createDialog(name = ".memberdialog",
+        title = "Change order for " & member.name, columns = 2)
     orderInfo = memberDialog & ".orderinfo"
   tclEval(script = "ttk::label " & orderInfo & " -text {Current order:}")
   tclEval(script = "grid " & orderInfo & " -padx 5")
   let orderLabel = memberDialog & ".current"
-  tclEval(script = "ttk::label " & orderLabel & " -text {" & getCurrentOrder(memberIndex = memberIndex) & "} -wraplength 275")
+  tclEval(script = "ttk::label " & orderLabel & " -text {" & getCurrentOrder(
+      memberIndex = memberIndex) & "} -wraplength 275")
   tclEval(script = "grid " & orderLabel & " -padx 5 -column 1 -row 1 -sticky w")
   let ordersInfo = memberDialog & ".ordersinfo"
   tclEval(script = "ttk::label " & ordersInfo & " -text {New order:}")
@@ -1243,6 +1245,13 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::combobox " & ordersBox & " -state readonly")
   let buttonsBox = memberDialog & ".buttons"
   tclEval(script = "ttk::frame " & buttonsBox)
+  let closeDialogButton = buttonsBox & ".button"
+  tclEval(script = "ttk::button " & closeDialogButton &
+      " -text Cancel -command {CloseDialog " & memberDialog & "} -image cancelicon -style Dialog.TButton")
+  let acceptButton = buttonsBox & ".button2"
+  tclEval(script = "ttk::button " & acceptButton & " -text Assign -image giveordericon -style Dialog.TButton")
+  tclEval(script = "bind " & ordersBox & " <Escape> {" & closeDialogButton & " invoke;break}")
+  tclEval(script = "bind " & ordersBox & " <Tab> {focus " & acceptButton & ";break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
