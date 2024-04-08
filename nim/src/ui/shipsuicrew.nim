@@ -1256,15 +1256,41 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
       return false
 
     for index, module in playerShip.modules:
+      if module.durability < module.maxDurability:
+        needRepair = true
       if module.durability > 0:
         case module.mType
         of gun, harpoonGun:
           if module.owner[0] != memberIndex:
             availableOrders.add(y = " {Operate " & module.name & "}")
-            tclCommands.add(y = " {Gunner " & $(memberIndex + 1) & " " & $(index + 1) & "}")
+            tclCommands.add(y = " {Gunner " & $(memberIndex + 1) & " " & $(
+                index + 1) & "}")
         of workshop:
-          if not isWorking(owners = module.owner, mIndex = memberIndex) and module.craftingIndex.len > 0:
-            availableOrders.add(y = " {" & (if module.craftingIndex.len > 6 and module.craftingIndex[0 .. 4] == "Study": "Study " & itemsList[module.craftingIndex[6 .. ^1].parseInt].name elif module.craftingIndex.len > 12 and module.craftingIndex[0 .. 10] == "Deconstruct": "Deconstruct " & itemsList[module.crafingIndex[12 .. ^1].parseInt].name else: "Manufacture ") & "}")
+          if not isWorking(owners = module.owner, mIndex = memberIndex) and
+              module.craftingIndex.len > 0:
+            availableOrders.add(y = " {" & (if module.craftingIndex.len > 6 and
+                module.craftingIndex[0 .. 4] == "Study": "Study " & itemsList[
+                module.craftingIndex[6 ..
+                ^1].parseInt].name elif module.craftingIndex.len > 12 and
+                module.craftingIndex[0 .. 10] == "Deconstruct": "Deconstruct " &
+                itemsList[module.craftingIndex[12 ..
+                ^1].parseInt].name else: "Manufacture " &
+                $module.craftingAmount & "x " & itemsList[recipesList[
+                module.craftingIndex].resultIndex].name) & "}")
+            tclCommands.add(y = " {Craft " & $(memberIndex + 1) & " " & $(
+                index + 1) & "}")
+        of cabin:
+          if module.cleanliness < module.quality and member.order != clean and needClean:
+            availableOrders.add(y = " {Clean ship}")
+            tclCommands.add(y = " {Clean " & $(memberIndex + 1) & "}")
+            needClean = false
+        of trainingRoom:
+          if not isWorking(owners = module.owner, mIndex = memberIndex):
+            availableOrders.add(y = " {Go training in " & module.name & "}")
+            tclCommands.add(y = " {Train " & $(memberIndex + 1) & " " & $(
+                index + 1) & "}")
+        else:
+          discard
 
 proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
