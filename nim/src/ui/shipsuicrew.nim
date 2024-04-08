@@ -1229,13 +1229,16 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
   for module in playerShip.modules:
     if module.durability < module.maxDurability:
       needRepair = true
-    if (module.durability > 0 and module.mType == ModuleType2.cabin) and module.cleanliness < module.quality:
+    if (module.durability > 0 and module.mType == ModuleType2.cabin) and
+        module.cleanliness < module.quality:
       needClean = true
     if needRepair and needClean:
       break
   let member = playerShip.crew[memberIndex]
   var availableOrders, tclCommands = ""
-  if ((member.tired == 100 or member.hunger == 100 or member.thirst == 100) and member.order != rest) or member.skills.len == 0 or member.contractLength == 0:
+  if ((member.tired == 100 or member.hunger == 100 or member.thirst == 100) and
+      member.order != rest) or member.skills.len == 0 or
+      member.contractLength == 0:
     availableOrders.add(y = " {Go on break}")
     tclCommands.add(y = " {Rest " & $(memberIndex + 1) & "}")
   else:
@@ -1245,6 +1248,23 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
     if member.order != engineer:
       availableOrders.add(y = " {Go engineering the ship}")
       tclCommands.add(y = " {Engineer " & $(memberIndex + 1) & "}")
+
+    proc isWorking(owners: seq[int]; mIndex: Natural): bool =
+      for owner in owners:
+        if owner == mIndex:
+          return true
+      return false
+
+    for index, module in playerShip.modules:
+      if module.durability > 0:
+        case module.mType
+        of gun, harpoonGun:
+          if module.owner[0] != memberIndex:
+            availableOrders.add(y = " {Operate " & module.name & "}")
+            tclCommands.add(y = " {Gunner " & $(memberIndex + 1) & " " & $(index + 1) & "}")
+        of workshop:
+          if not isWorking(owners = module.owner, mIndex = memberIndex) and module.craftingIndex.len > 0:
+            availableOrders.add(y = " {" & (if module.craftingIndex.len > 6 and module.craftingIndex[0 .. 4] == "Study": "Study " & itemsList[module.craftingIndex[6 .. ^1].parseInt].name elif module.craftingIndex.len > 12 and module.craftingIndex[0 .. 10] == "Deconstruct": "Deconstruct " & itemsList[module.crafingIndex[12 .. ^1].parseInt].name else: "Manufacture ") & "}")
 
 proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
@@ -1274,6 +1294,8 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & acceptButton & " -text Assign -image giveordericon -style Dialog.TButton")
   tclEval(script = "bind " & ordersBox & " <Escape> {" & closeDialogButton & " invoke;break}")
   tclEval(script = "bind " & ordersBox & " <Tab> {focus " & acceptButton & ";break}")
+  setAvailableOrders(memberIndex = memberIndex, ordersBox = ordersBox,
+      button = acceptButton)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
