@@ -1224,10 +1224,32 @@ proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     showError(message = "Can't update the crew info.")
   return tclOk
 
+proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
+  var needRepair, needClean = false
+  for module in playerShip.modules:
+    if module.durability < module.maxDurability:
+      needRepair = true
+    if (module.durability > 0 and module.mType == ModuleType2.cabin) and module.cleanliness < module.quality:
+      needClean = true
+    if needRepair and needClean:
+      break
+  let member = playerShip.crew[memberIndex]
+  var availableOrders, tclCommands = ""
+  if ((member.tired == 100 or member.hunger == 100 or member.thirst == 100) and member.order != rest) or member.skills.len == 0 or member.contractLength == 0:
+    availableOrders.add(y = " {Go on break}")
+    tclCommands.add(y = " {Rest " & $(memberIndex + 1) & "}")
+  else:
+    if member.order != pilot:
+      availableOrders.add(y = " {Go piloting the ship}")
+      tclCommands.add(y = " {Pilot " & $(memberIndex + 1) & "}")
+    if member.order != engineer:
+      availableOrders.add(y = " {Go engineering the ship}")
+      tclCommands.add(y = " {Engineer " & $(memberIndex + 1) & "}")
+
 proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
   let
-    memberIndex = ($argv[1]).parseInt
+    memberIndex = ($argv[1]).parseInt - 1
     member = playerShip.crew[memberIndex]
     memberDialog = createDialog(name = ".memberdialog",
         title = "Change order for " & member.name, columns = 2)
