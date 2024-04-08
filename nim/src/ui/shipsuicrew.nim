@@ -1394,9 +1394,12 @@ proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
   rowHeight = crewTable.rowHeight.cint
 
 proc setAdaAvailableOrders(memberIndex: cint; ordersBox,
-    button: cstring) {.exportc.} =
-  setAvailableOrders(memberIndex = memberIndex, ordersBox = $ordersBox,
-      button = $button)
+    button: cstring) {.raises: [], tags: [], exportc.} =
+  try:
+    setAvailableOrders(memberIndex = memberIndex - 1, ordersBox = $ordersBox,
+        button = $button)
+  except:
+    echo getCurrentExceptionMsg()
 
 proc addAdaCrewCommands() {.raises: [], tags: [RootEffect], exportc.} =
   try:
