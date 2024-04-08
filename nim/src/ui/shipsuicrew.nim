@@ -1269,10 +1269,10 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
             availableOrders.add(y = " {" & (if module.craftingIndex.len > 6 and
                 module.craftingIndex[0 .. 4] == "Study": "Study " & itemsList[
                 module.craftingIndex[6 ..
-                ^1].parseInt].name elif module.craftingIndex.len > 12 and
+                ^1].strip.parseInt].name elif module.craftingIndex.len > 12 and
                 module.craftingIndex[0 .. 10] == "Deconstruct": "Deconstruct " &
                 itemsList[module.craftingIndex[12 ..
-                ^1].parseInt].name else: "Manufacture " &
+                ^1].strip.parseInt].name else: "Manufacture " &
                 $module.craftingAmount & "x " & itemsList[recipesList[
                 module.craftingIndex].resultIndex].name) & "}")
             tclCommands.add(y = " {Craft " & $(memberIndex + 1) & " " & $(
