@@ -53,7 +53,8 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       let
         recipeIndex: string = recipeNode.attr(name = "index")
         recipeAction: DataAction = try:
-            parseEnum[DataAction](s = recipeNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = recipeNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if recipeAction in [update, remove]:
@@ -301,13 +302,13 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
           recipe.resultIndex].weight * recipe.resultAmount)) < 0:
         raise newException(exceptn = TradeNoFreeCargoError, message = "")
 
-proc resetOrder(module: var ModuleData; moduleOwner, toolIndex, crafterIndex: int) {.sideEffect,
-    raises: [KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
-        contractual.} =
+proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
+    crafterIndex: int) {.sideEffect, raises: [KeyError, CrewNoSpaceError,
+    Exception], tags: [RootEffect], contractual.} =
   ## Reset the crafting order for the crafter and for the ship's module
   ##
   ## * module       - the player's ship's module which setting will be resetted
-  ## * moduleOwner  - the index of the crafter in the player's ship's cargo who
+  ## * moduleOwner  - the index of the crafter in the player's ship's module who
   ##                  will have order resetted
   ## * toolIndex    - the index of the tool used for crafting
   ## * crafterIndex - the index of the crew member who crafts currently
@@ -333,6 +334,54 @@ proc resetOrder(module: var ModuleData; moduleOwner, toolIndex, crafterIndex: in
     module.craftingIndex = ""
     module.craftingTime = 0
     module.craftingAmount = 0
+
+proc getMaterialIndexes(module: ModuleData; recipe: CraftData): seq[
+    Positive] {.sideEffect, raises: [KeyError, ValueError], tags: [],
+    contractual.} =
+  ## Find indexes of materials needed to execute the selected crafting order
+  ##
+  ## * module - the player's ship' module in which the crafting order is set
+  ## * recipe - the crafting order which will be executed
+  ##
+  ## Returns the list of indexes of materials needed to execute the crafting
+  ## order
+  if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
+    for j in 1..itemsList.len:
+      if itemsList[j].name == itemsList[recipe.resultIndex].name:
+        result.add(y = j)
+        break
+  elif module.craftingIndex.len > 12 and module.craftingIndex[1..10] == "Deconstruct":
+    result.add(y = module.craftingIndex[12..^1].strip.parseInt)
+  else:
+    for materialType in recipe.materialTypes:
+      for j in 1..itemsList.len:
+        if itemsList[j].itemType == materialType:
+          result.add(y = j)
+          break
+
+proc crafterGainExp(recipe: CraftData; workTime: var int;
+    module: var ModuleData; owner, toolIndex, crafterIndex: int) {.sideEffect,
+    raises: [KeyError, Exception], tags: [RootEffect], contractual.} =
+  ## Count and update experience gained by the crafter in the crafting skill
+  ##
+  ## * recipe       - the executed crafting recipe
+  ## * workTime     - the amount of time spent on executing
+  ## * module       - the player's ship's module in which the crafting order
+  ##                  was executed
+  ## * owner        - the index of the crafter in the player's ship's module
+  ## * toolIndex    - the index of the tool used for crafting
+  ## * crafterIndex - the index of the crew member who crafts currently
+  var gainedExp: Natural = 0
+  while workTime <= 0:
+    gainedExp.inc
+    workTime += 15
+  if gainedExp > 0:
+    gainExp(amount = gainedExp, skillNumber = recipe.skill,
+        crewIndex = crafterIndex)
+  playerShip.crew[crafterIndex].orderTime = workTime
+  if module.craftingAmount == 0:
+    resetOrder(module = module, moduleOwner = owner,
+        toolIndex = toolIndex, crafterIndex = crafterIndex)
 
 proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
     Exception], tags: [RootEffect], contractual.} =
@@ -367,7 +416,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
         addMessage(message = module.name & " is destroyed, so " &
             playerShip.crew[crafterIndex].name & " can't work on " &
             recipeName & ".", mType = craftMessage, color = red)
-        resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+        resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex,
+            crafterIndex = crafterIndex)
         currentMinutes = 0
       var
         workTime: int = playerShip.crew[crafterIndex].orderTime
@@ -382,20 +432,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
         workTime = workTime - currentMinutes - recipeTime
         currentMinutes = 0 - recipeTime
         recipeTime = recipe.time
-        var materialIndexes: seq[Positive] = @[]
-        if module.craftingIndex.len > 6 and module.craftingIndex[0..4] == "Study":
-          for j in 1..itemsList.len:
-            if itemsList[j].name == itemsList[recipe.resultIndex].name:
-              materialIndexes.add(y = j)
-              break
-        elif module.craftingIndex.len > 12 and module.craftingIndex[1..10] == "Deconstruct":
-          materialIndexes.add(y = module.craftingIndex[12..^1].strip.parseInt)
-        else:
-          for materialType in recipe.materialTypes:
-            for j in 1..itemsList.len:
-              if itemsList[j].itemType == materialType:
-                materialIndexes.add(y = j)
-                break
+        var materialIndexes: seq[Positive] = getMaterialIndexes(module = module,
+            recipe = recipe)
         var craftingMaterial: int = -1
         for materialIndex in materialIndexes.mitems:
           craftingMaterial = findItem(inventory = playerShip.cargo,
@@ -403,7 +441,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
           if craftingMaterial == -1:
             addMessage(message = "You don't have the crafting materials for " &
                 recipeName & ".", mType = craftMessage, color = red)
-            resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+            resetOrder(module = module, moduleOwner = owner,
+                toolIndex = toolIndex, crafterIndex = crafterIndex)
             break
           elif playerShip.cargo[craftingMaterial].protoIndex != materialIndex:
             materialIndex = playerShip.cargo[craftingMaterial].protoIndex
@@ -423,9 +462,9 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
         for j in 0..materialIndexes.high:
           amount += (itemsList[materialIndexes[j]].weight *
               recipe.materialAmounts[j])
-        var resultAmount: Natural = recipe.resultAmount + (recipe.resultAmount.float *
-            (getSkillLevel(member = playerShip.crew[crafterIndex],
-            skillIndex = recipe.skill).float / 100.0)).int
+        var resultAmount: Natural = recipe.resultAmount + (
+            recipe.resultAmount.float * (getSkillLevel(member = playerShip.crew[
+            crafterIndex], skillIndex = recipe.skill).float / 100.0)).int
         let damage: float = 1.0 - (module.durability.float /
             module.maxDurability.float)
         resultAmount -= (resultAmount.float * damage).int
@@ -445,7 +484,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
         if not haveMaterial:
           addMessage(message = "You don't have enough crafting materials for " &
               recipeName & ".", mType = craftMessage, color = red)
-          resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+          resetOrder(module = module, moduleOwner = owner,
+              toolIndex = toolIndex, crafterIndex = crafterIndex)
           break
         craftedAmount += resultAmount
         module.craftingAmount.dec
@@ -456,7 +496,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
             if itemsList[material.protoIndex].itemType == itemsList[
                 materialIndexes[j]].itemType:
               if material.amount > recipe.materialAmounts[j]:
-                let newAmount: Natural = material.amount - recipe.materialAmounts[j]
+                let newAmount: Natural = material.amount -
+                    recipe.materialAmounts[j]
                 material.amount = newAmount
                 playerShip.cargo[cargoIndex] = material
                 break
@@ -478,7 +519,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
           if freeCargo(amount = amount) < 0:
             addMessage(message = "You don't have the free cargo space for " &
                 recipeName, mType = craftMessage, color = red)
-            resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+            resetOrder(module = module, moduleOwner = owner,
+                toolIndex = toolIndex, crafterIndex = crafterIndex)
             break
           if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
             updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
@@ -522,16 +564,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
               recipe.resultIndex].name, mType = craftMessage, color = green)
           updateGoal(goalType = GoalTypes.craft, targetIndex = "")
       if playerShip.crew[crafterIndex].order == craft:
-        var gainedExp: Natural = 0
-        while workTime <= 0:
-          gainedExp.inc
-          workTime += 15
-        if gainedExp > 0:
-          gainExp(amount = gainedExp, skillNumber = recipe.skill,
-              crewIndex = crafterIndex)
-        playerShip.crew[crafterIndex].orderTime = workTime
-        if module.craftingAmount == 0:
-          resetOrder(module = module, moduleOwner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
+        crafterGainExp(recipe = recipe, workTime = workTime, module = module,
+            owner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
     recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
