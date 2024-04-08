@@ -372,9 +372,7 @@ proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     gameSettings.windowHeight = tclEval2(script = "winfo height .").parseInt
   except:
-    tclEval(script = "bgerror {Can't set window height. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't set the window height.")
   var panedPosition = (if gameSettings.windowHeight -
       gameSettings.messagesPosition <
       0: gameSettings.windowHeight else: gameSettings.windowHeight -
@@ -382,9 +380,7 @@ proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   let sashPosition = try:
         tclEval2(script = mainPaned & " sashpos 0").parseInt
       except:
-        tclEval(script = "bgerror {Can't set sash position. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set the sash position.")
   if sashPosition > 0 and sashPosition != panedPosition:
     if gameSettings.windowHeight - sashPosition > -1:
       gameSettings.messagesPosition = gameSettings.windowHeight - sashPosition
@@ -437,9 +433,7 @@ proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
   let message = try:
       changeShipSpeed(speedValue = (($argv[1]).parseInt + 1).ShipSpeed)
     except:
-      tclEval(script = "bgerror {Can't change the player's ship speed. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't change the player's ship speed.")
   if message.len > 0:
     showMessage(text = message, title = "Changing the ship's speed.")
   return tclOk
@@ -477,9 +471,7 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
     discard tclEval(script = mapView & " configure -width [expr [winfo width $mapview] / [font measure MapFont {" &
         themesList[gameSettings.interfaceTheme].emptyMapIcon & "}]]")
   except:
-    tclEval(script = "bgerror {Can't set map width. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError("Can't set map width.")
   tclEval(script = mapView & " configure -height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]")
   if tclGetVar(varName = "refreshmap") == "1":
     drawMap()
@@ -511,9 +503,7 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if mapY > 1_024:
       return tclOk
   except:
-    tclEval(script = "bgerror {Can't set map Y coordinate. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Cant' set map Y coordinate.")
   try:
     if startX + (mapIndex[mapIndex.find(".") + 1 .. ^1]).parseInt < 1:
       return tclOk
@@ -521,9 +511,7 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if mapX > 1_024:
       return tclOk
   except:
-    tclEval(script = "bgerror {Can't set map X coordinate. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't set map X coordinate.")
   updateMapInfo(x = mapX, y = mapY)
   return tclOk
 
@@ -594,15 +582,11 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
     mapHeight = try:
         tclEval2(script = mapView & " cget -height").parseInt
       except:
-        tclEval(script = "bgerror {Can't get the map's height. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the map's height.")
     mapWidth = try:
         tclEval2(script = mapView & " cget -width").parseInt
       except:
-        tclEval(script = "bgerror {Can't get the map's width. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the map's width.")
     dialogName = ".gameframe.movemapdialog"
   if argv[1] == "centeronship":
     centerX = playerShip.skyX
@@ -612,16 +596,12 @@ proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
     centerX = try:
         tclEval2(script = spinBox & " get").parseInt
       except:
-        tclEval(script = "bgerror {Can't set center X. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set center X.")
     spinBox = dialogName & ".y"
     centerY = try:
         tclEval2(script = spinBox & " get").parseInt
       except:
-        tclEval(script = "bgerror {Can't set center Y. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set center Y.")
   elif argv[1] == "n":
     centerY = (if centerY - (mapHeight / 3).int < 1: (mapHeight /
         3).int else: centerY - (mapHeight / 3).int)
@@ -682,57 +662,49 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     res = try:
         moveShip(x = 0, y = -1, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "s":
     res = try:
         moveShip(x = 0, y = 1, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "e":
     res = try:
         moveShip(x = 1, y = 0, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "w":
     res = try:
         moveShip(x = -1, y = 0, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "sw":
     res = try:
         moveShip(x = -1, y = 1, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "se":
     res = try:
         moveShip(x = 1, y = 1, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "nw":
     res = try:
         moveShip(x = -1, y = -1, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "ne":
     res = try:
         moveShip(x = 1, y = -1, message = message)
       except:
-        tclEval(script = "bgerror {Can't move the ship. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't move the ship.")
         return
   elif argv[1] == "waitormove":
     if playerShip.destinationX == 0 and playerShip.destinationY == 0:
@@ -741,16 +713,14 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
         updateGame(minutes = gameSettings.waitMinutes)
         waitInPlace(minutes = gameSettings.waitMinutes)
       except:
-        tclEval(script = "bgerror {Can't update the game. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't update the game.")
         return
     else:
       updateCoordinates()
       res = try:
           moveShip(x = newX, y = newY, message = message)
         except:
-          tclEval(script = "bgerror {Can't move the ship. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't move the ship.")
           return
       if playerShip.destinationX == playerShip.skyX and
           playerShip.destinationY == playerShip.skyY:
@@ -762,8 +732,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
           message = try:
               autoFinishMissions()
             except:
-              tclEval(script = "bgerror {Can't finish missions. Reason: " &
-                  getCurrentExceptionMsg() & "}")
+              showError(message = "Can't finish missions.")
               return
         res = 4
   elif argv[1] == "moveto":
@@ -774,16 +743,14 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
       res = try:
           moveShip(x = newX, y = newY, message = message)
         except:
-          tclEval(script = "bgerror {Can't move the ship. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't move the ship.")
           return
       if res == 0:
         break
       startsCombat = try:
           checkForEvent()
         except:
-          tclEval(script = "bgerror {Can't check for events. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't check for events.")
           return
       if startsCombat:
         res = 4
@@ -792,8 +759,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
         try:
           waitForRest()
         except:
-          tclEval(script = "bgerror {Can't wait for rest of the crew. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't wait for rest of the crew.")
           return
         try:
           if "sentientships" notin factionsList[playerShip.crew[
@@ -802,19 +768,16 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
             try:
               waitForRest()
             except:
-              tclEval(script = "bgerror {Can't wait for rest of the crew. Reason: " &
-                  getCurrentExceptionMsg() & "}")
+              showError(message = "Can't wait for rest of the crew.")
               return
         except:
-          tclEval(script = "bgerror {Can't check do faction has sentientships flags. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't check do faction has sentientships flag.")
           return
         res = 1
         startsCombat = try:
             checkForEvent()
           except:
-            tclEval(script = "bgerror {Can't check for events. Reason: " &
-                getCurrentExceptionMsg() & "}")
+            showError(message = "Can't check for events.")
             return
         if startsCombat:
           res = 4
@@ -856,8 +819,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
             res = 4
             break
         except:
-          tclEval(script = "bgerror {Can't check low level of items. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't check low level of items.")
           return
       if playerShip.destinationX == playerShip.skyX and
           playerShip.destinationY == playerShip.skyY:
@@ -868,8 +830,7 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
           message = try:
               autoFinishMissions()
             except:
-              tclEval(script = "bgerror {Can't finish missions. Reason: " &
-                  getCurrentExceptionMsg() & "}")
+              showError(message = "Can't finish missions.")
               return
         res = 4
         break
@@ -881,15 +842,13 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     startsCombat = try:
         checkForEvent()
       except:
-        tclEval(script = "bgerror {Can't check for events. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't check for events.")
         return
     if not startsCombat and gameSettings.autoFinish:
       message = try:
           autoFinishMissions()
         except:
-          tclEval(script = "bgerror {Can't finish missions. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't finish missions.")
           return
   # Ship moved, but pilot needs rest, confirm
   of 6:
@@ -906,15 +865,13 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     startsCombat = try:
         checkForEvent()
       except:
-        tclEval(script = "bgerror {Can't check for events. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't check for events.")
         return
     if not startsCombat:
       try:
         waitForRest()
       except:
-        tclEval(script = "bgerror {Can't wait for rest of the crew. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't wait for rest of th crew.")
         return
       try:
         if "sentientships" notin factionsList[playerShip.crew[
@@ -923,21 +880,18 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
             order = engineer) == -1):
           waitForRest()
       except:
-        tclEval(script = "bgerror {Can't check do faction has sentientships flags. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't check do faction has sentientships flag.")
         return
       startsCombat = try:
           checkForEvent()
         except:
-          tclEval(script = "bgerror {Can't check for events. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't check for events.")
           return
     if not startsCombat and gameSettings.autoFinish:
       message = try:
           autoFinishMissions()
         except:
-          tclEval(script = "bgerror {Can't finish missions. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't finish missions.")
           return
   else:
     discard
