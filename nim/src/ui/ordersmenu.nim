@@ -79,9 +79,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           currentStory.currentStep] else: storiesList[
           currentStory.index].finalStep)
       except:
-        tclEval(script = "bgerror {Can't get the current story step. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the current story step.")
     case step.finishCondition
     of askInBase:
       if baseIndex > 0:
@@ -93,9 +91,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                     name = "item").parseInt].name,
                 command = "ExecuteStory", shortcut = "f", underLine = 4)
           except:
-            tclEval(script = "bgerror {Can't add the story button. Reason: " &
-                getCurrentExceptionMsg() & "}")
-            return tclOk
+            return showError("Can't add the story button.")
     of destroyShip:
       let parts = currentStory.data.split(';')
       try:
@@ -105,13 +101,9 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                 parts[3].parseInt].name, command = "ExecuteStory",
                     shortcut = "s", underline = 0)
           except:
-            tclEval(script = "bgerror {Can't add the story button. Reason: " &
-                getCurrentExceptionMsg() & "}")
-            return tclOk
+            return showError(message = "Can't add the story button.")
       except:
-        tclEval(script = "bgerror {Can't get the story step location. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the story step location.")
     of explore:
       let parts = currentStory.data.split(';')
       try:
@@ -119,9 +111,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           addButton(name = ".story", label = "Search area",
               command = "ExecuteStory", shortcut = "s", underline = 0)
       except:
-        tclEval(script = "bgerror {Can't get the story step location. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the story step location.")
     of any, loot:
       discard
   if playerShip.speed == docked:
@@ -150,9 +140,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           addButton(name = ".pray", label = "Pray", command = "Pray",
               shortcut = "p", underline = 0)
       except:
-        tclEval(script = "bgerror {Can't check if the base has temple flag. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't check if base has temple flag.")
       for member in playerShip.crew:
         if member.health < 100:
           addButton(name = ".heal", label = "Heal wounded",
@@ -168,9 +156,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           addButton(name = ".shipyard", label = "Shipyard",
               command = "ShowShipyard", shortcut = "i", underline = 2)
       except:
-        tclEval(script = "bgerror {Can't check if the base has shipyard flag. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't check if the base has shipyard flag.")
       for index, recipe in recipesList:
         try:
           if index notin knownRecipes and index in basesTypesList[skyBases[
@@ -180,9 +166,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                 command = "ShowBaseUI recipes", shortcut = "y", underline = 2)
             break
         except:
-          tclEval(script = "bgerror {Can't check if base has recipes for sale. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't check if base has recipes for sale.")
       if skyBases[baseIndex].missions.len > 0:
         var missionsLimit = case skyBases[baseIndex].reputation.level
           of 0 .. 25:
@@ -206,9 +190,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                     itemsList[mission.itemIndex].name,
                     command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
               except:
-                tclEval(script = "bgerror {Can't add mission button. Reason: " &
-                    getCurrentExceptionMsg() & "}")
-                return tclOk
+                return showError(message = "Can't add mission button.")
             of destroy:
               if mission.finished:
                 try:
@@ -217,9 +199,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                       command = "CompleteMission", shortcut = "c",
                           underline = 0, row = 0)
                 except:
-                  tclEval(script = "bgerror {Can't add mission button. Reason: " &
-                      getCurrentExceptionMsg() & "}")
-                  return tclOk
+                  return showError(message = "Can't add mission button.")
             of patrol:
               if mission.finished:
                 addButton(name = ".mission",
@@ -267,9 +247,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
             findItem(inventory = playerShip.cargo,
               itemType = factionsList[skyBases[baseIndex].owner].healingTools)
           except:
-            tclEval(script = "bgerror {Can't find medicines in the ship cargo. Reason: " &
-                getCurrentExceptionMsg() & "}")
-            return tclOk
+            return showError(message = "Can't find medicinet in the ship cargo.")
         if itemIndex > -1:
           addButton(name = ".deliverfree", label = "Deliver medicines for free",
               command = "DeliverMedicines free", shortcut = "d", underline = 0)
@@ -300,18 +278,14 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                     itemsList[mission.itemIndex].name,
                     command = "CompleteMission", shortcut = "c", underline = 0)
               except:
-                tclEval(script = "bgerror {Can't add accepted mission button. Reason: " &
-                    getCurrentExceptionMsg() & "}")
-                return tclOk
+                return showError(message = "Can't add accepted mission button.")
             of destroy:
               try:
                 addButton(name = ".mission", label = "Complete destroy " &
                     protoShipsList[mission.shipIndex].name,
                     command = "CompleteMission", shortcut = "c", underline = 0)
               except:
-                tclEval(script = "bgerror {Can't add accepted mission button. Reason: " &
-                    getCurrentExceptionMsg() & "}")
-                return tclOk
+                return showError(message = "Can't add accepted mission button.")
             of patrol:
               addButton(name = ".mission",
                   label = "Complete Patrol area mission",
@@ -337,9 +311,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                     protoShipsList[mission.shipIndex].name,
                     command = "StartMission", shortcut = "s", underline = 0)
               except:
-                tclEval(script = "bgerror {Can't add accepted mission button. Reason: " &
-                    getCurrentExceptionMsg() & "}")
-                return tclOk
+                return showError(message = "Can't add accepted mission button.")
             of patrol:
               addButton(name = ".mission", label = "Patrol area",
                   command = "StartMission", shortcut = "p", underline = 0)
@@ -368,9 +340,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
             addButton(name = ".askbases", label = "Ask for bases",
                 command = "AskForBases", shortcut = "b", underline = 8)
         except:
-          tclEval(script = "bgerror {Can't check if ship is trader. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't check if ship is trader.")
         addButton(name = ".askevents", label = "Ask for events",
             command = "AskForEvents", shortcut = "e", underline = 8)
       addButton(name = ".attack", label = "Attack", command = "Attack",
@@ -493,9 +463,7 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     countPrice(price = price, traderIndex = traderIndex)
   except:
-    tclEval(script = "bgerror {Can't count the price for set as home. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't count the price for set as home.")
   showQuestion(question = "Are you sure want to change your home base (it cost " &
       $price & " " & moneyName & ")?", res = "sethomebase")
   return tclOk
@@ -517,9 +485,7 @@ proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     generateTraderCargo(protoIndex = ($argv[1]).parseInt)
   except:
-    tclEval(script = "bgerror {Can't generate the trader's cargo. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't generated the trader's cargo.")
   tclEval(script = "ShowTrade");
   return tclOk
 
@@ -601,8 +567,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ExecuteStory", executeStoryCommand)
     addCommand("DeliverMedicines", deliverMedicinesCommand)
   except:
-    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't add a Tcl command.")
 
 import mapsui, waitmenu
 
@@ -614,9 +579,7 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
       message = (if argc == 1: dockShip(docking = false) else: dockShip(
           docking = false, escape = true))
     except:
-      tclEval(script = "bgerror {Can't undock from the base. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't undock from the base.")
     if message.len > 0:
       showMessage(text = message, title = "Can't undock from base")
       return tclOk
@@ -629,9 +592,7 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       message = dockShip(docking = true)
     except:
-      tclEval(script = "bgerror {Can't dock to the base. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't dock to the base.")
     if message.len > 0:
       showMessage(text = message, title = "Can't dock to base")
       return tclOk
@@ -646,9 +607,7 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     askForBases()
   except:
-    tclEval(script = "bgerror {Can't ask for bases. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't ask for bases.")
   showSkyMap()
   return tclOk
 
@@ -657,9 +616,7 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     askForEvents()
   except:
-    tclEval(script = "bgerror {Can't ask for events. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't ask for events.")
   showSkyMap()
   return tclOk
 
@@ -669,17 +626,13 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       updateMorale(ship = playerShip, memberIndex = index, value = 10)
     except:
-      tclEval(script = "bgerror {Can't update morale of crew member. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't update morale of crew member.")
   addMessage(message = "You and your crew were praying for some time. Now you all feel a bit better.",
       mType = orderMessage)
   try:
     updateGame(minutes = 30)
   except:
-    tclEval(script = "bgerror {Can't update the game. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't update the game.")
   showSkyMap()
   return tclOk
 
