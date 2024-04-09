@@ -821,7 +821,7 @@ package body Ships.UI.Crew is
              "-text {" &
              To_String
                (Source => Get_Current_Order(Member_Index => Member_Index)) &
-             "} -wraplength 275");
+             "} -wraplength 275 -style Golden.TLabel");
       Orders_Info: constant Ttk_Label :=
         Create
           (pathName => Member_Dialog & ".ordersinfo",
@@ -836,12 +836,12 @@ package body Ships.UI.Crew is
           (pathName => Member_Dialog & ".buttons.button",
            options =>
              "-text Cancel -command {CloseDialog " & Member_Dialog &
-             "} -image cancelicon -style Dialog.TButton");
+             "} -image cancelicon -style Dialogred.TButton");
       Accept_Button: constant Ttk_Button :=
         Create
           (pathName => Member_Dialog & ".buttons.button2",
            options =>
-             "-text Assign -image giveordericon -style Dialog.TButton");
+             "-text Assign -image giveordericon -style Dialoggreen.TButton");
    begin
       Tcl.Tk.Ada.Grid.Grid(Slave => Order_Info, Options => "-padx 5");
       Tcl.Tk.Ada.Grid.Grid
