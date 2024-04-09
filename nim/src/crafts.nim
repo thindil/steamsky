@@ -383,6 +383,79 @@ proc crafterGainExp(recipe: CraftData; workTime: var int;
     resetOrder(module = module, moduleOwner = owner,
         toolIndex = toolIndex, crafterIndex = crafterIndex)
 
+proc finishCrafting(recipe: CraftData; module: ModuleData; crafterIndex: int;
+    craftedAmount: Natural) {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
+  ## Show the summary message about crafting and update the current player's
+  ## goal if needed
+  ##
+  ## * recipe        - the executed crafting recipe
+  ## * module        - the player's ship's module in which the crafting order
+  ##                   was executed
+  ## * crafterIndex  - the index of the crew member who crafts currently
+  ## * craftedAmount - the amount of crafted items
+  if recipe.resultAmount > 0:
+    if module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
+      addMessage(message = playerShip.crew[crafterIndex].name &
+          " has recovered " & $craftedAmount & " " & itemsList[
+          recipe.resultIndex].name & ".", mType = craftMessage, color = green)
+    else:
+      addMessage(message = playerShip.crew[crafterIndex].name &
+          " has manufactured " & $craftedAmount & " " & itemsList[
+          recipe.resultIndex].name & ".", mType = craftMessage, color = green)
+    for key, protoRecipe in recipesList:
+      if protoRecipe.resultIndex == recipe.resultIndex:
+        updateGoal(goalType = GoalTypes.craft, targetIndex = key,
+            amount = craftedAmount)
+        break
+    if currentGoal.targetIndex.len > 0:
+      updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
+          recipe.resultIndex].itemType, amount = craftedAmount)
+      if itemsList[recipe.resultIndex].showType.len > 0:
+        updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
+            recipe.resultIndex].showType, amount = craftedAmount)
+  else:
+    addMessage(message = playerShip.crew[crafterIndex].name &
+        " has discovered recipe for " & itemsList[
+        recipe.resultIndex].name, mType = craftMessage, color = green)
+    updateGoal(goalType = GoalTypes.craft, targetIndex = "")
+
+proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
+    recipeName: string; module: var ModuleData; owner, toolIndex,
+    crafterIndex: int): bool {.sideEffect, raises: [KeyError, Exception],
+    tags: [RootEffect], contractual.} =
+  ## Craft or deconstruct the selected item
+  ##
+  ## * amount       - the amount of space needed for new items
+  ## * recipe       - the executed crafting recipe
+  ## * resultAmount - the amount of items crafted
+  ## * module       - the player's ship's module in which the crafting order
+  ##                  was executed
+  ## * owner        - the index of the crafter in the player's ship's module
+  ## * toolIndex    - the index of the tool used for crafting
+  ## * crafterIndex - the index of the crew member who crafts currently
+  ##
+  ## Returns the modified parameter amount. Additionally, returns true if the
+  ## crafting should stop otherwise false
+  amount -= (itemsList[recipe.resultIndex].weight * resultAmount)
+  if freeCargo(amount = amount) < 0:
+    addMessage(message = "You don't have the free cargo space for " &
+        recipeName, mType = craftMessage, color = red)
+    resetOrder(module = module, moduleOwner = owner,
+        toolIndex = toolIndex, crafterIndex = crafterIndex)
+    return true
+  if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
+    updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
+        amount = resultAmount)
+  else:
+    updateCargo(ship = playerShip, protoIndex = recipesList[
+        module.craftingIndex].resultIndex, amount = resultAmount)
+  for key, protoRecipe in recipesList:
+    if protoRecipe.resultIndex == recipe.resultIndex:
+      updateCraftingOrders(index = key)
+      break
+  return false
+
 proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
     Exception], tags: [RootEffect], contractual.} =
   ## Execute the currently set crafting orders in the player's ship
@@ -515,54 +588,19 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
               ship = playerShip)
         if module.craftingIndex.len < 6 or (module.craftingIndex.len > 6 and
             module.craftingIndex[0..4] != "Study"):
-          amount -= (itemsList[recipe.resultIndex].weight * resultAmount)
-          if freeCargo(amount = amount) < 0:
-            addMessage(message = "You don't have the free cargo space for " &
-                recipeName, mType = craftMessage, color = red)
-            resetOrder(module = module, moduleOwner = owner,
-                toolIndex = toolIndex, crafterIndex = crafterIndex)
+          if craftItem(amount = amount, recipe = recipe,
+              resultAmount = resultAmount, recipeName = recipeName,
+              module = module, owner = owner, toolIndex = toolIndex,
+              crafterIndex = crafterIndex):
             break
-          if module.craftingIndex.len > 11 and module.craftingIndex[0..10] == "Deconstruct":
-            updateCargo(ship = playerShip, protoIndex = recipe.resultIndex,
-                amount = resultAmount)
-          else:
-            updateCargo(ship = playerShip, protoIndex = recipesList[
-                module.craftingIndex].resultIndex, amount = resultAmount)
-          for key, protoRecipe in recipesList:
-            if protoRecipe.resultIndex == recipe.resultIndex:
-              updateCraftingOrders(index = key)
-              break
         else:
           for key, recipe in recipesList:
             if recipe.resultIndex == recipe.resultIndex:
               knownRecipes.add(y = key)
       module.craftingTime = recipeTime
       if craftedAmount > 0:
-        if recipe.resultAmount > 0:
-          if module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
-            addMessage(message = playerShip.crew[crafterIndex].name &
-                " has recovered " & $craftedAmount & " " & itemsList[
-                recipe.resultIndex].name & ".", mType = craftMessage, color = green)
-          else:
-            addMessage(message = playerShip.crew[crafterIndex].name &
-                " has manufactured " & $craftedAmount & " " & itemsList[
-                recipe.resultIndex].name & ".", mType = craftMessage, color = green)
-          for key, protoRecipe in recipesList:
-            if protoRecipe.resultIndex == recipe.resultIndex:
-              updateGoal(goalType = GoalTypes.craft, targetIndex = key,
-                  amount = craftedAmount)
-              break
-          if currentGoal.targetIndex.len > 0:
-            updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
-                recipe.resultIndex].itemType, amount = craftedAmount)
-            if itemsList[recipe.resultIndex].showType.len > 0:
-              updateGoal(goalType = GoalTypes.craft, targetIndex = itemsList[
-                  recipe.resultIndex].showType, amount = craftedAmount)
-        else:
-          addMessage(message = playerShip.crew[crafterIndex].name &
-              " has discovered recipe for " & itemsList[
-              recipe.resultIndex].name, mType = craftMessage, color = green)
-          updateGoal(goalType = GoalTypes.craft, targetIndex = "")
+        finishCrafting(recipe = recipe, module = module,
+            crafterIndex = crafterIndex, craftedAmount = craftedAmount)
       if playerShip.crew[crafterIndex].order == craft:
         crafterGainExp(recipe = recipe, workTime = workTime, module = module,
             owner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
