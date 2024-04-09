@@ -25,16 +25,13 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
--- with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with CoreUI; use CoreUI;
--- with Dialogs;
 with Game; use Game.Tiny_String;
 with Maps;
 with Maps.UI;
@@ -508,115 +505,6 @@ package body Ships.UI.Crew is
          B => New_String(Str => Widget_Image(Win => Button)));
    end Set_Available_Orders;
 
-   -- ****o* SUCrew/SUCrew.Show_Crew_Order_Command
-   -- FUNCTION
-   -- Show the dialog to change the order of the currently selected crew member
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowCrewOrder memberindex
-   -- MemberIndex is the index of the crew member which order will be changed
-   -- SOURCE
---   function Show_Crew_Order_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Show_Crew_Order_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Tcl.Tk.Ada.Widgets.TtkFrame;
---      use Dialogs;
---
---      Member_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
---      Member_Dialog: constant Ttk_Frame :=
---        Create_Dialog
---          (Name => ".memberdialog",
---           Title => "Change order for " & To_String(Source => Member.Name),
---           Columns => 2);
---      Order_Info: constant Ttk_Label :=
---        Create
---          (pathName => Member_Dialog & ".orderinfo",
---           options => "-text {Current order:}");
---      Order_Label: constant Ttk_Label :=
---        Create
---          (pathName => Member_Dialog & ".current",
---           options =>
---             "-text {" &
---             To_String
---               (Source => Get_Current_Order(Member_Index => Member_Index)) &
---             "} -wraplength 275 -style Golden.TLabel");
---      Orders_Info: constant Ttk_Label :=
---        Create
---          (pathName => Member_Dialog & ".ordersinfo",
---           options => "-text {New order:}");
---      Orders_Box: constant Ttk_ComboBox :=
---        Create
---          (pathName => Member_Dialog & ".list", options => "-state readonly");
---      Buttons_Box: constant Ttk_Frame :=
---        Create(pathName => Member_Dialog & ".buttons");
---      Close_Dialog_Button: constant Ttk_Button :=
---        Create
---          (pathName => Member_Dialog & ".buttons.button",
---           options =>
---             "-text Cancel -command {CloseDialog " & Member_Dialog &
---             "} -image cancelicon -style Dialogred.TButton");
---      Accept_Button: constant Ttk_Button :=
---        Create
---          (pathName => Member_Dialog & ".buttons.button2",
---           options =>
---             "-text Assign -image giveordericon -style Dialoggreen.TButton");
---   begin
---      Tcl.Tk.Ada.Grid.Grid(Slave => Order_Info, Options => "-padx 5");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Order_Label,
---         Options => "-padx 5 -column 1 -row 1 -sticky w");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Orders_Info, Options => "-padx 5 -sticky w");
---      Bind
---        (Widgt => Orders_Box, Sequence => "<Escape>",
---         Script => "{" & Close_Dialog_Button & " invoke;break}");
---      Bind
---        (Widgt => Orders_Box, Sequence => "<Tab>",
---         Script => "{focus " & Accept_Button & ";break}");
---      Set_Available_Orders
---        (Member_Index => Member_Index, Orders_Box => Orders_Box,
---         Button => Accept_Button);
---      Current(ComboBox => Orders_Box, NewIndex => "0");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Orders_Box, Options => "-padx 5 -column 1 -row 2 -sticky w");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Buttons_Box, Options => "-columnspan 2 -pady {0 5}");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Accept_Button);
---      Bind
---        (Widgt => Accept_Button, Sequence => "<Tab>",
---         Script => "{focus " & Close_Dialog_Button & ";break}");
---      Bind
---        (Widgt => Accept_Button, Sequence => "<Escape>",
---         Script => "{" & Close_Dialog_Button & " invoke;break}");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Close_Dialog_Button,
---         Options => "-column 1 -row 0 -padx {5 0}");
---      Focus(Widgt => Close_Dialog_Button);
---      Bind
---        (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
---         Script => "{focus " & Orders_Box & ";break}");
---      Bind
---        (Widgt => Close_Dialog_Button, Sequence => "<Escape>",
---         Script => "{" & Close_Dialog_Button & " invoke;break}");
---      Show_Dialog(Dialog => Member_Dialog);
---      return TCL_OK;
---   end Show_Crew_Order_Command;
-
    -- ****o* SUCrew/SUCrew.Select_Crew_Order_Command
    -- FUNCTION
    -- Set the selected order for the selected crew member
@@ -758,9 +646,6 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
---      Add_Command
---        (Name => "ShowCrewOrder",
---         Ada_Command => Show_Crew_Order_Command'Access);
       Add_Command
         (Name => "SelectCrewOrder",
          Ada_Command => Select_Crew_Order_Command'Access);
