@@ -1351,6 +1351,19 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & ordersBox & " <Tab> {focus " & acceptButton & ";break}")
   setAvailableOrders(memberIndex = memberIndex, ordersBox = ordersBox,
       button = acceptButton)
+  tclEval(script = ordersBox & " current 0")
+  tclEval(script = "grid " & ordersBox & " -padx 5 -column 1 -row 2 -sticky w")
+  tclEval(script = "grid " & buttonsBox & " -columnspan 2 -pady {0 5}")
+  tclEval(script = "grid " & acceptButton)
+  tclEval(script = "bind " & acceptButton & " <Tab> {focus " &
+      closeDialogButton & ";break}")
+  tclEval(script = "bind " & acceptButton & " <Escape> {" & closeDialogButton & " invoke;break}")
+  tclEval(script = "grid " & closeDialogButton & " -column 1 -row 0 -padx {5 0}")
+  tclEval(script = "focus " & closeDialogButton)
+  tclEval(script = "bind " & closeDialogButton & " <Tab> {focus " & ordersBox & ";break}")
+  tclEval(script = "bind " & closeDialogButton & " <Escape> {" &
+      closeDialogButton & " invoke;break}")
+  showDialog(dialog = memberDialog)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -1368,6 +1381,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowCrew", showCrewCommand)
     addCommand("SortShipCrew", sortCrewCommand)
     addCommand("SelectCrewSkill", selectCrewSkillCommand)
+    addCommand("ShowCrewOrder", showCrewOrderCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
