@@ -1322,9 +1322,12 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
       tclCommands & "} " & $(memberIndex + 1) & ";CloseDialog .memberdialog}")
 
 proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
-    memberIndex = ($argv[1]).parseInt - 1
+    memberIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the crew member index.")
     member = playerShip.crew[memberIndex]
     memberDialog = createDialog(name = ".memberdialog",
         title = "Change order for " & member.name, columns = 2)
@@ -1332,8 +1335,11 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::label " & orderInfo & " -text {Current order:}")
   tclEval(script = "grid " & orderInfo & " -padx 5")
   let orderLabel = memberDialog & ".current"
-  tclEval(script = "ttk::label " & orderLabel & " -text {" & getCurrentOrder(
-      memberIndex = memberIndex) & "} -wraplength 275 -style Golden.TLabel")
+  try:
+    tclEval(script = "ttk::label " & orderLabel & " -text {" & getCurrentOrder(
+        memberIndex = memberIndex) & "} -wraplength 275 -style Golden.TLabel")
+  except:
+    return showError(message = "Can't get the current order.")
   tclEval(script = "grid " & orderLabel & " -padx 5 -column 1 -row 1 -sticky w")
   let ordersInfo = memberDialog & ".ordersinfo"
   tclEval(script = "ttk::label " & ordersInfo & " -text {New order:}")
