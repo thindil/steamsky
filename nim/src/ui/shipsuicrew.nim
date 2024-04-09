@@ -1224,7 +1224,8 @@ proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     showError(message = "Can't update the crew info.")
   return tclOk
 
-proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
+proc setAvailableOrders(memberIndex: Natural; ordersBox,
+    button: string) {.sideEffect, raises: [], tags: [].} =
   var needRepair, needClean = false
   for module in playerShip.modules:
     if module.durability < module.maxDurability:
@@ -1266,15 +1267,20 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox, button: string) =
         of workshop:
           if not isWorking(owners = module.owner, mIndex = memberIndex) and
               module.craftingIndex.len > 0:
-            availableOrders.add(y = " {" & (if module.craftingIndex.len > 6 and
-                module.craftingIndex[0 .. 4] == "Study": "Study " & itemsList[
-                module.craftingIndex[6 ..
-                ^1].strip.parseInt].name elif module.craftingIndex.len > 12 and
-                module.craftingIndex[0 .. 10] == "Deconstruct": "Deconstruct " &
-                itemsList[module.craftingIndex[12 ..
-                ^1].strip.parseInt].name else: "Manufacture " &
-                $module.craftingAmount & "x " & itemsList[recipesList[
-                module.craftingIndex].resultIndex].name) & "}")
+            try:
+              availableOrders.add(y = " {" & (if module.craftingIndex.len >
+                  6 and module.craftingIndex[0 .. 4] == "Study": "Study " &
+                  itemsList[module.craftingIndex[6 ..
+                  ^1].strip.parseInt].name elif module.craftingIndex.len >
+                  12 and module.craftingIndex[0 .. 10] ==
+                  "Deconstruct": "Deconstruct " & itemsList[
+                  module.craftingIndex[12 ..
+                  ^1].strip.parseInt].name else: "Manufacture " &
+                  $module.craftingAmount & "x " & itemsList[recipesList[
+                  module.craftingIndex].resultIndex].name) & "}")
+            except:
+              showError(message = "Can't add an available order.")
+              return
             tclCommands.add(y = " {Craft " & $(memberIndex + 1) & " " & $(
                 index + 1) & "}")
         of cabin:
@@ -1322,7 +1328,7 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & orderInfo & " -padx 5")
   let orderLabel = memberDialog & ".current"
   tclEval(script = "ttk::label " & orderLabel & " -text {" & getCurrentOrder(
-      memberIndex = memberIndex) & "} -wraplength 275")
+      memberIndex = memberIndex) & "} -wraplength 275 -style Golden.TLabel")
   tclEval(script = "grid " & orderLabel & " -padx 5 -column 1 -row 1 -sticky w")
   let ordersInfo = memberDialog & ".ordersinfo"
   tclEval(script = "ttk::label " & ordersInfo & " -text {New order:}")
@@ -1333,9 +1339,9 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::frame " & buttonsBox)
   let closeDialogButton = buttonsBox & ".button"
   tclEval(script = "ttk::button " & closeDialogButton &
-      " -text Cancel -command {CloseDialog " & memberDialog & "} -image cancelicon -style Dialog.TButton")
+      " -text Cancel -command {CloseDialog " & memberDialog & "} -image cancelicon -style Dialogred.TButton")
   let acceptButton = buttonsBox & ".button2"
-  tclEval(script = "ttk::button " & acceptButton & " -text Assign -image giveordericon -style Dialog.TButton")
+  tclEval(script = "ttk::button " & acceptButton & " -text Assign -image giveordericon -style Dialoggreen.TButton")
   tclEval(script = "bind " & ordersBox & " <Escape> {" & closeDialogButton & " invoke;break}")
   tclEval(script = "bind " & ordersBox & " <Tab> {focus " & acceptButton & ";break}")
   setAvailableOrders(memberIndex = memberIndex, ordersBox = ordersBox,
