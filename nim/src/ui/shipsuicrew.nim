@@ -1226,6 +1226,11 @@ proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setAvailableOrders(memberIndex: Natural; ordersBox,
     button: string) {.sideEffect, raises: [], tags: [].} =
+  ## Set the list of available orders for the selected crew member
+  ##
+  ## * memberIndex - the index of the crew member for which the list will be set
+  ## * orderBox    - the Ttk_ComboBox in which the orders will be set
+  ## * button      - the Ttk_Button which will set the order
   var needRepair, needClean = false
   for module in playerShip.modules:
     if module.durability < module.maxDurability:
