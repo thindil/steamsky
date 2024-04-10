@@ -17,7 +17,7 @@ with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
@@ -30,9 +30,9 @@ with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with CoreUI; use CoreUI;
-with Game; use Game.Tiny_String;
+with Game;
 with Maps;
 with Maps.UI;
 with Messages;
@@ -236,6 +236,8 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Game.Tiny_String;
+
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       Column: constant Positive :=
         (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
@@ -477,7 +479,6 @@ package body Ships.UI.Crew is
       Update_Crew_Info(Skill => Natural'Value(Current(ComboBox => Skill_Box)));
       return TCL_OK;
    end Sort_Crew_Command;
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****if* SUCrew/SUCrew.Set_Available_Orders
    -- FUNCTION
@@ -504,6 +505,7 @@ package body Ships.UI.Crew is
          O_Box => New_String(Str => Widget_Image(Win => Orders_Box)),
          B => New_String(Str => Widget_Image(Win => Button)));
    end Set_Available_Orders;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCrew/SUCrew.Select_Crew_Order_Command
    -- FUNCTION
@@ -530,7 +532,9 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Ada.Strings.Unbounded;
       use GNAT.String_Split;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
 
       Orders_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => ".memberdialog.list", Interp => Interp);
