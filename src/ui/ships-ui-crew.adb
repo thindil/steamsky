@@ -14,28 +14,28 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Exceptions;
+-- with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;
+-- with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split;
+-- with GNAT.String_Split;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with CoreUI; use CoreUI;
 with Game;
-with Maps;
-with Maps.UI;
-with Messages;
+-- with Maps;
+-- with Maps.UI;
+-- with Messages;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew.Inventory;
 with Table; use Table;
@@ -120,42 +120,42 @@ package body Ships.UI.Crew is
    -- and optional parameter moduleindex is index of module in player ship
    -- which will be assigned to the crew member
    -- SOURCE
-   function Set_Crew_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Crew_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp);
-      use Ada.Exceptions;
-      use Maps.UI;
-      use Messages;
-
-      Module_Index: Natural := 0;
-   begin
-      if Argc = 4 then
-         Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
-      end if;
-      Give_Orders
-        (Ship => Player_Ship,
-         Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
-         Given_Order => Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)),
-         Module_Index => Module_Index);
-      Update_Header;
-      Update_Messages;
-      Update_Crew_Info;
-      return TCL_OK;
-   exception
-      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-         Add_Message
-           (Message => Exception_Message(X => An_Exception),
-            M_Type => ORDERMESSAGE, Color => RED);
-         Update_Messages;
-         return TCL_OK;
-   end Set_Crew_Order_Command;
+--   function Set_Crew_Order_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Set_Crew_Order_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp);
+--      use Ada.Exceptions;
+--      use Maps.UI;
+--      use Messages;
+--
+--      Module_Index: Natural := 0;
+--   begin
+--      if Argc = 4 then
+--         Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
+--      end if;
+--      Give_Orders
+--        (Ship => Player_Ship,
+--         Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
+--         Given_Order => Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)),
+--         Module_Index => Module_Index);
+--      Update_Header;
+--      Update_Messages;
+--      Update_Crew_Info;
+--      return TCL_OK;
+--   exception
+--      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
+--         Add_Message
+--           (Message => Exception_Message(X => An_Exception),
+--            M_Type => ORDERMESSAGE, Color => RED);
+--         Update_Messages;
+--         return TCL_OK;
+--   end Set_Crew_Order_Command;
 
    -- ****it* SUCrew/SUCrew.Crew_Sort_Orders
    -- FUNCTION
@@ -491,20 +491,20 @@ package body Ships.UI.Crew is
    -- HISTORY
    -- 7.9 - Added
    -- SOURCE
-   procedure Set_Available_Orders
-     (Member_Index: Positive; Orders_Box: Ttk_ComboBox; Button: Ttk_Button) is
-     -- ****
-      procedure Set_Ada_Available_Orders
-        (M_Index: Positive; O_Box, B: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaAvailableOrders";
-   begin
-      Set_Ada_Available_Orders
-        (M_Index => Member_Index,
-         O_Box => New_String(Str => Widget_Image(Win => Orders_Box)),
-         B => New_String(Str => Widget_Image(Win => Button)));
-   end Set_Available_Orders;
+--   procedure Set_Available_Orders
+--     (Member_Index: Positive; Orders_Box: Ttk_ComboBox; Button: Ttk_Button) is
+--     -- ****
+--      procedure Set_Ada_Available_Orders
+--        (M_Index: Positive; O_Box, B: chars_ptr) with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "setAdaAvailableOrders";
+--   begin
+--      Set_Ada_Available_Orders
+--        (M_Index => Member_Index,
+--         O_Box => New_String(Str => Widget_Image(Win => Orders_Box)),
+--         B => New_String(Str => Widget_Image(Win => Button)));
+--   end Set_Available_Orders;
    --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCrew/SUCrew.Select_Crew_Order_Command
@@ -522,65 +522,65 @@ package body Ships.UI.Crew is
    -- Orderslist is the list of the available orders with their parameters,
    -- memberindex is the crew index of the selected crew member
    -- SOURCE
-   function Select_Crew_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Select_Crew_Order_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Ada.Strings.Unbounded;
-      use GNAT.String_Split;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-
-      Orders_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => ".memberdialog.list", Interp => Interp);
-      Button: constant Ttk_Button :=
-        Get_Widget
-          (pathName => ".memberdialog.buttons.button2", Interp => Interp);
-      Order_Index: constant Natural :=
-        Natural'Value(Current(ComboBox => Orders_Box));
-      Tokens: Slice_Set;
-      Order_Label: constant Ttk_Label :=
-        Get_Widget(pathName => ".memberdialog.current");
-      Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Arguments: CArgv.Chars_Ptr_Ptr := CArgv.Empty & "SetCrewOrder";
-   begin
-      Tcl_Eval
-        (interp => Interp,
-         strng =>
-           "lindex {" & CArgv.Arg(Argv => Argv, N => 1) & "}" &
-           Order_Index'Img);
-      Create
-        (S => Tokens, From => Tcl_GetResult(interp => Interp),
-         Separators => " ");
-      Build_Arguments_Loop :
-      for I in 1 .. Slice_Count(S => Tokens) loop
-         Arguments := Arguments & Slice(S => Tokens, Index => I);
-      end loop Build_Arguments_Loop;
-      if Set_Crew_Order_Command
-          (Client_Data => Client_Data, Interp => Interp,
-           Argc => int(Slice_Count(S => Tokens) + 1), Argv => Arguments) =
-        TCL_ERROR then
-         return TCL_ERROR;
-      end if;
-      configure
-        (Widgt => Order_Label,
-         options =>
-           "-text {" &
-           To_String
-             (Source => Get_Current_Order(Member_Index => Member_Index)) &
-           "}");
-      Set_Available_Orders
-        (Member_Index => Member_Index, Orders_Box => Orders_Box,
-         Button => Button);
-      Focus(Widgt => Orders_Box);
-      return TCL_OK;
-   end Select_Crew_Order_Command;
+--   function Select_Crew_Order_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Select_Crew_Order_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Ada.Strings.Unbounded;
+--      use GNAT.String_Split;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--
+--      Orders_Box: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => ".memberdialog.list", Interp => Interp);
+--      Button: constant Ttk_Button :=
+--        Get_Widget
+--          (pathName => ".memberdialog.buttons.button2", Interp => Interp);
+--      Order_Index: constant Natural :=
+--        Natural'Value(Current(ComboBox => Orders_Box));
+--      Tokens: Slice_Set;
+--      Order_Label: constant Ttk_Label :=
+--        Get_Widget(pathName => ".memberdialog.current");
+--      Member_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+--      Arguments: CArgv.Chars_Ptr_Ptr := CArgv.Empty & "SetCrewOrder";
+--   begin
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng =>
+--           "lindex {" & CArgv.Arg(Argv => Argv, N => 1) & "}" &
+--           Order_Index'Img);
+--      Create
+--        (S => Tokens, From => Tcl_GetResult(interp => Interp),
+--         Separators => " ");
+--      Build_Arguments_Loop :
+--      for I in 1 .. Slice_Count(S => Tokens) loop
+--         Arguments := Arguments & Slice(S => Tokens, Index => I);
+--      end loop Build_Arguments_Loop;
+--      if Set_Crew_Order_Command
+--          (Client_Data => Client_Data, Interp => Interp,
+--           Argc => int(Slice_Count(S => Tokens) + 1), Argv => Arguments) =
+--        TCL_ERROR then
+--         return TCL_ERROR;
+--      end if;
+--      configure
+--        (Widgt => Order_Label,
+--         options =>
+--           "-text {" &
+--           To_String
+--             (Source => Get_Current_Order(Member_Index => Member_Index)) &
+--           "}");
+--      Set_Available_Orders
+--        (Member_Index => Member_Index, Orders_Box => Orders_Box,
+--         Button => Button);
+--      Focus(Widgt => Orders_Box);
+--      return TCL_OK;
+--   end Select_Crew_Order_Command;
 
    -- ****o* SUCrew/SUCrew.Toggle_All_Crew_Command
    -- FUNCTION
@@ -650,9 +650,9 @@ package body Ships.UI.Crew is
          External_Name => "addAdaCrewCommands";
    begin
       Add_Ada_Commands;
-      Add_Command
-        (Name => "SelectCrewOrder",
-         Ada_Command => Select_Crew_Order_Command'Access);
+--      Add_Command
+--        (Name => "SelectCrewOrder",
+--         Ada_Command => Select_Crew_Order_Command'Access);
       Add_Command
         (Name => "ToggleAllCrew",
          Ada_Command => Toggle_All_Crew_Command'Access);

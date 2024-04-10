@@ -1389,11 +1389,21 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     ordersBox = ".memberdialog.list"
     orderIndex = tclEval2(script = ordersBox & " current").parseInt
-    arguments = tclEval2(script = "lindex {" & $argv[1] & "} " &
+  var arguments = tclEval2(script = "lindex {" & $argv[1] & "} " &
         $orderIndex).split(sep = " ")
+  arguments.insert("SetCrewOrder", 0)
   if setCrewOrderCommand(clientData = clientData, interp = interp,
       argc = arguments.len.cint, argv = arguments.mapIt(op = it.cstring)) == tclError:
     return tclError
+  let
+    orderLabel = ".memberdialog.current"
+    memberIndex = ($argv[2]).parseInt - 1
+    button = ".memberdialog.buttons.button2"
+  tclEval(script = orderLabel & " configure -text {" & getCurrentOrder(
+      memberIndex = memberIndex) & "}")
+  setAvailableOrders(memberIndex = memberIndex + 1, ordersBox = ordersBox,
+      button = button)
+  tclEval(script = "focus " & ordersBox)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -1412,6 +1422,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SortShipCrew", sortCrewCommand)
     addCommand("SelectCrewSkill", selectCrewSkillCommand)
     addCommand("ShowCrewOrder", showCrewOrderCommand)
+    addCommand("SelectCrewOrder", selectCrewOrderCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
