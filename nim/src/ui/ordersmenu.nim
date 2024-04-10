@@ -653,17 +653,13 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
             startsCombat = startCombat(enemyIndex = mission.shipIndex,
                 newCombat = false)
         except:
-          tclEval(script = "bgerror {Can't start destroy mission. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't start destroy mission.")
       of patrol:
         try:
           updateGame(minutes = getRandom(min = 45, max = 75))
           startsCombat = checkForEvent()
         except:
-          tclEval(script = "bgerror {Can't start patrol mission. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't start patrol mission.")
         if not startsCombat:
           uMission = true
       of explore:
@@ -671,9 +667,7 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
           updateGame(minutes = getRandom(min = 30, max = 60))
           startsCombat = checkForEvent()
         except:
-          tclEval(script = "bgerror {Can't start explore mission. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't start explore mission.")
         if not startsCombat:
           uMission = true
   if startsCombat:
@@ -684,9 +678,7 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
       updateMission(missionIndex = skyMap[playerShip.skyX][
           playerShip.skyY].missionIndex)
     except:
-      tclEval(script = "bgerror {Can't update the mission. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't update the mission.")
   updateHeader()
   updateMessages()
   showSkyMap()
@@ -702,9 +694,7 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
         title = "Can't finish the mission")
     return tclOk
   except:
-    tclEval(script = "bgerror {Can't finish the mission. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't finish the mission.")
   updateHeader()
   updateMessages()
   showSkyMap()
@@ -719,16 +709,12 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
         currentStory.currentStep] else: storiesList[
             currentStory.index].finalStep)
       except:
-        tclEval(script = "bgerror {Can't get the current story step. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the current story step.")
   if playerShip.speed != docked and step.finishCondition == askInBase:
     let message = try:
         dockShip(docking = true)
       except:
-        tclEval(script = "bgerror {Can't dock to the base. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't dock to the base.")
     if message.len > 0:
       showInfo(text = message, title = "Can't dock to base")
       return tclOk
@@ -756,9 +742,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
       showInfo(text = step.failText, title = "Story")
       currentStory.showText = false
   except:
-    tclEval(script = "bgerror {Can't progress the current story. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't progress the current story.")
   updateHeader()
   updateMessages()
   showSkyMap()
@@ -773,9 +757,7 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
         findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[
             baseIndex].owner].healingTools)
       except:
-        tclEval(script = "bgerror {Can't get index of medicines. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get index of medicines.")
     event = eventsList[eventIndex]
     newTime = event.time - playerShip.cargo[itemIndex].amount
   if newTime < 1:
@@ -788,9 +770,7 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
           itemIndex].protoIndex].name & " for free to base.",
           mType = tradeMessage)
     except:
-      tclEval(script = "bgerror {Can't show message. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't show message.")
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
         itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
   else:
@@ -806,9 +786,7 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
       showMessage(text = "You can't sell medicines to the base because the base don't have enough money to buy them.",
           title = "Can't sell medicines")
     except:
-      tclEval(script = "bgerror {Can't sell medicines to base. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't sell medicines to base.")
   updateHeader()
   updateMessages()
   showSkyMap()
