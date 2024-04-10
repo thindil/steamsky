@@ -1383,22 +1383,30 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   let
     ordersBox = ".memberdialog.list"
-    orderIndex = tclEval2(script = ordersBox & " current").parseInt
+    orderIndex = try:
+        tclEval2(script = ordersBox & " current").parseInt
+      except:
+        return showError("Can't get the index of the order.")
   var arguments = tclEval2(script = "lindex {" & $argv[1] & "} " &
         $orderIndex).split(sep = " ")
   arguments.insert("SetCrewOrder", 0)
-  if setCrewOrderCommand(clientData = clientData, interp = interp,
-      argc = arguments.len.cint, argv = arguments.mapIt(op = it.cstring)) == tclError:
-    return tclError
+  discard setCrewOrderCommand(clientData = clientData, interp = interp,
+      argc = arguments.len.cint, argv = arguments.mapIt(op = it.cstring))
   let
     orderLabel = ".memberdialog.current"
-    memberIndex = ($argv[2]).parseInt - 1
+    memberIndex = try:
+        ($argv[2]).parseInt - 1
+      except:
+        return showError(message = "Can't get the member's index.")
     button = ".memberdialog.buttons.button2"
-  tclEval(script = orderLabel & " configure -text {" & getCurrentOrder(
-      memberIndex = memberIndex) & "}")
+  try:
+    tclEval(script = orderLabel & " configure -text {" & getCurrentOrder(
+        memberIndex = memberIndex) & "}")
+  except:
+    return showError("Can't get the current order.")
   setAvailableOrders(memberIndex = memberIndex + 1, ordersBox = ordersBox,
       button = button)
   tclEval(script = "focus " & ordersBox)
