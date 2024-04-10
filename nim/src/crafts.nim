@@ -456,6 +456,65 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
       break
   return false
 
+proc checkMaterials(materialIndexes: seq[Positive]; recipe: CraftData;
+    recipeName: string; module: var ModuleData; owner, crafterIndex: int;
+    craftedAmount: var Natural; resultAmount: Natural;
+    toolIndex: var int): bool {.sideEffect, raises: [KeyError, Exception],
+    tags: [RootEffect], contractual.} =
+  ## Check do the player has enought materials for crafting and set the amount
+  ## of crafted items
+  ##
+  ## * materialIndexes - the list of indexes of the materials needed for crafting
+  ## * recipe          - the executed crafting recipe
+  ## * recipeName      - the name of the executed recipe
+  ## * module          - the player's ship's module in which the crafting order
+  ##                     was executed
+  ## * owner           - the index of the crafter in the player's ship's module
+  ## * crafterIndex    - the index of the crew member who crafts currently
+  ## * resultAmount    - the amount of items crafted
+  ## * toolIndex       - the index of the tool used for crafting
+  ##
+  ## Returns true if there is no enough materials for crafting, otherwise false.
+  ## Additionally it returns modified parameters module and toolIndex.
+  result = false
+  var haveMaterial: bool = false
+  for j in 0..materialIndexes.high:
+    haveMaterial = false
+    for item in playerShip.cargo:
+      if itemsList[item.protoIndex].itemType == itemsList[
+          materialIndexes[j]].itemType and item.amount >=
+              recipe.materialAmounts[j]:
+        haveMaterial = true
+        break
+    if not haveMaterial:
+      break
+  if not haveMaterial:
+    addMessage(message = "You don't have enough crafting materials for " &
+        recipeName & ".", mType = craftMessage, color = red)
+    resetOrder(module = module, moduleOwner = owner,
+        toolIndex = toolIndex, crafterIndex = crafterIndex)
+    return true
+  craftedAmount += resultAmount
+  module.craftingAmount.dec
+  for j in 0..materialIndexes.high:
+    var cargoIndex: Natural = 0
+    while cargoIndex <= playerShip.cargo.high:
+      var material: InventoryData = playerShip.cargo[cargoIndex]
+      if itemsList[material.protoIndex].itemType == itemsList[
+          materialIndexes[j]].itemType:
+        if material.amount > recipe.materialAmounts[j]:
+          let newAmount: Natural = material.amount -
+              recipe.materialAmounts[j]
+          material.amount = newAmount
+          playerShip.cargo[cargoIndex] = material
+          break
+        elif material.amount == recipe.materialAmounts[j]:
+          playerShip.cargo.delete(i = cargoIndex)
+          if toolIndex > cargoIndex:
+            toolIndex.dec
+          break
+      cargoIndex.inc
+
 proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
     Exception], tags: [RootEffect], contractual.} =
   ## Execute the currently set crafting orders in the player's ship
@@ -543,43 +602,11 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
         resultAmount -= (resultAmount.float * damage).int
         if resultAmount == 0:
           resultAmount = 1
-        var haveMaterial: bool = false
-        for j in 0..materialIndexes.high:
-          haveMaterial = false
-          for item in playerShip.cargo:
-            if itemsList[item.protoIndex].itemType == itemsList[
-                materialIndexes[j]].itemType and item.amount >=
-                    recipe.materialAmounts[j]:
-              haveMaterial = true
-              break
-          if not haveMaterial:
-            break
-        if not haveMaterial:
-          addMessage(message = "You don't have enough crafting materials for " &
-              recipeName & ".", mType = craftMessage, color = red)
-          resetOrder(module = module, moduleOwner = owner,
-              toolIndex = toolIndex, crafterIndex = crafterIndex)
+        if checkMaterials(materialIndexes = materialIndexes, recipe = recipe,
+            recipeName = recipeName, module = module, owner = owner,
+            crafterIndex = crafterIndex, craftedAmount = craftedAmount,
+            resultAmount = resultAmount, toolIndex = toolIndex):
           break
-        craftedAmount += resultAmount
-        module.craftingAmount.dec
-        for j in 0..materialIndexes.high:
-          var cargoIndex: Natural = 0
-          while cargoIndex <= playerShip.cargo.high:
-            var material: InventoryData = playerShip.cargo[cargoIndex]
-            if itemsList[material.protoIndex].itemType == itemsList[
-                materialIndexes[j]].itemType:
-              if material.amount > recipe.materialAmounts[j]:
-                let newAmount: Natural = material.amount -
-                    recipe.materialAmounts[j]
-                material.amount = newAmount
-                playerShip.cargo[cargoIndex] = material
-                break
-              elif material.amount == recipe.materialAmounts[j]:
-                playerShip.cargo.delete(i = cargoIndex)
-                if toolIndex > cargoIndex:
-                  toolIndex.dec
-                break
-            cargoIndex.inc
         if toolIndex > -1:
           damageItem(inventory = playerShip.crew[crafterIndex].inventory,
               itemIndex = toolIndex, skillLevel = getSkillLevel(
