@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Skills use wrong attributes
 - Crash on loading a saved game
 - Crash on starting a new game
+- Crash when trying to show information about error on Windows
 
 ## [9.8] - 2024-03-17
 
