@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[algorithm, strutils, tables]
+import std/[algorithm, strutils, sequtils, tables]
 import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
 import coreui, dialogs, table, updateheader, utilsui2
 
@@ -1382,6 +1382,18 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & closeDialogButton & " <Escape> {" &
       closeDialogButton & " invoke;break}")
   showDialog(dialog = memberDialog)
+  return tclOk
+
+proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    ordersBox = ".memberdialog.list"
+    orderIndex = tclEval2(script = ordersBox & " current").parseInt
+    arguments = tclEval2(script = "lindex {" & $argv[1] & "} " &
+        $orderIndex).split(sep = " ")
+  if setCrewOrderCommand(clientData = clientData, interp = interp,
+      argc = arguments.len.cint, argv = arguments.mapIt(op = it.cstring)) == tclError:
+    return tclError
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
