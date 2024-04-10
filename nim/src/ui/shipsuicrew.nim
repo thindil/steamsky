@@ -371,16 +371,14 @@ proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
         return tclOk
   try:
     giveOrders(ship = playerShip, memberIndex = ($argv[2]).parseInt - 1,
-        givenOrder = parseEnum[CrewOrders](s = $argv[1]),
+        givenOrder = parseEnum[CrewOrders](s = ($argv[1]).toLowerAscii),
         moduleIndex = moduleIndex)
   except CrewOrderError, CrewNoSpaceError:
     addMessage(message = getCurrentExceptionMsg(), mType = orderMessage, color = red)
     updateMessages()
     return tclOk
   except:
-    tclEval(script = "bgerror {Can't give order. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't give order.")
   updateHeader()
   updateMessages()
   updateCrewInfo()
