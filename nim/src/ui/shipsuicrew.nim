@@ -1427,6 +1427,19 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Select or deselect all crew members
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ToggleAllCrew action
+  ## Action is the action which will be performed. Possible values are
+  ## select or deselect
 
   proc resetSelection() =
     for index, _ in playerShip.crew:
