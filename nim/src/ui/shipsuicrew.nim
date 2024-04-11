@@ -1426,7 +1426,7 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
 
   proc resetSelection() =
     for index, _ in playerShip.crew:
