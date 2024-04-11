@@ -87,9 +87,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
           modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].durability
         except:
-          tclEval(script = "bgerror {Can't set max upgrade info. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't set max upgrade info.")
     of maxValue:
       try:
         case modulesList[playerShip.modules[
@@ -117,9 +115,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         else:
           discard
       except:
-        tclEval(script = "bgerror {Can't set upgrade info. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set upgrade info.")
     of value:
       try:
         case modulesList[playerShip.modules[
@@ -131,9 +127,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         else:
           discard
       except:
-        tclEval(script = "bgerror {Can't set upgrade fuel usage info. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set upgrade fuel usage info.")
     else:
       discard
     maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
@@ -207,9 +201,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     discard tclEval(script = label & " configure -text {" &
         $countShipWeight(ship = playerShip) & "kg}")
   except:
-    tclEval(script = "bgerror {Can't show the weight of the ship. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't show the weight of the ship.")
   tclEval(script = "update")
   tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
       script = shipCanvas & " bbox all") & "]")
@@ -302,8 +294,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShipMaxMin", shipMaxMinCommand)
     shipsuimodules.addCommands()
   except:
-    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't add a Tcl command.")
 
 # Temporary code for interfacing with Ada
 
