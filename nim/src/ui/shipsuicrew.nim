@@ -1425,6 +1425,22 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus " & ordersBox)
   return tclOk
 
+proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+
+  proc resetSelection() =
+    for index, _ in playerShip.crew:
+      if tclGetVar(varName = "crewindex" & $(index + 1)) == "1":
+        tclUnsetVar(varName = "crewindex" & $(index + 1))
+
+  if argv[1] == "unselect":
+    resetSelection()
+  else:
+    for index, _ in playerShip.crew:
+      tclSetVar(varName = "crewindex" & $(index + 1), newValue = "1")
+  return sortCrewCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = ["SortShipCrew".cstring, "-1"])
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -1442,6 +1458,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SelectCrewSkill", selectCrewSkillCommand)
     addCommand("ShowCrewOrder", showCrewOrderCommand)
     addCommand("SelectCrewOrder", selectCrewOrderCommand)
+    addCommand("ToggleAllCrew", toggleAllCrewCommand)
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")
