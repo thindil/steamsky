@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Colored version of icons for setting study or deconstruct orders
+- Colored version of icons for setting study and deconstruct orders plus
+  giving orders to the player's ship's crew members
 
 ### Changed
 - Updated README.md
@@ -22,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Crash on loading a saved game
 - Crash on starting a new game
 - Crash when trying to show information about error on Windows
+- Crash when starting a new game on Windows
 
 ## [9.8] - 2024-03-17
 
