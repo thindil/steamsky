@@ -550,6 +550,7 @@ package body Maps.UI is
         0 then
          Tcl.Tk.Ada.Grid.Grid(Slave => Paned);
       end if;
+      Tcl_Eval(interp => Get_Context, strng => "update");
       if Invoke(Buttn => Button) /= "" then
          raise Steam_Sky_Map_Error with "Can't hide map buttons";
       end if;
