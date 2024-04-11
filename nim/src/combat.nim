@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, strutils, tables]
+import contracts
 import bases, crewinventory, config, game, game2, goals, events, log, maps,
     messages, missions, ships, ships2, shipscargo, shipscrew, shipscrew2,
         shipsmovement,
@@ -23,19 +24,19 @@ import bases, crewinventory, config, game, game2, goals, events, log, maps,
 
 var
   enemyShipIndex*: Natural     ## The index of the enemy's ship's prototype
-  factionName: string         ## The name of the enemy's faction (ship and its crew)
+  factionName: string          ## The name of the enemy's faction (ship and its crew)
   boardingOrders*: seq[int]    ## The list of orders for the boarding party
-  pilotOrder*: Natural = 0    ## The player's ship pilot order
-  engineerOrder*: Natural     ## The player's ship engineer order
+  pilotOrder*: Natural = 0     ## The player's ship pilot order
+  engineerOrder*: Natural      ## The player's ship engineer order
   endCombat*: bool = false     ## If true, the combat ends
-  enemyName*: string          ## The name of the enemy's ship
+  enemyName*: string           ## The name of the enemy's ship
   messagesStarts*: int = -1    ## The starting index of messages to show
   guns*: seq[array[1..3, int]] ## The list of guns installed on the player's ship
-  oldSpeed = fullSpeed        ## The speed of the player's ship before combat
-  turnNumber: Natural = 0     ## The number of the combat's turn
+  oldSpeed = fullSpeed         ## The speed of the player's ship before combat
+  turnNumber: Natural = 0      ## The number of the combat's turn
 
 proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffect,
-    raises: [KeyError, ValueError], tags: [RootEffect].} =
+    raises: [KeyError, ValueError], tags: [RootEffect], contractual.} =
   ## Generate the enemy and start the ship to ship combat if enemy spotted
   ## the player first
   ##
@@ -53,7 +54,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
   var enemyShip = createShip(protoIndex = enemyIndex, name = "",
       x = playerShip.skyX, y = playerShip.skyY, speed = fullSpeed)
   # Enemy ship is a trader, generate a cargo for it
-  if protoShipsList[enemyIndex].name.contains(tradersName):
+  if protoShipsList[enemyIndex].name.contains(sub = tradersName):
     generateTraderCargo(protoIndex = enemyIndex)
     for item in traderCargo:
       updateCargo(ship = enemyShip, protoIndex = item.protoIndex,
@@ -88,7 +89,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
           cargoItemIndex].amount + itemAmount
     else:
       if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
-        enemyShip.cargo.add(InventoryData(protoIndex: newItemIndex,
+        enemyShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
             amount: itemAmount, durability: defaultItemDurability, name: "", price: 0))
   var enemyGuns: seq[array[1..3, int]] = @[]
   for index, module in enemyShip.modules:
@@ -104,7 +105,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
             modulesList[module.protoIndex].speed - 1
           else:
             modulesList[module.protoIndex].speed
-      enemyGuns.add([1: index, 2: 1, 3: shootingSpeed])
+      enemyGuns.add(y = [1: index, 2: 1, 3: shootingSpeed])
   game.enemy = EnemyRecord(ship: enemyShip, accuracy: (if protoShipsList[
       enemyIndex].accuracy.maxValue == 0: protoShipsList[
       enemyIndex].accuracy.minValue else: getRandom(min = protoShipsList[
@@ -134,7 +135,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
   guns = @[]
   for index, module in playerShip.modules:
     if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
-      guns.add([1: index, 2: 1, 3: modulesList[module.protoIndex].speed])
+      guns.add(y = [1: index, 2: 1, 3: modulesList[module.protoIndex].speed])
   if oldGunsList.len == guns.len:
     for index, gun in guns:
       if gun[1] != oldGunsList[index][1]:
@@ -195,7 +196,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
 
 proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## One turn in the combat, between the ships and the crew members if there
   ## is boarding party on any ship.
   var
@@ -203,22 +204,27 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     speedBonus = 0
     ammoIndex2 = -1
 
-  proc attack(ship, enemyShip: var ShipRecord) =
+  proc attack(ship, enemyShip: var ShipRecord) {.sideEffect, raises: [KeyError,
+      IOError], tags: [RootEffect], contractual.} =
 
     var hitLocation: int = -1
 
-    proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) =
+    proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
+        raises: [], tags: [], contractual.} =
       if enemyShip.crew == playerShip.crew:
         for index, gun in guns:
           if gun[1] == moduleIndex:
-            guns.delete(index)
+            guns.delete(i = index)
             break
-    proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): int =
+    proc findEnemyModule(mType: ModuleType;
+        enemyShip: ShipRecord): int {.sideEffect, raises: [KeyError], tags: [],
+        contractual.} =
       for index, module in enemyShip.modules:
         if modulesList[module.protoIndex].mType == mType and module.durability > 0:
           return index
       return -1
-    proc findHitWeapon(enemyShip: ShipRecord) =
+    proc findHitWeapon(enemyShip: ShipRecord) {.sideEffect, raises: [KeyError],
+        tags: [], contractual.} =
       for index, module in enemyShip.modules:
         if ((module.mType == ModuleType2.turret and module.gunIndex > -1) or
             modulesList[module.protoIndex].mType == ModuleType.batteringRam) and
@@ -886,7 +892,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
               if member.order == boarding:
                 orderIndex.inc
               if index == defenderIndex2:
-                boardingOrders.delete(orderIndex)
+                boardingOrders.delete(i = orderIndex)
                 orderIndex.dec
                 break
             death(memberIndex = defenderIndex2, reason = attacker.name &
@@ -925,7 +931,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           elif boardingOrders[orderIndex] == -1:
             giveOrders(ship = playerShip, memberIndex = attackerIndex,
                 givenOrder = rest)
-            boardingOrders.delete(orderIndex)
+            boardingOrders.delete(i = orderIndex)
             orderIndex.dec
             attackDone = true
           orderIndex.inc
@@ -1053,7 +1059,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           else:
             storiesList[currentStory.index].finalStep
         if step.finishCondition == loot:
-          let stepData = currentStory.data.split(';')
+          let stepData = currentStory.data.split(sep = ';')
           if stepData[1] == "any" or stepData[1] == $enemyShipIndex:
             if progressStory():
               case step.finishCondition
@@ -1099,7 +1105,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
         else: storiesList[currentStory.index].finalStep.finishCondition
       if finishCondition != destroyShip:
         return
-      let storyData = currentStory.data.split(';')
+      let storyData = currentStory.data.split(sep = ';')
       if playerShip.skyX == storyData[0].parseInt and playerShip.skyY ==
           storyData[1].parseInt and enemyShipIndex == storyData[2].parseInt:
         if not progressStory(nextStep = true):
@@ -1108,12 +1114,12 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
 # Temporary code for interfacing with Ada
 
 proc getAdaHarpoonDuration(playerDuration, enemyDuration: cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   harpoonDuration = playerDuration
   game.enemy.harpoonDuration = enemyDuration
 
 proc startAdaCombat(enemyIndex, newCombat: cint): cint {.raises: [], tags: [
-    RootEffect], exportc.} =
+    RootEffect], exportc, contractual.} =
   try:
     return startCombat(enemyIndex = enemyIndex, newCombat = newCombat == 1).cint
   except ValueError:
@@ -1132,7 +1138,8 @@ type
 
   AdaBoardingOrders = array[50, cint]
 
-proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
+proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc,
+    contractual.} =
   adaEnemy.loot = game.enemy.loot.cint
   adaEnemy.distance = game.enemy.distance.cint
   adaEnemy.harpoonDuration = harpoonDuration.cint
@@ -1149,48 +1156,54 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc.} =
       adaEnemy.playerGuns[index] = [-1, -1, -1]
   npcShip = game.enemy.ship
 
-proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
+    contractual.} =
   try:
     combatTurn()
     npcShip = game.enemy.ship
   except:
     discard
 
-proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc.} =
+proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc,
+    contractual.} =
   guns = @[]
   for gun in adaGuns:
     if gun[0] == -1:
       break
-    guns.add([gun[0].int - 1, gun[1].int, gun[2].int])
+    guns.add(y = [gun[0].int - 1, gun[1].int, gun[2].int])
 
 proc getAdaBoardingOrders(adaOrders: var AdaBoardingOrders) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   for order in adaOrders.mitems:
     order = -1
   for index, order in boardingOrders:
     adaOrders[index] = order.cint
 
-proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [], exportc.} =
+proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [],
+    exportc, contractual.} =
   boardingOrders = @[]
   for order in adaOrders:
     if order == -1:
       break
-    boardingOrders.add(order)
+    boardingOrders.add(y = order)
 
-proc setAdaEnemyName(): cstring {.raises: [], tags: [], exportc.} =
+proc setAdaEnemyName(): cstring {.raises: [], tags: [], exportc, contractual.} =
   return enemyName.cstring
 
-proc getAdaPilotOrder(order: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaPilotOrder(order: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   pilotOrder = order
 
-proc setAdaPilotOrder(): cint {.raises: [], tags: [], exportc.} =
+proc setAdaPilotOrder(): cint {.raises: [], tags: [], exportc, contractual.} =
   return pilotOrder.cint
 
-proc getAdaEngineerOrder(order: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaEngineerOrder(order: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   engineerOrder = order
 
-proc setAdaEngineerOrder(): cint {.raises: [], tags: [], exportc.} =
+proc setAdaEngineerOrder(): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   return engineerOrder.cint
 
-proc getAdaEndCombat(): cint {.raises: [], tags: [], exportc.} =
+proc getAdaEndCombat(): cint {.raises: [], tags: [], exportc, contractual.} =
   return endCombat.cint
