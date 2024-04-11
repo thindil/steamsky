@@ -1384,6 +1384,19 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Set the selected order for the selected crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SelectCrewOrder orderslist memberindex
+  ## Orderslist is the list of the available orders with their parameters,
+  ## memberindex is the crew index of the selected crew member
   let
     ordersBox = ".memberdialog.list"
     orderIndex = try:
