@@ -139,17 +139,4 @@ package body Ships.Crew is
       Set_Ada_Crew(Ship => Ship);
    end Update_Morale;
 
-   function Get_Current_Order
-     (Member_Index: Positive) return Unbounded_String is
-      function Get_Ada_Current_Order(M_Index: Positive) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaCurrentOrder";
-   begin
-      return
-        To_Unbounded_String
-          (Source =>
-             Value(Item => Get_Ada_Current_Order(M_Index => Member_Index)));
-   end Get_Current_Order;
-
 end Ships.Crew;
