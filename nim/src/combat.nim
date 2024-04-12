@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to combat with NPC enemies, like combat between
+## the player's ship and NPC's ship or combat between ships' crews.
+
 import std/[math, strutils, tables]
 import contracts
 import bases, crewinventory, config, game, game2, goals, events, log, maps,
@@ -206,11 +209,21 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
 
   proc attack(ship, enemyShip: var ShipRecord) {.sideEffect, raises: [KeyError,
       IOError], tags: [RootEffect], contractual.} =
+    ## Made one attack of one of the ships in the combat
+    ##
+    ## * ship      - the ship which will be attacking
+    ## * enemyShip - the ship which will be attacked
+    ##
+    ## Returns modified parameters ship and enemyShip
 
     var hitLocation: int = -1
 
     proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
         raises: [], tags: [], contractual.} =
+      ## Remove the gun from the player's ship's list of guns
+      ##
+      ## * moduleIndex - the index of the module to remove
+      ## * enemyShip   - the ship which was attacked
       if enemyShip.crew == playerShip.crew:
         for index, gun in guns:
           if gun[1] == moduleIndex:
@@ -219,12 +232,22 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     proc findEnemyModule(mType: ModuleType;
         enemyShip: ShipRecord): int {.sideEffect, raises: [KeyError], tags: [],
         contractual.} =
+      ## Find the module in the enemy's ship
+      ##
+      ## * mType     - the type of the module to find
+      ## * enemyShip - the ship which was attacked
+      ##
+      ## Return the index of the module of the selected type or -1 if a module
+      ## was not found
       for index, module in enemyShip.modules:
         if modulesList[module.protoIndex].mType == mType and module.durability > 0:
           return index
       return -1
     proc findHitWeapon(enemyShip: ShipRecord) {.sideEffect, raises: [KeyError],
         tags: [], contractual.} =
+      ## Find the weapon which was hit by the attack
+      ##
+      ## * enemyShip - the ship which was attacked
       for index, module in enemyShip.modules:
         if ((module.mType == ModuleType2.turret and module.gunIndex > -1) or
             modulesList[module.protoIndex].mType == ModuleType.batteringRam) and
@@ -1115,11 +1138,13 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
 
 proc getAdaHarpoonDuration(playerDuration, enemyDuration: cint) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   harpoonDuration = playerDuration
   game.enemy.harpoonDuration = enemyDuration
 
 proc startAdaCombat(enemyIndex, newCombat: cint): cint {.raises: [], tags: [
     RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return startCombat(enemyIndex = enemyIndex, newCombat = newCombat == 1).cint
   except ValueError:
@@ -1140,6 +1165,7 @@ type
 
 proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   adaEnemy.loot = game.enemy.loot.cint
   adaEnemy.distance = game.enemy.distance.cint
   adaEnemy.harpoonDuration = harpoonDuration.cint
@@ -1158,6 +1184,7 @@ proc getAdaEnemy(adaEnemy: var AdaEnemyData) {.raises: [], tags: [], exportc,
 
 proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     combatTurn()
     npcShip = game.enemy.ship
@@ -1166,6 +1193,7 @@ proc combatAdaTurn() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
 
 proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   guns = @[]
   for gun in adaGuns:
     if gun[0] == -1:
@@ -1174,6 +1202,7 @@ proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc,
 
 proc getAdaBoardingOrders(adaOrders: var AdaBoardingOrders) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for order in adaOrders.mitems:
     order = -1
   for index, order in boardingOrders:
@@ -1181,6 +1210,7 @@ proc getAdaBoardingOrders(adaOrders: var AdaBoardingOrders) {.raises: [],
 
 proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   boardingOrders = @[]
   for order in adaOrders:
     if order == -1:
@@ -1188,22 +1218,28 @@ proc setAdaBoardingOrders(adaOrders: AdaBoardingOrders) {.raises: [], tags: [],
     boardingOrders.add(y = order)
 
 proc setAdaEnemyName(): cstring {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return enemyName.cstring
 
 proc getAdaPilotOrder(order: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   pilotOrder = order
 
 proc setAdaPilotOrder(): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return pilotOrder.cint
 
 proc getAdaEngineerOrder(order: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   engineerOrder = order
 
 proc setAdaEngineerOrder(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return engineerOrder.cint
 
 proc getAdaEndCombat(): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return endCombat.cint
