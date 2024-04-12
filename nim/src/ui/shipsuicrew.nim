@@ -79,8 +79,7 @@ proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [],
   try:
     return skillsList[highestIndex].name
   except KeyError:
-    tclEval(script = "bgerror {Can't get the highest skill. Index: " &
-        $highestIndex & "}")
+    showError(message = "Can't thge the highest skill. Index: " & $highestIndex )
     return "Unknown"
 
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
@@ -95,8 +94,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
     rows = try:
         gridSize[1].parseInt
       except ValueError:
-        tclEval(script = "bgerror {Can't get the size of the grid. Result: " &
-            $gridSize & "}")
+        showError(message = "Can't get the size of the grid. Result: " & $gridSize)
         return
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = crewInfoFrame)
   var needRepair, needClean = false
@@ -195,7 +193,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
             script = skillBox & " get") & " of the selected crew member",
             command = "ShowMemberInfo " & $(mIndex + 1), column = 4)
       except KeyError:
-        tclEval(script = "bgerror {Can't get the level of the skill.}")
+        showError(message = "Can't get the level of the skill.")
     addProgressbar(table = crewTable, value = playerShip.crew[mIndex].health,
         maxValue = SkillRange.high,
         tooltip = "The current health level of the selected crew member",
@@ -268,9 +266,7 @@ proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
           updateMessages()
           return tclOk
         except:
-          tclEval(script = "bgerror {Can't give orders. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't give orders.")
   else:
     for i in playerShip.crew.low .. playerShip.crew.high:
       try:
@@ -282,9 +278,7 @@ proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
         updateMessages()
         return tclOk
       except:
-        tclEval(script = "bgerror {Can't give orders. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give orders.")
   updateHeader()
   updateMessages()
   updateCrewInfo()
@@ -308,9 +302,7 @@ proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   let row = try:
       ($argv[1]).parseInt
     except:
-      tclEval(script = "bgerror {Can't get the row. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't get the row.")
   toggleCheckedButton(table = crewTable, row = row, column = 1)
   if isChecked(table = crewTable, row = row, column = 1):
     tclSetVar(varName = "crewindex" & $argv[2], newValue = "1")
@@ -337,9 +329,7 @@ proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
   let memberIndex = try:
       ($argv[1]).parseInt
     except:
-      tclEval(script = "bgerror {Can't get the crew member index. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't get the crew member index.")
   showQuestion(question = "Are you sure want to dismiss " & playerShip.crew[
       memberIndex - 1].name & "?", res = $argv[1])
   return tclOk
@@ -366,9 +356,7 @@ proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = try:
         ($argv[3]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the module index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the module index.")
   try:
     giveOrders(ship = playerShip, memberIndex = ($argv[2]).parseInt - 1,
         givenOrder = parseEnum[CrewOrders](s = ($argv[1]).toLowerAscii),
@@ -1474,8 +1462,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ToggleAllCrew", toggleAllCrewCommand)
     shipsuicrewinventory.addCommands()
   except:
-    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't add a Tcl command.")
 
 # Temporary code for interfacing with Ada
 
