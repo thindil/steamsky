@@ -24,33 +24,18 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Ships.Crew is
 -- ****
 
-   -- ****f* SCrew/SCrew.Get_Skill_Level
+   -- ****f* SCrew/SCrew.Death
    -- FUNCTION
-   -- Get level of skill of selected crew member
+   -- Handle crew member death
    -- PARAMETERS
-   -- Member      - Crew member which skill will be looking for
-   -- Skill_Index - Index of skill in skills list
+   -- Member_Index - Crew index of the member which died
+   -- Reason       - Reason of the death
+   -- Ship         - Ship in which crew member died
+   -- Create_Body  - If true, create body for dead crew member. Default is
+   --                true
    -- RESULT
-   -- Real level of selected skill of selected crew member
+   -- Parameter Ship with updated data (crew, cargo, modules)
    -- SOURCE
-   function Get_Skill_Level
-     (Member: Member_Data; Skill_Index: Skills_Amount_Range)
-      return Skill_Range with
-      Pre => Skill_Index in 1 .. Skills_Amount;
-      -- ****
-
-      -- ****f* SCrew/SCrew.Death
-      -- FUNCTION
-      -- Handle crew member death
-      -- PARAMETERS
-      -- Member_Index - Crew index of the member which died
-      -- Reason       - Reason of the death
-      -- Ship         - Ship in which crew member died
-      -- Create_Body  - If true, create body for dead crew member. Default is
-      --                true
-      -- RESULT
-      -- Parameter Ship with updated data (crew, cargo, modules)
-      -- SOURCE
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) with

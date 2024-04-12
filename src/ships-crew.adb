@@ -19,21 +19,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Ships.Crew is
 
-   function Get_Skill_Level
-     (Member: Member_Data; Skill_Index: Skills_Amount_Range)
-      return Skill_Range is
-      function Get_Ada_Skill_Level
-        (M: Nim_Member_Data; S_Index: Skills_Amount_Range)
-         return Skill_Range with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaSkillLevel";
-   begin
-      return
-        Get_Ada_Skill_Level
-          (M => Member_To_Nim(Member => Member), S_Index => Skill_Index);
-   end Get_Skill_Level;
-
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
