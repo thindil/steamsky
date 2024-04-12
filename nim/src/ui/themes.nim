@@ -131,6 +131,7 @@ type ThemeRecord* = object
   ## * craftColoredIcon    - Icon used for set crafting order button with green color
   ## * studyColoredIcon    - Icon used for set study order button with green color
   ## * deconstructColoredIcon - Icon used for set deconstruct order button with green color
+  ## * giveOrderColoredIcon - Icon used for give order to the crew member button with green color
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -236,6 +237,7 @@ type ThemeRecord* = object
   craftColoredIcon*: string
   studyColoredIcon*: string
   deconstructColoredIcon*: string
+  giveOrderColoredIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -332,7 +334,8 @@ let
       negotiateColoredIcon: defaultThemeIconPath & "negotiate2.svg",
       craftColoredIcon: defaultThemeIconPath & "craft-order2.svg",
       studyColoredIcon: defaultThemeIconPath & "study2.svg",
-      deconstructColoredIcon: defaultThemeIconPath & "deconstruct2.svg")
+      deconstructColoredIcon: defaultThemeIconPath & "deconstruct2.svg",
+      giveOrderColoredIcon: defaultThemeIconPath & "giveorder2.svg")
     ## The default game'st theme
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
@@ -570,6 +573,8 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
                 theme.studyColoredIcon = entry.value.unixToNativePath
               of "DeconstructColoredIcon":
                 theme.deconstructColoredIcon = entry.value.unixToNativePath
+              of "GiveOrderColoredIcon":
+                theme.giveOrderColoredIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -612,7 +617,8 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
       "dismissicon", "goresticon", "repairpriorityicon", "upgradebuttonicon",
       "powericon", "assigncrewicon", "assignammoicon", "buy2icon", "sell2icon",
       "moveicon", "give2icon", "drop2icon", "edit2icon", "show2icon",
-      "negotiate2icon", "craft2icon", "study2icon", "deconstruct2icon"]
+      "negotiate2icon", "craft2icon", "study2icon", "deconstruct2icon",
+      "giveorder2icon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -646,7 +652,8 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
         theme.moveIcon, theme.giveColoredIcon, theme.dropColoredIcon,
         theme.editColoredIcon, theme.showColoredIcon,
         theme.negotiateColoredIcon, theme.craftColoredIcon,
-        theme.studyColoredIcon, theme.deconstructColoredIcon]
+        theme.studyColoredIcon, theme.deconstructColoredIcon,
+        theme.giveOrderColoredIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
@@ -923,6 +930,8 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
     return theme.studyColoredIcon.cstring
   of "deconstructColoredIcon":
     return theme.deconstructColoredIcon.cstring
+  of "giveOrderColoredIcon":
+    return theme.giveOrderColoredIcon.cstring
   else:
     tclEval(script = "bgerror {Unknown theme setting: '" & $name & "'}")
     return "".cstring
