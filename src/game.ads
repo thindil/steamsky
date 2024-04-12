@@ -424,13 +424,6 @@ package Game is
    Attributes_Amount: Natural := 0;
    -- ****
 
-   -- ****v* Game/Game.Condition_Index
-   -- FUNCTION
-   -- Index of attribute used as bonus to character condition
-   -- SOURCE
-   Condition_Index: AttributesData_Container.Extended_Index;
-   -- ****
-
    -- ****v* Game/Game.Talking_Skill
    -- FUNCTION
    -- Index of skill used for talk in bases or with other ships
