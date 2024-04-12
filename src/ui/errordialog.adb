@@ -17,6 +17,7 @@ with Ada.Characters.Latin_1;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Interfaces.C;
+with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with GNAT.OS_Lib;
 with GNAT.Time_Stamp;
@@ -98,6 +99,7 @@ package body ErrorDialog is
       Show_Error_Dialog_Block :
       declare
          use type Interfaces.C.int;
+         use Interfaces.C.Strings;
          use GNAT.Directory_Operations;
          use Tcl;
          use Tcl.Ada;
@@ -107,6 +109,10 @@ package body ErrorDialog is
          use Utils.UI;
 
          Interp: Tcl.Tcl_Interp := Get_Context;
+         function Steam_Sky(Params: chars_ptr) return Tcl.Tcl_Interp with
+            Import => True,
+            Convention => C,
+            External_Name => "steamsky";
       begin
          Destroy_Main_Window_Block :
          declare
@@ -120,29 +126,15 @@ package body ErrorDialog is
             when Storage_Error =>
                null;
          end Destroy_Main_Window_Block;
-         Interp := Tcl.Tcl_CreateInterp;
-         if Tcl.Tcl_Init(interp => Interp) = Tcl.TCL_ERROR then
-            Ada.Text_IO.Put_Line
-              (Item =>
-                 "Steam Sky: Tcl.Tcl_Init failed: " &
-                 Tcl.Ada.Tcl_GetStringResult(interp => Interp));
-            return;
-         end if;
-         if Tcl.Tk.Tk_Init(interp => Interp) = Tcl.TCL_ERROR then
-            Ada.Text_IO.Put_Line
-              (Item =>
-                 "Steam Sky: Tcl.Tk.Tk_Init failed: " &
-                 Tcl.Ada.Tcl_GetStringResult(interp => Interp));
-            return;
-         end if;
+         Interp := Steam_Sky(Params => New_String(Str => ""));
          Set_Context(Interp => Interp);
          Tcl_EvalFile
-           (interp => Get_Context,
+           (interp => Interp,
             fileName =>
               To_String(Source => Data_Directory) & "ui" & Dir_Separator &
               "errordialog.tcl");
          Add_Command
-           (Name => "OpenLink", Ada_Command => Open_Link_Command'Access);
+           (Name => "OpenLink2", Ada_Command => Open_Link_Command'Access);
          Show_Error_Message_Block :
          declare
             use Tcl.Tk.Ada.Widgets.Text;
@@ -161,7 +153,7 @@ package body ErrorDialog is
             configure
               (Widgt => Directory_Button,
                options =>
-                 "-command {OpenLink {" & To_String(Source => Save_Directory) &
+                 "-command {OpenLink2 {" & To_String(Source => Save_Directory) &
                  " }}");
          end Show_Error_Message_Block;
          Tcl.Tk.Tk_MainLoop;

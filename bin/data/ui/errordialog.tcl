@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,13 +20,13 @@ pack [ttk::label .generalinfo \
    -text {Oops, something bad happens and the game has crashed. Game should save your progress, but better verify this yourself. Also, please, remember what you were doing before the crash and report this problem at} \
    -wraplength 790]
 pack [ttk::button .reportlink \
-   -text {https://www.laeran.pl/repositories/steamsky/ticket} \
-   -command {OpenLink https://www.laeran.pl/repositories/steamsky/ticket} \
+   -text {https://www.laeran.pl.eu.org/repositories/steamsky/ticket} \
+   -command {OpenLink2 https://www.laeran.pl.eu.org/repositories/steamsky/ticket} \
    -style Toolbutton]
 pack [ttk::label .generalinfo2 \
    -text {or if you prefer, on one of the game community options:}]
 pack [ttk::button .reportlink2 -text {https://thindil.itch.io/steam-sky} \
-   -command {OpenLink https://thindil.itch.io/steam-sky} -style Toolbutton]
+   -command {OpenLink2 https://thindil.itch.io/steam-sky} -style Toolbutton]
 pack [ttk::label .generalinfo3 \
    -text {and attach (if possible) file with saved game or 'error.log'}]
 pack [ttk::frame .buttons]

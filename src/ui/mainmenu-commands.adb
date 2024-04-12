@@ -64,11 +64,11 @@ package body MainMenu.Commands is
    function Open_Link_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use GNAT.OS_Lib;
 
       Os_Name: constant String :=
-        Tcl_GetVar(interp => Get_Context, varName => "tcl_platform(os)");
+        Tcl_GetVar(interp => Interp, varName => "tcl_platform(os)");
       Command: constant GNAT.OS_Lib.String_Access :=
         Locate_Exec_On_Path
           (Exec_Name =>
