@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[game, tk]
+import ../[config, game, items, tk]
 import table
 
 var
@@ -39,6 +39,25 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       inventoryIndexes.add(y = index)
   let
     page = (if argc == 3: ($argv[2]).parseInt else: 1)
+    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow = 1
+  for index, item in inventoryIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    addCheckButton(table = inventoryTable,
+        tooltip = "Select the item for move or equip it.",
+        command = "ToggleInventoryItem " & $(index + 1) & " " & $(item + 1),
+        checked = tclGetVar(varName = "invindex" & $(item + 1)) == "1",
+        column = 1, emptyUnchecked = true)
+    addButton(table = inventoryTable, text = getItemName(
+        item = member.inventory[item], damageInfo = false, toLower = false),
+        tooltip = "Show the selected item's info",
+        command = "ShowInventoryItemInfo " & $(item + 1), column = 2)
+    addProgressbar(table = inventoryTable, value = member.inventory[
+        item].durability, maxValue = defaultItemDurability,
+        tooltip = "The current durability level of the selected item.",
+        command = "ShowInventoryItemInfo " & $(item + 1), column = 3)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
