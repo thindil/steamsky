@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, sequtils, tables]
 import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
-import coreui, dialogs, table, updateheader, utilsui2
+import coreui, dialogs, shipsuicrewinventory, table, updateheader, utilsui2
 
 var
   crewTable: TableWidget
@@ -1472,6 +1472,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowCrewOrder", showCrewOrderCommand)
     addCommand("SelectCrewOrder", selectCrewOrderCommand)
     addCommand("ToggleAllCrew", toggleAllCrewCommand)
+    shipsuicrewinventory.addCommands()
   except:
     tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
         getCurrentExceptionMsg() & "}")

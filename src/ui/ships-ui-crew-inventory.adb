@@ -1561,7 +1561,12 @@ package body Ships.UI.Crew.Inventory is
    end Toggle_All_Inventory_Command;
 
    procedure Add_Inventory_Commands is
+      procedure Add_Ada_Commands with
+         Import => True,
+         Convention => C,
+         External_Name => "addAdaCrewInventoryCommands";
    begin
+      Add_Ada_Commands;
       Add_Command
         (Name => "UpdateInventory",
          Ada_Command => Update_Inventory_Command'Access);
