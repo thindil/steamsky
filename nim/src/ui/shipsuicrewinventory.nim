@@ -28,8 +28,11 @@ var
     ## The list of indexes of items in the crew member's inventory
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  memberIndex = ($argv[1]).parseInt
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  memberIndex = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't get the member index.")
   if inventoryTable.row > 1:
     inventoryTable.clearTable
   let member = playerShip.crew[memberIndex]
@@ -38,7 +41,10 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, _ in member.inventory:
       inventoryIndexes.add(y = index)
   let
-    page = (if argc == 3: ($argv[2]).parseInt else: 1)
+    page = try:
+        (if argc == 3: ($argv[2]).parseInt else: 1)
+      except:
+        return showError(message = "Can't get the page number.")
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
   var currentRow = 1
   for index, item in inventoryIndexes:
@@ -69,10 +75,13 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = inventoryTable, text = $member.inventory[item].amount,
         tooltip = "The amount of the item owned by the crew member.",
         command = "ShowInventoryItemInfo " & $(item + 1), column = 5)
-    addButton(table = inventoryTable, text = $(member.inventory[item].amount *
-        itemsList[member.inventory[item].protoIndex].weight) & " kg",
-        tooltip = "The total weight of the items",
-        command = "ShowInventoryItemInfo " & $(item + 1), column = 6, newRow = true)
+    try:
+      addButton(table = inventoryTable, text = $(member.inventory[item].amount *
+          itemsList[member.inventory[item].protoIndex].weight) & " kg",
+          tooltip = "The total weight of the items",
+          command = "ShowInventoryItemInfo " & $(item + 1), column = 6, newRow = true)
+    except:
+      return showError(message = "Can't count the total weight of the item.")
     if inventoryTable.row == gameSettings.listsLimit + 1:
       break
   if page > 1:
