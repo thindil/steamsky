@@ -14,11 +14,12 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ships.UI.Crew.Inventory;
-with Table; use Table;
+with Table;
 
 package body Ships.UI.Crew is
 
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
+      use Table;
 
       --## rule off TYPE_INITIAL_VALUES
       type Crew_Array is array(0 .. 50) of Natural;
@@ -26,6 +27,7 @@ package body Ships.UI.Crew is
       C_Array: Crew_Array := (others => 0);
       N_Width: Nim_Width := (others => 0);
       Index: Natural := 0;
+      --## rule off IMPROPER_INITIALIZATION
       Crew_Table: Table_Widget (Amount => 9);
       Crew_Indexes: Positive_Container.Vector;
       procedure Update_Ada_Crew_Info
@@ -43,6 +45,7 @@ package body Ships.UI.Crew is
               (New_Item => Crew_Container.To_Index(Position => I));
          end loop Update_Crew_Indexes_Loop;
       end if;
+      --## rule on IMPROPER_INITIALIZATION
       Convert_Crew_Indexes_Loop :
       for C_Index of Crew_Indexes loop
          C_Array(Index) := C_Index;
