@@ -88,12 +88,7 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
-  discard
-
-# Temporary code for interfacing with Ada
-
-proc addAdaCrewInventoryCommands() {.raises: [], tags: [RootEffect], exportc.} =
   try:
-    addCommands()
+    addCommand("UpdateInventory", updateInventoryCommand)
   except:
-    echo getCurrentExceptionMsg()
+    showError(message = "Can't add a Tcl command.")
