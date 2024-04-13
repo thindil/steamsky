@@ -26,17 +26,28 @@ import bases, crewinventory, config, game, game2, goals, events, log, maps,
     statistics, stories, stories2, trades, types, utils
 
 var
-  enemyShipIndex*: Natural     ## The index of the enemy's ship's prototype
-  factionName: string          ## The name of the enemy's faction (ship and its crew)
-  boardingOrders*: seq[int]    ## The list of orders for the boarding party
-  pilotOrder*: Natural = 0     ## The player's ship pilot order
-  engineerOrder*: Natural      ## The player's ship engineer order
-  endCombat*: bool = false     ## If true, the combat ends
-  enemyName*: string           ## The name of the enemy's ship
-  messagesStarts*: int = -1    ## The starting index of messages to show
-  guns*: seq[array[1..3, int]] ## The list of guns installed on the player's ship
-  oldSpeed = fullSpeed         ## The speed of the player's ship before combat
-  turnNumber: Natural = 0      ## The number of the combat's turn
+  enemyShipIndex*: Natural = 0
+    ## The index of the enemy's ship's prototype
+  factionName: string = ""
+    ## The name of the enemy's faction (ship and its crew)
+  boardingOrders*: seq[int] = @[]
+    ## The list of orders for the boarding party
+  pilotOrder*: Natural = 0
+    ## The player's ship pilot order
+  engineerOrder*: Natural = 0
+    ## The player's ship engineer order
+  endCombat*: bool = false
+    ## If true, the combat ends
+  enemyName*: string = ""
+    ## The name of the enemy's ship
+  messagesStarts*: int = -1
+    ## The starting index of messages to show
+  guns*: seq[array[1..3, int]] = @[]
+    ## The list of guns installed on the player's ship
+  oldSpeed: ShipSpeed = fullSpeed
+    ## The speed of the player's ship before combat
+  turnNumber: Natural = 0
+    ## The number of the combat's turn
 
 proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffect,
     raises: [KeyError, ValueError], tags: [RootEffect], contractual.} =
@@ -54,7 +65,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
   factionName = factionsList[protoShipsList[enemyIndex].owner].name
   harpoonDuration = 0
   boardingOrders = @[]
-  var enemyShip = createShip(protoIndex = enemyIndex, name = "",
+  var enemyShip: ShipRecord = createShip(protoIndex = enemyIndex, name = "",
       x = playerShip.skyX, y = playerShip.skyY, speed = fullSpeed)
   # Enemy ship is a trader, generate a cargo for it
   if protoShipsList[enemyIndex].name.contains(sub = tradersName):
@@ -63,7 +74,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       updateCargo(ship = enemyShip, protoIndex = item.protoIndex,
           amount = item.amount)
     traderCargo = @[]
-  var minFreeSpace = 0
+  var minFreeSpace: int = 0
   for module in enemyShip.modules:
     if module.mType == ModuleType2.cargoRoom and module.durability > 0:
       minFreeSpace = minFreeSpace + modulesList[module.protoIndex].maxValue
@@ -71,21 +82,21 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       max = 70).float / 100.0))).Natural
   while freeCargo(amount = 0, ship = enemyShip) > minFreeSpace:
     var
-      itemIndex = getRandom(min = 1, max = itemsList.len)
-      newItemIndex = 0
+      itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
+      newItemIndex: Natural = 0
     for i in 1 .. itemsList.len:
       itemIndex.dec
       if itemIndex == 0:
         newItemIndex = i
         break
     let
-      itemAmount = if enemyShip.crew.len < 5:
+      itemAmount: Positive = if enemyShip.crew.len < 5:
           getRandom(min = 1, max = 100)
         elif enemyShip.crew.len < 10:
           getRandom(min = 1, max = 500)
         else:
           getRandom(min = 1, max = 1000)
-      cargoItemIndex = findItem(inventory = enemyShip.cargo,
+      cargoItemIndex: int = findItem(inventory = enemyShip.cargo,
           protoIndex = newItemIndex)
     if cargoItemIndex > -1:
       enemyShip.cargo[cargoItemIndex].amount = enemyShip.cargo[
@@ -97,7 +108,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
   var enemyGuns: seq[array[1..3, int]] = @[]
   for index, module in enemyShip.modules:
     if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
-      var shootingSpeed = 0
+      var shootingSpeed: int = 0
       if modulesList[module.protoIndex].speed > 0:
         shootingSpeed = if protoShipsList[enemyIndex].combatAi == disarmer:
             ((modulesList[module.protoIndex].speed.float / 2.0).ceil).Natural
@@ -133,8 +144,8 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
   endCombat = false
   enemyName = generateShipName(factionIndex = protoShipsList[enemyIndex].owner)
   messagesStarts = getLastMessageIndex()
-  let oldGunsList = guns
-  var sameList = true
+  let oldGunsList: seq[array[1..3, int]] = guns
+  var sameList: bool = true
   guns = @[]
   for index, module in playerShip.modules:
     if module.mType in {ModuleType2.gun, harpoonGun} and module.durability > 0:
@@ -171,9 +182,9 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
           break
 
     let
-      playerPerception = countPerception(spotter = playerShip,
+      playerPerception: Natural = countPerception(spotter = playerShip,
         spotted = enemyShip)
-      enemyPerception = (if game.enemy.perception >
+      enemyPerception: Natural = (if game.enemy.perception >
           0: game.enemy.perception else: countPerception(
           spotter = game.enemy.ship,
           spotted = playerShip))
@@ -203,9 +214,9 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   ## One turn in the combat, between the ships and the crew members if there
   ## is boarding party on any ship.
   var
-    accuracyBonus, evadeBonus = 0
-    speedBonus = 0
-    ammoIndex2 = -1
+    accuracyBonus, evadeBonus: int = 0
+    speedBonus: int = 0
+    ammoIndex2: int = -1
 
   proc attack(ship, enemyShip: var ShipRecord) {.sideEffect, raises: [KeyError,
       IOError], tags: [RootEffect], contractual.} =
@@ -265,12 +276,12 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
             batteringRam, harpoonGun}:
           continue
         var
-          gunnerIndex = -1
-          ammoIndex = -1
-          gunnerOrder = 1
-          shoots = 0
-          currentAccuracyBonus = 0
-          evadeBonus = 0
+          gunnerIndex: int = -1
+          ammoIndex: int = -1
+          gunnerOrder: Natural = 1
+          shoots: int = 0
+          currentAccuracyBonus: int = 0
+          evadeBonus: int = 0
         if module.mType == ModuleType2.harpoonGun:
           ammoIndex2 = module.harpoonIndex
         elif module.mType == ModuleType2.gun:
