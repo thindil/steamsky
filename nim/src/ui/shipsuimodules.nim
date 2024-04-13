@@ -38,9 +38,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = try:
         ($argv[1]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get module index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get module index.")
     moduleDialog = createDialog(name = ".moduledialog",
         title = playerShip.modules[moduleIndex].name, columns = 2)
     moduleCanvas = moduleDialog & ".canvas"
@@ -73,8 +71,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       height = try:
           height + tclEval2(script = "winfo reqheight " & label).parseInt
         except:
-          tclEval(script = "bgerror {Can't count the height of the label. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't count the height of the label.")
           return
 
   # Show the module's name
@@ -98,9 +95,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   height = try:
       height + tclEval2(script = "winfo reqheight " & infoButton).parseInt
     except:
-      tclEval(script = "bgerror {Can't count the height of the button. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't count the height of the button.")
   # Show the module's damage
   currentRow.inc
   addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
@@ -128,9 +123,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   let moduleMaxValue = try:
       (modulesList[module.protoIndex].durability.float * 1.5).Positive
     except:
-      tclEval(script = "bgerror {Can't count the module's max value. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't count the module's max value.")
   if module.maxDurability == moduleMaxValue:
     statusTooltip.add(" (max upgrade)")
   let progressBar = moduleFrame & ".damagebar"
@@ -186,9 +179,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   height = try:
       height + tclEval2(script = "winfo reqheight " & infoButton).parseInt
     except:
-      tclEval(script = "bgerror {Can't count the height of the button (2). Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't count the height of the button (2).")
   # Show the module's weight
   currentRow.inc
   addLabel(name = moduleFrame & ".weightlbl", labelText = "Weight: ",
@@ -205,9 +196,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         countHeight = true,
         secondary = true)
   except:
-    tclEval(script = "bgerror {Can't show the label. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't show the label.")
   # Show the module's repair material
   currentRow.inc
   addLabel(name = moduleFrame & ".lblrepairmaterial",
@@ -232,32 +221,24 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             -1: " [list red]" else: " [list gold]"))
         mAmount.inc
     except:
-      tclEval(script = "bgerror {Can't show repair material. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't show repair material.")
   try:
     discard tclEval(script = moduleText &
         " configure -state disabled -height " & $(tclEval2(script = moduleText &
             " count -displaylines 0.0 end").parseInt /
         tclEval2(script = "font metrics InterfaceFont -linespace").parseInt))
   except:
-    tclEval(script = "bgerror {Can't configure moduleText. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't configure moduleText.")
   tclEval(script = "grid " & moduleText & " -row " & $currentRow & " -column 1 -sticky nw")
   var newHeight = try:
       tclEval2(script = "winfo reqheight " & moduleText).parseInt
     except:
-      tclEval(script = "bgerror {Can't count the height of the text. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't count the height of the text.")
   try:
     if newHeight < tclEval2(script = "winfo reqheight " & label).parseInt:
       newHeight = tclEval2(script = "winfo reqheight " & label).parseInt
   except:
-    tclEval(script = "bgerror {Can't count the new height of the text. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't count the new height of the text.")
   height = height + newHeight
   # Show the module's upgrade skill
   currentRow.inc
@@ -269,9 +250,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         skillsList[modulesList[module.protoIndex].repairSkill].attribute].name,
         row = currentRow, column = 1, secondary = true)
   except:
-    tclEval(script = "bgerror {Can't show the upgrade skill. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't show the upgrade skill.")
   # Show the module's upgrade action
   if module.upgradeAction != none:
     currentRow.inc
@@ -284,9 +263,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       maxUpgrade = try:
           modulesList[module.protoIndex].durability
       except:
-        tclEval(script = "bgerror {Can't get max upgrade. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get max upgrade.")
     of maxValue:
       try:
         case modulesList[module.protoIndex].mType
@@ -308,9 +285,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         else:
           discard
       except:
-        tclEval(script = "bgerror {Can't show info about upgrade. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't show info about upgrade.")
     of value:
       try:
         case modulesList[module.protoIndex].mType:
@@ -320,9 +295,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         else:
           discard
       except:
-        tclEval(script = "bgerror {Can't show info about fuel usage upgrade. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't show info about fuel usage ugprade.")
     else:
       discard
     maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
@@ -357,9 +330,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         height + tclEval2(script = "winfo reqheight " &
           infoButton).parseInt
       except:
-        tclEval(script = "bgerror {Can't count the height of the button (3). Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't count the height of the button (3).")
 
   proc addOwnersInfo(ownersName: string; addButton: bool = false;
       row: Natural = 0) {.sideEffect, raises: [], tags: [].} =
@@ -394,8 +365,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         height + tclEval2(script = "winfo reqheight " &
           infoButton).parseInt
       except:
-        tclEval(script = "bgerror {Can't count the height of the crew button. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't count the height of the crew button.")
         return
 
 
