@@ -98,7 +98,6 @@ package body ErrorDialog is
       end if;
       Show_Error_Dialog_Block :
       declare
-         use type Interfaces.C.int;
          use Interfaces.C.Strings;
          use GNAT.Directory_Operations;
          use Tcl;
