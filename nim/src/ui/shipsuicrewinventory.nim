@@ -29,6 +29,19 @@ var
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  ## Update inventory list of the selected crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## UpdateInventory memberindex page
+  ## MemberIndex is the index of the crew member to show inventory, page
+  ## is a number of the page of inventory list to show
   memberIndex = try:
       ($argv[1]).parseInt
     except:
