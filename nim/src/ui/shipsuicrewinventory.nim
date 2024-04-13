@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[config, game, items, tk]
+import std/[strutils, tables]
+import ../[config, crewinventory, game, items, tk]
 import table
 
 var
@@ -58,6 +58,32 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         item].durability, maxValue = defaultItemDurability,
         tooltip = "The current durability level of the selected item.",
         command = "ShowInventoryItemInfo " & $(item + 1), column = 3)
+    if itemIsUsed(memberIndex = memberIndex, itemIndex = item):
+      addCheckButton(table = inventoryTable,
+          tooltip = "The item is used by the crew member",
+          command = "ShowInventoryItemInfo " & $(item + 1), checked = true, column = 4)
+    else:
+      addCheckButton(table = inventoryTable,
+          tooltip = "The item isn't used by the crew member",
+          command = "ShowInventoryItemInfo " & $(item + 1), checked = false, column = 4)
+    addButton(table = inventoryTable, text = $member.inventory[item].amount,
+        tooltip = "The amount of the item owned by the crew member.",
+        command = "ShowInventoryItemInfo " & $(item + 1), column = 5)
+    addButton(table = inventoryTable, text = $(member.inventory[item].amount *
+        itemsList[member.inventory[item].protoIndex].weight) & " kg",
+        tooltip = "The total weight of the items",
+        command = "ShowInventoryItemInfo " & $(item + 1), column = 6, newRow = true)
+    if inventoryTable.row == gameSettings.listsLimit + 1:
+      break
+  if page > 1:
+    addPagination(table = inventoryTable, previousCommand = "UpdateInventory " &
+        $argv[1] & " " & $(page - 1), nextCommand = (if inventoryTable.row <
+        gameSettings.listsLimit + 1: "" else: "UpdateInventory " & $argv[1] &
+        " " & $(page + 1)))
+  elif inventoryTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = inventoryTable, previousCommand = "",
+        nextCommand = "UpdateInventory " & $argv[1] & " " & $(page + 1))
+  updateTable(table = inventoryTable)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
