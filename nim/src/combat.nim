@@ -403,7 +403,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
         logMessage(message = "Shoots: " & $shoots,
             debugType = DebugTypes.combat)
         if shoots > 0:
-          var hitChance = if ship.crew == playerShip.crew:
+          var hitChance: int = if ship.crew == playerShip.crew:
               currentAccuracyBonus - game.enemy.evasion
             else:
               game.enemy.accuracy - evadeBonus
@@ -419,9 +419,9 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
               debugType = DebugTypes.combat)
           logMessage(message = "Chance to hit: " & $hitChance,
               debugType = DebugTypes.combat)
-          let enemyNameOwner = enemyName & " (" & factionName & ")"
+          let enemyNameOwner: string = enemyName & " (" & factionName & ")"
           for shoot in 1 .. shoots:
-            var shootMessage: string
+            var shootMessage: string = ""
             if ship.crew == playerShip.crew:
               shootMessage = if module.mType in {ModuleType2.gun, harpoonGun}:
                   ship.crew[gunnerIndex].name & " shoots at " & enemyNameOwner
@@ -432,7 +432,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
             if hitChance + getRandom(min = 1, max = 50) > getRandom(min = 1,
                 max = hitChance + 50):
               shootMessage = shootMessage & " and hits "
-              let armorIndex = findEnemyModule(mType = ModuleType.armor,
+              let armorIndex: int = findEnemyModule(mType = ModuleType.armor,
                   enemyShip = enemyShip)
               if armorIndex > -1:
                 hitLocation = armorIndex
@@ -466,9 +466,9 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
                       break attackLoop
               shootMessage = shootMessage & enemyShip.modules[
                   hitLocation].name & "."
-              let damage = 1.0 - (module.durability.float /
+              let damage: float = 1.0 - (module.durability.float /
                   module.maxDurability.float)
-              var weaponDamage = 0
+              var weaponDamage: int = 0
               if module.mType == ModuleType2.harpoonGun:
                 weaponDamage = module.duration - (module.duration.float * damage).int
               elif module.mType == ModuleType2.gun:
@@ -517,7 +517,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
                   endCombat = true
                 of ModuleType.turret:
                   if enemyShip.crew == playerShip.crew:
-                    let weaponIndex = enemyShip.modules[hitLocation].gunIndex
+                    let weaponIndex: int = enemyShip.modules[hitLocation].gunIndex
                     if weaponIndex > -1:
                       enemyShip.modules[weaponIndex].durability = 0
                       removeGun(moduleIndex = weaponIndex,
@@ -596,14 +596,14 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   else:
     accuracyBonus = 20
     evadeBonus = -10
-  var enemyPilotIndex = findMember(order = pilot,
+  var enemyPilotIndex: int = findMember(order = pilot,
       shipCrew = game.enemy.ship.crew)
   if enemyPilotIndex > -1:
     accuracyBonus = accuracyBonus - getSkillLevel(member = game.enemy.ship.crew[
         enemyPilotIndex], skillIndex = pilotingSkill)
   if engineerIndex > -1 or "sentientships" in factionsList[playerShip.crew[
       0].faction].flags:
-    let message = changeShipSpeed(speedValue = engineerOrder.ShipSpeed)
+    let message: string = changeShipSpeed(speedValue = engineerOrder.ShipSpeed)
     if message.len > 0:
       addMessage(message = message, mType = orderMessage, color = red)
   speedBonus = 20 - (realSpeed(ship = playerShip) / 100).int
@@ -612,8 +612,8 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   accuracyBonus = accuracyBonus + speedBonus
   evadeBonus = evadeBonus - speedBonus
   var
-    damageRange = 10_000
-    enemyWeaponIndex = -1
+    damageRange: Natural = 10_000
+    enemyWeaponIndex: int = -1
   for index, module in game.enemy.ship.modules:
     if module.durability == 0 or module.mType notin {ModuleType2.gun,
         batteringRam, harpoonGun}:
@@ -627,7 +627,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           module.ammoIndex
         else:
           module.harpoonIndex
-      var enemyAmmoIndex = -1
+      var enemyAmmoIndex: int = -1
       if ammoIndex2 in game.enemy.ship.cargo.low .. game.enemy.ship.cargo.high:
         if itemsList[game.enemy.ship.cargo[ammoIndex2].protoIndex].itemType ==
             itemsTypesList[modulesList[module.protoIndex].value - 1]:
@@ -650,7 +650,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     enemyWeaponIndex = index
   if enemyWeaponIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
     game.enemy.combatAi = coward
-  var enemyPilotOrder = 2
+  var enemyPilotOrder: Natural = 2
   case game.enemy.combatAi
   of berserker:
     if game.enemy.distance > 10 and game.enemy.ship.speed != fullSpeed:
@@ -712,7 +712,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     speedBonus = -10
   accuracyBonus = accuracyBonus + speedBonus
   evadeBonus = evadeBonus - speedBonus
-  var distanceTraveled = if enemyPilotOrder < 4: -(realSpeed(
+  var distanceTraveled: int = if enemyPilotOrder < 4: -(realSpeed(
       ship = game.enemy.ship))
       else:
         realSpeed(ship = game.enemy.ship)
@@ -762,35 +762,35 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   if not endCombat:
     attack(ship = game.enemy.ship, enemyShip = playerShip)
   if not endCombat:
-    var haveBoardingParty = false
+    var haveBoardingParty: bool = false
 
     proc meleeCombat(attackers, defenders: var seq[MemberData];
         playerAttack: bool) =
       var
-        attackDone, riposte = false
-        attackerIndex, defenderIndex, orderIndex = 0
+        attackDone, riposte: bool = false
+        attackerIndex, defenderIndex, orderIndex: int = 0
 
       proc characterAttack(attackerIndex2, defenderIndex2: Natural;
           playerAttack2: bool): bool =
         let
-          hitLocation = getRandom(min = helmet.int,
+          hitLocation: EquipmentLocations = getRandom(min = helmet.int,
               max = legs.int).EquipmentLocations
           locationNames: array[helmet .. legs, string] = ["head", "torso",
               "arm", "leg"]
         var
-          attacker = if playerAttack2: playerShip.crew[attackerIndex2]
+          attacker: MemberData = if playerAttack2: playerShip.crew[attackerIndex2]
             else:
               game.enemy.ship.crew[attackerIndex2]
-          defender = if playerAttack2: game.enemy.ship.crew[defenderIndex2]
+          defender: MemberData = if playerAttack2: game.enemy.ship.crew[defenderIndex2]
             else:
               playerShip.crew[defenderIndex2]
-          baseDamage = attacker.attributes[strengthIndex].level
+          baseDamage: Natural = attacker.attributes[strengthIndex].level
         if attacker.equipment[weapon] > -1:
           baseDamage = baseDamage + itemsList[attacker.inventory[
               attacker.equipment[weapon]].protoIndex].value[2]
         var
-          wounds = 1.0 - (attacker.health.float / 100.0)
-          damage = (baseDamage - (baseDamage.float * wounds.float).int)
+          wounds: float = 1.0 - (attacker.health.float / 100.0)
+          damage: int = (baseDamage - (baseDamage.float * wounds.float).int)
         if attacker.thirst > 40:
           wounds = 1.0 - (attacker.thirst.float / 100.0)
           damage = damage - (baseDamage.float * wounds.float).int
@@ -802,8 +802,8 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           else:
             (damage.float * newGameSettings.enemyMeleeDamageBonus).int
         var
-          hitChance = 0
-          attackSkill = 0
+          hitChance: int = 0
+          attackSkill: int = 0
         if attacker.equipment[weapon] > -1:
           attackSkill = getSkillLevel(member = attacker,
               skillIndex = itemsList[attacker.inventory[attacker.equipment[
@@ -825,12 +825,12 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           damage = damage - itemsList[defender.inventory[defender.equipment[
               shield]].protoIndex].value[2]
         if attacker.equipment[weapon] == -1:
-          var damageBonus = getSkillLevel(member = attacker,
+          var damageBonus: float = getSkillLevel(member = attacker,
               skillIndex = unarmedSkill) / 200
           if damageBonus == 0:
             damageBonus = 1
           damage = damage + damageBonus.int
-        let faction = factionsList[defender.faction]
+        let faction: FactionData = factionsList[defender.faction]
         if "naturalarmor" in faction.flags:
           damage = (damage / 2).int
         if "toxicattack" in factionsList[attacker.faction].flags and
@@ -849,11 +849,11 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
               weapon]].protoIndex].value[5] == 2:
             damage = damage * 2
         var
-          attackMessage = if playerAttack2:
+          attackMessage: string = if playerAttack2:
               attacker.name & " attacks " & defender.name & " (" & factionName & ")"
             else:
               attacker.name & " (" & factionName & ") attacks " & defender.name
-          messageColor = white
+          messageColor: MessageColor = white
         if hitChance < 1:
           attackMessage = attackMessage & " and misses."
           messageColor = if playerAttack: blue else: cyan
