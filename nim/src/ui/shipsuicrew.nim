@@ -1350,7 +1350,7 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & closeDialogButton &
       " -text Cancel -command {CloseDialog " & memberDialog & "} -image cancelicon -style Dialogred.TButton")
   let acceptButton = buttonsBox & ".button2"
-  tclEval(script = "ttk::button " & acceptButton & " -text Assign -image giveordericon -style Dialoggreen.TButton")
+  tclEval(script = "ttk::button " & acceptButton & " -text Assign -image giveorder2icon -style Dialoggreen.TButton")
   tclEval(script = "bind " & ordersBox & " <Escape> {" & closeDialogButton & " invoke;break}")
   tclEval(script = "bind " & ordersBox & " <Tab> {focus " & acceptButton & ";break}")
   setAvailableOrders(memberIndex = memberIndex, ordersBox = ordersBox,
