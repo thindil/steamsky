@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[config, crewinventory, game, items, tk]
-import table
+import dialogs, table
 
 var
   inventoryTable: TableWidget
@@ -106,6 +106,25 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     addPagination(table = inventoryTable, previousCommand = "",
         nextCommand = "UpdateInventory " & $argv[1] & " " & $(page + 1))
   updateTable(table = inventoryTable)
+  return tclOk
+
+proc resetSelection() =
+  ## Reset the currently selected items in the crew member inventory
+  for index, _ in playerShip.crew[memberIndex].inventory:
+    if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
+      tclUnsetVar(varName = "invindex" & $(index + 1))
+
+proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let localMemberIndex = ($argv[1]).parseInt
+  if playerShip.crew[localMemberIndex].inventory.len == 0:
+    tclEval(script = "CloseDialog .memberdialog")
+    showMessage(text = playerShip.crew[localMemberIndex].name &
+        " doesn't own any items.", title = "Inventory of " & playerShip.crew[
+        localMemberIndex].name)
+    return tclOk
+  memberIndex = localMemberIndex
+  resetSelection()
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
