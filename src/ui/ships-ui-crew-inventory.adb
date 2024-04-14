@@ -1562,9 +1562,6 @@ package body Ships.UI.Crew.Inventory is
 
    procedure Add_Inventory_Commands is
    begin
---      Add_Command
---        (Name => "UpdateInventory",
---         Ada_Command => Update_Inventory_Command'Access);
       Add_Command
         (Name => "ShowMemberInventory",
          Ada_Command => Show_Member_Inventory_Command'Access);
