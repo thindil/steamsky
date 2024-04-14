@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.9] - 2024-04-14
 
 ### Added
 - Colored version of icons for setting study and deconstruct orders plus
