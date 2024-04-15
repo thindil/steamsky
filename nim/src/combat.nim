@@ -22,8 +22,7 @@ import std/[math, strutils, tables]
 import contracts
 import bases, crewinventory, config, game, game2, goals, events, log, maps,
     messages, missions, ships, ships2, shipscargo, shipscrew, shipscrew2,
-        shipsmovement,
-    statistics, stories, stories2, trades, types, utils
+    shipsmovement, statistics, stories, stories2, trades, types, utils
 
 var
   enemyShipIndex*: Natural = 0
@@ -163,13 +162,13 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       for index, member in spotter.crew:
         case member.order
         of pilot:
-          result = result + getSkillLevel(member = member,
+          result += getSkillLevel(member = member,
               skillIndex = perceptionSkill)
           if spotter.crew == playerShip.crew:
             gainExp(amount = 1, skillNumber = perceptionSkill,
                 crewIndex = index)
         of gunner:
-          result = result + getSkillLevel(member = member,
+          result += getSkillLevel(member = member,
               skillIndex = perceptionSkill)
           if spotter.crew == playerShip.crew:
             gainExp(amount = 1, skillNumber = perceptionSkill,
@@ -178,7 +177,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
           discard
       for module in spotted.modules:
         if module.mType == ModuleType2.hull:
-          result = result + module.maxModules
+          result += module.maxModules
           break
 
     let
@@ -351,7 +350,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
               modulesList[module.protoIndex].value - 1]:
             ammoIndex = ammoIndex2
           if ammoIndex == -1:
-            for iIndex, item in itemsList.pairs:
+            for iIndex, item in itemsList:
               if item.itemType == itemsTypesList[modulesList[
                   module.protoIndex].value - 1]:
                 for iIndex2, item2 in ship.cargo:
@@ -431,7 +430,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
               shootMessage = enemyNameOwner & " attacks"
             if hitChance + getRandom(min = 1, max = 50) > getRandom(min = 1,
                 max = hitChance + 50):
-              shootMessage = shootMessage & " and hits "
+              shootMessage &= " and hits "
               let armorIndex: int = findEnemyModule(mType = ModuleType.armor,
                   enemyShip = enemyShip)
               if armorIndex > -1:
@@ -517,7 +516,8 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
                   endCombat = true
                 of ModuleType.turret:
                   if enemyShip.crew == playerShip.crew:
-                    let weaponIndex: int = enemyShip.modules[hitLocation].gunIndex
+                    let weaponIndex: int = enemyShip.modules[
+                        hitLocation].gunIndex
                     if weaponIndex > -1:
                       enemyShip.modules[weaponIndex].durability = 0
                       removeGun(moduleIndex = weaponIndex,
@@ -530,7 +530,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
                 addMessage(message = shootMessage, mType = combatMessage,
                     color = yellow)
             else:
-              shootMessage = shootMessage & " and misses."
+              shootMessage &= " and misses."
               if ship.crew == playerShip.crew:
                 addMessage(message = shootMessage, mType = combatMessage, color = blue)
               else:
@@ -609,8 +609,8 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   speedBonus = 20 - (realSpeed(ship = playerShip) / 100).int
   if speedBonus < -10:
     speedBonus = -10
-  accuracyBonus = accuracyBonus + speedBonus
-  evadeBonus = evadeBonus - speedBonus
+  accuracyBonus += speedBonus
+  evadeBonus -= speedBonus
   var
     damageRange: Natural = 10_000
     enemyWeaponIndex: int = -1
@@ -710,8 +710,8 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   speedBonus = 20 - (realSpeed(ship = game.enemy.ship) / 100).int
   if speedBonus < -10:
     speedBonus = -10
-  accuracyBonus = accuracyBonus + speedBonus
-  evadeBonus = evadeBonus - speedBonus
+  accuracyBonus += speedBonus
+  evadeBonus -= speedBonus
   var distanceTraveled: int = if enemyPilotOrder < 4: -(realSpeed(
       ship = game.enemy.ship))
       else:
@@ -719,18 +719,18 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   if pilotIndex > -1:
     case pilotOrder
     of 1, 3:
-      distanceTraveled = distanceTraveled - realSpeed(ship = playerShip)
+      distanceTraveled -= realSpeed(ship = playerShip)
     of 2:
-      distanceTraveled = distanceTraveled + realSpeed(ship = playerShip)
+      distanceTraveled += realSpeed(ship = playerShip)
       if distanceTraveled > 0 and enemyPilotOrder != 4:
         distanceTraveled = 0
     of 4:
-      distanceTraveled = distanceTraveled + realSpeed(ship = playerShip)
+      distanceTraveled += realSpeed(ship = playerShip)
     else:
       discard
   else:
-    distanceTraveled = distanceTraveled - realSpeed(ship = playerShip)
-  game.enemy.distance = game.enemy.distance + distanceTraveled
+    distanceTraveled -= realSpeed(ship = playerShip)
+  game.enemy.distance += distanceTraveled
   if game.enemy.distance < 10:
     game.enemy.distance = 10
   if game.enemy.distance >= 15_000:
@@ -772,10 +772,9 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
 
       proc characterAttack(attackerIndex2, defenderIndex2: Natural;
           playerAttack2: bool): bool =
-        let
-          hitLocation: EquipmentLocations = getRandom(min = helmet.int,
+        let hitLocation: EquipmentLocations = getRandom(min = helmet.int,
               max = legs.int).EquipmentLocations
-          locationNames: array[helmet .. legs, string] = ["head", "torso",
+        const locationNames: array[helmet .. legs, string] = ["head", "torso",
               "arm", "leg"]
         var
           attacker: MemberData = if playerAttack2: playerShip.crew[attackerIndex2]
@@ -786,17 +785,17 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
               playerShip.crew[defenderIndex2]
           baseDamage: Natural = attacker.attributes[strengthIndex].level
         if attacker.equipment[weapon] > -1:
-          baseDamage = baseDamage + itemsList[attacker.inventory[
+          baseDamage += itemsList[attacker.inventory[
               attacker.equipment[weapon]].protoIndex].value[2]
         var
           wounds: float = 1.0 - (attacker.health.float / 100.0)
           damage: int = (baseDamage - (baseDamage.float * wounds.float).int)
         if attacker.thirst > 40:
           wounds = 1.0 - (attacker.thirst.float / 100.0)
-          damage = damage - (baseDamage.float * wounds.float).int
+          damage -= (baseDamage.float * wounds.float).int
         if attacker.hunger > 80:
           wounds = 1.0 - (attacker.hunger.float / 100.0)
-          damage = damage - (baseDamage.float * wounds.float).int
+          damage -= (baseDamage.float * wounds.float).int
         damage = if playerAttack2:
             (damage.float * newGameSettings.playerMeleeDamageBonus).int
           else:
@@ -992,7 +991,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
                 givenOrder = defend, moduleIndex = 0, checkPriorities = false)
           riposte = characterAttack(attackerIndex2 = attackerIndex,
               defenderIndex2 = defenderIndex, playerAttack2 = playerAttack)
-          if not endCombat and riposte:
+          if riposte and not endCombat:
             riposte = characterAttack(attackerIndex2 = defenderIndex,
                 defenderIndex2 = attackerIndex,
                 playerAttack2 = not playerAttack)
@@ -1045,14 +1044,14 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     updateGame(minutes = 1, inCombat = true)
   elif playerShip.crew[0].health > 0:
     var
-      wasBoarded = false
-      lootAmount = 0
+      wasBoarded: bool = false
+      lootAmount: Natural = 0
     if findMember(order = boarding) > -1:
       wasBoarded = true
     game.enemy.ship.modules[0].durability = 0
     addMessage(message = enemyName & " is destroyed!", mType = combatMessage)
     lootAmount = game.enemy.loot
-    var shipFreeSpace = freeCargo(amount = -lootAmount)
+    var shipFreeSpace: int = freeCargo(amount = -lootAmount)
     if shipFreeSpace < 0:
       lootAmount = lootAmount + shipFreeSpace
     if lootAmount > 0:
@@ -1062,7 +1061,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           amount = lootAmount)
     shipFreeSpace = freeCargo(amount = 0)
     if wasBoarded and shipFreeSpace > 0:
-      var message = "Additionally, your boarding party takes from " &
+      var message: string = "Additionally, your boarding party takes from " &
           enemyName & ":"
       for item in game.enemy.ship.cargo:
         lootAmount = (item.amount / 5).int
@@ -1086,14 +1085,14 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
       if currentStory.index.len == 0:
         startStory(factionName = factionName, condition = dropItem)
       else:
-        let step = if currentStory.currentStep == 0:
+        let step: StepData = if currentStory.currentStep == 0:
             storiesList[currentStory.index].startingStep
           elif currentStory.currentStep > 0:
             storiesList[currentStory.index].steps[currentStory.currentStep]
           else:
             storiesList[currentStory.index].finalStep
         if step.finishCondition == loot:
-          let stepData = currentStory.data.split(sep = ';')
+          let stepData: seq[string] = currentStory.data.split(sep = ';')
           if stepData[1] == "any" or stepData[1] == $enemyShipIndex:
             if progressStory():
               case step.finishCondition
@@ -1120,7 +1119,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
         playerShip.skyY].missionIndex].shipIndex].name == game.enemy.ship.name:
       updateMission(missionIndex = skyMap[playerShip.skyX][
           playerShip.skyY].missionIndex)
-    var lostReputationChance = 10
+    var lostReputationChance: Positive = 10
     if protoShipsList[enemyShipIndex].owner == playerShip.crew[0].faction:
       lostReputationChance = 40
     if getRandom(min = 1, max = 100) < lostReputationChance:
@@ -1131,7 +1130,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
       updateGoal(goalType = GoalTypes.destroy, targetIndex = protoShipsList[
           enemyShipIndex].owner)
     if currentStory.index.len > 0:
-      let finishCondition = if currentStory.currentStep == 0:
+      let finishCondition: StepConditionType = if currentStory.currentStep == 0:
           storiesList[currentStory.index].startingStep.finishCondition
         elif currentStory.currentStep > 0:
           storiesList[currentStory.index].steps[
@@ -1139,7 +1138,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
         else: storiesList[currentStory.index].finalStep.finishCondition
       if finishCondition != destroyShip:
         return
-      let storyData = currentStory.data.split(sep = ';')
+      let storyData: seq[string] = currentStory.data.split(sep = ';')
       if playerShip.skyX == storyData[0].parseInt and playerShip.skyY ==
           storyData[1].parseInt and enemyShipIndex == storyData[2].parseInt:
         if not progressStory(nextStep = true):
