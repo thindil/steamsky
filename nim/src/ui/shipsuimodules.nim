@@ -804,9 +804,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           countHeight = true, columnSpan = 4, wrapLength = tclEval2(
           script = "winfo reqwidth " & moduleFrame).parseInt)
   except:
-    tclEval(script = "bgerror {Can't show the description. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't show the description.")
   addCloseButton(name = moduleFrame & ".button", text = "Close",
       command = "CloseDialog " & moduleDialog, columnSpan = 4,
       row = currentRow + 1)
@@ -816,9 +814,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       height + tclEval2(script = "winfo reqheight " & moduleFrame &
         ".button").parseInt
     except:
-      tclEval(script = "bgerror {Can't count the height of the button (10). Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't count the height of the button (10).")
   if height > 500:
     height = 500
   tclEval(script = moduleCanvas & " create window 0 0 -anchor nw -window " & moduleFrame)
@@ -828,17 +824,13 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       height + 15 + tclEval2(script = "winfo reqheight " & moduleDialog &
         ".header").parseInt
     except:
-      tclEval(script = "bgerror {Can't count the height of the dialog. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't count the height of the dialog.")
   tclEval(script = "update")
   let width = try:
         tclEval2(script = "winfo reqwidth " & moduleFrame).parseInt +
           tclEval2(script = "winfo reqwidth " & yScroll).parseInt + 5
       except:
-        tclEval(script = "bgerror {Can't count the width of the dialog. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't count the widht of the dialog.")
   tclEval(script = moduleDialog & " configure -height " & $height & " -width " & $width)
   showDialog(dialog = moduleDialog, relativeX = 0.12, relativeY = 0.1)
   return tclOk
@@ -957,16 +949,12 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = try:
         ($argv[1]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the module index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the module index.")
     frameName = ".moduledialog.canvas.frame"
     crewIndex = try:
         (if argc == 3: ($argv[2]).parseInt else: -1)
       except:
-        tclEval(script = "bgerror {Can't get the crew index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the crew index.")
   if argc == 3:
     if tclGetVar(varName = frameName & ".crewbutton" & $argv[2]) == "0":
       for owner in playerShip.modules[moduleIndex].owner.mitems:
@@ -983,9 +971,7 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
             title = "Can't give a order")
         return tclOk
       except:
-        tclEval(script = "bgerror {Can't give order to a crew member. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give order to a crew member.")
     elif assignModuleCommand(clientData = clientData, interp = interp, argc = 4,
         argv = ["assignModule".cstring, "crew", argv[1], argv[2]]) != tclOk:
       return tclError
@@ -1030,9 +1016,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = try:
         ($argv[1]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the module index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the module index.")
     module = playerShip.modules[moduleIndex]
     moduleDialog = createDialog(name = ".moduledialog",
         title = "Assign a crew member to " & module.name, titleWidth = 250)
@@ -1055,9 +1039,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
         try:
           setRecipeData(recipeIndex = module.craftingIndex)
         except:
-          tclEval(script = "bgerror {Can't set the recipe. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't set the recipe.")
       else:
         CraftData()
   var
@@ -1081,16 +1063,12 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     height = try:
           height + tclEval2(script = "winfo reqheight " & crewButton).parseInt
       except:
-        tclEval(script = "bgerror {Can't set the height. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set the height.")
     try:
       if tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10 > width:
         width = tclEval2(script = "winfo reqwidth " & crewButton).parseInt + 10
     except:
-      tclEval(script = "bgerror {Can't set the width. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't set the width.")
     tclEval(script = "bind " & crewButton & " <Escape> {" & closeButton & " invoke;break}")
     tclEval(script = "bind " & crewButton & " <Tab> {focus [GetActiveButton " &
         $index & "];break}")
@@ -1104,16 +1082,12 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   height = try:
       height + tclEval2(script = "winfo reqheight " & infoLabel).parseInt
     except:
-      tclEval(script = "bgerror {Can't set the height2. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't set the height2.")
   try:
     if tclEval2(script = "winfo reqwidth " & infoLabel).parseInt > width:
       width = tclEval2(script = "winfo reqwidth " & infoLabel).parseInt
   except:
-    tclEval(script = "bgerror {Can't set the width2. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't set the width2.")
   if height > 500:
     height = 500
   tclEval(script = crewCanvas & " create window 0 0 -anchor nw -window " & crewFrame)
@@ -1144,9 +1118,7 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = try:
         ($argv[1]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get module index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the module index.")
     moduleDialog = createDialog(name = ".moduledialog",
         title = "Assign skill to " & playerShip.modules[moduleIndex].name,
         titleWidth = 400)
@@ -1164,9 +1136,7 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
           (if itemsList[protoIndex].showType.len > 0: itemsList[
               protoIndex].showType else: itemsList[protoIndex].itemType)
         except:
-          tclEval(script = "bgerror {Can't get the tool name. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't get the tool name.")
     var
       skillName = skill.name
       toolColor = "green"
@@ -1175,9 +1145,7 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
         skillName.add(y = " (no tool)")
         toolColor = "red"
     except:
-      tclEval(script = "bgerror {Can't check item amount. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't check item amount.")
     addButton(table = skillsTable, text = skillName, tooltip = "Press mouse " &
         (if gameSettings.rightButton: "right" else: "left") &
         " button to set as trained skill", command = "AssignModule skill " &
@@ -1222,9 +1190,7 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   let moduleIndex = try:
       ($argv[1]).parseInt - 1
     except:
-      tclEval(script = "bgerror {Can't get the module index. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't get the module index.")
   playerShip.modules[moduleIndex].craftingIndex = ""
   playerShip.modules[moduleIndex].craftingAmount = 0
   playerShip.modules[moduleIndex].craftingTime = 0
@@ -1237,9 +1203,7 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
             title = "Can't give a order")
         return tclOk
       except:
-        tclEval(script = "bgerror {Can't give rest order. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give rest order.")
   addMessage(message = "You cancelled crafting order in " & playerShip.modules[
       moduleIndex].name & ".", mType = craftMessage, color = red)
   updateMessages()
@@ -1265,9 +1229,7 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
   let crewIndex = try:
       ($argv[1]).parseInt
     except:
-      tclEval(script = "bgerror {Can't get the crew index. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't get the crew index.")
   var buttonName = ""
   for index, _ in playerShip.crew:
     buttonName = ".moduledialog.canvas.frame.crewbutton" & $index
@@ -1329,9 +1291,7 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = try:
         ($argv[1]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the module index. Reason: " &
-          getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the module index.")
     ammoIndex = (if playerShip.modules[moduleIndex].mType ==
         ModuleType2.gun: playerShip.modules[
         moduleIndex].ammoIndex else: playerShip.modules[
@@ -1359,9 +1319,7 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
                 " " & $index)
         row.inc
     except:
-      tclEval(script = "bgerror {Can't add button. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't add button.")
   addButton(name = ".close", label = "Close", command = "")
   showDialog(dialog = ammoMenu, parentFrame = ".")
   return tclOk
@@ -1385,8 +1343,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SortShipModules", sortShipModulesCommand)
     addCommand("ShowAssignAmmo", showAssignAmmoCommand)
   except:
-    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't add a Tcl command.")
 
 import shipsui
 
@@ -1396,8 +1353,7 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
     startUpgrading(moduleIndex = ($argv[2]).parseInt() - 1, upgradeType = (
         $argv[1]).parseInt)
   except:
-    tclEval(script = "bgerror {Can't set upgrade for the module. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't set upgrade for the module.")
   try:
     updateOrders(ship = playerShip)
   except:
