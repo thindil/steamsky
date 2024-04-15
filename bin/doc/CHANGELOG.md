@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing information about the selected crew member
+
 ## [9.9] - 2024-04-14
 
 ### Added
