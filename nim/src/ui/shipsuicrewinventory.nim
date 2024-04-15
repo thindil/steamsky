@@ -125,6 +125,21 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   memberIndex = localMemberIndex
   resetSelection()
+  let
+    memberDialog = createDialog(name = ".memberdialog",
+        title = "Inventory of " & playerShip.crew[memberIndex].name, columns = 2)
+    dialogCloseButton = memberDialog & ".button"
+  tclEval(script = "ttk::button " & dialogCloseButton &
+      " -image exiticon -command {CloseDialog " & memberDialog & "} -text {Close} -style Dialog.TButton")
+  tclEval(script = "tooltip::tooltip " & dialogCloseButton & " \"Close inventory \\[Escape key\\]\"")
+  let yScroll = memberDialog & ".yscroll"
+  tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .memberdialog.canvas yview]")
+  let memberCanvas = memberDialog & ".canvas"
+  tclEval(script = "canvas " & memberCanvas & " -yscrollcommand [list " &
+      yScroll & " set]")
+  tclEval(script = "grid " & memberCanvas & " -padx 5 -pady 5")
+  tclEval(script = "grid " & yScroll & " -row 1 -column 1 -padx 5 -pady 5 -sticky ns")
+  tclEval(script = "::autoscroll::autoscroll " & yScroll)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
