@@ -41,7 +41,7 @@ type
     ## * value - the data's value
     name, value: string
 
-  StepData = object
+  StepData* = object
     ## Used to store information about stories' steps
     ##
     ## * index           - the index of the step
