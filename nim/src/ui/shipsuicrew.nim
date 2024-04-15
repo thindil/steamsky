@@ -493,14 +493,14 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addLabel(name, text: string; text2: string = "") =
     let labelBox = name
-    tclEval(script = "ttk::frame " & labelBox & " -width 360")
+    tclEval(script = "ttk::frame " & labelBox & " -width 440")
     memberLabel = labelBox & ".label1"
-    tclEval(script = "ttk::label " & memberLabel & " -text {" & text & "} -wraplength 360")
+    tclEval(script = "ttk::label " & memberLabel & " -text {" & text & "} -wraplength 220")
     tclEval(script = "grid " & memberLabel & " -sticky w")
     tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
     if text2.len > 0:
       memberLabel = labelBox & ".label2"
-      tclEval(script = "ttk::label " & memberLabel & " -text {" & text2 & "} -wraplength 360 -style Golden.TLabel")
+      tclEval(script = "ttk::label " & memberLabel & " -text {" & text2 & "} -wraplength 220 -style Golden.TLabel")
       tclEval(script = "grid " & memberLabel & " -row 0 -column 1 -sticky w")
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
     tclEval(script = "grid " & labelBox & " -sticky w -padx 5")
