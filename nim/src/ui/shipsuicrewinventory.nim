@@ -157,6 +157,24 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & selectAllButton & " -sticky w")
   let unselectAllButton = buttonsBox & ".unselectallbutton"
   tclEval(script = "ttk::button " & unselectAllButton & " -image unselectallicon -command {ToggleInventory unselect} -style Small.TButton")
+  tclEval(script = "tooltip::tooltip " & selectAllButton & " \"Unselect all items.\"")
+  tclEval(script = "grid " & unselectAllButton & " -sticky w -row 0 -column 1")
+  height = height + tclEval2(script = "winfo reqheight " &
+      selectAllButton).parseInt
+  tclEval(script = "grid " & buttonsBox & " -sticky w -padx 5")
+  inventoryTable = createTable(parent = memberFrame, headers = @["", "Name",
+      "Durability", "Used", "Amount", "Weight"], scrollbar = yScroll,
+      command = "SortCrewInventory",
+      tooltipText = "Press mouse button to sort the inventory.")
+  discard updateInventoryCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
+  height = height + tclEval2(script = "winfo reqheight " & inventoryTable.canvas).parseInt
+  var width = tclEval2(script = "winfo reqwidth " & inventoryTable.canvas).parseInt
+  tclEval(script = "grid " & dialogCloseButton & " -pady 5")
+  tclEval(script = "focus " & inventoryTable.canvas)
+  tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " & selectAllButton & ";break}")
+  tclEval(script = "bind " & dialogCloseButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & selectAllButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & unselectAllButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
