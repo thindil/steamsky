@@ -140,6 +140,23 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & memberCanvas & " -padx 5 -pady 5")
   tclEval(script = "grid " & yScroll & " -row 1 -column 1 -padx 5 -pady 5 -sticky ns")
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
+  let memberFrame = memberCanvas & ".frame"
+  tclEval(script = "ttk::frame " & memberFrame)
+  let freeSpaceLabel = memberFrame & ".freespace"
+  tclEval(script = "ttk::label " & freeSpaceLabel &
+      " -text {Free inventory space: " & $freeInventory(
+      memberIndex = memberIndex, amount = 0) & " kg} -wraplength 400")
+  tclEval(script = "grid " & freeSpaceLabel)
+  var height = 10 + tclEval2(script = "winfo reqheight " &
+      freeSpaceLabel).parseInt
+  let buttonsBox = memberFrame & ".selectbox"
+  tclEval(script = "ttk::frame " & buttonsBox)
+  let selectAllButton = buttonsBox & ".selectallbutton"
+  tclEval(script = "ttk::button " & selectAllButton & " -image selectallicon -command {ToggleAllInventory select} -style Small.TButton")
+  tclEval(script = "tooltip::tooltip " & selectAllButton & " \"Select all items.\"")
+  tclEval(script = "grid " & selectAllButton & " -sticky w")
+  let unselectAllButton = buttonsBox & ".unselectallbutton"
+  tclEval(script = "ttk::button " & unselectAllButton & " -image unselectallicon -command {ToggleInventory unselect} -style Small.TButton")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
