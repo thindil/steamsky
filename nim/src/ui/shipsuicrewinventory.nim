@@ -115,8 +115,11 @@ proc resetSelection() =
       tclUnsetVar(varName = "invindex" & $(index + 1))
 
 proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let localMemberIndex = ($argv[1]).parseInt
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let localMemberIndex = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the member index.")
   if playerShip.crew[localMemberIndex].inventory.len == 0:
     tclEval(script = "CloseDialog .memberdialog")
     showMessage(text = playerShip.crew[localMemberIndex].name &
@@ -147,8 +150,11 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text {Free inventory space: " & $freeInventory(
       memberIndex = memberIndex, amount = 0) & " kg} -wraplength 400")
   tclEval(script = "grid " & freeSpaceLabel)
-  var height = 10 + tclEval2(script = "winfo reqheight " &
-      freeSpaceLabel).parseInt
+  var height = try:
+      10 + tclEval2(script = "winfo reqheight " &
+        freeSpaceLabel).parseInt
+    except:
+      return showError(message = "Can't count the height of the label.")
   let buttonsBox = memberFrame & ".selectbox"
   tclEval(script = "ttk::frame " & buttonsBox)
   let selectAllButton = buttonsBox & ".selectallbutton"
@@ -159,8 +165,11 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & unselectAllButton & " -image unselectallicon -command {ToggleInventory unselect} -style Small.TButton")
   tclEval(script = "tooltip::tooltip " & selectAllButton & " \"Unselect all items.\"")
   tclEval(script = "grid " & unselectAllButton & " -sticky w -row 0 -column 1")
-  height = height + tclEval2(script = "winfo reqheight " &
-      selectAllButton).parseInt
+  height = try:
+      height + tclEval2(script = "winfo reqheight " &
+        selectAllButton).parseInt
+    except:
+      return showError(message = "Can't count the height of the button.")
   tclEval(script = "grid " & buttonsBox & " -sticky w -padx 5")
   inventoryTable = createTable(parent = memberFrame, headers = @["", "Name",
       "Durability", "Used", "Amount", "Weight"], scrollbar = yScroll,
@@ -168,10 +177,16 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       tooltipText = "Press mouse button to sort the inventory.")
   discard updateInventoryCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
-  height = height + tclEval2(script = "winfo reqheight " &
-      inventoryTable.canvas).parseInt
-  var width = tclEval2(script = "winfo reqwidth " &
-      inventoryTable.canvas).parseInt
+  height = try:
+      height + tclEval2(script = "winfo reqheight " &
+        inventoryTable.canvas).parseInt
+    except:
+      return showError(message = "Can't count the height of the table.")
+  var width = try:
+      tclEval2(script = "winfo reqwidth " &
+        inventoryTable.canvas).parseInt
+    except:
+      return showError(message = "Can't count the width.")
   tclEval(script = "grid " & dialogCloseButton & " -pady 5")
   tclEval(script = "focus " & inventoryTable.canvas)
   tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " &
