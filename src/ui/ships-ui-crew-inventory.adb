@@ -25,17 +25,17 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas;
+-- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+-- with Tcl.Tk.Ada.Winfo;
+-- with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config;
 with CoreUI;
@@ -602,190 +602,190 @@ package body Ships.UI.Crew.Inventory is
    -- ShowMemberInventory memberindex
    -- MemberIndex is the index of the crew member to show inventory
    -- SOURCE
-   function Show_Member_Inventory_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Member_Inventory_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.Canvas;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Tcl.Tk.Ada.Winfo;
-      use Tcl.Tklib.Ada.Autoscroll;
-      use Tiny_String;
-
-      Local_Member_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Member_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".memberdialog",
-           Title =>
-             "Inventory of " &
-             To_String(Source => Player_Ship.Crew(Local_Member_Index).Name),
-           Columns => 2);
-      Y_Scroll: constant Ttk_Scrollbar :=
-        Create
-          (pathName => Member_Dialog & ".yscroll",
-           options =>
-             "-orient vertical -command [list .memberdialog.canvas yview]");
-      Member_Canvas: constant Tk_Canvas :=
-        Create
-          (pathName => Member_Dialog & ".canvas",
-           options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      Member_Frame: constant Ttk_Frame :=
-        Create(pathName => Member_Canvas & ".frame");
-      Height: Positive := 10;
-      Width: Positive;
-      Free_Space_Label: constant Ttk_Label :=
-        Create
-          (pathName => Member_Frame & ".freespace",
-           options =>
-             "-text {Free inventory space:" &
-             Integer'Image
-               (Free_Inventory
-                  (Member_Index =>
-                     Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-                   Amount => 0)) &
-             " kg} -wraplength 400");
-      Dialog_Close_Button: constant Ttk_Button :=
-        Create
-          (pathName => Member_Dialog & ".button",
-           options =>
-             "-image exiticon -command {CloseDialog " & Member_Dialog &
-             "} -text {Close} -style Dialog.TButton");
-      Buttons_Box: constant Ttk_Frame :=
-        Create(pathName => Member_Frame & ".selectbox");
-      Select_All_Button: constant Ttk_Button :=
-        Create
-          (pathName => Buttons_Box & ".selectallbutton",
-           options =>
-             "-image selectallicon -command {ToggleAllInventory select} -style Small.TButton");
-      Unselect_All_Button: constant Ttk_Button :=
-        Create
-          (pathName => Buttons_Box & ".unselectallbutton",
-           options =>
-             "-image unselectallicon -command {ToggleAllInventory unselect} -style Small.TButton");
-   begin
-      if Inventory_Container.Length
-          (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
-        0 then
-         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
-         Show_Message
-           (Text =>
-              To_String(Source => Player_Ship.Crew(Local_Member_Index).Name) &
-              " doesn't own any items.",
-            Title =>
-              "Inventory of " &
-              To_String(Source => Player_Ship.Crew(Local_Member_Index).Name));
-         return TCL_OK;
-      end if;
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Member_Index := Local_Member_Index;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Reset_Selection(Interp => Interp);
-      Add
-        (Widget => Dialog_Close_Button,
-         Message => "Close inventory \[Escape key\]");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Member_Canvas, Options => "-padx 5 -pady 5");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Y_Scroll,
-         Options => "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
-      Autoscroll(Scroll => Y_Scroll);
-      Tcl.Tk.Ada.Grid.Grid(Slave => Free_Space_Label);
-      Height :=
-        Height +
-        Positive'Value
-          (Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
-      Add(Widget => Select_All_Button, Message => "Select all items.");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Select_All_Button, Options => "-sticky w");
-      Add(Widget => Unselect_All_Button, Message => "Unselect all items.");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Unselect_All_Button,
-         Options => "-sticky w -row 0 -column 1");
-      Height :=
-        Height +
-        Positive'Value
-          (Winfo_Get(Widgt => Select_All_Button, Info => "reqheight"));
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Buttons_Box, Options => "-sticky w -padx 5");
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Inventory_Table :=
-        Create_Table
-          (Parent => Widget_Image(Win => Member_Frame),
-           Headers =>
-             (1 => To_Unbounded_String(Source => ""),
-              2 => To_Unbounded_String(Source => "Name"),
-              3 => To_Unbounded_String(Source => "Durability"),
-              4 => To_Unbounded_String(Source => "Used"),
-              5 => To_Unbounded_String(Source => "Amount"),
-              6 => To_Unbounded_String(Source => "Weight")),
-           Scrollbar => Y_Scroll, Command => "SortCrewInventory",
-           Tooltip_Text => "Press mouse button to sort the inventory.");
-      if Update_Inventory_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv) =
-        TCL_ERROR then
-         return TCL_ERROR;
-      end if;
-      Height :=
-        Height +
-        Positive'Value
-          (Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqheight"));
-      Width :=
-        Positive'Value
-          (Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqwidth"));
-      Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-pady 5");
-      Widgets.Focus(Widgt => Inventory_Table.Canvas);
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Select_All_Button & ";break}");
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Bind
-        (Widgt => Select_All_Button, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Bind
-        (Widgt => Unselect_All_Button, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Bind
-        (Widgt => Inventory_Table.Canvas, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Focus(Widgt => Dialog_Close_Button);
-      if Height > 500 then
-         Height := 500;
-      end if;
-      configure
-        (Widgt => Member_Frame,
-         options =>
-           "-height" & Positive'Image(Height) & " -width" &
-           Positive'Image(Width));
-      configure
-        (Widgt => Member_Canvas,
-         options =>
-           "-height" & Positive'Image(Height) & " -width" &
-           Positive'Image(Width + 15));
-      Canvas_Create
-        (Parent => Member_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Member_Frame);
-      Tcl_Eval(interp => Interp, strng => "update");
-      configure
-        (Widgt => Member_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
-      Show_Dialog
-        (Dialog => Member_Dialog, Relative_X => 0.2, Relative_Y => 0.2);
-      return TCL_OK;
-   end Show_Member_Inventory_Command;
+--   function Show_Member_Inventory_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Show_Member_Inventory_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tcl.Tk.Ada.Widgets.Canvas;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+--      use Tcl.Tk.Ada.Winfo;
+--      use Tcl.Tklib.Ada.Autoscroll;
+--      use Tiny_String;
+--
+--      Local_Member_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Member_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".memberdialog",
+--           Title =>
+--             "Inventory of " &
+--             To_String(Source => Player_Ship.Crew(Local_Member_Index).Name),
+--           Columns => 2);
+--      Y_Scroll: constant Ttk_Scrollbar :=
+--        Create
+--          (pathName => Member_Dialog & ".yscroll",
+--           options =>
+--             "-orient vertical -command [list .memberdialog.canvas yview]");
+--      Member_Canvas: constant Tk_Canvas :=
+--        Create
+--          (pathName => Member_Dialog & ".canvas",
+--           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+--      Member_Frame: constant Ttk_Frame :=
+--        Create(pathName => Member_Canvas & ".frame");
+--      Height: Positive := 10;
+--      Width: Positive;
+--      Free_Space_Label: constant Ttk_Label :=
+--        Create
+--          (pathName => Member_Frame & ".freespace",
+--           options =>
+--             "-text {Free inventory space:" &
+--             Integer'Image
+--               (Free_Inventory
+--                  (Member_Index =>
+--                     Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+--                   Amount => 0)) &
+--             " kg} -wraplength 400");
+--      Dialog_Close_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Member_Dialog & ".button",
+--           options =>
+--             "-image exiticon -command {CloseDialog " & Member_Dialog &
+--             "} -text {Close} -style Dialog.TButton");
+--      Buttons_Box: constant Ttk_Frame :=
+--        Create(pathName => Member_Frame & ".selectbox");
+--      Select_All_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Buttons_Box & ".selectallbutton",
+--           options =>
+--             "-image selectallicon -command {ToggleAllInventory select} -style Small.TButton");
+--      Unselect_All_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Buttons_Box & ".unselectallbutton",
+--           options =>
+--             "-image unselectallicon -command {ToggleAllInventory unselect} -style Small.TButton");
+--   begin
+--      if Inventory_Container.Length
+--          (Container => Player_Ship.Crew(Local_Member_Index).Inventory) =
+--        0 then
+--         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
+--         Show_Message
+--           (Text =>
+--              To_String(Source => Player_Ship.Crew(Local_Member_Index).Name) &
+--              " doesn't own any items.",
+--            Title =>
+--              "Inventory of " &
+--              To_String(Source => Player_Ship.Crew(Local_Member_Index).Name));
+--         return TCL_OK;
+--      end if;
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Member_Index := Local_Member_Index;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Reset_Selection(Interp => Interp);
+--      Add
+--        (Widget => Dialog_Close_Button,
+--         Message => "Close inventory \[Escape key\]");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Member_Canvas, Options => "-padx 5 -pady 5");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Y_Scroll,
+--         Options => "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
+--      Autoscroll(Scroll => Y_Scroll);
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Free_Space_Label);
+--      Height :=
+--        Height +
+--        Positive'Value
+--          (Winfo_Get(Widgt => Free_Space_Label, Info => "reqheight"));
+--      Add(Widget => Select_All_Button, Message => "Select all items.");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Select_All_Button, Options => "-sticky w");
+--      Add(Widget => Unselect_All_Button, Message => "Unselect all items.");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Unselect_All_Button,
+--         Options => "-sticky w -row 0 -column 1");
+--      Height :=
+--        Height +
+--        Positive'Value
+--          (Winfo_Get(Widgt => Select_All_Button, Info => "reqheight"));
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Buttons_Box, Options => "-sticky w -padx 5");
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Inventory_Table :=
+--        Create_Table
+--          (Parent => Widget_Image(Win => Member_Frame),
+--           Headers =>
+--             (1 => To_Unbounded_String(Source => ""),
+--              2 => To_Unbounded_String(Source => "Name"),
+--              3 => To_Unbounded_String(Source => "Durability"),
+--              4 => To_Unbounded_String(Source => "Used"),
+--              5 => To_Unbounded_String(Source => "Amount"),
+--              6 => To_Unbounded_String(Source => "Weight")),
+--           Scrollbar => Y_Scroll, Command => "SortCrewInventory",
+--           Tooltip_Text => "Press mouse button to sort the inventory.");
+--      if Update_Inventory_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv) =
+--        TCL_ERROR then
+--         return TCL_ERROR;
+--      end if;
+--      Height :=
+--        Height +
+--        Positive'Value
+--          (Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqheight"));
+--      Width :=
+--        Positive'Value
+--          (Winfo_Get(Widgt => Inventory_Table.Canvas, Info => "reqwidth"));
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Dialog_Close_Button, Options => "-pady 5");
+--      Widgets.Focus(Widgt => Inventory_Table.Canvas);
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
+--         Script => "{focus " & Select_All_Button & ";break}");
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Bind
+--        (Widgt => Select_All_Button, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Bind
+--        (Widgt => Unselect_All_Button, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Bind
+--        (Widgt => Inventory_Table.Canvas, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Focus(Widgt => Dialog_Close_Button);
+--      if Height > 500 then
+--         Height := 500;
+--      end if;
+--      configure
+--        (Widgt => Member_Frame,
+--         options =>
+--           "-height" & Positive'Image(Height) & " -width" &
+--           Positive'Image(Width));
+--      configure
+--        (Widgt => Member_Canvas,
+--         options =>
+--           "-height" & Positive'Image(Height) & " -width" &
+--           Positive'Image(Width + 15));
+--      Canvas_Create
+--        (Parent => Member_Canvas, Child_Type => "window",
+--         Options => "0 0 -anchor nw -window " & Member_Frame);
+--      Tcl_Eval(interp => Interp, strng => "update");
+--      configure
+--        (Widgt => Member_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
+--      Show_Dialog
+--        (Dialog => Member_Dialog, Relative_X => 0.2, Relative_Y => 0.2);
+--      return TCL_OK;
+--   end Show_Member_Inventory_Command;
 
    -- ****o* SUCI/SUCI.Set_Use_Item_Command
    -- FUNCTION
@@ -1562,9 +1562,9 @@ package body Ships.UI.Crew.Inventory is
 
    procedure Add_Inventory_Commands is
    begin
-      Add_Command
-        (Name => "ShowMemberInventory",
-         Ada_Command => Show_Member_Inventory_Command'Access);
+--      Add_Command
+--        (Name => "ShowMemberInventory",
+--         Ada_Command => Show_Member_Inventory_Command'Access);
       Add_Command
         (Name => "SetUseItem", Ada_Command => Set_Use_Item_Command'Access);
       Add_Command

@@ -166,20 +166,41 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       "Durability", "Used", "Amount", "Weight"], scrollbar = yScroll,
       command = "SortCrewInventory",
       tooltipText = "Press mouse button to sort the inventory.")
-  discard updateInventoryCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
-  height = height + tclEval2(script = "winfo reqheight " & inventoryTable.canvas).parseInt
-  var width = tclEval2(script = "winfo reqwidth " & inventoryTable.canvas).parseInt
+  discard updateInventoryCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+  height = height + tclEval2(script = "winfo reqheight " &
+      inventoryTable.canvas).parseInt
+  var width = tclEval2(script = "winfo reqwidth " &
+      inventoryTable.canvas).parseInt
   tclEval(script = "grid " & dialogCloseButton & " -pady 5")
   tclEval(script = "focus " & inventoryTable.canvas)
-  tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " & selectAllButton & ";break}")
-  tclEval(script = "bind " & dialogCloseButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
-  tclEval(script = "bind " & selectAllButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
-  tclEval(script = "bind " & unselectAllButton & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " &
+      selectAllButton & ";break}")
+  tclEval(script = "bind " & dialogCloseButton & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & selectAllButton & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & unselectAllButton & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & inventoryTable.canvas & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
+  tclEval(script = "focus " & dialogCloseButton)
+  if height > 500:
+    height = 500
+  tclEval(script = memberFrame & " configure -height " & $height & " -width " & $width)
+  tclEval(script = memberCanvas & " configure -height " & $height & " -width " &
+      $(width + 15))
+  tclEval(script = memberCanvas & " create window 0 0 -anchor nw -window " & memberFrame)
+  tclEval(script = "update")
+  tclEval(script = memberCanvas & " configure -scrollregion [list " & tclEval2(
+      script = memberCanvas & " bbox all") & "]")
+  showDialog(dialog = memberDialog, relativeX = 0.2, relativeY = 0.2)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("UpdateInventory", updateInventoryCommand)
+    addCommand("ShowMemberInventory", showMemberInventoryCommand)
   except:
     showError(message = "Can't add a Tcl command.")
