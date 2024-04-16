@@ -1370,15 +1370,11 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     moduleIndex = try:
         ($argv[2]).parseInt - 1
       except:
-        tclEval(script = "bgerror {Can't get the module index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the module index.")
     assignIndex = try:
         ($argv[3]).parseInt
       except:
-        tclEval(script = "bgerror {Can't get the assing index. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't get the assing index.")
   if argv[1] == "crew":
 
     proc updateOrder(order: CrewOrders) {.sideEffect, raises: [KeyError,
@@ -1425,9 +1421,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       showMessage(text = getCurrentExceptionMsg(), title = "Can't assign crew")
       return tclOk
     except:
-      tclEval(script = "bgerror {Can't assign crew member to the module. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't assign crew member to the module.")
   elif argv[1] == "ammo":
     if playerShip.modules[moduleIndex].mType == ModuleType2.gun:
       playerShip.modules[moduleIndex].ammoIndex = assignIndex
@@ -1438,9 +1432,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
           assignIndex].protoIndex].name & " to " & playerShip.modules[
           moduleIndex].name & ".", mType = orderMessage)
     except:
-      tclEval(script = "bgerror {Can't show message about assigned ammo. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't show message about assigned ammo.")
   elif argv[1] == "skill":
     if playerShip.modules[moduleIndex].trainedSkill == assignIndex:
       return tclOk
@@ -1450,9 +1442,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
           moduleIndex].name & " for training " & skillsList[assignIndex].name &
           ".", mType = orderMessage)
     except:
-      tclEval(script = "bgerror {Can't show message about assigned skill. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't show message about assigned skill.")
     updateMessages()
     return tclOk
   updateMessages()
@@ -1464,9 +1454,7 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
   let moduleIndex = try:
       ($argv[1]).parseInt - 1
     except:
-      tclEval(script = "bgerror {Can't set module index. Reason: " &
-          getCurrentExceptionMsg() & "}")
-      return tclOk
+      return showError(message = "Can't set module index.")
   if playerShip.modules[moduleIndex].disabled:
     playerShip.modules[moduleIndex].disabled = false
     addMessage(message = "You enabled " & playerShip.modules[moduleIndex].name &
@@ -1501,9 +1489,7 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
             title = "Can't give orders")
         return tclOk
       except:
-        tclEval(script = "bgerror {Can't give orders to a crew member. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't give orders to a crew member.")
       break
   addMessage(message = "You stopped current upgrade.", mType = orderMessage)
   updateMessages()
@@ -1517,9 +1503,7 @@ proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
     playerShip.repairModule = try:
         ($argv[2]).parseInt
       except:
-        tclEval(script = "bgerror {Can't set the repair priority. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk
+        return showError(message = "Can't set the repair priority.")
     addMessage(message = "You assigned " & playerShip.modules[
         playerShip.repairModule].name & " as the repair's priority.",
         mType = orderMessage)
@@ -1545,8 +1529,7 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     updateModulesInfo(page = ($argv[1]).parseInt)
   except:
-    tclEval(script = "bgerror {Can't update modules info. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't update modules info.")
   return tclOk
 
 type ModulesSortOrders = enum
@@ -1561,9 +1544,7 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   let column = getColumnNumber(table = modulesTable, xPosition = try:
         ($argv[1]).parseInt
       except:
-        tclEval(script = "bgerror {Can't get the column number. Reason: " &
-            getCurrentExceptionMsg() & "}")
-        return tclOk)
+        return showError(message = "Can't get the column number."))
   case column
   of 1:
     if modulesSortOrder == nameAsc:
