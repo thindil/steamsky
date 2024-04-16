@@ -225,7 +225,9 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 type InventorySortOrders = enum
-  selectedAsc, selectedDesc, nameAsc, nameDesc, durabilityAsc, durabilityDesc, typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, useAsc, useDesc, none
+  selectedAsc, selectedDesc, nameAsc, nameDesc, durabilityAsc, durabilityDesc,
+    typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, useAsc,
+    useDesc, none
 
 const defaultInventorySortOrder: InventorySortOrders = none
 
@@ -233,7 +235,8 @@ var inventorySortOrder = defaultInventorySortOrder
 
 proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(table = inventoryTable, xPosition = ($argv[1]).parseInt))
+  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(
+      table = inventoryTable, xPosition = ($argv[1]).parseInt))
   case column
   of 1:
     if inventorySortOrder == selectedAsc:
@@ -267,6 +270,24 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       inventorySortOrder = weightAsc
   else:
     discard
+  if inventorySortOrder == none:
+    return updateInventoryCommand(clientData = clientData, interp = interp,
+        argc = 2, argv = @["UpdateInventory".cstring, ($memberIndex).cstring])
+  type LocalItemData = object
+    selected: bool
+    name: string
+    damage: float
+    itemType: string
+    amount: Positive
+    weight: Positive
+    used: bool
+    id: Natural
+  var localInventory: seq[LocalItemData]
+  for index, item in inventoryIndexes:
+    localInventory.add(LocalItemData(selected: tclGetVar(varName = "invindex" &
+        $(index + 1)) == "1", name: getItemName(item = playerShip.crew[
+        memberIndex].inventory[item], damageInfo = false, toLower = false),
+        amount: 1, weight: 1))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
