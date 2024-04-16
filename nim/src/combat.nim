@@ -733,7 +733,22 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
   game.enemy.distance += distanceTraveled
   if game.enemy.distance < 10:
     game.enemy.distance = 10
-  if game.enemy.distance >= 15_000:
+  case game.enemy.distance:
+  of 0 .. 999:
+    accuracyBonus = accuracyBonus + 20
+    evadeBonus = evadeBonus - 10
+    logMessage(message = "Distance: short or close",
+        debugType = DebugTypes.combat)
+  of 1_000 .. 4_999:
+    accuracyBonus = accuracyBonus + 10
+    logMessage(message = "Distance: medium", debugType = DebugTypes.combat)
+  of 5_000 .. 9_999:
+    discard
+  of 10_000 .. 14_999:
+    accuracyBonus = accuracyBonus - 10
+    evadeBonus = evadeBonus + 10
+    logMessage(message = "Distance: long", debugType = DebugTypes.combat)
+  else:
     if pilotOrder == 4:
       addMessage(message = "You escaped the " & enemyName & ".",
           mType = combatMessage)
@@ -746,18 +761,6 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
             createBody = false)
     endCombat = true
     return
-  elif game.enemy.distance < 15_000 and game.enemy.distance >= 10_000:
-    accuracyBonus = accuracyBonus - 10
-    evadeBonus = evadeBonus + 10
-    logMessage(message = "Distance: long", debugType = DebugTypes.combat)
-  elif game.enemy.distance < 5_000 and game.enemy.distance >= 1_000:
-    accuracyBonus = accuracyBonus + 10
-    logMessage(message = "Distance: medium", debugType = DebugTypes.combat)
-  elif game.enemy.distance < 1_000:
-    accuracyBonus = accuracyBonus + 20
-    evadeBonus = evadeBonus - 10
-    logMessage(message = "Distance: short or close",
-        debugType = DebugTypes.combat)
   attack(ship = playerShip, enemyShip = game.enemy.ship)
   if not endCombat:
     attack(ship = game.enemy.ship, enemyShip = playerShip)
@@ -815,20 +818,20 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
             skillIndex = dodgeSkill) + getRandom(min = 1, max = 50))
         for i in helmet .. legs:
           if defender.equipment[i] > -1:
-            hitChance = hitChance + itemsList[defender.inventory[
+            hitChance += itemsList[defender.inventory[
                 defender.equipment[i]].protoIndex].value[3]
         if defender.equipment[hitLocation] > -1:
-          damage = damage - itemsList[defender.inventory[defender.equipment[
+          damage -= itemsList[defender.inventory[defender.equipment[
               hitLocation]].protoIndex].value[2]
         if defender.equipment[shield] > -1:
-          damage = damage - itemsList[defender.inventory[defender.equipment[
+          damage -= itemsList[defender.inventory[defender.equipment[
               shield]].protoIndex].value[2]
         if attacker.equipment[weapon] == -1:
           var damageBonus: float = getSkillLevel(member = attacker,
               skillIndex = unarmedSkill) / 200
           if damageBonus == 0:
             damageBonus = 1
-          damage = damage + damageBonus.int
+          damage += damageBonus.int
         let faction: FactionData = factionsList[defender.faction]
         if "naturalarmor" in faction.flags:
           damage = (damage / 2).int
@@ -854,7 +857,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
               attacker.name & " (" & factionName & ") attacks " & defender.name
           messageColor: MessageColor = white
         if hitChance < 1:
-          attackMessage = attackMessage & " and misses."
+          attackMessage &= " and misses."
           messageColor = if playerAttack: blue else: cyan
           if not playerAttack:
             gainExp(amount = 2, skillNumber = dodgeSkill,
@@ -1053,7 +1056,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     lootAmount = game.enemy.loot
     var shipFreeSpace: int = freeCargo(amount = -lootAmount)
     if shipFreeSpace < 0:
-      lootAmount = lootAmount + shipFreeSpace
+      lootAmount += shipFreeSpace
     if lootAmount > 0:
       addMessage(message = "You looted " & $lootAmount & " " & moneyName &
           " from " & enemyName & ".", mType = combatMessage)
@@ -1072,7 +1075,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           lootAmount = 0
         if lootAmount > 0:
           if item != game.enemy.ship.cargo[0]:
-            message = message & ","
+            message &= ","
           updateCargo(ship = playerShip, protoIndex = item.protoIndex,
               amount = lootAmount)
           message = message & " " & $lootAmount & " " & itemsList[
@@ -1095,12 +1098,9 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
           let stepData: seq[string] = currentStory.data.split(sep = ';')
           if stepData[1] == "any" or stepData[1] == $enemyShipIndex:
             if progressStory():
-              case step.finishCondition
-              of loot:
+              if step.finishCondition == loot:
                 updateCargo(ship = playerShip, protoIndex = stepData[
                     0].parseInt, amount = 1)
-              else:
-                discard
     for mIndex, member in playerShip.crew:
       if member.order in {boarding, defend}:
         giveOrders(ship = playerShip, memberIndex = mIndex, givenOrder = rest)
