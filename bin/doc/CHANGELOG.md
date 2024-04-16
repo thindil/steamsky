@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Updated modding guide
 - Updated look of the dialog used to start a crafting order
-- Updated look of the dialog used to assing an order to the player's ship's
+- Updated look of the dialog used to assign an order to the player's ship's
   crew member
 
 ### Fixed
