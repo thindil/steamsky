@@ -224,6 +224,51 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = memberDialog, relativeX = 0.2, relativeY = 0.2)
   return tclOk
 
+type InventorySortOrders = enum
+  selectedAsc, selectedDesc, nameAsc, nameDesc, durabilityAsc, durabilityDesc, typeAsc, typeDesc, amountAsc, amountDesc, weightAsc, weightDesc, useAsc, useDesc, none
+
+const defaultInventorySortOrder: InventorySortOrders = none
+
+var inventorySortOrder = defaultInventorySortOrder
+
+proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(table = inventoryTable, xPosition = ($argv[1]).parseInt))
+  case column
+  of 1:
+    if inventorySortOrder == selectedAsc:
+      inventorySortOrder = selectedDesc
+    else:
+      inventorySortOrder = selectedAsc
+  of 2:
+    if inventorySortOrder == nameAsc:
+      inventorySortOrder = nameDesc
+    else:
+      inventorySortOrder = nameAsc
+  of 3:
+    if inventorySortOrder == durabilityAsc:
+      inventorySortOrder = durabilityDesc
+    else:
+      inventorySortOrder = durabilityAsc
+  of 4:
+    if inventorySortOrder == useAsc:
+      inventorySortOrder = useDesc
+    else:
+      inventorySortOrder = useAsc
+  of 5:
+    if inventorySortOrder == amountAsc:
+      inventorySortOrder = amountDesc
+    else:
+      inventorySortOrder = amountAsc
+  of 6:
+    if inventorySortOrder == weightAsc:
+      inventorySortOrder = weightDesc
+    else:
+      inventorySortOrder = weightAsc
+  else:
+    discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
