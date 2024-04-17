@@ -207,6 +207,108 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       debugType = DebugTypes.combat)
   return true
 
+proc finishCombat() {.sideEffect, raises: [KeyError, ValueError, CrewOrderError,
+    CrewNoSpaceError, IOError, Exception], tags: [RootEffect], contractual.} =
+  ## Finish the combat when the player wins, count loot and show information
+  ## about it. Also update statistics plus the current goal.
+  var
+    wasBoarded: bool = false
+    lootAmount: Natural = 0
+  if findMember(order = boarding) > -1:
+    wasBoarded = true
+  game.enemy.ship.modules[0].durability = 0
+  addMessage(message = enemyName & " is destroyed!", mType = combatMessage)
+  lootAmount = game.enemy.loot
+  var shipFreeSpace: int = freeCargo(amount = -lootAmount)
+  if shipFreeSpace < 0:
+    lootAmount += shipFreeSpace
+  if lootAmount > 0:
+    addMessage(message = "You looted " & $lootAmount & " " & moneyName &
+        " from " & enemyName & ".", mType = combatMessage)
+    updateCargo(ship = playerShip, protoIndex = moneyIndex,
+        amount = lootAmount)
+  shipFreeSpace = freeCargo(amount = 0)
+  if wasBoarded and shipFreeSpace > 0:
+    var message: string = "Additionally, your boarding party takes from " &
+        enemyName & ":"
+    for item in game.enemy.ship.cargo:
+      lootAmount = (item.amount / 5).int
+      shipFreeSpace = freeCargo(amount = -lootAmount)
+      if shipFreeSpace < 0:
+        lootAmount += shipFreeSpace
+      if itemsList[item.protoIndex].price == 0 and item.protoIndex != moneyIndex:
+        lootAmount = 0
+      if lootAmount > 0:
+        if item != game.enemy.ship.cargo[0]:
+          message &= ","
+        updateCargo(ship = playerShip, protoIndex = item.protoIndex,
+            amount = lootAmount)
+        message = message & " " & $lootAmount & " " & itemsList[
+            item.protoIndex].name
+        shipFreeSpace = freeCargo(amount = 0)
+        if item == game.enemy.ship.cargo[game.enemy.ship.cargo.high] or
+            shipFreeSpace == 0:
+          break
+    addMessage(message = message & ".", mType = combatMessage)
+    if currentStory.index.len == 0:
+      startStory(factionName = factionName, condition = dropItem)
+    else:
+      let step: StepData = if currentStory.currentStep == 0:
+          storiesList[currentStory.index].startingStep
+        elif currentStory.currentStep > 0:
+          storiesList[currentStory.index].steps[currentStory.currentStep]
+        else:
+          storiesList[currentStory.index].finalStep
+      if step.finishCondition == loot:
+        let stepData: seq[string] = currentStory.data.split(sep = ';')
+        if stepData[1] == "any" or stepData[1] == $enemyShipIndex:
+          if progressStory():
+            if step.finishCondition == loot:
+              updateCargo(ship = playerShip, protoIndex = stepData[
+                  0].parseInt, amount = 1)
+  for mIndex, member in playerShip.crew:
+    if member.order in {boarding, defend}:
+      giveOrders(ship = playerShip, memberIndex = mIndex, givenOrder = rest)
+  game.enemy.ship.speed = fullStop
+  playerShip.speed = oldSpeed
+  if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
+    if eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].eType == attackOnBase:
+      gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 5)
+    deleteEvent(eventIndex = skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex)
+  if skyMap[playerShip.skyX][playerShip.skyY].missionIndex > -1 and
+      acceptedMissions[skyMap[playerShip.skyX][
+      playerShip.skyY].missionIndex].mType == destroy and protoShipsList[
+      acceptedMissions[skyMap[playerShip.skyX][
+      playerShip.skyY].missionIndex].shipIndex].name == game.enemy.ship.name:
+    updateMission(missionIndex = skyMap[playerShip.skyX][
+        playerShip.skyY].missionIndex)
+  var lostReputationChance: Positive = 10
+  if protoShipsList[enemyShipIndex].owner == playerShip.crew[0].faction:
+    lostReputationChance = 40
+  if getRandom(min = 1, max = 100) < lostReputationChance:
+    gainRep(baseIndex = game.enemy.ship.homeBase, points = -100)
+  updateDestroyedShips(shipName = game.enemy.ship.name)
+  updateGoal(goalType = GoalTypes.destroy, targetIndex = $enemyShipIndex)
+  if currentGoal.targetIndex.len > 0:
+    updateGoal(goalType = GoalTypes.destroy, targetIndex = protoShipsList[
+        enemyShipIndex].owner)
+  if currentStory.index.len > 0:
+    let finishCondition: StepConditionType = if currentStory.currentStep == 0:
+        storiesList[currentStory.index].startingStep.finishCondition
+      elif currentStory.currentStep > 0:
+        storiesList[currentStory.index].steps[
+            currentStory.currentStep].finishCondition
+      else: storiesList[currentStory.index].finalStep.finishCondition
+    if finishCondition != destroyShip:
+      return
+    let storyData: seq[string] = currentStory.data.split(sep = ';')
+    if playerShip.skyX == storyData[0].parseInt and playerShip.skyY ==
+        storyData[1].parseInt and enemyShipIndex == storyData[2].parseInt:
+      if not progressStory(nextStep = true):
+        return
+
 proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
@@ -1046,103 +1148,7 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
       updateOrders(ship = playerShip, combat = true)
     updateGame(minutes = 1, inCombat = true)
   elif playerShip.crew[0].health > 0:
-    var
-      wasBoarded: bool = false
-      lootAmount: Natural = 0
-    if findMember(order = boarding) > -1:
-      wasBoarded = true
-    game.enemy.ship.modules[0].durability = 0
-    addMessage(message = enemyName & " is destroyed!", mType = combatMessage)
-    lootAmount = game.enemy.loot
-    var shipFreeSpace: int = freeCargo(amount = -lootAmount)
-    if shipFreeSpace < 0:
-      lootAmount += shipFreeSpace
-    if lootAmount > 0:
-      addMessage(message = "You looted " & $lootAmount & " " & moneyName &
-          " from " & enemyName & ".", mType = combatMessage)
-      updateCargo(ship = playerShip, protoIndex = moneyIndex,
-          amount = lootAmount)
-    shipFreeSpace = freeCargo(amount = 0)
-    if wasBoarded and shipFreeSpace > 0:
-      var message: string = "Additionally, your boarding party takes from " &
-          enemyName & ":"
-      for item in game.enemy.ship.cargo:
-        lootAmount = (item.amount / 5).int
-        shipFreeSpace = freeCargo(amount = -lootAmount)
-        if shipFreeSpace < 0:
-          lootAmount = lootAmount + shipFreeSpace
-        if itemsList[item.protoIndex].price == 0 and item.protoIndex != moneyIndex:
-          lootAmount = 0
-        if lootAmount > 0:
-          if item != game.enemy.ship.cargo[0]:
-            message &= ","
-          updateCargo(ship = playerShip, protoIndex = item.protoIndex,
-              amount = lootAmount)
-          message = message & " " & $lootAmount & " " & itemsList[
-              item.protoIndex].name
-          shipFreeSpace = freeCargo(amount = 0)
-          if item == game.enemy.ship.cargo[game.enemy.ship.cargo.high] or
-              shipFreeSpace == 0:
-            break
-      addMessage(message = message & ".", mType = combatMessage)
-      if currentStory.index.len == 0:
-        startStory(factionName = factionName, condition = dropItem)
-      else:
-        let step: StepData = if currentStory.currentStep == 0:
-            storiesList[currentStory.index].startingStep
-          elif currentStory.currentStep > 0:
-            storiesList[currentStory.index].steps[currentStory.currentStep]
-          else:
-            storiesList[currentStory.index].finalStep
-        if step.finishCondition == loot:
-          let stepData: seq[string] = currentStory.data.split(sep = ';')
-          if stepData[1] == "any" or stepData[1] == $enemyShipIndex:
-            if progressStory():
-              if step.finishCondition == loot:
-                updateCargo(ship = playerShip, protoIndex = stepData[
-                    0].parseInt, amount = 1)
-    for mIndex, member in playerShip.crew:
-      if member.order in {boarding, defend}:
-        giveOrders(ship = playerShip, memberIndex = mIndex, givenOrder = rest)
-    game.enemy.ship.speed = fullStop
-    playerShip.speed = oldSpeed
-    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
-      if eventsList[skyMap[playerShip.skyX][
-          playerShip.skyY].eventIndex].eType == attackOnBase:
-        gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex, points = 5)
-      deleteEvent(eventIndex = skyMap[playerShip.skyX][
-          playerShip.skyY].eventIndex)
-    if skyMap[playerShip.skyX][playerShip.skyY].missionIndex > -1 and
-        acceptedMissions[skyMap[playerShip.skyX][
-        playerShip.skyY].missionIndex].mType == destroy and protoShipsList[
-        acceptedMissions[skyMap[playerShip.skyX][
-        playerShip.skyY].missionIndex].shipIndex].name == game.enemy.ship.name:
-      updateMission(missionIndex = skyMap[playerShip.skyX][
-          playerShip.skyY].missionIndex)
-    var lostReputationChance: Positive = 10
-    if protoShipsList[enemyShipIndex].owner == playerShip.crew[0].faction:
-      lostReputationChance = 40
-    if getRandom(min = 1, max = 100) < lostReputationChance:
-      gainRep(baseIndex = game.enemy.ship.homeBase, points = -100)
-    updateDestroyedShips(shipName = game.enemy.ship.name)
-    updateGoal(goalType = GoalTypes.destroy, targetIndex = $enemyShipIndex)
-    if currentGoal.targetIndex.len > 0:
-      updateGoal(goalType = GoalTypes.destroy, targetIndex = protoShipsList[
-          enemyShipIndex].owner)
-    if currentStory.index.len > 0:
-      let finishCondition: StepConditionType = if currentStory.currentStep == 0:
-          storiesList[currentStory.index].startingStep.finishCondition
-        elif currentStory.currentStep > 0:
-          storiesList[currentStory.index].steps[
-              currentStory.currentStep].finishCondition
-        else: storiesList[currentStory.index].finalStep.finishCondition
-      if finishCondition != destroyShip:
-        return
-      let storyData: seq[string] = currentStory.data.split(sep = ';')
-      if playerShip.skyX == storyData[0].parseInt and playerShip.skyY ==
-          storyData[1].parseInt and enemyShipIndex == storyData[2].parseInt:
-        if not progressStory(nextStep = true):
-          return
+    finishCombat()
 
 # Temporary code for interfacing with Ada
 
