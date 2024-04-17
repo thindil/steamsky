@@ -31,7 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Tooltip;
 with Config;
 with CoreUI;
 with Crew.Inventory; use Crew.Inventory;
@@ -64,6 +64,7 @@ package body Ships.UI.Crew.Inventory is
    Inventory_Indexes: Positive_Container.Vector;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****o* SUCI/SUCI.Update_Inventory_Command
    -- FUNCTION
    -- Update inventory list of the selected crew member
@@ -247,6 +248,7 @@ package body Ships.UI.Crew.Inventory is
       Update_Table(Table => Inventory_Table);
       return TCL_OK;
    end Update_Inventory_Command;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****it* SUCI/SUCI.Inventory_Sort_Orders
    -- FUNCTION
@@ -711,6 +713,7 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tklib.Ada.Tooltip;
 
       Item_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
