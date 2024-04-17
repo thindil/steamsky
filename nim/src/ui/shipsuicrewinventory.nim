@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[config, crewinventory, game, items, tk]
 import dialogs, table
 
@@ -298,6 +298,84 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
             itemsList[playerShip.crew[memberIndex].inventory[
             item].protoIndex].weight, used: itemIsUsed(
             memberIndex = memberIndex, itemIndex = index), id: index))
+  proc sortInventory(x, y: LocalItemData): int =
+    case inventorySortOrder
+    of selectedAsc:
+      if x.selected < y.selected:
+        return 1
+      else:
+        return -1
+    of selectedDesc:
+      if x.selected > y.selected:
+        return 1
+      else:
+        return -1
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of durabilityAsc:
+      if x.damage < y.damage:
+        return 1
+      else:
+        return -1
+    of durabilityDesc:
+      if x.damage > y.damage:
+        return 1
+      else:
+        return -1
+    of typeAsc:
+      if x.itemType < y.itemType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.itemType > y.itemType:
+        return 1
+      else:
+        return -1
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      else:
+        return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      else:
+        return -1
+    of weightAsc:
+      if x.weight < y.weight:
+        return 1
+      else:
+        return -1
+    of weightDesc:
+      if x.weight > y.weight:
+        return 1
+      else:
+        return -1
+    of useAsc:
+      if x.used < y.used:
+        return 1
+      else:
+        return -1
+    of useDesc:
+      if x.used > y.used:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localInventory.sort(cmp = sortInventory)
+  inventoryIndexes = @[]
+  for item in localInventory:
+    inventoryIndexes.add(y = item.id)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
