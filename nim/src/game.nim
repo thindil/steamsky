@@ -422,8 +422,7 @@ proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc.} =
     discard
 
 proc setAdaGameString(name: cstring): cstring {.raises: [], tags: [], exportc.} =
-  case $name
-  of "playerCareer":
+  if name == "playerCareer":
     return playerCareer.cstring
   return "".cstring
 
