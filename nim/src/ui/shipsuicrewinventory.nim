@@ -234,9 +234,12 @@ const defaultInventorySortOrder: InventorySortOrders = none
 var inventorySortOrder = defaultInventorySortOrder
 
 proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
-  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(
-      table = inventoryTable, xPosition = ($argv[1]).parseInt))
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+  let column = try:
+      (if argv[1] == "-1": Positive.high else: getColumnNumber(
+        table = inventoryTable, xPosition = ($argv[1]).parseInt))
+    except:
+      return showError(message = "Can't get column number.")
   case column
   of 1:
     if inventorySortOrder == selectedAsc:
@@ -284,20 +287,24 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     id: Natural = 0
   var localInventory: seq[LocalItemData]
   for index, _ in inventoryIndexes:
-    localInventory.add(LocalItemData(selected: tclGetVar(varName = "invindex" &
-        $(index + 1)) == "1", name: getItemName(item = playerShip.crew[
-            memberIndex].inventory[index], damageInfo = false, toLower = false),
-            damage: playerShip.crew[memberIndex].inventory[
-            index].durability.float / defaultItemDurability.float, itemType: (
-            if itemsList[playerShip.crew[memberIndex].inventory[
-            index].protoIndex].showType.len > 0: itemsList[playerShip.crew[
-            memberIndex].inventory[index].protoIndex].showType else: itemsList[
-            playerShip.crew[memberIndex].inventory[index].protoIndex].itemType),
-            amount: playerShip.crew[memberIndex].inventory[index].amount,
-            weight: playerShip.crew[memberIndex].inventory[index].amount *
-            itemsList[playerShip.crew[memberIndex].inventory[
-            index].protoIndex].weight, used: itemIsUsed(
-            memberIndex = memberIndex, itemIndex = index), id: index))
+    try:
+      localInventory.add(LocalItemData(selected: tclGetVar(
+          varName = "invindex" & $(index + 1)) == "1", name: getItemName(
+          item = playerShip.crew[memberIndex].inventory[index],
+          damageInfo = false, toLower = false), damage: playerShip.crew[
+          memberIndex].inventory[index].durability.float /
+          defaultItemDurability.float, itemType: (if itemsList[playerShip.crew[
+          memberIndex].inventory[index].protoIndex].showType.len > 0: itemsList[
+          playerShip.crew[memberIndex].inventory[
+          index].protoIndex].showType else: itemsList[playerShip.crew[
+          memberIndex].inventory[index].protoIndex].itemType),
+          amount: playerShip.crew[memberIndex].inventory[index].amount,
+          weight: playerShip.crew[memberIndex].inventory[index].amount *
+          itemsList[playerShip.crew[memberIndex].inventory[
+          index].protoIndex].weight, used: itemIsUsed(memberIndex = memberIndex,
+          itemIndex = index), id: index))
+    except:
+      return showError(message = "Can't add item to local inventory.")
   proc sortInventory(x, y: LocalItemData): int =
     case inventorySortOrder
     of selectedAsc:
