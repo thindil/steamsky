@@ -49,8 +49,7 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
       "Bases visited: " & $gameStats.basesVisited & " (" &
          fmt"{visitedPercent:5.3f}" & "%)"
     except:
-      tclEval(script = "bgerror {Can't show info about visited bases. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't shw info about visited bases.")
       return
   label = statsCanvas & ".stats.left.bases"
   tclEval(script = label & " configure -text {" & statsText & "}")
@@ -61,8 +60,7 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
   statsText = try:
       "Map discovered: " & fmt"{visitedPercent:5.3f}" & "%"
     except:
-      tclEval(script = "bgerror {Can't show info about discovered map. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't show info about discovered map.")
       return
   label = statsCanvas & ".stats.left.map"
   tclEval(script = label & " configure -text {" & statsText & "}")
@@ -97,8 +95,7 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
             itemsList[recipesList[statsList[item].index].resultIndex].name &
             "} {" & $statsList[item].amount & "}]")
       except:
-        tclEval(script = "bgerror {Can't show finished crafting orders. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't show finished crafting orders.")
         return
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
@@ -147,8 +144,7 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
               " insert {} end -values [list {Passengers transported} {" &
               $statsList[item].amount & "}]")
       except:
-        tclEval(script = "bgerror {Can't show finished missions. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't show finished missions.")
         return
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
@@ -162,8 +158,7 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
     discard tclEval(script = "tooltip::tooltip " & label &
         " \"The current goal: " & goalText(0) & "\"")
   except:
-    tclEval(script = "bgerror {Can't show the current goal. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't show the current goal.")
     return
   totalFinished = 0
   statsList = gameStats.finishedGoals
@@ -193,8 +188,7 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
         discard tclEval(script = treeView & " insert {} end -values [list {" &
             goalText(index = protoIndex) & "} {" & $statsList[item].amount & "}]")
       except:
-        tclEval(script = "bgerror {Can't show finished goals. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't show finished goals.")
         return
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
