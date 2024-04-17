@@ -897,6 +897,8 @@ proc moveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if message.len > 0:
     showMessage(text = message, title = "Message")
+  centerX = playerShip.skyX
+  centerY = playerShip.skyY
   if startsCombat:
     showCombatUi()
   else:
