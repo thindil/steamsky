@@ -274,20 +274,30 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     return updateInventoryCommand(clientData = clientData, interp = interp,
         argc = 2, argv = @["UpdateInventory".cstring, ($memberIndex).cstring])
   type LocalItemData = object
-    selected: bool
-    name: string
-    damage: float
-    itemType: string
-    amount: Positive
-    weight: Positive
-    used: bool
-    id: Natural
+    selected: bool = false
+    name: string = ""
+    damage: float = 0.0
+    itemType: string = ""
+    amount: Positive = 1
+    weight: Positive = 1
+    used: bool = false
+    id: Natural = 0
   var localInventory: seq[LocalItemData]
   for index, item in inventoryIndexes:
     localInventory.add(LocalItemData(selected: tclGetVar(varName = "invindex" &
         $(index + 1)) == "1", name: getItemName(item = playerShip.crew[
-        memberIndex].inventory[item], damageInfo = false, toLower = false),
-        amount: 1, weight: 1))
+            memberIndex].inventory[item], damageInfo = false, toLower = false),
+            damage: playerShip.crew[memberIndex].inventory[
+            item].durability.float / defaultItemDurability.float, itemType: (
+            if itemsList[playerShip.crew[memberIndex].inventory[
+            item].protoIndex].showType.len > 0: itemsList[playerShip.crew[
+            memberIndex].inventory[item].protoIndex].showType else: itemsList[
+            playerShip.crew[memberIndex].inventory[item].protoIndex].itemType),
+            amount: playerShip.crew[memberIndex].inventory[item].amount,
+            weight: playerShip.crew[memberIndex].inventory[item].amount *
+            itemsList[playerShip.crew[memberIndex].inventory[
+            item].protoIndex].weight, used: itemIsUsed(
+            memberIndex = memberIndex, itemIndex = index), id: index))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
