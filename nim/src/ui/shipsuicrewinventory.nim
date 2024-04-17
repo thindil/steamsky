@@ -283,20 +283,20 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     used: bool = false
     id: Natural = 0
   var localInventory: seq[LocalItemData]
-  for index, item in inventoryIndexes:
+  for index, _ in inventoryIndexes:
     localInventory.add(LocalItemData(selected: tclGetVar(varName = "invindex" &
         $(index + 1)) == "1", name: getItemName(item = playerShip.crew[
-            memberIndex].inventory[item], damageInfo = false, toLower = false),
+            memberIndex].inventory[index], damageInfo = false, toLower = false),
             damage: playerShip.crew[memberIndex].inventory[
-            item].durability.float / defaultItemDurability.float, itemType: (
+            index].durability.float / defaultItemDurability.float, itemType: (
             if itemsList[playerShip.crew[memberIndex].inventory[
-            item].protoIndex].showType.len > 0: itemsList[playerShip.crew[
-            memberIndex].inventory[item].protoIndex].showType else: itemsList[
-            playerShip.crew[memberIndex].inventory[item].protoIndex].itemType),
-            amount: playerShip.crew[memberIndex].inventory[item].amount,
-            weight: playerShip.crew[memberIndex].inventory[item].amount *
+            index].protoIndex].showType.len > 0: itemsList[playerShip.crew[
+            memberIndex].inventory[index].protoIndex].showType else: itemsList[
+            playerShip.crew[memberIndex].inventory[index].protoIndex].itemType),
+            amount: playerShip.crew[memberIndex].inventory[index].amount,
+            weight: playerShip.crew[memberIndex].inventory[index].amount *
             itemsList[playerShip.crew[memberIndex].inventory[
-            item].protoIndex].weight, used: itemIsUsed(
+            index].protoIndex].weight, used: itemIsUsed(
             memberIndex = memberIndex, itemIndex = index), id: index))
   proc sortInventory(x, y: LocalItemData): int =
     case inventorySortOrder
@@ -376,12 +376,14 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   inventoryIndexes = @[]
   for item in localInventory:
     inventoryIndexes.add(y = item.id)
-  return tclOk
+  return updateInventoryCommand(clientData = clientData, interp = interp,
+      argc = 2, argv = @["UpdateInventory".cstring, ($memberIndex).cstring])
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("UpdateInventory", updateInventoryCommand)
     addCommand("ShowMemberInventory", showMemberInventoryCommand)
+    addCommand("SortCrewInventory", sortCrewInventoryCommand)
   except:
     showError(message = "Can't add a Tcl command.")
