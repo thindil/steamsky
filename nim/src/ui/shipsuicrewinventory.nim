@@ -399,32 +399,44 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["UpdateInventory".cstring, ($memberIndex).cstring])
 
 proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   echo "here"
-  let itemIndex = ($argv[1]).parseInt - 1
+  let itemIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      return showError(message = "Can't get the item index.")
   if itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex):
     takeOffItem(memberIndex = memberIndex, itemIndex = itemIndex)
     return sortCrewInventoryCommand(clientData = clientData, interp = interp,
         argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
-  let itemType = itemsList[playerShip.crew[memberIndex].inventory[
-      itemIndex].protoIndex].itemType
+  let itemType = try:
+      itemsList[playerShip.crew[memberIndex].inventory[
+          itemIndex].protoIndex].itemType
+    except:
+      return showError(message = "Can't get the item type.")
   if itemType == weaponType:
-    if itemsList[playerShip.crew[memberIndex].inventory[
-        itemIndex].protoIndex].value[4] == 2 and playerShip.crew[
-        memberIndex].equipment[shield] > -1:
-      showMessage(text = playerShip.crew[memberIndex].name &
-          " can't use this weapon because have shield equiped. Take off shield first.",
-          title = "Shield in use")
-      return tclOk
+    try:
+      if itemsList[playerShip.crew[memberIndex].inventory[
+          itemIndex].protoIndex].value[4] == 2 and playerShip.crew[
+          memberIndex].equipment[shield] > -1:
+        showMessage(text = playerShip.crew[memberIndex].name &
+            " can't use this weapon because have shield equiped. Take off shield first.",
+            title = "Shield in use")
+        return tclOk
+    except:
+      return showError(message = "Can't do check for shield.")
     playerShip.crew[memberIndex].equipment[weapon] = itemIndex
   elif itemType == shieldType:
     if playerShip.crew[memberIndex].equipment[weapon] > -1:
-      if itemsList[playerShip.crew[memberIndex].inventory[playerShip.crew[
-          memberIndex].equipment[weapon]].protoIndex].value[4] == 2:
-        showMessage(text = playerShip.crew[memberIndex].name &
-            " can't use shield because have equiped two-hand weapon. Take off weapon first.",
-            title = "Two handed weapon in use")
-        return tclOk
+      try:
+        if itemsList[playerShip.crew[memberIndex].inventory[playerShip.crew[
+            memberIndex].equipment[weapon]].protoIndex].value[4] == 2:
+          showMessage(text = playerShip.crew[memberIndex].name &
+              " can't use shield because have equiped two-hand weapon. Take off weapon first.",
+              title = "Two handed weapon in use")
+          return tclOk
+      except:
+        return showError(message = "Can't do check for two handed weapon.")
     playerShip.crew[memberIndex].equipment[shield] = itemIndex
   elif itemType == headArmor:
     playerShip.crew[memberIndex].equipment[helmet] = itemIndex
