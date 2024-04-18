@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import ../[config, crewinventory, game, items, tk]
+import ../[config, crewinventory, game, items, tk, types]
 import dialogs, table
 
 var
@@ -397,6 +397,26 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     inventoryIndexes.add(y = item.id)
   return updateInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["UpdateInventory".cstring, ($memberIndex).cstring])
+
+proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let itemIndex = ($argv[1]).parseInt - 1
+  if itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex):
+    takeOffItem(memberIndex = memberIndex, itemIndex = itemIndex)
+    return sortCrewInventoryCommand(clientData = clientData, interp = interp,
+        argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
+  let itemType = itemsList[playerShip.crew[memberIndex].inventory[
+      itemIndex].protoIndex].itemType
+  if itemType == weaponType:
+    if itemsList[playerShip.crew[memberIndex].inventory[
+        itemIndex].protoIndex].value[4] == 2 and playerShip.crew[
+        memberIndex].equipment[shield] > -1:
+      showMessage(text = playerShip.crew[memberIndex].name &
+          " can't use this weapon because have shield equiped. Take off shield first.",
+          title = "Shield in use")
+      return tclOk
+    playerShip.crew[memberIndex].equipment[weapon] = itemIndex
+  return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
