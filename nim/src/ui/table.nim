@@ -97,8 +97,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
       if index == 0:
         result.rowHeight = coords[3].parseInt + 5
     except ValueError:
-      tclEval(script = "bgerror {Can't get coordinates for the table. Result: " &
-          tclResult & "}")
+      showError(message = "Can't get coordinates for the table. Result: " & tclResult)
       return
     let backgroundId = tclEval2(script = result.canvas & " create rectangle " &
         $oldX & " 0 " & $(x - 2) & " " & $(result.rowHeight - 3) & " -fill " &
@@ -230,7 +229,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   try:
     x = (coords[2].parseInt + 10) - coords[0].parseInt
   except ValueError:
-    tclEval(script = "bgerror {Can't add a button to the table. Result: " & tclResult & "}")
+    showError(message = "Can't add a button to the table. Result: " & tclResult)
     return
   if x > table.columnsWidth[column - 1]:
     table.columnsWidth[column - 1] = x
@@ -238,7 +237,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
     table.row.inc
 
 proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
-    raises: [], tags: [].} =
+    raises: [], tags: [RootEffect].} =
   ## Update the size and coordinates of all elements in the selected TableWidget
   ##
   ## * table     - the TableWidget in which the elements will be resized and
@@ -281,10 +280,10 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
     newY = newY + table.rowHeight
     tag = "row" & $row
     try:
-      discard tclEval(script = table.canvas & " coords " & tag & " 0 " & $(newY -
-          table.rowHeight) & " " & $(coords[2].parseInt - 1) & " " & $newY)
-    except ValueError:
-      tclEval(script = "bgerror {Can't update the table. Result: " & tclResult & "}")
+      discard tclEval(script = table.canvas & " coords " & tag & " 0 " & $(
+          newY - table.rowHeight) & " " & $(coords[2].parseInt - 1) & " " & $newY)
+    except ValueError, Exception:
+      showError(message = "Can't update the table. Result: " & tclResult)
       return
   tclEval(script = "set currentrow 1")
   tclEval(script = table.canvas & " bind <FocusIn> {set maxrows " & $table.row &
@@ -333,7 +332,7 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
   try:
     x = (coords[2].parseInt + 10) - coords[0].parseInt
   except ValueError:
-    tclEval(script = "bgerror {Can't add a progressbar to the table. Result: " & tclResult & "}")
+    showError(message = "Can't add a progressbar to the table. Result: " & tclResult)
     return
   if x > table.columnsWidth[column - 1]:
     table.columnsWidth[column - 1] = x
@@ -432,7 +431,7 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
   try:
     x = (coords[2].parseInt + 10) - coords[0].parseInt
   except ValueError:
-    tclEval(script = "bgerror {Can't add a checkbutton to the table. Result: " & tclResult & "}")
+    showError(message = "Can't add a checkbutton to the table. Result: " & tclResult)
     return
   if x > table.columnsWidth[column - 1]:
     table.columnsWidth[column - 1] = x
@@ -677,7 +676,7 @@ proc addAdaButton(canvas, text, tooltip, command, color: cstring; column,
     discard
 
 proc updateAdaTable(canvas: cstring; row, rowHeight, grabFocus: cint;
-    columnsWidth: array[10, cint]) {.raises: [], tags: [], exportc.} =
+    columnsWidth: array[10, cint]) {.raises: [], tags: [RootEffect], exportc.} =
   try:
     var newTable = TableWidget(canvas: $canvas, rowHeight: rowHeight, row: row)
     for width in columnsWidth:
