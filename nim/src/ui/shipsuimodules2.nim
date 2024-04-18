@@ -97,7 +97,7 @@ proc getModuleInfo*(moduleIndex: Natural): string {.sideEffect, raises: [],
     discard
 
 proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [RootEffect].} =
   ## Update the list of the player's ship's installed modules
   ##
   ## * page - the number of the current page of the list to show
@@ -158,7 +158,7 @@ proc getAdaModuleInfo(moduleIndex: cint): cstring {.raises: [], tags: [], export
   return getModuleInfo(moduleIndex - 1).cstring
 
 proc updateAdaModulesInfo(page: cint; mIndexes: array[50, cint];
-    columnsWidth: var array[10, cint]) {.raises: [], tags: [], exportc.} =
+    columnsWidth: var array[10, cint]) {.raises: [], tags: [RootEffect], exportc.} =
   modulesIndexes = @[]
   for index in mIndexes:
     if index == 0:

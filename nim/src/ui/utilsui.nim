@@ -163,7 +163,7 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return checkAmountCommand(clientData, interp, newArgv.len.cint, newArgv)
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Set the player's ship, module or crew member's name in Nim and Tcl
   ##
   ## * clientData - the additional data for the Tcl command

@@ -899,7 +899,7 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## StopUpgrading
 
 proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
   ## Set or remove the repair priority from the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -916,7 +916,7 @@ proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
   ## setting
 
 proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
   ## Reset the current destination point for the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1100,7 +1100,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Show assign the skill UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1242,7 +1242,7 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
   ## Show the list of the player's ship modules to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1258,7 +1258,7 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## modules.
 
 proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].}
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].}
   ## Sort the player's ship's modules list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1273,7 +1273,7 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## X is X axis coordinate where the player clicked the mouse button
 
 proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Show the list of available ammo for the selected gun
   ##
   ## * clientData - the additional data for the Tcl command

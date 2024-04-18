@@ -83,7 +83,7 @@ proc getHighestSkill(memberIndex: Natural): string {.sideEffect, raises: [],
     return "Unknown"
 
 proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
-    raises: [], tags: [].} =
+    raises: [], tags: [RootEffect].} =
   ## Update the list of the player's ship's crew members
   ##
   ## * page  - the current page of the list to show
@@ -958,7 +958,7 @@ proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Show the list of the player's ship crew to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -988,7 +988,7 @@ const defaultCrewSortOrder: CrewSortOrders = none
 var crewSortOrder = defaultCrewSortOrder
 
 proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Sort the player's ship's crew list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1191,7 +1191,7 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Show the list of the player's ship crew with selected skill from combobox
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1414,7 +1414,7 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Select or deselect all crew members
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1480,7 +1480,7 @@ proc getAdaHighestSkill(memberIndex: cint): cstring {.raises: [], tags: [], expo
 
 proc updateAdaCrewInfo(page, skill: cint; cIndexes: array[50, cint];
     columnsWidth: var array[10, cint]; row, rowHeight: var cint) {.raises: [],
-        tags: [], exportc.} =
+        tags: [RootEffect], exportc.} =
   crewIndexes = @[]
   for index in cIndexes:
     if index == 0:
