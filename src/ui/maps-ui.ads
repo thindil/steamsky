@@ -33,7 +33,11 @@ package Maps.UI is
    -- FUNCTION
    -- Update the game information on the UI header (time, crew, etc)
    -- SOURCE
-   procedure Update_Header;
+   procedure Update_Header with
+      Import => True,
+      Convention => C,
+      External_Name => "updateAdaHeader";
+
    -- ****
 
    -- ****f* MUI/MUI.Create_Game_Ui

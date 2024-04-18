@@ -61,16 +61,6 @@ with WaitMenu;
 
 package body Maps.UI is
 
-   procedure Update_Header is
-      procedure Update_Ada_Header with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaHeader";
-   begin
-      Set_Ship_In_Nim;
-      Update_Ada_Header;
-   end Update_Header;
-
    -- ****iv* MUI/MUI.MapView
    -- FUNCTION
    -- Text widget with the sky map
@@ -122,25 +112,16 @@ package body Maps.UI is
         Get_Widget(pathName => Paned & ".controls.messages");
       Paned_Position: Natural := 0;
       New_Start: Boolean := False;
-      procedure Update_Move_Buttons is
-         procedure Update_Ada_Move_Buttons with
-            Import => True,
-            Convention => C,
-            External_Name => "updateAdaMoveButtons";
-      begin
-         Set_Ship_In_Nim;
-         Update_Ada_Move_Buttons;
-      end Update_Move_Buttons;
+      procedure Update_Move_Buttons with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMoveButtons";
       procedure Update_Map_Info
-        (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
-         procedure Update_Ada_Map_Info(X1, Y1: Positive) with
-            Import => True,
-            Convention => C,
-            External_Name => "updateAdaMapInfo";
-      begin
-         Get_Ada_Ship;
-         Update_Ada_Map_Info(X1 => X, Y1 => Y);
-      end Update_Map_Info;
+        (X: Positive := Player_Ship.Sky_X;
+         Y: Positive := Player_Ship.Sky_Y) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMapInfo";
       procedure Add_Maps_Commands with
          Import => True,
          Convention => C,
