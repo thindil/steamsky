@@ -28,7 +28,7 @@ var
     ## The list of indexes of items in the crew member's inventory
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Update inventory list of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -115,7 +115,7 @@ proc resetSelection() =
       tclUnsetVar(varName = "invindex" & $(index + 1))
 
 proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Show inventory of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -234,7 +234,19 @@ const defaultInventorySortOrder: InventorySortOrders = none
 var inventorySortOrder = defaultInventorySortOrder
 
 proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Sort the selected crew member inventory
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortCrewInventory x
+  ## X is X axis coordinate where the player clicked the mouse button
   let column = try:
       (if argv[1] == "-1": Positive.high else: getColumnNumber(
         table = inventoryTable, xPosition = ($argv[1]).parseInt))
