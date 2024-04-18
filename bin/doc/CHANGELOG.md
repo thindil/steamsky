@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about the selected crew member
 - Typo in changelog
 - Centering the map on the player's ship after move
+- Wrong position of ship after trading
 
 ## [9.9] - 2024-04-14
 
