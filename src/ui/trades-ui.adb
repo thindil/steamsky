@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -176,15 +176,13 @@ package body Trades.UI is
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
       Price: Positive := 1;
       Combo_Box: Ttk_ComboBox;
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Base_Index: Natural;
       Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
       Base_Cargo_Index, Base_Amount: Natural := 0;
       --## rule off IMPROPER_INITIALIZATION
       Indexes_List: Positive_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
-      Event_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
+      Event_Index: Natural;
       Profit: Integer := 0;
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
@@ -208,6 +206,12 @@ package body Trades.UI is
          else "All {}");
       Current_Item_Index: Positive := 1;
    begin
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Base_Index :=
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Set_Base_Cargo(Base_Index => Base_Index);
+      Event_Index :=
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
