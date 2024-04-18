@@ -400,6 +400,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
+  echo "here"
   let itemIndex = ($argv[1]).parseInt - 1
   if itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex):
     takeOffItem(memberIndex = memberIndex, itemIndex = itemIndex)
@@ -416,7 +417,27 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
           title = "Shield in use")
       return tclOk
     playerShip.crew[memberIndex].equipment[weapon] = itemIndex
-  return tclOk
+  elif itemType == shieldType:
+    if playerShip.crew[memberIndex].equipment[weapon] > -1:
+      if itemsList[playerShip.crew[memberIndex].inventory[playerShip.crew[
+          memberIndex].equipment[weapon]].protoIndex].value[4] == 2:
+        showMessage(text = playerShip.crew[memberIndex].name &
+            " can't use shield because have equiped two-hand weapon. Take off weapon first.",
+            title = "Two handed weapon in use")
+        return tclOk
+    playerShip.crew[memberIndex].equipment[shield] = itemIndex
+  elif itemType == headArmor:
+    playerShip.crew[memberIndex].equipment[helmet] = itemIndex
+  elif itemType == chestArmor:
+    playerShip.crew[memberIndex].equipment[torso] = itemIndex
+  elif itemType == armsArmor:
+    playerShip.crew[memberIndex].equipment[arms] = itemIndex
+  elif itemType == legsArmor:
+    playerShip.crew[memberIndex].equipment[legs] = itemIndex
+  elif itemType in toolsList:
+    playerShip.crew[memberIndex].equipment[tool] = itemIndex
+  return sortCrewInventoryCommand(clientData = clientData, interp = interp,
+      argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
@@ -424,5 +445,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("UpdateInventory", updateInventoryCommand)
     addCommand("ShowMemberInventory", showMemberInventoryCommand)
     addCommand("SortCrewInventory", sortCrewInventoryCommand)
+    addCommand("SetUseItem", setUseItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")

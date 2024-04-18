@@ -1361,8 +1361,8 @@ package body Ships.UI.Crew.Inventory is
 
    procedure Add_Inventory_Commands is
    begin
-      Add_Command
-        (Name => "SetUseItem", Ada_Command => Set_Use_Item_Command'Access);
+--      Add_Command
+--        (Name => "SetUseItem", Ada_Command => Set_Use_Item_Command'Access);
       Add_Command
         (Name => "ShowMoveItem", Ada_Command => Show_Move_Item_Command'Access);
       Add_Command(Name => "MoveItem", Ada_Command => Move_Item_Command'Access);
@@ -1372,9 +1372,6 @@ package body Ships.UI.Crew.Inventory is
       Add_Command
         (Name => "ShowInventoryItemInfo",
          Ada_Command => Show_Inventory_Item_Info_Command'Access);
---      Add_Command
---        (Name => "SortCrewInventory",
---         Ada_Command => Sort_Crew_Inventory_Command'Access);
       Add_Command
         (Name => "ToggleInventoryItem",
          Ada_Command => Toggle_Inventory_Item_Command'Access);
