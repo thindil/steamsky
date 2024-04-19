@@ -623,8 +623,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
     theme = try:
         themesList[gameSettings.interfaceTheme]
       except:
-        tclEval(script = "bgerror {Can't find theme '" &
-            gameSettings.interfaceTheme & "'}")
+        showError(message = "Can't find theme '" & gameSettings.interfaceTheme & "'")
         return
     imagesFiles = [theme.pilotIcon, theme.engineerIcon, theme.gunnerIcon,
         theme.crewTraderIcon, theme.repairIcon, theme.noRepairIcon,
@@ -722,8 +721,7 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
   let theme = try:
         themesList[gameSettings.interfaceTheme]
       except:
-        tclEval(script = "bgerror {Can't find theme '" &
-            gameSettings.interfaceTheme & "'}")
+        showError(message = "Can't find theme '" & gameSettings.interfaceTheme & "'")
         return
   case $name
   of "name":
@@ -933,7 +931,7 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
   of "giveOrderColoredIcon":
     return theme.giveOrderColoredIcon.cstring
   else:
-    tclEval(script = "bgerror {Unknown theme setting: '" & $name & "'}")
+    showError(message = "Unknown theme setting: " & $name)
     return "".cstring
 
 proc getAdaThemesNames(): cstring {.raises: [], tags: [], exportc.} =
