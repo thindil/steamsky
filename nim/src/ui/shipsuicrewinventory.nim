@@ -478,6 +478,23 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::spinbox " & amountBox & " -width 5 -from 1 -to " &
       $maxAmount & " -validate key -validatecommand {ValidateMoveAmount " &
       $maxAmount & " %P " & button & " %W}")
+  var maxAmountButton = itemDialog & ".amountlbl"
+  tclEval(script = "ttk::button " & maxAmountButton & " -text {Amount (max: " &
+      $maxAmount & "):} -command {" & amountBox & " set " & $maxAmount & ";" &
+      amountBox & " validate}")
+  tclEval(script = "tooltip::tooltip " & maxAmountButton & " \"Max amount of the item to move.\"")
+  tclEval(script = "grid " & maxAmountButton & " -padx 5")
+  tclEval(script = amountBox & " set 1")
+  tclEval(script = "tooltip::tooltip " & amountBox & " \"Amount of the item to move.\"")
+  tclEval(script = "grid " & amountBox & " -column 1 -row 1")
+  tclEval(script = "bind " & amountBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  tclEval(script = "tooltip::tooltip " & button & " \"Move the itemm to the cargo.\"")
+  tclEval(script = "grid " & button & " -padx {5 0} -pady {0 5}")
+  tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  button = itemDialog & ".cancelbutton"
+  tclEval(script = "ttk::button " & button &
+      " -text Cancel -command {CloseDialog " & itemDialog & " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialogred.TButton")
+  tclEval(script = "tooltip::tooltip " & button & " \"Cancel giving and close dialog.\\[Escape key\\]\"")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
