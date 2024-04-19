@@ -462,6 +462,24 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
+proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  let
+    itemIndex = ($argv[1]).parseInt - 1
+    itemDialog = createDialog(name = ".itemdialog", title = "Move " &
+        getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]) &
+        " to ship cargo", titleWidth = 400, columns = 2,
+        parentName = ".memberDialog")
+    maxAmount = playerShip.crew[memberIndex].inventory[itemIndex].amount
+    amountBox = itemDialog & ".amount"
+  var button = itemDialog & ".movebutton"
+  tclEval(script = "ttk::button " & button & " -text Move -command {MoveItem " &
+      $argv[1] & "} -image moveicon -style Dialoggreen.TButton")
+  tclEval(script = "ttk::spinbox " & amountBox & " -width 5 -from 1 -to " &
+      $maxAmount & " -validate key -validatecommand {ValidateMoveAmount " &
+      $maxAmount & " %P " & button & " %W}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
