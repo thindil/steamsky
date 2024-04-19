@@ -582,6 +582,209 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
     if findMember(order = boarding) == -1:
       updateOrders(ship = game.enemy.ship)
 
+proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): int {.sideEffect,
+    raises: [KeyError], tags: [], contractual.} =
+  ## Find the module in the enemy's ship
+  ##
+  ## * mType     - the type of the module to find
+  ## * enemyShip - the ship which was attacked
+  ##
+  ## Return the index of the module of the selected type or -1 if a module
+  ## was not found
+  for index, module in enemyShip.modules:
+    if modulesList[module.protoIndex].mType == mType and module.durability > 0:
+      return index
+  return -1
+
+proc findHitWeapon(enemyShip: ShipRecord; hitLocation: var int) {.sideEffect,
+    raises: [KeyError], tags: [], contractual.} =
+  ## Find the weapon which was hit by the attack
+  ##
+  ## * enemyShip   - the ship which was attacked
+  ## * hitLocation - the index of the module which was hit
+  for index, module in enemyShip.modules:
+    if ((module.mType == ModuleType2.turret and module.gunIndex > -1) or
+        modulesList[module.protoIndex].mType == ModuleType.batteringRam) and
+        module.durability > 0:
+      hitLocation = index
+      return
+
+proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
+    raises: [], tags: [], contractual.} =
+  ## Remove the gun from the player's ship's list of guns
+  ##
+  ## * moduleIndex - the index of the module to remove
+  ## * enemyShip   - the ship which was attacked
+  if enemyShip.crew == playerShip.crew:
+    for index, gun in guns:
+      if gun[1] == moduleIndex:
+        guns.delete(i = index)
+        break
+
+proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
+    gunnerIndex, shoots, gunnerOrder, speedBonus, ammoIndex: int;
+    module: ModuleData; hitLocation: var int): bool {.sideEffect, raises: [
+    KeyError, IOError], tags: [WriteIOEffect, RootEffect], contractual.} =
+  ## Shoot to the enemy ship
+  ##
+  ## * ship                 - the ship which will shoot
+  ## * enemyShip            - the ship which will be attacked
+  ## * currentAccuracyBonus - the bonus to accuracy for the attacker
+  ## * evadeBonus           - the bonut to evading for the defender
+  ## * gunnerIndex          - the index of the crew member who is shooting
+  ## * shoots               - the amount of shoots
+  ## * gunnerOrder          - the order for the crew member who is shooting
+  ## * speedBonus           - the bonus from the ships speed
+  ## * ammoIndex            - the index of the ammunition in the attacker's cargo
+  ## * module               - the module which will be attacked
+  ## * hitLocation          - the location in the defender's ship which will be
+  ##                          attacked
+  ##
+  ## Returns true if attacking should be stopped due to end of combat or the
+  ## module was destroyed. Otherwise returns false.
+  var hitChance: int = if ship.crew == playerShip.crew:
+      currentAccuracyBonus - game.enemy.evasion
+    else:
+      game.enemy.accuracy - evadeBonus
+  if gunnerIndex > 0:
+    hitChance += getSkillLevel(member = ship.crew[gunnerIndex],
+        skillIndex = gunnerySkill)
+  if hitChance < -48:
+    hitChance = -48
+  logMessage(message = "Player accuracy: " & $currentAccuracyBonus &
+      " Player evasion: " & $evadeBonus, debugType = DebugTypes.combat)
+  logMessage(message = "Enemy evasion: " & $game.enemy.evasion &
+      " Enemy accuracy: " & $game.enemy.accuracy,
+      debugType = DebugTypes.combat)
+  logMessage(message = "Chance to hit: " & $hitChance,
+      debugType = DebugTypes.combat)
+  let enemyNameOwner: string = enemyName & " (" & factionName & ")"
+  for shoot in 1 .. shoots:
+    var shootMessage: string = ""
+    if ship.crew == playerShip.crew:
+      shootMessage = if module.mType in {ModuleType2.gun, harpoonGun}:
+          ship.crew[gunnerIndex].name & " shoots at " & enemyNameOwner
+        else:
+          "You ram " & enemyNameOwner
+    else:
+      shootMessage = enemyNameOwner & " attacks"
+    if hitChance + getRandom(min = 1, max = 50) > getRandom(min = 1,
+        max = hitChance + 50):
+      shootMessage &= " and hits "
+      let armorIndex: int = findEnemyModule(mType = ModuleType.armor,
+          enemyShip = enemyShip)
+      if armorIndex > -1:
+        hitLocation = armorIndex
+      else:
+        if ship.crew == playerShip.crew:
+          if gunnerIndex > -1 and gunnerOrder in 4 .. 6:
+            hitLocation = -1
+            case gunnerOrder
+            of 4:
+              hitLocation = findEnemyModule(mType = ModuleType.engine,
+                  enemyShip = enemyShip)
+            of 5:
+              hitLocation = -1
+              findHitWeapon(enemyShip = enemyShip, hitLocation = hitLocation)
+              if hitLocation == -1:
+                hitLocation = findEnemyModule(
+                    mType = ModuleType.batteringRam,
+                    enemyShip = enemyShip)
+            of 6:
+              hitLocation = findEnemyModule(mType = ModuleType.hull,
+                  enemyShip = enemyShip)
+            else:
+              hitLocation = 0
+          else:
+            hitLocation = getRandom(min = 0,
+                max = game.enemy.ship.modules.high)
+        else:
+          while enemyShip.modules[hitLocation].durability == 0:
+            hitLocation.dec
+            if hitLocation == -1:
+              return true
+      shootMessage = shootMessage & enemyShip.modules[
+          hitLocation].name & "."
+      let damage: float = 1.0 - (module.durability.float /
+          module.maxDurability.float)
+      var weaponDamage: int = 0
+      if module.mType == ModuleType2.harpoonGun:
+        weaponDamage = module.duration - (module.duration.float * damage).int
+      elif module.mType == ModuleType2.gun:
+        weaponDamage = module.damage - (module.damage.float * damage).int
+      elif module.mType == ModuleType2.batteringRam:
+        weaponDamage = module.damage2 - (module.damage2.float * damage).int
+        weaponDamage = if speedBonus < 0:
+            weaponDamage + (speedBonus.abs * (countShipWeight(
+                ship = ship) / 5_000).int)
+          else:
+            weaponDamage + (countShipWeight(ship = ship) / 5_000).int
+      if weaponDamage < 1:
+        weaponDamage = 1
+      if ammoIndex > -1:
+        weaponDamage += itemsList[ship.cargo[
+            ammoIndex].protoIndex].value[1]
+      weaponDamage = if ship.crew == playerShip.crew:
+            (weaponDamage.float * newGameSettings.playerDamageBonus).int
+          else:
+            (weaponDamage.float * newGameSettings.enemyDamageBonus).int
+      if armorIndex == -1:
+        if module.mType == ModuleType2.harpoonGun:
+          for eModule in enemyShip.modules:
+            if eModule.mType == ModuleType2.hull:
+              weaponDamage -= (eModule.maxModules / 10).int
+              if weaponDamage < 1:
+                weaponDamage = 1
+              break
+          if ship.crew == playerShip.crew:
+            game.enemy.harpoonDuration += weaponDamage
+          else:
+            harpoonDuration += weaponDamage
+          weaponDamage = 1
+        elif module.mType == ModuleType2.batteringRam:
+          if ship.crew == playerShip.crew:
+            game.enemy.harpoonDuration += 2
+          else:
+            harpoonDuration += 2
+      damageModule(ship = enemyShip, moduleIndex = hitLocation,
+          damage = weaponDamage,
+          deathReason = "enemy fire in ship combat")
+      if enemyShip.modules[hitLocation].durability == 0:
+        case modulesList[enemyShip.modules[
+            hitLocation].protoIndex].mType
+        of ModuleType.hull, ModuleType.engine:
+          endCombat = true
+        of ModuleType.turret:
+          if enemyShip.crew == playerShip.crew:
+            let weaponIndex: int = enemyShip.modules[
+                hitLocation].gunIndex
+            if weaponIndex > -1:
+              enemyShip.modules[weaponIndex].durability = 0
+              removeGun(moduleIndex = weaponIndex,
+                  enemyShip = enemyShip)
+        else:
+          discard
+      if ship.crew == playerShip.crew:
+        addMessage(message = shootMessage, mType = combatMessage, color = green)
+      else:
+        addMessage(message = shootMessage, mType = combatMessage,
+            color = yellow)
+    else:
+      shootMessage &= " and misses."
+      if ship.crew == playerShip.crew:
+        addMessage(message = shootMessage, mType = combatMessage, color = blue)
+      else:
+        addMessage(message = shootMessage, mType = combatMessage, color = cyan)
+    if ammoIndex > -1:
+      updateCargo(ship = ship, cargoIndex = ammoIndex, amount = -1)
+    if ship.crew == playerShip.crew and gunnerIndex > -1:
+      gainExp(amount = 2, skillNumber = gunnerySkill,
+          crewIndex = gunnerIndex)
+    if playerShip.crew[0].health == 0:
+      endCombat = true
+    if endCombat:
+      return true
+
 proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
@@ -602,43 +805,6 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     ## Returns modified parameters ship and enemyShip
 
     var hitLocation: int = -1
-
-    proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
-        raises: [], tags: [], contractual.} =
-      ## Remove the gun from the player's ship's list of guns
-      ##
-      ## * moduleIndex - the index of the module to remove
-      ## * enemyShip   - the ship which was attacked
-      if enemyShip.crew == playerShip.crew:
-        for index, gun in guns:
-          if gun[1] == moduleIndex:
-            guns.delete(i = index)
-            break
-    proc findEnemyModule(mType: ModuleType;
-        enemyShip: ShipRecord): int {.sideEffect, raises: [KeyError], tags: [],
-        contractual.} =
-      ## Find the module in the enemy's ship
-      ##
-      ## * mType     - the type of the module to find
-      ## * enemyShip - the ship which was attacked
-      ##
-      ## Return the index of the module of the selected type or -1 if a module
-      ## was not found
-      for index, module in enemyShip.modules:
-        if modulesList[module.protoIndex].mType == mType and module.durability > 0:
-          return index
-      return -1
-    proc findHitWeapon(enemyShip: ShipRecord) {.sideEffect, raises: [KeyError],
-        tags: [], contractual.} =
-      ## Find the weapon which was hit by the attack
-      ##
-      ## * enemyShip - the ship which was attacked
-      for index, module in enemyShip.modules:
-        if ((module.mType == ModuleType2.turret and module.gunIndex > -1) or
-            modulesList[module.protoIndex].mType == ModuleType.batteringRam) and
-            module.durability > 0:
-          hitLocation = index
-          return
 
     if ship.crew == playerShip.crew:
       logMessage(message = "Player's round", debugType = DebugTypes.combat)
@@ -777,149 +943,13 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
         logMessage(message = "Shoots: " & $shoots,
             debugType = DebugTypes.combat)
         if shoots > 0:
-          var hitChance: int = if ship.crew == playerShip.crew:
-              currentAccuracyBonus - game.enemy.evasion
-            else:
-              game.enemy.accuracy - evadeBonus
-          if gunnerIndex > 0:
-            hitChance += getSkillLevel(member = ship.crew[gunnerIndex],
-                skillIndex = gunnerySkill)
-          if hitChance < -48:
-            hitChance = -48
-          logMessage(message = "Player accuracy: " & $currentAccuracyBonus &
-              " Player evasion: " & $evadeBonus, debugType = DebugTypes.combat)
-          logMessage(message = "Enemy evasion: " & $game.enemy.evasion &
-              " Enemy accuracy: " & $game.enemy.accuracy,
-              debugType = DebugTypes.combat)
-          logMessage(message = "Chance to hit: " & $hitChance,
-              debugType = DebugTypes.combat)
-          let enemyNameOwner: string = enemyName & " (" & factionName & ")"
-          for shoot in 1 .. shoots:
-            var shootMessage: string = ""
-            if ship.crew == playerShip.crew:
-              shootMessage = if module.mType in {ModuleType2.gun, harpoonGun}:
-                  ship.crew[gunnerIndex].name & " shoots at " & enemyNameOwner
-                else:
-                  "You ram " & enemyNameOwner
-            else:
-              shootMessage = enemyNameOwner & " attacks"
-            if hitChance + getRandom(min = 1, max = 50) > getRandom(min = 1,
-                max = hitChance + 50):
-              shootMessage &= " and hits "
-              let armorIndex: int = findEnemyModule(mType = ModuleType.armor,
-                  enemyShip = enemyShip)
-              if armorIndex > -1:
-                hitLocation = armorIndex
-              else:
-                if ship.crew == playerShip.crew:
-                  if gunnerIndex > -1 and gunnerOrder in 4 .. 6:
-                    hitLocation = -1
-                    case gunnerOrder
-                    of 4:
-                      hitLocation = findEnemyModule(mType = ModuleType.engine,
-                          enemyShip = enemyShip)
-                    of 5:
-                      hitLocation = -1
-                      findHitWeapon(enemyShip = enemyShip)
-                      if hitLocation == -1:
-                        hitLocation = findEnemyModule(
-                            mType = ModuleType.batteringRam,
-                            enemyShip = enemyShip)
-                    of 6:
-                      hitLocation = findEnemyModule(mType = ModuleType.hull,
-                          enemyShip = enemyShip)
-                    else:
-                      hitLocation = 0
-                  else:
-                    hitLocation = getRandom(min = 0,
-                        max = game.enemy.ship.modules.high)
-                else:
-                  while enemyShip.modules[hitLocation].durability == 0:
-                    hitLocation.dec
-                    if hitLocation == -1:
-                      break attackLoop
-              shootMessage = shootMessage & enemyShip.modules[
-                  hitLocation].name & "."
-              let damage: float = 1.0 - (module.durability.float /
-                  module.maxDurability.float)
-              var weaponDamage: int = 0
-              if module.mType == ModuleType2.harpoonGun:
-                weaponDamage = module.duration - (module.duration.float * damage).int
-              elif module.mType == ModuleType2.gun:
-                weaponDamage = module.damage - (module.damage.float * damage).int
-              elif module.mType == ModuleType2.batteringRam:
-                weaponDamage = module.damage2 - (module.damage2.float * damage).int
-                weaponDamage = if speedBonus < 0:
-                    weaponDamage + (speedBonus.abs * (countShipWeight(
-                        ship = ship) / 5_000).int)
-                  else:
-                    weaponDamage + (countShipWeight(ship = ship) / 5_000).int
-              if weaponDamage < 1:
-                weaponDamage = 1
-              if ammoIndex > -1:
-                weaponDamage += itemsList[ship.cargo[
-                    ammoIndex].protoIndex].value[1]
-              weaponDamage = if ship.crew == playerShip.crew:
-                    (weaponDamage.float * newGameSettings.playerDamageBonus).int
-                  else:
-                    (weaponDamage.float * newGameSettings.enemyDamageBonus).int
-              if armorIndex == -1:
-                if module.mType == ModuleType2.harpoonGun:
-                  for eModule in enemyShip.modules:
-                    if eModule.mType == ModuleType2.hull:
-                      weaponDamage = weaponDamage - (eModule.maxModules / 10).int
-                      if weaponDamage < 1:
-                        weaponDamage = 1
-                      break
-                  if ship.crew == playerShip.crew:
-                    game.enemy.harpoonDuration += weaponDamage
-                  else:
-                    harpoonDuration += weaponDamage
-                  weaponDamage = 1
-                elif module.mType == ModuleType2.batteringRam:
-                  if ship.crew == playerShip.crew:
-                    game.enemy.harpoonDuration += 2
-                  else:
-                    harpoonDuration += 2
-              damageModule(ship = enemyShip, moduleIndex = hitLocation,
-                  damage = weaponDamage,
-                  deathReason = "enemy fire in ship combat")
-              if enemyShip.modules[hitLocation].durability == 0:
-                case modulesList[enemyShip.modules[
-                    hitLocation].protoIndex].mType
-                of ModuleType.hull, ModuleType.engine:
-                  endCombat = true
-                of ModuleType.turret:
-                  if enemyShip.crew == playerShip.crew:
-                    let weaponIndex: int = enemyShip.modules[
-                        hitLocation].gunIndex
-                    if weaponIndex > -1:
-                      enemyShip.modules[weaponIndex].durability = 0
-                      removeGun(moduleIndex = weaponIndex,
-                          enemyShip = enemyShip)
-                else:
-                  discard
-              if ship.crew == playerShip.crew:
-                addMessage(message = shootMessage, mType = combatMessage, color = green)
-              else:
-                addMessage(message = shootMessage, mType = combatMessage,
-                    color = yellow)
-            else:
-              shootMessage &= " and misses."
-              if ship.crew == playerShip.crew:
-                addMessage(message = shootMessage, mType = combatMessage, color = blue)
-              else:
-                addMessage(message = shootMessage, mType = combatMessage, color = cyan)
-            if ammoIndex > -1:
-              updateCargo(ship = ship, cargoIndex = ammoIndex, amount = -1)
-            if ship.crew == playerShip.crew and gunnerIndex > -1:
-              gainExp(amount = 2, skillNumber = gunnerySkill,
-                  crewIndex = gunnerIndex)
-            if playerShip.crew[0].health == 0:
-              endCombat = true
-            if endCombat:
-              break attackLoop
-
+          if shooting(ship = ship, enemyShip = enemyShip,
+              currentAccuracyBonus = currentAccuracyBonus,
+              evadeBonus = evadeBonus, gunnerIndex = gunnerIndex,
+              shoots = shoots, gunnerOrder = gunnerOrder,
+              speedBonus = speedBonus, ammoIndex = ammoIndex, module = module,
+              hitLocation = hitLocation):
+            break attackLoop
   if findItem(inventory = playerShip.cargo, itemType = fuelType) == -1:
     addMessage(message = "Ship fall from sky due to lack of fuel.",
         mType = otherMessage, color = red)
