@@ -495,6 +495,11 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & button &
       " -text Cancel -command {CloseDialog " & itemDialog & " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialogred.TButton")
   tclEval(script = "tooltip::tooltip " & button & " \"Cancel giving and close dialog.\\[Escape key\\]\"")
+  tclEval(script = "grid " & button & " -column 1 -row 2 -padx {0 5} -pady {0 5}")
+  tclEval(script = "focus " & button)
+  tclEval(script = "bind " & button & " <Tab> {focus " & itemDialog & ".movebutton;break}")
+  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+  showDialog(dialog = itemDialog)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -504,5 +509,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowMemberInventory", showMemberInventoryCommand)
     addCommand("SortCrewInventory", sortCrewInventoryCommand)
     addCommand("SetUseItem", setUseItemCommand)
+    addCommand("ShowMoveItem", showMoveItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
