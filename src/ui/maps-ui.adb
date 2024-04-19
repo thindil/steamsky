@@ -50,7 +50,7 @@ with Messages;
 with Messages.UI;
 with Missions.UI;
 with OrdersMenu;
-with Ships; use Ships;
+with Ships;
 with Ships.UI;
 with Statistics;
 with Statistics.UI;
@@ -96,6 +96,7 @@ package body Maps.UI is
       use Config;
       use DebugUI;
       use Log;
+      use Ships;
       use Themes;
       use Tiny_String;
       use Utils.UI;
