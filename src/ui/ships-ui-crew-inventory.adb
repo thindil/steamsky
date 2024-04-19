@@ -248,7 +248,6 @@ package body Ships.UI.Crew.Inventory is
       Update_Table(Table => Inventory_Table);
       return TCL_OK;
    end Update_Inventory_Command;
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****it* SUCI/SUCI.Inventory_Sort_Orders
    -- FUNCTION
@@ -688,6 +687,7 @@ package body Ships.UI.Crew.Inventory is
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
            Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Set_Use_Item_Command;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCI/SUCI.Show_Move_Item_Command
    -- FUNCTION
