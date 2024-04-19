@@ -463,9 +463,12 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
 proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
   let
-    itemIndex = ($argv[1]).parseInt - 1
+    itemIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the item index.")
     itemDialog = createDialog(name = ".itemdialog", title = "Move " &
         getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]) &
         " to ship cargo", titleWidth = 400, columns = 2,
