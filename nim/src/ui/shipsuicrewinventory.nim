@@ -518,7 +518,7 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
   if argv[1] == "unselect":
     resetSelection()
   else:
