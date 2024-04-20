@@ -517,6 +517,16 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = itemDialog)
   return tclOk
 
+proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults =
+  if argv[1] == "unselect":
+    resetSelection()
+  else:
+    for index, _ in playerShip.crew[memberIndex].inventory:
+      tclSetVar(varName = "invindex" & $(index + 1), newValue = "1")
+  return sortCrewInventoryCommand(clientData = clientData, interp = interp,
+      argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -525,5 +535,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SortCrewInventory", sortCrewInventoryCommand)
     addCommand("SetUseItem", setUseItemCommand)
     addCommand("ShowMoveItem", showMoveItemCommand)
+    addCommand("ToggleAllInventory", toggleAllInventoryCommand)
   except:
     showError(message = "Can't add a Tcl command.")

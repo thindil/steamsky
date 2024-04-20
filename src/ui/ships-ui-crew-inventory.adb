@@ -1219,36 +1219,36 @@ package body Ships.UI.Crew.Inventory is
    -- Action is the action which will be performed. Possible values are
    -- select or deselect
    -- SOURCE
-   function Toggle_All_Inventory_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Toggle_All_Inventory_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-   begin
-      if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
-         Reset_Selection(Interp => Interp);
-      else
-         Set_Item_Selection_Loop :
-         for I in
-           1 ..
-             Inventory_Container.Capacity
-               (Container => Player_Ship.Crew(Member_Index).Inventory) loop
-            Tcl_SetVar
-              (interp => Interp,
-               varName => "invindex" & Trim(Source => I'Img, Side => Left),
-               newValue => "1");
-         end loop Set_Item_Selection_Loop;
-      end if;
-      return
-        Sort_Crew_Inventory_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
-   end Toggle_All_Inventory_Command;
+--   function Toggle_All_Inventory_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--      Convention => C;
+--      -- ****
+--
+--   function Toggle_All_Inventory_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--   begin
+--      if CArgv.Arg(Argv => Argv, N => 1) = "unselect" then
+--         Reset_Selection(Interp => Interp);
+--      else
+--         Set_Item_Selection_Loop :
+--         for I in
+--           1 ..
+--             Inventory_Container.Capacity
+--               (Container => Player_Ship.Crew(Member_Index).Inventory) loop
+--            Tcl_SetVar
+--              (interp => Interp,
+--               varName => "invindex" & Trim(Source => I'Img, Side => Left),
+--               newValue => "1");
+--         end loop Set_Item_Selection_Loop;
+--      end if;
+--      return
+--        Sort_Crew_Inventory_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
+--   end Toggle_All_Inventory_Command;
 
    procedure Add_Inventory_Commands is
    begin
@@ -1267,9 +1267,9 @@ package body Ships.UI.Crew.Inventory is
          Ada_Command => Toggle_Inventory_Items_Command'Access);
       Add_Command
         (Name => "MoveItems", Ada_Command => Move_Items_Command'Access);
-      Add_Command
-        (Name => "ToggleAllInventory",
-         Ada_Command => Toggle_All_Inventory_Command'Access);
+--      Add_Command
+--        (Name => "ToggleAllInventory",
+--         Ada_Command => Toggle_All_Inventory_Command'Access);
    end Add_Inventory_Commands;
 
 end Ships.UI.Crew.Inventory;
