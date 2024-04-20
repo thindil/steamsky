@@ -29,8 +29,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
       discard tclEval(script = label & " configure -text {" & formattedTime() &
           " Speed: " & $((realSpeed(ship = playerShip) * 60) / 1_000) & " km/h}")
     except ValueError:
-      tclEval(script = "bgerror {Can't show the speed of the ship. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't show the speed of the ship.")
       return
     tclEval(script = "tooltip::tooltip " & label & " \"Game time and current ship speed.\"")
   label = gameHeader & ".nofuel"
@@ -38,8 +37,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   var itemAmount = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
-        tclEval(script = "bgerror {Can't get items amount. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get items amount.")
         return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofuelicon")
@@ -55,8 +53,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   itemAmount = try:
       getItemsAmount(iType = "Drinks")
     except KeyError:
-      tclEval(script = "bgerror {Can't get items amount. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError("Can't get items amount (2).")
       return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nodrinksicon")
@@ -72,8 +69,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   itemAmount = try:
       getItemsAmount(iType = "Food")
     except KeyError:
-      tclEval(script = "bgerror {Can't get items amount. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError("Can't get items amount (3).")
       return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofoodicon")
@@ -108,8 +104,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
     faction = try:
         factionsList[playerShip.crew[0].faction]
       except KeyError:
-        tclEval(script = "bgerror {Can't get faction. Reason: " &
-            getCurrentExceptionMsg() & "}")
+        showError(message = "Can't get faction.")
         return
     frame = mainPaned & ".combat"
   if havePilot and (haveEngineer or "sentientships" in faction.flags) and (
@@ -121,8 +116,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
                   ship = playerShip,
               infoOnly = true).float / 1_000)
         except ValueError:
-          tclEval(script = "bgerror {Can't count speed. Reason: " &
-              getCurrentExceptionMsg() & "}")
+          showError(message = "Can't coutn speed.")
           return
     if speed < 0.5:
       tclEval(script = "tooltip::tooltip " & label & " \"You can't fly with your ship, because it is overloaded.\"")
@@ -154,8 +148,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
       else:
         discard
     except KeyError:
-      tclEval(script = "bgerror {Can't check modules. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't check modules.")
       return
     if module.durability != module.maxDurability:
       needRepairs = true
