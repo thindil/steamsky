@@ -30,8 +30,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Config;
 with CoreUI;
 with Crew.Inventory; use Crew.Inventory;
@@ -689,115 +688,6 @@ package body Ships.UI.Crew.Inventory is
    end Set_Use_Item_Command;
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****o* SUCI/SUCI.Show_Move_Item_Command
-   -- FUNCTION
-   -- Show UI to move the selected item to the ship cargo
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowMoveItem itemindex
-   -- itemindex is the index of the item which will be set
-   -- SOURCE
---   function Show_Move_Item_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Show_Move_Item_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Tcl.Tklib.Ada.Tooltip;
---
---      Item_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Item_Dialog: constant Ttk_Frame :=
---        Create_Dialog
---          (Name => ".itemdialog",
---           Title =>
---             "Move " &
---             Get_Item_Name
---               (Item =>
---                  Inventory_Container.Element
---                    (Container => Player_Ship.Crew(Member_Index).Inventory,
---                     Index => Item_Index)) &
---             " to ship cargo",
---           Title_Width => 400, Columns => 2, Parent_Name => ".memberdialog");
---      Button: Ttk_Button :=
---        Create
---          (pathName => Item_Dialog & ".movebutton",
---           options =>
---             "-text Move -command {MoveItem " &
---             CArgv.Arg(Argv => Argv, N => 1) &
---             "} -image moveicon -style Dialoggreen.TButton");
---      Max_Amount_Button: Ttk_Button;
---      Max_Amount: constant Positive :=
---        Inventory_Container.Element
---          (Container => Player_Ship.Crew(Member_Index).Inventory,
---           Index => Item_Index)
---          .Amount;
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Amount_Box: constant Ttk_SpinBox :=
---        Create
---          (pathName => Item_Dialog & ".amount",
---           options =>
---             "-width 5 -from 1 -to" & Positive'Image(Max_Amount) &
---             " -validate key -validatecommand {ValidateMoveAmount" &
---             Positive'Image(Max_Amount) & " %P " & Button & " %W}");
---   begin
---      Max_Amount_Button :=
---        Create
---          (pathName => Item_Dialog & ".amountlbl",
---           options =>
---             "-text {Amount (max:" & Positive'Image(Max_Amount) &
---             "):} -command {" & Amount_Box & " set" &
---             Positive'Image(Max_Amount) & ";" & Amount_Box & " validate}");
---      Add
---        (Widget => Max_Amount_Button,
---         Message => "Max amount of the item to move.");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Max_Amount_Button, Options => "-padx 5");
---      Set(SpinBox => Amount_Box, Value => "1");
---      Add(Widget => Amount_Box, Message => "Amount of the item to move.");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
---      Bind
---        (Widgt => Amount_Box, Sequence => "<Escape>",
---         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
---      Add(Widget => Button, Message => "Move the item to the cargo.");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Button, Options => "-padx {5 0} -pady {0 5}");
---      Bind
---        (Widgt => Button, Sequence => "<Escape>",
---         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
---      Button :=
---        Create
---          (pathName => Item_Dialog & ".cancelbutton",
---           options =>
---             "-text Cancel -command {CloseDialog " & Item_Dialog &
---             " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialogred.TButton");
---      Add
---        (Widget => Button,
---         Message => "Cancel giving and close dialog. \[Escape key\]");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Button,
---         Options => "-column 1 -row 2 -padx {0 5} -pady {0 5}");
---      Focus(Widgt => Button);
---      Bind
---        (Widgt => Button, Sequence => "<Tab>",
---         Script => "{focus " & Item_Dialog & ".movebutton;break}");
---      Bind
---        (Widgt => Button, Sequence => "<Escape>",
---         Script => "{" & Button & " invoke;break}");
---      Show_Dialog(Dialog => Item_Dialog);
---      return TCL_OK;
---   end Show_Move_Item_Command;
-
    -- ****if* SUCI/SUCI.Move_Item
    -- FUNCTION
    -- Move the selected item to the player's ship's cargo
@@ -1018,6 +908,7 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tiny_String;
 
       Used: constant Boolean :=
@@ -1361,8 +1252,6 @@ package body Ships.UI.Crew.Inventory is
 
    procedure Add_Inventory_Commands is
    begin
---      Add_Command
---        (Name => "ShowMoveItem", Ada_Command => Show_Move_Item_Command'Access);
       Add_Command(Name => "MoveItem", Ada_Command => Move_Item_Command'Access);
       Add_Command
         (Name => "ValidateMoveAmount",
