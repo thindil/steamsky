@@ -22,21 +22,21 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Event;
+-- with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Config;
-with CoreUI;
+-- with CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
-with Ships.Cargo;
-with Ships.Crew;
+-- with Ships.Cargo;
+-- with Ships.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 
@@ -697,86 +697,89 @@ package body Ships.UI.Crew.Inventory is
    -- HISTORY
    -- 7.8 - Added
    -- SOURCE
-   procedure Move_Item(Item_Index, Amount: Positive) is
+   procedure Move_Item(Item_Index, Amount: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaCrewInfo";
       -- ****
-      use Tcl.Tk.Ada.Event;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-      use CoreUI;
-      use Ships.Cargo;
-      use Ships.Crew;
-
-      Type_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName =>
-             Main_Paned &
-             ".shipinfoframe.cargo.canvas.frame.selecttype.combo");
-   begin
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      if Free_Cargo
-          (Amount =>
-             0 -
-             (Get_Proto_Item
-                (Index =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Crew(Member_Index).Inventory,
-                      Index => Item_Index)
-                     .Proto_Index)
-                .Weight *
-              Amount)) <
-        0 then
-         Show_Message
-           (Text =>
-              "No free space in ship cargo for that amount of " &
-              Get_Item_Name
-                (Item =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Crew(Member_Index).Inventory,
-                      Index => Item_Index)),
-            Title => "No free space in cargo");
-         return;
-      end if;
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Update_Cargo
-        (Ship => Player_Ship,
-         Proto_Index =>
-           Inventory_Container.Element
-             (Container => Player_Ship.Crew(Member_Index).Inventory,
-              Index => Item_Index)
-             .Proto_Index,
-         Amount => Amount,
-         Durability =>
-           Inventory_Container.Element
-             (Container => Player_Ship.Crew(Member_Index).Inventory,
-              Index => Item_Index)
-             .Durability,
-         Price =>
-           Inventory_Container.Element
-             (Container => Player_Ship.Crew(Member_Index).Inventory,
-              Index => Item_Index)
-             .Price);
-      Update_Inventory
-        (Member_Index => Member_Index, Amount => -Amount,
-         Inventory_Index => Item_Index, Ship => Player_Ship);
-      if
-        (Player_Ship.Crew(Member_Index).Order = CLEAN and
-         Find_Item
-             (Inventory => Player_Ship.Crew(Member_Index).Inventory,
-              Item_Type => Cleaning_Tools) =
-           0) or
-        ((Player_Ship.Crew(Member_Index).Order = UPGRADING or
-          Player_Ship.Crew(Member_Index).Order = REPAIR) and
-         Find_Item
-             (Inventory => Player_Ship.Crew(Member_Index).Inventory,
-              Item_Type => Repair_Tools) =
-           0) then
-         Give_Orders
-           (Ship => Player_Ship, Member_Index => Member_Index,
-            Given_Order => REST);
-      end if;
-      Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-   end Move_Item;
+--      use Tcl.Tk.Ada.Event;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+--      use CoreUI;
+--      use Ships.Cargo;
+--      use Ships.Crew;
+--
+--      Type_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName =>
+--             Main_Paned &
+--             ".shipinfoframe.cargo.canvas.frame.selecttype.combo");
+--   begin
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      if Free_Cargo
+--          (Amount =>
+--             0 -
+--             (Get_Proto_Item
+--                (Index =>
+--                   Inventory_Container.Element
+--                     (Container => Player_Ship.Crew(Member_Index).Inventory,
+--                      Index => Item_Index)
+--                     .Proto_Index)
+--                .Weight *
+--              Amount)) <
+--        0 then
+--         Show_Message
+--           (Text =>
+--              "No free space in ship cargo for that amount of " &
+--              Get_Item_Name
+--                (Item =>
+--                   Inventory_Container.Element
+--                     (Container => Player_Ship.Crew(Member_Index).Inventory,
+--                      Index => Item_Index)),
+--            Title => "No free space in cargo");
+--         return;
+--      end if;
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      Update_Cargo
+--        (Ship => Player_Ship,
+--         Proto_Index =>
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Crew(Member_Index).Inventory,
+--              Index => Item_Index)
+--             .Proto_Index,
+--         Amount => Amount,
+--         Durability =>
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Crew(Member_Index).Inventory,
+--              Index => Item_Index)
+--             .Durability,
+--         Price =>
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Crew(Member_Index).Inventory,
+--              Index => Item_Index)
+--             .Price);
+--      Update_Inventory
+--        (Member_Index => Member_Index, Amount => -Amount,
+--         Inventory_Index => Item_Index, Ship => Player_Ship);
+--      if
+--        (Player_Ship.Crew(Member_Index).Order = CLEAN and
+--         Find_Item
+--             (Inventory => Player_Ship.Crew(Member_Index).Inventory,
+--              Item_Type => Cleaning_Tools) =
+--           0) or
+--        ((Player_Ship.Crew(Member_Index).Order = UPGRADING or
+--          Player_Ship.Crew(Member_Index).Order = REPAIR) and
+--         Find_Item
+--             (Inventory => Player_Ship.Crew(Member_Index).Inventory,
+--              Item_Type => Repair_Tools) =
+--           0) then
+--         Give_Orders
+--           (Ship => Player_Ship, Member_Index => Member_Index,
+--            Given_Order => REST);
+--      end if;
+--      Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--   end Move_Item;
 
    -- ****o* SUCI/SUCI.Move_Item_Command
    -- FUNCTION

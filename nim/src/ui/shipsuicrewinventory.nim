@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import ../[config, crewinventory, game, items, shipscargo, tk, types]
+import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
 import coreui, dialogs, table
 
 var
@@ -541,7 +541,6 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
 proc moveItem(itemIndex: Natural; amount: Positive) =
-  let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
   if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
       itemIndex].protoIndex].weight * amount)) < 0:
     showMessage(text = "No free space in ship cargo for tha amout of " &
@@ -554,6 +553,14 @@ proc moveItem(itemIndex: Natural; amount: Positive) =
       price = playerShip.crew[memberIndex].inventory[itemIndex].price)
   updateInventory(memberIndex = memberIndex, amount = -amount,
       inventoryIndex = itemIndex, ship = playerShip)
+  if (playerShip.crew[memberIndex].order == clean and findItem(
+      inventory = playerShip.crew[memberIndex].inventory,
+      itemType = cleaningTools) == -1) or (playerShip.crew[memberIndex].order in
+      {upgrading, repair} and findItem(inventory = playerShip.crew[
+      memberIndex].inventory, itemType = repairTools) == -1):
+    giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest)
+  let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
@@ -566,3 +573,12 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ToggleAllInventory", toggleAllInventoryCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc moveAdaItem(itemIndex, amount: cint) {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
+  try:
+    moveItem(itemIndex = itemIndex - 1, amount = amount)
+  except:
+    echo getCurrentExceptionMsg()
