@@ -785,6 +785,137 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     if endCombat:
       return true
 
+proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
+    ammoIndex, evadeBonus: var int; module: var ModuleData; ship,
+    enemyShip: ShipRecord; mIndex, accuracyBonus, ammoIndex2: int) {.sideEffect,
+    raises: [KeyError], tags: [RootEffect].} =
+  ## Count all needed data for shooting from the selected gun or harpoon gun
+  ##
+  ## * gunnerIndex          - the index of the gunner who is using the gun
+  ## * shoots               - the amount of shoots from the gun
+  ## * gunnerOrder          - the order for the gunner who is using the gun
+  ## * currentAccuracyBonus - the current bonus to attacker accuracy
+  ## * ammoIndex            - the index of ammunition used by the gun
+  ## * evadeBonus           - the bonus to evade for the defender
+  ## * module               - the information about the gun or harpoon gun
+  ## * ship                 - the attacking ship
+  ## * enemyShip            - the defending ship
+  ## * mIndex               - the index of currently checked module in the
+  ##                          attacker's ship
+  ## * accuracyBonus        - the global bonus to accuracy for the attacker
+  ## * ammoIndex2           - the index of the ammunition in the attacker's
+  ##                          cargo
+  ##
+  ## Returns modified parameters gunnerIndex, shoots, gunnerOrder,
+  ## currentAccuracyBonus, ammoIndex, evadeBonus and module
+  gunnerIndex = module.owner[0]
+  logMessage(message = "Gunner index: " & $gunnerIndex & ".",
+      debugType = DebugTypes.combat)
+  if ship.crew == playerShip.crew:
+    if gunnerIndex > -1:
+      for gun in guns.mitems:
+        if gun[1] == mIndex:
+          shoots = gun[3]
+          gunnerOrder = gun[2]
+          if gun[3] > 0:
+            if gunnerOrder != 3:
+              shoots = (shoots.float / 2.0).ceil.int
+            logMessage(message = "Player shoots (no cooldown): " &
+                $shoots, debugType = DebugTypes.combat)
+          elif gun[3] < 0:
+            shoots = 0
+            gun[3].inc
+            if gun[3] == 0:
+              shoots = 1
+              gun[3] = if gunnerOrder == 3:
+                  modulesList[playerShip.modules[gun[
+                      1]].protoIndex].speed
+                else:
+                  modulesList[playerShip.modules[gun[
+                      1]].protoIndex].speed - 1
+            logMessage(message = "Player shoots (after cooldown): " &
+                $shoots, debugType = DebugTypes.combat)
+      logMessage(message = "Shoots test3: " & $shoots,
+          debugType = DebugTypes.combat)
+      if ship.crew[gunnerIndex].order != gunner:
+        gunnerOrder = 1
+      case gunnerOrder
+      of 1:
+        if shoots > 0:
+          shoots = 0
+      of 2:
+        currentAccuracyBonus = accuracyBonus + 20
+      of 4:
+        currentAccuracyBonus = accuracyBonus - 10
+      of 5:
+        currentAccuracyBonus = accuracyBonus - 20
+      else:
+        discard
+  else:
+    for gun in game.enemy.guns.mitems:
+      if gun[1] == mIndex:
+        if gun[3] > 0:
+          shoots = gun[3]
+        elif gun[3] < 0:
+          shoots = 0
+          gun[3].inc
+          if gun[3] == 0:
+            shoots = 1
+            gun[3] = if game.enemy.combatAi == disarmer:
+                modulesList[ship.modules[gun[1]].protoIndex].speed - 1
+              else:
+                modulesList[ship.modules[gun[1]].protoIndex].speed
+    if ship.crew.len > 0 and gunnerIndex == -1:
+      shoots = 0
+  if ammoIndex2 in ship.cargo.low .. ship.cargo.high and itemsList[
+      ship.cargo[ammoIndex2].protoIndex].itemType == itemsTypesList[
+      modulesList[module.protoIndex].value - 1]:
+    ammoIndex = ammoIndex2
+  if ammoIndex == -1:
+    for iIndex, item in itemsList:
+      if item.itemType == itemsTypesList[modulesList[
+          module.protoIndex].value - 1]:
+        for iIndex2, item2 in ship.cargo:
+          if item2.protoIndex == iIndex:
+            ammoIndex = iIndex2
+            if module.mType == ModuleType2.harpoonGun:
+              module.harpoonIndex = ammoIndex
+            elif module.mType == ModuleType2.gun:
+              module.ammoIndex = ammoIndex
+            break
+      if ammoIndex > -1:
+        break
+  if ammoIndex == -1:
+    if ship.crew == playerShip.crew:
+      addMessage(message = "You don't have ammo to " & module.name &
+          "!", mType = combatMessage, color = red)
+    shoots = 0
+  elif ship.cargo[ammoIndex].amount < shoots:
+    shoots = ship.cargo[ammoIndex].amount
+  if game.enemy.distance > 5_000:
+    shoots = 0
+  if module.mType == ModuleType2.harpoonGun and shoots > 0:
+    shoots = 1
+    if game.enemy.distance > 2_000:
+      shoots = 0
+    if findEnemyModule(mType = ModuleType.armor,
+        enemyShip = enemyShip) > -1:
+      shoots = 0
+  if module.mType == ModuleType2.gun and shoots > 0:
+    case itemsList[ship.cargo[ammoIndex].protoIndex].value[2]
+    of 2:
+      if ship.crew == playerShip.crew:
+        currentAccuracyBonus -= 10
+      else:
+        evadeBonus += 10
+    of 3:
+      if ship.crew == playerShip.crew:
+        currentAccuracyBonus += 10
+      else:
+        evadeBonus -= 10
+    else:
+      discard
+
 proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
@@ -827,113 +958,12 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
         elif module.mType == ModuleType2.gun:
           ammoIndex2 = module.ammoIndex
         if module.mType in {ModuleType2.gun, harpoonGun}:
-          gunnerIndex = module.owner[0]
-          logMessage(message = "Gunner index: " & $gunnerIndex & ".",
-              debugType = DebugTypes.combat)
-          if ship.crew == playerShip.crew:
-            if gunnerIndex > -1:
-              for gun in guns.mitems:
-                if gun[1] == mIndex:
-                  shoots = gun[3]
-                  gunnerOrder = gun[2]
-                  if gun[3] > 0:
-                    if gunnerOrder != 3:
-                      shoots = (shoots.float / 2.0).ceil.int
-                    logMessage(message = "Player shoots (no cooldown): " &
-                        $shoots, debugType = DebugTypes.combat)
-                  elif gun[3] < 0:
-                    shoots = 0
-                    gun[3].inc
-                    if gun[3] == 0:
-                      shoots = 1
-                      gun[3] = if gunnerOrder == 3:
-                          modulesList[playerShip.modules[gun[
-                              1]].protoIndex].speed
-                        else:
-                          modulesList[playerShip.modules[gun[
-                              1]].protoIndex].speed - 1
-                    logMessage(message = "Player shoots (after cooldown): " &
-                        $shoots, debugType = DebugTypes.combat)
-              logMessage(message = "Shoots test3: " & $shoots,
-                  debugType = DebugTypes.combat)
-              if ship.crew[gunnerIndex].order != gunner:
-                gunnerOrder = 1
-              case gunnerOrder
-              of 1:
-                if shoots > 0:
-                  shoots = 0
-              of 2:
-                currentAccuracyBonus = accuracyBonus + 20
-              of 4:
-                currentAccuracyBonus = accuracyBonus - 10
-              of 5:
-                currentAccuracyBonus = accuracyBonus - 20
-              else:
-                discard
-          else:
-            for gun in game.enemy.guns.mitems:
-              if gun[1] == mIndex:
-                if gun[3] > 0:
-                  shoots = gun[3]
-                elif gun[3] < 0:
-                  shoots = 0
-                  gun[3].inc
-                  if gun[3] == 0:
-                    shoots = 1
-                    gun[3] = if game.enemy.combatAi == disarmer:
-                        modulesList[ship.modules[gun[1]].protoIndex].speed - 1
-                      else:
-                        modulesList[ship.modules[gun[1]].protoIndex].speed
-            if ship.crew.len > 0 and gunnerIndex == -1:
-              shoots = 0
-          if ammoIndex2 in ship.cargo.low .. ship.cargo.high and itemsList[
-              ship.cargo[ammoIndex2].protoIndex].itemType == itemsTypesList[
-              modulesList[module.protoIndex].value - 1]:
-            ammoIndex = ammoIndex2
-          if ammoIndex == -1:
-            for iIndex, item in itemsList:
-              if item.itemType == itemsTypesList[modulesList[
-                  module.protoIndex].value - 1]:
-                for iIndex2, item2 in ship.cargo:
-                  if item2.protoIndex == iIndex:
-                    ammoIndex = iIndex2
-                    if module.mType == ModuleType2.harpoonGun:
-                      module.harpoonIndex = ammoIndex
-                    elif module.mType == ModuleType2.gun:
-                      module.ammoIndex = ammoIndex
-                    break
-              if ammoIndex > -1:
-                break
-          if ammoIndex == -1:
-            if ship.crew == playerShip.crew:
-              addMessage(message = "You don't have ammo to " & module.name &
-                  "!", mType = combatMessage, color = red)
-            shoots = 0
-          elif ship.cargo[ammoIndex].amount < shoots:
-            shoots = ship.cargo[ammoIndex].amount
-          if game.enemy.distance > 5_000:
-            shoots = 0
-          if module.mType == ModuleType2.harpoonGun and shoots > 0:
-            shoots = 1
-            if game.enemy.distance > 2_000:
-              shoots = 0
-            if findEnemyModule(mType = ModuleType.armor,
-                enemyShip = enemyShip) > -1:
-              shoots = 0
-          if module.mType == ModuleType2.gun and shoots > 0:
-            case itemsList[ship.cargo[ammoIndex].protoIndex].value[2]
-            of 2:
-              if ship.crew == playerShip.crew:
-                currentAccuracyBonus -= 10
-              else:
-                evadeBonus += 10
-            of 3:
-              if ship.crew == playerShip.crew:
-                currentAccuracyBonus += 10
-              else:
-                evadeBonus -= 10
-            else:
-              discard
+          prepareGun(gunnerIndex = gunnerIndex, shoots = shoots,
+              gunnerOrder = gunnerOrder,
+              currentAccuracyBonus = currentAccuracyBonus,
+              ammoIndex = ammoIndex, evadeBonus = evadeBonus, module = module,
+              ship = ship, enemyShip = enemyShip, mIndex = mIndex,
+              accuracyBonus = accuracyBonus, ammoIndex2 = ammoIndex2)
         else:
           if game.enemy.distance > 100:
             shoots = 0
