@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Typo in changelog
 - Centering the map on the player's ship after move
 - Wrong position of ship after trading
+- Tooltip for the close button in move item from a crew member to the ship's
+  cargo
 
 ## [9.9] - 2024-04-14
 
