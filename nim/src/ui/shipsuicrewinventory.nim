@@ -519,6 +519,19 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Select or deselect all items in the crew member inventory
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ToggleAllInventory action
+  ## Action is the action which will be performed. Possible values are
+  ## select or deselect
   if argv[1] == "unselect":
     resetSelection()
   else:
