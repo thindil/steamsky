@@ -509,7 +509,7 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   button = itemDialog & ".cancelbutton"
   tclEval(script = "ttk::button " & button &
       " -text Cancel -command {CloseDialog " & itemDialog & " .memberdialog;focus .memberdialog.button} -image cancelicon -style Dialogred.TButton")
-  tclEval(script = "tooltip::tooltip " & button & " \"Cancel giving and close dialog.\\[Escape key\\]\"")
+  tclEval(script = "tooltip::tooltip " & button & " \"Cancel moving and close dialog.\\[Escape key\\]\"")
   tclEval(script = "grid " & button & " -column 1 -row 2 -padx {0 5} -pady {0 5}")
   tclEval(script = "focus " & button)
   tclEval(script = "bind " & button & " <Tab> {focus " & itemDialog & ".movebutton;break}")
