@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import ../[config, crewinventory, game, items, tk, types]
-import dialogs, table
+import ../[config, crewinventory, game, items, shipscargo, tk, types]
+import coreui, dialogs, table
 
 var
   inventoryTable: TableWidget
@@ -539,6 +539,21 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       tclSetVar(varName = "invindex" & $(index + 1), newValue = "1")
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
+
+proc moveItem(itemIndex: Natural; amount: Positive) =
+  let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
+      itemIndex].protoIndex].weight * amount)) < 0:
+    showMessage(text = "No free space in ship cargo for tha amout of " &
+        getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]),
+        title = "No free space in cargo")
+    return
+  updateCargo(ship = playerShip, protoIndex = playerShip.crew[
+      memberIndex].inventory[itemIndex].protoIndex, amount = amount,
+      durability = playerShip.crew[memberIndex].inventory[itemIndex].durability,
+      price = playerShip.crew[memberIndex].inventory[itemIndex].price)
+  updateInventory(memberIndex = memberIndex, amount = -amount,
+      inventoryIndex = itemIndex, ship = playerShip)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
