@@ -788,7 +788,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
 proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
     ammoIndex, evadeBonus: var int; module: var ModuleData; ship,
     enemyShip: ShipRecord; mIndex, accuracyBonus, ammoIndex2: int) {.sideEffect,
-    raises: [KeyError], tags: [RootEffect].} =
+    raises: [KeyError], tags: [RootEffect], contractual.} =
   ## Count all needed data for shooting from the selected gun or harpoon gun
   ##
   ## * gunnerIndex          - the index of the gunner who is using the gun
@@ -916,6 +916,153 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
     else:
       discard
 
+proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
+    speedBonus: int) {.sideEffect, raises: [KeyError, IOError], tags: [
+    RootEffect], contractual.} =
+  ## Made one attack of one of the ships in the combat
+  ##
+  ## * ship          - the ship which will be attacking
+  ## * enemyShip     - the ship which will be attacked
+  ## * ammoIndex2    - the index of the ammunition in the attacker's cargo
+  ## * accuracyBonus - the global bonus to accuracy for the attacker
+  ## * speedBonus    - the bonus from the ships speed
+  ##
+  ## Returns modified parameters ship and enemyShip
+
+  var hitLocation: int = -1
+
+  if ship.crew == playerShip.crew:
+    logMessage(message = "Player's round", debugType = DebugTypes.combat)
+  else:
+    logMessage(message = "Enemy's round.", debugType = DebugTypes.combat)
+  block attackLoop:
+    for mIndex, module in ship.modules.mpairs:
+      if module.durability == 0 or module.mType notin {ModuleType2.gun,
+          batteringRam, harpoonGun}:
+        continue
+      var
+        gunnerIndex: int = -1
+        ammoIndex: int = -1
+        gunnerOrder: Natural = 1
+        shoots: int = 0
+        currentAccuracyBonus: int = 0
+        evadeBonus: int = 0
+      if module.mType == ModuleType2.harpoonGun:
+        ammoIndex2 = module.harpoonIndex
+      elif module.mType == ModuleType2.gun:
+        ammoIndex2 = module.ammoIndex
+      if module.mType in {ModuleType2.gun, harpoonGun}:
+        prepareGun(gunnerIndex = gunnerIndex, shoots = shoots,
+            gunnerOrder = gunnerOrder,
+            currentAccuracyBonus = currentAccuracyBonus,
+            ammoIndex = ammoIndex, evadeBonus = evadeBonus, module = module,
+            ship = ship, enemyShip = enemyShip, mIndex = mIndex,
+            accuracyBonus = accuracyBonus, ammoIndex2 = ammoIndex2)
+      else:
+        if game.enemy.distance > 100:
+          shoots = 0
+        else:
+          shoots = (if module.coolingDown: 0 else: 1)
+        module.coolingDown = not module.coolingDown
+      logMessage(message = "Shoots: " & $shoots,
+          debugType = DebugTypes.combat)
+      if shoots > 0:
+        if shooting(ship = ship, enemyShip = enemyShip,
+            currentAccuracyBonus = currentAccuracyBonus,
+            evadeBonus = evadeBonus, gunnerIndex = gunnerIndex,
+            shoots = shoots, gunnerOrder = gunnerOrder,
+            speedBonus = speedBonus, ammoIndex = ammoIndex, module = module,
+            hitLocation = hitLocation):
+          break attackLoop
+
+proc changeEnemySpeed(enemyPilotOrder: var Natural;
+    damageRange: Natural) {.sideEffect, raises: [], tags: [], contractual.} =
+  ## Change the enemy's ship's speed depending on the enemy's AI
+  ##
+  ## * enemyPilotOrder - the order of the enemy's ship's pilot
+  ## * damageRange     - the distance between the ships in which some speed changes happen
+  ##
+  ## Returns modified parameter enemyPilotOrder
+  case game.enemy.combatAi
+  of berserker:
+    if game.enemy.distance > 10 and game.enemy.ship.speed != fullSpeed:
+      game.enemy.ship.speed.inc
+      addMessage(message = enemyName & " increases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 1
+    elif game.enemy.distance <= 10 and game.enemy.ship.speed == fullSpeed:
+      game.enemy.ship.speed.dec
+      addMessage(message = enemyName & " decreases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 2
+  of attacker, disarmer:
+    if game.enemy.distance > damageRange and game.enemy.ship.speed != fullSpeed:
+      game.enemy.ship.speed.inc
+      addMessage(message = enemyName & " increases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 1
+    elif game.enemy.distance <= damageRange and game.enemy.ship.speed == fullSpeed:
+      game.enemy.ship.speed.dec
+      addMessage(message = enemyName & " decreases speed.",
+          mType = combatMessage)
+      enemyPilotOrder = 2
+  of coward:
+    if game.enemy.distance < 15_000 and game.enemy.ship.speed != fullSpeed:
+      game.enemy.ship.speed.inc
+      addMessage(message = enemyName & " increases speed.",
+          mType = combatMessage)
+    enemyPilotOrder = 4
+  else:
+    discard
+
+proc countDamageRange(damageRange: var Natural;
+    ammoIndex2: var int) {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
+  ## Count the distance between the ships in which the enemy can attack the
+  ## player's ship
+  ##
+  ## * damageRange - the range between the ships in which damage can be done
+  ## * ammoIndex2  - the index of the ammunition in the enemy ship
+  ##
+  ## Returns modified parameters damageRange and ammoIndex2
+  var enemyWeaponIndex: int = -1
+  for index, module in game.enemy.ship.modules:
+    if module.durability == 0 or module.mType notin {ModuleType2.gun,
+        batteringRam, harpoonGun}:
+      continue
+    if module.mType in {ModuleType2.gun, harpoonGun}:
+      if module.mType == ModuleType2.gun and damageRange > 5_000:
+        damageRange = 5_000
+      elif damageRange > 2_000:
+        damageRange = 2_000
+      ammoIndex2 = if module.mType == ModuleType2.gun:
+          module.ammoIndex
+        else:
+          module.harpoonIndex
+      var enemyAmmoIndex: int = -1
+      if ammoIndex2 in game.enemy.ship.cargo.low .. game.enemy.ship.cargo.high:
+        if itemsList[game.enemy.ship.cargo[ammoIndex2].protoIndex].itemType ==
+            itemsTypesList[modulesList[module.protoIndex].value - 1]:
+          enemyAmmoIndex = ammoIndex2
+      if enemyAmmoIndex == -1:
+        for iindex, item in itemsList:
+          if item.itemType == itemsTypesList[modulesList[
+              module.protoIndex].value - 1]:
+            for cindex, cargo in game.enemy.ship.cargo:
+              if cargo.protoIndex == iindex:
+                enemyAmmoIndex = cindex
+                break
+            if enemyAmmoIndex > -1:
+              break
+      if enemyAmmoIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
+        game.enemy.combatAi = coward
+        break
+    elif damageRange > 100:
+      damageRange = 100
+    enemyWeaponIndex = index
+  if enemyWeaponIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
+    game.enemy.combatAi = coward
+
 proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
@@ -926,60 +1073,6 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     speedBonus: int = 0
     ammoIndex2: int = -1
 
-  proc attack(ship, enemyShip: var ShipRecord) {.sideEffect, raises: [KeyError,
-      IOError], tags: [RootEffect], contractual.} =
-    ## Made one attack of one of the ships in the combat
-    ##
-    ## * ship      - the ship which will be attacking
-    ## * enemyShip - the ship which will be attacked
-    ##
-    ## Returns modified parameters ship and enemyShip
-
-    var hitLocation: int = -1
-
-    if ship.crew == playerShip.crew:
-      logMessage(message = "Player's round", debugType = DebugTypes.combat)
-    else:
-      logMessage(message = "Enemy's round.", debugType = DebugTypes.combat)
-    block attackLoop:
-      for mIndex, module in ship.modules.mpairs:
-        if module.durability == 0 or module.mType notin {ModuleType2.gun,
-            batteringRam, harpoonGun}:
-          continue
-        var
-          gunnerIndex: int = -1
-          ammoIndex: int = -1
-          gunnerOrder: Natural = 1
-          shoots: int = 0
-          currentAccuracyBonus: int = 0
-          evadeBonus: int = 0
-        if module.mType == ModuleType2.harpoonGun:
-          ammoIndex2 = module.harpoonIndex
-        elif module.mType == ModuleType2.gun:
-          ammoIndex2 = module.ammoIndex
-        if module.mType in {ModuleType2.gun, harpoonGun}:
-          prepareGun(gunnerIndex = gunnerIndex, shoots = shoots,
-              gunnerOrder = gunnerOrder,
-              currentAccuracyBonus = currentAccuracyBonus,
-              ammoIndex = ammoIndex, evadeBonus = evadeBonus, module = module,
-              ship = ship, enemyShip = enemyShip, mIndex = mIndex,
-              accuracyBonus = accuracyBonus, ammoIndex2 = ammoIndex2)
-        else:
-          if game.enemy.distance > 100:
-            shoots = 0
-          else:
-            shoots = (if module.coolingDown: 0 else: 1)
-          module.coolingDown = not module.coolingDown
-        logMessage(message = "Shoots: " & $shoots,
-            debugType = DebugTypes.combat)
-        if shoots > 0:
-          if shooting(ship = ship, enemyShip = enemyShip,
-              currentAccuracyBonus = currentAccuracyBonus,
-              evadeBonus = evadeBonus, gunnerIndex = gunnerIndex,
-              shoots = shoots, gunnerOrder = gunnerOrder,
-              speedBonus = speedBonus, ammoIndex = ammoIndex, module = module,
-              hitLocation = hitLocation):
-            break attackLoop
   if findItem(inventory = playerShip.cargo, itemType = fuelType) == -1:
     addMessage(message = "Ship fall from sky due to lack of fuel.",
         mType = otherMessage, color = red)
@@ -1046,77 +1139,10 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     speedBonus = -10
   accuracyBonus += speedBonus
   evadeBonus -= speedBonus
-  var
-    damageRange: Natural = 10_000
-    enemyWeaponIndex: int = -1
-  for index, module in game.enemy.ship.modules:
-    if module.durability == 0 or module.mType notin {ModuleType2.gun,
-        batteringRam, harpoonGun}:
-      continue
-    if module.mType in {ModuleType2.gun, harpoonGun}:
-      if module.mType == ModuleType2.gun and damageRange > 5_000:
-        damageRange = 5_000
-      elif damageRange > 2_000:
-        damageRange = 2_000
-      ammoIndex2 = if module.mType == ModuleType2.gun:
-          module.ammoIndex
-        else:
-          module.harpoonIndex
-      var enemyAmmoIndex: int = -1
-      if ammoIndex2 in game.enemy.ship.cargo.low .. game.enemy.ship.cargo.high:
-        if itemsList[game.enemy.ship.cargo[ammoIndex2].protoIndex].itemType ==
-            itemsTypesList[modulesList[module.protoIndex].value - 1]:
-          enemyAmmoIndex = ammoIndex2
-      if enemyAmmoIndex == -1:
-        for iindex, item in itemsList:
-          if item.itemType == itemsTypesList[modulesList[
-              module.protoIndex].value - 1]:
-            for cindex, cargo in game.enemy.ship.cargo:
-              if cargo.protoIndex == iindex:
-                enemyAmmoIndex = cindex
-                break
-            if enemyAmmoIndex > -1:
-              break
-      if enemyAmmoIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
-        game.enemy.combatAi = coward
-        break
-    elif damageRange > 100:
-      damageRange = 100
-    enemyWeaponIndex = index
-  if enemyWeaponIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
-    game.enemy.combatAi = coward
+  var damageRange: Natural = 10_000
+  countDamageRange(damageRange = damageRange, ammoIndex2 = ammoIndex2)
   var enemyPilotOrder: Natural = 2
-  case game.enemy.combatAi
-  of berserker:
-    if game.enemy.distance > 10 and game.enemy.ship.speed != fullSpeed:
-      game.enemy.ship.speed.inc
-      addMessage(message = enemyName & " increases speed.",
-          mType = combatMessage)
-      enemyPilotOrder = 1
-    elif game.enemy.distance <= 10 and game.enemy.ship.speed == fullSpeed:
-      game.enemy.ship.speed.dec
-      addMessage(message = enemyName & " decreases speed.",
-          mType = combatMessage)
-      enemyPilotOrder = 2
-  of attacker, disarmer:
-    if game.enemy.distance > damageRange and game.enemy.ship.speed != fullSpeed:
-      game.enemy.ship.speed.inc
-      addMessage(message = enemyName & " increases speed.",
-          mType = combatMessage)
-      enemyPilotOrder = 1
-    elif game.enemy.distance <= damageRange and game.enemy.ship.speed == fullSpeed:
-      game.enemy.ship.speed.dec
-      addMessage(message = enemyName & " decreases speed.",
-          mType = combatMessage)
-      enemyPilotOrder = 2
-  of coward:
-    if game.enemy.distance < 15_000 and game.enemy.ship.speed != fullSpeed:
-      game.enemy.ship.speed.inc
-      addMessage(message = enemyName & " increases speed.",
-          mType = combatMessage)
-    enemyPilotOrder = 4
-  else:
-    discard
+  changeEnemySpeed(enemyPilotOrder = enemyPilotOrder, damageRange = damageRange)
   if game.enemy.harpoonDuration > 0:
     game.enemy.ship.speed = fullStop
     addMessage(message = enemyName & " is stopped by your ship.",
@@ -1196,9 +1222,13 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
             createBody = false)
     endCombat = true
     return
-  attack(ship = playerShip, enemyShip = game.enemy.ship)
+  attack(ship = playerShip, enemyShip = game.enemy.ship,
+      ammoIndex2 = ammoIndex2, accuracyBonus = accuracyBonus,
+      speedBonus = speedBonus)
   if not endCombat:
-    attack(ship = game.enemy.ship, enemyShip = playerShip)
+    attack(ship = game.enemy.ship, enemyShip = playerShip,
+        ammoIndex2 = ammoIndex2, accuracyBonus = accuracyBonus,
+        speedBonus = speedBonus)
   if not endCombat:
     var haveBoardingParty: bool = false
 
