@@ -122,8 +122,7 @@ proc getSkillMarks*(skillIndex: Positive;
         skillIndex = skillIndex) > 0:
       result = " +"
   except:
-    tclEval(script = "bgerror {Can't get the crew member skill level. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't get the crew member skill level.")
     return ""
   if memberIndex == crewIndex:
     result = result & "+"
@@ -143,8 +142,7 @@ proc travelInfo*(distance: Natural): array[1 .. 2, Natural] {.sideEffect,
   let speed = try:
       realSpeed(ship = playerShip, infoOnly = true) / 1_000
     except:
-      tclEval(script = "bgerror {Can't count the player's ship speed. Reason: " &
-          getCurrentExceptionMsg() & "}")
+      showError(message = "Can't count the player's ship speed.")
       return
   if speed == 0.0:
     return
