@@ -341,20 +341,6 @@ package Game is
    Skills_Amount: SkillsData_Container.Extended_Index := 0;
    -- ****
 
-   -- ****v* Game/Game.Repair_Tools
-   -- FUNCTION
-   -- Name of item type used as tool in repairing/upgrading ship
-   -- SOURCE
-   Repair_Tools: Tiny_String.Bounded_String;
-   -- ****
-
-   -- ****v* Game/Game.Cleaning_Tools
-   -- FUNCTION
-   -- Name of item type used as tool in cleaning ship
-   -- SOURCE
-   Cleaning_Tools: Tiny_String.Bounded_String;
-   -- ****
-
    -- ****v* Game/Game.Alchemy_Tools
    -- FUNCTION
    -- Name of item type used as alchemy tools (mainly in deconstructing orders)
