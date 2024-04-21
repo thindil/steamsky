@@ -911,7 +911,6 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tiny_String;
 
       Used: constant Boolean :=
@@ -952,6 +951,8 @@ package body Ships.UI.Crew.Inventory is
       if Selection then
          Show_Multi_Item_Actions_Menu_Block :
          declare
+            use Tcl.Tk.Ada.Widgets.TtkFrame;
+
             Items_Menu: constant Ttk_Frame :=
               Create_Dialog
                 (Name => ".itemsmenu", Title => "Selected items actions",
