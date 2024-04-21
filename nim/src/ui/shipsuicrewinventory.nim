@@ -542,6 +542,10 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveItem(itemIndex: Natural; amount: Positive) {.sideEffect, raises: [],
     tags: [RootEffect].} =
+  ## Move the selected item to the player's ship's cargo
+  ##
+  ## * itemIndex - the index in the crew member's inventory of item to move
+  ## * amount    - the amount of the item to move
   try:
     if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
         itemIndex].protoIndex].weight * amount)) < 0:
