@@ -540,25 +540,43 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
-proc moveItem(itemIndex: Natural; amount: Positive) =
-  if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
-      itemIndex].protoIndex].weight * amount)) < 0:
-    showMessage(text = "No free space in ship cargo for tha amout of " &
-        getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]),
-        title = "No free space in cargo")
+proc moveItem(itemIndex: Natural; amount: Positive) {.sideEffect, raises: [],
+    tags: [RootEffect].} =
+  try:
+    if freeCargo(amount = 0 - (itemsList[playerShip.crew[memberIndex].inventory[
+        itemIndex].protoIndex].weight * amount)) < 0:
+      showMessage(text = "No free space in ship cargo for tha amout of " &
+          getItemName(item = playerShip.crew[memberIndex].inventory[itemIndex]),
+          title = "No free space in cargo")
+      return
+  except:
+    showError(message = "Can't check free cargo space.")
     return
   updateCargo(ship = playerShip, protoIndex = playerShip.crew[
       memberIndex].inventory[itemIndex].protoIndex, amount = amount,
       durability = playerShip.crew[memberIndex].inventory[itemIndex].durability,
       price = playerShip.crew[memberIndex].inventory[itemIndex].price)
-  updateInventory(memberIndex = memberIndex, amount = -amount,
-      inventoryIndex = itemIndex, ship = playerShip)
+  try:
+    updateInventory(memberIndex = memberIndex, amount = -amount,
+        inventoryIndex = itemIndex, ship = playerShip)
+  except:
+    showError(message = "Can't update the crew member inventory.")
+    return
   if (playerShip.crew[memberIndex].order == clean and findItem(
       inventory = playerShip.crew[memberIndex].inventory,
       itemType = cleaningTools) == -1) or (playerShip.crew[memberIndex].order in
       {upgrading, repair} and findItem(inventory = playerShip.crew[
       memberIndex].inventory, itemType = repairTools) == -1):
-    giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest)
+    try:
+      giveOrders(ship = playerShip, memberIndex = memberIndex,
+          givenOrder = rest)
+    except CrewOrderError:
+      showMessage(text = getCurrentExceptionMsg(),
+          title = "Can't give an order.")
+      return
+    except:
+      showError(message = "Can't give order to the crew member.")
+      return
   let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
   tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
 
