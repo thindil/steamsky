@@ -21,7 +21,7 @@ import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        ReadIOEffect, ExecIOEffect, RootEffect].} =
+        ReadIOEffect, ExecIOEffect, RootEffect], exportc.} =
   ## Open the selected link in a proper program
   ##
   ## * clientData - the additional data for the Tcl command
@@ -51,7 +51,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-    ReadDirEffect, ReadIOEffect].} =
+    ReadDirEffect, ReadIOEffect], exportc.} =
   ## Show the selected file content
   ##
   ## * clientData - the additional data for the Tcl command
@@ -87,7 +87,7 @@ var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-    ReadIOEffect, ReadDirEffect].} =
+    ReadIOEffect, ReadDirEffect], exportc.} =
   ## Show the list of changes in the game, all or just recent, since the last
   ## release
   ##
@@ -132,7 +132,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show the hall of fame screen
   ##
   ## * clientData - the additional data for the Tcl command
@@ -154,7 +154,7 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Delete a saved game file
   ##
   ## * clientData - the additional data for the Tcl command
@@ -187,17 +187,9 @@ proc startGame() =
   generateTraders()
 
 proc addCommands*() =
-  addCommand("OpenLink", openLinkCommand)
-  addCommand("ShowFile", showFileCommand)
-  addCommand("ShowNews", showNewsCommand)
-  addCommand("ShowHallOfFame", showHallOfFameCommand)
-  addCommand("DeleteGame", deleteGameCommand)
-
-# Temporary code for interfacing with Ada
-
-proc addAdaMainMenuCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()
-
+  discard
+#  addCommand("OpenLink", openLinkCommand)
+#  addCommand("ShowFile", showFileCommand)
+#  addCommand("ShowNews", showNewsCommand)
+#  addCommand("ShowHallOfFame", showHallOfFameCommand)
+#  addCommand("DeleteGame", deleteGameCommand)

@@ -43,7 +43,10 @@ package MainMenu.Commands is
    function Open_Link_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "openLinkCommand";
+
       -- ****
 
       -- ****f* MCommands/MCommands.Add_Commands

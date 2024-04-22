@@ -23,7 +23,6 @@ with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.OS_Lib;
 with GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -60,37 +59,6 @@ with Utils;
 with Utils.UI; use Utils.UI;
 
 package body MainMenu.Commands is
-
-   function Open_Link_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use GNAT.OS_Lib;
-
-      Os_Name: constant String :=
-        Tcl_GetVar(interp => Interp, varName => "tcl_platform(os)");
-      Command: constant GNAT.OS_Lib.String_Access :=
-        Locate_Exec_On_Path
-          (Exec_Name =>
-             (if Os_Name = "Windows" then "start"
-              elsif Os_Name = "Darwin" then "open" else "xdg-open"));
-   begin
-      if Command = null then
-         Show_Message
-           (Text => "Can't open the link. Reason: no program to open it.",
-            Parent_Frame => ".", Title => "Can't open the link.");
-         return TCL_OK;
-      end if;
-      if Non_Blocking_Spawn
-          (Program_Name => Command.all,
-           Args =>
-             Argument_String_To_List
-               (Arg_String => CArgv.Arg(Argv => Argv, N => 1)).all) =
-        Invalid_Pid then
-         return TCL_ERROR;
-      end if;
-      return TCL_OK;
-   end Open_Link_Command;
 
    -- ****iv* MCommands/MCommands.LoadTable
    -- FUNCTION
@@ -1080,13 +1048,44 @@ package body MainMenu.Commands is
            Argv => Argv);
    end Sort_Saves_Command;
 
+   function Show_File_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showFileCommand";
+
+   function Show_News_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showNewsCommand";
+
+   function Show_Hall_Of_Fame_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showHallOfFameCommand";
+
+   function Delete_Game_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "deleteGameCommand";
+
    procedure Add_Commands is
-      procedure Add_Ada_Commands with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaMainMenuCommands";
    begin
-      Add_Ada_Commands;
+      Add_Command(Name => "OpenLink", Ada_Command => Open_Link_Command'Access);
+      Add_Command(Name => "ShowFile", Ada_Command => Show_File_Command'Access);
+      Add_Command(Name => "ShowNews", Ada_Command => Show_News_Command'Access);
+      Add_Command
+        (Name => "ShowHallOfFame",
+         Ada_Command => Show_Hall_Of_Fame_Command'Access);
+      Add_Command
+        (Name => "DeleteGame", Ada_Command => Delete_Game_Command'Access);
       Add_Command
         (Name => "ShowLoadGame", Ada_Command => Show_Load_Game_Command'Access);
       Add_Command(Name => "LoadGame", Ada_Command => Load_Game_Command'Access);
