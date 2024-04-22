@@ -621,6 +621,52 @@ proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
         guns.delete(i = index)
         break
 
+proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
+    hitLocation: var int; ship, enemyShip: ShipRecord): bool {.sideEffect,
+    raises: [KeyError], tags: [].} =
+  ## Count location in which the enemy's ship was hit.
+  ##
+  ## * gunnerIndex - the index of the crew member who is shooting
+  ## * gunnerOrder - the order for the crew member who is shooting
+  ## * hitLocation - the location in the defender's ship which will be attacked
+  ## * ship        - the ship which will shoot
+  ## * enemyShip   - the ship which will be attacked
+  ##
+  ## Returns true if attacking should be stopped due to end of combat or the
+  ## module was destroyed. Otherwise returns false. Also returns the modified
+  ## parameter hitLocation
+  result = false
+  if armorIndex > -1:
+    hitLocation = armorIndex
+  else:
+    if ship.crew == playerShip.crew:
+      if gunnerIndex > -1 and gunnerOrder in 4 .. 6:
+        hitLocation = -1
+        case gunnerOrder
+        of 4:
+          hitLocation = findEnemyModule(mType = ModuleType.engine,
+              enemyShip = enemyShip)
+        of 5:
+          hitLocation = -1
+          findHitWeapon(enemyShip = enemyShip, hitLocation = hitLocation)
+          if hitLocation == -1:
+            hitLocation = findEnemyModule(
+                mType = ModuleType.batteringRam,
+                enemyShip = enemyShip)
+        of 6:
+          hitLocation = findEnemyModule(mType = ModuleType.hull,
+              enemyShip = enemyShip)
+        else:
+          hitLocation = 0
+      else:
+        hitLocation = getRandom(min = 0,
+            max = game.enemy.ship.modules.high)
+    else:
+      while enemyShip.modules[hitLocation].durability == 0:
+        hitLocation.dec
+        if hitLocation == -1:
+          return true
+
 proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     gunnerIndex, shoots, gunnerOrder, speedBonus, ammoIndex: int;
     module: ModuleData; hitLocation: var int): bool {.sideEffect, raises: [
@@ -673,36 +719,10 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
       shootMessage &= " and hits "
       let armorIndex: int = findEnemyModule(mType = ModuleType.armor,
           enemyShip = enemyShip)
-      if armorIndex > -1:
-        hitLocation = armorIndex
-      else:
-        if ship.crew == playerShip.crew:
-          if gunnerIndex > -1 and gunnerOrder in 4 .. 6:
-            hitLocation = -1
-            case gunnerOrder
-            of 4:
-              hitLocation = findEnemyModule(mType = ModuleType.engine,
-                  enemyShip = enemyShip)
-            of 5:
-              hitLocation = -1
-              findHitWeapon(enemyShip = enemyShip, hitLocation = hitLocation)
-              if hitLocation == -1:
-                hitLocation = findEnemyModule(
-                    mType = ModuleType.batteringRam,
-                    enemyShip = enemyShip)
-            of 6:
-              hitLocation = findEnemyModule(mType = ModuleType.hull,
-                  enemyShip = enemyShip)
-            else:
-              hitLocation = 0
-          else:
-            hitLocation = getRandom(min = 0,
-                max = game.enemy.ship.modules.high)
-        else:
-          while enemyShip.modules[hitLocation].durability == 0:
-            hitLocation.dec
-            if hitLocation == -1:
-              return true
+      if countHitLocation(armorIndex = armorIndex, gunnerIndex = gunnerIndex,
+          gunnerOrder = gunnerOrder, hitLocation = hitLocation, ship = ship,
+          enemyShip = enemyShip):
+        return true
       shootMessage = shootMessage & enemyShip.modules[
           hitLocation].name & "."
       let damage: float = 1.0 - (module.durability.float /
@@ -785,6 +805,34 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     if endCombat:
       return true
 
+proc prepareEnemyGun(mIndex, gunnerIndex: int; shoots: var int;
+    ship: ShipRecord) {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
+  ## Count amount of shoots of the enemy's ship.
+  ##
+  ## * mIndex      - the index of currently checked module in the attacker's
+  ##                 ship
+  ## * gunnerIndex - the index of the gunner who is using the gun
+  ## * shoots      - the amount of shoots from the gun
+  ## * ship        - the attacking ship
+  ##
+  ## Returns the modified parameter shoots
+  for gun in game.enemy.guns.mitems:
+    if gun[1] == mIndex:
+      if gun[3] > 0:
+        shoots = gun[3]
+      elif gun[3] < 0:
+        shoots = 0
+        gun[3].inc
+        if gun[3] == 0:
+          shoots = 1
+          gun[3] = if game.enemy.combatAi == disarmer:
+              modulesList[ship.modules[gun[1]].protoIndex].speed - 1
+            else:
+              modulesList[ship.modules[gun[1]].protoIndex].speed
+  if ship.crew.len > 0 and gunnerIndex == -1:
+    shoots = 0
+
 proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
     ammoIndex, evadeBonus: var int; module: var ModuleData; ship,
     enemyShip: ShipRecord; mIndex, accuracyBonus, ammoIndex2: int) {.sideEffect,
@@ -852,21 +900,7 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
       else:
         discard
   else:
-    for gun in game.enemy.guns.mitems:
-      if gun[1] == mIndex:
-        if gun[3] > 0:
-          shoots = gun[3]
-        elif gun[3] < 0:
-          shoots = 0
-          gun[3].inc
-          if gun[3] == 0:
-            shoots = 1
-            gun[3] = if game.enemy.combatAi == disarmer:
-                modulesList[ship.modules[gun[1]].protoIndex].speed - 1
-              else:
-                modulesList[ship.modules[gun[1]].protoIndex].speed
-    if ship.crew.len > 0 and gunnerIndex == -1:
-      shoots = 0
+    prepareEnemyGun(mIndex = mIndex, gunnerIndex = gunnerIndex, shoots = shoots, ship = ship)
   if ammoIndex2 in ship.cargo.low .. ship.cargo.high and itemsList[
       ship.cargo[ammoIndex2].protoIndex].itemType == itemsTypesList[
       modulesList[module.protoIndex].value - 1]:
@@ -1063,6 +1097,57 @@ proc countDamageRange(damageRange: var Natural;
   if enemyWeaponIndex == -1 and game.enemy.combatAi in {attacker, disarmer}:
     game.enemy.combatAi = coward
 
+proc countBonuses(pilotIndex, engineerIndex: int; accuracyBonus, evadeBonus,
+    speedBonus: var int) {.sideEffect, raises: [KeyError, ValueError], tags: [],
+    contractual.} =
+  ## Count the bonuses or maluses for the player's ship used in calculating the
+  ## chance for hit an enemy's ship and evade its attacks
+  ##
+  ## * pilotIndex    - the index of the pilot in the player's ship's crew
+  ## * engineerIndex - the index of the engineer in the player's ship's crew
+  ## * accuracyBonus - the bonus or malus to hit an enemy's ship
+  ## * evadeBonus    - the bonus or malus to evade an enemy's ship's attacks
+  ## * speedBonus    - the bonus or malus to hit and evade from the player's
+  ##                   ship's speed
+  ##
+  ## Returns modified parameters accuracyBonus, evadeBonus and speedBonus.
+  if pilotIndex > -1:
+    case pilotOrder
+    of 1:
+      accuracyBonus = 20
+      evadeBonus = -10
+    of 2:
+      accuracyBonus = 10
+      evadeBonus = 0
+    of 3:
+      accuracyBonus = 0
+      evadeBonus = 10
+    of 4:
+      accuracyBonus = -10
+      evadeBonus = 20
+    else:
+      discard
+    evadeBonus = evadeBonus + getSkillLevel(member = playerShip.crew[
+        pilotIndex], skillIndex = pilotingSkill)
+  else:
+    accuracyBonus = 20
+    evadeBonus = -10
+  var enemyPilotIndex: int = findMember(order = pilot,
+      shipCrew = game.enemy.ship.crew)
+  if enemyPilotIndex > -1:
+    accuracyBonus = accuracyBonus - getSkillLevel(member = game.enemy.ship.crew[
+        enemyPilotIndex], skillIndex = pilotingSkill)
+  if engineerIndex > -1 or "sentientships" in factionsList[playerShip.crew[
+      0].faction].flags:
+    let message: string = changeShipSpeed(speedValue = engineerOrder.ShipSpeed)
+    if message.len > 0:
+      addMessage(message = message, mType = orderMessage, color = red)
+  speedBonus = 20 - (realSpeed(ship = playerShip) / 100).int
+  if speedBonus < -10:
+    speedBonus = -10
+  accuracyBonus += speedBonus
+  evadeBonus -= speedBonus
+
 proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
@@ -1103,42 +1188,9 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
       gainExp(amount = 2, skillNumber = engineeringSkill, crewIndex = index)
     else:
       discard
-  if pilotIndex > -1:
-    case pilotOrder
-    of 1:
-      accuracyBonus = 20
-      evadeBonus = -10
-    of 2:
-      accuracyBonus = 10
-      evadeBonus = 0
-    of 3:
-      accuracyBonus = 0
-      evadeBonus = 10
-    of 4:
-      accuracyBonus = -10
-      evadeBonus = 20
-    else:
-      discard
-    evadeBonus = evadeBonus + getSkillLevel(member = playerShip.crew[
-        pilotIndex], skillIndex = pilotingSkill)
-  else:
-    accuracyBonus = 20
-    evadeBonus = -10
-  var enemyPilotIndex: int = findMember(order = pilot,
-      shipCrew = game.enemy.ship.crew)
-  if enemyPilotIndex > -1:
-    accuracyBonus = accuracyBonus - getSkillLevel(member = game.enemy.ship.crew[
-        enemyPilotIndex], skillIndex = pilotingSkill)
-  if engineerIndex > -1 or "sentientships" in factionsList[playerShip.crew[
-      0].faction].flags:
-    let message: string = changeShipSpeed(speedValue = engineerOrder.ShipSpeed)
-    if message.len > 0:
-      addMessage(message = message, mType = orderMessage, color = red)
-  speedBonus = 20 - (realSpeed(ship = playerShip) / 100).int
-  if speedBonus < -10:
-    speedBonus = -10
-  accuracyBonus += speedBonus
-  evadeBonus -= speedBonus
+  countBonuses(pilotIndex = pilotIndex, engineerIndex = engineerIndex,
+      accuracyBonus = accuracyBonus, evadeBonus = evadeBonus,
+      speedBonus = speedBonus)
   var damageRange: Natural = 10_000
   countDamageRange(damageRange = damageRange, ammoIndex2 = ammoIndex2)
   var enemyPilotOrder: Natural = 2
