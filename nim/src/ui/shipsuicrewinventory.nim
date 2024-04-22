@@ -620,7 +620,8 @@ proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
 proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   for index in countdown(playerShip.crew[memberIndex].inventory.high,
       playerShip.crew[memberIndex].inventory.low):
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
