@@ -132,8 +132,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("ShowWait", showWaitCommand)
     addCommand("Wait", waitCommand)
   except:
-    tclEval(script = "bgerror {Can't add a Tcl command. Reason: " &
-        getCurrentExceptionMsg() & "}")
+    showError(message = "Can't add a Tcl command.")
 
 import mapsui
 
@@ -181,9 +180,7 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
       var timeNeeded = try:
           tclEval2(script = amountBox & " get").parseInt
         except:
-          tclEval(script = "bgerror {Can't get type of time to wait. Reason: " &
-              getCurrentExceptionMsg() & "}")
-          return tclOk
+          return showError(message = "Can't get type of time to wait.")
       let amountCombo = ".gameframe.wait.mins"
       if tclEval2(script = amountCombo & " current") == "1":
         timeNeeded = timeNeeded * 60
@@ -192,9 +189,7 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
       updateGame(minutes = timeNeeded)
       waitInPlace(minutes = timeNeeded)
   except:
-    tclEval(script = "bgerror {Can't wait selected amount of time. Reason: " &
-        getCurrentExceptionMsg() & "}")
-    return tclOk
+    return showError(message = "Can't wait selected amount of time.")
   updateHeader()
   updateMessages()
   var currentFrame = mainPaned & ".shipinfoframe"
