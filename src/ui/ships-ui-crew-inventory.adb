@@ -692,10 +692,10 @@ package body Ships.UI.Crew.Inventory is
    -- HISTORY
    -- 7.8 - Added
    -- SOURCE
-   procedure Move_Item(Item_Index, Amount: Positive) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaCrewInfo";
+--   procedure Move_Item(Item_Index, Amount: Positive) with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "updateAdaCrewInfo";
       -- ****
 
    -- ****o* SUCI/SUCI.Move_Item_Command
@@ -1050,49 +1050,51 @@ package body Ships.UI.Crew.Inventory is
    function Move_Items_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "moveItemsCommand";
       -- ****
 
-   function Move_Items_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc, Argv);
-   begin
-      Move_Items_Loop :
-      for I in reverse
-        Inventory_Container.First_Index
-          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
-          Inventory_Container.Last_Index
-            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
-         if Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "invindex" &
-                Trim
-                  (Source => Inventory_Container.Extended_Index'Image(I),
-                   Side => Left)) =
-           "1" then
-            Move_Item
-              (Item_Index => I,
-               Amount =>
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Crew(Member_Index).Inventory,
-                    Index => I)
-                   .Amount);
-         end if;
-      end loop Move_Items_Loop;
-      if Inventory_Container.Length
-          (Container => Player_Ship.Crew(Member_Index).Inventory) =
-        0 then
-         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
-         return TCL_OK;
-      end if;
-      Reset_Selection(Interp => Interp);
-      return
-        Sort_Crew_Inventory_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
-   end Move_Items_Command;
+--   function Move_Items_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc, Argv);
+--   begin
+--      Move_Items_Loop :
+--      for I in reverse
+--        Inventory_Container.First_Index
+--          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
+--          Inventory_Container.Last_Index
+--            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
+--         if Tcl_GetVar
+--             (interp => Interp,
+--              varName =>
+--                "invindex" &
+--                Trim
+--                  (Source => Inventory_Container.Extended_Index'Image(I),
+--                   Side => Left)) =
+--           "1" then
+--            Move_Item
+--              (Item_Index => I,
+--               Amount =>
+--                 Inventory_Container.Element
+--                   (Container => Player_Ship.Crew(Member_Index).Inventory,
+--                    Index => I)
+--                   .Amount);
+--         end if;
+--      end loop Move_Items_Loop;
+--      if Inventory_Container.Length
+--          (Container => Player_Ship.Crew(Member_Index).Inventory) =
+--        0 then
+--         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
+--         return TCL_OK;
+--      end if;
+--      Reset_Selection(Interp => Interp);
+--      return
+--        Sort_Crew_Inventory_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
+--   end Move_Items_Command;
 
    procedure Add_Inventory_Commands is
    begin
