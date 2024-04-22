@@ -12,4 +12,4 @@ withDir "nim":
     echo i
     for file in listFiles("tests"):
       if file.endsWith("nim"):
-        exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r " & file
+        exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r " & file & " -v"
