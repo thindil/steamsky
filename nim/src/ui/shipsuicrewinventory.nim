@@ -585,12 +585,19 @@ proc moveItem(itemIndex: Natural; amount: Positive) {.sideEffect, raises: [],
   tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
 
 proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let
-    itemIndex = ($argv[1]).parseInt
+    itemIndex = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get item index.")
     itemDialog = ".itemdialog"
     amountBox = itemDialog & ".amount"
-    amount = tclEval2(script = amountBox & " get").parseInt
+    amount = try:
+        tclEval2(script = amountBox & " get").parseInt
+      except:
+        return showError(message = "Can't get the amount of item to move.")
   moveItem(itemIndex = itemIndex, amount = amount)
   tclEval(script = itemDialog & " destroy")
   tclEval(script = "CloseDialog " & itemDialog & " .memberdialog")
