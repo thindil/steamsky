@@ -587,6 +587,18 @@ proc moveItem(itemIndex: Natural; amount: Positive) {.sideEffect, raises: [],
 proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Move the selected item to the ship cargo
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MoveItem itemindex
+  ## itemindex is the index of the item which will be set
   let
     itemIndex = try:
         ($argv[1]).parseInt
