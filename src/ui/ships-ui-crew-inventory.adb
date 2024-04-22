@@ -24,7 +24,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Toplevel;
+-- with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -715,41 +715,43 @@ package body Ships.UI.Crew.Inventory is
    function Move_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "moveItemCommand";
       -- ****
 
-   function Move_Item_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Tcl.Tk.Ada.Widgets.Toplevel;
-
-      Amount: Positive;
-      Item_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Item_Dialog: Tk_Toplevel :=
-        Get_Widget(pathName => ".itemdialog", Interp => Interp);
-      Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
-   begin
-      Amount := Positive'Value(Get(Widgt => Amount_Box));
-      Move_Item(Item_Index => Item_Index, Amount => Amount);
-      Destroy(Widgt => Item_Dialog);
-      Tcl_Eval
-        (interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      if Inventory_Container.Length
-          (Container => Player_Ship.Crew(Member_Index).Inventory) =
-        0 then
-         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
-         return TCL_OK;
-      end if;
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      return
-        Sort_Crew_Inventory_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
-   end Move_Item_Command;
+--   function Move_Item_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Tcl.Tk.Ada.Widgets.Toplevel;
+--
+--      Amount: Positive;
+--      Item_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Item_Dialog: Tk_Toplevel :=
+--        Get_Widget(pathName => ".itemdialog", Interp => Interp);
+--      Amount_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
+--   begin
+--      Amount := Positive'Value(Get(Widgt => Amount_Box));
+--      Move_Item(Item_Index => Item_Index, Amount => Amount);
+--      Destroy(Widgt => Item_Dialog);
+--      Tcl_Eval
+--        (interp => Interp, strng => "CloseDialog .itemdialog .memberdialog");
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      if Inventory_Container.Length
+--          (Container => Player_Ship.Crew(Member_Index).Inventory) =
+--        0 then
+--         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
+--         return TCL_OK;
+--      end if;
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      return
+--        Sort_Crew_Inventory_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
+--   end Move_Item_Command;
 
    -- ****o* SUCI/SUCI.Validate_Move_Amount_Command
    -- FUNCTION

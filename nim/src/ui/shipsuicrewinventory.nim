@@ -584,6 +584,22 @@ proc moveItem(itemIndex: Natural; amount: Positive) {.sideEffect, raises: [],
   let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
   tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
 
+proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let
+    itemIndex = ($argv[1]).parseInt
+    itemDialog = ".itemdialog"
+    amountBox = itemDialog & ".amount"
+    amount = tclEval2(script = amountBox & " get").parseInt
+  moveItem(itemIndex = itemIndex, amount = amount)
+  tclEval(script = itemDialog & " destroy")
+  tclEval(script = "CloseDialog " & itemDialog & " .memberdialog")
+  if playerShip.crew[memberIndex].inventory.len == 0:
+    tclEval(script = "CloseDialog .memberdialog")
+    return tclOk
+  return sortCrewInventoryCommand(clientData = clientData, interp = interp,
+      argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -593,6 +609,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     addCommand("SetUseItem", setUseItemCommand)
     addCommand("ShowMoveItem", showMoveItemCommand)
     addCommand("ToggleAllInventory", toggleAllInventoryCommand)
+#    addCommand("MoveItem", moveItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
