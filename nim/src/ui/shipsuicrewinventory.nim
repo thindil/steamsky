@@ -648,7 +648,8 @@ proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
 proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   var isUsed = false
   let equip = argv[1] == "equip"
   for index, _ in playerShip.crew[memberIndex].inventory:
