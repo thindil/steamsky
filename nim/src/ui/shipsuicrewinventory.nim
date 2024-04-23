@@ -645,17 +645,34 @@ proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
+proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  var isUsed = false
+  let equip = argv[1] == "equip"
+  for index, _ in playerShip.crew[memberIndex].inventory:
+    if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
+      isUsed = itemIsUsed(memberIndex = memberIndex, itemIndex = index)
+      if equip and not isUsed:
+        discard setUseItemCommand(clientData = clientData, interp = interp,
+            argc = 2, argv = @["SetUseItem".cstring, ($index).cstring])
+    elif not equip and isUsed:
+      takeOffItem(memberIndex = memberIndex, itemIndex = index)
+  resetSelection()
+  return sortCrewInventoryCommand(clientData = clientData, interp = interp,
+      argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("UpdateInventory", updateInventoryCommand)
+#    addCommand("UpdateInventory", updateInventoryCommand)
     addCommand("ShowMemberInventory", showMemberInventoryCommand)
     addCommand("SortCrewInventory", sortCrewInventoryCommand)
-    addCommand("SetUseItem", setUseItemCommand)
+#    addCommand("SetUseItem", setUseItemCommand)
     addCommand("ShowMoveItem", showMoveItemCommand)
     addCommand("ToggleAllInventory", toggleAllInventoryCommand)
 #    addCommand("MoveItem", moveItemCommand)
 #    addCommand("MoveItems", moveItemsCommand)
+#    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
