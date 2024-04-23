@@ -28,7 +28,8 @@ var
     ## The list of indexes of items in the crew member's inventory
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   ## Update inventory list of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -399,7 +400,8 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["UpdateInventory".cstring, ($memberIndex).cstring])
 
 proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   ## Set if item is used by a crew member or not
   ##
   ## * clientData - the additional data for the Tcl command
@@ -664,12 +666,12 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
-#    addCommand("UpdateInventory", updateInventoryCommand)
     addCommand("ShowMemberInventory", showMemberInventoryCommand)
     addCommand("SortCrewInventory", sortCrewInventoryCommand)
-#    addCommand("SetUseItem", setUseItemCommand)
     addCommand("ShowMoveItem", showMoveItemCommand)
     addCommand("ToggleAllInventory", toggleAllInventoryCommand)
+#    addCommand("SetUseItem", setUseItemCommand)
+#    addCommand("UpdateInventory", updateInventoryCommand)
 #    addCommand("MoveItem", moveItemCommand)
 #    addCommand("MoveItems", moveItemsCommand)
 #    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
