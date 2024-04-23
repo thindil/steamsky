@@ -27,56 +27,57 @@ suite "Unit tests for bases module":
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   skyBases[1].recruits = @[]
 
-  test "Testing generateBaseName.":
+  test "Generate name for a base.":
     check:
       generateBaseName("POLEIS").len() > 0
 
-  test "Testing gainRep.":
+  test "Gaining reputation in a base.":
     skyBases[1].reputation = ReputationData(level: 1, experience: 1)
     gainRep(1, 1)
-    checkpoint "Gaining reputation in a base."
     check:
       skyBases[1].reputation.experience == 2
-    checkpoint "Losing reputation in a base."
+
+  test "Losing reputation in a base.":
     gainRep(1, -1)
     check:
       skyBases[1].reputation.experience == 1
 
-  test "Testing countPrice.":
+  test "Raising a price in a base.":
     var price: Natural = 100
     countPrice(price, 0, false)
-    checkpoint "Raising a price in a base."
     check:
       price > 100
-    price = 100
-    checkpoint "Lowering a price in a base."
+
+  test "Lowering a price in a base.":
+    var price: Natural = 100
     countPrice(price, 0)
     check:
       price < 100
 
-  test "Testing updatePopulation.":
+  test "Updating population in a base.":
     updatePopulation()
 
-  test "Testing generateRecruits.":
+  test "Generating recruits in a base with positive reputation.":
     skyBases[1].reputation.level = 10
     generateRecruits()
-    checkpoint "Generating recruits in a base with positive reputation."
     check:
       skyBases[1].recruits.len > 0
+
+  test "Generating recruits in a base with negative reputation.":
     skyBases[1].recruits = @[]
     skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
     skyBases[1].reputation.level = -50
-    checkpoint "Generating recruits in a base with negative reputation"
-    generateRecruits()
-    check:
-      skyBases[1].recruits.len > 0
-    skyBases[1].recruits = @[]
-    skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-    skyBases[1].reputation.level = 0
-    checkpoint "Generating recruits in a base with zero reputation"
     generateRecruits()
     check:
       skyBases[1].recruits.len > 0
 
-  test "Testing updatePrices.":
+  test "Generating recruits in a base with zero reputation":
+    skyBases[1].recruits = @[]
+    skyBases[1].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBases[1].reputation.level = 0
+    generateRecruits()
+    check:
+      skyBases[1].recruits.len > 0
+
+  test "Updating prices in a game.":
     updatePrices()
