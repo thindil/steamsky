@@ -24,10 +24,8 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Config;
 with Crew.Inventory; use Crew.Inventory;
@@ -743,6 +741,7 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 
       Amount: Natural := 0;
       Button: constant Ttk_Button :=
@@ -772,6 +771,7 @@ package body Ships.UI.Crew.Inventory is
          return TCL_OK;
    end Validate_Move_Amount_Command;
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****o* SUCI/SUCI.Show_Inventory_Item_Info_Command
    -- FUNCTION
    -- Show detailed information about the selected item in crew member
@@ -1033,6 +1033,7 @@ package body Ships.UI.Crew.Inventory is
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
            Argv => CArgv.Empty & "SortCrewInventory" & "-1");
    end Toggle_Inventory_Items_Command;
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUCI/SUCI.Move_Items_Command
    -- FUNCTION
@@ -1054,47 +1055,6 @@ package body Ships.UI.Crew.Inventory is
       Convention => C,
       External_Name => "moveItemsCommand";
       -- ****
-
---   function Move_Items_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc, Argv);
---   begin
---      Move_Items_Loop :
---      for I in reverse
---        Inventory_Container.First_Index
---          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
---          Inventory_Container.Last_Index
---            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
---         if Tcl_GetVar
---             (interp => Interp,
---              varName =>
---                "invindex" &
---                Trim
---                  (Source => Inventory_Container.Extended_Index'Image(I),
---                   Side => Left)) =
---           "1" then
---            Move_Item
---              (Item_Index => I,
---               Amount =>
---                 Inventory_Container.Element
---                   (Container => Player_Ship.Crew(Member_Index).Inventory,
---                    Index => I)
---                   .Amount);
---         end if;
---      end loop Move_Items_Loop;
---      if Inventory_Container.Length
---          (Container => Player_Ship.Crew(Member_Index).Inventory) =
---        0 then
---         Tcl_Eval(interp => Interp, strng => "CloseDialog .memberdialog");
---         return TCL_OK;
---      end if;
---      Reset_Selection(Interp => Interp);
---      return
---        Sort_Crew_Inventory_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
---   end Move_Items_Command;
 
    procedure Add_Inventory_Commands is
    begin
