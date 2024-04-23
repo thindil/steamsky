@@ -309,6 +309,183 @@ proc finishCombat() {.sideEffect, raises: [KeyError, ValueError, CrewOrderError,
       if not progressStory(nextStep = true):
         return
 
+proc characterAttack(attackerIndex2, defenderIndex2: Natural;
+    playerAttack, playerAttack2: bool; orderIndex: var int): bool {.sideEffect,
+        raises: [KeyError,
+    CrewNoSpaceError, IOError], tags: [WriteIOEffect], contractual.} =
+  ## The attack of the selected crew member on its target
+  ##
+  ## * attackerIndex2 - the index of the crew member which attacks
+  ## * defenderIndex2 - the index of the crew member which is attacked
+  ## * playerAttack   - if true, the attacker is the player's ship
+  ## * playerAttack2  - if true, the attacker is from the player's ship's
+  ##                    crew
+  ## * orderIndex     - the index of the boarding order for the attacker
+  ##
+  ## Returns true if the defender survived the attack, otherwise false
+  let hitLocation: EquipmentLocations = getRandom(min = helmet.int,
+        max = legs.int).EquipmentLocations
+  const locationNames: array[helmet .. legs, string] = ["head", "torso",
+        "arm", "leg"]
+  var
+    attacker: MemberData = if playerAttack2: playerShip.crew[attackerIndex2]
+      else:
+        game.enemy.ship.crew[attackerIndex2]
+    defender: MemberData = if playerAttack2: game.enemy.ship.crew[defenderIndex2]
+      else:
+        playerShip.crew[defenderIndex2]
+    baseDamage: Natural = attacker.attributes[strengthIndex].level
+  if attacker.equipment[weapon] > -1:
+    baseDamage += itemsList[attacker.inventory[
+        attacker.equipment[weapon]].protoIndex].value[2]
+  var
+    wounds: float = 1.0 - (attacker.health.float / 100.0)
+    damage: int = (baseDamage - (baseDamage.float * wounds.float).int)
+  if attacker.thirst > 40:
+    wounds = 1.0 - (attacker.thirst.float / 100.0)
+    damage -= (baseDamage.float * wounds.float).int
+  if attacker.hunger > 80:
+    wounds = 1.0 - (attacker.hunger.float / 100.0)
+    damage -= (baseDamage.float * wounds.float).int
+  damage = if playerAttack2:
+      (damage.float * newGameSettings.playerMeleeDamageBonus).int
+    else:
+      (damage.float * newGameSettings.enemyMeleeDamageBonus).int
+  var
+    hitChance: int = 0
+    attackSkill: int = 0
+  if attacker.equipment[weapon] > -1:
+    attackSkill = getSkillLevel(member = attacker,
+        skillIndex = itemsList[attacker.inventory[attacker.equipment[
+        weapon]].protoIndex].value[3])
+    hitChance = attackSkill + getRandom(min = 1, max = 50)
+  else:
+    hitChance = getSkillLevel(member = attacker,
+        skillIndex = unarmedSkill) + getRandom(min = 1, max = 50)
+  hitChance -= (getSkillLevel(member = defender, skillIndex = dodgeSkill) +
+      getRandom(min = 1, max = 50))
+  for i in helmet .. legs:
+    if defender.equipment[i] > -1:
+      hitChance += itemsList[defender.inventory[
+          defender.equipment[i]].protoIndex].value[3]
+  if defender.equipment[hitLocation] > -1:
+    damage -= itemsList[defender.inventory[defender.equipment[
+        hitLocation]].protoIndex].value[2]
+  if defender.equipment[shield] > -1:
+    damage -= itemsList[defender.inventory[defender.equipment[
+        shield]].protoIndex].value[2]
+  if attacker.equipment[weapon] == -1:
+    var damageBonus: float = getSkillLevel(member = attacker,
+        skillIndex = unarmedSkill) / 200
+    if damageBonus == 0:
+      damageBonus = 1
+    damage += damageBonus.int
+  let faction: FactionData = factionsList[defender.faction]
+  if "naturalarmor" in faction.flags:
+    damage = (damage / 2).int
+  if "toxicattack" in factionsList[attacker.faction].flags and
+      attacker.equipment[weapon] == -1 and "diseaseimmune" notin faction.flags:
+    damage = if damage * 10 < 30:
+        damage * 10
+      else:
+        damage + 30
+  if damage < 1:
+    damage = 1
+  if attacker.equipment[weapon] > -1:
+    if itemsList[attacker.inventory[attacker.equipment[
+        weapon]].protoIndex].value[5] == 1:
+      damage = (damage.float * 1.5).int
+    elif itemsList[attacker.inventory[attacker.equipment[
+        weapon]].protoIndex].value[5] == 2:
+      damage *= 2
+  var
+    attackMessage: string = if playerAttack2:
+        attacker.name & " attacks " & defender.name & " (" & factionName & ")"
+      else:
+        attacker.name & " (" & factionName & ") attacks " & defender.name
+    messageColor: MessageColor = white
+  if hitChance < 1:
+    attackMessage &= " and misses."
+    messageColor = if playerAttack: blue else: cyan
+    if not playerAttack:
+      gainExp(amount = 2, skillNumber = dodgeSkill,
+          crewIndex = defenderIndex2)
+      defender.skills = playerShip.crew[defenderIndex2].skills
+      defender.attributes = playerShip.crew[defenderIndex2].attributes
+  else:
+    attackMessage = attackMessage & " and hit " & locationNames[
+        hitLocation] & "."
+    messageColor = if playerAttack2: green else: yellow
+    if attacker.equipment[weapon] > -1:
+      if playerAttack:
+        damageItem(inventory = attacker.inventory,
+            itemIndex = attacker.equipment[weapon],
+            skillLevel = attackSkill, memberIndex = attackerIndex2,
+            ship = playerShip)
+      else:
+        damageItem(inventory = attacker.inventory,
+            itemIndex = attacker.equipment[weapon],
+            skillLevel = attackSkill, memberIndex = attackerIndex2,
+            ship = game.enemy.ship)
+    if defender.equipment[hitLocation] > -1:
+      if playerAttack:
+        damageItem(inventory = defender.inventory,
+            itemIndex = defender.equipment[hitLocation], skillLevel = 0,
+            memberIndex = defenderIndex2, ship = game.enemy.ship)
+      else:
+        damageItem(inventory = defender.inventory,
+            itemIndex = defender.equipment[hitLocation], skillLevel = 0,
+            memberIndex = defenderIndex2, ship = playerShip)
+    if playerAttack2:
+      if attacker.equipment[weapon] > -1:
+        gainExp(amount = 2, skillNumber = itemsList[attacker.inventory[
+            attacker.equipment[weapon]].protoIndex].value[3],
+            crewIndex = attackerIndex2)
+      else:
+        gainExp(amount = 2, skillNumber = unarmedSkill,
+            crewIndex = attackerIndex2)
+      attacker.skills = playerShip.crew[attackerIndex2].skills
+      attacker.attributes = playerShip.crew[attackerIndex2].attributes
+    defender.health = if damage > defender.health: 0 else: defender.health - damage
+  addMessage(message = attackMessage, mType = combatMessage,
+      color = messageColor)
+  if attacker.tired + 1 <= SkillRange.high:
+    attacker.tired.inc
+  if defender.tired + 1 <= SkillRange.high:
+    defender.tired.inc
+  if playerAttack2:
+    playerShip.crew[attackerIndex2] = attacker
+    game.enemy.ship.crew[defenderIndex2] = defender
+  else:
+    playerShip.crew[defenderIndex2] = defender
+    game.enemy.ship.crew[attackerIndex2] = attacker
+  if defender.health == 0:
+    if playerAttack2:
+      death(memberIndex = defenderIndex2, reason = attacker.name &
+          " blow in melee combat", ship = game.enemy.ship)
+      for order in boardingOrders.mitems:
+        if order > defenderIndex2:
+          order.dec
+      updateKilledMobs(mob = defender, factionName = factionName)
+      updateGoal(goalType = kill, targetIndex = factionName)
+      if game.enemy.ship.crew.len == 0:
+        endCombat = true
+    else:
+      orderIndex = -1
+      for index, member in playerShip.crew:
+        if member.order == boarding:
+          orderIndex.inc
+        if index == defenderIndex2:
+          boardingOrders.delete(i = orderIndex)
+          orderIndex.dec
+          break
+      death(memberIndex = defenderIndex2, reason = attacker.name &
+          " blow in melee combat", ship = playerShip)
+      if defenderIndex2 == 0:
+        endCombat = true
+    return false
+  return true
+
 proc meleeCombat(attackers, defenders: var seq[MemberData];
     playerAttack: bool) {.sideEffect, raises: [KeyError, IOError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
@@ -325,179 +502,6 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
     attackDone, riposte: bool = false
     attackerIndex, defenderIndex, orderIndex: int = 0
 
-  proc characterAttack(attackerIndex2, defenderIndex2: Natural;
-      playerAttack2: bool): bool {.sideEffect, raises: [KeyError,
-      CrewNoSpaceError, IOError], tags: [WriteIOEffect], contractual.} =
-    ## The attack of the selected crew member on its target
-    ##
-    ## * attackerIndex2 - the index of the crew member which attacks
-    ## * defenderIndex2 - the index of the crew member which is attacked
-    ## * playerAttack2  - if true, the attacker is from the player's ship's
-    ##                    crew
-    ## Returns true if the defender survived the attack, otherwise false
-    let hitLocation: EquipmentLocations = getRandom(min = helmet.int,
-          max = legs.int).EquipmentLocations
-    const locationNames: array[helmet .. legs, string] = ["head", "torso",
-          "arm", "leg"]
-    var
-      attacker: MemberData = if playerAttack2: playerShip.crew[attackerIndex2]
-        else:
-          game.enemy.ship.crew[attackerIndex2]
-      defender: MemberData = if playerAttack2: game.enemy.ship.crew[defenderIndex2]
-        else:
-          playerShip.crew[defenderIndex2]
-      baseDamage: Natural = attacker.attributes[strengthIndex].level
-    if attacker.equipment[weapon] > -1:
-      baseDamage += itemsList[attacker.inventory[
-          attacker.equipment[weapon]].protoIndex].value[2]
-    var
-      wounds: float = 1.0 - (attacker.health.float / 100.0)
-      damage: int = (baseDamage - (baseDamage.float * wounds.float).int)
-    if attacker.thirst > 40:
-      wounds = 1.0 - (attacker.thirst.float / 100.0)
-      damage -= (baseDamage.float * wounds.float).int
-    if attacker.hunger > 80:
-      wounds = 1.0 - (attacker.hunger.float / 100.0)
-      damage -= (baseDamage.float * wounds.float).int
-    damage = if playerAttack2:
-        (damage.float * newGameSettings.playerMeleeDamageBonus).int
-      else:
-        (damage.float * newGameSettings.enemyMeleeDamageBonus).int
-    var
-      hitChance: int = 0
-      attackSkill: int = 0
-    if attacker.equipment[weapon] > -1:
-      attackSkill = getSkillLevel(member = attacker,
-          skillIndex = itemsList[attacker.inventory[attacker.equipment[
-          weapon]].protoIndex].value[3])
-      hitChance = attackSkill + getRandom(min = 1, max = 50)
-    else:
-      hitChance = getSkillLevel(member = attacker,
-          skillIndex = unarmedSkill) + getRandom(min = 1, max = 50)
-    hitChance -= (getSkillLevel(member = defender, skillIndex = dodgeSkill) +
-        getRandom(min = 1, max = 50))
-    for i in helmet .. legs:
-      if defender.equipment[i] > -1:
-        hitChance += itemsList[defender.inventory[
-            defender.equipment[i]].protoIndex].value[3]
-    if defender.equipment[hitLocation] > -1:
-      damage -= itemsList[defender.inventory[defender.equipment[
-          hitLocation]].protoIndex].value[2]
-    if defender.equipment[shield] > -1:
-      damage -= itemsList[defender.inventory[defender.equipment[
-          shield]].protoIndex].value[2]
-    if attacker.equipment[weapon] == -1:
-      var damageBonus: float = getSkillLevel(member = attacker,
-          skillIndex = unarmedSkill) / 200
-      if damageBonus == 0:
-        damageBonus = 1
-      damage += damageBonus.int
-    let faction: FactionData = factionsList[defender.faction]
-    if "naturalarmor" in faction.flags:
-      damage = (damage / 2).int
-    if "toxicattack" in factionsList[attacker.faction].flags and
-        attacker.equipment[weapon] == -1 and "diseaseimmune" notin faction.flags:
-      damage = if damage * 10 < 30:
-          damage * 10
-        else:
-          damage + 30
-    if damage < 1:
-      damage = 1
-    if attacker.equipment[weapon] > -1:
-      if itemsList[attacker.inventory[attacker.equipment[
-          weapon]].protoIndex].value[5] == 1:
-        damage = (damage.float * 1.5).int
-      elif itemsList[attacker.inventory[attacker.equipment[
-          weapon]].protoIndex].value[5] == 2:
-        damage *= 2
-    var
-      attackMessage: string = if playerAttack2:
-          attacker.name & " attacks " & defender.name & " (" & factionName & ")"
-        else:
-          attacker.name & " (" & factionName & ") attacks " & defender.name
-      messageColor: MessageColor = white
-    if hitChance < 1:
-      attackMessage &= " and misses."
-      messageColor = if playerAttack: blue else: cyan
-      if not playerAttack:
-        gainExp(amount = 2, skillNumber = dodgeSkill,
-            crewIndex = defenderIndex2)
-        defender.skills = playerShip.crew[defenderIndex2].skills
-        defender.attributes = playerShip.crew[defenderIndex2].attributes
-    else:
-      attackMessage = attackMessage & " and hit " & locationNames[
-          hitLocation] & "."
-      messageColor = if playerAttack2: green else: yellow
-      if attacker.equipment[weapon] > -1:
-        if playerAttack:
-          damageItem(inventory = attacker.inventory,
-              itemIndex = attacker.equipment[weapon],
-              skillLevel = attackSkill, memberIndex = attackerIndex2,
-              ship = playerShip)
-        else:
-          damageItem(inventory = attacker.inventory,
-              itemIndex = attacker.equipment[weapon],
-              skillLevel = attackSkill, memberIndex = attackerIndex2,
-              ship = game.enemy.ship)
-      if defender.equipment[hitLocation] > -1:
-        if playerAttack:
-          damageItem(inventory = defender.inventory,
-              itemIndex = defender.equipment[hitLocation], skillLevel = 0,
-              memberIndex = defenderIndex2, ship = game.enemy.ship)
-        else:
-          damageItem(inventory = defender.inventory,
-              itemIndex = defender.equipment[hitLocation], skillLevel = 0,
-              memberIndex = defenderIndex2, ship = playerShip)
-      if playerAttack2:
-        if attacker.equipment[weapon] > -1:
-          gainExp(amount = 2, skillNumber = itemsList[attacker.inventory[
-              attacker.equipment[weapon]].protoIndex].value[3],
-              crewIndex = attackerIndex2)
-        else:
-          gainExp(amount = 2, skillNumber = unarmedSkill,
-              crewIndex = attackerIndex2)
-        attacker.skills = playerShip.crew[attackerIndex2].skills
-        attacker.attributes = playerShip.crew[attackerIndex2].attributes
-      defender.health = if damage > defender.health: 0 else: defender.health - damage
-    addMessage(message = attackMessage, mType = combatMessage,
-        color = messageColor)
-    if attacker.tired + 1 <= SkillRange.high:
-      attacker.tired.inc
-    if defender.tired + 1 <= SkillRange.high:
-      defender.tired.inc
-    if playerAttack2:
-      playerShip.crew[attackerIndex2] = attacker
-      game.enemy.ship.crew[defenderIndex2] = defender
-    else:
-      playerShip.crew[defenderIndex2] = defender
-      game.enemy.ship.crew[attackerIndex2] = attacker
-    if defender.health == 0:
-      if playerAttack2:
-        death(memberIndex = defenderIndex2, reason = attacker.name &
-            " blow in melee combat", ship = game.enemy.ship)
-        for order in boardingOrders.mitems:
-          if order > defenderIndex2:
-            order.dec
-        updateKilledMobs(mob = defender, factionName = factionName)
-        updateGoal(goalType = kill, targetIndex = factionName)
-        if game.enemy.ship.crew.len == 0:
-          endCombat = true
-      else:
-        orderIndex = -1
-        for index, member in playerShip.crew:
-          if member.order == boarding:
-            orderIndex.inc
-          if index == defenderIndex2:
-            boardingOrders.delete(i = orderIndex)
-            orderIndex.dec
-            break
-        death(memberIndex = defenderIndex2, reason = attacker.name &
-            " blow in melee combat", ship = playerShip)
-        if defenderIndex2 == 0:
-          endCombat = true
-      return false
-    return true
-
   attackerIndex = attackers.low
   orderIndex = 0
   while attackerIndex < attackers.len:
@@ -512,15 +516,16 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
       if boardingOrders[orderIndex] in defenders.low .. defenders.high:
         defenderIndex = boardingOrders[orderIndex]
         riposte = characterAttack(attackerIndex2 = attackerIndex,
-            defenderIndex2 = defenderIndex, playerAttack2 = playerAttack)
+            defenderIndex2 = defenderIndex, playerAttack = playerAttack,
+            playerAttack2 = playerAttack, orderIndex = orderIndex)
         if riposte and not endCombat:
           if game.enemy.ship.crew[defenderIndex].order != defend:
             giveOrders(ship = game.enemy.ship, memberIndex = defenderIndex,
                 givenOrder = defend, moduleIndex = 0,
                 checkPriorities = false)
           riposte = characterAttack(attackerIndex2 = defenderIndex,
-              defenderIndex2 = attackerIndex,
-              playerAttack2 = not playerAttack)
+              defenderIndex2 = attackerIndex, playerAttack = playerAttack,
+              playerAttack2 = not playerAttack, orderIndex = orderIndex)
         else:
           riposte = true
         attackDone = true
@@ -535,11 +540,12 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
       for dIndex, defender in defenders:
         if defender.order == defend:
           riposte = characterAttack(attackerIndex2 = attackerIndex,
-              defenderIndex2 = dIndex, playerAttack2 = playerAttack)
+              defenderIndex2 = dIndex, playerAttack = playerAttack,
+              playerAttack2 = playerAttack, orderIndex = orderIndex)
           if riposte and not endCombat:
             riposte = characterAttack(attackerIndex2 = dIndex,
-                defenderIndex2 = attackerIndex,
-                playerAttack2 = not playerAttack)
+                defenderIndex2 = attackerIndex, playerAttack = playerAttack,
+                playerAttack2 = not playerAttack, orderIndex = orderIndex)
           else:
             riposte = true
           attackDone = true
@@ -553,11 +559,12 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
         giveOrders(ship = playerShip, memberIndex = defenderIndex,
             givenOrder = defend, moduleIndex = 0, checkPriorities = false)
       riposte = characterAttack(attackerIndex2 = attackerIndex,
-          defenderIndex2 = defenderIndex, playerAttack2 = playerAttack)
+          defenderIndex2 = defenderIndex, playerAttack = playerAttack,
+          playerAttack2 = playerAttack, orderIndex = orderIndex)
       if riposte and not endCombat:
         riposte = characterAttack(attackerIndex2 = defenderIndex,
-            defenderIndex2 = attackerIndex,
-            playerAttack2 = not playerAttack)
+            defenderIndex2 = attackerIndex, playerAttack = playerAttack,
+            playerAttack2 = not playerAttack, orderIndex = orderIndex)
       else:
         riposte = true
     if endCombat:
@@ -571,11 +578,12 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
       for aIndex, attacker in attackers:
         if attacker.order == boarding:
           riposte = characterAttack(attackerIndex2 = defenderIndex,
-              defenderIndex2 = aIndex, playerAttack2 = not playerAttack)
+              defenderIndex2 = aIndex, playerAttack = playerAttack,
+              playerAttack2 = not playerAttack, orderIndex = orderIndex)
           if not endCombat and riposte:
             riposte = characterAttack(attackerIndex2 = aIndex,
-                defenderIndex2 = defenderIndex,
-                playerAttack2 = playerAttack)
+                defenderIndex2 = defenderIndex, playerAttack = playerAttack,
+                playerAttack2 = playerAttack, orderIndex = orderIndex)
           break
     if riposte:
       defenderIndex.inc
@@ -623,7 +631,7 @@ proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
 
 proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
     hitLocation: var int; ship, enemyShip: ShipRecord): bool {.sideEffect,
-    raises: [KeyError], tags: [].} =
+    raises: [KeyError], tags: [], contractual.} =
   ## Count location in which the enemy's ship was hit.
   ##
   ## * gunnerIndex - the index of the crew member who is shooting
