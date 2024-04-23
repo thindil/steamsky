@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -28,5 +28,7 @@ package Combat.UI is
    -- SOURCE
    procedure Show_Combat_Ui(New_Combat: Boolean := True);
    -- ****
+
+   procedure Add_Combat_Commands;
 
 end Combat.UI;

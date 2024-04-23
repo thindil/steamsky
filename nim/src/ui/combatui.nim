@@ -547,7 +547,7 @@ proc updateBoardingUi() {.sideEffect, raises: [], tags: [].} =
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].} =
+        WriteIOEffect, RootEffect], exportc.} =
   ## Excecute the combat orders and go the next turn
   ##
   ## * clientData - the additional data for the Tcl command
@@ -601,7 +601,8 @@ proc showCombatUi*(newCombat: bool = true) {.sideEffect, raises: [], tags: [Root
   ## * newCombat - if true, starts a new combat with an enemy's ship
 
 proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   ## Show combat UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -620,7 +621,7 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Set the combat order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -692,7 +693,7 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Set the boarding order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -720,7 +721,7 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Set the melee combat party (boarding or defenders)
   ##
   ## * clientData - the additional data for the Tcl command
@@ -816,7 +817,8 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   ## Set crew member position (pilot, engineer, gunner) in combat
   ##
   ## * clientData - the additional data for the Tcl command
@@ -900,7 +902,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show information about the selected mob in combat
   ##
   ## * clientData - the additional data for the Tcl command
@@ -933,7 +935,7 @@ proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Maximize or minimize the selected section of the combat UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -984,7 +986,7 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Select or deselect all crew members in boarding and defending parties
   ## setting
   ##
@@ -1007,7 +1009,8 @@ proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   ## Set crew members in or out of boarding and defending party
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1063,20 +1066,20 @@ proc showCombatUi(newCombat: bool = true) =
       tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "combat.tcl")
       pilotOrder = 2
       engineerOrder = 3
-      try:
-        addCommand("NextTurn", nextTurnCommand)
-        addCommand("ShowCombatUI", showCombatUiCommand)
-        addCommand("SetCombatOrder", setCombatOrderCommand)
-        addCommand("SetBoardingOrder", setBoardingOrderCommand)
-        addCommand("SetCombatParty", setCombatPartyCommand)
-        addCommand("SetCombatPosition", setCombatPositionCommand)
-        addCommand("ShowCombatInfo", showCombatInfoCommand)
-        addCommand("CombatMaxMix", combatMaxMinCommand)
-        addCommand("ToggleAllCombat", toggleAllCombatCommand)
-        addCommand("SetParty", setPartyCommand)
-      except:
-        showError(message = "Can't add a Tcl command.")
-        return
+  #     try:
+  #       addCommand("NextTurn", nextTurnCommand)
+  #       addCommand("ShowCombatUI", showCombatUiCommand)
+  #       addCommand("SetCombatOrder", setCombatOrderCommand)
+  #       addCommand("SetBoardingOrder", setBoardingOrderCommand)
+  #       addCommand("SetCombatParty", setCombatPartyCommand)
+  #       addCommand("SetCombatPosition", setCombatPositionCommand)
+  #       addCommand("ShowCombatInfo", showCombatInfoCommand)
+  #       addCommand("CombatMaxMix", combatMaxMinCommand)
+  #       addCommand("ToggleAllCombat", toggleAllCombatCommand)
+  #       addCommand("SetParty", setPartyCommand)
+  #     except:
+  #       showError(message = "Can't add a Tcl command.")
+  #       return
     else:
       let
         button = combatFrame & ".next"

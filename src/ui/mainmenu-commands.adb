@@ -43,6 +43,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
 with BasesTypes; use BasesTypes;
+with Combat.UI;
 with Config; use Config;
 with CoreUI;
 with Crew;
@@ -1104,6 +1105,7 @@ package body MainMenu.Commands is
          Ada_Command => Show_Load_Game_Menu_Command'Access);
       Add_Command
         (Name => "SortSaves", Ada_Command => Sort_Saves_Command'Access);
+      Combat.UI.Add_Combat_Commands;
    end Add_Commands;
 
 end MainMenu.Commands;
