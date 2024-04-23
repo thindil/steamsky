@@ -650,6 +650,19 @@ proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Equip or unequip the selected items
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ToggleInventoryItems action
+  ## Action is the action to do with the selected items. Possible values are
+  ## equip and unequip
   var isUsed = false
   let equip = argv[1] == "equip"
   for index, _ in playerShip.crew[memberIndex].inventory:
