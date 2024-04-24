@@ -59,12 +59,12 @@ suite "Unit tests for bases2 module":
     base.population = getRandom(100, 400)
     skyMap[base.skyX][base.skyY].baseIndex = index
 
-  test "Testing askForEvents.":
+  test "Asking for events in a base.":
     askForEvents()
     check:
       eventsList.len > 0
 
-  test "Testing askForBases.":
+  test "Asking for bases in a base.":
     askForBases()
     check:
       skyBases[1].askedForBases
