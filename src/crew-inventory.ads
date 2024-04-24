@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -70,25 +70,6 @@ package Crew.Inventory is
      (Member_Index: Positive; Amount: Integer; Update_Nim: Boolean := True)
       return Integer with
       Pre => Member_Index <= Player_Ship.Crew.Last_Index;
-      -- ****
-
-      -- ****f* Inventory/Inventory.Take_Off_Item
-      -- FUNCTION
-      -- Remove selected item from character equipment
-      -- PARAMETERS
-      -- Member_Index - Crew index of the member from which item willl be taken
-      --                off
-      -- Item_Index   - Inventory index of item to take off
-      -- HISTORY
-      -- 7.5 - Renamed to Take_Off_Item, changed parameters names to
-      --       Member_Index and Item_Index
-      -- SOURCE
-   procedure Take_Off_Item
-     (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True) with
-      Pre => Member_Index <= Player_Ship.Crew.Last_Index and
-      Item_Index <=
-        Inventory_Container.Last_Index
-          (Container => Player_Ship.Crew(Member_Index).Inventory);
       -- ****
 
       -- ****f* Inventory/Inventory.Item_Is_Used

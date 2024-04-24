@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -84,32 +84,6 @@ package body Crew.Inventory is
       end if;
       return Free_Ada_Inventory(M_Index => Member_Index, Amnt => Amount);
    end Free_Inventory;
-
-   procedure Take_Off_Item
-     (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True) is
-      Nim_Equipment: Nim_Equipment_Array;
-      procedure Take_Ada_Off_Item(M_Index, I_Index: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "takeAdaOffItem";
-   begin
-      if Update_Nim then
-         Get_Ada_Crew;
-         Get_Ada_Crew_Inventory
-           (Inventory =>
-              Inventory_To_Nim
-                (Inventory => Player_Ship.Crew(Member_Index).Inventory),
-            Member_Index => Member_Index);
-      end if;
-      Take_Ada_Off_Item(M_Index => Member_Index, I_Index => Item_Index);
-      Equipment_To_Ada(M_Index => Member_Index, Equipment => Nim_Equipment);
-      Update_Equipment_Loop :
-      for I in Nim_Equipment'Range loop
-         Player_Ship.Crew(Member_Index).Equipment
-           (Equipment_Locations'Val(I)) :=
-           Nim_Equipment(I);
-      end loop Update_Equipment_Loop;
-   end Take_Off_Item;
 
    function Item_Is_Used
      (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True)
