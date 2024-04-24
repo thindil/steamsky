@@ -26,21 +26,11 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs;
--- with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****iv* SUCI/SUCI.Inventory_Table
-   -- FUNCTION
-   -- Table with info about the crew member inventory
-   -- SOURCE
---   Inventory_Table: Table_Widget (Amount => 6);
-   -- ****
 
    -- ****iv* SUCI/SUCI.Member_Index
    -- FUNCTION
@@ -401,30 +391,6 @@ package body Ships.UI.Crew.Inventory is
       Convention => C,
       External_Name => "toggleInventoryItemCommand";
       -- ****
-
---   function Toggle_Inventory_Item_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---   begin
---      Toggle_Checked_Button
---        (Table => Inventory_Table,
---         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
---      if Is_Checked
---          (Table => Inventory_Table,
---           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
---           Column => 1) then
---         Tcl_SetVar
---           (interp => Interp,
---            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2),
---            newValue => "1");
---      else
---         Tcl_UnsetVar
---           (interp => Interp,
---            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2));
---      end if;
---      return TCL_OK;
---   end Toggle_Inventory_Item_Command;
 
    -- ****o* SUCI/SUCI.Toggle_Inventory_Items_Command
    -- FUNCTION
