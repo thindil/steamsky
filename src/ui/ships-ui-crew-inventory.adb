@@ -13,10 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
--- with Ada.Containers.Generic_Array_Sort;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
@@ -27,20 +26,20 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
--- with Config;
+-- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Crew.Inventory; use Crew.Inventory;
-with Dialogs; use Dialogs;
-with Table; use Table;
+with Dialogs;
+-- with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* SUCI/SUCI.Inventory_Table
    -- FUNCTION
    -- Table with info about the crew member inventory
    -- SOURCE
-   Inventory_Table: Table_Widget (Amount => 6);
+--   Inventory_Table: Table_Widget (Amount => 6);
    -- ****
 
    -- ****iv* SUCI/SUCI.Member_Index
@@ -57,7 +56,6 @@ package body Ships.UI.Crew.Inventory is
    Inventory_Indexes: Positive_Container.Vector;
    -- ****
 
-   --## rule off REDUCEABLE_SCOPE
    -- ****o* SUCI/SUCI.Update_Inventory_Command
    -- FUNCTION
    -- Update inventory list of the selected crew member
@@ -82,19 +80,20 @@ package body Ships.UI.Crew.Inventory is
    function Update_Inventory_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+--      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 
       Member: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
-      Member_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => ".memberdialog.canvas.frame");
-      Y_Scroll: constant Ttk_Scrollbar :=
-        Get_Widget
-          (pathName => ".memberdialog.yscroll");
+--      Member_Frame: constant Ttk_Frame :=
+--        Get_Widget(pathName => ".memberdialog.canvas.frame");
+--      Y_Scroll: constant Ttk_Scrollbar :=
+--        Get_Widget
+--          (pathName => ".memberdialog.yscroll");
       function Update_Ada_Inventory_Command
-        (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-         Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+        (Client_Data2: Integer; Interp2: Tcl.Tcl_Interp;
+         Argc2: Interfaces.C.int; Argv2: CArgv.Chars_Ptr_Ptr)
+         return Interfaces.C.int with
          Import => True,
          Convention => C,
          External_Name => "updateInventoryCommand";
@@ -111,518 +110,23 @@ package body Ships.UI.Crew.Inventory is
             Inventory_Indexes.Append(New_Item => I);
          end loop Fill_Inventory_Indexes_Loop;
       end if;
-      Inventory_Table :=
-        Create_Table
-          (Parent => Widget_Image(Win => Member_Frame),
-           Headers =>
-             (1 => To_Unbounded_String(Source => ""),
-              2 => To_Unbounded_String(Source => "Name"),
-              3 => To_Unbounded_String(Source => "Durability"),
-              4 => To_Unbounded_String(Source => "Used"),
-              5 => To_Unbounded_String(Source => "Amount"),
-              6 => To_Unbounded_String(Source => "Weight")),
-           Scrollbar => Y_Scroll, Command => "SortCrewInventory",
-           Tooltip_Text => "Press mouse button to sort the inventory.");
-      return Update_Ada_Inventory_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+--      Inventory_Table :=
+--        Create_Table
+--          (Parent => Widget_Image(Win => Member_Frame),
+--           Headers =>
+--             (1 => To_Unbounded_String(Source => ""),
+--              2 => To_Unbounded_String(Source => "Name"),
+--              3 => To_Unbounded_String(Source => "Durability"),
+--              4 => To_Unbounded_String(Source => "Used"),
+--              5 => To_Unbounded_String(Source => "Amount"),
+--              6 => To_Unbounded_String(Source => "Weight")),
+--           Scrollbar => Y_Scroll, Command => "SortCrewInventory",
+--           Tooltip_Text => "Press mouse button to sort the inventory.");
+      return
+        Update_Ada_Inventory_Command
+          (Client_Data2 => Client_Data, Interp2 => Interp, Argc2 => Argc,
+           Argv2 => Argv);
    end Update_Inventory_Command;
-
---   function Update_Inventory_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data);
---      use Config;
---
---      Member: Member_Data
---        (Amount_Of_Attributes => Attributes_Amount,
---         Amount_Of_Skills => Skills_Amount);
---      Page: constant Positive :=
---        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
---         else 1);
---      --## rule off SIMPLIFIABLE_EXPRESSIONS
---      Start_Row: constant Positive :=
---        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
---      --## rule on SIMPLIFIABLE_EXPRESSIONS
---      Current_Row: Positive := 1;
---   begin
---      Member_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Member := Player_Ship.Crew(Member_Index);
---      if Inventory_Table.Row > 1 then
---         Clear_Table(Table => Inventory_Table);
---      end if;
---      if Inventory_Indexes.Length /=
---        Inventory_Container.Length(Container => Member.Inventory) then
---         Inventory_Indexes.Clear;
---         Fill_Inventory_Indexes_Loop :
---         for I in
---           Inventory_Container.First_Index(Container => Member.Inventory) ..
---             Inventory_Container.Last_Index(Container => Member.Inventory) loop
---            Inventory_Indexes.Append(New_Item => I);
---         end loop Fill_Inventory_Indexes_Loop;
---      end if;
---      Load_Inventory_Loop :
---      for I in Inventory_Indexes.Iterate loop
---         if Current_Row < Start_Row then
---            Current_Row := Current_Row + 1;
---            goto End_Of_Loop;
---         end if;
---         Add_Check_Button
---           (Table => Inventory_Table,
---            Tooltip => "Select the item for move or equip it.",
---            Command =>
---              "ToggleInventoryItem" &
---              Positive'Image(Positive_Container.To_Index(Position => I)) &
---              Positive'Image(Inventory_Indexes(I)),
---            Checked =>
---              (if
---                 Tcl_GetVar
---                   (interp => Interp,
---                    varName =>
---                      "invindex" &
---                      Trim
---                        (Source => Positive'Image(Inventory_Indexes(I)),
---                         Side => Left)) =
---                 "1"
---               then True
---               else False),
---            Column => 1, Empty_Unchecked => True);
---         Add_Button
---           (Table => Inventory_Table,
---            Text =>
---              Get_Item_Name
---                (Item =>
---                   Inventory_Container.Element
---                     (Container => Member.Inventory,
---                      Index => Inventory_Indexes(I)),
---                 Damage_Info => False, To_Lower => False),
---            Tooltip => "Show the selected item's info",
---            Command =>
---              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
---            Column => 2);
---         Add_Progress_Bar
---           (Table => Inventory_Table,
---            Value =>
---              Inventory_Container.Element
---                (Container => Member.Inventory, Index => Inventory_Indexes(I))
---                .Durability,
---            Max_Value => Default_Item_Durability,
---            Tooltip => "The current durability level of the selected item.",
---            Command =>
---              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
---            Column => 3);
---         if Item_Is_Used
---             (Member_Index => Member_Index,
---              Item_Index => Inventory_Indexes(I)) then
---            Add_Check_Button
---              (Table => Inventory_Table,
---               Tooltip => "The item is used by the crew member",
---               Command =>
---                 "ShowInventoryItemInfo " &
---                 Positive'Image(Inventory_Indexes(I)),
---               Checked => True, Column => 4);
---         else
---            Add_Check_Button
---              (Table => Inventory_Table,
---               Tooltip => "The item isn't used by the crew member",
---               Command =>
---                 "ShowInventoryItemInfo " &
---                 Positive'Image(Inventory_Indexes(I)),
---               Checked => False, Column => 4);
---         end if;
---         Add_Button
---           (Table => Inventory_Table,
---            Text =>
---              Positive'Image
---                (Inventory_Container.Element
---                   (Container => Member.Inventory,
---                    Index => Inventory_Indexes(I))
---                   .Amount),
---            Tooltip => "The amount of the item owned by the crew member",
---            Command =>
---              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
---            Column => 5);
---         Add_Button
---           (Table => Inventory_Table,
---            Text =>
---              Positive'Image
---                (Inventory_Container.Element
---                   (Container => Member.Inventory,
---                    Index => Inventory_Indexes(I))
---                   .Amount *
---                 Get_Proto_Item
---                   (Index =>
---                      Inventory_Container.Element
---                        (Container => Member.Inventory,
---                         Index => Inventory_Indexes(I))
---                        .Proto_Index)
---                   .Weight) &
---              " kg",
---            Tooltip => "The total weight of the items",
---            Command =>
---              "ShowInventoryItemInfo " & Positive'Image(Inventory_Indexes(I)),
---            Column => 6, New_Row => True);
---         exit Load_Inventory_Loop when Inventory_Table.Row =
---           Get_Integer_Setting(Name => "listsLimit") + 1;
---         <<End_Of_Loop>>
---      end loop Load_Inventory_Loop;
---      if Page > 1 then
---         Add_Pagination
---           (Table => Inventory_Table,
---            Previous_Command =>
---              "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
---              Positive'Image(Page - 1),
---            Next_Command =>
---              (if
---                 Inventory_Table.Row <
---                 Get_Integer_Setting(Name => "listsLimit") + 1
---               then ""
---               else "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
---                 Positive'Image(Page + 1)));
---      elsif Inventory_Table.Row =
---        Get_Integer_Setting(Name => "listsLimit") + 1 then
---         Add_Pagination
---           (Table => Inventory_Table, Previous_Command => "",
---            Next_Command =>
---              "UpdateInventory " & CArgv.Arg(Argv => Argv, N => 1) &
---              Positive'Image(Page + 1));
---      end if;
---      Update_Table(Table => Inventory_Table);
---      return TCL_OK;
---   end Update_Inventory_Command;
-
-   -- ****it* SUCI/SUCI.Inventory_Sort_Orders
-   -- FUNCTION
-   -- Sorting orders for items inside various inventories
-   -- OPTIONS
-   -- SELECTEDASC    - Sort items by selected ascending
-   -- SELETEDDESC    - Sort items by selected descending
-   -- NAMEASC        - Sort items by name ascending
-   -- NAMEDESC       - Sort items by name descending
-   -- DURABILITYASC  - Sort items by durability ascending
-   -- DURABILITYDESC - Sort items by durability descending
-   -- TYPEASC        - Sort items by type ascending
-   -- TYPEDESC       - Sort items by type descending
-   -- AMOUNTASC      - Sort items by amount ascending
-   -- AMOUNTDESC     - Sort items by amount descending
-   -- WEIGHTASC      - Sort items by total weight ascending
-   -- WEIGHTDESC     - Sort items by total weight descending
-   -- USEDASC        - Sort items by use status (mobs inventory only) ascending
-   -- USEDDESC       - Sort items by use status (mobs inventory only) descending
-   -- NONE           - No sorting items (default)
-   -- HISTORY
-   -- 6.4 - Added
-   -- 7.8 - Added SELECTEDASC and SELECTEDDESC values
-   -- SOURCE
---   type Inventory_Sort_Orders is
---     (SELECTEDASC, SELECTEDDESC, NAMEASC, NAMEDESC, DURABILITYASC,
---      DURABILITYDESC, TYPEASC, TYPEDESC, AMOUNTASC, AMOUNTDESC, WEIGHTASC,
---      WEIGHTDESC, USEDASC, USEDDESC, NONE) with
---      Default_Value => NONE;
-      -- ****
-
-      -- ****id* SUCI/SUCI.Default_Inventory_Sort_Order
-      -- FUNCTION
-      -- Default sorting order for items in various inventories
-      -- HISTORY
-      -- 6.4 - Added
-      -- SOURCE
---   Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NONE;
-   -- ****
-
-   --## rule off DIRECTLY_ACCESSED_GLOBALS
-   -- ****iv* SUCI/SUCI.Inventory_Sort_Order
-   -- FUNCTION
-   -- The current sorting order of items in various inventories
-   -- SOURCE
---    Inventory_Sort_Order: Inventory_Sort_Orders := Default_Inventory_Sort_Order;
-   -- ****
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
-
-   -- ****o* SUCI/SUCI.Sort_Crew_Inventory_Command
-   -- FUNCTION
-   -- Sort the selected crew member inventory
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command.
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SortCrewInventory x
-   -- X is X axis coordinate where the player clicked the mouse button
-   -- SOURCE
---   function Sort_Crew_Inventory_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---      Convention => C;
---      -- ****
---
---   function Sort_Crew_Inventory_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      use Tiny_String;
---
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Column: constant Positive :=
---        (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
---         else Get_Column_Number
---             (Table => Inventory_Table,
---              X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      --## rule off TYPE_INITIAL_VALUES
---      type Local_Item_Data is record
---         Selected: Boolean;
---         Name: Unbounded_String;
---         Damage: Float;
---         Item_Type: Bounded_String;
---         Amount: Positive;
---         Weight: Positive;
---         Used: Boolean;
---         Id: Positive;
---      end record;
---      type Inventory_Array is array(Positive range <>) of Local_Item_Data;
---      --## rule on TYPE_INITIAL_VALUES
---      --## rule off IMPROPER_INITIALIZATION
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Local_Inventory: Inventory_Array
---        (1 ..
---             Natural
---               (Inventory_Container.Length
---                  (Container => Player_Ship.Crew(Member_Index).Inventory)));
---      --## rule on IMPROPER_INITIALIZATION
---      function "<"(Left, Right: Local_Item_Data) return Boolean is
---      begin
---         if Inventory_Sort_Order = SELECTEDASC
---           and then Left.Selected < Right.Selected then
---            return True;
---         end if;
---         if Inventory_Sort_Order = SELECTEDDESC
---           and then Left.Selected > Right.Selected then
---            return True;
---         end if;
---         if Inventory_Sort_Order = NAMEASC and then Left.Name < Right.Name then
---            return True;
---         end if;
---         if Inventory_Sort_Order = NAMEDESC
---           and then Left.Name > Right.Name then
---            return True;
---         end if;
---         if Inventory_Sort_Order = DURABILITYASC
---           and then Left.Damage < Right.Damage then
---            return True;
---         end if;
---         if Inventory_Sort_Order = DURABILITYDESC
---           and then Left.Damage > Right.Damage then
---            return True;
---         end if;
---         if Inventory_Sort_Order = TYPEASC
---           and then Left.Item_Type < Right.Item_Type then
---            return True;
---         end if;
---         if Inventory_Sort_Order = TYPEDESC
---           and then Left.Item_Type > Right.Item_Type then
---            return True;
---         end if;
---         if Inventory_Sort_Order = AMOUNTASC
---           and then Left.Amount < Right.Amount then
---            return True;
---         end if;
---         if Inventory_Sort_Order = AMOUNTDESC
---           and then Left.Amount > Right.Amount then
---            return True;
---         end if;
---         if Inventory_Sort_Order = WEIGHTASC
---           and then Left.Weight < Right.Weight then
---            return True;
---         end if;
---         if Inventory_Sort_Order = WEIGHTDESC
---           and then Left.Weight > Right.Weight then
---            return True;
---         end if;
---         if Inventory_Sort_Order = USEDASC and then Left.Used < Right.Used then
---            return True;
---         end if;
---         if Inventory_Sort_Order = USEDDESC
---           and then Left.Used > Right.Used then
---            return True;
---         end if;
---         return False;
---      end "<";
---      procedure Sort_Inventory is new Ada.Containers.Generic_Array_Sort
---        (Index_Type => Positive, Element_Type => Local_Item_Data,
---         Array_Type => Inventory_Array);
---   begin
---      case Column is
---         when 1 =>
---            if Inventory_Sort_Order = SELECTEDASC then
---               Inventory_Sort_Order := SELECTEDDESC;
---            else
---               Inventory_Sort_Order := SELECTEDASC;
---            end if;
---         when 2 =>
---            if Inventory_Sort_Order = NAMEASC then
---               Inventory_Sort_Order := NAMEDESC;
---            else
---               Inventory_Sort_Order := NAMEASC;
---            end if;
---         when 3 =>
---            if Inventory_Sort_Order = DURABILITYASC then
---               Inventory_Sort_Order := DURABILITYDESC;
---            else
---               Inventory_Sort_Order := DURABILITYASC;
---            end if;
---         when 4 =>
---            if Inventory_Sort_Order = USEDASC then
---               Inventory_Sort_Order := USEDDESC;
---            else
---               Inventory_Sort_Order := USEDASC;
---            end if;
---         when 5 =>
---            if Inventory_Sort_Order = AMOUNTASC then
---               Inventory_Sort_Order := AMOUNTDESC;
---            else
---               Inventory_Sort_Order := AMOUNTASC;
---            end if;
---         when 6 =>
---            if Inventory_Sort_Order = WEIGHTASC then
---               Inventory_Sort_Order := WEIGHTDESC;
---            else
---               Inventory_Sort_Order := WEIGHTASC;
---            end if;
---         when others =>
---            null;
---      end case;
---      if Inventory_Sort_Order = NONE then
---         return
---           Update_Inventory_Command
---             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---              Argv =>
---                CArgv.Empty & "UpdateInventory" &
---                Trim(Source => Positive'Image(Member_Index), Side => Left));
---      end if;
---      Fill_Local_Inventory_Loop :
---      for I in
---        Inventory_Indexes.First_Index .. Inventory_Indexes.Last_Index loop
---         Local_Inventory(I) :=
---           (Selected =>
---              (if
---                 Tcl_GetVar
---                   (interp => Interp,
---                    varName =>
---                      "invindex" &
---                      Trim
---                        (Source => Positive_Container.Extended_Index'Image(I),
---                         Side => Left)) =
---                 "1"
---               then True
---               else False),
---            Name =>
---              To_Unbounded_String
---                (Source =>
---                   Get_Item_Name
---                     (Item =>
---                        Inventory_Container.Element
---                          (Container =>
---                             Player_Ship.Crew(Member_Index).Inventory,
---                           Index => I),
---                      Damage_Info => False, To_Lower => False)),
---            Damage =>
---              Float
---                (Inventory_Container.Element
---                   (Container => Player_Ship.Crew(Member_Index).Inventory,
---                    Index => I)
---                   .Durability) /
---              Float(Default_Item_Durability),
---            Item_Type =>
---              (if
---                 Get_Proto_Item
---                   (Index =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Crew(Member_Index).Inventory,
---                         Index => I)
---                        .Proto_Index)
---                   .Show_Type /=
---                 Null_Bounded_String
---               then
---                 Get_Proto_Item
---                   (Index =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Crew(Member_Index).Inventory,
---                         Index => I)
---                        .Proto_Index)
---                   .Show_Type
---               else Get_Proto_Item
---                   (Index =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Crew(Member_Index).Inventory,
---                         Index => I)
---                        .Proto_Index)
---                   .I_Type),
---            Amount =>
---              Inventory_Container.Element
---                (Container => Player_Ship.Crew(Member_Index).Inventory,
---                 Index => I)
---                .Amount,
---            Weight =>
---              Inventory_Container.Element
---                (Container => Player_Ship.Crew(Member_Index).Inventory,
---                 Index => I)
---                .Amount *
---              Get_Proto_Item
---                (Index =>
---                   Inventory_Container.Element
---                     (Container => Player_Ship.Crew(Member_Index).Inventory,
---                      Index => I)
---                     .Proto_Index)
---                .Weight,
---            Used =>
---              Item_Is_Used(Member_Index => Member_Index, Item_Index => I),
---            Id => I);
---      end loop Fill_Local_Inventory_Loop;
---      Sort_Inventory(Container => Local_Inventory);
---      Inventory_Indexes.Clear;
---      Fill_Inventory_Indexes_Loop :
---      for Item of Local_Inventory loop
---         Inventory_Indexes.Append(New_Item => Item.Id);
---      end loop Fill_Inventory_Indexes_Loop;
---      return
---        Update_Inventory_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 4,
---           Argv =>
---             CArgv.Empty & "UpdateInventory" &
---             Trim(Source => Positive'Image(Member_Index), Side => Left));
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---   end Sort_Crew_Inventory_Command;
-
-   -- ****if* SUCI/SUCI.Reset_Selection
-   -- FUNCTION
-   -- Reset the currently selected items in the crew member inventory
-   -- PARAMETERS
-   -- Interp - The Tcl interpreter in which the selection will be reseted
-   -- HISTORY
-   -- 7.8 - Added
-   -- SOURCE
---   procedure Reset_Selection(Interp: Tcl_Interp) is
---      -- ****
---   begin
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Reset_Item_Selection_Loop :
---      for I in
---        1 ..
---          Inventory_Container.Capacity
---            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
---         if Tcl_GetVar
---             (interp => Interp,
---              varName => "invindex" & Trim(Source => I'Img, Side => Left)) =
---           "1" then
---            Tcl_UnsetVar
---              (interp => Interp,
---               varName => "invindex" & Trim(Source => I'Img, Side => Left));
---         end if;
---      end loop Reset_Item_Selection_Loop;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---   end Reset_Selection;
 
    -- ****o* SUCI/SUCI.Set_Use_Item_Command
    -- FUNCTION
@@ -644,106 +148,6 @@ package body Ships.UI.Crew.Inventory is
       Import => True,
       Convention => C,
       External_Name => "setUseItemCommand";
-      -- ****
-
---   function Set_Use_Item_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      use Tiny_String;
---
---      Item_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Item_Type: constant Bounded_String :=
---        Get_Proto_Item
---          (Index =>
---             Inventory_Container.Element
---               (Container => Player_Ship.Crew(Member_Index).Inventory,
---                Index => Item_Index)
---               .Proto_Index)
---          .I_Type;
---   begin
---      if Item_Is_Used
---          (Member_Index => Member_Index, Item_Index => Item_Index) then
---         Take_Off_Item(Member_Index => Member_Index, Item_Index => Item_Index);
---         return
---           Sort_Crew_Inventory_Command
---             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---              Argv => CArgv.Empty & "SortCrewInventory" & "-1");
---      end if;
---      if Item_Type = Weapon_Type then
---         if Get_Proto_Item
---             (Index =>
---                Inventory_Container.Element
---                  (Container => Player_Ship.Crew(Member_Index).Inventory,
---                   Index => Item_Index)
---                  .Proto_Index)
---             .Value
---             (4) =
---           2 and
---           Player_Ship.Crew(Member_Index).Equipment(SHIELD) /= 0 then
---            Show_Message
---              (Text =>
---                 To_String(Source => Player_Ship.Crew(Member_Index).Name) &
---                 " can't use this weapon because have shield equiped. Take off shield first.",
---               Title => "Shield in use");
---            return TCL_OK;
---         end if;
---         Player_Ship.Crew(Member_Index).Equipment(WEAPON) := Item_Index;
---      elsif Item_Type = Shield_Type then
---         if Player_Ship.Crew(Member_Index).Equipment(WEAPON) > 0 then
---            if Get_Proto_Item
---                (Index =>
---                   Inventory_Container.Element
---                     (Container => Player_Ship.Crew(Member_Index).Inventory,
---                      Index =>
---                        Player_Ship.Crew(Member_Index).Equipment(WEAPON))
---                     .Proto_Index)
---                .Value
---                (4) =
---              2 then
---               Show_Message
---                 (Text =>
---                    To_String(Source => Player_Ship.Crew(Member_Index).Name) &
---                    " can't use shield because have equiped two-hand weapon. Take off weapon first.",
---                  Title => "Two handed weapon in use");
---               return TCL_OK;
---            end if;
---         end if;
---         Player_Ship.Crew(Member_Index).Equipment(SHIELD) := Item_Index;
---      elsif Item_Type = Head_Armor then
---         Player_Ship.Crew(Member_Index).Equipment(HELMET) := Item_Index;
---      elsif Item_Type = Chest_Armor then
---         Player_Ship.Crew(Member_Index).Equipment(TORSO) := Item_Index;
---      elsif Item_Type = Arms_Armor then
---         Player_Ship.Crew(Member_Index).Equipment(ARMS) := Item_Index;
---      elsif Item_Type = Legs_Armor then
---         Player_Ship.Crew(Member_Index).Equipment(LEGS) := Item_Index;
---      elsif Is_Tool(Item_Type => Item_Type) then
---         Player_Ship.Crew(Member_Index).Equipment(TOOL) := Item_Index;
---      end if;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      return
---        Sort_Crew_Inventory_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
---   end Set_Use_Item_Command;
-   --## rule on REDUCEABLE_SCOPE
-
-   -- ****if* SUCI/SUCI.Move_Item
-   -- FUNCTION
-   -- Move the selected item to the player's ship's cargo
-   -- PARAMETERS
-   -- Item_Index - The inventory index of the item to move
-   -- Amount     - The amount of the item to move
-   -- HISTORY
-   -- 7.8 - Added
-   -- SOURCE
---   procedure Move_Item(Item_Index, Amount: Positive) with
---         Import => True,
---         Convention => C,
---         External_Name => "updateAdaCrewInfo";
       -- ****
 
    -- ****o* SUCI/SUCI.Move_Item_Command
@@ -847,7 +251,10 @@ package body Ships.UI.Crew.Inventory is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
       use Tiny_String;
+      use Dialogs;
 
       Used: constant Boolean :=
         Item_Is_Used
@@ -990,32 +397,34 @@ package body Ships.UI.Crew.Inventory is
    function Toggle_Inventory_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "toggleInventoryItemCommand";
       -- ****
 
-   function Toggle_Inventory_Item_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-   begin
-      Toggle_Checked_Button
-        (Table => Inventory_Table,
-         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
-      if Is_Checked
-          (Table => Inventory_Table,
-           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
-           Column => 1) then
-         Tcl_SetVar
-           (interp => Interp,
-            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2),
-            newValue => "1");
-      else
-         Tcl_UnsetVar
-           (interp => Interp,
-            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2));
-      end if;
-      return TCL_OK;
-   end Toggle_Inventory_Item_Command;
+--   function Toggle_Inventory_Item_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--   begin
+--      Toggle_Checked_Button
+--        (Table => Inventory_Table,
+--         Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)), Column => 1);
+--      if Is_Checked
+--          (Table => Inventory_Table,
+--           Row => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)),
+--           Column => 1) then
+--         Tcl_SetVar
+--           (interp => Interp,
+--            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2),
+--            newValue => "1");
+--      else
+--         Tcl_UnsetVar
+--           (interp => Interp,
+--            varName => "invindex" & CArgv.Arg(Argv => Argv, N => 2));
+--      end if;
+--      return TCL_OK;
+--   end Toggle_Inventory_Item_Command;
 
    -- ****o* SUCI/SUCI.Toggle_Inventory_Items_Command
    -- FUNCTION
@@ -1039,52 +448,6 @@ package body Ships.UI.Crew.Inventory is
       Convention => C,
       External_Name => "toggleInventoryItemsCommand";
       -- ****
-
---   function Toggle_Inventory_Items_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      Is_Used: Boolean := False;
---      Equip: constant Boolean :=
---        (if CArgv.Arg(Argv => Argv, N => 1) = "equip" then True else False);
---   begin
---      Toogle_Items_Loop :
---      for I in
---        Inventory_Container.First_Index
---          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
---          Inventory_Container.Last_Index
---            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
---         if Tcl_GetVar
---             (interp => Interp,
---              varName =>
---                "invindex" &
---                Trim
---                  (Source => Inventory_Container.Extended_Index'Image(I),
---                   Side => Left)) =
---           "1" then
---            Is_Used :=
---              Item_Is_Used(Member_Index => Member_Index, Item_Index => I);
---            if Equip and then not Is_Used then
---               if Set_Use_Item_Command
---                   (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---                    Argv =>
---                      CArgv.Empty & "SetUseItem" &
---                      Trim(Source => I'Img, Side => Left)) /=
---                 TCL_OK then
---                  return TCL_ERROR;
---               end if;
---            elsif not Equip and then Is_Used then
---               Take_Off_Item(Member_Index => Member_Index, Item_Index => I);
---            end if;
---         end if;
---      end loop Toogle_Items_Loop;
---      Reset_Selection(Interp => Interp);
---      return
---        Sort_Crew_Inventory_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---           Argv => CArgv.Empty & "SortCrewInventory" & "-1");
---   end Toggle_Inventory_Items_Command;
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUCI/SUCI.Move_Items_Command
    -- FUNCTION
