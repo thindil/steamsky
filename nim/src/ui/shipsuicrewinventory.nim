@@ -679,6 +679,19 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Select or deselect the selected item in the inventory
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ToggleInventoryItem rowindex, itemindex
+  ## Rowindex is the index of the row in which is the selected item,
+  ## itemindex is the index of the selected item in crew member inventory.
   let row = try:
       ($argv[1]).parseInt
     except:
