@@ -678,8 +678,11 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
 proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
-  let row = ($argv[1]).parseInt
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  let row = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't take the number of the row.")
   toggleCheckedButton(table = inventoryTable, row = row, column = 1)
   if isChecked(table = inventoryTable, row = row, column = 1):
     tclSetVar(varName = "invindex" & $argv[2], newValue = "1")
