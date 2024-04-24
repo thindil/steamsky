@@ -309,10 +309,85 @@ proc finishCombat() {.sideEffect, raises: [KeyError, ValueError, CrewOrderError,
       if not progressStory(nextStep = true):
         return
 
-proc characterAttack(attackerIndex2, defenderIndex2: Natural;
-    playerAttack, playerAttack2: bool; orderIndex: var int): bool {.sideEffect,
-        raises: [KeyError,
-    CrewNoSpaceError, IOError], tags: [WriteIOEffect], contractual.} =
+proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
+    hitLocation: EquipmentLocations): tuple [damage, hitChance,
+    attackSkill: int] {.sideEffect, raises: [KeyError], tags: [], contractual.} =
+  ## Count damage, hit chance and skill used by attacker for melee combat
+  ##
+  ## * attacker      - the crew member who was attacking
+  ## * defender      - the crew member who was hit
+  ## * playerAttack2 - if true, the attacker is from the player's ship's
+  ##                   crew
+  ## * hitLocation   - the location on defender body where damage is taken
+  ##
+  ## Returns tuple with information about damage done, hit chance and index
+  ## of the skill used by the attacker.
+  var baseDamage: Natural = attacker.attributes[strengthIndex].level
+  if attacker.equipment[weapon] > -1:
+    baseDamage += itemsList[attacker.inventory[
+        attacker.equipment[weapon]].protoIndex].value[2]
+  var wounds: float = 1.0 - (attacker.health.float / 100.0)
+  result.damage = (baseDamage - (baseDamage.float * wounds.float).int)
+  if attacker.thirst > 40:
+    wounds = 1.0 - (attacker.thirst.float / 100.0)
+    result.damage -= (baseDamage.float * wounds.float).int
+  if attacker.hunger > 80:
+    wounds = 1.0 - (attacker.hunger.float / 100.0)
+    result.damage -= (baseDamage.float * wounds.float).int
+  result.damage = if playerAttack2:
+      (result.damage.float * newGameSettings.playerMeleeDamageBonus).int
+    else:
+      (result.damage.float * newGameSettings.enemyMeleeDamageBonus).int
+  result.hitChance = 0
+  result.attackSkill = 0
+  if attacker.equipment[weapon] > -1:
+    result.attackSkill = getSkillLevel(member = attacker,
+        skillIndex = itemsList[attacker.inventory[attacker.equipment[
+        weapon]].protoIndex].value[3])
+    result.hitChance = result.attackSkill + getRandom(min = 1, max = 50)
+  else:
+    result.hitChance = getSkillLevel(member = attacker,
+        skillIndex = unarmedSkill) + getRandom(min = 1, max = 50)
+  result.hitChance -= (getSkillLevel(member = defender,
+      skillIndex = dodgeSkill) + getRandom(min = 1, max = 50))
+  for i in helmet .. legs:
+    if defender.equipment[i] > -1:
+      result.hitChance += itemsList[defender.inventory[
+          defender.equipment[i]].protoIndex].value[3]
+  if defender.equipment[hitLocation] > -1:
+    result.damage -= itemsList[defender.inventory[defender.equipment[
+        hitLocation]].protoIndex].value[2]
+  if defender.equipment[shield] > -1:
+    result.damage -= itemsList[defender.inventory[defender.equipment[
+        shield]].protoIndex].value[2]
+  if attacker.equipment[weapon] == -1:
+    var damageBonus: float = getSkillLevel(member = attacker,
+        skillIndex = unarmedSkill) / 200
+    if damageBonus == 0:
+      damageBonus = 1
+    result.damage += damageBonus.int
+  let faction: FactionData = factionsList[defender.faction]
+  if "naturalarmor" in faction.flags:
+    result.damage = (result.damage / 2).int
+  if "toxicattack" in factionsList[attacker.faction].flags and
+      attacker.equipment[weapon] == -1 and "diseaseimmune" notin faction.flags:
+    result.damage = if result.damage * 10 < 30:
+        result.damage * 10
+      else:
+        result.damage + 30
+  if result.damage < 1:
+    result.damage = 1
+  if attacker.equipment[weapon] > -1:
+    if itemsList[attacker.inventory[attacker.equipment[
+        weapon]].protoIndex].value[5] == 1:
+      result.damage = (result.damage.float * 1.5).int
+    elif itemsList[attacker.inventory[attacker.equipment[
+        weapon]].protoIndex].value[5] == 2:
+      result.damage *= 2
+
+proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
+    playerAttack2: bool; orderIndex: var int): bool {.sideEffect, raises: [
+    KeyError, CrewNoSpaceError, IOError], tags: [WriteIOEffect], contractual.} =
   ## The attack of the selected crew member on its target
   ##
   ## * attackerIndex2 - the index of the crew member which attacks
@@ -334,70 +409,9 @@ proc characterAttack(attackerIndex2, defenderIndex2: Natural;
     defender: MemberData = if playerAttack2: game.enemy.ship.crew[defenderIndex2]
       else:
         playerShip.crew[defenderIndex2]
-    baseDamage: Natural = attacker.attributes[strengthIndex].level
-  if attacker.equipment[weapon] > -1:
-    baseDamage += itemsList[attacker.inventory[
-        attacker.equipment[weapon]].protoIndex].value[2]
-  var
-    wounds: float = 1.0 - (attacker.health.float / 100.0)
-    damage: int = (baseDamage - (baseDamage.float * wounds.float).int)
-  if attacker.thirst > 40:
-    wounds = 1.0 - (attacker.thirst.float / 100.0)
-    damage -= (baseDamage.float * wounds.float).int
-  if attacker.hunger > 80:
-    wounds = 1.0 - (attacker.hunger.float / 100.0)
-    damage -= (baseDamage.float * wounds.float).int
-  damage = if playerAttack2:
-      (damage.float * newGameSettings.playerMeleeDamageBonus).int
-    else:
-      (damage.float * newGameSettings.enemyMeleeDamageBonus).int
-  var
-    hitChance: int = 0
-    attackSkill: int = 0
-  if attacker.equipment[weapon] > -1:
-    attackSkill = getSkillLevel(member = attacker,
-        skillIndex = itemsList[attacker.inventory[attacker.equipment[
-        weapon]].protoIndex].value[3])
-    hitChance = attackSkill + getRandom(min = 1, max = 50)
-  else:
-    hitChance = getSkillLevel(member = attacker,
-        skillIndex = unarmedSkill) + getRandom(min = 1, max = 50)
-  hitChance -= (getSkillLevel(member = defender, skillIndex = dodgeSkill) +
-      getRandom(min = 1, max = 50))
-  for i in helmet .. legs:
-    if defender.equipment[i] > -1:
-      hitChance += itemsList[defender.inventory[
-          defender.equipment[i]].protoIndex].value[3]
-  if defender.equipment[hitLocation] > -1:
-    damage -= itemsList[defender.inventory[defender.equipment[
-        hitLocation]].protoIndex].value[2]
-  if defender.equipment[shield] > -1:
-    damage -= itemsList[defender.inventory[defender.equipment[
-        shield]].protoIndex].value[2]
-  if attacker.equipment[weapon] == -1:
-    var damageBonus: float = getSkillLevel(member = attacker,
-        skillIndex = unarmedSkill) / 200
-    if damageBonus == 0:
-      damageBonus = 1
-    damage += damageBonus.int
-  let faction: FactionData = factionsList[defender.faction]
-  if "naturalarmor" in faction.flags:
-    damage = (damage / 2).int
-  if "toxicattack" in factionsList[attacker.faction].flags and
-      attacker.equipment[weapon] == -1 and "diseaseimmune" notin faction.flags:
-    damage = if damage * 10 < 30:
-        damage * 10
-      else:
-        damage + 30
-  if damage < 1:
-    damage = 1
-  if attacker.equipment[weapon] > -1:
-    if itemsList[attacker.inventory[attacker.equipment[
-        weapon]].protoIndex].value[5] == 1:
-      damage = (damage.float * 1.5).int
-    elif itemsList[attacker.inventory[attacker.equipment[
-        weapon]].protoIndex].value[5] == 2:
-      damage *= 2
+  let (damage, hitChance, attackSkill) = countMeleeDamage(attacker = attacker,
+      defender = defender, playerAttack2 = playerAttack2,
+      hitLocation = hitLocation)
   var
     attackMessage: string = if playerAttack2:
         attacker.name & " attacks " & defender.name & " (" & factionName & ")"
