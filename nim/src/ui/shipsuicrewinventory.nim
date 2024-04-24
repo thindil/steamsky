@@ -677,6 +677,16 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
+proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let row = ($argv[1]).parseInt
+  toggleCheckedButton(table = inventoryTable, row = row, column = 1)
+  if isChecked(table = inventoryTable, row = row, column = 1):
+    tclSetVar(varName = "invindex" & $argv[2], newValue = "1")
+  else:
+    tclUnsetVar(varName = "invindex" & $argv[2])
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -689,6 +699,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("MoveItem", moveItemCommand)
 #    addCommand("MoveItems", moveItemsCommand)
 #    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
+#    addCommand("ToggleInventoryItem", toggleInventoryItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
