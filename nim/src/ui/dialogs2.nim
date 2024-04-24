@@ -19,7 +19,7 @@ import ../tk
 import dialogs
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Close the selected dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -56,7 +56,8 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() =
-  addCommand("CloseDialog", closeDialogCommand)
+  # addCommand("CloseDialog", closeDialogCommand)
+  discard
 
 # Temporary code for interfacing with Ada
 
