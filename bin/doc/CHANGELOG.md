@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Wrong position of ship after trading
 - Tooltip for the close button in move item from a crew member to the ship's
   cargo
+- Setting an event or a mission as the destination for the player's ship
 
 ## [9.9] - 2024-04-14
 
