@@ -59,7 +59,7 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   let addedMinutes: Natural = minutes mod 60
   gameDate.minutes += addedMinutes
   if gameDate.minutes > 59:
-    gameDate.minutes = gameDate.minutes - 60
+    gameDate.minutes -= 60
     gameDate.hour.inc
   var addedHours: Natural = (minutes / 60).int
   while addedHours > 23:
@@ -362,14 +362,14 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
               targetFaction = index)
           var maxBaseSpawnRoll: Natural = 0
           for spawnChance in faction.basesTypes.values:
-            maxBaseSpawnRoll = maxBaseSpawnRoll + spawnChance
+            maxBaseSpawnRoll += spawnChance
           var baseTypeRoll: Positive = getRandom(min = 1,
               max = maxBaseSpawnRoll)
           for tindex, baseTypeChance in faction.basesTypes:
             if baseTypeRoll <= baseTypeChance:
               baseType = tindex
               break
-            baseTypeRoll = baseTypeRoll - baseTypeChance
+            baseTypeRoll -= baseTypeChance
           break
         factionRoll -= faction.spawnChance
       {.ruleOff: "ifstatements".}
