@@ -726,6 +726,26 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = "bind " & button & " <Tab> {focus " & itemsMenu & ".equip;break}")
         tclEval(script = "focus " & button)
 
+    addButton(name = ".equip", label = "Equip items",
+        command = "ToggleInventoryItems equip")
+    addButton(name = ".unequip", label = "Unequip items",
+        command = "ToggleInventoryItems unequip")
+    addButton(name = ".move", label = "Move items to the ship's cargo",
+        command = "MoveItems")
+    addButton(name = ".close", label = "Close", command = "")
+    showDialog(dialog = itemsMenu, parentFrame = ".memberdialog")
+    return tclOk
+  let
+    itemIndex = ($argv[1]).parseInt
+    itemType = itemsList[playerShip.crew[memberIndex].inventory[
+        itemIndex].protoIndex].itemType
+    typesArray: array[1 .. 6, string] = [weaponType, shieldType, headArmor,
+        chestArmor, armsArmor, legsArmor]
+  var equipable = itemType in toolsList
+  for iType in typesArray:
+    if iType == itemType:
+      equipable = true
+      break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
