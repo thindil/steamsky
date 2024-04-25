@@ -24,10 +24,7 @@ package Help.UI is
    -- FUNCTION
    -- Add Tcl commands related to the help UI
    -- SOURCE
-   procedure Add_Commands with
-      Import => True,
-      Convention => C,
-      External_Name => "addAdaHelpCommands";
+   procedure Add_Commands;
    -- ****
 
 end Help.UI;
