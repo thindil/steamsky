@@ -27,35 +27,38 @@ suite "Unit tests for basescargo module.":
   skyBases[1].owner = "POLEIS"
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
-  test "Testing generateCargo.":
+  test "Generate a base's cargo.":
     generateCargo()
     check:
       skyBases[1].cargo.len > 0
 
-  test "Testing findBaseCargo.":
+  test "Find an existing item in a base's cargo":
     skyBases[1].cargo = @[]
     generateCargo()
-    checkpoint "Find an existing item in a base's cargo"
     check:
       findBaseCargo(1) == 0
-    checkpoint "Not find an existing item in a base's cargo"
+
+  test "Not find an existing item in a base's cargo":
     check:
       findBaseCargo(40) == -1
-    checkpoint "Not find an non-existing item in a base's cargo"
+
+  test "Not find an non-existing item in a base's cargo":
     check:
       findBaseCargo(490) == -1
 
-  test "Testing updateBaseCargo.":
+  test "Remove an item from a base's cargo with protoIndex":
     skyBases[1].cargo = @[]
     generateCargo()
     let
       amount = skyBases[1].cargo[0].amount - 1
       protoIndex = skyBases[1].cargo[0].protoIndex
-    checkpoint "Remove an item from a base's cargo with protoIndex"
     updateBaseCargo(protoIndex, -1)
     check:
       skyBases[1].cargo[0].amount == amount
-    checkpoint "Remove an item from a base's cargo with amount"
+
+  test "Remove an item from a base's cargo with amount":
+    let
+      amount = skyBases[1].cargo[0].amount - 1
     updateBaseCargo(cargoIndex = 0, amount = -1)
     check:
-      skyBases[1].cargo[0].amount == amount - 1
+      skyBases[1].cargo[0].amount == amount
