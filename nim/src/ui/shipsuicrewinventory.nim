@@ -703,6 +703,31 @@ proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
     tclUnsetVar(varName = "invindex" & $argv[2])
   return tclOk
 
+proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  var selection = false
+  for index, _ in playerShip.crew[memberIndex].inventory:
+    if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
+      selection = true
+      break
+  if selection:
+    let itemsMenu = createDialog(name = ".itemsmenu",
+        title = "Selected items actions", parentName = ".memberdialog")
+
+    proc addButton(name, label, command: string) =
+      let button = itemsMenu & name
+      tclEval(script = "ttk::button " & button & " -text {" & label &
+          "} -command {CloseDialog " & itemsMenu & " .memberdialog;" & command & "}")
+      tclEval(script = "grid " & button & " -sticky we -padx 5" & (
+          if command.len == 0: " -pady {0 3}" else: ""))
+      tclEval(script = "bind " & button & " <Escape> {CloseDialog " &
+          itemsMenu & " .memberdialog;break}")
+      if command.len == 0:
+        tclEval(script = "bind " & button & " <Tab> {focus " & itemsMenu & ".equip;break}")
+        tclEval(script = "focus " & button)
+
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -716,6 +741,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("MoveItems", moveItemsCommand)
 #    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
 #    addCommand("ToggleInventoryItem", toggleInventoryItemCommand)
+#    addCommand("ShowInventoryItemInfo", showInventoryItemInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
