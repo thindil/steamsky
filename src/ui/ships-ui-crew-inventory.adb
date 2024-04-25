@@ -15,7 +15,7 @@
 
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
@@ -25,7 +25,7 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs;
 with Utils.UI; use Utils.UI;
@@ -37,13 +37,6 @@ package body Ships.UI.Crew.Inventory is
    -- The index of the selected crew member
    -- SOURCE
    Member_Index: Positive;
-   -- ****
-
-   -- ****iv* SUCI/SUCI.Inventory_Indexes
-   -- FUNCTION
-   -- Indexes of the crew member items in inventory
-   -- SOURCE
-   Inventory_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****o* SUCI/SUCI.Update_Inventory_Command
@@ -70,16 +63,7 @@ package body Ships.UI.Crew.Inventory is
    function Update_Inventory_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 
-      Member: Member_Data
-        (Amount_Of_Attributes => Attributes_Amount,
-         Amount_Of_Skills => Skills_Amount);
---      Member_Frame: constant Ttk_Frame :=
---        Get_Widget(pathName => ".memberdialog.canvas.frame");
---      Y_Scroll: constant Ttk_Scrollbar :=
---        Get_Widget
---          (pathName => ".memberdialog.yscroll");
       function Update_Ada_Inventory_Command
         (Client_Data2: Integer; Interp2: Tcl.Tcl_Interp;
          Argc2: Interfaces.C.int; Argv2: CArgv.Chars_Ptr_Ptr)
@@ -89,29 +73,6 @@ package body Ships.UI.Crew.Inventory is
          External_Name => "updateInventoryCommand";
    begin
       Member_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Member := Player_Ship.Crew(Member_Index);
-      if Inventory_Indexes.Length /=
-        Inventory_Container.Length(Container => Member.Inventory) then
-         Inventory_Indexes.Clear;
-         Fill_Inventory_Indexes_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Member.Inventory) ..
-             Inventory_Container.Last_Index(Container => Member.Inventory) loop
-            Inventory_Indexes.Append(New_Item => I);
-         end loop Fill_Inventory_Indexes_Loop;
-      end if;
---      Inventory_Table :=
---        Create_Table
---          (Parent => Widget_Image(Win => Member_Frame),
---           Headers =>
---             (1 => To_Unbounded_String(Source => ""),
---              2 => To_Unbounded_String(Source => "Name"),
---              3 => To_Unbounded_String(Source => "Durability"),
---              4 => To_Unbounded_String(Source => "Used"),
---              5 => To_Unbounded_String(Source => "Amount"),
---              6 => To_Unbounded_String(Source => "Weight")),
---           Scrollbar => Y_Scroll, Command => "SortCrewInventory",
---           Tooltip_Text => "Press mouse button to sort the inventory.");
       return
         Update_Ada_Inventory_Command
           (Client_Data2 => Client_Data, Interp2 => Interp, Argc2 => Argc,
@@ -243,6 +204,7 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Ada.Strings.Unbounded;
       use Tiny_String;
       use Dialogs;
 
@@ -284,6 +246,7 @@ package body Ships.UI.Crew.Inventory is
       if Selection then
          Show_Multi_Item_Actions_Menu_Block :
          declare
+            use Tcl.Tk.Ada.Widgets.TtkFrame;
 
             Items_Menu: constant Ttk_Frame :=
               Create_Dialog
