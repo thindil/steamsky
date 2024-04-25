@@ -400,6 +400,7 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
    begin
+      Set_Ada_Ship(Ship => Player_Ship);
       if Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) =
         Player_Ship.Sky_X and
         Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) =
@@ -413,6 +414,7 @@ package body Utils.UI is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Player_Ship.Destination_Y :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Get_Ada_Ship;
       Add_Message
         (Message => "You set the travel destination for your ship.",
          M_Type => ORDERMESSAGE);

@@ -750,6 +750,8 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
     playerShip.repairModule = shipData.repairModule - 1
     playerShip.description = $shipData.description
     playerShip.homeBase = shipData.homeBase
+    playerShip.destinationX = shipData.destinationX
+    playerShip.destinationY = shipData.destinationY
   else:
     npcShip.name = $shipData.name
     npcShip.skyX = shipData.skyX
