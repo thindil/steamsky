@@ -17,12 +17,6 @@
 
 package body Crew.Inventory is
 
-   procedure Equipment_To_Ada
-     (M_Index: Integer; Equipment: out Nim_Equipment_Array) with
-      Import => True,
-      Convention => C,
-      External_Name => "equipmentToAda";
-
    procedure Update_Inventory
      (Member_Index: Positive; Amount: Integer; Proto_Index: Natural := 0;
       Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
@@ -38,6 +32,11 @@ package body Crew.Inventory is
          Import => True,
          Convention => C,
          External_Name => "updateAdaInventory";
+      procedure Equipment_To_Ada
+        (M_Index: Integer; Equipment: out Nim_Equipment_Array) with
+         Import => True,
+         Convention => C,
+         External_Name => "equipmentToAda";
    begin
       Get_Ada_Crew(Ship_Crew => Ship.Crew);
       Get_Ada_Crew_Inventory
