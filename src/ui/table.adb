@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2023 Bartek thindil Jasicki
+-- Copyright (c) 2021-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -286,38 +286,5 @@ package body Table is
         (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
          Com => New_String(Str => Command), Width => N_Width);
    end Update_Headers_Command;
-
-   --## rule off LOCAL_HIDING
-   function Is_Checked
-     (Table: Table_Widget; Row, Column: Natural) return Boolean is
-   --## rule on LOCAL_HIDING
-      function Is_Ada_Checked
-        (Can: chars_ptr; R, Col: Natural) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "isAdaChecked";
-   begin
-      if Is_Ada_Checked
-          (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
-           R => Row, Col => Column) =
-        1 then
-         return True;
-      end if;
-      return False;
-   end Is_Checked;
-
-   --## rule off LOCAL_HIDING
-   procedure Toggle_Checked_Button
-     (Table: Table_Widget; Row, Column: Natural) is
-   --## rule on LOCAL_HIDING
-      procedure Toggle_Ada_Checked_Button(Can: chars_ptr; R, Col: Natural) with
-         Import => True,
-         Convention => C,
-         External_Name => "toggleAdaCheckedButton";
-   begin
-      Toggle_Ada_Checked_Button
-        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)), R => Row,
-         Col => Column);
-   end Toggle_Checked_Button;
 
 end Table;

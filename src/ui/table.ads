@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -272,34 +272,6 @@ package Table is
      -- 6.5 - Added
      -- SOURCE
    procedure Update_Headers_Command(Table: Table_Widget; Command: String);
-   -- ****
-
-   -- ****f* Table/Table.Is_Checked
-   -- FUNCTION
-   -- Check if the selected checkbutton is checked or not
-   -- PARAMETERS
-   -- Table  - The Table_Widget in which the checkbutton will be checked
-   -- Row    - The row number in which the checkbutton will be checked
-   -- Column - The column number in which the checkbutton will be checked
-   -- RESULT
-   -- True if the selected checkbutton is checked, otherwise False
-   -- HISTORY
-   -- 7.8 - Added
-   -- SOURCE
-   function Is_Checked
-     (Table: Table_Widget; Row, Column: Natural) return Boolean;
-     -- ****
-
-     -- ****f* Table/Table.Toggle_Checked_Button
-     -- FUNCTION
-     -- Toggle the state of the selected checkbutton in the table
-     -- Table  - The Table_Widget in which the checkbutton will be toggled
-     -- Row    - The row number in which the checkbutton will be toggled
-     -- Column - The column number in which the checkbutton will be toggled
-     -- HISTORY
-     -- 7.8 - Added
-     -- SOURCE
-   procedure Toggle_Checked_Button(Table: Table_Widget; Row, Column: Natural);
    -- ****
    --## rule on LOCAL_HIDING
 
