@@ -22,7 +22,7 @@ import coreui
 type ButtonSettings* = object
   text, command, icon, tooltip, color: string
 
-const emptyButtonSettings = ButtonSettings(text: "", command: "", icon: "",
+const emptyButtonSettings* = ButtonSettings(text: "", command: "", icon: "",
     tooltip: "", color: "")
 
 var timerId*: string = "" ## Id of the timer for auto close command
