@@ -86,6 +86,7 @@ package body DebugUI is
       Spin_Box: Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
+      Set_Ada_Modules(Ship => Player_Ship);
       Module_Index := Natural'Value(Current(ComboBox => Module_Combo)) + 1;
       Set
         (ComboBox => Proto_Combo,
@@ -163,6 +164,7 @@ package body DebugUI is
       --## rule on IMPROPER_INITIALIZATION
       Skills_List_Values: Unbounded_String := Null_Unbounded_String;
    begin
+      Set_Ada_Crew(Ship => Player_Ship);
       Member :=
         Player_Ship.Crew(Natural'Value(Current(ComboBox => Combo_Box)) + 1);
       Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Health));
@@ -322,6 +324,7 @@ package body DebugUI is
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
    begin
+      Get_Ship_From_Nim(Ship => Player_Ship);
       Item_Index := Natural'Value(Current(ComboBox => Cargo_Combo)) + 1;
       Set
         (SpinBox => Amount_Box,
@@ -719,9 +722,11 @@ package body DebugUI is
       Spin_Box: Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
    begin
+      Set_Ada_Ship(Ship => Player_Ship);
       Player_Ship.Sky_X := Positive'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".y");
       Player_Ship.Sky_Y := Positive'Value(Get(Widgt => Spin_Box));
+      Get_Ada_Ship;
       Show_Sky_Map(Clear => True);
       return TCL_OK;
    end Move_Ship_Command;
@@ -763,6 +768,7 @@ package body DebugUI is
       Spin_Box: Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
+      Set_Ada_Modules(Ship => Player_Ship);
       Update_Proto_Index_Loop :
       for I in 1 .. Get_Modules_Amount loop
          if To_String(Source => Get_Module(Index => I).Name) =
@@ -785,6 +791,7 @@ package body DebugUI is
       --## rule on ASSIGNMENTS
       Player_Ship.Modules(Module_Index).Upgrade_Progress :=
         Natural'Value(Get(Widgt => Spin_Box));
+      Get_Ada_Modules;
       return TCL_OK;
    end Update_Module_Command;
 
@@ -819,6 +826,7 @@ package body DebugUI is
         Natural'Value(Current(ComboBox => Combo_Box)) + 1;
       Skill_Name: Unbounded_String;
    begin
+      Set_Ada_Crew(Ship => Player_Ship);
       Combo_Box.Name := New_String(Str => Frame_Name & ".addskill.skills");
       Skill_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       Add_Skill_Loop :
@@ -840,6 +848,7 @@ package body DebugUI is
                  Argv => Argv);
          end if;
       end loop Add_Skill_Loop;
+      Get_Ada_Crew;
       return TCL_OK;
    end Add_Skill_Command;
 
@@ -877,6 +886,7 @@ package body DebugUI is
       Local_Attribute: Mob_Attribute_Record;
       --## rule on IMPROPER_INITIALIZATION
    begin
+      Set_Ada_Crew(Ship => Player_Ship);
       Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
       Player_Ship.Crew(Member_Index).Health :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
@@ -934,6 +944,7 @@ package body DebugUI is
                New_Item => New_Skill);
          end Update_Skill_Block;
       end loop Update_Skills_Loop;
+      Get_Ada_Crew;
       return TCL_OK;
    end Update_Member_Command;
 
