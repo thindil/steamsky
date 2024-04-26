@@ -44,9 +44,11 @@ package body Help.UI is
    procedure Add_Commands is
       use Utils.UI;
    begin
-      Add_Command("ShowTopic", Show_Topic_Command'Access);
-      Add_Command("CloseHelp", Close_Help_Command'Access);
-      Add_Command("ShowHelp", Show_Help_Command'Access);
+      Add_Command
+        (Name => "ShowTopic", Ada_Command => Show_Topic_Command'Access);
+      Add_Command
+        (Name => "CloseHelp", Ada_Command => Close_Help_Command'Access);
+      Add_Command(Name => "ShowHelp", Ada_Command => Show_Help_Command'Access);
    end Add_Commands;
 
 end Help.UI;
