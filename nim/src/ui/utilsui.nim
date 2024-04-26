@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[bases, config, crew2, crewinventory, events2, game, game2,
-    maps, messages, missions2, shipscargo, shipscrew, tk, types]
+    items, maps, messages, missions2, shipscargo, shipscrew, tk, types]
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules2
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -259,6 +259,23 @@ proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
   addCommand("CheckAmount", checkAmountCommand)
   addCommand("ValidateAmount", validateAmountCommand)
   addCommand("NimSetTextVariable", setTextVariableCommand)
+
+proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
+    memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
+    button2: ButtonSettings = emptyButtonSettings) =
+  var
+    protoIndex: Natural
+    itemInfo: string = ""
+  if memberIndex > -1:
+    protoIndex = playerShip.crew[memberIndex].inventory[itemIndex].protoIndex
+    if playerShip.crew[memberIndex].inventory[itemIndex].durability < defaultItemDurability:
+      itemInfo = getItemDamage(itemDurability = playerShip.crew[
+          memberIndex].inventory[itemIndex].durability, withColors = true) & '\n'
+  else:
+    protoIndex = playerShip.cargo[itemIndex].protoIndex
+    if playerShip.cargo[itemIndex].durability < defaultItemDurability:
+      itemInfo = getItemDamage(itemDurability = playerShip.cargo[
+          itemIndex].durability, withColors = true) & '\n'
 
 # Temporary code for interfacing with Ada
 
