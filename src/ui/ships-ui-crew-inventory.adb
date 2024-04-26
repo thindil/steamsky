@@ -26,7 +26,9 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
+--## rule off REDUCEABLE_SCOPE
 with Crew.Inventory; use Crew.Inventory;
+--## rule on REDUCEABLE_SCOPE
 with Dialogs;
 with Utils.UI; use Utils.UI;
 
