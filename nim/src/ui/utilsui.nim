@@ -296,6 +296,19 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
       else:
         "")
     itemInfo.add(y = "{/gold}")
+  let itemTypes = [weaponType, chestArmor, headArmor, armsArmor, legsArmor, shieldType]
+  for itemType in itemTypes:
+    if itemsList[protoIndex].itemType == itemType:
+      itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+          itemData = itemsList[protoIndex].value[1]) &
+          "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+      break
+  if itemsList[protoIndex].itemType in toolsList:
+    itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+        itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+  if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
+      0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
+    itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
 
 # Temporary code for interfacing with Ada
 
