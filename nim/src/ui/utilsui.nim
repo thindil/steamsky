@@ -276,6 +276,26 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     if playerShip.cargo[itemIndex].durability < defaultItemDurability:
       itemInfo = getItemDamage(itemDurability = playerShip.cargo[
           itemIndex].durability, withColors = true) & '\n'
+  itemInfo.add(y = "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}")
+  if itemsList[protoIndex].itemType == weaponType:
+    itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
+        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
+        3]].attribute].name & "{/gold}")
+    if itemsList[protoIndex].value[4] == 1:
+      itemInfo.add(y = "\n{gold}Can be used with shield.{/gold}")
+    else:
+      itemInfo.add(y = "\n{gold}Can't be used with shield (two-handed weapon).{/gold}")
+    itemInfo.add(y = "\nDamage type: {gold}")
+    itemInfo.add(y = case itemsList[protoIndex].value[5]
+      of 1:
+        "cutting"
+      of 2:
+        "impaling"
+      of 3:
+        "blunt"
+      else:
+        "")
+    itemInfo.add(y = "{/gold}")
 
 # Temporary code for interfacing with Ada
 
