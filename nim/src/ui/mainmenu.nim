@@ -31,7 +31,7 @@ proc showMainMenu*()
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-    ReadDirEffect, RootEffect].} =
+    ReadDirEffect, RootEffect], exportc.} =
   ## Show the list of available saved games
   ##
   ## * clientData - the additional data for the Tcl command
@@ -147,7 +147,7 @@ proc createMainMenu*() =
     return
   let icon = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
   mainmenucommands.addCommands()
-  addCommand("ShowLoadGame", showLoadGameCommand)
+  #addCommand("ShowLoadGame", showLoadGameCommand)
 
 proc showMainMenu() =
   let mainWindow = "."
