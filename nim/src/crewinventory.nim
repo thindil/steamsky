@@ -188,7 +188,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     item: InventoryData = inventory[itemIndex]
     damageChance: int = itemsList[item.protoIndex].value[1]
   if skillLevel > 0:
-    damageChance = damageChance - (skillLevel / 5).int
+    damageChance -= (skillLevel / 5).int
     if damageChance < 1:
       damageChance = 1
   if getRandom(min = 1, max = 100) > damageChance:
