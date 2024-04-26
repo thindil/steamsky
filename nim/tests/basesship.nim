@@ -37,21 +37,20 @@ suite "Unit tests for basesship module":
   generateCargo()
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
-  test "Testing payForDock.":
+  test "Paying for docking.":
     payForDock()
     check:
       playerShip.cargo[0].amount == 90
 
-  test "Testing repairCost.":
+  test "Counting repair cost for the selected module.":
     var cost, time: Natural = 0
-    checkpoint "Counting repair cost for the selected module."
     playerShip.modules[0].durability -= 5
     repairCost(cost, time, 0)
     check:
       cost > 0 and time > 0
-    checkpoint "Counting repair cost for the whole ship"
-    cost = 0
-    time = 0
+
+  test "Counting repair cost for the whole ship":
+    var cost, time: Natural = 0
     repairCost(cost, time, -1)
     check:
       cost > 0 and time > 0
