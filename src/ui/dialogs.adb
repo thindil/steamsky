@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2023 Bartek thindil Jasicki
+-- Copyright (c) 2021-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -582,15 +581,6 @@ package body Dialogs is
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Button_Settings is record
-         Text: chars_ptr;
-         Command: chars_ptr;
-         Icon: chars_ptr;
-         Tooltip: chars_ptr;
-         Color: chars_ptr;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
       Nim_Button_1: constant Nim_Button_Settings :=
         (Text => New_String(Str => To_String(Source => Button_1.Text)),
          Command => New_String(Str => To_String(Source => Button_1.Command)),

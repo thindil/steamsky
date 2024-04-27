@@ -1,4 +1,4 @@
--- Copyright (c) 2021-2023 Bartek thindil Jasicki
+-- Copyright (c) 2021-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Game; use Game;
@@ -241,5 +242,17 @@ package Dialogs is
      (Question, Result: String; In_Game: Boolean := True) with
       Pre => Question'Length > 0;
       -- ****
+
+-- Temporary code to interact with Nim
+
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Button_Settings is record
+         Text: chars_ptr;
+         Command: chars_ptr;
+         Icon: chars_ptr;
+         Tooltip: chars_ptr;
+         Color: chars_ptr;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
 
 end Dialogs;
