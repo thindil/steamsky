@@ -1078,6 +1078,7 @@ package body DebugUI is
       Base_Name := To_Bounded_String(Source => Get(Widgt => Base_Entry));
       Find_Index_Loop :
       for I in Sky_Bases'Range loop
+         Get_Base_From_Nim(Base_Index => I);
          if Sky_Bases(I).Name = Base_Name then
             Base_Index := I;
             exit Find_Index_Loop;
@@ -1121,6 +1122,7 @@ package body DebugUI is
       BaseCargo_Container.Replace_Element
         (Container => Sky_Bases(Base_Index).Cargo, Index => 1,
          New_Item => Item);
+      Set_Base_In_Nim(Base_Index => Base_Index);
       return TCL_OK;
    end Update_Base_Command;
 
