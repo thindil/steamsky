@@ -20,7 +20,7 @@ import ../[config, tk]
 import coreui
 
 type ButtonSettings* = object
-  text, command, icon, tooltip, color: string
+  text*, command*, icon*, tooltip*, color*: string
 
 const emptyButtonSettings* = ButtonSettings(text: "", command: "", icon: "",
     tooltip: "", color: "")
@@ -264,8 +264,8 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
 
 # Temporary code for interfacing with Ada
 
-type AdaButtonSettings = object
-  text, command, icon, tooltip, color: cstring
+type AdaButtonSettings* = object
+  text*, command*, icon*, tooltip*, color*: cstring
 
 proc createAdaDialog(name, title: cstring; titleWidth, columns: cint;
     parentName: cstring; timerName: var cstring): cstring {.raises: [], tags: [], exportc.} =
