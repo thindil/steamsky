@@ -80,24 +80,24 @@ suite "Unit tests for basesship2 module":
   skyBases[1].cargo[0].amount = 10_000
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
-  test "Testing repairShip.":
-    checkpoint "Repairing the player's ship's module in the base."
+  test "Repairing the player's ship's module in the base.":
     playerShip.modules[0].durability -= 5
     repairShip(0)
     check:
       playerShip.modules[0].durability == playerShip.modules[0].maxDurability
-    checkpoint "Repairing the whole player's ship in the base."
+
+  test "Repairing the whole player's ship in the base.":
     playerShip.modules[0].durability -= 5
     repairShip(-1)
     check:
       playerShip.modules[0].durability == playerShip.modules[0].maxDurability
 
-  test "Testing upgradeShip.":
-    checkpoint "Removing a module from the player's ship in the base"
+  test "Removing a module from the player's ship in the base":
     upgradeShip(false, 5)
     check:
       playerShip.modules.len == 5
-    checkpoint "Installing a new module in the player's ship in the base"
+
+  test "Installing a new module in the player's ship in the base":
     upgradeShip(true, 6)
     check:
       playerShip.modules.len == 6
