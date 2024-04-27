@@ -309,6 +309,20 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
   if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
       0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
     itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  if itemsList[protoIndex].description.len > 0:
+    itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
+  if parent == ".":
+    showInfo(text = itemInfo, title = (if memberIndex > -1: getItemName(
+        item = playerShip.crew[memberIndex].inventory[itemIndex],
+        damageInfo = false, toLower = false) else: getItemName(
+        item = playerShip.cargo[itemIndex], damageInfo = false,
+        toLower = false)), button1 = button1, button2 = button2)
+  else:
+    showInfo(text = itemInfo, parentName = parent, title = (if memberIndex >
+        -1: getItemName(item = playerShip.crew[memberIndex].inventory[
+        itemIndex], damageInfo = false, toLower = false) else: getItemName(
+        item = playerShip.cargo[itemIndex], damageInfo = false,
+        toLower = false)), button1 = button1, button2 = button2)
 
 # Temporary code for interfacing with Ada
 
@@ -321,3 +335,16 @@ proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
 proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
     gcsafe, sideEffect, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
+
+proc showAdaInventoryInfo(parent: cstring; itemIndex, memberIndex: cint;
+    button1, button2: AdaButtonSettings) {.exportc, raises: [], tags: [].} =
+  let
+    nimButton1 = ButtonSettings(text: $button1.text, command: $button1.command,
+        icon: $button1.icon, tooltip: $button1.tooltip, color: $button1.color)
+    nimButton2 = ButtonSettings(text: $button2.text, command: $button2.command,
+        icon: $button2.icon, tooltip: $button2.tooltip, color: $button2.color)
+  try:
+    showInventoryItemInfo(parent = $parent, itemIndex = itemIndex,
+        memberIndex = memberIndex, button1 = nimButton1, button2 = nimButton2)
+  except:
+    echo getCurrentExceptionMsg()
