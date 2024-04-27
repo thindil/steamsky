@@ -78,7 +78,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
             var itemElement: XmlNode = newElement(tag = "item")
             itemElement.attrs = {"index": $item}.toXmlAttributes
             recruitNode.add(son = itemElement)
-          for index, item in recruit.equipment.pairs:
+          for index, item in recruit.equipment:
             if item > -1:
               var itemElement: XmlNode = newElement(tag = "equipment")
               itemElement.attrs = {"slot": $(index.int + 1), "index": $(item +
