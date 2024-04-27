@@ -58,6 +58,7 @@ with Trades.UI;
 with Themes;
 with Utils.UI;
 with WaitMenu;
+with Maps.UI.Commands;
 
 package body Maps.UI is
 
@@ -100,6 +101,7 @@ package body Maps.UI is
       use Themes;
       use Tiny_String;
       use Utils.UI;
+      use Maps.UI.Commands;
 
       Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
       Paned: constant Ttk_PanedWindow :=
@@ -123,11 +125,6 @@ package body Maps.UI is
          Import => True,
          Convention => C,
          External_Name => "updateAdaMapInfo";
-      procedure Add_Maps_Commands with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaMapsCommands";
-
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
       if Winfo_Get(Widgt => Get_Map_View, Info => "exists") = "0" then
