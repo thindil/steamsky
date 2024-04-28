@@ -262,7 +262,8 @@ proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
 
 proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
-    button2: ButtonSettings = emptyButtonSettings) =
+    button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [
+    KeyError], tags: [].} =
   var
     protoIndex: Natural
     itemInfo: string = ""
