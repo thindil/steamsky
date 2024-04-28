@@ -38,7 +38,7 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- The index of the selected crew member
    -- SOURCE
-   Member_Index: Positive;
+   Member_Index: Positive := 1;
    -- ****
 
    -- ****o* SUCI/SUCI.Update_Inventory_Command
