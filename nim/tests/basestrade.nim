@@ -55,18 +55,18 @@ suite "Unit tests for basestrade module":
   playerCareer = "general"
   generateCargo()
 
-  test "Testing checkMoney.":
+  test "Check money in a base.":
     check:
       checkMoney(1) > -1
 
-  test "Testing hireRecruit.":
+  test "Hire a recruit.":
     generateRecruits()
     skyBases[1].recruits[0].price = 10
     hireRecruit(0, 1, 0, 0, -1)
     check:
       playerShip.crew.len == 2
 
-  test "Testing buyRecipes.":
+  test "Buy recipes.":
     let
       recipes = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
       recipesAmount = knownRecipes.len
@@ -77,35 +77,36 @@ suite "Unit tests for basestrade module":
     check:
       knownRecipes.len == recipesAmount + 1
 
-  test "Testing healCost.":
+  test "Count the cost of heal of a not wounded crew member.":
     var cost, time: Natural = 0
-    checkpoint "Count the cost of heal of a not wounded crew member."
     healCost(cost, time, 0)
     check:
       cost == 1 and time == 1
+
+  test "Count the cost of heal of a wounded crew member.":
+    var cost, time: Natural = 0
     playerShip.crew[0].health -= 10
-    checkpoint "Count the cost of heal of a wounded crew member."
     healCost(cost, time, 0)
     check:
       cost > 1 and time > 1
 
-  test "Testing healWounded.":
+  test "Heal a wounded crew member.":
     playerShip.crew[0].health = 90
-    checkpoint "Heal a wounded crew member."
     healWounded(0)
     check:
       playerShip.crew[0].health == 100
-    checkpoint "Heal the whole crew."
+
+  test "Heal the whole crew.":
     playerShip.crew[0].health = 90
     healWounded(-1)
     check:
       playerShip.crew[0].health == 100
 
-  test "Testing trainCost.":
+  test "Count the cost of training.":
     check:
       trainCost(0, 1) > 0
 
-  test "Testing trainSkill.":
+  test "Train a skill.":
     trainSkill(0, 1, 1)
     check:
       playerShip.crew[0].skills.len == 2
