@@ -33,7 +33,7 @@ with Combat.UI;
 with CoreUI; use CoreUI;
 with Crew;
 with Events;
-with Items; use Items;
+with Items;
 with Maps;
 with Maps.UI; use Maps.UI;
 with MainMenu;
@@ -145,6 +145,7 @@ package body Utils.UI is
       elsif Result = "sethomebase" then
          Set_Home_Base_Block :
          declare
+            use Items;
             use Ships.Cargo;
 
             Trader_Index: constant Natural := Find_Member(Order => TALK);
