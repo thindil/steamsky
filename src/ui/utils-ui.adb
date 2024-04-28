@@ -491,15 +491,6 @@ package body Utils.UI is
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
---      use Ada.Characters.Latin_1;
---      use Short_String;
---      use Tiny_String;
-
---      Proto_Index: Natural;
---      Item_Info: Unbounded_String := Null_Unbounded_String;
---      Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
---        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
---         5 => Legs_Armor, 6 => Shield_Type);
       Nim_Button_1: constant Nim_Button_Settings :=
         (Text => New_String(Str => To_String(Source => Button_1.Text)),
          Command => New_String(Str => To_String(Source => Button_1.Command)),
@@ -512,193 +503,16 @@ package body Utils.UI is
          Icon => New_String(Str => To_String(Source => Button_2.Icon)),
          Tooltip => New_String(Str => To_String(Source => Button_2.Tooltip)),
          Color => New_String(Str => To_String(Source => Button_2.Color)));
-      procedure Show_Ada_Inventory_Item_Info(P: chars_ptr; I_Index, M_Index: Integer; B_1, B_2: Nim_Button_Settings) with
+      procedure Show_Ada_Inventory_Item_Info
+        (P: chars_ptr; I_Index, M_Index: Integer;
+         B_1, B_2: Nim_Button_Settings) with
          Import => True,
          Convention => C,
          External_Name => "showAdaScreen";
    begin
-      Show_Ada_Inventory_Item_Info(P => New_String(Str => Parent), I_Index => Item_Index, M_Index => Member_Index, B_1 => Nim_Button_1, B_2 => Nim_Button_2);
---      if Member_Index > 0 then
---         Proto_Index :=
---           Inventory_Container.Element
---             (Container => Player_Ship.Crew(Member_Index).Inventory,
---              Index => Item_Index)
---             .Proto_Index;
---         if Inventory_Container.Element
---             (Container => Player_Ship.Crew(Member_Index).Inventory,
---              Index => Item_Index)
---             .Durability <
---           Default_Item_Durability then
---            Append
---              (Source => Item_Info,
---               New_Item =>
---                 Get_Item_Damage
---                   (Item_Durability =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Crew(Member_Index).Inventory,
---                         Index => Item_Index)
---                        .Durability,
---                    With_Colors => True) &
---                 LF);
---         end if;
---      else
---         Proto_Index :=
---           Inventory_Container.Element
---             (Container => Player_Ship.Cargo, Index => Item_Index)
---             .Proto_Index;
---         if Inventory_Container.Element
---             (Container => Player_Ship.Cargo, Index => Item_Index)
---             .Durability <
---           Default_Item_Durability then
---            Append
---              (Source => Item_Info,
---               New_Item =>
---                 Get_Item_Damage
---                   (Item_Durability =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Cargo, Index => Item_Index)
---                        .Durability,
---                    With_Colors => True) &
---                 LF);
---         end if;
---      end if;
---      Append
---        (Source => Item_Info,
---         New_Item =>
---           "Weight: {gold}" &
---           Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
---           " kg{/gold}");
---      if Get_Proto_Item(Index => Proto_Index).I_Type = Weapon_Type then
---         Append
---           (Source => Item_Info,
---            New_Item =>
---              LF & "Skill: {gold}" &
---              To_String
---                (Source =>
---                   SkillsData_Container.Element
---                     (Container => Skills_List,
---                      Index =>
---                        Skills_Amount_Range
---                          (Get_Proto_Item(Index => Proto_Index).Value(3)))
---                     .Name) &
---              "/" &
---              To_String
---                (Source =>
---                   AttributesData_Container.Element
---                     (Container => Attributes_List,
---                      Index =>
---                        SkillsData_Container.Element
---                          (Container => Skills_List,
---                           Index =>
---                             Skills_Amount_Range
---                               (Get_Proto_Item(Index => Proto_Index).Value(3)))
---                          .Attribute)
---                     .Name) &
---              "{/gold}");
---         if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
---            Append
---              (Source => Item_Info,
---               New_Item => LF & "{gold}Can be used with shield.{/gold}");
---         else
---            Append
---              (Source => Item_Info,
---               New_Item =>
---                 LF &
---                 "{gold}Can't be used with shield (two-handed weapon).{/gold}");
---         end if;
---         Append
---           (Source => Item_Info,
---            New_Item =>
---              LF & "Damage type: {gold}" &
---              (case Get_Proto_Item(Index => Proto_Index).Value(5) is
---                 when 1 => "cutting", when 2 => "impaling", when 3 => "blunt",
---                 when others => "") &
---              "{/gold}");
---      end if;
---      Show_More_Item_Info_Loop :
---      for ItemType of Item_Types loop
---         if Get_Proto_Item(Index => Proto_Index).I_Type = ItemType then
---            Append
---              (Source => Item_Info,
---               New_Item =>
---                 LF & "Damage chance: {gold}" &
---                 Get_Item_Chance_To_Damage
---                   (Item_Data =>
---                      Get_Proto_Item(Index => Proto_Index).Value(1)) &
---                 LF & "{/gold}Strength:{gold}" &
---                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)) &
---                 "{/gold}");
---            exit Show_More_Item_Info_Loop;
---         end if;
---      end loop Show_More_Item_Info_Loop;
---      if Is_Tool(Item_Type => Get_Proto_Item(Index => Proto_Index).I_Type) then
---         Append
---           (Source => Item_Info,
---            New_Item =>
---              LF & "Damage chance: {gold}" &
---              Get_Item_Chance_To_Damage
---                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)) &
---              "{/gold}");
---      end if;
---      if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
---        and then
---        (Slice
---           (Source => Get_Proto_Item(Index => Proto_Index).I_Type, Low => 1,
---            High => 4) =
---         "Ammo" or
---         Get_Proto_Item(Index => Proto_Index).I_Type =
---           To_Bounded_String(Source => "Harpoon")) then
---         Append
---           (Source => Item_Info,
---            New_Item =>
---              LF & "Strength:{gold}" &
---              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)) &
---              "{/gold}");
---      end if;
---      if Get_Proto_Item(Index => Proto_Index).Description /=
---        Short_String.Null_Bounded_String then
---         Append
---           (Source => Item_Info,
---            New_Item =>
---              LF & LF &
---              Short_String.To_String
---                (Source => Get_Proto_Item(Index => Proto_Index).Description));
---      end if;
---      if Parent = "." then
---         Show_Info
---           (Text => To_String(Source => Item_Info),
---            Title =>
---              (if Member_Index > 0 then
---                 Get_Item_Name
---                   (Item =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Crew(Member_Index).Inventory,
---                         Index => Item_Index),
---                    Damage_Info => False, To_Lower => False)
---               else Get_Item_Name
---                   (Item =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Cargo, Index => Item_Index),
---                    Damage_Info => False, To_Lower => False)),
---            Button_1 => Button_1, Button_2 => Button_2);
---      else
---         Show_Info
---           (Text => To_String(Source => Item_Info), Parent_Name => Parent,
---            Title =>
---              (if Member_Index > 0 then
---                 Get_Item_Name
---                   (Item =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Crew(Member_Index).Inventory,
---                         Index => Item_Index),
---                    Damage_Info => False, To_Lower => False)
---               else Get_Item_Name
---                   (Item =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Cargo, Index => Item_Index),
---                    Damage_Info => False, To_Lower => False)),
---            Button_1 => Button_1, Button_2 => Button_2);
---      end if;
+      Show_Ada_Inventory_Item_Info
+        (P => New_String(Str => Parent), I_Index => Item_Index,
+         M_Index => Member_Index, B_1 => Nim_Button_1, B_2 => Nim_Button_2);
    end Show_Inventory_Item_Info;
 
    procedure Delete_Widgets
