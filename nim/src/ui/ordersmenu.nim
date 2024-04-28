@@ -22,7 +22,7 @@ import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
 import combatui, coreui, dialogs, dialogs2, updateheader, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show available the player's ship's orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -369,7 +369,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Dock or undock from the sky base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -386,7 +386,7 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Ask for bases in the currently docked base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -401,7 +401,7 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Ask for events in the currently docked base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -415,7 +415,8 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## AskForEvents
 
 proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Start the combat between ships
   ##
   ## * clientData - the additional data for the Tcl command
@@ -432,7 +433,7 @@ proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Pray in the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -446,7 +447,7 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Pray
 
 proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Set the selected base as the home base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -469,7 +470,7 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Generate cargo for the trader and show the trading UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -491,7 +492,7 @@ proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Start the selected mission
   ##
   ## * clientData - the additional data for the Tcl command
@@ -506,7 +507,7 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Complete the selected mission in the base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -521,7 +522,7 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Execute the current step in the current story
   ##
   ## * clientData - the additional data for the Tcl command
@@ -536,7 +537,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect].}
+        WriteIOEffect, RootEffect], exportc.}
   ## Deliver medicines to the base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -554,18 +555,19 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the orders menu
   try:
-    addCommand("ShowOrders", showOrdersCommand)
-    addCommand("Docking", dockingCommand)
-    addCommand("AskForBases", askForBasesCommand)
-    addCommand("AskForEvents", askForEventsCommand)
-    addCommand("Attack", attackCommand)
-    addCommand("Pray", prayCommand)
-    addCommand("SetAsHome", setAsHomeCommand)
-    addCommand("ShowTrader", showTraderCommand)
-    addCommand("StartMission", startMissionCommand)
-    addCommand("CompleteMission", completeMissionCommand)
-    addCommand("ExecuteStory", executeStoryCommand)
-    addCommand("DeliverMedicines", deliverMedicinesCommand)
+    discard
+#    addCommand("ShowOrders", showOrdersCommand)
+#    addCommand("Docking", dockingCommand)
+#    addCommand("AskForBases", askForBasesCommand)
+#    addCommand("AskForEvents", askForEventsCommand)
+#    addCommand("Attack", attackCommand)
+#    addCommand("Pray", prayCommand)
+#    addCommand("SetAsHome", setAsHomeCommand)
+#    addCommand("ShowTrader", showTraderCommand)
+#    addCommand("StartMission", startMissionCommand)
+#    addCommand("CompleteMission", completeMissionCommand)
+#    addCommand("ExecuteStory", executeStoryCommand)
+#    addCommand("DeliverMedicines", deliverMedicinesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 

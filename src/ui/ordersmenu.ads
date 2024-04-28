@@ -24,10 +24,7 @@ package OrdersMenu is
    -- FUNCTION
    -- Add Tcl commands to the game
    -- SOURCE
-   procedure Add_Commands with
-      Import => True,
-      Convention => C,
-      External_Name => "addAdaOrdersMenuCommands";
+   procedure Add_Commands;
    -- ****
 
 end OrdersMenu;
