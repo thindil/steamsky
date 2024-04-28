@@ -58,10 +58,8 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
       let cargoItemIndex: int = findItem(inventory = traderShip.cargo,
           protoIndex = newItemIndex)
       if cargoItemIndex > -1:
-        traderCargo[cargoItemIndex].amount = traderCargo[
-            cargoItemIndex].amount + itemAmount
-        traderShip.cargo[cargoItemIndex].amount = traderShip.cargo[
-            cargoItemIndex].amount + itemAmount
+        traderCargo[cargoItemIndex].amount += itemAmount
+        traderShip.cargo[cargoItemIndex].amount += itemAmount
       else:
         if freeCargo(amount = 0 - (itemsList[newItemIndex].weight *
             itemAmount)) > -1:
@@ -111,7 +109,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
     let eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
     if eventIndex > -1 and eventsList[eventIndex].eType == doublePrice and
         eventsList[eventIndex].itemIndex == protoIndex:
-      price = price * 2
+      price *= 2
     let sellAmount: Positive = amount.parseInt
     var profit: Natural = price * sellAmount
     if playerShip.cargo[itemIndex].durability < 100:
@@ -170,7 +168,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
           baseIndex].reputation.level:
         gainRep(baseIndex = baseIndex, points = 1)
     else:
-      traderCargo[0].amount = traderCargo[0].amount - profit
+      traderCargo[0].amount -= profit
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     let gain: int = profit - (sellAmount * price)
     addMessage(message = "You sold " & $sellAmount & " " & itemName & " for " &
@@ -178,7 +176,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
         if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
         " compared to the base price."), mType = tradeMessage)
     if baseIndex > 0 and eventIndex > -1:
-      eventsList[eventIndex].time = eventsList[eventIndex].time + 5
+      eventsList[eventIndex].time += 5
     updateGame(minutes = 5)
 
 proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
@@ -224,7 +222,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
   if baseIndex > 0:
     updateBaseCargo(protoIndex = moneyIndex, amount = cost)
   else:
-    traderCargo[0].amount = traderCargo[0].amount + cost
+    traderCargo[0].amount += cost
   if baseIndex > 0:
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
         durability = skyBases[baseIndex].cargo[baseItemIndex].durability, price = price)
@@ -234,7 +232,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
   else:
     updateCargo(ship = playerShip, protoIndex = itemIndex, amount = buyAmount,
         durability = traderCargo[baseItemIndex].durability, price = price)
-    traderCargo[baseItemIndex].amount = traderCargo[baseItemIndex].amount - buyAmount
+    traderCargo[baseItemIndex].amount -= buyAmount
     if traderCargo[baseItemIndex].amount == 0:
       traderCargo.delete(i = baseItemIndex)
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
@@ -244,7 +242,7 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
       if gain > 0: "gain " else: "lost ") & $(gain.abs) & " " & moneyName &
       " compared to the base price."), mType = tradeMessage)
   if baseIndex == 0 and eventIndex > -1:
-    eventsList[eventIndex].time = eventsList[eventIndex].time + 5
+    eventsList[eventIndex].time += 5
   updateGame(minutes = 5)
 
 # Temporary code for interfacing with Ada
