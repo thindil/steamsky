@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   cargo
 - Setting an event or a mission as the destination for the player's ship
 - Updating the debug menu after changes
+- Refreshing the list of known bases
 
 ## [9.9] - 2024-04-14
 
