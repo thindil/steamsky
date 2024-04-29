@@ -93,7 +93,7 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             recipe.materialAmounts.add(y = amount)
         else:
           var deleteIndex: Natural = 0
-          for index, mType in recipe.materialTypes.pairs:
+          for index, mType in recipe.materialTypes:
             if mType == materialType:
               deleteIndex = index
               break
