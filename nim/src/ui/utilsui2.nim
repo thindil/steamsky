@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[config, crew, game, messages, shipscrew, shipsmovement, tk, types]
-import coreui
+import std/[strutils, tables]
+import ../[config, crew, game, items, messages, shipscrew, shipsmovement, tk, types]
+import coreui, dialogs
 
 proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
   ## Clear the old screen and show the selected to the player
@@ -248,6 +248,81 @@ proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [
   if travelTime.minutes > 0:
     infoText = infoText & " " & $travelTime.minutes & "mins"
 
+proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
+    memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
+    button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [
+    KeyError], tags: [].} =
+  ## Show info about selected item in ship cargo or crew member inventory
+  ##
+  ## * Parent       - The name of the parent widget
+  ## * Item_Index   - Index of item (can be inventory or ship cargo)
+  ## * Member_Index - If item is in crew member inventory, crew index of member,
+  ##                  otherwise 0
+  ## * Button_1     - The settings for the first optional button. If empty, the
+  ##                  button will not show. Default value is empty.
+  ## * Button_2     - The setting for the second optional button. If empty,
+  ##                  the button will not show. Default value is empty.
+  var
+    protoIndex: Natural
+    itemInfo: string = ""
+  if memberIndex > -1:
+    protoIndex = playerShip.crew[memberIndex].inventory[itemIndex].protoIndex
+    if playerShip.crew[memberIndex].inventory[itemIndex].durability < defaultItemDurability:
+      itemInfo = getItemDamage(itemDurability = playerShip.crew[
+          memberIndex].inventory[itemIndex].durability, withColors = true) & '\n'
+  else:
+    protoIndex = playerShip.cargo[itemIndex].protoIndex
+    if playerShip.cargo[itemIndex].durability < defaultItemDurability:
+      itemInfo = getItemDamage(itemDurability = playerShip.cargo[
+          itemIndex].durability, withColors = true) & '\n'
+  itemInfo.add(y = "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}")
+  if itemsList[protoIndex].itemType == weaponType:
+    itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
+        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
+        3]].attribute].name & "{/gold}")
+    if itemsList[protoIndex].value[4] == 1:
+      itemInfo.add(y = "\n{gold}Can be used with shield.{/gold}")
+    else:
+      itemInfo.add(y = "\n{gold}Can't be used with shield (two-handed weapon).{/gold}")
+    itemInfo.add(y = "\nDamage type: {gold}")
+    itemInfo.add(y = case itemsList[protoIndex].value[5]
+      of 1:
+        "cutting"
+      of 2:
+        "impaling"
+      of 3:
+        "blunt"
+      else:
+        "")
+    itemInfo.add(y = "{/gold}")
+  let itemTypes = [weaponType, chestArmor, headArmor, armsArmor, legsArmor, shieldType]
+  for itemType in itemTypes:
+    if itemsList[protoIndex].itemType == itemType:
+      itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+          itemData = itemsList[protoIndex].value[1]) &
+          "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+      break
+  if itemsList[protoIndex].itemType in toolsList:
+    itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+        itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+  if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
+      0 .. 3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
+    itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  if itemsList[protoIndex].description.len > 0:
+    itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
+  if parent == ".":
+    showInfo(text = itemInfo, title = (if memberIndex > -1: getItemName(
+        item = playerShip.crew[memberIndex].inventory[itemIndex],
+        damageInfo = false, toLower = false) else: getItemName(
+        item = playerShip.cargo[itemIndex], damageInfo = false,
+        toLower = false)), button1 = button1, button2 = button2)
+  else:
+    showInfo(text = itemInfo, parentName = parent, title = (if memberIndex >
+        -1: getItemName(item = playerShip.crew[memberIndex].inventory[
+        itemIndex], damageInfo = false, toLower = false) else: getItemName(
+        item = playerShip.cargo[itemIndex], damageInfo = false,
+        toLower = false)), button1 = button1, button2 = button2)
+
 # Temporary code for interfacing with Ada
 
 proc showAdaScreen(newScreenName: cstring) {.exportc, raises: [], tags: [].} =
@@ -277,3 +352,16 @@ proc minutesAdaToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
   var nimText = $infoText
   minutesToDate(minutes, nimText)
   infoText = nimText.cstring
+
+proc showAdaInventoryInfo(parent: cstring; itemIndex, memberIndex: cint;
+    button1, button2: AdaButtonSettings) {.exportc, raises: [], tags: [].} =
+  let
+    nimButton1 = ButtonSettings(text: $button1.text, command: $button1.command,
+        icon: $button1.icon, tooltip: $button1.tooltip, color: $button1.color)
+    nimButton2 = ButtonSettings(text: $button2.text, command: $button2.command,
+        icon: $button2.icon, tooltip: $button2.tooltip, color: $button2.color)
+  try:
+    showInventoryItemInfo(parent = $parent, itemIndex = itemIndex,
+        memberIndex = memberIndex, button1 = nimButton1, button2 = nimButton2)
+  except:
+    echo getCurrentExceptionMsg()
