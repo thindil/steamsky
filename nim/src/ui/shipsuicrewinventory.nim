@@ -705,6 +705,18 @@ proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show detailed information about the selected item in crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowInventoryItemInfo memberindex itemindex
+  ## itemindex is the index of the item which will be show
   var selection = false
   for index, _ in playerShip.crew[memberIndex].inventory:
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
