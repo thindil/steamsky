@@ -184,6 +184,7 @@ package body Knowledge.Bases is
       Rows := 0;
       Load_Bases_Loop :
       for I of Bases_Indexes loop
+         Get_Base_From_Nim(Base_Index => I);
          if not Sky_Bases(I).Known then
             goto End_Of_Loop;
          end if;
