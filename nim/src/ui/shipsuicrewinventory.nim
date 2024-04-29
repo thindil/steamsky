@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
-import coreui, dialogs, table
+import coreui, dialogs, table, utilsui2
 
 var
   inventoryTable: TableWidget
@@ -746,6 +746,16 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if iType == itemType:
       equipable = true
       break
+  let used = itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex)
+  showInventoryItemInfo(parent = ".memberdialog", memberIndex = memberIndex,
+      itemIndex = itemIndex, button1 = ButtonSettings(text: "Move",
+      command: "ShowMoveItem " & $argv[1], icon: "cargoicon",
+      tooltip: "Move the selected item to the ship's cargo", color: ""),
+      button2 = (if equipable: ButtonSettings(text: (
+      if used: "Unequip" else: "Equip"), command: "SetUseItem " & $argv[1],
+      icon: (if used: "unequipicon" else: "equipicon"), tooltip: (
+      if used: "Stop" else: "Start") & " using the selected item",
+      color: "green") else: emptyButtonSettings))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
