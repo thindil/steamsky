@@ -704,7 +704,7 @@ proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   var selection = false
   for index, _ in playerShip.crew[memberIndex].inventory:
     if tclGetVar(varName = "invindex" & $(index + 1)) == "1":
@@ -736,9 +736,15 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     showDialog(dialog = itemsMenu, parentFrame = ".memberdialog")
     return tclOk
   let
-    itemIndex = ($argv[1]).parseInt
-    itemType = itemsList[playerShip.crew[memberIndex].inventory[
-        itemIndex].protoIndex].itemType
+    itemIndex = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the index of the item.")
+    itemType = try:
+          itemsList[playerShip.crew[memberIndex].inventory[
+              itemIndex].protoIndex].itemType
+        except:
+          return showError(message = "Can't get the type of the item.")
     typesArray: array[1 .. 6, string] = [weaponType, shieldType, headArmor,
         chestArmor, armsArmor, legsArmor]
   var equipable = itemType in toolsList
@@ -747,15 +753,18 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       equipable = true
       break
   let used = itemIsUsed(memberIndex = memberIndex, itemIndex = itemIndex)
-  showInventoryItemInfo(parent = ".memberdialog", memberIndex = memberIndex,
-      itemIndex = itemIndex, button1 = ButtonSettings(text: "Move",
-      command: "ShowMoveItem " & $argv[1], icon: "cargoicon",
-      tooltip: "Move the selected item to the ship's cargo", color: ""),
-      button2 = (if equipable: ButtonSettings(text: (
-      if used: "Unequip" else: "Equip"), command: "SetUseItem " & $argv[1],
-      icon: (if used: "unequipicon" else: "equipicon"), tooltip: (
-      if used: "Stop" else: "Start") & " using the selected item",
-      color: "green") else: emptyButtonSettings))
+  try:
+    showInventoryItemInfo(parent = ".memberdialog", memberIndex = memberIndex,
+        itemIndex = itemIndex, button1 = ButtonSettings(text: "Move",
+        command: "ShowMoveItem " & $argv[1], icon: "cargoicon",
+        tooltip: "Move the selected item to the ship's cargo", color: ""),
+        button2 = (if equipable: ButtonSettings(text: (
+        if used: "Unequip" else: "Equip"), command: "SetUseItem " & $argv[1],
+        icon: (if used: "unequipicon" else: "equipicon"), tooltip: (
+        if used: "Stop" else: "Start") & " using the selected item",
+        color: "green") else: emptyButtonSettings))
+  except:
+    return showError(message = "Can't show the information about the item.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
