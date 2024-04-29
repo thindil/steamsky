@@ -13,17 +13,49 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C;
+with CArgv;
+with Tcl;
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
+with Utils.UI;
 
 package body Ships.UI is
 
+   function Show_Ship_Info_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showShipInfoCommand";
+
+   function Set_Ship_Name_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "setShipNameCommand";
+
+   function Ship_Max_Min_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "shipMaxMinCommand";
+
    procedure Add_Commands is
+      use Utils.UI;
       procedure Add_Ada_Commands with
          Import => True,
          Convention => C,
          External_Name => "addAdaShipsCommands";
    begin
+      Add_Command
+        (Name => "ShowShipInfo", Ada_Command => Show_Ship_Info_Command'Access);
+      Add_Command
+        (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
+      Add_Command
+        (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
       Add_Ada_Commands;
       Ships.UI.Crew.Add_Crew_Commands;
       Ships.UI.Cargo.Add_Cargo_Commands;

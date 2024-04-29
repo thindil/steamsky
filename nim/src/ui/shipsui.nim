@@ -20,7 +20,8 @@ import ../[config, game, maps, ships, tk]
 import coreui, shipsuicrew, utilsui2, shipsuimodules, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Show information about the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -220,7 +221,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Change name of the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -241,7 +242,7 @@ proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Maximize or minimize the selected section of the player's ship info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -289,10 +290,10 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
-    addCommand("ShowShipInfo", showShipInfoCommand)
-    addCommand("SetShipName", setShipNameCommand)
-    addCommand("ShipMaxMin", shipMaxMinCommand)
     shipsuimodules.addCommands()
+#    addCommand("ShowShipInfo", showShipInfoCommand)
+#    addCommand("SetShipName", setShipNameCommand)
+#    addCommand("ShipMaxMin", shipMaxMinCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
