@@ -13,23 +13,21 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings;
-with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;
+-- with Ada.Strings;
+-- with Ada.Strings.Fixed;
+-- with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
---## rule off REDUCEABLE_SCOPE
-with Crew.Inventory; use Crew.Inventory;
---## rule on REDUCEABLE_SCOPE
-with Dialogs;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Crew.Inventory; use Crew.Inventory;
+-- with Dialogs;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
@@ -38,7 +36,7 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- The index of the selected crew member
    -- SOURCE
-   Member_Index: Positive := 1;
+--   Member_Index: Positive := 1;
    -- ****
 
    -- ****o* SUCI/SUCI.Update_Inventory_Command
@@ -74,7 +72,7 @@ package body Ships.UI.Crew.Inventory is
          Convention => C,
          External_Name => "updateInventoryCommand";
    begin
-      Member_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Member_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       return
         Update_Ada_Inventory_Command
           (Client_Data2 => Client_Data, Interp2 => Interp, Argc2 => Argc,
@@ -197,142 +195,144 @@ package body Ships.UI.Crew.Inventory is
    function Show_Inventory_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showInventoryItemInfoCommand";
       -- ****
 
-   function Show_Inventory_Item_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Ada.Strings.Unbounded;
-      use Tiny_String;
-      use Dialogs;
-
-      Used: constant Boolean :=
-        Item_Is_Used
-          (Member_Index => Member_Index,
-           Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      Selection, Equipable: Boolean := False;
-      Item_Type: constant Tiny_String.Bounded_String :=
-        Get_Proto_Item
-          (Index =>
-             Inventory_Container.Element
-               (Container => Player_Ship.Crew(Member_Index).Inventory,
-                Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))
-               .Proto_Index)
-          .I_Type;
-      Types_Array: constant array(1 .. 6) of Tiny_String.Bounded_String :=
-        (1 => Weapon_Type, 2 => Shield_Type, 3 => Head_Armor, 4 => Chest_Armor,
-         5 => Arms_Armor, 6 => Legs_Armor);
-   begin
-      Check_Selection_Loop :
-      for I in
-        Inventory_Container.First_Index
-          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
-          Inventory_Container.Last_Index
-            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
-         if Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "invindex" &
-                Trim
-                  (Source => Inventory_Container.Extended_Index'Image(I),
-                   Side => Left)) =
-           "1" then
-            Selection := True;
-            exit Check_Selection_Loop;
-         end if;
-      end loop Check_Selection_Loop;
-      if Selection then
-         Show_Multi_Item_Actions_Menu_Block :
-         declare
-            use Tcl.Tk.Ada.Widgets.TtkFrame;
-
-            Items_Menu: constant Ttk_Frame :=
-              Create_Dialog
-                (Name => ".itemsmenu", Title => "Selected items actions",
-                 Parent_Name => ".memberdialog");
-            procedure Add_Button(Name, Label, Command: String) is
-               Button: constant Ttk_Button :=
-                 Create
-                   (pathName => Items_Menu & Name,
-                    options =>
-                      "-text {" & Label & "} -command {CloseDialog " &
-                      Items_Menu & " .memberdialog;" & Command & "}");
-            begin
-               Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Button,
-                  Options =>
-                    "-sticky we -padx 5" &
-                    (if Command'Length = 0 then " -pady {0 3}" else ""));
-               Bind
-                 (Widgt => Button, Sequence => "<Escape>",
-                  Script =>
-                    "{CloseDialog " & Items_Menu & " .memberdialog;break}");
-               if Command'Length = 0 then
-                  Bind
-                    (Widgt => Button, Sequence => "<Tab>",
-                     Script => "{focus " & Items_Menu & ".equip;break}");
-                  Focus(Widgt => Button);
-               end if;
-            end Add_Button;
-         begin
-            Add_Button
-              (Name => ".equip", Label => "Equip items",
-               Command => "ToggleInventoryItems equip");
-            Add_Button
-              (Name => ".unequip", Label => "Unequip items",
-               Command => "ToggleInventoryItems unequip");
-            Add_Button
-              (Name => ".move", Label => "Move items to the ship's cargo",
-               Command => "MoveItems");
-            Add_Button(Name => ".close", Label => "Close", Command => "");
-            Show_Dialog(Dialog => Items_Menu, Parent_Frame => ".memberdialog");
-         end Show_Multi_Item_Actions_Menu_Block;
-         return TCL_OK;
-      end if;
-      Equipable := Is_Tool(Item_Type => Item_Type);
-      Is_Equipable_Loop :
-      for I_Type of Types_Array loop
-         if I_Type = Item_Type then
-            Equipable := True;
-            exit Is_Equipable_Loop;
-         end if;
-      end loop Is_Equipable_Loop;
-      Show_Inventory_Item_Info
-        (Parent => ".memberdialog", Member_Index => Member_Index,
-         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-         Button_1 =>
-           (Text => To_Unbounded_String(Source => "Move"),
-            Command =>
-              To_Unbounded_String
-                (Source => "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1)),
-            Icon => To_Unbounded_String(Source => "cargoicon"),
-            Tooltip =>
-              To_Unbounded_String
-                (Source => "Move the selected item to the ship's cargo"),
-            Color => Null_Unbounded_String),
-         Button_2 =>
-           (if Equipable then
-              (Text =>
-                 (if Used then To_Unbounded_String(Source => "Unequip")
-                  else To_Unbounded_String(Source => "Equip")),
-               Command =>
-                 To_Unbounded_String
-                   (Source => "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1)),
-               Icon =>
-                 (if Used then To_Unbounded_String(Source => "unequipicon")
-                  else To_Unbounded_String(Source => "equipicon")),
-               Tooltip =>
-                 (if Used then To_Unbounded_String(Source => "Stop")
-                  else To_Unbounded_String(Source => "Start")) &
-                 " using the selected item",
-               Color => To_Unbounded_String(Source => "green"))
-            else Empty_Button_Settings));
-      return TCL_OK;
-   end Show_Inventory_Item_Info_Command;
+--   function Show_Inventory_Item_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Ada.Strings.Unbounded;
+--      use Tiny_String;
+--      use Dialogs;
+--
+--      Used: constant Boolean :=
+--        Item_Is_Used
+--          (Member_Index => Member_Index,
+--           Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--      Selection, Equipable: Boolean := False;
+--      Item_Type: constant Tiny_String.Bounded_String :=
+--        Get_Proto_Item
+--          (Index =>
+--             Inventory_Container.Element
+--               (Container => Player_Ship.Crew(Member_Index).Inventory,
+--                Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))
+--               .Proto_Index)
+--          .I_Type;
+--      Types_Array: constant array(1 .. 6) of Tiny_String.Bounded_String :=
+--        (1 => Weapon_Type, 2 => Shield_Type, 3 => Head_Armor, 4 => Chest_Armor,
+--         5 => Arms_Armor, 6 => Legs_Armor);
+--   begin
+--      Check_Selection_Loop :
+--      for I in
+--        Inventory_Container.First_Index
+--          (Container => Player_Ship.Crew(Member_Index).Inventory) ..
+--          Inventory_Container.Last_Index
+--            (Container => Player_Ship.Crew(Member_Index).Inventory) loop
+--         if Tcl_GetVar
+--             (interp => Interp,
+--              varName =>
+--                "invindex" &
+--                Trim
+--                  (Source => Inventory_Container.Extended_Index'Image(I),
+--                   Side => Left)) =
+--           "1" then
+--            Selection := True;
+--            exit Check_Selection_Loop;
+--         end if;
+--      end loop Check_Selection_Loop;
+--      if Selection then
+--         Show_Multi_Item_Actions_Menu_Block :
+--         declare
+--            use Tcl.Tk.Ada.Widgets.TtkFrame;
+--
+--            Items_Menu: constant Ttk_Frame :=
+--              Create_Dialog
+--                (Name => ".itemsmenu", Title => "Selected items actions",
+--                 Parent_Name => ".memberdialog");
+--            procedure Add_Button(Name, Label, Command: String) is
+--               Button: constant Ttk_Button :=
+--                 Create
+--                   (pathName => Items_Menu & Name,
+--                    options =>
+--                      "-text {" & Label & "} -command {CloseDialog " &
+--                      Items_Menu & " .memberdialog;" & Command & "}");
+--            begin
+--               Tcl.Tk.Ada.Grid.Grid
+--                 (Slave => Button,
+--                  Options =>
+--                    "-sticky we -padx 5" &
+--                    (if Command'Length = 0 then " -pady {0 3}" else ""));
+--               Bind
+--                 (Widgt => Button, Sequence => "<Escape>",
+--                  Script =>
+--                    "{CloseDialog " & Items_Menu & " .memberdialog;break}");
+--               if Command'Length = 0 then
+--                  Bind
+--                    (Widgt => Button, Sequence => "<Tab>",
+--                     Script => "{focus " & Items_Menu & ".equip;break}");
+--                  Focus(Widgt => Button);
+--               end if;
+--            end Add_Button;
+--         begin
+--            Add_Button
+--              (Name => ".equip", Label => "Equip items",
+--               Command => "ToggleInventoryItems equip");
+--            Add_Button
+--              (Name => ".unequip", Label => "Unequip items",
+--               Command => "ToggleInventoryItems unequip");
+--            Add_Button
+--              (Name => ".move", Label => "Move items to the ship's cargo",
+--               Command => "MoveItems");
+--            Add_Button(Name => ".close", Label => "Close", Command => "");
+--            Show_Dialog(Dialog => Items_Menu, Parent_Frame => ".memberdialog");
+--         end Show_Multi_Item_Actions_Menu_Block;
+--         return TCL_OK;
+--      end if;
+--      Equipable := Is_Tool(Item_Type => Item_Type);
+--      Is_Equipable_Loop :
+--      for I_Type of Types_Array loop
+--         if I_Type = Item_Type then
+--            Equipable := True;
+--            exit Is_Equipable_Loop;
+--         end if;
+--      end loop Is_Equipable_Loop;
+--      Show_Inventory_Item_Info
+--        (Parent => ".memberdialog", Member_Index => Member_Index,
+--         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+--         Button_1 =>
+--           (Text => To_Unbounded_String(Source => "Move"),
+--            Command =>
+--              To_Unbounded_String
+--                (Source => "ShowMoveItem " & CArgv.Arg(Argv => Argv, N => 1)),
+--            Icon => To_Unbounded_String(Source => "cargoicon"),
+--            Tooltip =>
+--              To_Unbounded_String
+--                (Source => "Move the selected item to the ship's cargo"),
+--            Color => Null_Unbounded_String),
+--         Button_2 =>
+--           (if Equipable then
+--              (Text =>
+--                 (if Used then To_Unbounded_String(Source => "Unequip")
+--                  else To_Unbounded_String(Source => "Equip")),
+--               Command =>
+--                 To_Unbounded_String
+--                   (Source => "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1)),
+--               Icon =>
+--                 (if Used then To_Unbounded_String(Source => "unequipicon")
+--                  else To_Unbounded_String(Source => "equipicon")),
+--               Tooltip =>
+--                 (if Used then To_Unbounded_String(Source => "Stop")
+--                  else To_Unbounded_String(Source => "Start")) &
+--                 " using the selected item",
+--               Color => To_Unbounded_String(Source => "green"))
+--            else Empty_Button_Settings));
+--      return TCL_OK;
+--   end Show_Inventory_Item_Info_Command;
 
    -- ****o* SUCI/SUCI.Toggle_Inventory_Item
    -- FUNCTION
