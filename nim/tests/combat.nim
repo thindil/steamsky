@@ -33,8 +33,8 @@ suite "Unit tests for combat module":
   playerShip.modules.add(ModuleData(mType: ModuleType2.gun, protoIndex: 160,
       durability: 100, damage: 100, owner: @[-1]))
 
-  test "Testing startCombat.":
+  test "Starting combat.":
     discard startCombat(2)
 
-  test "Testing combatTurn.":
+  test "Executing a combat's turn.":
     combatTurn()
