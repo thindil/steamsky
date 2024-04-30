@@ -76,7 +76,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
   var minFreeSpace: int = 0
   for module in enemyShip.modules:
     if module.mType == ModuleType2.cargoRoom and module.durability > 0:
-      minFreeSpace = minFreeSpace + modulesList[module.protoIndex].maxValue
+      minFreeSpace += modulesList[module.protoIndex].maxValue
   minFreeSpace = (minFreeSpace.float * (1.0 - (getRandom(min = 20,
       max = 70).float / 100.0))).Natural
   while freeCargo(amount = 0, ship = enemyShip) > minFreeSpace:
@@ -98,8 +98,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       cargoItemIndex: int = findItem(inventory = enemyShip.cargo,
           protoIndex = newItemIndex)
     if cargoItemIndex > -1:
-      enemyShip.cargo[cargoItemIndex].amount = enemyShip.cargo[
-          cargoItemIndex].amount + itemAmount
+      enemyShip.cargo[cargoItemIndex].amount += itemAmount
     else:
       if freeCargo(amount = 0 - (itemsList[newItemIndex].weight * itemAmount)) > -1:
         enemyShip.cargo.add(y = InventoryData(protoIndex: newItemIndex,
@@ -1149,7 +1148,7 @@ proc countBonuses(pilotIndex, engineerIndex: int; accuracyBonus, evadeBonus,
       evadeBonus = 20
     else:
       discard
-    evadeBonus = evadeBonus + getSkillLevel(member = playerShip.crew[
+    evadeBonus += getSkillLevel(member = playerShip.crew[
         pilotIndex], skillIndex = pilotingSkill)
   else:
     accuracyBonus = 20
@@ -1157,7 +1156,7 @@ proc countBonuses(pilotIndex, engineerIndex: int; accuracyBonus, evadeBonus,
   var enemyPilotIndex: int = findMember(order = pilot,
       shipCrew = game.enemy.ship.crew)
   if enemyPilotIndex > -1:
-    accuracyBonus = accuracyBonus - getSkillLevel(member = game.enemy.ship.crew[
+    accuracyBonus -= getSkillLevel(member = game.enemy.ship.crew[
         enemyPilotIndex], skillIndex = pilotingSkill)
   if engineerIndex > -1 or "sentientships" in factionsList[playerShip.crew[
       0].faction].flags:
@@ -1229,17 +1228,17 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
         mType = combatMessage)
   case enemyPilotOrder
   of 1:
-    accuracyBonus = accuracyBonus + 20
-    evadeBonus = evadeBonus - 20
+    accuracyBonus += 20
+    evadeBonus -= 20
   of 2:
-    accuracyBonus = accuracyBonus + 10
-    evadeBonus = evadeBonus - 10
+    accuracyBonus += 10
+    evadeBonus -= 10
   of 3:
-    accuracyBonus = accuracyBonus - 10
-    evadeBonus = evadeBonus + 10
+    accuracyBonus -= 10
+    evadeBonus += 10
   of 4:
-    accuracyBonus = accuracyBonus - 20
-    evadeBonus = evadeBonus + 20
+    accuracyBonus -= 20
+    evadeBonus += 20
   else:
     discard
   speedBonus = 20 - (realSpeed(ship = game.enemy.ship) / 100).int
@@ -1270,18 +1269,18 @@ proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
     game.enemy.distance = 10
   case game.enemy.distance:
   of 0 .. 999:
-    accuracyBonus = accuracyBonus + 20
-    evadeBonus = evadeBonus - 10
+    accuracyBonus += 20
+    evadeBonus -= 10
     logMessage(message = "Distance: short or close",
         debugType = DebugTypes.combat)
   of 1_000 .. 4_999:
-    accuracyBonus = accuracyBonus + 10
+    accuracyBonus += 10
     logMessage(message = "Distance: medium", debugType = DebugTypes.combat)
   of 5_000 .. 9_999:
     discard
   of 10_000 .. 14_999:
-    accuracyBonus = accuracyBonus - 10
-    evadeBonus = evadeBonus + 10
+    accuracyBonus -= 10
+    evadeBonus += 10
     logMessage(message = "Distance: long", debugType = DebugTypes.combat)
   else:
     if pilotOrder == 4:
