@@ -72,24 +72,4 @@ package Crew.Inventory is
       Pre => Member_Index <= Player_Ship.Crew.Last_Index;
       -- ****
 
-      -- ****f* Inventory/Inventory.Item_Is_Used
-      -- FUNCTION
-      -- Check if selected crew member use this item
-      -- PARAMETERS
-      -- Member_Index - Crew index of the member which will be checked
-      -- Item_Index   - Iventory index of the item which will be checked
-      -- Update_Nim   - If true, update crew and the selected inventory in Nim
-      -- HISTORY
-      -- 7.5 - Renamed to Item_Is_Used, changed parameters names to Member_Index
-      --       and Item_Index
-      -- SOURCE
-   function Item_Is_Used
-     (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True)
-      return Boolean with
-      Pre => Member_Index <= Player_Ship.Crew.Last_Index and
-      Item_Index <=
-        Inventory_Container.Last_Index
-          (Container => Player_Ship.Crew(Member_Index).Inventory);
-      -- ****
-
 end Crew.Inventory;

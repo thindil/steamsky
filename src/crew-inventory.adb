@@ -84,27 +84,4 @@ package body Crew.Inventory is
       return Free_Ada_Inventory(M_Index => Member_Index, Amnt => Amount);
    end Free_Inventory;
 
-   function Item_Is_Used
-     (Member_Index, Item_Index: Positive; Update_Nim: Boolean := True)
-      return Boolean is
-      function Item_Ada_Is_Used(M_Index, I_Index: Integer) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "itemAdaIsUsed";
-   begin
-      if Update_Nim then
-         Get_Ada_Crew;
-         Get_Ada_Crew_Inventory
-           (Inventory =>
-              Inventory_To_Nim
-                (Inventory => Player_Ship.Crew(Member_Index).Inventory),
-            Member_Index => Member_Index);
-      end if;
-      if Item_Ada_Is_Used(M_Index => Member_Index, I_Index => Item_Index) =
-        1 then
-         return True;
-      end if;
-      return False;
-   end Item_Is_Used;
-
 end Crew.Inventory;
