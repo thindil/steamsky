@@ -780,7 +780,7 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   try:
     var amount = 0
     if argv[2].len > 0:
