@@ -779,6 +779,28 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't show the information about the item.")
   return tclOk
 
+proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  try:
+    var amount = 0
+    if argv[2].len > 0:
+      amount = ($argv[2]).parseInt
+    let
+      button = $argv[3]
+      maxVal = ($argv[1]).parseInt
+      spinBox = $argv[4]
+    if amount < 1:
+      tclEval(script = button & " configure -state disabled")
+      tclSetResult(value = "1")
+      return tclOk
+    elif amount > maxVal:
+      tclEval(script = spinBox & " set " & $maxVal)
+    tclEval(script = button & " configure -state normal")
+    tclSetResult(value = "1")
+  except:
+    tclSetResult(value = "0")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -793,6 +815,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
 #    addCommand("ToggleInventoryItem", toggleInventoryItemCommand)
 #    addCommand("ShowInventoryItemInfo", showInventoryItemInfoCommand)
+#    addCommand("ValidateMoveAmount", validateMoveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
