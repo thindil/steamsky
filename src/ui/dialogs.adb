@@ -725,7 +725,8 @@ package body Dialogs is
             Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       end if;
       Set(SpinBox => Amount_Box, Value => "1");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Amount_Box, Options => "-column 1 -row 1 -padx {0 5}");
       Bind
         (Widgt => Amount_Box, Sequence => "<Escape>",
          Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
@@ -745,7 +746,8 @@ package body Dialogs is
                 To_String(Source => Money_Name) & "} -style " &
                 (if Action = "buy" then "Golden.TLabel"
                  else "Headergreen.TLabel"));
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-column 1 -row 2");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label, Options => "-column 1 -row 2 -padx {0 5}");
       end if;
       Label :=
         Create
