@@ -122,6 +122,7 @@ package body Ships.UI.Cargo is
         Get_Widget
           (pathName => Cargo_Info_Frame & ".freespace", Interp => Interp);
    begin
+      Get_Ship_From_Nim(Ship => Player_Ship);
       Create
         (S => Tokens,
          From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Cargo_Info_Frame),

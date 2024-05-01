@@ -541,7 +541,6 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     resetSelection()
   else:
     for index, _ in playerShip.crew[memberIndex].inventory:
-      echo "index:", index
       tclSetVar(varName = "invindex" & $(index + 1), newValue = "1")
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
