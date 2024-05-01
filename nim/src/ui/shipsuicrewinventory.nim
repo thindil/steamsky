@@ -290,7 +290,7 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if inventorySortOrder == none:
     return updateInventoryCommand(clientData = clientData, interp = interp,
-        argc = 2, argv = @["UpdateInventory".cstring, ($memberIndex).cstring])
+        argc = 2, argv = @["UpdateInventory".cstring, ($(memberIndex + 1)).cstring])
   type LocalItemData = object
     selected: bool = false
     name: string = ""
@@ -541,6 +541,7 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
     resetSelection()
   else:
     for index, _ in playerShip.crew[memberIndex].inventory:
+      echo "index:", index
       tclSetVar(varName = "invindex" & $(index + 1), newValue = "1")
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
