@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables, xmlparser, xmltree]
+import contracts
 import types
 
 type
@@ -77,7 +78,7 @@ var
   docDirectory*: string = "doc" & DirSep
     ## The directory where the game's documentation is stored
   themesDirectory*: string = "data" & DirSep & "themes" &
-      DirSep ## The directory where the game's themes are stored
+      DirSep                               ## The directory where the game's themes are stored
   moneyIndex*: Positive ## The item's index of the item used as money in the game
   moneyName*: string                       ## The name of the item used as a money in the game
   skillsList* = initTable[Positive, SkillRecord]() ## The list of all skill available in the game
@@ -144,7 +145,7 @@ var
 {.warning[UnsafeSetLen]: on.}
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Get the index of the selected skill
   ##
   ## * skillName - the name of the skill which index will be looking for
@@ -156,208 +157,217 @@ proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
   return 0
 
 proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game data
   ##
   ## * fileName - the name of the file with the game data to load
+  require:
+    fileName.len > 0
+  body:
 
-  proc findAttributeIndex(attributeName: string): int {.sideEffect,
-      raises: [], tags: [].} =
-    ## Find the index of the selected attribute
-    ##
-    ## * attributeName - the name of the attribute which index will be looking
-    ##                   for
-    ##
-    ## Returns the index of the selected attribute or -1 if the attribute not found
-    for key, attribute in attributesList.pairs:
-      if attribute.name == attributeName:
-        return key
-    return -1
-
-  let gameXml = try:
-      loadXml(path = fileName)
-    except XmlError, ValueError, IOError, OSError, Exception:
-      raise newException(exceptn = DataLoadingError,
-          message = "Can't load game data file. Reason: " &
-          getCurrentExceptionMsg())
-  var skillIndex: Positive = 1
-  for gameNode in gameXml:
-    if gameNode.kind != xnElement:
-      continue
-    case gameNode.tag
-    of "basessyllablepre":
-      basesSyllablesPreList.add(y = gameNode.attr(name = "value"))
-    of "basessyllablestart":
-      basesSyllablesStartList.add(y = gameNode.attr(name = "value"))
-    of "basessyllableend":
-      basesSyllablesEndList.add(y = gameNode.attr(name = "value"))
-    of "basessyllablepost":
-      basesSyllablesPostList.add(y = gameNode.attr(name = "value"))
-    of "malessyllablestart":
-      malesSyllablesStartList.add(y = gameNode.attr(name = "value"))
-    of "malessyllablemiddle":
-      malesSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
-    of "malessyllableend":
-      malesSyllablesEndList.add(y = gameNode.attr(name = "value"))
-    of "malesvocal":
-      malesVocalsList.add(y = gameNode.attr(name = "value"))
-    of "malesconsonant":
-      malesConsonantsList.add(y = gameNode.attr(name = "value"))
-    of "femalessyllablestart":
-      femalesSyllablesStartList.add(y = gameNode.attr(name = "value"))
-    of "femalessyllablemiddle":
-      femalesSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
-    of "femalessyllableend":
-      femalesSyllablesEndList.add(y = gameNode.attr(name = "value"))
-    of "femalesvocal":
-      femalesVocalsList.add(y = gameNode.attr(name = "value"))
-    of "shipssyllablestart":
-      shipsSyllablesStartList.add(y = gameNode.attr(name = "value"))
-    of "shipssyllablemiddle":
-      shipsSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
-    of "shipssyllableend":
-      shipsSyllablesEndList.add(y = gameNode.attr(name = "value"))
-    of "attribute":
-      attributesList.add(y = AttributeRecord(name: gameNode.attr(name = "name"),
-          description: gameNode.innerText()))
-    of "skill":
-      var newSkill: SkillRecord = SkillRecord(attribute: 1)
-      newSkill.name = gameNode.attr(name = "name")
-      newSkill.tool = gameNode.attr(name = "tool")
-      let attributeName = gameNode.attr(name = "attribute")
-      for index, attribute in attributesList.pairs():
+    proc findAttributeIndex(attributeName: string): int {.sideEffect,
+        raises: [], tags: [], contractual.} =
+      ## Find the index of the selected attribute
+      ##
+      ## * attributeName - the name of the attribute which index will be looking
+      ##                   for
+      ##
+      ## Returns the index of the selected attribute or -1 if the attribute not found
+      for key, attribute in attributesList.pairs:
         if attribute.name == attributeName:
-          newSkill.attribute = index
-          break
-      for childNode in gameNode:
-        if childNode.kind != xnElement:
-          continue
-        case childNode.tag
-        of "description":
-          newSkill.description = childNode.innerText()
-        of "toolquality":
+          return key
+      return -1
+
+    let gameXml = try:
+        loadXml(path = fileName)
+      except XmlError, ValueError, IOError, OSError, Exception:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't load game data file. Reason: " &
+            getCurrentExceptionMsg())
+    var skillIndex: Positive = 1
+    for gameNode in gameXml:
+      if gameNode.kind != xnElement:
+        continue
+      case gameNode.tag
+      of "basessyllablepre":
+        basesSyllablesPreList.add(y = gameNode.attr(name = "value"))
+      of "basessyllablestart":
+        basesSyllablesStartList.add(y = gameNode.attr(name = "value"))
+      of "basessyllableend":
+        basesSyllablesEndList.add(y = gameNode.attr(name = "value"))
+      of "basessyllablepost":
+        basesSyllablesPostList.add(y = gameNode.attr(name = "value"))
+      of "malessyllablestart":
+        malesSyllablesStartList.add(y = gameNode.attr(name = "value"))
+      of "malessyllablemiddle":
+        malesSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
+      of "malessyllableend":
+        malesSyllablesEndList.add(y = gameNode.attr(name = "value"))
+      of "malesvocal":
+        malesVocalsList.add(y = gameNode.attr(name = "value"))
+      of "malesconsonant":
+        malesConsonantsList.add(y = gameNode.attr(name = "value"))
+      of "femalessyllablestart":
+        femalesSyllablesStartList.add(y = gameNode.attr(name = "value"))
+      of "femalessyllablemiddle":
+        femalesSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
+      of "femalessyllableend":
+        femalesSyllablesEndList.add(y = gameNode.attr(name = "value"))
+      of "femalesvocal":
+        femalesVocalsList.add(y = gameNode.attr(name = "value"))
+      of "shipssyllablestart":
+        shipsSyllablesStartList.add(y = gameNode.attr(name = "value"))
+      of "shipssyllablemiddle":
+        shipsSyllablesMiddleList.add(y = gameNode.attr(name = "value"))
+      of "shipssyllableend":
+        shipsSyllablesEndList.add(y = gameNode.attr(name = "value"))
+      of "attribute":
+        attributesList.add(y = AttributeRecord(name: gameNode.attr(
+            name = "name"), description: gameNode.innerText()))
+      of "skill":
+        var newSkill: SkillRecord = SkillRecord(attribute: 1)
+        newSkill.name = gameNode.attr(name = "name")
+        newSkill.tool = gameNode.attr(name = "tool")
+        let attributeName = gameNode.attr(name = "attribute")
+        for index, attribute in attributesList.pairs():
+          if attribute.name == attributeName:
+            newSkill.attribute = index
+            break
+        for childNode in gameNode:
+          if childNode.kind != xnElement:
+            continue
+          case childNode.tag
+          of "description":
+            newSkill.description = childNode.innerText()
+          of "toolquality":
+            try:
+              newSkill.toolsQuality.add(y = ToolQuality(level: childNode.attr(
+                  name = "level").parseInt(), quality: childNode.attr(
+                  name = "quality").parseInt()))
+            except ValueError:
+              raise newException(exceptn = DataLoadingError,
+                  message = "Can't add skill '" & newSkill.name & "'. Invalid value for tools quality.")
+        skillsList[skillIndex] = newSkill
+        skillIndex.inc()
+      of "itemtype":
+        itemsTypesList.add(y = gameNode.attr(name = "value"))
+      of "remove":
+        case gameNode.attr(name = "name")
+        of "skill":
+          {.warning[ProveInit]: off.}
+          {.warning[UnsafeDefault]: off.}
           try:
-            newSkill.toolsQuality.add(y = ToolQuality(level: childNode.attr(
-                name = "level").parseInt(), quality: childNode.attr(
-                name = "quality").parseInt()))
+            skillsList.del(key = gameNode.attr(name = "value").parseInt())
           except ValueError:
             raise newException(exceptn = DataLoadingError,
-                message = "Can't add skill '" & newSkill.name & "'. Invalid value for tools quality.")
-      skillsList[skillIndex] = newSkill
-      skillIndex.inc()
-    of "itemtype":
-      itemsTypesList.add(y = gameNode.attr(name = "value"))
-    of "remove":
-      case gameNode.attr(name = "name")
-      of "skill":
-        {.warning[ProveInit]: off.}
-        {.warning[UnsafeDefault]: off.}
+                message = "Can't delete skill '" & gameNode.attr(
+                    name = "value") & "'. Invalid index.")
+          {.warning[ProveInit]: on.}
+          {.warning[UnsafeDefault]: on.}
+        of "attribute":
+          try:
+            attributesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't delete attribute '" & gameNode.attr(
+                    name = "value") & "'. Invalid index.")
+        of "itemtype":
+          try:
+            itemsTypesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't delete item type '" & gameNode.attr(
+                    name = "value") & "'. Invalid index.")
+        else:
+          discard
+      of "repairtools":
+        repairTools = gameNode.attr(name = "value")
+      of "cleaningtools":
+        cleaningTools = gameNode.attr(name = "value")
+      of "alchemytools":
+        alchemyTools = gameNode.attr(name = "value")
+      of "corpseindex":
         try:
-          skillsList.del(key = gameNode.attr(name = "value").parseInt())
+          corpseIndex = gameNode.attr(name = "value").parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't delete skill '" & gameNode.attr(name = "value") & "'. Invalid index.")
-        {.warning[ProveInit]: on.}
-        {.warning[UnsafeDefault]: on.}
-      of "attribute":
+            message = "Can't set corpse index '" & gameNode.attr(
+                name = "value") & "'. Invalid value.")
+      of "missionitemstype":
+        missionItemsType = gameNode.attr(name = "value")
+      of "fueltype":
+        fuelType = gameNode.attr(name = "value")
+      of "moneyindex":
         try:
-          attributesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
+          moneyIndex = gameNode.attr(name = "value").parseInt()
         except ValueError:
           raise newException(exceptn = DataLoadingError,
-              message = "Can't delete attribute '" & gameNode.attr(
-                  name = "value") & "'. Invalid index.")
-      of "itemtype":
-        try:
-          itemsTypesList.del(i = gameNode.attr(name = "value").parseInt() - 1)
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-              message = "Can't delete item type '" & gameNode.attr(
-                  name = "value") & "'. Invalid index.")
-      else:
-        discard
-    of "repairtools":
-      repairTools = gameNode.attr(name = "value")
-    of "cleaningtools":
-      cleaningTools = gameNode.attr(name = "value")
-    of "alchemytools":
-      alchemyTools = gameNode.attr(name = "value")
-    of "corpseindex":
-      try:
-        corpseIndex = gameNode.attr(name = "value").parseInt()
-      except ValueError:
-        raise newException(exceptn = DataLoadingError,
-          message = "Can't set corpse index '" & gameNode.attr(name = "value") & "'. Invalid value.")
-    of "missionitemstype":
-      missionItemsType = gameNode.attr(name = "value")
-    of "fueltype":
-      fuelType = gameNode.attr(name = "value")
-    of "moneyindex":
-      try:
-        moneyIndex = gameNode.attr(name = "value").parseInt()
-      except ValueError:
-        raise newException(exceptn = DataLoadingError,
-          message = "Can't set money index '" & gameNode.attr(name = "value") & "'. Invalid value.")
-    of "tradersname":
-      tradersName = gameNode.attr(name = "value")
-    of "conditionname":
-      conditionIndex = findAttributeIndex(attributeName = gameNode.attr(
-          name = "value"))
-    of "strengthname":
-      strengthIndex = findAttributeIndex(attributeName = gameNode.attr(
-          name = "value"))
-    of "pilotingskill":
-      pilotingSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
-    of "engineeringskill":
-      engineeringSkill = findSkillIndex(skillName = gameNode.attr(
-          name = "value"))
-    of "gunneryskill":
-      gunnerySkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
-    of "talkingskill":
-      talkingSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
-    of "perceptionskill":
-      perceptionSkill = findSkillIndex(skillName = gameNode.attr(
-          name = "value"))
-    of "headarmor":
-      headArmor = gameNode.attr(name = "value")
-    of "chestarmor":
-      chestArmor = gameNode.attr(name = "value")
-    of "armsarmor":
-      armsArmor = gameNode.attr(name = "value")
-    of "legsarmor":
-      legsArmor = gameNode.attr(name = "value")
-    of "shieldtype":
-      shieldType = gameNode.attr(name = "value")
-    of "weapontype":
-      weaponType = gameNode.attr(name = "value")
-    of "dodgeskill":
-      dodgeSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
-    of "unarmedskill":
-      unarmedSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+            message = "Can't set money index '" & gameNode.attr(
+                name = "value") & "'. Invalid value.")
+      of "tradersname":
+        tradersName = gameNode.attr(name = "value")
+      of "conditionname":
+        conditionIndex = findAttributeIndex(attributeName = gameNode.attr(
+            name = "value"))
+      of "strengthname":
+        strengthIndex = findAttributeIndex(attributeName = gameNode.attr(
+            name = "value"))
+      of "pilotingskill":
+        pilotingSkill = findSkillIndex(skillName = gameNode.attr(
+            name = "value"))
+      of "engineeringskill":
+        engineeringSkill = findSkillIndex(skillName = gameNode.attr(
+            name = "value"))
+      of "gunneryskill":
+        gunnerySkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+      of "talkingskill":
+        talkingSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+      of "perceptionskill":
+        perceptionSkill = findSkillIndex(skillName = gameNode.attr(
+            name = "value"))
+      of "headarmor":
+        headArmor = gameNode.attr(name = "value")
+      of "chestarmor":
+        chestArmor = gameNode.attr(name = "value")
+      of "armsarmor":
+        armsArmor = gameNode.attr(name = "value")
+      of "legsarmor":
+        legsArmor = gameNode.attr(name = "value")
+      of "shieldtype":
+        shieldType = gameNode.attr(name = "value")
+      of "weapontype":
+        weaponType = gameNode.attr(name = "value")
+      of "dodgeskill":
+        dodgeSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
+      of "unarmedskill":
+        unarmedSkill = findSkillIndex(skillName = gameNode.attr(name = "value"))
 
 # Temporary code for interfacing with Ada
 
 proc loadAdaData(fileName: cstring): cstring {.raises: [], tags: [WriteIOEffect,
-    ReadIOEffect, RootEffect], exportc.} =
+    ReadIOEffect, RootEffect], exportc, contractual.} =
   try:
     loadData(fileName = $fileName)
     return "".cstring
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
 
-proc getAdaItemType(itemIndex: cint): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaItemType(itemIndex: cint): cstring {.raises: [], tags: [], exportc,
+    contractual.} =
   if itemIndex >= itemsTypesList.len():
     return ""
   return itemsTypesList[itemIndex].cstring
 
 proc getAdaAttribute(itemIndex: cint; attribute: var array[2,
-    cstring]) {.raises: [], tags: [], exportc.} =
+    cstring]) {.raises: [], tags: [], exportc, contractual.} =
   attribute = ["".cstring, "".cstring]
   if itemIndex >= attributesList.len():
     return
   attribute = [attributesList[itemIndex].name.cstring, attributesList[
       itemIndex].description.cstring]
 
-proc getAdaSkillToolsAmount(skillIndex: cint): cint {.raises: [], tags: [], exportc.} =
+proc getAdaSkillToolsAmount(skillIndex: cint): cint {.raises: [], tags: [],
+    exportc, contractual.} =
   if not skillsList.contains(key = skillIndex):
     return 0
   try:
@@ -372,7 +382,7 @@ type AdaSkillRecord = object
   tool: cstring
 
 proc getAdaSkill(skillIndex: cint; skill: var AdaSkillRecord) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   skill = AdaSkillRecord(name: "".cstring, attribute: 0,
       description: "".cstring, tool: "".cstring)
   if not skillsList.contains(key = skillIndex):
@@ -386,7 +396,7 @@ proc getAdaSkill(skillIndex: cint; skill: var AdaSkillRecord) {.raises: [],
     return
 
 proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
-    cint]]) {.raises: [], tags: [], exportc.} =
+    cint]]) {.raises: [], tags: [], exportc, contractual.} =
   tools[0] = [-1.cint, -1.cint]
   if not skillsList.contains(key = skillIndex):
     return
@@ -398,40 +408,46 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
   except KeyError:
     return
 
-proc findAdaSkillIndex(skillName: cstring): cint {.raises: [], tags: [], exportc.} =
+proc findAdaSkillIndex(skillName: cstring): cint {.raises: [], tags: [],
+    exportc, contractual.} =
   return findSkillIndex(skillName = $skillName).cint
 
-proc getAdaGameStrings(values: var array[0..12, cstring]) {.raises: [], tags: [], exportc.} =
+proc getAdaGameStrings(values: var array[0..12, cstring]) {.raises: [], tags: [],
+    exportc, contractual.} =
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
       missionItemsType.cstring, fuelType.cstring, tradersName.cstring,
       headArmor.cstring, chestArmor.cstring, armsArmor.cstring,
       legsArmor.cstring, shieldType.cstring, weaponType.cstring,
       moneyName.cstring]
 
-proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [], exportc.} =
+proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [],
+    exportc, contractual.} =
   values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
       (strengthIndex + 1).cint, pilotingSkill.cint, engineeringSkill.cint,
       gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint,
       dodgeSkill.cint, unarmedSkill.cint]
 
-proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc.} =
+proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc,
+    contractual.} =
   case $name
   of "playerCareer":
     playerCareer = $value
   else:
     discard
 
-proc setAdaGameString(name: cstring): cstring {.raises: [], tags: [], exportc.} =
+proc setAdaGameString(name: cstring): cstring {.raises: [], tags: [], exportc,
+    contractual.} =
   if name == "playerCareer":
     return playerCareer.cstring
   return "".cstring
 
-proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   gameDate = DateRecord(year: year, month: month, day: day, hour: hour,
       minutes: minutes)
 
 proc setAdaGameDate(year, month, day, hour, minutes: var cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   year = gameDate.year
   month = gameDate.month
   day = gameDate.day
