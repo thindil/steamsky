@@ -199,6 +199,34 @@ package body Ships.UI.Crew.Inventory is
       External_Name => "moveItemsCommand";
       -- ****
 
+   function Show_Member_Inventory_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showMemberInventoryCommand";
+
+   function Sort_Crew_Inventory_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "sortCrewInventoryCommand";
+
+   function Show_Move_Item_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showMoveItemCommand";
+
+   function Toggle_All_Inventory_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "toggleAllInventoryCommand";
+
    procedure Add_Inventory_Commands is
       use Utils.UI;
    begin
@@ -222,6 +250,17 @@ package body Ships.UI.Crew.Inventory is
          Ada_Command => Toggle_Inventory_Items_Command'Access);
       Add_Command
         (Name => "MoveItems", Ada_Command => Move_Items_Command'Access);
+      Add_Command
+        (Name => "ShowMemberInventory",
+         Ada_Command => Show_Member_Inventory_Command'Access);
+      Add_Command
+        (Name => "SortCrewInventory",
+         Ada_Command => Sort_Crew_Inventory_Command'Access);
+      Add_Command
+        (Name => "ShowMoveItem", Ada_Command => Show_Move_Item_Command'Access);
+      Add_Command
+        (Name => "ToggleAllInventory",
+         Ada_Command => Toggle_All_Inventory_Command'Access);
    end Add_Inventory_Commands;
 
 end Ships.UI.Crew.Inventory;

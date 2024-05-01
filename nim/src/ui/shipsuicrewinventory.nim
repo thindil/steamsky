@@ -116,7 +116,8 @@ proc resetSelection() =
       tclUnsetVar(varName = "invindex" & $(index + 1))
 
 proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Show inventory of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -235,7 +236,8 @@ const defaultInventorySortOrder: InventorySortOrders = none
 var inventorySortOrder = defaultInventorySortOrder
 
 proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Sort the selected crew member inventory
   ##
   ## * clientData - the additional data for the Tcl command
@@ -465,7 +467,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory".cstring, "-1"])
 
 proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show UI to move the selected item to the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -520,7 +522,8 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Select or deselect all items in the crew member inventory
   ##
   ## * clientData - the additional data for the Tcl command
@@ -815,10 +818,11 @@ proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("ShowMemberInventory", showMemberInventoryCommand)
-    addCommand("SortCrewInventory", sortCrewInventoryCommand)
-    addCommand("ShowMoveItem", showMoveItemCommand)
-    addCommand("ToggleAllInventory", toggleAllInventoryCommand)
+    discard
+#    addCommand("ShowMemberInventory", showMemberInventoryCommand)
+#    addCommand("SortCrewInventory", sortCrewInventoryCommand)
+#    addCommand("ShowMoveItem", showMoveItemCommand)
+#    addCommand("ToggleAllInventory", toggleAllInventoryCommand)
 #    addCommand("SetUseItem", setUseItemCommand)
 #    addCommand("UpdateInventory", updateInventoryCommand)
 #    addCommand("MoveItem", moveItemCommand)
