@@ -44,7 +44,7 @@ proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## MemberIndex is the index of the crew member to show inventory, page
   ## is a number of the page of inventory list to show
   memberIndex = try:
-      ($argv[1]).parseInt
+      ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the member index.")
   if inventoryTable.row > 1:
@@ -131,7 +131,7 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowMemberInventory memberindex
   ## MemberIndex is the index of the crew member to show inventory
   let localMemberIndex = try:
-        ($argv[1]).parseInt
+        ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the member index.")
   if playerShip.crew[localMemberIndex].inventory.len == 0:
@@ -606,7 +606,7 @@ proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## itemindex is the index of the item which will be set
   let
     itemIndex = try:
-        ($argv[1]).parseInt
+        ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get item index.")
     itemDialog = ".itemdialog"
@@ -752,7 +752,7 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   let
     itemIndex = try:
-        ($argv[1]).parseInt
+        ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the index of the item.")
     itemType = try:
