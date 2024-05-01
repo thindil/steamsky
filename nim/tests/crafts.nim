@@ -19,28 +19,28 @@ suite "Unit tests for crafts module":
       durability: 100))
   updateCargo(playerShip, 6, 10)
 
-  test "Testing setRecipe.":
+  test "Set the amount for a crafting order.":
     setRecipe(0, 10, "1")
-    checkpoint "Set the amount for a crafting order."
     check:
       playerShip.modules[0].craftingAmount == 10
-    checkpoint "Set the index for the crafting order"
+
+  test "Set the index for the crafting order":
     check:
       playerShip.modules[0].craftingIndex == "1"
 
-  test "Testing checkRecipe.":
+  test "Checking a recipe.":
     check:
       checkRecipe("1") == 10
 
-  test "Testing manufacturing.":
+  test "Manufacturing.":
     manufacturing(15)
 
-  test "Testing setRecipeData":
+  test "Setting recipe data":
     let recipe = setRecipeData("1")
     check:
       recipe.tool == "CookingSet"
 
-  test "Testing getWorkshopRecipeName":
+  test "Getting a workshop's recipe's name":
     setRecipe(0, 10, "1")
     check:
       getWorkshopRecipeName(0) == "Manufacturing 10x Basic Ration"
