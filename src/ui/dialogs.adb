@@ -160,7 +160,9 @@ package body Dialogs is
          Frame :=
            Get_Widget
              (pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
-         Tcl.Tk.Ada.Busy.Forget(Window => Frame);
+         if Tcl.Tk.Ada.Busy.Status(Window => Frame) = "1" then
+            Tcl.Tk.Ada.Busy.Forget(Window => Frame);
+         end if;
          if CArgv.Arg(Argv => Argv, N => 2) = ".memberdialog" then
             Frame :=
               Get_Widget
