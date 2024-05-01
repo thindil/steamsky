@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Setting an event or a mission as the destination for the player's ship
 - Updating the debug menu after changes
 - Refreshing the list of known bases
+- Crash on closing some in-game dialogs
 
 ## [9.9] - 2024-04-14
 
