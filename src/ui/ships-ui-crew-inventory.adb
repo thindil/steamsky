@@ -16,21 +16,9 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
--- with Tcl.Ada;
--- with Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.TtkButton;
--- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
-
-   -- ****iv* SUCI/SUCI.Member_Index
-   -- FUNCTION
-   -- The index of the selected crew member
-   -- SOURCE
---   Member_Index: Positive := 1;
-   -- ****
 
    -- ****o* SUCI/SUCI.Update_Inventory_Command
    -- FUNCTION
@@ -119,43 +107,6 @@ package body Ships.UI.Crew.Inventory is
       Convention => C,
       External_Name => "validateMoveAmountCommand";
       -- ****
-
---   function Validate_Move_Amount_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      use Tcl.Ada;
---      use Tcl.Tk.Ada;
---      use Tcl.Tk.Ada.Widgets.TtkButton;
---      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
---
---      Amount: Natural := 0;
---      Button: constant Ttk_Button :=
---        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 3));
---      Max_Val: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Spin_Box: constant Ttk_SpinBox :=
---        Get_Widget
---          (pathName => CArgv.Arg(Argv => Argv, N => 4), Interp => Interp);
---   begin
---      if CArgv.Arg(Argv => Argv, N => 2)'Length > 0 then
---         Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
---      end if;
---      if Amount < 1 then
---         Widgets.configure(Widgt => Button, options => "-state disabled");
---         Tcl_SetResult(interp => Interp, str => "1");
---         return TCL_OK;
---      elsif Amount > Max_Val then
---         Set(SpinBox => Spin_Box, Value => Positive'Image(Max_Val));
---      end if;
---      Widgets.configure(Widgt => Button, options => "-state normal");
---      Tcl_SetResult(interp => Interp, str => "1");
---      return TCL_OK;
---   exception
---      when Constraint_Error =>
---         Tcl_SetResult(interp => Interp, str => "0");
---         return TCL_OK;
---   end Validate_Move_Amount_Command;
 
    --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****o* SUCI/SUCI.Show_Inventory_Item_Info_Command
