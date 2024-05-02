@@ -17,7 +17,7 @@
 
 import std/[os, tables]
 import ../[config, game, maps, ships, tk]
-import coreui, shipsuicrew, utilsui2, shipsuimodules, shipsuimodules2
+import coreui, shipsuicargo, shipsuicrew, utilsui2, shipsuimodules, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
@@ -291,6 +291,8 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the wait menu
   try:
     shipsuimodules.addCommands()
+    shipsuicrew.addCommands()
+    shipsuicargo.addCommands()
 #    addCommand("ShowShipInfo", showShipInfoCommand)
 #    addCommand("SetShipName", setShipNameCommand)
 #    addCommand("ShipMaxMin", shipMaxMinCommand)
