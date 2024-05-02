@@ -30,70 +30,82 @@ suite "Unit tests for crew module":
       durability: 100, owner: @[0]))
   skyMap[1][1].baseIndex = 1
 
-  test "Testing dailyPayment":
+  test "Testing daily payment.":
     dailyPayment()
 
-  test "Testing getAttributeLevelName.":
-    checkpoint "Testing attribute level name as string"
+  test "Testing attribute level name for value 3":
     gameSettings.showNumbers = false
-    checkpoint "Testing attribute level name for value 3"
     check:
       getAttributeLevelName(3) == "Very low"
-    checkpoint "Testing attribute level name for value 12"
+
+  test "Testing attribute level name for value 12":
+    gameSettings.showNumbers = false
     check:
       getAttributeLevelName(12) == "Below average"
-    checkpoint "Testing attribute level name for value 48"
+
+  test "Testing attribute level name for value 48":
+    gameSettings.showNumbers = false
     check:
       getAttributeLevelName(48) == "Very high"
-    checkpoint "Testing attribute level name as number"
+
+  test "Testing attribute level name for value 3":
     gameSettings.showNumbers = true
-    checkpoint "Testing attribute level name for value 3"
     check:
       getAttributeLevelName(3) == "3"
-    checkpoint "Testing attribute level name for value 12"
+
+  test "Testing attribute level name for value 12":
+    gameSettings.showNumbers = true
     check:
       getAttributeLevelName(12) == "12"
-    checkpoint "Testing attribute level name for value 48"
+
+  test "Testing attribute level name for value 48":
+    gameSettings.showNumbers = true
     check:
       getAttributeLevelName(48) == "48"
 
-  test "Testing getSkillLevelName.":
-    checkpoint "Testing skill level name as string"
+  test "Testing skill level name for value 9":
     gameSettings.showNumbers = false
-    checkpoint "Testing skill level name for value 9"
     check:
       getSkillLevelName(9) == "Beginner"
-    checkpoint "Testing skill level name for value 54"
+
+  test "Testing skill level name for value 54":
+    gameSettings.showNumbers = false
     check:
       getSkillLevelName(54) == "Respected"
-    checkpoint "Testing skill level name for value 92"
+
+  test "Testing skill level name for value 92":
+    gameSettings.showNumbers = false
     check:
       getSkillLevelName(92) == "Legendary"
-    checkpoint "Testing skill level name as number"
+
+  test "Testing skill level name for value 9":
     gameSettings.showNumbers = true
-    checkpoint "Testing skill level name for value 9"
     check:
       getSkillLevelName(9) == "9"
-    checkpoint "Testing skill level name for value 54"
+
+  test "Testing skill level name for value 54":
+    gameSettings.showNumbers = true
     check:
       getSkillLevelName(54) == "54"
-    checkpoint "Testing skill level name for value 92"
+
+  test "Testing skill level name for value 92":
+    gameSettings.showNumbers = true
     check:
       getSkillLevelName(92) == "92"
 
-  test "Testing findCabin.":
-    checkpoint "Testing finding a cabin for the player"
+  test "Testing finding a cabin for the player":
     check:
       findCabin(0) == 0
-    checkpoint "Testing finding a cabin for a non-exisiting crew member"
+
+  test "Testing finding a cabin for a non-exisiting crew member":
     check:
       findCabin(100) == -1
 
-  test "Testing updateCrew.":
-    checkpoint "Testing update healthy crew member"
+  test "Testing update healthy crew member":
     playerShip.crew[0].health = 100
     updateCrew(1, 1)
-    checkpoint "Testing updating a dead crew member"
+
+  test "Testing updating a dead crew member":
     playerShip.crew[0].health = 0
     saveDirectory = ""
     updateCrew(1, 1)
