@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, shipscargo, tk]
+import ../[config, game, items, shipscargo, tk]
 import coreui, table
 
 var
@@ -54,11 +54,30 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
           0: protoItem.showType else: protoItem.itemType)
     if "{" & itemType & "}" notin itemsTypes:
       itemsTypes.add(y = " {" & itemType & "}")
-  let page = (if argc == 2: ($argv[1]).parseInt else: 1)
+  let
+    page = (if argc == 2: ($argv[1]).parseInt else: 1)
+    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+    typeBox = cargoInfoFrame & ".selecttype.combo"
+    itemsType = tclEval2(script = typeBox & " get")
+  var currentRow = 1
   for index in cargoIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
     let
       item = playerShip.cargo[index]
       protoItem = itemsList[item.protoIndex]
+      itemType = (if protoItem.showType.len >
+          0: protoItem.showType else: protoItem.itemType)
+    if itemsType != "All" and itemType != itemsType:
+      continue
+    addButton(table = cargoTable, text = getItemName(item = item),
+        tooltip = "Show item's description and actions",
+        command = "ShowCargoItemInfo " & $(index + 1), column = 1)
+    addProgressbar(table = cargoTable, value = item.durability,
+        maxValue = defaultItemDurability,
+        tooltip = "The current durability of the selected crew member",
+        command = "ShowCargoItemInfo " & $(index + 1), column = 2)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
