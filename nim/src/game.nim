@@ -15,13 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to update the global state of the game, like global
+## variables, loading the game data, etc.
+
 import std/[os, strutils, tables, xmlparser, xmltree]
 import contracts
 import types
 
 type
   DataAction* = enum
-    # Possible actions to do when loading game data
+    ## Possible actions to do when loading game data
     add, update, remove
 
   ToolQuality = object
@@ -346,6 +349,7 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc loadAdaData(fileName: cstring): cstring {.raises: [], tags: [WriteIOEffect,
     ReadIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     loadData(fileName = $fileName)
     return "".cstring
@@ -354,12 +358,14 @@ proc loadAdaData(fileName: cstring): cstring {.raises: [], tags: [WriteIOEffect,
 
 proc getAdaItemType(itemIndex: cint): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   if itemIndex >= itemsTypesList.len():
     return ""
   return itemsTypesList[itemIndex].cstring
 
 proc getAdaAttribute(itemIndex: cint; attribute: var array[2,
     cstring]) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   attribute = ["".cstring, "".cstring]
   if itemIndex >= attributesList.len():
     return
@@ -368,6 +374,7 @@ proc getAdaAttribute(itemIndex: cint; attribute: var array[2,
 
 proc getAdaSkillToolsAmount(skillIndex: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   if not skillsList.contains(key = skillIndex):
     return 0
   try:
@@ -383,6 +390,7 @@ type AdaSkillRecord = object
 
 proc getAdaSkill(skillIndex: cint; skill: var AdaSkillRecord) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   skill = AdaSkillRecord(name: "".cstring, attribute: 0,
       description: "".cstring, tool: "".cstring)
   if not skillsList.contains(key = skillIndex):
@@ -397,6 +405,7 @@ proc getAdaSkill(skillIndex: cint; skill: var AdaSkillRecord) {.raises: [],
 
 proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
     cint]]) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   tools[0] = [-1.cint, -1.cint]
   if not skillsList.contains(key = skillIndex):
     return
@@ -410,10 +419,12 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
 
 proc findAdaSkillIndex(skillName: cstring): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   return findSkillIndex(skillName = $skillName).cint
 
 proc getAdaGameStrings(values: var array[0..12, cstring]) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
       missionItemsType.cstring, fuelType.cstring, tradersName.cstring,
       headArmor.cstring, chestArmor.cstring, armsArmor.cstring,
@@ -422,6 +433,7 @@ proc getAdaGameStrings(values: var array[0..12, cstring]) {.raises: [], tags: []
 
 proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   values = [corpseIndex.cint, moneyIndex.cint, conditionIndex.cint,
       (strengthIndex + 1).cint, pilotingSkill.cint, engineeringSkill.cint,
       gunnerySkill.cint, talkingSkill.cint, perceptionSkill.cint,
@@ -429,6 +441,7 @@ proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [],
 
 proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   case $name
   of "playerCareer":
     playerCareer = $value
@@ -437,17 +450,20 @@ proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc,
 
 proc setAdaGameString(name: cstring): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   if name == "playerCareer":
     return playerCareer.cstring
   return "".cstring
 
 proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   gameDate = DateRecord(year: year, month: month, day: day, hour: hour,
       minutes: minutes)
 
 proc setAdaGameDate(year, month, day, hour, minutes: var cint) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   year = gameDate.year
   month = gameDate.month
   day = gameDate.day
