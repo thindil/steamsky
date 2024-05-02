@@ -55,6 +55,76 @@ package body Ships.UI.Modules is
       Convention => C,
       External_Name => "stopUpgradingCommand";
 
+   function Set_Repair_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "setRepairCommand";
+
+   function Reset_Destination_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "resetDestinationCommand";
+
+   function Update_Assign_Crew_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "updateAssignCrewCommand";
+
+   function Show_Assign_Crew_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showAssignCrewCommand";
+
+   function Show_Assign_Skill_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showAssignSkillCommand";
+
+   function Cancel_Order_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "cancelOrderCommand";
+
+   function Get_Active_Button_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "getActiveButtonCommand";
+
+   function Show_Modules_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showModulesCommand";
+
+   function Sort_Ship_Modules_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "sortShipModulesCommand";
+
+   function Show_Assign_Ammo_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showAssignAmmoCommand";
+
    procedure Add_Modules_Commands is
       use Utils.UI;
    begin
@@ -71,6 +141,33 @@ package body Ships.UI.Modules is
       Add_Command
         (Name => "StopUpgrading",
          Ada_Command => Stop_Upgrading_Command'Access);
+      Add_Command
+        (Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
+      Add_Command
+        (Name => "ResetDestination",
+         Ada_Command => Reset_Destination_Command'Access);
+      Add_Command
+        (Name => "UpdateAssignCrew",
+         Ada_Command => Update_Assign_Crew_Command'Access);
+      Add_Command
+        (Name => "ShowAssignCrew",
+         Ada_Command => Show_Assign_Crew_Command'Access);
+      Add_Command
+        (Name => "ShowAssignSkill",
+         Ada_Command => Show_Assign_Skill_Command'Access);
+      Add_Command
+        (Name => "CancelOrder", Ada_Command => Cancel_Order_Command'Access);
+      Add_Command
+        (Name => "GetActiveButton",
+         Ada_Command => Get_Active_Button_Command'Access);
+      Add_Command
+        (Name => "ShowModules", Ada_Command => Show_Modules_Command'Access);
+      Add_Command
+        (Name => "SortShipModules",
+         Ada_Command => Sort_Ship_Modules_Command'Access);
+      Add_Command
+        (Name => "ShowAssignAmmo",
+         Ada_Command => Show_Assign_Ammo_Command'Access);
    end Add_Modules_Commands;
 
 end Ships.UI.Modules;
