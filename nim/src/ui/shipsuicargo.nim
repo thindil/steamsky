@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[game, tk]
+import std/[strutils, tables]
+import ../[game, shipscargo, tk]
 import coreui, table
 
 var
@@ -42,6 +42,23 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     cargoIndexes = @[]
     for index, _ in playerShip.cargo:
       cargoIndexes.add(y = index)
+  let freeSpaceLabel = cargoInfoFrame & ".freespace"
+  tclEval(script = freeSpaceLabel & " configure -text {Free cargo space: " &
+      $freeCargo(amount = 0) & " kg}")
+  var itemsTypes = "All"
+  for index in cargoIndexes:
+    let
+      item = playerShip.cargo[index]
+      protoItem = itemsList[item.protoIndex]
+      itemType = (if protoItem.showType.len >
+          0: protoItem.showType else: protoItem.itemType)
+    if "{" & itemType & "}" notin itemsTypes:
+      itemsTypes.add(y = " {" & itemType & "}")
+  let page = (if argc == 2: ($argv[1]).parseInt else: 1)
+  for index in cargoIndexes:
+    let
+      item = playerShip.cargo[index]
+      protoItem = itemsList[item.protoIndex]
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
