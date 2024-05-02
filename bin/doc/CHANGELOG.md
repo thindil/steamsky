@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Updating the debug menu after changes
 - Refreshing the list of known bases
 - Crash on closing some in-game dialogs
+- Showing information about the player's ship's cargo
 
 ## [9.9] - 2024-04-14
 
