@@ -76,7 +76,7 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         command = "ShowCargoItemInfo " & $(index + 1), column = 1)
     addProgressbar(table = cargoTable, value = item.durability,
         maxValue = defaultItemDurability,
-        tooltip = "The current durability of the selected crew member",
+        tooltip = "The current durability of the selected item",
         command = "ShowCargoItemInfo " & $(index + 1), column = 2)
   return tclOk
 

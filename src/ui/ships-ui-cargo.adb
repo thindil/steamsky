@@ -214,7 +214,7 @@ package body Ships.UI.Cargo is
             Add_Progress_Bar
               (Table => Cargo_Table, Value => Item.Durability,
                Max_Value => Default_Item_Durability,
-               Tooltip => "The current durability of the selected crew member",
+               Tooltip => "The current durability of the selected item",
                Command => "ShowCargoItemInfo" & Positive'Image(I),
                Column => 2);
             Add_Button
