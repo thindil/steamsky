@@ -28,6 +28,18 @@ var
 proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Show the cargo of the player ship
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowCargo ?page?
+  ## Optional paramater page is the number of the page of cargo list to show
   let
     shipCanvas = mainPaned & ".shipinfoframe.cargo.canvas"
     cargoInfoFrame = shipCanvas & ".frame"
