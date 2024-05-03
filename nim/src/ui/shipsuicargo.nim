@@ -26,12 +26,16 @@ var
     ## The list of indexes of the items in the cargo
 
 proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let
     shipCanvas = mainPaned & ".shipinfoframe.cargo.canvas"
     cargoInfoFrame = shipCanvas & ".frame"
     res = tclEval2(script = "grid size " & cargoInfoFrame).split
-    rows = res[1].parseInt
+    rows = try:
+        res[1].parseInt
+      except:
+        return showError(message = "Can't get the amount of rows")
   deleteWidgets(startIndex = 3, endIndex = rows - 1, frame = cargoInfoFrame)
   cargoTable = createTable(parent = cargoInfoFrame, headers = @["", "Name",
       "Durability", "Type", "Amount", "Weight"],
@@ -43,19 +47,28 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, _ in playerShip.cargo:
       cargoIndexes.add(y = index)
   let freeSpaceLabel = cargoInfoFrame & ".freespace"
-  tclEval(script = freeSpaceLabel & " configure -text {Free cargo space: " &
-      $freeCargo(amount = 0) & " kg}")
+  try:
+    tclEval(script = freeSpaceLabel & " configure -text {Free cargo space: " &
+        $freeCargo(amount = 0) & " kg}")
+  except:
+    return showError(message = "Can't show the amount of free space.")
   var itemsTypes = "All"
   for index in cargoIndexes:
     let
       item = playerShip.cargo[index]
-      protoItem = itemsList[item.protoIndex]
+      protoItem = try:
+          itemsList[item.protoIndex]
+        except:
+          return showError(message = "Can't get proto item")
       itemType = (if protoItem.showType.len >
           0: protoItem.showType else: protoItem.itemType)
     if "{" & itemType & "}" notin itemsTypes:
       itemsTypes.add(y = " {" & itemType & "}")
   let
-    page = (if argc == 2: ($argv[1]).parseInt else: 1)
+    page = try:
+        (if argc == 2: ($argv[1]).parseInt else: 1)
+      except:
+        return showError(message = "Can't get the number of page.")
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
     typeBox = cargoInfoFrame & ".selecttype.combo"
     itemsType = tclEval2(script = typeBox & " get")
@@ -66,7 +79,10 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
       continue
     let
       item = playerShip.cargo[index]
-      protoItem = itemsList[item.protoIndex]
+      protoItem = try:
+          itemsList[item.protoIndex]
+        except:
+          return showError(message = "Can't get the proto item.")
       itemType = (if protoItem.showType.len >
           0: protoItem.showType else: protoItem.itemType)
     if itemsType != "All" and itemType != itemsType:
