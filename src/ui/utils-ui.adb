@@ -508,7 +508,7 @@ package body Utils.UI is
          B_1, B_2: Nim_Button_Settings) with
          Import => True,
          Convention => C,
-         External_Name => "showAdaScreen";
+         External_Name => "showAdaInventoryInfo";
    begin
       Show_Ada_Inventory_Item_Info
         (P => New_String(Str => Parent), I_Index => Item_Index,
