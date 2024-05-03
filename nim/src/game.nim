@@ -81,69 +81,130 @@ var
   docDirectory*: string = "doc" & DirSep
     ## The directory where the game's documentation is stored
   themesDirectory*: string = "data" & DirSep & "themes" &
-      DirSep                               ## The directory where the game's themes are stored
-  moneyIndex*: Positive ## The item's index of the item used as money in the game
-  moneyName*: string                       ## The name of the item used as a money in the game
-  skillsList* = initTable[Positive, SkillRecord]() ## The list of all skill available in the game
-  basesSyllablesPreList*: seq[string]      ## The list of pre syllables for bases names
-  basesSyllablesStartList*: seq[string]    ## The list of start syllables for bases names
-  basesSyllablesEndList*: seq[string]      ## The list of end syllables for bases names
-  basesSyllablesPostList*: seq[string]     ## The list of post syllables for bases names
-  malesSyllablesStartList*: seq[string]    ## The list of start syllables for males names
-  malesSyllablesMiddleList*: seq[string]   ## The list of middle syllables for males names
-  malesSyllablesEndList*: seq[string]      ## The list of end syllables for males names
-  malesVocalsList*: seq[string]            ## The list of vocals for males names
-  malesConsonantsList*: seq[string]        ## The list of consonants for males names
-  femalesSyllablesStartList*: seq[string]  ## The list of start syllables for females names
-  femalesSyllablesMiddleList*: seq[string] ## The list of middle syllables for females names
-  femalesSyllablesEndList*: seq[string]    ## The list of end syllables for females names
-  femalesVocalsList*: seq[string]          ## The list of vocals for female names
-  shipsSyllablesStartList*: seq[string]    ## The list of start syllables for ships names
-  shipsSyllablesMiddleList*: seq[string]   ## The list of middle syllables for ships names
-  shipsSyllablesEndList*: seq[string]      ## The list of end syllables for ships names
-  attributesList*: seq[AttributeRecord]    ## The list of all attributes available in the game
-  itemsTypesList*: seq[string] ## The list of all types of items available in the game
-  repairTools*: string                     ## The type of item used to repair ships
-  cleaningTools*: string                   ## The type of item used to cleaning ships
-  alchemyTools*: string                    ## The type of item used as alchemy tools
-  corpseIndex*: Positive                   ## The index of item used as prototype for corpses
-  missionItemsType*: string                ## The type of item used in missions
-  fuelType*: string                        ## The type of item used as fuel for ships
-  tradersName*: string ## The word used to mark traders ships in their names
-  conditionIndex*: Natural                 ## The index of condition attribute
-  strengthIndex*: Natural                  ## The index of strength attribute
-  pilotingSkill*: Positive                 ## The index of piloting skill
-  engineeringSkill*: Positive              ## The index of engineering skill
-  gunnerySkill*: Positive                  ## The index of gunnery skill
-  talkingSkill*: Positive                  ## The index of talking skill
-  perceptionSkill*: Positive               ## The index of perception skil
-  headArmor*: string                       ## The type of items used as head armor
-  chestArmor*: string                      ## The type of items used as chest armor
-  armsArmor*: string                       ## The type of items used as arms armor
-  legsArmor*: string                       ## The type of items used as legs armor
-  shieldType*: string                      ## The type of items used as shield
-  weaponType*: string                      ## The type of items used as weapon
-  dodgeSkill*: Positive                    ## The index of dodge skill
-  unarmedSkill*: Positive                  ## The index of unarmed combat skill
-  factionsList*: Table[string, FactionData] = initTable[string, FactionData]() ## The list of all available factions in the game
-  itemsList* = initTable[Positive, ObjectData]() ## The list of prototypes of all items availabla in the game
-  skyBases*: array[BasesRange, BaseRecord] ## The list of all bases in the game
-  modulesList* = initTable[Positive, BaseModuleData]() ## The list of prototypes of all ships' modules available in the game
-  recipesList* = initTable[string, CraftData]() ## The list of all available crafting recipes in the game
-  goalsList* = initTable[Positive, GoalData]() ## The list of available goals in the game
-  playerCareer*: string ## Index of the career of the player selected when starting a new game
-  knownRecipes*: seq[string]               ## The list of known recipes by the player
-  messagesList*: seq[MessageData]          ## The list of in-game messages
-  eventsList*: seq[EventData]              ## The list of available events in the game
-  playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The player's ship's data
-  npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1) ## The npc ship like enemy, trader, etc
-  protoShipsList* = initTable[Positive, ProtoShipData]() ## The list of prototypes of ships available in the game
-  protoMobsList* = initTable[Positive, ProtoMobRecord]() ## The list of prototypes of all mobs availabla in the game
-  gameDate*: DateRecord                    ## The current time in the game
-  traderCargo*: seq[BaseCargo]             ## The current trader's ship's cargo
-  harpoonDuration*: Natural = 0 ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
-  enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1,
-      skyY: 1))                            ## The enemy information
+      DirSep
+    ## The directory where the game's themes are stored
+  moneyIndex*: Positive = 1
+    ## The item's index of the item used as money in the game
+  moneyName*: string = "Charcollum"
+    ## The name of the item used as a money in the game
+  skillsList*: Table[Positive, SkillRecord] = initTable[Positive, SkillRecord]()
+    ## The list of all skill available in the game
+  basesSyllablesPreList*: seq[string]
+    ## The list of pre syllables for bases names
+  basesSyllablesStartList*: seq[string]
+    ## The list of start syllables for bases names
+  basesSyllablesEndList*: seq[string]
+    ## The list of end syllables for bases names
+  basesSyllablesPostList*: seq[string]
+    ## The list of post syllables for bases names
+  malesSyllablesStartList*: seq[string]
+    ## The list of start syllables for males names
+  malesSyllablesMiddleList*: seq[string]
+    ## The list of middle syllables for males names
+  malesSyllablesEndList*: seq[string]
+    ## The list of end syllables for males names
+  malesVocalsList*: seq[string]
+    ## The list of vocals for males names
+  malesConsonantsList*: seq[string]
+    ## The list of consonants for males names
+  femalesSyllablesStartList*: seq[string]
+    ## The list of start syllables for females names
+  femalesSyllablesMiddleList*: seq[string]
+    ## The list of middle syllables for females names
+  femalesSyllablesEndList*: seq[string]
+    ## The list of end syllables for females names
+  femalesVocalsList*: seq[string]
+    ## The list of vocals for female names
+  shipsSyllablesStartList*: seq[string]
+    ## The list of start syllables for ships names
+  shipsSyllablesMiddleList*: seq[string]
+    ## The list of middle syllables for ships names
+  shipsSyllablesEndList*: seq[string]
+    ## The list of end syllables for ships names
+  attributesList*: seq[AttributeRecord]
+    ## The list of all attributes available in the game
+  itemsTypesList*: seq[string]
+    ## The list of all types of items available in the game
+  repairTools*: string
+    ## The type of item used to repair ships
+  cleaningTools*: string
+    ## The type of item used to cleaning ships
+  alchemyTools*: string
+    ## The type of item used as alchemy tools
+  corpseIndex*: Positive
+    ## The index of item used as prototype for corpses
+  missionItemsType*: string
+    ## The type of item used in missions
+  fuelType*: string
+    ## The type of item used as fuel for ships
+  tradersName*: string
+    ## The word used to mark traders ships in their names
+  conditionIndex*: Natural
+    ## The index of condition attribute
+  strengthIndex*: Natural
+    ## The index of strength attribute
+  pilotingSkill*: Positive
+    ## The index of piloting skill
+  engineeringSkill*: Positive
+    ## The index of engineering skill
+  gunnerySkill*: Positive
+    ## The index of gunnery skill
+  talkingSkill*: Positive
+    ## The index of talking skill
+  perceptionSkill*: Positive
+    ## The index of perception skil
+  headArmor*: string
+    ## The type of items used as head armor
+  chestArmor*: string
+    ## The type of items used as chest armor
+  armsArmor*: string
+    ## The type of items used as arms armor
+  legsArmor*: string
+    ## The type of items used as legs armor
+  shieldType*: string
+    ## The type of items used as shield
+  weaponType*: string
+    ## The type of items used as weapon
+  dodgeSkill*: Positive
+    ## The index of dodge skill
+  unarmedSkill*: Positive
+    ## The index of unarmed combat skill
+  factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
+    ## The list of all available factions in the game
+  itemsList* = initTable[Positive, ObjectData]()
+    ## The list of prototypes of all items availabla in the game
+  skyBases*: array[BasesRange, BaseRecord]
+    ## The list of all bases in the game
+  modulesList* = initTable[Positive, BaseModuleData]()
+    ## The list of prototypes of all ships' modules available in the game
+  recipesList* = initTable[string, CraftData]()
+    ## The list of all available crafting recipes in the game
+  goalsList* = initTable[Positive, GoalData]()
+    ## The list of available goals in the game
+  playerCareer*: string
+    ## Index of the career of the player selected when starting a new game
+  knownRecipes*: seq[string]
+    ## The list of known recipes by the player
+  messagesList*: seq[MessageData]
+    ## The list of in-game messages
+  eventsList*: seq[EventData]
+    ## The list of available events in the game
+  playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1)
+    ## The player's ship's data
+  npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1)
+    ## The npc ship like enemy, trader, etc
+  protoShipsList* = initTable[Positive, ProtoShipData]()
+    ## The list of prototypes of ships available in the game
+  protoMobsList* = initTable[Positive, ProtoMobRecord]()
+    ## The list of prototypes of all mobs availabla in the game
+  gameDate*: DateRecord
+    ## The current time in the game
+  traderCargo*: seq[BaseCargo]
+    ## The current trader's ship's cargo
+  harpoonDuration*: Natural = 0
+    ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
+  enemy*: EnemyRecord = EnemyRecord(ship: ShipRecord(skyX: 1, skyY: 1))
+    ## The enemy information
 {.warning[UnsafeDefault]: on.}
 {.warning[UnsafeSetLen]: on.}
 
@@ -422,8 +483,8 @@ proc findAdaSkillIndex(skillName: cstring): cint {.raises: [], tags: [],
   ## Temporary C binding
   return findSkillIndex(skillName = $skillName).cint
 
-proc getAdaGameStrings(values: var array[0..12, cstring]) {.raises: [], tags: [],
-    exportc, contractual.} =
+proc getAdaGameStrings(values: var array[0..12, cstring]) {.raises: [], tags: [
+    ], exportc, contractual.} =
   ## Temporary C binding
   values = [repairTools.cstring, cleaningTools.cstring, alchemyTools.cstring,
       missionItemsType.cstring, fuelType.cstring, tradersName.cstring,
@@ -455,8 +516,8 @@ proc setAdaGameString(name: cstring): cstring {.raises: [], tags: [], exportc,
     return playerCareer.cstring
   return "".cstring
 
-proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [],
-    exportc, contractual.} =
+proc getAdaGameDate(year, month, day, hour, minutes: cint) {.raises: [], tags: [
+    ], exportc, contractual.} =
   ## Temporary C binding
   gameDate = DateRecord(year: year, month: month, day: day, hour: hour,
       minutes: minutes)
