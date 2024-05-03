@@ -3,5 +3,5 @@ include ../src/crew2
 
 suite "Unit tests for crew2 module":
 
-  test "Testing waitForRest.":
+  test "Waiting for rest.":
     waitForRest()
