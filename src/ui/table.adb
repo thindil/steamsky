@@ -15,10 +15,12 @@
 
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
+with CArgv;
 with Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Utils.UI;
 
 package body Table is
 
@@ -286,5 +288,40 @@ package body Table is
         (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
          Com => New_String(Str => Command), Width => N_Width);
    end Update_Headers_Command;
+
+   function Update_Current_Row_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "updateCurrentRowCommand";
+
+   function Execute_Current_Row_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "executeCurrentRowCommand";
+
+   function Hide_Current_Row_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "hideCurrentRowCommand";
+
+   procedure Add_Commands is
+      use Utils.UI;
+   begin
+      Add_Command
+        (Name => "UpdateCurrentRow",
+         Ada_Command => Update_Current_Row_Command'Access);
+      Add_Command
+        (Name => "ExecuteCurrentRow",
+         Ada_Command => Execute_Current_Row_Command'Access);
+      Add_Command
+        (Name => "HideCurrentRow",
+         Ada_Command => Hide_Current_Row_Command'Access);
+   end Add_Commands;
 
 end Table;

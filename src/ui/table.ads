@@ -282,10 +282,7 @@ package Table is
    -- 6.6 - Added
    -- 7.1 - Renamed to Add_Commands
    -- SOURCE
-   procedure Add_Commands with
-      Import => True,
-      Convention => C,
-      External_Name => "addAdaTableCommands";
+   procedure Add_Commands;
    -- ****
 
 -- Temporary code to interact with Nim
