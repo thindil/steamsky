@@ -16,10 +16,10 @@
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with GNAT.String_Split;
+-- with GNAT.String_Split;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
+-- with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Event;
@@ -36,7 +36,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip;
-with Config;
+-- with Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
@@ -87,49 +87,54 @@ package body Ships.UI.Cargo is
    function Show_Cargo_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
-      use GNAT.String_Split;
-      use Tcl.Ada;
+--      use GNAT.String_Split;
+--      use Tcl.Ada;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Config;
-      use Tiny_String;
-
+--      use Config;
+--      use Tiny_String;
+--
       Ship_Canvas: constant Tk_Canvas :=
         Get_Widget
           (pathName => Main_Paned & ".shipinfoframe.cargo.canvas",
            Interp => Interp);
       Cargo_Info_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Ship_Canvas & ".frame", Interp => Interp);
-      Tokens: Slice_Set;
-      Rows: Natural;
-      Item_Type: Bounded_String := Null_Bounded_String;
-      Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
-      Type_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName => Cargo_Info_Frame & ".selecttype.combo",
-           Interp => Interp);
-      Items_Type: constant String := Get(Widgt => Type_Box);
-      Page: constant Positive :=
-        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
-         else 1);
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Start_Row: constant Positive :=
-        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Current_Row: Positive := 1;
-      Free_Space_Label: constant Ttk_Label :=
-        Get_Widget
-          (pathName => Cargo_Info_Frame & ".freespace", Interp => Interp);
+--      Tokens: Slice_Set;
+--      Rows: Natural;
+--      Item_Type: Bounded_String := Null_Bounded_String;
+--      Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
+--      Type_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName => Cargo_Info_Frame & ".selecttype.combo",
+--           Interp => Interp);
+--      Items_Type: constant String := Get(Widgt => Type_Box);
+--      Page: constant Positive :=
+--        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
+--         else 1);
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Start_Row: constant Positive :=
+--        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      Current_Row: Positive := 1;
+--      Free_Space_Label: constant Ttk_Label :=
+--        Get_Widget
+--          (pathName => Cargo_Info_Frame & ".freespace", Interp => Interp);
+      function Show_Ada_Cargo_Command
+         (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+         Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "showCargoCommand";
    begin
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Create
-        (S => Tokens,
-         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Cargo_Info_Frame),
-         Separators => " ");
-      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets
-        (Start_Index => 3, End_Index => Rows - 1, Frame => Cargo_Info_Frame);
+--      Get_Ship_From_Nim(Ship => Player_Ship);
+--      Create
+--        (S => Tokens,
+--         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Cargo_Info_Frame),
+--         Separators => " ");
+--      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+--      Delete_Widgets
+--        (Start_Index => 3, End_Index => Rows - 1, Frame => Cargo_Info_Frame);
       Cargo_Table :=
         Create_Table
           (Parent => Widget_Image(Win => Cargo_Info_Frame),
@@ -144,129 +149,130 @@ package body Ships.UI.Cargo is
                (pathName => Main_Paned & ".shipinfoframe.cargo.scrolly"),
            Command => "SortShipCargo",
            Tooltip_Text => "Press mouse button to sort the cargo.");
-      if Cargo_Indexes.Length /=
-        Inventory_Container.Length(Container => Player_Ship.Cargo) then
-         Cargo_Indexes.Clear;
-         Fill_Cargo_Indexes_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-             Inventory_Container.Last_Index
-               (Container => Player_Ship.Cargo) loop
-            Cargo_Indexes.Append(New_Item => I);
-         end loop Fill_Cargo_Indexes_Loop;
-      end if;
-      configure
-        (Widgt => Free_Space_Label,
-         options =>
-           "-text {Free cargo space:" &
-           Integer'Image(Free_Cargo(Amount => 0)) & " kg}");
-      Fill_Cargo_Types_Loop :
-      for I of Cargo_Indexes loop
-         Set_Item_Type_Block :
-         declare
-            Item: constant Inventory_Data :=
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I);
-            Proto_Item: constant Object_Data :=
-              Get_Proto_Item(Index => Item.Proto_Index);
-         begin
-            Item_Type :=
-              (if Proto_Item.Show_Type /= Null_Bounded_String then
-                 Proto_Item.Show_Type
-               else Proto_Item.I_Type);
-            if Index
-                (Source => Items_Types,
-                 Pattern => "{" & To_String(Source => Item_Type) & "}") =
-              0 then
-               Append
-                 (Source => Items_Types,
-                  New_Item => " {" & To_String(Source => Item_Type) & "}");
-            end if;
-         end Set_Item_Type_Block;
-      end loop Fill_Cargo_Types_Loop;
-      Load_Cargo_Loop :
-      for I of Cargo_Indexes loop
-         Show_Item_Block :
-         declare
-            Item: constant Inventory_Data :=
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I);
-            Proto_Item: constant Object_Data :=
-              Get_Proto_Item(Index => Item.Proto_Index);
-         begin
-            if Current_Row < Start_Row then
-               Current_Row := Current_Row + 1;
-               goto End_Of_Loop;
-            end if;
-            Item_Type :=
-              (if Proto_Item.Show_Type /= Null_Bounded_String then
-                 Proto_Item.Show_Type
-               else Proto_Item.I_Type);
-            if Items_Type /= "All"
-              and then To_String(Source => Item_Type) /= Items_Type then
-               goto End_Of_Loop;
-            end if;
-            Add_Button
-              (Table => Cargo_Table, Text => Get_Item_Name(Item => Item),
-               Tooltip => "Show item's description and actions",
-               Command => "ShowCargoItemInfo" & Positive'Image(I),
-               Column => 1);
-            Add_Progress_Bar
-              (Table => Cargo_Table, Value => Item.Durability,
-               Max_Value => Default_Item_Durability,
-               Tooltip => "The current durability of the selected item",
-               Command => "ShowCargoItemInfo" & Positive'Image(I),
-               Column => 2);
-            Add_Button
-              (Table => Cargo_Table, Text => To_String(Source => Item_Type),
-               Tooltip => "The type of the selected item",
-               Command => "ShowCargoItemInfo" & Positive'Image(I),
-               Column => 3);
-            Add_Button
-              (Table => Cargo_Table, Text => Positive'Image(Item.Amount),
-               Tooltip => "The amount of the selected item",
-               Command => "ShowCargoItemInfo" & Positive'Image(I),
-               Column => 4);
-            Add_Button
-              (Table => Cargo_Table,
-               Text => Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
-               Tooltip => "The total weight of the selected item",
-               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 5,
-               New_Row => True);
-            exit Load_Cargo_Loop when Cargo_Table.Row =
-              Get_Integer_Setting(Name => "listsLimit") + 1;
-            <<End_Of_Loop>>
-         end Show_Item_Block;
-      end loop Load_Cargo_Loop;
-      if Page > 1 then
-         Add_Pagination
-           (Table => Cargo_Table,
-            Previous_Command => "ShowCargo" & Positive'Image(Page - 1),
-            Next_Command =>
-              (if
-                 Cargo_Table.Row <
-                 Get_Integer_Setting(Name => "listsLimit") + 1
-               then ""
-               else "ShowCargo" & Positive'Image(Page + 1)));
-      elsif Cargo_Table.Row =
-        Get_Integer_Setting(Name => "listsLimit") + 1 then
-         Add_Pagination
-           (Table => Cargo_Table, Previous_Command => "",
-            Next_Command => "ShowCargo" & Positive'Image(Page + 1));
-      end if;
-      Update_Table(Table => Cargo_Table);
-      configure
-        (Widgt => Type_Box,
-         options => "-values [list " & To_String(Source => Items_Types) & "]");
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      configure
-        (Widgt => Ship_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
-      return TCL_OK;
+      return Show_Ada_Cargo_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+--      if Cargo_Indexes.Length /=
+--        Inventory_Container.Length(Container => Player_Ship.Cargo) then
+--         Cargo_Indexes.Clear;
+--         Fill_Cargo_Indexes_Loop :
+--         for I in
+--           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+--             Inventory_Container.Last_Index
+--               (Container => Player_Ship.Cargo) loop
+--            Cargo_Indexes.Append(New_Item => I);
+--         end loop Fill_Cargo_Indexes_Loop;
+--      end if;
+--      configure
+--        (Widgt => Free_Space_Label,
+--         options =>
+--           "-text {Free cargo space:" &
+--           Integer'Image(Free_Cargo(Amount => 0)) & " kg}");
+--      Fill_Cargo_Types_Loop :
+--      for I of Cargo_Indexes loop
+--         Set_Item_Type_Block :
+--         declare
+--            Item: constant Inventory_Data :=
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => I);
+--            Proto_Item: constant Object_Data :=
+--              Get_Proto_Item(Index => Item.Proto_Index);
+--         begin
+--            Item_Type :=
+--              (if Proto_Item.Show_Type /= Null_Bounded_String then
+--                 Proto_Item.Show_Type
+--               else Proto_Item.I_Type);
+--            if Index
+--                (Source => Items_Types,
+--                 Pattern => "{" & To_String(Source => Item_Type) & "}") =
+--              0 then
+--               Append
+--                 (Source => Items_Types,
+--                  New_Item => " {" & To_String(Source => Item_Type) & "}");
+--            end if;
+--         end Set_Item_Type_Block;
+--      end loop Fill_Cargo_Types_Loop;
+--      Load_Cargo_Loop :
+--      for I of Cargo_Indexes loop
+--         Show_Item_Block :
+--         declare
+--            Item: constant Inventory_Data :=
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => I);
+--            Proto_Item: constant Object_Data :=
+--              Get_Proto_Item(Index => Item.Proto_Index);
+--         begin
+--            if Current_Row < Start_Row then
+--               Current_Row := Current_Row + 1;
+--               goto End_Of_Loop;
+--            end if;
+--            Item_Type :=
+--              (if Proto_Item.Show_Type /= Null_Bounded_String then
+--                 Proto_Item.Show_Type
+--               else Proto_Item.I_Type);
+--            if Items_Type /= "All"
+--              and then To_String(Source => Item_Type) /= Items_Type then
+--               goto End_Of_Loop;
+--            end if;
+--            Add_Button
+--              (Table => Cargo_Table, Text => Get_Item_Name(Item => Item),
+--               Tooltip => "Show item's description and actions",
+--               Command => "ShowCargoItemInfo" & Positive'Image(I),
+--               Column => 1);
+--            Add_Progress_Bar
+--              (Table => Cargo_Table, Value => Item.Durability,
+--               Max_Value => Default_Item_Durability,
+--               Tooltip => "The current durability of the selected item",
+--               Command => "ShowCargoItemInfo" & Positive'Image(I),
+--               Column => 2);
+--            Add_Button
+--              (Table => Cargo_Table, Text => To_String(Source => Item_Type),
+--               Tooltip => "The type of the selected item",
+--               Command => "ShowCargoItemInfo" & Positive'Image(I),
+--               Column => 3);
+--            Add_Button
+--              (Table => Cargo_Table, Text => Positive'Image(Item.Amount),
+--               Tooltip => "The amount of the selected item",
+--               Command => "ShowCargoItemInfo" & Positive'Image(I),
+--               Column => 4);
+--            Add_Button
+--              (Table => Cargo_Table,
+--               Text => Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
+--               Tooltip => "The total weight of the selected item",
+--               Command => "ShowCargoItemInfo" & Positive'Image(I), Column => 5,
+--               New_Row => True);
+--            exit Load_Cargo_Loop when Cargo_Table.Row =
+--              Get_Integer_Setting(Name => "listsLimit") + 1;
+--            <<End_Of_Loop>>
+--         end Show_Item_Block;
+--      end loop Load_Cargo_Loop;
+--      if Page > 1 then
+--         Add_Pagination
+--           (Table => Cargo_Table,
+--            Previous_Command => "ShowCargo" & Positive'Image(Page - 1),
+--            Next_Command =>
+--              (if
+--                 Cargo_Table.Row <
+--                 Get_Integer_Setting(Name => "listsLimit") + 1
+--               then ""
+--               else "ShowCargo" & Positive'Image(Page + 1)));
+--      elsif Cargo_Table.Row =
+--        Get_Integer_Setting(Name => "listsLimit") + 1 then
+--         Add_Pagination
+--           (Table => Cargo_Table, Previous_Command => "",
+--            Next_Command => "ShowCargo" & Positive'Image(Page + 1));
+--      end if;
+--      Update_Table(Table => Cargo_Table);
+--      configure
+--        (Widgt => Type_Box,
+--         options => "-values [list " & To_String(Source => Items_Types) & "]");
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      configure
+--        (Widgt => Ship_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
+--      return TCL_OK;
    end Show_Cargo_Command;
 
    -- ****it* SUCargo/SUCargo.Cargo_Sort_Orders

@@ -78,6 +78,31 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         maxValue = defaultItemDurability,
         tooltip = "The current durability of the selected item",
         command = "ShowCargoItemInfo " & $(index + 1), column = 2)
+    addButton(table = cargoTable, text = itemType,
+        tooltip = "The type of the selected item",
+        command = "ShowCargoItemInfo " & $(index + 1), column = 3)
+    addButton(table = cargoTable, text = $item.amount,
+        tooltip = "The amount of the selected item",
+        command = "ShowCargoItemInfo " & $(index + 1), column = 4)
+    addButton(table = cargoTable, text = $(item.amount * protoItem.weight) &
+        " kg", tooltip = "The total weight of the selected item",
+        command = "ShowCargoItemInfo " & $(index + 1), column = 5, newRow = true)
+    if cargoTable.row == gameSettings.listsLimit + 1:
+      break
+  if page > 1:
+    addPagination(table = cargoTable, previousCommand = "ShowCargo " & $(page -
+        1), nextCommand = (if cargoTable.row < gameSettings.listsLimit +
+        1: "" else: "ShowCargo " & $(page + 1)))
+  elif cargoTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = cargoTable, previousCommand = "",
+        nextCommand = "ShowCargo " & $(page + 1))
+  updateTable(table = cargoTable)
+  tclEval(script = typeBox & " configure -values [list " & itemsTypes & "]")
+  tclEval(script = "update")
+  tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
+      script = shipCanvas & " bbox all") & "]")
+  tclEval(script = shipCanvas & " xview moveto 0.0")
+  tclEval(script = shipCanvas & " yview moveto 0.0")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
