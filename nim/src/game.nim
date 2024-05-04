@@ -89,89 +89,89 @@ var
     ## The name of the item used as a money in the game
   skillsList*: Table[Positive, SkillRecord] = initTable[Positive, SkillRecord]()
     ## The list of all skill available in the game
-  basesSyllablesPreList*: seq[string]
+  basesSyllablesPreList*: seq[string] = @[]
     ## The list of pre syllables for bases names
-  basesSyllablesStartList*: seq[string]
+  basesSyllablesStartList*: seq[string] = @[]
     ## The list of start syllables for bases names
-  basesSyllablesEndList*: seq[string]
+  basesSyllablesEndList*: seq[string] = @[]
     ## The list of end syllables for bases names
-  basesSyllablesPostList*: seq[string]
+  basesSyllablesPostList*: seq[string] = @[]
     ## The list of post syllables for bases names
-  malesSyllablesStartList*: seq[string]
+  malesSyllablesStartList*: seq[string] = @[]
     ## The list of start syllables for males names
-  malesSyllablesMiddleList*: seq[string]
+  malesSyllablesMiddleList*: seq[string] = @[]
     ## The list of middle syllables for males names
-  malesSyllablesEndList*: seq[string]
+  malesSyllablesEndList*: seq[string] = @[]
     ## The list of end syllables for males names
-  malesVocalsList*: seq[string]
+  malesVocalsList*: seq[string] = @[]
     ## The list of vocals for males names
-  malesConsonantsList*: seq[string]
+  malesConsonantsList*: seq[string] = @[]
     ## The list of consonants for males names
-  femalesSyllablesStartList*: seq[string]
+  femalesSyllablesStartList*: seq[string] = @[]
     ## The list of start syllables for females names
-  femalesSyllablesMiddleList*: seq[string]
+  femalesSyllablesMiddleList*: seq[string] = @[]
     ## The list of middle syllables for females names
-  femalesSyllablesEndList*: seq[string]
+  femalesSyllablesEndList*: seq[string] = @[]
     ## The list of end syllables for females names
-  femalesVocalsList*: seq[string]
+  femalesVocalsList*: seq[string] = @[]
     ## The list of vocals for female names
-  shipsSyllablesStartList*: seq[string]
+  shipsSyllablesStartList*: seq[string] = @[]
     ## The list of start syllables for ships names
-  shipsSyllablesMiddleList*: seq[string]
+  shipsSyllablesMiddleList*: seq[string] = @[]
     ## The list of middle syllables for ships names
-  shipsSyllablesEndList*: seq[string]
+  shipsSyllablesEndList*: seq[string] = @[]
     ## The list of end syllables for ships names
-  attributesList*: seq[AttributeRecord]
+  attributesList*: seq[AttributeRecord] = @[]
     ## The list of all attributes available in the game
-  itemsTypesList*: seq[string]
+  itemsTypesList*: seq[string] = @[]
     ## The list of all types of items available in the game
-  repairTools*: string
+  repairTools*: string = ""
     ## The type of item used to repair ships
-  cleaningTools*: string
+  cleaningTools*: string = ""
     ## The type of item used to cleaning ships
-  alchemyTools*: string
+  alchemyTools*: string = ""
     ## The type of item used as alchemy tools
-  corpseIndex*: Positive
+  corpseIndex*: Positive = 1
     ## The index of item used as prototype for corpses
-  missionItemsType*: string
+  missionItemsType*: string = ""
     ## The type of item used in missions
-  fuelType*: string
+  fuelType*: string = ""
     ## The type of item used as fuel for ships
-  tradersName*: string
+  tradersName*: string = ""
     ## The word used to mark traders ships in their names
-  conditionIndex*: Natural
+  conditionIndex*: Natural = 0
     ## The index of condition attribute
-  strengthIndex*: Natural
+  strengthIndex*: Natural = 0
     ## The index of strength attribute
-  pilotingSkill*: Positive
+  pilotingSkill*: Positive = 1
     ## The index of piloting skill
-  engineeringSkill*: Positive
+  engineeringSkill*: Positive = 1
     ## The index of engineering skill
-  gunnerySkill*: Positive
+  gunnerySkill*: Positive = 1
     ## The index of gunnery skill
-  talkingSkill*: Positive
+  talkingSkill*: Positive = 1
     ## The index of talking skill
-  perceptionSkill*: Positive
+  perceptionSkill*: Positive = 1
     ## The index of perception skil
-  headArmor*: string
+  headArmor*: string = ""
     ## The type of items used as head armor
-  chestArmor*: string
+  chestArmor*: string = ""
     ## The type of items used as chest armor
-  armsArmor*: string
+  armsArmor*: string = ""
     ## The type of items used as arms armor
-  legsArmor*: string
+  legsArmor*: string = ""
     ## The type of items used as legs armor
-  shieldType*: string
+  shieldType*: string = ""
     ## The type of items used as shield
-  weaponType*: string
+  weaponType*: string = ""
     ## The type of items used as weapon
-  dodgeSkill*: Positive
+  dodgeSkill*: Positive = 1
     ## The index of dodge skill
-  unarmedSkill*: Positive
+  unarmedSkill*: Positive = 1
     ## The index of unarmed combat skill
   factionsList*: Table[string, FactionData] = initTable[string, FactionData]()
     ## The list of all available factions in the game
-  itemsList* = initTable[Positive, ObjectData]()
+  itemsList*: Table[Positive, ObjectData] = initTable[Positive, ObjectData]()
     ## The list of prototypes of all items availabla in the game
   skyBases*: array[BasesRange, BaseRecord]
     ## The list of all bases in the game
