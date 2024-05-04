@@ -17,6 +17,7 @@ with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl;
 with Utils.UI;
+with Ships;
 
 package body Maps.UI.Commands is
 
@@ -93,9 +94,36 @@ package body Maps.UI.Commands is
    function Move_Ship_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Import => True,
-      Convention => C,
-      External_Name => "moveShipCommand";
+      Convention => C;
+
+   function Move_Ship_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tcl;
+      use Ships;
+
+      function Move_Ada_Ship_Command
+        (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+         Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "moveShipCommand";
+   begin
+      if Move_Ada_Ship_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv) =
+        TCL_OK then
+         Get_Ship_From_Nim(Ship => Player_Ship);
+         Get_Map_Y_Loop :
+         for Y in 1 .. 1_024 loop
+            Get_Map_X_Loop :
+            for X in 1 .. 1_024 loop
+               Set_Map_Cell(X => X, Y => Y);
+            end loop Get_Map_X_Loop;
+         end loop Get_Map_Y_Loop;
+      end if;
+      return TCL_OK;
+   end Move_Ship_Command;
 
    function Quit_Game_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
