@@ -142,9 +142,13 @@ const defaultCargoSortOrder = none
 var cargoSortOrder = defaultCargoSortOrder
 
 proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
-  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(
-      table = cargoTable, xPosition = ($argv[1]).parseInt))
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
+  let column = try:
+      (if argv[1] == "-1": Positive.high else: getColumnNumber(
+          table = cargoTable, xPosition = ($argv[1]).parseInt))
+    except:
+      return showError(message = "Can't get the column number.")
   case column
   of 1:
     if cargoSortOrder == nameAsc:
@@ -185,13 +189,16 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     id: Natural
   var localCargo: seq[LocalCargoData]
   for index, item in playerShip.cargo:
-    localCargo.add(y = LocalCargoData(name: getItemName(item = item,
-        damageInfo = false, toLower = false), damage: (item.durability.float /
-        defaultItemDurability.float), itemType: (if itemsList[
-        item.protoIndex].showType.len > 0: itemsList[
-        item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
-        amount: item.amount, weight: item.amount * itemsList[
-        item.protoIndex].weight, id: index))
+    try:
+      localCargo.add(y = LocalCargoData(name: getItemName(item = item,
+          damageInfo = false, toLower = false), damage: (item.durability.float /
+          defaultItemDurability.float), itemType: (if itemsList[
+          item.protoIndex].showType.len > 0: itemsList[
+          item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
+          amount: item.amount, weight: item.amount * itemsList[
+          item.protoIndex].weight, id: index))
+    except:
+      return showError(message = "Can't add local item to cargo.")
   proc sortCargo(x, y: LocalCargoData): int =
     case cargoSortOrder
     of nameAsc:
