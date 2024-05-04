@@ -133,10 +133,56 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = shipCanvas & " yview moveto 0.0")
   return tclOk
 
+type cargoSortOrders = enum
+  nameAsc, nameDesc, durabilityAsc, durabilityDesc, typeAsc, typeDesc,
+    amountAsc, amountDesc, weightAsc, weightDesc, none
+
+const defaultCargoSortOrder = none
+
+var cargoSortOrder = defaultCargoSortOrder
+
+proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let column = (if argv[1] == "-1": Positive.high else: getColumnNumber(
+      table = cargoTable, xPosition = ($argv[1]).parseInt))
+  case column
+  of 1:
+    if cargoSortOrder == nameAsc:
+      cargoSortOrder = nameDesc
+    else:
+      cargoSortOrder = nameAsc
+  of 2:
+    if cargoSortOrder == durabilityAsc:
+      cargoSortOrder = durabilityDesc
+    else:
+      cargoSortOrder = durabilityAsc
+  of 3:
+    if cargoSortOrder == typeAsc:
+      cargoSortOrder = typeDesc
+    else:
+      cargoSortOrder = typeAsc
+  of 4:
+    if cargoSortOrder == amountAsc:
+      cargoSortOrder = amountDesc
+    else:
+      cargoSortOrder = amountAsc
+  of 5:
+    if cargoSortOrder == weightAsc:
+      cargoSortOrder = weightDesc
+    else:
+      cargoSortOrder = weightAsc
+  else:
+    discard
+  if cargoSortOrder == none:
+    return showCargoCommand(clientData = clientData, interp = interp, argc = 1,
+        argv = @["ShowCargo".cstring])
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowCargo", showCargoCommand)
+#    addCommand("SortShipCargo", sortCargoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
