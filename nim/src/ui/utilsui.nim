@@ -21,7 +21,7 @@ import ../[bases, config, crew2, crewinventory, events2, game, game2,
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules2
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Resize the selected canvas
   ##
   ## * clientData - the additional data for the Tcl command
@@ -46,7 +46,7 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Check the amount of the item, if it is not below low level of warning or
   ## if the entered amount is a proper number
   ##
@@ -141,7 +141,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Validate amount of the item when the spinbox button to increase or
   ## decrease the amount was pressed
   ##
@@ -163,7 +163,7 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return checkAmountCommand(clientData, interp, newArgv.len.cint, newArgv)
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect].} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
   ## Set the player's ship, module or crew member's name in Nim and Tcl
   ##
   ## * clientData - the additional data for the Tcl command
@@ -253,12 +253,13 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     endGame(save = true)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [AddingCommandError], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Add Tcl commands related to the various UI elements
-  addCommand("ResizeCanvas", resizeCanvasCommand)
-  addCommand("CheckAmount", checkAmountCommand)
-  addCommand("ValidateAmount", validateAmountCommand)
-  addCommand("NimSetTextVariable", setTextVariableCommand)
+  discard
+#  addCommand("ResizeCanvas", resizeCanvasCommand)
+#  addCommand("CheckAmount", checkAmountCommand)
+#  addCommand("ValidateAmount", validateAmountCommand)
+#  addCommand("NimSetTextVariable", setTextVariableCommand)
 
 # Temporary code for interfacing with Ada
 

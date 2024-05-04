@@ -82,21 +82,23 @@ package body Utils.UI is
    function Set_Text_Variable_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "setTextVariableCommand";
       -- ****
 
-   function Set_Text_Variable_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-   begin
-      Get_Ada_Ship;
-      Tcl_Eval
-        (interp => Interp,
-         strng => "NimSetTextVariable " & CArgv.Arg(Argv => Argv, N => 1));
-      Set_Ada_Ship(Ship => Player_Ship);
-      return TCL_OK;
-   end Set_Text_Variable_Command;
+--   function Set_Text_Variable_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--   begin
+--      Get_Ada_Ship;
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng => "NimSetTextVariable " & CArgv.Arg(Argv => Argv, N => 1));
+--      Set_Ada_Ship(Ship => Player_Ship);
+--      return TCL_OK;
+--   end Set_Text_Variable_Command;
 
    -- ****o* UUI/UUI.Process_Question_Command
    -- FUNCTION
@@ -424,6 +426,27 @@ package body Utils.UI is
       return TCL_OK;
    end Set_Destination_Command;
 
+   function Resize_Canvas_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "resizeCanvasCommand";
+
+   function Check_Amount_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "checkAmountCommand";
+
+   function Validate_Amount_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "validateAmountCommand";
+
    procedure Add_Commands is
       procedure Add_Ada_Commands with
          Import => True,
@@ -434,6 +457,13 @@ package body Utils.UI is
       Add_Command
         (Name => "SetTextVariable",
          Ada_Command => Set_Text_Variable_Command'Access);
+      Add_Command
+        (Name => "ResizeCanvas", Ada_Command => Resize_Canvas_Command'Access);
+      Add_Command
+        (Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
+      Add_Command
+        (Name => "ValidateAmount",
+         Ada_Command => Validate_Amount_Command'Access);
       Add_Command
         (Name => "ProcessQuestion",
          Ada_Command => Process_Question_Command'Access);
