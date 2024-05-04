@@ -31,7 +31,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip;
 with CoreUI; use CoreUI;
@@ -54,12 +54,14 @@ package body Ships.UI.Cargo is
    Cargo_Table: Table_Widget (Amount => 5);
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* SUCargo/SUCargo.Cargo_Indexes
    -- FUNCTION
    -- Indexes of the player ship cargo
    -- SOURCE
    Cargo_Indexes: Positive_Container.Vector;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUCargo/SUCargo.Show_Cargo_Command
    -- FUNCTION
@@ -94,8 +96,8 @@ package body Ships.UI.Cargo is
       Cargo_Info_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Ship_Canvas & ".frame", Interp => Interp);
       function Show_Ada_Cargo_Command
-        (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-         Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
          Import => True,
          Convention => C,
          External_Name => "showCargoCommand";
@@ -116,8 +118,7 @@ package body Ships.UI.Cargo is
            Tooltip_Text => "Press mouse button to sort the cargo.");
       return
         Show_Ada_Cargo_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
    end Show_Cargo_Command;
 
    -- ****it* SUCargo/SUCargo.Cargo_Sort_Orders
@@ -399,6 +400,7 @@ package body Ships.UI.Cargo is
       use Tcl.Tk.Ada.Event;
       use Tcl.Tklib.Ada.Tooltip;
       use Tiny_String;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
 
       Item_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
