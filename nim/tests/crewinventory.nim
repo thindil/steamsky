@@ -17,63 +17,66 @@ suite "Unit tests for crewinventory module":
     member.equipment[index] = -1
   member.equipment[weapon] = 1
   playerShip.crew.add(member)
+  var inventory: seq[InventoryData]
+  inventory.add(InventoryData(protoIndex: 66, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0))
+  inventory.add(InventoryData(protoIndex: 67, amount: 1, name: "",
+      durability: defaultItemDurability, price: 0))
 
-  test "Testing freeInventory.":
+  test "Checking free inventory space.":
     discard freeInventory(0, 0)
 
-  test "Testing itemIsUsed.":
-    checkpoint "Check if an item is not used by the player."
+  test "Check if an item is not used by the player.":
     check:
       not itemIsUsed(0, 0)
-    checkpoint "Check if an item is used by the player."
+
+  test "Check if an item is used by the player.":
     check:
       itemIsUsed(0, 1)
 
-  test "Testing takeOffItem.":
+  test "Take off item.":
     takeOffItem(0, 1)
     check:
       not itemIsUsed(0, 1)
 
-  test "Testing updateInventory.":
-    checkpoint "Adding an item to the player's inventory."
+  test "Adding an item to the player's inventory.":
     updateInventory(0, 1, 1, ship = playerShip)
     check:
       playerShip.crew[0].inventory[0].amount == 2
-    checkpoint "Removing an item from the player's inventory."
+
+  test "Removing an item from the player's inventory.":
     updateInventory(0, -1, 1, ship = playerShip)
     check:
       playerShip.crew[0].inventory[0].amount == 1
-    checkpoint "Adding too much items to the player's inventory."
+
+  test "Adding too much items to the player's inventory.":
     expect CrewNoSpaceError:
       updateInventory(0, 10_000, 1, ship = playerShip)
     check:
       playerShip.crew[0].inventory[0].amount == 1
 
-  test "Testing damageItem.":
+  test "Damaging item":
     for i in 1..100:
       if playerShip.crew[0].inventory.len == 0:
         break
       damageItem(playerShip.crew[0].inventory, 0, 0, 0, playerShip)
 
-  test "Testing findItem.":
-    var inventory: seq[InventoryData]
-    inventory.add(InventoryData(protoIndex: 66, amount: 1, name: "",
-        durability: defaultItemDurability, price: 0))
-    inventory.add(InventoryData(protoIndex: 67, amount: 1, name: "",
-        durability: defaultItemDurability, price: 0))
-    checkpoint "Find an item in inventory by proto index."
+  test "Find an item in inventory by proto index.":
     check:
       findItem(inventory, 67) == 1
-    checkpoint "Find an item in inventory by item type."
+
+  test "Find an item in inventory by item type.":
     check:
       findItem(inventory = inventory, itemType = "Weapon") == 0
-    checkpoint "Not find an item in inventory by proto index."
+
+  test "Not find an item in inventory by proto index.":
     check:
       findItem(inventory, 500) == -1
-    checkpoint "Not find an item in inventory with item type"
+
+  test "Not find an item in inventory with item type":
     check:
       findItem(inventory = inventory, itemType = "asdasdas") == -1
 
-  test "Testing getTrainingToolQuality.":
+  test "Getting quality of a training tool.":
     check:
       getTrainingToolQuality(0, 1) == 100
