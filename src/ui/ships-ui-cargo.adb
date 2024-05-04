@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Generic_Array_Sort;
+-- with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
@@ -23,7 +23,7 @@ with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas;
+-- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -32,7 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+-- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
@@ -42,7 +42,7 @@ with Messages; use Messages;
 with Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Stories;
-with Table; use Table;
+-- with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
@@ -51,7 +51,7 @@ package body Ships.UI.Cargo is
    -- FUNCTION
    -- Table with info about the player ship cargo
    -- SOURCE
-   Cargo_Table: Table_Widget (Amount => 5);
+--   Cargo_Table: Table_Widget (Amount => 5);
    -- ****
 
    --## rule off REDUCEABLE_SCOPE
@@ -59,7 +59,7 @@ package body Ships.UI.Cargo is
    -- FUNCTION
    -- Indexes of the player ship cargo
    -- SOURCE
-   Cargo_Indexes: Positive_Container.Vector;
+--   Cargo_Indexes: Positive_Container.Vector;
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
@@ -80,46 +80,48 @@ package body Ships.UI.Cargo is
    function Show_Cargo_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showCargoCommand";
       -- ****
 
-   function Show_Cargo_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.Canvas;
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+--   function Show_Cargo_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tcl.Tk.Ada.Widgets.Canvas;
+--      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 --
-      Ship_Canvas: constant Tk_Canvas :=
-        Get_Widget
-          (pathName => Main_Paned & ".shipinfoframe.cargo.canvas",
-           Interp => Interp);
-      Cargo_Info_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Ship_Canvas & ".frame", Interp => Interp);
-      function Show_Ada_Cargo_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Import => True,
-         Convention => C,
-         External_Name => "showCargoCommand";
-   begin
-      Cargo_Table :=
-        Create_Table
-          (Parent => Widget_Image(Win => Cargo_Info_Frame),
-           Headers =>
-             (1 => To_Unbounded_String(Source => "Name"),
-              2 => To_Unbounded_String(Source => "Durability"),
-              3 => To_Unbounded_String(Source => "Type"),
-              4 => To_Unbounded_String(Source => "Amount"),
-              5 => To_Unbounded_String(Source => "Weight")),
-           Scrollbar =>
-             Get_Widget
-               (pathName => Main_Paned & ".shipinfoframe.cargo.scrolly"),
-           Command => "SortShipCargo",
-           Tooltip_Text => "Press mouse button to sort the cargo.");
-      return
-        Show_Ada_Cargo_Command
-          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
-   end Show_Cargo_Command;
+--      Ship_Canvas: constant Tk_Canvas :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".shipinfoframe.cargo.canvas",
+--           Interp => Interp);
+--      Cargo_Info_Frame: constant Ttk_Frame :=
+--        Get_Widget(pathName => Ship_Canvas & ".frame", Interp => Interp);
+--      function Show_Ada_Cargo_Command
+--        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+--         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "showCargoCommand";
+--   begin
+--      Cargo_Table :=
+--        Create_Table
+--          (Parent => Widget_Image(Win => Cargo_Info_Frame),
+--           Headers =>
+--             (1 => To_Unbounded_String(Source => "Name"),
+--              2 => To_Unbounded_String(Source => "Durability"),
+--              3 => To_Unbounded_String(Source => "Type"),
+--              4 => To_Unbounded_String(Source => "Amount"),
+--              5 => To_Unbounded_String(Source => "Weight")),
+--           Scrollbar =>
+--             Get_Widget
+--               (pathName => Main_Paned & ".shipinfoframe.cargo.scrolly"),
+--           Command => "SortShipCargo",
+--           Tooltip_Text => "Press mouse button to sort the cargo.");
+--      return
+--        Show_Ada_Cargo_Command
+--          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--   end Show_Cargo_Command;
 
    -- ****it* SUCargo/SUCargo.Cargo_Sort_Orders
    -- FUNCTION
@@ -139,10 +141,10 @@ package body Ships.UI.Cargo is
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Cargo_Sort_Orders is
-     (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
-      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, NONE) with
-      Default_Value => NONE;
+--   type Cargo_Sort_Orders is
+--     (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
+--      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, NONE) with
+--      Default_Value => NONE;
       -- ****
 
       -- ****id* SUCargo/SUCargo.Default_Cargo_Sort_Order
@@ -151,7 +153,7 @@ package body Ships.UI.Cargo is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Cargo_Sort_Order: constant Cargo_Sort_Orders := NONE;
+--   Default_Cargo_Sort_Order: constant Cargo_Sort_Orders := NONE;
    -- ****
 
    --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -159,7 +161,7 @@ package body Ships.UI.Cargo is
    -- FUNCTION
    -- The current sorting order of items in the player's ship cargo
    -- SOURCE
-   Cargo_Sort_Order: Cargo_Sort_Orders := Default_Cargo_Sort_Order;
+--   Cargo_Sort_Order: Cargo_Sort_Orders := Default_Cargo_Sort_Order;
    -- ****
    --## rule on DIRECTLY_ACCESSED_GLOBALS
 
@@ -180,197 +182,199 @@ package body Ships.UI.Cargo is
    function Sort_Cargo_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "sortCargoCommand";
       -- ****
 
-   function Sort_Cargo_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Tiny_String;
-
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Column: constant Positive :=
-        (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
-         else Get_Column_Number
-             (Table => Cargo_Table,
-              X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      --## rule off TYPE_INITIAL_VALUES
-      type Local_Cargo_Data is record
-         Name: Unbounded_String;
-         Damage: Float;
-         Item_Type: Bounded_String;
-         Amount: Positive;
-         Weight: Positive;
-         Id: Positive;
-      end record;
-      type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
-      Local_Cargo: Cargo_Array
-        (1 ..
-             Natural
-               (Inventory_Container.Length(Container => Player_Ship.Cargo)));
-      --## rule on IMPROPER_INITIALIZATION
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      function "<"(Left, Right: Local_Cargo_Data) return Boolean is
-      begin
-         if Cargo_Sort_Order = NAMEASC and then Left.Name < Right.Name then
-            return True;
-         end if;
-         if Cargo_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
-            return True;
-         end if;
-         if Cargo_Sort_Order = DURABILITYASC
-           and then Left.Damage < Right.Damage then
-            return True;
-         end if;
-         if Cargo_Sort_Order = DURABILITYDESC
-           and then Left.Damage > Right.Damage then
-            return True;
-         end if;
-         if Cargo_Sort_Order = TYPEASC
-           and then Left.Item_Type < Right.Item_Type then
-            return True;
-         end if;
-         if Cargo_Sort_Order = TYPEDESC
-           and then Left.Item_Type > Right.Item_Type then
-            return True;
-         end if;
-         if Cargo_Sort_Order = AMOUNTASC
-           and then Left.Amount < Right.Amount then
-            return True;
-         end if;
-         if Cargo_Sort_Order = AMOUNTDESC
-           and then Left.Amount > Right.Amount then
-            return True;
-         end if;
-         if Cargo_Sort_Order = WEIGHTASC
-           and then Left.Weight < Right.Weight then
-            return True;
-         end if;
-         if Cargo_Sort_Order = WEIGHTDESC
-           and then Left.Weight > Right.Weight then
-            return True;
-         end if;
-         return False;
-      end "<";
-      procedure Sort_Cargo is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Local_Cargo_Data,
-         Array_Type => Cargo_Array);
-   begin
-      case Column is
-         when 1 =>
-            if Cargo_Sort_Order = NAMEASC then
-               Cargo_Sort_Order := NAMEDESC;
-            else
-               Cargo_Sort_Order := NAMEASC;
-            end if;
-         when 2 =>
-            if Cargo_Sort_Order = DURABILITYASC then
-               Cargo_Sort_Order := DURABILITYDESC;
-            else
-               Cargo_Sort_Order := DURABILITYASC;
-            end if;
-         when 3 =>
-            if Cargo_Sort_Order = TYPEASC then
-               Cargo_Sort_Order := TYPEDESC;
-            else
-               Cargo_Sort_Order := TYPEASC;
-            end if;
-         when 4 =>
-            if Cargo_Sort_Order = AMOUNTASC then
-               Cargo_Sort_Order := AMOUNTDESC;
-            else
-               Cargo_Sort_Order := AMOUNTASC;
-            end if;
-         when 5 =>
-            if Cargo_Sort_Order = WEIGHTASC then
-               Cargo_Sort_Order := WEIGHTDESC;
-            else
-               Cargo_Sort_Order := WEIGHTASC;
-            end if;
-         when others =>
-            null;
-      end case;
-      if Cargo_Sort_Order = NONE then
-         return
-           Show_Cargo_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 1,
-              Argv => CArgv.Empty & "ShowCargo");
-      end if;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Fill_Local_Cargo_Loop :
-      for I in
-        Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-          Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
-         Local_Cargo(I) :=
-           (Name =>
-              To_Unbounded_String
-                (Source =>
-                   Get_Item_Name
-                     (Item =>
-                        Inventory_Container.Element
-                          (Container => Player_Ship.Cargo, Index => I),
-                      Damage_Info => False, To_Lower => False)),
-            Damage =>
-              Float
-                (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => I)
-                   .Durability) /
-              Float(Default_Item_Durability),
-            Item_Type =>
-              (if
-                 Get_Proto_Item
-                   (Index =>
-                      Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => I)
-                        .Proto_Index)
-                   .Show_Type /=
-                 Null_Bounded_String
-               then
-                 Get_Proto_Item
-                   (Index =>
-                      Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => I)
-                        .Proto_Index)
-                   .Show_Type
-               else Get_Proto_Item
-                   (Index =>
-                      Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => I)
-                        .Proto_Index)
-                   .I_Type),
-            Amount =>
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Amount,
-            Weight =>
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Amount *
-              Get_Proto_Item
-                (Index =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => I)
-                     .Proto_Index)
-                .Weight,
-            Id => I);
-      end loop Fill_Local_Cargo_Loop;
-      Sort_Cargo(Container => Local_Cargo);
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Cargo_Indexes.Clear;
-      Fill_Cargo_Indexes_Loop :
-      for Item of Local_Cargo loop
-         Cargo_Indexes.Append(New_Item => Item.Id);
-      end loop Fill_Cargo_Indexes_Loop;
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      return
-        Show_Cargo_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 1,
-           Argv => CArgv.Empty & "ShowCargo");
-   end Sort_Cargo_Command;
+--   function Sort_Cargo_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Tiny_String;
+--
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Column: constant Positive :=
+--        (if CArgv.Arg(Argv => Argv, N => 1) = "-1" then Positive'Last
+--         else Get_Column_Number
+--             (Table => Cargo_Table,
+--              X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      --## rule off TYPE_INITIAL_VALUES
+--      type Local_Cargo_Data is record
+--         Name: Unbounded_String;
+--         Damage: Float;
+--         Item_Type: Bounded_String;
+--         Amount: Positive;
+--         Weight: Positive;
+--         Id: Positive;
+--      end record;
+--      type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
+--      --## rule on TYPE_INITIAL_VALUES
+--      --## rule off IMPROPER_INITIALIZATION
+--      Local_Cargo: Cargo_Array
+--        (1 ..
+--             Natural
+--               (Inventory_Container.Length(Container => Player_Ship.Cargo)));
+--      --## rule on IMPROPER_INITIALIZATION
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      function "<"(Left, Right: Local_Cargo_Data) return Boolean is
+--      begin
+--         if Cargo_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = DURABILITYASC
+--           and then Left.Damage < Right.Damage then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = DURABILITYDESC
+--           and then Left.Damage > Right.Damage then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = TYPEASC
+--           and then Left.Item_Type < Right.Item_Type then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = TYPEDESC
+--           and then Left.Item_Type > Right.Item_Type then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = AMOUNTASC
+--           and then Left.Amount < Right.Amount then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = AMOUNTDESC
+--           and then Left.Amount > Right.Amount then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = WEIGHTASC
+--           and then Left.Weight < Right.Weight then
+--            return True;
+--         end if;
+--         if Cargo_Sort_Order = WEIGHTDESC
+--           and then Left.Weight > Right.Weight then
+--            return True;
+--         end if;
+--         return False;
+--      end "<";
+--      procedure Sort_Cargo is new Ada.Containers.Generic_Array_Sort
+--        (Index_Type => Positive, Element_Type => Local_Cargo_Data,
+--         Array_Type => Cargo_Array);
+--   begin
+--      case Column is
+--         when 1 =>
+--            if Cargo_Sort_Order = NAMEASC then
+--               Cargo_Sort_Order := NAMEDESC;
+--            else
+--               Cargo_Sort_Order := NAMEASC;
+--            end if;
+--         when 2 =>
+--            if Cargo_Sort_Order = DURABILITYASC then
+--               Cargo_Sort_Order := DURABILITYDESC;
+--            else
+--               Cargo_Sort_Order := DURABILITYASC;
+--            end if;
+--         when 3 =>
+--            if Cargo_Sort_Order = TYPEASC then
+--               Cargo_Sort_Order := TYPEDESC;
+--            else
+--               Cargo_Sort_Order := TYPEASC;
+--            end if;
+--         when 4 =>
+--            if Cargo_Sort_Order = AMOUNTASC then
+--               Cargo_Sort_Order := AMOUNTDESC;
+--            else
+--               Cargo_Sort_Order := AMOUNTASC;
+--            end if;
+--         when 5 =>
+--            if Cargo_Sort_Order = WEIGHTASC then
+--               Cargo_Sort_Order := WEIGHTDESC;
+--            else
+--               Cargo_Sort_Order := WEIGHTASC;
+--            end if;
+--         when others =>
+--            null;
+--      end case;
+--      if Cargo_Sort_Order = NONE then
+--         return
+--           Show_Cargo_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => 1,
+--              Argv => CArgv.Empty & "ShowCargo");
+--      end if;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      Fill_Local_Cargo_Loop :
+--      for I in
+--        Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+--          Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+--         Local_Cargo(I) :=
+--           (Name =>
+--              To_Unbounded_String
+--                (Source =>
+--                   Get_Item_Name
+--                     (Item =>
+--                        Inventory_Container.Element
+--                          (Container => Player_Ship.Cargo, Index => I),
+--                      Damage_Info => False, To_Lower => False)),
+--            Damage =>
+--              Float
+--                (Inventory_Container.Element
+--                   (Container => Player_Ship.Cargo, Index => I)
+--                   .Durability) /
+--              Float(Default_Item_Durability),
+--            Item_Type =>
+--              (if
+--                 Get_Proto_Item
+--                   (Index =>
+--                      Inventory_Container.Element
+--                        (Container => Player_Ship.Cargo, Index => I)
+--                        .Proto_Index)
+--                   .Show_Type /=
+--                 Null_Bounded_String
+--               then
+--                 Get_Proto_Item
+--                   (Index =>
+--                      Inventory_Container.Element
+--                        (Container => Player_Ship.Cargo, Index => I)
+--                        .Proto_Index)
+--                   .Show_Type
+--               else Get_Proto_Item
+--                   (Index =>
+--                      Inventory_Container.Element
+--                        (Container => Player_Ship.Cargo, Index => I)
+--                        .Proto_Index)
+--                   .I_Type),
+--            Amount =>
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => I)
+--                .Amount,
+--            Weight =>
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => I)
+--                .Amount *
+--              Get_Proto_Item
+--                (Index =>
+--                   Inventory_Container.Element
+--                     (Container => Player_Ship.Cargo, Index => I)
+--                     .Proto_Index)
+--                .Weight,
+--            Id => I);
+--      end loop Fill_Local_Cargo_Loop;
+--      Sort_Cargo(Container => Local_Cargo);
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Cargo_Indexes.Clear;
+--      Fill_Cargo_Indexes_Loop :
+--      for Item of Local_Cargo loop
+--         Cargo_Indexes.Append(New_Item => Item.Id);
+--      end loop Fill_Cargo_Indexes_Loop;
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      return
+--        Show_Cargo_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 1,
+--           Argv => CArgv.Empty & "ShowCargo");
+--   end Sort_Cargo_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Give_Item_Command
    -- FUNCTION

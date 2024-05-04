@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[config, game, items, shipscargo, tk]
 import coreui, table
 
@@ -224,7 +224,34 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         return 1
       else:
         return -1
-  return tclOk
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      else:
+        return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      else:
+        return -1
+    of weightAsc:
+      if x.weight < y.weight:
+        return 1
+      else:
+        return -1
+    of weightDesc:
+      if x.weight > y.weight:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localCargo.sort(cmp = sortCargo)
+  cargoIndexes = @[]
+  for item in localCargo:
+    cargoIndexes.add(y = item.id)
+  return showCargoCommand(clientData = clientData, interp = interp, argc = 1,
+      argv = @["ShowCargo".cstring])
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
