@@ -176,6 +176,54 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   if cargoSortOrder == none:
     return showCargoCommand(clientData = clientData, interp = interp, argc = 1,
         argv = @["ShowCargo".cstring])
+  type LocalCargoData = object
+    name: string
+    damage: float
+    itemType: string
+    amount: Positive = 1
+    weight: Positive = 1
+    id: Natural
+  var localCargo: seq[LocalCargoData]
+  for index, item in playerShip.cargo:
+    localCargo.add(y = LocalCargoData(name: getItemName(item = item,
+        damageInfo = false, toLower = false), damage: (item.durability.float /
+        defaultItemDurability.float), itemType: (if itemsList[
+        item.protoIndex].showType.len > 0: itemsList[
+        item.protoIndex].showType else: itemsList[item.protoIndex].itemType),
+        amount: item.amount, weight: item.amount * itemsList[
+        item.protoIndex].weight, id: index))
+  proc sortCargo(x, y: LocalCargoData): int =
+    case cargoSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of durabilityAsc:
+      if x.damage < y.damage:
+        return 1
+      else:
+        return -1
+    of durabilityDesc:
+      if x.damage > y.damage:
+        return 1
+      else:
+        return -1
+    of typeAsc:
+      if x.itemType < y.itemType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.itemType > y.itemType:
+        return 1
+      else:
+        return -1
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
