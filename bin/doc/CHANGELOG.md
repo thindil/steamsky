@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about the player's ship's cargo
 - Tooltip for an item's durability in the player's ship's cargo
 - Saving the map and the player's ship
+- Crashing on Windows
 
 ## [9.9] - 2024-04-14
 
