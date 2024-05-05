@@ -19,7 +19,7 @@
 ## variables, loading the game data, etc.
 
 import std/[os, strutils, tables, xmlparser, xmltree]
-import contracts
+import contracts, nimalyzer
 import types
 
 type
@@ -173,8 +173,6 @@ var
     ## The list of all available factions in the game
   itemsList*: Table[Positive, ObjectData] = initTable[Positive, ObjectData]()
     ## The list of prototypes of all items availabla in the game
-  skyBases*: array[BasesRange, BaseRecord]
-    ## The list of all bases in the game
   modulesList* = initTable[Positive, BaseModuleData]()
     ## The list of prototypes of all ships' modules available in the game
   recipesList* = initTable[string, CraftData]()
@@ -207,6 +205,11 @@ var
     ## The enemy information
 {.warning[UnsafeDefault]: on.}
 {.warning[UnsafeSetLen]: on.}
+
+{.push ruleOff: "varDeclared".}
+var skyBases*: array[BasesRange, BaseRecord]
+    ## The list of all bases in the game
+{.push ruleOn: "varDeclared".}
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
     tags: [], contractual.} =
