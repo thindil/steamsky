@@ -35,26 +35,26 @@ suite "Unit tests for events module":
   skyMap[1][1].baseIndex = 1
   eventsList = @[]
 
-  test "Testing generateEnemies.":
+  test "Generating enemies.":
     var enemies: seq[Positive] = @[]
     generateEnemies(enemies)
     check:
       enemies.len > 0
 
-  test "Testing updateEvents.":
+  test "Updating events.":
     updateEvents(1)
 
-  test "Testing deleteEvent.":
+  test "Deleting an event.":
     eventsList.add(EventData(eType: doublePrice, skyX: 1, skyY: 1, itemIndex: 1, time: 10))
     deleteEvent(0)
     check:
       eventsList.len == 0
 
-  test "Testing recoverBase.":
+  test "Recovering a base.":
     skyBases[2].population = 0
     recoverBase(2)
     check:
       skyBases[2].population > 0
 
-  test "Testing generateTraders.":
+  test "Generating traders.":
     generateTraders()
