@@ -103,15 +103,14 @@ package body Maps.UI.Commands is
       use Ships;
 
       function Move_Ada_Ship_Command
-        (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-         Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
          Import => True,
          Convention => C,
          External_Name => "moveShipCommand";
    begin
       if Move_Ada_Ship_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv) =
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
         TCL_OK then
          Get_Ship_From_Nim(Ship => Player_Ship);
          Get_Map_Y_Loop :
