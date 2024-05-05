@@ -24,10 +24,7 @@ package WaitMenu is
    -- FUNCTION
    -- Add Tcl commands related to the waiting
    -- SOURCE
-   procedure Add_Commands with
-      Import => True,
-      Convention => C,
-      External_Name => "addAdaWaitCommands";
+   procedure Add_Commands;
    -- ****
 
 end WaitMenu;
