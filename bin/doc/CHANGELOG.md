@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
-- Updated lookg of the dialog used to buy or sell items in bases
+- Updated the look of the dialog used to buy or sell items in bases
 
 ### Fixed
 - Showing information about the selected crew member
