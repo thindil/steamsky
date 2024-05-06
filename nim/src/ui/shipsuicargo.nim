@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[config, game, items, shipscargo, tk]
-import coreui, table
+import coreui, dialogs, table
 
 var
   cargoTable: TableWidget
@@ -272,11 +272,34 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   return showCargoCommand(clientData = clientData, interp = interp, argc = 1,
       argv = @["ShowCargo".cstring])
 
+proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let
+    itemIndex = ($argv[1]).parseInt
+    itemDialog = createDialog(name = ".itemdialog", title = "Give " &
+        getItemName(item = playerShip.cargo[itemIndex]) &
+        " from the ship's cargo to the selected crew member", titleWidth = 370, columns = 3)
+  var label = itemDialog & ".memberlbl"
+  tclEval(script = "ttk::label " & label & " -text {To:}")
+  tclEval(script = "grid " & label)
+  var membersNames = ""
+  for member in playerShip.crew:
+    membersNames.add(y = " " & member.name)
+  let crewBox = itemDialog & ".member"
+  tclEval(script = "ttk::combobox " & crewBox & " -state readonly -width 14")
+  tclEval(script = crewBox & " configure -values [list" & membersNames & "]")
+  tclEval(script = crewBox & " current 0")
+  tclEval(script = "grind " & crewBox & " -column 1 -row 1")
+  tclEval(script = "bind " & crewBox & " <<ComboboxSelected>> {UpdateMaxGiveAmount " &
+      $argv[1] & "}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowCargo", showCargoCommand)
 #    addCommand("SortShipCargo", sortCargoCommand)
+#    addCommand("ShowGiveItem", showGiveItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
