@@ -286,9 +286,9 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
     membersNames.add(y = " " & member.name)
   let crewBox = itemDialog & ".member"
   tclEval(script = "ttk::combobox " & crewBox & " -state readonly -width 14")
-  tclEval(script = crewBox & " configure -values [list" & membersNames & "]")
+  tclEval(script = crewBox & " configure -values [list " & membersNames & "]")
   tclEval(script = crewBox & " current 0")
-  tclEval(script = "grind " & crewBox & " -column 1 -row 1")
+  tclEval(script = "grid " & crewBox & " -column 1 -row 1")
   tclEval(script = "bind " & crewBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   tclEval(script = "bind " & crewBox & " <<ComboboxSelected>> {UpdateMaxGiveAmount " &
       $argv[1] & "}")
@@ -317,7 +317,9 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tooltip::tooltip " & button & " \"Give the item\"")
   tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   button = itemDialog & ".cancelbutton"
-  tclEval(script = "ttk::button " & button & " -column 1 -row 4 -padx {5 15} -pady 5 -sticky w")
+  tclEval(script = "ttk::button " & button &
+      " -image cancelicon -command {CloseDialog " & itemDialog & "} -style Dialogred.TButton -text Close")
+  tclEval(script = "grid " & button & " -column 1 -row 4 -padx {5 15} -pady 5 -sticky w")
   tclEval(script = "tooltip::tooltip " & button & " \"Cancel giving and close dialog. \\[Escape key\\]\"")
   tclEval(script = "focus " & button)
   tclEval(script = "bind " & button & " <Tab> {focus .itemdialog.maxbutton;break}")
