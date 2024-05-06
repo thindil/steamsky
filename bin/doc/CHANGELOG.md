@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Tooltip for an item's durability in the player's ship's cargo
 - Saving the map and the player's ship
 - Crashing on Windows
+- Sorting items in the trade screen doesn't remember the selected type
 
 ## [9.9] - 2024-04-14
 
