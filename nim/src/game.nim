@@ -173,31 +173,34 @@ var
     ## The list of all available factions in the game
   itemsList*: Table[Positive, ObjectData] = initTable[Positive, ObjectData]()
     ## The list of prototypes of all items availabla in the game
-  modulesList* = initTable[Positive, BaseModuleData]()
+  modulesList*: Table[Positive, BaseModuleData] = initTable[Positive,
+      BaseModuleData]()
     ## The list of prototypes of all ships' modules available in the game
-  recipesList* = initTable[string, CraftData]()
+  recipesList*: Table[string, CraftData] = initTable[string, CraftData]()
     ## The list of all available crafting recipes in the game
-  goalsList* = initTable[Positive, GoalData]()
+  goalsList*: Table[Positive, GoalData] = initTable[Positive, GoalData]()
     ## The list of available goals in the game
-  playerCareer*: string
+  playerCareer*: string = ""
     ## Index of the career of the player selected when starting a new game
-  knownRecipes*: seq[string]
+  knownRecipes*: seq[string] = @[]
     ## The list of known recipes by the player
-  messagesList*: seq[MessageData]
+  messagesList*: seq[MessageData] = @[]
     ## The list of in-game messages
-  eventsList*: seq[EventData]
+  eventsList*: seq[EventData] = @[]
     ## The list of available events in the game
   playerShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1)
     ## The player's ship's data
   npcShip*: ShipRecord = ShipRecord(skyX: 1, skyY: 1)
     ## The npc ship like enemy, trader, etc
-  protoShipsList* = initTable[Positive, ProtoShipData]()
+  protoShipsList*: Table[Positive, ProtoShipData] = initTable[Positive,
+      ProtoShipData]()
     ## The list of prototypes of ships available in the game
-  protoMobsList* = initTable[Positive, ProtoMobRecord]()
+  protoMobsList*: Table[Positive, ProtoMobRecord] = initTable[Positive,
+      ProtoMobRecord]()
     ## The list of prototypes of all mobs availabla in the game
-  gameDate*: DateRecord
+  gameDate*: DateRecord = startDate
     ## The current time in the game
-  traderCargo*: seq[BaseCargo]
+  traderCargo*: seq[BaseCargo] = @[]
     ## The current trader's ship's cargo
   harpoonDuration*: Natural = 0
     ## How long in combat rounds the player's ship will be stopped by an enemy's harpoon
@@ -208,7 +211,7 @@ var
 
 {.push ruleOff: "varDeclared".}
 var skyBases*: array[BasesRange, BaseRecord]
-    ## The list of all bases in the game
+  ## The list of all bases in the game
 {.push ruleOn: "varDeclared".}
 
 proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
@@ -245,7 +248,7 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           return key
       return -1
 
-    let gameXml = try:
+    let gameXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -295,7 +298,7 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         var newSkill: SkillRecord = SkillRecord(attribute: 1)
         newSkill.name = gameNode.attr(name = "name")
         newSkill.tool = gameNode.attr(name = "tool")
-        let attributeName = gameNode.attr(name = "attribute")
+        let attributeName: string = gameNode.attr(name = "attribute")
         for index, attribute in attributesList.pairs():
           if attribute.name == attributeName:
             newSkill.attribute = index
@@ -473,7 +476,7 @@ proc getAdaSkillTools(skillIndex: cint; tools: var array[16, array[2,
   tools[0] = [-1.cint, -1.cint]
   if not skillsList.contains(key = skillIndex):
     return
-  var index = 0
+  var index: Natural = 0
   try:
     for toolQuality in skillsList[skillIndex].toolsQuality:
       tools[index] = [toolQuality.level.cint, toolQuality.quality.cint]
