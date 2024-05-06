@@ -289,8 +289,22 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = crewBox & " configure -values [list" & membersNames & "]")
   tclEval(script = crewBox & " current 0")
   tclEval(script = "grind " & crewBox & " -column 1 -row 1")
+  tclEval(script = "bind " & crewBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   tclEval(script = "bind " & crewBox & " <<ComboboxSelected>> {UpdateMaxGiveAmount " &
       $argv[1] & "}")
+  var button = itemDialog & ".maxbutton"
+  tclEval(script = "ttk::button " & button)
+  tclEval(script = "grid " & button & " -row 2 -pady {0 5}")
+  tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  tclEval(script = "tooltip::tooltip " & button & " \"Set the max amount as amount to give for the selected crew member.\"")
+  let amountBox = itemDialog & ".giveamount"
+  tclEval(script = "ttk::spinbox " & amountBox & " -width 14 -from 1 -to " &
+      $playerShip.cargo[itemIndex].amount &
+      " -validate key -validatecommand {CheckAmount %W " & $(itemIndex + 1) &
+      " %P " & itemDialog & ".givebutton} -command {ValidateAmount " &
+      itemDialog & ".giveamount " & $(itemIndex + 1) & " " & itemDialog & ".givebutton}")
+  tclEval(script = amountBox & " set 1")
+  tclEval(script = "grid " & amountBox & " -column 1 -row 2 -pady {0 5}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
