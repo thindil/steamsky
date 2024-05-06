@@ -49,10 +49,9 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the amount of rows")
   deleteWidgets(startIndex = 3, endIndex = rows - 1, frame = cargoInfoFrame)
-  cargoTable = createTable(parent = cargoInfoFrame, headers = @["", "Name",
-      "Durability", "Type", "Amount", "Weight"],
-      scrollbar = mainPaned & ".shipinfoframe.cargo.scrolly",
-      command = "SortShipCargo",
+  cargoTable = createTable(parent = cargoInfoFrame, headers = @["Name",
+      "Durability", "Type", "Amount", "Weight"], scrollbar = mainPaned &
+      ".shipinfoframe.cargo.scrolly", command = "SortShipCargo",
       tooltipText = "Press mouse button to sort the cargo.")
   if cargoIndexes.len != playerShip.cargo.len:
     cargoIndexes = @[]
