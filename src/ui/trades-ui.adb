@@ -207,11 +207,9 @@ package body Trades.UI is
       Current_Item_Index: Positive := 1;
    begin
       Get_Ship_From_Nim(Ship => Player_Ship);
-      Base_Index :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Set_Base_Cargo(Base_Index => Base_Index);
-      Event_Index :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
+      Event_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
@@ -1475,6 +1473,10 @@ package body Trades.UI is
       Local_Items: Items_Container.Vector;
       --## rule on IMPROPER_INITIALIZATION
       --## rule off DIRECTLY_ACCESSED_GLOBALS
+      Type_Box: constant Ttk_ComboBox :=
+        Get_Widget
+          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type",
+           Interp => Interp);
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Items_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1743,7 +1745,7 @@ package body Trades.UI is
       return
         Show_Trade_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "ShowTrade" & "All");
+           Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
    end Sort_Items_Command;
 
    -- ****o* TUI/TUI.Trade_Item_Command
