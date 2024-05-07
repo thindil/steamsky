@@ -271,9 +271,12 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCargo".cstring])
 
 proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    itemIndex = ($argv[1]).parseInt
+    itemIndex = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the item's index.")
     itemDialog = createDialog(name = ".itemdialog", title = "Give " &
         getItemName(item = playerShip.cargo[itemIndex]) &
         " from the ship's cargo to the selected crew member", titleWidth = 370, columns = 3)
