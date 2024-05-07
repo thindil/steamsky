@@ -9,27 +9,28 @@ suite "Unit tests for factions module":
   loadCareers("../bin/data/careers.dat")
   loadFactions("../bin/data/factions.dat")
 
-  test "Testing getReputation.":
-    checkpoint "Gaining reputation in the same faction."
+  test "Gaining reputation in the same faction.":
     check:
       getReputation("POLEIS", "POLEIS") == 0
-    checkpoint "Gaining reputation in enemy faction."
+
+  test "Gaining reputation in enemy faction.":
     check:
       getReputation("POLEIS", "PIRATES") == -10
 
-  test "Testing isFriendly.":
-    checkpoint "Checking if friendly factions are friendly"
+  test "Checking if friendly factions are friendly":
     check:
       isFriendly("POLEIS", "INDEPENDENT")
-    checkpoint "Checking if enemy factions are unfriendly"
+
+  test "Checking if enemy factions are unfriendly":
     check:
       not isFriendly("POLEIS", "PIRATES")
 
-  test "Testing getRandomFaction.":
+  test "Get random faction index":
     let factionIndex = getRandomFaction()
-    checkpoint "Get random faction index"
     check:
       factionIndex.len > 0
-    checkpoint "Get existing random faction index"
+
+  test "Get existing random faction index":
+    let factionIndex = getRandomFaction()
     check:
       factionIndex in factionsList
