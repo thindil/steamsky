@@ -19,8 +19,6 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
--- with Tcl.Tk.Ada.Event;
--- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton;
@@ -29,8 +27,6 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tk.Ada.Widgets.TtkLabel;
--- with Tcl.Tklib.Ada.Tooltip;
 with CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
@@ -109,131 +105,6 @@ package body Ships.UI.Cargo is
       Convention => C,
       External_Name => "showGiveItemCommand";
       -- ****
-
---   function Show_Give_Item_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Tcl.Tk.Ada.Event;
---      use Tcl.Tklib.Ada.Tooltip;
---      use Tiny_String;
---      use Tcl.Tk.Ada.Widgets.TtkLabel;
---
---      Item_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Item_Dialog: constant Ttk_Frame :=
---        Create_Dialog
---          (Name => ".itemdialog",
---           Title =>
---             "Give " &
---             Get_Item_Name
---               (Item =>
---                  Inventory_Container.Element
---                    (Container => Player_Ship.Cargo, Index => Item_Index)) &
---             " from the ship's cargo to the selected crew member",
---           Title_Width => 370, Columns => 3);
---      Button: Ttk_Button := Create(pathName => Item_Dialog & ".maxbutton");
---      Label: Ttk_Label;
---      Amount_Box: constant Ttk_SpinBox :=
---        Create
---          (pathName => Item_Dialog & ".giveamount",
---           options =>
---             "-width 14 -from 1 -to" &
---             Positive'Image
---               (Inventory_Container.Element
---                  (Container => Player_Ship.Cargo, Index => Item_Index)
---                  .Amount) &
---             " -validate key -validatecommand {CheckAmount %W" &
---             Positive'Image(Item_Index) & " %P " & Item_Dialog &
---             ".givebutton} -command {ValidateAmount " & Item_Dialog &
---             ".giveamount" & Positive'Image(Item_Index) & " " & Item_Dialog &
---             ".givebutton}");
---      Crew_Box: constant Ttk_ComboBox :=
---        Create
---          (pathName => Item_Dialog & ".member",
---           options => "-state readonly -width 14");
---      Members_Names: Unbounded_String := Null_Unbounded_String;
---   begin
---      Label :=
---        Create
---          (pathName => Item_Dialog & ".memberlbl", options => "-text {To:}");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
---      Load_Crew_Names_Loop :
---      for Member of Player_Ship.Crew loop
---         Append
---           (Source => Members_Names,
---            New_Item => " " & To_String(Source => Member.Name));
---      end loop Load_Crew_Names_Loop;
---      configure
---        (Widgt => Crew_Box,
---         options =>
---           "-values [list" & To_String(Source => Members_Names) & "]");
---      Current(ComboBox => Crew_Box, NewIndex => "0");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Box, Options => "-column 1 -row 1");
---      Bind
---        (Widgt => Crew_Box, Sequence => "<Escape>",
---         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
---      Bind
---        (Widgt => Crew_Box, Sequence => "<<ComboboxSelected>>",
---         Script =>
---           "{UpdateMaxGiveAmount " & CArgv.Arg(Argv => Argv, N => 1) & "}");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 2 -pady {0 5}");
---      Bind
---        (Widgt => Button, Sequence => "<Escape>",
---         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
---      Add
---        (Widget => Button,
---         Message =>
---           "Set the max amount as amount to give for the selected crew member.");
---      Set(SpinBox => Amount_Box, Value => "1");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Amount_Box, Options => "-column 1 -row 2 -pady {0 5}");
---      Bind
---        (Widgt => Amount_Box, Sequence => "<Escape>",
---         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
---      Label :=
---        Create
---          (pathName => Item_Dialog & ".errorlbl",
---           options => "-style Headerred.TLabel -wraplength 350");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
---      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
---      Button :=
---        Create
---          (pathName => Item_Dialog & ".givebutton",
---           options =>
---             "-image give2icon -command {GiveItem " &
---             CArgv.Arg(Argv => Argv, N => 1) &
---             "} -style Dialoggreen.TButton -text Give");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Button,
---         Options => "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
---      Add(Widget => Button, Message => "Give the item");
---      Bind
---        (Widgt => Button, Sequence => "<Escape>",
---         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
---      Button :=
---        Create
---          (pathName => Item_Dialog & ".cancelbutton",
---           options =>
---             "-image cancelicon -command {CloseDialog " & Item_Dialog &
---             "} -style Dialogred.TButton -text Close");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Button,
---         Options => "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
---      Add
---        (Widget => Button,
---         Message => "Cancel giving and close dialog. \[Escape key\]");
---      Focus(Widgt => Button);
---      Bind
---        (Widgt => Button, Sequence => "<Tab>",
---         Script => "{focus .itemdialog.maxbutton;break}");
---      Bind
---        (Widgt => Button, Sequence => "<Escape>",
---         Script => "{" & Button & " invoke;break}");
---      Show_Dialog(Dialog => Item_Dialog);
---      Generate(Window => Crew_Box, EventName => "<<ComboboxSelected>>");
---      return TCL_OK;
---   end Show_Give_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Give_Item_Command
    -- FUNCTION
