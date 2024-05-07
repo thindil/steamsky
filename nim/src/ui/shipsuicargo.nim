@@ -155,11 +155,10 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortShipCargo x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
-      (if argv[1] == "-1": Positive.high else: getColumnNumber(
-          table = cargoTable, xPosition = ($argv[1]).parseInt))
+  let column: Positive = try:
+      getColumnNumber(table = cargoTable, xPosition = ($argv[1]).parseInt)
     except:
-      return showError(message = "Can't get the column number.")
+      Positive.high
   case column
   of 1:
     if cargoSortOrder == nameAsc:
