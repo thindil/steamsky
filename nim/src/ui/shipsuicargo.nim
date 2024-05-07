@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[config, crewinventory, game, items, messages, shipscargo, tk, types]
-import coreui, dialogs, table
+import coreui, dialogs, table, updateheader, utilsui2
 
 var
   cargoTable: TableWidget
@@ -364,7 +364,15 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   updateInventory(memberIndex = memberIndex, amount = amount,
       protoIndex = item.protoIndex, durability = item.durability,
       price = item.price, ship = playerShip)
-  return tclOk
+  updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
+      price = item.price)
+  tclEval(script = "destroy " & itemDialog)
+  tclEval(script = "busy forget " & mainPaned)
+  tclEval(script = "busy forget " & gameHeader)
+  updateHeader()
+  updateMessages()
+  return sortCargoCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["SortShipCargo".cstring, "-1"])
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
