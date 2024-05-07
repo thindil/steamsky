@@ -221,7 +221,7 @@ proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
   ## * skillName - the name of the skill which index will be looking for
   ##
   ## Returns the index of the selected skill or 0 if the skill not found
-  for key, skill in skillsList.pairs:
+  for key, skill in skillsList:
     if skill.name == skillName:
       return key
   return 0
@@ -243,7 +243,7 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       ##                   for
       ##
       ## Returns the index of the selected attribute or -1 if the attribute not found
-      for key, attribute in attributesList.pairs:
+      for key, attribute in attributesList:
         if attribute.name == attributeName:
           return key
       return -1
@@ -509,8 +509,7 @@ proc getAdaGameIntegers(values: var array[0..10, cint]) {.raises: [], tags: [],
 proc getAdaGameString(name, value: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
   ## Temporary C binding
-  case $name
-  of "playerCareer":
+  if $name == "playerCareer":
     playerCareer = $value
   else:
     discard
