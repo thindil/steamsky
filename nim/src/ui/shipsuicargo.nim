@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import ../[config, game, items, shipscargo, tk]
+import ../[config, crewinventory, game, items, messages, shipscargo, tk, types]
 import coreui, dialogs, table
 
 var
@@ -343,6 +343,29 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "event generate " & crewBox & " <<ComboboxSelected>>")
   return tclOk
 
+proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let
+    itemDialog = ".itemdialog"
+    spinBox = itemDialog & ".giveamount"
+    amount = tclEval2(script = spinBox & " get").parseInt
+    comboBox = itemDialog & ".member"
+    memberIndex = tclEval2(script = comboBox & " current").parseInt
+    itemIndex = ($argv[1]).parseInt - 1
+    item = playerShip.cargo[itemIndex]
+  if freeInventory(memberIndex = memberIndex, amount = -(itemsList[
+      item.protoIndex].weight * amount)) < 0:
+    showMessage(text = "No free space in " & playerShip.crew[memberIndex].name &
+        "'s inventory for that amount of " & getItemName(item = item),
+        title = "Can't give item")
+    return tclOk
+  addMessage(message = "You gave " & $amount & " " & getItemName(item = item) &
+      " to " & playerShip.crew[memberIndex].name & ".", mType = otherMessage)
+  updateInventory(memberIndex = memberIndex, amount = amount,
+      protoIndex = item.protoIndex, durability = item.durability,
+      price = item.price, ship = playerShip)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -350,5 +373,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowCargo", showCargoCommand)
 #    addCommand("SortShipCargo", sortCargoCommand)
 #    addCommand("ShowGiveItem", showGiveItemCommand)
+#    addCommand("GiveItem", giveItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
