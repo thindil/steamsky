@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Saving the map and the player's ship
 - Crashing on Windows
 - Sorting items in the trade screen doesn't remember the selected type
+- Crash on loading the game's images on Windows
 
 ## [9.9] - 2024-04-14
 
