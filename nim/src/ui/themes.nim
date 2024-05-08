@@ -658,7 +658,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
         index] & "} -format {svg -scaletoheight " & $(
         gameSettings.interfaceFontSize + 8) & "}")
   tclEval(script = "ttk::theme::" & tclEval2(script = "ttk::style theme use") &
-      "::LoadImages " & theme.fileName.parentDir & " " & $(
+      "::LoadImages {" & theme.fileName.parentDir & "} " & $(
       gameSettings.interfaceFontSize + 8))
 
 proc setTheme*() {.sideEffect, raises: [], tags: [].} =
