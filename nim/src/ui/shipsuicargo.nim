@@ -344,26 +344,42 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let
     itemDialog = ".itemdialog"
     spinBox = itemDialog & ".giveamount"
-    amount = tclEval2(script = spinBox & " get").parseInt
+    amount = try:
+        tclEval2(script = spinBox & " get").parseInt
+      except:
+        return showError(message = "Can't get the amount.")
     comboBox = itemDialog & ".member"
-    memberIndex = tclEval2(script = comboBox & " current").parseInt
-    itemIndex = ($argv[1]).parseInt - 1
+    memberIndex = try:
+        tclEval2(script = comboBox & " current").parseInt
+      except:
+        return showError(message = "Can't ge the member's index.")
+    itemIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the item's index.")
     item = playerShip.cargo[itemIndex]
-  if freeInventory(memberIndex = memberIndex, amount = -(itemsList[
-      item.protoIndex].weight * amount)) < 0:
-    showMessage(text = "No free space in " & playerShip.crew[memberIndex].name &
-        "'s inventory for that amount of " & getItemName(item = item),
-        title = "Can't give item")
-    return tclOk
+  try:
+    if freeInventory(memberIndex = memberIndex, amount = -(itemsList[
+        item.protoIndex].weight * amount)) < 0:
+      showMessage(text = "No free space in " & playerShip.crew[
+          memberIndex].name & "'s inventory for that amount of " & getItemName(
+          item = item), title = "Can't give item")
+      return tclOk
+  except:
+    return showError(message = "Can't get the item.")
   addMessage(message = "You gave " & $amount & " " & getItemName(item = item) &
       " to " & playerShip.crew[memberIndex].name & ".", mType = otherMessage)
-  updateInventory(memberIndex = memberIndex, amount = amount,
-      protoIndex = item.protoIndex, durability = item.durability,
-      price = item.price, ship = playerShip)
+  try:
+    updateInventory(memberIndex = memberIndex, amount = amount,
+        protoIndex = item.protoIndex, durability = item.durability,
+        price = item.price, ship = playerShip)
+  except:
+    return showError(message = "Can't update the member's inventory.")
   updateCargo(ship = playerShip, amount = -amount, cargoIndex = itemIndex,
       price = item.price)
   tclEval(script = "destroy " & itemDialog)
