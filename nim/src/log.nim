@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,7 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to logging various messages to the log file.
+## What exactly is logged, depends on the logging's level.
+
 import std/logging
+import contracts
 import game
 
 # Workaround bug in loggind.nim in Nim 1.6.14
@@ -33,7 +37,7 @@ type DebugTypes* = enum
 var debugMode*: DebugTypes = none ## The debug mode of the game.
 
 proc logMessage(message: cstring; debugType: cint) {.exportc, sideEffect,
-    raises: [], tags: [RootEffect].} =
+    raises: [], tags: [RootEffect], contractual.} =
   ## Write the selected message to the log file, C version
   ##
   ## * message   - The message which will be written to the file
@@ -42,20 +46,20 @@ proc logMessage(message: cstring; debugType: cint) {.exportc, sideEffect,
   if debugType != debugMode.cint and debugMode != everything:
     return
   try:
-    log(level = lvlError, $message)
+    log(level = lvlError, args = $message)
   except Exception:
     echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
 
 proc logMessage*(message: string; debugType: DebugTypes) {.sideEffect, raises: [],
-    tags: [RootEffect].} =
+    tags: [RootEffect], contractual.} =
   ## Write the selected message to the log file, Nim version
   ##
   ## * message   - The message which will be written to the file
   ## * debugType - The type of message which will be written. If different
   ##               than the game debug mode (except everything), don't write it
-  logMessage(message = message.cstring, debugType = ord(debugType).cint)
+  logMessage(message = message.cstring, debugType = debugType.ord.cint)
 
-proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect].} =
+proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
   ## Start logging the game. Set the logger.
   if debugMode == none:
     return
@@ -63,6 +67,6 @@ proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect].} =
     let logger: FileLogger = newFileLogger(filename = saveDirectory &
         "debug.log", fmtStr = "[$datetime] - $levelname: ")
     addHandler(handler = logger)
-    log(level = lvlError, "Starting game in debug mode.")
+    log(level = lvlError, args = "Starting game in debug mode.")
   except IOError, Exception:
     echo ("Can't start log for the game, reason: " & getCurrentExceptionMsg())
