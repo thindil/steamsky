@@ -23,17 +23,16 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 -- with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with CoreUI;
-with Crew.Inventory; use Crew.Inventory;
+with Crew.Inventory;
 with Dialogs; use Dialogs;
-with Maps.UI; use Maps.UI;
-with Messages; use Messages;
+with Maps.UI;
+with Messages;
 with Missions;
-with Ships.Cargo; use Ships.Cargo;
+with Ships.Cargo;
 with Stories;
 with Utils.UI; use Utils.UI;
 
@@ -265,7 +264,10 @@ package body Ships.UI.Cargo is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Maps.UI;
+      use Messages;
       use Missions;
+      use Ships.Cargo;
       use Stories;
       use Tiny_String;
 
@@ -434,6 +436,8 @@ package body Ships.UI.Cargo is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Crew.Inventory;
 
       Crew_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => ".itemdialog.member", Interp => Interp);
