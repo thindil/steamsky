@@ -402,6 +402,11 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCargoCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["SortShipCargo".cstring, "-1"])
 
+proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let itemIndex = ($argv[1]).parseInt - 1
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -410,5 +415,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("SortShipCargo", sortCargoCommand)
 #    addCommand("ShowGiveItem", showGiveItemCommand)
 #    addCommand("GiveItem", giveItemCommand)
+#    addCommand("ShowDropItem", showDropItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
