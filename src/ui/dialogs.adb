@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
+-- with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Tcl; use Tcl;
@@ -26,12 +26,12 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip;
-with Ships;
+-- with Tcl.Tklib.Ada.Tooltip;
+-- with Ships;
 with Utils.UI;
 
 package body Dialogs is
@@ -612,173 +612,182 @@ package body Dialogs is
      (Title, Command, Action: String;
       Item_Index: Inventory_Container.Extended_Index;
       Max_Amount, Cost: Natural := 0) is
-      use Ada.Characters.Handling;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-      use Tcl.Tklib.Ada.Tooltip;
-      use Ships;
-
-      Item_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".itemdialog", Title => Title, Title_Width => 275,
-           Columns => 2);
-      Button: Ttk_Button :=
-        Create
-          (pathName => Item_Dialog & ".dropbutton",
-           options =>
-             "-command {" & Command & "} -style Dialoggreen.TButton" &
-             (if Action = "drop" then " -image drop2icon"
-              elsif Action = "take" then " -image give2icon"
-              elsif Action = "buy" then " -image buyicon"
-              elsif Action = "sell" then " -image sellicon" else "") &
-             " -text {" & To_Upper(Item => Action(Action'First)) &
-             Action(Action'First + 1 .. Action'Last) & "}");
-      Label: Ttk_Label;
-      Amount_Box: Ttk_SpinBox;
-      Max_Button: Ttk_Button;
+--      use Ada.Characters.Handling;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+--      use Tcl.Tklib.Ada.Tooltip;
+--      use Ships;
+--
+--      Item_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".itemdialog", Title => Title, Title_Width => 275,
+--           Columns => 2);
+--      Button: Ttk_Button :=
+--        Create
+--          (pathName => Item_Dialog & ".dropbutton",
+--           options =>
+--             "-command {" & Command & "} -style Dialoggreen.TButton" &
+--             (if Action = "drop" then " -image drop2icon"
+--              elsif Action = "take" then " -image give2icon"
+--              elsif Action = "buy" then " -image buyicon"
+--              elsif Action = "sell" then " -image sellicon" else "") &
+--             " -text {" & To_Upper(Item => Action(Action'First)) &
+--             Action(Action'First + 1 .. Action'Last) & "}");
+--      Label: Ttk_Label;
+--      Amount_Box: Ttk_SpinBox;
+--      Max_Button: Ttk_Button;
+      procedure Show_Ada_Manipulate_Item
+        (Ti, Com, Act: chars_ptr; I_Index, M_Amount, C: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "showAdaManipulateItem";
    begin
-      if Action = "drop" then
-         Add
-           (Widget => Button,
-            Message => "Drop the item from the ship's cargo");
-      elsif Action = "take" then
-         Add(Widget => Button, Message => "Take the item from the base");
-      elsif Action = "buy" then
-         Add
-           (Widget => Button,
-            Message => "Buy the selected amount of the item");
-      elsif Action = "sell" then
-         Add
-           (Widget => Button,
-            Message => "Sell the selected amount of the item");
-      end if;
-      if Max_Amount = 0 then
-         Amount_Box :=
-           Create
-             (pathName => Item_Dialog & ".amount",
-              options =>
-                "-width 10 -from 1 -to" &
-                Positive'Image
-                  (Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Amount) &
-                " -validate key -validatecommand {CheckAmount " & Item_Dialog &
-                ".amount" & Positive'Image(Item_Index) & " %P " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
-                Button & "} -command {ValidateAmount " & Item_Dialog &
-                ".amount" & Positive'Image(Item_Index) & " " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
-                Button & "}");
-      else
-         Amount_Box :=
-           Create
-             (pathName => Item_Dialog & ".amount",
-              options =>
-                "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
-                " -validate key -validatecommand {CheckAmount " & Item_Dialog &
-                ".amount" & Positive'Image(Item_Index) & " %P " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
-                Button & "} -command {ValidateAmount " & Item_Dialog &
-                ".amount" & Positive'Image(Item_Index) & " " & Action &
-                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
-                Button & "}");
-      end if;
-      if Max_Amount = 0 then
-         Max_Button :=
-           Create
-             (pathName => Item_Dialog & ".amountlbl",
-              options =>
-                "-text {Amount (max:" &
-                Positive'Image
-                  (Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Amount) &
-                "):} -command {" & Amount_Box & " set" &
-                Positive'Image
-                  (Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Amount) &
-                ";" & Amount_Box & " validate" & "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
-         Add
-           (Widget => Max_Button,
-            Message => "Max amount of items to " & Action & ".");
-         Bind
-           (Widgt => Max_Button, Sequence => "<Escape>",
-            Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
-      else
-         Max_Button :=
-           Create
-             (pathName => Item_Dialog & ".amountlbl",
-              options =>
-                "-text {Amount (max:" & Positive'Image(Max_Amount) &
-                "):} -command {" & Amount_Box & " set" &
-                Positive'Image(Max_Amount) & ";" & Amount_Box & " validate" &
-                "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
-         Add
-           (Widget => Max_Button,
-            Message =>
-              "Max amount of items to " & Action & "." &
-              (if Action in "buy" | "sell" then
-                 " It depends on bonuses\nfrom the base's reputation and trader's skill level too."
-               else ""));
-         Bind
-           (Widgt => Max_Button, Sequence => "<Escape>",
-            Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
-      end if;
-      Set(SpinBox => Amount_Box, Value => "1");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Amount_Box, Options => "-column 1 -row 1 -padx {0 5}");
-      Bind
-        (Widgt => Amount_Box, Sequence => "<Escape>",
-         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
-      if Cost > 0 then
-         Label :=
-           Create
-             (pathName => Item_Dialog & ".costlbl",
-              options =>
-                "-text {Total " &
-                (if Action = "buy" then "cost:" else "gain:") & "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
-         Label :=
-           Create
-             (pathName => Item_Dialog & ".cost2lbl",
-              options =>
-                "-text {" & Natural'Image(Cost) & " " &
-                To_String(Source => Money_Name) & "} -style " &
-                (if Action = "buy" then "Golden.TLabel"
-                 else "Headergreen.TLabel"));
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label, Options => "-column 1 -row 2 -padx {0 5}");
-      end if;
-      Label :=
-        Create
-          (pathName => Item_Dialog & ".errorlbl",
-           options => "-style Headerred.TLabel -wraplength 370");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-column 0 -row 4 -pady {0 5}");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
-      Button :=
-        Create
-          (pathName => Item_Dialog & ".cancelbutton",
-           options =>
-             "-command {CloseDialog " & Item_Dialog & "}" &
-             " -image cancelicon -style Dialogred.TButton -text {Close}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
-      Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
-      Focus(Widgt => Button);
-      Bind
-        (Widgt => Button, Sequence => "<Tab>",
-         Script => "{focus .itemdialog.dropbutton;break}");
-      Bind
-        (Widgt => Button, Sequence => "<Escape>",
-         Script => "{" & Button & " invoke;break}");
-      Show_Dialog(Dialog => Item_Dialog);
+      Show_Ada_Manipulate_Item
+        (Ti => New_String(Str => Title), Com => New_String(Str => Command),
+         Act => New_String(Str => Action), I_Index => Item_Index,
+         M_Amount => Max_Amount, C => Cost);
+--      if Action = "drop" then
+--         Add
+--           (Widget => Button,
+--            Message => "Drop the item from the ship's cargo");
+--      elsif Action = "take" then
+--         Add(Widget => Button, Message => "Take the item from the base");
+--      elsif Action = "buy" then
+--         Add
+--           (Widget => Button,
+--            Message => "Buy the selected amount of the item");
+--      elsif Action = "sell" then
+--         Add
+--           (Widget => Button,
+--            Message => "Sell the selected amount of the item");
+--      end if;
+--      if Max_Amount = 0 then
+--         Amount_Box :=
+--           Create
+--             (pathName => Item_Dialog & ".amount",
+--              options =>
+--                "-width 10 -from 1 -to" &
+--                Positive'Image
+--                  (Inventory_Container.Element
+--                     (Container => Player_Ship.Cargo, Index => Item_Index)
+--                     .Amount) &
+--                " -validate key -validatecommand {CheckAmount " & Item_Dialog &
+--                ".amount" & Positive'Image(Item_Index) & " %P " & Action &
+--                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+--                Button & "} -command {ValidateAmount " & Item_Dialog &
+--                ".amount" & Positive'Image(Item_Index) & " " & Action &
+--                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+--                Button & "}");
+--      else
+--         Amount_Box :=
+--           Create
+--             (pathName => Item_Dialog & ".amount",
+--              options =>
+--                "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
+--                " -validate key -validatecommand {CheckAmount " & Item_Dialog &
+--                ".amount" & Positive'Image(Item_Index) & " %P " & Action &
+--                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+--                Button & "} -command {ValidateAmount " & Item_Dialog &
+--                ".amount" & Positive'Image(Item_Index) & " " & Action &
+--                (if Cost > 0 then Positive'Image(Cost) else "") & " " &
+--                Button & "}");
+--      end if;
+--      if Max_Amount = 0 then
+--         Max_Button :=
+--           Create
+--             (pathName => Item_Dialog & ".amountlbl",
+--              options =>
+--                "-text {Amount (max:" &
+--                Positive'Image
+--                  (Inventory_Container.Element
+--                     (Container => Player_Ship.Cargo, Index => Item_Index)
+--                     .Amount) &
+--                "):} -command {" & Amount_Box & " set" &
+--                Positive'Image
+--                  (Inventory_Container.Element
+--                     (Container => Player_Ship.Cargo, Index => Item_Index)
+--                     .Amount) &
+--                ";" & Amount_Box & " validate" & "}");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
+--         Add
+--           (Widget => Max_Button,
+--            Message => "Max amount of items to " & Action & ".");
+--         Bind
+--           (Widgt => Max_Button, Sequence => "<Escape>",
+--            Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+--      else
+--         Max_Button :=
+--           Create
+--             (pathName => Item_Dialog & ".amountlbl",
+--              options =>
+--                "-text {Amount (max:" & Positive'Image(Max_Amount) &
+--                "):} -command {" & Amount_Box & " set" &
+--                Positive'Image(Max_Amount) & ";" & Amount_Box & " validate" &
+--                "}");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
+--         Add
+--           (Widget => Max_Button,
+--            Message =>
+--              "Max amount of items to " & Action & "." &
+--              (if Action in "buy" | "sell" then
+--                 " It depends on bonuses\nfrom the base's reputation and trader's skill level too."
+--               else ""));
+--         Bind
+--           (Widgt => Max_Button, Sequence => "<Escape>",
+--            Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+--      end if;
+--      Set(SpinBox => Amount_Box, Value => "1");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Amount_Box, Options => "-column 1 -row 1 -padx {0 5}");
+--      Bind
+--        (Widgt => Amount_Box, Sequence => "<Escape>",
+--         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+--      if Cost > 0 then
+--         Label :=
+--           Create
+--             (pathName => Item_Dialog & ".costlbl",
+--              options =>
+--                "-text {Total " &
+--                (if Action = "buy" then "cost:" else "gain:") & "}");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
+--         Label :=
+--           Create
+--             (pathName => Item_Dialog & ".cost2lbl",
+--              options =>
+--                "-text {" & Natural'Image(Cost) & " " &
+--                To_String(Source => Money_Name) & "} -style " &
+--                (if Action = "buy" then "Golden.TLabel"
+--                 else "Headergreen.TLabel"));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label, Options => "-column 1 -row 2 -padx {0 5}");
+--      end if;
+--      Label :=
+--        Create
+--          (pathName => Item_Dialog & ".errorlbl",
+--           options => "-style Headerred.TLabel -wraplength 370");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Button, Options => "-column 0 -row 4 -pady {0 5}");
+--      Bind
+--        (Widgt => Button, Sequence => "<Escape>",
+--         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+--      Button :=
+--        Create
+--          (pathName => Item_Dialog & ".cancelbutton",
+--           options =>
+--             "-command {CloseDialog " & Item_Dialog & "}" &
+--             " -image cancelicon -style Dialogred.TButton -text {Close}");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
+--      Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
+--      Focus(Widgt => Button);
+--      Bind
+--        (Widgt => Button, Sequence => "<Tab>",
+--         Script => "{focus .itemdialog.dropbutton;break}");
+--      Bind
+--        (Widgt => Button, Sequence => "<Escape>",
+--         Script => "{" & Button & " invoke;break}");
+--      Show_Dialog(Dialog => Item_Dialog);
    end Show_Manipulate_Item;
 
    procedure Show_Question
