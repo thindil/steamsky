@@ -25,12 +25,12 @@ suite "Unit tests for game2 module":
   skyBases[1].baseType = "1"
   playerShip.crew = @[]
 
-  test "Testing updateGame.":
+  test "Updating the game.":
     updateGame(1)
     check:
       gameDate.minutes == 1
 
-  test "Testing endGame.":
+  test "Ending the game.":
     let oldSaveDir = saveDirectory
     saveDirectory = "."
     addMessage("Test message", otherMessage)
@@ -39,7 +39,7 @@ suite "Unit tests for game2 module":
     check:
       messagesAmount() == 0
 
-  test "Testing newGame.":
+  test "Starting a new game.":
     let oldSaveDir = saveDirectory
     saveDirectory = "."
     newGame()
