@@ -327,6 +327,25 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
         "buy": "cost:" else: "gain:") & "}")
     tclEval(script = "grid " & label & " -padx {5 0}")
     label = itemDialog & ".cost2lbl"
+    tclEval(script = "ttk::label " & label & " -text { " & $cost & " " &
+        moneyName & "} -style " & (if action ==
+        "buy": "Golden.TLabel" else: "Headergreen.TLabel"))
+    tclEval(script = "grid " & label & " -column 1 -row 2 -padx {0 5}")
+  label = itemDialog & ".errorlbl"
+  tclEval(script = "ttk::label " & label & " -style Headerred.TLabel -wraplength 370")
+  tclEval(script = "grid " & label & " -columnspan 2 -padx 5")
+  tclEval(script = "grid remove " & label)
+  tclEval(script = "grid " & button & " -column 0 -row 4 -pady {0 5}")
+  tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  button = itemDialog & ".cancelbutton"
+  tclEval(script = "ttk::button " & button & " -command {CloseDialog " &
+      itemDialog & "} -image cancelicon -style Dialogred.TButton -text {Close}")
+  tclEval(script = "grid " & button & " -column 1 -row 4 -pady {0 5}")
+  tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
+  tclEval(script = "focus " & button)
+  tclEval(script = "bind " & button & " <Tab> {focus .itemdialog.dropbutton;break}")
+  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+  showDialog(dialog = itemDialog)
 
 # Temporary code for interfacing with Ada
 
@@ -371,3 +390,8 @@ proc showAdaInfo(text, parentName, title: cstring; button1,
     showInfo($text, $parentName, $title, nimButton1, nimButton2)
   except:
     discard
+
+proc showAdaManipulateItem(title, command, action: cstring; itemIndex,
+    maxAmount, cost: cint) {.exportc, raises: [], tags: [].} =
+  showManipulateItem(title = $title, command = $command, action = $action,
+      itemIndex = itemIndex - 1, maxAmount = maxAmount, cost = cost)
