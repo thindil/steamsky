@@ -172,7 +172,8 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
 
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
-    button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [], tags: [].} =
+    button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [],
+        tags: [].} =
   ## Show the dialog with the selected text to the player
   ##
   ## * text       - the text to show in the dialog. Can use special tags for colors,
@@ -217,8 +218,8 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     startIndex = tagIndex + tagName.len + 3
     tagIndex = text.find('{', startIndex)
   try:
-    discard tclEval(script = infoLabel & " configure -state disabled -height " & $(
-        tclEval2(script = infoLabel & " index end").parseFloat + 1.0))
+    discard tclEval(script = infoLabel & " configure -state disabled -height " &
+        $(tclEval2(script = infoLabel & " index end").parseFloat + 1.0))
   except ValueError:
     showError(message = "Can't show the info. Tcl result: " & tclGetResult2())
     return
@@ -261,6 +262,27 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
   tclEval(script = "grid " & buttonsFrame & " -padx 5 -pady 5")
   showDialog(dialog = infoDialog)
+
+proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
+    maxAmount: Natural = 0; cost: Natural = 0) =
+  let itemDialog = createDialog(name = ".itemdialog", title = title,
+      titleWidth = 275, columns = 2)
+  var button = itemDialog & ".dropbutton"
+  tclEval(script = "ttk::button " & button & " -command {" & command &
+      "} -style Dialoggreen.TButton" & (if action ==
+      "drop": " -image drop2icon" elif action ==
+      "take": " -image give2icon" elif action ==
+      "buy": " -image buyicon" elif action ==
+      "sell": " -image sellicon" else: "") & " -text {" &
+      action.capitalizeAscii & "}")
+  if action == "drop":
+    tclEval(script = "tooltip::tooltip " & button & " \"Drop the item from the ship's cargo\"")
+  elif action == "take":
+    tclEval(script = "tooltip::tooltip " & button & " \"Take the item from the base\"")
+  elif action == "buy":
+    tclEval(script = "tooltip::tooltip " & button & " \"Buy the selected amount of the item\"")
+  elif action == "sell":
+    tclEval(script = "tooltip::tooltip " & button & " \"Sell the selected amount of the item\"")
 
 # Temporary code for interfacing with Ada
 
