@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[config, tk]
+import ../[config, game, tk]
 import coreui
 
 type ButtonSettings* = object
@@ -283,6 +283,25 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
     tclEval(script = "tooltip::tooltip " & button & " \"Buy the selected amount of the item\"")
   elif action == "sell":
     tclEval(script = "tooltip::tooltip " & button & " \"Sell the selected amount of the item\"")
+  let amountBox = itemDialog & ".amount"
+  if maxAmount == 0:
+    tclEval(script = "ttk::spinbox " & amountBox & " -width 10 -from 1 -to " &
+        $playerShip.cargo[itemIndex].amount &
+        " -validate key -validatecommand {CheckAmount " & amountBox & " " & $(
+        itemIndex + 1) & " %P " & action & (if cost > 0: " " & $cost else: "") &
+        " " & button & "} -command {ValidateAmount " & amountBox & " " & $(
+        itemIndex + 1) & " " & action & (if cost > 0: " " & $cost else: "") &
+        " " & button & "}")
+  else:
+    tclEval(script = "ttk::spinbox " & amountBox & " -width 10 -from 1 -to " &
+        $maxAmount & " -validate key -validatecommand {CheckAmount " &
+        amountBox & " " & $(itemIndex + 1) & " %P " & action & (if cost >
+        0: " " & $cost else: "") & " " & button &
+        "} -command {ValidateAmount " & amountBox & " " & $(itemIndex + 1) &
+        " " & action & (if cost > 0: " " & $cost else: "") & " " & button & "}")
+  let maxButton = itemDialog & ".amountlbl"
+  if maxAmount == 0:
+    tclEval(script = "ttk::button " & maxButton & " -text {Amount (max: " & $playerShip.cargo[itemIndex].amount & "):} -command {" & amountBox " set " & $playerShip.cargo.[itemIndex].amount & ";" & amountBox & " validate}")
 
 # Temporary code for interfacing with Ada
 
