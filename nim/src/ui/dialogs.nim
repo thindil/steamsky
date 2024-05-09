@@ -301,7 +301,32 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
         " " & action & (if cost > 0: " " & $cost else: "") & " " & button & "}")
   let maxButton = itemDialog & ".amountlbl"
   if maxAmount == 0:
-    tclEval(script = "ttk::button " & maxButton & " -text {Amount (max: " & $playerShip.cargo[itemIndex].amount & "):} -command {" & amountBox " set " & $playerShip.cargo.[itemIndex].amount & ";" & amountBox & " validate}")
+    tclEval(script = "ttk::button " & maxButton & " -text {Amount (max: " &
+        $playerShip.cargo[itemIndex].amount & "):} -command {" & amountBox &
+        " set " & $playerShip.cargo[itemIndex].amount & ";" & amountBox & " validate}")
+    tclEval(script = "grid " & maxButton & " -padx {5 0}")
+    tclEval(script = "tooltip::tooltip " & maxButton &
+        " \"Max amount of items to " & action & ".\"")
+    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  else:
+    tclEval(script = "ttk::button " & maxButton & " -text {Amount (max: " &
+        $maxAmount & "):} -command {" & amountBox & " set " & $maxAmount & ";" &
+        amountBox & " validate}")
+    tclEval(script = "grid " & maxButton & " -padx {5 0}")
+    tclEval(script = "tooltip::tooltip " & maxButton &
+        " \"Max amount of items to " & action & "." & (if action in ["buy",
+        "sell"]: " It depends on bonuses\\nfrom the base's reputation and trader's skill level too." else: "") & "\"")
+    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  tclEval(script = amountBox & " set 1")
+  tclEval(script = "grid " & amountBox & " -column 1 -row 1 -padx {0 5}")
+  tclEval(script = "bind " & amountBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  var label = ""
+  if cost > 0:
+    label = itemDialog & ".costlbl"
+    tclEval(script = "ttk::label " & label & " -text {Total " & (if action ==
+        "buy": "cost:" else: "gain:") & "}")
+    tclEval(script = "grid " & label & " -padx {5 0}")
+    label = itemDialog & ".cost2lbl"
 
 # Temporary code for interfacing with Ada
 
