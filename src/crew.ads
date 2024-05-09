@@ -231,13 +231,6 @@ package Crew is
    Crew_Order_Error: exception;
    -- ****
 
-   -- ****e* Crew/Crew.Crew_No_Space_Error
-   -- FUNCTION
-   -- Raised when no space for new item in crew member inventory
-   -- SOURCE
-   Crew_No_Space_Error: exception;
-   -- ****
-
    -- ****f* Crew/Crew.Gain_Exp
    -- FUNCTION
    -- Gain experience in selected skill.
