@@ -264,7 +264,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   showDialog(dialog = infoDialog)
 
 proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
-    maxAmount: Natural = 0; cost: Natural = 0) =
+    maxAmount: Natural = 0; cost: Natural = 0) {.sideEffect, raises: [], tags: [].} =
   let itemDialog = createDialog(name = ".itemdialog", title = title,
       titleWidth = 275, columns = 2)
   var button = itemDialog & ".dropbutton"
