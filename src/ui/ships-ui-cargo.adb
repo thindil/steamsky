@@ -164,26 +164,6 @@ package body Ships.UI.Cargo is
       External_Name => "showDropItemCommand";
       -- ****
 
---   function Show_Drop_Item_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Interp);
---      Item_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---   begin
---      Show_Manipulate_Item
---        (Title =>
---           "Drop " &
---           Get_Item_Name
---             (Item =>
---                Inventory_Container.Element
---                  (Container => Player_Ship.Cargo, Index => Item_Index)) &
---           " from the ship's cargo",
---         Command => "DropItem " & CArgv.Arg(Argv => Argv, N => 1),
---         Action => "drop", Item_Index => Item_Index);
---      return TCL_OK;
---   end Show_Drop_Item_Command;
-
    -- ****o* SUCargo/SUCargo.Drop_Item_Command
    -- FUNCTION
    -- Drop selected amount of the selected item from the ship's cargo
