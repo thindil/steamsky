@@ -16,90 +16,97 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, tables]
+import contracts
 import bases, config, events, game, maps, messages, shipscrew, shipscargo,
     types, utils
 
 var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
 
 proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
-    raises: [KeyError], tags: [].} =
+    raises: [KeyError], tags: [], contractual.} =
   ## Delete the selected accepted mission, update the player's repuration in
   ## connected bases and update the sky map
   ##
   ## * missionIndex - the index of the mission to delete
   ## * failed       - if true, mission failed, default value is true
-  let mission = acceptedMissions[missionIndex]
-  var reputation: Natural = (mission.reward / 50).Natural
-  if reputation < 2:
-    reputation = 2
-  reputation = (reputation.float + (reputation.float * (mission.multiplier - 1.0))).Natural
-  if failed:
-    gainRep(baseIndex = mission.startBase, points = -reputation)
-    updateMorale(ship = playerShip, memberIndex = 0, value = getRandom(
-        min = -10, max = -5))
-    var messageText = "You failed your mission to "
-    case mission.mType
-    of deliver:
-      messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
-    of destroy:
-      messageText.add(y = "'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
-    of patrol:
-      messageText.add(y = "'Patrol selected area.'.")
-    of explore:
-      messageText.add(y = "'Explore selected area'.")
-    of passenger:
-      messageText.add(y = "'Transport passenger to base'.")
-    addMessage(message = messageText, mType = missionMessage, color = red)
-  else:
-    if mission.mType in {deliver, passenger}:
-      gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex,
-          points = (reputation / 2).int)
-      gainRep(baseIndex = mission.startBase, points = (reputation / 2).int)
+  require:
+    missionIndex < acceptedMissions.len
+  body:
+    let mission = acceptedMissions[missionIndex]
+    var reputation: Natural = (mission.reward / 50).Natural
+    if reputation < 2:
+      reputation = 2
+    reputation = (reputation.float + (reputation.float * (mission.multiplier - 1.0))).Natural
+    if failed:
+      gainRep(baseIndex = mission.startBase, points = -reputation)
+      updateMorale(ship = playerShip, memberIndex = 0, value = getRandom(
+          min = -10, max = -5))
+      var messageText = "You failed your mission to "
+      case mission.mType
+      of deliver:
+        messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
+      of destroy:
+        messageText.add(y = "'Destroy " & protoShipsList[
+            mission.shipIndex].name & "'.")
+      of patrol:
+        messageText.add(y = "'Patrol selected area.'.")
+      of explore:
+        messageText.add(y = "'Explore selected area'.")
+      of passenger:
+        messageText.add(y = "'Transport passenger to base'.")
+      addMessage(message = messageText, mType = missionMessage, color = red)
     else:
-      gainRep(baseIndex = mission.startBase, points = reputation)
-    updateMorale(ship = playerShip, memberIndex = 0, value = 1)
-    let traderIndex = findMember(order = talk)
-    var rewardAmount = (mission.reward.float * mission.multiplier).Natural
-    countPrice(price = rewardAmount, traderIndex = traderIndex, reduce = false)
-    if traderIndex > -1:
-      gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-    let freeSpace = freeCargo(amount = -(rewardAmount))
-    if freeSpace < 0:
-      rewardAmount = rewardAmount + freeSpace
-    if rewardAmount > 0:
-      addMessage(message = "You received " & $rewardAmount & " " & moneyName &
-          " for finishing your mission.", mType = missionMessage)
-      updateCargo(ship = playerShip, protoIndex = moneyIndex,
-          amount = rewardAmount)
-  skyMap[mission.targetX][mission.targetY].missionIndex = -1
-  skyMap[skyBases[mission.startBase].skyX][skyBases[
-      mission.startBase].skyY].missionIndex = -1
-  {.warning[UnsafeSetLen]: off.}
-  acceptedMissions.delete(i = missionIndex)
-  {.warning[UnsafeSetLen]: on.}
-  if mission.mType == deliver:
-    updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = -1)
-  elif mission.mType == passenger and mission.data < playerShip.crew.len:
+      if mission.mType in {deliver, passenger}:
+        gainRep(baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex,
+            points = (reputation / 2).int)
+        gainRep(baseIndex = mission.startBase, points = (reputation / 2).int)
+      else:
+        gainRep(baseIndex = mission.startBase, points = reputation)
+      updateMorale(ship = playerShip, memberIndex = 0, value = 1)
+      let traderIndex = findMember(order = talk)
+      var rewardAmount = (mission.reward.float * mission.multiplier).Natural
+      countPrice(price = rewardAmount, traderIndex = traderIndex,
+          reduce = false)
+      if traderIndex > -1:
+        gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+      let freeSpace = freeCargo(amount = -(rewardAmount))
+      if freeSpace < 0:
+        rewardAmount = rewardAmount + freeSpace
+      if rewardAmount > 0:
+        addMessage(message = "You received " & $rewardAmount & " " & moneyName &
+            " for finishing your mission.", mType = missionMessage)
+        updateCargo(ship = playerShip, protoIndex = moneyIndex,
+            amount = rewardAmount)
+    skyMap[mission.targetX][mission.targetY].missionIndex = -1
+    skyMap[skyBases[mission.startBase].skyX][skyBases[
+        mission.startBase].skyY].missionIndex = -1
     {.warning[UnsafeSetLen]: off.}
-    playerShip.crew.delete(i = mission.data)
+    acceptedMissions.delete(i = missionIndex)
     {.warning[UnsafeSetLen]: on.}
-    for module in playerShip.modules.mitems:
-      for owner in module.owner.mitems:
-        if owner == mission.data:
-          owner = 0
-        elif owner > mission.data:
-          owner.dec
-    for aMission in acceptedMissions.mitems:
-      if aMission.mType == passenger and aMission.data > mission.data:
-        aMission.data.dec
-  for index, aMission in acceptedMissions.pairs:
-    if aMission.finished:
-      skyMap[skyBases[aMission.startBase].skyX][skyBases[
-          aMission.startBase].skyY].missionIndex = index
-    else:
-      skyMap[aMission.targetX][aMission.targetY].missionIndex = index
+    if mission.mType == deliver:
+      updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = -1)
+    elif mission.mType == passenger and mission.data < playerShip.crew.len:
+      {.warning[UnsafeSetLen]: off.}
+      playerShip.crew.delete(i = mission.data)
+      {.warning[UnsafeSetLen]: on.}
+      for module in playerShip.modules.mitems:
+        for owner in module.owner.mitems:
+          if owner == mission.data:
+            owner = 0
+          elif owner > mission.data:
+            owner.dec
+      for aMission in acceptedMissions.mitems:
+        if aMission.mType == passenger and aMission.data > mission.data:
+          aMission.data.dec
+    for index, aMission in acceptedMissions.pairs:
+      if aMission.finished:
+        skyMap[skyBases[aMission.startBase].skyX][skyBases[
+            aMission.startBase].skyY].missionIndex = index
+      else:
+        skyMap[aMission.targetX][aMission.targetY].missionIndex = index
 
-proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
+proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Generate available missions in the selected base if needed
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate,
@@ -231,7 +238,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [].} =
   skyBases[baseIndex].missionsDate = gameDate
 
 proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Update accepted missions timers and delete expired ones.
   ##
   ## * minutes - the amount of minutes passed in the game
@@ -244,7 +251,8 @@ proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
       acceptedMissions[i].time = time
       i.inc
 
-func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [].} =
+func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [],
+    contractual.} =
   ## Get the name of the type of a mission
   ##
   ## * mType - the type of missions which name will be get
@@ -263,33 +271,36 @@ func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [].} =
     return "Transport passenger to base"
 
 proc updateMission*(missionIndex: Natural) {.sideEffect, raises: [KeyError],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Update the status of the selected mission
   ##
   ## * missionIndex - the index of the mission which will be updated
-  let mission = acceptedMissions[missionIndex]
-  skyMap[mission.targetX][mission.targetY].missionIndex = -1
-  acceptedMissions[missionIndex].finished = true
-  skyMap[skyBases[mission.startBase].skyX][skyBases[
-      mission.startBase].skyY].missionIndex = missionIndex
-  var messageText = "Return to " & skyBases[mission.startBase].name & " to finish mission "
-  case mission.mType
-  of deliver:
-    messageText.add("'Deliver " & itemsList[mission.itemIndex].name & "'.")
-  of destroy:
-    messageText.add("'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
-  of patrol:
-    messageText.add("'Patrol selected area'.")
-  of explore:
-    messageText.add("'Explore selected area'.")
-  of passenger:
-    messageText.add("'Transport passenger to base'.")
-  addMessage(message = messageText, mType = missionMessage)
-  if gameSettings.autoReturn:
-    playerShip.destinationX = skyBases[mission.startBase].skyX
-    playerShip.destinationY = skyBases[mission.startBase].skyY
-    addMessage(message = "You set the travel destination for your ship.",
-        mType = orderMessage)
+  require:
+    missionIndex < acceptedMissions.len
+  body:
+    let mission = acceptedMissions[missionIndex]
+    skyMap[mission.targetX][mission.targetY].missionIndex = -1
+    acceptedMissions[missionIndex].finished = true
+    skyMap[skyBases[mission.startBase].skyX][skyBases[
+        mission.startBase].skyY].missionIndex = missionIndex
+    var messageText = "Return to " & skyBases[mission.startBase].name & " to finish mission "
+    case mission.mType
+    of deliver:
+      messageText.add("'Deliver " & itemsList[mission.itemIndex].name & "'.")
+    of destroy:
+      messageText.add("'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
+    of patrol:
+      messageText.add("'Patrol selected area'.")
+    of explore:
+      messageText.add("'Explore selected area'.")
+    of passenger:
+      messageText.add("'Transport passenger to base'.")
+    addMessage(message = messageText, mType = missionMessage)
+    if gameSettings.autoReturn:
+      playerShip.destinationX = skyBases[mission.startBase].skyX
+      playerShip.destinationY = skyBases[mission.startBase].skyY
+      addMessage(message = "You set the travel destination for your ship.",
+          mType = orderMessage)
 
 # Temporary code for interfacing with Ada
 
@@ -306,7 +317,7 @@ type
     data: cint
 
 proc getAdaMissions(adaMissions: array[50, AdaMissionData];
-    baseIndex: cint = 0) {.raises: [], tags: [], exportc.} =
+    baseIndex: cint = 0) {.raises: [], tags: [], exportc, contractual.} =
   var missionsList: seq[MissionData]
   for mission in adaMissions.items:
     if mission.time == 0:
@@ -350,7 +361,7 @@ proc getAdaMissions(adaMissions: array[50, AdaMissionData];
     skyBases[baseIndex].missions = missionsList
 
 proc setAdaMissions(adaMissions: var array[50, AdaMissionData];
-    baseIndex: cint = 0) {.raises: [], tags: [], exportc.} =
+    baseIndex: cint = 0) {.raises: [], tags: [], exportc, contractual.} =
   for mission in adaMissions.mitems:
     mission = AdaMissionData(time: 0, targetX: 0, targetY: 0, reward: 0,
         startBase: 0, finished: 0, multiplier: 0.0, mtype: 0, data: 0)
@@ -377,33 +388,38 @@ proc setAdaMissions(adaMissions: var array[50, AdaMissionData];
       else:
         mission.target.cint
 
-proc deleteAdaMission(missionIndex, failed: cint) {.raises: [], tags: [], exportc.} =
+proc deleteAdaMission(missionIndex, failed: cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   try:
     deleteMission(missionIndex = missionIndex - 1, failed = (if failed ==
         1: true else: false))
   except KeyError:
     discard
 
-proc generateAdaMissions() {.raises: [], tags: [], exportc.} =
+proc generateAdaMissions() {.raises: [], tags: [], exportc, contractual.} =
   try:
     generateMissions()
   except KeyError:
     discard
 
-proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc.} =
+proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     updateMissions(minutes = minutes)
   except KeyError:
     discard
 
-proc getAdaMissionType(mType: cint): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaMissionType(mType: cint): cstring {.raises: [], tags: [], exportc,
+    contractual.} =
   return getMissionType(mType.MissionsTypes).cstring
 
-proc updateAdaMission(missionIndex: cint) {.raises: [], tags: [], exportc.} =
+proc updateAdaMission(missionIndex: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     updateMission(missionIndex = missionIndex - 1)
   except KeyError:
     discard
 
-proc getAdaAcceptedMissionsAmount(): cint {.raises: [], tags: [], exportc.} =
+proc getAdaAcceptedMissionsAmount(): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   return acceptedMissions.len.cint
