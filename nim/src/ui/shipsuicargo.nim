@@ -405,6 +405,9 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
 proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.exportc.} =
   let itemIndex = ($argv[1]).parseInt - 1
+  showManipulateItem(title = "Drop " & getItemName(item = playerShip.cargo[
+      itemIndex]) & " from the ship's cargo", command = "DropItem " & $argv[1],
+      action = "drop", itemIndex = itemIndex)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
