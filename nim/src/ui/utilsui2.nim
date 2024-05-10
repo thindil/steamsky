@@ -361,7 +361,7 @@ proc showAdaInventoryInfo(parent: cstring; itemIndex, memberIndex: cint;
     nimButton2 = ButtonSettings(text: $button2.text, command: $button2.command,
         icon: $button2.icon, tooltip: $button2.tooltip, color: $button2.color)
   try:
-    showInventoryItemInfo(parent = $parent, itemIndex = itemIndex,
-        memberIndex = memberIndex, button1 = nimButton1, button2 = nimButton2)
+    showInventoryItemInfo(parent = $parent, itemIndex = itemIndex - 1,
+        memberIndex = memberIndex - 1, button1 = nimButton1, button2 = nimButton2)
   except:
     echo getCurrentExceptionMsg()
