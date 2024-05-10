@@ -287,7 +287,7 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Itemindex is the index of the item which will be set
   let
     itemIndex = try:
-        ($argv[1]).parseInt
+        ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the item's index.")
     itemDialog = createDialog(name = ".itemdialog", title = "Give " &
