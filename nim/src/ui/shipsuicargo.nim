@@ -403,8 +403,11 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["SortShipCargo".cstring, "-1"])
 
 proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
-  let itemIndex = ($argv[1]).parseInt - 1
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  let itemIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      return showError(message = "Can't get the item's index.")
   showManipulateItem(title = "Drop " & getItemName(item = playerShip.cargo[
       itemIndex]) & " from the ship's cargo", command = "DropItem " & $argv[1],
       action = "drop", itemIndex = itemIndex)
