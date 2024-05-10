@@ -265,6 +265,20 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
 
 proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
     maxAmount: Natural = 0; cost: Natural = 0) {.sideEffect, raises: [], tags: [].} =
+  ## Show the dialog for manipulate items amount in cargo (like selling,
+  ## dropping, etc).
+  ##
+  ## * title      - The title of the dialog
+  ## * command    - The Tcl command which will be executed when the player hit
+  ##                the button Ok
+  ## * action     - The name of action which the player is doing (like drop,
+  ##                sell, ect)
+  ## * itemIndex  - The index of the item which will be manipulated
+  ## * maxAmount  - Max amount of the items to manipualate. If zero, use max
+  ##                amount of items from player ship cargo. Default value is
+  ##                zero.
+  ## * cost       - The cost (in buying) or gain (in selling) for one item in
+  ##                the game money. Can be zero. Default value is zero.
   let itemDialog = createDialog(name = ".itemdialog", title = title,
       titleWidth = 275, columns = 2)
   var button = itemDialog & ".dropbutton"
