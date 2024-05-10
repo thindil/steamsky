@@ -12,7 +12,7 @@ suite "Unit tests for gamesaveload module":
       experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
   playerShip.name = "Anaria"
 
-  test "Testing generateSaveName.":
+  test "Generating name for save file.":
     let oldName = saveName
     generateSaveName()
     check:
