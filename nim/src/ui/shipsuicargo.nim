@@ -427,23 +427,34 @@ proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let
     itemDialog = ".itemdialog"
     spinBox = itemDialog & ".amount"
-  var dropAmount, dropAmount2 = tclEval2(script = spinBox & " get").parseInt
-  let itemIndex = ($argv[1]).parseInt - 1
-  if itemsList[playerShip.cargo[itemIndex].protoIndex].itemType == missionItemsType:
-    for j in 1 .. dropAmount2:
-      for index, mission in acceptedMissions:
-        if mission.mType == deliver and mission.itemIndex == playerShip.cargo[
+  var dropAmount, dropAmount2 = try:
+      tclEval2(script = spinBox & " get").parseInt
+    except:
+      return showError(message = "Can't get the drop amount.")
+  let itemIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      return showError(message = "Can't get the item's index.")
+  try:
+    if itemsList[playerShip.cargo[itemIndex].protoIndex].itemType == missionItemsType:
+      for j in 1 .. dropAmount2:
+        for index, mission in acceptedMissions:
+          if mission.mType == deliver and mission.itemIndex == playerShip.cargo[
+              itemIndex].protoIndex:
+            deleteMission(missionIndex = index)
+            dropAmount.dec
+            break
+    elif currentStory.index.len > 0 and storiesList[
+        currentStory.index].startData[0].parseInt == playerShip.cargo[
             itemIndex].protoIndex:
-          deleteMission(missionIndex = index)
-          dropAmount.dec
-          break
-  elif currentStory.index.len > 0 and storiesList[currentStory.index].startData[
-      0].parseInt == playerShip.cargo[itemIndex].protoIndex:
-    clearCurrentStory()
+      clearCurrentStory()
+  except:
+    return showError(message = "Can't check the drop amount.")
   if dropAmount > 0:
     addMessage(message = "You dropped " & $dropAmount & " " & getItemName(
         item = playerShip.cargo[itemIndex]) & ".", mtype = otherMessage)
