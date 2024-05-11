@@ -224,13 +224,16 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
       diffY = (playerShip.skyY - missionY).abs
     case mission.mType
     of deliver:
-      mission.time = (80.0 * sqrt(((diffX ^ 2) + (diffY ^ 2)).float)).Positive
+      mission.time = (80.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
+          2)).float)).Positive
       mission.reward = (mission.time / 4).Positive
     of destroy, passenger:
-      mission.time = (180.0 * sqrt(((diffX ^ 2) + (diffY ^ 2)).float)).Positive
+      mission.time = (180.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
+          2)).float)).Positive
       mission.reward = (mission.time / 4).Positive
     of patrol, explore:
-      mission.time = (180.0 * sqrt(((diffX ^ 2) + (diffY ^ 2)).float)).Positive
+      mission.time = (180.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
+          2)).float)).Positive
       mission.reward = (mission.time / 5).Positive
     mission.startBase = baseIndex
     mission.finished = false
@@ -246,7 +249,7 @@ proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
   while i < acceptedMissions.len:
     let time = acceptedMissions[i].time - minutes
     if time < 1:
-      deleteMission(i)
+      deleteMission(missionIndex = i)
     else:
       acceptedMissions[i].time = time
       i.inc
@@ -286,15 +289,15 @@ proc updateMission*(missionIndex: Natural) {.sideEffect, raises: [KeyError],
     var messageText = "Return to " & skyBases[mission.startBase].name & " to finish mission "
     case mission.mType
     of deliver:
-      messageText.add("'Deliver " & itemsList[mission.itemIndex].name & "'.")
+      messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
     of destroy:
-      messageText.add("'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
+      messageText.add(y = "'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
     of patrol:
-      messageText.add("'Patrol selected area'.")
+      messageText.add(y = "'Patrol selected area'.")
     of explore:
-      messageText.add("'Explore selected area'.")
+      messageText.add(y = "'Explore selected area'.")
     of passenger:
-      messageText.add("'Transport passenger to base'.")
+      messageText.add(y = "'Transport passenger to base'.")
     addMessage(message = messageText, mType = missionMessage)
     if gameSettings.autoReturn:
       playerShip.destinationX = skyBases[mission.startBase].skyX
@@ -411,7 +414,7 @@ proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc,
 
 proc getAdaMissionType(mType: cint): cstring {.raises: [], tags: [], exportc,
     contractual.} =
-  return getMissionType(mType.MissionsTypes).cstring
+  return getMissionType(mType = mType.MissionsTypes).cstring
 
 proc updateAdaMission(missionIndex: cint) {.raises: [], tags: [], exportc,
     contractual.} =
