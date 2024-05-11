@@ -27,7 +27,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with CoreUI;
 with Crew.Inventory;
-with Dialogs; use Dialogs;
+with Dialogs;
 with Maps.UI;
 with Messages;
 with Missions;
@@ -188,6 +188,7 @@ package body Ships.UI.Cargo is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Dialogs;
       use Maps.UI;
       use Messages;
       use Missions;
