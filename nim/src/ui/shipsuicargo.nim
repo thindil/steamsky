@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import ../[config, crewinventory, game, items, messages, shipscargo, tk, types]
+import ../[config, crewinventory, game, items, messages, missions, shipscargo,
+    stories, tk, types]
 import coreui, dialogs, table, updateheader, utilsui2
 
 var
@@ -425,6 +426,26 @@ proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
       action = "drop", itemIndex = itemIndex)
   return tclOk
 
+proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let
+    itemDialog = ".itemdialog"
+    spinBox = itemDialog & ".amount"
+  var dropAmount, dropAmount2 = tclEval2(script = spinBox & " get").parseInt
+  let itemIndex = ($argv[1]).parseInt
+  if itemsList[playerShip.cargo[itemIndex].protoIndex].itemType == missionItemsType:
+    for j in 1 .. dropAmount2:
+      for index, mission in acceptedMissions:
+        if mission.mType == deliver and mission.itemIndex == playerShip.cargo[
+            itemIndex].protoIndex:
+          deleteMission(missionIndex = index)
+          dropAmount.dec
+          break
+  elif currentStory.index.len > 0 and storiesList[currentStory.index].startData[
+      0].parseInt == playerShip.cargo[itemIndex].protoIndex:
+    clearCurrentStory()
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -434,5 +455,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowGiveItem", showGiveItemCommand)
 #    addCommand("GiveItem", giveItemCommand)
 #    addCommand("ShowDropItem", showDropItemCommand)
+#    addCommand("DropItem", dropItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
