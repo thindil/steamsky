@@ -24,15 +24,15 @@ with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
 with CoreUI;
 with Crew.Inventory;
-with Dialogs;
-with Maps.UI;
-with Messages;
-with Missions;
-with Ships.Cargo;
-with Stories;
+-- with Dialogs;
+-- with Maps.UI;
+-- with Messages;
+-- with Missions;
+-- with Ships.Cargo;
+-- with Stories;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
@@ -186,104 +186,122 @@ package body Ships.UI.Cargo is
    function Drop_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
-      use Dialogs;
-      use Maps.UI;
-      use Messages;
-      use Missions;
-      use Ships.Cargo;
-      use Stories;
-      use Tiny_String;
-
-      Drop_Amount, Drop_Amount_2: Natural;
-      Item_Dialog: constant Ttk_Frame :=
-        Get_Widget(pathName => ".itemdialog", Interp => Interp);
-      Spin_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
-      Item_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      --## rule off IMPROPER_INITIALIZATION
-      Accepted_Mission: Mission_Data;
-      --## rule on IMPROPER_INITIALIZATION
+      use CoreUI;
+      function Drop_Ada_Item_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "dropItemCommand";
    begin
-      Drop_Amount := Natural'Value(Get(Widgt => Spin_Box));
-      Drop_Amount_2 := Drop_Amount;
-      if To_String
-          (Source =>
-             Get_Proto_Item
-               (Index =>
-                  Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => Item_Index)
-                    .Proto_Index)
-               .I_Type) =
-        To_String(Source => Mission_Items_Type) then
-         Check_Drop_Items_Loop :
-         for J in 1 .. Drop_Amount_2 loop
-            Delete_Missions_Loop :
-            for I in 1 .. Get_Accepted_Missions_Amount loop
-               Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
-               if Accepted_Mission.M_Type = DELIVER and
-                 Accepted_Mission.Item_Index =
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Proto_Index then
-                  Delete_Mission(Mission_Index => I);
-                  Drop_Amount := Drop_Amount - 1;
-                  exit Delete_Missions_Loop;
-               end if;
-            end loop Delete_Missions_Loop;
-         end loop Check_Drop_Items_Loop;
-      elsif Get_Current_Story.Index /= Null_Unbounded_String
-        and then
-          Positive'Value
-            (To_String
-               (Source =>
-                  Get_Story(Index => Get_Current_Story.Index).Start_Data(1))) =
-          Inventory_Container.Element
-            (Container => Player_Ship.Cargo, Index => Item_Index)
-            .Proto_Index then
-         Clear_Current_Story;
-      end if;
-      if Drop_Amount > 0 then
-         Add_Message
-           (Message =>
-              "You dropped" & Positive'Image(Drop_Amount) & " " &
-              Get_Item_Name
-                (Item =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)) &
-              ".",
-            M_Type => OTHERMESSAGE);
-         Update_Cargo
-           (Ship => Player_Ship,
-            Proto_Index =>
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Item_Index)
-                .Proto_Index,
-            Amount => -Drop_Amount,
-            Durability =>
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Item_Index)
-                .Durability,
-            Price =>
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Item_Index)
-                .Price);
-      end if;
-      if Close_Dialog_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
-        TCL_ERROR then
-         return TCL_ERROR;
-      end if;
-      Update_Header;
-      Update_Messages;
+      Tcl.Tk.Ada.Busy.Forget(Window => Main_Paned);
+      Tcl.Tk.Ada.Busy.Forget(Window => Game_Header);
       return
-        Sort_Cargo_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "SortShipCargo" & "-1");
+        Drop_Ada_Item_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
    end Drop_Item_Command;
+
+--   function Drop_Item_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--      use Dialogs;
+--      use Maps.UI;
+--      use Messages;
+--      use Missions;
+--      use Ships.Cargo;
+--      use Stories;
+--      use Tiny_String;
+--
+--      Drop_Amount, Drop_Amount_2: Natural;
+--      Item_Dialog: constant Ttk_Frame :=
+--        Get_Widget(pathName => ".itemdialog", Interp => Interp);
+--      Spin_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => Item_Dialog & ".amount", Interp => Interp);
+--      Item_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      --## rule off IMPROPER_INITIALIZATION
+--      Accepted_Mission: Mission_Data;
+--      --## rule on IMPROPER_INITIALIZATION
+--   begin
+--      Drop_Amount := Natural'Value(Get(Widgt => Spin_Box));
+--      Drop_Amount_2 := Drop_Amount;
+--      if To_String
+--          (Source =>
+--             Get_Proto_Item
+--               (Index =>
+--                  Inventory_Container.Element
+--                    (Container => Player_Ship.Cargo, Index => Item_Index)
+--                    .Proto_Index)
+--               .I_Type) =
+--        To_String(Source => Mission_Items_Type) then
+--         Check_Drop_Items_Loop :
+--         for J in 1 .. Drop_Amount_2 loop
+--            Delete_Missions_Loop :
+--            for I in 1 .. Get_Accepted_Missions_Amount loop
+--               Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
+--               if Accepted_Mission.M_Type = DELIVER and
+--                 Accepted_Mission.Item_Index =
+--                   Inventory_Container.Element
+--                     (Container => Player_Ship.Cargo, Index => Item_Index)
+--                     .Proto_Index then
+--                  Delete_Mission(Mission_Index => I);
+--                  Drop_Amount := Drop_Amount - 1;
+--                  exit Delete_Missions_Loop;
+--               end if;
+--            end loop Delete_Missions_Loop;
+--         end loop Check_Drop_Items_Loop;
+--      elsif Get_Current_Story.Index /= Null_Unbounded_String
+--        and then
+--          Positive'Value
+--            (To_String
+--               (Source =>
+--                  Get_Story(Index => Get_Current_Story.Index).Start_Data(1))) =
+--          Inventory_Container.Element
+--            (Container => Player_Ship.Cargo, Index => Item_Index)
+--            .Proto_Index then
+--         Clear_Current_Story;
+--      end if;
+--      if Drop_Amount > 0 then
+--         Add_Message
+--           (Message =>
+--              "You dropped" & Positive'Image(Drop_Amount) & " " &
+--              Get_Item_Name
+--                (Item =>
+--                   Inventory_Container.Element
+--                     (Container => Player_Ship.Cargo, Index => Item_Index)) &
+--              ".",
+--            M_Type => OTHERMESSAGE);
+--         Update_Cargo
+--           (Ship => Player_Ship,
+--            Proto_Index =>
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Item_Index)
+--                .Proto_Index,
+--            Amount => -Drop_Amount,
+--            Durability =>
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Item_Index)
+--                .Durability,
+--            Price =>
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Item_Index)
+--                .Price);
+--      end if;
+--      if Close_Dialog_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
+--        TCL_ERROR then
+--         return TCL_ERROR;
+--      end if;
+--      Update_Header;
+--      Update_Messages;
+--      return
+--        Sort_Cargo_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => CArgv.Empty & "SortShipCargo" & "-1");
+--   end Drop_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Cargo_Item_Info_Command
    -- FUNCTION

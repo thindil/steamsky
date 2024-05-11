@@ -18,7 +18,7 @@
 import std/[algorithm, strutils, tables]
 import ../[config, crewinventory, game, items, messages, missions, shipscargo,
     stories, tk, types]
-import coreui, dialogs, table, updateheader, utilsui2
+import coreui, dialogs, dialogs2, table, updateheader, utilsui2
 
 var
   cargoTable: TableWidget
@@ -432,7 +432,7 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
     itemDialog = ".itemdialog"
     spinBox = itemDialog & ".amount"
   var dropAmount, dropAmount2 = tclEval2(script = spinBox & " get").parseInt
-  let itemIndex = ($argv[1]).parseInt
+  let itemIndex = ($argv[1]).parseInt - 1
   if itemsList[playerShip.cargo[itemIndex].protoIndex].itemType == missionItemsType:
     for j in 1 .. dropAmount2:
       for index, mission in acceptedMissions:
@@ -444,7 +444,19 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   elif currentStory.index.len > 0 and storiesList[currentStory.index].startData[
       0].parseInt == playerShip.cargo[itemIndex].protoIndex:
     clearCurrentStory()
-  return tclOk
+  if dropAmount > 0:
+    addMessage(message = "You dropped " & $dropAmount & " " & getItemName(
+        item = playerShip.cargo[itemIndex]) & ".", mtype = otherMessage)
+    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+        itemIndex].protoIndex, amount = -dropAmount,
+        durability = playerShip.cargo[itemIndex].durability,
+        price = playerShip.cargo[itemIndex].price)
+  discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["CloseDialog".cstring, ".itemdialog"])
+  updateHeader()
+  updateMessages()
+  return sortCargoCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["SortShipCargo".cstring, "-1"])
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
