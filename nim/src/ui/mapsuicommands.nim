@@ -518,7 +518,7 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults =
-  if mapX == 0 or mapY == 0 and updateMapInfoCommand(clientData = clientData,
+  if (mapX == 0 or mapY == 0) and updateMapInfoCommand(clientData = clientData,
       interp = interp, argc = argc, argv = argv) != tclOk:
     return tclError
   let destinationDialog = createDialog(name = ".gameframe.destinationmenu",
