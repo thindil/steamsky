@@ -7,7 +7,7 @@ suite "Unit tests for halloffame module":
   gameStats.points = 100
   saveDirectory = "."
 
-  test "Testing updateHallOfFame.":
+  test "Updating Hall of Fame.":
     updateHallOfFame("TestPlayer", "TestDeath")
     check:
       hallOfFameArray[1].name == "TestPlayer"
