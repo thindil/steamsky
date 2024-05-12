@@ -482,6 +482,18 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Drop selected amount of the selected item from the ship's cargo
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowCargoItemInfo itemindex
+  ## Itemindex is the index of the item which information will be show
   let itemIndex = try:
       ($argv[1]).parseInt - 1
     except:
