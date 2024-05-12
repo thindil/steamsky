@@ -256,16 +256,6 @@ package Stories is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****f* Stories/Stories.Clear_Current_Story
-   -- FUNCTION
-   -- Resets current story
-   -- SOURCE
-   procedure Clear_Current_Story with
-      Import => True,
-      Convention => C,
-      External_Name => "clearAdaCurrentStory";
-      -- ****
-
    -- ****f* Stories/Stories.Get_Current_Story_Text
    -- FUNCTION
    -- Get text of current step in story
