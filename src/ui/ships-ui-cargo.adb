@@ -19,11 +19,10 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 -- with Tcl.Tk.Ada.Widgets.TtkFrame;
 with CoreUI;
 with Crew.Inventory;
@@ -219,38 +218,40 @@ package body Ships.UI.Cargo is
    function Show_Cargo_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showCargoItemInfoCommand";
       -- ****
 
-   function Show_Cargo_Item_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-   begin
-      Show_Inventory_Item_Info
-        (Parent => ".",
-         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-         Member_Index => 0,
-         Button_1 =>
-           (Tooltip =>
-              To_Unbounded_String(Source => "Give item to a crew member"),
-            Command =>
-              To_Unbounded_String
-                (Source => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1)),
-            Icon => To_Unbounded_String(Source => "giveicon"),
-            Text => To_Unbounded_String(Source => "Give"),
-            Color => Null_Unbounded_String),
-         Button_2 =>
-           (Tooltip =>
-              To_Unbounded_String(Source => "Drop item from the ship cargo"),
-            Command =>
-              To_Unbounded_String
-                (Source => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1)),
-            Icon => To_Unbounded_String(Source => "dropicon"),
-            Text => To_Unbounded_String(Source => "Drop"),
-            Color => Null_Unbounded_String));
-      return TCL_OK;
-   end Show_Cargo_Item_Info_Command;
+ --  function Show_Cargo_Item_Info_Command
+ --    (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+ --     Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+ --     pragma Unreferenced(Client_Data, Interp, Argc);
+ --  begin
+ --     Show_Inventory_Item_Info
+ --       (Parent => ".",
+ --        Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+ --        Member_Index => 0,
+ --        Button_1 =>
+ --          (Tooltip =>
+ --             To_Unbounded_String(Source => "Give item to a crew member"),
+ --           Command =>
+ --             To_Unbounded_String
+ --               (Source => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1)),
+ --           Icon => To_Unbounded_String(Source => "giveicon"),
+ --           Text => To_Unbounded_String(Source => "Give"),
+ --           Color => Null_Unbounded_String),
+ --        Button_2 =>
+ --          (Tooltip =>
+ --             To_Unbounded_String(Source => "Drop item from the ship cargo"),
+ --           Command =>
+ --             To_Unbounded_String
+ --               (Source => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1)),
+ --           Icon => To_Unbounded_String(Source => "dropicon"),
+ --           Text => To_Unbounded_String(Source => "Drop"),
+ --           Color => Null_Unbounded_String));
+ --     return TCL_OK;
+ --  end Show_Cargo_Item_Info_Command;
 
    -- ****o* SUCargo/SUCargo.Update_Max_Give_Amount_Command
    -- FUNCTION
@@ -276,8 +277,10 @@ package body Ships.UI.Cargo is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
       use Crew.Inventory;
 
       Crew_Box: constant Ttk_ComboBox :=
