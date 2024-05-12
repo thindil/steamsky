@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to update the missions, like the list of missions
+## accepted by the player, updating or deleting missions, etc.
+
 import std/[math, tables]
 import contracts
 import bases, config, events, game, maps, messages, shipscrew, shipscargo,
@@ -321,6 +324,7 @@ type
 
 proc getAdaMissions(adaMissions: array[50, AdaMissionData];
     baseIndex: cint = 0) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   var missionsList: seq[MissionData]
   for mission in adaMissions.items:
     if mission.time == 0:
@@ -365,6 +369,7 @@ proc getAdaMissions(adaMissions: array[50, AdaMissionData];
 
 proc setAdaMissions(adaMissions: var array[50, AdaMissionData];
     baseIndex: cint = 0) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for mission in adaMissions.mitems:
     mission = AdaMissionData(time: 0, targetX: 0, targetY: 0, reward: 0,
         startBase: 0, finished: 0, multiplier: 0.0, mtype: 0, data: 0)
@@ -393,6 +398,7 @@ proc setAdaMissions(adaMissions: var array[50, AdaMissionData];
 
 proc deleteAdaMission(missionIndex, failed: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     deleteMission(missionIndex = missionIndex - 1, failed = (if failed ==
         1: true else: false))
@@ -400,6 +406,7 @@ proc deleteAdaMission(missionIndex, failed: cint) {.raises: [], tags: [],
     discard
 
 proc generateAdaMissions() {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     generateMissions()
   except KeyError:
@@ -407,6 +414,7 @@ proc generateAdaMissions() {.raises: [], tags: [], exportc, contractual.} =
 
 proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     updateMissions(minutes = minutes)
   except KeyError:
@@ -414,10 +422,12 @@ proc updateAdaMissions(minutes: cint) {.raises: [], tags: [], exportc,
 
 proc getAdaMissionType(mType: cint): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return getMissionType(mType = mType.MissionsTypes).cstring
 
 proc updateAdaMission(missionIndex: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     updateMission(missionIndex = missionIndex - 1)
   except KeyError:
@@ -425,4 +435,5 @@ proc updateAdaMission(missionIndex: cint) {.raises: [], tags: [], exportc,
 
 proc getAdaAcceptedMissionsAmount(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return acceptedMissions.len.cint
