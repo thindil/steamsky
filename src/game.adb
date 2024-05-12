@@ -275,8 +275,6 @@ package body Game is
          Get_Ada_Game_Strings(Values => Nim_Strings);
          Alchemy_Tools :=
            To_Bounded_String(Source => Value(Item => Nim_Strings(2)));
-         Mission_Items_Type :=
-           To_Unbounded_String(Source => Value(Item => Nim_Strings(3)));
          Fuel_Type :=
            To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
          Head_Armor :=

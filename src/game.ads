@@ -348,13 +348,6 @@ package Game is
    Alchemy_Tools: Tiny_String.Bounded_String;
    -- ****
 
-   -- ****v* Game/Game.Mission_Items_Type
-   -- FUNCTION
-   -- Name of item type used for delivery missions
-   -- SOURCE
-   Mission_Items_Type: Unbounded_String;
-   -- ****
-
    -- ****v* Game/Game.Fuel_Type
    -- FUNCTION
    -- Name of item type used as fuel for ships
