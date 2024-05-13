@@ -58,7 +58,7 @@ type
     ## initialization, etc.
 
   TclCmdProc* = proc (clientData: cint; interp: PInterp; argc: cint;
-      argv: openArray[cstring]): TclResults
+      argv: cstringArray): TclResults
     ## Procedure which will be executed as Tcl command
     ##
     ## * clientData - the additional data passed to the procedure
@@ -240,8 +240,8 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) =
     for widget in tclResult.split():
       tclEval(script = "destroy " & widget)
 
-proc showError*(message: string; e: ref Exception = getCurrentException()): TclResults {.discardable,
-    sideEffect, raises: [], tags: [].} =
+proc showError*(message: string; e: ref Exception = getCurrentException(
+    )): TclResults {.discardable, sideEffect, raises: [], tags: [].} =
   ## Show the error dialog with the message containing technical details about the issue
   ##
   ## * message - the message to show in the error dialog
