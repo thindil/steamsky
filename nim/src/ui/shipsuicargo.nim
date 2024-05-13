@@ -510,19 +510,31 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.exportc.} =
+    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    itemIndex = ($argv[1]).parseInt
+    itemIndex = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the item's index.")
     item = playerShip.cargo[itemIndex]
     crewBox = ".itemdialog.member"
-    memberIndex = tclEval2(script = crewBox & " current").parseInt
-  var maxAmount = (freeInventory(memberIndex = memberIndex, amount = 0).float /
-      itemsList[item.protoIndex].weight.float).Natural
+    memberIndex = try:
+        tclEval2(script = crewBox & " current").parseInt
+      except:
+        return showError(message = "Can't get the member's index.")
+  var maxAmount = try:
+        (freeInventory(memberIndex = memberIndex, amount = 0).float / itemsList[
+            item.protoIndex].weight.float).Natural
+      except:
+        return showError(message = "Can't count the max amount.")
   if item.amount < maxAmount:
     maxAmount = item.amount
   let amountBox = ".itemdialog.giveamount"
-  if tclEval2(script = amountBox & " get").parseInt > maxAmount:
-    tclEval(script = amountBox & " set " & $maxAmount)
+  try:
+    if tclEval2(script = amountBox & " get").parseInt > maxAmount:
+      tclEval(script = amountBox & " set " & $maxAmount)
+  except:
+    showError(message = "Can't set the max amount.")
   tclEval(script = amountBox & " configure -to " & $maxAmount)
   let maxButton = ".itemdialog.maxbutton"
   tclEval(script = maxButton & " configure -text {Amount (max: " & $maxAmount &
