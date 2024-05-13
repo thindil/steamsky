@@ -23,7 +23,7 @@ import contracts
 import bases, config, events, game, maps, messages, shipscrew, shipscargo,
     types, utils
 
-var acceptedMissions*: seq[MissionData] ## The list of accepted missions by the player
+var acceptedMissions*: seq[MissionData] = @[] ## The list of accepted missions by the player
 
 proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
     raises: [KeyError], tags: [], contractual.} =
@@ -35,7 +35,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
   require:
     missionIndex < acceptedMissions.len
   body:
-    let mission = acceptedMissions[missionIndex]
+    let mission: MissionData = acceptedMissions[missionIndex]
     var reputation: Natural = (mission.reward / 50).Natural
     if reputation < 2:
       reputation = 2
@@ -44,7 +44,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
       gainRep(baseIndex = mission.startBase, points = -reputation)
       updateMorale(ship = playerShip, memberIndex = 0, value = getRandom(
           min = -10, max = -5))
-      var messageText = "You failed your mission to "
+      var messageText: string = "You failed your mission to "
       case mission.mType
       of deliver:
         messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
@@ -66,13 +66,14 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
       else:
         gainRep(baseIndex = mission.startBase, points = reputation)
       updateMorale(ship = playerShip, memberIndex = 0, value = 1)
-      let traderIndex = findMember(order = talk)
-      var rewardAmount = (mission.reward.float * mission.multiplier).Natural
+      let traderIndex: int = findMember(order = talk)
+      var rewardAmount: Natural = (mission.reward.float *
+          mission.multiplier).Natural
       countPrice(price = rewardAmount, traderIndex = traderIndex,
           reduce = false)
       if traderIndex > -1:
         gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-      let freeSpace = freeCargo(amount = -(rewardAmount))
+      let freeSpace: int = freeCargo(amount = -(rewardAmount))
       if freeSpace < 0:
         rewardAmount = rewardAmount + freeSpace
       if rewardAmount > 0:
@@ -111,11 +112,12 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
 proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
     contractual.} =
   ## Generate available missions in the selected base if needed
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate,
       currentDate = gameDate) < 7 or skyBases[baseIndex].population == 0:
     return
-  var missionsAmount = case skyBases[baseIndex].population
+  var missionsAmount: Natural = case skyBases[baseIndex].population
     of 1 .. 149:
       getRandom(min = 1, max = 5)
     of 150 .. 299:
@@ -133,7 +135,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
       missionsAmount + 10
     else:
       missionsAmount
-  var missionsItems: seq[Positive]
+  var missionsItems: seq[Positive] = @[]
   for index, item in itemsList.pairs:
     if item.itemType == missionItemsType:
       missionsItems.add(y = index)
@@ -145,17 +147,17 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
   normalizeCoord(coord = minY, isXAxis = false)
   var maxY: int = playerShip.skyY + 100
   normalizeCoord(coord = maxY, isXAxis = false)
-  var basesInRange: seq[Positive]
+  var basesInRange: seq[Positive] = @[]
   for index, base in skyBases.pairs:
     if index != baseIndex and skyBases[index].skyX in minX .. maxX and skyBases[
         index].skyY in minY .. maxY and skyBases[index].population > 0:
       basesInRange.add(y = index)
   while missionsAmount > basesInRange.len:
-    let tmpBaseIndex = getRandom(min = 1, max = 1024)
+    let tmpBaseIndex: Positive = getRandom(min = 1, max = 1024)
     if tmpBaseIndex notin basesInRange and skyBases[tmpBaseIndex].population > 0:
       basesInRange.add(y = tmpBaseIndex)
   skyBases[baseIndex].missions = @[]
-  var enemies: seq[Positive]
+  var enemies: seq[Positive] = @[]
   if getRandom(min = 1, max = 100) < 75:
     generateEnemies(enemies = enemies, withTraders = false)
   else:
@@ -214,7 +216,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
               max = qualitiesArray.high)])
     if mission.mType in {deliver, passenger}:
       while true:
-        let tmpBaseIndex = getRandom(min = basesInRange.low,
+        let tmpBaseIndex: Natural = getRandom(min = basesInRange.low,
             max = basesInRange.high)
         missionX = skyBases[basesInRange[tmpBaseIndex]].skyX
         missionY = skyBases[basesInRange[tmpBaseIndex]].skyY
@@ -223,8 +225,8 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
     mission.targetX = missionX
     mission.targetY = missionY
     let
-      diffX = (playerShip.skyX - missionX).abs
-      diffY = (playerShip.skyY - missionY).abs
+      diffX: Natural = (playerShip.skyX - missionX).abs
+      diffY: Natural = (playerShip.skyY - missionY).abs
     case mission.mType
     of deliver:
       mission.time = (80.0 * sqrt(x = ((diffX ^ 2) + (diffY ^
@@ -248,9 +250,9 @@ proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
   ## Update accepted missions timers and delete expired ones.
   ##
   ## * minutes - the amount of minutes passed in the game
-  var i = acceptedMissions.low
+  var i: Natural = acceptedMissions.low
   while i < acceptedMissions.len:
-    let time = acceptedMissions[i].time - minutes
+    let time: int = acceptedMissions[i].time - minutes
     if time < 1:
       deleteMission(missionIndex = i)
     else:
@@ -284,12 +286,12 @@ proc updateMission*(missionIndex: Natural) {.sideEffect, raises: [KeyError],
   require:
     missionIndex < acceptedMissions.len
   body:
-    let mission = acceptedMissions[missionIndex]
+    let mission: MissionData = acceptedMissions[missionIndex]
     skyMap[mission.targetX][mission.targetY].missionIndex = -1
     acceptedMissions[missionIndex].finished = true
     skyMap[skyBases[mission.startBase].skyX][skyBases[
         mission.startBase].skyY].missionIndex = missionIndex
-    var messageText = "Return to " & skyBases[mission.startBase].name & " to finish mission "
+    var messageText: string = "Return to " & skyBases[mission.startBase].name & " to finish mission "
     case mission.mType
     of deliver:
       messageText.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
@@ -325,7 +327,7 @@ type
 proc getAdaMissions(adaMissions: array[50, AdaMissionData];
     baseIndex: cint = 0) {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  var missionsList: seq[MissionData]
+  var missionsList: seq[MissionData] = @[]
   for mission in adaMissions.items:
     if mission.time == 0:
       break
@@ -373,7 +375,7 @@ proc setAdaMissions(adaMissions: var array[50, AdaMissionData];
   for mission in adaMissions.mitems:
     mission = AdaMissionData(time: 0, targetX: 0, targetY: 0, reward: 0,
         startBase: 0, finished: 0, multiplier: 0.0, mtype: 0, data: 0)
-  let missionsList = if baseIndex == 0:
+  let missionsList: seq[MissionData] = if baseIndex == 0:
       acceptedMissions
     else:
       skyBases[baseIndex].missions
