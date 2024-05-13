@@ -509,6 +509,26 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't show the item's info.")
   return tclOk
 
+proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: openArray[cstring]): TclResults {.exportc.} =
+  let
+    itemIndex = ($argv[1]).parseInt
+    item = playerShip.cargo[itemIndex]
+    crewBox = ".itemdialog.member"
+    memberIndex = tclEval2(script = crewBox & " current").parseInt
+  var maxAmount = (freeInventory(memberIndex = memberIndex, amount = 0).float /
+      itemsList[item.protoIndex].weight.float).Natural
+  if item.amount < maxAmount:
+    maxAmount = item.amount
+  let amountBox = ".itemdialog.giveamount"
+  if tclEval2(script = amountBox & " get").parseInt > maxAmount:
+    tclEval(script = amountBox & " set " & $maxAmount)
+  tclEval(script = amountBox & " configure -to " & $maxAmount)
+  let maxButton = ".itemdialog.maxbutton"
+  tclEval(script = maxButton & " configure -text {Amount (max: " & $maxAmount &
+      "):} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -520,5 +540,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowDropItem", showDropItemCommand)
 #    addCommand("DropItem", dropItemCommand)
 #    addCommand("ShowCargoItemInfo", showCargoItemInfoCommand)
+#    addCommand("updateMaxGiveAmount", updateMaxGiveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
