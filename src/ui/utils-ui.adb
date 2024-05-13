@@ -32,6 +32,7 @@ with Bases;
 with Combat.UI;
 with CoreUI; use CoreUI;
 with Crew;
+with Dialogs; use Dialogs;
 with Events;
 with Items;
 with Maps;
@@ -517,33 +518,6 @@ package body Utils.UI is
    begin
       Nim_Show_Screen(Screen_Name => New_String(Str => New_Screen_Name));
    end Show_Screen;
-
-   procedure Show_Inventory_Item_Info
-     (Parent: String; Item_Index: Positive; Member_Index: Natural;
-      Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
-      Nim_Button_1: constant Nim_Button_Settings :=
-        (Text => New_String(Str => To_String(Source => Button_1.Text)),
-         Command => New_String(Str => To_String(Source => Button_1.Command)),
-         Icon => New_String(Str => To_String(Source => Button_1.Icon)),
-         Tooltip => New_String(Str => To_String(Source => Button_1.Tooltip)),
-         Color => New_String(Str => To_String(Source => Button_1.Color)));
-      Nim_Button_2: constant Nim_Button_Settings :=
-        (Text => New_String(Str => To_String(Source => Button_2.Text)),
-         Command => New_String(Str => To_String(Source => Button_2.Command)),
-         Icon => New_String(Str => To_String(Source => Button_2.Icon)),
-         Tooltip => New_String(Str => To_String(Source => Button_2.Tooltip)),
-         Color => New_String(Str => To_String(Source => Button_2.Color)));
-      procedure Show_Ada_Inventory_Item_Info
-        (P: chars_ptr; I_Index, M_Index: Integer;
-         B_1, B_2: Nim_Button_Settings) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaInventoryInfo";
-   begin
-      Show_Ada_Inventory_Item_Info
-        (P => New_String(Str => Parent), I_Index => Item_Index,
-         M_Index => Member_Index, B_1 => Nim_Button_1, B_2 => Nim_Button_2);
-   end Show_Inventory_Item_Info;
 
    procedure Delete_Widgets
      (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) is
