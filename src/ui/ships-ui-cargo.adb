@@ -18,12 +18,12 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+-- with Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with CoreUI;
-with Crew.Inventory;
+-- with Crew.Inventory;
 with Utils.UI;
 
 package body Ships.UI.Cargo is
@@ -232,51 +232,53 @@ package body Ships.UI.Cargo is
    function Update_Max_Give_Amount_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "updateMaxGiveAmountCommand";
       -- ****
 
-   function Update_Max_Give_Amount_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.Widgets;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-      use Crew.Inventory;
-
-      Crew_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => ".itemdialog.member", Interp => Interp);
-      Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => ".itemdialog.giveamount", Interp => Interp);
-      Member_Index: constant Positive :=
-        Natural'Value(Current(ComboBox => Crew_Box)) + 1;
-      Item: constant Inventory_Data :=
-        Inventory_Container.Element
-          (Container => Player_Ship.Cargo,
-           Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
-      Max_Amount: Natural :=
-        Free_Inventory(Member_Index => Member_Index, Amount => 0) /
-        Get_Proto_Item(Index => Item.Proto_Index).Weight;
-      Max_Button: constant Ttk_Button :=
-        Get_Widget(pathName => ".itemdialog.maxbutton", Interp => Interp);
-   begin
-      if Item.Amount < Max_Amount then
-         Max_Amount := Item.Amount;
-      end if;
-      if Natural'Value(Get(Widgt => Amount_Box)) > Max_Amount then
-         Set(SpinBox => Amount_Box, Value => Natural'Image(Max_Amount));
-      end if;
-      configure
-        (Widgt => Amount_Box, options => "-to" & Natural'Image(Max_Amount));
-      configure
-        (Widgt => Max_Button,
-         options =>
-           "-text {Amount (max:" & Natural'Image(Max_Amount) &
-           "):} -command {" & Amount_Box & " set" & Natural'Image(Max_Amount) &
-           ";" & Amount_Box & " validate}");
-      return TCL_OK;
-   end Update_Max_Give_Amount_Command;
+--   function Update_Max_Give_Amount_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Tcl.Tk.Ada.Widgets;
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+--      use Crew.Inventory;
+--
+--      Crew_Box: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => ".itemdialog.member", Interp => Interp);
+--      Amount_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => ".itemdialog.giveamount", Interp => Interp);
+--      Member_Index: constant Positive :=
+--        Natural'Value(Current(ComboBox => Crew_Box)) + 1;
+--      Item: constant Inventory_Data :=
+--        Inventory_Container.Element
+--          (Container => Player_Ship.Cargo,
+--           Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--      Max_Amount: Natural :=
+--        Free_Inventory(Member_Index => Member_Index, Amount => 0) /
+--        Get_Proto_Item(Index => Item.Proto_Index).Weight;
+--      Max_Button: constant Ttk_Button :=
+--        Get_Widget(pathName => ".itemdialog.maxbutton", Interp => Interp);
+--   begin
+--      if Item.Amount < Max_Amount then
+--         Max_Amount := Item.Amount;
+--      end if;
+--      if Natural'Value(Get(Widgt => Amount_Box)) > Max_Amount then
+--         Set(SpinBox => Amount_Box, Value => Natural'Image(Max_Amount));
+--      end if;
+--      configure
+--        (Widgt => Amount_Box, options => "-to" & Natural'Image(Max_Amount));
+--      configure
+--        (Widgt => Max_Button,
+--         options =>
+--           "-text {Amount (max:" & Natural'Image(Max_Amount) &
+--           "):} -command {" & Amount_Box & " set" & Natural'Image(Max_Amount) &
+--           ";" & Amount_Box & " validate}");
+--      return TCL_OK;
+--   end Update_Max_Give_Amount_Command;
 
    procedure Add_Cargo_Commands is
       use Utils.UI;
