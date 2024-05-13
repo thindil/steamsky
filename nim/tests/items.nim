@@ -23,65 +23,69 @@ suite "Unit tests for items module":
     member.equipment[index] = -1
   member.equipment[weapon] = 1
   playerShip.crew.add(member)
+  var item = InventoryData(protoIndex: 2, amount: 1, name: "", durability: 80, price: 0)
 
 
-  test "Testing findProtoItem.":
-    checkpoint "Find an existing item"
+  test "Find an existing item":
     check:
       findProtoItem("Iron") > 0
-    checkpoint "Not find a non-existing item"
+
+  test "Not find a non-existing item":
     check:
       findProtoItem("sfdsfsdfsdf") == 0
 
-  test "Testing getItemDamage.":
-    checkpoint "Get damage info"
+  test "Get damage info":
     check:
       getItemDamage(60) == "Damaged"
-    checkpoint "Get damage info with lowercasing"
+
+  test "Get damage info with lowercasing":
     check:
       getItemDamage(60, true) == "damaged"
 
-  test "Testing getItemName.":
-    var item = InventoryData(protoIndex: 2, amount: 1, name: "", durability: 80, price: 0)
-    checkpoint "Get an item name with lowered damage info"
+  test "Get an item name with lowered damage info":
     check:
       getItemName(item) == "Basic Ration (slightly used)"
-    checkpoint "Get an item name"
+
+  test "Get an item name":
     check:
       getItemName(item, false) == "Basic Ration"
-    checkpoint "Get an item name with damage info"
+
+  test "Get an item name with damage info":
     check:
       getItemName(item, true, false) == "Basic Ration (Slightly used)"
-    checkpoint "Get an item name with new name"
+
+  test "Get an item name with new name":
     item.name = "New name"
     check:
       getItemName(item, false) == "New name"
 
-  test "Testing getItemChanceToDamage.":
+  test "Get chance to damage for 3 as string":
     gameSettings.showNumbers = false
-    checkpoint "Get chance to damage for 3 as string"
     check:
       getItemChanceToDamage(3) == "Small"
-    checkpoint "Get chance to damage for 30 as string"
+
+  test "Get chance to damage for 30 as string":
     check:
       getItemChanceToDamage(30) == "Very high"
+
+  test "Get chance to damage for 3 as number":
     gameSettings.showNumbers = true
-    checkpoint "Get chance to damage for 3 as number"
     check:
       getItemChanceToDamage(3) == " 3%"
-    checkpoint "Get chance to damage for 30 as number"
+
+  test "Get chance to damage for 30 as number":
     check:
       getItemChanceToDamage(30) == " 30%"
 
-  test "Testing findTools.":
-    checkpoint "Find an existing tool"
+  test "Find an existing tool":
     check:
       findTools(0, "Bucket", clean) > -1
-    checkpoint "Not find a non-existing tool"
+
+  test "Not find a non-existing tool":
     check:
       findTools(0, "sfewrwer", talk) == -1
 
-  test "Testing getRandomItem.":
+  test "Getting a random item.":
     let itemIndex = getRandomItem(weaponsList, weapon, 20, 20, "POLEIS")
     check:
       itemIndex > 0 and itemsList.hasKey(itemIndex)
