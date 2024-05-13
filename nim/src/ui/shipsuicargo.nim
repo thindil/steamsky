@@ -501,7 +501,7 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     showInventoryItemInfo(parent = ".", itemIndex = itemIndex, memberIndex = -1,
         button1 = ButtonSettings(tooltip: "Give item to a crew member",
-        command: "ShowGiveItem " & $argv[1], icon: "giveicon", text: "give",
+        command: "ShowGiveItem " & $argv[1], icon: "giveicon", text: "Give",
         color: ""), button2 = ButtonSettings(
         tooltip: "Drop item from the ship cargo", command: "ShowDropItem " &
         $argv[1], icon: "dropicon", text: "Drop", color: ""))
