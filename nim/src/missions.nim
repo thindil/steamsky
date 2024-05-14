@@ -75,7 +75,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
         gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
       let freeSpace: int = freeCargo(amount = -(rewardAmount))
       if freeSpace < 0:
-        rewardAmount = rewardAmount + freeSpace
+        rewardAmount += freeSpace
       if rewardAmount > 0:
         addMessage(message = "You received " & $rewardAmount & " " & moneyName &
             " for finishing your mission.", mType = missionMessage)
@@ -102,7 +102,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
       for aMission in acceptedMissions.mitems:
         if aMission.mType == passenger and aMission.data > mission.data:
           aMission.data.dec
-    for index, aMission in acceptedMissions.pairs:
+    for index, aMission in acceptedMissions:
       if aMission.finished:
         skyMap[skyBases[aMission.startBase].skyX][skyBases[
             aMission.startBase].skyY].missionIndex = index
@@ -136,7 +136,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
     else:
       missionsAmount
   var missionsItems: seq[Positive] = @[]
-  for index, item in itemsList.pairs:
+  for index, item in itemsList:
     if item.itemType == missionItemsType:
       missionsItems.add(y = index)
   var minX: int = playerShip.skyX - 100
@@ -148,7 +148,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
   var maxY: int = playerShip.skyY + 100
   normalizeCoord(coord = maxY, isXAxis = false)
   var basesInRange: seq[Positive] = @[]
-  for index, base in skyBases.pairs:
+  for index, base in skyBases:
     if index != baseIndex and skyBases[index].skyX in minX .. maxX and skyBases[
         index].skyY in minY .. maxY and skyBases[index].population > 0:
       basesInRange.add(y = index)
@@ -328,7 +328,7 @@ proc getAdaMissions(adaMissions: array[50, AdaMissionData];
     baseIndex: cint = 0) {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
   var missionsList: seq[MissionData] = @[]
-  for mission in adaMissions.items:
+  for mission in adaMissions:
     if mission.time == 0:
       break
     case mission.mType
@@ -379,7 +379,7 @@ proc setAdaMissions(adaMissions: var array[50, AdaMissionData];
       acceptedMissions
     else:
       skyBases[baseIndex].missions
-  for index, mission in missionsList.pairs:
+  for index, mission in missionsList:
     adaMissions[index].time = mission.time.cint
     adaMissions[index].targetX = mission.targetX
     adaMissions[index].targetY = mission.targetY
