@@ -94,27 +94,20 @@ package body Crafts.UI is
    function Check_Tool
      (Tool_Needed: Tiny_String.Bounded_String) return Boolean is
       -- ****
+      use Interfaces.C.Strings;
       use Tiny_String;
 
-      Cargo_Index: Natural := 0;
-      Has_Tool: Boolean := True;
+      function Check_Ada_Tool(T_Needed: chars_ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "checkAdaTool";
    begin
-      if Tool_Needed /= To_Bounded_String(Source => "None") then
-         Has_Tool := False;
-         Check_Tool_Loop :
-         for I in 1 .. Get_Proto_Amount loop
-            if To_String(Source => Get_Proto_Item(Index => I).I_Type) =
-              To_String(Source => Tool_Needed) then
-               Cargo_Index :=
-                 Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => I);
-               if Cargo_Index > 0 then
-                  Has_Tool := True;
-                  exit Check_Tool_Loop;
-               end if;
-            end if;
-         end loop Check_Tool_Loop;
+      if Check_Ada_Tool
+          (T_Needed => New_String(To_String(Source => Tool_Needed))) =
+        1 then
+         return True;
       end if;
-      return Has_Tool;
+      return False;
    end Check_Tool;
 
    -- ****if* CUI4/CUI4.Is_Craftable
