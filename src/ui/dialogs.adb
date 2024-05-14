@@ -15,6 +15,7 @@
 
 with Ada.Strings;
 with Ada.Strings.Fixed;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -31,6 +32,16 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Utils.UI;
 
 package body Dialogs is
+
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Button_Settings is record
+         Text: chars_ptr;
+         Command: chars_ptr;
+         Icon: chars_ptr;
+         Tooltip: chars_ptr;
+         Color: chars_ptr;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
 
    -- ****iv* Dialogs/Dialogs.Timer_Id
    -- FUNCTION

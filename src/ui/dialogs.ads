@@ -15,7 +15,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Game; use Game;
@@ -244,15 +243,5 @@ package Dialogs is
       -- ****
 
 -- Temporary code to interact with Nim
-
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Button_Settings is record
-         Text: chars_ptr;
-         Command: chars_ptr;
-         Icon: chars_ptr;
-         Tooltip: chars_ptr;
-         Color: chars_ptr;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
 
 end Dialogs;
