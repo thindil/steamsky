@@ -403,13 +403,6 @@ package Ships is
 
    procedure Set_Ada_Crew(Ship: in out Ship_Record);
 
-   procedure Get_Ada_Crew_Inventory
-     (Inventory: Nim_Inventory_Array; Member_Index: Positive;
-      Get_Player_Ship: Natural := 1) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaCrewInventory";
-
    procedure Get_Ada_Ship_Cargo
      (Cargo: Nim_Inventory_Array; Get_Player_Ship: Natural := 1) with
       Import => True,
