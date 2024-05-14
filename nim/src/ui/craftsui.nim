@@ -15,7 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../tk
+import std/tables
+import ../[crewinventory, game, tk]
+
+proc checkTool(toolNeeded: string): bool =
+  result = true
+  if toolNeeded != "None":
+    result = false
+    for index, item in itemsList:
+      if item.itemType == toolNeeded:
+        let cargoIndex = findItem(inventory = playerShip.cargo,
+            protoIndex = index)
+        if cargoIndex > -1:
+          result = true
+          break
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
@@ -23,3 +36,10 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     discard
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc checkAdaTool(toolNeeded: cstring): int {.sideEffect, raises: [], tags: [], exportc.} =
+  if checkTool(toolNeeded = $toolNeeded):
+    return 1
+  return 0
