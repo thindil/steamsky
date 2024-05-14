@@ -18,7 +18,7 @@
 import std/tables
 import ../[crewinventory, game, tk]
 
-proc checkTool(toolNeeded: string): bool =
+proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   result = true
   if toolNeeded != "None":
     result = false
