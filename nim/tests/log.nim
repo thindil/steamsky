@@ -3,7 +3,7 @@ include ../src/log
 
 suite "Unit tests for log module":
 
-  test "Testing logMessage.":
+  test "Logging a message.":
     let oldSaveDirectory = saveDirectory
     saveDirectory = "."
     debugMode = everything
