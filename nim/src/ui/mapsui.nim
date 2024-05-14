@@ -516,7 +516,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-import helpui, mapsuicommands, ordersmenu, shipsui, waitmenu
+import craftsui, helpui, mapsuicommands, ordersmenu, shipsui, waitmenu
 
 proc createGameUi*() =
   let
@@ -676,6 +676,7 @@ proc createGameUi*() =
     waitmenu.addCommands()
     helpui.addCommands()
     shipsui.addCommands()
+    craftsui.addCommands()
 
 # Temporary code for interfacing with Ada
 
