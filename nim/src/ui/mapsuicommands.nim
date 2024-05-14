@@ -140,7 +140,7 @@ proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ZoomMap
 
 proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
   ## Update the information about the selected map's cell
   ##
   ## * clientData - the additional data for the Tcl command
@@ -155,7 +155,7 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## X and Y are coordinates of the map cell which info will be show
 
 proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
   ## Create and show the destination menu dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -493,7 +493,7 @@ proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
 var mapX, mapY = 0
 
 proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   let
     mapView = mainPaned & ".mapframe.map"
     mapIndex = tclEval2(script = mapView & " index @" & $argv[1] & "," & $argv[2])
@@ -517,7 +517,7 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   if (mapX == 0 or mapY == 0) and updateMapInfoCommand(clientData = clientData,
       interp = interp, argc = argc, argv = argv) != tclOk:
     return tclError

@@ -19,7 +19,7 @@ import ../tk
 import dialogs
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Close the selected dialog
   ##
   ## * clientData - the additional data for the Tcl command

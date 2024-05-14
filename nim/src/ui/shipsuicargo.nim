@@ -27,7 +27,7 @@ var
     ## The list of indexes of the items in the cargo
 
 proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   ## Show the cargo of the player ship
   ##
@@ -142,7 +142,7 @@ const defaultCargoSortOrder = none
 var cargoSortOrder = defaultCargoSortOrder
 
 proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   ## Sort the player's ship's cargo list
   ##
@@ -190,7 +190,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if cargoSortOrder == none:
     return showCargoCommand(clientData = clientData, interp = interp, argc = 1,
-        argv = @["ShowCargo".cstring])
+        argv = @["ShowCargo"].allocCStringArray)
   type LocalCargoData = object
     name: string
     damage: float
@@ -269,10 +269,10 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   for item in localCargo:
     cargoIndexes.add(y = item.id)
   return showCargoCommand(clientData = clientData, interp = interp, argc = 1,
-      argv = @["ShowCargo".cstring])
+      argv = @["ShowCargo"].allocCStringArray)
 
 proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show UI to give the selected item from the ship cargo to the selected
   ## crew member
   ##
@@ -345,7 +345,7 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   ## Give selected amount of the selected item from the ship's cargo to the
   ## selected crew member
@@ -401,10 +401,10 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   updateHeader()
   updateMessages()
   return sortCargoCommand(clientData = clientData, interp = interp, argc = 2,
-      argv = @["SortShipCargo".cstring, "-1"])
+      argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show UI to drop the selected item from the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -427,7 +427,7 @@ proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   ## Drop selected amount of the selected item from the ship's cargo
   ##
@@ -474,14 +474,14 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
         durability = playerShip.cargo[itemIndex].durability,
         price = playerShip.cargo[itemIndex].price)
   discard closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
-      argv = @["CloseDialog".cstring, ".itemdialog"])
+      argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
   updateHeader()
   updateMessages()
   return sortCargoCommand(clientData = clientData, interp = interp, argc = 2,
-      argv = @["SortShipCargo".cstring, "-1"])
+      argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Drop selected amount of the selected item from the ship's cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -510,7 +510,7 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Update max give amount after selecting the crew member
   ##
   ## * clientData - the additional data for the Tcl command

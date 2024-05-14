@@ -20,7 +20,7 @@ import ../[crew2, game, game2, shipsmovement, tk, types]
 import coreui, dialogs, updateheader, utilsui2
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show the available wait orders to the player
   ##
   ## * clientData - the additional data for the Tcl command

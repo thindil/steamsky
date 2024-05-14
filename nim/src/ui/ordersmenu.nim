@@ -22,7 +22,7 @@ import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
 import combatui, coreui, dialogs, dialogs2, updateheader, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show available the player's ship's orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -368,7 +368,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Dock or undock from the sky base
   ##
@@ -574,7 +574,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 import mapsui, waitmenu
 
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   var message = ""
   if playerShip.speed == docked:
     try:
