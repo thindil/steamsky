@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[crewinventory, game, tk]
+import ../[crewinventory, game, tk, types]
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
@@ -34,6 +34,30 @@ proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
         if cargoIndex > -1:
           result = true
           break
+
+proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
+    hasMaterials: var bool) =
+  canCraft = false
+  hasWorkplace = false
+  hasMaterials = false
+  hasTool = false
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == recipe.workplace and
+        module.durability > 0:
+      hasWorkplace = true
+      break
+  hasTool = checkTool(toolNeeded = recipe.tool)
+  for materialIndex, material in recipe.materialTypes:
+    hasMaterials = false
+    for itemIndex, item in itemsList:
+      if item.itemType == material:
+        var cargoIndex = findItem(inventory = playerShip.cargo,
+            protoIndex = itemIndex)
+        if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
+            recipe.materialAmounts[materialIndex]:
+          hasMaterials = true
+  if hasTool and hasMaterials and hasWorkplace:
+    canCraft = true
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
