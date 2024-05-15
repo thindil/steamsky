@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[crewinventory, game, tk, types]
+import ../[crafts, crewinventory, game, tk, types]
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
@@ -72,3 +72,25 @@ proc checkAdaTool(toolNeeded: cstring): int {.sideEffect, raises: [], tags: [], 
   if checkTool(toolNeeded = $toolNeeded):
     return 1
   return 0
+
+proc isAdaCraftable(adaRecipe: AdaCraftData; canCraft, hasWorkplace, hasTool,
+    hasMaterials: var cint) {.sideEffect, raises: [], tags: [], exportc.} =
+  var
+    materials: seq[string]
+    amounts: seq[Positive]
+  for material in adaRecipe.materialTypes:
+    materials.add(y = $material)
+  for amount in adaRecipe.materialAmounts:
+    amounts.add(y = amount)
+  let recipe = CraftData(workplace: adaRecipe.workplace.ModuleType,
+      tool: $adaRecipe.tool, materialTypes: materials, materialAmounts: amounts)
+  var cCraft, hWorkplace, hTool, hMaterials: bool = false
+  try:
+    isCraftable(recipe = recipe, canCraft = cCraft, hasWorkplace = hWorkplace,
+        hasTool = hTool, hasMaterials = hMaterials)
+  except:
+    echo getCurrentExceptionMsg()
+  canCraft = (if cCraft: 1 else: 0)
+  hasWorkplace = (if hWorkplace: 1 else: 0)
+  hasTool = (if hTool: 1 else: 0)
+  hasMaterials = (if hMaterials: 1 else: 0)
