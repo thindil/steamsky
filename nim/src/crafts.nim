@@ -702,16 +702,16 @@ proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
 # Temporary code for interfacing with Ada
 
 type
-  AdaCraftData = object
-    materialTypes: array[0..4, cstring]
-    materialAmounts: array[0..4, cint]
+  AdaCraftData* = object
+    materialTypes*: array[0..4, cstring]
+    materialAmounts*: array[0..4, cint]
     resultIndex: cint
     resultAmount: cint
-    workplace: cint
+    workplace*: cint
     skill: cint
     time: cint
     difficulty: cint
-    tool: cstring
+    tool*: cstring
     reputation: cint
     toolQuality: cint
 
