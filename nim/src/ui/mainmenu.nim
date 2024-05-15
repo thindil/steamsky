@@ -30,7 +30,7 @@ var
 proc showMainMenu*()
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     ReadDirEffect, RootEffect], exportc.} =
   ## Show the list of available saved games
   ##

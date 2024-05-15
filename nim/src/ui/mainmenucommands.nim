@@ -20,7 +20,7 @@ import ../[config, events, game, halloffame, tk]
 import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         ReadIOEffect, ExecIOEffect, RootEffect], exportc.} =
   ## Open the selected link in a proper program
   ##
@@ -50,7 +50,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     ReadDirEffect, ReadIOEffect], exportc.} =
   ## Show the selected file content
   ##
@@ -86,7 +86,7 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
 var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     ReadIOEffect, ReadDirEffect], exportc.} =
   ## Show the list of changes in the game, all or just recent, since the last
   ## release
@@ -132,7 +132,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show the hall of fame screen
   ##
   ## * clientData - the additional data for the Tcl command
@@ -154,7 +154,7 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Delete a saved game file
   ##
   ## * clientData - the additional data for the Tcl command

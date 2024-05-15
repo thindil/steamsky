@@ -20,7 +20,7 @@ import ../[basestypes, config, game, help, items, tk]
 import dialogs, themes
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
   ## Show the content of the selected topic help
   ##
   ## * clientData - the additional data for the Tcl command
@@ -34,7 +34,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowTopic
 
 proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Destroy the help window and save the sash position to the game
   ## configuration
   ##
@@ -59,7 +59,7 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Show the help window to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -144,7 +144,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 import mapsui
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   let helpView = ".help.paned.content.view"
   tclEval(script = helpView & " configure -state normal")
   tclEval(script = helpView & " delete 1.0 end")

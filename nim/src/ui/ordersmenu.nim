@@ -385,7 +385,7 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## otherwise normal docking or undocking operation
 
 proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Ask for bases in the currently docked base
   ##
@@ -400,7 +400,7 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## AskForBases
 
 proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Ask for events in the currently docked base
   ##
@@ -415,7 +415,7 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## AskForEvents
 
 proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         RootEffect], exportc.} =
   ## Start the combat between ships
   ##
@@ -432,7 +432,7 @@ proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Pray in the selected base
   ##
@@ -447,7 +447,7 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Pray
 
 proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Set the selected base as the home base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -470,7 +470,7 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Generate cargo for the trader and show the trading UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -491,7 +491,7 @@ proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Start the selected mission
   ##
@@ -506,7 +506,7 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## StartMission
 
 proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Complete the selected mission in the base
   ##
@@ -521,7 +521,7 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## CompleteMission
 
 proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Execute the current step in the current story
   ##
@@ -536,7 +536,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ExecuteStory
 
 proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Deliver medicines to the base
   ##
@@ -605,7 +605,7 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   try:
     askForBases()
   except:
@@ -614,7 +614,7 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   try:
     askForEvents()
   except:
@@ -623,7 +623,7 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   for index, _ in playerShip.crew:
     try:
       updateMorale(ship = playerShip, memberIndex = index, value = 10)
@@ -639,7 +639,7 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   var startsCombat, uMission = false
   for mission in acceptedMissions:
     if mission.targetX == playerShip.skyX and mission.targetY ==
@@ -687,7 +687,7 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   try:
     finishMission(missionIndex = skyMap[playerShip.skyX][
         playerShip.skyY].missionIndex)
@@ -703,7 +703,7 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   var step = try:
         (if currentStory.currentStep == -1: storiesList[
         currentStory.index].startingStep elif currentStory.currentStep >
@@ -751,7 +751,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
