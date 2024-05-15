@@ -33,16 +33,6 @@ with Utils.UI;
 
 package body Dialogs is
 
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Button_Settings is record
-         Text: chars_ptr;
-         Command: chars_ptr;
-         Icon: chars_ptr;
-         Tooltip: chars_ptr;
-         Color: chars_ptr;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-
    -- ****iv* Dialogs/Dialogs.Timer_Id
    -- FUNCTION
    -- Id of timer for auto close command
@@ -590,6 +580,16 @@ package body Dialogs is
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
+
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Button_Settings is record
+         Text: chars_ptr;
+         Command: chars_ptr;
+         Icon: chars_ptr;
+         Tooltip: chars_ptr;
+         Color: chars_ptr;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       Nim_Button_1: constant Nim_Button_Settings :=
         (Text => New_String(Str => To_String(Source => Button_1.Text)),
          Command => New_String(Str => To_String(Source => Button_1.Command)),
