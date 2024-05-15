@@ -103,7 +103,7 @@ package body Crafts.UI is
          External_Name => "checkAdaTool";
    begin
       if Check_Ada_Tool
-          (T_Needed => New_String(To_String(Source => Tool_Needed))) =
+          (T_Needed => New_String(Str => To_String(Source => Tool_Needed))) =
         1 then
          return True;
       end if;
