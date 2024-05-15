@@ -20,13 +20,6 @@ with Maps;
 
 package body Ships is
 
-   procedure Get_Ada_Crew_Inventory
-     (Inventory: Nim_Inventory_Array; Member_Index: Positive;
-      Get_Player_Ship: Natural := 1) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaCrewInventory";
-
    function Generate_Ship_Name
      (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
       use Tiny_String;
@@ -69,6 +62,12 @@ package body Ships is
          Import => True,
          Convention => C,
          External_Name => "getAdaShipCrew";
+      procedure Get_Ada_Crew_Inventory
+        (Inventory: Nim_Inventory_Array; Member_Index: Positive;
+         Get_Player_Ship: Natural := 1) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaCrewInventory";
    begin
       Convert_Crew_Loop :
       for Member of Ship_Crew loop
@@ -106,7 +105,7 @@ package body Ships is
          Convention => C,
          External_Name => "setAdaShipCrew";
       procedure Set_Ada_Crew_Inventory
-         (Inventory: out Nim_Inventory_Array; Member_Index: Positive;
+        (Inventory: out Nim_Inventory_Array; Member_Index: Positive;
          Get_Player_Ship: Natural := 1) with
          Import => True,
          Convention => C,
