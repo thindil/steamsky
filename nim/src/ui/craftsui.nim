@@ -19,6 +19,11 @@ import std/tables
 import ../[crewinventory, game, tk]
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
+  ##  Check if the player has needed tool for the crafting recipe
+  ##
+  ##  * toolNeeded - The type of tool needed for the recipe
+  ##
+  ## Returns true if the tool is in the player ship cargo, otherwise false
   result = true
   if toolNeeded != "None":
     result = false
