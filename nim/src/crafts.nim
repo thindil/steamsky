@@ -703,6 +703,7 @@ proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
 
 type
   AdaCraftData* = object
+    ## Used to store crafting data from Ada
     materialTypes*: array[0..4, cstring]
     materialAmounts*: array[0..4, cint]
     resultIndex: cint
