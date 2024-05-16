@@ -15,29 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Items;
 with Trades;
 
 package body Crafts is
-
-   --## rule off TYPE_INITIAL_VALUES
-   type Material_Types_Array is array(0 .. 4) of chars_ptr;
-   type Material_Amounts_Array is array(0 .. 4) of Integer;
-   type Craft_Nim_Data is record
-      Material_Types: Material_Types_Array;
-      Material_Amounts: Material_Amounts_Array;
-      Result_Index: Integer;
-      Result_Amount: Integer;
-      Workplace: Integer;
-      Skill: Integer;
-      Time: Positive := 1;
-      Difficulty: Positive := 1;
-      Tool: chars_ptr;
-      Reputation: Integer;
-      Tool_Quality: Positive := 1;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
 
    function Convert_Recipe_From_Nim
      (Crafting_Data: Craft_Nim_Data) return Craft_Data is
