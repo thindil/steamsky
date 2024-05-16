@@ -37,6 +37,19 @@ proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
 
 proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     hasMaterials: var bool) {.sideEffect, raises: [], tags: [].} =
+  ## Check if the selected recipe can be crafted (has all requirements meet)
+  ##
+  ## * recipe       - The crafting recipe to check
+  ## * canCraft     - If recipe can be crafted, then it will be true, otherwise
+  ##                  false
+  ## * hasWorkplace - If there is workplace for the recipe, will be true,
+  ##                  otherwise false
+  ## * hasTool      - If there is available tool for the recipe, will be true,
+  ##                  otherwise false
+  ## * hasMaterials - If there are available materials for the recipe, will be
+  ##                  true, otherwise false
+  ##
+  ## Returns parameters canCraft, hasWorkplace, hasTool, hasMaterials
   canCraft = false
   hasWorkplace = false
   hasMaterials = false
