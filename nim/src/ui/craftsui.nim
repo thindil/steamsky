@@ -79,9 +79,11 @@ proc isAdaCraftable(adaRecipe: AdaCraftData; canCraft, hasWorkplace, hasTool,
     materials: seq[string]
     amounts: seq[Positive]
   for material in adaRecipe.materialTypes:
-    materials.add(y = $material)
+    if material.len > 0:
+      materials.add(y = $material)
   for amount in adaRecipe.materialAmounts:
-    amounts.add(y = amount)
+    if amount > 0:
+      amounts.add(y = amount)
   let recipe = CraftData(workplace: adaRecipe.workplace.ModuleType,
       tool: $adaRecipe.tool, materialTypes: materials, materialAmounts: amounts)
   var cCraft, hWorkplace, hTool, hMaterials: bool = false

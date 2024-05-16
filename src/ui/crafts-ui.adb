@@ -131,9 +131,9 @@ package body Crafts.UI is
       use Game.Tiny_String;
 
       Nim_Recipe: Craft_Nim_Data;
-      M_Types: Material_Types_Array;
-      M_Amounts: Material_Amounts_Array;
-      Craft, Workplace, Tool, Materials: Integer := 0;
+      M_Types: Material_Types_Array := (others => New_String(Str => ""));
+      M_Amounts: Material_Amounts_Array := (others => 0);
+      Craft, Workplace, Tool, Materials, Index: Integer := 0;
       procedure Is_Ada_Craftable
         (R: Craft_Nim_Data;
          C_Craft, H_Workplace, H_Tool, H_Materials: out Integer) with
@@ -141,6 +141,17 @@ package body Crafts.UI is
          Convention => C,
          External_Name => "isAdaCraftable";
    begin
+      Convert_Materials_Types_Loop :
+      for Material of Recipe.Material_Types loop
+         M_Types(Index) := New_String(Str => To_String(Source => Material));
+         Index := Index + 1;
+      end loop Convert_Materials_Types_Loop;
+      Index := 0;
+      Convert_Materials_Amounts_Loop :
+      for Amount of Recipe.Material_Amounts loop
+         M_Amounts(Index) := Amount;
+         Index := Index + 1;
+      end loop Convert_Materials_Amounts_Loop;
       Nim_Recipe :=
         (Workplace => Module_Type'Pos(Recipe.Workplace),
          Tool => New_String(Str => To_String(Source => Recipe.Tool)),
