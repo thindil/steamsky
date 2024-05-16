@@ -20,7 +20,6 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
@@ -94,7 +93,6 @@ package body Crafts.UI is
    function Check_Tool
      (Tool_Needed: Tiny_String.Bounded_String) return Boolean is
       -- ****
-      use Interfaces.C.Strings;
       use Tiny_String;
 
       function Check_Ada_Tool(T_Needed: chars_ptr) return Interfaces.C.int with
@@ -130,64 +128,85 @@ package body Crafts.UI is
      (Recipe: Craft_Data;
       Can_Craft, Has_Workplace, Has_Tool, Has_Materials: out Boolean) is
       -- ****
-   begin
-      Can_Craft := False;
-      Has_Workplace := False;
-      Has_Materials := False;
-      Has_Tool := False;
-      Find_Workshop_Loop :
-      for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index).M_Type = Recipe.Workplace
-           and then Module.Durability > 0 then
-            Has_Workplace := True;
-            exit Find_Workshop_Loop;
-         end if;
-      end loop Find_Workshop_Loop;
-      Has_Tool := Check_Tool(Tool_Needed => Recipe.Tool);
-      Check_Recipe_Block :
-      declare
-         use Tiny_String;
+      use Game.Tiny_String;
 
-         Materials: array
-           (Recipe.Material_Types.First_Index ..
-                Recipe.Material_Types.Last_Index) of Boolean :=
-           (others => False);
-         Cargo_Index: Natural := 0;
-      begin
-         Find_Materials_Loop :
-         for K in
-           Recipe.Material_Types.First_Index ..
-             Recipe.Material_Types.Last_Index loop
-            Find_Cargo_Index_Loop :
-            for J in 1 .. Get_Proto_Amount loop
-               if Get_Proto_Item(Index => J).I_Type =
-                 Recipe.Material_Types(K) then
-                  Cargo_Index :=
-                    Find_Item
-                      (Inventory => Player_Ship.Cargo, Proto_Index => J);
-                  if Cargo_Index > 0
-                    and then
-                      Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                        .Amount >=
-                      Recipe.Material_Amounts(K) then
-                     Materials(K) := True;
-                  end if;
-               end if;
-            end loop Find_Cargo_Index_Loop;
-         end loop Find_Materials_Loop;
-         Has_Materials := True;
-         Set_Can_Craft_Loop :
-         for Material of Materials loop
-            if not Material then
-               Has_Materials := False;
-               exit Set_Can_Craft_Loop;
-            end if;
-         end loop Set_Can_Craft_Loop;
-      end Check_Recipe_Block;
-      if Has_Tool and Has_Materials and Has_Workplace then
-         Can_Craft := True;
-      end if;
+      Nim_Recipe: Craft_Nim_Data;
+      M_Types: Material_Types_Array;
+      M_Amounts: Material_Amounts_Array;
+      Craft, Workplace, Tool, Materials: Integer := 0;
+      procedure Is_Ada_Craftable
+        (R: Craft_Nim_Data;
+         C_Craft, H_Workplace, H_Tool, H_Materials: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "isAdaCraftable";
+   begin
+      Nim_Recipe :=
+        (Workplace => Module_Type'Pos(Recipe.Workplace),
+         Tool => New_String(Str => To_String(Source => Recipe.Tool)),
+         Tool_Quality => 1, Reputation => 0, Difficulty => 1, Time => 1,
+         Skill => 0, Result_Index => 0, Result_Amount => 1,
+         Material_Types => M_Types, Material_Amounts => M_Amounts);
+      Is_Ada_Craftable
+        (R => Nim_Recipe, C_Craft => Craft, H_Workplace => Workplace,
+         H_Tool => Tool, H_Materials => Materials);
+      Can_Craft := (if Craft = 1 then True else False);
+      Has_Workplace := (if Workplace = 1 then True else False);
+      Has_Materials := (if Materials = 1 then True else False);
+      Has_Tool := (if Tool = 1 then True else False);
+--      Find_Workshop_Loop :
+--      for Module of Player_Ship.Modules loop
+--         if Get_Module(Index => Module.Proto_Index).M_Type = Recipe.Workplace
+--           and then Module.Durability > 0 then
+--            Has_Workplace := True;
+--            exit Find_Workshop_Loop;
+--         end if;
+--      end loop Find_Workshop_Loop;
+--      Has_Tool := Check_Tool(Tool_Needed => Recipe.Tool);
+--      Check_Recipe_Block :
+--      declare
+--         use Tiny_String;
+--
+--         Materials: array
+--           (Recipe.Material_Types.First_Index ..
+--                Recipe.Material_Types.Last_Index) of Boolean :=
+--           (others => False);
+--         Cargo_Index: Natural := 0;
+--      begin
+--         Find_Materials_Loop :
+--         for K in
+--           Recipe.Material_Types.First_Index ..
+--             Recipe.Material_Types.Last_Index loop
+--            Find_Cargo_Index_Loop :
+--            for J in 1 .. Get_Proto_Amount loop
+--               if Get_Proto_Item(Index => J).I_Type =
+--                 Recipe.Material_Types(K) then
+--                  Cargo_Index :=
+--                    Find_Item
+--                      (Inventory => Player_Ship.Cargo, Proto_Index => J);
+--                  if Cargo_Index > 0
+--                    and then
+--                      Inventory_Container.Element
+--                        (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--                        .Amount >=
+--                      Recipe.Material_Amounts(K) then
+--                     Materials(K) := True;
+--                  end if;
+--               end if;
+--            end loop Find_Cargo_Index_Loop;
+--         end loop Find_Materials_Loop;
+--         Has_Materials := True;
+--         Set_Can_Craft_Loop :
+--         for Material of Materials loop
+--            if not Material then
+--               Has_Materials := False;
+--               exit Set_Can_Craft_Loop;
+--            end if;
+--         end loop Set_Can_Craft_Loop;
+--      end Check_Recipe_Block;
+--      if Has_Tool and Has_Materials and Has_Workplace then
+--         Can_Craft := True;
+--      end if;
    end Is_Craftable;
 
    -- ****if* CUI4/CUI4.Check_Study_Prerequisites
@@ -249,7 +268,6 @@ package body Crafts.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
-      use Interfaces.C.Strings;
       use GNAT.Directory_Operations;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkEntry;
