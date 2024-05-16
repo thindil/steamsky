@@ -76,6 +76,18 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
   if hasTool and hasMaterials and hasWorkplace:
     canCraft = true
 
+proc checkStudyPrerequisities(canCraft, hasTool, hasWorkplace: var bool) =
+  hasTool = checkTool(toolNeeded = alchemyTools)
+  canCraft = false
+  hasWorkplace = false
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == alchemyLab and
+        module.durability > 0:
+      hasWorkplace = true
+      break
+  if hasWorkplace:
+    canCraft = true
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -113,3 +125,15 @@ proc isAdaCraftable(adaRecipe: AdaCraftData; canCraft, hasWorkplace, hasTool,
   hasWorkplace = (if hWorkplace: 1 else: 0)
   hasTool = (if hTool: 1 else: 0)
   hasMaterials = (if hMaterials: 1 else: 0)
+
+proc checkAdaStudyPrerequisities(canCraft, hasTool,
+    hasWorkplace: var cint) {.sideEffect, raises: [], tags: [], exportc.} =
+  var cCraft, hTool, hWorkplace: bool = false
+  try:
+    checkStudyPrerequisities(canCraft = cCraft, hasTool = hTool,
+        hasWorkplace = hWorkplace)
+  except:
+    echo getCurrentExceptionMsg()
+  canCraft = (if cCraft: 1 else: 0)
+  hasWorkplace = (if hWorkplace: 1 else: 0)
+  hasTool = (if hTool: 1 else: 0)
