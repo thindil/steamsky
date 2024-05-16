@@ -508,7 +508,7 @@ proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Button-1> {}")
 
 proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Update the Tcl variable currentrow and show the currently selected row in
   ## the table
   ##
@@ -551,7 +551,7 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Excecut the Tcl command associated with the current row in the selected
   ## TableWidget
   ##
@@ -571,7 +571,7 @@ proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
       if gameSettings.rightButton: "3" else: "1") & ">")
 
 proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Set the normal background for the current row in the selected TableWidget
   ##
   ## * clientData - the additional data for the Tcl command
