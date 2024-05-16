@@ -36,16 +36,20 @@ proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
           break
 
 proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var bool) =
+    hasMaterials: var bool) {.sideEffect, raises: [], tags: [].} =
   canCraft = false
   hasWorkplace = false
   hasMaterials = false
   hasTool = false
   for module in playerShip.modules:
-    if modulesList[module.protoIndex].mType == recipe.workplace and
-        module.durability > 0:
-      hasWorkplace = true
-      break
+    try:
+      if modulesList[module.protoIndex].mType == recipe.workplace and
+          module.durability > 0:
+        hasWorkplace = true
+        break
+    except:
+      showError(message = "Can't check workshop.")
+      return
   hasTool = checkTool(toolNeeded = recipe.tool)
   for materialIndex, material in recipe.materialTypes:
     hasMaterials = false
