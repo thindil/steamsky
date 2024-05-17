@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the ships' modules like reading them from files and
+## getting their types.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import game, items, log, types
@@ -27,7 +30,7 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let modulesXml = try:
+    let modulesXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -44,7 +47,8 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 message = "Can't add module '" & moduleNode.attr(
                     name = "index") & "', invalid index.")
         moduleAction: DataAction = try:
-            parseEnum[DataAction](moduleNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = moduleNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if moduleAction in [update, remove]:
@@ -70,13 +74,13 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
         else:
           BaseModuleData(repairSkill: 1, installTime: 1, size: 1)
-      var attribute = moduleNode.attr(name = "name")
+      var attribute: string = moduleNode.attr(name = "name")
       if attribute.len() > 0:
         module.name = attribute
       attribute = moduleNode.attr(name = "type")
       if attribute.len() > 0:
         module.mType = try:
-            parseEnum[ModuleType](attribute.toLowerAscii)
+            parseEnum[ModuleType](s = attribute.toLowerAscii)
           except ValueError:
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $moduleAction & " module '" &
@@ -113,7 +117,7 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               message = "Can't " & $moduleAction & " module '" & $moduleIndex & "', invalid value for module durability.")
       attribute = moduleNode.attr(name = "material")
       if attribute.len() > 0:
-        let itemIndex = findProtoItem(itemType = attribute)
+        let itemIndex: int = findProtoItem(itemType = attribute)
         if itemIndex == 0:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $moduleAction & " module '" & $moduleIndex &
@@ -121,7 +125,7 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         module.repairMaterial = attribute
       attribute = moduleNode.attr(name = "skill")
       if attribute.len() > 0:
-        let skillIndex = findSkillIndex(skillName = attribute)
+        let skillIndex: int = findSkillIndex(skillName = attribute)
         if skillIndex == 0:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $moduleAction & " module '" & $moduleIndex &
@@ -207,7 +211,7 @@ proc getModuleType*(moduleIndex: Positive): string {.sideEffect, raises: [
     moduleIndex in modulesList
   body:
     result = $modulesList[moduleIndex].mType
-    let index = result.find({'A'..'Z'})
+    let index: int = result.find(chars = {'A'..'Z'})
     if index > 0:
       result = result[0 .. index - 1] & " " & result[index].toLowerAscii &
           result[index + 1 .. ^1]
@@ -236,13 +240,14 @@ type
 
 proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   adaModule = AdaBaseModuleData(name: "".cstring, mType: 0, weight: 0, value: 0,
       maxValue: 0, durability: 0, repairMaterial: "".cstring, repairSkill: 0,
       price: 0, installTime: 0, unique: 0, size: 0, description: "".cstring,
       maxOwners: 0, speed: 0, reputation: -100)
   if not modulesList.hasKey(key = index):
     return
-  let module = try:
+  let module: BaseModuleData = try:
       modulesList[index]
     except KeyError:
       return
@@ -265,10 +270,12 @@ proc getAdaModule(index: cint; adaModule: var AdaBaseModuleData) {.raises: [],
 
 proc getAdaModulesAmount(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return modulesList.len.cint
 
 proc getAdaModuleType(moduleIndex: cint): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return getModuleType(moduleIndex = moduleIndex.Positive).cstring
   except KeyError:
