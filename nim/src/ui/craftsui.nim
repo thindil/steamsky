@@ -78,6 +78,16 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
 
 proc checkStudyPrerequisities(canCraft, hasTool,
     hasWorkplace: var bool) {.sideEffect, raises: [], tags: [].} =
+  ## Check if the study and decontruct recipes can be crafted
+  ##
+  ## * canCraft      - If recipe can be crafter then it will be True, otherwise
+  ##                   False
+  ## * hasTool       - If there is tool for the study and deconstruct recipes
+  ##                   then True, otherwise False
+  ## * hasWorkplace  - If there is workplace for study and deconstruct recipes
+  ##                   then True, otherwise False
+  ##
+  ## Returns parameters canCraft, hasTool and hasWorkplace
   hasTool = checkTool(toolNeeded = alchemyTools)
   canCraft = false
   hasWorkplace = false
