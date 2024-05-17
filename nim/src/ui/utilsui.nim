@@ -21,7 +21,7 @@ import ../[bases, config, crew2, crewinventory, events2, game, game2,
 import combatui, coreui, dialogs, mapsui, shipsuicrew, shipsuimodules2
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Resize the selected canvas
   ##
   ## * clientData - the additional data for the Tcl command
@@ -46,7 +46,7 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Check the amount of the item, if it is not below low level of warning or
   ## if the entered amount is a proper number
   ##
@@ -141,7 +141,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   ## Validate amount of the item when the spinbox button to increase or
   ## decrease the amount was pressed
   ##
@@ -155,15 +155,17 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ValidateAmount name
   ## Name is the name of spinbox which value will be validated
-  let value = tclEval2(script = $argv[1] & " get").cstring
-  var newArgv: seq[cstring]
+  let value = tclEval2(script = $argv[1] & " get")
+  var newArgv: seq[string]
   for i in 0 ..< argc:
-    newArgv.add(argv[i])
+    newArgv.add($argv[i])
   newArgv.insert(value, 3)
-  return checkAmountCommand(clientData, interp, newArgv.len.cint, newArgv)
+  return checkAmountCommand(clientData, interp, newArgv.len.cint,
+      newArgv.allocCStringArray)
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Set the player's ship, module or crew member's name in Nim and Tcl
   ##
   ## * clientData - the additional data for the Tcl command
@@ -206,7 +208,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   let answer = argv[1]
   if answer == "deletesave":
     removeFile(saveDirectory & tclGetVar("deletesave"))

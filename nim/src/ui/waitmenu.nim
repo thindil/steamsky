@@ -112,7 +112,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, RootEffect], exportc.}
   ## Wait the selected amount of time
   ##
@@ -138,7 +138,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 import mapsui
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: openArray[cstring]): TclResults =
+    argv: cstringArray): TclResults =
   try:
     if argv[1] == "1":
       updateGame(minutes = 1)
