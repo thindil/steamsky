@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
+import std/[os, strutils, tables]
 import ../[crafts, crewinventory, game, tk, types]
 import coreui
 
@@ -104,6 +104,10 @@ proc checkStudyPrerequisities(canCraft, hasTool,
   if hasWorkplace:
     canCraft = true
 
+var
+  studies: seq[Positive]
+  deconstructs: seq[Positive]
+
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   let
@@ -123,6 +127,16 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   if recipeName.len == 0:
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
+    tclEval(script = searchEntry & " configure -validatecommand {ShowCrafting 1 %P}")
+  let
+    typeBox = craftsCanvas & ".craft.sframe.show"
+    showType = tclEval2(script = typeBox & " current").parseInt + 1
+  studies = @[]
+  deconstructs = @[]
+  for item in playerShip.cargo:
+    for recipe in recipesList.values:
+      if recipe.resultIndex == item.protoIndex:
+        break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
