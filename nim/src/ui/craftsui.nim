@@ -76,15 +76,20 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
   if hasTool and hasMaterials and hasWorkplace:
     canCraft = true
 
-proc checkStudyPrerequisities(canCraft, hasTool, hasWorkplace: var bool) =
+proc checkStudyPrerequisities(canCraft, hasTool,
+    hasWorkplace: var bool) {.sideEffect, raises: [], tags: [].} =
   hasTool = checkTool(toolNeeded = alchemyTools)
   canCraft = false
   hasWorkplace = false
   for module in playerShip.modules:
-    if modulesList[module.protoIndex].mType == alchemyLab and
-        module.durability > 0:
-      hasWorkplace = true
-      break
+    try:
+      if modulesList[module.protoIndex].mType == alchemyLab and
+          module.durability > 0:
+        hasWorkplace = true
+        break
+    except:
+      showError(message = "Can't check workshop.")
+      return
   if hasWorkplace:
     canCraft = true
 
