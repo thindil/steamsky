@@ -33,7 +33,7 @@ suite "Unit tests for missions module":
   skyMap[1][1].baseIndex = 1
   skyBases[1] = BaseRecord(skyX: 1, skyY: 1)
 
-  test "Testing deleteMission.":
+  test "Deleting a mission.":
     acceptedMissions = @[]
     acceptedMissions.add(y = MissionData(mType: explore, time: 1, targetX: 1,
         targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
@@ -41,28 +41,28 @@ suite "Unit tests for missions module":
     check:
       acceptedMissions.len == 0
 
-  test "Testing generateMissions.":
+  test "Generating missions in a base.":
     skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
     generateMissions()
 
-  test "Testing updateMission.":
+  test "Update accepted missions":
     acceptedMissions = @[]
     acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
         targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
-    checkpoint "Update accepted missions"
     updateMissions(8)
     check:
       acceptedMissions[0].time == 2
-    checkpoint "Remove accepted mission"
+
+  test "Remove accepted mission":
     updateMissions(2)
     check:
       acceptedMissions.len == 0
 
-  test "Testing getMissionType.":
+  test "Getting a mission's type.":
     check:
       getMissionType(patrol) == "Patrol area"
 
-  test "Testing updateMission.":
+  test "Updating a mission.":
     acceptedMissions = @[]
     acceptedMissions.add(y = MissionData(mType: explore, time: 10, targetX: 1,
         targetY: 1, reward: 1, startBase: 1, finished: true, multiplier: 0.0, target: 0))
