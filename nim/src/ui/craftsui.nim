@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
+import std/[os, tables]
 import ../[crafts, crewinventory, game, tk, types]
+import coreui
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
@@ -103,10 +104,32 @@ proc checkStudyPrerequisities(canCraft, hasTool,
   if hasWorkplace:
     canCraft = true
 
+proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    craftsFrame = mainPaned & ".craftframe"
+    craftsCanvas = craftsFrame & ".canvas"
+  if tclEval2(script = "winfo exists " & craftsCanvas) == "0":
+    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "crafts.tcl")
+    tclEval(script = "bind " & craftsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+  elif tclEval2(script = "winfo ismapped " & craftsCanvas) == "1" and argc == 1:
+    tclEval(script = "InvokeButton " & closeButton)
+    tclEval(script = "grid remove " & closeButton)
+    return tclOk
+  tclSetVar(varName = "gamestate", newValue = "crafts")
+  let
+    recipeName = (if argc == 3: $argv[2] else: "")
+    searchEntry = craftsCanvas & ".crafts.sframe.search"
+  if recipeName.len == 0:
+    tclEval(script = searchEntry & " configure -validatecommand {}")
+    tclEval(script = searchEntry & " delete 0 end")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
+#    addCommand("ShowCrafting", showCraftingCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
