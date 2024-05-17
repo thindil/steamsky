@@ -90,24 +90,25 @@ package body Crafts.UI is
    -- RESULT
    -- True if the tool is in the player ship cargo, otherwise False
    -- SOURCE
-   function Check_Tool
-     (Tool_Needed: Tiny_String.Bounded_String) return Boolean is
-      -- ****
-      use Tiny_String;
+--   function Check_Tool
+--     (Tool_Needed: Tiny_String.Bounded_String) return Boolean is
+--      -- ****
+--      use Tiny_String;
+--
+--      function Check_Ada_Tool(T_Needed: chars_ptr) return Interfaces.C.int with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "checkAdaTool";
+--   begin
+--      if Check_Ada_Tool
+--          (T_Needed => New_String(Str => To_String(Source => Tool_Needed))) =
+--        1 then
+--         return True;
+--      end if;
+--      return False;
+--   end Check_Tool;
 
-      function Check_Ada_Tool(T_Needed: chars_ptr) return Interfaces.C.int with
-         Import => True,
-         Convention => C,
-         External_Name => "checkAdaTool";
-   begin
-      if Check_Ada_Tool
-          (T_Needed => New_String(Str => To_String(Source => Tool_Needed))) =
-        1 then
-         return True;
-      end if;
-      return False;
-   end Check_Tool;
-
+   --## rule off IMPROPER_INITIALIZATION
    -- ****if* CUI4/CUI4.Is_Craftable
    -- FUNCTION
    -- Check if the selected recipe can be crafted (has all requirements meet)
@@ -183,22 +184,34 @@ package body Crafts.UI is
    procedure Check_Study_Prerequisites
      (Can_Craft, Has_Tool, Has_Workplace: out Boolean) is
      -- ****
+      Craft, Workplace, Tool: Integer := 0;
+      procedure Check_Ada_Study_Prerequisites
+        (C_Craft, H_Workplace, H_Tool: out Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "checkAdaStudyPrerequisities";
    begin
-      Has_Tool := Check_Tool(Tool_Needed => Alchemy_Tools);
-      Can_Craft := False;
-      Has_Workplace := False;
-      Find_Alchemy_Lab_Loop :
-      for Module of Player_Ship.Modules loop
-         if Get_Module(Index => Module.Proto_Index).M_Type = ALCHEMY_LAB
-           and then Module.Durability > 0 then
-            Has_Workplace := True;
-            exit Find_Alchemy_Lab_Loop;
-         end if;
-      end loop Find_Alchemy_Lab_Loop;
-      if Has_Workplace then
-         Can_Craft := True;
-      end if;
+      Check_Ada_Study_Prerequisites
+        (C_Craft => Craft, H_Workplace => Workplace, H_Tool => Tool);
+      Can_Craft := (if Craft = 1 then True else False);
+      Has_Workplace := (if Workplace = 1 then True else False);
+      Has_Tool := (if Tool = 1 then True else False);
+--      Has_Tool := Check_Tool(Tool_Needed => Alchemy_Tools);
+--      Can_Craft := False;
+--      Has_Workplace := False;
+--      Find_Alchemy_Lab_Loop :
+--      for Module of Player_Ship.Modules loop
+--         if Get_Module(Index => Module.Proto_Index).M_Type = ALCHEMY_LAB
+--           and then Module.Durability > 0 then
+--            Has_Workplace := True;
+--            exit Find_Alchemy_Lab_Loop;
+--         end if;
+--      end loop Find_Alchemy_Lab_Loop;
+--      if Has_Workplace then
+--         Can_Craft := True;
+--      end if;
    end Check_Study_Prerequisites;
+   --## rule on IMPROPER_INITIALIZATION
 
    -- ****o* CUI4/CUI4.Show_Crafting_Command
    -- FUNCTION
