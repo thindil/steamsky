@@ -112,9 +112,8 @@ var
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
-  let
-    craftsFrame = mainPaned & ".craftframe"
-    craftsCanvas = craftsFrame & ".canvas"
+  var craftsFrame = mainPaned & ".craftframe"
+  let craftsCanvas = craftsFrame & ".canvas"
   if tclEval2(script = "winfo exists " & craftsCanvas) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "crafts.tcl")
     tclEval(script = "bind " & craftsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
@@ -228,6 +227,37 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       continue
     if showType == 3:
       continue
+    addButton(table = recipesTable, text = "Deconstruct " & itemsList[
+        recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
+        $canCraft, column = 1)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasWorkplace, column = 2)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasTool, column = 3, newRow = true)
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  if page > 1:
+    if recipesTable.row < gameSettings.listsLimit + 1:
+      addPagination(table = recipesTable, previousCommand = "ShowCrafting " & $(
+          page - 1) & (if recipeName.len > 0: " {" & recipeName & "}" else: ""),
+          nextCommand = "")
+    else:
+      addPagination(table = recipesTable, previousCommand = "ShowCrafting " & $(
+          page - 1) & (if recipeName.len > 0: " {" & recipeName & "}" else: ""),
+          nextCommand = "ShowCrafting " & $(page + 1) & (if recipeName.len >
+          0: " {" & recipeName & "}" else: ""))
+  elif recipesTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = recipesTable, previousCommand = "",
+        nextCommand = "ShowCrafting " & $(page + 1) & (if recipeName.len >
+        0: " {" & recipeName & "}" else: ""))
+  updateTable(table = recipesTable, grabFocus = not (tclEval2(
+      script = "focus") == searchEntry))
+  craftsFrame = craftsCanvas & ".craft"
+  tclEval(script = craftsCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
