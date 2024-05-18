@@ -197,6 +197,37 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   for i in knownRecipes.len .. recipesIndexes.high:
     if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
       break
+    if recipeName.len > 0 and ("Study " & itemsList[recipesIndexes[
+        i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
+        start = 1) == -1:
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
+      continue
+    addButton(table = recipesTable, text = "Study " & itemsList[recipesIndexes[
+        i].parseInt].name, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
+        $canCraft, column = 1)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasWorkplace, column = 2)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
+        $canCraft, checked = hasTool, column = 3, newRow = true)
+  for i in (knownRecipes.len + studies.len + 1) .. recipesIndexes.high:
+    if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
+      break
+    if recipeName.len > 0 and ("Deconstruct " & itemsList[recipesIndexes[
+        i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
+        start = 1) == -1:
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    if showType == 3:
+      continue
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
