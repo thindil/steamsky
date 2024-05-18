@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[crafts, crewinventory, game, tk, types]
-import coreui
+import coreui, table
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
@@ -108,6 +108,7 @@ var
   studies: seq[Positive]
   deconstructs: seq[Positive]
   recipesIndexes: seq[string]
+  recipesTable: TableWidget
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
@@ -146,9 +147,19 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       recipesIndexes.add(y = $recipe)
     for recipe in deconstructs:
       recipesIndexes.add(y = $recipe)
+  if recipesTable.rowHeight == 1:
+    recipesTable = createTable(parent = craftsCanvas & ".craft", headers = @[
+        "Name", "Workshop", "Tools", "Materials"], scrollbar = craftsFrame &
+        ".scrolly", command = "SortCrafting",
+        tooltipText = "Press mouse button to sort the crafting recipes.")
+  else:
+    recipesTable.clearTable
   let
     typeBox = craftsCanvas & ".craft.sframe.show"
     showType = tclEval2(script = typeBox & " current").parseInt + 1
+  for index, recipe in recipesIndexes:
+    if index > knownRecipes.len:
+      break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
