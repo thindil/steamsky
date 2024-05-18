@@ -53,9 +53,11 @@ suite "Unit tests for shipsmovement module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
   skyMap[1][1].baseIndex = 1
-  skyBases[1].population = 100
+  for base in skyBases.mitems:
+    base.population = 100
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
+  skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 
   test "Testing waitInPlace.":
     waitInPlace(1)
