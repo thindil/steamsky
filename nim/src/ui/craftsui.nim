@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[crafts, crewinventory, game, tk, types]
+import ../[config, crafts, crewinventory, game, tk, types]
 import coreui, table
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
@@ -157,9 +157,20 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     typeBox = craftsCanvas & ".craft.sframe.show"
     showType = tclEval2(script = typeBox & " current").parseInt + 1
-  for index, recipe in recipesIndexes:
+    page = (if argc == 2: ($argv[1]).parseInt else: 1)
+    startRow = (page - 1) * gameSettings.listsLimit + 1
+  var currentRow = 1
+  for index, rec in recipesIndexes:
     if index > knownRecipes.len:
       break
+    if recipeName.len > 0 and itemsList[recipesList[
+        rec].resultIndex].name.toLowerAscii.find(sub = recipeName.toLowerAscii,
+        start = 1) == -1:
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    let recipe = recipesList[rec]
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
