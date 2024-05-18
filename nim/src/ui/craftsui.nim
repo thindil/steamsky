@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[config, crafts, crewinventory, game, tk, types]
-import coreui, table
+import coreui, table, utilsui2
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
@@ -258,6 +258,13 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = craftsCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
       script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  tclEval(script = craftsCanvas & " create window 0 0 -anchor nw -window " & craftsFrame)
+  tclEval(script = "update")
+  tclEval(script = craftsCanvas & " configure -scrollregion [list " & tclEval2(
+      script = craftsCanvas & " bbox all") & "]")
+  showScreen(newScreenName = "craftframe")
+  tclSetResult(value = "1")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
