@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, xmlparser, xmltree]
+import contracts
 import game, statistics
 
 type
@@ -32,7 +33,7 @@ type
 var hallOfFameArray*: array[1..10, HallOfFameData] ## The list of entries in the game's hall of fame
 
 proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
-    WriteIOEffect, ReadIOEffect, RootEffect].} =
+    WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game's hall of fame data from file
   if hallOfFameArray[1].name.len > 0:
     return
@@ -56,35 +57,39 @@ proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
     index.inc
 
 proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
-    IOError], tags: [WriteIOEffect].} =
+    IOError], tags: [WriteIOEffect], contractual.} =
   ## Update the game's hall of fame list with the new entry. If needed, remove
   ## old one to replace it with the new. If new is too low in points, don't
   ## insert it to the hall of fame list.
   ##
   ## * playerName  - the name of the player to add to the list
   ## * deathReason - the reason what killed the player
-  var newIndex: Natural = 0
-  for index, entry in hallOfFameArray.pairs:
-    if entry.points < getGamePoints():
-      newIndex = index
-      break
-  if newIndex == 0:
-    return
-  hallOfFameArray[newIndex + 1 .. hallOfFameArray.high] = hallOfFameArray[
-      newIndex .. hallOfFameArray.high - 1]
-  hallOfFameArray[newIndex] = HallOfFameData(name: playerName,
-      points: getGamePoints(), deathReason: deathReason)
-  var entries: seq[XmlNode]
-  for entry in hallOfFameArray:
-    if entry.points == 0:
-      break
-    var element = newElement("entry")
-    let values = {"name": entry.name, "points": $entry.points,
-        "Death_Reason": entry.deathReason}.toXmlAttributes
-    element.attrs = values
-    entries.add(y = element)
-  let xmlTree = newXmlTree(tag = "halloffame", children = entries)
-  writeFile(filename = saveDirectory & "halloffame.dat", content = xmlHeader & $xmlTree)
+  require:
+    playerName.len > 0
+    deathReason.len > 0
+  body:
+    var newIndex: Natural = 0
+    for index, entry in hallOfFameArray.pairs:
+      if entry.points < getGamePoints():
+        newIndex = index
+        break
+    if newIndex == 0:
+      return
+    hallOfFameArray[newIndex + 1 .. hallOfFameArray.high] = hallOfFameArray[
+        newIndex .. hallOfFameArray.high - 1]
+    hallOfFameArray[newIndex] = HallOfFameData(name: playerName,
+        points: getGamePoints(), deathReason: deathReason)
+    var entries: seq[XmlNode]
+    for entry in hallOfFameArray:
+      if entry.points == 0:
+        break
+      var element = newElement("entry")
+      let values = {"name": entry.name, "points": $entry.points,
+          "Death_Reason": entry.deathReason}.toXmlAttributes
+      element.attrs = values
+      entries.add(y = element)
+    let xmlTree = newXmlTree(tag = "halloffame", children = entries)
+    writeFile(filename = saveDirectory & "halloffame.dat", content = xmlHeader & $xmlTree)
 
 # Temporary code for interfacing with Ada
 
@@ -95,7 +100,7 @@ type
     deathReason: cstring
 
 proc loadAdaHallOfFame(): cstring {.sideEffect, raises: [], tags: [
-    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+    WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
   try:
     loadHallOfFame()
     return "".cstring
@@ -103,13 +108,13 @@ proc loadAdaHallOfFame(): cstring {.sideEffect, raises: [], tags: [
     return getCurrentExceptionMsg().cstring
 
 proc getAdaHofEntry(index: cint; entry: var AdaHallOfFameData) {.sideEffect,
-    raises: [], tags: [], exportc.} =
+    raises: [], tags: [], exportc, contractual.} =
   entry = AdaHallOfFameData(name: hallOfFameArray[index].name.cstring,
       points: hallOfFameArray[index].points.cint, deathReason: hallOfFameArray[
       index].deathReason.cstring)
 
 proc updateAdaHallOfFame(playerName, deathReason: cstring) {.sideEffect,
-    raises: [], tags: [WriteIOEffect], exportc.} =
+    raises: [], tags: [WriteIOEffect], exportc, contractual.} =
   try:
     updateHallOfFame(playerName = $playerName, deathReason = $deathReason)
   except IOError:
