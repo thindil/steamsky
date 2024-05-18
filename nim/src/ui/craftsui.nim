@@ -159,7 +159,9 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     showType = tclEval2(script = typeBox & " current").parseInt + 1
     page = (if argc == 2: ($argv[1]).parseInt else: 1)
     startRow = (page - 1) * gameSettings.listsLimit + 1
-  var currentRow = 1
+  var
+    currentRow = 1
+    canCraft, hasWorkplace, hasTool, hasMaterials = false
   for index, rec in recipesIndexes:
     if index > knownRecipes.len:
       break
@@ -171,6 +173,30 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       currentRow.inc
       continue
     let recipe = recipesList[rec]
+    isCraftable(recipe = recipe, canCraft = canCraft,
+        hasWorkplace = hasWorkplace, hasTool = hasTool,
+        hasMaterials = hasMaterials)
+    if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
+      continue
+    addButton(table = recipesTable, text = itemsList[recipe.resultIndex].name,
+        tooltip = "Show recipe's details", command = "ShowRecipeInfo {" & rec &
+        "} " & $canCraft, column = 1)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
+        checked = hasWorkplace, column = 2)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
+        checked = hasTool, column = 3)
+    addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
+        command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
+        checked = hasMaterials, column = 4, newRow = true)
+    if recipesTable.row == gameSettings.listsLimit + 1:
+      break
+  checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
+      hasWorkplace = hasWorkplace)
+  for i in knownRecipes.len .. recipesIndexes.high:
+    if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
+      break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
