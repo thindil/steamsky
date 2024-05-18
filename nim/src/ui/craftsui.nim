@@ -107,6 +107,7 @@ proc checkStudyPrerequisities(canCraft, hasTool,
 var
   studies: seq[Positive]
   deconstructs: seq[Positive]
+  recipesIndexes: seq[string]
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
@@ -128,15 +129,26 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
     tclEval(script = searchEntry & " configure -validatecommand {ShowCrafting 1 %P}")
-  let
-    typeBox = craftsCanvas & ".craft.sframe.show"
-    showType = tclEval2(script = typeBox & " current").parseInt + 1
   studies = @[]
   deconstructs = @[]
   for item in playerShip.cargo:
-    for recipe in recipesList.values:
+    for recipeIndex, recipe in recipesList:
       if recipe.resultIndex == item.protoIndex:
-        break
+        if recipeIndex notin knownRecipes and item.protoIndex notin studies:
+          studies.add(y = item.protoIndex)
+        if recipe.materialAmounts[0] > 1 and recipe.resultAmount == 1:
+          deconstructs.add(y = item.protoIndex)
+  if recipesIndexes.len != knownRecipes.len + studies.len + deconstructs.len:
+    recipesIndexes = @[]
+    for recipe in knownRecipes:
+      recipesIndexes.add(y = recipe)
+    for recipe in studies:
+      recipesIndexes.add(y = $recipe)
+    for recipe in deconstructs:
+      recipesIndexes.add(y = $recipe)
+  let
+    typeBox = craftsCanvas & ".craft.sframe.show"
+    showType = tclEval2(script = typeBox & " current").parseInt + 1
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
