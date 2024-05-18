@@ -54,15 +54,15 @@ suite "Unit tests for missions2 module":
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   skyBases[1].missionsDate = gameDate
 
-  test "Testing finishMission.":
+  test "Finish an accepted mission":
     acceptedMissions = @[]
-    checkpoint "Finish an accepted mission"
     acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
         targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
     finishMission(0)
     check:
       acceptedMissions.len == 0
-    checkpoint "Finish an accepted passenger mission"
+
+  test "Finish an accepted passenger mission":
     playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
         homeBase: 1, faction: "DRONES", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
         1, 0, 0], loyalty: 100, health: 100, tired: 0, hunger: 0,
@@ -77,14 +77,14 @@ suite "Unit tests for missions2 module":
     check:
       acceptedMissions.len == 0
 
-  test "Testing autoFinishMissions.":
+  test "Auto finish a mission.":
     acceptedMissions = @[]
     acceptedMissions.add(y = MissionData(mType: explore, time: 1000, targetX: 2,
         targetY: 2, reward: 1, startBase: 1, finished: true, multiplier: 1.0, target: 0))
     check:
       autoFinishMissions().len == 0 and acceptedMissions.len == 0
 
-  test "Testing acceptMission.":
+  test "Accepting a mission.":
     skyBases[1].missions = @[]
     skyBases[1].missions.add(y = MissionData(mType: explore, time: 1000,
         targetX: 2, targetY: 2, reward: 1, startBase: 1, finished: true,
