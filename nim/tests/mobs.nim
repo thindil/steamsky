@@ -11,7 +11,7 @@ suite "Unit tests for mobs module":
   loadFactions("../bin/data/factions.dat")
   loadMobs("../bin/data/mobs.dat")
 
-  test "Testing generateMob.":
+  test "Generating a random mob.":
     let newMob = generateMob(5, "POLEIS")
     check:
       newMob.attributes[0].level == 2
