@@ -113,6 +113,20 @@ var
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         RootEffect], exportc.} =
+  ## Show information about available crafting recipes
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowCrafting page recipename
+  ## Page is the current page of recipes list to show, recipename is the
+  ## text which will be searching in the recipes names. Can be empty, then
+  ## show all recipes.
   var craftsFrame = mainPaned & ".craftframe"
   let craftsCanvas = craftsFrame & ".canvas"
   if tclEval2(script = "winfo exists " & craftsCanvas) == "0":
