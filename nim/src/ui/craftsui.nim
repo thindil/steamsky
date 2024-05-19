@@ -111,7 +111,8 @@ var
   recipesTable: TableWidget
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   var craftsFrame = mainPaned & ".craftframe"
   let craftsCanvas = craftsFrame & ".canvas"
   if tclEval2(script = "winfo exists " & craftsCanvas) == "0":
@@ -155,8 +156,14 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     recipesTable.clearTable
   let
     typeBox = craftsCanvas & ".craft.sframe.show"
-    showType = tclEval2(script = typeBox & " current").parseInt + 1
-    page = (if argc == 2: ($argv[1]).parseInt else: 1)
+    showType = try:
+        tclEval2(script = typeBox & " current").parseInt + 1
+      except:
+        return showError(message = "Can't get the show type value.")
+    page = try:
+        (if argc == 2: ($argv[1]).parseInt else: 1)
+      except:
+        return showError(message = "Can't get the page.")
     startRow = (page - 1) * gameSettings.listsLimit + 1
   var
     currentRow = 1
@@ -164,22 +171,33 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   for index, rec in recipesIndexes:
     if index > knownRecipes.high:
       break
-    if recipeName.len > 0 and itemsList[recipesList[
-        rec].resultIndex].name.toLowerAscii.find(sub = recipeName.toLowerAscii,
-        start = 1) == -1:
-      continue
+    try:
+      if recipeName.len > 0 and itemsList[recipesList[
+          rec].resultIndex].name.toLowerAscii.find(
+          sub = recipeName.toLowerAscii,
+          start = 1) == -1:
+        continue
+    except:
+      return showError(message = "Can't check recipeName.")
     if currentRow < startRow:
       currentRow.inc
       continue
-    let recipe = recipesList[rec]
+    let recipe = try:
+        recipesList[rec]
+      except:
+        return showError(message = "Can't get the recipe.")
     isCraftable(recipe = recipe, canCraft = canCraft,
         hasWorkplace = hasWorkplace, hasTool = hasTool,
         hasMaterials = hasMaterials)
     if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
       continue
-    addButton(table = recipesTable, text = itemsList[recipe.resultIndex].name,
-        tooltip = "Show recipe's details", command = "ShowRecipeInfo {" & rec &
-        "} " & $canCraft, column = 1)
+    try:
+      addButton(table = recipesTable, text = itemsList[recipe.resultIndex].name,
+          tooltip = "Show recipe's details", command = "ShowRecipeInfo {" &
+              rec &
+          "} " & $canCraft, column = 1)
+    except:
+      return showError(message = "Can't add the button.")
     addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
         command = "ShowRecipeInfo {" & rec & "} " & $canCraft,
         checked = hasWorkplace, column = 2)
@@ -196,19 +214,25 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   for i in knownRecipes.len .. recipesIndexes.high:
     if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
       break
-    if recipeName.len > 0 and ("Study " & itemsList[recipesIndexes[
-        i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
-        start = 1) == -1:
-      continue
+    try:
+      if recipeName.len > 0 and ("Study " & itemsList[recipesIndexes[
+          i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
+          start = 1) == -1:
+        continue
+    except:
+      return showError(message = "Can't check the recipeName in study.")
     if currentRow < startRow:
       currentRow.inc
       continue
     if (showType == 2 and not canCraft) or (showType == 3 and canCraft):
       continue
-    addButton(table = recipesTable, text = "Study " & itemsList[recipesIndexes[
-        i].parseInt].name, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
-        $canCraft, column = 1)
+    try:
+      addButton(table = recipesTable, text = "Study " & itemsList[
+          recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
+          command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
+          $canCraft, column = 1)
+    except:
+      return showError(message = "Can't add button in study.")
     addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
         command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
         $canCraft, checked = hasWorkplace, column = 2)
@@ -218,19 +242,25 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   for i in (knownRecipes.len + studies.len) .. recipesIndexes.high:
     if recipesTable.row == gameSettings.listsLimit + 1:
       break
-    if recipeName.len > 0 and ("Deconstruct " & itemsList[recipesIndexes[
-        i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
-        start = 1) == -1:
-      continue
+    try:
+      if recipeName.len > 0 and ("Deconstruct " & itemsList[recipesIndexes[
+          i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
+          start = 1) == -1:
+        continue
+    except:
+      return showError(message = "Can't check recipeName in deconstruct.")
     if currentRow < startRow:
       currentRow.inc
       continue
     if showType == 3:
       continue
-    addButton(table = recipesTable, text = "Deconstruct " & itemsList[
-        recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
-        command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
-        $canCraft, column = 1)
+    try:
+      addButton(table = recipesTable, text = "Deconstruct " & itemsList[
+          recipesIndexes[i].parseInt].name, tooltip = "Show recipe's details",
+          command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
+          $canCraft, column = 1)
+    except:
+      return showError(message = "Can't add button in deconstruct.")
     addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
         command = "ShowRecipeInfo {Deconstruct " & $recipesIndexes[i] & "} " &
         $canCraft, checked = hasWorkplace, column = 2)
