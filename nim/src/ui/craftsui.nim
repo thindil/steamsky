@@ -146,7 +146,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       recipesIndexes.add(y = $recipe)
     for recipe in deconstructs:
       recipesIndexes.add(y = $recipe)
-  if recipesTable.rowHeight == 1:
+  if recipesTable.rowHeight == 0:
     recipesTable = createTable(parent = craftsCanvas & ".craft", headers = @[
         "Name", "Workshop", "Tools", "Materials"], scrollbar = craftsFrame &
         ".scrolly", command = "SortCrafting",
@@ -162,7 +162,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     currentRow = 1
     canCraft, hasWorkplace, hasTool, hasMaterials = false
   for index, rec in recipesIndexes:
-    if index > knownRecipes.len:
+    if index > knownRecipes.high:
       break
     if recipeName.len > 0 and itemsList[recipesList[
         rec].resultIndex].name.toLowerAscii.find(sub = recipeName.toLowerAscii,
@@ -215,8 +215,8 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     addCheckButton(table = recipesTable, tooltip = "Show recipe's details",
         command = "ShowRecipeInfo {Study " & $recipesIndexes[i] & "} " &
         $canCraft, checked = hasTool, column = 3, newRow = true)
-  for i in (knownRecipes.len + studies.len + 1) .. recipesIndexes.high:
-    if recipesTable.row == gameSettings.listsLimit + 1 or i > studies.high:
+  for i in (knownRecipes.len + studies.len) .. recipesIndexes.high:
+    if recipesTable.row == gameSettings.listsLimit + 1:
       break
     if recipeName.len > 0 and ("Deconstruct " & itemsList[recipesIndexes[
         i].parseInt].name).toLowerAscii.find(sub = recipeName.toLowerAscii,
