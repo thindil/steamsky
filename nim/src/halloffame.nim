@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's hall of fame list, like updating the
+## list, loading it from the file, etc.
+
 import std/[strutils, xmlparser, xmltree]
 import contracts
 import game, statistics
@@ -83,7 +86,7 @@ proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
     for entry in hallOfFameArray:
       if entry.points == 0:
         break
-      var element = newElement("entry")
+      var element: XmlNode = newElement(tag = "entry")
       let values = {"name": entry.name, "points": $entry.points,
           "Death_Reason": entry.deathReason}.toXmlAttributes
       element.attrs = values
@@ -101,6 +104,7 @@ type
 
 proc loadAdaHallOfFame(): cstring {.sideEffect, raises: [], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     loadHallOfFame()
     return "".cstring
@@ -109,12 +113,14 @@ proc loadAdaHallOfFame(): cstring {.sideEffect, raises: [], tags: [
 
 proc getAdaHofEntry(index: cint; entry: var AdaHallOfFameData) {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   entry = AdaHallOfFameData(name: hallOfFameArray[index].name.cstring,
       points: hallOfFameArray[index].points.cint, deathReason: hallOfFameArray[
       index].deathReason.cstring)
 
 proc updateAdaHallOfFame(playerName, deathReason: cstring) {.sideEffect,
     raises: [], tags: [WriteIOEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     updateHallOfFame(playerName = $playerName, deathReason = $deathReason)
   except IOError:
