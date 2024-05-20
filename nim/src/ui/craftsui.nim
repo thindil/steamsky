@@ -320,8 +320,12 @@ const defaultRecipesSortOrder = none
 var recipesSortOrder = defaultRecipesSortOrder
 
 proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  let column = getColumnNumber(table = recipesTable, xPosition = ($argv[1]).parseInt)
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
+  let column = try:
+      getColumnNumber(table = recipesTable, xPosition = ($argv[1]).parseInt)
+    except:
+      return showError(message = "Can't get the column.")
   case column
   of 1:
     if recipesSortOrder == nameAsc:
@@ -357,12 +361,15 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     localRecipes: seq[LocalModuleData]
     canCraft, hasWorkplace, hasTool, hasMaterials = false
   for recipe in knownRecipes:
-    isCraftable(recipe = recipesList[recipe], canCraft = canCraft,
-        hasWorkplace = hasWorkplace, hasTool = hasTool,
-        hasMaterials = hasMaterials)
-    localRecipes.add(y = LocalModuleData(name: itemsList[recipesList[
-        recipe].resultIndex].name, workplace: hasWorkplace, tool: hasTool,
-        materials: hasMaterials, id: recipe))
+    try:
+      isCraftable(recipe = recipesList[recipe], canCraft = canCraft,
+          hasWorkplace = hasWorkplace, hasTool = hasTool,
+          hasMaterials = hasMaterials)
+      localRecipes.add(y = LocalModuleData(name: itemsList[recipesList[
+          recipe].resultIndex].name, workplace: hasWorkplace, tool: hasTool,
+          materials: hasMaterials, id: recipe))
+    except:
+      return showError(message = "Can't sort known recipes.")
   proc sortRecipes(x, y: LocalModuleData): int =
     case recipesSortOrder
     of nameAsc:
@@ -415,15 +422,21 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       hasWorkplace = hasWorkplace)
   localRecipes = @[]
   for recipe in studies:
-    localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
-        workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
+    try:
+      localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
+          workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
+    except:
+      return showError(message = "Can't sort studies.")
   localRecipes.sort(cmp = sortRecipes)
   for recipe in localRecipes:
     recipesIndexes.add(y = recipe.id)
   localRecipes = @[]
   for recipe in deconstructs:
-    localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
-        workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
+    try:
+      localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
+          workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
+    except:
+      return showError(message = "Can't sort deconstructs.")
   localRecipes.sort(cmp = sortRecipes)
   for recipe in localRecipes:
     recipesIndexes.add(y = recipe.id)
