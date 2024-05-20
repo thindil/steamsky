@@ -311,11 +311,56 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+type RecipesSortOrders = enum
+  nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc, materialsAsc, materialsDesc, none
+
+const defaultRecipesSortOrder = none
+
+var recipesSortOrder = defaultRecipesSortOrder
+
+proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = getColumnNumber(table = recipesTable, xPosition = ($argv[1]).parseInt)
+  case column
+  of 1:
+    if recipesSortOrder == nameAsc:
+      recipesSortOrder = nameDesc
+    else:
+      recipesSortOrder = nameAsc
+  of 2:
+    if recipesSortOrder == workplaceAsc:
+      recipesSortOrder = workplaceDesc
+    else:
+      recipesSortOrder = workplaceAsc
+  of 3:
+    if recipesSortOrder == toolsAsc:
+      recipesSortOrder = toolsDesc
+    else:
+      recipesSortOrder = toolsAsc
+  of 4:
+    if recipesSortOrder == materialsAsc:
+      recipesSortOrder = materialsDesc
+    else:
+      recipesSortOrder = materialsAsc
+  else:
+    discard
+  if recipesSortOrder == none:
+    return tclOk
+  type LocalModuleData = object
+    name: string
+    workplace: bool
+    tool: bool
+    materials: bool
+    id: string
+  var localRecipes: seq[LocalModuleData]
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowCrafting", showCraftingCommand)
+#    addCommand("SortCrafting", sortCraftingCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
