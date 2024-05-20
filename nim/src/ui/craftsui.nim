@@ -322,6 +322,18 @@ var recipesSortOrder = defaultRecipesSortOrder
 proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Sort the list of crafting recipes
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortCrafting x
+  ## X is X axis coordinate where the player clicked the mouse button
   let column = try:
       getColumnNumber(table = recipesTable, xPosition = ($argv[1]).parseInt)
     except:
