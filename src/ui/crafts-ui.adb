@@ -15,7 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1;
-with Ada.Containers.Generic_Array_Sort; use Ada.Containers;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -38,7 +38,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with Config; use Config;
+with Config;
 with CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
@@ -50,6 +50,7 @@ with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* CUI4/CUI4.Recipes_Table
    -- FUNCTION
    -- Table with info about available crafting recipes
@@ -168,6 +169,7 @@ package body Crafts.UI is
       Has_Tool := (if Tool = 1 then True else False);
    end Check_Study_Prerequisites;
    --## rule on IMPROPER_INITIALIZATION
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* CUI4/CUI4.Show_Crafting_Command
    -- FUNCTION
@@ -554,6 +556,7 @@ package body Crafts.UI is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Characters.Latin_1;
       use Tcl.Tk.Ada.Widgets.Text;
+      use Config;
       use Tiny_String;
 
       Recipe_Index: constant Bounded_String :=
