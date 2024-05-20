@@ -19,7 +19,7 @@
 ## list, loading it from the file, etc.
 
 import std/[strutils, xmlparser, xmltree]
-import contracts
+import contracts, nimalyzer
 import game, statistics
 
 type
@@ -33,7 +33,9 @@ type
     points*: Natural
     deathReason*: string
 
+{.push ruleOff: "varDeclared".}
 var hallOfFameArray*: array[1..10, HallOfFameData] ## The list of entries in the game's hall of fame
+{.push ruleOn: "varDeclared".}
 
 proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
