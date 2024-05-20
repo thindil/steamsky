@@ -11,10 +11,10 @@ suite "Unit tests for shipmodules module":
   loadFactions("../bin/data/factions.dat")
   loadModules("../bin/data/shipmodules.dat")
 
-  test "Testing getModuleType.":
-    checkpoint "Get the type of the module"
+  test "Get the type of the module":
     check:
       getModuleType(1) == "Hull"
-    checkpoint "Get the type of the module with two words"
+
+  test "Get the type of the module with two words":
     check:
       getModuleType(6) == "Alchemy lab"
