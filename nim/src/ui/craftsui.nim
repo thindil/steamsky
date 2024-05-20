@@ -411,7 +411,24 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   recipesIndexes = @[]
   for recipe in localRecipes:
     recipesIndexes.add(y = recipe.id)
-  return tclOk
+  checkStudyPrerequisities(canCraft = canCraft, hasTool = hasTool,
+      hasWorkplace = hasWorkplace)
+  localRecipes = @[]
+  for recipe in studies:
+    localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
+        workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
+  localRecipes.sort(cmp = sortRecipes)
+  for recipe in localRecipes:
+    recipesIndexes.add(y = recipe.id)
+  localRecipes = @[]
+  for recipe in deconstructs:
+    localRecipes.add(y = LocalModuleData(name: itemsList[recipe].name,
+        workplace: hasWorkplace, tool: hasTool, materials: true, id: $recipe))
+  localRecipes.sort(cmp = sortRecipes)
+  for recipe in localRecipes:
+    recipesIndexes.add(y = recipe.id)
+  return showCraftingCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowCrafting", "1"].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
