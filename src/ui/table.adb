@@ -211,44 +211,6 @@ package body Table is
    end Add_Pagination;
 
    --## rule off LOCAL_HIDING
-   procedure Add_Check_Button
-     (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
-      Column: Positive; New_Row, Empty_Unchecked: Boolean := False) is
-      --## rule on LOCAL_HIDING
-      N_Width: Nim_Width := (others => 0);
-      Index: Natural := 0;
-      Row: Positive := Table.Row;
-      procedure Add_Ada_Check_Button
-        (Can, Tt, Com: chars_ptr;
-         Col, N_Row, R_Height, Ch, E_Unchecked: Integer; Width: Nim_Width;
-         R: in out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaCheckButton";
-   begin
-      Convert_Width_Loop :
-      for Width of Table.Columns_Width loop
-         N_Width(Index) := Width;
-         Index := Index + 1;
-      end loop Convert_Width_Loop;
-      Add_Ada_Check_Button
-        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
-         Tt => New_String(Str => Tooltip), Com => New_String(Str => Command),
-         Col => Column, N_Row => (if New_Row then 1 else 0),
-         R_Height => Table.Row_Height, Ch => (if Checked then 1 else 0),
-         E_Unchecked => (if Empty_Unchecked then 1 else 0), Width => N_Width,
-         R => Row);
-      Table.Row := Row;
-      Index := 1;
-      Convert_Nim_Width_Loop :
-      for Width of N_Width loop
-         exit Convert_Nim_Width_Loop when Width = 0;
-         Table.Columns_Width(Index) := Width;
-         Index := Index + 1;
-      end loop Convert_Nim_Width_Loop;
-   end Add_Check_Button;
-
-   --## rule off LOCAL_HIDING
    function Get_Column_Number
      (Table: Table_Widget; X_Position: Natural) return Positive is
       --## rule on LOCAL_HIDING
