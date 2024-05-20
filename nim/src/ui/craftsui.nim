@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[algorithm, os, strutils, tables]
 import ../[config, crafts, crewinventory, game, tk, types]
 import coreui, table, utilsui2
 
@@ -312,7 +312,8 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 type RecipesSortOrders = enum
-  nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc, materialsAsc, materialsDesc, none
+  nameAsc, nameDesc, workplaceAsc, workplaceDesc, toolsAsc, toolsDesc,
+    materialsAsc, materialsDesc, none
 
 const defaultRecipesSortOrder = none
 
@@ -352,7 +353,64 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     tool: bool
     materials: bool
     id: string
-  var localRecipes: seq[LocalModuleData]
+  var
+    localRecipes: seq[LocalModuleData]
+    canCraft, hasWorkplace, hasTool, hasMaterials = false
+  for recipe in knownRecipes:
+    isCraftable(recipe = recipesList[recipe], canCraft = canCraft,
+        hasWorkplace = hasWorkplace, hasTool = hasTool,
+        hasMaterials = hasMaterials)
+    localRecipes.add(y = LocalModuleData(name: itemsList[recipesList[
+        recipe].resultIndex].name, workplace: hasWorkplace, tool: hasTool,
+        materials: hasMaterials, id: recipe))
+  proc sortRecipes(x, y: LocalModuleData): int =
+    case recipesSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of workplaceAsc:
+      if x.workplace < y.workplace:
+        return 1
+      else:
+        return -1
+    of workplaceDesc:
+      if x.workplace > y.workplace:
+        return 1
+      else:
+        return -1
+    of toolsAsc:
+      if x.tool < y.tool:
+        return 1
+      else:
+        return -1
+    of toolsDesc:
+      if x.tool > y.tool:
+        return 1
+      else:
+        return -1
+    of materialsAsc:
+      if x.materials < y.materials:
+        return 1
+      else:
+        return -1
+    of materialsDesc:
+      if x.materials > y.materials:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localRecipes.sort(cmp = sortRecipes)
+  recipesIndexes = @[]
+  for recipe in localRecipes:
+    recipesIndexes.add(y = recipe.id)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
