@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Sorting items in the trade screen doesn't remember the selected type
 - Crash on loading the game's images on Windows
 - Hangs on starting a new game on Windows
+- Hangs when an event ends
 
 ## [9.9] - 2024-04-14
 
