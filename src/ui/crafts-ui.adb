@@ -35,28 +35,16 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config;
-with CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with Items; use Items;
 with Maps.UI;
 with Ships.Crew;
-with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****iv* CUI4/CUI4.Recipes_Table
-   -- FUNCTION
-   -- Table with info about available crafting recipes
-   -- SOURCE
-   Recipes_Table: Table_Widget (Amount => 4);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* CUI4/CUI4.Show_Crafting_Command
    -- FUNCTION
@@ -77,34 +65,10 @@ package body Crafts.UI is
    function Show_Crafting_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showCraftingCommand";
       -- ****
-
-   function Show_Crafting_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use CoreUI;
-      Crafts_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".craftframe", Interp => Interp);
-      function Show_Ada_Crafting_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Import => True,
-         Convention => C,
-         External_Name => "showCraftingCommand";
-   begin
-      if Show_Ada_Crafting_Command
-          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) /=
-        TCL_OK then
-         return TCL_ERROR;
-      end if;
-      if Recipes_Table.Row_Height = 1 then
-         Recipes_Table.Scrollbar :=
-              Get_Widget(pathName => Crafts_Frame & ".scrolly");
-      end if;
-      return TCL_OK;
-   end Show_Crafting_Command;
 
    -- ****o* CUI4/CUI4.Show_Set_Recipe_Command
    -- FUNCTION
