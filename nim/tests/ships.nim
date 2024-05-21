@@ -14,11 +14,11 @@ suite "Unit tests for ships module":
   loadMobs("../bin/data/mobs.dat")
   loadShips("../bin/data/ships.dat")
 
-  test "Testing getCabinQuality.":
+  test "Getting a cabin's quality.":
     check:
       getCabinQuality(10) == "Empty room"
 
-  test "Testing damageModule.":
+  test "Damaging the player's ship module.":
     playerShip.modules = @[]
     playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
         durability: 100))
@@ -26,10 +26,10 @@ suite "Unit tests for ships module":
     check:
       playerShip.modules[0].durability == 90
 
-  test "Testing countShipWeigth.":
+  test "Couting the player's ship weight.":
     discard countShipWeight(playerShip)
 
-  test "Testing createShip.":
+  test "Creating a ship.":
     for base in skyBases.mitems:
       base.owner = "POLEIS"
     for x in MapXRange.low .. MapXRange.high:
