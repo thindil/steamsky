@@ -17,7 +17,7 @@
 
 import std/[algorithm, os, strutils, tables]
 import ../[config, crafts, crewinventory, game, tk, types]
-import coreui, table, utilsui2
+import coreui, dialogs, table, utilsui2
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
@@ -455,12 +455,28 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return showCraftingCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowCrafting", "1"].allocCStringArray)
 
+proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    recipeIndex = $argv[1]
+    recipeLength = recipeIndex.len
+    recipeType = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
+        "Study": "Study" elif recipeLength > 6 and recipeIndex[0 .. 4] ==
+        "Decon": "Deconstruct" else: "Craft")
+    craftDialog = createDialog(name = ".craftdialog", title = recipeType & " " &
+        (if recipeType == "Study": itemsList[recipeIndex[6 ..
+        ^1].parseInt].name elif recipeType == "Deconstruct": itemsList[
+        recipeIndex[12 .. ^1].parseInt].name else: itemsList[
+        recipeIndex.parseInt].name), titleWidth = 275, columns = 2)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowCrafting", showCraftingCommand)
 #    addCommand("SortCrafting", sortCraftingCommand)
+#    addCommand("ShowSetRecipe", showSetRecipeCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
