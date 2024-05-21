@@ -79,7 +79,7 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
           populationLost = skyBases[baseIndex].population
           skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
         skyBases[baseIndex].population = skyBases[baseIndex].population - populationLost
-      skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = 0
+      skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = -1
       {.warning[UnsafeSetLen]: off.}
       eventsList.delete(key)
       {.warning[UnsafeSetLen]: on.}
