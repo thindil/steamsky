@@ -468,6 +468,23 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
         ^1].parseInt].name elif recipeType == "Deconstruct": itemsList[
         recipeIndex[12 .. ^1].parseInt].name else: itemsList[
         recipeIndex.parseInt].name), titleWidth = 275, columns = 2)
+    maxAmount = checkRecipe(recipeIndex = recipeIndex)
+    amountBox = craftDialog & ".amount"
+  tclEval(script = "ttk::spinbox " & amountBox & " -from 1 -to " & $maxAmount &
+      " -validate key -validatecommand {ValidateSpinbox %W %P " & craftDialog & ".craft} -width 20")
+  tclEval(script = amountBox & " set 1")
+  tclSetVar(varName = "craftworker", newValue = "noone")
+  var label = craftDialog & ".amountlabel"
+  tclEval(script = "ttk::label " & label & " -text {Amount:}")
+  var button = craftDialog & ".maxamount"
+  tclEval(script = "ttk::button " & button & " -text {max " & $maxAmount &
+      "} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
+  if recipeType != "Study":
+    if maxAmount > 1:
+      tclEval(script = "grid " & label)
+      tclEval(script = "grid " & button & " -row 1 -column 1 -padx {0 5}")
+      tclEval(script = "tooltip::tooltip " & button & " \"Set maximum possible amount of how many times\\nthe crafting order should be done.\"")
+      tclEval(script = "bind " & button & " <Tab> {focus " & amountBox & ";break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
