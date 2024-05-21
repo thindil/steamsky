@@ -799,7 +799,7 @@ package body Crafts.UI is
          Text => "{" & Positive'Image(Recipe.Time) & " minutes} [list gold]");
       configure(Widgt => Recipe_Text, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Recipe_Text, Options => "-padx 5");
-      if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then
+      if CArgv.Arg(Argv => Argv, N => 2) = "true" then
          Add_Buttons_Block :
          declare
             Button_Box: constant Ttk_Frame :=
