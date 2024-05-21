@@ -44,11 +44,11 @@ proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
     return
   for entry in hallOfFameArray.mitems:
     entry = HallOfFameData(name: "", points: 0, deathReason: "")
-  let hofXml = try:
+  let hofXml: XmlNode = try:
       loadXml(path = saveDirectory & "halloffame.dat")
     except XmlError, ValueError, IOError, OSError, Exception:
       return
-  var index = 1
+  var index: Positive = 1
   for hofNode in hofXml:
     if hofNode.kind != xnElement:
       continue
@@ -74,7 +74,7 @@ proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
     deathReason.len > 0
   body:
     var newIndex: Natural = 0
-    for index, entry in hallOfFameArray.pairs:
+    for index, entry in hallOfFameArray:
       if entry.points < getGamePoints():
         newIndex = index
         break
@@ -84,16 +84,16 @@ proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
         newIndex .. hallOfFameArray.high - 1]
     hallOfFameArray[newIndex] = HallOfFameData(name: playerName,
         points: getGamePoints(), deathReason: deathReason)
-    var entries: seq[XmlNode]
+    var entries: seq[XmlNode] = @[]
     for entry in hallOfFameArray:
       if entry.points == 0:
         break
       var element: XmlNode = newElement(tag = "entry")
-      let values = {"name": entry.name, "points": $entry.points,
+      let values: XmlAttributes = {"name": entry.name, "points": $entry.points,
           "Death_Reason": entry.deathReason}.toXmlAttributes
       element.attrs = values
       entries.add(y = element)
-    let xmlTree = newXmlTree(tag = "halloffame", children = entries)
+    let xmlTree: XmlNode = newXmlTree(tag = "halloffame", children = entries)
     writeFile(filename = saveDirectory & "halloffame.dat", content = xmlHeader & $xmlTree)
 
 # Temporary code for interfacing with Ada
