@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with ShipModules; use ShipModules;
 with Game; use Game;
 with Ships; use Ships;
@@ -106,24 +105,6 @@ package Crafts is
 
 -- Temporary code to interact with Nim
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Material_Types_Array is array(0 .. 4) of chars_ptr;
-   type Material_Amounts_Array is array(0 .. 4) of Integer;
-   type Craft_Nim_Data is record
-      Material_Types: Material_Types_Array;
-      Material_Amounts: Material_Amounts_Array;
-      Result_Index: Integer;
-      Result_Amount: Integer;
-      Workplace: Integer;
-      Skill: Integer;
-      Time: Positive := 1;
-      Difficulty: Positive := 1;
-      Tool: chars_ptr;
-      Reputation: Integer;
-      Tool_Quality: Positive := 1;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data;
 
@@ -134,12 +115,5 @@ package Crafts is
 
    function Is_Known_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Boolean;
-
-   function Get_Known_Recipe(Index: Integer) return Tiny_String.Bounded_String;
-
-   function Get_Known_Recipes_Amount return Natural with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaKnownRecipesAmount";
 
 end Crafts;
