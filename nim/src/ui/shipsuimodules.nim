@@ -410,7 +410,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if moduleMaxValue == module.fuelUsage: " (max upgrade)" else: ""),
         row = currentRow, column = 1, secondary = true)
     if module.fuelUsage > moduleMaxValue:
-      addUpgradeButton(upgradeType = maxValue,
+      addUpgradeButton(upgradeType = value,
           buttonTooltip = "engine's fuel usage", box = moduleFrame,
           shipModule = module, column = 2, buttonName = "fuelbutton",
           row = currentRow)
