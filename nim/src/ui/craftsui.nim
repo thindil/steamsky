@@ -511,6 +511,24 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     if modulesList[module.protoIndex].mType == mType:
       modulesList2.add(y = " {" & module.name & "}")
       modulesAmount.inc
+  let modulesBox = craftDialog & ".workshop"
+  tclEval(script = "ttk::combobox " & modulesBox & " -state readonly")
+  tclEval(script = modulesBox & " -values [list " & modulesList2 & "]")
+  tclEval(script = modulesBox & " current 0")
+  if modulesAmount > 1:
+    label = craftDialog & ".workshoplabel"
+    tclEval(script = "ttk::label " & label & " -text {Workshop:}")
+    tclEval(script = "grid " & label & " -columnspan 2 -padx 5")
+    tclEval(script = "grid " & modulesBox & " -columnspan 2 -padx 5")
+    tclEval(script = "bind " & modulesBox & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+    buttonRow = buttonRow + 2
+    if firstFocus.len == 0:
+      firstFocus = ".workshop"
+  let crafterButton = craftDialog & ".members"
+  tclEval(script = "ttk::button " & crafterButton & " -text {Don't assing anyone} -variable craftworker -value noone")
+  tclEval(script = "grid " & crafterButton & " -columnspan 2 -padx 5 -sticky w")
+  tclEval(script = "tooltip::tooltip " & crafterButton & " \"Don't assign anyone to the order. You can\\nmanually do it later, in ship info screen.\"")
+  tclEval(script = "bind " & crafterButton & " <Tab> {focus " & craftDialog & ".bestworker;break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
