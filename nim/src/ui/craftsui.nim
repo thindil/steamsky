@@ -546,8 +546,25 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & crafterButton & " <Tab> {focus " & crewBox & ";break}")
   tclEval(script = "bind " & crafterButton & " <Escape> {" & craftDialog & ".cancel invoke;break}")
   var crewList = ""
+  let recipe = setRecipeData(recipeIndex = recipeIndex)
   for index, member in playerShip.crew:
-    crewList.add(y = "")
+    crewList.add(y = " {" & member.name & getSkillMarks(
+        skillIndex = recipe.skill, memberIndex = index) & "}")
+  tclEval(script = crewBox & " -values [list " & crewList & "]")
+  tclEval(script = crewBox & " current 0")
+  tclEval(script = "grid " & crewBox & " -columnspan 2 -padx 5")
+  tclEval(script = "tooltip::tooltip " & crewBox & " \"Assign the crew member from the list.\\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\\nneeded skill is the best in the crew.\"")
+  tclEval(script = "bind " & crewBox & " <Tab> {focus " & craftDialog & ".craft;break}")
+  tclEval(script = "bind " & crewBox & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+  buttonRow = buttonRow + 4
+  button = craftDialog & ".craft"
+  tclEval(script = "ttk::button " & button & " -text {" & recipeType &
+      "} -command {SetCrafting {" & $argv[1] & "};CloseDialog " & craftDialog &
+      "} -image " & recipeType & "2icon -style Dialoggreen.TButton")
+  tclEval(script = "grid " & button & " -pady 5 -padx 5")
+  tclEval(script = "tooltip::tooltip " & button & " \"Set the crafting order.\"")
+  tclEval(script = "bind " & button & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+  button = craftDialog & ".cancel"
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
