@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Crash on loading the game's images on Windows
 - Hangs on starting a new game on Windows
 - Hangs when an event ends
+- Starting upgrading an engine's fuel usage
 
 ## [9.9] - 2024-04-14
 
