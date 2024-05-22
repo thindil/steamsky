@@ -524,11 +524,30 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     buttonRow = buttonRow + 2
     if firstFocus.len == 0:
       firstFocus = ".workshop"
-  let crafterButton = craftDialog & ".members"
-  tclEval(script = "ttk::button " & crafterButton & " -text {Don't assing anyone} -variable craftworker -value noone")
+  var crafterButton = craftDialog & ".members"
+  tclEval(script = "ttk::radiobutton " & crafterButton & " -text {Don't assing anyone} -variable craftworker -value noone")
   tclEval(script = "grid " & crafterButton & " -columnspan 2 -padx 5 -sticky w")
   tclEval(script = "tooltip::tooltip " & crafterButton & " \"Don't assign anyone to the order. You can\\nmanually do it later, in ship info screen.\"")
   tclEval(script = "bind " & crafterButton & " <Tab> {focus " & craftDialog & ".bestworker;break}")
+  tclEval(script = "bind " & crafterButton & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+  if firstFocus.len == 0:
+    firstFocus = ".noworker"
+  crafterButton = craftDialog & ".bestworker"
+  tclEval(script = "ttk::radiobutton " & crafterButton & " -text {Assign the best worker} -variable craftworker -value best")
+  tclEval(script = "grid " & crafterButton & " -columnspan 2 -padx 5 -sticky w")
+  tclEval(script = "tooltip::tooltip " & crafterButton & " \"Assign the crew member with the highest skill\\nneeded for the recipe, even if the crew member\\nis busy.\"")
+  tclEval(script = "bind " & crafterButton & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+  crafterButton = craftDialog & ".selectedworker"
+  tclEval(script = "ttk::radiobutton " & crafterButton & " -text {Assign selected member} -variable craftworker -value fromlist")
+  tclEval(script = "grid " & crafterButton & " -columnspan 2 -padx 5 -sticky w")
+  tclEval(script = "tooltip::tooltip " & crafterButton & " \"Assign the crew member from the list.\\nThe sign + after name means that this crew member has\\nneeded skill, the sign ++ after name means that his/her\\nneeded skill is the best in the crew.\"")
+  let crewBox = craftDialog & ".members"
+  tclEval(script = "ttk::combobox " & crewBox & " -state readonly")
+  tclEval(script = "bind " & crafterButton & " <Tab> {focus " & crewBox & ";break}")
+  tclEval(script = "bind " & crafterButton & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+  var crewList = ""
+  for index, member in playerShip.crew:
+    crewList.add(y = "")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
