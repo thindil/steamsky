@@ -14,7 +14,7 @@ suite "Unit tests for ships2 module":
   loadMobs("../bin/data/mobs.dat")
   loadShips("../bin/data/ships.dat")
 
-  test "Testing damageModule.":
+  test "Damaging a module.":
     playerShip.modules = @[]
     playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
         durability: 100))
@@ -22,10 +22,10 @@ suite "Unit tests for ships2 module":
     check:
       playerShip.modules[0].durability == 90
 
-  test "Testing countCombatValue.":
+  test "Counting a combat value.":
     discard countCombatValue()
 
-  test "Testing generateShipName.":
+  test "Generating a ship's name.":
     check:
       generateShipName("POLEIS").len() > 0
 
