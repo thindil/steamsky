@@ -565,6 +565,15 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tooltip::tooltip " & button & " \"Set the crafting order.\"")
   tclEval(script = "bind " & button & " <Escape> {" & craftDialog & ".cancel invoke;break}")
   button = craftDialog & ".cancel"
+  tclEval(script = "ttk::button " & button &
+      " -text {Cancel} -command {CloseDialog " & craftDialog & "} -image cancelicon -style Dialogred.TButton")
+  tclEval(script = "grid " & button & " -pady 5 -padx 5 -column 1 -row " & $buttonRow)
+  tclEval(script = "tooltip::tooltip " & button & " \"Cancel setting the order and close dialog. \\[Escape key\\]\"")
+  tclEval(script = "bind " & button & " <Tab> {focus " & craftDialog &
+      firstFocus & ";break}")
+  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+  showDialog(dialog = craftDialog)
+  tclEval(script = "focus " & button)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
