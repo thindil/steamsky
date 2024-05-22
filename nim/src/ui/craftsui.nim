@@ -479,12 +479,38 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   var button = craftDialog & ".maxamount"
   tclEval(script = "ttk::button " & button & " -text {max " & $maxAmount &
       "} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
+  var
+    firstFocus = ""
+    buttonRow = 1
   if recipeType != "Study":
     if maxAmount > 1:
       tclEval(script = "grid " & label)
       tclEval(script = "grid " & button & " -row 1 -column 1 -padx {0 5}")
       tclEval(script = "tooltip::tooltip " & button & " \"Set maximum possible amount of how many times\\nthe crafting order should be done.\"")
       tclEval(script = "bind " & button & " <Tab> {focus " & amountBox & ";break}")
+      tclEval(script = "bind " & button & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+      firstFocus = ".maxamount"
+    else:
+      tclEval(script = "grid " & label & " -columnspan 2")
+    tclEval(script = "grid " & amountBox & " -columnspan 2 -padx 5")
+    tclEval(script = "tooltip::tooltip " & amountBox & " \"Set amount of how many times the crafting order\\nshould be done.\"")
+    tclEval(script = "bind " & amountBox & " <Tab> {focus " & craftDialog & ".noworker;break}")
+    tclEval(script = "bind " & amountBox & " <Escape> {" & craftDialog & ".cancel invoke;break}")
+    if firstFocus.len == 0:
+      firstFocus = ".amount"
+    buttonRow = buttonRow + 2
+  var mType: ModuleType
+  if recipeType in ["Study", "Deconstruct"]:
+    mType = alchemyLab
+  else:
+    mType = recipesList[recipeIndex].workplace
+  var
+    modulesList2 = ""
+    modulesAmount = 0
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == mType:
+      modulesList2.add(y = " {" & module.name & "}")
+      modulesAmount.inc
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
