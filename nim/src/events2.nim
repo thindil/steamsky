@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,12 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the in-game events like checking for events. Split
+## from events module to avoid circular dependencies.
+
 import std/tables
+import contracts
 import basestypes, combat, events, factions, game, game2, items, maps, messages,
     shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
 
 proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
-    Exception], tags: [WriteIOEffect, RootEffect].} =
+    Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Check and generate an event happened at the player's position.
   ##
   ## Returns true if a combat with another ship started, otherwise false.
@@ -32,8 +36,8 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       return false
   if getRandom(min = 1, max = 100) > 6:
     return false
-  var roll = getRandom(min = 1, max = 100)
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var roll: Positive = getRandom(min = 1, max = 100)
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   # Event outside a sky base
   if baseIndex == 0:
 
@@ -45,9 +49,9 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
     case roll
     # Engine damaged
     of 1 .. 5:
-      let engineerIndex = findMember(order = engineer)
+      let engineerIndex: int = findMember(order = engineer)
       if engineerIndex > -1 and playerShip.speed != fullStop:
-        var roll2 = getRandom(min = 1, max = 100)
+        var roll2: Positive = getRandom(min = 1, max = 100)
         case playerShip.speed
         of quarterSpeed:
           roll2 = if roll2 < 21: 1 else: roll2 - 20
@@ -59,11 +63,11 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
             skillIndex = engineeringSkill):
           addMessage(message = "One of your engines is taking damage.",
               mType = otherMessage, color = red)
-          var engines: seq[Natural]
+          var engines: seq[Natural] = @[]
           for index, module in playerShip.modules:
             if module.mType == ModuleType2.engine and not module.disabled:
               engines.add(y = index)
-          let engineIndex = engines[getRandom(min = 0, max = engines.high)]
+          let engineIndex: Natural = engines[getRandom(min = 0, max = engines.high)]
           playerShip.modules[engineIndex].durability.dec
           updateOrders(ship = playerShip)
         else:
@@ -73,11 +77,11 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
             crewIndex = engineerIndex)
     # Bad weather
     of 6 .. 20:
-      let pilotIndex = findMember(order = pilot)
+      let pilotIndex: int = findMember(order = pilot)
       if pilotIndex > 0:
         addMessage(message = "Sudden bad weather causes your travel to take longer.",
             mType = otherMessage, color = red)
-        var timePassed = 60 - getSkillLevel(member = playerShip.crew[
+        var timePassed: int = 60 - getSkillLevel(member = playerShip.crew[
             pilotIndex], skillIndex = pilotingSkill)
         if timePassed < 1:
           timePassed = 1
@@ -87,7 +91,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         updateGame(minutes = timePassed)
     # Friendly trader
     of 21 .. 23:
-      eventsList.add(EventData(eType: trader, skyX: playerShip.skyX,
+      eventsList.add(y = EventData(eType: trader, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: traders[getRandom(min = traders.low, max = traders.high)]))
       skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
@@ -97,7 +101,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       updateOrders(ship = playerShip)
     # Friendly ship
     of 24 .. 30:
-      eventsList.add(EventData(eType: friendlyShip, skyX: playerShip.skyX,
+      eventsList.add(y = EventData(eType: friendlyShip, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: friendlyShips[getRandom(min = friendlyShips.low,
           max = friendlyShips.high)]))
@@ -110,7 +114,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
     else:
       var enemies: seq[Positive]
       generateEnemies(enemies = enemies)
-      eventsList.add(EventData(eType: enemyShip, skyX: playerShip.skyX,
+      eventsList.add(y = EventData(eType: enemyShip, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: enemies[getRandom(min = enemies.low, max = enemies.high)]))
       skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
@@ -129,7 +133,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         var restingCrew: seq[Positive]
         for index, member in playerShip.crew:
           if member.order == rest:
-            restingCrew.add(index)
+            restingCrew.add(y = index)
         if restingCrew.len > 0:
           let roll2 = getRandom(min = restingCrew.low, max = restingCrew.high)
           var injuries = getRandom(min = 1, max = 10)
@@ -166,7 +170,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       of 1 .. 20:
         var enemies: seq[Positive]
         generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
-        eventsList.add(EventData(eType: attackOnBase, skyX: playerShip.skyX,
+        eventsList.add(y = EventData(eType: attackOnBase, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 60, max = 90),
             shipIndex: enemies[getRandom(min = enemies.low,
             max = enemies.high)]))
@@ -175,7 +179,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
       # Disease in base
       of 21:
-        eventsList.add(EventData(eType: disease, skyX: playerShip.skyX,
+        eventsList.add(y = EventData(eType: disease, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000), data: 1))
         addMessage(message = "You can't dock to the base now, it is closed due to a disease.",
             mType = otherMessage)
@@ -193,7 +197,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
           if getPrice(baseType = skyBases[skyMap[playerShip.skyX][
               playerShip.skyY].baseIndex].baseType, itemIndex = newItemIndex) > 0:
             break
-        eventsList.add(EventData(eType: doublePrice, skyX: playerShip.skyX,
+        eventsList.add(y = EventData(eType: doublePrice, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 1_440, max = 2_880),
             itemIndex: newItemIndex))
       # Full docks or enemy patrol
@@ -204,7 +208,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
           var enemies: seq[Positive]
           generateEnemies(enemies = enemies, owner = skyBases[baseIndex].owner,
               withTraders = false)
-          eventsList.add(EventData(eType: enemyPatrol, skyX: playerShip.skyX,
+          eventsList.add(y = EventData(eType: enemyPatrol, skyX: playerShip.skyX,
               skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
               shipIndex: enemies[getRandom(min = enemies.low,
               max = enemies.high)]))
@@ -213,7 +217,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
               mType = otherMessage, color = red)
           return startCombat(enemyIndex = eventsList[eventsList.high].shipIndex)
         # Full docks
-        eventsList.add(EventData(eType: fullDocks, skyX: playerShip.skyX,
+        eventsList.add(y = EventData(eType: fullDocks, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 15, max = 30), data: 1))
         addMessage(message = "You can't dock to the base now, because its docks are full.",
             mType = otherMessage, color = red)
@@ -222,7 +226,9 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
 
 # Temporary code for interfacing with Ada
 
-proc checkAdaForEvent(): cint {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc checkAdaForEvent(): cint {.raises: [], tags: [WriteIOEffect, RootEffect],
+    exportc, contractual.} =
+  ## Temporary C binding
   try:
     if checkForEvent():
       return 1
