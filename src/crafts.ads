@@ -70,32 +70,18 @@ package Crafts is
    -- SOURCE
    function Set_Recipe_Data
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data;
-   -- ****
+     -- ****
 
-      -- ****f* Crafts/Crafts.Check_Recipe
-      -- FUNCTION
-      -- Check if player have all requirements for selected recipe
-      -- PARAMETERS
-      -- Recipe_Index - Index of the prototype recipe to check or if deconstruct
-      --                existing item, "Study " + item name.
-      -- RESULT
-      -- Max amount of items which can be craft
-      -- SOURCE
-   function Check_Recipe
-     (Recipe_Index: Tiny_String.Bounded_String) return Positive with
-      Pre => Tiny_String.Length(Source => Recipe_Index) > 0;
-      -- ****
-
-      -- ****f* Crafts/Crafts.Set_Recipe
-      -- FUNCTION
-      -- Set crafting recipe for selected workshop
-      -- PARAMETERS
-      -- Workshop     - Index of player ship module (workplace) to which
-      --                selected recipe will be set
-      -- Amount       - How many times the recipe will be crafted
-      -- Recipe_Index - Index of the prototype recipe to check or if deconstruct
-      --                existing item, "Study " + item name.
-      -- SOURCE
+     -- ****f* Crafts/Crafts.Set_Recipe
+     -- FUNCTION
+     -- Set crafting recipe for selected workshop
+     -- PARAMETERS
+     -- Workshop     - Index of player ship module (workplace) to which
+     --                selected recipe will be set
+     -- Amount       - How many times the recipe will be crafted
+     -- Recipe_Index - Index of the prototype recipe to check or if deconstruct
+     --                existing item, "Study " + item name.
+     -- SOURCE
    procedure Set_Recipe
      (Workshop, Amount: Positive;
       Recipe_Index: Tiny_String.Bounded_String) with

@@ -16,8 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Items;
-with Trades;
 
 package body Crafts is
 
@@ -96,42 +94,6 @@ package body Crafts is
       Recipe := Convert_Recipe_From_Nim(Crafting_Data => Temp_Nim_Record);
       return Recipe;
    end Set_Recipe_Data;
-
-   function Check_Recipe
-     (Recipe_Index: Tiny_String.Bounded_String) return Positive is
-      use Items;
-      use Trades;
-
-      Max_Amount: Integer;
-      function Check_Ada_Recipe(R_Index: chars_ptr) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "checkAdaRecipe";
-      Crafting_No_Materials: exception;
-      Crafting_No_Tools: exception;
-      Crafting_No_Workshop: exception;
-   begin
-      Get_Ada_Modules;
-      Get_Ada_Ship_Cargo
-        (Cargo => Inventory_To_Nim(Inventory => Player_Ship.Cargo),
-         Get_Player_Ship => 1);
-      Max_Amount :=
-        Check_Ada_Recipe
-          (R_Index =>
-             New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
-      case Max_Amount is
-         when -1 =>
-            raise Trade_No_Free_Cargo;
-         when -2 =>
-            raise Crafting_No_Workshop;
-         when -3 =>
-            raise Crafting_No_Materials;
-         when -4 =>
-            raise Crafting_No_Tools;
-         when others =>
-            return Max_Amount;
-      end case;
-   end Check_Recipe;
 
    procedure Set_Recipe
      (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is
