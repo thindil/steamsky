@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Hangs on starting a new game on Windows
 - Hangs when an event ends
 - Starting upgrading an engine's fuel usage
+- Showing information about upgrading a gun's damage
 
 ## [9.9] - 2024-04-14
 
