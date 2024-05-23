@@ -56,7 +56,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         of quarterSpeed:
           roll2 = if roll2 < 21: 1 else: roll2 - 20
         of fullSpeed:
-          roll2 = roll2 + 20
+          roll2 += 20
         else:
           discard
         if roll2 > getSkillLevel(member = playerShip.crew[engineerIndex],
@@ -112,7 +112,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       updateOrders(ship = playerShip)
     # Combat
     else:
-      var enemies: seq[Positive]
+      var enemies: seq[Positive] = @[]
       generateEnemies(enemies = enemies)
       eventsList.add(y = EventData(eType: enemyShip, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
@@ -130,17 +130,16 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
     if playerShip.speed == docked:
       # Brawl in base, happens only when there is more than 1 crew member
       if roll < 5 and playerShip.crew.len > 1:
-        var restingCrew: seq[Positive]
+        var restingCrew: seq[Positive] = @[]
         for index, member in playerShip.crew:
           if member.order == rest:
             restingCrew.add(y = index)
         if restingCrew.len > 0:
-          let roll2 = getRandom(min = restingCrew.low, max = restingCrew.high)
-          var injuries = getRandom(min = 1, max = 10)
+          let roll2: Natural = getRandom(min = restingCrew.low, max = restingCrew.high)
+          var injuries: Positive = getRandom(min = 1, max = 10)
           if injuries > playerShip.crew[restingCrew[roll2]].health:
             injuries = playerShip.crew[restingCrew[roll2]].health
-          playerShip.crew[restingCrew[roll2]].health = playerShip.crew[
-              restingCrew[roll2]].health - injuries
+          playerShip.crew[restingCrew[roll2]].health -= injuries
           addMessage(message = playerShip.crew[restingCrew[roll2]].name &
               " was injured in a brawl inside the base", mType = otherMessage, color = red)
           if playerShip.crew[restingCrew[roll2]].health == 0:
@@ -148,9 +147,9 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
                 reason = "injuries in brawl in the base", ship = playerShip)
       # Lost cargo in the base
       elif roll > 4 and roll < 10:
-        let roll2 = getRandom(min = playerShip.cargo.low,
+        let roll2: Natural = getRandom(min = playerShip.cargo.low,
             max = playerShip.cargo.high)
-        var lostCargo = getRandom(min = 1, max = 10)
+        var lostCargo: Positive = getRandom(min = 1, max = 10)
         if lostCargo > playerShip.cargo[roll2].amount:
           lostCargo = playerShip.cargo[roll2].amount
         addMessage(message = "During checking your ship's cargo, you noticed that you lost " &
@@ -168,7 +167,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       case roll
       # Base is attacked
       of 1 .. 20:
-        var enemies: seq[Positive]
+        var enemies: seq[Positive] = @[]
         generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
         eventsList.add(y = EventData(eType: attackOnBase, skyX: playerShip.skyX,
             skyY: playerShip.skyY, time: getRandom(min = 60, max = 90),
@@ -184,9 +183,9 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         addMessage(message = "You can't dock to the base now, it is closed due to a disease.",
             mType = otherMessage)
       of 22 .. 30:
-        var newItemIndex = 0
+        var newItemIndex: Natural = 0
         while true:
-          var itemIndex = getRandom(min = 1, max = itemsList.len)
+          var itemIndex: int = getRandom(min = 1, max = itemsList.len)
           for j in 1 .. itemsList.len:
             itemIndex.dec
             if itemIndex == 0 and getPrice(baseType = skyBases[skyMap[
@@ -205,7 +204,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         # Enemy patrol (only at an enemy base)
         if roll in 20 .. 40 and not isFriendly(sourceFaction = playerShip.crew[
             0].faction, targetFaction = skyBases[baseIndex].owner):
-          var enemies: seq[Positive]
+          var enemies: seq[Positive] = @[]
           generateEnemies(enemies = enemies, owner = skyBases[baseIndex].owner,
               withTraders = false)
           eventsList.add(y = EventData(eType: enemyPatrol, skyX: playerShip.skyX,
