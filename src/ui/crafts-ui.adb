@@ -13,33 +13,31 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Handling;
 with Ada.Characters.Latin_1;
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 -- with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 -- with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Tooltip;
 with Config;
 with Crew;
-with Dialogs; use Dialogs;
-with Items; use Items;
+with Dialogs;
+with Items;
 with Maps.UI;
 with Ships.Crew;
 with Utils.UI; use Utils.UI;
@@ -409,8 +407,15 @@ package body Crafts.UI is
       use Ada.Characters.Latin_1;
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Ada.Strings.Unbounded;
+      use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Text;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+      use Tcl.Tklib.Ada.Tooltip;
       use Config;
+      use Dialogs;
+      use Items;
       use Tiny_String;
 
       Recipe_Index: constant Bounded_String :=
@@ -804,6 +809,8 @@ package body Crafts.UI is
       if CArgv.Arg(Argv => Argv, N => 2) = "true" then
          Add_Buttons_Block :
          declare
+            use Ada.Characters.Handling;
+
             Button_Box: constant Ttk_Frame :=
               Create(pathName => Recipe_Dialog & ".buttons");
             Button: Ttk_Button;
@@ -877,6 +884,8 @@ package body Crafts.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
       use Crew;
       use Maps.UI;
       use Ships.Crew;
