@@ -27,25 +27,25 @@ suite "Unit tests for shipscargo module":
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0)], health: 100))
 
-  test "Testing updateCargo.":
-    checkpoint "Remove an item from the player's ship cargo"
+  test "Remove an item from the player's ship cargo":
     updateCargo(playerShip, 1, -1)
     check:
       playerShip.cargo[0].amount == 99
-    checkpoint "Add an item to the player's ship cargo"
+
+  test "Add an item to the player's ship cargo":
     updateCargo(playerShip, 1, 1)
     check:
       playerShip.cargo[0].amount == 100
     updateCargo(playerShip, 40, -1)
 
-  test "Testing freeCargo.":
+  test "Checking a free space in the player's ship cargo.":
     check:
       freeCargo(1) > freeCargo(0)
 
-  test "Testing getItemAmount.":
+  test "Getting amount of an item in the player's ship cargo.":
     check:
       getItemAmount("Fuel") == 100
 
-  test "Testing getItemsAmount.":
+  test "Getting amount of items in the player's ship cargo.":
     check:
       getItemsAmount("Drinks") == 200
