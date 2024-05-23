@@ -456,19 +456,25 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCrafting", "1"].allocCStringArray)
 
 proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     recipeIndex = $argv[1]
     recipeLength = recipeIndex.len
     recipeType = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Study": "Study" elif recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Decon": "Deconstruct" else: "Craft")
-    craftDialog = createDialog(name = ".craftdialog", title = recipeType & " " &
-        (if recipeType == "Study": itemsList[recipeIndex[6 ..
-        ^1].parseInt].name elif recipeType == "Deconstruct": itemsList[
-        recipeIndex[12 .. ^1].parseInt].name else: itemsList[
-        recipeIndex.parseInt].name), titleWidth = 275, columns = 2)
-    maxAmount = checkRecipe(recipeIndex = recipeIndex)
+    craftDialog = try:
+        createDialog(name = ".craftdialog", title = recipeType & " " &
+          (if recipeType == "Study": itemsList[recipeIndex[6 ..
+          ^1].parseInt].name elif recipeType == "Deconstruct": itemsList[
+          recipeIndex[12 .. ^1].parseInt].name else: itemsList[
+          recipeIndex.parseInt].name), titleWidth = 275, columns = 2)
+      except:
+        return showError(message = "Can't create a dialog.")
+    maxAmount = try:
+        checkRecipe(recipeIndex = recipeIndex)
+      except:
+        return showError(message = "Can't get max amount.")
     amountBox = craftDialog & ".amount"
   tclEval(script = "ttk::spinbox " & amountBox & " -from 1 -to " & $maxAmount &
       " -validate key -validatecommand {ValidateSpinbox %W %P " & craftDialog & ".craft} -width 20")
@@ -503,14 +509,20 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   if recipeType in ["Study", "Deconstruct"]:
     mType = alchemyLab
   else:
-    mType = recipesList[recipeIndex].workplace
+    mType = try:
+        recipesList[recipeIndex].workplace
+      except:
+        return showError(message = "Can't get a module's type.")
   var
     modulesList2 = ""
     modulesAmount = 0
   for module in playerShip.modules:
-    if modulesList[module.protoIndex].mType == mType:
-      modulesList2.add(y = " {" & module.name & "}")
-      modulesAmount.inc
+    try:
+      if modulesList[module.protoIndex].mType == mType:
+        modulesList2.add(y = " {" & module.name & "}")
+        modulesAmount.inc
+    except:
+      return showError(message = "Can't create the list of modules.")
   let modulesBox = craftDialog & ".workshop"
   tclEval(script = "ttk::combobox " & modulesBox & " -state readonly")
   tclEval(script = modulesBox & " -values [list " & modulesList2 & "]")
@@ -546,7 +558,10 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & crafterButton & " <Tab> {focus " & crewBox & ";break}")
   tclEval(script = "bind " & crafterButton & " <Escape> {" & craftDialog & ".cancel invoke;break}")
   var crewList = ""
-  let recipe = setRecipeData(recipeIndex = recipeIndex)
+  let recipe = try:
+      setRecipeData(recipeIndex = recipeIndex)
+    except:
+      return showError(message = "Can't get the recipe.")
   for index, member in playerShip.crew:
     crewList.add(y = " {" & member.name & getSkillMarks(
         skillIndex = recipe.skill, memberIndex = index) & "}")
