@@ -524,7 +524,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
     buttonRow = buttonRow + 2
     if firstFocus.len == 0:
       firstFocus = ".workshop"
-  var crafterButton = craftDialog & ".members"
+  var crafterButton = craftDialog & ".noworker"
   tclEval(script = "ttk::radiobutton " & crafterButton & " -text {Don't assing anyone} -variable craftworker -value noone")
   tclEval(script = "grid " & crafterButton & " -columnspan 2 -padx 5 -sticky w")
   tclEval(script = "tooltip::tooltip " & crafterButton & " \"Don't assign anyone to the order. You can\\nmanually do it later, in ship info screen.\"")
@@ -550,7 +550,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   for index, member in playerShip.crew:
     crewList.add(y = " {" & member.name & getSkillMarks(
         skillIndex = recipe.skill, memberIndex = index) & "}")
-  tclEval(script = crewBox & " -values [list " & crewList & "]")
+  tclEval(script = crewBox & " configure -values [list" & crewList & "]")
   tclEval(script = crewBox & " current 0")
   tclEval(script = "grid " & crewBox & " -columnspan 2 -padx 5")
   tclEval(script = "tooltip::tooltip " & crewBox & " \"Assign the crew member from the list.\\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\\nneeded skill is the best in the crew.\"")
@@ -560,7 +560,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   button = craftDialog & ".craft"
   tclEval(script = "ttk::button " & button & " -text {" & recipeType &
       "} -command {SetCrafting {" & $argv[1] & "};CloseDialog " & craftDialog &
-      "} -image " & recipeType & "2icon -style Dialoggreen.TButton")
+      "} -image " & recipeType.toLowerAscii & "2icon -style Dialoggreen.TButton")
   tclEval(script = "grid " & button & " -pady 5 -padx 5")
   tclEval(script = "tooltip::tooltip " & button & " \"Set the crafting order.\"")
   tclEval(script = "bind " & button & " <Escape> {" & craftDialog & ".cancel invoke;break}")
