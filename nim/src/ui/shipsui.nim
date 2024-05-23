@@ -102,7 +102,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue
         of gun, batteringRam:
-          upgradeInfo.add("(quality)")
+          upgradeInfo.add("(damage)")
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue * 2
         of hull:
