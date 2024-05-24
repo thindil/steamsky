@@ -537,7 +537,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't create the list of modules.")
   let modulesBox = craftDialog & ".workshop"
   tclEval(script = "ttk::combobox " & modulesBox & " -state readonly")
-  tclEval(script = modulesBox & " -values [list " & modulesList2 & "]")
+  tclEval(script = modulesBox & " configure -values [list" & modulesList2 & "]")
   tclEval(script = modulesBox & " current 0")
   if modulesAmount > 1:
     label = craftDialog & ".workshoplabel"
