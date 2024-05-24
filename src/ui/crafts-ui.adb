@@ -119,9 +119,7 @@ package body Crafts.UI is
       use Ada.Strings.Unbounded;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Text;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
-      use Tcl.Tklib.Ada.Tooltip;
       use Config;
       use Dialogs;
       use Items;
@@ -519,6 +517,8 @@ package body Crafts.UI is
          Add_Buttons_Block :
          declare
             use Ada.Characters.Handling;
+            use Tcl.Tk.Ada.Widgets.TtkButton;
+            use Tcl.Tklib.Ada.Tooltip;
 
             Button_Box: constant Ttk_Frame :=
               Create(pathName => Recipe_Dialog & ".buttons");
