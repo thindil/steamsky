@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, os, strutils, tables]
-import ../[config, crafts, crewinventory, game, tk, types]
+import ../[config, crafts, crewinventory, game, shipscrew, tk, types]
 import coreui, dialogs, table, utilsui2
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
@@ -603,6 +603,29 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus " & button)
   return tclOk
 
+proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  var recipeIndex = $argv[1]
+  if recipeIndex[0] == '{':
+    recipeIndex = recipeIndex[1 .. ^2]
+  let
+    modulesBox = ".craftdialog.workshop"
+    amountBox = ".craftdialog.amount"
+    assignWorker = tclGetVar(varName = "craftworker")
+    memberBox = ".craftdialog.members"
+  var workshopIndex = tclEval2(script = modulesBox & " current").parseInt + 1
+  for index, module in playerShip.modules:
+    if module.name == tclEval2(script = modulesBox & " get"):
+      workshopIndex.dec
+    if workshopIndex == 0:
+      setRecipe(workshop = index, amount = tclEval2(script = amountBox &
+          " get").parseInt, recipeIndex = recipeIndex)
+      if assignWorker == "fromlist":
+        giveOrders(ship = playerShip, memberIndex = tclEval2(
+            script = memberBox & " current").parseInt, givenOrder = craft,
+            moduleIndex = index)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -610,6 +633,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowCrafting", showCraftingCommand)
 #    addCommand("SortCrafting", sortCraftingCommand)
 #    addCommand("ShowSetRecipe", showSetRecipeCommand)
+#    addCommand("SetCrafting", setCraftingCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
