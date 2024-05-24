@@ -604,8 +604,8 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  echo "here"
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   var recipeIndex = $argv[1]
   if recipeIndex[0] == '{':
     recipeIndex = recipeIndex[1 .. ^2]
@@ -614,29 +614,47 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     amountBox = ".craftdialog.amount"
     assignWorker = tclGetVar(varName = "craftworker")
     memberBox = ".craftdialog.members"
-  var workshopIndex = tclEval2(script = modulesBox & " current").parseInt + 1
+  var workshopIndex = try:
+      tclEval2(script = modulesBox & " current").parseInt + 1
+    except:
+      return showError(message = "Can't get the workshop index.")
   for index, module in playerShip.modules:
     if module.name == tclEval2(script = modulesBox & " get"):
       workshopIndex.dec
     if workshopIndex == 0:
-      setRecipe(workshop = index, amount = tclEval2(script = amountBox &
-          " get").parseInt, recipeIndex = recipeIndex)
+      try:
+        setRecipe(workshop = index, amount = tclEval2(script = amountBox &
+            " get").parseInt, recipeIndex = recipeIndex)
+      except:
+        return showError(message = "Can't set the recipe.")
       if assignWorker == "fromlist":
-        giveOrders(ship = playerShip, memberIndex = tclEval2(
-            script = memberBox & " current").parseInt, givenOrder = craft,
-            moduleIndex = index)
+        try:
+          giveOrders(ship = playerShip, memberIndex = tclEval2(
+              script = memberBox & " current").parseInt, givenOrder = craft,
+              moduleIndex = index)
+        except:
+          return showError(message = "Can't give order from list.")
       elif assignWorker == "best":
-        let recipe = setRecipeData(recipeIndex = recipeIndex)
+        let recipe = try:
+            setRecipeData(recipeIndex = recipeIndex)
+          except:
+            return showError(message = "Can't set the recipe's data.")
         var workerAssigned = false
         for mIndex, member in playerShip.crew:
           if getSkillMarks(skillIndex = recipe.skill, memberIndex = mIndex) == " ++":
-            giveOrders(ship = playerShip, memberIndex = mIndex,
-                givenOrder = craft, moduleIndex = index)
+            try:
+              giveOrders(ship = playerShip, memberIndex = mIndex,
+                  givenOrder = craft, moduleIndex = index)
+            except:
+              return showError(message = "Can't give order to best worker.")
             workerAssigned = true
             break
         if not workerAssigned:
-          giveOrders(ship = playerShip, memberIndex = 0, givenOrder = craft,
-              moduleIndex = index)
+          try:
+            giveOrders(ship = playerShip, memberIndex = 0, givenOrder = craft,
+                moduleIndex = index)
+          except:
+            return showError(message = "Can't give order to the player.")
       updateHeader()
       updateMessages()
       break
