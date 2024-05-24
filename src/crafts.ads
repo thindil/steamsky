@@ -17,7 +17,7 @@
 
 with ShipModules; use ShipModules;
 with Game; use Game;
-with Ships; use Ships;
+with Ships; use Ships; --## rule line off REDUCEABLE_SCOPE
 
 -- ****h* Crafts/Crafts
 -- FUNCTION
