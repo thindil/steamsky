@@ -18,7 +18,7 @@ suite "Unit tests for crew module":
       1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
       experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
-      experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
+      experience: 0), MobAttributeRecord(level: 3, experience: 0)], name: "Laeran"))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
       1, 0, 0], order: gunner, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
