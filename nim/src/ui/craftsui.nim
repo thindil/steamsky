@@ -605,6 +605,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
+  echo "here"
   var recipeIndex = $argv[1]
   if recipeIndex[0] == '{':
     recipeIndex = recipeIndex[1 .. ^2]
