@@ -23,6 +23,13 @@ import contracts
 import basestypes, combat, events, factions, game, game2, items, maps, messages,
     shipscargo, shipscrew, shipscrew2, shipsmovement, types, utils
 
+proc gainPerception() {.sideEffect, raises: [], tags: [], contractual.} =
+  ## Gain experience in perception skill for pilot and gunners of the player's
+  ## ship
+  for index, member in playerShip.crew:
+    if member.order in {pilot, gunner}:
+      gainExp(amount = 1, skillNumber = perceptionSkill, crewIndex = index)
+
 proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Check and generate an event happened at the player's position.
@@ -40,12 +47,6 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
   let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   # Event outside a sky base
   if baseIndex == 0:
-
-    proc gainPerception() =
-      for index, member in playerShip.crew:
-        if member.order in {pilot, gunner}:
-          gainExp(amount = 1, skillNumber = perceptionSkill, crewIndex = index)
-
     case roll
     # Engine damaged
     of 1 .. 5:
