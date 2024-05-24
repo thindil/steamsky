@@ -17,7 +17,7 @@
 
 import std/[algorithm, os, strutils, tables]
 import ../[config, crafts, crewinventory, game, shipscrew, tk, types]
-import coreui, dialogs, table, utilsui2
+import coreui, dialogs, table, updateheader, utilsui2
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
@@ -624,6 +624,21 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         giveOrders(ship = playerShip, memberIndex = tclEval2(
             script = memberBox & " current").parseInt, givenOrder = craft,
             moduleIndex = index)
+      elif assignWorker == "best":
+        let recipe = setRecipeData(recipeIndex = recipeIndex)
+        var workerAssigned = false
+        for mIndex, member in playerShip.crew:
+          if getSkillMarks(skillIndex = recipe.skill, memberIndex = mIndex) == " ++":
+            giveOrders(ship = playerShip, memberIndex = mIndex,
+                givenOrder = craft, moduleIndex = index)
+            workerAssigned = true
+            break
+        if not workerAssigned:
+          giveOrders(ship = playerShip, memberIndex = 0, givenOrder = craft,
+              moduleIndex = index)
+      updateHeader()
+      updateMessages()
+      break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
