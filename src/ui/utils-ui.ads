@@ -13,16 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
---## rule off REDUCEABLE_SCOPE
-with Ada.Containers; use Ada.Containers;
---## rule on REDUCEABLE_SCOPE
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Config; use Config;
-with Ships; use Ships;
 
 -- ****h* Utils/UUI
 -- FUNCTION
@@ -165,26 +161,6 @@ package Utils.UI is
       -- SOURCE
    procedure Delete_Widgets
      (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class);
-      -- ****
-
-      -- ****f* UUI/UUI.Get_Skill_Marks
-      -- FUNCTION
-      -- Get the marks for the selected skill for the selected crew member
-      -- PARAMETERS
-      -- Skill_Index  - The index of the skill which will be checked
-      -- Member_Index - The index of the player ship crew member which will be
-      --                checked
-      -- RESULT
-      -- If the crew member don't have the selected skill, empty String, if
-      -- have the skill, " +", if the skill is the highest in the crew, " ++"
-      -- HISTORY
-      -- 6.7 - Added
-      -- SOURCE
-   function Get_Skill_Marks
-     (Skill_Index: Skills_Amount_Range; Member_Index: Positive)
-      return String with
-      Pre => Skill_Index <= Skills_Amount and
-      Member_Index <= Player_Ship.Crew.Last_Index;
       -- ****
 
    -- ****f* UUI/UUI.Set_Fonts

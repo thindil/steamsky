@@ -40,6 +40,7 @@ with Maps.UI; use Maps.UI;
 with MainMenu;
 with Messages; use Messages;
 with Missions;
+with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Crew;
 with Ships.UI.Crew;
@@ -531,22 +532,6 @@ package body Utils.UI is
         (S_Index => Start_Index, E_Index => End_Index,
          Parent => New_String(Str => Widget_Image(Win => Frame)));
    end Delete_Widgets;
-
-   function Get_Skill_Marks
-     (Skill_Index: Skills_Amount_Range; Member_Index: Positive)
-      return String is
-      function Get_Ada_Skill_Marks
-        (S_Index, M_Index: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaSkillMarks";
-   begin
-      return
-        Value
-          (Item =>
-             Get_Ada_Skill_Marks
-               (S_Index => Integer(Skill_Index), M_Index => Member_Index));
-   end Get_Skill_Marks;
 
    procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
       Help_Fonts: constant array(1 .. 4) of Unbounded_String :=
