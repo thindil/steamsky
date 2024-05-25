@@ -24,13 +24,13 @@ suite "Unit tests for shipscrew2 module":
       1, 0, 0], order: gunner, loyalty: 100))
   skyMap[1][1].baseIndex = 1
 
-  test "Testing deleteMember.":
+  test "Deleting a crew member.":
     let oldLength = playerShip.crew.len
     deleteMember(1, playerShip)
     check:
       playerShip.crew.len == (oldLength - 1)
 
-  test "Testing death.":
+  test "Killing a crew member.":
     playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
         homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
         1, 0, 0], order: gunner, loyalty: 100))
@@ -44,6 +44,6 @@ suite "Unit tests for shipscrew2 module":
     check:
       playerShip.cargo.len == 1
 
-  test "Testing getCurrentOrder.":
+  test "Getting the current order of a crew member.":
     check:
       getCurrentOrder(0) == "Talking with others"
