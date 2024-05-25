@@ -21,24 +21,19 @@ with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton;
--- with Tcl.Tk.Ada.Widgets.TtkEntry;
--- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
--- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tklib.Ada.Tooltip;
 with Config;
--- with Crew;
 with Dialogs;
 with Items;
--- with Maps.UI;
--- with Ships.Crew;
-with Utils.UI; use Utils.UI;
+with Ships;
+with Utils.UI;
 
 package body Crafts.UI is
 
@@ -117,12 +112,14 @@ package body Crafts.UI is
       use Ada.Strings;
       use Ada.Strings.Fixed;
       use Ada.Strings.Unbounded;
+      use Tcl.Ada;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Config;
       use Dialogs;
       use Items;
+      use Ships;
       use Tiny_String;
 
       Recipe_Index: constant Bounded_String :=
@@ -591,92 +588,6 @@ package body Crafts.UI is
       External_Name => "setCraftingCommand";
       -- ****
 
---   function Set_Crafting_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
---      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
---      use Crew;
---      use Maps.UI;
---      use Ships.Crew;
---      use Tiny_String;
---
---      Recipe_Index: Bounded_String :=
---        To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
---      Modules_Box: constant Ttk_ComboBox :=
---        Get_Widget(pathName => ".craftdialog.workshop");
---      Amount_Box: constant Ttk_SpinBox :=
---        Get_Widget(pathName => ".craftdialog.amount", Interp => Interp);
---      Members_Box: constant Ttk_ComboBox :=
---        Get_Widget(pathName => ".craftdialog.members", Interp => Interp);
---      Assign_Worker: constant String :=
---        Tcl_GetVar(interp => Interp, varName => "craftworker");
---      Workshop_Index: Natural :=
---        Natural'Value(Current(ComboBox => Modules_Box)) + 1;
---   begin
---      if Element(Source => Recipe_Index, Index => 1) = '{' then
---         Recipe_Index :=
---           Bounded_Slice
---             (Source => Recipe_Index, Low => 2,
---              High => Length(Source => Recipe_Index) - 1);
---      end if;
---      Set_Module_Loop :
---      for I in
---        Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index loop
---         if Player_Ship.Modules(I).Name =
---           To_Bounded_String(Source => Get(Widgt => Modules_Box)) then
---            Workshop_Index := Workshop_Index - 1;
---         end if;
---         if Workshop_Index = 0 then
---            Set_Recipe
---              (Workshop => I,
---               Amount => Positive'Value(Get(Widgt => Amount_Box)),
---               Recipe_Index => Recipe_Index);
---            if Assign_Worker = "fromlist" then
---               Give_Orders
---                 (Ship => Player_Ship,
---                  Member_Index =>
---                    Positive'Value(Current(ComboBox => Members_Box)) + 1,
---                  Given_Order => CRAFT, Module_Index => I);
---            elsif Assign_Worker = "best" then
---               Assing_Best_Worker_Block :
---               declare
---                  Recipe: constant Craft_Data :=
---                    Set_Recipe_Data(Recipe_Index => Recipe_Index);
---                  Worker_Assigned: Boolean := False;
---               begin
---                  Set_Best_Worker_Loop :
---                  for J in Player_Ship.Crew.Iterate loop
---                     if Get_Skill_Marks
---                         (Skill_Index => Recipe.Skill,
---                          Member_Index =>
---                            Crew_Container.To_Index(Position => J)) =
---                       " ++" then
---                        Give_Orders
---                          (Ship => Player_Ship,
---                           Member_Index =>
---                             Crew_Container.To_Index(Position => J),
---                           Given_Order => CRAFT, Module_Index => I);
---                        Worker_Assigned := True;
---                        exit Set_Best_Worker_Loop;
---                     end if;
---                  end loop Set_Best_Worker_Loop;
---                  if not Worker_Assigned then
---                     Give_Orders
---                       (Ship => Player_Ship, Member_Index => 1,
---                        Given_Order => CRAFT, Module_Index => I);
---                  end if;
---               end Assing_Best_Worker_Block;
---            end if;
---            Update_Header;
---            Update_Messages;
---            exit Set_Module_Loop;
---         end if;
---      end loop Set_Module_Loop;
---      return TCL_OK;
---   end Set_Crafting_Command;
-
    -- ****o* CUI4/CUI4.Sort_Crafting_Command
    -- FUNCTION
    -- Sort the list of crafting recipes
@@ -700,6 +611,7 @@ package body Crafts.UI is
       -- ****
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowCrafting", Ada_Command => Show_Crafting_Command'Access);
