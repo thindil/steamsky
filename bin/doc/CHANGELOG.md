@@ -27,6 +27,8 @@ All notable changes to this project will be documented in this file.
 - Hangs when an event ends
 - Starting upgrading an engine's fuel usage
 - Showing information about upgrading a gun's damage
+- Showing the wrong icon when there is the player's ship upgrade in progress,
+  but no one is assigned to it
 
 ## [9.9] - 2024-04-14
 
