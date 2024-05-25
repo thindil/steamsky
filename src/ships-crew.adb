@@ -77,37 +77,6 @@ package body Ships.Crew is
         Find_Ada_Member(Ord => Crew_Orders'Pos(Order), In_Player_Ship => 0);
    end Find_Member;
 
-   procedure Give_Orders
-     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
-      Given_Order: Crew_Orders;
-      Module_Index: Modules_Container.Extended_Index := 0;
-      Check_Priorities: Boolean := True) is
-      use Interfaces.C;
-
-      Message: chars_ptr;
-      function Give_Ada_Orders
-        (Get_Player_Ship, M_Index, G_Order, Mod_Index, Priorities: Natural)
-         return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "giveAdaOrders";
-   begin
-      Set_Ship_In_Nim(Ship => Ship);
-      Message :=
-        Give_Ada_Orders
-          (Get_Player_Ship => (if Ship = Player_Ship then 1 else 0),
-           M_Index => Member_Index, G_Order => Crew_Orders'Pos(Given_Order),
-           Mod_Index => Module_Index,
-           Priorities => (if Check_Priorities then 1 else 0));
-      if Strlen(Item => Message) > 0 then
-         if Ship = Player_Ship then
-            raise Crew_Order_Error with Value(Item => Message);
-         end if;
-         return;
-      end if;
-      Get_Ship_From_Nim(Ship => Ship);
-   end Give_Orders;
-
    procedure Update_Morale
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Amount: Integer) is

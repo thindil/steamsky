@@ -73,29 +73,6 @@ package Ships.Crew is
       Post => Find_Member'Result <= Ship_Crew.Last_Index;
       -- ****
 
-      -- ****f* SCrew/SCrew.Give_Orders
-      -- FUNCTION
-      -- Change order for selected crew member
-      -- PARAMETERS
-      -- Ship             - Ship in which crew member will be have changed order
-      -- Member_Index     - Crew index of member to change order
-      -- Given_Order      - New order for selected crew member
-      -- Module_Index     - Index of module to assign to crew member with new
-      --                    order. Default is 0 - no module assigned
-      -- Check_Priorities - If true, check orders priorities of whole crew.
-      --                    Default is true
-      -- Result
-      -- Parameter Ship with modified data (crew, modules, cargo)
-      -- SOURCE
-   procedure Give_Orders
-     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
-      Given_Order: Crew_Orders;
-      Module_Index: Modules_Container.Extended_Index := 0;
-      Check_Priorities: Boolean := True) with
-      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-      Module_Index <= Ship.Modules.Last_Index;
-      -- ****
-
       -- ****f* SCrew/SCrew.Update_Morale
       -- FUNCTION
       -- Update morale of selected crew member by value
