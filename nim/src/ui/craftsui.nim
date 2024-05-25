@@ -606,6 +606,18 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
 proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Set the selected recipe as a crafting order in the selected workshop
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetCrafting index
+  ## Index is the index of the crafting recipe to set
   var recipeIndex = $argv[1]
   if recipeIndex[0] == '{':
     recipeIndex = recipeIndex[1 .. ^2]
