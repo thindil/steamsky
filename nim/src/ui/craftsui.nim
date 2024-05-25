@@ -672,6 +672,26 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       break
   return tclOk
 
+proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    recipeIndex = $argv[1]
+    recipeLength = recipeIndex.len
+    recipeType = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
+        "Study": "Study" elif recipeLength > 6 and recipeIndex[0 .. 4] ==
+        "Decon": "Deconstruct" else: "Craft")
+    recipeDialog = createDialog(name = ".recipedialog", title = (
+        if recipeType == "Study": "Study " & itemsList[recipeIndex[6 ..
+        ^1].parseInt].name elif recipeType == "Deconstruct": "Deconstruct " &
+        itemsList[recipeIndex[12 .. ^1].parseInt].name else: "Craft " &
+        itemsList[recipesList[recipeIndex].resultIndex].name), titleWidth = 275)
+    recipeText = recipeDialog & ".text"
+  tclEval(script = "text " & recipeText & " -wrap char -height 15 -width 40")
+  tclEval(script = recipeText & " tag configure red -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-red)"))
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -680,6 +700,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("SortCrafting", sortCraftingCommand)
 #    addCommand("ShowSetRecipe", showSetRecipeCommand)
 #    addCommand("SetCrafting", setCraftingCommand)
+#    addCommand("ShowRecipeInfo", showRecipeInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
