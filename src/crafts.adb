@@ -73,43 +73,6 @@ package body Crafts is
       return Temp_Record;
    end Convert_Recipe_From_Nim;
 
-   function Set_Recipe_Data
-     (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
-      use Tiny_String;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Recipe: Craft_Data;
-      Temp_Nim_Record: Craft_Nim_Data;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Set_Ada_Recipe_Data
-        (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaRecipeData";
-   begin
-      Set_Ada_Recipe_Data
-        (C_Index => New_String(Str => To_String(Source => Recipe_Index)),
-         Ada_Craft => Temp_Nim_Record);
-      --## rule off IMPROPER_INITIALIZATION
-      Recipe := Convert_Recipe_From_Nim(Crafting_Data => Temp_Nim_Record);
-      return Recipe;
-   end Set_Recipe_Data;
-
-   procedure Set_Recipe
-     (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is
-      procedure Set_Ada_Recipe(W, A: Integer; R_Index: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaRecipe";
-   begin
-      Set_Ship_In_Nim;
-      Set_Ada_Recipe
-        (W => Workshop, A => Amount,
-         R_Index =>
-           New_String(Str => Tiny_String.To_String(Source => Recipe_Index)));
-      Get_Ship_From_Nim(Ship => Player_Ship);
-   end Set_Recipe;
-
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
       Nim_Recipe: Craft_Nim_Data;

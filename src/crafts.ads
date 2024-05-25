@@ -17,7 +17,6 @@
 
 with ShipModules; use ShipModules;
 with Game; use Game;
-with Ships; use Ships; --## rule line off REDUCEABLE_SCOPE
 
 -- ****h* Crafts/Crafts
 -- FUNCTION
@@ -58,36 +57,6 @@ package Crafts is
    end record;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
-
-   -- ****f* Crafts/Crafts.Set_Recipe_Data
-   -- FUNCTION
-   -- Set crafting data for selected recipe
-   -- PARAMETERS
-   -- Recipe_Index - Index of recipe from Recipes_List or full name of recipe
-   --                for deconstructing
-   -- RESULT
-   -- Crafting data for selected recipe
-   -- SOURCE
-   function Set_Recipe_Data
-     (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data;
-     -- ****
-
-     -- ****f* Crafts/Crafts.Set_Recipe
-     -- FUNCTION
-     -- Set crafting recipe for selected workshop
-     -- PARAMETERS
-     -- Workshop     - Index of player ship module (workplace) to which
-     --                selected recipe will be set
-     -- Amount       - How many times the recipe will be crafted
-     -- Recipe_Index - Index of the prototype recipe to check or if deconstruct
-     --                existing item, "Study " + item name.
-     -- SOURCE
-   procedure Set_Recipe
-     (Workshop, Amount: Positive;
-      Recipe_Index: Tiny_String.Bounded_String) with
-      Pre => Workshop <= Player_Ship.Modules.Last_Index and
-      Tiny_String.Length(Source => Recipe_Index) > 0;
-      -- ****
 
 -- Temporary code to interact with Nim
 
