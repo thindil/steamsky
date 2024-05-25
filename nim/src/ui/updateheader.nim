@@ -209,7 +209,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
       tclEval(script = label & " configure -image upgradeicon")
       tclEval(script = "tooltip::tooltip " & label & " \"A ship module upgrade in progress.\"")
     else:
-      tclEval(script = label & " configure -image noupgradeticon")
+      tclEval(script = label & " configure -image noupgradeicon")
       tclEval(script = "tooltip::tooltip " & label & " \"A ship module upgrade is in progress but no one is working on it.\"")
     tclEval(script = "grid " & label)
   else:
