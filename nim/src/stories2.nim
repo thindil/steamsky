@@ -1,5 +1,4 @@
-
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,48 +15,52 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the in-game stories like progressing the current
+## story . Split from stories module to avoid circular dependencies.
+
 import std/[strutils, tables]
+import contracts
 import game, game2, shipscrew, stories, types, utils
 
 proc progressStory*(nextStep: bool = false): bool {.sideEffect, raises: [
     KeyError, IOError, ValueError, Exception], tags: [WriteIOEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Progress the current story to the next step if requirements for it are meet.
   ##
   ## * nextStep - used in destroyShip condition, if false, progress to the next
   ##              step. Default value is false.
   var
-    step = if currentStory.currentStep == -1:
+    step: StepData = if currentStory.currentStep == -1:
         storiesList[currentStory.index].startingStep
       elif currentStory.currentStep > -1:
         storiesList[currentStory.index].steps[currentStory.currentStep]
       else:
         storiesList[currentStory.index].finalStep
-    finishCondition = getStepData(finishData = step.finishData,
+    finishCondition: string = getStepData(finishData = step.finishData,
         name = "condition")
-  let maxRandom = if step.finishCondition == destroyShip and nextStep:
+  let maxRandom: Positive = if step.finishCondition == destroyShip and nextStep:
         1
       else:
         getStepData(finishData = step.finishData, name = "chance").parseInt
   if finishCondition == "random" and getRandom(min = 1, max = maxRandom) > 1:
     updateGame(minutes = 10)
     return false
-  var chance = 0
+  var chance: int = 0
   case step.finishCondition
   of askInBase:
-    let traderIndex = findMember(order = talk)
+    let traderIndex: int = findMember(order = talk)
     if traderIndex > -1:
       chance = getSkillLevel(member = playerShip.crew[traderIndex],
           skillIndex = findSkillIndex(skillName = finishCondition))
   of destroyShip, stories.explore:
     for member in playerShip.crew:
       if member.order in {pilot, gunner}:
-        chance = chance + getSkillLevel(member = member,
+        chance += getSkillLevel(member = member,
             skillIndex = findSkillIndex(skillName = finishCondition))
   of loot:
     for member in playerShip.crew:
       if member.order == boarding:
-        chance = chance + getSkillLevel(member = member,
+        chance += getSkillLevel(member = member,
             skillIndex = findSkillIndex(skillName = finishCondition))
   of stories.any:
     discard
@@ -69,7 +72,7 @@ proc progressStory*(nextStep: bool = false): bool {.sideEffect, raises: [
   if finishCondition != "random":
     case step.finishCondition
     of askInBase:
-      let traderIndex = findMember(order = talk)
+      let traderIndex: int = findMember(order = talk)
       if traderIndex > -1:
         gainExp(amount = 10, skillNumber = findSkillIndex(
             skillName = finishCondition), crewIndex = traderIndex)
@@ -88,7 +91,7 @@ proc progressStory*(nextStep: bool = false): bool {.sideEffect, raises: [
   updateGame(minutes = 30)
   for finishedStory in finishedStories.mitems:
     if finishedStory.index == currentStory.index:
-      finishedStory.stepsTexts.add(getCurrentStoryText())
+      finishedStory.stepsTexts.add(y = getCurrentStoryText())
       break
   currentStory.step.inc
   currentStory.finishedStep = step.finishCondition
@@ -121,7 +124,8 @@ proc progressStory*(nextStep: bool = false): bool {.sideEffect, raises: [
 # Temporary code for interfacing with Ada
 
 proc progressAdaStory(nextStep: cint): cint {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc.} =
+    RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return progressStory(nextStep = nextStep == 1).cint
   except ValueError, IOError, Exception:
