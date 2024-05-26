@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -15,52 +15,69 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various procedures like generating names for robotic factions and
+## random numbers generation.
+
 import std/random
+import contracts
 import types
 
 proc generateRoboticName*(): string {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Generate robotic type name for bases, mobs, ships, etc
   ##
   ## Returns random robotic name
-  randomize()
-  let
-    lettersAmount: Positive = rand(x = 2..5)
-    numbersAmount: Positive = rand(x = 2..4)
-    letters: set[char] = {'A'..'Z'}
-  result = ""
-  # Get random letters for the name
-  for i in 1..lettersAmount:
-    result.add(y = sample(s = letters))
-  result.add('-')
-  # Get random digits for the name
-  for i in 1..numbersAmount:
-    result.add(y = $rand(max = 9))
+  ensure:
+    result.len > 0
+  body:
+    randomize()
+    let
+      lettersAmount: Positive = rand(x = 2..5)
+      numbersAmount: Positive = rand(x = 2..4)
+      letters: set[char] = {'A'..'Z'}
+    result = ""
+    # Get random letters for the name
+    for i in 1..lettersAmount:
+      result.add(y = sample(s = letters))
+    result.add(y = '-')
+    # Get random digits for the name
+    for i in 1..numbersAmount:
+      result.add(y = $rand(max = 9))
 
 proc getRandom(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Get the random value from the selected range
   ##
   ## * min - The minimal value from which the value will be taken
   ## * max - The maximal value from which the value will be taken
   ##
   ## Returns the random value from min and max range
-  randomize()
-  return rand(min .. max)
+  require:
+    min <= max
+  ensure:
+    result in min .. max
+  body:
+    randomize()
+    return rand(x = min .. max)
 
 proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Get the random value from the selected range
   ##
   ## * min - The minimal value from which the value will be taken
   ## * max - The maximal value from which the value will be taken
   ##
   ## Returns the random value from min and max range
-  randomize()
-  return rand(min .. max)
+  require:
+    min <= max
+  ensure:
+    result in min .. max
+  body:
+    randomize()
+    return rand(x = min .. max)
 
 proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.gcsafe,
-    sideEffect, raises: [], tags: [].} =
+    sideEffect, raises: [], tags: [], contractual.} =
   ## Get the difference in days between two dates, mostly with the current
   ## date in the game
   ##
@@ -75,7 +92,8 @@ proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.gcsafe,
 # Temporary code for interfacing with Ada
 
 proc daysAdaDifference(y, m, d, h, mi, yc, mc, dc, hc,
-    mic: cint): cint {.raises: [], tags: [], exportc.} =
+    mic: cint): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return daysDifference(dateToCompare = DateRecord(year: y, month: m, day: d,
       hour: h, minutes: m), currentDate = DateRecord(year: yc, month: mc,
       day: dc, hour: hc, minutes: mic))
