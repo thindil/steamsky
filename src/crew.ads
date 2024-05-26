@@ -224,13 +224,6 @@ package Crew is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****e* Crew/Crew.Crew_Order_Error
-   -- FUNCTION
-   -- Raised when new order can't be set for selected crew member
-   -- SOURCE
-   Crew_Order_Error: exception;
-   -- ****
-
    -- ****f* Crew/Crew.Gain_Exp
    -- FUNCTION
    -- Gain experience in selected skill.
