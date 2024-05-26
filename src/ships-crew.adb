@@ -15,13 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Ships.Crew is
 
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
+      use Interfaces.C.Strings;
 
       procedure Death_Ada
         (M_Index: Integer; Reas: chars_ptr;
