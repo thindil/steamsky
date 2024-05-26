@@ -690,6 +690,25 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recipeText & " tag configure red -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-red)"))
+  tclEval(script = recipeText & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
+  var recipe: CraftData
+  if recipeType == "Study":
+    recipe.materialTypes.add(y = itemsList[recipeIndex[6 ..
+        ^1].parseInt].itemType)
+    recipe.resultIndex = recipeIndex[6 .. ^1].parseInt
+    recipe.materialAmounts.add(y = 1)
+    recipe.resultAmount = 0
+    recipe.workplace = alchemyLab
+    for rec in recipesList.values:
+      if rec.resultIndex == recipe.resultIndex:
+        recipe.skill = rec.skill
+        recipe.time = rec.difficulty * 15
+        break
+    recipe.difficulty = 1
+    recipe.tool = alchemyTools
+    recipe.toolQuality = 100
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
