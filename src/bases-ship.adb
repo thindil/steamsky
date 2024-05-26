@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -35,7 +35,6 @@ package body Bases.Ship is
          External_Name => "repairAdaShip2";
       Bases_Ship_Nothing_To_Repair: exception;
    begin
-      Set_Ship_In_Nim;
       Get_Base_Cargo(Base_Index => Base_Index);
       Get_Game_Date;
       Result := Repair_Ada_Ship(M_Index => Module_Index);
