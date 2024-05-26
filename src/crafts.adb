@@ -37,42 +37,6 @@ package body Crafts is
    end record;
    --## rule on TYPE_INITIAL_VALUES
 
-   function Convert_Recipe_From_Nim
-     (Crafting_Data: Craft_Nim_Data) return Craft_Data is
-      use Tiny_String;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Temp_Record: Craft_Data;
-      Temp_Materials: TinyString_Container.Vector;
-      Temp_Amount: Positive_Container.Vector;
-   begin
-      Temp_Record :=
-        (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
-         Result_Index => Crafting_Data.Result_Index,
-         Result_Amount => Crafting_Data.Result_Amount,
-         Workplace => Module_Type'Val(Crafting_Data.Workplace),
-         Skill => SkillsData_Container.Extended_Index(Crafting_Data.Skill),
-         Time => Crafting_Data.Time, Difficulty => Crafting_Data.Difficulty,
-         Tool =>
-           To_Bounded_String
-             (Source =>
-                Interfaces.C.Strings.Value(Item => Crafting_Data.Tool)),
-         Reputation => Crafting_Data.Reputation,
-         Tool_Quality => Crafting_Data.Tool_Quality);
-      --## rule on IMPROPER_INITIALIZATION
-      Load_Materials_Loop :
-      for I in Crafting_Data.Material_Types'Range loop
-         exit Load_Materials_Loop when Crafting_Data.Material_Amounts(I) = 0;
-         Temp_Record.Material_Types.Append
-           (New_Item =>
-              To_Bounded_String
-                (Source => Value(Item => Crafting_Data.Material_Types(I))));
-         Temp_Record.Material_Amounts.Append
-           (New_Item => Crafting_Data.Material_Amounts(I));
-      end loop Load_Materials_Loop;
-      return Temp_Record;
-   end Convert_Recipe_From_Nim;
-
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
       Nim_Recipe: Craft_Nim_Data;
@@ -81,6 +45,42 @@ package body Crafts is
          Import => True,
          Convention => C,
          External_Name => "getAdaCraftData";
+      function Convert_Recipe_From_Nim
+        (Crafting_Data: Craft_Nim_Data) return Craft_Data is
+         use Tiny_String;
+
+         --## rule off IMPROPER_INITIALIZATION
+         Temp_Record: Craft_Data;
+         Temp_Materials: TinyString_Container.Vector;
+         Temp_Amount: Positive_Container.Vector;
+      begin
+         Temp_Record :=
+           (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
+            Result_Index => Crafting_Data.Result_Index,
+            Result_Amount => Crafting_Data.Result_Amount,
+            Workplace => Module_Type'Val(Crafting_Data.Workplace),
+            Skill => SkillsData_Container.Extended_Index(Crafting_Data.Skill),
+            Time => Crafting_Data.Time, Difficulty => Crafting_Data.Difficulty,
+            Tool =>
+              To_Bounded_String
+                (Source =>
+                   Interfaces.C.Strings.Value(Item => Crafting_Data.Tool)),
+            Reputation => Crafting_Data.Reputation,
+            Tool_Quality => Crafting_Data.Tool_Quality);
+         --## rule on IMPROPER_INITIALIZATION
+         Load_Materials_Loop :
+         for I in Crafting_Data.Material_Types'Range loop
+            exit Load_Materials_Loop when Crafting_Data.Material_Amounts(I) =
+              0;
+            Temp_Record.Material_Types.Append
+              (New_Item =>
+                 To_Bounded_String
+                   (Source => Value(Item => Crafting_Data.Material_Types(I))));
+            Temp_Record.Material_Amounts.Append
+              (New_Item => Crafting_Data.Material_Amounts(I));
+         end loop Load_Materials_Loop;
+         return Temp_Record;
+      end Convert_Recipe_From_Nim;
    begin
       Get_Ada_Craft
         (C_Index =>
