@@ -65,50 +65,51 @@ suite "Unit tests for shipsmovement module":
   skyBases[1].owner = "POLEIS"
   skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
 
-  test "Testing waitInPlace.":
+  test "Wait in place.":
     waitInPlace(1)
 
-  test "Testing realSpeed.":
-    checkpoint "Get the real speed of the docked ship."
+  test "Get the real speed of the docked ship.":
     playerShip.speed = docked
     check:
       realSpeed(playerShip) == 0
-    checkpoint "Get the real speed of the ship with full speed."
+
+  test "Get the real speed of the ship with full speed.":
     playerShip.speed = fullSpeed
     check:
       realSpeed(playerShip) > 0
-    checkpoint "Get the speed docked ship."
+
+  test "Get the speed docked ship.":
     playerShip.speed = docked
     check:
       realSpeed(playerShip, true) > 0
 
-  test "Testing dockShip.":
-    checkpoint "Undock the ship from a base."
+  test "Undock the ship from a base.":
     check:
       dockShip(false).len == 0
-    checkpoint "Dock the ship to a base."
+
+  test "Dock the ship to a base.":
     check:
       dockShip(true).len == 0
 
-  test "Testing countFuelNeeded.":
+  test "Count needed fuel.":
     check:
       countFuelNeeded() == -4
 
-  test "Testing changeShipSpeed.":
-    checkpoint "Change speed of the docked ship."
+  test "Change speed of the docked ship.":
     check:
       changeShipSpeed(fullSpeed).len == 0
+
+  test "Changee the speed of the ship":
     checkpoint "Undock the ship."
     check:
       dockShip(false).len == 0
-    checkpoint "Changee the speed of the ship"
     check:
       changeShipSpeed(fullStop).len == 0
     checkpoint "Dock the ship."
     check:
       dockShip(true).len == 0
 
-  test "Testing moveShip.":
+  test "Move the player's ship.":
     var
       newX, newY = 1
       message = ""
