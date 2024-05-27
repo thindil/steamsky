@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, math, os, strutils, tables]
-import ../[config, crafts, crewinventory, game, items, shipscrew, tk, types]
+import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
 import coreui, dialogs, table, updateheader, utilsui2
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
@@ -765,8 +765,33 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     tclEval(script = recipeText & " insert end {\\nTool: }")
     var mAmount = 0
-    for item in itemsList.values:
+    for iIndex, item in itemsList:
       haveTool = false
+      if item.itemType == recipe.tool and item.value[1] <= recipe.toolQuality:
+        if mAmount > 0:
+          tclEval(script = recipeText & " insert end { or } [list gold]")
+        let cargoIndex = findItem(inventory = playerShip.cargo,
+            protoIndex = iIndex, quality = recipe.toolQuality)
+        if cargoIndex > -1:
+          haveTool = true
+        tclEval(script = recipeText & " insert end {" & item.name & "}" & (
+            if haveTool: " [list gold]" else: " [list red]"))
+        mAmount.inc
+  tclEval(script = recipeText & " insert end {\\nWorkplace: }")
+  var
+    haveWorkplace = false
+    workplaceName = ""
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == recipe.workplace:
+      workplaceName = module.name
+      if module.durability > 0:
+        haveWorkplace = true
+        break
+  if workplaceName.len == 0:
+    for index, module in modulesList:
+      if module.mType == recipe.workplace:
+        workplaceName = getModuleType(moduleIndex = index)
+        break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
