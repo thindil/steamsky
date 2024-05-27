@@ -792,6 +792,33 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       if module.mType == recipe.workplace:
         workplaceName = getModuleType(moduleIndex = index)
         break
+  tclEval(script = recipeText & " insert end {" & workplaceName & "}" & (
+      if haveWorkplace: " [list gold]" else: " [list red]"))
+  tclEval(script = recipeText & " insert end {\\nSkill: }")
+  tclEval(script = recipeText & " insert end {" & skillsList[
+      recipe.skill].name & "/" & attributesList[skillsList[
+      recipe.skill].attribute].name & "} [list gold]")
+  tclEval(script = recipeText & " insert end {\\nTime needed: }")
+  tclEval(script = recipeText & " insert end {" & $recipe.time & " minutes} [list gold]")
+  tclEval(script = recipeText & " configure -state disabled")
+  tclEval(script = "grid " & recipeText & " -padx 5")
+  if argv[2] == "true":
+    let buttonBox = recipeDialog & ".buttons"
+    tclEval(script = "ttk::frame " & buttonBox)
+    var button = buttonBox & ".craft"
+    tclEval(script = "ttk::button " & button & " -image " &
+        recipeType.toLowerAscii & "icon -command {ShowSetRecipe {" & $argv[1] &
+        "};CloseDialog " & recipeDialog & "} -style Dialog.TButton -text {" &
+        recipeType & "}")
+    tclEval(script = "grid " & button)
+    tclEval(script = "tooltip::tooltip " & button & " \"Set crafting order (" &
+        recipeType & ").\"")
+    tclEval(script = "bind " & button & " <Escape> {" & buttonBox & ".close invoke;break}")
+    button = buttonBox & ".close"
+    tclEval(script = "ttk::button " & button &
+        " -image exiticon -command {CloseDialog " & recipeDialog & "} -style Dialog.TButton -text Close")
+    tclEval(script = "grid " & button & " -row 0 -column 1 -padx {5 0}")
+    tclEval(script = "tooltip::tooltip " & button & " \"Close dialog \\[Escape key\\]\"")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
