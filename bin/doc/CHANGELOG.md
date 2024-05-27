@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Showing the wrong icon when there is the player's ship upgrade in progress,
   but no one is assigned to it
 - The player's ship is undocked when it is repaired in a base
+- Showing the list of available missions in bases outside the starting base
 
 ## [9.9] - 2024-04-14
 
