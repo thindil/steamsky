@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
+import contracts
 
 # Set names of Tcl/Tk libraries
 # On Windows
@@ -80,26 +81,28 @@ type
 var currentTclInterp: PInterp = nil
   ## Stores the current Tcl interpreter
 
-proc setInterp*(interp: PInterp) {.gcsafe, sideEffect, raises: [], tags: [].} =
+proc setInterp*(interp: PInterp) {.gcsafe, sideEffect, raises: [], tags: [],
+    contractual.} =
   ## Set the current Tcl interpreter.
   ##
   ## * interp - The Tcl interpreter which will be set as the current
   currentTclInterp = interp
 
-proc getInterp*(): PInterp {.gcsafe, sideEffect, raises: [], tags: [].} =
+proc getInterp*(): PInterp {.gcsafe, sideEffect, raises: [], tags: [],
+    contractual.} =
   ## Get the current Tcl interpreter
   ##
   ## Returns the Tcl interpreter set as the current
   result = currentTclInterp
 
 proc tclCreateInterp*(): PInterp {.cdecl, dynlib: tclDllName,
-    importc: "Tcl_CreateInterp".}
+    importc: "Tcl_CreateInterp", contractual, raises: [], tags: [].}
   ## Create Tcl interpreter. Imported from C
   ##
   ## Returns pointer to the newly created Tcl interpreter or nil if creation failed.
 
 proc tclInit*(interp: PInterp): TclResults {.cdecl, dynlib: tclDllName,
-    importc: "Tcl_Init".}
+    importc: "Tcl_Init", contractual, raises: [], tags: [].}
   ## Initialize Tcl with the selected interpreter. Load libraries, etc.
   ##
   ## * interp - A Tcl interpreter which will be initialized
@@ -107,7 +110,7 @@ proc tclInit*(interp: PInterp): TclResults {.cdecl, dynlib: tclDllName,
   ## Returns tclOk if Tcl initialized correctly, otherwise tclError
 
 proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
-    importc: "Tk_Init".}
+    importc: "Tk_Init", contractual, raises: [], tags: [].}
   ## Initialize Tk on the selected Tcl interpreter
   ##
   ## * interp - A Tcl interpreter on which Tk will be initialized
@@ -115,7 +118,7 @@ proc tkInit*(interp: PInterp): TclResults {.cdecl, dynlib: tkDllName,
   ## Returns tclOk if Tk initialized correctly, otherwise tclError
 
 proc tclEval*(interp: PInterp = getInterp();
-    script: string): TclResults {.discardable.} =
+    script: string): TclResults {.discardable, contractual, raises: [], tags: [].} =
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation. Accepts Tcl code as Nim string
   ##
@@ -124,18 +127,19 @@ proc tclEval*(interp: PInterp = getInterp();
   ##
   ## Returns tclOk if the code evaluated correctly, otherwise tclError
   proc tclEval(interp: PInterp; script: cstring): TclResults {.cdecl,
-      dynlib: tclDllName, importc: "Tcl_Eval".}
+      dynlib: tclDllName, importc: "Tcl_Eval", raises: [], tags: [], contractual.}
   return interp.tclEval(script = script.cstring)
 
 proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
-    importc: "Tcl_GetStringResult".}
+    importc: "Tcl_GetStringResult", raises: [], tags: [], contractual.}
   ## Get the string with the result of the last evaluated Tcl command
   ##
   ## * interp - The Tcl interpreter from which the result will be taken
   ##
   ## Returns the string with the result of the last evaluated Tcl command
 
-proc tclGetResult2*(interp: PInterp = getInterp()): string =
+proc tclGetResult2*(interp: PInterp = getInterp()): string {.raises: [], tags: [
+    ], contractual.} =
   ## Get the string with the result of the last evaluated Tcl command
   ##
   ## * interp - The Tcl interpreter from which the result will be taken
@@ -143,7 +147,8 @@ proc tclGetResult2*(interp: PInterp = getInterp()): string =
   ## Returns the string with the result of the last evaluated Tcl command
   return $interp.tclGetResult
 
-proc tclEval2*(interp: PInterp = getInterp(); script: string): string =
+proc tclEval2*(interp: PInterp = getInterp();
+    script: string): string {.raises: [], tags: [], contractual.} =
   ## Evaluate the Tcl code on the selected Tcl interpreter and get the result
   ## of the evaluation. Accepts Tcl code as Nim string
   ##
@@ -156,7 +161,8 @@ proc tclEval2*(interp: PInterp = getInterp(); script: string): string =
 
 proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
     clientData: cint; deleteProc: TclCmdDeleteProc): pointer {.cdecl,
-    dynlib: tclDllName, importc: "Tcl_CreateCommand", discardable.}
+    dynlib: tclDllName, importc: "Tcl_CreateCommand", discardable, raises: [],
+    tags: [], contractual.}
   ## Add a new Tcl command, defined in Nim on the selected Tcl interpreter.
   ## If there is a command with the same name, it will be replaced.
   ##
@@ -169,47 +175,50 @@ proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
   ##
   ## Returns pointer for the newly created command
 
-proc tclGetVar*(varName: string): string =
+proc tclGetVar*(varName: string): string {.raises: [], tags: [], contractual.} =
   proc tclGetVar(interp: PInterp; varName: cstring;
-      flags: cint): cstring {.cdecl, dynlib: tclDllName, importc: "Tcl_GetVar".}
+      flags: cint): cstring {.cdecl, dynlib: tclDllName, importc: "Tcl_GetVar",
+      raises: [], tags: [], contractual.}
   return $tclGetVar(getInterp(), varName.cstring, 1)
 
-proc tclSetVar*(varName, newValue: string) =
+proc tclSetVar*(varName, newValue: string) {.raises: [], tags: [],
+    contractual.} =
   ## Set the new value for the selected Tcl variable. If variable doesn't
   ## exist, it will be created.
   ##
   ## * varName  - the name of the Tcl variable to set
   ## * newValue - the value of the Tcl variable
   proc tclSetVar(interp: PInterp; varName, newValue: cstring;
-      flags: cint) {.cdecl, dynlib: tclDllName, importc: "Tcl_SetVar".}
+      flags: cint) {.cdecl, dynlib: tclDllName, importc: "Tcl_SetVar", raises: [],
+      tags: [], contractual.}
   tclSetVar(getInterp(), varName.cstring, newValue.cstring, 1)
 
-proc tclUnsetVar*(varName: string) =
+proc tclUnsetVar*(varName: string) {.raises: [], tags: [], contractual.} =
   ## Remove the selected Tcl variable.
   ##
   ## * varName  - the name of the Tcl variable to remove
   proc tclUnsetVar(interp: PInterp; varName: cstring; flags: cint) {.cdecl,
-      dynlib: tclDllName, importc: "Tcl_UnsetVar".}
+      dynlib: tclDllName, importc: "Tcl_UnsetVar", raises: [], tags: [], contractual.}
   tclUnsetVar(getInterp(), varName.cstring, 1)
 
-proc tclSetResult*(value: string) =
+proc tclSetResult*(value: string) {.raises: [], tags: [], contractual.} =
   ## Set the new value for the Tcl result on the current Tcl interpreter
   ##
   ## * result   - the new value for the Tcl result
   proc tclSetResult(interp: PInterp; result: cstring; freeProc: cint) {.cdecl,
-      dynlib: tclDllName, importc: "Tcl_SetResult".}
+      dynlib: tclDllName, importc: "Tcl_SetResult", raises: [], tags: [], contractual.}
   tclSetResult(getInterp(), value.cstring, 1)
 
-proc tclEvalFile*(fileName: string) =
+proc tclEvalFile*(fileName: string) {.raises: [], tags: [], contractual.} =
   ## Read the file and evaluate it as a Tcl script
   ##
   ## * fileName - the name of the file to read
   proc tclEvalFile(interp: PInterp; fileName: cstring) {.cdecl,
-      dynlib: tclDllName, importc: "Tcl_EvalFile".}
+      dynlib: tclDllName, importc: "Tcl_EvalFile", raises: [], tags: [], contractual.}
   tclEvalFile(getInterp(), fileName.cstring)
 
 proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
-    AddingCommandError], tags: [].} =
+    AddingCommandError], tags: [], contractual.} =
   ## Add the selected Nim procedure as a Tcl command.
   ##
   ## * name    - the name of the Tcl command
@@ -224,7 +233,8 @@ proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
     raise newException(exceptn = AddingCommandError,
         message = "Can't add command " & name)
 
-proc deleteWidgets*(startIndex, endIndex: int; frame: string) =
+proc deleteWidgets*(startIndex, endIndex: int; frame: string) {.raises: [],
+    tags: [], contractual.} =
   ## Delete widgets inside the selected grid
   ##
   ## * startIndex - the index of the first widget to delete
@@ -241,7 +251,7 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) =
       tclEval(script = "destroy " & widget)
 
 proc showError*(message: string; e: ref Exception = getCurrentException(
-    )): TclResults {.discardable, sideEffect, raises: [], tags: [].} =
+    )): TclResults {.discardable, sideEffect, raises: [], tags: [], contractual.} =
   ## Show the error dialog with the message containing technical details about the issue
   ##
   ## * message - the message to show in the error dialog
