@@ -730,6 +730,21 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     recipe = recipesList[recipeIndex]
     tclEval(script = recipeText & " insert end {Amount: }")
     tclEval(script = recipeText & " insert end {" & $recipe.resultAmount & "\n} [list gold]")
+  tclEval(script = recipeText & " insert end {Materials needed: }")
+  for material in recipe.materialTypes:
+    tclEval(script = recipeText & " insert end {\\n-} [list gold]")
+    var mAmount = 0
+    for iIndex, item in itemsList:
+      var isMaterial = false
+      if recipeIndex.len > 6 and recipeIndex[0 .. 4] == "Study":
+        if item.name == itemsList[recipe.resultIndex].name:
+          isMaterial = true
+      elif recipeIndex.len > 12 and recipeIndex[0 .. 10] == "Deconstruct":
+        if iIndex == recipeIndex[12 .. ^1].parseInt:
+          isMaterial = true
+      else:
+        if item.itemType == material:
+          isMaterial = true
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
