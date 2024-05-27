@@ -28,7 +28,7 @@ suite "Unit tests for shipsrepairs module":
       experience: 0), MobAttributeRecord(level: 3, experience: 0)]))
   playerShip.crew[0].equipment[tool] = -1
 
-  test "Testing repairShip.":
+  test "Repairing the player's ship.":
     repairShip(15)
     check:
       playerShip.modules[0].durability == 100
