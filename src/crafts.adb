@@ -19,26 +19,25 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Crafts is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Material_Types_Array is array(0 .. 4) of chars_ptr;
-   type Material_Amounts_Array is array(0 .. 4) of Integer;
-   type Craft_Nim_Data is record
-      Material_Types: Material_Types_Array;
-      Material_Amounts: Material_Amounts_Array;
-      Result_Index: Integer;
-      Result_Amount: Integer;
-      Workplace: Integer;
-      Skill: Integer;
-      Time: Positive := 1;
-      Difficulty: Positive := 1;
-      Tool: chars_ptr;
-      Reputation: Integer;
-      Tool_Quality: Positive := 1;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
+      --## rule off TYPE_INITIAL_VALUES
+      type Material_Types_Array is array(0 .. 4) of chars_ptr;
+      type Material_Amounts_Array is array(0 .. 4) of Integer;
+      type Craft_Nim_Data is record
+         Material_Types: Material_Types_Array;
+         Material_Amounts: Material_Amounts_Array;
+         Result_Index: Integer;
+         Result_Amount: Integer;
+         Workplace: Integer;
+         Skill: Integer;
+         Time: Positive := 1;
+         Difficulty: Positive := 1;
+         Tool: chars_ptr;
+         Reputation: Integer;
+         Tool_Quality: Positive := 1;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       Nim_Recipe: Craft_Nim_Data;
       procedure Get_Ada_Craft
         (C_Index: chars_ptr; Ada_Craft: out Craft_Nim_Data) with
