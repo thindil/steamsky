@@ -526,7 +526,9 @@ package body Missions.UI is
         (interp => Interp, varName => "gamestate", newValue => "missions");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
+      Set_Ada_Ship(Ship => Player_Ship);
       Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Get_Base_From_Nim(Base_Index => Get_Base_Index);
       if Sky_Bases(Get_Base_Index).Missions.Length = 0 then
          Show_Sky_Map(Clear => True);
          return TCL_OK;
