@@ -731,7 +731,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = recipeText & " insert end {Amount: }")
     tclEval(script = recipeText & " insert end {" & $recipe.resultAmount & "\n} [list gold]")
   tclEval(script = recipeText & " insert end {Materials needed: }")
-  for material in recipe.materialTypes:
+  for mIndex, material in recipe.materialTypes:
     tclEval(script = recipeText & " insert end {\\n-} [list gold]")
     var mAmount = 0
     for iIndex, item in itemsList:
@@ -745,6 +745,28 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         if item.itemType == material:
           isMaterial = true
+      if isMaterial:
+        if mAmount > 0:
+          tclEval(script = recipeText & " insert end { or} [list gold]")
+        let cargoIndex = findItem(inventory = playerShip.cargo,
+            protoIndex = iIndex)
+        if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
+            recipe.materialAmounts[mIndex]:
+          tclEval(script = recipeText & " insert end {" &
+              $recipe.materialAmounts[mIndex] & "x" & item.name & "(owned: " &
+              $playerShip.cargo[cargoIndex].amount & ")} [list gold]")
+        else:
+          tclEval(script = recipeText & " insert end {" &
+              $recipe.materialAmounts[mIndex] & "x" & item.name & "} [list red]")
+        mAmount.inc
+  var haveTool = false
+  if recipe.tool == "None":
+    haveTool = true
+  else:
+    tclEval(script = recipeText & " insert end {\\nTool: }")
+    var mAmount = 0
+    for item in itemsList.values:
+      haveTool = false
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
