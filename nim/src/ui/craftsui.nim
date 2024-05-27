@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[algorithm, os, strutils, tables]
-import ../[config, crafts, crewinventory, game, shipscrew, tk, types]
+import std/[algorithm, math, os, strutils, tables]
+import ../[config, crafts, crewinventory, game, items, shipscrew, tk, types]
 import coreui, dialogs, table, updateheader, utilsui2
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
@@ -709,6 +709,27 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     recipe.difficulty = 1
     recipe.tool = alchemyTools
     recipe.toolQuality = 100
+  elif recipeType == "Deconstruct":
+    recipe.materialTypes.add(y = itemsList[recipeIndex[12 ..
+        ^1].parseInt].itemType)
+    recipe.resultIndex = recipeIndex[12 .. ^1].parseInt
+    recipe.materialAmounts.add(y = 1)
+    recipe.resultAmount = 0
+    recipe.workplace = alchemyLab
+    for rec in recipesList.values:
+      if rec.resultIndex == recipe.resultIndex:
+        recipe.skill = rec.skill
+        recipe.time = rec.difficulty * 15
+        recipe.difficulty = rec.difficulty
+        recipe.resultIndex = findProtoItem(itemType = rec.materialTypes[0])
+        recipe.resultAmount = (rec.materialAmounts[0].float * 0.8).ceil.Natural
+        break
+    recipe.tool = alchemyTools
+    recipe.toolQuality = 100
+  else:
+    recipe = recipesList[recipeIndex]
+    tclEval(script = recipeText & " insert end {Amount: }")
+    tclEval(script = recipeText & " insert end {" & $recipe.resultAmount & "\n} [list gold]")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
