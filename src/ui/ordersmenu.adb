@@ -16,6 +16,7 @@
 with Interfaces.C;
 with CArgv;
 with Tcl;
+with Bases;
 with Utils.UI;
 
 package body OrdersMenu is
@@ -37,9 +38,32 @@ package body OrdersMenu is
    function Ask_For_Bases_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Import => True,
-      Convention => C,
-      External_Name => "askForBasesCommand";
+      Convention => C;
+
+   function Ask_For_Bases_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Interfaces.C;
+      use Tcl;
+      use Bases;
+
+      function Ask_Ada_For_Bases_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "askForBasesCommand";
+   begin
+      if Ask_Ada_For_Bases_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
+        TCL_OK then
+         Get_Bases_Loop :
+         for I in Sky_Bases'Range loop
+            Get_Base_From_Nim(Base_Index => I);
+         end loop Get_Bases_Loop;
+      end if;
+      return TCL_OK;
+   end Ask_For_Bases_Command;
 
    function Ask_For_Events_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
