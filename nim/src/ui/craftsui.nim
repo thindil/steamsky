@@ -673,18 +673,22 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     recipeIndex = $argv[1]
     recipeLength = recipeIndex.len
     recipeType = (if recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Study": "Study" elif recipeLength > 6 and recipeIndex[0 .. 4] ==
         "Decon": "Deconstruct" else: "Craft")
-    recipeDialog = createDialog(name = ".recipedialog", title = (
-        if recipeType == "Study": "Study " & itemsList[recipeIndex[6 ..
-        ^1].parseInt].name elif recipeType == "Deconstruct": "Deconstruct " &
-        itemsList[recipeIndex[12 .. ^1].parseInt].name else: "Craft " &
-        itemsList[recipesList[recipeIndex].resultIndex].name), titleWidth = 275)
+    recipeDialog = try:
+        createDialog(name = ".recipedialog", title = (
+          if recipeType == "Study": "Study " & itemsList[recipeIndex[6 ..
+          ^1].parseInt].name elif recipeType == "Deconstruct": "Deconstruct " &
+          itemsList[recipeIndex[12 .. ^1].parseInt].name else: "Craft " &
+          itemsList[recipesList[recipeIndex].resultIndex].name),
+              titleWidth = 275)
+      except:
+        return showError(message = "Can't create the dialog.")
     recipeText = recipeDialog & ".text"
   tclEval(script = "text " & recipeText & " -wrap char -height 15 -width 40")
   tclEval(script = recipeText & " tag configure red -foreground " & tclGetVar(
@@ -695,9 +699,15 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       "::colors(-goldenyellow)"))
   var recipe: CraftData
   if recipeType == "Study":
-    recipe.materialTypes.add(y = itemsList[recipeIndex[6 ..
-        ^1].parseInt].itemType)
-    recipe.resultIndex = recipeIndex[6 .. ^1].parseInt
+    try:
+      recipe.materialTypes.add(y = itemsList[recipeIndex[6 ..
+          ^1].parseInt].itemType)
+    except:
+      return showError(message = "Can't add material.")
+    recipe.resultIndex = try:
+        recipeIndex[6 .. ^1].parseInt
+      except:
+        return showError(message = "Can't set result index.")
     recipe.materialAmounts.add(y = 1)
     recipe.resultAmount = 0
     recipe.workplace = alchemyLab
@@ -710,9 +720,15 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     recipe.tool = alchemyTools
     recipe.toolQuality = 100
   elif recipeType == "Deconstruct":
-    recipe.materialTypes.add(y = itemsList[recipeIndex[12 ..
-        ^1].parseInt].itemType)
-    recipe.resultIndex = recipeIndex[12 .. ^1].parseInt
+    try:
+      recipe.materialTypes.add(y = itemsList[recipeIndex[12 ..
+          ^1].parseInt].itemType)
+    except:
+      return showError(message = "Can't add deconstruct material.")
+    recipe.resultIndex = try:
+        recipeIndex[12 .. ^1].parseInt
+      except:
+        return showError(message = "Can't set deconstruct result")
     recipe.materialAmounts.add(y = 1)
     recipe.resultAmount = 0
     recipe.workplace = alchemyLab
@@ -727,7 +743,10 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     recipe.tool = alchemyTools
     recipe.toolQuality = 100
   else:
-    recipe = recipesList[recipeIndex]
+    recipe = try:
+        recipesList[recipeIndex]
+      except:
+        return showError(message = "Can't set recipe.")
     tclEval(script = recipeText & " insert end {Amount: }")
     tclEval(script = recipeText & " insert end {" & $recipe.resultAmount & "\n} [list gold]")
   tclEval(script = recipeText & " insert end {Materials needed: }")
@@ -737,11 +756,17 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     for iIndex, item in itemsList:
       var isMaterial = false
       if recipeIndex.len > 6 and recipeIndex[0 .. 4] == "Study":
-        if item.name == itemsList[recipe.resultIndex].name:
-          isMaterial = true
+        try:
+          if item.name == itemsList[recipe.resultIndex].name:
+            isMaterial = true
+        except:
+          return showError(message = "Can't check study material.")
       elif recipeIndex.len > 12 and recipeIndex[0 .. 10] == "Deconstruct":
-        if iIndex == recipeIndex[12 .. ^1].parseInt:
-          isMaterial = true
+        try:
+          if iIndex == recipeIndex[12 .. ^1].parseInt:
+            isMaterial = true
+        except:
+          return showError(message = "Can't check deconstruct materials.")
       else:
         if item.itemType == material:
           isMaterial = true
@@ -782,22 +807,31 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     haveWorkplace = false
     workplaceName = ""
   for module in playerShip.modules:
-    if modulesList[module.protoIndex].mType == recipe.workplace:
-      workplaceName = module.name
-      if module.durability > 0:
-        haveWorkplace = true
-        break
+    try:
+      if modulesList[module.protoIndex].mType == recipe.workplace:
+        workplaceName = module.name
+        if module.durability > 0:
+          haveWorkplace = true
+          break
+    except:
+      return showError(message = "Can't check workplace.")
   if workplaceName.len == 0:
     for index, module in modulesList:
       if module.mType == recipe.workplace:
-        workplaceName = getModuleType(moduleIndex = index)
+        try:
+          workplaceName = getModuleType(moduleIndex = index)
+        except:
+          return showError(message = "Can't get workplace name.")
         break
   tclEval(script = recipeText & " insert end {" & workplaceName & "}" & (
       if haveWorkplace: " [list gold]" else: " [list red]"))
   tclEval(script = recipeText & " insert end {\nSkill: }")
-  tclEval(script = recipeText & " insert end {" & skillsList[
-      recipe.skill].name & "/" & attributesList[skillsList[
-      recipe.skill].attribute].name & "} [list gold]")
+  try:
+    tclEval(script = recipeText & " insert end {" & skillsList[
+        recipe.skill].name & "/" & attributesList[skillsList[
+        recipe.skill].attribute].name & "} [list gold]")
+  except:
+    return showError(message = "Can't show recipe skill.")
   tclEval(script = recipeText & " insert end {\nTime needed: }")
   tclEval(script = recipeText & " insert end {" & $recipe.time & " minutes} [list gold]")
   tclEval(script = recipeText & " configure -state disabled")
