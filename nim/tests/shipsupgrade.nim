@@ -30,14 +30,14 @@ suite "Unit tests for shipsupgrade module":
   playerShip.crew[0].equipment[tool] = -1
 
 
-  test "Testing upgradeShip.":
+  test "Upgrading the player's ship.":
     upgradeShip(15)
     check:
       playerShip.modules[0].upgradeProgress < 20
     playerShip.upgradeModule = -1
     upgradeShip(15)
 
-  test "Testing startUpgrading.":
+  test "Setting an upgrade of a module in the player's ship.":
     startUpgrading(0, 1)
     check:
       playerShip.upgradeModule == 0
