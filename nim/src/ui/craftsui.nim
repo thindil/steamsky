@@ -819,6 +819,14 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         " -image exiticon -command {CloseDialog " & recipeDialog & "} -style Dialog.TButton -text Close")
     tclEval(script = "grid " & button & " -row 0 -column 1 -padx {5 0}")
     tclEval(script = "tooltip::tooltip " & button & " \"Close dialog \\[Escape key\\]\"")
+    tclEval(script = "focus " & button)
+    tclEval(script = "bind " & button & " <Tab> {focus " & buttonBox & ".craft;break}")
+    tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+    tclEval(script = "grid " & buttonBox & " -pady 5")
+  else:
+    addCloseButton(name = recipeDialog & ".close", text = "Close",
+        command = "CloseDialog " & recipeDialog, row = 2, icon = "exiticon")
+  showDialog(dialog = recipeDialog, relativeX = 0.2, relativeY = 0.1)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
