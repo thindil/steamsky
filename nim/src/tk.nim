@@ -179,7 +179,7 @@ proc tclGetVar*(varName: string): string {.raises: [], tags: [], contractual.} =
   proc tclGetVar(interp: PInterp; varName: cstring;
       flags: cint): cstring {.cdecl, dynlib: tclDllName, importc: "Tcl_GetVar",
       raises: [], tags: [], contractual.}
-  return $tclGetVar(getInterp(), varName.cstring, 1)
+  return $tclGetVar(interp = getInterp(), varName = varName.cstring, flags = 1)
 
 proc tclSetVar*(varName, newValue: string) {.raises: [], tags: [],
     contractual.} =
@@ -191,7 +191,8 @@ proc tclSetVar*(varName, newValue: string) {.raises: [], tags: [],
   proc tclSetVar(interp: PInterp; varName, newValue: cstring;
       flags: cint) {.cdecl, dynlib: tclDllName, importc: "Tcl_SetVar", raises: [],
       tags: [], contractual.}
-  tclSetVar(getInterp(), varName.cstring, newValue.cstring, 1)
+  tclSetVar(interp = getInterp(), varName = varName.cstring,
+      newValue = newValue.cstring, flags = 1)
 
 proc tclUnsetVar*(varName: string) {.raises: [], tags: [], contractual.} =
   ## Remove the selected Tcl variable.
@@ -199,7 +200,7 @@ proc tclUnsetVar*(varName: string) {.raises: [], tags: [], contractual.} =
   ## * varName  - the name of the Tcl variable to remove
   proc tclUnsetVar(interp: PInterp; varName: cstring; flags: cint) {.cdecl,
       dynlib: tclDllName, importc: "Tcl_UnsetVar", raises: [], tags: [], contractual.}
-  tclUnsetVar(getInterp(), varName.cstring, 1)
+  tclUnsetVar(interp = getInterp(), varName = varName.cstring, flags = 1)
 
 proc tclSetResult*(value: string) {.raises: [], tags: [], contractual.} =
   ## Set the new value for the Tcl result on the current Tcl interpreter
@@ -207,7 +208,7 @@ proc tclSetResult*(value: string) {.raises: [], tags: [], contractual.} =
   ## * result   - the new value for the Tcl result
   proc tclSetResult(interp: PInterp; result: cstring; freeProc: cint) {.cdecl,
       dynlib: tclDllName, importc: "Tcl_SetResult", raises: [], tags: [], contractual.}
-  tclSetResult(getInterp(), value.cstring, 1)
+  tclSetResult(interp = getInterp(), result = value.cstring, freeProc = 1)
 
 proc tclEvalFile*(fileName: string) {.raises: [], tags: [], contractual.} =
   ## Read the file and evaluate it as a Tcl script
@@ -215,7 +216,7 @@ proc tclEvalFile*(fileName: string) {.raises: [], tags: [], contractual.} =
   ## * fileName - the name of the file to read
   proc tclEvalFile(interp: PInterp; fileName: cstring) {.cdecl,
       dynlib: tclDllName, importc: "Tcl_EvalFile", raises: [], tags: [], contractual.}
-  tclEvalFile(getInterp(), fileName.cstring)
+  tclEvalFile(interp = getInterp(), fileName = fileName.cstring)
 
 proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
     AddingCommandError], tags: [], contractual.} =
@@ -242,23 +243,24 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) {.raises: [],
   ## * frame      - the name of the container which is the grid
   if endIndex < startIndex:
     return
-  let interp = getInterp()
+  let interp: PInterp = getInterp()
   for i in startIndex .. endIndex:
     if tclEval(script = "grid slaves " & frame & " -row " & $i) == tclError:
       return
-    let tclResult = $interp.tclGetResult()
+    let tclResult: string = $interp.tclGetResult()
     for widget in tclResult.split():
       tclEval(script = "destroy " & widget)
 
 proc showError*(message: string; e: ref Exception = getCurrentException(
-    )): TclResults {.discardable, sideEffect, raises: [], tags: [], contractual.} =
+    )): TclResults {.discardable, sideEffect, raises: [], tags: [],
+        contractual.} =
   ## Show the error dialog with the message containing technical details about the issue
   ##
   ## * message - the message to show in the error dialog
   ## * e       - the exception which happened. Default value is the current exception
   ##
   ## This procedure always returns tclOk
-  var debugInfo = message
+  var debugInfo: string = message
   if e != nil:
     debugInfo.add(y = " Reason: " & getCurrentExceptionMsg())
     when defined(debug):
