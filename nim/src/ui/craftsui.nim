@@ -674,6 +674,19 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show information about the selected recipe
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowRecipeInfo index cancraft
+  ## Index is the index of the crafting recipe to show, cancraft if TRUE
+  ## then recipe can be crafted (show craft button)
   let
     recipeIndex = $argv[1]
     recipeLength = recipeIndex.len
