@@ -732,7 +732,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = recipeText & " insert end {" & $recipe.resultAmount & "\n} [list gold]")
   tclEval(script = recipeText & " insert end {Materials needed: }")
   for mIndex, material in recipe.materialTypes:
-    tclEval(script = recipeText & " insert end {\\n-} [list gold]")
+    tclEval(script = recipeText & " insert end {\n- } [list gold]")
     var mAmount = 0
     for iIndex, item in itemsList:
       var isMaterial = false
@@ -747,7 +747,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           isMaterial = true
       if isMaterial:
         if mAmount > 0:
-          tclEval(script = recipeText & " insert end { or} [list gold]")
+          tclEval(script = recipeText & " insert end { or } [list gold]")
         let cargoIndex = findItem(inventory = playerShip.cargo,
             protoIndex = iIndex)
         if cargoIndex > -1 and playerShip.cargo[cargoIndex].amount >=
@@ -763,7 +763,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   if recipe.tool == "None":
     haveTool = true
   else:
-    tclEval(script = recipeText & " insert end {\\nTool: }")
+    tclEval(script = recipeText & " insert end {\nTool: }")
     var mAmount = 0
     for iIndex, item in itemsList:
       haveTool = false
@@ -777,7 +777,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = recipeText & " insert end {" & item.name & "}" & (
             if haveTool: " [list gold]" else: " [list red]"))
         mAmount.inc
-  tclEval(script = recipeText & " insert end {\\nWorkplace: }")
+  tclEval(script = recipeText & " insert end {\nWorkplace: }")
   var
     haveWorkplace = false
     workplaceName = ""
@@ -794,11 +794,11 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         break
   tclEval(script = recipeText & " insert end {" & workplaceName & "}" & (
       if haveWorkplace: " [list gold]" else: " [list red]"))
-  tclEval(script = recipeText & " insert end {\\nSkill: }")
+  tclEval(script = recipeText & " insert end {\nSkill: }")
   tclEval(script = recipeText & " insert end {" & skillsList[
       recipe.skill].name & "/" & attributesList[skillsList[
       recipe.skill].attribute].name & "} [list gold]")
-  tclEval(script = recipeText & " insert end {\\nTime needed: }")
+  tclEval(script = recipeText & " insert end {\nTime needed: }")
   tclEval(script = recipeText & " insert end {" & $recipe.time & " minutes} [list gold]")
   tclEval(script = recipeText & " configure -state disabled")
   tclEval(script = "grid " & recipeText & " -padx 5")
