@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
   but no one is assigned to it
 - The player's ship is undocked when it is repaired in a base
 - Showing the list of available missions in bases outside the starting base
+- The game doesn't save known bases
 
 ## [9.9] - 2024-04-14
 
