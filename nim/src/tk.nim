@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides Nim binding to Tcl programming language and it GUI toolkit, Tk.
+## It is an incomplete binding, only things needed by the game are ported.
+
 import std/strutils
 import contracts
 
@@ -51,8 +54,8 @@ type
     ## Pointer to the Tcl interpreter
 
   TclResults* = enum
-    tclOk, tclError, tclReturn, tclBreak, tclContinue
     ## Types of result used by Tcl
+    tclOk, tclError, tclReturn, tclBreak, tclContinue
 
   TclError* = object of CatchableError
     ## Used to raise exceptions related to the Tcl/Tk, like failed
@@ -128,6 +131,7 @@ proc tclEval*(interp: PInterp = getInterp();
   ## Returns tclOk if the code evaluated correctly, otherwise tclError
   proc tclEval(interp: PInterp; script: cstring): TclResults {.cdecl,
       dynlib: tclDllName, importc: "Tcl_Eval", raises: [], tags: [], contractual.}
+      ## Nim binding to Tcl Tcl_Eval C API
   return interp.tclEval(script = script.cstring)
 
 proc tclGetResult*(interp: PInterp): cstring {.cdecl, dynlib: tclDllName,
@@ -176,9 +180,15 @@ proc tclCreateCommand*(interp: PInterp; cmdName: cstring; cproc: TclCmdProc;
   ## Returns pointer for the newly created command
 
 proc tclGetVar*(varName: string): string {.raises: [], tags: [], contractual.} =
+  ## Get the value of the selected Tcl variable
+  ##
+  ## * varName - the name of the Tcl variable which value will be get
+  ##
+  ## Returns the value of the selected variable
   proc tclGetVar(interp: PInterp; varName: cstring;
       flags: cint): cstring {.cdecl, dynlib: tclDllName, importc: "Tcl_GetVar",
       raises: [], tags: [], contractual.}
+      ## Nim binding to Tcl Tcl_GetVar C API
   return $tclGetVar(interp = getInterp(), varName = varName.cstring, flags = 1)
 
 proc tclSetVar*(varName, newValue: string) {.raises: [], tags: [],
@@ -191,6 +201,7 @@ proc tclSetVar*(varName, newValue: string) {.raises: [], tags: [],
   proc tclSetVar(interp: PInterp; varName, newValue: cstring;
       flags: cint) {.cdecl, dynlib: tclDllName, importc: "Tcl_SetVar", raises: [],
       tags: [], contractual.}
+      ## Nim binding to Tcl Tcl_SetVar C API
   tclSetVar(interp = getInterp(), varName = varName.cstring,
       newValue = newValue.cstring, flags = 1)
 
@@ -200,6 +211,7 @@ proc tclUnsetVar*(varName: string) {.raises: [], tags: [], contractual.} =
   ## * varName  - the name of the Tcl variable to remove
   proc tclUnsetVar(interp: PInterp; varName: cstring; flags: cint) {.cdecl,
       dynlib: tclDllName, importc: "Tcl_UnsetVar", raises: [], tags: [], contractual.}
+      ## Nim binding to Tcl Tcl_UnsetVar C API
   tclUnsetVar(interp = getInterp(), varName = varName.cstring, flags = 1)
 
 proc tclSetResult*(value: string) {.raises: [], tags: [], contractual.} =
@@ -208,6 +220,7 @@ proc tclSetResult*(value: string) {.raises: [], tags: [], contractual.} =
   ## * result   - the new value for the Tcl result
   proc tclSetResult(interp: PInterp; result: cstring; freeProc: cint) {.cdecl,
       dynlib: tclDllName, importc: "Tcl_SetResult", raises: [], tags: [], contractual.}
+      ## Nim binding to Tcl Tcl_SetResult C API
   tclSetResult(interp = getInterp(), result = value.cstring, freeProc = 1)
 
 proc tclEvalFile*(fileName: string) {.raises: [], tags: [], contractual.} =
@@ -216,6 +229,7 @@ proc tclEvalFile*(fileName: string) {.raises: [], tags: [], contractual.} =
   ## * fileName - the name of the file to read
   proc tclEvalFile(interp: PInterp; fileName: cstring) {.cdecl,
       dynlib: tclDllName, importc: "Tcl_EvalFile", raises: [], tags: [], contractual.}
+      ## Nim binding to Tcl Tcl_EvalFile C API
   tclEvalFile(interp = getInterp(), fileName = fileName.cstring)
 
 proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
