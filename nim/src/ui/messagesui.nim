@@ -19,7 +19,7 @@ import std/strutils
 import ../[tk, types]
 
 proc showMessage(message: MessageData; messageView: string;
-    messagesType: MessageType) =
+    messagesType: MessageType) {.sideEffect, raises: [], tags: [].} =
   if message.kind != messagesType and messagesType != default:
     return
   let messageTag = (if message.color != white: " [list " & (
