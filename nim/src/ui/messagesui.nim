@@ -35,7 +35,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 
 # Temporary code for interfacing with Ada
 
-proc showAdaMessage(message, messageView: cstring; color, mType,
+proc showAdaMessageUI(message, messageView: cstring; color, mType,
     messagesType: cint) {.sideEffect, raises: [], tags: [], exportc.} =
   let message = MessageData(message: $message, color: color.MessageColor,
       kind: mType.MessageType)
