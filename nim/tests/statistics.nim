@@ -15,41 +15,41 @@ suite "Unit tests for statistics module":
   loadMobs("../bin/data/mobs.dat")
   loadShips("../bin/data/ships.dat")
 
-  test "Testing updateCraftingOrders.":
+  test "Updating an crafting orders goals' list.":
     gameStats.craftingOrders = @[]
     updateCraftingOrders("1")
     check:
       gameStats.craftingOrders.len == 1
 
-  test "Testing updateFinishedGoals.":
+  test "Update an existing goal":
     gameStats.finishedGoals = @[]
-    checkpoint "Update an existing goal"
     updateFinishedGoals("1")
     check:
       gameStats.finishedGoals.len == 1
-    checkpoint "Update a non-existing goal"
+
+  test "Update a non-existing goal":
     updateFinishedGoals("Sdfdsf")
     check:
       gameStats.finishedGoals.len == 1
 
-  test "Testing getGamePoints.":
+  test "Getting the player's points.":
     gameStats.points = 0
     check:
       getGamePoints() == 0
 
-  test "Testing updateFinishedMissions.":
+  test "Updating the list of finished missions.":
     gameStats.finishedMissions = @[]
     updateFinishedMissions("DESTROY")
     check:
       gameStats.finishedMissions.len == 1
 
-  test "Testing clearGameStats.":
+  test "Clearing the game's statistics.":
     gameStats.points = 100
     clearGameStats()
     check:
       gameStats.points == 0
 
-  test "Testing updateKilledMobs.":
+  test "Updating the list of killed mobs.":
     gameStats.killedMobs = @[]
     updateKilledMobs(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
         homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
@@ -61,13 +61,13 @@ suite "Unit tests for statistics module":
     check:
       gameStats.killedMobs.len == 1
 
-  test "Testing updateDestroyedShips.":
+  test "Update an existing ship stats":
     gameStats.destroyedShips = @[]
-    checkpoint "Update an existing ship stats"
     updateDestroyedShips("Tiny pirates ship")
     check:
       gameStats.destroyedShips.len == 1
-    checkpoint "Update a non-existing ship stats"
+
+  test "Update a non-existing ship stats":
     updateDestroyedShips("Sfdsfdsf")
     check:
       gameStats.destroyedShips.len == 1
