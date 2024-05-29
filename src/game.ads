@@ -341,13 +341,6 @@ package Game is
    Skills_Amount: SkillsData_Container.Extended_Index := 0;
    -- ****
 
-   -- ****v* Game/Game.Alchemy_Tools
-   -- FUNCTION
-   -- Name of item type used as alchemy tools (mainly in deconstructing orders)
-   -- SOURCE
-   Alchemy_Tools: Tiny_String.Bounded_String;
-   -- ****
-
    -- ****v* Game/Game.Fuel_Type
    -- FUNCTION
    -- Name of item type used as fuel for ships

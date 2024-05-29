@@ -273,8 +273,6 @@ package body Game is
             end loop Fill_Skills_Loop;
          end Fill_Skills_Block;
          Get_Ada_Game_Strings(Values => Nim_Strings);
-         Alchemy_Tools :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(2)));
          Fuel_Type :=
            To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
          Head_Armor :=
