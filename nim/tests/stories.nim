@@ -11,15 +11,15 @@ suite "Unit tests for stories module":
   loadFactions("../bin/data/factions.dat")
   loadStories("../bin/data/stories.dat")
 
-  test "Testing getStepData.":
-    checkpoint "Get finish data of the selected step."
+  test "Get finish data of the selected step.":
     check:
       getStepData(storiesList["1"].steps[0].finishData, "condition") == "Rhetoric"
-    checkpoint "Get finish data of the non-existing step."
+
+  test "Get finish data of the non-existing step.":
     check:
       getStepData(storiesList["1"].steps[0].finishData, "sdfdsf").len == 0
 
-  test "Testing startStory.":
+  test "Starting a story.":
     playerShip.crew = @[]
     playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
         homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1,
@@ -35,19 +35,19 @@ suite "Unit tests for stories module":
     check:
       currentStory.index.len > 0
 
-  test "Testing getCurrentStoryText.":
+  test "Getting the current story text.":
     currentStory.finishedStep = askInBase
     check:
       getCurrentStoryText().len > 0
 
-  test "Testing clearCurrentStory.":
+  test "Clearing the current story.":
     let oldStory = currentStory
     clearCurrentStory()
     check:
       currentStory.index.len == 0
     currentStory = oldStory
 
-  test "Testing getStoryLocation.":
+  test "Getting a story location.":
     let (x, y) = getStoryLocation()
     check:
       x > 0 and y > 0
