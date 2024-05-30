@@ -17,7 +17,7 @@
 
 import std/[os, strutils]
 import ../[config, game, messages, tk, types]
-import coreui
+import coreui, utilsui2
 
 proc showMessage(message: MessageData; messageView: string;
     messagesType: MessageType) {.sideEffect, raises: [], tags: [].} =
@@ -67,6 +67,15 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = messagesView & " configure -state disabled")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   messagesFrame = messagesCanvas & ".messages"
+  tclEval(script = messagesCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  tclEval(script = messagesCanvas & " create window 0 0 -anchor nw -window " & messagesFrame)
+  tclEval(script = "update")
+  tclEval(script = messagesCanvas & " configure -scrollregion [list " &
+      tclEval2(script = messagesCanvas & " bbox all") & "]")
+  showScreen(newScreenName = "messagesframe")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
