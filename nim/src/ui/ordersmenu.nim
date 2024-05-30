@@ -300,8 +300,8 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                   command = "CompleteMission", shortcut = "c", underline = 0)
       else:
         for mission in acceptedMissions:
-          if haveTrader and mission.targetX == playerShip.skyX and
-              mission.targetY == playerShip.skyY and not mission.finished:
+          if mission.targetX == playerShip.skyX and mission.targetY ==
+              playerShip.skyY and not mission.finished:
             case mission.mType
             of deliver, passenger:
               discard
