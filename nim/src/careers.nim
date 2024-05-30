@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
+import contracts
 import game, log
 
 type
@@ -31,75 +32,78 @@ var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ## The list of available player's careers in the game
 
 proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the player's careers' data from the file
   ##
   ## * fileName - the path to the file with careers data which will be loaded
-  let careersXml = try:
-      loadXml(path = fileName)
-    except XmlError, ValueError, IOError, OSError, Exception:
-      raise newException(exceptn = DataLoadingError,
-          message = "Can't load careers data file. Reason: " &
-          getCurrentExceptionMsg())
-  for careerNode in careersXml:
-    if careerNode.kind != xnElement:
-      continue
-    let
-      careerIndex = careerNode.attr(name = "index")
-      careerAction: DataAction = try:
-          parseEnum[DataAction](careerNode.attr(name = "action").toLowerAscii)
-        except ValueError:
-          DataAction.add
-    if careerAction in [update, remove]:
-      if careersList.hasKey(key = careerIndex):
+  require:
+    fileName.len > 0
+  body:
+    let careersXml = try:
+        loadXml(path = fileName)
+      except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $careerAction & " career '" & careerIndex & "', there is no career with that index,")
-    elif careersList.hasKey(key = careerIndex):
-      raise newException(exceptn = DataLoadingError,
-          message = "Can't add career '" & careerIndex & "', there is a career with that index.")
-    if careerAction == DataAction.remove:
-      careersList.del(key = careerIndex)
-      logMessage(message = "Career removed: '" & careerIndex & "'",
-          debugType = everything)
-      continue
-    var career: CareerData = if careerAction == DataAction.update:
-        try:
-          careersList[careerIndex]
-        except KeyError:
-          CareerData()
-      else:
-        CareerData()
-    var attribute = careerNode.attr(name = "name")
-    if attribute.len() > 0:
-      career.name = attribute
-    for skillNode in careerNode:
-      if skillNode.kind != xnElement:
+            message = "Can't load careers data file. Reason: " &
+            getCurrentExceptionMsg())
+    for careerNode in careersXml:
+      if careerNode.kind != xnElement:
         continue
-      let skillName = skillNode.attr(name = "name")
-      if skillNode.attr(name = "action") == "remove":
-        for index, skill in career.skills.pairs:
-          if skill == skillName:
-            career.skills.delete(i = index)
-            break
-      else:
-        if findSkillIndex(skillName = skillName) == 0:
+      let
+        careerIndex = careerNode.attr(name = "index")
+        careerAction: DataAction = try:
+            parseEnum[DataAction](careerNode.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      if careerAction in [update, remove]:
+        if careersList.hasKey(key = careerIndex):
           raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $careerAction & " career '" &
-              careerIndex &
-              "', no skill with name '" & skillName & "'.")
-        career.skills.add(y = skillName)
-    if careerAction == DataAction.add:
-      logMessage(message = "Career added: '" & careerIndex & "'",
-          debugType = everything)
-    else:
-      logMessage(message = "Career updated: '" & careerIndex & "'",
-          debugType = everything)
-    careersList[careerIndex] = career
+              message = "Can't " & $careerAction & " career '" & careerIndex & "', there is no career with that index,")
+      elif careersList.hasKey(key = careerIndex):
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't add career '" & careerIndex & "', there is a career with that index.")
+      if careerAction == DataAction.remove:
+        careersList.del(key = careerIndex)
+        logMessage(message = "Career removed: '" & careerIndex & "'",
+            debugType = everything)
+        continue
+      var career: CareerData = if careerAction == DataAction.update:
+          try:
+            careersList[careerIndex]
+          except KeyError:
+            CareerData()
+        else:
+          CareerData()
+      var attribute = careerNode.attr(name = "name")
+      if attribute.len() > 0:
+        career.name = attribute
+      for skillNode in careerNode:
+        if skillNode.kind != xnElement:
+          continue
+        let skillName = skillNode.attr(name = "name")
+        if skillNode.attr(name = "action") == "remove":
+          for index, skill in career.skills.pairs:
+            if skill == skillName:
+              career.skills.delete(i = index)
+              break
+        else:
+          if findSkillIndex(skillName = skillName) == 0:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $careerAction & " career '" &
+                careerIndex &
+                "', no skill with name '" & skillName & "'.")
+          career.skills.add(y = skillName)
+      if careerAction == DataAction.add:
+        logMessage(message = "Career added: '" & careerIndex & "'",
+            debugType = everything)
+      else:
+        logMessage(message = "Career updated: '" & careerIndex & "'",
+            debugType = everything)
+      careersList[careerIndex] = career
 
 # Temporary code for interfacing with Ada
 
 proc loadAdaCareers*(fileName: cstring): cstring {.sideEffect, raises: [],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
   try:
     loadCareers(fileName = $fileName)
     return "".cstring
@@ -107,7 +111,7 @@ proc loadAdaCareers*(fileName: cstring): cstring {.sideEffect, raises: [],
     return getCurrentExceptionMsg().cstring
 
 proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
-    raises: [], tags: [], exportc.} =
+    raises: [], tags: [], exportc, contractual.} =
   adaCareer = ["".cstring, "".cstring]
   if index > careersList.len():
     return
@@ -126,7 +130,7 @@ proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
   adaCareer[1] = career.name.cstring
 
 proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.sideEffect,
-    raises: [], tags: [], exportc.} =
+    raises: [], tags: [], exportc, contractual.} =
   try:
     if index >= careersList[$careerIndex].skills.len():
       return ""
@@ -134,7 +138,8 @@ proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.sideEffect,
   except KeyError:
     return ""
 
-proc getAdaCareerName(careerIndex: cstring): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaCareerName(careerIndex: cstring): cstring {.raises: [], tags: [],
+    exportc, contractual.} =
   try:
     return careersList[$careerIndex].name.cstring
   except KeyError:
