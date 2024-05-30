@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -13,8 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
--- with Ada.Characters.Latin_1;
+with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
@@ -52,14 +51,8 @@ package body Messages.UI is
      (Message: Message_Data; Messages_View: Tk_Text;
       Messages_Type: Message_Type) is
       -- ****
---      use Ada.Characters.Latin_1;
       use Interfaces.C.Strings;
---
---      Message_Tag: constant String :=
---        (if Message.Color /= WHITE then
---           " [list " & To_Lower(Item => Message_Color'Image(Message.Color)) &
---           "]"
---         else "");
+
       procedure Show_Ada_Message
         (M, M_View: chars_ptr; Color, M_Type, Me_Type: Integer) with
          Import => True,
@@ -72,14 +65,6 @@ package body Messages.UI is
          Color => Message_Color'Pos(Message.Color),
          M_Type => Message_Type'Pos(Message.M_Type),
          Me_Type => Message_Type'Pos(Messages_Type));
---      if Message.M_Type /= Messages_Type and Messages_Type /= DEFAULT then
---         return;
---      end if;
---      Insert
---        (TextWidget => Messages_View, Index => "end",
---         Text =>
---           "{" & To_String(Source => Message.Message) & LF & "}" &
---           Message_Tag);
    end Show_Message;
 
    -- ****o* MUI2/MUI2.Show_Last_Messages_Command
@@ -298,6 +283,7 @@ package body Messages.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Characters.Handling;
       use Ada.Strings.Fixed;
 
       Frame_Name: constant String :=
