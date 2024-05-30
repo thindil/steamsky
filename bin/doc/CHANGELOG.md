@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Showing the list of available missions in bases outside the starting base
 - The game doesn't save known bases
 - Typo in the timed close dialog's button
+- No option to execute mission in the orders' menu
 
 ## [9.9] - 2024-04-14
 
