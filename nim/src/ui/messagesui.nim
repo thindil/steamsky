@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils]
-import ../[game, tk, types]
+import ../[config, game, messages, tk, types]
 import coreui
 
 proc showMessage(message: MessageData; messageView: string;
@@ -34,9 +34,8 @@ proc showMessage(message: MessageData; messageView: string;
 
 proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
-  let
-    messagesFrame = mainPaned & ".messagesframe"
-    messagesCanvas = messagesFrame & ".canvas"
+  var messagesFrame = mainPaned & ".messagesframe"
+  let messagesCanvas = messagesFrame & ".canvas"
   if tclEval2(script = "winfo exists " & messagesCanvas) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "messages.tcl")
     tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
@@ -49,6 +48,25 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = typeBox & " current 0")
   let searchEntry = messagesCanvas & ".messages.options.search"
   tclEval(script = searchEntry & " delete 0 end")
+  let messagesView = messagesCanvas & ".messages.list.view"
+  tclEval(script = messagesView & " configure -state normal")
+  tclEval(script = messagesView & " delete 1.0 end")
+  let messagesType: MessageType = (if argc == 1: default else: ($argv[
+      1]).parseInt.MessageType)
+  if messagesAmount(kind = messagesType) == 0:
+    tclEval(script = messagesView & " insert end {There are no messages of that type.}")
+  else:
+    if gameSettings.messagesOrder == olderFirst:
+      for i in 1 .. messagesAmount():
+        showMessage(message = getMessage(messageIndex = i),
+            messageView = messagesView, messagesType = messagesType)
+    else:
+      for i in countdown(messagesAmount(), 1):
+        showMessage(message = getMessage(messageIndex = i),
+            messageView = messagesView, messagesType = messagesType)
+  tclEval(script = messagesView & " configure -state disabled")
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  messagesFrame = messagesCanvas & ".messages"
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
