@@ -20,6 +20,11 @@ import ../[tk, types]
 
 proc showMessage(message: MessageData; messageView: string;
     messagesType: MessageType) {.sideEffect, raises: [], tags: [].} =
+  ## Show the selected message to a player
+  ##
+  ## * message      - the message to show
+  ## * messageView  - the Tcl treeview name in which the message will be show
+  ## * messagesType - the selected type of messages to show
   if message.kind != messagesType and messagesType != default:
     return
   let messageTag = (if message.color != white: " [list " & (
