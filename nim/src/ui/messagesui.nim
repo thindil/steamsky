@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[tk, types]
+import std/[os, strutils]
+import ../[game, tk, types]
+import coreui
 
 proc showMessage(message: MessageData; messageView: string;
     messagesType: MessageType) {.sideEffect, raises: [], tags: [].} =
@@ -31,10 +32,30 @@ proc showMessage(message: MessageData; messageView: string;
       $message.color).toLowerAscii & "]" else: "")
   tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
 
+proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    messagesFrame = mainPaned & ".messagesframe"
+    messagesCanvas = messagesFrame & ".canvas"
+  if tclEval2(script = "winfo exists " & messagesCanvas) == "0":
+    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "messages.tcl")
+    tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+  elif tclEval2(script = "winfo ismapped " & messagesCanvas) == "1" and argc == 1:
+    tclEval(script = "InvokeButton " & closeButton)
+    tclEval(script = "grid remove " & closeButton)
+    return tclOk
+  let typeBox = messagesCanvas & ".messages.options.types"
+  if argc == 1:
+    tclEval(script = typeBox & " current 0")
+  let searchEntry = messagesCanvas & ".messages.options.search"
+  tclEval(script = searchEntry & " delete 0 end")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
+#    addCommand("ShowLastMessages", showLastMessagesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
