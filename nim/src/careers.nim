@@ -39,7 +39,7 @@ proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let careersXml = try:
+    let careersXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -49,9 +49,9 @@ proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       if careerNode.kind != xnElement:
         continue
       let
-        careerIndex = careerNode.attr(name = "index")
+        careerIndex: string = careerNode.attr(name = "index")
         careerAction: DataAction = try:
-            parseEnum[DataAction](careerNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = careerNode.attr(name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if careerAction in [update, remove]:
@@ -73,15 +73,15 @@ proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             CareerData()
         else:
           CareerData()
-      var attribute = careerNode.attr(name = "name")
+      var attribute: string = careerNode.attr(name = "name")
       if attribute.len() > 0:
         career.name = attribute
       for skillNode in careerNode:
         if skillNode.kind != xnElement:
           continue
-        let skillName = skillNode.attr(name = "name")
+        let skillName: string = skillNode.attr(name = "name")
         if skillNode.attr(name = "action") == "remove":
-          for index, skill in career.skills.pairs:
+          for index, skill in career.skills:
             if skill == skillName:
               career.skills.delete(i = index)
               break
@@ -116,7 +116,7 @@ proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
   if index > careersList.len():
     return
   var
-    career: CareerData
+    career: CareerData = CareerData()
     careerIndex: Positive = 1
   for key in careersList.keys:
     if careerIndex == index:
