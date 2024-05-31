@@ -33,7 +33,7 @@ proc showMessage(message: MessageData; messageView: string;
   tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
 
 proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   var messagesFrame = mainPaned & ".messagesframe"
   let messagesCanvas = messagesFrame & ".canvas"
   if tclEval2(script = "winfo exists " & messagesCanvas) == "0":
@@ -51,8 +51,10 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   let messagesView = messagesCanvas & ".messages.list.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
-  let messagesType: MessageType = (if argc == 1: default else: ($argv[
-      1]).parseInt.MessageType)
+  let messagesType: MessageType = try:
+      (if argc == 1: default else: ($argv[1]).parseInt.MessageType)
+    except:
+      return showError(message = "Can't get messages type.")
   if messagesAmount(kind = messagesType) == 0:
     tclEval(script = messagesView & " insert end {There are no messages of that type.}")
   else:
