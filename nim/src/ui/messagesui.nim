@@ -34,6 +34,18 @@ proc showMessage(message: MessageData; messageView: string;
 
 proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show the list of last messages to a player
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowLastMessages messagestype
+  ## MessagesType is the type of messages to show, default all
   var messagesFrame = mainPaned & ".messagesframe"
   let messagesCanvas = messagesFrame & ".canvas"
   if tclEval2(script = "winfo exists " & messagesCanvas) == "0":
