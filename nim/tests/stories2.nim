@@ -23,5 +23,5 @@ suite "Unit tests for stories2 module":
     if currentStory.index.len > 0:
       break
 
-  test "Testing progressStory.":
+  test "Progress the current story.":
     discard progressStory()
