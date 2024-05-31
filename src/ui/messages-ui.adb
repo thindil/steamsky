@@ -20,7 +20,7 @@ with Interfaces.C.Strings;
 -- with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada;
 -- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -32,13 +32,14 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 -- with Tcl.Tk.Ada.Widgets.TtkFrame;
 -- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 -- with Tcl.Tk.Ada.Winfo;
-with Config; use Config;
+with Config;
 with CoreUI; use CoreUI;
 with Dialogs;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Messages.UI is
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****if* MUI2/MUI2.Show_Message
    -- FUNCTION
    -- Show the selected message to a player
@@ -66,6 +67,7 @@ package body Messages.UI is
          M_Type => Message_Type'Pos(Message.M_Type),
          Me_Type => Message_Type'Pos(Messages_Type));
    end Show_Message;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* MUI2/MUI2.Show_Last_Messages_Command
    -- FUNCTION
@@ -287,6 +289,8 @@ package body Messages.UI is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Characters.Handling;
       use Ada.Strings.Fixed;
+      use Tcl.Ada;
+      use Config;
 
       Frame_Name: constant String :=
         Main_Paned & ".messagesframe.canvas.messages";
@@ -369,6 +373,7 @@ package body Messages.UI is
    end Search_Messages_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowLastMessages",
