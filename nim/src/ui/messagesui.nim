@@ -93,7 +93,7 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let typeBox = mainPaned & ".messagesframe.canvas.messages.options.types"
   return showLastMessagesCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SelectMessages", tclEval2(script = typeBox &
