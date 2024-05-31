@@ -101,24 +101,26 @@ package body Messages.UI is
    function Select_Messages_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "selectMessagesCommand";
       -- ****
 
-   function Select_Messages_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      Type_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName =>
-             Main_Paned & ".messagesframe.canvas.messages.options.types",
-           Interp => Interp);
-   begin
-      return
-        Show_Last_Messages_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => Argv & Current(ComboBox => Type_Box));
-   end Select_Messages_Command;
+--   function Select_Messages_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      Type_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName =>
+--             Main_Paned & ".messagesframe.canvas.messages.options.types",
+--           Interp => Interp);
+--   begin
+--      return
+--        Show_Last_Messages_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => Argv & Current(ComboBox => Type_Box));
+--   end Select_Messages_Command;
 
    -- ****o* MUI2/MUI2.Delete_Messages_Command
    -- FUNCTION

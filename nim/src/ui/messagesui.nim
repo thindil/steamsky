@@ -92,11 +92,19 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   showScreen(newScreenName = "messagesframe")
   return tclOk
 
+proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let typeBox = mainPaned & ".messagesframe.canvas.messages.options.types"
+  return showLastMessagesCommand(clientData = clientData, interp = interp,
+      argc = 2, argv = @["SelectMessages", tclEval2(script = typeBox &
+      " current")].allocCStringArray)
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowLastMessages", showLastMessagesCommand)
+#    addCommand("SelectMessages", selectMessagesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
