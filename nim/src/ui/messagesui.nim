@@ -94,6 +94,17 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show only messages of the selected type
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SelectMessages
   let typeBox = mainPaned & ".messagesframe.canvas.messages.options.types"
   return showLastMessagesCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SelectMessages", tclEval2(script = typeBox &
