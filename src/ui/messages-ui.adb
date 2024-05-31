@@ -17,21 +17,15 @@ with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
--- with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
--- with Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
--- with Tcl.Tk.Ada.Winfo;
 with Config;
 with CoreUI; use CoreUI;
 with Dialogs;
@@ -90,111 +84,6 @@ package body Messages.UI is
       Convention => C,
       External_Name => "showLastMessagesCommand";
       -- ****
-
---   function Show_Last_Messages_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data);
---      use Interfaces.C.Strings;
---      use GNAT.Directory_Operations;
---      use Tcl.Tk.Ada;
---      use Tcl.Tk.Ada.Widgets.Canvas;
---      use Tcl.Tk.Ada.Widgets.TtkEntry;
---      use Tcl.Tk.Ada.Widgets.TtkFrame;
---      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
---      use Tcl.Tk.Ada.Winfo;
---
---      Messages_Frame: Ttk_Frame :=
---        Get_Widget
---          (pathName => Main_Paned & ".messagesframe", Interp => Interp);
---      Messages_Canvas: constant Tk_Canvas :=
---        Get_Widget(pathName => Messages_Frame & ".canvas", Interp => Interp);
---      Messages_Type: constant Message_Type :=
---        (if Argc = 1 then DEFAULT
---         else Message_Type'Val
---             (Natural'Value(CArgv.Arg(Argv => Argv, N => 1))));
---      Messages_View: constant Tk_Text :=
---        Get_Widget
---          (pathName => Messages_Canvas & ".messages.list.view",
---           Interp => Interp);
---      Type_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName => Messages_Canvas & ".messages.options.types",
---           Interp => Interp);
---      Search_Entry: constant Ttk_Entry :=
---        Get_Widget
---          (pathName => Messages_Canvas & ".messages.options.search",
---           Interp => Interp);
---   begin
---      if Winfo_Get(Widgt => Messages_Canvas, Info => "exists") = "0" then
---         Tcl_EvalFile
---           (interp => Get_Context,
---            fileName =>
---              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
---              "messages.tcl");
---         Bind
---           (Widgt => Messages_Frame, Sequence => "<Configure>",
---            Script => "{ResizeCanvas %W.canvas %w %h}");
---      elsif Winfo_Get(Widgt => Messages_Canvas, Info => "ismapped") = "1" and
---        Argc = 1 then
---         Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
---         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---         return TCL_OK;
---      end if;
---      if Argc = 1 then
---         Current(ComboBox => Type_Box, NewIndex => "0");
---      end if;
---      Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
---      configure(Widgt => Messages_View, options => "-state normal");
---      Delete
---        (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
---      if Messages_Amount(M_Type => Messages_Type) = 0 then
---         Insert
---           (TextWidget => Messages_View, Index => "end",
---            Text => "{There are no messages of that type.}");
---      else
---         if Get_Messages_Order = OLDER_FIRST then
---            Show_Older_First_Loop :
---            for I in 1 .. Messages_Amount loop
---               Show_Message
---                 (Message => Get_Message(Message_Index => I),
---                  Messages_View => Messages_View,
---                  Messages_Type => Messages_Type);
---            end loop Show_Older_First_Loop;
---         else
---            Show_Newer_First_Loop :
---            for I in reverse 1 .. Messages_Amount loop
---               Show_Message
---                 (Message => Get_Message(Message_Index => I),
---                  Messages_View => Messages_View,
---                  Messages_Type => Messages_Type);
---            end loop Show_Newer_First_Loop;
---         end if;
---      end if;
---      configure(Widgt => Messages_View, options => "-state disabled");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Close_Button, Options => "-row 0 -column 1");
---      Messages_Frame.Name :=
---        New_String(Str => Widget_Image(Win => Messages_Canvas) & ".messages");
---      configure
---        (Widgt => Messages_Canvas,
---         options =>
---           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
---           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      Canvas_Create
---        (Parent => Messages_Canvas, Child_Type => "window",
---         Options =>
---           "0 0 -anchor nw -window " & Widget_Image(Win => Messages_Frame));
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      configure
---        (Widgt => Messages_Canvas,
---         options =>
---           "-scrollregion [list " &
---           BBox(CanvasWidget => Messages_Canvas, TagOrId => "all") & "]");
---      Show_Screen(New_Screen_Name => "messagesframe");
---      return TCL_OK;
---   end Show_Last_Messages_Command;
 
    -- ****o* MUI2/MUI2.Select_Messages_Command
    -- FUNCTION
