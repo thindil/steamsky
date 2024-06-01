@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - The game doesn't save known bases
 - Typo in the timed close dialog's button
 - No option to execute mission in the orders' menu
+- Not showing information about a mission on the map after loading the game
 
 ## [9.9] - 2024-04-14
 
