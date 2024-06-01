@@ -334,7 +334,7 @@ proc loadGame*() =
   logMessage(message = "done", debugType = everything)
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
-  for mission in savedGame.findAll("acceptedmission"):
+  for index, mission in savedGame.findAll("acceptedmission"):
     var tmpMission = MissionData(mtype: mission.attr(
         "type").parseInt.MissionsTypes, time: mission.attr("time").parseInt,
         targetX: mission.attr("targetx").parseInt, targetY: mission.attr(
@@ -354,6 +354,7 @@ proc loadGame*() =
     if multiplier.len > 0:
       tmpMission.multiplier = multiplier.parseFloat
     acceptedMissions.add(tmpMission)
+    skyMap[tmpMission.targetX][tmpMission.targetY].missionIndex = index
   logMessage(message = "done", debugType = everything)
   # Load game statistics
   logMessage(message = "Loading game statistics...", debugType = everything)
