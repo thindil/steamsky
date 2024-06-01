@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the player's careers, like loading them from files.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log
@@ -104,6 +106,7 @@ proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
 proc loadAdaCareers*(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     loadCareers(fileName = $fileName)
     return "".cstring
@@ -112,6 +115,7 @@ proc loadAdaCareers*(fileName: cstring): cstring {.sideEffect, raises: [],
 
 proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   adaCareer = ["".cstring, "".cstring]
   if index > careersList.len():
     return
@@ -131,6 +135,7 @@ proc getAdaCareer(index: cint; adaCareer: var array[2, cstring]) {.sideEffect,
 
 proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     if index >= careersList[$careerIndex].skills.len():
       return ""
@@ -140,6 +145,7 @@ proc getAdaCareerSkill(careerIndex: cstring; index: cint): cstring {.sideEffect,
 
 proc getAdaCareerName(careerIndex: cstring): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return careersList[$careerIndex].name.cstring
   except KeyError:
