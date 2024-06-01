@@ -27,7 +27,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Config;
 with CoreUI;
-with Dialogs;
+-- with Dialogs;
 with Utils.UI;
 
 package body Messages.UI is
@@ -121,21 +121,23 @@ package body Messages.UI is
    function Delete_Messages_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "deleteMessagesCommand";
       -- ****
 
-   function Delete_Messages_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      use Dialogs;
-
-   begin
-      Show_Question
-        (Question => "Are you sure you want to clear all messages?",
-         Result => "messages");
-      return TCL_OK;
-   end Delete_Messages_Command;
+--   function Delete_Messages_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--      use Dialogs;
+--
+--   begin
+--      Show_Question
+--        (Question => "Are you sure you want to clear all messages?",
+--         Result => "messages");
+--      return TCL_OK;
+--   end Delete_Messages_Command;
 
    -- ****o* MUI2/MUI2.Search_Messages_Command
    -- FUNCTION

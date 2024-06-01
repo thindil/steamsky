@@ -17,7 +17,7 @@
 
 import std/[os, strutils]
 import ../[config, game, messages, tk, types]
-import coreui, utilsui2
+import coreui, dialogs, utilsui2
 
 proc showMessage(message: MessageData; messageView: string;
     messagesType: MessageType) {.sideEffect, raises: [], tags: [].} =
@@ -110,12 +110,19 @@ proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SelectMessages", tclEval2(script = typeBox &
       " current")].allocCStringArray)
 
+proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  showQuestion(question = "Are you sure you want to clear all messages?",
+      res = "messages")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowLastMessages", showLastMessagesCommand)
 #    addCommand("SelectMessages", selectMessagesCommand)
+#    addCommand("DeleteMessages", deleteMessagesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
