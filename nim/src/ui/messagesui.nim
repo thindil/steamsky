@@ -111,7 +111,7 @@ proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
       " current")].allocCStringArray)
 
 proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   showQuestion(question = "Are you sure you want to clear all messages?",
       res = "messages")
   return tclOk
