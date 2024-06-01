@@ -55,15 +55,15 @@ suite "Unit tests for trades module":
   generateCargo()
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
-  test "Testing generateTraderCargo.":
+  test "Generating a trader's cargo.":
     generateTraderCargo(96)
     check:
       traderCargo.len > 0
 
-  test "Testing sellItems.":
+  test "Selling an item.":
     sellItems(1, "1")
 
-  test "Testing buyItems.":
+  test "Buying an item.":
     generateCargo()
     updateBaseCargo(skyBases[1].cargo[2].protoIndex, 2)
     buyItems(2, "1")
