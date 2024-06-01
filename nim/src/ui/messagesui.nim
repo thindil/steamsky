@@ -127,6 +127,32 @@ proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
       res = "messages")
   return tclOk
 
+proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = mainPaned & ".messagesframe.canvas.messages"
+    messagesView = frameName & ".list.view"
+  tclEval(script = messagesView & " configure -state normal")
+  tclEval(script = messagesView & " delete 1.0 end")
+  let
+    searchText = $argv[1]
+    typeBox = frameName & ".options.types"
+    messagesType = tclEval2(script = typeBox & " current").parseInt.MessageType
+  if searchText.len == 0:
+    if gameSettings.messagesOrder == olderFirst:
+      for i in 1 .. messagesAmount():
+        showMessage(message = getMessage(messageIndex = i),
+            messageView = messagesView, messagesType = messagesType)
+    else:
+      for i in countdown(1, messagesAmount()):
+        showMessage(message = getMessage(messageIndex = i),
+            messageView = messagesView, messagesType = messagesType)
+    tclSetResult(value = "1")
+    return tclOk
+  tclEval(script = messagesView & " configure -state disable")
+  tclSetResult(value = "1")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -134,6 +160,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowLastMessages", showLastMessagesCommand)
 #    addCommand("SelectMessages", selectMessagesCommand)
 #    addCommand("DeleteMessages", deleteMessagesCommand)
+#    addCommand("SearchMessages", searchMessagesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
