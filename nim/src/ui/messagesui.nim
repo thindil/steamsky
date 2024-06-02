@@ -149,6 +149,16 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
             messageView = messagesView, messagesType = messagesType)
     tclSetResult(value = "1")
     return tclOk
+  if gameSettings.messagesOrder == olderFirst:
+    for i in 1 .. messagesAmount():
+      let message = getMessage(messageIndex = i)
+      if message.message.find(sub = searchText) > -1:
+        showMessage(message = message, messageView = messagesView, messagesType = messagesType)
+  else:
+    for i in countdown(1, messagesAmount()):
+      let message = getMessage(messageIndex = i)
+      if message.message.find(sub = searchText) > -1:
+        showMessage(message = message, messageView = messagesView, messagesType = messagesType)
   tclEval(script = messagesView & " configure -state disable")
   tclSetResult(value = "1")
   return tclOk
