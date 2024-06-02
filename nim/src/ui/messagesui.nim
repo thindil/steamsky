@@ -129,6 +129,18 @@ proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show only this messages which contains the selected sequence
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SearchMessages text
+  ## Text is the string to search in the messages
   let
     frameName = mainPaned & ".messagesframe.canvas.messages"
     messagesView = frameName & ".list.view"
