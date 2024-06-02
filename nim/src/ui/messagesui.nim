@@ -128,7 +128,7 @@ proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = mainPaned & ".messagesframe.canvas.messages"
     messagesView = frameName & ".list.view"
@@ -137,7 +137,10 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     searchText = $argv[1]
     typeBox = frameName & ".options.types"
-    messagesType = tclEval2(script = typeBox & " current").parseInt.MessageType
+    messagesType = try:
+        tclEval2(script = typeBox & " current").parseInt.MessageType
+      except:
+        return showError(message = "Can't get messages' type.")
   if searchText.len == 0:
     if gameSettings.messagesOrder == olderFirst:
       for i in 1 .. messagesAmount():
@@ -153,12 +156,14 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
     for i in 1 .. messagesAmount():
       let message = getMessage(messageIndex = i)
       if message.message.find(sub = searchText) > -1:
-        showMessage(message = message, messageView = messagesView, messagesType = messagesType)
+        showMessage(message = message, messageView = messagesView,
+            messagesType = messagesType)
   else:
     for i in countdown(1, messagesAmount()):
       let message = getMessage(messageIndex = i)
       if message.message.find(sub = searchText) > -1:
-        showMessage(message = message, messageView = messagesView, messagesType = messagesType)
+        showMessage(message = message, messageView = messagesView,
+            messagesType = messagesType)
   tclEval(script = messagesView & " configure -state disable")
   tclSetResult(value = "1")
   return tclOk
