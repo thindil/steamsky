@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 
 type
 
@@ -750,7 +751,7 @@ type
     faction*: cstring
 
 proc inventoryToNim*(inventory: array[128, AdaInventoryData]): seq[
-    InventoryData] =
+    InventoryData] {.sideEffect, raises: [], tags: [], contractual.} =
   for item in inventory:
     if item.protoIndex == 0:
       break
@@ -759,7 +760,7 @@ proc inventoryToNim*(inventory: array[128, AdaInventoryData]): seq[
         price: item.price))
 
 proc inventoryToAda*(inventory: seq[InventoryData]): array[128,
-    AdaInventoryData] =
+    AdaInventoryData] {.sideEffect, raises: [], tags: [], contractual.} =
   for i in 0..127:
     if i < inventory.len:
       result[i] = AdaInventoryData(protoIndex: inventory[i].protoIndex.cint,
@@ -768,7 +769,8 @@ proc inventoryToAda*(inventory: seq[InventoryData]): array[128,
     else:
       result[i] = AdaInventoryData(protoIndex: 0)
 
-func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.raises: [], tags: [].} =
+func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.sideEffect,
+    raises: [], tags: [], contractual.} =
   result = MemberData(name: $adaMember.name, gender: adaMember.gender,
       health: adaMember.health, tired: adaMember.tired,
       hunger: adaMember.hunger, thirst: adaMember.thirst,
@@ -776,9 +778,9 @@ func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.raises: [], tags: [
       previousOrder: adaMember.previousOrder.CrewOrders,
       contractLength: adaMember.contractLength, loyalty: adaMember.loyalty,
       homeBase: adaMember.homeBase, faction: $adaMember.faction)
-  for index, order in adaMember.orders.pairs:
+  for index, order in adaMember.orders:
     result.orders[index] = order
-  for index, item in adaMember.equipment.pairs:
+  for index, item in adaMember.equipment:
     result.equipment[index.EquipmentLocations] = item - 1
   for attribute in adaMember.attributes:
     if attribute[0] == 0:
@@ -793,16 +795,17 @@ func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.raises: [], tags: [
   result.payment = [adaMember.payment[1].Natural, adaMember.payment[2].Natural]
   result.morale = [adaMember.morale[1].Natural, adaMember.morale[2].Natural]
 
-func adaMemberFromNim*(member: MemberData): AdaMemberData {.raises: [], tags: [].} =
+func adaMemberFromNim*(member: MemberData): AdaMemberData {.sideEffect,
+    raises: [], tags: [], contractual.} =
   result = AdaMemberData()
   for attribute in result.attributes.mitems:
     attribute = [0.cint, 0.cint]
-  for index, attribute in member.attributes.pairs:
+  for index, attribute in member.attributes:
     result.attributes[index + 1] = [attribute.level.cint,
         attribute.experience.cint]
   for skill in result.skills.mitems:
     skill = [0.cint, 0.cint, 0.cint]
-  for index, skill in member.skills.pairs:
+  for index, skill in member.skills:
     result.skills[index + 1] = [skill.index.cint, skill.level.cint,
         skill.experience.cint]
   result.name = member.name.cstring
@@ -814,7 +817,7 @@ func adaMemberFromNim*(member: MemberData): AdaMemberData {.raises: [], tags: []
   result.order = member.order.ord.cint
   result.previousOrder = member.previousOrder.ord.cint
   result.orderTime = member.orderTime.cint
-  for index, order in member.orders.pairs:
+  for index, order in member.orders:
     result.orders[index] = order.ord.cint
   for index, item in member.equipment:
     result.equipment[index.ord.cint] = item.cint
