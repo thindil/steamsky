@@ -504,8 +504,8 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       color = "red3"
     of doublePrice:
       try:
-        eventInfoText = eventInfoText & itemsList[eventsList[
-            eventIndex].itemIndex].name
+        eventInfoText = eventInfoText & "Double price for " & itemsList[
+            eventsList[eventIndex].itemIndex].name
       except:
         showError(message = "Can't get the name of the item for the event.")
         return
