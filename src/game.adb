@@ -96,21 +96,6 @@ package body Game is
    begin
       if Save then
          Set_Ship_In_Nim;
-         Get_Bases_Loop :
-         for I in Bases_Range loop
-            Set_Base_In_Nim(Base_Index => I);
-         end loop Get_Bases_Loop;
-         Get_Map_Y_Loop :
-         for Y in Map_Y_Range loop
-            Get_Map_X_Loop :
-            for X in Map_X_Range loop
-               Get_Ada_Map_Cell
-                 (X => X, Y => Y, Base_Index => Sky_Map(X, Y).Base_Index,
-                  Visited => (if Sky_Map(X, Y).Visited then 1 else 0),
-                  Event_Index => Sky_Map(X, Y).Event_Index,
-                  Mission_Index => Sky_Map(X, Y).Mission_Index);
-            end loop Get_Map_X_Loop;
-         end loop Get_Map_Y_Loop;
       end if;
       End_Ada_Game(S => (if Save then 1 else 0));
       Clear_Game_Stats;
