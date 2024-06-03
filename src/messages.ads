@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -109,22 +109,6 @@ package Messages is
       Pre => Message'Length > 0;
       -- ****
 
-      -- ****f* Messages/Messages.Get_Message
-      -- FUNCTION
-      -- Get Nth message of selected type
-      -- PARAMETERS
-      -- Message_Index - If positive, get Nth message from start of list if
-      --                 negative, get Nth message from the end of the messages
-      --                 list
-      -- M_Type        - Type of messages to check. Default all messages
-      -- RESULT
-      -- Selected message or empty message if nothing found
-      -- SOURCE
-   function Get_Message
-     (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
-      return Message_Data;
-      -- ****
-
       -- ****f* Messages/Messages.Clear_Messages
       -- FUNCTION
       -- Remove all messages
@@ -134,17 +118,6 @@ package Messages is
       Convention => C,
       External_Name => "clearMessages";
       -- ****
-
-      -- ****f* Messages/Messages.Messages_Amount
-      -- FUNCTION
-      -- Get amount of selected type messages
-      -- PARAMETERS
-      -- M_Type - Type of messages to search. Default is all messages
-      -- RESULT
-      -- Amount of messages of selected type
-      -- SOURCE
-   function Messages_Amount(M_Type: Message_Type := DEFAULT) return Natural;
-   -- ****
 
       -- ****f* Messages/Messages.Get_Last_Message_Index
       -- FUNCTION

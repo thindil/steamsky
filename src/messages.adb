@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -47,39 +47,6 @@ package body Messages is
         (Msg => New_String(Str => Message), Mtype => Message_Type'Pos(M_Type),
          Mcolor => Message_Color'Pos(Color));
    end Add_Message;
-
-   function Get_Message
-     (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
-      return Message_Data is
-      type Message_Data_C is record
-         Msg: chars_ptr;
-         Kind: Integer;
-         Color: Integer;
-      end record;
-      function Nim_Get_Message
-        (Mindex, Mtype: Integer) return Message_Data_C with
-         Import => True,
-         Convention => C,
-         External_Name => "getMessage";
-      Temp_Message: constant Message_Data_C :=
-        Nim_Get_Message
-          (Mindex => Message_Index, Mtype => Message_Type'Pos(M_Type));
-   begin
-      return
-        (Message =>
-           To_Unbounded_String(Source => Value(Item => Temp_Message.Msg)),
-         M_Type => Message_Type'Val(Temp_Message.Kind),
-         Color => Message_Color'Val(Temp_Message.Color));
-   end Get_Message;
-
-   function Messages_Amount(M_Type: Message_Type := DEFAULT) return Natural is
-      function Nim_Messages_Amount(Kind: Integer) return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "messagesAmount";
-   begin
-      return Nim_Messages_Amount(Kind => Message_Type'Pos(M_Type));
-   end Messages_Amount;
 
    function Get_Last_Message_Index return Natural is
       function Nim_Get_Last_Message_Index return Integer with
