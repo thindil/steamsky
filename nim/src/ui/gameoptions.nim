@@ -19,7 +19,7 @@ import ../tk
 import coreui
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     optionsCanvas = mainPaned & ".optionsframe.canvas"
     optionsFrame = optionsCanvas & ".options"
