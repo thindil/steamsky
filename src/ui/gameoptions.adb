@@ -356,39 +356,41 @@ package body GameOptions is
    function Show_Options_Tab_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showOptionsTabCommand";
       -- ****
 
-   function Show_Options_Tab_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      Options_Canvas: constant Tk_Canvas :=
-        Get_Widget
-          (pathName => Main_Paned & ".optionsframe.canvas", Interp => Interp);
-      Options_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Options_Canvas & ".options", Interp => Interp);
-      Frame: constant Ttk_Frame :=
-        Get_Widget
-          (pathName =>
-             Options_Frame & "." &
-             Tcl_GetVar(interp => Interp, varName => "newtab"));
-      Old_Frame: constant Ttk_Frame :=
-        Get_Widget
-          (pathName =>
-             Tcl.Tk.Ada.Grid.Grid_Slaves
-               (Master => Options_Frame, Option => "-row 1"));
-   begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Old_Frame);
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-sticky nwes -padx 10");
-      Tcl_Eval(interp => Interp, strng => "update");
-      configure
-        (Widgt => Options_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
-      return TCL_OK;
-   end Show_Options_Tab_Command;
+--   function Show_Options_Tab_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      Options_Canvas: constant Tk_Canvas :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".optionsframe.canvas", Interp => Interp);
+--      Options_Frame: constant Ttk_Frame :=
+--        Get_Widget(pathName => Options_Canvas & ".options", Interp => Interp);
+--      Frame: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName =>
+--             Options_Frame & "." &
+--             Tcl_GetVar(interp => Interp, varName => "newtab"));
+--      Old_Frame: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName =>
+--             Tcl.Tk.Ada.Grid.Grid_Slaves
+--               (Master => Options_Frame, Option => "-row 1"));
+--   begin
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Old_Frame);
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-sticky nwes -padx 10");
+--      Tcl_Eval(interp => Interp, strng => "update");
+--      configure
+--        (Widgt => Options_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
+--      return TCL_OK;
+--   end Show_Options_Tab_Command;
 
    -- ****o* GameOptions/GameOptions.Show_Options_Command
    -- FUNCTION
