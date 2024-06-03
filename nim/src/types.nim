@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various types for the game, like ships' data structure, etc.
+
 import std/tables
 import contracts
 
@@ -723,6 +725,7 @@ type
 # Temporary code for interfacing with Ada
 
   AdaInventoryData* = object
+    ## Temporary type for interfacing with Ada
     protoIndex*: cint
     amount*: cint
     name*: cstring
@@ -730,6 +733,7 @@ type
     price*: cint
 
   AdaMemberData* = object
+    ## Temporary type for interfacing with Ada
     attributes*: array[1..16, array[2, cint]]
     skills*: array[1..64, array[3, cint]]
     name*: cstring
@@ -752,6 +756,7 @@ type
 
 proc inventoryToNim*(inventory: array[128, AdaInventoryData]): seq[
     InventoryData] {.sideEffect, raises: [], tags: [], contractual.} =
+  ## Temporary C binding
   for item in inventory:
     if item.protoIndex == 0:
       break
@@ -761,6 +766,7 @@ proc inventoryToNim*(inventory: array[128, AdaInventoryData]): seq[
 
 proc inventoryToAda*(inventory: seq[InventoryData]): array[128,
     AdaInventoryData] {.sideEffect, raises: [], tags: [], contractual.} =
+  ## Temporary C binding
   for i in 0..127:
     if i < inventory.len:
       result[i] = AdaInventoryData(protoIndex: inventory[i].protoIndex.cint,
@@ -771,6 +777,7 @@ proc inventoryToAda*(inventory: seq[InventoryData]): array[128,
 
 func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.sideEffect,
     raises: [], tags: [], contractual.} =
+  ## Temporary C binding
   result = MemberData(name: $adaMember.name, gender: adaMember.gender,
       health: adaMember.health, tired: adaMember.tired,
       hunger: adaMember.hunger, thirst: adaMember.thirst,
@@ -797,6 +804,7 @@ func adaMemberToNim*(adaMember: AdaMemberData): MemberData {.sideEffect,
 
 func adaMemberFromNim*(member: MemberData): AdaMemberData {.sideEffect,
     raises: [], tags: [], contractual.} =
+  ## Temporary C binding
   result = AdaMemberData()
   for attribute in result.attributes.mitems:
     attribute = [0.cint, 0.cint]
