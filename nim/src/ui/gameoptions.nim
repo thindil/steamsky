@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/os
+import std/[os, tables]
 import ../[game, tk]
-import coreui
+import coreui, mapsui, themes
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -61,6 +61,17 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     for label in labelsArray:
       let labelName = optionsCanvas & ".options.info." & label.name
       tclEval(script = labelName & " configure -text {" & label.value & " }")
+    var themesNames = ""
+    for theme in themesList.values:
+      themesNames &= " {" & theme.name & "}"
+    let comboBox = optionsFrame & ".canvas.options.interface.theme"
+    tclEval(script = comboBox & " configure -values [list" & themesNames & "]")
+  elif tclEval2(script = "winfo ismapped " & optionsCanvas) == "1":
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+    return tclOk
+  optionsFrame = optionsCanvas & ".options.general"
+  tclEval(script = "grid " & optionsFrame & " -sticky nwes -padx 10")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
