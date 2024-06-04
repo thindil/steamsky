@@ -115,6 +115,24 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       WidgetData(name: optionsCanvas & ".options.interface.listslimit",
       value: $gameSettings.listsLimit), WidgetData(name: optionsCanvas &
       ".options.general.waitinterval", value: $gameSettings.waitMinutes)]
+  for spinBox in spinboxArray:
+    tclEval(script = spinBox.name & " set " & spinBox.value)
+  let comboboxArray: array[4, WidgetData] = [WidgetData(name: optionsCanvas &
+      ".options.general.speed", value: $(gameSettings.undockSpeed.ord - 1)),
+      WidgetData(name: optionsCanvas & ".options.general.automovestop",
+      value: $(gameSettings.autoMoveStop.ord)), WidgetData(name: optionsCanvas &
+      ".options.general.messagesorder", value: $(
+      gameSettings.messagesOrder.ord)), WidgetData(name: optionsCanvas &
+      ".options.general.autosave", value: $(gameSettings.autoSave.ord))]
+  for comboBox in comboboxArray:
+    tclEval(script = comboBox.name & " current " & comboBox.value)
+  optionsFrame = optionsCanvas & ".options.interface"
+  var comboBox = optionsFrame & ".theme"
+  let theme = try:
+        themesList[gameSettings.interfaceTheme]
+      except:
+        return showError(message = "Can't find theme '" & gameSettings.interfaceTheme & "'")
+  tclEval(script = comboBox & " set {" & "}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
