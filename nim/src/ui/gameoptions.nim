@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../tk
+import std/os
+import ../[game, tk]
 import coreui
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -43,10 +44,30 @@ proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
       script = optionsCanvas & " bbox all") & "]")
   return tclOk
 
+proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  tclSetVar(varName = "newtab", newValue = "general")
+  var optionsFrame = mainPaned & ".optionsframe"
+  let optionsCanvas = optionsFrame & ".canvas"
+  if tclEval2(script = "winfo exists " & optionsCanvas) == "0":
+    tclEvalFile(fileName = dataDirectory & DirSep & "options.tcl")
+    tclEval(script = "bind " & optionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+    type WidgetData = object
+      name, value: string
+    let labelsArray: array[4, WidgetData] = [WidgetData(name: "data",
+        value: dataDirectory), WidgetData(name: "save", value: saveDirectory),
+        WidgetData(name: "docs", value: docDirectory), WidgetData(name: "mods",
+        value: modsDirectory)]
+    for label in labelsArray:
+      let labelName = optionsCanvas & ".options.info." & label.name
+      tclEval(script = labelName & " configure -text {" & label.value & " }")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowOptionsTab", showOptionsTabCommand)
+#    addCommand("ShowOptions", showOptionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
