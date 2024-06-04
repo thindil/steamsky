@@ -44,6 +44,17 @@ proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
       script = optionsCanvas & " bbox all") & "]")
   return tclOk
 
+type AccelData = object
+  shortcut, entryName, configName: string
+
+var accels: array[4, AccelData] = [AccelData(shortcut: menuAccelerators[1],
+    entryName: ".menu.shipinfo", configName: "ShipInfo"), AccelData(
+    shortcut: menuAccelerators[2], entryName: ".menu.orders",
+    configName: "Orders"), AccelData(shortcut: menuAccelerators[3],
+    entryName: ".menu.crafts", configName: "Crafting"), AccelData(
+    shortcut: menuAccelerators[4], entryName: ".menu.messages",
+    configName: "LastMessages")]
+
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   tclSetVar(varName = "newtab", newValue = "general")
@@ -131,8 +142,9 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   let theme = try:
         themesList[gameSettings.interfaceTheme]
       except:
-        return showError(message = "Can't find theme '" & gameSettings.interfaceTheme & "'")
-  tclEval(script = comboBox & " set {" & "}")
+        return showError(message = "Can't find theme '" &
+            gameSettings.interfaceTheme & "'")
+  tclEval(script = comboBox & " set {" & theme.name & "}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
