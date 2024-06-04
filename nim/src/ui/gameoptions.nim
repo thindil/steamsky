@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
-import ../[game, tk]
+import ../[config, game, tk]
 import coreui, mapsui, themes
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -49,11 +49,11 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = "newtab", newValue = "general")
   var optionsFrame = mainPaned & ".optionsframe"
   let optionsCanvas = optionsFrame & ".canvas"
+  type WidgetData = object
+    name, value: string
   if tclEval2(script = "winfo exists " & optionsCanvas) == "0":
     tclEvalFile(fileName = dataDirectory & DirSep & "options.tcl")
     tclEval(script = "bind " & optionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
-    type WidgetData = object
-      name, value: string
     let labelsArray: array[4, WidgetData] = [WidgetData(name: "data",
         value: dataDirectory), WidgetData(name: "save", value: saveDirectory),
         WidgetData(name: "docs", value: docDirectory), WidgetData(name: "mods",
@@ -72,6 +72,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   optionsFrame = optionsCanvas & ".options.general"
   tclEval(script = "grid " & optionsFrame & " -sticky nwes -padx 10")
+  let checkboxArray: array[11, WidgetData] = [WidgetData(name: optionsCanvas & ".options.general.autorest", value: (if gameSettings.autoRest: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autocenter", value: (if gameSettings.autoCenter: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autoreturn", value: (if gameSettings.autoReturn: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autofinish", value: (if gameSettings.autoFinish: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autoaskforbases", value: (if gameSettings.autoAskForBases: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autoaskforevents", value: (if gameSettings.autoAskForEvents: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.rightbutton", value: (if gameSettings.rightButton: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.showtooltips", value: (if gameSettings.showTooltips: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.showmessages", value: (if gameSettings.showLastMessages: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.fullscreen", value: (if gameSettings.fullScreen: "1" else: "0"))]
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
