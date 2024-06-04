@@ -27,7 +27,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -35,7 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm;
@@ -361,37 +361,6 @@ package body GameOptions is
       External_Name => "showOptionsTabCommand";
       -- ****
 
---   function Show_Options_Tab_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      Options_Canvas: constant Tk_Canvas :=
---        Get_Widget
---          (pathName => Main_Paned & ".optionsframe.canvas", Interp => Interp);
---      Options_Frame: constant Ttk_Frame :=
---        Get_Widget(pathName => Options_Canvas & ".options", Interp => Interp);
---      Frame: constant Ttk_Frame :=
---        Get_Widget
---          (pathName =>
---             Options_Frame & "." &
---             Tcl_GetVar(interp => Interp, varName => "newtab"));
---      Old_Frame: constant Ttk_Frame :=
---        Get_Widget
---          (pathName =>
---             Tcl.Tk.Ada.Grid.Grid_Slaves
---               (Master => Options_Frame, Option => "-row 1"));
---   begin
---      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Old_Frame);
---      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-sticky nwes -padx 10");
---      Tcl_Eval(interp => Interp, strng => "update");
---      configure
---        (Widgt => Options_Canvas,
---         options =>
---           "-scrollregion [list " &
---           BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
---      return TCL_OK;
---   end Show_Options_Tab_Command;
-
    -- ****o* GameOptions/GameOptions.Show_Options_Command
    -- FUNCTION
    -- Show the game options to the player
@@ -415,6 +384,8 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Ada.Directories;
+      use Tcl.Tk.Ada.Widgets.Canvas;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Winfo;
 
