@@ -72,7 +72,49 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   optionsFrame = optionsCanvas & ".options.general"
   tclEval(script = "grid " & optionsFrame & " -sticky nwes -padx 10")
-  let checkboxArray: array[11, WidgetData] = [WidgetData(name: optionsCanvas & ".options.general.autorest", value: (if gameSettings.autoRest: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autocenter", value: (if gameSettings.autoCenter: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autoreturn", value: (if gameSettings.autoReturn: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autofinish", value: (if gameSettings.autoFinish: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autoaskforbases", value: (if gameSettings.autoAskForBases: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.general.autoaskforevents", value: (if gameSettings.autoAskForEvents: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.rightbutton", value: (if gameSettings.rightButton: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.showtooltips", value: (if gameSettings.showTooltips: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.showmessages", value: (if gameSettings.showLastMessages: "1" else: "0")), WidgetData(name: optionsCanvas & ".options.interface.fullscreen", value: (if gameSettings.fullScreen: "1" else: "0"))]
+  let checkboxArray: array[11, WidgetData] = [WidgetData(name: optionsCanvas &
+      ".options.general.autorest", value: (
+      if gameSettings.autoRest: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.general.autocenter", value: (
+      if gameSettings.autoCenter: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.general.autoreturn", value: (
+      if gameSettings.autoReturn: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.general.autofinish", value: (
+      if gameSettings.autoFinish: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.general.autoaskforbases", value: (
+      if gameSettings.autoAskForBases: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.general.autoaskforevents", value: (
+      if gameSettings.autoAskForEvents: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.interface.rightbutton", value: (
+      if gameSettings.rightButton: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.interface.showtooltips", value: (
+      if gameSettings.showTooltips: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.interface.showmessages", value: (
+      if gameSettings.showLastMessages: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.interface.fullscreen", value: (
+      if gameSettings.fullScreen: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.interface.shownumbers", value: (
+      if gameSettings.showNumbers: "1" else: "0"))]
+  for checkBox in checkboxArray:
+    tclSetVar(varName = checkBox.name, newValue = checkBox.value)
+  let spinboxArray: array[11, WidgetData] = [WidgetData(name: optionsCanvas &
+      ".options.general.fuel", value: $gameSettings.lowFuel), WidgetData(
+      name: optionsCanvas & ".options.general.drinks",
+      value: $gameSettings.lowDrinks), WidgetData(name: optionsCanvas &
+      ".options.general.food", value: $gameSettings.lowFood), WidgetData(
+      name: optionsCanvas & ".options.general.messageslimit",
+      value: $gameSettings.messagesLimit), WidgetData(name: optionsCanvas &
+      ".options.general.savedmessages", value: $gameSettings.savedMessages),
+      WidgetData(name: optionsCanvas & ".options.interface.closemessages",
+      value: $gameSettings.autoCloseMessagesTime), WidgetData(
+      name: optionsCanvas & ".options.interface.mapfont",
+      value: $gameSettings.mapFontSize), WidgetData(name: optionsCanvas &
+      ".options.interface.interfacefont",
+      value: $gameSettings.interfaceFontSize), WidgetData(name: optionsCanvas &
+      ".options.interface.helpfont", value: $gameSettings.helpFontSize),
+      WidgetData(name: optionsCanvas & ".options.interface.listslimit",
+      value: $gameSettings.listsLimit), WidgetData(name: optionsCanvas &
+      ".options.general.waitinterval", value: $gameSettings.waitMinutes)]
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
