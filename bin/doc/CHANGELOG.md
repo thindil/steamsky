@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Not showing information about a mission on the map after loading the game
 - Showing information about double price events in the map info
 - Saving information about visited bases
+- Crash when the player's ship's armor is destroyed during combat
 
 ## [9.9] - 2024-04-14
 
