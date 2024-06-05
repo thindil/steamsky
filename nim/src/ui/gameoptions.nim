@@ -47,7 +47,86 @@ proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
 type AccelData = object
   shortcut, entryName, configName: string
 
-var accels: array[50, AccelData] = [AccelData(shortcut: menuAccelerators[1], entryName: ".menu.shipinfo", configName: "ShipInfo"), AccelData( shortcut: menuAccelerators[2], entryName: ".menu.orders", configName: "Orders"), AccelData(shortcut: menuAccelerators[3], entryName: ".menu.crafts", configName: "Crafting"), AccelData( shortcut: menuAccelerators[4], entryName: ".menu.messages", configName: "LastMessages"), AccelData(shortcut: menuAccelerators[5], entryName: ".menu.knowledge", configName: "Knowledge"), AccelData( shortcut: menuAccelerators[6], entryName: ".menu.waitorders", configName: "WaitOrders"), AccelData(shortcut: menuAccelerators[7], entryName: ".menu.gamestats", configName: "GameStats"), AccelData( shortcut: menuAccelerators[8], entryName: ".menu.help", configName: "Help"), AccelData(shortcut: menuAccelerators[9], entryName: ".menu.gameoptions", configName: "GameOptions"), AccelData( shortcut: menuAccelerators[10], entryName: ".menu.quit", configName: "Quit"), AccelData(shortcut: menuAccelerators[11], entryName: ".menu.resign", configName: "Resign"), AccelData( shortcut: mapAccelerators[1], entryName: ".menu.menu", configName: "GameMenu"), AccelData(shortcut: mapAccelerators[2], entryName: ".map.mapoptions", configName: "MapOptions"), AccelData( shortcut: mapAccelerators[3], entryName: ".map.zoomin", configName: "ZoomInMap"), AccelData(shortcut: mapAccelerators[4], entryName: ".map.zoomout", configName: "ZoomOutMap"), AccelData(shortcut: mapAccelerators[5], entryName: ".movement.upleft", configName: "MoveUpLeft"), AccelData(shortcut: mapAccelerators[6], entryName: ".movement.up", configName: "MoveUp"), AccelData(shortcut: mapAccelerators[7], entryName: ".movement.upright", configName: "MoveUpRight"), AccelData(shortcut: mapAccelerators[8], entryName: ".movement.left", configName: "MoveLeft"), AccelData(shortcut: mapAccelerators[10], entryName: ".movement.wait", configName: "WaitInPlace"), AccelData(shortcut: mapAccelerators[9], entryName: ".movement.right", configName: "MoveRight"), AccelData(shortcut: mapAccelerators[11], entryName: ".movement.downleft", configName: "MoveDownLeft"), AccelData(shortcut: mapAccelerators[12], entryName: ".movement.down", configName: "MoveDown"), AccelData(shortcut: mapAccelerators[13], entryName: ".movement.downright", configName: "MoveDownRight"), AccelData(shortcut: mapAccelerators[14], entryName: ".movement.moveto", configName: "MoveTo"), AccelData(shortcut: mapAccelerators[15], entryName: ".map.center", configName: "CenterMap"), AccelData(shortcut: mapAccelerators[16], entryName: ".map.centerhomebase", configName: "CenterMapOnHomeBase"), AccelData(shortcut: mapAccelerators[17], entryName: ".map.mapupleft", configName: "MoveMapUpLeft"), AccelData(shortcut: mapAccelerators[18], entryName: ".map.mapup", configName: "MoveMapUp"), AccelData(shortcut: mapAccelerators[19], entryName: ".map.mapupright", configName: "MoveMapUpRight"), AccelData(shortcut: mapAccelerators[20], entryName: ".map.mapleft", configName: "MoveMapLeft"), AccelData(shortcut: mapAccelerators[21], entryName: ".map.mapright", configName: "MoveMapRight"), AccelData(shortcut: mapAccelerators[22], entryName: ".map.mapdownleft", configName: "MoveMapDownLeft"), AccelData(shortcut: mapAccelerators[23], entryName: ".map.mapdown", configName: "MoveMapDown"), AccelData(shortcut: mapAccelerators[24], entryName: ".map.mapdownright", configName: "MoveMapDownRight"), AccelData(shortcut: mapAccelerators[25], entryName: ".map.cursorupleft", configName: "MoveCursorUpLeft"), AccelData(shortcut: mapAccelerators[26], entryName: ".map.cursorup", configName: "MoveCursorUp"), AccelData(shortcut: mapAccelerators[27], entryName: ".map.cursorupright", configName: "MoveCursorUpRight"), AccelData(shortcut: mapAccelerators[28], entryName: ".map.cursorleft", configName: "MoveCursorLeft"), AccelData(shortcut: mapAccelerators[29], entryName: ".map.cursorright", configName: "MoveCursorRight"), AccelData(shortcut: mapAccelerators[30], entryName: ".map.cursordownleft", configName: "MoveCursorDownLeft"), AccelData(shortcut: mapAccelerators[31], entryName: ".map.cursordown", configName: "MoveCursorDown"), AccelData(shortcut: mapAccelerators[32], entryName: ".map.cursordownright", configName: "MoveCursorDownRight"), AccelData(shortcut: mapAccelerators[33], entryName: ".map.clickmouse", configName: "LeftClickMouse"), AccelData(shortcut: mapAccelerators[34], entryName: ".movement.fullstop", configName: "FullStop"), AccelData(shortcut: mapAccelerators[35], entryName: ".movement.quarterspeed", configName: "QuarterSpeed"), AccelData(shortcut: mapAccelerators[36], entryName: ".movement.halfspeed", configName: "HalfSpeed"), AccelData(shortcut: mapAccelerators[37], entryName: ".movement.fullspeed", configName: "FullSpeed"), AccelData(shortcut: fullScreenAccel, entryName: ".interface.fullscreenkey", configName: "FullScreen"), AccelData(shortcut: generalAccelerators[1], entryName: ".ui.resizefirst", configName: "ResizeFirst")]
+var accels: array[53, AccelData] = [AccelData(shortcut: menuAccelerators[1],
+    entryName: ".menu.shipinfo", configName: "ShipInfo"), AccelData(
+    shortcut: menuAccelerators[2], entryName: ".menu.orders",
+    configName: "Orders"), AccelData(shortcut: menuAccelerators[3],
+    entryName: ".menu.crafts", configName: "Crafting"), AccelData(
+    shortcut: menuAccelerators[4], entryName: ".menu.messages",
+    configName: "LastMessages"), AccelData(shortcut: menuAccelerators[5],
+    entryName: ".menu.knowledge", configName: "Knowledge"), AccelData(
+    shortcut: menuAccelerators[6], entryName: ".menu.waitorders",
+    configName: "WaitOrders"), AccelData(shortcut: menuAccelerators[7],
+    entryName: ".menu.gamestats", configName: "GameStats"), AccelData(
+    shortcut: menuAccelerators[8], entryName: ".menu.help", configName: "Help"),
+    AccelData(shortcut: menuAccelerators[9], entryName: ".menu.gameoptions",
+    configName: "GameOptions"), AccelData(shortcut: menuAccelerators[10],
+    entryName: ".menu.quit", configName: "Quit"), AccelData(
+    shortcut: menuAccelerators[11], entryName: ".menu.resign",
+    configName: "Resign"), AccelData(shortcut: mapAccelerators[1],
+    entryName: ".menu.menu", configName: "GameMenu"), AccelData(
+    shortcut: mapAccelerators[2], entryName: ".map.mapoptions",
+    configName: "MapOptions"), AccelData(shortcut: mapAccelerators[3],
+    entryName: ".map.zoomin", configName: "ZoomInMap"), AccelData(
+    shortcut: mapAccelerators[4], entryName: ".map.zoomout",
+    configName: "ZoomOutMap"), AccelData(shortcut: mapAccelerators[5],
+    entryName: ".movement.upleft", configName: "MoveUpLeft"), AccelData(
+    shortcut: mapAccelerators[6], entryName: ".movement.up",
+    configName: "MoveUp"), AccelData(shortcut: mapAccelerators[7],
+    entryName: ".movement.upright", configName: "MoveUpRight"), AccelData(
+    shortcut: mapAccelerators[8], entryName: ".movement.left",
+    configName: "MoveLeft"), AccelData(shortcut: mapAccelerators[10],
+    entryName: ".movement.wait", configName: "WaitInPlace"), AccelData(
+    shortcut: mapAccelerators[9], entryName: ".movement.right",
+    configName: "MoveRight"), AccelData(shortcut: mapAccelerators[11],
+    entryName: ".movement.downleft", configName: "MoveDownLeft"), AccelData(
+    shortcut: mapAccelerators[12], entryName: ".movement.down",
+    configName: "MoveDown"), AccelData(shortcut: mapAccelerators[13],
+    entryName: ".movement.downright", configName: "MoveDownRight"), AccelData(
+    shortcut: mapAccelerators[14], entryName: ".movement.moveto",
+    configName: "MoveTo"), AccelData(shortcut: mapAccelerators[15],
+    entryName: ".map.center", configName: "CenterMap"), AccelData(
+    shortcut: mapAccelerators[16], entryName: ".map.centerhomebase",
+    configName: "CenterMapOnHomeBase"), AccelData(shortcut: mapAccelerators[17],
+    entryName: ".map.mapupleft", configName: "MoveMapUpLeft"), AccelData(
+    shortcut: mapAccelerators[18], entryName: ".map.mapup",
+    configName: "MoveMapUp"), AccelData(shortcut: mapAccelerators[19],
+    entryName: ".map.mapupright", configName: "MoveMapUpRight"), AccelData(
+    shortcut: mapAccelerators[20], entryName: ".map.mapleft",
+    configName: "MoveMapLeft"), AccelData(shortcut: mapAccelerators[21],
+    entryName: ".map.mapright", configName: "MoveMapRight"), AccelData(
+    shortcut: mapAccelerators[22], entryName: ".map.mapdownleft",
+    configName: "MoveMapDownLeft"), AccelData(shortcut: mapAccelerators[23],
+    entryName: ".map.mapdown", configName: "MoveMapDown"), AccelData(
+    shortcut: mapAccelerators[24], entryName: ".map.mapdownright",
+    configName: "MoveMapDownRight"), AccelData(shortcut: mapAccelerators[25],
+    entryName: ".map.cursorupleft", configName: "MoveCursorUpLeft"), AccelData(
+    shortcut: mapAccelerators[26], entryName: ".map.cursorup",
+    configName: "MoveCursorUp"), AccelData(shortcut: mapAccelerators[27],
+    entryName: ".map.cursorupright", configName: "MoveCursorUpRight"),
+    AccelData(shortcut: mapAccelerators[28], entryName: ".map.cursorleft",
+    configName: "MoveCursorLeft"), AccelData(shortcut: mapAccelerators[29],
+    entryName: ".map.cursorright", configName: "MoveCursorRight"), AccelData(
+    shortcut: mapAccelerators[30], entryName: ".map.cursordownleft",
+    configName: "MoveCursorDownLeft"), AccelData(shortcut: mapAccelerators[31],
+    entryName: ".map.cursordown", configName: "MoveCursorDown"), AccelData(
+    shortcut: mapAccelerators[32], entryName: ".map.cursordownright",
+    configName: "MoveCursorDownRight"), AccelData(shortcut: mapAccelerators[33],
+    entryName: ".map.clickmouse", configName: "LeftClickMouse"), AccelData(
+    shortcut: mapAccelerators[34], entryName: ".movement.fullstop",
+    configName: "FullStop"), AccelData(shortcut: mapAccelerators[35],
+    entryName: ".movement.quarterspeed", configName: "QuarterSpeed"), AccelData(
+    shortcut: mapAccelerators[36], entryName: ".movement.halfspeed",
+    configName: "HalfSpeed"), AccelData(shortcut: mapAccelerators[37],
+    entryName: ".movement.fullspeed", configName: "FullSpeed"), AccelData(
+    shortcut: fullScreenAccel, entryName: ".interface.fullscreenkey",
+    configName: "FullScreen"), AccelData(shortcut: generalAccelerators[0],
+    entryName: ".ui.resizefirst", configName: "ResizeFirst"), AccelData(
+    shortcut: generalAccelerators[1], entryName: ".ui.resizesecond",
+    configName: "ResizeSecond"), AccelData(shortcut: generalAccelerators[2],
+    entryName: ".ui.resizethird", configName: "ResizeThird"), AccelData(
+    shortcut: generalAccelerators[3], entryName: ".ui.resizefourth",
+    configName: "ResizeFourth")]
 
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
@@ -139,6 +218,11 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't find theme '" &
             gameSettings.interfaceTheme & "'")
   tclEval(script = comboBox & " set {" & theme.name & "}")
+  optionsFrame = optionsCanvas & ".options"
+  for i in 0 .. 10:
+    accels[i].shortcut = menuAccelerators[i + 1]
+  for i in 0 .. 36:
+    accels[i + 11].shortcut = mapAccelerators[i + 1]
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
