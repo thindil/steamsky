@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about double price events in the map info
 - Saving information about visited bases
 - Crash when the player's ship's armor is destroyed during combat
+- Tab key doesn't work in Orders menu
 
 ## [9.9] - 2024-04-14
 
