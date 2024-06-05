@@ -47,13 +47,7 @@ proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
 type AccelData = object
   shortcut, entryName, configName: string
 
-var accels: array[4, AccelData] = [AccelData(shortcut: menuAccelerators[1],
-    entryName: ".menu.shipinfo", configName: "ShipInfo"), AccelData(
-    shortcut: menuAccelerators[2], entryName: ".menu.orders",
-    configName: "Orders"), AccelData(shortcut: menuAccelerators[3],
-    entryName: ".menu.crafts", configName: "Crafting"), AccelData(
-    shortcut: menuAccelerators[4], entryName: ".menu.messages",
-    configName: "LastMessages")]
+var accels: array[14, AccelData] = [AccelData(shortcut: menuAccelerators[1], entryName: ".menu.shipinfo", configName: "ShipInfo"), AccelData( shortcut: menuAccelerators[2], entryName: ".menu.orders", configName: "Orders"), AccelData(shortcut: menuAccelerators[3], entryName: ".menu.crafts", configName: "Crafting"), AccelData( shortcut: menuAccelerators[4], entryName: ".menu.messages", configName: "LastMessages"), AccelData(shortcut: menuAccelerators[5], entryName: ".menu.knowledge", configName: "Knowledge"), AccelData( shortcut: menuAccelerators[6], entryName: ".menu.waitorders", configName: "WaitOrders"), AccelData(shortcut: menuAccelerators[7], entryName: ".menu.gamestats", configName: "GameStats"), AccelData( shortcut: menuAccelerators[8], entryName: ".menu.help", configName: "Help"), AccelData(shortcut: menuAccelerators[9], entryName: ".menu.gameoptions", configName: "GameOptions"), AccelData( shortcut: menuAccelerators[10], entryName: ".menu.quit", configName: "Quit"), AccelData(shortcut: menuAccelerators[11], entryName: ".menu.resign", configName: "Resign"), AccelData( shortcut: mapAccelerators[1], entryName: ".menu.menu", configName: "GameMenu"), AccelData(shortcut: mapAccelerators[2], entryName: ".map.mapoptions", configName: "MapOptions"), AccelData( shortcut: mapAccelerators[3], entryName: ".map.zoomin", configName: "ZoomInMap")]
 
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
