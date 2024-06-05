@@ -17,7 +17,7 @@
 
 import std/[os, tables]
 import ../[config, game, tk]
-import coreui, mapsui, themes
+import coreui, mapsui, themes, utilsui2
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -223,7 +223,29 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     accels[i].shortcut = menuAccelerators[i + 1]
   for i in 0 .. 36:
     accels[i + 11].shortcut = mapAccelerators[i + 1]
-  return tclOk
+  accels[11 + 37].shortcut = fullScreenAccel
+  for i in 0 .. 3:
+    accels[i + 11 + 37 + 1].shortcut = generalAccelerators[i]
+  for accel in accels:
+    let keyEntry = optionsFrame & accel.entryName
+    tclEval(script = keyEntry & " delete 0 end")
+    tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
+  if tclEval2(script = closeButton & " cget -command") == "ShowCombatUI":
+    tclEval(script = closeButton & " configure -command {CloseOption combat}")
+  else:
+    tclEval(script = closeButton & " configure -command {CloseOption map}")
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  tclEval(script = optionsCanvas & " configure -height " & tclEval2(
+      script = mainPaned & " cget -height") & " -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  tclEval(script = optionsCanvas & " create window 0 0 -anchor nw -window " & optionsFrame)
+  tclEval(script = "update")
+  tclEval(script = optionsCanvas & " configure -scrollregion [list " & tclEval2(
+      script = optionsCanvas & " bbox all") & "]")
+  showScreen(newScreenName = "optionsframe")
+  return showOptionsTabCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
