@@ -214,8 +214,8 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
           freePosition = true
           break
       if not freePosition:
-        giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[0],
-            givenOrder = rest, moduleIndex = -1, checkPriorities = false)
+        giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[
+            0], givenOrder = rest, moduleIndex = -1, checkPriorities = false)
     var moduleIndex2 = -1
     if moduleIndex == -1 and givenOrder in [pilot, engineer, rest]:
       let mType: ModuleType = case givenOrder
@@ -229,7 +229,8 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
           ModuleType.engine
       for index, module in ship.modules.pairs:
         if mType != ModuleType.cabin:
-          if modulesList[module.protoIndex].mType == mType and module.durability > 0:
+          if modulesList[module.protoIndex].mType == mType and
+              module.durability > 0:
             if module.owner[0] > -1:
               giveOrders(ship = ship, memberIndex = module.owner[0],
                   givenOrder = rest, moduleIndex = -1, checkPriorities = false)
@@ -276,7 +277,8 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       requiredTool = ""
     if toolsIndex > -1 and ship.crew[memberIndex].equipment[tool] != toolsIndex:
       updateInventory(memberIndex = memberIndex, amount = 1,
-          protoIndex = ship.cargo[toolsIndex].protoIndex, durability = ship.cargo[
+          protoIndex = ship.cargo[toolsIndex].protoIndex,
+              durability = ship.cargo[
           toolsIndex].durability, ship = ship)
       updateCargo(ship = ship, amount = -1, cargoIndex = toolsIndex)
       ship.crew[memberIndex].equipment[tool] = findItem(inventory = ship.crew[
@@ -314,13 +316,17 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         if toolsIndex == -1:
           case givenOrder
             of repair:
-              raise newException(exceptn = CrewOrderError, message = memberName & " can't start repairing ship because you don't have the proper tools.")
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start repairing ship because you don't have the proper tools.")
             of clean:
-              raise newException(exceptn = CrewOrderError, message = memberName & " can't start cleaning ship because you don't have any cleaning tools.")
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start cleaning ship because you don't have any cleaning tools.")
             of upgrading:
-              raise newException(exceptn = CrewOrderError, message = memberName & " can't start upgrading module because you don't have the proper tools.")
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start upgrading module because you don't have the proper tools.")
             of train:
-              raise newException(exceptn = CrewOrderError, message = memberName & " can't start training because you don't have the proper tools.")
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start training because you don't have the proper tools.")
             else:
               return
     if givenOrder == rest:
@@ -328,8 +334,9 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
         toolsIndex = ship.crew[memberIndex].equipment[tool]
         if toolsIndex > -1:
-          updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
-              toolsIndex].protoIndex, amount = 1, durability = ship.crew[
+          updateCargo(ship = ship, protoIndex = ship.crew[
+              memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
+                  durability = ship.crew[
               memberIndex].inventory[toolsIndex].durability)
           updateInventory(memberIndex = memberIndex, amount = -1,
               inventoryIndex = toolsIndex, ship = ship)
@@ -402,7 +409,8 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       updateOrders(ship = ship)
 
 proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
-    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
+    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
+    RootEffect], contractual.} =
   ## Update the orders of the crew of the selected ship, based on the crew
   ## members orders' priorities
   ##
@@ -414,7 +422,8 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
 
   proc updatePosition(ship: var ShipRecord; order: CrewOrders;
       maxPriority: bool = true): bool {.sideEffect, raises: [CrewOrderError,
-      KeyError, CrewNoSpaceError, Exception], tags: [RootEffect].} =
+      KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
+          contractual.} =
     var
       orderIndex: Natural
       memberIndex, moduleIndex: int = -1
@@ -596,7 +605,8 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     updateOrders(ship = ship)
 
 proc findMember*(order: CrewOrders; shipCrew: seq[
-    MemberData] = playerShip.crew): int {.sideEffect, raises: [], tags: [].} =
+    MemberData] = playerShip.crew): int {.sideEffect, raises: [], tags: [],
+    contractual.} =
   ## Find the first member of the selected crew with the selected order
   ##
   ## * order    - the order for which looking for
@@ -610,79 +620,90 @@ proc findMember*(order: CrewOrders; shipCrew: seq[
   return -1
 
 proc gainExp*(amount: Natural; skillNumber: Positive;
-    crewIndex: Natural) {.sideEffect, raises: [], tags: [].} =
+    crewIndex: Natural) {.sideEffect, raises: [], tags: [], contractual.} =
   ## Raise the crew member experience in the selected skill and associated
   ## attribute
   ##
   ## * amount      - the amount of experience gained by the crew mmeber
   ## * skillNumber - the index of the skill in which the experience is gained
   ## * crewIndex   - the index of the crew member who gains experience
-  let attributeIndex = try:
-      skillsList[skillNumber].attribute
-    except KeyError:
-      Positive.high
-  if attributeIndex == Positive.high:
-    return
-  var
-    skillExp, newAmount, skillLevel = 0
-    skillIndex = -1
-
-  proc gainExpInAttribute(attribute: Positive) =
-    var memberAttribute = playerShip.crew[crewIndex].attributes[attribute]
-    if memberAttribute.level == 50:
+  require:
+    skillsList.contains(key = skillNumber)
+    crewIndex < playerShip.crew.len
+  body:
+    let attributeIndex = try:
+        skillsList[skillNumber].attribute
+      except KeyError:
+        Positive.high
+    if attributeIndex == Positive.high:
       return
     var
-      attributeExp = memberAttribute.experience + newAmount
-      attributeLevel = memberAttribute.level
-    if attributeExp >= attributeLevel * 250:
-      attributeExp = attributeExp - (attributeLevel * 250)
-      attributeLevel.inc
-    playerShip.crew[crewIndex].attributes[attribute].level = attributeLevel
-    playerShip.crew[crewIndex].attributes[attribute].experience = attributeExp
+      skillExp, newAmount, skillLevel = 0
+      skillIndex = -1
 
-  newAmount = try:
-      if skillsList[skillNumber].name in careersList[playerCareer].skills:
-        amount + (amount / 2).int
-      else:
-        amount
-    except KeyError:
-      -1
-  if newAmount == -1:
-    return
-  newAmount = (newAmount.float * newGameSettings.experienceBonus).int
-  if newAmount == 0:
-    return
-  gainExpInAttribute(attribute = conditionIndex)
-  gainExpInAttribute(attribute = attributeIndex)
-  for i in playerShip.crew[crewIndex].skills.low..playerShip.crew[
-      crewIndex].skills.high:
-    if playerShip.crew[crewIndex].skills[i].index == skillNumber:
-      skillIndex = i
-      break
-  if skillIndex > -1:
-    if playerShip.crew[crewIndex].skills[skillIndex].level == SkillRange.high:
+    proc gainExpInAttribute(attribute: Natural) {.sideEffect, raises: [],
+        tags: [], contractual.} =
+      require:
+        attribute < playerShip.crew[crewIndex].attributes.len
+      body:
+        var memberAttribute = playerShip.crew[crewIndex].attributes[attribute]
+        if memberAttribute.level == 50:
+          return
+        var
+          attributeExp = memberAttribute.experience + newAmount
+          attributeLevel = memberAttribute.level
+        if attributeExp >= attributeLevel * 250:
+          attributeExp = attributeExp - (attributeLevel * 250)
+          attributeLevel.inc
+        playerShip.crew[crewIndex].attributes[attribute].level = attributeLevel
+        playerShip.crew[crewIndex].attributes[
+            attribute].experience = attributeExp
+
+    newAmount = try:
+        if skillsList[skillNumber].name in careersList[playerCareer].skills:
+          amount + (amount / 2).int
+        else:
+          amount
+      except KeyError:
+        -1
+    if newAmount == -1:
       return
-    skillLevel = playerShip.crew[crewIndex].skills[skillIndex].level
-    skillExp = playerShip.crew[crewIndex].skills[skillIndex].experience + newAmount
-  if skillExp >= skillLevel * 25:
-    skillExp = skillExp - (skillLevel * 25)
-    skillLevel.inc
-  if skillIndex > -1:
-    playerShip.crew[crewIndex].skills[skillIndex] = SkillInfo(
-        index: skillNumber, level: skillLevel, experience: skillExp)
-  else:
-    playerShip.crew[crewIndex].skills.add(y = SkillInfo(index: skillNumber,
-        level: skillLevel, experience: skillExp))
+    newAmount = (newAmount.float * newGameSettings.experienceBonus).int
+    if newAmount == 0:
+      return
+    gainExpInAttribute(attribute = conditionIndex)
+    gainExpInAttribute(attribute = attributeIndex)
+    for i in playerShip.crew[crewIndex].skills.low..playerShip.crew[
+        crewIndex].skills.high:
+      if playerShip.crew[crewIndex].skills[i].index == skillNumber:
+        skillIndex = i
+        break
+    if skillIndex > -1:
+      if playerShip.crew[crewIndex].skills[skillIndex].level == SkillRange.high:
+        return
+      skillLevel = playerShip.crew[crewIndex].skills[skillIndex].level
+      skillExp = playerShip.crew[crewIndex].skills[skillIndex].experience + newAmount
+    if skillExp >= skillLevel * 25:
+      skillExp = skillExp - (skillLevel * 25)
+      skillLevel.inc
+    if skillIndex > -1:
+      playerShip.crew[crewIndex].skills[skillIndex] = SkillInfo(
+          index: skillNumber, level: skillLevel, experience: skillExp)
+    else:
+      playerShip.crew[crewIndex].skills.add(y = SkillInfo(index: skillNumber,
+          level: skillLevel, experience: skillExp))
 
 # Temporary code for interfacing with Ada
 
 proc generateAdaMemberName(gender: char;
-    factionIndex: cstring): cstring {.raises: [], tags: [], exportc.} =
+    factionIndex: cstring): cstring {.raises: [], tags: [], exportc,
+        contractual.} =
   return generateMemberName(gender = gender,
       factionIndex = $factionIndex).cstring
 
 proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
-  checkPriorities: cint): cstring {.raises: [], tags: [RootEffect], exportc.} =
+  checkPriorities: cint): cstring {.raises: [], tags: [RootEffect], exportc,
+      contractual.} =
   try:
     if isPlayerShip == 1:
       giveOrders(ship = playerShip, memberIndex = memberIndex - 1,
@@ -697,7 +718,7 @@ proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
   return "".cstring
 
 proc updateAdaOrders(isPlayerShip, combat: cint) {.raises: [], tags: [
-    RootEffect], exportc.} =
+    RootEffect], exportc, contractual.} =
   try:
     if isPlayerShip == 1:
       updateOrders(ship = playerShip, combat = (if combat ==
@@ -708,21 +729,22 @@ proc updateAdaOrders(isPlayerShip, combat: cint) {.raises: [], tags: [
     discard
 
 proc getAdaSkillLevel(member: AdaMemberData;
-    skillIndex: cint): cint {.raises: [], tags: [], exportc.} =
+    skillIndex: cint): cint {.raises: [], tags: [], exportc, contractual.} =
   try:
     return getSkillLevel(member = adaMemberToNim(adaMember = member),
         skillIndex = skillIndex.Positive).cint
   except KeyError:
     return 0
 
-proc findAdaMember(order, inPlayerShip: cint): cint {.raises: [], tags: [], exportc.} =
+proc findAdaMember(order, inPlayerShip: cint): cint {.raises: [], tags: [],
+    exportc, contractual.} =
   if inPlayerShip == 1:
     return findMember(order = order.CrewOrders).cint + 1
   else:
     return findMember(order = order.CrewOrders, shipCrew = npcShip.crew).cint + 1
 
 proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   try:
     if isPlayerShip == 1:
       updateMorale(ship = playerShip, memberIndex = memberIndex - 1, value = value)
@@ -731,6 +753,7 @@ proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
   except KeyError:
     discard
 
-proc gainAdaExp(amount, skillNumber, crewIndex: cint) {.raises: [], tags: [], exportc.} =
+proc gainAdaExp(amount, skillNumber, crewIndex: cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   gainExp(amount = amount.Natural, skillNumber = skillNumber.Positive,
       crewIndex = crewIndex.Natural - 1)
