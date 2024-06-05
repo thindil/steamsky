@@ -352,7 +352,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & dialogCloseButton & " -sticky we -padx 5 -pady {0 5}")
     tclEval(script = "bind " & dialogCloseButton & " <Escape> {" &
         dialogCloseButton & " invoke;break}")
-    tclEval(script = "bind " & lastButton & "<Tab> {focus " &
+    tclEval(script = "bind " & lastButton & " <Tab> {focus " &
         dialogCloseButton & ";break}")
     for shortcut in shortcuts:
       tclEval(script = "bind " & dialogCloseButton & " <Alt-" &
