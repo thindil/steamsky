@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to ships' crews like generating names for members,
+## getting skills' levels for members, etc.
+
 import std/[strutils, tables]
 import contracts
 import careers, config, crewinventory, game, maps, messages, shipscargo, types, utils
@@ -161,6 +164,14 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
 proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
     RootEffect], contractual.}
+  ## Update the orders of the crew of the selected ship, based on the crew
+  ## members orders' priorities
+  ##
+  ## * ship   - the ship of which crew's orders will be updated
+  ## * combat - if true, the orders update takes place in a combat. Default
+  ##            value is false.
+  ##
+  ## Returns the modified parameter ship with updated info about the ship
 
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
@@ -424,6 +435,14 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
       maxPriority: bool = true): bool {.sideEffect, raises: [CrewOrderError,
       KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
           contractual.} =
+    ## Change the crew member for the selected order
+    ##
+    ## * ship        - the ship of which crew's orders will be updated
+    ## * order       - the order which will be updated
+    ## * maxPriority - if true, get the crew member which high priority for
+    ##                 the order
+    ##
+    ## Returns true if order was updated, otherwise false
     var
       orderIndex: Natural
       memberIndex, moduleIndex: int = -1
@@ -643,6 +662,11 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
 
     proc gainExpInAttribute(attribute: Natural) {.sideEffect, raises: [],
         tags: [], contractual.} =
+      ## Raise the crew member experience in the attribute associated with the
+      ## skill
+      ##
+      ## * attribute - the index of the attribute in which experience will be
+      ##               gained
       require:
         attribute < playerShip.crew[crewIndex].attributes.len
       body:
@@ -698,12 +722,14 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
 proc generateAdaMemberName(gender: char;
     factionIndex: cstring): cstring {.raises: [], tags: [], exportc,
         contractual.} =
+  ## Temporary C binding
   return generateMemberName(gender = gender,
       factionIndex = $factionIndex).cstring
 
 proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
   checkPriorities: cint): cstring {.raises: [], tags: [RootEffect], exportc,
       contractual.} =
+  ## Temporary C binding
   try:
     if isPlayerShip == 1:
       giveOrders(ship = playerShip, memberIndex = memberIndex - 1,
@@ -719,6 +745,7 @@ proc giveAdaOrders(isPlayerShip, memberIndex, givenOrder, moduleIndex,
 
 proc updateAdaOrders(isPlayerShip, combat: cint) {.raises: [], tags: [
     RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     if isPlayerShip == 1:
       updateOrders(ship = playerShip, combat = (if combat ==
@@ -730,6 +757,7 @@ proc updateAdaOrders(isPlayerShip, combat: cint) {.raises: [], tags: [
 
 proc getAdaSkillLevel(member: AdaMemberData;
     skillIndex: cint): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return getSkillLevel(member = adaMemberToNim(adaMember = member),
         skillIndex = skillIndex.Positive).cint
@@ -738,6 +766,7 @@ proc getAdaSkillLevel(member: AdaMemberData;
 
 proc findAdaMember(order, inPlayerShip: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   if inPlayerShip == 1:
     return findMember(order = order.CrewOrders).cint + 1
   else:
@@ -745,6 +774,7 @@ proc findAdaMember(order, inPlayerShip: cint): cint {.raises: [], tags: [],
 
 proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     if isPlayerShip == 1:
       updateMorale(ship = playerShip, memberIndex = memberIndex - 1, value = value)
@@ -755,5 +785,6 @@ proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
 
 proc gainAdaExp(amount, skillNumber, crewIndex: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   gainExp(amount = amount.Natural, skillNumber = skillNumber.Positive,
       crewIndex = crewIndex.Natural - 1)
