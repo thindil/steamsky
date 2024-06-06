@@ -19,20 +19,19 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.TtkStyle;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 -- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 -- with Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -41,11 +40,11 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Combat.UI;
-with Game; use Game;
+with Game;
 with Maps.UI; use Maps.UI;
-with Ships; use Ships;
+with Ships;
 with Themes; use Themes;
 with Utils.UI; use Utils.UI;
 
@@ -919,12 +918,18 @@ package body GameOptions is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Strings;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada;
       use Tcl.Tk.Ada.TtkStyle;
+      use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
       use Tcl.Tk.Ada.Wm;
       use Tcl.Tklib.Ada.Tooltip;
       use Combat.UI;
+      use CoreUI;
+      use Ships;
 
       Root_Name: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
@@ -1172,6 +1177,7 @@ package body GameOptions is
       Save_Keys_To_File_Block :
       declare
          use Ada.Text_IO;
+         use Game;
 
          Keys_File: File_Type;
       begin
@@ -1223,6 +1229,8 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use GNAT.Directory_Operations;
+
       Default_Movement_Accels: constant array(1 .. 14) of Accel_Data :=
         (1 =>
            (Shortcut =>
