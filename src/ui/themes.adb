@@ -26,15 +26,6 @@ package body Themes is
       return Value(Item => Get_Ada_Icon(N => New_String(Str => Name)));
    end Get_Icon;
 
-   function Get_Themes_Names return String is
-      function Get_Ada_Themes_Names return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaThemesNames";
-   begin
-      return Value(Item => Get_Ada_Themes_Names);
-   end Get_Themes_Names;
-
    procedure Set_New_Theme(Name: String) is
       procedure Set_Ada_New_Theme(N: chars_ptr) with
          Import => True,

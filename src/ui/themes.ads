@@ -71,7 +71,6 @@ package Themes is
 -- Temporary code to interact with Nim
 
    function Get_Icon(Name: String) return String;
-   function Get_Themes_Names return String;
    procedure Set_New_Theme(Name: String);
 
 end Themes;
