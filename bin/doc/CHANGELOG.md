@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Saving information about visited bases
 - Crash when the player's ship's armor is destroyed during combat
 - Tab key doesn't work in Orders menu
+- Crash when close the message's dialog before its timer ends
 
 ## [9.9] - 2024-04-14
 
