@@ -130,6 +130,17 @@ var accels: array[53, AccelData] = [AccelData(shortcut: menuAccelerators[1],
 
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show the selected options tab
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowOptions
   tclSetVar(varName = "newtab", newValue = "general")
   var optionsFrame = mainPaned & ".optionsframe"
   let optionsCanvas = optionsFrame & ".canvas"
