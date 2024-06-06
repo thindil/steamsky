@@ -78,21 +78,11 @@ package body Config is
       Set_Ada_Integer_Setting(N => New_String(Str => Name), V => Value);
    end Set_Integer_Setting;
 
-   function Get_Undock_Speed return Ship_Speed is
-   begin
-      return Ship_Speed'Val(Get_Integer_Setting(Name => "undockSpeed"));
-   end Get_Undock_Speed;
-
    procedure Set_Undock_Speed(Value: Ship_Speed) is
    begin
       Set_Ada_Integer_Setting
         (N => New_String(Str => "undockSpeed"), V => Ship_Speed'Pos(Value));
    end Set_Undock_Speed;
-
-   function Get_Auto_Move_Stop return Auto_Move_Break is
-   begin
-      return Auto_Move_Break'Val(Get_Integer_Setting(Name => "autoMoveStop"));
-   end Get_Auto_Move_Stop;
 
    procedure Set_Auto_Move_Stop(Value: Auto_Move_Break) is
    begin
@@ -101,22 +91,11 @@ package body Config is
          V => Auto_Move_Break'Pos(Value));
    end Set_Auto_Move_Stop;
 
-   function Get_Auto_Save return Auto_Save_Type is
-   begin
-      return Auto_Save_Type'Val(Get_Integer_Setting(Name => "autoSave"));
-   end Get_Auto_Save;
-
    procedure Set_Auto_Save(Value: Auto_Save_Type) is
    begin
       Set_Ada_Integer_Setting
         (N => New_String(Str => "autoSave"), V => Auto_Save_Type'Pos(Value));
    end Set_Auto_Save;
-
-   function Get_Messages_Order return Messages_Order_Type is
-   begin
-      return
-        Messages_Order_Type'Val(Get_Integer_Setting(Name => "messagesOrder"));
-   end Get_Messages_Order;
 
    procedure Set_Messages_Order(Value: Messages_Order_Type) is
    begin

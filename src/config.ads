@@ -136,13 +136,9 @@ package Config is
    procedure Set_Boolean_Setting(Name: String; Value: Boolean);
    function Get_Integer_Setting(Name: String) return Integer;
    procedure Set_Integer_Setting(Name: String; Value: Integer);
-   function Get_Undock_Speed return Ship_Speed;
    procedure Set_Undock_Speed(Value: Ship_Speed);
-   function Get_Auto_Move_Stop return Auto_Move_Break;
    procedure Set_Auto_Move_Stop(Value: Auto_Move_Break);
-   function Get_Messages_Order return Messages_Order_Type;
    procedure Set_Messages_Order(Value: Messages_Order_Type);
-   function Get_Auto_Save return Auto_Save_Type;
    procedure Set_Auto_Save(Value: Auto_Save_Type);
    function Get_Interface_Theme return Unbounded_String;
    function Get_String_Setting(Name: String) return String;
