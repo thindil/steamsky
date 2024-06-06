@@ -129,7 +129,7 @@ var accels: array[53, AccelData] = [AccelData(shortcut: menuAccelerators[1],
     configName: "ResizeFourth")]
 
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   tclSetVar(varName = "newtab", newValue = "general")
   var optionsFrame = mainPaned & ".optionsframe"
   let optionsCanvas = optionsFrame & ".canvas"
