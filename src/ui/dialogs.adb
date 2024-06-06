@@ -219,29 +219,39 @@ package body Dialogs is
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1) & ".button",
            Interp => Interp);
-      Text: constant String :=
-        Widgets.cget(Widgt => Message_Button, option => "-text");
-      Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
    begin
-      if Seconds = 0 then
+      if Winfo_Get(Widgt => Message_Button, Info => "exists") = "0" then
          return
            Close_Dialog_Command
              (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
               Argv => Argv);
       end if;
-      Widgets.configure
-        (Widgt => Message_Button,
-         options => "-text {Close" & Positive'Image(Seconds) & "}");
-      Set_Timer_Id
-        (New_Value =>
-           To_Unbounded_String
-             (Source =>
-                After
-                  (Ms => 1_000,
-                   Script =>
-                     "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
-                     (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
-                      else ""))));
+      Update_Timer_Block:
+      declare
+         Text: constant String :=
+           Widgets.cget(Widgt => Message_Button, option => "-text");
+         Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
+      begin
+         if Seconds = 0 then
+            return
+              Close_Dialog_Command
+                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+                 Argv => Argv);
+         end if;
+         Widgets.configure
+           (Widgt => Message_Button,
+            options => "-text {Close" & Positive'Image(Seconds) & "}");
+         Set_Timer_Id
+           (New_Value =>
+              To_Unbounded_String
+                (Source =>
+                   After
+                     (Ms => 1_000,
+                      Script =>
+                        "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
+                        (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
+                         else ""))));
+      end Update_Timer_Block;
       return TCL_OK;
    end Update_Dialog_Command;
 
