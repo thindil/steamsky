@@ -136,7 +136,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   type WidgetData = object
     name, value: string
   if tclEval2(script = "winfo exists " & optionsCanvas) == "0":
-    tclEvalFile(fileName = dataDirectory & DirSep & "options.tcl")
+    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "options.tcl")
     tclEval(script = "bind " & optionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     let labelsArray: array[4, WidgetData] = [WidgetData(name: "data",
         value: dataDirectory), WidgetData(name: "save", value: saveDirectory),
@@ -231,9 +231,9 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = keyEntry & " delete 0 end")
     tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   if tclEval2(script = closeButton & " cget -command") == "ShowCombatUI":
-    tclEval(script = closeButton & " configure -command {CloseOption combat}")
+    tclEval(script = closeButton & " configure -command {CloseOptions combat}")
   else:
-    tclEval(script = closeButton & " configure -command {CloseOption map}")
+    tclEval(script = closeButton & " configure -command {CloseOptions map}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   tclEval(script = optionsCanvas & " configure -height " & tclEval2(
       script = mainPaned & " cget -height") & " -width " & tclEval2(
