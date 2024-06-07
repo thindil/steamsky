@@ -323,7 +323,8 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
         item = playerShip.cargo[itemIndex], damageInfo = false,
         toLower = false)), button1 = button1, button2 = button2)
 
-proc setFonts*(newSize: Positive; fontType: FontTypes) =
+proc setFonts*(newSize: Positive; fontType: FontTypes) {.sideEffect, raises: [],
+    tags: [].} =
   const
     helpFonts: array[4, string] = ["HelpFont", "BoldHelpFont",
         "UnderlineHelpFont", "ItalicHelpFont"]
