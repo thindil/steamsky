@@ -156,6 +156,10 @@ type
     pricesBonus*: BonusType
     difficultyLevel*: DifficultyType
 
+  FontTypes* = enum
+    ## The types of in-game fonts, used to set their size
+    helpFont, interfaceFont, mapFont
+
 const
   defaultGameSettings*: GameSettingsRecord = GameSettingsRecord(autoRest: true,
     undockSpeed: fullSpeed, autoCenter: true, autoReturn: true,
