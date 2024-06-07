@@ -372,6 +372,8 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
             baseTypeRoll -= baseTypeChance
           break
         factionRoll -= faction.spawnChance
+      if baseOwner.len == 0:
+        baseOwner = newGameSettings.playerFaction
       {.ruleOff: "ifstatements".}
       baseSize = (if basePopulation == 0: getRandom(min = 0,
           max = 2).BasesSize elif basePopulation <
