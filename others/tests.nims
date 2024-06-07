@@ -10,6 +10,7 @@ if not fileExists("steamsky.gpr"):
 withDir "nim":
   for i in 1..parseInt(paramStr(paramCount())):
     echo i
-    for file in listFiles("tests"):
-      if file.endsWith("nim"):
-        exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r " & file & " -v"
+    exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r tests/game2.nim -v"
+#    for file in listFiles("tests"):
+#      if file.endsWith("nim"):
+#        exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r " & file & " -v"

@@ -334,9 +334,15 @@ proc setFonts*(newSize: Positive; fontType: FontTypes) =
     tclEval(script = "font configure MapFont -size " &
         $gameSettings.mapFontSize)
   of helpFont:
-    discard
+    gameSettings.helpFontSize = newSize
+    for fontName in helpFonts:
+      tclEval(script = "font configure " & fontName & " -size " &
+          $gameSettings.mapFontSize)
   of interfaceFont:
-    discard
+    gameSettings.interfaceFontSize = newSize
+    for fontName in interfaceFonts:
+      tclEval(script = "font configure " & fontName & " -size " &
+          $gameSettings.mapFontSize)
 
 # Temporary code for interfacing with Ada
 
@@ -381,3 +387,6 @@ proc showAdaInventoryInfo(parent: cstring; itemIndex, memberIndex: cint;
         button2 = nimButton2)
   except:
     echo getCurrentExceptionMsg()
+
+proc setAdaFonts(newSize, fontType: cint) {.exportc, raises: [], tags: [].} =
+  setFonts(newSize = newSize, fontType = fontType.FontTypes)
