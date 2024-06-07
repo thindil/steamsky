@@ -13,14 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Characters.Latin_1;
 with Ada.Directories;
 with Ada.Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -534,53 +532,12 @@ package body Utils.UI is
    end Delete_Widgets;
 
    procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
---      Help_Fonts: constant array(1 .. 4) of Unbounded_String :=
---        (1 => To_Unbounded_String(Source => "HelpFont"),
---         2 => To_Unbounded_String(Source => "BoldHelpFont"),
---         3 => To_Unbounded_String(Source => "UnderlineHelpFont"),
---         4 => To_Unbounded_String(Source => "ItalicHelpFont"));
---      Interface_Fonts: constant array(1 .. 3) of Unbounded_String :=
---        (1 => To_Unbounded_String(Source => "InterfaceFont"),
---         2 => To_Unbounded_String(Source => "OverstrikedFont"),
---         3 => To_Unbounded_String(Source => "UnderlineFont"));
       procedure Set_Ada_Fonts(N_Size, F_Type: Integer) with
          Import => True,
          Convention => C,
          External_Name => "setAdaFonts";
    begin
       Set_Ada_Fonts(N_Size => New_Size, F_Type => Font_Types'Pos(Font_Type));
---      case Font_Type is
---         when MAPFONT =>
---            Set_Integer_Setting(Name => "mapFontSize", Value => New_Size);
---            Font.Configure
---              (FontName => "MapFont",
---               Options =>
---                 "-size" &
---                 Positive'Image(Get_Integer_Setting(Name => "mapFontSize")));
---         when Help_Font_Type =>
---            Set_Integer_Setting(Name => "helpFontSize", Value => New_Size);
---            Set_Fonts_Loop :
---            for FontName of Help_Fonts loop
---               Font.Configure
---                 (FontName => To_String(Source => FontName),
---                  Options =>
---                    "-size" &
---                    Positive'Image
---                      (Get_Integer_Setting(Name => "helpFontSize")));
---            end loop Set_Fonts_Loop;
---         when INTERFACEFONT =>
---            Set_Integer_Setting
---              (Name => "interfaceFontSize", Value => New_Size);
---            Set_Interface_Fonts_Loop :
---            for FontName of Interface_Fonts loop
---               Font.Configure
---                 (FontName => To_String(Source => FontName),
---                  Options =>
---                    "-size" &
---                    Positive'Image
---                      (Get_Integer_Setting(Name => "interfaceFontSize")));
---            end loop Set_Interface_Fonts_Loop;
---      end case;
    end Set_Fonts;
 
 end Utils.UI;
