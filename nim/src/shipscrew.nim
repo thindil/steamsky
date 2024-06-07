@@ -45,28 +45,28 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
     if gender == 'M':
       result = malesSyllablesStartList[getRandom(min = 0, max = (
           malesSyllablesStartList.len - 1))]
-      result = result & malesVocalsList[getRandom(min = 0, max = (
+      result &= malesVocalsList[getRandom(min = 0, max = (
           malesVocalsList.len - 1))]
       if getRandom(min = 1, max = 100) < 36:
-        result = result & malesSyllablesMiddleList[getRandom(min = 0, max = (
+        result &= malesSyllablesMiddleList[getRandom(min = 0, max = (
             malesSyllablesMiddleList.len - 1))]
       if getRandom(min = 1, max = 100) < 11:
-        result = result & malesConsonantsList[getRandom(min = 0, max = (
+        result &= malesConsonantsList[getRandom(min = 0, max = (
             malesConsonantsList.len - 1))]
-      result = result & malesSyllablesEndList[getRandom(min = 0, max = (
+      result &= malesSyllablesEndList[getRandom(min = 0, max = (
           malesSyllablesEndList.len - 1))]
       return
     result = femalesSyllablesStartList[getRandom(min = 0, max = (
         femalesSyllablesStartList.len - 1))]
-    result = result & femalesVocalsList[getRandom(min = 0, max = (
+    result &= femalesVocalsList[getRandom(min = 0, max = (
         femalesVocalsList.len - 1))]
     if getRandom(min = 1, max = 100) < 36:
-      result = result & femalesSyllablesMiddleList[getRandom(min = 0, max = (
+      result &= femalesSyllablesMiddleList[getRandom(min = 0, max = (
           femalesSyllablesMiddleList.len - 1))]
     if getRandom(min = 1, max = 100) < 11:
-      result = result & femalesSyllablesMiddleList[getRandom(min = 0, max = (
+      result &= femalesSyllablesMiddleList[getRandom(min = 0, max = (
           femalesSyllablesMiddleList.len - 1))]
-    result = result & femalesSyllablesEndList[getRandom(min = 0, max = (
+    result &= femalesSyllablesEndList[getRandom(min = 0, max = (
         femalesSyllablesEndList.len - 1))]
 
 proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
@@ -84,26 +84,26 @@ proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
     result = 0
     for skill in member.skills:
       if skill.index == skillIndex:
-        let baseSkillLevel = skill.level + member.attributes[skillsList[
+        let baseSkillLevel: Natural = skill.level + member.attributes[skillsList[
             skill.index].attribute].level
-        var damage = 1.0 - (member.health.float / 100.0)
-        result = result + (baseSkillLevel - (baseSkillLevel.float * damage).int)
+        var damage: float = 1.0 - (member.health.float / 100.0)
+        result += (baseSkillLevel - (baseSkillLevel.float * damage).int)
         if member.thirst > 40:
           damage = 1.0 - (member.thirst.float / 100.0)
-          result = result - (baseSkillLevel - (baseSkillLevel.float * damage).int)
+          result -= (baseSkillLevel - (baseSkillLevel.float * damage).int)
         if member.hunger > 80:
           damage = 1.0 - (member.hunger.float / 100.0)
-          result = result - (baseSkillLevel - (baseSkillLevel.float * damage).int)
+          result -= (baseSkillLevel - (baseSkillLevel.float * damage).int)
         if member.morale[1] < 25:
           damage = member.morale[1].float / 100.0
-          result = result - (baseSkillLevel - (baseSkillLevel.float * damage).int)
+          result -= (baseSkillLevel - (baseSkillLevel.float * damage).int)
         if result < 1:
           result = 1
         elif result > 100:
           result = 100
         if member.morale[1] > 90:
           damage = result.float / 100.0
-          result = result + (baseSkillLevel.float * damage).int
+          result += (baseSkillLevel.float * damage).int
           if result > 100:
             result = 100
         return
@@ -121,8 +121,8 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
   require:
     memberIndex < ship.crew.len
   body:
-    var newMorale, newLoyalty, newValue: int
-    let factionIndex = ship.crew[memberIndex].faction
+    var newMorale, newLoyalty, newValue: int = 0
+    let factionIndex: string = ship.crew[memberIndex].faction
     if "nomorale" in factionsList[factionIndex].flags:
       return
     newValue = value
@@ -138,11 +138,11 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     newValue = ship.crew[memberIndex].morale[2] + newValue
     newMorale = ship.crew[memberIndex].morale[1]
     while newValue >= 5:
-      newValue = newValue - 5
-      newMorale = newMorale + 1
+      newValue -= 5
+      newMorale += 1
     while newValue < 0:
-      newValue = newValue + 5
-      newMorale = newMorale - 1
+      newValue += 5
+      newMorale -= 1
     if newMorale > 100:
       newMorale = 100
     elif newMorale < 0:
@@ -154,7 +154,7 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
     if newMorale > 74 and newLoyalty < 100:
       newLoyalty.inc
     if newMorale < 25 and newLoyalty > 0:
-      newLoyalty = newLoyalty - getRandom(min = 5, max = 10)
+      newLoyalty -= getRandom(min = 5, max = 10)
     if newLoyalty > 100:
       newLoyalty = 100
     elif newLoyalty < 0:
@@ -196,14 +196,14 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
   body:
     if givenOrder == ship.crew[memberIndex].order:
       if givenOrder in [craft, gunner]:
-        for index, module in ship.modules.pairs:
+        for index, module in ship.modules:
           if index == moduleIndex:
             for owner in module.owner:
               if owner == memberIndex:
                 return
       else:
         return
-    let memberName = ship.crew[memberIndex].name
+    let memberName: string = ship.crew[memberIndex].name
     if givenOrder != rest and ((ship.crew[memberIndex].morale[1] < 11 and
         getRandom(min = 1, max = 100) < 50) or ship.crew[memberIndex].loyalty < 20):
       if ship.crew == playerShip.crew:
@@ -212,7 +212,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       raise newException(exceptn = CrewOrderError, message = memberName &
           " can't start training because " & ship.modules[moduleIndex].name & " isn't prepared.")
     if givenOrder in [pilot, engineer, upgrading, talk]:
-      for index, member in ship.crew.pairs:
+      for index, member in ship.crew:
         if member.order == givenOrder:
           giveOrders(ship = ship, memberIndex = index, givenOrder = rest,
               moduleIndex = -1, checkPriorities = false)
@@ -227,7 +227,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       if not freePosition:
         giveOrders(ship = ship, memberIndex = ship.modules[moduleIndex].owner[
             0], givenOrder = rest, moduleIndex = -1, checkPriorities = false)
-    var moduleIndex2 = -1
+    var moduleIndex2: int = -1
     if moduleIndex == -1 and givenOrder in [pilot, engineer, rest]:
       let mType: ModuleType = case givenOrder
         of pilot:
@@ -238,8 +238,14 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
           ModuleType.cabin
         else:
           ModuleType.engine
-      for index, module in ship.modules.pairs:
-        if mType != ModuleType.cabin:
+      for index, module in ship.modules:
+        if mType == ModuleType.cabin:
+          if module.mType == ModuleType2.cabin and module.durability > 0:
+            for owner in module.owner:
+              if memberIndex == owner:
+                moduleIndex2 = index
+                break
+        else:
           if modulesList[module.protoIndex].mType == mType and
               module.durability > 0:
             if module.owner[0] > -1:
@@ -247,12 +253,6 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
                   givenOrder = rest, moduleIndex = -1, checkPriorities = false)
             moduleIndex2 = index
             break
-        else:
-          if module.mType == ModuleType2.cabin and module.durability > 0:
-            for owner in module.owner:
-              if memberIndex == owner:
-                moduleIndex2 = index
-                break
     else:
       moduleIndex2 = moduleIndex
     if moduleIndex2 == -1 and ship.crew == playerShip.crew:
@@ -265,9 +265,9 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
           raise newException(exceptn = CrewOrderError, message = memberName & " can't start operating gun because all of the guns are destroyed or you don't have any installed.")
         of rest:
           block takeCabin:
-            for index, module in ship.modules.pairs:
+            for index, module in ship.modules:
               if module.mType == ModuleType2.cabin and module.durability > 0:
-                for i, owner in module.owner.pairs:
+                for i, owner in module.owner:
                   if owner == -1:
                     ship.modules[index].owner[i] = memberIndex;
                     addMessage(message = (memberName & " takes " & module.name &
@@ -277,15 +277,15 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         else:
           discard
     block releaseModule:
-      for index, module in ship.modules.pairs:
+      for index, module in ship.modules:
         if module.mType != ModuleType2.cabin:
-          for i, owner in module.owner.pairs:
+          for i, owner in module.owner:
             if owner == memberIndex:
               ship.modules[index].owner[i] = -1
               break releaseModule
     var
-      toolsIndex = -1
-      requiredTool = ""
+      toolsIndex: int = -1
+      requiredTool: string = ""
     if toolsIndex > -1 and ship.crew[memberIndex].equipment[tool] != toolsIndex:
       updateInventory(memberIndex = memberIndex, amount = 1,
           protoIndex = ship.cargo[toolsIndex].protoIndex,
@@ -303,7 +303,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       updateInventory(memberIndex = memberIndex, amount = -1,
           inventoryIndex = toolsIndex, ship = ship)
       toolsIndex = -1
-    var toolQuality = defaultItemDurability
+    var toolQuality: ItemsDurability = defaultItemDurability
     if givenOrder in [upgrading, repair, clean, train]:
       if givenOrder == clean:
         requiredTool = cleaningTools
@@ -373,7 +373,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         of craft:
           addMessage(message = memberName & " starts manufacturing.",
               mType = orderMessage)
-          for index, owner in ship.modules[moduleIndex2].owner.pairs:
+          for index, owner in ship.modules[moduleIndex2].owner:
             if owner == -1:
               ship.modules[moduleIndex2].owner[index] = memberIndex
               break
@@ -390,7 +390,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
               " starts healing wounded crew members.",
               mType = orderMessage)
           if moduleIndex > -1:
-            for index, owner in ship.modules[moduleIndex].owner.pairs:
+            for index, owner in ship.modules[moduleIndex].owner:
               if owner == -1:
                 ship.modules[moduleIndex2].owner[index] = memberIndex
                 break
@@ -408,7 +408,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         of train:
           addMessage(message = memberName &
               " starts personal training.", mType = orderMessage)
-          for index, owner in ship.modules[moduleIndex2].owner.pairs:
+          for index, owner in ship.modules[moduleIndex2].owner:
             if owner == -1:
               ship.modules[moduleIndex2].owner[index] = memberIndex
               break
@@ -444,17 +444,17 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     ##
     ## Returns true if order was updated, otherwise false
     var
-      orderIndex: Natural
+      orderIndex: Natural = 0
       memberIndex, moduleIndex: int = -1
     orderIndex = (if order < defend: (order.ord + 1) else: order.ord)
     if maxPriority:
-      for index, member in ship.crew.pairs:
+      for index, member in ship.crew:
         if member.orders[orderIndex] == 2 and member.order != order and
             member.previousOrder != order:
           memberIndex = index
           break
     else:
-      for index, member in ship.crew.pairs:
+      for index, member in ship.crew:
         if member.orders[orderIndex] == 1 and member.order == rest and
             member.previousOrder == rest:
           memberIndex = index
@@ -462,7 +462,7 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     if memberIndex == -1:
       return false
     if order in [gunner, craft, heal, pilot, engineer, train]:
-      for index, module in ship.modules.pairs:
+      for index, module in ship.modules:
         if module.durability > 0:
           case module.mType
             of ModuleType2.gun:
@@ -551,7 +551,7 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
           break
   if skyMap[ship.skyX][ship.skyY].baseIndex > 0:
     needTrader = true
-  let eventIndex = skyMap[ship.skyX][ship.skyY].eventIndex
+  let eventIndex: int = skyMap[ship.skyX][ship.skyY].eventIndex
   if not needTrader and eventIndex > 0 and eventsList[eventIndex].eType in [
       trader, friendlyShip]:
     needTrader = true
@@ -633,7 +633,7 @@ proc findMember*(order: CrewOrders; shipCrew: seq[
   ##
   ## Returns the index of the crew member with the selected order or -1 if
   ## nothing found.
-  for index, member in shipCrew.pairs:
+  for index, member in shipCrew:
     if member.order == order:
       return index
   return -1
@@ -650,15 +650,15 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
     skillsList.contains(key = skillNumber)
     crewIndex < playerShip.crew.len
   body:
-    let attributeIndex = try:
+    let attributeIndex: Natural = try:
         skillsList[skillNumber].attribute
       except KeyError:
-        Positive.high
-    if attributeIndex == Positive.high:
+        Natural.high
+    if attributeIndex == Natural.high:
       return
     var
-      skillExp, newAmount, skillLevel = 0
-      skillIndex = -1
+      skillExp, newAmount, skillLevel: int = 0
+      skillIndex: int = -1
 
     proc gainExpInAttribute(attribute: Natural) {.sideEffect, raises: [],
         tags: [], contractual.} =
@@ -670,14 +670,14 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
       require:
         attribute < playerShip.crew[crewIndex].attributes.len
       body:
-        var memberAttribute = playerShip.crew[crewIndex].attributes[attribute]
+        var memberAttribute: MobAttributeRecord = playerShip.crew[crewIndex].attributes[attribute]
         if memberAttribute.level == 50:
           return
         var
-          attributeExp = memberAttribute.experience + newAmount
-          attributeLevel = memberAttribute.level
+          attributeExp: int = memberAttribute.experience + newAmount
+          attributeLevel: Natural = memberAttribute.level
         if attributeExp >= attributeLevel * 250:
-          attributeExp = attributeExp - (attributeLevel * 250)
+          attributeExp -= (attributeLevel * 250)
           attributeLevel.inc
         playerShip.crew[crewIndex].attributes[attribute].level = attributeLevel
         playerShip.crew[crewIndex].attributes[
@@ -708,7 +708,7 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
       skillLevel = playerShip.crew[crewIndex].skills[skillIndex].level
       skillExp = playerShip.crew[crewIndex].skills[skillIndex].experience + newAmount
     if skillExp >= skillLevel * 25:
-      skillExp = skillExp - (skillLevel * 25)
+      skillExp -= (skillLevel * 25)
       skillLevel.inc
     if skillIndex > -1:
       playerShip.crew[crewIndex].skills[skillIndex] = SkillInfo(
