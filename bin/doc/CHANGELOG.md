@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Crash when the player's ship's armor is destroyed during combat
 - Tab key doesn't work in Orders menu
 - Crash when close the message's dialog before its timer ends
+- Crash on starting a new game
 
 ## [9.9] - 2024-04-14
 
