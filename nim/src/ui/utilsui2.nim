@@ -325,6 +325,10 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
 
 proc setFonts*(newSize: Positive; fontType: FontTypes) {.sideEffect, raises: [],
     tags: [].} =
+  ##  Set all the game fonts to the selected size
+  ##
+  ##  newSize  - The new size of the selected font's type
+  ##  fontType - The type of the font
   const
     helpFonts: array[4, string] = ["HelpFont", "BoldHelpFont",
         "UnderlineHelpFont", "ItalicHelpFont"]
