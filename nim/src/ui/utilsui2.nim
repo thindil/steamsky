@@ -323,6 +323,21 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
         item = playerShip.cargo[itemIndex], damageInfo = false,
         toLower = false)), button1 = button1, button2 = button2)
 
+proc setFonts*(newSize: Positive; fontType: FontTypes) =
+  const
+    helpFonts: array[4, string] = ["HelpFont", "BoldHelpFont",
+        "UnderlineHelpFont", "ItalicHelpFont"]
+    interfaceFonts: array[3, string] = ["InterfaceFont", "OverstrikedFont", "UnderlineFont"]
+  case fontType
+  of mapFont:
+    gameSettings.mapFontSize = newSize
+    tclEval(script = "font configure MapFont -size " &
+        $gameSettings.mapFontSize)
+  of helpFont:
+    discard
+  of interfaceFont:
+    discard
+
 # Temporary code for interfacing with Ada
 
 proc showAdaScreen(newScreenName: cstring) {.exportc, raises: [], tags: [].} =
@@ -362,6 +377,7 @@ proc showAdaInventoryInfo(parent: cstring; itemIndex, memberIndex: cint;
         icon: $button2.icon, tooltip: $button2.tooltip, color: $button2.color)
   try:
     showInventoryItemInfo(parent = $parent, itemIndex = itemIndex - 1,
-        memberIndex = memberIndex - 1, button1 = nimButton1, button2 = nimButton2)
+        memberIndex = memberIndex - 1, button1 = nimButton1,
+        button2 = nimButton2)
   except:
     echo getCurrentExceptionMsg()
