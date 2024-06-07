@@ -337,12 +337,12 @@ proc setFonts*(newSize: Positive; fontType: FontTypes) =
     gameSettings.helpFontSize = newSize
     for fontName in helpFonts:
       tclEval(script = "font configure " & fontName & " -size " &
-          $gameSettings.mapFontSize)
+          $gameSettings.helpFontSize)
   of interfaceFont:
     gameSettings.interfaceFontSize = newSize
     for fontName in interfaceFonts:
       tclEval(script = "font configure " & fontName & " -size " &
-          $gameSettings.mapFontSize)
+          $gameSettings.interfaceFontSize)
 
 # Temporary code for interfacing with Ada
 
