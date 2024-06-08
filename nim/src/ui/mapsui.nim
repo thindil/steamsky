@@ -34,8 +34,8 @@ var
       "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
       "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
       "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
-  fullScreenAccel* = "Control-f"
-  defaultFontSizes*: array[3, Positive]
+  fullScreenAccel* = "Control-f" ## Keyboard shortcut for toggle full screen
+  defaultFontSizes*: array[3, Positive] ## The default sizes of fonts
 
 proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
   ## Update the player's ship movement buttons, depending on the state of the
