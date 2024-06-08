@@ -419,6 +419,83 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     if checkPriorities:
       updateOrders(ship = ship)
 
+proc updatePosition(ship: var ShipRecord; order: CrewOrders;
+    maxPriority: bool = true): bool {.sideEffect, raises: [CrewOrderError,
+    KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
+        contractual.} =
+  ## Change the crew member for the selected order
+  ##
+  ## * ship        - the ship of which crew's orders will be updated
+  ## * order       - the order which will be updated
+  ## * maxPriority - if true, get the crew member which high priority for
+  ##                 the order
+  ##
+  ## Returns true if order was updated, otherwise false
+  var
+    orderIndex: Natural = 0
+    memberIndex, moduleIndex: int = -1
+  orderIndex = (if order < defend: (order.ord + 1) else: order.ord)
+  if maxPriority:
+    for index, member in ship.crew:
+      if member.orders[orderIndex] == 2 and member.order != order and
+          member.previousOrder != order:
+        memberIndex = index
+        break
+  else:
+    for index, member in ship.crew:
+      if member.orders[orderIndex] == 1 and member.order == rest and
+          member.previousOrder == rest:
+        memberIndex = index
+        break
+  if memberIndex == -1:
+    return false
+  if order in [gunner, craft, heal, pilot, engineer, train]:
+    for index, module in ship.modules:
+      if module.durability > 0:
+        case module.mType
+          of ModuleType2.gun:
+            if order == gunner and module.owner[0] == -1:
+              moduleIndex = index
+              break
+          of ModuleType2.workshop:
+            if order == craft and module.craftingIndex.len > 0:
+              for owner in module.owner:
+                if owner == -1:
+                  moduleIndex = index
+                  break
+          of ModuleType2.medicalRoom:
+            if order == heal:
+              for owner in module.owner:
+                if owner == -1:
+                  moduleIndex = index
+                  break
+          of ModuleType2.cockpit:
+            if order == pilot:
+              moduleIndex = index
+              break
+          of ModuleType2.engine:
+            if order == engineer:
+              moduleIndex = index
+              break
+          of ModuleType2.trainingRoom:
+            if order == train and module.trainedSkill > 0:
+              for owner in module.owner:
+                if owner == -1:
+                  moduleIndex = index
+                  break
+          else:
+            discard
+      if moduleIndex > -1:
+        break
+    if moduleIndex == -1:
+      return false
+  if ship.crew[memberIndex].order != rest:
+    giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest,
+        moduleIndex = -1, checkPriorities = false)
+  giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order,
+      moduleIndex = moduleIndex)
+  return true
+
 proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
     RootEffect], contractual.} =
@@ -430,83 +507,6 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
   ##            value is false.
   ##
   ## Returns the modified parameter ship with updated info about the ship
-
-  proc updatePosition(ship: var ShipRecord; order: CrewOrders;
-      maxPriority: bool = true): bool {.sideEffect, raises: [CrewOrderError,
-      KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
-          contractual.} =
-    ## Change the crew member for the selected order
-    ##
-    ## * ship        - the ship of which crew's orders will be updated
-    ## * order       - the order which will be updated
-    ## * maxPriority - if true, get the crew member which high priority for
-    ##                 the order
-    ##
-    ## Returns true if order was updated, otherwise false
-    var
-      orderIndex: Natural = 0
-      memberIndex, moduleIndex: int = -1
-    orderIndex = (if order < defend: (order.ord + 1) else: order.ord)
-    if maxPriority:
-      for index, member in ship.crew:
-        if member.orders[orderIndex] == 2 and member.order != order and
-            member.previousOrder != order:
-          memberIndex = index
-          break
-    else:
-      for index, member in ship.crew:
-        if member.orders[orderIndex] == 1 and member.order == rest and
-            member.previousOrder == rest:
-          memberIndex = index
-          break
-    if memberIndex == -1:
-      return false
-    if order in [gunner, craft, heal, pilot, engineer, train]:
-      for index, module in ship.modules:
-        if module.durability > 0:
-          case module.mType
-            of ModuleType2.gun:
-              if order == gunner and module.owner[0] == -1:
-                moduleIndex = index
-                break
-            of ModuleType2.workshop:
-              if order == craft and module.craftingIndex.len > 0:
-                for owner in module.owner:
-                  if owner == -1:
-                    moduleIndex = index
-                    break
-            of ModuleType2.medicalRoom:
-              if order == heal:
-                for owner in module.owner:
-                  if owner == -1:
-                    moduleIndex = index
-                    break
-            of ModuleType2.cockpit:
-              if order == pilot:
-                moduleIndex = index
-                break
-            of ModuleType2.engine:
-              if order == engineer:
-                moduleIndex = index
-                break
-            of ModuleType2.trainingRoom:
-              if order == train and module.trainedSkill > 0:
-                for owner in module.owner:
-                  if owner == -1:
-                    moduleIndex = index
-                    break
-            else:
-              discard
-        if moduleIndex > -1:
-          break
-      if moduleIndex == -1:
-        return false
-    if ship.crew[memberIndex].order != rest:
-      giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = rest,
-          moduleIndex = -1, checkPriorities = false)
-    giveOrders(ship = ship, memberIndex = memberIndex, givenOrder = order,
-        moduleIndex = moduleIndex)
-    return true
 
   var havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal, needGunners,
     needCrafters, needClean, needRepairs, needTrader: bool = false
