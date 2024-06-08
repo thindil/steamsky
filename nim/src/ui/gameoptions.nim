@@ -260,6 +260,18 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Set the selected font
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetFonts fontfield
+  ## Fontfield is the name of the spinbox which value changed.
   let
     frameName = ".gameframe.paned.optionsframe.canvas.options.interface"
     spinBox = $argv[1]
