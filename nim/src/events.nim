@@ -59,6 +59,17 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
         withTraders or tradersName notin ship.name):
       enemies.add(y = index)
 
+proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
+    tags: [].} =
+  ## Delete the selected event and update the map information
+  ##
+  ## * eventIndex - the index of the event to delete
+  skyMap[eventsList[eventIndex].skyX][eventsList[
+      eventIndex].skyY].eventIndex = -1
+  eventsList.delete(eventIndex)
+  for index, event in eventsList.pairs:
+    skyMap[event.skyX][event.skyY].eventIndex = index
+
 proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
   ## Update timer for all known events, delete events if the timers passed
   ##
@@ -79,27 +90,13 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
           populationLost = skyBases[baseIndex].population
           skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
         skyBases[baseIndex].population = skyBases[baseIndex].population - populationLost
-      skyMap[eventsList[key].skyX][eventsList[key].skyY].eventIndex = -1
-      {.warning[UnsafeSetLen]: off.}
-      eventsList.delete(key)
-      {.warning[UnsafeSetLen]: on.}
+      deleteEvent(eventIndex = key)
     else:
       eventsList[key].time = newTime
       key.inc
   if eventsAmount < eventsList.len:
     for index, event in eventsList.pairs:
       skyMap[event.skyX][event.skyY].eventIndex = index
-
-proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
-    tags: [].} =
-  ## Delete the selected event and update the map information
-  ##
-  ## * eventIndex - the index of the event to delete
-  skyMap[eventsList[eventIndex].skyX][eventsList[
-      eventIndex].skyY].eventIndex = -1
-  eventsList.delete(eventIndex)
-  for index, event in eventsList.pairs:
-    skyMap[event.skyX][event.skyY].eventIndex = index
 
 proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
     tags: [].} =
