@@ -20,7 +20,7 @@
 ## avoid circular dependencies.
 
 import std/[os, strutils, tables, xmlparser, xmltree]
-import contracts, nimalyzer
+import contracts
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
     messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
@@ -374,12 +374,14 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
         factionRoll -= faction.spawnChance
       if baseOwner.len == 0:
         baseOwner = newGameSettings.playerFaction
-      {.ruleOff: "ifstatements".}
-      baseSize = (if basePopulation == 0: getRandom(min = 0,
-          max = 2).BasesSize elif basePopulation <
-          150: small elif basePopulation <
-          300: medium else: big)
-      {.ruleOn: "ifstatements".}
+      baseSize = case basePopulation
+        of 0:
+          getRandom(min = 0, max = 2).BasesSize
+        of 1 .. 149:
+          small
+        of 150 .. 299:
+          medium
+        else: big
       skyBases[i].name = generateBaseName(factionIndex = baseOwner)
       skyBases[i].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
       skyBases[i].skyX = 1
