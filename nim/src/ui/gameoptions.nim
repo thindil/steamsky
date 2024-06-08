@@ -259,11 +259,14 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = argc, argv = argv)
 
 proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".gameframe.paned.optionsframe.canvas.options.interface"
     spinBox = $argv[1]
-    newSize = tclEval2(script = spinBox & " get").parseInt
+    newSize = try:
+        tclEval2(script = spinBox & " get").parseInt
+      except:
+        return showError(message = "Can't get the new size.")
   if spinBox == frameName & "mapfont":
     setFonts(newSize = newSize, fontType = mapFont)
   elif spinBox == frameName & ".helpfont":
