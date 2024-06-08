@@ -35,6 +35,7 @@ var
       "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
       "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
   fullScreenAccel* = "Control-f"
+  defaultFontSizes*: array[3, Positive]
 
 proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
   ## Update the player's ship movement buttons, depending on the state of the
@@ -755,3 +756,6 @@ proc getAdaStartPoint(x, y: var cint) {.raises: [], tags: [], exportc.} =
 proc setAdaStartPoint(x, y: cint) {.raises: [], tags: [], exportc.} =
   startX = x.Positive
   startY = y.Positive
+
+proc getAdaFontSizes(map, inter, help: cint) {.raises: [], tags: [], exportc.} =
+  defaultFontSizes = [map.Positive, inter, help]

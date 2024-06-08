@@ -123,6 +123,10 @@ package body MainMenu is
       Button: Ttk_Button :=
         Get_Widget(pathName => ".newgamemenu.canvas.player.randomplayer");
       Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
+      procedure Get_Ada_Font_Sizes(Map, Inter, Help: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaFontSizes";
    begin
       if not Exists(Name => Icon_Path) then
          Wm_Set(Widgt => Main_Window, Action => "withdraw");
@@ -166,6 +170,9 @@ package body MainMenu is
          3 =>
            Positive'Value
              (Font.Configure(FontName => "HelpFont", Option => "-size")));
+      Get_Ada_Font_Sizes
+        (Map => Default_Fonts_Sizes(1), Inter => Default_Fonts_Sizes(2),
+         Help => Default_Fonts_Sizes(3));
       Set_Fonts
         (New_Size => Get_Integer_Setting(Name => "mapFontSize"),
          Font_Type => MAPFONT);
@@ -176,8 +183,7 @@ package body MainMenu is
         (New_Size => Get_Integer_Setting(Name => "interfaceFontSize"),
          Font_Type => INTERFACEFONT);
       configure
-        (Widgt => Version_Label,
-         options => "-text {" & Game_Version & "}");
+        (Widgt => Version_Label, options => "-text {" & Game_Version & "}");
       Data_Error := To_Unbounded_String(Source => Load_Game_Data);
       if Get_Data_Error'Length > 0 then
          Show_Main_Menu;
