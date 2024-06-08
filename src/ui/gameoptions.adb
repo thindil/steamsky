@@ -393,35 +393,37 @@ package body GameOptions is
    function Set_Fonts_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "setFontsCommand";
       -- ****
 
-   function Set_Fonts_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      Frame_Name: constant String :=
-        ".gameframe.paned.optionsframe.canvas.options.interface";
-      Spin_Box: constant Ttk_SpinBox :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-   begin
-      if CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".mapfont" then
-         Set_Fonts
-           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
-            Font_Type => MAPFONT);
-      elsif CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".helpfont" then
-         Set_Fonts
-           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
-            Font_Type => Help_Font_Type);
-      else
-         Set_Fonts
-           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
-            Font_Type => INTERFACEFONT);
-      end if;
-      Load_Theme_Images;
-      return TCL_OK;
-   end Set_Fonts_Command;
+--   function Set_Fonts_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      Frame_Name: constant String :=
+--        ".gameframe.paned.optionsframe.canvas.options.interface";
+--      Spin_Box: constant Ttk_SpinBox :=
+--        Get_Widget
+--          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+--   begin
+--      if CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".mapfont" then
+--         Set_Fonts
+--           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
+--            Font_Type => MAPFONT);
+--      elsif CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".helpfont" then
+--         Set_Fonts
+--           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
+--            Font_Type => Help_Font_Type);
+--      else
+--         Set_Fonts
+--           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
+--            Font_Type => INTERFACEFONT);
+--      end if;
+--      Load_Theme_Images;
+--      return TCL_OK;
+--   end Set_Fonts_Command;
 
    -- ****o* GameOptions/GameOptions.Set_Default_Fonts_Command
    -- FUNCTION

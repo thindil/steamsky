@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
+import std/[os, strutils, tables]
 import ../[config, game, tk]
 import coreui, mapsui, themes, utilsui2
 
@@ -258,11 +258,27 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return showOptionsTabCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
 
+proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".gameframe.paned.optionsframe.canvas.options.interface"
+    spinBox = $argv[1]
+    newSize = tclEval2(script = spinBox & " get").parseInt
+  if spinBox == frameName & "mapfont":
+    setFonts(newSize = newSize, fontType = mapFont)
+  elif spinBox == frameName & ".helpfont":
+    setFonts(newSize = newSize, fontType = helpFont)
+  else:
+    setFonts(newSize = newSize, fontType = interfaceFont)
+  loadThemeImages()
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
 #    addCommand("ShowOptionsTab", showOptionsTabCommand)
 #    addCommand("ShowOptions", showOptionsCommand)
+#    addCommand("SetFonts", setFontsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
