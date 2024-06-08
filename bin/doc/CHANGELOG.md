@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Tab key doesn't work in Orders menu
 - Crash when close the message's dialog before its timer ends
 - Crash on starting a new game
+- Crash when a in-game events expire
 
 ## [9.9] - 2024-04-14
 
