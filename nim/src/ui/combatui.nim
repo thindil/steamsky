@@ -297,8 +297,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
         0.24: " -style yellow.Horizontal.TProgressbar" else: " -style Horizontal.TProgressbar"))
     tclEval(script = "grid " & progressBar & " -row " & $row & " -column 1")
     tclEval(script = "SetScrollbarBindings " & progressBar & " $combatframe.damage.scrolly")
-    tclEval(script = "grid columnconfigure " & progressBar & " -weight 1")
-    tclEval(script = "grid rowconfigure " & progressBar & " -weight 1")
+    tclEval(script = "grid columnconfigure " & frame & " " & progressBar & " -weight 1")
+    tclEval(script = "grid rowconfigure " & frame & " " & progressBar & " -weight 1")
     row.inc
   tclEval(script = "update")
   combatCanvas = mainPaned & ".combatframe.damage.canvas"
