@@ -414,39 +414,41 @@ package body GameOptions is
    function Set_Default_Fonts_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "setDefaultFontsCommand";
       -- ****
 
-   function Set_Default_Fonts_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      Spin_Box: Ttk_SpinBox; --## rule line off IMPROPER_INITIALIZATION
-      Spin_Box_Names: constant array(1 .. 3) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "map"),
-         2 => To_Unbounded_String(Source => "interface"),
-         3 => To_Unbounded_String(Source => "help"));
-      Font_Types_Names: constant array(1 .. 3) of Config.Font_Types :=
-        (1 => MAPFONT, 2 => INTERFACEFONT, 3 => Help_Font_Type);
-   begin
-      Spin_Box.Interp := Interp;
-      Set_Default_Fonts_Loop :
-      for I in Spin_Box_Names'Range loop
-         Spin_Box.Name :=
-           New_String
-             (Str =>
-                ".gameframe.paned.optionsframe.canvas.options.interface." &
-                To_String(Source => Spin_Box_Names(I)) & "font");
-         Set
-           (SpinBox => Spin_Box,
-            Value => Positive'Image(Default_Fonts_Sizes(I)));
-         Set_Fonts
-           (New_Size => Default_Fonts_Sizes(I),
-            Font_Type => Font_Types_Names(I));
-      end loop Set_Default_Fonts_Loop;
-      Load_Theme_Images;
-      return TCL_OK;
-   end Set_Default_Fonts_Command;
+--   function Set_Default_Fonts_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      Spin_Box: Ttk_SpinBox; --## rule line off IMPROPER_INITIALIZATION
+--      Spin_Box_Names: constant array(1 .. 3) of Unbounded_String :=
+--        (1 => To_Unbounded_String(Source => "map"),
+--         2 => To_Unbounded_String(Source => "interface"),
+--         3 => To_Unbounded_String(Source => "help"));
+--      Font_Types_Names: constant array(1 .. 3) of Config.Font_Types :=
+--        (1 => MAPFONT, 2 => INTERFACEFONT, 3 => Help_Font_Type);
+--   begin
+--      Spin_Box.Interp := Interp;
+--      Set_Default_Fonts_Loop :
+--      for I in Spin_Box_Names'Range loop
+--         Spin_Box.Name :=
+--           New_String
+--             (Str =>
+--                ".gameframe.paned.optionsframe.canvas.options.interface." &
+--                To_String(Source => Spin_Box_Names(I)) & "font");
+--         Set
+--           (SpinBox => Spin_Box,
+--            Value => Positive'Image(Default_Fonts_Sizes(I)));
+--         Set_Fonts
+--           (New_Size => Default_Fonts_Sizes(I),
+--            Font_Type => Font_Types_Names(I));
+--      end loop Set_Default_Fonts_Loop;
+--      Load_Theme_Images;
+--      return TCL_OK;
+--   end Set_Default_Fonts_Command;
 
    -- ****o* GameOptions/GameOptions.Close_Options_Command
    -- FUNCTION

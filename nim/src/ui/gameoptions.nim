@@ -288,6 +288,19 @@ proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   loadThemeImages()
   return tclOk
 
+proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  const
+    spinboxNames: array[3, string] = ["map", "interface", "help"]
+    fontTypesNames: array[3, FontTypes] = [mapFont, interfaceFont, helpFont]
+  for index, name in spinboxNames:
+    let spinbox = ".gameframe.paned.optionsframe.canvas.options.interface." &
+        name & "font"
+    tclEval(script = spinbox & " set " & $defaultFontSizes[index])
+    setFonts(newSize = defaultFontSizes[index], fontType = fontTypesNames[index])
+  loadThemeImages()
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -295,5 +308,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowOptionsTab", showOptionsTabCommand)
 #    addCommand("ShowOptions", showOptionsCommand)
 #    addCommand("SetFonts", setFontsCommand)
+#    addCommand("SetDefaultFonts", setDefaultFontsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
