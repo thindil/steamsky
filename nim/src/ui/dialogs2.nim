@@ -40,7 +40,7 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
     dialog = $argv[1]
   if argc == 3:
     frame = $argv[2]
-    tclEval(script = "busy forget " & frame)
+    tclEval(script = "tk busy forget " & frame)
     if argv[2] == ".memberdialog":
       frame = frame & ".buttons.button"
       if tclEval2(script = "winfo exists " & frame) == "0":
@@ -48,10 +48,10 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "focus " & frame)
     tclEval(script = "destroy " & dialog)
     return tclOk
-  if tclEval2(script = "busy status " & frame) == "1":
-    tclEval(script = "busy forget " & frame)
+  if tclEval2(script = "tk busy status " & frame) == "1":
+    tclEval(script = "tk busy forget " & frame)
     frame = ".gameframe.paned"
-    tclEval(script = "busy forget " & frame)
+    tclEval(script = "tk busy forget " & frame)
   tclEval(script = "destroy " & dialog)
   return tclOk
 
