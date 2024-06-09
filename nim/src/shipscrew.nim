@@ -84,8 +84,8 @@ proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
     result = 0
     for skill in member.skills:
       if skill.index == skillIndex:
-        let baseSkillLevel: Natural = skill.level + member.attributes[skillsList[
-            skill.index].attribute].level
+        let baseSkillLevel: Natural = skill.level + member.attributes[
+            skillsList[skill.index].attribute].level
         var damage: float = 1.0 - (member.health.float / 100.0)
         result += (baseSkillLevel - (baseSkillLevel.float * damage).int)
         if member.thirst > 40:
@@ -496,20 +496,25 @@ proc updatePosition(ship: var ShipRecord; order: CrewOrders;
       moduleIndex = moduleIndex)
   return true
 
-proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
-    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
-    RootEffect], contractual.} =
-  ## Update the orders of the crew of the selected ship, based on the crew
-  ## members orders' priorities
+proc setOrdersConditions(havePilot, haveEngineer, haveUpgrade, haveTrader,
+    canHeal, needGunners, needCrafters, needClean, needRepairs,
+    needTrader: var bool; ship: ShipRecord) {.sideEffect, raises: [KeyError],
+    tags: [], contractual.} =
+  ## Set various conditions needed for update orders in the ship
   ##
-  ## * ship   - the ship of which crew's orders will be updated
-  ## * combat - if true, the orders update takes place in a combat. Default
-  ##            value is false.
+  ## * havePilot    - the ship has a pilot on position
+  ## * haveEngineer - the ship has an engineer on position
+  ## * haveUpgrade  - the ship has an upgrade in progress
+  ## * haveTrader   - the ship has a trader on postion
+  ## * canHeal      - the ship's crew members can be healed
+  ## * needGunners  - the ship needs gunners
+  ## * needCrafters - the ship needs crafters
+  ## * needClean    - the ship needs cleaning
+  ## * needRepairs  - the ship is damaged
+  ## * needTrader   - the ship needs trader
+  ## * ship         - the ship which will be checked
   ##
-  ## Returns the modified parameter ship with updated info about the ship
-
-  var havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal, needGunners,
-    needCrafters, needClean, needRepairs, needTrader: bool = false
+  ## Returns modified all paramters except the ship parameter.
   for member in ship.crew:
     case member.order
       of pilot:
@@ -555,6 +560,25 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
   if not needTrader and eventIndex > 0 and eventsList[eventIndex].eType in [
       trader, friendlyShip]:
     needTrader = true
+
+proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
+    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
+    RootEffect], contractual.} =
+  ## Update the orders of the crew of the selected ship, based on the crew
+  ## members orders' priorities
+  ##
+  ## * ship   - the ship of which crew's orders will be updated
+  ## * combat - if true, the orders update takes place in a combat. Default
+  ##            value is false.
+  ##
+  ## Returns the modified parameter ship with updated info about the ship
+
+  var havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal, needGunners,
+    needCrafters, needClean, needRepairs, needTrader: bool = false
+  setOrdersConditions(havePilot = havePilot, haveEngineer = haveEngineer,
+      haveUpgrade = haveUpgrade, haveTrader = haveTrader, canHeal = canHeal,
+      needGunners = needGunners, needCrafters = needCrafters,
+      needClean = needClean, needRepairs = needRepairs, needTrader = needTrader, ship = ship)
   if not havePilot and updatePosition(ship = ship, order = pilot):
     updateOrders(ship = ship)
   if not haveEngineer and updatePosition(ship = ship, order = engineer):
@@ -670,7 +694,8 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
       require:
         attribute < playerShip.crew[crewIndex].attributes.len
       body:
-        var memberAttribute: MobAttributeRecord = playerShip.crew[crewIndex].attributes[attribute]
+        var memberAttribute: MobAttributeRecord = playerShip.crew[
+            crewIndex].attributes[attribute]
         if memberAttribute.level == 50:
           return
         var
