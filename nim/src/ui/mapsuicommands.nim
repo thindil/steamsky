@@ -985,7 +985,7 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let focusedWidget = tclEval2(script = "focus")
   if tclEval2(script = "winfo class " & focusedWidget) == "TEntry" or tclEval2(
-      script = "busy status " & gameHeader) == "1":
+      script = "tk busy status " & gameHeader) == "1":
     return tclOk
   let menuCommands: array[1 .. 11, string] = ["ShowShipInfo", "ShowOrders",
       "ShowCrafting", "ShowLastMessages", "ShowKnowledge", "ShowWait",
