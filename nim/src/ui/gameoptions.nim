@@ -289,7 +289,7 @@ proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   const
     spinboxNames: array[3, string] = ["map", "interface", "help"]
     fontTypesNames: array[3, FontTypes] = [mapFont, interfaceFont, helpFont]
