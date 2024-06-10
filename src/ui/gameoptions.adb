@@ -31,17 +31,16 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip;
-with Config; use Config;
+with Config;
 with CoreUI;
 with Combat.UI;
 with Game;
 with Maps.UI; use Maps.UI;
 with Ships;
-with Themes; use Themes;
-with Utils.UI; use Utils.UI;
+with Themes;
+with Utils.UI;
 
 package body GameOptions is
 
@@ -419,37 +418,6 @@ package body GameOptions is
       External_Name => "setDefaultFontsCommand";
       -- ****
 
---   function Set_Default_Fonts_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      Spin_Box: Ttk_SpinBox; --## rule line off IMPROPER_INITIALIZATION
---      Spin_Box_Names: constant array(1 .. 3) of Unbounded_String :=
---        (1 => To_Unbounded_String(Source => "map"),
---         2 => To_Unbounded_String(Source => "interface"),
---         3 => To_Unbounded_String(Source => "help"));
---      Font_Types_Names: constant array(1 .. 3) of Config.Font_Types :=
---        (1 => MAPFONT, 2 => INTERFACEFONT, 3 => Help_Font_Type);
---   begin
---      Spin_Box.Interp := Interp;
---      Set_Default_Fonts_Loop :
---      for I in Spin_Box_Names'Range loop
---         Spin_Box.Name :=
---           New_String
---             (Str =>
---                ".gameframe.paned.optionsframe.canvas.options.interface." &
---                To_String(Source => Spin_Box_Names(I)) & "font");
---         Set
---           (SpinBox => Spin_Box,
---            Value => Positive'Image(Default_Fonts_Sizes(I)));
---         Set_Fonts
---           (New_Size => Default_Fonts_Sizes(I),
---            Font_Type => Font_Types_Names(I));
---      end loop Set_Default_Fonts_Loop;
---      Load_Theme_Images;
---      return TCL_OK;
---   end Set_Default_Fonts_Command;
-
    -- ****o* GameOptions/GameOptions.Close_Options_Command
    -- FUNCTION
    -- Save all options and back to the map
@@ -486,8 +454,10 @@ package body GameOptions is
       use Tcl.Tk.Ada.Wm;
       use Tcl.Tklib.Ada.Tooltip;
       use Combat.UI;
+      use Config;
       use CoreUI;
       use Ships;
+      use Themes;
 
       Root_Name: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
@@ -499,6 +469,8 @@ package body GameOptions is
         Get_Widget
           (pathName => Root_Name & ".interface.theme", Interp => Interp);
       function Get_Spinbox_Value(Spin_Box_Name: String) return Natural is
+         use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+
          Spin_Box: constant Ttk_SpinBox :=
            Get_Widget(pathName => Root_Name & Spin_Box_Name, Interp => Interp);
       begin
@@ -1166,6 +1138,7 @@ package body GameOptions is
    end Reset_Keys_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowOptions", Ada_Command => Show_Options_Command'Access);
