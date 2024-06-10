@@ -404,7 +404,15 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       spinboxName = ".interface.listslimit")
   saveConfig()
   for index, accel in accels:
-    tclEval(script = "bind . <" & accel.shortcut & ">")
+    var
+      pos = accel.shortcut.rfind(sub = '-')
+      keyName = ""
+    if pos > -1:
+      keyName = accel.shortcut[0 .. pos] & "KeyPress-" & accel.shortcut[pos +
+          1 .. ^1]
+    else:
+      keyName = "KeyPress-" & accel.shortcut
+    tclEval(script = "bind . <" & keyName & "> {}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
