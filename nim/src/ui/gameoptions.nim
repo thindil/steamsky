@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[config, game, tk]
+import ../[config, game, tk, types]
 import coreui, mapsui, themes, utilsui2
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -312,6 +312,25 @@ proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   loadThemeImages()
   return tclOk
 
+proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  tclEval(script = closeButton & " configure -command ShowSkyMap")
+  tclEval(script = "grid remove " & closeButton)
+  const rootName = ".gameframe.paned.optionsframe.canvas.options"
+
+  proc getCheckboxValue(checkboxName: string): bool =
+    return tclGetVar(varName = rootName & " checkboxName") == "1"
+
+  gameSettings.autoRest = getCheckboxValue(checkboxName = ".general.autorest")
+
+  proc getComboboxValue(comboboxName: string): Natural =
+    let comboBox = rootName & comboboxName
+    return tclEval2(script = comboBox & " current").parseInt
+
+  gameSettings.undockSpeed = (getComboboxValue(
+      comboboxName = ".general.speed") + 1).ShipSpeed
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -320,5 +339,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowOptions", showOptionsCommand)
 #    addCommand("SetFonts", setFontsCommand)
 #    addCommand("SetDefaultFonts", setDefaultFontsCommand)
+#    addCommand("CloseOptions", closeOptionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
