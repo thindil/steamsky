@@ -373,6 +373,36 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     gameSettings.rightButton = true
     tclEval(script = "bind " & mapView & " <Button-3> {ShowDestinationMenu %X %Y}")
     tclEval(script = "bind " & mapView & " <Button-1> {}")
+  else:
+    gameSettings.rightButton = false
+    tclEval(script = "bind " & mapView & " <Button-1> {ShowDestinationMenu %X %Y}")
+    tclEval(script = "bind " & mapView & " <Button-3> {}")
+  if tclGetVar(varName = rootName & ".interface.showtooltips") == "1":
+    gameSettings.showTooltips = true
+    tclEval(script = "tooltip::tooltip enable")
+  else:
+    gameSettings.showTooltips = false
+    tclEval(script = "tooltip::tooltip disable")
+  gameSettings.showLastMessages = tclGetVar(varName = rootName &
+      ".interface.showmessages") == "1"
+  if tclGetVar(varName = rootName & ".interface.fullscreen") == "1":
+    gameSettings.fullScreen = true
+    tclEval(script = "wm attributes . -fullscreen 1")
+  else:
+    gameSettings.fullScreen = false
+    tclEval(script = "wm attributes . -fullscreen 0")
+  gameSettings.autoCloseMessagesTime = getSpinboxValue(
+      spinboxName = ".interface.closemessages")
+  gameSettings.showNumbers = getCheckboxValue(
+      checkboxName = ".interface.shownumbers")
+  gameSettings.mapFontSize = getSpinboxValue(spinboxName = ".interface.mapfont")
+  gameSettings.helpFontSize = getSpinboxValue(
+      spinboxName = ".interface.helpfont")
+  gameSettings.interfaceFontSize = getSpinboxValue(
+      spinboxName = ".interface.interfacefont")
+  gameSettings.listsLimit = getSpinboxValue(
+      spinboxName = ".interface.listslimit")
+  saveConfig()
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
