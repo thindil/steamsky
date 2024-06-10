@@ -403,6 +403,8 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   gameSettings.listsLimit = getSpinboxValue(
       spinboxName = ".interface.listslimit")
   saveConfig()
+  for index, accel in accels:
+    tclEval(script = "bind . <" & accel.shortcut & ">")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
