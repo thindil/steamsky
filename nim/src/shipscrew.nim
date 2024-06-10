@@ -561,6 +561,61 @@ proc setOrdersConditions(havePilot, haveEngineer, haveUpgrade, haveTrader,
       trader, friendlyShip]:
     needTrader = true
 
+proc updateCrewOrders(havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal,
+    needGunners, needCrafters, needClean, needRepairs, needTrader: bool;
+    ship: var ShipRecord; maxPriority: bool = true) {.sideEffect, raises: [
+    KeyError, CrewOrderError, CrewNoSpaceError, Exception], tags: [RootEffect],
+    contractual.} =
+  ## Update the orders of the crew of the selected ship
+  ##
+  ## * havePilot    - the ship has a pilot on position
+  ## * haveEngineer - the ship has an engineer on position
+  ## * haveUpgrade  - the ship has an upgrade in progress
+  ## * haveTrader   - the ship has a trader on postion
+  ## * canHeal      - the ship's crew members can be healed
+  ## * needGunners  - the ship needs gunners
+  ## * needCrafters - the ship needs crafters
+  ## * needClean    - the ship needs cleaning
+  ## * needRepairs  - the ship is damaged
+  ## * needTrader   - the ship needs trader
+  ## * ship         - the ship of which crew's orders will be updated
+  ## * maxPriority  - if true, upgrade the orders for crew members with max
+  ##                  priority in them. Can be empty. Default value is true.
+  ##
+  ## Returns the modified parameter ship with updated info about the ship
+  if not havePilot and updatePosition(ship = ship, order = pilot,
+      maxPriority = maxPriority):
+    updateOrders(ship = ship)
+  if not haveEngineer and updatePosition(ship = ship, order = engineer,
+      maxPriority = maxPriority):
+    updateOrders(ship = ship)
+  if needGunners and updatePosition(ship = ship, order = gunner,
+      maxPriority = maxPriority):
+    updateOrders(ship = ship)
+  if needCrafters and updatePosition(ship = ship, order = craft,
+      maxPriority = maxPriority):
+    updateOrders(ship = ship)
+  if not haveUpgrade and ship.upgradeModule > -1 and findItem(
+      inventory = ship.cargo, itemType = repairTools) > -1:
+    if findItem(inventory = ship.cargo, itemType = modulesList[ship.modules[
+        ship.upgradeModule].protoIndex].repairMaterial) > -1 and updatePosition(
+            ship = ship, order = upgrading, maxPriority = maxPriority):
+      updateOrders(ship = ship)
+  if (not haveTrader and needTrader) and updatePosition(ship = ship,
+      order = talk, maxPriority = maxPriority):
+    updateOrders(ship = ship)
+  if (needClean and findItem(inventory = ship.cargo, itemType = cleaningTools) >
+      -1) and updatePosition(ship = ship, order = clean,
+          maxPriority = maxPriority):
+    updateOrders(ship = ship)
+  if canHeal and updatePosition(ship = ship, order = heal,
+      maxPriority = maxPriority):
+    updateOrders(ship = ship)
+  if (needRepairs and findItem(inventory = ship.cargo, itemType = repairTools) >
+      -1) and updatePosition(ship = ship, order = repair,
+          maxPriority = maxPriority):
+    updateOrders(ship = ship)
+
 proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
     RootEffect], contractual.} =
@@ -579,30 +634,10 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
       haveUpgrade = haveUpgrade, haveTrader = haveTrader, canHeal = canHeal,
       needGunners = needGunners, needCrafters = needCrafters,
       needClean = needClean, needRepairs = needRepairs, needTrader = needTrader, ship = ship)
-  if not havePilot and updatePosition(ship = ship, order = pilot):
-    updateOrders(ship = ship)
-  if not haveEngineer and updatePosition(ship = ship, order = engineer):
-    updateOrders(ship = ship)
-  if needGunners and updatePosition(ship = ship, order = gunner):
-    updateOrders(ship = ship)
-  if needCrafters and updatePosition(ship = ship, order = craft):
-    updateOrders(ship = ship)
-  if not haveUpgrade and ship.upgradeModule > -1 and findItem(
-      inventory = ship.cargo, itemType = repairTools) > -1:
-    if findItem(inventory = ship.cargo, itemType = modulesList[ship.modules[
-        ship.upgradeModule].protoIndex].repairMaterial) > -1 and updatePosition(
-            ship = ship, order = upgrading):
-      updateOrders(ship = ship)
-  if (not haveTrader and needTrader) and updatePosition(ship = ship, order = talk):
-    updateOrders(ship = ship)
-  if (needClean and findItem(inventory = ship.cargo, itemType = cleaningTools) >
-      -1) and updatePosition(ship = ship, order = clean):
-    updateOrders(ship = ship)
-  if canHeal and updatePosition(ship = ship, order = heal):
-    updateOrders(ship = ship)
-  if (needRepairs and findItem(inventory = ship.cargo, itemType = repairTools) >
-      -1) and updatePosition(ship = ship, order = repair):
-    updateOrders(ship = ship)
+  updateCrewOrders(havePilot = havePilot, haveEngineer = haveEngineer,
+      haveUpgrade = haveUpgrade, haveTrader = haveTrader, canHeal = canHeal,
+      needGunners = needGunners, needCrafters = needCrafters,
+      needClean = needClean, needRepairs = needRepairs, needTrader = needTrader, ship = ship)
   if combat:
     if updatePosition(ship = ship, order = defend):
       updateOrders(ship = ship)
@@ -610,35 +645,11 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
       updateOrders(ship = ship)
   if updatePosition(ship = ship, order = train):
     updateOrders(ship = ship)
-  if not havePilot and updatePosition(ship = ship, order = pilot,
-      maxPriority = false):
-    updateOrders(ship = ship)
-  if not haveEngineer and updatePosition(ship = ship, order = engineer,
-      maxPriority = false):
-    updateOrders(ship = ship)
-  if needGunners and updatePosition(ship = ship, order = gunner,
-      maxPriority = false):
-    updateOrders(ship = ship)
-  if needCrafters and updatePosition(ship = ship, order = craft,
-      maxPriority = false):
-    updateOrders(ship = ship)
-  if not haveUpgrade and ship.upgradeModule > -1 and findItem(
-      inventory = ship.cargo, itemType = repairTools) > -1:
-    if findItem(inventory = ship.cargo, itemType = modulesList[ship.modules[
-        ship.upgradeModule].protoIndex].repairMaterial) > -1 and updatePosition(
-            ship = ship, order = upgrading, maxPriority = false):
-      updateOrders(ship = ship)
-  if (not haveTrader and needTrader) and updatePosition(ship = ship,
-      order = talk, maxPriority = false):
-    updateOrders(ship = ship)
-  if (needClean and findItem(inventory = ship.cargo, itemType = cleaningTools) >
-      -1) and updatePosition(ship = ship, order = clean, maxPriority = false):
-    updateOrders(ship = ship)
-  if canHeal and updatePosition(ship = ship, order = heal, maxPriority = false):
-    updateOrders(ship = ship)
-  if (needRepairs and findItem(inventory = ship.cargo, itemType = repairTools) >
-      -1) and updatePosition(ship = ship, order = repair, maxPriority = false):
-    updateOrders(ship = ship)
+  updateCrewOrders(havePilot = havePilot, haveEngineer = haveEngineer,
+      haveUpgrade = haveUpgrade, haveTrader = haveTrader, canHeal = canHeal,
+      needGunners = needGunners, needCrafters = needCrafters,
+      needClean = needClean, needRepairs = needRepairs, needTrader = needTrader,
+      ship = ship, maxPriority = false)
   if combat:
     if updatePosition(ship = ship, order = defend, maxPriority = false):
       updateOrders(ship = ship)
