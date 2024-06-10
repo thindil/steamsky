@@ -359,6 +359,20 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       comboboxName = ".general.messagesorder").MessagesOrder
   gameSettings.autoSave = getComboboxValue(
       comboboxName = ".general.autosave").AutoSaveTime
+  let
+    themeCombobox = rootName & ".interface.theme"
+    themeName = tclEval2(script = themeCombobox & " get")
+  for index, theme in themesList.pairs:
+    if theme.name == $themeName:
+      gameSettings.interfaceTheme = index
+      break
+  tclEval(script = "ttk::style theme use " & gameSettings.interfaceTheme)
+  setTheme()
+  let mapView = ".gameframe.paned.mapframe.map"
+  if tclGetVar(varName = rootName & ".interface.rightbutton") == "1":
+    gameSettings.rightButton = true
+    tclEval(script = "bind " & mapView & " <Button-3> {ShowDestinationMenu %X %Y}")
+    tclEval(script = "bind " & mapView & " <Button-1> {}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
