@@ -271,8 +271,8 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
   let
     tclResult = tclEval2(script = table.canvas & " bbox all")
     coords = tclResult.split
-  if tclEval2(script = "winfo parent " & table.canvas) != tclEval2(
-      script = "winfo parent " & table.scrollbar):
+  if table.scrollbar.len == 0 or tclEval2(script = "winfo parent " &
+      table.canvas) != tclEval2(script = "winfo parent " & table.scrollbar):
     tclEval(script = table.canvas & " configure -height [expr " & coords[3] &
         " - " & coords[1] & "] -width [expr " & coords[2] & " - " & coords[0] & " + 5]")
   newY = table.rowHeight
