@@ -329,6 +329,36 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
   gameSettings.undockSpeed = (getComboboxValue(
       comboboxName = ".general.speed") + 1).ShipSpeed
+  gameSettings.autoCenter = getCheckboxValue(
+      checkboxName = ".general.autocenter")
+  gameSettings.autoReturn = getCheckboxValue(
+      checkboxName = ".general.autoreturn")
+  gameSettings.autoFinish = getCheckboxValue(
+      checkboxName = ".general.autofinish")
+  gameSettings.autoAskForBases = getCheckboxValue(
+      checkboxName = ".general.autoaskforbases")
+  gameSettings.autoAskForEvents = getCheckboxValue(
+      checkboxName = ".general.autoaskforevents")
+
+  proc getSpinboxValue(spinboxName: string): Natural =
+    let spinBox = rootName & spinboxName
+    return tclEval2(script = spinBox & " get").parseInt
+
+  gameSettings.lowFuel = getSpinboxValue(spinboxName = ".general.fuel")
+  gameSettings.lowDrinks = getSpinboxValue(spinboxName = ".general.drinks")
+  gameSettings.lowFood = getSpinboxValue(spinboxName = ".general.food")
+  gameSettings.autoMoveStop = getComboboxValue(
+      comboboxName = ".general.automovestop").AutoMoveBreak
+  gameSettings.messagesLimit = getSpinboxValue(
+      spinboxName = ".general.messageslimit")
+  gameSettings.savedMessages = getSpinboxValue(
+      spinboxName = ".general.savedMessages")
+  gameSettings.waitMinutes = getSpinboxValue(
+      spinboxName = ".general.waitinterval")
+  gameSettings.messagesOrder = getComboboxValue(
+      comboboxName = ".general.messagesorder").MessagesOrder
+  gameSettings.autoSave = getComboboxValue(
+      comboboxName = ".general.autosave").AutoSaveTime
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
