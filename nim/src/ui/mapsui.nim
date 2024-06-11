@@ -517,8 +517,42 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-proc setKeys() =
-  const tclCommandsArray: array[13, string] = ["{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader & "] == 0} {ShowGameMenu}}", "{" & mainPaned & ".mapframe.buttons.wait invoke}", "{ZoomMap raise}", "{ZoomMap lower}", "{InvokeButton $bframe.nw}", "{InvokeButton $bframe.n}", "{InvokeButton $bframe.ne}", "{InvokeButton $bframe.w}", "{InvokeButton $bframe.wait}", "{InvokeButton $bframe.e}", "{InvokeButton $bframe.sw}", "{InvokeButton $bframe.s}", "{InvokeButton $bframe.se}"]
+proc setKeys*() =
+  const tclCommandsArray: array[37, string] = [
+    "{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader &
+      "] == 0} {ShowGameMenu}}", "{" & mainPaned &
+      ".mapframe.buttons.wait invoke}", "{ZoomMap raise}", "{ZoomMap lower}",
+      "{InvokeButton $bframe.nw}", "{InvokeButton $bframe.n}",
+      "{InvokeButton $bframe.ne}", "{InvokeButton $bframe.w}",
+      "{InvokeButton $bframe.wait}", "{InvokeButton $bframe.e}",
+      "{InvokeButton $bframe.sw}", "{InvokeButton $bframe.s}",
+      "{InvokeButton $bframe.se}", "{InvokeButton $bframe.box.moveto}",
+      "{MoveMap centeronship}", "{MoveMap centeronhome}", "{MoveMap nw}",
+      "{MoveMap n}", "{MoveMap ne}", "{MoveMap w}", "{MoveMap e}",
+      "{MoveMap sw}", "{MoveMap s}", "{MoveMap se}", "{MoveCursor nw %x %y}",
+      "{MoveCursor n %x %y}", "{MoveCursor ne %x %y}", "{MoveCursor w %x %y}",
+      "{MoveCursor e %x %y}", "{MoveCursor sw %x %y}", "{MoveCursor s %x %y}",
+      "{MoveCursor se %x %y}", "{MoveCursor click %x %y}", "{" & mainPaned &
+      ".controls.buttons.box.speed current 0}", "{" & mainPaned &
+      ".controls.buttons.box.speed current 1}", "{" & mainPaned &
+      ".controls.buttons.box.speed current 2}", "{" & mainPaned & ".controls.buttons.box.speed current 3}"]
+  for index, command in tclCommandsArray:
+    var
+      pos = mapAccelerators[index + 1].rfind(sub = '-')
+      keyName = ""
+    if pos > -1:
+      keyName = mapAccelerators[index + 1][0 .. pos] & "KeyPress-" & mapAccelerators[index + 1][pos + 1 .. ^1]
+    else:
+      keyName = "KeyPress-" & mapAccelerators[index + 1]
+    tclEval(script = "bind . <" & keyName & "> {" & command & "}")
+  var
+    pos = fullScreenAccel.rfind(sub = '-')
+    keyName = ""
+  if pos > -1:
+    keyName = fullScreenAccel[0 .. pos] & "KeyPress-" & fullScreenAccel[pos + 1 .. ^1]
+  else:
+    keyName = "KeyPress-" & fullScreenAccel
+  tclEval(script = "bind . <" & keyName & "> {ToggleFullScreen}")
 
 import craftsui, gameoptions, helpui, mapsuicommands, messagesui, ordersmenu,
     shipsui, waitmenu
