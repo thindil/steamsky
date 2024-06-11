@@ -286,14 +286,6 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     var
       toolsIndex: int = -1
       requiredTool: string = ""
-    if toolsIndex > -1 and ship.crew[memberIndex].equipment[tool] != toolsIndex:
-      updateInventory(memberIndex = memberIndex, amount = 1,
-          protoIndex = ship.cargo[toolsIndex].protoIndex,
-              durability = ship.cargo[
-          toolsIndex].durability, ship = ship)
-      updateCargo(ship = ship, amount = -1, cargoIndex = toolsIndex)
-      ship.crew[memberIndex].equipment[tool] = findItem(inventory = ship.crew[
-          memberIndex].inventory, itemType = requiredTool)
     toolsIndex = ship.crew[memberIndex].equipment[tool]
     if toolsIndex > 0 and itemsList[ship.crew[memberIndex].inventory[
         toolsIndex].protoIndex].itemType != requiredTool:
