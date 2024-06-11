@@ -431,6 +431,19 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       generalAccelerators[index - 48] = tclEval2(script = accel.entryName & " get")
     accel.shortcut = tclEval2(script = accel.entryName & " get")
+  var
+    pos = accels[^1].shortcut.rfind(sub = '-')
+    keyName = ""
+  if pos > -1:
+    keyName = accels[^1].shortcut[0 .. pos] & "KeyPress-" & accels[^1].shortcut[pos + 1 .. ^1]
+  else:
+    keyName = "KeyPress-" & accels[^1].shortcut
+  tclEval(script = "bind . <" & keyName & "> {}")
+  fullScreenAccel = tclEval2(script = accels[48].entryName & " get")
+  let keyFile: File = open(saveDirectory & "keys.cfg", fmWrite)
+  for accel in accels:
+    keyFile.writeLine(accel.configName & " = " & accel.shortcut)
+  keyFile.close
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
