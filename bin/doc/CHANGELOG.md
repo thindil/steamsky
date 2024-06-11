@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Crash on starting a new game
 - Crash when a in-game events expire
 - Various small problems with displaying the game UI
+- Crash when trying to change order for a crew member after assigned another
 
 ## [9.9] - 2024-04-14
 
