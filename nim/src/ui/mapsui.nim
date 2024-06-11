@@ -20,7 +20,7 @@ import ../[basestypes, config, game, maps, missions, statistics, stories, tk, ty
 import coreui, dialogs, themes, updateheader, utilsui2
 
 var
-  centerX*, centerY*: Positive  ## Coordinates of the center point on the map
+  centerX*, centerY*: Positive          ## Coordinates of the center point on the map
   mapView = ".gameframe.paned.mapframe.map"
   menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]
@@ -33,8 +33,8 @@ var
       "Control-KP_Home", "Control-KP_Up", "Control-KP_Prior", "Control-KP_Left",
       "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
       "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
-      "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
-  fullScreenAccel* = "Control-f" ## Keyboard shortcut for toggle full screen
+      "Control-c", "Control-d"]         ## The keyboard shortcuts used on the map
+  fullScreenAccel* = "Control-f"        ## Keyboard shortcut for toggle full screen
   defaultFontSizes*: array[3, Positive] ## The default sizes of fonts
 
 proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
@@ -516,6 +516,9 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     insertText(newText = eventInfoText, tagName = color)
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
+
+proc setKeys() =
+  const tclCommandsArray: array[13, string] = ["{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader & "] == 0} {ShowGameMenu}}", "{" & mainPaned & ".mapframe.buttons.wait invoke}", "{ZoomMap raise}", "{ZoomMap lower}", "{InvokeButton $bframe.nw}", "{InvokeButton $bframe.n}", "{InvokeButton $bframe.ne}", "{InvokeButton $bframe.w}", "{InvokeButton $bframe.wait}", "{InvokeButton $bframe.e}", "{InvokeButton $bframe.sw}", "{InvokeButton $bframe.s}", "{InvokeButton $bframe.se}"]
 
 import craftsui, gameoptions, helpui, mapsuicommands, messagesui, ordersmenu,
     shipsui, waitmenu
