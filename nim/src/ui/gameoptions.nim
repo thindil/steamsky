@@ -403,7 +403,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   gameSettings.listsLimit = getSpinboxValue(
       spinboxName = ".interface.listslimit")
   saveConfig()
-  for index, accel in accels:
+  for index, accel in accels.mpairs:
     var
       pos = accel.shortcut.rfind(sub = '-')
       keyName = ""
@@ -413,6 +413,24 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       keyName = "KeyPress-" & accel.shortcut
     tclEval(script = "bind . <" & keyName & "> {}")
+    if index < 11:
+      menuAccelerators[index + 1] = tclEval2(script = accel.entryName & " get")
+      pos = menuAccelerators[index + 1].rfind(sub = '-')
+      keyName = ""
+      if pos > -1:
+        keyName = menuAccelerators[index + 1][0 .. pos] & "KeyPress-" &
+            menuAccelerators[index + 1][pos + 1 .. ^1]
+      else:
+        keyName = "KeyPress-" & menuAccelerators[index + 1]
+      tclEval(script = "bind . <" & keyName & "> {InvokeMenu " &
+          menuAccelerators[index + 1] & "}")
+    elif index < 48:
+      mapAccelerators[index - 10] = tclEval2(script = accel.entryName & " get")
+    elif index == 48:
+      discard
+    else:
+      generalAccelerators[index - 48] = tclEval2(script = accel.entryName & " get")
+    accel.shortcut = tclEval2(script = accel.entryName & " get")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
