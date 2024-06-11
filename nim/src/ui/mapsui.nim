@@ -517,7 +517,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-proc setKeys*() =
+proc setKeys*() {.sideEffect, raises: [], tags: [].} =
   const tclCommandsArray: array[37, string] = [
     "{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader &
       "] == 0} {ShowGameMenu}}", "{" & mainPaned &
