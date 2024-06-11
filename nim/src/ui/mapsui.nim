@@ -796,3 +796,6 @@ proc setAdaStartPoint(x, y: cint) {.raises: [], tags: [], exportc.} =
 
 proc getAdaFontSizes(map, inter, help: cint) {.raises: [], tags: [], exportc.} =
   defaultFontSizes = [map.Positive, inter, help]
+
+proc setAdaKeys() {.raises: [], tags: [], exportc.} =
+  setKeys()

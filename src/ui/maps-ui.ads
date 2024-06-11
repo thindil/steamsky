@@ -61,7 +61,10 @@ package Maps.UI is
    -- FUNCTION
    -- Set keyboard shortcuts
    -- SOURCE
-   procedure Set_Keys;
+   procedure Set_Keys with
+      Import => True,
+      Convention => C,
+      External_Name => "setAdaKeys";
    -- ****
 
 -- Temporary code to interact with Nim

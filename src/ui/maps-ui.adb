@@ -561,107 +561,107 @@ package body Maps.UI is
       Show_Ada_Sky_Map(Cle => (if Clear then 1 else 0));
    end Show_Sky_Map;
 
-   procedure Set_Keys is
-      Tcl_Commands_Array: constant array(1 .. 37) of Unbounded_String :=
-        (1 =>
-           To_Unbounded_String
-             (Source =>
-                "{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
-                Game_Header & "] == 0} {ShowGameMenu}}"),
-         2 =>
-           To_Unbounded_String
-             (Source => "{" & Main_Paned & ".mapframe.buttons.wait invoke}"),
-         3 => To_Unbounded_String(Source => "{ZoomMap raise}"),
-         4 => To_Unbounded_String(Source => "{ZoomMap lower}"),
-         5 => To_Unbounded_String(Source => "{InvokeButton $bframe.nw}"),
-         6 => To_Unbounded_String(Source => "{InvokeButton $bframe.n}"),
-         7 => To_Unbounded_String(Source => "{InvokeButton $bframe.ne}"),
-         8 => To_Unbounded_String(Source => "{InvokeButton $bframe.w}"),
-         9 => To_Unbounded_String(Source => "{InvokeButton $bframe.wait}"),
-         10 => To_Unbounded_String(Source => "{InvokeButton $bframe.e}"),
-         11 => To_Unbounded_String(Source => "{InvokeButton $bframe.sw}"),
-         12 => To_Unbounded_String(Source => "{InvokeButton $bframe.s}"),
-         13 => To_Unbounded_String(Source => "{InvokeButton $bframe.se}"),
-         14 =>
-           To_Unbounded_String(Source => "{InvokeButton $bframe.box.moveto}"),
-         15 => To_Unbounded_String(Source => "{MoveMap centeronship}"),
-         16 => To_Unbounded_String(Source => "{MoveMap centeronhome}"),
-         17 => To_Unbounded_String(Source => "{MoveMap nw}"),
-         18 => To_Unbounded_String(Source => "{MoveMap n}"),
-         19 => To_Unbounded_String(Source => "{MoveMap ne}"),
-         20 => To_Unbounded_String(Source => "{MoveMap w}"),
-         21 => To_Unbounded_String(Source => "{MoveMap e}"),
-         22 => To_Unbounded_String(Source => "{MoveMap sw}"),
-         23 => To_Unbounded_String(Source => "{MoveMap s}"),
-         24 => To_Unbounded_String(Source => "{MoveMap se}"),
-         25 => To_Unbounded_String(Source => "{MoveCursor nw %x %y}"),
-         26 => To_Unbounded_String(Source => "{MoveCursor n %x %y}"),
-         27 => To_Unbounded_String(Source => "{MoveCursor ne %x %y}"),
-         28 => To_Unbounded_String(Source => "{MoveCursor w %x %y}"),
-         29 => To_Unbounded_String(Source => "{MoveCursor e %x %y}"),
-         30 => To_Unbounded_String(Source => "{MoveCursor sw %x %y}"),
-         31 => To_Unbounded_String(Source => "{MoveCursor s %x %y}"),
-         32 => To_Unbounded_String(Source => "{MoveCursor se %x %y}"),
-         33 => To_Unbounded_String(Source => "{MoveCursor click %x %y}"),
-         34 =>
-           To_Unbounded_String
-             (Source =>
-                "{" & Main_Paned & ".controls.buttons.box.speed current 0}"),
-         35 =>
-           To_Unbounded_String
-             (Source =>
-                "{" & Main_Paned & ".controls.buttons.box.speed current 1}"),
-         36 =>
-           To_Unbounded_String
-             (Source =>
-                "{" & Main_Paned & ".controls.buttons.box.speed current 2}"),
-         37 =>
-           To_Unbounded_String
-             (Source =>
-                "{" & Main_Paned & ".controls.buttons.box.speed current 3}"));
-   begin
-      Bind_Commands_Loop :
-      for I in Tcl_Commands_Array'Range loop
-         Bind_To_Main_Window
-           (Interp => Get_Context,
-            Sequence =>
-              "<" &
-              To_String
-                (Source =>
-                   Insert
-                     (Source =>
-                        To_Unbounded_String
-                          (Source => Get_Map_Accelerator(Index => I)),
-                      Before =>
-                        Index
-                          (Source =>
-                             To_Unbounded_String
-                               (Source => Get_Map_Accelerator(Index => I)),
-                           Pattern => "-", Going => Backward) +
-                        1,
-                      New_Item => "KeyPress-")) &
-              ">",
-            Script => To_String(Source => Tcl_Commands_Array(I)));
-      end loop Bind_Commands_Loop;
-      Bind_To_Main_Window
-        (Interp => Get_Context,
-         Sequence =>
-           "<" &
-           To_String
-             (Source =>
-                Insert
-                  (Source =>
-                     To_Unbounded_String(Source => Get_Full_Screen_Accel),
-                   Before =>
-                     Index
-                       (Source =>
-                          To_Unbounded_String(Source => Get_Full_Screen_Accel),
-                        Pattern => "-", Going => Backward) +
-                     1,
-                   New_Item => "KeyPress-")) &
-           ">",
-         Script => "{ToggleFullScreen}");
-   end Set_Keys;
+--   procedure Set_Keys is
+--      Tcl_Commands_Array: constant array(1 .. 37) of Unbounded_String :=
+--        (1 =>
+--           To_Unbounded_String
+--             (Source =>
+--                "{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
+--                Game_Header & "] == 0} {ShowGameMenu}}"),
+--         2 =>
+--           To_Unbounded_String
+--             (Source => "{" & Main_Paned & ".mapframe.buttons.wait invoke}"),
+--         3 => To_Unbounded_String(Source => "{ZoomMap raise}"),
+--         4 => To_Unbounded_String(Source => "{ZoomMap lower}"),
+--         5 => To_Unbounded_String(Source => "{InvokeButton $bframe.nw}"),
+--         6 => To_Unbounded_String(Source => "{InvokeButton $bframe.n}"),
+--         7 => To_Unbounded_String(Source => "{InvokeButton $bframe.ne}"),
+--         8 => To_Unbounded_String(Source => "{InvokeButton $bframe.w}"),
+--         9 => To_Unbounded_String(Source => "{InvokeButton $bframe.wait}"),
+--         10 => To_Unbounded_String(Source => "{InvokeButton $bframe.e}"),
+--         11 => To_Unbounded_String(Source => "{InvokeButton $bframe.sw}"),
+--         12 => To_Unbounded_String(Source => "{InvokeButton $bframe.s}"),
+--         13 => To_Unbounded_String(Source => "{InvokeButton $bframe.se}"),
+--         14 =>
+--           To_Unbounded_String(Source => "{InvokeButton $bframe.box.moveto}"),
+--         15 => To_Unbounded_String(Source => "{MoveMap centeronship}"),
+--         16 => To_Unbounded_String(Source => "{MoveMap centeronhome}"),
+--         17 => To_Unbounded_String(Source => "{MoveMap nw}"),
+--         18 => To_Unbounded_String(Source => "{MoveMap n}"),
+--         19 => To_Unbounded_String(Source => "{MoveMap ne}"),
+--         20 => To_Unbounded_String(Source => "{MoveMap w}"),
+--         21 => To_Unbounded_String(Source => "{MoveMap e}"),
+--         22 => To_Unbounded_String(Source => "{MoveMap sw}"),
+--         23 => To_Unbounded_String(Source => "{MoveMap s}"),
+--         24 => To_Unbounded_String(Source => "{MoveMap se}"),
+--         25 => To_Unbounded_String(Source => "{MoveCursor nw %x %y}"),
+--         26 => To_Unbounded_String(Source => "{MoveCursor n %x %y}"),
+--         27 => To_Unbounded_String(Source => "{MoveCursor ne %x %y}"),
+--         28 => To_Unbounded_String(Source => "{MoveCursor w %x %y}"),
+--         29 => To_Unbounded_String(Source => "{MoveCursor e %x %y}"),
+--         30 => To_Unbounded_String(Source => "{MoveCursor sw %x %y}"),
+--         31 => To_Unbounded_String(Source => "{MoveCursor s %x %y}"),
+--         32 => To_Unbounded_String(Source => "{MoveCursor se %x %y}"),
+--         33 => To_Unbounded_String(Source => "{MoveCursor click %x %y}"),
+--         34 =>
+--           To_Unbounded_String
+--             (Source =>
+--                "{" & Main_Paned & ".controls.buttons.box.speed current 0}"),
+--         35 =>
+--           To_Unbounded_String
+--             (Source =>
+--                "{" & Main_Paned & ".controls.buttons.box.speed current 1}"),
+--         36 =>
+--           To_Unbounded_String
+--             (Source =>
+--                "{" & Main_Paned & ".controls.buttons.box.speed current 2}"),
+--         37 =>
+--           To_Unbounded_String
+--             (Source =>
+--                "{" & Main_Paned & ".controls.buttons.box.speed current 3}"));
+--   begin
+--      Bind_Commands_Loop :
+--      for I in Tcl_Commands_Array'Range loop
+--         Bind_To_Main_Window
+--           (Interp => Get_Context,
+--            Sequence =>
+--              "<" &
+--              To_String
+--                (Source =>
+--                   Insert
+--                     (Source =>
+--                        To_Unbounded_String
+--                          (Source => Get_Map_Accelerator(Index => I)),
+--                      Before =>
+--                        Index
+--                          (Source =>
+--                             To_Unbounded_String
+--                               (Source => Get_Map_Accelerator(Index => I)),
+--                           Pattern => "-", Going => Backward) +
+--                        1,
+--                      New_Item => "KeyPress-")) &
+--              ">",
+--            Script => To_String(Source => Tcl_Commands_Array(I)));
+--      end loop Bind_Commands_Loop;
+--      Bind_To_Main_Window
+--        (Interp => Get_Context,
+--         Sequence =>
+--           "<" &
+--           To_String
+--             (Source =>
+--                Insert
+--                  (Source =>
+--                     To_Unbounded_String(Source => Get_Full_Screen_Accel),
+--                   Before =>
+--                     Index
+--                       (Source =>
+--                          To_Unbounded_String(Source => Get_Full_Screen_Accel),
+--                        Pattern => "-", Going => Backward) +
+--                     1,
+--                   New_Item => "KeyPress-")) &
+--           ">",
+--         Script => "{ToggleFullScreen}");
+--   end Set_Keys;
 
    function Get_General_Accelerator(Index: Positive) return String is
 
