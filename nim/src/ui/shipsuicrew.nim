@@ -1408,7 +1408,7 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
         memberIndex = memberIndex) & "}")
   except:
     return showError("Can't get the current order.")
-  setAvailableOrders(memberIndex = memberIndex + 1, ordersBox = ordersBox,
+  setAvailableOrders(memberIndex = memberIndex, ordersBox = ordersBox,
       button = button)
   tclEval(script = "focus " & ordersBox)
   return tclOk
