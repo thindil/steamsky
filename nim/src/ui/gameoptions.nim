@@ -313,7 +313,8 @@ proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
   tclEval(script = closeButton & " configure -command ShowSkyMap")
   tclEval(script = "grid remove " & closeButton)
   const rootName = ".gameframe.paned.optionsframe.canvas.options"
@@ -327,8 +328,10 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     let comboBox = rootName & comboboxName
     return tclEval2(script = comboBox & " current").parseInt
 
-  gameSettings.undockSpeed = (getComboboxValue(
-      comboboxName = ".general.speed") + 1).ShipSpeed
+  gameSettings.undockSpeed = try:
+      (getComboboxValue(comboboxName = ".general.speed") + 1).ShipSpeed
+    except:
+      return showError(message = "Can't get undock speed.")
   gameSettings.autoCenter = getCheckboxValue(
       checkboxName = ".general.autocenter")
   gameSettings.autoReturn = getCheckboxValue(
@@ -344,21 +347,42 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     let spinBox = rootName & spinboxName
     return tclEval2(script = spinBox & " get").parseInt
 
-  gameSettings.lowFuel = getSpinboxValue(spinboxName = ".general.fuel")
-  gameSettings.lowDrinks = getSpinboxValue(spinboxName = ".general.drinks")
-  gameSettings.lowFood = getSpinboxValue(spinboxName = ".general.food")
-  gameSettings.autoMoveStop = getComboboxValue(
-      comboboxName = ".general.automovestop").AutoMoveBreak
-  gameSettings.messagesLimit = getSpinboxValue(
-      spinboxName = ".general.messageslimit")
-  gameSettings.savedMessages = getSpinboxValue(
-      spinboxName = ".general.savedMessages")
-  gameSettings.waitMinutes = getSpinboxValue(
-      spinboxName = ".general.waitinterval")
-  gameSettings.messagesOrder = getComboboxValue(
-      comboboxName = ".general.messagesorder").MessagesOrder
-  gameSettings.autoSave = getComboboxValue(
-      comboboxName = ".general.autosave").AutoSaveTime
+  gameSettings.lowFuel = try:
+      getSpinboxValue(spinboxName = ".general.fuel")
+    except:
+      return showError(message = "Can't get low fuel.")
+  gameSettings.lowDrinks = try:
+      getSpinboxValue(spinboxName = ".general.drinks")
+    except:
+      return showError(message = "Can't get low drinks.")
+  gameSettings.lowFood = try:
+      getSpinboxValue(spinboxName = ".general.food")
+    except:
+      return showError(message = "Can't get low food.")
+  gameSettings.autoMoveStop = try:
+      getComboboxValue(comboboxName = ".general.automovestop").AutoMoveBreak
+    except:
+      return showError(message = "Can't get low auto move stop.")
+  gameSettings.messagesLimit = try:
+      getSpinboxValue(spinboxName = ".general.messageslimit")
+    except:
+      return showError(message = "Can't get messages limit.")
+  gameSettings.savedMessages = try:
+      getSpinboxValue(spinboxName = ".general.savedMessages")
+    except:
+      return showError(message = "Can't get saved messages.")
+  gameSettings.waitMinutes = try:
+      getSpinboxValue(spinboxName = ".general.waitinterval")
+    except:
+      return showError(message = "Can't get wait minutes.")
+  gameSettings.messagesOrder = try:
+      getComboboxValue(comboboxName = ".general.messagesorder").MessagesOrder
+    except:
+      return showError(message = "Can't get messages order.")
+  gameSettings.autoSave = try:
+      getComboboxValue(comboboxName = ".general.autosave").AutoSaveTime
+    except:
+      return showError(message = "Can't get auto save.")
   let
     themeCombobox = rootName & ".interface.theme"
     themeName = tclEval2(script = themeCombobox & " get")
@@ -391,18 +415,32 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     gameSettings.fullScreen = false
     tclEval(script = "wm attributes . -fullscreen 0")
-  gameSettings.autoCloseMessagesTime = getSpinboxValue(
-      spinboxName = ".interface.closemessages")
+  gameSettings.autoCloseMessagesTime = try:
+      getSpinboxValue(spinboxName = ".interface.closemessages")
+    except:
+      return showError(message = "Can't get close messages time.")
   gameSettings.showNumbers = getCheckboxValue(
       checkboxName = ".interface.shownumbers")
-  gameSettings.mapFontSize = getSpinboxValue(spinboxName = ".interface.mapfont")
-  gameSettings.helpFontSize = getSpinboxValue(
-      spinboxName = ".interface.helpfont")
-  gameSettings.interfaceFontSize = getSpinboxValue(
-      spinboxName = ".interface.interfacefont")
-  gameSettings.listsLimit = getSpinboxValue(
-      spinboxName = ".interface.listslimit")
-  saveConfig()
+  gameSettings.mapFontSize = try:
+      getSpinboxValue(spinboxName = ".interface.mapfont")
+    except:
+      return showError(message = "Can't get map font size.")
+  gameSettings.helpFontSize = try:
+      getSpinboxValue(spinboxName = ".interface.helpfont")
+    except:
+      return showError(message = "Can't get help font size.")
+  gameSettings.interfaceFontSize = try:
+      getSpinboxValue(spinboxName = ".interface.interfacefont")
+    except:
+      return showError(message = "Can't get interface font size.")
+  gameSettings.listsLimit = try:
+      getSpinboxValue(spinboxName = ".interface.listslimit")
+    except:
+      return showError(message = "Can't get lists limit.")
+  try:
+    saveConfig()
+  except:
+    return showError(message = "Can't save configuration file.")
   for index, accel in accels.mpairs:
     var
       pos = accel.shortcut.rfind(sub = '-')
@@ -431,9 +469,15 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       generalAccelerators[index - 48] = tclEval2(script = accel.entryName & " get")
     accel.shortcut = tclEval2(script = accel.entryName & " get")
-  let keyFile: File = open(saveDirectory & "keys.cfg", fmWrite)
+  let keyFile: File = try:
+        open(saveDirectory & "keys.cfg", fmWrite)
+      except:
+        return showError(message = "Can't open keys configuration file.")
   for accel in accels:
-    keyFile.writeLine(accel.configName & " = " & accel.shortcut)
+    try:
+      keyFile.writeLine(accel.configName & " = " & accel.shortcut)
+    except:
+      return showError(message = "Can't save keyboard accelerator.")
   keyFile.close
   setKeys()
   if argv[1] == "map":
