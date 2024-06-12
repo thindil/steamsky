@@ -53,9 +53,6 @@ package body ErrorDialog is
       Error_Text, Error_Details: Unbounded_String := Null_Unbounded_String;
       Can_Save: Boolean := True;
    begin
-      if Natural(Player_Ship.Crew.Length) > 0 then
-         Save_Game;
-      end if;
       Append
         (Source => Error_Text,
          New_Item =>
@@ -95,6 +92,9 @@ package body ErrorDialog is
            (File => Error_File,
             Item => To_String(Source => Error_Text & Error_Details));
          Close(File => Error_File);
+      end if;
+      if Natural(Player_Ship.Crew.Length) > 0 then
+         Save_Game;
       end if;
       Show_Error_Dialog_Block :
       declare
