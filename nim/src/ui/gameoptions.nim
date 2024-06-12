@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[config, game, tk, types]
-import coreui, mapsui, themes, utilsui2
+import coreui, combatui, mapsui, themes, utilsui2
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -435,6 +435,11 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   for accel in accels:
     keyFile.writeLine(accel.configName & " = " & accel.shortcut)
   keyFile.close
+  setKeys()
+  if argv[1] == "map":
+    showSkyMap(clear = true)
+  else:
+    showCombatUi(newCombat = false)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
