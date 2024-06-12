@@ -173,6 +173,50 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
   ##
   ## Returns the modified parameter ship with updated info about the ship
 
+proc checkModule(moduleIndex2: int; ship: var ShipRecord;
+    givenOrder: CrewOrders; memberName: string;
+    memberIndex: Natural) {.sideEffect, raises: [CrewOrderError], tags: [],
+    contractual.} =
+  ## Check the module for given order. If the module cannot be used, raise
+  ## CrewOrderError exception.
+  ##
+  ## * moduleIndex2 - the index of the module to check
+  ## * ship         - the ship in which the module will be checked
+  ## * givenOrder   - the given order for the crew member
+  ## * memberName   - the name of the crew member
+  ## * memberIndex  - the index in the crew of the crew member
+  ##
+  ## Returns modified parameter ship
+  body:
+    if moduleIndex2 == -1 and ship.crew == playerShip.crew:
+      case givenOrder
+        of pilot:
+          raise newException(exceptn = CrewOrderError, message = memberName & " can't start piloting because the cockpit is destroyed or you don't have cockpit.")
+        of engineer:
+          raise newException(exceptn = CrewOrderError, message = memberName & " can't start engineer's duty because all of the engines are destroyed or you don't have engine.")
+        of gunner:
+          raise newException(exceptn = CrewOrderError, message = memberName & " can't start operating gun because all of the guns are destroyed or you don't have any installed.")
+        of rest:
+          block takeCabin:
+            for index, module in ship.modules:
+              if module.mType == ModuleType2.cabin and module.durability > 0:
+                for i, owner in module.owner:
+                  if owner == -1:
+                    ship.modules[index].owner[i] = memberIndex;
+                    addMessage(message = (memberName & " takes " & module.name &
+                        " as their own cabin."),
+                        mType = otherMessage)
+                    break takeCabin
+        else:
+          discard
+    block releaseModule:
+      for index, module in ship.modules:
+        if module.mType != ModuleType2.cabin:
+          for i, owner in module.owner:
+            if owner == memberIndex:
+              ship.modules[index].owner[i] = -1
+              break releaseModule
+
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
     checkPriorities: bool = true) {.sideEffect, raises: [CrewOrderError,
@@ -255,34 +299,9 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
             break
     else:
       moduleIndex2 = moduleIndex
-    if moduleIndex2 == -1 and ship.crew == playerShip.crew:
-      case givenOrder
-        of pilot:
-          raise newException(exceptn = CrewOrderError, message = memberName & " can't start piloting because the cockpit is destroyed or you don't have cockpit.")
-        of engineer:
-          raise newException(exceptn = CrewOrderError, message = memberName & " can't start engineer's duty because all of the engines are destroyed or you don't have engine.")
-        of gunner:
-          raise newException(exceptn = CrewOrderError, message = memberName & " can't start operating gun because all of the guns are destroyed or you don't have any installed.")
-        of rest:
-          block takeCabin:
-            for index, module in ship.modules:
-              if module.mType == ModuleType2.cabin and module.durability > 0:
-                for i, owner in module.owner:
-                  if owner == -1:
-                    ship.modules[index].owner[i] = memberIndex;
-                    addMessage(message = (memberName & " takes " & module.name &
-                        " as their own cabin."),
-                        mType = otherMessage)
-                    break takeCabin
-        else:
-          discard
-    block releaseModule:
-      for index, module in ship.modules:
-        if module.mType != ModuleType2.cabin:
-          for i, owner in module.owner:
-            if owner == memberIndex:
-              ship.modules[index].owner[i] = -1
-              break releaseModule
+    checkModule(moduleIndex2 = moduleIndex2, ship = ship,
+        givenOrder = givenOrder, memberName = memberName,
+        memberIndex = memberIndex)
     var
       toolsIndex: int = -1
       requiredTool: string = ""
