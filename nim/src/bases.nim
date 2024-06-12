@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -404,10 +404,11 @@ proc getAdaRecruits(recruits: array[1..20, AdaRecruitData];
 proc setAdaRecruits(recruits: var array[1..20, AdaRecruitData];
     baseIndex: cint) {.raises: [], tags: [], exportc.} =
   var index = 1
+  for recruit in recruits.mitems:
+    recruit.name = "".cstring
   for recruit in skyBases[baseIndex].recruits:
     recruits[index] = adaRecruitFromNim(recruit = recruit)
     index.inc
-  recruits[index].name = "".cstring
 
 proc getAdaBaseType(baseIndex: cint; baseType: cstring) {.raises: [], tags: [], exportc.} =
   skyBases[baseIndex].baseType = $baseType
