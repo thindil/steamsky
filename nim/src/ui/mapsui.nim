@@ -518,6 +518,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
 proc setKeys*() {.sideEffect, raises: [], tags: [].} =
+  ## Set the keyboard shortcuts for the map
   const tclCommandsArray: array[37, string] = [
     "{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader &
       "] == 0} {ShowGameMenu}}", "{" & mainPaned &
@@ -544,7 +545,7 @@ proc setKeys*() {.sideEffect, raises: [], tags: [].} =
       keyName = mapAccelerators[index + 1][0 .. pos] & "KeyPress-" & mapAccelerators[index + 1][pos + 1 .. ^1]
     else:
       keyName = "KeyPress-" & mapAccelerators[index + 1]
-    tclEval(script = "bind . <" & keyName & "> {" & command & "}")
+    tclEval(script = "bind . <" & keyName & "> " & command)
   var
     pos = fullScreenAccel.rfind(sub = '-')
     keyName = ""
