@@ -217,6 +217,84 @@ proc checkModule(moduleIndex2: int; ship: var ShipRecord;
               ship.modules[index].owner[i] = -1
               break releaseModule
 
+proc checkTools(ship: var ShipRecord; memberIndex: Natural;
+    givenOrder: CrewOrders; moduleIndex: int;
+        memberName: string): bool {.sideEffect,
+    raises: [KeyError, CrewNoSpaceError, CrewOrderError], tags: [],
+    contractual.} =
+  ## Check the tools for the given order. If there no needed tools available,
+  ## raise CrewOrderError.
+  ##
+  ## * ship        - the ship in which the module will be checked
+  ## * memberIndex - the index in the crew of the crew member
+  ## * givenOrder  - the given order for the crew member
+  ## * moduleIndex - the index of the module used in the given order
+  ## * memberName  - the name of the crew member
+  ##
+  ## Returns modified parameter ship and true if tools exists, otherwise false.
+  body:
+    var
+      toolsIndex: int = -1
+      requiredTool: string = ""
+    toolsIndex = ship.crew[memberIndex].equipment[tool]
+    if toolsIndex > 0 and itemsList[ship.crew[memberIndex].inventory[
+        toolsIndex].protoIndex].itemType != requiredTool:
+      updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
+          toolsIndex].protoIndex, amount = 1, durability = ship.crew[
+          memberIndex].inventory[toolsIndex].durability)
+      updateInventory(memberIndex = memberIndex, amount = -1,
+          inventoryIndex = toolsIndex, ship = ship)
+      toolsIndex = -1
+    var toolQuality: ItemsDurability = defaultItemDurability
+    if givenOrder in [upgrading, repair, clean, train]:
+      if givenOrder == clean:
+        requiredTool = cleaningTools
+      elif givenOrder == train:
+        requiredTool = skillsList[ship.modules[moduleIndex].trainedSkill].tool
+        toolQuality = getTrainingToolQuality(memberIndex = memberIndex,
+            skillIndex = ship.modules[moduleIndex].trainedSkill)
+      else:
+        requiredTool = repairTools
+      if requiredTool.len > 0:
+        if toolsIndex == -1:
+          toolsIndex = findItem(inventory = ship.cargo, itemType = requiredTool,
+              quality = toolQuality)
+          if toolsIndex == -1:
+            toolsIndex = findItem(inventory = ship.crew[memberIndex].inventory,
+                itemType = requiredTool, quality = toolQuality)
+            if toolsIndex > -1:
+              ship.crew[memberIndex].equipment[tool] = toolsIndex
+          else:
+            ship.crew[memberIndex].equipment[tool] = -1
+        if toolsIndex == -1:
+          case givenOrder
+            of repair:
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start repairing ship because you don't have the proper tools.")
+            of clean:
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start cleaning ship because you don't have any cleaning tools.")
+            of upgrading:
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start upgrading module because you don't have the proper tools.")
+            of train:
+              raise newException(exceptn = CrewOrderError,
+                  message = memberName & " can't start training because you don't have the proper tools.")
+            else:
+              return false
+    if givenOrder == rest:
+      ship.crew[memberIndex].previousOrder = rest
+      if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
+        toolsIndex = ship.crew[memberIndex].equipment[tool]
+        if toolsIndex > -1:
+          updateCargo(ship = ship, protoIndex = ship.crew[
+              memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
+                  durability = ship.crew[
+              memberIndex].inventory[toolsIndex].durability)
+          updateInventory(memberIndex = memberIndex, amount = -1,
+              inventoryIndex = toolsIndex, ship = ship)
+    return true
+
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
     checkPriorities: bool = true) {.sideEffect, raises: [CrewOrderError,
@@ -302,59 +380,14 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     checkModule(moduleIndex2 = moduleIndex2, ship = ship,
         givenOrder = givenOrder, memberName = memberName,
         memberIndex = memberIndex)
-    var
-      toolsIndex: int = -1
-      requiredTool: string = ""
-    toolsIndex = ship.crew[memberIndex].equipment[tool]
-    if toolsIndex > 0 and itemsList[ship.crew[memberIndex].inventory[
-        toolsIndex].protoIndex].itemType != requiredTool:
-      updateCargo(ship = ship, protoIndex = ship.crew[memberIndex].inventory[
-          toolsIndex].protoIndex, amount = 1, durability = ship.crew[
-          memberIndex].inventory[toolsIndex].durability)
-      updateInventory(memberIndex = memberIndex, amount = -1,
-          inventoryIndex = toolsIndex, ship = ship)
-      toolsIndex = -1
-    var toolQuality: ItemsDurability = defaultItemDurability
-    if givenOrder in [upgrading, repair, clean, train]:
-      if givenOrder == clean:
-        requiredTool = cleaningTools
-      elif givenOrder == train:
-        requiredTool = skillsList[ship.modules[moduleIndex].trainedSkill].tool
-        toolQuality = getTrainingToolQuality(memberIndex = memberIndex,
-            skillIndex = ship.modules[moduleIndex].trainedSkill)
-      else:
-        requiredTool = repairTools
-      if requiredTool.len > 0:
-        if toolsIndex == -1:
-          toolsIndex = findItem(inventory = ship.cargo, itemType = requiredTool,
-              quality = toolQuality)
-          if toolsIndex == -1:
-            toolsIndex = findItem(inventory = ship.crew[memberIndex].inventory,
-                itemType = requiredTool, quality = toolQuality)
-            if toolsIndex > -1:
-              ship.crew[memberIndex].equipment[tool] = toolsIndex
-          else:
-            ship.crew[memberIndex].equipment[tool] = -1
-        if toolsIndex == -1:
-          case givenOrder
-            of repair:
-              raise newException(exceptn = CrewOrderError,
-                  message = memberName & " can't start repairing ship because you don't have the proper tools.")
-            of clean:
-              raise newException(exceptn = CrewOrderError,
-                  message = memberName & " can't start cleaning ship because you don't have any cleaning tools.")
-            of upgrading:
-              raise newException(exceptn = CrewOrderError,
-                  message = memberName & " can't start upgrading module because you don't have the proper tools.")
-            of train:
-              raise newException(exceptn = CrewOrderError,
-                  message = memberName & " can't start training because you don't have the proper tools.")
-            else:
-              return
+    if not checkTools(ship = ship, memberIndex = memberIndex,
+        givenOrder = givenOrder, moduleIndex = moduleIndex,
+        memberName = memberName):
+      return
     if givenOrder == rest:
       ship.crew[memberIndex].previousOrder = rest
       if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
-        toolsIndex = ship.crew[memberIndex].equipment[tool]
+        var toolsIndex: int = ship.crew[memberIndex].equipment[tool]
         if toolsIndex > -1:
           updateCargo(ship = ship, protoIndex = ship.crew[
               memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
