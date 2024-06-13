@@ -55,26 +55,9 @@ package Maps.UI is
    procedure Show_Sky_Map(Clear: Boolean := False);
    -- ****
 
-   -- ****f* MUI/MUI.Set_Keys
-   -- FUNCTION
-   -- Set keyboard shortcuts
-   -- SOURCE
-   procedure Set_Keys with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaKeys";
-   -- ****
-
 -- Temporary code to interact with Nim
 
    function Get_General_Accelerator(Index: Positive) return String;
-   procedure Set_General_Accelerator(Index: Positive; Value: String);
-   function Get_Menu_Accelerator(Index: Positive) return String;
-   procedure Set_Menu_Accelerator(Index: Positive; Value: String);
-   function Get_Map_Accelerator(Index: Positive) return String;
-   procedure Set_Map_Accelerator(Index: Positive; Value: String);
-   function Get_Full_Screen_Accel return String;
-   procedure Set_Full_Screen_Accel(Value: String);
    procedure Set_Center_Point(X, Y: Positive) with
       Import => True,
       Convention => C,
