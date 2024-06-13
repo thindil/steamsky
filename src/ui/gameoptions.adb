@@ -17,7 +17,7 @@ with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 -- with Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
@@ -28,7 +28,7 @@ with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets;
 -- with Tcl.Tk.Ada.Widgets.Text;
 -- with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 -- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 -- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 -- with Tcl.Tk.Ada.Wm;
@@ -43,23 +43,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Utils.UI;
 
 package body GameOptions is
-
-   --## rule off TYPE_INITIAL_VALUES
-   -- ****it* GameOptions/GameOptions.Accel_Data
-   -- FUNCTION
-   -- Data for showing keyboard shortcuts
-   -- PARAMETERS
-   -- Shortcut    - Keyboard shortcut
-   -- Entry_Name  - Name of the text entry which will be showing this shortcut
-   -- Config_Name - The name of the entry in keyboard configuration file
-   -- SOURCE
-   type Accel_Data is record
-      Shortcut: Unbounded_String;
-      Entry_Name: Unbounded_String;
-      Config_Name: Unbounded_String;
-   end record;
-   -- ****
-   --## rule on TYPE_INITIAL_VALUES
 
    -- ****iv* GameOptions/GameOptions.Accels
    -- FUNCTION
@@ -761,8 +744,17 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Interfaces.C.Strings;
       use GNAT.Directory_Operations;
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
 
+      --## rule off TYPE_INITIAL_VALUES
+      type Accel_Data is record
+         Shortcut: Unbounded_String;
+         Entry_Name: Unbounded_String;
+         Config_Name: Unbounded_String;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       Default_Movement_Accels: constant array(1 .. 14) of Accel_Data :=
         (1 =>
            (Shortcut =>
