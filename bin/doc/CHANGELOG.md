@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - Various small problems with displaying the game UI
 - Crash when trying to change order for a crew member after assigned another
 - Crash when starting a new game as Undead
+- Starting a new game as Undead with empty ship
 
 ## [9.9] - 2024-04-14
 
