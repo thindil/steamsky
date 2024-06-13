@@ -68,7 +68,6 @@ package body Events is
          Convention => C,
          External_Name => "generateAdaTraders";
    begin
-      Set_Ship_In_Nim;
       Generate_Ada_Traders;
    end Generate_Traders;
 
