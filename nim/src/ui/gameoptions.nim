@@ -368,7 +368,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get messages limit.")
   gameSettings.savedMessages = try:
-      getSpinboxValue(spinboxName = ".general.savedMessages")
+      getSpinboxValue(spinboxName = ".general.savedmessages")
     except:
       return showError(message = "Can't get saved messages.")
   gameSettings.waitMinutes = try:
@@ -452,7 +452,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       keyName = "KeyPress-" & accel.shortcut
     tclEval(script = "bind . <" & keyName & "> {}")
     if index < 11:
-      menuAccelerators[index + 1] = tclEval2(script = accel.entryName & " get")
+      menuAccelerators[index + 1] = tclEval2(script = rootName & accel.entryName & " get")
       pos = menuAccelerators[index + 1].rfind(sub = '-')
       keyName = ""
       if pos > -1:
@@ -463,12 +463,12 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "bind . <" & keyName & "> {InvokeMenu " &
           menuAccelerators[index + 1] & "}")
     elif index < 48:
-      mapAccelerators[index - 10] = tclEval2(script = accel.entryName & " get")
+      mapAccelerators[index - 10] = tclEval2(script = rootName & accel.entryName & " get")
     elif index == 48:
-      fullScreenAccel = tclEval2(script = accels[48].entryName & " get")
+      fullScreenAccel = tclEval2(script = rootName & accels[48].entryName & " get")
     else:
-      generalAccelerators[index - 48] = tclEval2(script = accel.entryName & " get")
-    accel.shortcut = tclEval2(script = accel.entryName & " get")
+      generalAccelerators[index - 49] = tclEval2(script = rootName & accel.entryName & " get")
+    accel.shortcut = tclEval2(script = rootName & accel.entryName & " get")
   let keyFile: File = try:
         open(saveDirectory & "keys.cfg", fmWrite)
       except:
