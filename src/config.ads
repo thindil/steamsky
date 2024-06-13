@@ -18,7 +18,6 @@
 --## rule off REDUCEABLE_SCOPE
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --## rule on REDUCEABLE_SCOPE
-with Ships; use Ships;
 
 -- ****h* Config/Config
 -- FUNCTION
@@ -133,13 +132,8 @@ package Config is
 -- Temporary code to interact with Nim
 
    function Get_Boolean_Setting(Name: String) return Boolean;
-   procedure Set_Boolean_Setting(Name: String; Value: Boolean);
    function Get_Integer_Setting(Name: String) return Integer;
    procedure Set_Integer_Setting(Name: String; Value: Integer);
-   procedure Set_Undock_Speed(Value: Ship_Speed);
-   procedure Set_Auto_Move_Stop(Value: Auto_Move_Break);
-   procedure Set_Messages_Order(Value: Messages_Order_Type);
-   procedure Set_Auto_Save(Value: Auto_Save_Type);
    function Get_Interface_Theme return Unbounded_String;
    function Get_String_Setting(Name: String) return String;
    procedure Set_String_Setting(Name, Value: String);

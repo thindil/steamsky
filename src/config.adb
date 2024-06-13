@@ -49,16 +49,6 @@ package body Config is
       return False;
    end Get_Boolean_Setting;
 
-   procedure Set_Boolean_Setting(Name: String; Value: Boolean) is
-      procedure Set_Ada_Boolean_Setting(N: chars_ptr; V: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaBooleanSetting";
-   begin
-      Set_Ada_Boolean_Setting
-        (N => New_String(Str => Name), V => (if Value then 1 else 0));
-   end Set_Boolean_Setting;
-
    function Get_Integer_Setting(Name: String) return Integer is
       function Get_Ada_Integer_Setting(N: chars_ptr) return Integer with
          Import => True,
@@ -77,32 +67,6 @@ package body Config is
    begin
       Set_Ada_Integer_Setting(N => New_String(Str => Name), V => Value);
    end Set_Integer_Setting;
-
-   procedure Set_Undock_Speed(Value: Ship_Speed) is
-   begin
-      Set_Ada_Integer_Setting
-        (N => New_String(Str => "undockSpeed"), V => Ship_Speed'Pos(Value));
-   end Set_Undock_Speed;
-
-   procedure Set_Auto_Move_Stop(Value: Auto_Move_Break) is
-   begin
-      Set_Ada_Integer_Setting
-        (N => New_String(Str => "autoMoveStop"),
-         V => Auto_Move_Break'Pos(Value));
-   end Set_Auto_Move_Stop;
-
-   procedure Set_Auto_Save(Value: Auto_Save_Type) is
-   begin
-      Set_Ada_Integer_Setting
-        (N => New_String(Str => "autoSave"), V => Auto_Save_Type'Pos(Value));
-   end Set_Auto_Save;
-
-   procedure Set_Messages_Order(Value: Messages_Order_Type) is
-   begin
-      Set_Ada_Integer_Setting
-        (N => New_String(Str => "messagesOrder"),
-         V => Messages_Order_Type'Pos(Value));
-   end Set_Messages_Order;
 
    function Get_Interface_Theme return Unbounded_String is
       function Get_Ada_Interface_Theme return chars_ptr with
