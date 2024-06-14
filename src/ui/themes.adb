@@ -13,11 +13,13 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Themes is
 
    function Get_Icon(Name: String) return String is
+      use Interfaces.C.Strings;
+
       function Get_Ada_Icon(N: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
