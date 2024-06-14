@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to change order for a crew member after assigned another
 - Crash when starting a new game as Undead
 - Starting a new game as Undead with empty ship
+- Loading events from saved game
 
 ## [9.9] - 2024-04-14
 
