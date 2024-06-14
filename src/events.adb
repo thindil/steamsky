@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,11 +17,13 @@
 
 with Interfaces.C.Strings;
 with Maps; use Maps;
-with Ships; use Ships;
+with Ships;
 
 package body Events is
 
    function Check_For_Event return Boolean is
+      use Ships;
+
       Result: Integer;
       function Check_Ada_For_Event return Integer with
          Import => True,
