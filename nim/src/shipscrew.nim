@@ -295,6 +295,81 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
               inventoryIndex = toolsIndex, ship = ship)
     return true
 
+proc showOrderMessage(givenOrder: CrewOrders; memberName: string;
+    ship: var ShipRecord; memberIndex: Natural; moduleIndex,
+    moduleIndex2: int) {.sideEffect, raises: [], tags: [], contractual.} =
+  ## Show message about changed the crew member's order
+  ##
+  ## * givenOrder  - the given order for the crew member
+  ## * memberName  - the name of the crew member
+  ## * ship        - the ship in which the module will be checked
+  ## * memberIndex - the index in the crew of the crew member
+  ## * moduleIndex - the index of the module used in the given order
+  ## * moduleIndex2 - the index of the module to check
+  ##
+  ## Returns the modified parameter ship
+  body:
+    case givenOrder
+      of pilot:
+        addMessage(message = memberName & " starts piloting.",
+            mType = orderMessage)
+        ship.modules[moduleIndex2].owner[0] = memberIndex
+      of engineer:
+        addMessage(message = memberName & " starts engineer's duty.",
+            mType = orderMessage)
+      of gunner:
+        addMessage(message = memberName & " starts operating gun.",
+            mType = orderMessage)
+        ship.modules[moduleIndex2].owner[0] = memberIndex
+      of rest:
+        addMessage(message = memberName & " is going on break.",
+            mType = orderMessage)
+      of repair:
+        addMessage(message = memberName & " starts repairing ship.",
+            mType = orderMessage)
+      of craft:
+        addMessage(message = memberName & " starts manufacturing.",
+            mType = orderMessage)
+        for index, owner in ship.modules[moduleIndex2].owner:
+          if owner == -1:
+            ship.modules[moduleIndex2].owner[index] = memberIndex
+            break
+      of upgrading:
+        addMessage(message = memberName & " starts upgrading " & ship.modules[
+            ship.upgradeModule].name & ".",
+            mType = orderMessage)
+      of talk:
+        addMessage(message = memberName &
+            " is now assigned to talking in bases.",
+            mType = orderMessage)
+      of heal:
+        addMessage(message = memberName &
+            " starts healing wounded crew members.",
+            mType = orderMessage)
+        if moduleIndex > -1:
+          for index, owner in ship.modules[moduleIndex].owner:
+            if owner == -1:
+              ship.modules[moduleIndex2].owner[index] = memberIndex
+              break
+      of clean:
+        addMessage(message = memberName & " starts cleaning ship.",
+            mType = orderMessage)
+      of boarding:
+        addMessage(message = memberName &
+            " starts boarding the enemy ship.",
+            mType = orderMessage)
+      of defend:
+        addMessage(message = memberName &
+            " starts defending the ship.",
+            mType = orderMessage)
+      of train:
+        addMessage(message = memberName &
+            " starts personal training.", mType = orderMessage)
+        for index, owner in ship.modules[moduleIndex2].owner:
+          if owner == -1:
+            ship.modules[moduleIndex2].owner[index] = memberIndex
+            break
+
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
     checkPriorities: bool = true) {.sideEffect, raises: [CrewOrderError,
@@ -396,66 +471,9 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
           updateInventory(memberIndex = memberIndex, amount = -1,
               inventoryIndex = toolsIndex, ship = ship)
     if ship.crew == playerShip.crew:
-      case givenOrder
-        of pilot:
-          addMessage(message = memberName & " starts piloting.",
-              mType = orderMessage)
-          ship.modules[moduleIndex2].owner[0] = memberIndex
-        of engineer:
-          addMessage(message = memberName & " starts engineer's duty.",
-              mType = orderMessage)
-        of gunner:
-          addMessage(message = memberName & " starts operating gun.",
-              mType = orderMessage)
-          ship.modules[moduleIndex2].owner[0] = memberIndex
-        of rest:
-          addMessage(message = memberName & " is going on break.",
-              mType = orderMessage)
-        of repair:
-          addMessage(message = memberName & " starts repairing ship.",
-              mType = orderMessage)
-        of craft:
-          addMessage(message = memberName & " starts manufacturing.",
-              mType = orderMessage)
-          for index, owner in ship.modules[moduleIndex2].owner:
-            if owner == -1:
-              ship.modules[moduleIndex2].owner[index] = memberIndex
-              break
-        of upgrading:
-          addMessage(message = memberName & " starts upgrading " & ship.modules[
-              ship.upgradeModule].name & ".",
-              mType = orderMessage)
-        of talk:
-          addMessage(message = memberName &
-              " is now assigned to talking in bases.",
-              mType = orderMessage)
-        of heal:
-          addMessage(message = memberName &
-              " starts healing wounded crew members.",
-              mType = orderMessage)
-          if moduleIndex > -1:
-            for index, owner in ship.modules[moduleIndex].owner:
-              if owner == -1:
-                ship.modules[moduleIndex2].owner[index] = memberIndex
-                break
-        of clean:
-          addMessage(message = memberName & " starts cleaning ship.",
-              mType = orderMessage)
-        of boarding:
-          addMessage(message = memberName &
-              " starts boarding the enemy ship.",
-              mType = orderMessage)
-        of defend:
-          addMessage(message = memberName &
-              " starts defending the ship.",
-              mType = orderMessage)
-        of train:
-          addMessage(message = memberName &
-              " starts personal training.", mType = orderMessage)
-          for index, owner in ship.modules[moduleIndex2].owner:
-            if owner == -1:
-              ship.modules[moduleIndex2].owner[index] = memberIndex
-              break
+      showOrderMessage(givenOrder = givenOrder, memberName = memberName,
+          ship = ship, memberIndex = memberIndex, moduleIndex = moduleIndex,
+          moduleIndex2 = moduleIndex2)
     ship.crew[memberIndex].order = givenOrder
     ship.crew[memberIndex].orderTime = 15
     if givenOrder != rest:
