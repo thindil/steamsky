@@ -537,6 +537,27 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
           accel.entryName
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
+  elif argv[1] == "menu":
+    let defaultMenuAccels: array[12, AccelData] = [AccelData(shortcut: "s",
+        entryName: ".menu.shipinfo", configName: ""), AccelData(shortcut: "o",
+        entryName: ".menu.orders", configName: ""), AccelData(shortcut: "r",
+        entryName: ".menu.crafts", configName: ""), AccelData(shortcut: "m",
+        entryName: ".menu.messages", configName: ""), AccelData(shortcut: "k",
+        entryName: ".menu.knowledge", configName: ""), AccelData(shortcut: "w",
+        entryName: ".menu.waitorders", configName: ""), AccelData(shortcut: "g",
+        entryName: ".menu.gamestats", configName: ""), AccelData(shortcut: "h",
+        entryName: ".menu.help", configName: ""), AccelData(shortcut: "p",
+        entryName: ".menu.gameoptions", configName: ""), AccelData(
+        shortcut: "q", entryName: ".menu.quit", configName: ""), AccelData(
+        shortcut: "x", entryName: ".menu.resign", configName: ""), AccelData(
+        shortcut: "e", entryName: ".menu.menu", configName: "")]
+    for accel in defaultMenuAccels:
+      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+          accel.entryName
+      tclEval(script = keyEntry & " delete 0 end")
+      tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
+  elif argv[1] == "map":
+    let defaultMapAccels: array[5, AccelData] = [AccelData(shortcut: "Shift-Return", entryName: ".map.center", configName: ""), AccelData(shortcut: "Shift-h", entryName: ".map.centerhomebase", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Home" else: "KP_7"), entryName: ".map.mapupleft", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Up" else: "KP_8"), entryName: "map.mapup", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Prior" else: "KP_9"), entryName: ".map.mapupright", configName: "")]
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
