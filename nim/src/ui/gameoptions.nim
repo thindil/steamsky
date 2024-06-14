@@ -499,6 +499,11 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     showCombatUi(newCombat = false)
   return tclOk
 
+proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let defaultMovementAccels: array[6, AccelData] = [AccelData(shortcut: if DirSep == '\\': "Home" else: "KP_Home", entryName: ".movement.upleft", configName: ""), AccelData(shortcut: if DirSep == '\\': "Up" else: "KP_Up", entryName: ".movement.up", configName: ""), AccelData(shortcut: if Dir_Sep == '\\': "Prior" else: "KP_Prior", entryName: ".movement.upright", configName: ""), AccelData(shortcut: if DirSep == '\\': "Left" else: "KP_Left", entryName: ".movement.left", configName: ""), AccelData(shortcut: if DirSep == '\\': "Clear" else: "KP_Begin", entryName: ".movement.wait", configName: ""), AccelData(shortcut: if DirSep == '\\': "Right" else: "KP_Right", entryName: ".movement.right", configName: "")]
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the crew UI
   try:
@@ -508,5 +513,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("SetFonts", setFontsCommand)
 #    addCommand("SetDefaultFonts", setDefaultFontsCommand)
 #    addCommand("CloseOptions", closeOptionsCommand)
+#    addCommand("ResetKeys", resetKeysCommand)
   except:
     showError(message = "Can't add a Tcl command.")
