@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
@@ -160,6 +160,7 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings.Unbounded;
       use Interfaces.C.Strings;
       use GNAT.Directory_Operations;
       use Tcl.Tk.Ada.Widgets.TtkEntry;
