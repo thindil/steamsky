@@ -465,7 +465,8 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       keyName = "KeyPress-" & accel.shortcut
     tclEval(script = "bind . <" & keyName & "> {}")
     if index < 11:
-      menuAccelerators[index + 1] = tclEval2(script = rootName & accel.entryName & " get")
+      menuAccelerators[index + 1] = tclEval2(script = rootName &
+          accel.entryName & " get")
       pos = menuAccelerators[index + 1].rfind(sub = '-')
       keyName = ""
       if pos > -1:
@@ -476,11 +477,13 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "bind . <" & keyName & "> {InvokeMenu " &
           menuAccelerators[index + 1] & "}")
     elif index < 48:
-      mapAccelerators[index - 10] = tclEval2(script = rootName & accel.entryName & " get")
+      mapAccelerators[index - 10] = tclEval2(script = rootName &
+          accel.entryName & " get")
     elif index == 48:
       fullScreenAccel = tclEval2(script = rootName & accels[48].entryName & " get")
     else:
-      generalAccelerators[index - 49] = tclEval2(script = rootName & accel.entryName & " get")
+      generalAccelerators[index - 49] = tclEval2(script = rootName &
+          accel.entryName & " get")
     accel.shortcut = tclEval2(script = rootName & accel.entryName & " get")
   let keyFile: File = try:
         open(saveDirectory & "keys.cfg", fmWrite)
@@ -501,7 +504,39 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
-  let defaultMovementAccels: array[6, AccelData] = [AccelData(shortcut: if DirSep == '\\': "Home" else: "KP_Home", entryName: ".movement.upleft", configName: ""), AccelData(shortcut: if DirSep == '\\': "Up" else: "KP_Up", entryName: ".movement.up", configName: ""), AccelData(shortcut: if Dir_Sep == '\\': "Prior" else: "KP_Prior", entryName: ".movement.upright", configName: ""), AccelData(shortcut: if DirSep == '\\': "Left" else: "KP_Left", entryName: ".movement.left", configName: ""), AccelData(shortcut: if DirSep == '\\': "Clear" else: "KP_Begin", entryName: ".movement.wait", configName: ""), AccelData(shortcut: if DirSep == '\\': "Right" else: "KP_Right", entryName: ".movement.right", configName: "")]
+  if argv[1] == "movement":
+    let defaultMovementAccels: array[14, AccelData] = [AccelData(
+        shortcut: if DirSep == '\\': "Home" else: "KP_Home",
+        entryName: ".movement.upleft", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "Up" else: "KP_Up",
+        entryName: ".movement.up", configName: ""), AccelData(
+        shortcut: if Dir_Sep == '\\': "Prior" else: "KP_Prior",
+        entryName: ".movement.upright", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "Left" else: "KP_Left",
+        entryName: ".movement.left", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "Clear" else: "KP_Begin",
+        entryName: ".movement.wait", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "Right" else: "KP_Right",
+        entryName: ".movement.right", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "End" else: "KP_End",
+        entryName: ".movement.downleft", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "Down" else: "KP_Down",
+        entryName: ".movement.down", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "Next" else: "KP_Next",
+        entryName: ".movement.downright", configName: ""), AccelData(
+        shortcut: if DirSep == '\\': "slash" else: "KP_Divide",
+        entryName: ".movement.moveto", configName: ""), AccelData(
+        shortcut: "Control-a", entryName: ".movement.fullstop", configName: ""),
+        AccelData(shortcut: "Control-b", entryName: ".movement.quarterspeed",
+        configName: ""), AccelData(shortcut: "Control-c",
+        entryName: ".movement.halfspeed", configName: ""), AccelData(
+        shortcut: "Control-d", entryName: ".movement.fullspeed",
+        configName: "")]
+    for accel in defaultMovementAccels:
+      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+          accel.entryName
+      tclEval(script = keyEntry & " delete 0 end")
+      tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
