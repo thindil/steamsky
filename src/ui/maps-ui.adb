@@ -83,22 +83,6 @@ package body Maps.UI is
    end Get_Map_View;
    --## rule on REDUCEABLE_SCOPE
 
-   function Get_Menu_Accelerator(Index: Positive) return String;
-   procedure Set_Full_Screen_Accel(Value: String);
-   procedure Set_General_Accelerator(Index: Positive; Value: String);
-   procedure Set_Map_Accelerator(Index: Positive; Value: String);
-   procedure Set_Menu_Accelerator(Index: Positive; Value: String);
-
-   -- ****f* MUI/MUI.Set_Keys
-   -- FUNCTION
-   -- Set keyboard shortcuts
-   -- SOURCE
-   procedure Set_Keys with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaKeys";
-   -- ****
-
    procedure Create_Game_Ui is
       use Ada.Strings;
       use Ada.Strings.Fixed;
@@ -147,6 +131,18 @@ package body Maps.UI is
          Import => True,
          Convention => C,
          External_Name => "updateAdaMapInfo";
+      procedure Set_Keys with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaKeys";
+      function Get_Menu_Accelerator(Index: Positive) return String is
+         function Get_Ada_Menu_Accelerator(I: Positive) return chars_ptr with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaMenuAccelerator";
+      begin
+         return Value(Item => Get_Ada_Menu_Accelerator(I => Index));
+      end Get_Menu_Accelerator;
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
       if Winfo_Get(Widgt => Get_Map_View, Info => "exists") = "0" then
@@ -159,6 +155,45 @@ package body Maps.UI is
             Raw_Data, Field_Name, Value: Unbounded_String :=
               Null_Unbounded_String;
             Equal_Index: Natural := 0;
+            procedure Set_Menu_Accelerator(Index: Positive; Value: String) is
+               procedure Set_Ada_Menu_Accelerator
+                 (I: Positive; Val: chars_ptr) with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "setAdaMenuAccelerator";
+            begin
+               Set_Ada_Menu_Accelerator
+                 (I => Index, Val => New_String(Str => Value));
+            end Set_Menu_Accelerator;
+            procedure Set_Map_Accelerator(Index: Positive; Value: String) is
+               procedure Set_Ada_Map_Accelerator
+                 (I: Positive; Val: chars_ptr) with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "setAdaMapAccelerator";
+            begin
+               Set_Ada_Map_Accelerator
+                 (I => Index, Val => New_String(Str => Value));
+            end Set_Map_Accelerator;
+            procedure Set_General_Accelerator
+              (Index: Positive; Value: String) is
+               procedure Set_Ada_General_Accelerator
+                 (I: Positive; Val: chars_ptr) with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "setAdaGeneralAccelerator";
+            begin
+               Set_Ada_General_Accelerator
+                 (I => Index, Val => New_String(Str => Value));
+            end Set_General_Accelerator;
+            procedure Set_Full_Screen_Accel(Value: String) is
+               procedure Set_Ada_Full_Screen_Accel(Val: chars_ptr) with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "setAdaFullScreenAccel";
+            begin
+               Set_Ada_Full_Screen_Accel(Val => New_String(Str => Value));
+            end Set_Full_Screen_Accel;
          begin
             Open
               (File => Keys_File, Mode => In_File,
@@ -592,51 +627,5 @@ package body Maps.UI is
    begin
       return Value(Item => Get_Ada_General_Accelerator(I => Index));
    end Get_General_Accelerator;
-
-   procedure Set_General_Accelerator(Index: Positive; Value: String) is
-      procedure Set_Ada_General_Accelerator(I: Positive; Val: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaGeneralAccelerator";
-   begin
-      Set_Ada_General_Accelerator(I => Index, Val => New_String(Str => Value));
-   end Set_General_Accelerator;
-
-   function Get_Menu_Accelerator(Index: Positive) return String is
-
-      function Get_Ada_Menu_Accelerator(I: Positive) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaMenuAccelerator";
-   begin
-      return Value(Item => Get_Ada_Menu_Accelerator(I => Index));
-   end Get_Menu_Accelerator;
-
-   procedure Set_Menu_Accelerator(Index: Positive; Value: String) is
-      procedure Set_Ada_Menu_Accelerator(I: Positive; Val: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaMenuAccelerator";
-   begin
-      Set_Ada_Menu_Accelerator(I => Index, Val => New_String(Str => Value));
-   end Set_Menu_Accelerator;
-
-   procedure Set_Map_Accelerator(Index: Positive; Value: String) is
-      procedure Set_Ada_Map_Accelerator(I: Positive; Val: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaMapAccelerator";
-   begin
-      Set_Ada_Map_Accelerator(I => Index, Val => New_String(Str => Value));
-   end Set_Map_Accelerator;
-
-   procedure Set_Full_Screen_Accel(Value: String) is
-      procedure Set_Ada_Full_Screen_Accel(Val: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaFullScreenAccel";
-   begin
-      Set_Ada_Full_Screen_Accel(Val => New_String(Str => Value));
-   end Set_Full_Screen_Accel;
 
 end Maps.UI;
