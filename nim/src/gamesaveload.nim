@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -299,7 +299,7 @@ proc loadGame*() =
       else:
         event.data = savedEvent.attr("data").parseInt
     eventsList.add(event)
-    skyMap[event.skyX][event.skyY].eventIndex = index + 1
+    skyMap[event.skyX][event.skyY].eventIndex = index
   logMessage(message = "done", debugType = everything)
   # Load the current story
   let storyNode = savedGame.child("currentstory")
