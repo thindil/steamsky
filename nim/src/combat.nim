@@ -679,13 +679,16 @@ proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
               enemyShip = enemyShip)
         else:
           hitLocation = 0
+      else:
+        hitLocation = getRandom(min = 0,
+            max = game.enemy.ship.modules.high)
     else:
       if game.enemy.combatAi == disarmer:
         hitLocation = 0
         findHitWeapon(enemyShip = enemyShip, hitLocation = hitLocation)
       else:
         hitLocation = getRandom(min = 0,
-            max = game.enemy.ship.modules.high)
+            max = playerShip.modules.high)
     while enemyShip.modules[hitLocation].durability == 0:
       hitLocation.dec
       if hitLocation == -1:
