@@ -503,7 +503,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   if argv[1] == "movement":
     let defaultMovementAccels: array[14, AccelData] = [AccelData(
         shortcut: if DirSep == '\\': "Home" else: "KP_Home",
@@ -567,10 +567,13 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         AccelData(shortcut: "Shift-" & (if DirSep ==
         '\\': "Prior" else: "KP_Prior"), entryName: ".map.mapupright",
         configName: ""), AccelData(shortcut: "Shift-" & (if DirSep ==
-        '\\': "Left" else: "KP_Left"), entryName: ".map.mapleft", configName: ""),
+        '\\': "Left" else: "KP_Left"), entryName: ".map.mapleft",
+        configName: ""),
         AccelData(shortcut: "Shift-" & (if DirSep ==
-        '\\': "Right" else: "KP_Right"), entryName: ".mapmapright", configName: ""),
-        AccelData(shortcut: "Shift-" & (if DirSep == '\\': "End" else: "KP_End"),
+        '\\': "Right" else: "KP_Right"), entryName: ".mapmapright",
+        configName: ""),
+        AccelData(shortcut: "Shift-" & (if DirSep ==
+            '\\': "End" else: "KP_End"),
         entryName: ".map.mapdownleft", configName: ""), AccelData(
         shortcut: "Shift-" & (if DirSep == '\\': "Down" else: "KP_Down"),
         entryName: ".map.mapdown", configName: ""), AccelData(
