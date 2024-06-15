@@ -370,6 +370,26 @@ proc showOrderMessage(givenOrder: CrewOrders; memberName: string;
             ship.modules[moduleIndex2].owner[index] = memberIndex
             break
 
+proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.sideEffect,
+    raises: [KeyError, CrewNoSpaceError], tags: [], contractual.} =
+  ## Give the rest order to the selected crew member
+  ##
+  ## * ship        - the ship in which the crew member will have given order
+  ## * memberIndex - the index of the crew member which will have given order
+  ##
+  ## Returns the modified parameter ship with updated info about the ship
+  body:
+    ship.crew[memberIndex].previousOrder = rest
+    if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
+      var toolsIndex: int = ship.crew[memberIndex].equipment[tool]
+      if toolsIndex > -1:
+        updateCargo(ship = ship, protoIndex = ship.crew[
+            memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
+                durability = ship.crew[
+            memberIndex].inventory[toolsIndex].durability)
+        updateInventory(memberIndex = memberIndex, amount = -1,
+            inventoryIndex = toolsIndex, ship = ship)
+
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
     checkPriorities: bool = true) {.sideEffect, raises: [CrewOrderError,
@@ -460,16 +480,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
         memberName = memberName):
       return
     if givenOrder == rest:
-      ship.crew[memberIndex].previousOrder = rest
-      if ship.crew[memberIndex].order in [repair, clean, upgrading, train]:
-        var toolsIndex: int = ship.crew[memberIndex].equipment[tool]
-        if toolsIndex > -1:
-          updateCargo(ship = ship, protoIndex = ship.crew[
-              memberIndex].inventory[toolsIndex].protoIndex, amount = 1,
-                  durability = ship.crew[
-              memberIndex].inventory[toolsIndex].durability)
-          updateInventory(memberIndex = memberIndex, amount = -1,
-              inventoryIndex = toolsIndex, ship = ship)
+      giveRestOrder(ship = ship, memberIndex = memberIndex)
     if ship.crew == playerShip.crew:
       showOrderMessage(givenOrder = givenOrder, memberName = memberName,
           ship = ship, memberIndex = memberIndex, moduleIndex = moduleIndex,
