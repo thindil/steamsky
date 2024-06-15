@@ -155,7 +155,7 @@ package body Maps.UI is
             Raw_Data, Field_Name, Value: Unbounded_String :=
               Null_Unbounded_String;
             Equal_Index: Natural := 0;
-            procedure Set_Menu_Accelerator(Index: Positive; Value: String) is
+            procedure Set_Menu_Accelerator(Index: Positive; Value2: String) is
                procedure Set_Ada_Menu_Accelerator
                  (I: Positive; Val: chars_ptr) with
                   Import => True,
@@ -163,9 +163,9 @@ package body Maps.UI is
                   External_Name => "setAdaMenuAccelerator";
             begin
                Set_Ada_Menu_Accelerator
-                 (I => Index, Val => New_String(Str => Value));
+                 (I => Index, Val => New_String(Str => Value2));
             end Set_Menu_Accelerator;
-            procedure Set_Map_Accelerator(Index: Positive; Value: String) is
+            procedure Set_Map_Accelerator(Index: Positive; Value3: String) is
                procedure Set_Ada_Map_Accelerator
                  (I: Positive; Val: chars_ptr) with
                   Import => True,
@@ -173,10 +173,10 @@ package body Maps.UI is
                   External_Name => "setAdaMapAccelerator";
             begin
                Set_Ada_Map_Accelerator
-                 (I => Index, Val => New_String(Str => Value));
+                 (I => Index, Val => New_String(Str => Value3));
             end Set_Map_Accelerator;
             procedure Set_General_Accelerator
-              (Index: Positive; Value: String) is
+              (Index: Positive; Value4: String) is
                procedure Set_Ada_General_Accelerator
                  (I: Positive; Val: chars_ptr) with
                   Import => True,
@@ -184,15 +184,15 @@ package body Maps.UI is
                   External_Name => "setAdaGeneralAccelerator";
             begin
                Set_Ada_General_Accelerator
-                 (I => Index, Val => New_String(Str => Value));
+                 (I => Index, Val => New_String(Str => Value4));
             end Set_General_Accelerator;
-            procedure Set_Full_Screen_Accel(Value: String) is
+            procedure Set_Full_Screen_Accel(Value5: String) is
                procedure Set_Ada_Full_Screen_Accel(Val: chars_ptr) with
                   Import => True,
                   Convention => C,
                   External_Name => "setAdaFullScreenAccel";
             begin
-               Set_Ada_Full_Screen_Accel(Val => New_String(Str => Value));
+               Set_Ada_Full_Screen_Accel(Val => New_String(Str => Value5));
             end Set_Full_Screen_Accel;
          begin
             Open
@@ -214,208 +214,208 @@ package body Maps.UI is
                     Count => Length(Source => Raw_Data) - Equal_Index - 1);
                if Field_Name = To_Unbounded_String(Source => "ShipInfo") then
                   Set_Menu_Accelerator
-                    (Index => 1, Value => To_String(Source => Value));
+                    (Index => 1, Value2 => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Orders") then
                   Set_Menu_Accelerator
-                    (Index => 2, Value => To_String(Source => Value));
+                    (Index => 2, Value2 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "Crafting") then
                   Set_Menu_Accelerator
-                    (Index => 3, Value => To_String(Source => Value));
+                    (Index => 3, Value2 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "LastMessages") then
                   Set_Menu_Accelerator
-                    (Index => 4, Value => To_String(Source => Value));
+                    (Index => 4, Value2 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "Knowledge") then
                   Set_Menu_Accelerator
-                    (Index => 5, Value => To_String(Source => Value));
+                    (Index => 5, Value2 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "WaitOrders") then
                   Set_Menu_Accelerator
-                    (Index => 6, Value => To_String(Source => Value));
+                    (Index => 6, Value2 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameStats") then
                   Set_Menu_Accelerator
-                    (Index => 7, Value => To_String(Source => Value));
+                    (Index => 7, Value2 => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Help") then
                   Set_Menu_Accelerator
-                    (Index => 8, Value => To_String(Source => Value));
+                    (Index => 8, Value2 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameOptions") then
                   Set_Menu_Accelerator
-                    (Index => 9, Value => To_String(Source => Value));
+                    (Index => 9, Value2 => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Quit") then
                   Set_Menu_Accelerator
-                    (Index => 10, Value => To_String(Source => Value));
+                    (Index => 10, Value2 => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "Resign") then
                   Set_Menu_Accelerator
-                    (Index => 11, Value => To_String(Source => Value));
+                    (Index => 11, Value2 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameMenu") then
                   Set_Map_Accelerator
-                    (Index => 1, Value => To_String(Source => Value));
+                    (Index => 1, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MapOptions") then
                   Set_Map_Accelerator
-                    (Index => 2, Value => To_String(Source => Value));
+                    (Index => 2, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ZoomInMap") then
                   Set_Map_Accelerator
-                    (Index => 3, Value => To_String(Source => Value));
+                    (Index => 3, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ZoomOutMap") then
                   Set_Map_Accelerator
-                    (Index => 4, Value => To_String(Source => Value));
+                    (Index => 4, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveUpLeft") then
                   Set_Map_Accelerator
-                    (Index => 5, Value => To_String(Source => Value));
+                    (Index => 5, Value3 => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "MoveUp") then
                   Set_Map_Accelerator
-                    (Index => 6, Value => To_String(Source => Value));
+                    (Index => 6, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveUpRight") then
                   Set_Map_Accelerator
-                    (Index => 7, Value => To_String(Source => Value));
+                    (Index => 7, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveLeft") then
                   Set_Map_Accelerator
-                    (Index => 8, Value => To_String(Source => Value));
+                    (Index => 8, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "WaitInPlace") then
                   Set_Map_Accelerator
-                    (Index => 10, Value => To_String(Source => Value));
+                    (Index => 10, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveRight") then
                   Set_Map_Accelerator
-                    (Index => 9, Value => To_String(Source => Value));
+                    (Index => 9, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveDownLeft") then
                   Set_Map_Accelerator
-                    (Index => 11, Value => To_String(Source => Value));
+                    (Index => 11, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveDown") then
                   Set_Map_Accelerator
-                    (Index => 12, Value => To_String(Source => Value));
+                    (Index => 12, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveDownRight") then
                   Set_Map_Accelerator
-                    (Index => 13, Value => To_String(Source => Value));
+                    (Index => 13, Value3 => To_String(Source => Value));
                elsif Field_Name = To_Unbounded_String(Source => "MoveTo") then
                   Set_Map_Accelerator
-                    (Index => 14, Value => To_String(Source => Value));
+                    (Index => 14, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "CenterMap") then
                   Set_Map_Accelerator
-                    (Index => 15, Value => To_String(Source => Value));
+                    (Index => 15, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "CenterMapOnHomeBase") then
                   Set_Map_Accelerator
-                    (Index => 16, Value => To_String(Source => Value));
+                    (Index => 16, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUpLeft") then
                   Set_Map_Accelerator
-                    (Index => 17, Value => To_String(Source => Value));
+                    (Index => 17, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUp") then
                   Set_Map_Accelerator
-                    (Index => 18, Value => To_String(Source => Value));
+                    (Index => 18, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUpRight") then
                   Set_Map_Accelerator
-                    (Index => 19, Value => To_String(Source => Value));
+                    (Index => 19, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapLeft") then
                   Set_Map_Accelerator
-                    (Index => 20, Value => To_String(Source => Value));
+                    (Index => 20, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapRight") then
                   Set_Map_Accelerator
-                    (Index => 21, Value => To_String(Source => Value));
+                    (Index => 21, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDownLeft") then
                   Set_Map_Accelerator
-                    (Index => 22, Value => To_String(Source => Value));
+                    (Index => 22, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDown") then
                   Set_Map_Accelerator
-                    (Index => 23, Value => To_String(Source => Value));
+                    (Index => 23, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDownRight") then
                   Set_Map_Accelerator
-                    (Index => 24, Value => To_String(Source => Value));
+                    (Index => 24, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorUpLeft") then
                   Set_Map_Accelerator
-                    (Index => 25, Value => To_String(Source => Value));
+                    (Index => 25, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorUp") then
                   Set_Map_Accelerator
-                    (Index => 26, Value => To_String(Source => Value));
+                    (Index => 26, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorUpRight") then
                   Set_Map_Accelerator
-                    (Index => 27, Value => To_String(Source => Value));
+                    (Index => 27, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorLeft") then
                   Set_Map_Accelerator
-                    (Index => 28, Value => To_String(Source => Value));
+                    (Index => 28, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorRight") then
                   Set_Map_Accelerator
-                    (Index => 29, Value => To_String(Source => Value));
+                    (Index => 29, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorDownLeft") then
                   Set_Map_Accelerator
-                    (Index => 30, Value => To_String(Source => Value));
+                    (Index => 30, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorDown") then
                   Set_Map_Accelerator
-                    (Index => 31, Value => To_String(Source => Value));
+                    (Index => 31, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorDownRight") then
                   Set_Map_Accelerator
-                    (Index => 32, Value => To_String(Source => Value));
+                    (Index => 32, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "LeftClickMouse") then
                   Set_Map_Accelerator
-                    (Index => 33, Value => To_String(Source => Value));
+                    (Index => 33, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullStop") then
                   Set_Map_Accelerator
-                    (Index => 34, Value => To_String(Source => Value));
+                    (Index => 34, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "QuarterSpeed") then
                   Set_Map_Accelerator
-                    (Index => 35, Value => To_String(Source => Value));
+                    (Index => 35, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "HalfSpeed") then
                   Set_Map_Accelerator
-                    (Index => 36, Value => To_String(Source => Value));
+                    (Index => 36, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullSpeed") then
                   Set_Map_Accelerator
-                    (Index => 37, Value => To_String(Source => Value));
+                    (Index => 37, Value3 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullScreen") then
-                  Set_Full_Screen_Accel(Value => To_String(Source => Value));
+                  Set_Full_Screen_Accel(Value5 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeFirst") then
                   Set_General_Accelerator
-                    (Index => 1, Value => To_String(Source => Value));
+                    (Index => 1, Value4 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeSecond") then
                   Set_General_Accelerator
-                    (Index => 2, Value => To_String(Source => Value));
+                    (Index => 2, Value4 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeThird") then
                   Set_General_Accelerator
-                    (Index => 3, Value => To_String(Source => Value));
+                    (Index => 3, Value4 => To_String(Source => Value));
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeForth") then
                   Set_General_Accelerator
-                    (Index => 4, Value => To_String(Source => Value));
+                    (Index => 4, Value4 => To_String(Source => Value));
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;
@@ -423,32 +423,32 @@ package body Maps.UI is
          exception
             when others =>
                if Dir_Separator = '\' then
-                  Set_Map_Accelerator(Index => 5, Value => "Home");
-                  Set_Map_Accelerator(Index => 6, Value => "Up");
-                  Set_Map_Accelerator(Index => 7, Value => "Prior");
-                  Set_Map_Accelerator(Index => 8, Value => "Left");
-                  Set_Map_Accelerator(Index => 9, Value => "Clear");
-                  Set_Map_Accelerator(Index => 10, Value => "Right");
-                  Set_Map_Accelerator(Index => 11, Value => "End");
-                  Set_Map_Accelerator(Index => 12, Value => "Down");
-                  Set_Map_Accelerator(Index => 13, Value => "Next");
-                  Set_Map_Accelerator(Index => 14, Value => "slash");
-                  Set_Map_Accelerator(Index => 17, Value => "Shift-Home");
-                  Set_Map_Accelerator(Index => 18, Value => "Shift-Up");
-                  Set_Map_Accelerator(Index => 19, Value => "Shift-Prior");
-                  Set_Map_Accelerator(Index => 20, Value => "Shift-Left");
-                  Set_Map_Accelerator(Index => 21, Value => "Shift-Right");
-                  Set_Map_Accelerator(Index => 22, Value => "Shift-End");
-                  Set_Map_Accelerator(Index => 23, Value => "Shift-Down");
-                  Set_Map_Accelerator(Index => 24, Value => "Shift-Next");
-                  Set_Map_Accelerator(Index => 25, Value => "Control-Home");
-                  Set_Map_Accelerator(Index => 26, Value => "Control-Up");
-                  Set_Map_Accelerator(Index => 27, Value => "Control-Prior");
-                  Set_Map_Accelerator(Index => 28, Value => "Control-Left");
-                  Set_Map_Accelerator(Index => 29, Value => "Control-Right");
-                  Set_Map_Accelerator(Index => 30, Value => "Control-End");
-                  Set_Map_Accelerator(Index => 31, Value => "Control-Down");
-                  Set_Map_Accelerator(Index => 32, Value => "Control-Next");
+                  Set_Map_Accelerator(Index => 5, Value3 => "Home");
+                  Set_Map_Accelerator(Index => 6, Value3 => "Up");
+                  Set_Map_Accelerator(Index => 7, Value3 => "Prior");
+                  Set_Map_Accelerator(Index => 8, Value3 => "Left");
+                  Set_Map_Accelerator(Index => 9, Value3 => "Clear");
+                  Set_Map_Accelerator(Index => 10, Value3 => "Right");
+                  Set_Map_Accelerator(Index => 11, Value3 => "End");
+                  Set_Map_Accelerator(Index => 12, Value3 => "Down");
+                  Set_Map_Accelerator(Index => 13, Value3 => "Next");
+                  Set_Map_Accelerator(Index => 14, Value3 => "slash");
+                  Set_Map_Accelerator(Index => 17, Value3 => "Shift-Home");
+                  Set_Map_Accelerator(Index => 18, Value3 => "Shift-Up");
+                  Set_Map_Accelerator(Index => 19, Value3 => "Shift-Prior");
+                  Set_Map_Accelerator(Index => 20, Value3 => "Shift-Left");
+                  Set_Map_Accelerator(Index => 21, Value3 => "Shift-Right");
+                  Set_Map_Accelerator(Index => 22, Value3 => "Shift-End");
+                  Set_Map_Accelerator(Index => 23, Value3 => "Shift-Down");
+                  Set_Map_Accelerator(Index => 24, Value3 => "Shift-Next");
+                  Set_Map_Accelerator(Index => 25, Value3 => "Control-Home");
+                  Set_Map_Accelerator(Index => 26, Value3 => "Control-Up");
+                  Set_Map_Accelerator(Index => 27, Value3 => "Control-Prior");
+                  Set_Map_Accelerator(Index => 28, Value3 => "Control-Left");
+                  Set_Map_Accelerator(Index => 29, Value3 => "Control-Right");
+                  Set_Map_Accelerator(Index => 30, Value3 => "Control-End");
+                  Set_Map_Accelerator(Index => 31, Value3 => "Control-Down");
+                  Set_Map_Accelerator(Index => 32, Value3 => "Control-Next");
                end if;
          end Load_Keys_Block;
          Add_Maps_Commands;
