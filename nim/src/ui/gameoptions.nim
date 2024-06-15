@@ -557,7 +557,66 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = keyEntry & " delete 0 end")
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   elif argv[1] == "map":
-    let defaultMapAccels: array[15, AccelData] = [AccelData(shortcut: "Shift-Return", entryName: ".map.center", configName: ""), AccelData(shortcut: "Shift-h", entryName: ".map.centerhomebase", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Home" else: "KP_7"), entryName: ".map.mapupleft", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Up" else: "KP_8"), entryName: "map.mapup", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Prior" else: "KP_9"), entryName: ".map.mapupright", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Left" else: "KP_4"), entryName: ".map.mapleft", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Right" else: "KP_6"), entryName: ".mapmapright", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "End" else: "KP_1"), entryName: ".map.mapdownleft", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Down" else: "KP_2"), entryName: ".map.mapdown", configName: ""), AccelData(shortcut: "Shift-" & (if DirSep == '\\': "Next" else: "KP_3"), entryName: ".map.mapdownright", configName: ""), AccelData(shortcut: "Control-" & (if DirSep == '\\': "Home" else: "KP_Home"), entryName: ".map.cursorupleft", configName: ""), AccelData(shortcut: "Control-" & (if DirSep == '\\': "Up" else: "KP_Up"), entryName: ".map.cursorup", configName: ""), AccelData(shortcut: "Control-" & (if DirSep == '\\': "Prior" else: "KP_Prior"), entryName: ".map.cursorupright", configName: ""), AccelData(shortcut: "Control-" & (if DirSep == '\\': "Left" else: "KP_Left"), entryName: ".map.cursorleft", configName: ""), AccelData(shortcut: "Control-" & (if DirSep == '\\': "Right" else: "KP_Right"), entryName: ".map.cursorright", configName: "")]
+    let defaultMapAccels: array[23, AccelData] = [AccelData(
+        shortcut: "Shift-Return", entryName: ".map.center", configName: ""),
+        AccelData(shortcut: "Shift-h", entryName: ".map.centerhomebase",
+        configName: ""), AccelData(shortcut: "Shift-" & (if DirSep ==
+        '\\': "Home" else: "KP_7"), entryName: ".map.mapupleft",
+        configName: ""), AccelData(shortcut: "Shift-" & (if DirSep ==
+        '\\': "Up" else: "KP_8"), entryName: "map.mapup", configName: ""),
+        AccelData(shortcut: "Shift-" & (if DirSep ==
+        '\\': "Prior" else: "KP_9"), entryName: ".map.mapupright",
+        configName: ""), AccelData(shortcut: "Shift-" & (if DirSep ==
+        '\\': "Left" else: "KP_4"), entryName: ".map.mapleft", configName: ""),
+        AccelData(shortcut: "Shift-" & (if DirSep ==
+        '\\': "Right" else: "KP_6"), entryName: ".mapmapright", configName: ""),
+        AccelData(shortcut: "Shift-" & (if DirSep == '\\': "End" else: "KP_1"),
+        entryName: ".map.mapdownleft", configName: ""), AccelData(
+        shortcut: "Shift-" & (if DirSep == '\\': "Down" else: "KP_2"),
+        entryName: ".map.mapdown", configName: ""), AccelData(
+        shortcut: "Shift-" & (if DirSep == '\\': "Next" else: "KP_3"),
+        entryName: ".map.mapdownright", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Home" else: "KP_Home"),
+        entryName: ".map.cursorupleft", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Up" else: "KP_Up"),
+        entryName: ".map.cursorup", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Prior" else: "KP_Prior"),
+        entryName: ".map.cursorupright", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Left" else: "KP_Left"),
+        entryName: ".map.cursorleft", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Right" else: "KP_Right"),
+        entryName: ".map.cursorright", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "End" else: "KP_End"),
+        entryName: ".map.cursordownleft", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Down" else: "KP_Down"),
+        entryName: ".map.cursordown", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Next" else: "KP_Next"),
+        entryName: ".map.cursordownright", configName: ""), AccelData(
+        shortcut: "Control-" & (if DirSep == '\\': "Begin" else: "Return"),
+        entryName: ".map.clickmouse", configName: ""), AccelData(
+        shortcut: "Control-a", entryName: ".movement.fullstop", configName: ""),
+        AccelData(shortcut: "Control-b", entryName: ".movement.quarterspeed",
+        configName: ""), AccelData(shortcut: "Control-c",
+        entryName: ".movement.halfspeed", configName: ""), AccelData(
+        shortcut: "Control-d", entryName: ".movement.fullspeed",
+        configName: "")]
+    for accel in defaultMapAccels:
+      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+          accel.entryName
+      tclEval(script = keyEntry & " delete 0 end")
+      tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
+  elif argv[1] == "general":
+    let defaultGeneralAccels: array[4, AccelData] = [AccelData(
+        shortcut: "Alt-a", entryName: ".ui.resizefirst", configName: ""),
+        AccelData(shortcut: "Alt-b", entryName: ".ui.resizesecond",
+        configName: ""), AccelData(shortcut: "Alt-c",
+        entryName: ".ui.resizethird", configName: ""), AccelData(
+        shortcut: "Alt-d", entryName: ".ui.resizefourth", configName: "")]
+    for accel in defaultGeneralAccels:
+      let keyEntry = ".gameframe.paned.optionsframe.canvas.options" &
+          accel.entryName
+      tclEval(script = keyEntry & " delete 0 end")
+      tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
