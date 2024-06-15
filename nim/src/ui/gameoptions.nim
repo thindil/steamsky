@@ -545,7 +545,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         entryName: ".menu.messages", configName: ""), AccelData(shortcut: "k",
         entryName: ".menu.knowledge", configName: ""), AccelData(shortcut: "w",
         entryName: ".menu.waitorders", configName: ""), AccelData(shortcut: "g",
-        entryName: ".menu.gamestats", configName: ""), AccelData(shortcut: "h",
+        entryName: ".menu.gamestats", configName: ""), AccelData(shortcut: "F1",
         entryName: ".menu.help", configName: ""), AccelData(shortcut: "p",
         entryName: ".menu.gameoptions", configName: ""), AccelData(
         shortcut: "q", entryName: ".menu.quit", configName: ""), AccelData(
@@ -561,20 +561,20 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
         shortcut: "Shift-Return", entryName: ".map.center", configName: ""),
         AccelData(shortcut: "Shift-h", entryName: ".map.centerhomebase",
         configName: ""), AccelData(shortcut: "Shift-" & (if DirSep ==
-        '\\': "Home" else: "KP_7"), entryName: ".map.mapupleft",
+        '\\': "Home" else: "KP_Home"), entryName: ".map.mapupleft",
         configName: ""), AccelData(shortcut: "Shift-" & (if DirSep ==
-        '\\': "Up" else: "KP_8"), entryName: "map.mapup", configName: ""),
+        '\\': "Up" else: "KP_Up"), entryName: "map.mapup", configName: ""),
         AccelData(shortcut: "Shift-" & (if DirSep ==
-        '\\': "Prior" else: "KP_9"), entryName: ".map.mapupright",
+        '\\': "Prior" else: "KP_Prior"), entryName: ".map.mapupright",
         configName: ""), AccelData(shortcut: "Shift-" & (if DirSep ==
-        '\\': "Left" else: "KP_4"), entryName: ".map.mapleft", configName: ""),
+        '\\': "Left" else: "KP_Left"), entryName: ".map.mapleft", configName: ""),
         AccelData(shortcut: "Shift-" & (if DirSep ==
-        '\\': "Right" else: "KP_6"), entryName: ".mapmapright", configName: ""),
-        AccelData(shortcut: "Shift-" & (if DirSep == '\\': "End" else: "KP_1"),
+        '\\': "Right" else: "KP_Right"), entryName: ".mapmapright", configName: ""),
+        AccelData(shortcut: "Shift-" & (if DirSep == '\\': "End" else: "KP_End"),
         entryName: ".map.mapdownleft", configName: ""), AccelData(
-        shortcut: "Shift-" & (if DirSep == '\\': "Down" else: "KP_2"),
+        shortcut: "Shift-" & (if DirSep == '\\': "Down" else: "KP_Down"),
         entryName: ".map.mapdown", configName: ""), AccelData(
-        shortcut: "Shift-" & (if DirSep == '\\': "Next" else: "KP_3"),
+        shortcut: "Shift-" & (if DirSep == '\\': "Next" else: "KP_Next"),
         entryName: ".map.mapdownright", configName: ""), AccelData(
         shortcut: "Control-" & (if DirSep == '\\': "Home" else: "KP_Home"),
         entryName: ".map.cursorupleft", configName: ""), AccelData(
