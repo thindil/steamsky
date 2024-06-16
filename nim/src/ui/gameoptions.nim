@@ -504,6 +504,19 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Reset the selected group of keys to their default values
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ResetKeys group
+  ## Group is the group of keys which will be resetted. Possible values are
+  ## movement, map, menu
   if argv[1] == "movement":
     let defaultMovementAccels: array[14, AccelData] = [AccelData(
         shortcut: if DirSep == '\\': "Home" else: "KP_Home",
