@@ -556,7 +556,7 @@ proc setKeys*() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = "bind . <" & keyName & "> {ToggleFullScreen}")
 
 import craftsui, gameoptions, helpui, mapsuicommands, messagesui, ordersmenu,
-    shipsui, waitmenu
+    shipsui, tradesui, waitmenu
 
 proc createGameUi*() =
   let
@@ -719,6 +719,7 @@ proc createGameUi*() =
     craftsui.addCommands()
     messagesui.addCommands()
     gameoptions.addCommands()
+    tradesui.addCommands()
 
 # Temporary code for interfacing with Ada
 
