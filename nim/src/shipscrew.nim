@@ -688,6 +688,8 @@ proc updateCrewOrders(havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal,
       -1) and updatePosition(ship = ship, order = repair,
           maxPriority = maxPriority):
     updateOrders(ship = ship)
+  if updatePosition(ship = ship, order = defend, maxPriority = maxPriority):
+    updateOrders(ship = ship)
 
 proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
