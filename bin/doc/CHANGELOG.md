@@ -48,6 +48,8 @@ All notable changes to this project will be documented in this file.
 - Starting a new game as Undead with empty ship
 - Loading events from saved game
 - Crash in combat when using a battering ram
+- Defenders don't back to their defend position when they have set the proper
+  orders' priority
 
 ## [9.9] - 2024-04-14
 
