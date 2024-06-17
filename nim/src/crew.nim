@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -177,7 +177,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
         itemIndex: int = findItem(inventory = playerShip.cargo,
             itemType = itemType)
         consumeValue: Natural = 0
-      if itemIndex > 0:
+      if itemIndex > -1:
         consumeValue = itemsList[playerShip.cargo[itemIndex].protoIndex].value[1]
         if itemsList[playerShip.cargo[itemIndex].protoIndex].value.len > 1 and
             itemsList[playerShip.cargo[itemIndex].protoIndex].value[2] != 0:
@@ -188,7 +188,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
         return consumeValue
       itemIndex = findItem(inventory = playerShip.crew[i].inventory,
           itemType = itemType)
-      if itemIndex > 0:
+      if itemIndex > -1:
         consumeValue = itemsList[playerShip.crew[i].inventory[
             itemIndex].protoIndex].value[1]
         if itemsList[playerShip.crew[i].inventory[
