@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/os
-import ../[game, events, maps, tk]
+import ../[game, events, maps, tk, types]
 import coreui, mapsui, table
 
 type ItemsSortOrders = enum
@@ -29,6 +29,7 @@ const defaultItemsSortOrder: ItemsSortOrders = none
 var
   tradeTable: TableWidget
   itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
+  itemsIndexes: seq[int]
 
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
@@ -61,7 +62,26 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = searchEntry & " delete 0 end")
   tclEval(script = closeButton & " configure -command {ShowSkyMap ShowTrade}")
   tradeFrame = tradeCanvas & ".trade"
-  var comboBox = tradeFrame & ".options.type"
+  clearTable(table = tradeTable)
+  var
+    baseType: string
+    baseCargo: seq[BaseCargo]
+  if baseIndex > 0:
+    baseType = skyBases[baseIndex].baseType
+    baseCargo = skyBases[baseIndex].cargo
+  else:
+    baseType = "0"
+    baseCargo = traderCargo
+  if itemsSortOrder == defaultItemsSortOrder:
+    itemsIndexes = @[]
+    for index in playerShip.cargo.low .. playerShip.cargo.high:
+      itemsIndexes.add(y = index)
+    itemsIndexes.add(y = -1)
+    for index in baseCargo.low .. baseCargo.high:
+      itemsIndexes.add(y = index)
+  for i in itemsIndexes:
+    if i == -1:
+      break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
