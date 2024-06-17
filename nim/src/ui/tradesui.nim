@@ -16,15 +16,27 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/os
-import ../[game, maps, tk]
-import coreui, table
+import ../[game, events, maps, tk]
+import coreui, mapsui, table
 
-var tradeTable: TableWidget
+type ItemsSortOrders = enum
+  nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
+    priceDesc, profitAsc, profitDesc, weightAsc, weightDesc, ownedAsc,
+    ownedDesc, availableAsc, availableDesc, none
+
+const defaultItemsSortOrder: ItemsSortOrders = none
+
+var
+  tradeTable: TableWidget
+  itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
 
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   var tradeFrame = mainPaned & ".tradeframe"
-  let tradeCanvas = tradeFrame & ".canvas"
+  let
+    tradeCanvas = tradeFrame & ".canvas"
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   var label = tradeCanvas & ".trade.options.typelabel"
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "trade.tcl")
@@ -35,9 +47,21 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         scrollbar = mainPaned & ".tradeframe.scrolly",
         command = "SortTradeItems",
         tooltipTExt = "Press mouse button to sort the items.")
-  let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  elif tclEval2(script = "winfo ismapped " & label) == "1" and argc == 1:
+    itemsSortOrder = defaultItemsSortOrder
+    tclEval(script = "grid remove " & closeButton)
+    tclEval(script = closeButton & " configure -command ShowSkyMap")
+    if baseIndex == 0 and eventIndex > -1:
+      deleteEvent(eventIndex = eventIndex)
+    showSkyMap(clear = true)
+    return tclOk
+  tclSetVar(varName = "gamestate", newValue = "trade")
+  let searchEntry = tradeCanvas & ".trade.options.search"
+  if argc < 3:
+    tclEval(script = searchEntry & " delete 0 end")
+  tclEval(script = closeButton & " configure -command {ShowSkyMap ShowTrade}")
+  tradeFrame = tradeCanvas & ".trade"
+  var comboBox = tradeFrame & ".options.type"
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
