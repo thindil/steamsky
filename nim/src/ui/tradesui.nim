@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/os
-import ../[game, events, maps, tk, types]
+import std/[os, strutils, tables]
+import ../[basestypes, basescargo, game, events, maps, tk, types]
 import coreui, mapsui, table
 
 type ItemsSortOrders = enum
@@ -79,9 +79,31 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     itemsIndexes.add(y = -1)
     for index in baseCargo.low .. baseCargo.high:
       itemsIndexes.add(y = index)
+  var itemsTypes: string = "All"
   for i in itemsIndexes:
     if i == -1:
       break
+    let
+      protoIndex = playerShip.cargo[i].protoIndex
+      itemType = if itemsList[protoIndex].showType.len == 0:
+          itemsList[protoIndex].itemType
+        else:
+          itemsList[protoIndex].showType
+    if itemsTypes.find(sub = "{" & itemType & "}") == -1 and itemsList[
+        protoIndex].price > 0:
+      itemsTypes.add(y = " {" & itemType & "}")
+  var currentItemIndex = 0
+  for i in itemsIndexes:
+    currentItemIndex.inc
+    if i == -1:
+      break
+    if getPrice(baseType = baseType, itemIndex = playerShip.cargo[
+        i].protoIndex) == 0:
+      continue
+    let
+      protoIndex = playerShip.cargo[i].protoIndex
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          durability = playerShip.cargo[i].durability)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
