@@ -133,6 +133,37 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
           skyBases[baseIndex].cargo[baseCargoIndex].price
         else:
           traderCargo[baseCargoIndex].price
+    if eventIndex > -1:
+      if eventsList[eventIndex].eType == doublePrice and eventsList[
+          eventIndex].itemIndex == protoIndex:
+        price = price * 2
+    let profit = price - playerShip.cargo[i].price
+    var baseAmount = 0
+    if baseIndex > 0:
+      if baseCargoIndex > -1 and isBuyable(baseType = baseType,
+          itemIndex = protoIndex):
+        baseAmount = baseCargo[baseCargoIndex].amount
+    else:
+      if baseCargoIndex > -1:
+        baseAmount = baseCargo[baseCargoIndex].amount
+    addButton(table = tradeTable, text = itemName,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $i, column = 1)
+    addButton(table = tradeTable, text = itemType,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $i, column = 2)
+    let itemDurability = (if playerShip.cargo[i].durability <
+        100: getItemDamage(itemDurability = playerShip.cargo[
+        i].durability) else: "Unused")
+    addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
+        maxValue = defaultItemDurability, tooltip = itemDurability,
+        command = "ShowTradeItemInfo " & $i, column = 3)
+    addButton(table = tradeTable, text = $price,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $i, column = 4)
+    addButton(table = tradeTable, text = $profit,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $i, column = 5)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
