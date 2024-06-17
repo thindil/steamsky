@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to sky bases types like loading them from file,
+## getting price, checking do an item is buyable.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, types
@@ -240,6 +243,7 @@ proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
 
 proc loadAdaBasesTypes(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     loadBasesTypes(fileName = $fileName)
     return "".cstring
@@ -248,6 +252,7 @@ proc loadAdaBasesTypes(fileName: cstring): cstring {.sideEffect, raises: [],
 
 proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
   except KeyError:
@@ -256,6 +261,7 @@ proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.raises: [], tags: [
 proc isAdaBuyable(baseType: cstring; itemIndex, checkFlag, baseIndex,
     reputationLevel, reputationExperience: cint): cint {.raises: [], tags: [],
         exportc, contractual.} =
+  ## Temporary C binding
   if baseIndex > 0:
     skyBases[baseIndex].reputation = ReputationData(level: reputationLevel,
         experience: reputationExperience)
@@ -267,6 +273,7 @@ proc isAdaBuyable(baseType: cstring; itemIndex, checkFlag, baseIndex,
 
 proc hasAdaFlag(baseType, flag: cstring): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   if not basesTypesList.hasKey(key = $baseType):
     return 0
   try:
@@ -278,6 +285,7 @@ proc hasAdaFlag(baseType, flag: cstring): cint {.raises: [], tags: [], exportc,
 
 proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   var i = 0
   for key in basesTypesList.keys:
     basesTypes[i] = key.cstring
@@ -288,6 +296,7 @@ proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.raises: [],
 
 proc getAdaBaseTypeName(baseType: cstring): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return basesTypesList[$baseType].name.cstring
   except KeyError:
@@ -295,6 +304,7 @@ proc getAdaBaseTypeName(baseType: cstring): cstring {.raises: [], tags: [],
 
 proc hasAdaRecipe(baseType, recipe: cstring): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   if not basesTypesList.hasKey(key = $baseType):
     return 0
   try:
@@ -306,6 +316,7 @@ proc hasAdaRecipe(baseType, recipe: cstring): cint {.raises: [], tags: [],
 
 proc getAdaBaseTypeColor(baseType: cstring): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return basesTypesList[$baseType].color.cstring
   except KeyError:
@@ -313,6 +324,7 @@ proc getAdaBaseTypeColor(baseType: cstring): cstring {.raises: [], tags: [],
 
 proc getAdaBaseTypeDescription(baseType: cstring): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return basesTypesList[$baseType].description.cstring
   except KeyError:
