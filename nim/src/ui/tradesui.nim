@@ -163,7 +163,34 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         command = "ShowTradeItemInfo " & $i, column = 4)
     addButton(table = tradeTable, text = $profit,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 5)
+        command = "ShowTradeItemInfo " & $i, column = 5, color = (if profit >
+        0: tclGetVar(varName = "ttk::theme::" & gameSettings.interfaceTheme &
+        "::colors(-green)") elif profit < 0: tclGetVar(
+        varName = "ttk::theme::" & gameSettings.interfaceTheme &
+        "::colors(-green)") else: ""))
+    addButton(table = tradeTable, text = $itemsList[protoIndex].weight & " kg",
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $i, column = 6)
+    addButton(table = tradeTable, text = $playerShip.cargo[i].amount,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $i, column = 7)
+    addButton(table = tradeTable, text = $baseAmount,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo " & $i, column = 8, newRow = true)
+    if tradeTable.row == gameSettings.listsLimit + 1:
+      break
+  currentItemIndex = playerShip.cargo.len + 1
+  for i in currentItemIndex .. itemsIndexes.high:
+    let
+      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
+      itemType = if itemsList[protoIndex].showType.len == 0:
+          itemsList[protoIndex].itemType
+        else:
+          itemsList[protoIndex].showType
+    if isBuyable(baseType = baseType, itemIndex = protoIndex,
+        baseIndex = baseIndex) and baseCargo[itemsIndexes[i]].amount > 0 and
+        itemsTypes.find(sub = "{" & itemType & "}") == -1:
+      itemsTypes.add(y = " {" & itemType & "}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
