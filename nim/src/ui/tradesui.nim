@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basestypes, basescargo, game, events, maps, tk, types]
+import ../[basestypes, basescargo, config, events, game, items, maps, tk, types]
 import coreui, mapsui, table
 
 type ItemsSortOrders = enum
@@ -92,7 +92,13 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     if itemsTypes.find(sub = "{" & itemType & "}") == -1 and itemsList[
         protoIndex].price > 0:
       itemsTypes.add(y = " {" & itemType & "}")
-  var currentItemIndex = 0
+  var
+    currentItemIndex = 0
+    indexesList: seq[Natural]
+    currentRow = 1
+  let
+    page = (if argc == 4: ($argv[3]).parseInt else: 1)
+    startRow = ((page - 1) * gameSettings.listsLimit) + 1
   for i in itemsIndexes:
     currentItemIndex.inc
     if i == -1:
@@ -104,6 +110,29 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       protoIndex = playerShip.cargo[i].protoIndex
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
           durability = playerShip.cargo[i].durability)
+    if baseCargoIndex > -1:
+      indexesList.add(y = baseCargoIndex)
+    let itemType = if itemsList[protoIndex].showType.len == 0:
+          itemsList[protoIndex].itemType
+        else:
+          itemsList[protoIndex].showType
+    if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
+      continue
+    let itemName = getItemName(item = playerShip.cargo[i], damageInfo = false,
+        toLower = false)
+    if argc == 3 and itemName.find(sub = $argv[2]) == -1:
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    var price = 0
+    if baseCargoIndex == -1:
+      price = getPrice(baseType = baseType, itemIndex = protoIndex)
+    else:
+      price = if baseIndex > 0:
+          skyBases[baseIndex].cargo[baseCargoIndex].price
+        else:
+          traderCargo[baseCargoIndex].price
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
