@@ -218,6 +218,36 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         skyBases[baseIndex].cargo[itemsIndexes[i]].price
       else:
         traderCargo[itemsIndexes[i]].price
+    if eventIndex > -1:
+      if eventsList[eventIndex].eType == doublePrice and eventsList[
+          eventIndex].itemIndex == protoIndex:
+        price = price * 2
+    let baseAmount = (if baseIndex == 0: traderCargo[itemsIndexes[
+        i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
+    addButton(table = tradeTable, text = itemName,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 1)
+    addButton(table = tradeTable, text = itemType,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 2)
+    let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
+        100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
+        i]].durability) else: "Unused")
+    addProgressbar(table = tradeTable, value = baseCargo[itemsIndexes[
+        i]].durability, maxValue = defaultItemDurability,
+        tooltip = itemDurability, command = "ShowTradeItemInfo -" &
+        $itemsIndexes[i], column = 3)
+    addButton(table = tradeTable, text = $price,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 4)
+    addButton(table = tradeTable, text = $(-price),
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 5,
+        newRow = false, color = tclGetVar(varName = "ttk::theme::" &
+        gameSettings.interfaceTheme & "::colors(-red)"))
+    addButton(table = tradeTable, text = $itemsList[protoIndex].weight & " kg",
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 6)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
