@@ -13,20 +13,20 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
+-- with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Vectors;
 with Ada.Exceptions;
-with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings;
+-- with Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings;
-with GNAT.Directory_Operations;
+-- with Interfaces.C.Strings;
+-- with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
+-- with Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -34,13 +34,13 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo;
+-- with Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
-with Config;
+-- with Config;
 with CoreUI; use CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
@@ -142,687 +142,714 @@ package body Trades.UI is
    function Show_Trade_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
-      use Ada.Characters.Handling;
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Interfaces.C.Strings;
-      use GNAT.Directory_Operations;
-      use Tcl.Ada;
-      use Tcl.Tk.Ada;
+--      pragma Unreferenced(Client_Data);
+--      use Ada.Characters.Handling;
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Interfaces.C.Strings;
+--      use GNAT.Directory_Operations;
+--      use Tcl.Ada;
+--      use Tcl.Tk.Ada;
       use Tcl.Tk.Ada.Widgets.Canvas;
-      use Tcl.Tk.Ada.Widgets.TtkEntry;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Tcl.Tk.Ada.Winfo;
-      use Config;
-      use Tiny_String;
-
+--      use Tcl.Tk.Ada.Winfo;
+--      use Config;
+--      use Tiny_String;
+--
       Trade_Frame: Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".tradeframe", Interp => Interp);
       Trade_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Trade_Frame & ".canvas", Interp => Interp);
-      Label: Ttk_Label :=
-        Get_Widget
-          (pathName => Trade_Canvas & ".trade.options.typelabel",
-           Interp => Interp);
-      Item_Name, Trade_Info, Item_Durability: Unbounded_String :=
-        Null_Unbounded_String;
-      Proto_Index: Natural := 0;
-      Base_Type: Bounded_String;
-      Item_Type: Bounded_String := Null_Bounded_String;
-      Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
-      Price: Positive := 1;
-      Combo_Box: Ttk_ComboBox;
-      Base_Index: Natural;
-      Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
-      Base_Cargo_Index, Base_Amount: Natural := 0;
-      --## rule off IMPROPER_INITIALIZATION
-      Indexes_List: Positive_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      Event_Index: Natural;
-      Profit: Integer := 0;
-      Money_Index_2: constant Natural :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Search_Entry: constant Ttk_Entry :=
-        Get_Widget
-          (pathName => Trade_Canvas & ".trade.options.search",
-           Interp => Interp);
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Page: constant Positive :=
-        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
-         else 1);
-      Start_Row: constant Positive :=
-        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Current_Row: Positive := 1;
-      Arguments: constant String :=
-        (if Argc > 2 then
-           "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
-           CArgv.Arg(Argv => Argv, N => 2) & "}"
-         elsif Argc = 2 then CArgv.Arg(Argv => Argv, N => 1) & " {}"
-         else "All {}");
-      Current_Item_Index: Positive := 1;
+--      Label: Ttk_Label :=
+--        Get_Widget
+--          (pathName => Trade_Canvas & ".trade.options.typelabel",
+--           Interp => Interp);
+--      Item_Name, Trade_Info, Item_Durability: Unbounded_String :=
+--        Null_Unbounded_String;
+--      Proto_Index: Natural := 0;
+--      Base_Type: Bounded_String;
+--      Item_Type: Bounded_String := Null_Bounded_String;
+--      Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
+--      Price: Positive := 1;
+--      Combo_Box: Ttk_ComboBox;
+--      Base_Index: Natural;
+--      Base_Cargo: BaseCargo_Container.Vector (Capacity => 16);
+--      Base_Cargo_Index, Base_Amount: Natural := 0;
+--      --## rule off IMPROPER_INITIALIZATION
+--      Indexes_List: Positive_Container.Vector;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Event_Index: Natural;
+--      Profit: Integer := 0;
+--      Money_Index_2: constant Natural :=
+--        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+--      Search_Entry: constant Ttk_Entry :=
+--        Get_Widget
+--          (pathName => Trade_Canvas & ".trade.options.search",
+--           Interp => Interp);
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Page: constant Positive :=
+--        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
+--         else 1);
+--      Start_Row: constant Positive :=
+--        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      Current_Row: Positive := 1;
+--      Arguments: constant String :=
+--        (if Argc > 2 then
+--           "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
+--           CArgv.Arg(Argv => Argv, N => 2) & "}"
+--         elsif Argc = 2 then CArgv.Arg(Argv => Argv, N => 1) & " {}"
+--         else "All {}");
+--      Current_Item_Index: Positive := 1;
+      function Show_Ada_Trade_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "showTradeCommand";
    begin
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Set_Base_Cargo(Base_Index => Base_Index);
-      Event_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
-      if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
-         Tcl_EvalFile
-           (interp => Get_Context,
-            fileName =>
-              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
-              "trade.tcl");
-         Bind
-           (Widgt => Trade_Frame, Sequence => "<Configure>",
-            Script => "{ResizeCanvas %W.canvas %w %h}");
-         Trade_Frame := Get_Widget(pathName => Trade_Canvas & ".trade");
-         Trade_Table :=
-           Create_Table
-             (Parent => Widget_Image(Win => Trade_Frame),
-              Headers =>
-                (1 => To_Unbounded_String(Source => "Name"),
-                 2 => To_Unbounded_String(Source => "Type"),
-                 3 => To_Unbounded_String(Source => "Durability"),
-                 4 => To_Unbounded_String(Source => "Price"),
-                 5 => To_Unbounded_String(Source => "Profit"),
-                 6 => To_Unbounded_String(Source => "Weight"),
-                 7 => To_Unbounded_String(Source => "Owned"),
-                 8 => To_Unbounded_String(Source => "Available")),
-              Scrollbar =>
-                Get_Widget(pathName => Main_Paned & ".tradeframe.scrolly"),
-              Command => "SortTradeItems",
-              Tooltip_Text => "Press mouse button to sort the items.");
-      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
-        Argc = 1 then
-         Items_Sort_Order := Default_Items_Sort_Order;
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
-         configure(Widgt => Close_Button, options => "-command ShowSkyMap");
-         if Base_Index = 0 and Event_Index > 0 then
-            Delete_Event(Event_Index => Event_Index);
-         end if;
-         Show_Sky_Map(Clear => True);
-         return TCL_OK;
+      if Show_Ada_Trade_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) = TCL_ERROR then
+         return TCL_ERROR;
       end if;
-      Tcl_SetVar
-        (interp => Interp, varName => "gamestate", newValue => "trade");
-      if Argc < 3 then
-         Delete
-           (TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
-      end if;
-      configure
-        (Widgt => Close_Button, options => "-command {ShowSkyMap ShowTrade}");
-      Trade_Frame.Name := New_String(Str => Trade_Canvas & ".trade");
-      Combo_Box :=
-        Get_Widget
-          (pathName => Trade_Frame & ".options.type", Interp => Interp);
-      Clear_Table(Table => Trade_Table);
-      if Base_Index > 0 then
-         Base_Type := Sky_Bases(Base_Index).Base_Type;
-         BaseCargo_Container.Assign
-           (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
-      else
-         Base_Type := To_Bounded_String(Source => "0");
-         BaseCargo_Container.Assign
-           (Target => Base_Cargo, Source => Trader_Cargo);
-      end if;
-      if Items_Sort_Order = Default_Items_Sort_Order then
-         Items_Indexes.Clear;
-         Fill_Item_Indexes_Loop :
-         for I in
-           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-             Inventory_Container.Last_Index
-               (Container => Player_Ship.Cargo) loop
-            Items_Indexes.Append(New_Item => I);
-         end loop Fill_Item_Indexes_Loop;
-         Items_Indexes.Append(New_Item => 0);
-         Add_Cargo_Indexes_Loop :
-         for I in
-           BaseCargo_Container.First_Index(Container => Base_Cargo) ..
-             BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
-            Items_Indexes.Append(New_Item => I);
-         end loop Add_Cargo_Indexes_Loop;
-      end if;
-      Fill_Cargo_Types_Loop :
-      for I of Items_Indexes loop
-         exit Fill_Cargo_Types_Loop when I = 0;
-         Proto_Index :=
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => I)
-             .Proto_Index;
-         Item_Type :=
-           (if
-              Get_Proto_Item(Index => Proto_Index).Show_Type =
-              Null_Bounded_String
-            then Get_Proto_Item(Index => Proto_Index).I_Type
-            else Get_Proto_Item(Index => Proto_Index).Show_Type);
-         if Index
-             (Source => Items_Types,
-              Pattern => To_String(Source => "{" & Item_Type & "}")) =
-           0 and
-           Get_Proto_Item(Index => Proto_Index).Price > 0 then
-            Append
-              (Source => Items_Types,
-               New_Item => " {" & To_String(Source => Item_Type) & "}");
-         end if;
-      end loop Fill_Cargo_Types_Loop;
-      Show_Cargo_Items_Loop :
-      for I of Items_Indexes loop
-         Current_Item_Index := Current_Item_Index + 1;
-         exit Show_Cargo_Items_Loop when I = 0;
-         if Get_Price
-             (Base_Type => Base_Type,
-              Item_Index =>
-                Inventory_Container.Element
-                  (Container => Player_Ship.Cargo, Index => I)
-                  .Proto_Index) =
-           0 then
-            goto End_Of_Cargo_Loop;
-         end if;
-         Proto_Index :=
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => I)
-             .Proto_Index;
-         Base_Cargo_Index :=
-           Find_Base_Cargo
-             (Proto_Index => Proto_Index,
-              Durability =>
-                Inventory_Container.Element
-                  (Container => Player_Ship.Cargo, Index => I)
-                  .Durability);
-         if Base_Cargo_Index > 0 then
-            Indexes_List.Append(New_Item => Base_Cargo_Index);
-         end if;
-         Item_Type :=
-           (if
-              Get_Proto_Item(Index => Proto_Index).Show_Type =
-              Null_Bounded_String
-            then Get_Proto_Item(Index => Proto_Index).I_Type
-            else Get_Proto_Item(Index => Proto_Index).Show_Type);
-         if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
-           and then To_String(Source => Item_Type) /=
-             CArgv.Arg(Argv => Argv, N => 1) then
-            goto End_Of_Cargo_Loop;
-         end if;
-         Item_Name :=
-           To_Unbounded_String
-             (Source =>
-                Get_Item_Name
-                  (Item =>
-                     Inventory_Container.Element
-                       (Container => Player_Ship.Cargo, Index => I),
-                   Damage_Info => False, To_Lower => False));
-         if Argc = 3
-           and then
-             Index
-               (Source => To_Lower(Item => To_String(Source => Item_Name)),
-                Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
-             0 then
-            goto End_Of_Cargo_Loop;
-         end if;
-         if Current_Row < Start_Row then
-            Current_Row := Current_Row + 1;
-            goto End_Of_Cargo_Loop;
-         end if;
-         if Base_Cargo_Index = 0 then
-            Price :=
-              Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
-         else
-            Price :=
-              (if Base_Index > 0 then
-                 BaseCargo_Container.Element
-                   (Container => Sky_Bases(Base_Index).Cargo,
-                    Index => Base_Cargo_Index)
-                   .Price
-               else BaseCargo_Container.Element
-                   (Container => Trader_Cargo, Index => Base_Cargo_Index)
-                   .Price);
-         end if;
-         if Event_Index > 0 then
-            if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
-              and then Get_Event(Index => Event_Index).Item_Index =
-                Proto_Index then
-               Price := Price * 2;
-            end if;
-         end if;
-         Profit :=
-           Price -
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => I)
-             .Price;
-         Base_Amount := 0;
-         if Base_Index > 0 then
-            if Base_Cargo_Index > 0 and
-              Is_Buyable
-                (Base_Type => Base_Type, Item_Index => Proto_Index) then
-               Base_Amount :=
-                 BaseCargo_Container.Element
-                   (Container => Base_Cargo, Index => Base_Cargo_Index)
-                   .Amount;
-            end if;
-         else
-            if Base_Cargo_Index > 0 then
-               Base_Amount :=
-                 BaseCargo_Container.Element
-                   (Container => Base_Cargo, Index => Base_Cargo_Index)
-                   .Amount;
-            end if;
-         end if;
-         Add_Button
-           (Table => Trade_Table, Text => To_String(Source => Item_Name),
-            Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 1);
-         Add_Button
-           (Table => Trade_Table, Text => To_String(Source => Item_Type),
-            Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 2);
-         Item_Durability :=
-           (if
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Durability <
-              100
-            then
-              To_Unbounded_String
-                (Source =>
-                   Get_Item_Damage
-                     (Item_Durability =>
-                        Inventory_Container.Element
-                          (Container => Player_Ship.Cargo, Index => I)
-                          .Durability))
-            else To_Unbounded_String(Source => "Unused"));
-         Add_Progress_Bar
-           (Table => Trade_Table,
-            Value =>
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Durability,
-            Max_Value => Default_Item_Durability,
-            Tooltip => To_String(Source => Item_Durability),
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 3);
-         Add_Button
-           (Table => Trade_Table, Text => Positive'Image(Price),
-            Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 4);
-         Add_Button
-           (Table => Trade_Table, Text => Positive'Image(Profit),
-            Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 5,
-            Color =>
-              (if Profit > 0 then
-                 Tcl_GetVar
-                   (interp => Interp,
-                    varName =>
-                      "ttk::theme::" &
-                      To_String(Source => Get_Interface_Theme) &
-                      "::colors(-green)")
-               elsif Profit < 0 then
-                 Tcl_GetVar
-                   (interp => Interp,
-                    varName =>
-                      "ttk::theme::" &
-                      To_String(Source => Get_Interface_Theme) &
-                      "::colors(-red)")
-               else ""));
-         Add_Button
-           (Table => Trade_Table,
-            Text =>
-              Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
-              " kg",
-            Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 6);
-         Add_Button
-           (Table => Trade_Table,
-            Text =>
-              Positive'Image
-                (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => I)
-                   .Amount),
-            Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 7);
-         Add_Button
-           (Table => Trade_Table, Text => Positive'Image(Base_Amount),
-            Tooltip => "Show available options for item",
-            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 8,
-            New_Row => True);
-         exit Show_Cargo_Items_Loop when Trade_Table.Row =
-           Get_Integer_Setting(Name => "listsLimit") + 1;
-         <<End_Of_Cargo_Loop>>
-      end loop Show_Cargo_Items_Loop;
-      Current_Item_Index :=
-        Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) +
-        2;
-      --## rule off SIMPLIFIABLE_STATEMENTS
-      Fill_Trader_Types_Loop :
-      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
-         Proto_Index :=
-           BaseCargo_Container.Element
-             (Container => Base_Cargo, Index => Items_Indexes(I))
-             .Proto_Index;
-         Item_Type :=
-           (if
-              Get_Proto_Item(Index => Proto_Index).Show_Type =
-              Null_Bounded_String
-            then Get_Proto_Item(Index => Proto_Index).I_Type
-            else Get_Proto_Item(Index => Proto_Index).Show_Type);
-         if Is_Buyable
-             (Base_Type => Base_Type, Item_Index => Proto_Index,
-              Base_Index => Base_Index) and
-           BaseCargo_Container.Element
-               (Container => Base_Cargo, Index => Items_Indexes(I))
-               .Amount >
-             0 and
-           Index
-               (Source => Items_Types,
-                Pattern => To_String(Source => "{" & Item_Type & "}")) =
-             0 then
-            Append
-              (Source => Items_Types,
-               New_Item => " {" & To_String(Source => Item_Type) & "}");
-         end if;
-      end loop Fill_Trader_Types_Loop;
-      Show_Trader_Items_Loop :
-      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
-         exit Show_Trader_Items_Loop when Trade_Table.Row =
-           Get_Integer_Setting(Name => "listsLimit") + 1;
-         if Indexes_List.Find_Index(Item => Items_Indexes(I)) > 0 or
-           not Is_Buyable
-             (Base_Type => Base_Type,
-              Item_Index =>
-                BaseCargo_Container.Element
-                  (Container => Base_Cargo, Index => Items_Indexes(I))
-                  .Proto_Index,
-              Base_Index => Base_Index) or
-           BaseCargo_Container.Element
-               (Container => Base_Cargo, Index => Items_Indexes(I))
-               .Amount =
-             0 then
-            goto End_Of_Trader_Loop;
-         end if;
-         Proto_Index :=
-           BaseCargo_Container.Element
-             (Container => Base_Cargo, Index => Items_Indexes(I))
-             .Proto_Index;
-         Item_Type :=
-           (if
-              Get_Proto_Item(Index => Proto_Index).Show_Type =
-              Null_Bounded_String
-            then Get_Proto_Item(Index => Proto_Index).I_Type
-            else Get_Proto_Item(Index => Proto_Index).Show_Type);
-         if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
-           and then To_String(Source => Item_Type) /=
-             CArgv.Arg(Argv => Argv, N => 1) then
-            goto End_Of_Trader_Loop;
-         end if;
-         Item_Name :=
-           To_Unbounded_String
-             (Source =>
-                To_String
-                  (Source => Get_Proto_Item(Index => Proto_Index).Name));
-         if Argc = 3
-           and then
-             Index
-               (Source => To_Lower(Item => To_String(Source => Item_Name)),
-                Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
-             0 then
-            goto End_Of_Trader_Loop;
-         end if;
-         if Current_Row < Start_Row then
-            Current_Row := Current_Row + 1;
-            goto End_Of_Trader_Loop;
-         end if;
-         Price :=
-           (if Base_Index > 0 then
-              BaseCargo_Container.Element
-                (Container => Sky_Bases(Base_Index).Cargo,
-                 Index => Items_Indexes(I))
-                .Price
-            else BaseCargo_Container.Element
-                (Container => Trader_Cargo, Index => Items_Indexes(I))
-                .Price);
-         if Event_Index > 0 then
-            if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
-              and then Get_Event(Index => Event_Index).Item_Index =
-                Proto_Index then
-               Price := Price * 2;
-            end if;
-         end if;
-         Base_Amount :=
-           (if Base_Index = 0 then
-              BaseCargo_Container.Element
-                (Container => Trader_Cargo, Index => Items_Indexes(I))
-                .Amount
-            else BaseCargo_Container.Element
-                (Container => Sky_Bases(Base_Index).Cargo,
-                 Index => Items_Indexes(I))
-                .Amount);
-         Add_Button
-           (Table => Trade_Table, Text => To_String(Source => Item_Name),
-            Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 1);
-         Add_Button
-           (Table => Trade_Table, Text => To_String(Source => Item_Type),
-            Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 2);
-         Item_Durability :=
-           (if
-              BaseCargo_Container.Element
-                (Container => Base_Cargo, Index => Items_Indexes(I))
-                .Durability <
-              100
-            then
-              To_Unbounded_String
-                (Source =>
-                   Get_Item_Damage
-                     (Item_Durability =>
-                        BaseCargo_Container.Element
-                          (Container => Base_Cargo, Index => Items_Indexes(I))
-                          .Durability))
-            else To_Unbounded_String(Source => "Unused"));
-         Add_Progress_Bar
-           (Table => Trade_Table,
-            Value =>
-              BaseCargo_Container.Element
-                (Container => Base_Cargo, Index => Items_Indexes(I))
-                .Durability,
-            Max_Value => Default_Item_Durability,
-            Tooltip => To_String(Source => Item_Durability),
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 3);
-         Add_Button
-           (Table => Trade_Table, Text => Positive'Image(Price),
-            Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 4);
-         Add_Button
-           (Table => Trade_Table, Text => Integer'Image(-Price),
-            Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 5, New_Row => False,
-            Color =>
-              Tcl_GetVar
-                (interp => Interp,
-                 varName =>
-                   "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                   "::colors(-red)"));
-         Add_Button
-           (Table => Trade_Table,
-            Text =>
-              Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
-              " kg",
-            Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 6);
-         Add_Button
-           (Table => Trade_Table, Text => " 0",
-            Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 7);
-         Add_Button
-           (Table => Trade_Table, Text => Natural'Image(Base_Amount),
-            Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeItemInfo -" &
-              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
-            Column => 8, New_Row => True);
-         <<End_Of_Trader_Loop>>
-      end loop Show_Trader_Items_Loop;
-      --## rule on SIMPLIFIABLE_STATEMENTS
-      if Page > 1 then
-         if Trade_Table.Row <
-           Get_Integer_Setting(Name => "listsLimit") + 1 then
-            Add_Pagination
-              (Table => Trade_Table,
-               Previous_Command =>
-                 "ShowTrade " & Arguments & Positive'Image(Page - 1),
-               Next_Command => "");
-         else
-            Add_Pagination
-              (Table => Trade_Table,
-               Previous_Command =>
-                 "ShowTrade " & Arguments & Positive'Image(Page - 1),
-               Next_Command =>
-                 "ShowTrade " & Arguments & Positive'Image(Page + 1));
-         end if;
-      elsif Trade_Table.Row =
-        Get_Integer_Setting(Name => "listsLimit") + 1 then
-         Add_Pagination
-           (Table => Trade_Table, Previous_Command => "",
-            Next_Command =>
-              "ShowTrade " & Arguments & Positive'Image(Page + 1));
-      end if;
-      Update_Table
-        (Table => Trade_Table,
-         Grab_Focus =>
-           (if Focus = Widget_Image(Win => Search_Entry) then False));
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list " & To_String(Source => Items_Types) & "]");
-      if Argc = 1 then
-         Current(ComboBox => Combo_Box, NewIndex => "0");
-      end if;
-      if Money_Index_2 > 0 then
-         Trade_Info :=
-           To_Unbounded_String
-             (Source =>
-                "You have" &
-                Natural'Image
-                  (Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                     .Amount) &
-                " " & To_String(Source => Money_Name) & ".");
-      else
-         Trade_Info :=
-           To_Unbounded_String
-             (Source =>
-                "You don't have any " & To_String(Source => Money_Name) &
-                " to buy anything.");
-      end if;
-      Show_Free_Space_Block :
-      declare
-         Free_Space: Integer := Free_Cargo(Amount => 0);
-      begin
-         if Free_Space < 0 then
-            Free_Space := 0;
-         end if;
-         Append
-           (Source => Trade_Info,
-            New_Item =>
-              LF & "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
-      end Show_Free_Space_Block;
-      Label.Name := New_String(Str => Trade_Frame & ".options.playerinfo");
-      configure
-        (Widgt => Label,
-         options => "-text {" & To_String(Source => Trade_Info) & "}");
-      Trade_Info := Null_Unbounded_String;
-      if Base_Index > 0 then
-         if BaseCargo_Container.Element
-             (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
-             .Amount =
-           0 then
-            Append
-              (Source => Trade_Info,
-               New_Item =>
-                 "Base doesn't have any " & To_String(Source => Money_Name) &
-                 "to buy anything.");
-         else
-            Append
-              (Source => Trade_Info,
-               New_Item =>
-                 "Base has" &
-                 Positive'Image
-                   (BaseCargo_Container.Element
-                      (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
-                      .Amount) &
-                 " " & To_String(Source => Money_Name) & ".");
-         end if;
-      else
-         if BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1)
-             .Amount =
-           0 then
-            Append
-              (Source => Trade_Info,
-               New_Item =>
-                 "Ship doesn't have any " & To_String(Source => Money_Name) &
-                 "to buy anything.");
-         else
-            Append
-              (Source => Trade_Info,
-               New_Item =>
-                 "Ship has" &
-                 Positive'Image
-                   (BaseCargo_Container.Element
-                      (Container => Trader_Cargo, Index => 1)
-                      .Amount) &
-                 " " & To_String(Source => Money_Name) & ".");
-         end if;
-      end if;
-      Label.Name := New_String(Str => Trade_Frame & ".options.baseinfo");
-      configure
-        (Widgt => Label,
-         options => "-text {" & To_String(Source => Trade_Info) & "}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-row 0 -column 1");
-      configure
-        (Widgt => Trade_Canvas,
-         options =>
-           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
-           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Canvas_Create
-        (Parent => Trade_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Trade_Frame);
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      configure
-        (Widgt => Trade_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Trade_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Trade_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Trade_Canvas, Fraction => "0.0");
-      Show_Screen(New_Screen_Name => "tradeframe");
-      Tcl_SetResult(interp => Interp, str => "1");
+      Trade_Frame := Get_Widget(pathName => Trade_Canvas & ".trade");
+      Trade_Table :=
+         Create_Table
+            (Parent => Widget_Image(Win => Trade_Frame),
+         Headers =>
+         (1 => To_Unbounded_String(Source => "Name"),
+         2 => To_Unbounded_String(Source => "Type"),
+         3 => To_Unbounded_String(Source => "Durability"),
+         4 => To_Unbounded_String(Source => "Price"),
+         5 => To_Unbounded_String(Source => "Profit"),
+         6 => To_Unbounded_String(Source => "Weight"),
+         7 => To_Unbounded_String(Source => "Owned"),
+         8 => To_Unbounded_String(Source => "Available")),
+         Scrollbar =>
+         Get_Widget(pathName => Main_Paned & ".tradeframe.scrolly"),
+         Command => "SortTradeItems",
+         Tooltip_Text => "Press mouse button to sort the items.");
       return TCL_OK;
+--      Get_Ship_From_Nim(Ship => Player_Ship);
+--      Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Set_Base_Cargo(Base_Index => Base_Index);
+--      Event_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
+--      if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
+--         Tcl_EvalFile
+--           (interp => Get_Context,
+--            fileName =>
+--              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+--              "trade.tcl");
+--         Bind
+--           (Widgt => Trade_Frame, Sequence => "<Configure>",
+--            Script => "{ResizeCanvas %W.canvas %w %h}");
+--         Trade_Frame := Get_Widget(pathName => Trade_Canvas & ".trade");
+--         Trade_Table :=
+--           Create_Table
+--             (Parent => Widget_Image(Win => Trade_Frame),
+--              Headers =>
+--                (1 => To_Unbounded_String(Source => "Name"),
+--                 2 => To_Unbounded_String(Source => "Type"),
+--                 3 => To_Unbounded_String(Source => "Durability"),
+--                 4 => To_Unbounded_String(Source => "Price"),
+--                 5 => To_Unbounded_String(Source => "Profit"),
+--                 6 => To_Unbounded_String(Source => "Weight"),
+--                 7 => To_Unbounded_String(Source => "Owned"),
+--                 8 => To_Unbounded_String(Source => "Available")),
+--              Scrollbar =>
+--                Get_Widget(pathName => Main_Paned & ".tradeframe.scrolly"),
+--              Command => "SortTradeItems",
+--              Tooltip_Text => "Press mouse button to sort the items.");
+--      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
+--        Argc = 1 then
+--         Items_Sort_Order := Default_Items_Sort_Order;
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+--         configure(Widgt => Close_Button, options => "-command ShowSkyMap");
+--         if Base_Index = 0 and Event_Index > 0 then
+--            Delete_Event(Event_Index => Event_Index);
+--         end if;
+--         Show_Sky_Map(Clear => True);
+--         return TCL_OK;
+--      end if;
+--      Tcl_SetVar
+--        (interp => Interp, varName => "gamestate", newValue => "trade");
+--      if Argc < 3 then
+--         Delete
+--           (TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
+--      end if;
+--      configure
+--        (Widgt => Close_Button, options => "-command {ShowSkyMap ShowTrade}");
+--      Trade_Frame.Name := New_String(Str => Trade_Canvas & ".trade");
+--      Combo_Box :=
+--        Get_Widget
+--          (pathName => Trade_Frame & ".options.type", Interp => Interp);
+--      Clear_Table(Table => Trade_Table);
+--      if Base_Index > 0 then
+--         Base_Type := Sky_Bases(Base_Index).Base_Type;
+--         BaseCargo_Container.Assign
+--           (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
+--      else
+--         Base_Type := To_Bounded_String(Source => "0");
+--         BaseCargo_Container.Assign
+--           (Target => Base_Cargo, Source => Trader_Cargo);
+--      end if;
+--      if Items_Sort_Order = Default_Items_Sort_Order then
+--         Items_Indexes.Clear;
+--         Fill_Item_Indexes_Loop :
+--         for I in
+--           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+--             Inventory_Container.Last_Index
+--               (Container => Player_Ship.Cargo) loop
+--            Items_Indexes.Append(New_Item => I);
+--         end loop Fill_Item_Indexes_Loop;
+--         Items_Indexes.Append(New_Item => 0);
+--         Add_Cargo_Indexes_Loop :
+--         for I in
+--           BaseCargo_Container.First_Index(Container => Base_Cargo) ..
+--             BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
+--            Items_Indexes.Append(New_Item => I);
+--         end loop Add_Cargo_Indexes_Loop;
+--      end if;
+--      Fill_Cargo_Types_Loop :
+--      for I of Items_Indexes loop
+--         exit Fill_Cargo_Types_Loop when I = 0;
+--         Proto_Index :=
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Cargo, Index => I)
+--             .Proto_Index;
+--         Item_Type :=
+--           (if
+--              Get_Proto_Item(Index => Proto_Index).Show_Type =
+--              Null_Bounded_String
+--            then Get_Proto_Item(Index => Proto_Index).I_Type
+--            else Get_Proto_Item(Index => Proto_Index).Show_Type);
+--         if Index
+--             (Source => Items_Types,
+--              Pattern => To_String(Source => "{" & Item_Type & "}")) =
+--           0 and
+--           Get_Proto_Item(Index => Proto_Index).Price > 0 then
+--            Append
+--              (Source => Items_Types,
+--               New_Item => " {" & To_String(Source => Item_Type) & "}");
+--         end if;
+--      end loop Fill_Cargo_Types_Loop;
+--      Show_Cargo_Items_Loop :
+--      for I of Items_Indexes loop
+--         Current_Item_Index := Current_Item_Index + 1;
+--         exit Show_Cargo_Items_Loop when I = 0;
+--         if Get_Price
+--             (Base_Type => Base_Type,
+--              Item_Index =>
+--                Inventory_Container.Element
+--                  (Container => Player_Ship.Cargo, Index => I)
+--                  .Proto_Index) =
+--           0 then
+--            goto End_Of_Cargo_Loop;
+--         end if;
+--         Proto_Index :=
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Cargo, Index => I)
+--             .Proto_Index;
+--         Base_Cargo_Index :=
+--           Find_Base_Cargo
+--             (Proto_Index => Proto_Index,
+--              Durability =>
+--                Inventory_Container.Element
+--                  (Container => Player_Ship.Cargo, Index => I)
+--                  .Durability);
+--         if Base_Cargo_Index > 0 then
+--            Indexes_List.Append(New_Item => Base_Cargo_Index);
+--         end if;
+--         Item_Type :=
+--           (if
+--              Get_Proto_Item(Index => Proto_Index).Show_Type =
+--              Null_Bounded_String
+--            then Get_Proto_Item(Index => Proto_Index).I_Type
+--            else Get_Proto_Item(Index => Proto_Index).Show_Type);
+--         if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
+--           and then To_String(Source => Item_Type) /=
+--             CArgv.Arg(Argv => Argv, N => 1) then
+--            goto End_Of_Cargo_Loop;
+--         end if;
+--         Item_Name :=
+--           To_Unbounded_String
+--             (Source =>
+--                Get_Item_Name
+--                  (Item =>
+--                     Inventory_Container.Element
+--                       (Container => Player_Ship.Cargo, Index => I),
+--                   Damage_Info => False, To_Lower => False));
+--         if Argc = 3
+--           and then
+--             Index
+--               (Source => To_Lower(Item => To_String(Source => Item_Name)),
+--                Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
+--             0 then
+--            goto End_Of_Cargo_Loop;
+--         end if;
+--         if Current_Row < Start_Row then
+--            Current_Row := Current_Row + 1;
+--            goto End_Of_Cargo_Loop;
+--         end if;
+--         if Base_Cargo_Index = 0 then
+--            Price :=
+--              Get_Price(Base_Type => Base_Type, Item_Index => Proto_Index);
+--         else
+--            Price :=
+--              (if Base_Index > 0 then
+--                 BaseCargo_Container.Element
+--                   (Container => Sky_Bases(Base_Index).Cargo,
+--                    Index => Base_Cargo_Index)
+--                   .Price
+--               else BaseCargo_Container.Element
+--                   (Container => Trader_Cargo, Index => Base_Cargo_Index)
+--                   .Price);
+--         end if;
+--         if Event_Index > 0 then
+--            if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+--              and then Get_Event(Index => Event_Index).Item_Index =
+--                Proto_Index then
+--               Price := Price * 2;
+--            end if;
+--         end if;
+--         Profit :=
+--           Price -
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Cargo, Index => I)
+--             .Price;
+--         Base_Amount := 0;
+--         if Base_Index > 0 then
+--            if Base_Cargo_Index > 0 and
+--              Is_Buyable
+--                (Base_Type => Base_Type, Item_Index => Proto_Index) then
+--               Base_Amount :=
+--                 BaseCargo_Container.Element
+--                   (Container => Base_Cargo, Index => Base_Cargo_Index)
+--                   .Amount;
+--            end if;
+--         else
+--            if Base_Cargo_Index > 0 then
+--               Base_Amount :=
+--                 BaseCargo_Container.Element
+--                   (Container => Base_Cargo, Index => Base_Cargo_Index)
+--                   .Amount;
+--            end if;
+--         end if;
+--         Add_Button
+--           (Table => Trade_Table, Text => To_String(Source => Item_Name),
+--            Tooltip => "Show available options for item",
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 1);
+--         Add_Button
+--           (Table => Trade_Table, Text => To_String(Source => Item_Type),
+--            Tooltip => "Show available options for item",
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 2);
+--         Item_Durability :=
+--           (if
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => I)
+--                .Durability <
+--              100
+--            then
+--              To_Unbounded_String
+--                (Source =>
+--                   Get_Item_Damage
+--                     (Item_Durability =>
+--                        Inventory_Container.Element
+--                          (Container => Player_Ship.Cargo, Index => I)
+--                          .Durability))
+--            else To_Unbounded_String(Source => "Unused"));
+--         Add_Progress_Bar
+--           (Table => Trade_Table,
+--            Value =>
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => I)
+--                .Durability,
+--            Max_Value => Default_Item_Durability,
+--            Tooltip => To_String(Source => Item_Durability),
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 3);
+--         Add_Button
+--           (Table => Trade_Table, Text => Positive'Image(Price),
+--            Tooltip => "Show available options for item",
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 4);
+--         Add_Button
+--           (Table => Trade_Table, Text => Positive'Image(Profit),
+--            Tooltip => "Show available options for item",
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 5,
+--            Color =>
+--              (if Profit > 0 then
+--                 Tcl_GetVar
+--                   (interp => Interp,
+--                    varName =>
+--                      "ttk::theme::" &
+--                      To_String(Source => Get_Interface_Theme) &
+--                      "::colors(-green)")
+--               elsif Profit < 0 then
+--                 Tcl_GetVar
+--                   (interp => Interp,
+--                    varName =>
+--                      "ttk::theme::" &
+--                      To_String(Source => Get_Interface_Theme) &
+--                      "::colors(-red)")
+--               else ""));
+--         Add_Button
+--           (Table => Trade_Table,
+--            Text =>
+--              Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
+--              " kg",
+--            Tooltip => "Show available options for item",
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 6);
+--         Add_Button
+--           (Table => Trade_Table,
+--            Text =>
+--              Positive'Image
+--                (Inventory_Container.Element
+--                   (Container => Player_Ship.Cargo, Index => I)
+--                   .Amount),
+--            Tooltip => "Show available options for item",
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 7);
+--         Add_Button
+--           (Table => Trade_Table, Text => Positive'Image(Base_Amount),
+--            Tooltip => "Show available options for item",
+--            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 8,
+--            New_Row => True);
+--         exit Show_Cargo_Items_Loop when Trade_Table.Row =
+--           Get_Integer_Setting(Name => "listsLimit") + 1;
+--         <<End_Of_Cargo_Loop>>
+--      end loop Show_Cargo_Items_Loop;
+--      Current_Item_Index :=
+--        Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) +
+--        2;
+--      --## rule off SIMPLIFIABLE_STATEMENTS
+--      Fill_Trader_Types_Loop :
+--      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
+--         Proto_Index :=
+--           BaseCargo_Container.Element
+--             (Container => Base_Cargo, Index => Items_Indexes(I))
+--             .Proto_Index;
+--         Item_Type :=
+--           (if
+--              Get_Proto_Item(Index => Proto_Index).Show_Type =
+--              Null_Bounded_String
+--            then Get_Proto_Item(Index => Proto_Index).I_Type
+--            else Get_Proto_Item(Index => Proto_Index).Show_Type);
+--         if Is_Buyable
+--             (Base_Type => Base_Type, Item_Index => Proto_Index,
+--              Base_Index => Base_Index) and
+--           BaseCargo_Container.Element
+--               (Container => Base_Cargo, Index => Items_Indexes(I))
+--               .Amount >
+--             0 and
+--           Index
+--               (Source => Items_Types,
+--                Pattern => To_String(Source => "{" & Item_Type & "}")) =
+--             0 then
+--            Append
+--              (Source => Items_Types,
+--               New_Item => " {" & To_String(Source => Item_Type) & "}");
+--         end if;
+--      end loop Fill_Trader_Types_Loop;
+--      Show_Trader_Items_Loop :
+--      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
+--         exit Show_Trader_Items_Loop when Trade_Table.Row =
+--           Get_Integer_Setting(Name => "listsLimit") + 1;
+--         if Indexes_List.Find_Index(Item => Items_Indexes(I)) > 0 or
+--           not Is_Buyable
+--             (Base_Type => Base_Type,
+--              Item_Index =>
+--                BaseCargo_Container.Element
+--                  (Container => Base_Cargo, Index => Items_Indexes(I))
+--                  .Proto_Index,
+--              Base_Index => Base_Index) or
+--           BaseCargo_Container.Element
+--               (Container => Base_Cargo, Index => Items_Indexes(I))
+--               .Amount =
+--             0 then
+--            goto End_Of_Trader_Loop;
+--         end if;
+--         Proto_Index :=
+--           BaseCargo_Container.Element
+--             (Container => Base_Cargo, Index => Items_Indexes(I))
+--             .Proto_Index;
+--         Item_Type :=
+--           (if
+--              Get_Proto_Item(Index => Proto_Index).Show_Type =
+--              Null_Bounded_String
+--            then Get_Proto_Item(Index => Proto_Index).I_Type
+--            else Get_Proto_Item(Index => Proto_Index).Show_Type);
+--         if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
+--           and then To_String(Source => Item_Type) /=
+--             CArgv.Arg(Argv => Argv, N => 1) then
+--            goto End_Of_Trader_Loop;
+--         end if;
+--         Item_Name :=
+--           To_Unbounded_String
+--             (Source =>
+--                To_String
+--                  (Source => Get_Proto_Item(Index => Proto_Index).Name));
+--         if Argc = 3
+--           and then
+--             Index
+--               (Source => To_Lower(Item => To_String(Source => Item_Name)),
+--                Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
+--             0 then
+--            goto End_Of_Trader_Loop;
+--         end if;
+--         if Current_Row < Start_Row then
+--            Current_Row := Current_Row + 1;
+--            goto End_Of_Trader_Loop;
+--         end if;
+--         Price :=
+--           (if Base_Index > 0 then
+--              BaseCargo_Container.Element
+--                (Container => Sky_Bases(Base_Index).Cargo,
+--                 Index => Items_Indexes(I))
+--                .Price
+--            else BaseCargo_Container.Element
+--                (Container => Trader_Cargo, Index => Items_Indexes(I))
+--                .Price);
+--         if Event_Index > 0 then
+--            if Get_Event(Index => Event_Index).E_Type = DOUBLEPRICE
+--              and then Get_Event(Index => Event_Index).Item_Index =
+--                Proto_Index then
+--               Price := Price * 2;
+--            end if;
+--         end if;
+--         Base_Amount :=
+--           (if Base_Index = 0 then
+--              BaseCargo_Container.Element
+--                (Container => Trader_Cargo, Index => Items_Indexes(I))
+--                .Amount
+--            else BaseCargo_Container.Element
+--                (Container => Sky_Bases(Base_Index).Cargo,
+--                 Index => Items_Indexes(I))
+--                .Amount);
+--         Add_Button
+--           (Table => Trade_Table, Text => To_String(Source => Item_Name),
+--            Tooltip => "Show available options for item",
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 1);
+--         Add_Button
+--           (Table => Trade_Table, Text => To_String(Source => Item_Type),
+--            Tooltip => "Show available options for item",
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 2);
+--         Item_Durability :=
+--           (if
+--              BaseCargo_Container.Element
+--                (Container => Base_Cargo, Index => Items_Indexes(I))
+--                .Durability <
+--              100
+--            then
+--              To_Unbounded_String
+--                (Source =>
+--                   Get_Item_Damage
+--                     (Item_Durability =>
+--                        BaseCargo_Container.Element
+--                          (Container => Base_Cargo, Index => Items_Indexes(I))
+--                          .Durability))
+--            else To_Unbounded_String(Source => "Unused"));
+--         Add_Progress_Bar
+--           (Table => Trade_Table,
+--            Value =>
+--              BaseCargo_Container.Element
+--                (Container => Base_Cargo, Index => Items_Indexes(I))
+--                .Durability,
+--            Max_Value => Default_Item_Durability,
+--            Tooltip => To_String(Source => Item_Durability),
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 3);
+--         Add_Button
+--           (Table => Trade_Table, Text => Positive'Image(Price),
+--            Tooltip => "Show available options for item",
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 4);
+--         Add_Button
+--           (Table => Trade_Table, Text => Integer'Image(-Price),
+--            Tooltip => "Show available options for item",
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 5, New_Row => False,
+--            Color =>
+--              Tcl_GetVar
+--                (interp => Interp,
+--                 varName =>
+--                   "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+--                   "::colors(-red)"));
+--         Add_Button
+--           (Table => Trade_Table,
+--            Text =>
+--              Positive'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
+--              " kg",
+--            Tooltip => "Show available options for item",
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 6);
+--         Add_Button
+--           (Table => Trade_Table, Text => " 0",
+--            Tooltip => "Show available options for item",
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 7);
+--         Add_Button
+--           (Table => Trade_Table, Text => Natural'Image(Base_Amount),
+--            Tooltip => "Show available options for item",
+--            Command =>
+--              "ShowTradeItemInfo -" &
+--              Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+--            Column => 8, New_Row => True);
+--         <<End_Of_Trader_Loop>>
+--      end loop Show_Trader_Items_Loop;
+--      --## rule on SIMPLIFIABLE_STATEMENTS
+--      if Page > 1 then
+--         if Trade_Table.Row <
+--           Get_Integer_Setting(Name => "listsLimit") + 1 then
+--            Add_Pagination
+--              (Table => Trade_Table,
+--               Previous_Command =>
+--                 "ShowTrade " & Arguments & Positive'Image(Page - 1),
+--               Next_Command => "");
+--         else
+--            Add_Pagination
+--              (Table => Trade_Table,
+--               Previous_Command =>
+--                 "ShowTrade " & Arguments & Positive'Image(Page - 1),
+--               Next_Command =>
+--                 "ShowTrade " & Arguments & Positive'Image(Page + 1));
+--         end if;
+--      elsif Trade_Table.Row =
+--        Get_Integer_Setting(Name => "listsLimit") + 1 then
+--         Add_Pagination
+--           (Table => Trade_Table, Previous_Command => "",
+--            Next_Command =>
+--              "ShowTrade " & Arguments & Positive'Image(Page + 1));
+--      end if;
+--      Update_Table
+--        (Table => Trade_Table,
+--         Grab_Focus =>
+--           (if Focus = Widget_Image(Win => Search_Entry) then False));
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list " & To_String(Source => Items_Types) & "]");
+--      if Argc = 1 then
+--         Current(ComboBox => Combo_Box, NewIndex => "0");
+--      end if;
+--      if Money_Index_2 > 0 then
+--         Trade_Info :=
+--           To_Unbounded_String
+--             (Source =>
+--                "You have" &
+--                Natural'Image
+--                  (Inventory_Container.Element
+--                     (Container => Player_Ship.Cargo, Index => Money_Index_2)
+--                     .Amount) &
+--                " " & To_String(Source => Money_Name) & ".");
+--      else
+--         Trade_Info :=
+--           To_Unbounded_String
+--             (Source =>
+--                "You don't have any " & To_String(Source => Money_Name) &
+--                " to buy anything.");
+--      end if;
+--      Show_Free_Space_Block :
+--      declare
+--         Free_Space: Integer := Free_Cargo(Amount => 0);
+--      begin
+--         if Free_Space < 0 then
+--            Free_Space := 0;
+--         end if;
+--         Append
+--           (Source => Trade_Info,
+--            New_Item =>
+--              LF & "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
+--      end Show_Free_Space_Block;
+--      Label.Name := New_String(Str => Trade_Frame & ".options.playerinfo");
+--      configure
+--        (Widgt => Label,
+--         options => "-text {" & To_String(Source => Trade_Info) & "}");
+--      Trade_Info := Null_Unbounded_String;
+--      if Base_Index > 0 then
+--         if BaseCargo_Container.Element
+--             (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
+--             .Amount =
+--           0 then
+--            Append
+--              (Source => Trade_Info,
+--               New_Item =>
+--                 "Base doesn't have any " & To_String(Source => Money_Name) &
+--                 "to buy anything.");
+--         else
+--            Append
+--              (Source => Trade_Info,
+--               New_Item =>
+--                 "Base has" &
+--                 Positive'Image
+--                   (BaseCargo_Container.Element
+--                      (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
+--                      .Amount) &
+--                 " " & To_String(Source => Money_Name) & ".");
+--         end if;
+--      else
+--         if BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1)
+--             .Amount =
+--           0 then
+--            Append
+--              (Source => Trade_Info,
+--               New_Item =>
+--                 "Ship doesn't have any " & To_String(Source => Money_Name) &
+--                 "to buy anything.");
+--         else
+--            Append
+--              (Source => Trade_Info,
+--               New_Item =>
+--                 "Ship has" &
+--                 Positive'Image
+--                   (BaseCargo_Container.Element
+--                      (Container => Trader_Cargo, Index => 1)
+--                      .Amount) &
+--                 " " & To_String(Source => Money_Name) & ".");
+--         end if;
+--      end if;
+--      Label.Name := New_String(Str => Trade_Frame & ".options.baseinfo");
+--      configure
+--        (Widgt => Label,
+--         options => "-text {" & To_String(Source => Trade_Info) & "}");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Close_Button, Options => "-row 0 -column 1");
+--      configure
+--        (Widgt => Trade_Canvas,
+--         options =>
+--           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+--           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Canvas_Create
+--        (Parent => Trade_Canvas, Child_Type => "window",
+--         Options => "0 0 -anchor nw -window " & Trade_Frame);
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      configure
+--        (Widgt => Trade_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Trade_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Trade_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Trade_Canvas, Fraction => "0.0");
+--      Show_Screen(New_Screen_Name => "tradeframe");
+--      Tcl_SetResult(interp => Interp, str => "1");
+--      return TCL_OK;
    end Show_Trade_Command;
 
    -- ****if* TUI/TUI.Item_Index
