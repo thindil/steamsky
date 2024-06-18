@@ -62,6 +62,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = searchEntry & " delete 0 end")
   tclEval(script = closeButton & " configure -command {ShowSkyMap ShowTrade}")
   tradeFrame = tradeCanvas & ".trade"
+  let comboBox = tradeFrame & ".options.type"
   clearTable(table = tradeTable)
   var
     baseType: string
@@ -248,6 +249,28 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = tradeTable, text = $itemsList[protoIndex].weight & " kg",
         tooltip = "Show available options for item",
         command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 6)
+    addButton(table = tradeTable, text = "0",
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 7)
+    addButton(table = tradeTable, text = $baseAmount,
+        tooltip = "Show available options for item",
+        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 8, newRow = true)
+  let arguments = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
+      "}" elif argc == 2: $argv[1] & " {}" else: "All {}")
+  if page > 1:
+    if tradeTable.row < gameSettings.listsLimit + 1:
+      addPagination(table = tradeTable, previousCommand = "ShowTrade " &
+          arguments & " " & $(page - 1), nextCommand = "")
+    else:
+      addPagination(table = tradeTable, previousCommand = "ShowTrade " &
+          arguments & " " & $(page - 1), nextCommand = "ShowTrade " &
+          arguments & " " & $(page + 1))
+  elif tradeTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = tradeTable, previousCommand = "",
+        nextCommand = "ShowTrade " & arguments & " " & $(page + 1))
+  updateTable(table = tradeTable, grabFocus = tclEval2(script = "focus") == searchEntry)
+  tclEval(script = "update")
+  tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
