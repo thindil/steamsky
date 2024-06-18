@@ -120,7 +120,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       continue
     let itemName = getItemName(item = playerShip.cargo[i], damageInfo = false,
         toLower = false)
-    if argc == 3 and itemName.find(sub = $argv[2]) == -1:
+    if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
+        2]).toLowerAscii) == -1:
       continue
     if currentRow < startRow:
       currentRow.inc
@@ -191,6 +192,32 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         baseIndex = baseIndex) and baseCargo[itemsIndexes[i]].amount > 0 and
         itemsTypes.find(sub = "{" & itemType & "}") == -1:
       itemsTypes.add(y = " {" & itemType & "}")
+  for i in currentItemIndex .. itemsIndexes.high:
+    if tradeTable.row == gameSettings.listsLimit + 1:
+      break
+    if itemsIndexes[i] in indexesList or not isBuyable(baseType = baseType,
+        itemIndex = baseCargo[itemsIndexes[i]].protoIndex,
+        baseIndex = baseIndex) or baseCargo[itemsIndexes[i]].amount == 0:
+      continue
+    let
+      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
+      itemType = if itemsList[protoIndex].showType.len == 0:
+          itemsList[protoIndex].itemType
+        else:
+          itemsList[protoIndex].showType
+    if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
+      continue
+    let itemName = itemsList[protoIndex].name
+    if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
+        2]).toLowerAscii) == -1:
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    var price = if baseIndex > 0:
+        skyBases[baseIndex].cargo[itemsIndexes[i]].price
+      else:
+        traderCargo[itemsIndexes[i]].price
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
