@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- New mob for the starting player's ship
+
 ### Changed
 - Updated the look of the dialog used to buy or sell items in bases
 
