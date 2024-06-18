@@ -18,7 +18,7 @@
 import std/[os, strutils, tables]
 import ../[basestypes, basescargo, config, crewinventory, events, game, items,
     maps, shipscargo, tk, types]
-import coreui, mapsui, table
+import coreui, mapsui, table, utilsui2
 
 type ItemsSortOrders = enum
   nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
@@ -295,6 +295,26 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       tradeInfo.add(y = "Base has " & $skyBases[baseIndex].cargo[0].amount &
           " " & moneyName & ".")
+  else:
+    if traderCargo[0].amount == 0:
+      tradeInfo.add(y = "Ship doesn't have any " & moneyName & " to buy anything.")
+    else:
+      tradeInfo.add(y = "Ship has " & $traderCargo[0].amount & " " & moneyName & ".")
+  label = tradeFrame & ".options.baseinfo"
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  tclEval(script = tradeCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & "sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  tclEval(script = tradeCanvas & " create window 0 0 -anchor nw -window " & tradeFrame)
+  tclEval(script = "update")
+  tclEval(script = tradeCanvas & " configure -scrollregion [list " & tclEval2(
+      script = tradeCanvas & " bbox all") & "]")
+  tclEval(script = tradeCanvas & " xview moveto 0.0")
+  tclEval(script = tradeCanvas & " yview moveto 0.0")
+  showScreen(newScreenName = "tradeframe")
+  tclSetResult(value = "1")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
