@@ -45,7 +45,8 @@ type
     flags*: seq[string]
     description*: string
 
-var basesTypesList* = initTable[string, BaseTypeData]()
+var basesTypesList*: Table[string, BaseTypeData] = initTable[string,
+    BaseTypeData]()
   ## The list of all available bases types in the game
 
 proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
@@ -56,7 +57,7 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let basesTypesXml = try:
+    let basesTypesXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -66,9 +67,9 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       if baseTypeNode.kind != xnElement:
         continue
       let
-        baseTypeIndex = baseTypeNode.attr(name = "index")
+        baseTypeIndex: string = baseTypeNode.attr(name = "index")
         baseTypeAction: DataAction = try:
-            parseEnum[DataAction](baseTypeNode.attr(
+            parseEnum[DataAction](s = baseTypeNode.attr(
                 name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
@@ -92,7 +93,7 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             BaseTypeData()
         else:
           BaseTypeData()
-      var attribute = baseTypeNode.attr(name = "name")
+      var attribute: string = baseTypeNode.attr(name = "name")
       if attribute.len() > 0:
         baseType.name = attribute
       attribute = baseTypeNode.attr(name = "color")
@@ -106,15 +107,15 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           baseType.description = childNode.innerText()
         of "item":
           let
-            itemIndex = try:
+            itemIndex: int = try:
                 childNode.attr(name = "index").parseInt()
               except ValueError:
                 raise newException(exceptn = DataLoadingError,
                     message = "Can't " & $baseTypeAction & " base type '" &
                     baseTypeIndex & "', invalid item index '" & childNode.attr(
                     name = "index") & "'.")
-            subAction = try:
-                parseEnum[DataAction](childNode.attr(
+            subAction: DataAction = try:
+                parseEnum[DataAction](s = childNode.attr(
                     name = "action").toLowerAscii)
               except ValueError:
                 DataAction.add
@@ -146,9 +147,9 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             baseType.trades[itemIndex] = [1: sellPrice, 2: buyPrice]
         of "recipe":
           let
-            recipeIndex = childNode.attr(name = "index")
-            subAction = try:
-                parseEnum[DataAction](childNode.attr(
+            recipeIndex: string = childNode.attr(name = "index")
+            subAction: DataAction = try:
+                parseEnum[DataAction](s = childNode.attr(
                     name = "action").toLowerAscii)
               except ValueError:
                 DataAction.add
@@ -157,7 +158,7 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 message = "Can't add base type '" & baseTypeIndex &
                 "', recipe with index '" & recipeIndex & "' already added.")
           if subAction == DataAction.remove:
-            for index, recipe in baseType.recipes.pairs:
+            for index, recipe in baseType.recipes:
               if recipe == recipeIndex:
                 baseType.recipes.delete(i = index)
                 break
@@ -165,9 +166,9 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             baseType.recipes.add(y = recipeIndex)
         of "flag":
           let
-            flagName = childNode.attr(name = "name")
-            subAction = try:
-                parseEnum[DataAction](childNode.attr(
+            flagName: string = childNode.attr(name = "name")
+            subAction: DataAction = try:
+                parseEnum[DataAction](s = childNode.attr(
                     name = "action").toLowerAscii)
               except ValueError:
                 DataAction.add
@@ -176,7 +177,7 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 message = "Can't add base type '" & baseTypeIndex &
                 "', flag '" & flagName & "' already added.")
           if subAction == DataAction.remove:
-            for index, flag in baseType.flags.pairs:
+            for index, flag in baseType.flags:
               if flag == flagName:
                 baseType.flags.delete(i = index)
                 break
@@ -250,8 +251,8 @@ proc loadAdaBasesTypes(fileName: cstring): cstring {.sideEffect, raises: [],
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
 
-proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.raises: [], tags: [],
-    exportc, contractual.} =
+proc getAdaPrice(baseType: cstring; itemIndex: cint): cint {.raises: [], tags: [
+    ], exportc, contractual.} =
   ## Temporary C binding
   try:
     return getPrice(baseType = $baseType, itemIndex = itemIndex).cint
@@ -286,12 +287,12 @@ proc hasAdaFlag(baseType, flag: cstring): cint {.raises: [], tags: [], exportc,
 proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.raises: [],
     tags: [], exportc, contractual.} =
   ## Temporary C binding
-  var i = 0
+  var i: int = 0
   for key in basesTypesList.keys:
     basesTypes[i] = key.cstring
     i.inc
   i.inc
-  for index in i..15:
+  for index in i .. 15:
     basesTypes[i] = ""
 
 proc getAdaBaseTypeName(baseType: cstring): cstring {.raises: [], tags: [],
@@ -322,8 +323,8 @@ proc getAdaBaseTypeColor(baseType: cstring): cstring {.raises: [], tags: [],
   except KeyError:
     return "".cstring
 
-proc getAdaBaseTypeDescription(baseType: cstring): cstring {.raises: [], tags: [],
-    exportc, contractual.} =
+proc getAdaBaseTypeDescription(baseType: cstring): cstring {.raises: [], tags: [
+    ], exportc, contractual.} =
   ## Temporary C binding
   try:
     return basesTypesList[$baseType].description.cstring
