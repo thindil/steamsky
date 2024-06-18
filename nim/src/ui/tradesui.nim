@@ -151,35 +151,36 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         baseAmount = baseCargo[baseCargoIndex].amount
     addButton(table = tradeTable, text = itemName,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 1)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 1)
     addButton(table = tradeTable, text = itemType,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 2)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 2)
     let itemDurability = (if playerShip.cargo[i].durability <
         100: getItemDamage(itemDurability = playerShip.cargo[
         i].durability) else: "Unused")
     addProgressbar(table = tradeTable, value = playerShip.cargo[i].durability,
         maxValue = defaultItemDurability, tooltip = itemDurability,
-        command = "ShowTradeItemInfo " & $i, column = 3)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 3)
     addButton(table = tradeTable, text = $price,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 4)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 4)
     addButton(table = tradeTable, text = $profit,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 5, color = (if profit >
+        command = "ShowTradeItemInfo " & $(i + 1), column = 5, color = (
+        if profit >
         0: tclGetVar(varName = "ttk::theme::" & gameSettings.interfaceTheme &
         "::colors(-green)") elif profit < 0: tclGetVar(
         varName = "ttk::theme::" & gameSettings.interfaceTheme &
         "::colors(-green)") else: ""))
     addButton(table = tradeTable, text = $itemsList[protoIndex].weight & " kg",
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 6)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 6)
     addButton(table = tradeTable, text = $playerShip.cargo[i].amount,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 7)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 7)
     addButton(table = tradeTable, text = $baseAmount,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo " & $i, column = 8, newRow = true)
+        command = "ShowTradeItemInfo " & $(i + 1), column = 8, newRow = true)
     if tradeTable.row == gameSettings.listsLimit + 1:
       break
   currentItemIndex = playerShip.cargo.len + 1
@@ -228,34 +229,34 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
     addButton(table = tradeTable, text = itemName,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 1)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 1)
     addButton(table = tradeTable, text = itemType,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 2)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 2)
     let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
         100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
         i]].durability) else: "Unused")
     addProgressbar(table = tradeTable, value = baseCargo[itemsIndexes[
         i]].durability, maxValue = defaultItemDurability,
         tooltip = itemDurability, command = "ShowTradeItemInfo -" &
-        $itemsIndexes[i], column = 3)
+        $(itemsIndexes[i] + 1), column = 3)
     addButton(table = tradeTable, text = $price,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 4)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 4)
     addButton(table = tradeTable, text = $(-price),
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 5,
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 5,
         newRow = false, color = tclGetVar(varName = "ttk::theme::" &
         gameSettings.interfaceTheme & "::colors(-red)"))
     addButton(table = tradeTable, text = $itemsList[protoIndex].weight & " kg",
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 6)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 6)
     addButton(table = tradeTable, text = "0",
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 7)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 7)
     addButton(table = tradeTable, text = $baseAmount,
         tooltip = "Show available options for item",
-        command = "ShowTradeItemInfo -" & $itemsIndexes[i], column = 8, newRow = true)
+        command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 8, newRow = true)
   let arguments = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
       "}" elif argc == 2: $argv[1] & " {}" else: "All {}")
   if page > 1:
