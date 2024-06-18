@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basestypes, basescargo, config, events, game, items, maps, tk, types]
+import ../[basestypes, basescargo, config, crewinventory, events, game, items,
+    maps, shipscargo, tk, types]
 import coreui, mapsui, table
 
 type ItemsSortOrders = enum
@@ -271,6 +272,29 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   updateTable(table = tradeTable, grabFocus = tclEval2(script = "focus") == searchEntry)
   tclEval(script = "update")
   tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
+  if argc == 1:
+    tclEval(script = comboBox & " current 0")
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  var tradeInfo = ""
+  if moneyIndex2 > -1:
+    tradeInfo = "You have " & $playerShip.cargo[moneyIndex2].amount & " " &
+        moneyName & "."
+  else:
+    tradeInfo = "You don't have any " & moneyName & " to buy anything."
+  var freeSpace = freeCargo(amount = 0)
+  if freeSpace < 0:
+    freeSpace = 0
+  tradeInfo.add(y = "\nFree cargo space: " & $freeSpace & " kg.")
+  label = tradeFrame & ".options.playerinfo"
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
+  tradeInfo = ""
+  if baseIndex > 0:
+    if skyBases[baseIndex].cargo[0].amount == 0:
+      tradeInfo.add(y = "Base doesn't have any " & moneyName & " to buy anything.")
+    else:
+      tradeInfo.add(y = "Base has " & $skyBases[baseIndex].cargo[0].amount &
+          " " & moneyName & ".")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
