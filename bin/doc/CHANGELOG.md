@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated the look of the dialog used to buy or sell items in bases
+- Crew for the starting ship for Inquisition's Hunter career
 
 ### Fixed
 - Showing information about the selected crew member
