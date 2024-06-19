@@ -425,8 +425,44 @@ proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       itemsSortOrder = availableAsc
   else:
     discard
+  if itemsSortOrder == defaultItemsSortOrder:
+    return tclOk
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  var baseCargo: seq[BaseCargo]
+  var
+    baseCargo: seq[BaseCargo]
+    baseType: string
+  if baseIndex > 0:
+    baseCargo = skyBases[baseIndex].cargo
+    baseType = skyBases[baseIndex].baseType
+  else:
+    baseCargo = traderCargo
+    baseType = "0"
+  var indexesList: seq[Natural]
+  let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  type LocalItemData = object
+    name: string
+    iType: string
+    damage: float
+    price: Natural
+    profit: int
+    weight: Positive = 1
+    owned: Natural
+    available: Natural
+    id: Natural
+  var localItems: seq[LocalItemData]
+  for index, item in playerShip.cargo:
+    let
+      protoIndex = item.protoIndex
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex, durability = item.durability)
+    var price: int
+    if baseCargoIndex > -1:
+      indexesList.add(y = baseCargoIndex)
+      price = baseCargo[baseCargoIndex].price
+    else:
+      price = getPrice(baseType = baseType, itemIndex = protoIndex)
+    if eventIndex > -1:
+      if eventsList[eventIndex].eType == doublePrice and eventsList[eventIndex].itemIndex == protoIndex:
+        price = price * 2
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
