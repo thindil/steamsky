@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -- with Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1;
 with Ada.Containers.Vectors;
 with Ada.Exceptions;
 -- with Ada.Strings;
@@ -44,11 +44,11 @@ with BasesTypes; use BasesTypes;
 with CoreUI; use CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
-with Events; use Events;
+with Events;
 with Game; use Game;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
-with Ships.Cargo; use Ships.Cargo;
+with Maps.UI;
+with Ships.Cargo;
 with Ships.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
@@ -60,13 +60,6 @@ package body Trades.UI is
    -- Table with info about the available items to trade
    -- SOURCE
    Trade_Table: Table_Widget (Amount => 8);
-   -- ****
-
-   -- ****iv* TUI/TUI.Items_Indexes
-   -- FUNCTION
-   -- Indexes of the items for trade
-   -- SOURCE
-   Items_Indexes: Natural_Container.Vector;
    -- ****
 
    -- ****it* TUI/TUI.Items_Sort_Orders
@@ -885,7 +878,9 @@ package body Trades.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Characters.Latin_1;
       use Crew;
+      use Ships.Cargo;
       use Ships.Crew;
       use Short_String;
       use Tiny_String;
@@ -1460,6 +1455,7 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Ada.Containers;
+      use Events;
       use Tiny_String;
 
       X_Pos: constant Integer :=
@@ -1566,6 +1562,7 @@ package body Trades.UI is
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
+      Items_Indexes: Natural_Container.Vector;
    begin
       case Column is
          when 1 =>
@@ -1800,6 +1797,7 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Ada.Exceptions;
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Maps.UI;
 
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
