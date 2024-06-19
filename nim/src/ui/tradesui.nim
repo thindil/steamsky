@@ -377,10 +377,63 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    xPos = ($argv[1]).parseInt
+    column = (if xPos > -1: getColumnNumber(table = tradeTable, xPosition = xPos) else: itemsSortOrder.ord + 1)
+  case column
+  of 1:
+    if itemsSortOrder == nameAsc:
+      itemsSortOrder = nameDesc
+    else:
+      itemsSortOrder = nameAsc
+  of 2:
+    if itemsSortOrder == typeAsc:
+      itemsSortOrder = typeDesc
+    else:
+      itemsSortOrder = typeAsc
+  of 3:
+    if itemsSortOrder == durabilityAsc:
+      itemsSortOrder = durabilityDesc
+    else:
+      itemsSortOrder = durabilityAsc
+  of 4:
+    if itemsSortOrder == priceAsc:
+      itemsSortOrder = priceDesc
+    else:
+      itemsSortOrder = priceAsc
+  of 5:
+    if itemsSortOrder == profitAsc:
+      itemsSortOrder = profitDesc
+    else:
+      itemsSortOrder = profitAsc
+  of 6:
+    if itemsSortOrder == weightAsc:
+      itemsSortOrder = weightDesc
+    else:
+      itemsSortOrder = weightAsc
+  of 7:
+    if itemsSortOrder == ownedAsc:
+      itemsSortOrder = ownedDesc
+    else:
+      itemsSortOrder = ownedAsc
+  of 8:
+    if itemsSortOrder == availableAsc:
+      itemsSortOrder = availableDesc
+    else:
+      itemsSortOrder = availableAsc
+  else:
+    discard
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var baseCargo: seq[BaseCargo]
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowTrade", showTradeCommand)
+#    addCommand("SortTradeItems", sortItemsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
