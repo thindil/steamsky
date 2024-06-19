@@ -6019,7 +6019,7 @@ during combat. Max length is 512 characters. -->
   <recipe index="20"/>
   <member index="109"/>
   <member index="110"/>
-  <member index="83"/>
+  <member index="114"/>
  </ship>
 </ships>
 
