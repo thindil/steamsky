@@ -333,7 +333,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   const rootName = ".gameframe.paned.optionsframe.canvas.options"
 
   proc getCheckboxValue(checkboxName: string): bool =
-    return tclGetVar(varName = rootName & " checkboxName") == "1"
+    return tclGetVar(varName = rootName & checkboxName) == "1"
 
   gameSettings.autoRest = getCheckboxValue(checkboxName = ".general.autorest")
 
