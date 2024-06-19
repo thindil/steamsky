@@ -35,6 +35,19 @@ var
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Show information about trading
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowTrade ?itemtype? ?searchstring?
+  ## Itemtype is type of items to show, searchstring is string which is
+  ## looking for in items names
   var tradeFrame = mainPaned & ".tradeframe"
   let
     tradeCanvas = tradeFrame & ".canvas"
