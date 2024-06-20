@@ -377,7 +377,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
-proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
+proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   let
     xPos = ($argv[1]).parseInt
@@ -593,6 +593,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   try:
     discard
 #    addCommand("ShowTrade", showTradeCommand)
-#    addCommand("SortTradeItems", sortItemsCommand)
+#    addCommand("SortTradeItems", sortTradeItemsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
