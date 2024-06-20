@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[algorithm, os, strutils, tables]
 import ../[basestypes, basescargo, config, crewinventory, events, game, items,
     maps, shipscargo, tk, types]
 import coreui, mapsui, table, utilsui2
@@ -381,7 +381,8 @@ proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   let
     xPos = ($argv[1]).parseInt
-    column = (if xPos > -1: getColumnNumber(table = tradeTable, xPosition = xPos) else: itemsSortOrder.ord + 1)
+    column = (if xPos > -1: getColumnNumber(table = tradeTable,
+        xPosition = xPos) else: itemsSortOrder.ord + 1)
   case column
   of 1:
     if itemsSortOrder == nameAsc:
@@ -453,7 +454,8 @@ proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   for index, item in playerShip.cargo:
     let
       protoIndex = item.protoIndex
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex, durability = item.durability)
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          durability = item.durability)
     var price: int
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
@@ -461,9 +463,16 @@ proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       price = getPrice(baseType = baseType, itemIndex = protoIndex)
     if eventIndex > -1:
-      if eventsList[eventIndex].eType == doublePrice and eventsList[eventIndex].itemIndex == protoIndex:
+      if eventsList[eventIndex].eType == doublePrice and eventsList[
+          eventIndex].itemIndex == protoIndex:
         price = price * 2
-    localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (if itemsList[protoIndex].showType.len == 0: itemsList[protoIndex].itemType else: itemsList[protoIndex].showType), damage: (item.durability.float / defaultItemDurability.float), price: price, profit: price - item.price, weight: itemsList[protoIndex].weight, owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[baseCargoIndex].amount else: 0), id: index))
+    localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
+        if itemsList[protoIndex].showType.len == 0: itemsList[
+        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+        item.durability.float / defaultItemDurability.float), price: price,
+        profit: price - item.price, weight: itemsList[protoIndex].weight,
+        owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
+        baseCargoIndex].amount else: 0), id: index))
 
   proc sortItems(x, y: LocalItemData): int =
     case itemsSortOrder
@@ -550,7 +559,34 @@ proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     of none:
       return -1
 
-  return tclOk
+  localItems.sort(cmp = sortItems)
+  itemsIndexes = @[]
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
+  itemsIndexes.add(y = -1)
+  localItems = @[]
+  for index, item in baseCargo:
+    if index in indexesList:
+      continue
+    let protoIndex = item.protoIndex
+    var price = item.price
+    if eventIndex > -1:
+      if eventsList[eventIndex].eType == doublePrice and eventsList[
+          eventIndex].itemIndex == protoIndex:
+        price = price * 2
+    localItems.add(y = LocalItemData(name: itemsList[protoIndex].name, iType: (
+        if itemsList[protoIndex].showType.len == 0: itemsList[
+        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+        item.durability.float / defaultItemDurability.float), price: price,
+        profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
+        available: item.amount, id: index))
+  localItems.sort(cmp = sortItems)
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
+  let typeBox = mainPaned & ".tradeframe.canvas.trade.options.type"
+  return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowTrade", tclEval2(script = typeBox &
+      " get")].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
