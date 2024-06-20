@@ -879,7 +879,9 @@ package body Trades.UI is
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
+      --## rule off IMPROPER_INITIALIZATION
       Items_Indexes: Natural_Container.Vector;
+      --## rule on IMPROPER_INITIALIZATION
    begin
       case Column is
          when 1 =>
