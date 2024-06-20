@@ -380,6 +380,18 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
 proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Sort the trading list
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortTradeItems x
+  ## X is X axis coordinate where the player clicked the mouse button
   let
     xPos = try:
         ($argv[1]).parseInt
