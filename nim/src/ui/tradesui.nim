@@ -463,6 +463,93 @@ proc sortItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     if eventIndex > -1:
       if eventsList[eventIndex].eType == doublePrice and eventsList[eventIndex].itemIndex == protoIndex:
         price = price * 2
+    localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (if itemsList[protoIndex].showType.len == 0: itemsList[protoIndex].itemType else: itemsList[protoIndex].showType), damage: (item.durability.float / defaultItemDurability.float), price: price, profit: price - item.price, weight: itemsList[protoIndex].weight, owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[baseCargoIndex].amount else: 0), id: index))
+
+  proc sortItems(x, y: LocalItemData): int =
+    case itemsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of typeAsc:
+      if x.iType < y.iType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.iType > y.iType:
+        return 1
+      else:
+        return -1
+    of durabilityAsc:
+      if x.damage < y.damage:
+        return 1
+      else:
+        return -1
+    of durabilityDesc:
+      if x.damage > y.damage:
+        return 1
+      else:
+        return -1
+    of priceAsc:
+      if x.price < y.price:
+        return 1
+      else:
+        return -1
+    of priceDesc:
+      if x.price > y.price:
+        return 1
+      else:
+        return -1
+    of profitAsc:
+      if x.profit < y.profit:
+        return 1
+      else:
+        return -1
+    of profitDesc:
+      if x.profit > y.profit:
+        return 1
+      else:
+        return -1
+    of weightAsc:
+      if x.weight < y.weight:
+        return 1
+      else:
+        return -1
+    of weightDesc:
+      if x.weight > y.weight:
+        return 1
+      else:
+        return -1
+    of ownedAsc:
+      if x.owned < y.owned:
+        return 1
+      else:
+        return -1
+    of ownedDesc:
+      if x.owned > y.owned:
+        return 1
+      else:
+        return -1
+    of availableAsc:
+      if x.available < y.available:
+        return 1
+      else:
+        return -1
+    of availableDesc:
+      if x.available > y.available:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
