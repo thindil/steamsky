@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to ships' cargo, like adding or removing items from
+## it, counting free space or getting items amount.
+
 import std/tables
 import contracts
 import config, game, types
@@ -137,6 +140,7 @@ proc getItemsAmount*(iType: string): Natural {.sideEffect, raises: [KeyError],
 
 proc updateAdaCargo(protoIndex, amount, durability, cargoIndex, price,
     getPlayerShip: cint) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if getPlayerShip == 1:
     updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
         durability = durability, cargoIndex = cargoIndex - 1, price = price)
@@ -146,6 +150,7 @@ proc updateAdaCargo(protoIndex, amount, durability, cargoIndex, price,
 
 proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if getPlayerShip == 1:
     try:
       return freeCargo(amount = amount).cint
@@ -159,6 +164,7 @@ proc freeAdaCargo(amount: cint; getPlayerShip: cint = 1): cint {.raises: [],
 
 proc getAdaItemAmount(itemType: cstring): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     return getItemAmount(itemType = $itemType).cint
   except KeyError:
@@ -166,6 +172,7 @@ proc getAdaItemAmount(itemType: cstring): cint {.raises: [], tags: [], exportc,
 
 proc getAdaItemsAmount(iType: cstring): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     return getItemsAmount(iType = $iType).cint
   except KeyError:
