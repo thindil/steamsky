@@ -378,9 +378,13 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let
-    xPos = ($argv[1]).parseInt
+    xPos = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get X position on table.")
     column = (if xPos > -1: getColumnNumber(table = tradeTable,
         xPosition = xPos) else: itemsSortOrder.ord + 1)
   case column
@@ -461,18 +465,24 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       indexesList.add(y = baseCargoIndex)
       price = baseCargo[baseCargoIndex].price
     else:
-      price = getPrice(baseType = baseType, itemIndex = protoIndex)
+      price = try:
+          getPrice(baseType = baseType, itemIndex = protoIndex)
+        except:
+          return showError(message = "Can't get price.")
     if eventIndex > -1:
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
         price = price * 2
-    localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
-        if itemsList[protoIndex].showType.len == 0: itemsList[
-        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-        item.durability.float / defaultItemDurability.float), price: price,
-        profit: price - item.price, weight: itemsList[protoIndex].weight,
-        owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
-        baseCargoIndex].amount else: 0), id: index))
+    try:
+      localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
+          if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+          item.durability.float / defaultItemDurability.float), price: price,
+          profit: price - item.price, weight: itemsList[protoIndex].weight,
+          owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
+          baseCargoIndex].amount else: 0), id: index))
+    except:
+      return showError(message = "Can't add item from the player's ship's cargo.")
 
   proc sortItems(x, y: LocalItemData): int =
     case itemsSortOrder
@@ -574,12 +584,15 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       if eventsList[eventIndex].eType == doublePrice and eventsList[
           eventIndex].itemIndex == protoIndex:
         price = price * 2
-    localItems.add(y = LocalItemData(name: itemsList[protoIndex].name, iType: (
-        if itemsList[protoIndex].showType.len == 0: itemsList[
-        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-        item.durability.float / defaultItemDurability.float), price: price,
-        profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
-        available: item.amount, id: index))
+    try:
+      localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
+          iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+          item.durability.float / defaultItemDurability.float), price: price,
+          profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
+          available: item.amount, id: index))
+    except:
+      return showError(message = "Can't add item from the base's cargo.")
   localItems.sort(cmp = sortItems)
   for item in localItems:
     itemsIndexes.add(y = item.id)
