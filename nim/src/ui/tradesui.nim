@@ -652,8 +652,24 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     showMessage(text = "You can't buy " & getCurrentExceptionMsg() &
         " in this " & trader & ".", title = "Can't buy items")
     return tclOk
-  except NotForSaleNowError:
-    showMessage(text = "You can't buy " & getCurrentExceptionMsg() & " in this base at this moment.", title = "Can't buy items")
+  except NoFreeCargoError:
+    showMessage(text = "You don't have that much free space in your ship cargo.",
+        title = "Can't buy items")
+    return tclOk
+  except NoMoneyError:
+    showMessage(text = "You don't have any " & moneyName & " to buy " &
+        getCurrentExceptionMsg() & ".", title = "No money to buy items")
+    return tclOk
+  except NotEnoughMoneyError:
+    showMessage(text = "You don't have enough " & moneyName &
+        " to buy so much " & getCurrentExceptionMsg() & ".",
+        title = "Not enough money to buy items")
+    return tclOk
+  except NoMoneyInBaseError:
+    showMessage(text = "You can't sell so much " & getCurrentExceptionMsg() &
+        " because " & trader & " don't have that much " & moneyName &
+        " to buy it.", title = "Too much items for sale")
+    return tclOk
   updateHeader()
   updateMessages()
   let typeBox = ".gameframe.paned.tradeframe.canvas.trade.options.type"
