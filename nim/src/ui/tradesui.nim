@@ -670,6 +670,10 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
         " because " & trader & " don't have that much " & moneyName &
         " to buy it.", title = "Too much items for sale")
     return tclOk
+  except NoTraderError:
+    showMessage(text = "You don't have assigned anyone in crew to talk in bases duty.",
+        title = "No trader assigned")
+    return tclOk
   updateHeader()
   updateMessages()
   let typeBox = ".gameframe.paned.tradeframe.canvas.trade.options.type"
