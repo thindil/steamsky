@@ -1094,6 +1094,7 @@ proc showCombatUi(newCombat: bool = true) =
         member.orderTime = 15
         addMessage(message = member.name & " back to work for combat.",
             mType = orderMessage)
+  updateHeader()
   if playerShip.crew[0].order == boarding:
     updateBoardingUi()
     showCombatFrame(frameName = ".boarding")
