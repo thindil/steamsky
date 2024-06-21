@@ -18,7 +18,7 @@
 import std/[algorithm, os, strutils, tables]
 import ../[basestypes, basescargo, config, crewinventory, events, game, items,
     maps, shipscargo, tk, trades, types]
-import coreui, dialogs2, mapsui, table, updateheader, utilsui2
+import coreui, dialogs, dialogs2, mapsui, table, updateheader, utilsui2
 
 type ItemsSortOrders = enum
   nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
@@ -633,24 +633,39 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
         baseCargoIndex].protoIndex)
   let trader = (if baseIndex > 0: "base" else: "ship")
-  if argc > 2:
-    if argv[1] == "buy":
-      buyItems(baseItemIndex = baseCargoIndex, amount = $argv[2])
+  try:
+    if argc > 2:
+      if argv[1] == "buy":
+        buyItems(baseItemIndex = baseCargoIndex, amount = $argv[2])
+      else:
+        sellItems(itemIndex = cargoIndex, amount = $argv[2])
     else:
-      sellItems(itemIndex = cargoIndex, amount = $argv[2])
-  else:
-    let amountBox = ".itemdialog.amount"
-    if argv[1] == "buy":
-      buyItems(baseItemIndex = baseCargoIndex, amount = tclEval2(
-          script = amountBox & " get"))
-    else:
-      sellItems(itemIndex = cargoIndex, amount = tclEval2(script = amountBox & " get"))
-    discard closeDialogCommand(clientData = clientData, interp = interp,
-        argc = 2, argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
+      let amountBox = ".itemdialog.amount"
+      if argv[1] == "buy":
+        buyItems(baseItemIndex = baseCargoIndex, amount = tclEval2(
+            script = amountBox & " get"))
+      else:
+        sellItems(itemIndex = cargoIndex, amount = tclEval2(script = amountBox & " get"))
+      discard closeDialogCommand(clientData = clientData, interp = interp,
+          argc = 2, argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
+  except CantBuyError:
+    showMessage(text = "You can't buy " & getCurrentExceptionMsg() &
+        " in this " & trader & ".", title = "Can't buy items")
+    return tclOk
+  except NotForSaleNowError:
+    showMessage(text = "You can't buy " & getCurrentExceptionMsg() & " in this base at this moment.", title = "Can't buy items")
   updateHeader()
   updateMessages()
+  let typeBox = ".gameframe.paned.tradeframe.canvas.trade.options.type"
   tclEval(script = "bind " & typeBox & " <<ComboBoxSelected>> {}")
-  return tclOk
+  tclEval(script = typeBox & " current 0")
+  tclEval(script = "bind " & typeBox & " <<ComboBoxSelected>> {ShowTrade [" &
+      typeBox & " get]}")
+  if itemsSortOrder != defaultItemsSortOrder:
+    return sortTradeItemsCommand(clientData = clientData, interp = interp,
+        argc = 2, argv = @["SortTradeItem", "-1"].allocCStringArray)
+  return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowTrade", "All"].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
