@@ -25,8 +25,8 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Bases.Cargo; use Bases.Cargo;
-with BasesTypes; use BasesTypes;
-with CoreUI; use CoreUI;
+with BasesTypes;
+with CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with Game; use Game;
@@ -95,6 +95,7 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Ada.Characters.Latin_1;
+      use BasesTypes;
       use Crew;
       use Ships.Cargo;
       use Ships.Crew;
@@ -528,6 +529,8 @@ package body Trades.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use CoreUI;
+
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type",
