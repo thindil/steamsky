@@ -613,11 +613,39 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowTrade", tclEval2(script = typeBox &
       " get")].allocCStringArray)
 
+var itemIndex = -1
+
+proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  var baseCargoIndex, cargoIndex: int = -1
+  if itemIndex < 0:
+    baseCargoIndex = itemIndex.abs
+  else:
+    cargoIndex = itemIndex
+  var protoIndex = 0
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if cargoIndex > -1:
+    protoIndex = playerShip.cargo[cargoIndex].protoIndex
+    if baseCargoIndex == -1:
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
+  else:
+    protoIndex = (if baseIndex == 0: traderCargo[
+        baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
+        baseCargoIndex].protoIndex)
+  let trader = (if baseIndex > 0: "base" else: "ship")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowTrade", showTradeCommand)
 #    addCommand("SortTradeItems", sortTradeItemsCommand)
+#    addCommand("TradeItem", tradeItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc getTradeItemIndex(iIndex: cint) {.exportc.} =
+  itemIndex = iIndex
