@@ -17,8 +17,8 @@
 
 import std/[algorithm, os, strutils, tables]
 import ../[basestypes, basescargo, config, crewinventory, events, game, items,
-    maps, shipscargo, tk, types]
-import coreui, mapsui, table, utilsui2
+    maps, shipscargo, tk, trades, types]
+import coreui, dialogs2, mapsui, table, updateheader, utilsui2
 
 type ItemsSortOrders = enum
   nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
@@ -633,6 +633,23 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
         baseCargoIndex].protoIndex)
   let trader = (if baseIndex > 0: "base" else: "ship")
+  if argc > 2:
+    if argv[1] == "buy":
+      buyItems(baseItemIndex = baseCargoIndex, amount = $argv[2])
+    else:
+      sellItems(itemIndex = cargoIndex, amount = $argv[2])
+  else:
+    let amountBox = ".itemdialog.amount"
+    if argv[1] == "buy":
+      buyItems(baseItemIndex = baseCargoIndex, amount = tclEval2(
+          script = amountBox & " get"))
+    else:
+      sellItems(itemIndex = cargoIndex, amount = tclEval2(script = amountBox & " get"))
+    discard closeDialogCommand(clientData = clientData, interp = interp,
+        argc = 2, argv = @["CloseDialog", ".itemdialog"].allocCStringArray)
+  updateHeader()
+  updateMessages()
+  tclEval(script = "bind " & typeBox & " <<ComboBoxSelected>> {}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
