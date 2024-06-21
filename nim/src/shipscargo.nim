@@ -42,7 +42,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
   body:
     var itemIndex: int = -1
     if protoIndex > 0 and cargoIndex < 0:
-      for index, item in ship.cargo.pairs:
+      for index, item in ship.cargo:
         if item.protoIndex == protoIndex and item.durability == durability:
           itemIndex = index
           break
@@ -81,10 +81,10 @@ proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
   result = 0
   for module in ship.modules:
     if module.mType == cargoRoom and module.durability > 0:
-      result = result + modulesList[module.protoIndex].maxValue
+      result += modulesList[module.protoIndex].maxValue
   for item in ship.cargo:
-    result = result - (itemsList[item.protoIndex].weight * item.amount)
-  result = result + amount
+    result -= (itemsList[item.protoIndex].weight * item.amount)
+  result += amount
 
 proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
     tags: [], contractual.} =
@@ -100,7 +100,7 @@ proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
     result = 0
     for item in playerShip.cargo:
       if itemsList[item.protoIndex].itemType == itemType:
-        result = result + item.amount
+        result += item.amount
 
 proc getItemsAmount*(iType: string): Natural {.sideEffect, raises: [KeyError],
     tags: [], contractual.} =
@@ -115,24 +115,24 @@ proc getItemsAmount*(iType: string): Natural {.sideEffect, raises: [KeyError],
   body:
     if iType == "Drinks":
       for member in playerShip.crew:
-        let faction = factionsList[member.faction]
+        let faction: FactionData = factionsList[member.faction]
         if faction.drinksTypes.len == 0:
           result = gameSettings.lowDrinks + 1
         else:
           result = 0
           for drinkType in faction.drinksTypes:
-            result = result + getItemAmount(itemType = drinkType)
+            result += getItemAmount(itemType = drinkType)
           if result < gameSettings.lowDrinks:
             break
     else:
       for member in playerShip.crew:
-        let faction = factionsList[member.faction]
+        let faction: FactionData = factionsList[member.faction]
         if faction.foodTypes.len == 0:
           result = gameSettings.lowFood + 1
         else:
           result = 0
           for foodType in faction.foodTypes:
-            result = result + getItemAmount(itemType = foodType)
+            result += getItemAmount(itemType = foodType)
           if result < gameSettings.lowFood:
             break
 
