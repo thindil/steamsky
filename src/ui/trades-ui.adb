@@ -15,7 +15,6 @@
 
 with Ada.Characters.Latin_1;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
--- with Ada.Exceptions;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
@@ -23,7 +22,6 @@ with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
--- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Bases.Cargo;
 with BasesTypes;
 with CoreUI;
@@ -32,7 +30,6 @@ with Dialogs; use Dialogs;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
--- with Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Crew;
@@ -699,21 +696,9 @@ package body Trades.UI is
    function Trade_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use Ada.Exceptions;
---      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
---      use Maps.UI;
---
+
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
---      Base_Cargo_Index, Cargo_Index: Natural := 0;
---      Trader: String(1 .. 4);
---      Proto_Index: Natural;
---      Amount_Box: constant Ttk_SpinBox :=
---        Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
---      Type_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName =>
---             ".gameframe.paned.tradeframe.canvas.trade.options.type");
       function Trade_Ada_Item_Command
         (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
          Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
@@ -738,152 +723,6 @@ package body Trades.UI is
       Get_Ship_From_Nim(Ship => Player_Ship);
       Set_Base_Cargo(Base_Index => Base_Index);
       return TCL_OK;
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      if Item_Index < 0 then
---         Base_Cargo_Index := abs Item_Index;
---      else
---         Cargo_Index := Item_Index;
---      end if;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      if Cargo_Index > 0 then
---         Proto_Index :=
---           Inventory_Container.Element
---             (Container => Player_Ship.Cargo, Index => Cargo_Index)
---             .Proto_Index;
---         if Base_Cargo_Index = 0 then
---            Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
---         end if;
---      else
---         Proto_Index :=
---           (if Base_Index = 0 then
---              BaseCargo_Container.Element
---                (Container => Trader_Cargo, Index => Base_Cargo_Index)
---                .Proto_Index
---            else BaseCargo_Container.Element
---                (Container => Sky_Bases(Base_Index).Cargo,
---                 Index => Base_Cargo_Index)
---                .Proto_Index);
---      end if;
---      Trader := (if Base_Index > 0 then "base" else "ship");
---      if Argc > 2 then
---         if CArgv.Arg(Argv => Argv, N => 1) in "buy" then
---            Buy_Items
---              (Base_Item_Index => Base_Cargo_Index,
---               Amount => CArgv.Arg(Argv => Argv, N => 2));
---         else
---            Sell_Items
---              (Item_Index => Cargo_Index,
---               Amount => CArgv.Arg(Argv => Argv, N => 2));
---         end if;
---      else
---         if CArgv.Arg(Argv => Argv, N => 1) in "buy" then
---            Buy_Items
---              (Base_Item_Index => Base_Cargo_Index,
---               Amount => Get(Widgt => Amount_Box));
---         else
---            Sell_Items
---              (Item_Index => Cargo_Index, Amount => Get(Widgt => Amount_Box));
---         end if;
---         if Close_Dialog_Command
---             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---              Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
---           TCL_ERROR then
---            return TCL_ERROR;
---         end if;
---      end if;
---      Update_Header;
---      Update_Messages;
---      Unbind(Widgt => Type_Box, Sequence => "<<ComboBoxSelected>>");
---      Current(ComboBox => Type_Box, NewIndex => "0");
---      Bind
---        (Widgt => Type_Box, Sequence => "<<ComboBoxSelected>>",
---         Script => "{ShowTrade [" & Type_Box & " get]}");
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
-----      if Items_Sort_Order /= Default_Items_Sort_Order then
-----         return
-----           Sort_Items_Command
-----             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-----              Argv => CArgv.Empty & "SortTradeItem" & "-1");
-----      end if;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      return
---        Show_Trade_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---           Argv => CArgv.Empty & "ShowTrade" & "All");
---   exception
---      when An_Exception : Trade_Cant_Buy =>
---         Show_Message
---           (Text =>
---              "You can't buy " & Exception_Message(X => An_Exception) &
---              " in this " & Trader & ".",
---            Title => "Can't buy items");
---         return TCL_OK;
---      when An_Exception : Trade_Not_For_Sale_Now =>
---         Show_Message
---           (Text =>
---              "You can't buy " & Exception_Message(X => An_Exception) &
---              " in this base at this moment.",
---            Title => "Can't buy items");
---         return TCL_OK;
---      when An_Exception : Trade_Buying_Too_Much =>
---         Show_Message
---           (Text =>
---              Trader & " don't have that much " &
---              Exception_Message(X => An_Exception) & " for sale.",
---            Title => "Not enough items");
---         return TCL_OK;
---      when Trade_No_Free_Cargo =>
---         Show_Message
---           (Text => "You don't have that much free space in your ship cargo.",
---            Title => "No free cargo space");
---         return TCL_OK;
---      when An_Exception : Trade_No_Money =>
---         Show_Message
---           (Text =>
---              "You don't have any " & To_String(Source => Money_Name) &
---              " to buy " & Exception_Message(X => An_Exception) & ".",
---            Title => "No money to buy items");
---         return TCL_OK;
---      when An_Exception : Trade_Not_Enough_Money =>
---         Show_Message
---           (Text =>
---              "You don't have enough " & To_String(Source => Money_Name) &
---              " to buy so much " & Exception_Message(X => An_Exception) & ".",
---            Title => "Not enough money to buy items");
---         return TCL_OK;
---      when Trade_Invalid_Amount =>
---         if CArgv.Arg(Argv => Argv, N => 1) = "buy" then
---            Show_Message
---              (Text => "You entered invalid amount to buy.",
---               Title => "Invalid amount of items");
---         else
---            Show_Message
---              (Text => "You entered invalid amount to sell.",
---               Title => "Invalid amount of items");
---         end if;
---         return TCL_OK;
---      when An_Exception : Trade_Too_Much_For_Sale =>
---         Show_Message
---           (Text =>
---              "You dont have that much " &
---              Exception_Message(X => An_Exception) & " in ship cargo.",
---            Title => "Not enough items for sale");
---         return TCL_OK;
---      when An_Exception : Trade_No_Money_In_Base =>
---         Show_Message
---           (Text =>
---              "You can't sell so much " &
---              Exception_Message(X => An_Exception) & " because " & Trader &
---              " don't have that much " & To_String(Source => Money_Name) &
---              " to buy it.",
---            Title => "Too much items for sale");
---         return TCL_OK;
---      when Trade_No_Trader =>
---         Show_Message
---           (Text =>
---              "You don't have assigned anyone in crew to talk in bases duty.",
---            Title => "No trader assigned");
---         return TCL_OK;
    end Trade_Item_Command;
 
    procedure Add_Commands is
