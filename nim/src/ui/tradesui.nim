@@ -700,4 +700,4 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 # Temporary code for interfacing with Ada
 
 proc getTradeItemIndex(iIndex: cint) {.exportc.} =
-  itemIndex = iIndex
+  itemIndex = (if iIndex > 0: iIndex - 1 else: iIndex + 1)

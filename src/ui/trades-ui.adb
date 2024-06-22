@@ -14,27 +14,29 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 -- with Ada.Exceptions;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 -- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Bases.Cargo; use Bases.Cargo;
+with Bases.Cargo;
 with BasesTypes;
 with CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with Game; use Game;
+with Items; use Items;
 with Maps; use Maps;
 -- with Maps.UI;
+with Ships; use Ships;
 with Ships.Cargo;
 with Ships.Crew;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Trades.UI is
 
@@ -95,6 +97,7 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Ada.Characters.Latin_1;
+      use Bases.Cargo;
       use BasesTypes;
       use Crew;
       use Ships.Cargo;
@@ -529,6 +532,8 @@ package body Trades.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
       use CoreUI;
 
       Type_Box: constant Ttk_ComboBox :=
@@ -698,8 +703,8 @@ package body Trades.UI is
 --      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 --      use Maps.UI;
 --
---      Base_Index: constant Natural :=
---        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Base_Index: constant Natural :=
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
 --      Base_Cargo_Index, Cargo_Index: Natural := 0;
 --      Trader: String(1 .. 4);
 --      Proto_Index: Natural;
@@ -711,17 +716,28 @@ package body Trades.UI is
 --             ".gameframe.paned.tradeframe.canvas.trade.options.type");
       function Trade_Ada_Item_Command
         (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-        Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-        Import => True,
-        Convention => C,
-        External_Name => "tradeItemCommand";
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "tradeItemCommand";
       procedure Get_Ada_Trade_Item_Index(I_Index: Integer) with
-        Import => True,
-        Convention => C,
-        External_Name => "getTradeItemIndex";
+         Import => True,
+         Convention => C,
+         External_Name => "getTradeItemIndex";
    begin
+      Set_Ship_In_Nim;
+      Get_Base_Cargo(Base_Index => Base_Index);
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       Get_Ada_Trade_Item_Index(I_Index => Item_Index);
-      return Trade_Ada_Item_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
+      if Trade_Ada_Item_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      Set_Base_Cargo(Base_Index => Base_Index);
+      return TCL_OK;
 --      --## rule off DIRECTLY_ACCESSED_GLOBALS
 --      if Item_Index < 0 then
 --         Base_Cargo_Index := abs Item_Index;
@@ -871,6 +887,7 @@ package body Trades.UI is
    end Trade_Item_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowTrade", Ada_Command => Show_Trade_Command'Access);
