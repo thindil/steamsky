@@ -15,12 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Bases; use Bases;
---## rule off REDUCEABLE_SCOPE
-with Items; use Items;
---## rule on REDUCEABLE_SCOPE
-with Ships; use Ships;
 
 -- ****h* Trades/Trades
 -- FUNCTION
@@ -41,20 +36,6 @@ package Trades is
    -- Raised when items is not available to buy
    -- SOURCE
    Trade_Cant_Buy: exception;
-   -- ****
-
-   -- ****e* Trades/Trades.Trade_Not_For_Sale_Now
-   -- FUNCTION
-   -- Raised when no items available at this time for sale
-   -- SOURCE
-   Trade_Not_For_Sale_Now: exception;
-   -- ****
-
-   -- ****e* Trades/Trades.Trade_Buying_Too_Much
-   -- FUNCTION
-   -- Raised when player trying buy more than can
-   -- SOURCE
-   Trade_Buying_Too_Much: exception;
    -- ****
 
    -- ****e* Trades/Trades.Trade_No_Free_Cargo
@@ -78,20 +59,6 @@ package Trades is
    Trade_Not_Enough_Money: exception;
    -- ****
 
-   -- ****e* Trades/Trades.Trade_Invalid_Amount
-   -- FUNCTION
-   -- Raised when player enter invalid amount
-   -- SOURCE
-   Trade_Invalid_Amount: exception;
-   -- ****
-
-   -- ****e* Trades/Trades.Trade_Too_Much_For_Sale
-   -- FUNCTION
-   -- Raised when player try sell more than have
-   -- SOURCE
-   Trade_Too_Much_For_Sale: exception;
-   -- ****
-
    -- ****e* Trades/Trades.Trade_No_Money_In_Base
    -- FUNCTION
    -- Raised when base don't have enough money for buy item
@@ -105,33 +72,5 @@ package Trades is
    -- SOURCE
    Trade_No_Trader: exception;
    -- ****
-
-   -- ****f* Trades/Trades.Buy_Items
-   -- FUNCTION
-   -- Buy items from bases or trader
-   -- PARAMETERS
-   -- Base_Item_Index - Base or ship cargo index of item to buy
-   -- Amount          - Amount of items to buy
-   -- SOURCE
-   procedure Buy_Items
-     (Base_Item_Index: BaseCargo_Container.Extended_Index; Amount: String) with
-      Pre => Amount'Length > 0;
-      -- ****
-
-      -- ****f* Trades/Trades.Sell_Items
-      -- FUNCTION
-      -- Sell items from bases or trader
-      -- PARAMETERS
-      -- Item_Index - Player ship cargo index of item to sell
-      -- Amount     - Amount of items to sell
-      -- SOURCE
-   procedure Sell_Items
-     (Item_Index: Inventory_Container.Extended_Index; Amount: String) with
-      Pre => Item_Index in
-        Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-              Inventory_Container.Last_Index
-                (Container => Player_Ship.Cargo) and
-      Amount'Length > 0;
-      -- ****
 
 end Trades;
