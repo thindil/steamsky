@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file.
 - Drones can't find food in the player's ship's cargo
 - Wrong in-game time after waiting for rest of tired crew members
 - Wrong in-game time after starting a new combat
+- Typos in the trade's errors' dialogs
 
 ## [9.9] - 2024-04-14
 
