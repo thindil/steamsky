@@ -653,7 +653,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
         " in this " & trader & ".", title = "Can't buy items")
     return tclOk
   except NoFreeCargoError:
-    showMessage(text = "You don't have that much free space in your ship cargo.",
+    showMessage(text = "You don't have enough free space in your ship's cargo.",
         title = "Can't buy items")
     return tclOk
   except NoMoneyError:
@@ -662,16 +662,16 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   except NotEnoughMoneyError:
     showMessage(text = "You don't have enough " & moneyName &
-        " to buy so much " & getCurrentExceptionMsg() & ".",
+        " to buy so many " & getCurrentExceptionMsg() & ".",
         title = "Not enough money to buy items")
     return tclOk
   except NoMoneyInBaseError:
-    showMessage(text = "You can't sell so much " & getCurrentExceptionMsg() &
-        " because " & trader & " don't have that much " & moneyName &
+    showMessage(text = "You can't sell so many " & getCurrentExceptionMsg() &
+        " because " & trader & " don't have that many " & moneyName &
         " to buy it.", title = "Too much items for sale")
     return tclOk
   except NoTraderError:
-    showMessage(text = "You don't have assigned anyone in crew to talk in bases duty.",
+    showMessage(text = "You don't have assigned anyone in the crew to the trader's duty.",
         title = "No trader assigned")
     return tclOk
   updateHeader()
