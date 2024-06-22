@@ -632,9 +632,9 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tradetype is type of trade action. Can be buy, buymax, sell, sellmax
   var baseCargoIndex, cargoIndex: int = -1
   if itemIndex < 0:
-    baseCargoIndex = itemIndex.abs
+    baseCargoIndex = (itemIndex + 1).abs
   else:
-    cargoIndex = itemIndex
+    cargoIndex = itemIndex - 1
   var protoIndex = 0
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if cargoIndex > -1:
@@ -702,6 +702,30 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowTrade", "All"].allocCStringArray)
 
+proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  itemIndex = ($argv[1]).parseInt
+  var baseCargoIndex, cargoIndex: int = -1
+  if itemIndex < 0:
+    baseCargoIndex = (itemIndex + 1).abs
+  else:
+    cargoIndex = itemIndex - 1
+  if cargoIndex > playerShip.cargo.high:
+    return tclOk
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if baseIndex == 0 and baseCargoIndex > traderCargo.high:
+    return tclOk
+  elif baseIndex > 0 and baseCargoIndex > skyBases[baseIndex].cargo.high:
+    return tclOk
+  var protoIndex = 0
+  if cargoIndex > -1:
+    protoIndex = playerShip.cargo[cargoIndex].protoIndex
+  else:
+    protoIndex = (if baseIndex == 0: traderCargo[
+        baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
+        baseCargoIndex].protoIndex)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -709,10 +733,11 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowTrade", showTradeCommand)
 #    addCommand("SortTradeItems", sortTradeItemsCommand)
 #    addCommand("TradeItem", tradeItemCommand)
+#    addCommand("ShowTradeItemInfo", showTradeItemInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
 # Temporary code for interfacing with Ada
 
 proc getTradeItemIndex(iIndex: cint) {.exportc.} =
-  itemIndex = (if iIndex > 0: iIndex - 1 else: iIndex + 1)
+  itemIndex = iIndex
