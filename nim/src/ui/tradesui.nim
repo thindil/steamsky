@@ -616,7 +616,8 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
 var itemIndex = -1
 
 proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
   var baseCargoIndex, cargoIndex: int = -1
   if itemIndex < 0:
     baseCargoIndex = itemIndex.abs
@@ -674,6 +675,8 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     showMessage(text = "You don't have assigned anyone in the crew to the trader's duty.",
         title = "No trader assigned")
     return tclOk
+  except:
+    return showError(message = "Can't trade item.")
   updateHeader()
   updateMessages()
   let typeBox = ".gameframe.paned.tradeframe.canvas.trade.options.type"
