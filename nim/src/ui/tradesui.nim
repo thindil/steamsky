@@ -724,6 +724,25 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     protoIndex = (if baseIndex == 0: traderCargo[
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
         baseCargoIndex].protoIndex)
+  var itemInfo = ""
+  if itemsList[protoIndex].itemType == weaponType:
+    itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[3]].attribute].name & (if itemsList[protoIndex].value[4] == 1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
+    case itemsList[protoIndex].value[5]
+    of 1:
+      itemInfo.add(y = "cutting")
+    of 2:
+      itemInfo.add(y = "impaling")
+    of 3:
+      itemInfo.add(y = "blunt")
+    else:
+      discard
+    itemInfo.add(y = "{/gold}")
+  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor, armsArmor, legsArmor, shieldType]
+  for itemType in itemTypes:
+    if itemsList[protoIndex].itemType == itemType:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Damage chance: {gold}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
