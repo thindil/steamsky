@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,9 +16,11 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import basestypes, game, maps, types, utils
 
-proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
+proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Generate the cargo in the selected sky base if needed
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -60,7 +62,8 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
               break
             itemIndex.inc
     else:
-      proc getMaxAmount(amount: Positive): Natural =
+      proc getMaxAmount(amount: Positive): Natural {.sideEffect, raises: [],
+          tags: [], contractual.} =
         result = (amount / 2).int
         if result < 1:
           result = 1
@@ -76,7 +79,7 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [].} =
 
 proc findBaseCargo*(protoIndex: Natural;
     durability: ItemsDurability = ItemsDurability.high): int {.sideEffect,
-    raises: [], tags: [].} =
+    raises: [], tags: [], contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
   ## * protoIndex - the index of the prototype to search
@@ -87,7 +90,8 @@ proc findBaseCargo*(protoIndex: Natural;
   ## found.
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
 
-  proc findCargo(localBaseCargo: seq[BaseCargo]): int =
+  proc findCargo(localBaseCargo: seq[BaseCargo]): int {.sideEffect, raises: [],
+      tags: [], contractual.} =
     result = -1
     for index, item in localBaseCargo.pairs:
       if durability < ItemsDurability.high:
@@ -103,7 +107,8 @@ proc findBaseCargo*(protoIndex: Natural;
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability;
-    cargoIndex: cint = -1) {.sideEffect, raises: [KeyError], tags: [].} =
+    cargoIndex: cint = -1) {.sideEffect, raises: [KeyError], tags: [],
+        contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
   ##
@@ -140,17 +145,18 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
 
 # Temporary code for interfacing with Ada
 
-proc generateAdaCargo() {.raises: [], tags: [], exportc.} =
+proc generateAdaCargo() {.raises: [], tags: [], exportc, contractual.} =
   try:
     generateCargo()
   except KeyError:
     discard
 
-proc findAdaBaseCargo(protoIndex, durability: cint): cint {.raises: [], tags: [], exportc.} =
+proc findAdaBaseCargo(protoIndex, durability: cint): cint {.raises: [], tags: [
+    ], exportc, contractual.} =
   return findBaseCargo(protoIndex = protoIndex, durability = durability).cint + 1
 
 proc updateAdaBaseCargo(protoIndex, amount, durability,
-    cargoIndex: cint) {.raises: [], tags: [], exportc.} =
+    cargoIndex: cint) {.raises: [], tags: [], exportc, contractual.} =
   try:
     updateBaseCargo(protoIndex = protoIndex, amount = amount,
         durability = durability, cargoIndex = cargoIndex - 1)
