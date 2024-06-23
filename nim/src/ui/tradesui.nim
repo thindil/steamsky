@@ -813,7 +813,30 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       protoIndex = moneyIndex)
   if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
       isBuyable(baseType = baseType, itemIndex = protoIndex)) or baseIndex == 0):
-    var maxBuyAmout = playerShip.cargo[moneyIndex2].amount / price
+    var
+      maxBuyAmount: int = (playerShip.cargo[moneyIndex2].amount / price).int
+      maxPrice: Natural = maxBuyAmount * price
+    if maxBuyAmount > 0:
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+      if maxPrice < maxBuyAmount * price:
+        maxBuyAmount = (maxBuyAmount.float * ((maxBuyAmount.float *
+            price.float) / maxPrice.float)).floor.int
+      if baseIndex > 0 and maxBuyAmount > skyBases[baseIndex].cargo[
+          baseCargoIndex].amount:
+        maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
+      elif baseIndex == 0 and maxBuyAmount > traderCargo[baseCargoIndex].amount:
+        maxBuyAmount = traderCargo[baseCargoIndex].amount
+      maxPrice = maxBuyAmount * price
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+      var weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
+      while weight < 0:
+        maxBuyAmount = maxBuyAmount + (weight / itemsList[
+            protoIndex].weight).int - 1
+        if maxBuyAmount < 0:
+          maxBuyAmount = 0
+        if maxBuyAmount == 0:
+          break
+        maxPrice = maxBuyAmount * price
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
