@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the sky bases' cargo, like generating it, finding
+## items in them or updating the cargo.
+
 import std/tables
 import contracts
 import basestypes, game, maps, types, utils
@@ -62,11 +65,18 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
               break
             itemIndex.inc
     else:
+
       proc getMaxAmount(amount: Positive): Natural {.sideEffect, raises: [],
           tags: [], contractual.} =
+        ## Get the max amount from the selected amount of items
+        ##
+        ## * amount - the amount of item which max value will be taken
+        ##
+        ## Returns the max amount of the selected item
         result = (amount / 2).int
         if result < 1:
           result = 1
+
       for item in skyBases[baseIndex].cargo.mitems:
         let roll = getRandom(min = 1, max = 100)
         if roll < 30 and item.amount > 0:
@@ -92,6 +102,12 @@ proc findBaseCargo*(protoIndex: Natural;
 
   proc findCargo(localBaseCargo: seq[BaseCargo]): int {.sideEffect, raises: [],
       tags: [], contractual.} =
+    ## Find the index of the item in the base's cargo
+    ##
+    ## * localBaseCargo - the cargo in which the item will be looked for
+    ##
+    ## Returns the index of the item in the base's cargo or -1 if the item
+    ## not found
     result = -1
     for index, item in localBaseCargo.pairs:
       if durability < ItemsDurability.high:
@@ -146,6 +162,7 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
 # Temporary code for interfacing with Ada
 
 proc generateAdaCargo() {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     generateCargo()
   except KeyError:
@@ -153,10 +170,12 @@ proc generateAdaCargo() {.raises: [], tags: [], exportc, contractual.} =
 
 proc findAdaBaseCargo(protoIndex, durability: cint): cint {.raises: [], tags: [
     ], exportc, contractual.} =
+  ## Temporary C binding
   return findBaseCargo(protoIndex = protoIndex, durability = durability).cint + 1
 
 proc updateAdaBaseCargo(protoIndex, amount, durability,
     cargoIndex: cint) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     updateBaseCargo(protoIndex = protoIndex, amount = amount,
         durability = durability, cargoIndex = cargoIndex - 1)
