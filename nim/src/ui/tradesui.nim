@@ -726,7 +726,10 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         baseCargoIndex].protoIndex)
   var itemInfo = ""
   if itemsList[protoIndex].itemType == weaponType:
-    itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[3]].attribute].name & (if itemsList[protoIndex].value[4] == 1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
+    itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[
+        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
+        3]].attribute].name & (if itemsList[protoIndex].value[4] ==
+        1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
     case itemsList[protoIndex].value[5]
     of 1:
       itemInfo.add(y = "cutting")
@@ -737,12 +740,40 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       discard
     itemInfo.add(y = "{/gold}")
-  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor, armsArmor, legsArmor, shieldType]
+  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
+      armsArmor, legsArmor, shieldType]
   for itemType in itemTypes:
     if itemsList[protoIndex].itemType == itemType:
       if itemInfo.len > 0:
         itemInfo.add(y = "\n")
-      itemInfo.add(y = "Damage chance: {gold}")
+      itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+          itemData = itemsList[protoIndex].value[1]) &
+          "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+      break
+  if itemsList[protoIndex].itemType in toolsList:
+    if itemInfo.len > 0:
+      itemInfo.add(y = "\n")
+    itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+        itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+  if itemsList[protoIndex].itemType.len > 4 and (itemsList[protoIndex].itemType[
+      0..3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon"):
+    if itemInfo.len > 0:
+      itemInfo.add(y = "\n")
+    itemInfo.add(y = "Strength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  if itemsList[protoIndex].description.len > 0:
+    if itemInfo.len > 0:
+      itemInfo.add(y = "\n\n")
+    itemInfo.add(y = itemsList[protoIndex].description)
+  let baseType = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
+  var price = 0
+  if itemIndex > 0:
+    baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+        durability = playerShip.cargo[cargoIndex].durability)
+    if baseCargoIndex > -1:
+      price = (if baseIndex > 0: skyBases[baseIndex].cargo[
+          baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
+    else:
+      price = getPrice(baseType = baseType, itemIndex = protoIndex)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
