@@ -811,11 +811,11 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           maxSellAmount) - maxPrice)
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
+  var maxBuyAmount: int = 0
   if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
       isBuyable(baseType = baseType, itemIndex = protoIndex)) or baseIndex == 0):
-    var
-      maxBuyAmount: int = (playerShip.cargo[moneyIndex2].amount / price).int
-      maxPrice: Natural = maxBuyAmount * price
+    maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / price).int
+    var maxPrice: Natural = maxBuyAmount * price
     if maxBuyAmount > 0:
       countPrice(price = maxPrice, traderIndex = findMember(order = talk))
       if maxPrice < maxBuyAmount * price:
@@ -837,6 +837,18 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if maxBuyAmount == 0:
           break
         maxPrice = maxBuyAmount * price
+        countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+        weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
+    if itemIndex == 0:
+      itemIndex = -(baseCargoIndex)
+  showInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
+      if maxBuyAmount == 0: emptyButtonSettings else: ButtonSettings(
+      tooltip: "Buy item from the base", command: "TradeAmount buy " &
+      $maxBuyAmount & " " & $price, icon: "buy2icon", text: "Buy", color: "")),
+      button2 = (if maxSellAmount ==
+      0: emptyButtonSettings else: ButtonSettings(
+      tooltip: "Sell item from the ship cargo", command: "TradeAmount sell " &
+      $maxSellAmount & " " & $price, icon: "sell2icon", text: "Sell", color: "")))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
