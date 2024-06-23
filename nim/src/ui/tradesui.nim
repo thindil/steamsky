@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[algorithm, os, strutils, tables]
-import ../[basestypes, basescargo, config, crewinventory, events, game, items,
-    maps, shipscargo, tk, trades, types]
+import std/[algorithm, math, os, strutils, tables]
+import ../[bases, basestypes, basescargo, config, crewinventory, events, game,
+    items, maps, shipscargo, shipscrew, tk, trades, types]
 import coreui, dialogs, dialogs2, mapsui, table, updateheader, utilsui2
 
 type ItemsSortOrders = enum
@@ -766,7 +766,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemInfo.add(y = itemsList[protoIndex].description)
   let baseType = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
   var price = 0
-  if itemIndex > 0:
+  if itemIndex > -1:
     baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
         durability = playerShip.cargo[cargoIndex].durability)
     if baseCargoIndex > -1:
@@ -774,6 +774,24 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
     else:
       price = getPrice(baseType = baseType, itemIndex = protoIndex)
+  else:
+    itemIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex,
+        durability = (if baseIndex > 0: skyBases[baseIndex].cargo[
+        baseCargoIndex].durability else: traderCargo[
+        baseCargoIndex].durability))
+    price = (if baseIndex > 0: skyBases[baseIndex].cargo[
+        baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
+  var maxSellAmount = 0
+  if itemIndex > -1:
+    maxSellAmount = playerShip.cargo[itemIndex].amount
+    var
+      maxPrice = maxSellAmount * price
+      weight = 0
+    countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+        reduce = false)
+    if baseIndex > 0 and maxPrice > skyBases[baseIndex].cargo[0].amount:
+      maxSellAmount = (maxSellAmount.float * (skyBases[baseIndex].cargo[
+          0].amount.float / maxPrice.float)).floor.int
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
