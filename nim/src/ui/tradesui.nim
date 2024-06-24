@@ -910,6 +910,31 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't show the item's info.")
   return tclOk
 
+proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  if argv[1] == "sell":
+    showManipulateItem(title = "Sell " & getItemName(item = playerShip.cargo[
+        itemIndex]), command = "TradeItem sell", action = "sell",
+        itemIndex = itemIndex, maxAmount = ($argv[2]).parseInt, cost = ($argv[3]).parseInt)
+  else:
+    if itemIndex > 0:
+      showManipulateItem(title = "Buy " & getItemName(item = playerShip.cargo[
+          itemIndex]), command = "TradeItem buy", action = "buy",
+          itemIndex = itemIndex, maxAmount = ($argv[2]).parseInt, cost = ($argv[3]).parseInt)
+    else:
+      let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      if baseIndex > 0:
+        showManipulateItem(title = "Buy " & itemsList[skyBases[baseIndex].cargo[
+            itemIndex.abs].protoIndex].name, command = "TradeItem buy",
+            action = "buy", itemIndex = itemIndex.abs, maxAmount = ($argv[
+            2]).parseInt, cost = ($argv[3]).parseInt)
+      else:
+        showManipulateItem(title = "Buy " & itemsList[traderCargo[
+            itemIndex.abs].protoIndex].name, command = "TradeItem buy",
+            action = "buy", itemIndex = itemIndex.abs, maxAmount = ($argv[
+            2]).parseInt, cost = ($argv[3]).parseInt)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -918,6 +943,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("SortTradeItems", sortTradeItemsCommand)
 #    addCommand("TradeItem", tradeItemCommand)
 #    addCommand("ShowTradeItemInfo", showTradeItemInfoCommand)
+#    addCommand("TradeAmount", tradeAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
