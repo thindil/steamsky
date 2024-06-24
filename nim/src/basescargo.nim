@@ -26,11 +26,13 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
     contractual.} =
   ## Generate the cargo in the selected sky base if needed
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    population = (if skyBases[baseIndex].population > 0: skyBases[
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
+    population: Positive = (if skyBases[baseIndex].population > 0: skyBases[
         baseIndex].population else: 1)
-  var chance = (if population < 150: 5 elif population < 300: 10 else: 15)
-  chance = chance + daysDifference(dateToCompare = skyBases[baseIndex].visited,
+  var chance: Positive = (if population < 150: 5 elif population <
+      300: 10 else: 15)
+  chance += daysDifference(dateToCompare = skyBases[baseIndex].visited,
       currentDate = gameDate)
   if skyBases[baseIndex].cargo.len == 0:
     chance = 101
@@ -48,11 +50,11 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
             durability: defaultItemDurability, price: getPrice(
             baseType = skyBases[baseIndex].baseType, itemIndex = i)))
     if "blackmarket" in basesTypesList[skyBases[baseIndex].baseType].flags:
-      let amount = (if population < 150: getRandom(min = 1,
+      let amount: Positive = (if population < 150: getRandom(min = 1,
           max = 10) elif population < 300: getRandom(min = 1,
           max = 20) else: getRandom(min = 1, max = 30))
       for i in 1 .. amount:
-        var itemIndex = getRandom(min = 1, max = itemsList.len)
+        var itemIndex: Positive = getRandom(min = 1, max = itemsList.len)
         for j in 1 .. amount:
           itemIndex.dec
           if itemIndex == 0:
@@ -78,9 +80,9 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
           result = 1
 
       for item in skyBases[baseIndex].cargo.mitems:
-        let roll = getRandom(min = 1, max = 100)
+        let roll: Positive = getRandom(min = 1, max = 100)
         if roll < 30 and item.amount > 0:
-          item.amount = item.amount - getRandom(min = 1, max = getMaxAmount(
+          item.amount -= getRandom(min = 1, max = getMaxAmount(
               amount = item.amount))
         elif roll < 60 and skyBases[baseIndex].population > 0:
           item.amount = (if item.amount == 0: getRandom(min = 1, max = 10) *
@@ -98,7 +100,8 @@ proc findBaseCargo*(protoIndex: Natural;
   ##
   ## The index of the item with the selected prototype index or -1 if nothing
   ## found.
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
 
   proc findCargo(localBaseCargo: seq[BaseCargo]): int {.sideEffect, raises: [],
       tags: [], contractual.} =
@@ -109,7 +112,7 @@ proc findBaseCargo*(protoIndex: Natural;
     ## Returns the index of the item in the base's cargo or -1 if the item
     ## not found
     result = -1
-    for index, item in localBaseCargo.pairs:
+    for index, item in localBaseCargo:
       if durability < ItemsDurability.high:
         if item.protoIndex == protoIndex and item.durability == durability:
           return index
@@ -138,7 +141,8 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
   ##                updated. This argument or protoIndex argument must always
   ##                be set, but only one of them.
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     itemIndex: int = if protoIndex > 0:
         findBaseCargo(protoIndex = protoIndex, durability = durability)
       else:
@@ -149,15 +153,13 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
           amount: amount, durability: durability, price: getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex)))
     else:
-      skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
-          itemIndex].amount + amount
+      skyBases[baseIndex].cargo[itemIndex].amount += amount
   else:
-    skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
-        itemIndex].amount + amount
+    skyBases[baseIndex].cargo[itemIndex].amount += amount
     if skyBases[baseIndex].cargo[itemIndex].amount == 0 and not isBuyable(
         baseType = skyBases[baseIndex].baseType, itemIndex = skyBases[
         baseIndex].cargo[itemIndex].protoIndex) and itemIndex > 0:
-      skyBases[baseIndex].cargo.delete(itemIndex)
+      skyBases[baseIndex].cargo.delete(i = itemIndex)
 
 # Temporary code for interfacing with Ada
 
