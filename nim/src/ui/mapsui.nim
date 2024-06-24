@@ -157,13 +157,13 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
     storyY = 1
   if startY < 1:
     startY = 1
-    endY = mapHeight
+    endY = mapHeight + 1
   if startX < 1:
     startX = 1
-    endX = mapWidth
+    endX = mapWidth + 1
   if endY > 1_024:
     endY = 1_024
-    startY = 1_025 - mapHeight
+    startY = 1_024 - mapHeight
   if endX > 1_024:
     endX = 1_024
     startX = 1_025 - mapWidth
