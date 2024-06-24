@@ -26,9 +26,9 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 -- with BasesTypes;
 with CoreUI;
 -- with Crew;
-with Dialogs; use Dialogs;
-with Game; use Game;
-with Items; use Items;
+with Dialogs;
+with Game;
+with Items;
 with Maps; use Maps;
 with Ships; use Ships;
 -- with Ships.Cargo;
@@ -585,7 +585,9 @@ package body Trades.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tiny_String;
+      use Dialogs;
+      use Items;
+      use Game.Tiny_String;
 
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
