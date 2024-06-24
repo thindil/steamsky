@@ -31,33 +31,15 @@ package BasesTypes is
    procedure Load_Bases_Types;
    -- ****
 
-   -- ****f* BasesTypes/BasesTypes.Is_Buyable
+   -- ****f* BasesTypes/BasesTypes.Get_Price
    -- FUNCTION
-   -- Check if selected item is buyable in selected base type
+   -- Get price of selected item in selected base type
    -- PARAMETERS
    -- Base_Type  - Base type to check
    -- Item_Index - Index of item prototype to check
-   -- Check_Flag - Check if selected base type has blackmarket flag
-   -- Base_Index - Index of the selected base to check. Default value
-   --              is 0
    -- RESULT
-   -- True if item is buyable in that type of bases otherwise false
+   -- Price of selected item in selected base type
    -- SOURCE
-   function Is_Buyable
-     (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive;
-      Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
-      return Boolean;
-      -- ****
-
-      -- ****f* BasesTypes/BasesTypes.Get_Price
-      -- FUNCTION
-      -- Get price of selected item in selected base type
-      -- PARAMETERS
-      -- Base_Type  - Base type to check
-      -- Item_Index - Index of item prototype to check
-      -- RESULT
-      -- Price of selected item in selected base type
-      -- SOURCE
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
       return Natural;

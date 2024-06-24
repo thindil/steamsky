@@ -18,7 +18,6 @@
 --## rule off REDUCEABLE_SCOPE
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 --## rule on REDUCEABLE_SCOPE
-with Bases;
 
 package body BasesTypes is
 
@@ -41,39 +40,6 @@ package body BasesTypes is
            To_Bounded_String(Source => Value(Item => A_Bases_Types(I)));
       end loop Set_Bases_Types_Loop;
    end Load_Bases_Types;
-
-   function Is_Buyable
-     (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive;
-      Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
-      return Boolean is
-      use Bases;
-      use Tiny_String;
-
-      function Is_Ada_Buyable
-        (B_Type: chars_ptr;
-         I_Index, C_Flags, B_Index, Rep_Level, Rep_Experience: Integer)
-         return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "isAdaBuyable";
-
-   begin
-      if Is_Ada_Buyable
-          (B_Type => New_String(Str => To_String(Source => Base_Type)),
-           I_Index => Item_Index, C_Flags => (if Check_Flag then 1 else 0),
-           B_Index => Base_Index,
-           Rep_Level =>
-             (if Base_Index > 0 then Sky_Bases(Base_Index).Reputation.Level
-              else 0),
-           Rep_Experience =>
-             (if Base_Index > 0 then
-                Sky_Bases(Base_Index).Reputation.Experience
-              else 0)) =
-        1 then
-         return True;
-      end if;
-      return False;
-   end Is_Buyable;
 
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
