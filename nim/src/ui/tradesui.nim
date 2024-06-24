@@ -704,6 +704,20 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show information about the selected item
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowTradeItemInfo itemindex
+  ## ItemIndex is the index of the item which menu will be show. If index
+  ## starts with minus means item in base/trader cargo only. Otherwise it is
+  ## index in the player ship cargo.
   itemIndex = try:
       ($argv[1]).parseInt
     except:
