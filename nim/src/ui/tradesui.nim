@@ -703,8 +703,11 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowTrade", "All"].allocCStringArray)
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  itemIndex = ($argv[1]).parseInt
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  itemIndex = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't get itemIndex.")
   var baseCargoIndex, cargoIndex: int = -1
   if itemIndex < 0:
     baseCargoIndex = (itemIndex + 1).abs
@@ -725,45 +728,62 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
         baseCargoIndex].protoIndex)
   var itemInfo = ""
-  if itemsList[protoIndex].itemType == weaponType:
-    itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[
-        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
-        3]].attribute].name & (if itemsList[protoIndex].value[4] ==
-        1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
-    case itemsList[protoIndex].value[5]
-    of 1:
-      itemInfo.add(y = "cutting")
-    of 2:
-      itemInfo.add(y = "impaling")
-    of 3:
-      itemInfo.add(y = "blunt")
-    else:
-      discard
-    itemInfo.add(y = "{/gold}")
+  try:
+    if itemsList[protoIndex].itemType == weaponType:
+      itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[
+          3]].name & "/" & attributesList[skillsList[itemsList[
+              protoIndex].value[
+          3]].attribute].name & (if itemsList[protoIndex].value[4] ==
+          1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
+      case itemsList[protoIndex].value[5]
+      of 1:
+        itemInfo.add(y = "cutting")
+      of 2:
+        itemInfo.add(y = "impaling")
+      of 3:
+        itemInfo.add(y = "blunt")
+      else:
+        discard
+      itemInfo.add(y = "{/gold}")
+  except:
+    return showError(message = "Can't show weapon info.")
   let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
       armsArmor, legsArmor, shieldType]
   for itemType in itemTypes:
-    if itemsList[protoIndex].itemType == itemType:
+    try:
+      if itemsList[protoIndex].itemType == itemType:
+        if itemInfo.len > 0:
+          itemInfo.add(y = "\n")
+        itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+            itemData = itemsList[protoIndex].value[1]) &
+            "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+        break
+    except:
+      return showError(message = "Can't get damage chance.")
+  try:
+    if itemsList[protoIndex].itemType in toolsList:
       if itemInfo.len > 0:
         itemInfo.add(y = "\n")
       itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-          itemData = itemsList[protoIndex].value[1]) &
-          "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
-      break
-  if itemsList[protoIndex].itemType in toolsList:
-    if itemInfo.len > 0:
-      itemInfo.add(y = "\n")
-    itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-        itemData = itemsList[protoIndex].value[1]) & "{/gold}")
-  if itemsList[protoIndex].itemType.len > 4 and (itemsList[protoIndex].itemType[
-      0..3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon"):
-    if itemInfo.len > 0:
-      itemInfo.add(y = "\n")
-    itemInfo.add(y = "Strength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
-  if itemsList[protoIndex].description.len > 0:
-    if itemInfo.len > 0:
-      itemInfo.add(y = "\n\n")
-    itemInfo.add(y = itemsList[protoIndex].description)
+          itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+  except:
+    return showError(message = "Can't get tool info.")
+  try:
+    if itemsList[protoIndex].itemType.len > 4 and (itemsList[
+        protoIndex].itemType[0..3] == "Ammo" or itemsList[
+        protoIndex].itemType == "Harpoon"):
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Strength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  except:
+    return showError(message = "Can't get ammo info.")
+  try:
+    if itemsList[protoIndex].description.len > 0:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n\n")
+      itemInfo.add(y = itemsList[protoIndex].description)
+  except:
+    return showError(message = "Can't get the description.")
   let baseType = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
   var price = 0
   if itemIndex > -1:
@@ -773,7 +793,10 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       price = (if baseIndex > 0: skyBases[baseIndex].cargo[
           baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
     else:
-      price = getPrice(baseType = baseType, itemIndex = protoIndex)
+      price = try:
+          getPrice(baseType = baseType, itemIndex = protoIndex)
+        except:
+          return showError(message = "Can't get price.")
   else:
     itemIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex,
         durability = (if baseIndex > 0: skyBases[baseIndex].cargo[
@@ -785,8 +808,11 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   if itemIndex > -1:
     maxSellAmount = playerShip.cargo[itemIndex].amount
     var maxPrice: Natural = maxSellAmount * price
-    countPrice(price = maxPrice, traderIndex = findMember(order = talk),
-        reduce = false)
+    try:
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+          reduce = false)
+    except:
+      return showError(message = "Can't count price.")
     if baseIndex > 0 and maxPrice > skyBases[baseIndex].cargo[0].amount:
       maxSellAmount = (maxSellAmount.float * (skyBases[baseIndex].cargo[
           0].amount.float / maxPrice.float)).floor.int
@@ -795,60 +821,79 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           maxPrice.float)).floor.int
     maxPrice = maxSellAmount * price
     if maxPrice > 0:
-      countPrice(price = maxPrice, traderIndex = findMember(order = talk),
-          reduce = false)
-    var weight = freeCargo(amount = (itemsList[protoIndex].weight *
-        maxSellAmount) - maxPrice)
+      try:
+        countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+            reduce = false)
+      except:
+        return showError(message = "Can't count price 2.")
+    var weight = try:
+          freeCargo(amount = (itemsList[protoIndex].weight * maxSellAmount) - maxPrice)
+        except:
+          return showError(message = "Can't get free cargo space.")
     while weight < 0:
       maxSellAmount = (maxSellAmount.float * ((maxPrice + weight).float /
           maxPrice.float)).floor.int
       if maxSellAmount < 1:
         break
       maxPrice = maxSellAmount * price
-      countPrice(price = maxPrice, traderIndex = findMember(order = talk),
-          reduce = false)
-      weight = freeCargo(amount = (itemsList[protoIndex].weight *
-          maxSellAmount) - maxPrice)
+      try:
+        countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+            reduce = false)
+      except:
+        return showError(message = "Can't count price 3.")
+      weight = try:
+          freeCargo(amount = (itemsList[protoIndex].weight * maxSellAmount) - maxPrice)
+        except:
+          return showError(message = "Can't get free cargo space 2.")
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   var maxBuyAmount: int = 0
-  if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
-      isBuyable(baseType = baseType, itemIndex = protoIndex)) or baseIndex == 0):
-    maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / price).int
-    var maxPrice: Natural = maxBuyAmount * price
-    if maxBuyAmount > 0:
-      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-      if maxPrice < maxBuyAmount * price:
-        maxBuyAmount = (maxBuyAmount.float * ((maxBuyAmount.float *
-            price.float) / maxPrice.float)).floor.int
-      if baseIndex > 0 and maxBuyAmount > skyBases[baseIndex].cargo[
-          baseCargoIndex].amount:
-        maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
-      elif baseIndex == 0 and maxBuyAmount > traderCargo[baseCargoIndex].amount:
-        maxBuyAmount = traderCargo[baseCargoIndex].amount
-      maxPrice = maxBuyAmount * price
-      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-      var weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
-      while weight < 0:
-        maxBuyAmount = maxBuyAmount + (weight / itemsList[
-            protoIndex].weight).int - 1
-        if maxBuyAmount < 0:
-          maxBuyAmount = 0
-        if maxBuyAmount == 0:
-          break
+  try:
+    if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
+        isBuyable(baseType = baseType, itemIndex = protoIndex)) or baseIndex == 0):
+      maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / price).int
+      var maxPrice: Natural = maxBuyAmount * price
+      if maxBuyAmount > 0:
+        countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+        if maxPrice < maxBuyAmount * price:
+          maxBuyAmount = (maxBuyAmount.float * ((maxBuyAmount.float *
+              price.float) / maxPrice.float)).floor.int
+        if baseIndex > 0 and maxBuyAmount > skyBases[baseIndex].cargo[
+            baseCargoIndex].amount:
+          maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
+        elif baseIndex == 0 and maxBuyAmount > traderCargo[
+            baseCargoIndex].amount:
+          maxBuyAmount = traderCargo[baseCargoIndex].amount
         maxPrice = maxBuyAmount * price
         countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-        weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
-    if itemIndex == 0:
-      itemIndex = -(baseCargoIndex)
-  showInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
-      if maxBuyAmount == 0: emptyButtonSettings else: ButtonSettings(
-      tooltip: "Buy item from the base", command: "TradeAmount buy " &
-      $maxBuyAmount & " " & $price, icon: "buy2icon", text: "Buy", color: "")),
-      button2 = (if maxSellAmount ==
-      0: emptyButtonSettings else: ButtonSettings(
-      tooltip: "Sell item from the ship cargo", command: "TradeAmount sell " &
-      $maxSellAmount & " " & $price, icon: "sell2icon", text: "Sell", color: "")))
+        var weight = freeCargo(amount = maxPrice - (itemsList[
+            protoIndex].weight * maxBuyAmount))
+        while weight < 0:
+          maxBuyAmount = maxBuyAmount + (weight / itemsList[
+              protoIndex].weight).int - 1
+          if maxBuyAmount < 0:
+            maxBuyAmount = 0
+          if maxBuyAmount == 0:
+            break
+          maxPrice = maxBuyAmount * price
+          countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+          weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
+      if itemIndex == 0:
+        itemIndex = -(baseCargoIndex)
+  except:
+    return showError(message = "Can't count max buy amount")
+  try:
+    showInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
+        if maxBuyAmount == 0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Buy item from the base", command: "TradeAmount buy " &
+        $maxBuyAmount & " " & $price, icon: "buy2icon", text: "Buy",
+        color: "")),
+        button2 = (if maxSellAmount ==
+        0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Sell item from the ship cargo", command: "TradeAmount sell " &
+        $maxSellAmount & " " & $price, icon: "sell2icon", text: "Sell", color: "")))
+  except:
+    return showError(message = "Can't show the item's info.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
