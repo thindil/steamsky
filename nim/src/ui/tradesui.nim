@@ -722,11 +722,15 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get itemIndex.")
+  if itemIndex < 0:
+    itemIndex.inc
+  else:
+    itemIndex.dec
   var baseCargoIndex, cargoIndex: int = -1
   if itemIndex < 0:
-    baseCargoIndex = (itemIndex + 1).abs
+    baseCargoIndex = itemIndex.abs
   else:
-    cargoIndex = itemIndex - 1
+    cargoIndex = itemIndex
   if cargoIndex > playerShip.cargo.high:
     return tclOk
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
