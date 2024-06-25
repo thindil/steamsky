@@ -914,7 +914,22 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't show the item's info.")
   return tclOk
 
-proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint; argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show dialog to enter amount of items to sell or buy
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## TradeAmount action baseindex
+  ## Action which will be taken. Can be buy or sell. BaseIndex is the index
+  ## of the base from which item will be bought. If zero it mean buying from
+  ## trader ship.
   try:
     if argv[1] == "sell":
       showManipulateItem(title = "Sell " & getItemName(item = playerShip.cargo[
@@ -924,12 +939,14 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint; argv: cst
       if itemIndex > 0:
         showManipulateItem(title = "Buy " & getItemName(item = playerShip.cargo[
             itemIndex]), command = "TradeItem buy", action = "buy",
-            itemIndex = itemIndex, maxAmount = ($argv[2]).parseInt, cost = ($argv[3]).parseInt)
+            itemIndex = itemIndex, maxAmount = ($argv[2]).parseInt, cost = (
+                $argv[3]).parseInt)
       else:
         let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
         if baseIndex > 0:
-          showManipulateItem(title = "Buy " & itemsList[skyBases[baseIndex].cargo[
-              itemIndex.abs].protoIndex].name, command = "TradeItem buy",
+          showManipulateItem(title = "Buy " & itemsList[skyBases[
+              baseIndex].cargo[itemIndex.abs].protoIndex].name,
+                  command = "TradeItem buy",
               action = "buy", itemIndex = itemIndex.abs, maxAmount = ($argv[
               2]).parseInt, cost = ($argv[3]).parseInt)
         else:
