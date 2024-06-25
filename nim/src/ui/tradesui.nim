@@ -896,7 +896,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           maxPrice = maxBuyAmount * price
           countPrice(price = maxPrice, traderIndex = findMember(order = talk))
           weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
-      if itemIndex == 0:
+      if itemIndex == -1:
         itemIndex = -(baseCargoIndex)
   except:
     return showError(message = "Can't count max buy amount")
