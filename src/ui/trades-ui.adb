@@ -24,8 +24,8 @@ with CoreUI;
 -- with Dialogs;
 -- with Game;
 -- with Items;
-with Maps; use Maps;
-with Ships; use Ships;
+with Maps;
+with Ships;
 with Utils.UI;
 
 package body Trades.UI is
@@ -292,6 +292,8 @@ package body Trades.UI is
    function Trade_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Maps;
+      use Ships;
 
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
