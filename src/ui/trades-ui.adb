@@ -21,8 +21,6 @@ with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with CoreUI;
-with Maps;
-with Ships;
 with Utils.UI;
 
 package body Trades.UI is
@@ -183,35 +181,10 @@ package body Trades.UI is
    function Trade_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "tradeItemCommand";
       -- ****
-
-   function Trade_Item_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Maps;
-      use Ships;
-
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      function Trade_Ada_Item_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Import => True,
-         Convention => C,
-         External_Name => "tradeItemCommand";
-   begin
-      Set_Ship_In_Nim;
-      Get_Base_Cargo(Base_Index => Base_Index);
-      if Trade_Ada_Item_Command
-          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
-        TCL_ERROR then
-         return TCL_ERROR;
-      end if;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Base_Cargo(Base_Index => Base_Index);
-      return TCL_OK;
-   end Trade_Item_Command;
 
    procedure Add_Commands is
       use Utils.UI;
