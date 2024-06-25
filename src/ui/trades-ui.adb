@@ -50,13 +50,6 @@ package body Trades.UI is
       External_Name => "showTradeCommand";
       -- ****
 
-   -- ****if* TUI/TUI.Item_Index
-   -- FUNCTION
-   -- Index of the currently selected item
-   -- SOURCE
-   Item_Index: Integer;
-   -- ****
-
    -- ****o* TUI/TUI.Show_Trade_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
@@ -76,24 +69,10 @@ package body Trades.UI is
    function Show_Trade_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showTradeItemInfoCommand";
       -- ****
-
-   function Show_Trade_Item_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      function Show_Ada_Trade_Item_Info_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Import => True,
-         Convention => C,
-         External_Name => "showTradeItemInfoCommand";
-   begin
-      Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
-      return
-        Show_Ada_Trade_Item_Info_Command
-          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
-   end Show_Trade_Item_Info_Command;
 
    -- ****o* TUI/TUI.Search_Trade_Command
    -- FUNCTION
@@ -221,16 +200,9 @@ package body Trades.UI is
          Import => True,
          Convention => C,
          External_Name => "tradeItemCommand";
-      procedure Get_Ada_Trade_Item_Index(I_Index: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getTradeItemIndex";
    begin
       Set_Ship_In_Nim;
       Get_Base_Cargo(Base_Index => Base_Index);
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Get_Ada_Trade_Item_Index(I_Index => Item_Index);
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
       if Trade_Ada_Item_Command
           (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
         TCL_ERROR then
