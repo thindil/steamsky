@@ -632,9 +632,9 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tradetype is type of trade action. Can be buy, buymax, sell, sellmax
   var baseCargoIndex, cargoIndex: int = -1
   if itemIndex < 0:
-    baseCargoIndex = (itemIndex + 1).abs
+    baseCargoIndex = itemIndex.abs
   else:
-    cargoIndex = itemIndex - 1
+    cargoIndex = itemIndex
   var protoIndex = 0
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if cargoIndex > -1:
