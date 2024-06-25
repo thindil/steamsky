@@ -30,7 +30,7 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
         playerShip.skyY].baseIndex
     population: Positive = (if skyBases[baseIndex].population > 0: skyBases[
         baseIndex].population else: 1)
-  var chance: Positive = (if population < 150: 5 elif population <
+  var chance: int = (if population < 150: 5 elif population <
       300: 10 else: 15)
   chance += daysDifference(dateToCompare = skyBases[baseIndex].visited,
       currentDate = gameDate)
@@ -153,9 +153,11 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
           amount: amount, durability: durability, price: getPrice(
           baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex)))
     else:
-      skyBases[baseIndex].cargo[itemIndex].amount += amount
+      skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
+          itemIndex].amount + amount
   else:
-    skyBases[baseIndex].cargo[itemIndex].amount += amount
+    skyBases[baseIndex].cargo[itemIndex].amount = skyBases[baseIndex].cargo[
+        itemIndex].amount + amount
     if skyBases[baseIndex].cargo[itemIndex].amount == 0 and not isBuyable(
         baseType = skyBases[baseIndex].baseType, itemIndex = skyBases[
         baseIndex].cargo[itemIndex].protoIndex) and itemIndex > 0:
