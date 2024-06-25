@@ -21,9 +21,6 @@ with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with CoreUI;
--- with Dialogs;
--- with Game;
--- with Items;
 with Maps;
 with Ships;
 with Utils.UI;
@@ -167,85 +164,6 @@ package body Trades.UI is
       Convention => C,
       External_Name => "tradeAmountCommand";
       -- ****
-
---   function Trade_Amount_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Dialogs;
---      use Items;
---      use Game.Tiny_String;
---
---      Base_Index: constant Natural :=
---        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
---   begin
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      if CArgv.Arg(Argv => Argv, N => 1) = "sell" then
---         Show_Manipulate_Item
---           (Title =>
---              "Sell " &
---              Get_Item_Name
---                (Item =>
---                   Inventory_Container.Element
---                     (Container => Player_Ship.Cargo, Index => Item_Index)),
---            Command => "TradeItem sell", Action => "sell",
---            Item_Index => Item_Index,
---            Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
---            Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
---      else
---         if Item_Index > 0 then
---            Show_Manipulate_Item
---              (Title =>
---                 "Buy " &
---                 Get_Item_Name
---                   (Item =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Cargo, Index => Item_Index)),
---               Command => "TradeItem buy", Action => "buy",
---               Item_Index => Item_Index,
---               Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
---               Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
---         else
---            if Base_Index > 0 then
---               Show_Manipulate_Item
---                 (Title =>
---                    "Buy " &
---                    To_String
---                      (Source =>
---                         Get_Proto_Item
---                           (Index =>
---                              BaseCargo_Container.Element
---                                (Container => Sky_Bases(Base_Index).Cargo,
---                                 Index => abs Item_Index)
---                                .Proto_Index)
---                           .Name),
---                  Command => "TradeItem buy", Action => "buy",
---                  Item_Index => abs Item_Index,
---                  Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
---                  Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
---            else
---               Show_Manipulate_Item
---                 (Title =>
---                    "Buy " &
---                    To_String
---                      (Source =>
---                         Get_Proto_Item
---                           (Index =>
---                              BaseCargo_Container.Element
---                                (Container => Trader_Cargo,
---                                 Index => abs Item_Index)
---                                .Proto_Index)
---                           .Name),
---                  Command => "TradeItem buy", Action => "buy",
---                  Item_Index => abs Item_Index,
---                  Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)),
---                  Cost => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
---            end if;
---         end if;
---      end if;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      return TCL_OK;
---   end Trade_Amount_Command;
 
    -- ****o* TUI/TUI.Sort_Items_Command
    -- FUNCTION
