@@ -16,11 +16,6 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
--- with Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.TtkEntry;
--- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
--- with CoreUI;
 with Utils.UI;
 
 package body Trades.UI is
@@ -92,33 +87,6 @@ package body Trades.UI is
       Convention => C,
       External_Name => "searchTradeCommand";
       -- ****
-
---   function Search_Trade_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      use Tcl.Tk.Ada.Widgets;
---      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
---      use CoreUI;
---
---      Type_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName => Main_Paned & ".tradeframe.canvas.trade.options.type",
---           Interp => Interp);
---      Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
---   begin
---      if Search_Text'Length = 0 then
---         return
---           Show_Trade_Command
---             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---              Argv => CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box));
---      end if;
---      return
---        Show_Trade_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
---           Argv =>
---             CArgv.Empty & "ShowTrade" & Get(Widgt => Type_Box) & Search_Text);
---   end Search_Trade_Command;
 
    -- ****o* TUI/TUI.Trade_Amount_Command
    -- FUNCTION
