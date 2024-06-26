@@ -326,7 +326,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   elif tradeTable.row == gameSettings.listsLimit + 1:
     addPagination(table = tradeTable, previousCommand = "",
         nextCommand = "ShowTrade " & arguments & " " & $(page + 1))
-  updateTable(table = tradeTable, grabFocus = tclEval2(script = "focus") == searchEntry)
+  updateTable(table = tradeTable, grabFocus = tclEval2(script = "focus") != searchEntry)
   tclEval(script = "update")
   tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
   if argc == 1:
