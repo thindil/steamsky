@@ -19,7 +19,7 @@
 ## items in them or updating the cargo.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import basestypes, game, maps, types, utils
 
 proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
@@ -147,6 +147,7 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         findBaseCargo(protoIndex = protoIndex, durability = durability)
       else:
         cargoIndex
+  {.ruleOff: "assignments".}
   if amount > 0:
     if itemIndex == -1:
       skyBases[baseIndex].cargo.add(y = BaseCargo(protoIndex: protoIndex,
@@ -162,6 +163,7 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         baseType = skyBases[baseIndex].baseType, itemIndex = skyBases[
         baseIndex].cargo[itemIndex].protoIndex) and itemIndex > 0:
       skyBases[baseIndex].cargo.delete(i = itemIndex)
+  {.ruleOn: "assignments".}
 
 # Temporary code for interfacing with Ada
 
