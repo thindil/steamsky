@@ -364,7 +364,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   tclEval(script = tradeCanvas & " configure -height [expr " & tclEval2(
-      script = mainPaned & "sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
       script = mainPaned & " cget -width"))
   tclEval(script = "update")
   tclEval(script = tradeCanvas & " create window 0 0 -anchor nw -window " & tradeFrame)
