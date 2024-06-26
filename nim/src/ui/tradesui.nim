@@ -959,7 +959,8 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let
     typeBox = mainPaned & ".tradeframe.canvas.trade.options.type"
     searchText = $argv[1]
