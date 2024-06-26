@@ -542,7 +542,8 @@ proc setKeys*() {.sideEffect, raises: [], tags: [].} =
       pos = mapAccelerators[index + 1].rfind(sub = '-')
       keyName = ""
     if pos > -1:
-      keyName = mapAccelerators[index + 1][0 .. pos] & "KeyPress-" & mapAccelerators[index + 1][pos + 1 .. ^1]
+      keyName = mapAccelerators[index + 1][0 .. pos] & "KeyPress-" &
+          mapAccelerators[index + 1][pos + 1 .. ^1]
     else:
       keyName = "KeyPress-" & mapAccelerators[index + 1]
     tclEval(script = "bind . <" & keyName & "> " & command)
@@ -550,13 +551,14 @@ proc setKeys*() {.sideEffect, raises: [], tags: [].} =
     pos = fullScreenAccel.rfind(sub = '-')
     keyName = ""
   if pos > -1:
-    keyName = fullScreenAccel[0 .. pos] & "KeyPress-" & fullScreenAccel[pos + 1 .. ^1]
+    keyName = fullScreenAccel[0 .. pos] & "KeyPress-" & fullScreenAccel[pos +
+        1 .. ^1]
   else:
     keyName = "KeyPress-" & fullScreenAccel
   tclEval(script = "bind . <" & keyName & "> {ToggleFullScreen}")
 
-import craftsui, gameoptions, helpui, mapsuicommands, messagesui, ordersmenu,
-    shipsui, tradesui, waitmenu
+import basesschoolui, craftsui, gameoptions, helpui, mapsuicommands, messagesui,
+    ordersmenu, shipsui, tradesui, waitmenu
 
 proc createGameUi*() =
   let
@@ -720,6 +722,7 @@ proc createGameUi*() =
     messagesui.addCommands()
     gameoptions.addCommands()
     tradesui.addCommands()
+    basesschoolui.addCommands()
 
 # Temporary code for interfacing with Ada
 
