@@ -958,6 +958,19 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't show setting trade amount.")
   return tclOk
 
+proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    typeBox = mainPaned & ".tradeframe.canvas.trade.options.type"
+    searchText = $argv[1]
+  if searchText.len == 0:
+    return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
+        argv = @["ShowTrade", tclEval2(script = typeBox &
+            " get")].allocCStringArray)
+  return showTradeCommand(clientData = clientData, interp = interp, argc = 3,
+      argv = @["ShowTrade", tclEval2(script = typeBox & " get"),
+          searchText].allocCStringArray)
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -967,6 +980,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("TradeItem", tradeItemCommand)
 #    addCommand("ShowTradeItemInfo", showTradeItemInfoCommand)
 #    addCommand("TradeAmount", tradeAmountCommand)
+#    addCommand("SearchTrade", searchTradeCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
