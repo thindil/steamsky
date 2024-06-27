@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
-import ../[crew, game, tk]
-import coreui
+import std/[os, strutils, tables]
+import ../[crew, crewinventory, game, tk]
+import coreui, mapsui
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -63,10 +63,36 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "UpdateSchoolSelectedCost")
   return tclOk
 
+proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  var schoolFrame = mainPaned & ".schoolframe"
+  let schoolCanvas = schoolFrame & ".canvas"
+  if tclEval2(script = "winfo exists " & schoolCanvas) == "0":
+    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "school.tcl")
+    tclEval(script = "bind " & schoolFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+  elif tclEval2(script = "winfo ismapped " & schoolCanvas) == "1" and argc == 1:
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+    return tclOk
+  tclSetVar(varName = "gamestate", newValue = "crew")
+  let
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    moneyLabel = schoolCanvas & ".school.money"
+  if moneyIndex2 > 0:
+    tclEval(script = moneyLabel & " configure -text {You have " &
+        $playerShip.cargo[moneyIndex2].amount & " " & moneyName & ".}")
+  else:
+    tclEval(script = moneyLabel & " configure -text {You don't have any " &
+        moneyName & " to pay for learning.}")
+  schoolFrame = schoolCanvas & ".school"
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("SetSchoolSkills", setSchoolSkillsCommand)
+#    addCommand("ShowSchool", showSchoolCommand)
   except:
     showError(message = "Can't add a Tcl command.")
