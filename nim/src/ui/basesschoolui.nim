@@ -20,10 +20,13 @@ import ../[crew, game, tk]
 import coreui
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let frameName = mainPaned & ".schoolframe.canvas.school"
   var comboBox = frameName & ".setting.crew"
-  let memberIndex = tclEval2(script = comboBox & " current").parseInt
+  let memberIndex = try:
+      tclEval2(script = comboBox & " current").parseInt
+    except:
+      return showError(message = "Can't get the member's index")
   var comboList = ""
   for index, skill in skillsList:
     var skillLevel = 0
