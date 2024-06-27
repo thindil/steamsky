@@ -54,7 +54,7 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
           max = 10) elif population < 300: getRandom(min = 1,
           max = 20) else: getRandom(min = 1, max = 30))
       for i in 1 .. amount:
-        var itemIndex: Positive = getRandom(min = 1, max = itemsList.len)
+        var itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
         for j in 1 .. amount:
           itemIndex.dec
           if itemIndex == 0:
