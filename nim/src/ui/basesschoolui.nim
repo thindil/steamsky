@@ -34,7 +34,8 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
           break
     if skillLevel != 100:
       comboList.add(y = " {" & skill.name & ": " & (if skillLevel ==
-          0: "Untrained" else: getSkillLevelName(skillLevel = skillLevel).strip) & "}")
+          0: "Untrained" else: getSkillLevelName(
+              skillLevel = skillLevel).strip) & "}")
   comboBox = frameName & ".setting.skill"
   let
     oldComboList = tclEval2(script = comboBox & " cget -values")
@@ -43,6 +44,9 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = comboBox & " configure -values [list " & comboList & "]")
     tclEval(script = comboBox & " current 0")
     tclEval(script = spinBox & " set 1")
+  tclEval(script = "UpdateSchoolCost " & spinBox & " " & tclEval2(
+      script = spinBox & " get"))
+  tclEval(script = "UpdateSchoolSelectedCost")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
