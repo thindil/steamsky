@@ -21,6 +21,17 @@ import coreui
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Set list of available to train skills for the selected crew member
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetSchoolSkills
   let frameName = mainPaned & ".schoolframe.canvas.school"
   var comboBox = frameName & ".setting.crew"
   let memberIndex = try:
