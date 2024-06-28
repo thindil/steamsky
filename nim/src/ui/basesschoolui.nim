@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[crew, crewinventory, game, tk]
-import coreui, mapsui
+import coreui, mapsui, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -86,6 +86,30 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = moneyLabel & " configure -text {You don't have any " &
         moneyName & " to pay for learning.}")
   schoolFrame = schoolCanvas & ".school"
+  if argc == 1:
+    var comboList = ""
+    for member in playerShip.crew:
+      comboList.add(y = " " & member.name)
+    let comboBox = schoolCanvas & ".school.setting.crew"
+    tclEval(script = comboBox & " configure -values [list" & comboList & "]")
+    tclEval(script = comboBox & " current 0")
+  discard setSchoolSkillsCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  tclEval(script = schoolCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  tclEval(script = schoolCanvas & " create window 0 0 -anchor nw -window " & schoolFrame)
+  tclEval(script = "update")
+  tclEval(script = schoolCanvas & " configure -scrollregion [list " & tclEval2(
+      script = schoolCanvas & " bbox all") & "]")
+  let
+    comboBox = schoolCanvas & ".school.costbox.amount"
+    trainButton = schoolCanvas & ".school.setting.train"
+  tclEval(script = "bind " & comboBox & " <Tab> {focus " & trainButton & ";break}")
+  showScreen(newScreenName = "schoolframe")
+  tclEval(script = "focus -force " & trainButton)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
