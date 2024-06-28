@@ -23,7 +23,7 @@ type HelpData = object
   index*: string
   text*: string
 
-var helpList* = initOrderedTable[string, HelpData]()
+var helpList*: OrderedTable[string, HelpData] = initOrderedTable[string, HelpData]()
 
 proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     KeyError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
@@ -34,9 +34,9 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     fileName.len > 0
   body:
     var
-      helpTitle: string
-      helpEntry: HelpData
-    let helpXml = try:
+      helpTitle: string = ""
+      helpEntry: HelpData = HelpData()
+    let helpXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -48,7 +48,7 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
       let helpIndex: string = helpNode.attr(name = "index")
       helpTitle = helpNode.attr(name = "title")
       let helpAction: DataAction = try:
-            parseEnum[DataAction](helpNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = helpNode.attr(name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if helpAction in [update, remove]:
@@ -70,7 +70,7 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
             HelpData(index: helpIndex)
         else:
           HelpData(index: helpIndex)
-      var text = helpNode.innerText()
+      var text: string = helpNode.innerText()
       if text.len() > 0:
         helpEntry.text = text
       if helpAction == DataAction.add:
@@ -85,19 +85,19 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     helpTitle = $(helpList.len + 1) & ". Attributes and skills"
     helpEntry.text = "Here you will find information about all available attributes and skills in the game\n\n{u}Attributes{/u}\n\n"
     for attribute in attributesList:
-      helpEntry.text.add("{b}" & attribute.name & "{/b}\n    " &
+      helpEntry.text.add(y = "{b}" & attribute.name & "{/b}\n    " &
           attribute.description & "\n\n")
-    helpEntry.text.add("\n{u}Skills{/u}\n\n")
+    helpEntry.text.add(y ="\n{u}Skills{/u}\n\n")
     for skill in skillsList.values:
-      helpEntry.text.add("{b}" & skill.name &
+      helpEntry.text.add(y = "{b}" & skill.name &
           "{/b}\n    {i}Related attribute:{/i} " & attributesList[
           skill.attribute].name & "\n")
       for item in itemsList.values:
         if item.itemType == skill.tool:
-          helpEntry.text.add("   {i}Training tool:{/i} " & (
+          helpEntry.text.add(y = "   {i}Training tool:{/i} " & (
               if item.showType.len == 0: item.itemType else: item.showType) & "\n")
           break
-      helpEntry.text.add("    " & skill.description & "\n\n")
+      helpEntry.text.add(y = "    " & skill.description & "\n\n")
     helpList[helpTitle] = helpEntry
     logMessage(message = "Help added: '" & helpTitle & "'",
         debugType = everything)
@@ -107,21 +107,21 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     helpEntry.text = "Here you will find information about all available factions and careers in the game\n\n{u}Factions{/u}\n\n"
     for faction in factionsList.values:
       if faction.careers.len > 0:
-        helpEntry.text.add("{b}" & faction.name & "{/b}\n    " &
+        helpEntry.text.add(y = "{b}" & faction.name & "{/b}\n    " &
             faction.description & "\n    {i}Relations{/i}\n")
         for index, relation in faction.relations:
-          helpEntry.text.add("        " & factionsList[index].name & ": " & (
+          helpEntry.text.add(y = "        " & factionsList[index].name & ": " & (
               if relation.friendly: "Friendly" else: "Enemies") & "\n")
-        helpEntry.text.add("\n")
-    helpEntry.text.add("\n{u}Careers{/u}\n\n")
+        helpEntry.text.add(y = "\n")
+    helpEntry.text.add(y = "\n{u}Careers{/u}\n\n")
     for index, career in careersList:
-      helpEntry.text.add("{b}" & career.name & "{/b}\n" & factionsList[
+      helpEntry.text.add(y = "{b}" & career.name & "{/b}\n" & factionsList[
           "POLEIS"].careers[index].description & "\n")
       if career.skills.len > 0:
-        helpEntry.text.add("    {i}Bonus to skills{/i}\n")
+        helpEntry.text.add(y = "    {i}Bonus to skills{/i}\n")
         for skill in career.skills:
-          helpEntry.text.add("        " & skill & "\n")
-      helpEntry.text.add("\n")
+          helpEntry.text.add(y = "        " & skill & "\n")
+      helpEntry.text.add(y = "\n")
     helpList[helpTitle] = helpEntry
     logMessage(message = "Help added: '" & helpTitle & "'",
         debugType = everything)
@@ -130,7 +130,7 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     helpTitle = $(helpList.len + 1) & ". Bases Types"
     helpEntry.text = "Here you will find information about all available bases types in the game\n\n"
     for baseType in basesTypesList.values:
-      helpEntry.text.add("{b}" & baseType.name & "{/b}\n    " &
+      helpEntry.text.add(y = "{b}" & baseType.name & "{/b}\n    " &
           baseType.description & "\n\n")
     helpList[helpTitle] = helpEntry
     logMessage(message = "Help added: '" & helpTitle & "'",
@@ -145,7 +145,7 @@ proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
   text = ""
   if index > helpList.len:
     return
-  var i = 0
+  var i: Natural = 0
   for htitle, help in helpList:
     if i < index:
       i.inc
