@@ -54,7 +54,7 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     oldComboList = tclEval2(script = comboBox & " cget -values")
     spinBox = frameName & ".amountbox.amount"
-  if oldComboList.len + 1 != comboList.len:
+  if oldComboList != comboList:
     tclEval(script = comboBox & " configure -values [list " & comboList & "]")
     tclEval(script = comboBox & " current 0")
     tclEval(script = spinBox & " set 1")
