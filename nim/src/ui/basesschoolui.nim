@@ -124,6 +124,9 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getMemberIndex(): Natural {.sideEffect, raises: [], tags: [].} =
+  ## Get the index in the player ship of the currently selected member
+  ##
+  ## Returns the crew member's index
   let memberBox = mainPaned & ".schoolframe.canvas.school.setting.crew"
   result = 0
   for member in playerShip.crew:
