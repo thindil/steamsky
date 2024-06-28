@@ -142,5 +142,5 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 
 # Temporary code for interfacing with Ada
 
-proc getAdaMemberIndex(): cint {.exportc.} =
+proc getAdaMemberIndex(): cint {.sideEffect, raises: [], tags: [], exportc.} =
   return getMemberIndex().cint + 1

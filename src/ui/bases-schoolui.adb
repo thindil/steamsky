@@ -84,23 +84,27 @@ package body Bases.SchoolUI is
    -- RESULT
    -- The index of the currently selected crew member
    -- SOURCE
-   function Get_Member_Index return Positive is
+   function Get_Member_Index return Positive with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaMemberIndex";
       -- ****
-      use Tiny_String;
-
-      Member_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName => Main_Paned & ".schoolframe.canvas.school.setting.crew");
-      Member_Index: Positive := 1;
-   begin
-      Find_Member_Index_Loop :
-      for Member of Player_Ship.Crew loop
-         exit Find_Member_Index_Loop when Member.Name =
-           To_Bounded_String(Source => Get(Widgt => Member_Box));
-         Member_Index := Member_Index + 1;
-      end loop Find_Member_Index_Loop;
-      return Member_Index;
-   end Get_Member_Index;
+--   is
+--      use Tiny_String;
+--
+--      Member_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".schoolframe.canvas.school.setting.crew");
+--      Member_Index: Positive := 1;
+--   begin
+--      Find_Member_Index_Loop :
+--      for Member of Player_Ship.Crew loop
+--         exit Find_Member_Index_Loop when Member.Name =
+--           To_Bounded_String(Source => Get(Widgt => Member_Box));
+--         Member_Index := Member_Index + 1;
+--      end loop Find_Member_Index_Loop;
+--      return Member_Index;
+--   end Get_Member_Index;
 
    -- ****if* SchoolUI/SchoolUI.Get_Skill_Index
    -- FUNCTION
