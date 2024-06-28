@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -17,27 +17,20 @@ with Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
--- with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Canvas;
--- with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
--- with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
--- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
 with CoreUI; use CoreUI;
 with Dialogs;
--- with Maps.UI; use Maps.UI;
 with Trades;
 with Utils.UI; use Utils.UI;
 
@@ -84,117 +77,6 @@ package body Bases.SchoolUI is
       Convention => C,
       External_Name => "showSchoolCommand";
       -- ****
-
---   function Show_School_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use GNAT.Directory_Operations;
---      use Tcl.Tk.Ada;
---      use Tcl.Tk.Ada.Widgets.Canvas;
---      use Tcl.Tk.Ada.Widgets.TtkButton;
---      use Tcl.Tk.Ada.Widgets.TtkFrame;
---      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
---      use Tiny_String;
---
---      School_Frame: Ttk_Frame :=
---        Get_Widget(pathName => Main_Paned & ".schoolframe", Interp => Interp);
---      School_Canvas: constant Tk_Canvas :=
---        Get_Widget(pathName => School_Frame & ".canvas", Interp => Interp);
---      Combo_Box: Ttk_ComboBox :=
---        Get_Widget
---          (pathName => School_Canvas & ".school.setting.crew",
---           Interp => Interp);
---      Combo_List: Unbounded_String := Null_Unbounded_String;
---      Money_Label: constant Ttk_Label :=
---        Get_Widget
---          (pathName => School_Canvas & ".school.money", Interp => Interp);
---      Money_Index_2: Natural;
---      Train_Button: constant Ttk_Button :=
---        Get_Widget
---          (pathName => School_Canvas & ".school.setting.train",
---           Interp => Interp);
---   begin
---      if Winfo_Get(Widgt => School_Canvas, Info => "exists") = "0" then
---         Tcl_EvalFile
---           (interp => Get_Context,
---            fileName =>
---              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
---              "school.tcl");
---         Bind
---           (Widgt => School_Frame, Sequence => "<Configure>",
---            Script => "{ResizeCanvas %W.canvas %w %h}");
---      elsif Winfo_Get(Widgt => School_Canvas, Info => "ismapped") = "1" and
---        Argc = 1 then
---         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---         Show_Sky_Map(Clear => True);
---         return TCL_OK;
---      end if;
---      Tcl_SetVar(interp => Interp, varName => "gamestate", newValue => "crew");
---      Money_Index_2 :=
---        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
---      if Money_Index_2 > 0 then
---         configure
---           (Widgt => Money_Label,
---            options =>
---              "-text {You have" &
---              Natural'Image
---                (Inventory_Container.Element
---                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
---                   .Amount) &
---              " " & To_String(Source => Money_Name) & ".}");
---      else
---         configure
---           (Widgt => Money_Label,
---            options =>
---              "-text {You don't have any " & To_String(Source => Money_Name) &
---              " to pay for learning.}");
---      end if;
---      School_Frame.Name := New_String(Str => School_Canvas & ".school");
---      if Argc = 1 then
---         Add_Crew_Loop :
---         for Member of Player_Ship.Crew loop
---            Append
---              (Source => Combo_List,
---               New_Item => " " & To_String(Source => Member.Name));
---         end loop Add_Crew_Loop;
---         configure
---           (Widgt => Combo_Box,
---            options =>
---              "-values [list" & To_String(Source => Combo_List) & "]");
---         Current(ComboBox => Combo_Box, NewIndex => "0");
---      end if;
---      if Set_School_Skills_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---           Argv => Argv) /=
---        TCL_OK then
---         return TCL_ERROR;
---      end if;
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Close_Button, Options => "-row 0 -column 1");
---      configure
---        (Widgt => School_Canvas,
---         options =>
---           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
---           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      Canvas_Create
---        (Parent => School_Canvas, Child_Type => "window",
---         Options => "0 0 -anchor nw -window " & School_Frame);
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      configure
---        (Widgt => School_Canvas,
---         options =>
---           "-scrollregion [list " &
---           BBox(CanvasWidget => School_Canvas, TagOrId => "all") & "]");
---      Combo_Box :=
---        Get_Widget(pathName => School_Canvas & ".school.costbox.amount");
---      Bind
---        (Widgt => Combo_Box, Sequence => "<Tab>",
---         Script => "{focus " & Train_Button & ";break}");
---      Show_Screen(New_Screen_Name => "schoolframe");
---      Focus(Widgt => Train_Button, Option => "-force");
---      return TCL_OK;
---   end Show_School_Command;
 
    -- ****if* SchoolUI/SchoolUI.Get_Member_Index
    -- FUNCTION

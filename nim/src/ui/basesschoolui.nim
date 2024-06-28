@@ -123,6 +123,14 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus -force " & trainButton)
   return tclOk
 
+proc getMemberIndex(): Natural =
+  let memberBox = mainPaned & ".schoolframe.canvas.school.setting.crew"
+  result = 0
+  for member in playerShip.crew:
+    if member.name == tclEval2(script = memberBox & " get"):
+      break
+    result.inc
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -131,3 +139,8 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowSchool", showSchoolCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc getAdaMemberIndex(): cint {.exportc.} =
+  return getMemberIndex().cint + 1
