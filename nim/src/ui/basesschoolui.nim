@@ -64,7 +64,7 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   var schoolFrame = mainPaned & ".schoolframe"
   let schoolCanvas = schoolFrame & ".canvas"
   if tclEval2(script = "winfo exists " & schoolCanvas) == "0":
