@@ -123,7 +123,7 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus -force " & trainButton)
   return tclOk
 
-proc getMemberIndex(): Natural =
+proc getMemberIndex(): Natural {.sideEffect, raises: [], tags: [].} =
   let memberBox = mainPaned & ".schoolframe.canvas.school.setting.crew"
   result = 0
   for member in playerShip.crew:
