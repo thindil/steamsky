@@ -134,6 +134,17 @@ proc getMemberIndex(): Natural {.sideEffect, raises: [], tags: [].} =
       break
     result.inc
 
+proc getSkillIndex(): Positive =
+  let
+    skillBox = mainPaned & ".schoolframe.canvas.school.setting.skill"
+    comboBoxValue = tclEval2(script = skillBox & " get")
+    skillName = comboBoxValue[0 .. comboBoxValue.find(sub = ':') - 1]
+  result = 1
+  for index, skill in skillsList:
+    if skill.name == skillName:
+      result = index
+      break
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -147,3 +158,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 
 proc getAdaMemberIndex(): cint {.sideEffect, raises: [], tags: [], exportc.} =
   return getMemberIndex().cint + 1
+
+proc getAdaSkillIndex(): cint {.sideEffect, raises: [], tags: [], exportc.} =
+  return getSkillIndex().cint
