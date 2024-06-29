@@ -59,6 +59,7 @@ All notable changes to this project will be documented in this file.
 - Wrong in-game time after starting a new combat
 - Typos in the trade's errors' dialogs
 - Drawing the sky map when the player's ship is near its edges
+- Typo in the skill's level's tooltip
 
 ## [9.9] - 2024-04-14
 
