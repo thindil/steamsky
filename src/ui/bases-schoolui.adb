@@ -101,29 +101,6 @@ package body Bases.SchoolUI is
       Convention => C,
       External_Name => "getAdaSkillIndex";
       -- ****
---      use Tiny_String;
---
---      Skill_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName =>
---             Main_Paned & ".schoolframe.canvas.school.setting.skill");
---      Skill_Index: Positive := 1;
---      Combo_Box_Value: constant String := Get(Widgt => Skill_Box);
---      Skill_Name: constant Bounded_String :=
---        Bounded_Slice
---          (Source => To_Bounded_String(Source => Combo_Box_Value), Low => 1,
---           High => Index(Source => Combo_Box_Value, Pattern => ":") - 1);
---   begin
---      Find_Skill_Index_Loop :
---      for I in 1 .. Skills_Amount loop
---         exit Find_Skill_Index_Loop when SkillsData_Container.Element
---             (Container => Skills_List, Index => I)
---             .Name =
---           Skill_Name;
---         Skill_Index := Skill_Index + 1;
---      end loop Find_Skill_Index_Loop;
---      return Skill_Index;
---   end Get_Skill_Index;
 
    -- ****o* SchoolUI/SchoolUI.Train_Skill_Command
    -- FUNCTION
