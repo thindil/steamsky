@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to in-game help system, like load it from files.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import basestypes, careers, game, log, types
@@ -23,7 +25,8 @@ type HelpData = object
   index*: string
   text*: string
 
-var helpList*: OrderedTable[string, HelpData] = initOrderedTable[string, HelpData]()
+var helpList*: OrderedTable[string, HelpData] = initOrderedTable[string,
+    HelpData]() ## The whole in-game help
 
 proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     KeyError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
@@ -48,7 +51,8 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
       let helpIndex: string = helpNode.attr(name = "index")
       helpTitle = helpNode.attr(name = "title")
       let helpAction: DataAction = try:
-            parseEnum[DataAction](s = helpNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = helpNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if helpAction in [update, remove]:
@@ -87,7 +91,7 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     for attribute in attributesList:
       helpEntry.text.add(y = "{b}" & attribute.name & "{/b}\n    " &
           attribute.description & "\n\n")
-    helpEntry.text.add(y ="\n{u}Skills{/u}\n\n")
+    helpEntry.text.add(y = "\n{u}Skills{/u}\n\n")
     for skill in skillsList.values:
       helpEntry.text.add(y = "{b}" & skill.name &
           "{/b}\n    {i}Related attribute:{/i} " & attributesList[
@@ -110,8 +114,8 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
         helpEntry.text.add(y = "{b}" & faction.name & "{/b}\n    " &
             faction.description & "\n    {i}Relations{/i}\n")
         for index, relation in faction.relations:
-          helpEntry.text.add(y = "        " & factionsList[index].name & ": " & (
-              if relation.friendly: "Friendly" else: "Enemies") & "\n")
+          helpEntry.text.add(y = "        " & factionsList[index].name & ": " &
+              (if relation.friendly: "Friendly" else: "Enemies") & "\n")
         helpEntry.text.add(y = "\n")
     helpEntry.text.add(y = "\n{u}Careers{/u}\n\n")
     for index, career in careersList:
@@ -140,6 +144,7 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
 
 proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   helpIndex = ""
   title = ""
   text = ""
@@ -157,6 +162,7 @@ proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
 
 proc getAdaHelp2(title: cstring; index, text: var cstring) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     index = helpList[$title].index.cstring
     text = helpList[$title].text.cstring
