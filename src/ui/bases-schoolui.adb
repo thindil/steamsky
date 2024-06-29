@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+-- with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
@@ -30,8 +30,8 @@ with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
 with CoreUI; use CoreUI;
-with Dialogs;
-with Trades;
+-- with Dialogs;
+-- with Trades;
 with Utils.UI; use Utils.UI;
 
 package body Bases.SchoolUI is
@@ -118,59 +118,61 @@ package body Bases.SchoolUI is
    function Train_Skill_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "trainSkillCommand";
       -- ****
 
-   function Train_Skill_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Ada.Strings;
-      use Dialogs;
-      use Trades;
-
-      pragma Unreferenced(Argc, Argv);
-      Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget
-          (pathName =>
-             Main_Paned & ".schoolframe.canvas.school." &
-             Tcl_GetVar(interp => Interp, varName => "traintype") &
-             "box.amount",
-           Interp => Interp);
-   begin
-      if Get(Widgt => Amount_Box) = "0" then
-         return TCL_OK;
-      end if;
-      Train_Skill
-        (Member_Index => Get_Member_Index,
-         Skill_Index => Skills_Amount_Range(Get_Skill_Index),
-         Amount => Positive'Value(Get(Widgt => Amount_Box)),
-         Is_Amount =>
-           (if Tcl_GetVar(interp => Interp, varName => "traintype") = "amount"
-            then True
-            else False));
-      Update_Messages;
-      return
-        Show_School_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv =>
-             CArgv.Empty & "TrainSkill" &
-             Trim(Source => Positive'Image(Get_Member_Index), Side => Left));
-   exception
-      when Trade_No_Money =>
-         Show_Message
-           (Text =>
-              "You don't have any " & To_String(Source => Money_Name) &
-              " to pay for learning.",
-            Title => "Can't train");
-         return TCL_OK;
-      when Trade_Not_Enough_Money =>
-         Show_Message
-           (Text =>
-              "You don't have enough " & To_String(Source => Money_Name) &
-              " to pay for learning this skill.",
-            Title => "Can't train");
-         return TCL_OK;
-   end Train_Skill_Command;
+--   function Train_Skill_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Ada.Strings;
+--      use Dialogs;
+--      use Trades;
+--
+--      pragma Unreferenced(Argc, Argv);
+--      Amount_Box: constant Ttk_SpinBox :=
+--        Get_Widget
+--          (pathName =>
+--             Main_Paned & ".schoolframe.canvas.school." &
+--             Tcl_GetVar(interp => Interp, varName => "traintype") &
+--             "box.amount",
+--           Interp => Interp);
+--   begin
+--      if Get(Widgt => Amount_Box) = "0" then
+--         return TCL_OK;
+--      end if;
+--      Train_Skill
+--        (Member_Index => Get_Member_Index,
+--         Skill_Index => Skills_Amount_Range(Get_Skill_Index),
+--         Amount => Positive'Value(Get(Widgt => Amount_Box)),
+--         Is_Amount =>
+--           (if Tcl_GetVar(interp => Interp, varName => "traintype") = "amount"
+--            then True
+--            else False));
+--      Update_Messages;
+--      return
+--        Show_School_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv =>
+--             CArgv.Empty & "TrainSkill" &
+--             Trim(Source => Positive'Image(Get_Member_Index), Side => Left));
+--   exception
+--      when Trade_No_Money =>
+--         Show_Message
+--           (Text =>
+--              "You don't have any " & To_String(Source => Money_Name) &
+--              " to pay for learning.",
+--            Title => "Can't train");
+--         return TCL_OK;
+--      when Trade_Not_Enough_Money =>
+--         Show_Message
+--           (Text =>
+--              "You don't have enough " & To_String(Source => Money_Name) &
+--              " to pay for learning this skill.",
+--            Title => "Can't train");
+--         return TCL_OK;
+--   end Train_Skill_Command;
 
    -- ****o* SchoolUI/SchoolUI.Update_School_Cost_Command
    -- FUNCTION
