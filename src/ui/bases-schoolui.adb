@@ -26,8 +26,8 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
 with CoreUI; use CoreUI;
 with Dialogs;
@@ -89,22 +89,6 @@ package body Bases.SchoolUI is
       Convention => C,
       External_Name => "getAdaMemberIndex";
       -- ****
---   is
---      use Tiny_String;
---
---      Member_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName => Main_Paned & ".schoolframe.canvas.school.setting.crew");
---      Member_Index: Positive := 1;
---   begin
---      Find_Member_Index_Loop :
---      for Member of Player_Ship.Crew loop
---         exit Find_Member_Index_Loop when Member.Name =
---           To_Bounded_String(Source => Get(Widgt => Member_Box));
---         Member_Index := Member_Index + 1;
---      end loop Find_Member_Index_Loop;
---      return Member_Index;
---   end Get_Member_Index;
 
    -- ****if* SchoolUI/SchoolUI.Get_Skill_Index
    -- FUNCTION
@@ -234,6 +218,9 @@ package body Bases.SchoolUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Winfo;
+
       Combo_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
