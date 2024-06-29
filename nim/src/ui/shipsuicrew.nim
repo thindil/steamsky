@@ -765,7 +765,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "update")
       var progressBar = frame & ".level" & $index
       tclEval(script = "ttk::progressbar " & progressBar & " -value " & $skill.level)
-      tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
+      tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the skill.\"")
       tclEval(script = "grid " & progressBar & " -sticky w -padx 5")
       tclEval(script = "SetScrollbarBindings " & progressBar & " " & yScroll)
       progressFrame = frame & ".experienceframe" & $index
