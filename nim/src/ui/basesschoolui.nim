@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[crew, crewinventory, game, tk]
-import coreui, mapsui, utilsui2
+import ../[basestrade, crew, crewinventory, game, tk, types]
+import coreui, dialogs, mapsui, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -148,12 +148,35 @@ proc getSkillIndex(): Positive =
       result = index
       break
 
+proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let amountBox = mainPaned & ".schoolframe.canvas.school." & tclGetVar(
+      varName = "traintype") & "box.amount"
+  if tclEval2(script = amountBox & " get") == "0":
+    return tclOk
+  try:
+    trainSkill(memberIndex = getMemberIndex(), skillIndex = getSkillIndex(),
+        amount = tclEval2(script = amountBox & " get").parseInt,
+        isAmount = tclGetVar(varName = "traintype") == "amount")
+  except NoMoneyError:
+    showMessage(text = "You don't have any " & moneyName &
+        " to pay for learning.", title = "Can't train")
+    return tclOk
+  except NotEnoughMoneyError:
+    showMessage(text = "You don't have enough " & moneyName &
+        " to pay for learning this skill.", title = "Can't train")
+    return tclOk
+  updateMessages()
+  return showSchoolCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("SetSchoolSkills", setSchoolSkillsCommand)
 #    addCommand("ShowSchool", showSchoolCommand)
+#    addCommand("TrainSkill", trainSkillCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
