@@ -135,6 +135,9 @@ proc getMemberIndex(): Natural {.sideEffect, raises: [], tags: [].} =
     result.inc
 
 proc getSkillIndex(): Positive =
+  ## Get the index of the currently selected skill
+  ##
+  ## Returns the index of the skill
   let
     skillBox = mainPaned & ".schoolframe.canvas.school.setting.skill"
     comboBoxValue = tclEval2(script = skillBox & " get")
