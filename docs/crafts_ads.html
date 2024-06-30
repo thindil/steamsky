@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.9 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -35,27 +35,14 @@
 <ul>
 <li>1.1. <a href="./ui/crafts-ui_ads.html#robo16">Crafts/CUI4</a></li>
 <ul>
-<li>1.1.1. <a href="./ui/crafts-ui_adb.html#robo88">CUI4/CUI4.Recipes_Sort_Orders</a></li>
-<li>1.1.2. <a href="./ui/crafts-ui_adb.html#robo230">CUI4/CUI4.Default_Recipes_Sort_Order</a></li>
-<li>1.1.3. <a href="./ui/crafts-ui_adb.html#robo319">CUI4/CUI4.Deconstructs</a></li>
-<li>1.1.4. <a href="./ui/crafts-ui_adb.html#robo320">CUI4/CUI4.Recipes_Indexes</a></li>
-<li>1.1.5. <a href="./ui/crafts-ui_adb.html#robo321">CUI4/CUI4.Recipes_Sort_Order</a></li>
-<li>1.1.6. <a href="./ui/crafts-ui_adb.html#robo322">CUI4/CUI4.Recipes_Table</a></li>
-<li>1.1.7. <a href="./ui/crafts-ui_adb.html#robo323">CUI4/CUI4.Studies</a></li>
-<li>1.1.8. <a href="./ui/crafts-ui_ads.html#robo452">CUI4/CUI4.Add_Commands</a></li>
-<li>1.1.9. <a href="./ui/crafts-ui_adb.html#robo453">CUI4/CUI4.Check_Study_Prerequisites</a></li>
-<li>1.1.10. <a href="./ui/crafts-ui_adb.html#robo454">CUI4/CUI4.Check_Tool</a></li>
-<li>1.1.11. <a href="./ui/crafts-ui_adb.html#robo455">CUI4/CUI4.Is_Craftable</a></li>
-<li>1.1.12. <a href="./ui/crafts-ui_adb.html#robo633">CUI4/CUI4.Set_Crafting_Command</a></li>
-<li>1.1.13. <a href="./ui/crafts-ui_adb.html#robo634">CUI4/CUI4.Show_Crafting_Command</a></li>
-<li>1.1.14. <a href="./ui/crafts-ui_adb.html#robo635">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
-<li>1.1.15. <a href="./ui/crafts-ui_adb.html#robo636">CUI4/CUI4.Show_Set_Recipe_Command</a></li>
-<li>1.1.16. <a href="./ui/crafts-ui_adb.html#robo637">CUI4/CUI4.Sort_Crafting_Command</a></li>
+<li>1.1.1. <a href="./ui/crafts-ui_ads.html#robo412">CUI4/CUI4.Add_Commands</a></li>
+<li>1.1.2. <a href="./ui/crafts-ui_adb.html#robo570">CUI4/CUI4.Set_Crafting_Command</a></li>
+<li>1.1.3. <a href="./ui/crafts-ui_adb.html#robo571">CUI4/CUI4.Show_Crafting_Command</a></li>
+<li>1.1.4. <a href="./ui/crafts-ui_adb.html#robo572">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
+<li>1.1.5. <a href="./ui/crafts-ui_adb.html#robo573">CUI4/CUI4.Show_Set_Recipe_Command</a></li>
+<li>1.1.6. <a href="./ui/crafts-ui_adb.html#robo574">CUI4/CUI4.Sort_Crafting_Command</a></li>
 </ul>
-<li>1.2. <a href="#robo174">Crafts/Crafts.Craft_Data</a></li>
-<li>1.3. <a href="#robo443">Crafts/Crafts.Check_Recipe</a></li>
-<li>1.4. <a href="#robo444">Crafts/Crafts.Set_Recipe</a></li>
-<li>1.5. <a href="#robo445">Crafts/Crafts.Set_Recipe_Data</a></li>
+<li>1.2. <a href="#robo169">Crafts/Crafts.Craft_Data</a></li>
 </ul>
 </ul>
 <hr />
@@ -72,7 +59,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eCraft5fData"></a>
-<a name="robo174"></a><h2>Crafts/Crafts.Craft_Data [ Records ]</h2>
+<a name="robo169"></a><h2>Crafts/Crafts.Craft_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -107,73 +94,9 @@
  Tool_Quality     - Minimal quality of tool needed to craft that recipe
 </pre>
 
-<hr />
-<a name="Crafts2fCrafts2eCheck5fRecipe"></a>
-<a name="robo443"></a><h2>Crafts/Crafts.Check_Recipe [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Check if player have all requirements for selected recipe
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Check_Recipe
-     <span class="sign">(</span>Recipe_Index<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">)</span> <span class="keyword">return</span> Positive <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Tiny_String<span class="sign">.</span>Length<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Recipe_Index<span class="sign">)</span> <span class="sign">&gt;</span> 0<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Recipe_Index - Index of the prototype recipe to check or if deconstruct
-                existing item, "Study " + item name.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> Max amount of items which can be craft
-</pre>
-
-<hr />
-<a name="Crafts2fCrafts2eSet5fRecipe"></a>
-<a name="robo444"></a><h2>Crafts/Crafts.Set_Recipe [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Set crafting recipe for selected workshop
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Set_Recipe
-     <span class="sign">(</span>Workshop<span class="sign">,</span> Amount<span class="sign">:</span> Positive<span class="sign">;</span>
-      Recipe_Index<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Workshop <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index <span class="keyword">and</span>
-      Tiny_String<span class="sign">.</span>Length<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Recipe_Index<span class="sign">)</span> <span class="sign">&gt;</span> 0<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Workshop     - Index of player ship module (workplace) to which
-                selected recipe will be set
- Amount       - How many times the recipe will be crafted
- Recipe_Index - Index of the prototype recipe to check or if deconstruct
-                existing item, "Study " + item name.
-</pre>
-
-<hr />
-<a name="Crafts2fCrafts2eSet5fRecipe5fData"></a>
-<a name="robo445"></a><h2>Crafts/Crafts.Set_Recipe_Data [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Set crafting data for selected recipe
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Set_Recipe_Data
-     <span class="sign">(</span>Recipe_Index<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">)</span> <span class="keyword">return</span> Craft_Data<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Recipe_Index - Index of recipe from Recipes_List or full name of recipe
-                for deconstructing
-</pre>
-<p class="item_name">RESULT</p>
-<pre> Crafting data for selected recipe
-</pre>
-
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-04-14 03:16:06</p>
+<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-06-30 03:22:47</p>
 </div> <!-- footer -->
 </body>
 </html>

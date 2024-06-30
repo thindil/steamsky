@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 9.9 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,11 +33,10 @@
 <ul>
 <li>1. <a href="#robo51">Ships/SCrew</a></li>
 <ul>
-<li>1.1. <a href="#robo558">SCrew/SCrew.Death</a></li>
-<li>1.2. <a href="#robo559">SCrew/SCrew.Delete_Member</a></li>
-<li>1.3. <a href="#robo560">SCrew/SCrew.Find_Member</a></li>
-<li>1.4. <a href="#robo561">SCrew/SCrew.Give_Orders</a></li>
-<li>1.5. <a href="#robo562">SCrew/SCrew.Update_Morale</a></li>
+<li>1.1. <a href="#robo507">SCrew/SCrew.Death</a></li>
+<li>1.2. <a href="#robo508">SCrew/SCrew.Delete_Member</a></li>
+<li>1.3. <a href="#robo509">SCrew/SCrew.Find_Member</a></li>
+<li>1.4. <a href="#robo510">SCrew/SCrew.Update_Morale</a></li>
 </ul>
 </ul>
 <hr />
@@ -54,7 +53,7 @@
 
 <hr />
 <a name="SCrew2fSCrew2eDeath"></a>
-<a name="robo558"></a><h2>SCrew/SCrew.Death [ Subprograms ]</h2>
+<a name="robo507"></a><h2>SCrew/SCrew.Death [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo51">SCrew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -80,7 +79,7 @@
 
 <hr />
 <a name="SCrew2fSCrew2eDelete5fMember"></a>
-<a name="robo559"></a><h2>SCrew/SCrew.Delete_Member [ Subprograms ]</h2>
+<a name="robo508"></a><h2>SCrew/SCrew.Delete_Member [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo51">SCrew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -102,7 +101,7 @@
 
 <hr />
 <a name="SCrew2fSCrew2eFind5fMember"></a>
-<a name="robo560"></a><h2>SCrew/SCrew.Find_Member [ Subprograms ]</h2>
+<a name="robo509"></a><h2>SCrew/SCrew.Find_Member [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo51">SCrew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -123,37 +122,8 @@
 </pre>
 
 <hr />
-<a name="SCrew2fSCrew2eGive5fOrders"></a>
-<a name="robo561"></a><h2>SCrew/SCrew.Give_Orders [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo51">SCrew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Change order for selected crew member
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Give_Orders
-     <span class="sign">(</span><a href="./bases-ship_ads.html#robo7">Ship</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Ship_Record<span class="sign">;</span> Member_Index<span class="sign">:</span> Crew_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
-      Given_Order<span class="sign">:</span> Crew_Orders<span class="sign">;</span>
-      Module_Index<span class="sign">:</span> Modules_Container<span class="sign">.</span>Extended_Index <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
-      Check_Priorities<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Member_Index <span class="keyword">in</span> <a href="./bases-ship_ads.html#robo7">Ship</a><span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>First_Index <span class="sign">.</span><span class="sign">.</span> <a href="./bases-ship_ads.html#robo7">Ship</a><span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
-      Module_Index <span class="sign">&lt;</span><span class="sign">=</span> <a href="./bases-ship_ads.html#robo7">Ship</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> <a href="./bases-ship_ads.html#robo7">Ship</a>             - <a href="./bases-ship_ads.html#robo7">Ship</a> in which crew member will be have changed order
- Member_Index     - <a href="./crew_ads.html#robo17">Crew</a> index of member to change order
- Given_Order      - New order for selected crew member
- Module_Index     - Index of module to assign to crew member with new
-                    order. Default is 0 - no module assigned
- Check_Priorities - If true, check orders priorities of whole crew.
-                    Default is true
- Result
- Parameter <a href="./bases-ship_ads.html#robo7">Ship</a> with modified data (crew, modules, cargo)
-</pre>
-
-<hr />
 <a name="SCrew2fSCrew2eUpdate5fMorale"></a>
-<a name="robo562"></a><h2>SCrew/SCrew.Update_Morale [ Subprograms ]</h2>
+<a name="robo510"></a><h2>SCrew/SCrew.Update_Morale [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo51">SCrew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -176,7 +146,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-04-14 03:16:06</p>
+<p>Generated from ./src/ships-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-06-30 03:22:47</p>
 </div> <!-- footer -->
 </body>
 </html>
