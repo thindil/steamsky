@@ -15,24 +15,22 @@
 
 with Ada.Strings;
 -- with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
-with CoreUI; use CoreUI;
+with CoreUI;
 -- with Dialogs;
 -- with Trades;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Bases.SchoolUI is
 
@@ -200,6 +198,9 @@ package body Bases.SchoolUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Ada.Strings.Unbounded;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Winfo;
 
@@ -266,6 +267,9 @@ package body Bases.SchoolUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use CoreUI;
+
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget
           (pathName =>
@@ -312,6 +316,7 @@ package body Bases.SchoolUI is
    end Update_School_Selected_Cost_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowSchool", Ada_Command => Show_School_Command'Access);
