@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables, xmltree, xmlparser]
+import contracts
 import basessaveload, config, game, goals, log, maps, messages, missions,
     shipssaveload, statistics, stories, types, utils
 
@@ -27,7 +28,7 @@ type SaveGameInvalidData* = object of CatchableError
 var saveName*: string ## The full path to the game save file with file name
 
 proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
-    IOError], tags: [WriteIOEffect, RootEffect].} =
+    IOError], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Save the game data to the file.
   ##
   ## * prettyPrint - if true, format properly XML before save, default is false,
@@ -114,12 +115,18 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       "distancetraveled": $gameStats.distanceTraveled,
       "acceptedmissions": $gameStats.acceptedMissions,
       "points": $gameStats.points}.toXmlAttributes
-  proc saveStatistics(stats: seq[StatisticsData], statName: string) =
-    for statistic in stats:
-      var statElement = newElement(statName)
-      statElement.attrs = {"index": statistic.index,
-          "amount": $statistic.amount}.toXmlAttributes
-      statsElement.add(statElement)
+
+  proc saveStatistics(stats: seq[StatisticsData],
+      statName: string) {.sideEffect, raises: [], tags: [], contractual.} =
+    require:
+      statName.len > 0
+    body:
+      for statistic in stats:
+        var statElement = newElement(statName)
+        statElement.attrs = {"index": statistic.index,
+            "amount": $statistic.amount}.toXmlAttributes
+        statsElement.add(statElement)
+
   saveStatistics(gameStats.destroyedShips, "destroyedships")
   saveStatistics(gameStats.craftingOrders, "finishedcrafts")
   saveStatistics(gameStats.finishedMissions, "finishedmissions")
@@ -216,7 +223,8 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Finished saving game in file " & saveName & ".",
       debugType = everything)
 
-proc loadGame*() =
+proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
+    Exception], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   let savedGame = loadXml(saveName)
   logMessage(message = "Start loading game from file " & saveName & ".",
       debugType = everything)
@@ -396,7 +404,8 @@ proc loadGame*() =
   logMessage(message = "Finished loading the game.", debugType = everything)
 
 proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
-    IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect].} =
+    IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect],
+        contractual.} =
   ## Generate an unique name for the save game file
   ##
   ## * renameSave - if true, rename the existing save game file.
@@ -412,27 +421,30 @@ proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
 
 # Temporary code for interfacing with Ada
 
-proc getAdaSaveName(name: cstring) {.raises: [], tags: [], exportc.} =
+proc getAdaSaveName(name: cstring) {.raises: [], tags: [], exportc,
+    contractual.} =
   saveName = $name
 
-proc setAdaSaveName(name: var cstring) {.raises: [], tags: [], exportc.} =
+proc setAdaSaveName(name: var cstring) {.raises: [], tags: [], exportc,
+    contractual.} =
   name = saveName.cstring
 
 proc saveAdaGame(prettyPrint: cint) {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc.} =
+    RootEffect], exportc, contractual.} =
   try:
     saveGame(prettyPrint = prettyPrint == 1)
   except KeyError, IOError:
     discard
 
-proc loadAdaGame() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc loadAdaGame() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
+    contractual.} =
   try:
     loadGame()
   except XmlError, ValueError, IOError, OSError, Exception:
     discard
 
 proc generateAdaSaveName(renameSave: cint) {.raises: [], tags: [WriteIOEffect,
-    ReadIOEffect], exportc.} =
+    ReadIOEffect], exportc, contractual.} =
   try:
     generateSaveName(renameSave = renameSave == 1)
   except OSError, IOError, Exception:
