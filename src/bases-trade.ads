@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -102,25 +102,6 @@ package Bases.Trade is
       Import => True,
       Convention => C,
       External_Name => "trainAdaCost";
-      -- ****
-
-      -- ****f* BTrade/BTrade.Train_Skill
-      -- FUNCTION
-      -- Train selected skill
-      -- PARAMETERS
-      -- Member_Index - Index of Player_Ship crew member which train
-      -- Skill_Index  - Index of skill of selected crew member to train
-      -- Amount       - How many times train or how many money spend on training
-      -- Is_Amount    - If true, Amount variable is how many times train,
-      --                otherwise it is amount of money to spend
-      -- SOURCE
-   procedure Train_Skill
-     (Member_Index: Crew_Container.Extended_Index;
-      Skill_Index: Skills_Container.Extended_Index; Amount: Positive;
-      Is_Amount: Boolean := True) with
-      Pre => Member_Index in
-        Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
-      Skill_Index in 1 .. Skills_Amount;
       -- ****
 
 end Bases.Trade;

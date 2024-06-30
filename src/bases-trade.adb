@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -162,27 +162,5 @@ package body Bases.Trade is
       Set_Base_Cargo(Base_Index => Base_Index);
       Set_Game_Date;
    end Heal_Wounded;
-
-   procedure Train_Skill
-     (Member_Index: Crew_Container.Extended_Index;
-      Skill_Index: Skills_Container.Extended_Index; Amount: Positive;
-      Is_Amount: Boolean := True) is
-      Base_Index: constant Extended_Base_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Train_Ada_Skill(M_Index, S_Index, A, I_Amount: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "trainAdaSkill";
-   begin
-      Set_Ship_In_Nim;
-      Get_Base_Cargo(Base_Index => Base_Index);
-      Get_Game_Date;
-      Train_Ada_Skill
-        (M_Index => Member_Index, S_Index => Integer(Skill_Index), A => Amount,
-         I_Amount => (if Is_Amount then 1 else 0));
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Base_Cargo(Base_Index => Base_Index);
-      Set_Game_Date;
-   end Train_Skill;
 
 end Bases.Trade;
