@@ -149,7 +149,8 @@ proc getSkillIndex(): Positive =
       break
 
 proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, RootEffect], exportc.} =
   let amountBox = mainPaned & ".schoolframe.canvas.school." & tclGetVar(
       varName = "traintype") & "box.amount"
   if tclEval2(script = amountBox & " get") == "0":
@@ -166,6 +167,8 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     showMessage(text = "You don't have enough " & moneyName &
         " to pay for learning this skill.", title = "Can't train")
     return tclOk
+  except:
+    return showError(message = "Can't train the skill.")
   updateMessages()
   return showSchoolCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
