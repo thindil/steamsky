@@ -35,7 +35,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   ##                 for reduce size of the file
   logMessage(message = "Start saving game in file " & saveName & ".",
       debugType = everything)
-  var saveTree = newXmlTree("save", [], {
+  var saveTree = newXmlTree(tag = "save", children = [], attributes = {
       "version": $saveVersion}.toXmlAttributes)
   logMessage(message = "Saving game difficulty settings...",
       debugType = everything)
@@ -48,54 +48,54 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       newGameSettings.upgradeCostBonus), ("pricesbonus",
       newGameSettings.pricesBonus)]
   var
-    diffElement = newElement("difficulty")
+    diffElement = newElement(tag = "difficulty")
     attrs: seq[tuple[key, val: string]] = @[]
   for difficulty in difficulties:
-    attrs.add((difficulty[0], $difficulty[1]))
+    attrs.add(y = (difficulty[0], $difficulty[1]))
   diffElement.attrs = attrs.toXmlAttributes
-  saveTree.add(diffElement)
+  saveTree.add(son = diffElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving game time...", debugType = everything)
-  var dateElement = newElement("gamedate")
+  var dateElement = newElement(tag = "gamedate")
   dateElement.attrs = {"year": $gameDate.year, "month": $gameDate.month,
       "day": $gameDate.day, "hour": $gameDate.hour,
       "minutes": $gameDate.minutes}.toXmlAttributes
-  saveTree.add(dateElement)
+  saveTree.add(son = dateElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving map...", debugType = everything)
   for x in MapXRange.low .. MapXRange.high:
     for y in MapYRange.low .. MapYRange.high:
       if skyMap[x][y].visited:
-        var fieldElement = newElement("field")
+        var fieldElement = newElement(tag = "field")
         fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
-        saveTree.add(fieldElement)
+        saveTree.add(son = fieldElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving bases...", debugType = everything)
-  saveBases(saveTree)
+  saveBases(saveData = saveTree)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving player ship...", debugType = everything)
-  savePlayerShip(saveTree)
+  savePlayerShip(saveData = saveTree)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving known recipes...", debugType = everything)
   for recipe in knownRecipes:
-    var recipeElement = newElement("recipe")
+    var recipeElement = newElement(tag = "recipe")
     recipeElement.attrs = {"index": recipe}.toXmlAttributes
-    saveTree.add(recipeElement)
+    saveTree.add(son = recipeElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving messages...", debugType = everything)
   let messagesToSave = (if gameSettings.savedMessages > messagesAmount(): messagesAmount() else: gameSettings.savedMessages)
   for i in (messagesAmount() - messagesToSave + 1) .. messagesAmount():
-    let message = getMessage(i)
-    var messageElement = newElement("message")
+    let message = getMessage(messageIndex = i)
+    var messageElement = newElement(tag = "message")
     messageElement.attrs = {"type": $message.kind,
         "color": $message.color}.toXmlAttributes
-    messageElement.add(newText($message.message))
-    saveTree.add(messageElement)
+    messageElement.add(son = newText(text = $message.message))
+    saveTree.add(son = messageElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving events...", debugType = everything)
   for event in eventsList:
     var
-      eventElement = newElement("event")
+      eventElement = newElement(tag = "event")
       eventData: string
     case event.eType
     of doublePrice:
@@ -106,10 +106,10 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       eventData = $event.data
     eventElement.attrs = {"data": eventData, "type": $event.eType.ord,
         "x": $event.skyX, "y": $event.skyY, "time": $event.time}.toXmlAttributes
-    saveTree.add(eventElement)
+    saveTree.add(son = eventElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving game statistics...", debugType = everything)
-  var statsElement = newElement("statistics")
+  var statsElement = newElement(tag = "statistics")
   statsElement.attrs = {"visitedbases": $gameStats.basesVisited,
       "mapdiscovered": $gameStats.mapVisited,
       "distancetraveled": $gameStats.distanceTraveled,
@@ -122,50 +122,50 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       statName.len > 0
     body:
       for statistic in stats:
-        var statElement = newElement(statName)
+        var statElement = newElement(tag = statName)
         statElement.attrs = {"index": statistic.index,
             "amount": $statistic.amount}.toXmlAttributes
-        statsElement.add(statElement)
+        statsElement.add(son = statElement)
 
-  saveStatistics(gameStats.destroyedShips, "destroyedships")
-  saveStatistics(gameStats.craftingOrders, "finishedcrafts")
-  saveStatistics(gameStats.finishedMissions, "finishedmissions")
-  saveStatistics(gameStats.finishedGoals, "finishedgoals")
-  saveStatistics(gameStats.killedMobs, "killedmobs")
-  saveTree.add(statsElement)
+  saveStatistics(stats = gameStats.destroyedShips, statName = "destroyedships")
+  saveStatistics(stats = gameStats.craftingOrders, statName = "finishedcrafts")
+  saveStatistics(stats = gameStats.finishedMissions, statName = "finishedmissions")
+  saveStatistics(stats = gameStats.finishedGoals, statName = "finishedgoals")
+  saveStatistics(stats = gameStats.killedMobs, statName = "killedmobs")
+  saveTree.add(son = statsElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving current goal...", debugType = everything)
-  var goalElement = newElement("currentgoal")
+  var goalElement = newElement(tag = "currentgoal")
   goalElement.attrs = {"index": $currentGoal.index,
       "type": $currentGoal.goalType.ord, "amount": $currentGoal.amount,
       "target": currentGoal.targetIndex,
       "multiplier": $currentGoal.multiplier}.toXmlAttributes
-  saveTree.add(goalElement)
+  saveTree.add(son = goalElement)
   logMessage(message = "done", debugType = everything)
   if currentStory.index.len > 0:
     logMessage(message = "Saving current story...", debugType = everything)
     var
-      storyElement = newElement("currentstory")
+      storyElement = newElement(tag = "currentstory")
       attrs: seq[tuple[key, val: string]] = @[]
-    attrs.add(("index", currentStory.index))
+    attrs.add(y = ("index", currentStory.index))
     case currentStory.currentStep
     of 0:
-      attrs.add(("currentstep", "start"))
+      attrs.add(y = ("currentstep", "start"))
     of -1:
-      attrs.add(("currentstep", "finish"))
+      attrs.add(y = ("currentstep", "finish"))
     else:
-      attrs.add(("currentstep", storiesList[currentStory.index].steps[
+      attrs.add(y = ("currentstep", storiesList[currentStory.index].steps[
           currentStory.currentStep].index))
-    attrs.add(("maxsteps", $currentStory.maxSteps))
+    attrs.add(y = ("maxsteps", $currentStory.maxSteps))
     if currentStory.showText:
-      attrs.add(("showText", "Y"))
+      attrs.add(y = ("showText", "Y"))
     else:
-      attrs.add(("showText", "N"))
+      attrs.add(y = ("showText", "N"))
     if currentStory.data.len > 0:
-      attrs.add(("data", currentStory.data))
-    attrs.add(("finishedstep", $currentStory.finishedStep.ord))
+      attrs.add(y = ("data", currentStory.data))
+    attrs.add(y = ("finishedstep", $currentStory.finishedStep.ord))
     storyElement.attrs = attrs.toXmlAttributes
-    saveTree.add(storyElement)
+    saveTree.add(son = storyElement)
     logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving finished stories...", debugType = everything)
   for finishedStory in finishedStories.items:
