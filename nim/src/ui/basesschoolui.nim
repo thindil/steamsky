@@ -184,6 +184,25 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   return showSchoolCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
 
+proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  if argv[2] == "":
+    tclSetResult(value = "1")
+    return tclOk
+  var amount = ($argv[2]).parseInt
+  if amount < 1:
+    amount = 1
+  elif amount > 100:
+    amount = 100
+  var cost = trainCost(memberIndex = getMemberIndex(),
+      skillIndex = getSkillIndex()) * amount
+  let
+    comboBox = $argv[1]
+    label = tclEval2(script = "winfo parent " & comboBox) & ".cost"
+  tclEval(script = label & " configure -text {" & $cost & " " & moneyName & "}")
+  tclSetResult(value = "1")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -191,6 +210,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("SetSchoolSkills", setSchoolSkillsCommand)
 #    addCommand("ShowSchool", showSchoolCommand)
 #    addCommand("TrainSkill", trainSkillCommand)
+#    addCommand("UpdateSchoolCost", updateSchoolCostCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
