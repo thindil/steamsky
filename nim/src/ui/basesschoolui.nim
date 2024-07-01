@@ -185,17 +185,24 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
 
 proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   if argv[2] == "":
     tclSetResult(value = "1")
     return tclOk
-  var amount = ($argv[2]).parseInt
+  var amount = try:
+      ($argv[2]).parseInt
+    except:
+      tclSetResult(value = "0")
+      return tclOk
   if amount < 1:
     amount = 1
   elif amount > 100:
     amount = 100
-  var cost = trainCost(memberIndex = getMemberIndex(),
-      skillIndex = getSkillIndex()) * amount
+  var cost = try:
+      trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex()) * amount
+    except:
+      tclSetResult(value = "1")
+      return showError(message = "Can't count cost of training.")
   let
     comboBox = $argv[1]
     label = tclEval2(script = "winfo parent " & comboBox) & ".cost"
