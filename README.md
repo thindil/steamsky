@@ -13,9 +13,9 @@ closed. Any code propositions should go to the [Fossil](https://www.laeran.pl.eu
 
 There are currently 2 versions of the game:
 
-* 9.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in the *9.0* branch.
-* 10.x: "development" version of game, future version 10.0. This is where
+* 10.0.x: "stable" version of game. This version will receive bug fixes but
+  no new features. Source code for this version is in the *10.0* branch.
+* 10.x: "development" version of game, future version 11.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
   Source code for this version is in the *trunk* branch. **This** version.
