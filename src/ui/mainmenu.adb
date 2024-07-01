@@ -183,7 +183,7 @@ package body MainMenu is
         (New_Size => Get_Integer_Setting(Name => "interfaceFontSize"),
          Font_Type => INTERFACEFONT);
       configure
-        (Widgt => Version_Label, options => "-text {" & Game_Version & "}");
+        (Widgt => Version_Label, options => "-text {" & Game_Version & " development}");
       Data_Error := To_Unbounded_String(Source => Load_Game_Data);
       if Get_Data_Error'Length > 0 then
          Show_Main_Menu;
