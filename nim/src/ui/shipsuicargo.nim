@@ -58,7 +58,7 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     cargoIndexes = @[]
     for index, _ in playerShip.cargo:
       cargoIndexes.add(y = index)
-  let freeSpaceLabel = cargoInfoFrame & ".freespace"
+  let freeSpaceLabel = cargoInfoFrame & ".freeframe.freespace"
   try:
     tclEval(script = freeSpaceLabel & " configure -text {Free cargo space: " &
         $freeCargo(amount = 0) & " kg}")
