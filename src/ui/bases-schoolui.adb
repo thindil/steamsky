@@ -13,23 +13,20 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings;
--- with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;
+-- with Ada.Strings;
+-- with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
+-- with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Winfo;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
 with CoreUI;
--- with Dialogs;
--- with Trades;
 with Utils.UI;
 
 package body Bases.SchoolUI is
@@ -140,58 +137,60 @@ package body Bases.SchoolUI is
    function Update_School_Cost_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "updateSchoolCostCommand";
       -- ****
 
-   function Update_School_Cost_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Ada.Strings.Unbounded;
-      use Tcl.Ada;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Tcl.Tk.Ada.Winfo;
-
-      Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      Label: constant Ttk_Label :=
-        Get_Widget
-          (pathName =>
-             Winfo_Get(Widgt => Combo_Box, Info => "parent") & ".cost",
-           Interp => Interp);
-      Amount, Cost: Natural;
-   begin
-      if CArgv.Arg(Argv => Argv, N => 2) = "" then
-         Tcl_SetResult(interp => Interp, str => "1");
-         return TCL_OK;
-      end if;
-      Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
-      --## rule off SIMPLIFIABLE_STATEMENTS
-      if Amount < 1 then
-         Amount := 1;
-      elsif Amount > 100 then
-         Amount := 100;
-      end if;
-      --## rule on SIMPLIFIABLE_STATEMENTS
-      Cost :=
-        Train_Cost
-          (Member_Index => Get_Member_Index,
-           Skill_Index => Skills_Amount_Range(Get_Skill_Index)) *
-        Amount;
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {" & Positive'Image(Cost) & " " &
-           To_String(Source => Money_Name) & "}");
-      Tcl_SetResult(interp => Interp, str => "1");
-      return TCL_OK;
-   exception
-      when Constraint_Error =>
-         Tcl_SetResult(interp => Interp, str => "0");
-         return TCL_OK;
-   end Update_School_Cost_Command;
+--   function Update_School_Cost_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Ada.Strings.Unbounded;
+--      use Tcl.Ada;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Tcl.Tk.Ada.Winfo;
+--
+--      Combo_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+--      Label: constant Ttk_Label :=
+--        Get_Widget
+--          (pathName =>
+--             Winfo_Get(Widgt => Combo_Box, Info => "parent") & ".cost",
+--           Interp => Interp);
+--      Amount, Cost: Natural;
+--   begin
+--      if CArgv.Arg(Argv => Argv, N => 2) = "" then
+--         Tcl_SetResult(interp => Interp, str => "1");
+--         return TCL_OK;
+--      end if;
+--      Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
+--      --## rule off SIMPLIFIABLE_STATEMENTS
+--      if Amount < 1 then
+--         Amount := 1;
+--      elsif Amount > 100 then
+--         Amount := 100;
+--      end if;
+--      --## rule on SIMPLIFIABLE_STATEMENTS
+--      Cost :=
+--        Train_Cost
+--          (Member_Index => Get_Member_Index,
+--           Skill_Index => Skills_Amount_Range(Get_Skill_Index)) *
+--        Amount;
+--      configure
+--        (Widgt => Label,
+--         options =>
+--           "-text {" & Positive'Image(Cost) & " " &
+--           To_String(Source => Money_Name) & "}");
+--      Tcl_SetResult(interp => Interp, str => "1");
+--      return TCL_OK;
+--   exception
+--      when Constraint_Error =>
+--         Tcl_SetResult(interp => Interp, str => "0");
+--         return TCL_OK;
+--   end Update_School_Cost_Command;
 
    -- ****o* SchoolUI/SchoolUI.Update_School_Selected_Cost_Command
    -- FUNCTION
