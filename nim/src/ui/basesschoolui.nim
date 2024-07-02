@@ -224,6 +224,27 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
+    argc: cint;argv: cstringArray): TclResults {.exportc.} =
+  let
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    cost = trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex())
+    amountBox = mainPaned & ".schoolframe.canvas.school.costbox.amount"
+  if moneyIndex > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
+    tclEval(script = amountBox & " configure -from " & $cost & " -to " &
+        $playerShip.cargo[moneyIndex2].amount)
+    tclEval(script = "bind " & amountBox & " <<Increment>> {" & amountBox &
+        " set [expr [" & amountBox & " get] + " & $cost & " - 1]}")
+    tclEval(script = "bind " & amountBox & " <<Decrement>> {" & amountBox &
+        " set [expr [" & amountBox & " get] - " & $cost & " + 1]}")
+  else:
+    tclEval(script = amountBox & " configure -from 0 to 0")
+    tclEval(script = "bind " & amountBox & " <<Increment>> {}")
+    tclEval(script = "bind " & amountBox & " <<Decrement>> {}")
+  tclEval(script = amountBox & " set " & $cost)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -232,6 +253,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowSchool", showSchoolCommand)
 #    addCommand("TrainSkill", trainSkillCommand)
 #    addCommand("UpdateSchoolCost", updateSchoolCostCommand)
+#    addCommand("UpdateSchoolSelectedCost", updateSchoolSelectedCostCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
