@@ -186,6 +186,20 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Update the cost of training
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## UpdateSchoolCost combobox amount
+  ## Combobox is the Tk path to the ttk::combobox with the amount of
+  ## training sessions, amount is the amount of the requested training
+  ## sessions
   if argv[2] == "":
     tclSetResult(value = "1")
     return tclOk
