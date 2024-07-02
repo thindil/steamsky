@@ -39,8 +39,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
     if eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == enemyShip:
       return startCombat(enemyIndex = eventsList[skyMap[playerShip.skyX][
           playerShip.skyY].eventIndex].shipIndex)
-    else:
-      return false
+    return false
   if getRandom(min = 1, max = 100) > 6:
     return false
   var roll: Positive = getRandom(min = 1, max = 100)
