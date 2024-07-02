@@ -188,10 +188,10 @@ grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton \
 tooltip::tooltip $shipcanvas.frame.maxmin \
    {Maximize/minimize the ship cargo info}
 grid [ttk::frame $shipcanvas.frame.freeframe] -sticky w -padx 5
-grid [ttk::label $shipcanvas.frame.freeframe.freespace] -sticky w -padx 5
+grid [ttk::label $shipcanvas.frame.freeframe.freespace -text {Free cargo space:}] -padx 5
 SetScrollbarBindings $shipcanvas.frame.freeframe.freespace $shipinfoframe.cargo.scrolly
 grid [ttk::label $shipcanvas.frame.freeframe.freespace2 -style Golden.TLabel] \
-   -sticky w -padx 5 -row 0 -column 1
+   -padx 5 -row 0 -column 1
 SetScrollbarBindings $shipcanvas.frame.freeframe.freespace2 $shipinfoframe.cargo.scrolly
 grid [ttk::frame $shipcanvas.frame.selecttype] -sticky w
 grid [ttk::label $shipcanvas.frame.selecttype.label -text {Type:}] -padx 5
