@@ -225,11 +225,15 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
-    argc: cint;argv: cstringArray): TclResults {.exportc.} =
+    argc: cint; argv: cstringArray): TclResults {.sideEffect, raises: [],
+    tags: [], exportc.} =
   let
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-    cost = trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex())
+    cost = try:
+        trainCost(memberIndex = getMemberIndex(), skillIndex = getSkillIndex())
+      except:
+        return showError(message = "Can't get the training cost.")
     amountBox = mainPaned & ".schoolframe.canvas.school.costbox.amount"
   if moneyIndex > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
     tclEval(script = amountBox & " configure -from " & $cost & " -to " &
