@@ -227,6 +227,17 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
 proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
     argc: cint; argv: cstringArray): TclResults {.sideEffect, raises: [],
     tags: [], exportc.} =
+  ## Update the minimal and maximum values of spinbox with training cost
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## UpdateSchoolSelectedCost
   let
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
