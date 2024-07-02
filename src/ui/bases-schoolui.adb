@@ -16,11 +16,11 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Bases.Trade; use Bases.Trade;
-with CoreUI;
+-- with Tcl.Tk.Ada;
+-- with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+-- with Bases.Trade; use Bases.Trade;
+-- with CoreUI;
 with Utils.UI;
 
 package body Bases.SchoolUI is
@@ -73,10 +73,10 @@ package body Bases.SchoolUI is
    -- RESULT
    -- The index of the currently selected crew member
    -- SOURCE
-   function Get_Member_Index return Positive with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaMemberIndex";
+--   function Get_Member_Index return Positive with
+--      Import => True,
+--      Convention => C,
+--      External_Name => "getAdaMemberIndex";
       -- ****
 
    -- ****if* SchoolUI/SchoolUI.Get_Skill_Index
@@ -85,10 +85,10 @@ package body Bases.SchoolUI is
    -- RESULT
    -- The index of the currently selected skill
    -- SOURCE
-   function Get_Skill_Index return Positive with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaSkillIndex";
+--   function Get_Skill_Index return Positive with
+--      Import => True,
+--      Convention => C,
+--      External_Name => "getAdaSkillIndex";
       -- ****
 
    -- ****o* SchoolUI/SchoolUI.Train_Skill_Command
@@ -152,60 +152,62 @@ package body Bases.SchoolUI is
    function Update_School_Selected_Cost_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "updateSchoolSelectedCostCommand";
       -- ****
 
-   function Update_School_Selected_Cost_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-      use CoreUI;
-
-      Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget
-          (pathName =>
-             Main_Paned & ".schoolframe.canvas.school.costbox.amount",
-           Interp => Interp);
-      Money_Index_2: constant Natural :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Cost: constant Natural :=
-        Train_Cost
-          (Member_Index => Get_Member_Index,
-           Skill_Index => Skills_Amount_Range(Get_Skill_Index));
-   begin
-      if Money_Index_2 > 0
-        and then Cost <=
-          Inventory_Container.Element
-            (Container => Player_Ship.Cargo, Index => Money_Index_2)
-            .Amount then
-         configure
-           (Widgt => Amount_Box,
-            options =>
-              "-from" & Positive'Image(Cost) & " -to" &
-              Positive'Image
-                (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                   .Amount));
-         Bind
-           (Widgt => Amount_Box, Sequence => "<<Increment>>",
-            Script =>
-              "{" & Amount_Box & " set [expr [" & Amount_Box & " get] +" &
-              Positive'Image(Cost) & " - 1]}");
-         Bind
-           (Widgt => Amount_Box, Sequence => "<<Decrement>>",
-            Script =>
-              "{" & Amount_Box & " set [expr [" & Amount_Box & " get] -" &
-              Positive'Image(Cost) & " + 1]}");
-      else
-         configure(Widgt => Amount_Box, options => "-from 0 -to 0");
-         Set(SpinBox => Amount_Box, Value => "0");
-         Unbind(Widgt => Amount_Box, Sequence => "<<Increment>>");
-         Unbind(Widgt => Amount_Box, Sequence => "<<Decrement>>");
-      end if;
-      Set(SpinBox => Amount_Box, Value => Natural'Image(Cost));
-      return TCL_OK;
-   end Update_School_Selected_Cost_Command;
+--   function Update_School_Selected_Cost_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+--      use CoreUI;
+--
+--      Amount_Box: constant Ttk_SpinBox :=
+--        Get_Widget
+--          (pathName =>
+--             Main_Paned & ".schoolframe.canvas.school.costbox.amount",
+--           Interp => Interp);
+--      Money_Index_2: constant Natural :=
+--        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+--      Cost: constant Natural :=
+--        Train_Cost
+--          (Member_Index => Get_Member_Index,
+--           Skill_Index => Skills_Amount_Range(Get_Skill_Index));
+--   begin
+--      if Money_Index_2 > 0
+--        and then Cost <=
+--          Inventory_Container.Element
+--            (Container => Player_Ship.Cargo, Index => Money_Index_2)
+--            .Amount then
+--         configure
+--           (Widgt => Amount_Box,
+--            options =>
+--              "-from" & Positive'Image(Cost) & " -to" &
+--              Positive'Image
+--                (Inventory_Container.Element
+--                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
+--                   .Amount));
+--         Bind
+--           (Widgt => Amount_Box, Sequence => "<<Increment>>",
+--            Script =>
+--              "{" & Amount_Box & " set [expr [" & Amount_Box & " get] +" &
+--              Positive'Image(Cost) & " - 1]}");
+--         Bind
+--           (Widgt => Amount_Box, Sequence => "<<Decrement>>",
+--            Script =>
+--              "{" & Amount_Box & " set [expr [" & Amount_Box & " get] -" &
+--              Positive'Image(Cost) & " + 1]}");
+--      else
+--         configure(Widgt => Amount_Box, options => "-from 0 -to 0");
+--         Set(SpinBox => Amount_Box, Value => "0");
+--         Unbind(Widgt => Amount_Box, Sequence => "<<Increment>>");
+--         Unbind(Widgt => Amount_Box, Sequence => "<<Decrement>>");
+--      end if;
+--      Set(SpinBox => Amount_Box, Value => Natural'Image(Cost));
+--      return TCL_OK;
+--   end Update_School_Selected_Cost_Command;
 
    procedure Add_Commands is
       use Utils.UI;
