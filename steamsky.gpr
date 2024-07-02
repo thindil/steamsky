@@ -58,7 +58,7 @@ project steamsky is
                "-ftest-coverage");
       end case;
       for Default_Switches("c") use ("-Inim/obj/",
-         "-I/nim-2.0.2/lib/");
+         "-I/nim-2.0.6/lib/");
    end Compiler;
 
    package Linker is
