@@ -82,26 +82,4 @@ package Bases.Trade is
       Post => Cost > 0 and Time > 0;
       -- ****
 
-      -- ****f* BTrade/BTrade.Train_Cost
-      -- FUNCTION
-      -- Count cost of training action
-      -- PARAMETERS
-      -- Member_Index - Index of player ship crew member which will be training
-      -- Skill_Index  - Index of skill of selected crew member which will be
-      --                training
-      -- RESULT
-      -- Overall cost of training selected skill by selected crew member.
-      -- Return 0 if the skill can't be trained because is maxed.
-      -- SOURCE
-   function Train_Cost
-     (Member_Index: Crew_Container.Extended_Index;
-      Skill_Index: Skills_Container.Extended_Index) return Natural with
-      Pre => Member_Index in
-        Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
-      Skill_Index in 1 .. Skills_Amount,
-      Import => True,
-      Convention => C,
-      External_Name => "trainAdaCost";
-      -- ****
-
 end Bases.Trade;
