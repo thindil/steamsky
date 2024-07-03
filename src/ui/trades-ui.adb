@@ -16,6 +16,7 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
+with Ships;
 with Utils.UI;
 
 package body Trades.UI is
@@ -151,10 +152,29 @@ package body Trades.UI is
    function Trade_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Import => True,
-      Convention => C,
-      External_Name => "tradeItemCommand";
+      Convention => C;
       -- ****
+
+   function Trade_Item_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Ships;
+
+      function Trade_Ada_Item_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "tradeItemCommand";
+   begin
+      if Trade_Ada_Item_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
+      Get_Ship_From_Nim(Ship => Player_Ship);
+      return TCL_OK;
+   end Trade_Item_Command;
 
    procedure Add_Commands is
       use Utils.UI;
