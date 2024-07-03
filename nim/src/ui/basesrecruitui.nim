@@ -15,7 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../tk
+import ../[game, tk, types]
+
+proc getHighestAttribute(baseIndex: BasesRange; memberIndex: Natural): string =
+  var
+    highestLevel = 1
+    highestIndex = 0
+  for index, attrib in skyBases[baseIndex].recruits[memberIndex].attributes:
+    if attrib.level > highestLevel:
+      highestLevel = attrib.level
+      highestIndex = index
+  return attributesList[highestIndex].name
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
@@ -23,3 +33,8 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     discard
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc getAdaHighestAttribute(baseIndex, memberIndex: cint): cstring {.exportc.} =
+  return getHighestAttribute(baseIndex = baseIndex, memberIndex = memberIndex - 1).cstring
