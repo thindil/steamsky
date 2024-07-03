@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- No refreshing information about the player's ship after trading
+
 ## [10.0] - 2026-06-30
 
 ### Added
