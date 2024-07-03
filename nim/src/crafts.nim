@@ -694,9 +694,8 @@ proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
       elif module.craftingIndex.len > 12 and module.craftingIndex[0..10] == "Deconstruct":
         return "Deconstructing " & itemsList[module.craftingIndex[
             12..^1].strip.parseInt].name
-      else:
-        return "Manufacturing " & $module.craftingAmount & "x " & itemsList[
-            recipesList[module.craftingIndex].resultIndex].name
+      return "Manufacturing " & $module.craftingAmount & "x " & itemsList[
+          recipesList[module.craftingIndex].resultIndex].name
     return ""
 
 # Temporary code for interfacing with Ada
