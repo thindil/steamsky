@@ -880,8 +880,7 @@ proc findAdaMember(order, inPlayerShip: cint): cint {.raises: [], tags: [],
   ## Temporary C binding
   if inPlayerShip == 1:
     return findMember(order = order.CrewOrders).cint + 1
-  else:
-    return findMember(order = order.CrewOrders, shipCrew = npcShip.crew).cint + 1
+  return findMember(order = order.CrewOrders, shipCrew = npcShip.crew).cint + 1
 
 proc updateAdaMorale(isPlayerShip, memberIndex, value: cint) {.raises: [],
     tags: [], exportc, contractual.} =
