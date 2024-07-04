@@ -85,10 +85,6 @@ package body Bases.RecruitUI is
    function Get_Highest_Attribute
      (Base_Index, Member_Index: Positive) return Unbounded_String is
      -- ****
---      use Tiny_String;
-
---      Highest_Level, Highest_Index: Positive := 1;
-
       function Get_Ada_Highest_Attribute
         (B_Index, M_Index: Positive) return chars_ptr with
          Import => True,
@@ -102,36 +98,6 @@ package body Bases.RecruitUI is
                (Item =>
                   Get_Ada_Highest_Attribute
                     (B_Index => Base_Index, M_Index => Member_Index)));
---      Get_Highest_Attribute_Level_Loop :
---      for I in Recruit_Container.Element
---        (Container => Sky_Bases(Base_Index).Recruits, Index => Member_Index)
---        .Attributes'
---        Range loop
---         if Recruit_Container.Element
---             (Container => Sky_Bases(Base_Index).Recruits,
---              Index => Member_Index)
---             .Attributes
---             (I)
---             .Level >
---           Highest_Level then
---            Highest_Level :=
---              Recruit_Container.Element
---                (Container => Sky_Bases(Base_Index).Recruits,
---                 Index => Member_Index)
---                .Attributes
---                (I)
---                .Level;
---            Highest_Index := I;
---         end if;
---      end loop Get_Highest_Attribute_Level_Loop;
---      return
---        To_Unbounded_String
---          (Source =>
---             To_String
---               (Source =>
---                  AttributesData_Container.Element
---                    (Container => Attributes_List, Index => Highest_Index)
---                    .Name));
    end Get_Highest_Attribute;
 
    -- ****if* RecruitUI/RecruitUI.Get_Highest_Skill
