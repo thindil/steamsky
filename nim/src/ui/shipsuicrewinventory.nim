@@ -159,7 +159,9 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
   let memberFrame = memberCanvas & ".frame"
   tclEval(script = "ttk::frame " & memberFrame)
-  let freeSpaceLabel = memberFrame & ".freespace"
+  let freeSpaceFrame = memberFrame & ".freeframe"
+  tclEval(script = "ttk::frame " & freeSpaceFrame)
+  let freeSpaceLabel = freeSpaceFrame & ".freespace"
   tclEval(script = "ttk::label " & freeSpaceLabel &
       " -text {Free inventory space: " & $freeInventory(
       memberIndex = memberIndex, amount = 0) & " kg} -wraplength 400")
@@ -169,6 +171,7 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
         freeSpaceLabel).parseInt
     except:
       return showError(message = "Can't count the height of the label.")
+  tclEval(script = "grid " & freeSpaceFrame)
   let buttonsBox = memberFrame & ".selectbox"
   tclEval(script = "ttk::frame " & buttonsBox)
   let selectAllButton = buttonsBox & ".selectallbutton"
