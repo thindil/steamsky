@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/tables
 import ../[game, tk, types]
 
 proc getHighestAttribute(baseIndex: BasesRange;
@@ -36,6 +37,16 @@ proc getHighestAttribute(baseIndex: BasesRange;
       highestIndex = index
   return attributesList[highestIndex].name
 
+proc getHighestSkill(baseIndex: BasesRange; memberIndex: Natural): string =
+  var
+    highestLevel = 1
+    highestIndex = 0
+  for skill in skyBases[baseIndex].recruits[memberIndex].skills:
+    if skill.level > highestLevel:
+      highestLevel = skill.level
+      highestIndex = skill.index
+  return skillsList[highestIndex].name
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -47,3 +58,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 
 proc getAdaHighestAttribute(baseIndex, memberIndex: cint): cstring {.exportc.} =
   return getHighestAttribute(baseIndex = baseIndex, memberIndex = memberIndex - 1).cstring
+
+proc getAdaHighestRecSkill(baseIndex, memberIndex: cint): cstring {.exportc.} =
+  return getHighestSkill(baseIndex = baseIndex, memberIndex = memberIndex - 1).cstring
