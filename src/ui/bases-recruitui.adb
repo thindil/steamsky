@@ -116,28 +116,40 @@ package body Bases.RecruitUI is
    function Get_Highest_Skill
      (Base_Index, Member_Index: Positive) return Unbounded_String is
      -- ****
-      use Tiny_String;
-
-      Highest_Level: Positive := 1;
-      Highest_Index: Skills_Amount_Range := 1;
+--      use Tiny_String;
+--
+--      Highest_Level: Positive := 1;
+--      Highest_Index: Skills_Amount_Range := 1;
+      function Get_Ada_Highest_Skill
+        (B_Index, M_Index: Positive) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaHighestRecSkill";
    begin
-      Get_Highest_Skill_Level_Loop :
-      for Skill of Recruit_Container.Element
-        (Container => Sky_Bases(Base_Index).Recruits, Index => Member_Index)
-        .Skills loop
-         if Skill.Level > Highest_Level then
-            Highest_Level := Skill.Level;
-            Highest_Index := Skill.Index;
-         end if;
-      end loop Get_Highest_Skill_Level_Loop;
       return
         To_Unbounded_String
           (Source =>
-             To_String
-               (Source =>
-                  SkillsData_Container.Element
-                    (Container => Skills_List, Index => Highest_Index)
-                    .Name));
+             Value
+               (Item =>
+                  Get_Ada_Highest_Skill
+                    (B_Index => Base_Index, M_Index => Member_Index)));
+--      Get_Highest_Skill_Level_Loop :
+--      for Skill of Recruit_Container.Element
+--        (Container => Sky_Bases(Base_Index).Recruits, Index => Member_Index)
+--        .Skills loop
+--         if Skill.Level > Highest_Level then
+--            Highest_Level := Skill.Level;
+--            Highest_Index := Skill.Index;
+--         end if;
+--      end loop Get_Highest_Skill_Level_Loop;
+--      return
+--        To_Unbounded_String
+--          (Source =>
+--             To_String
+--               (Source =>
+--                  SkillsData_Container.Element
+--                    (Container => Skills_List, Index => Highest_Index)
+--                    .Name));
    end Get_Highest_Skill;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
