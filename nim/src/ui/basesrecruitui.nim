@@ -37,7 +37,8 @@ proc getHighestAttribute(baseIndex: BasesRange;
       highestIndex = index
   return attributesList[highestIndex].name
 
-proc getHighestSkill(baseIndex: BasesRange; memberIndex: Natural): string =
+proc getHighestSkill(baseIndex: BasesRange;
+    memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
   var
     highestLevel = 1
     highestIndex = 0
@@ -45,7 +46,10 @@ proc getHighestSkill(baseIndex: BasesRange; memberIndex: Natural): string =
     if skill.level > highestLevel:
       highestLevel = skill.level
       highestIndex = skill.index
-  return skillsList[highestIndex].name
+  try:
+    return skillsList[highestIndex].name
+  except:
+    return ""
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
