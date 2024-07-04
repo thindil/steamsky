@@ -19,6 +19,14 @@ import ../[game, tk, types]
 
 proc getHighestAttribute(baseIndex: BasesRange;
     memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
+  ## Get the highest attribute's name of the selected recruit
+  ##
+  ## * baseIndex   - The index of the base in which the recruit's attributes
+  ##                 will be check
+  ## * memberIndex - The index of the recruit which attributes will be check
+  ##
+  ## Returns the name of the attribute with the highest level of the selected
+  ## recruit
   var
     highestLevel = 1
     highestIndex = 0
