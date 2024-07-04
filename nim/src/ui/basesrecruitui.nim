@@ -17,7 +17,8 @@
 
 import ../[game, tk, types]
 
-proc getHighestAttribute(baseIndex: BasesRange; memberIndex: Natural): string =
+proc getHighestAttribute(baseIndex: BasesRange;
+    memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
   var
     highestLevel = 1
     highestIndex = 0
