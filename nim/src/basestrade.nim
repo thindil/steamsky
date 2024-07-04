@@ -266,7 +266,7 @@ proc hireAdaRecruit(recruitIndex, cost, dailyPayment, tradePayment,
     contractLength: cint): cstring {.raises: [], tags: [WriteIOEffect,
     RootEffect], exportc.} =
   try:
-    hireRecruit(recruitIndex = recruitIndex, cost = cost,
+    hireRecruit(recruitIndex = recruitIndex - 1, cost = cost,
         dailyPayment = dailyPayment, tradePayment = tradePayment,
         contractLength = contractLength)
     return "".cstring
