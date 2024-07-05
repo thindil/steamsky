@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[config, game, maps, tk, types]
-import coreui, mapsui, table
+import coreui, mapsui, table, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
     memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
@@ -130,6 +130,10 @@ proc showRecruitCommand(clientData: cint; interp: PInterp;
   elif recruitTable.row == gameSettings.listsLimit + 1:
     addPagination(table = recruitTable, previousCommand = "",
         nextCommand = "ShowRecruit " & $(page + 1))
+  updateTable(table = recruitTable)
+  tclEval(script = recruitTable.canvas & " configure -scrollregion [list " &
+      tclEval2(script = recruitTable.canvas & " bbox all") & "]")
+  showScreen(newScreenName = "recruitframe")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
