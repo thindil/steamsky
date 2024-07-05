@@ -161,17 +161,21 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::frame " & memberFrame)
   let freeSpaceFrame = memberFrame & ".freeframe"
   tclEval(script = "ttk::frame " & freeSpaceFrame)
-  let freeSpaceLabel = freeSpaceFrame & ".freespace"
+  var freeSpaceLabel = freeSpaceFrame & ".freespace"
   tclEval(script = "ttk::label " & freeSpaceLabel &
-      " -text {Free inventory space: " & $freeInventory(
-      memberIndex = memberIndex, amount = 0) & " kg} -wraplength 400")
+      " -text {Free inventory space:}")
   tclEval(script = "grid " & freeSpaceLabel)
+  freeSpaceLabel = freeSpaceFrame & ".freespace2"
+  tclEval(script = "ttk::label " & freeSpaceLabel &
+      " -text {" & $freeInventory(
+      memberIndex = memberIndex, amount = 0) & " kg} -style Golden.TLabel")
+  tclEval(script = "grid " & freeSpaceLabel & " -row 0 -column 1")
   var height = try:
       10 + tclEval2(script = "winfo reqheight " &
         freeSpaceLabel).parseInt
     except:
       return showError(message = "Can't count the height of the label.")
-  tclEval(script = "grid " & freeSpaceFrame)
+  tclEval(script = "grid " & freeSpaceFrame &  " -sticky w -padx 5")
   let buttonsBox = memberFrame & ".selectbox"
   tclEval(script = "ttk::frame " & buttonsBox)
   let selectAllButton = buttonsBox & ".selectallbutton"
@@ -226,7 +230,7 @@ proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "update")
   tclEval(script = memberCanvas & " configure -scrollregion [list " & tclEval2(
       script = memberCanvas & " bbox all") & "]")
-  showDialog(dialog = memberDialog, relativeX = 0.2, relativeY = 0.2)
+  showDialog(dialog = memberDialog, relativeX = 0.1, relativeY = 0.2)
   return tclOk
 
 type InventorySortOrders = enum
