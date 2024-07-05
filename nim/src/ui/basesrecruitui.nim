@@ -39,6 +39,14 @@ proc getHighestAttribute(baseIndex: BasesRange;
 
 proc getHighestSkill(baseIndex: BasesRange;
     memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
+  ## Get the highest skill's name of the selected recruit
+  ##
+  ## * baseIndex   - The index of the base in which the recruit's skill will
+  ##                 be check
+  ## * memberIndex - The index of the recruit which skills will be check
+  ##
+  ## Returns the name of the skill with the highest level of the selected
+  ## recruit
   var
     highestLevel = 1
     highestIndex = 0
