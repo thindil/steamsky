@@ -170,48 +170,48 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Saving finished stories...", debugType = everything)
   for finishedStory in finishedStories.items:
     var
-      storyNode = newXmlTree("finishedstory", [], {
+      storyNode = newXmlTree(tag = "finishedstory", children = [], attributes = {
         "index": finishedStory.index,
         "stepsamount": $finishedStory.stepsAmount}.toXmlAttributes)
     for text in finishedStory.stepsTexts.items:
-      var textElement = newElement("steptext")
-      textElement.add(newText(text))
-      storyNode.add(textElement)
-    saveTree.add(storyNode)
+      var textElement = newElement(tag = "steptext")
+      textElement.add(son = newText(text = text))
+      storyNode.add(son = textElement)
+    saveTree.add(son = storyNode)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving accepted missions...", debugType = everything)
   for mission in acceptedMissions:
     var
-      missionElement = newElement("acceptedmission")
+      missionElement = newElement(tag = "acceptedmission")
       attrs: seq[tuple[key, val: string]] = @[]
-    attrs.add(("type", $mission.mType.ord))
+    attrs.add(y = ("type", $mission.mType.ord))
     case mission.mType
     of deliver:
-      attrs.add(("target", $mission.itemIndex))
+      attrs.add(y = ("target", $mission.itemIndex))
     of passenger:
-      attrs.add(("target", $mission.data))
+      attrs.add(y = ("target", $mission.data))
     of destroy:
-      attrs.add(("target", $mission.shipIndex))
+      attrs.add(y = ("target", $mission.shipIndex))
     else:
-      attrs.add(("target", $mission.target))
-    attrs.add(("time", $mission.time))
-    attrs.add(("targetx", $mission.targetX))
-    attrs.add(("targety", $mission.targetY))
-    attrs.add(("reward", $mission.reward))
-    attrs.add(("startbase", $mission.startBase))
+      attrs.add(y = ("target", $mission.target))
+    attrs.add(y = ("time", $mission.time))
+    attrs.add(y = ("targetx", $mission.targetX))
+    attrs.add(y = ("targety", $mission.targetY))
+    attrs.add(y = ("reward", $mission.reward))
+    attrs.add(y = ("startbase", $mission.startBase))
     if mission.finished:
-      attrs.add(("finished", "Y"))
+      attrs.add(y = ("finished", "Y"))
     else:
-      attrs.add(("finished", "N"))
+      attrs.add(y = ("finished", "N"))
     if mission.multiplier != 1.0:
-      attrs.add(("multiplier", $mission.multiplier))
+      attrs.add(y = ("multiplier", $mission.multiplier))
     missionElement.attrs = attrs.toXmlAttributes()
-    saveTree.add(missionElement)
+    saveTree.add(son = missionElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving player career...", debugType = everything)
-  var careerElement = newElement("playercareer")
+  var careerElement = newElement(tag = "playercareer")
   careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
-  saveTree.add(careerElement)
+  saveTree.add(son = careerElement)
   logMessage(message = "done", debugType = everything)
   var saveText = $saveTree
   if not prettyPrint:
@@ -219,45 +219,45 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     for line in lines.mitems:
       line = line.strip
     saveText = lines.join
-  writeFile(saveName, saveText)
+  writeFile(filename = saveName, content = saveText)
   logMessage(message = "Finished saving game in file " & saveName & ".",
       debugType = everything)
 
 proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
-  let savedGame = loadXml(saveName)
+  let savedGame = loadXml(path = saveName)
   logMessage(message = "Start loading game from file " & saveName & ".",
       debugType = everything)
   # Check the same game compatybility
-  if savedGame.attr("version").parseInt > saveVersion:
+  if savedGame.attr(name = "version").parseInt > saveVersion:
     raise newException(exceptn = DataLoadingError,
         message = "This save is incompatible with this version of the game.")
   # Load the game difficulty settings
   logMessage(message = "Loading the game difficulty settings...",
       debugType = everything)
-  var diffNode = savedGame.child("difficulty")
-  newGameSettings.enemyDamageBonus = diffNode.attr(
+  var diffNode = savedGame.child(name = "difficulty")
+  newGameSettings.enemyDamageBonus = diffNode.attr(name =
       "enemydamagebonus").parseFloat
-  newGameSettings.playerDamageBonus = diffNode.attr(
+  newGameSettings.playerDamageBonus = diffNode.attr(name =
       "playerdamagebonus").parseFloat
-  newGameSettings.enemyMeleeDamageBonus = diffNode.attr(
+  newGameSettings.enemyMeleeDamageBonus = diffNode.attr(name =
       "enemymeleedamagebonus").parseFloat
-  newGameSettings.playerMeleeDamageBonus = diffNode.attr(
+  newGameSettings.playerMeleeDamageBonus = diffNode.attr(name =
       "playermeleedamagebonus").parseFloat
-  newGameSettings.experienceBonus = diffNode.attr("experiencebonus").parseFloat
-  newGameSettings.reputationBonus = diffNode.attr("reputationbonus").parseFloat
-  newGameSettings.upgradeCostBonus = diffNode.attr(
+  newGameSettings.experienceBonus = diffNode.attr(name = "experiencebonus").parseFloat
+  newGameSettings.reputationBonus = diffNode.attr(name = "reputationbonus").parseFloat
+  newGameSettings.upgradeCostBonus = diffNode.attr(name =
       "upgradecostbonus").parseFloat
-  newGameSettings.pricesBonus = diffNode.attr("pricesbonus").parseFloat
+  newGameSettings.pricesBonus = diffNode.attr(name = "pricesbonus").parseFloat
   logMessage(message = "done", debugType = everything)
   # Load the game date
   logMessage(message = "Loading the game time...", debugType = everything)
-  var dateNode = savedGame.child("gamedate")
-  gameDate.year = dateNode.attr("year").parseInt
-  gameDate.month = dateNode.attr("month").parseInt
-  gameDate.day = dateNode.attr("day").parseInt
-  gameDate.hour = dateNode.attr("hour").parseInt
-  gameDate.minutes = dateNode.attr("minutes").parseInt
+  var dateNode = savedGame.child(name = "gamedate")
+  gameDate.year = dateNode.attr(name = "year").parseInt
+  gameDate.month = dateNode.attr(name = "month").parseInt
+  gameDate.day = dateNode.attr(name = "day").parseInt
+  gameDate.hour = dateNode.attr(name = "hour").parseInt
+  gameDate.minutes = dateNode.attr(name = "minutes").parseInt
   logMessage(message = "done", debugType = everything)
   # Load the sky map
   logMessage(message = "Loading the map...", debugType = everything)
