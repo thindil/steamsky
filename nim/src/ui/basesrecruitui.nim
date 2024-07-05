@@ -74,8 +74,10 @@ proc showRecruitCommand(clientData: cint; interp: PInterp;
         "Name", "Gender", "Faction", "Base cost", "Highest stat",
         "Highest skill"], command = "SortRecruits",
         tooltipText = "Press mouse button to sort the recruits.")
-    tclEval(script = "bind " & recruitFrame & " <Configure> {ResizeCanvas " & recruitTable.canvas & " %w %h}")
-  elif tclEval2(script = "winfo ismapped " & recruitFrame) == "1" and (argc == 1 or skyBases[baseIndex].recruits.len == 0):
+    tclEval(script = "bind " & recruitFrame & " <Configure> {ResizeCanvas " &
+        recruitTable.canvas & " %w %h}")
+  elif tclEval2(script = "winfo ismapped " & recruitFrame) == "1" and (argc ==
+      1 or skyBases[baseIndex].recruits.len == 0):
     tclEval(script = "grid remove " & closeButton)
     showSkyMap(clear = true)
     return tclOk
@@ -94,6 +96,40 @@ proc showRecruitCommand(clientData: cint; interp: PInterp;
     if currentRow < startRow:
       currentRow.inc
       continue
+    addButton(table = recruitTable, text = skyBases[baseIndex].recruits[
+        index].name, tooltip = "Show recruit's details",
+        command = "ShowRecruitInfo " & $(index + 1), column = 1)
+    addButton(table = recruitTable, text = (if skyBases[baseIndex].recruits[
+        index].gender == 'F': "Female" else: "Male"),
+        tooltip = "Show recruit's details", command = "ShowRecruitInfo " & $(
+        index + 1), column = 2)
+    addButton(table = recruitTable, text = factionsList[skyBases[
+        baseIndex].recruits[index].faction].name,
+        tooltip = "Show recruit's details", command = "ShowRecruitInfo " & $(
+        index + 1), column = 3)
+    addButton(table = recruitTable, text = $skyBases[baseIndex].recruits[
+        index].price, tooltip = "Show recruit's details",
+        command = "ShowRecruitInfo " & $(index + 1), column = 4)
+    addButton(table = recruitTable, text = getHighestAttribute(
+        baseIndex = baseIndex, memberIndex = index),
+        tooltip = "Show recruit's details", command = "ShowRecruitInfo " & $(
+        index + 1), column = 5)
+    addButton(table = recruitTable, text = getHighestSkill(
+        baseIndex = baseIndex, memberIndex = index),
+        tooltip = "Show recruit's details", command = "ShowRecruitInfo " & $(
+        index + 1), column = 6, newRow = true)
+    if recruitTable.row == gameSettings.listsLimit + 1:
+      break
+  if page > 1:
+    if recruitTable.row < gameSettings.listsLimit + 1:
+      addPagination(table = recruitTable, previousCommand = "ShowRecruit " & $(
+          page - 1), nextCommand = "")
+    else:
+      addPagination(table = recruitTable, previousCommand = "ShowRecruit " & $(
+          page - 1), nextCommand = "ShowRecruit " & $(page + 1))
+  elif recruitTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = recruitTable, previousCommand = "",
+        nextCommand = "ShowRecruit " & $(page + 1))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
