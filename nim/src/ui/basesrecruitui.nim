@@ -17,6 +17,7 @@
 
 import std/tables
 import ../[game, tk, types]
+import coreui, table
 
 proc getHighestAttribute(baseIndex: BasesRange;
     memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
@@ -59,10 +60,24 @@ proc getHighestSkill(baseIndex: BasesRange;
   except:
     return ""
 
+var recruitTable: TableWidget
+
+proc showRecruitCommand(clientData: cint; interp: PInterp;
+    argc: cint; argv: cstringArray): TclResults {.exportc.} =
+  var recruitFrame = mainPaned & ".recruitframe"
+  if tclEval2(script = "winfo exists " & recruitFrame) == "0":
+    tclEval(script = "ttk::frame " & recruitFrame)
+    recruitTable = createTable(parent = recruitFrame, headers = @[
+        "Name", "Gender", "Faction", "Base cost", "Highest stat",
+        "Highest skill"], command = "SortRecruits",
+        tooltipText = "Press mouse button to sort the recruits.")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
+#    addCommand("ShowRecruit", showRecruitCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
