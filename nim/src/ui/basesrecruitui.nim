@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/tables
-import ../[game, tk, types]
-import coreui, table
+import std/[strutils, tables]
+import ../[config, game, maps, tk, types]
+import coreui, mapsui, table
 
 proc getHighestAttribute(baseIndex: BasesRange;
     memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
@@ -60,17 +60,40 @@ proc getHighestSkill(baseIndex: BasesRange;
   except:
     return ""
 
-var recruitTable: TableWidget
+var
+  recruitTable: TableWidget
+  recruitsIndexes: seq[Natural]
 
 proc showRecruitCommand(clientData: cint; interp: PInterp;
     argc: cint; argv: cstringArray): TclResults {.exportc.} =
   var recruitFrame = mainPaned & ".recruitframe"
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyX].baseIndex
   if tclEval2(script = "winfo exists " & recruitFrame) == "0":
     tclEval(script = "ttk::frame " & recruitFrame)
     recruitTable = createTable(parent = recruitFrame, headers = @[
         "Name", "Gender", "Faction", "Base cost", "Highest stat",
         "Highest skill"], command = "SortRecruits",
         tooltipText = "Press mouse button to sort the recruits.")
+    tclEval(script = "bind " & recruitFrame & " <Configure> {ResizeCanvas " & recruitTable.canvas & " %w %h}")
+  elif tclEval2(script = "winfo ismapped " & recruitFrame) == "1" and (argc == 1 or skyBases[baseIndex].recruits.len == 0):
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+    return tclOk
+  tclSetVar(varName = "gamestate", newValue = "recruit")
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  if recruitsIndexes.len != skyBases[baseIndex].recruits.len:
+    recruitsIndexes = @[]
+    for index, _ in skyBases[baseIndex].recruits:
+      recruitsIndexes.add(y = index)
+  clearTable(table = recruitTable)
+  let
+    page = (if argc == 2: ($argv[1]).parseInt else: 1)
+    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow = 1
+  for index in recruitsIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
