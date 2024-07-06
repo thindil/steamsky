@@ -129,7 +129,8 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
 
   saveStatistics(stats = gameStats.destroyedShips, statName = "destroyedships")
   saveStatistics(stats = gameStats.craftingOrders, statName = "finishedcrafts")
-  saveStatistics(stats = gameStats.finishedMissions, statName = "finishedmissions")
+  saveStatistics(stats = gameStats.finishedMissions,
+      statName = "finishedmissions")
   saveStatistics(stats = gameStats.finishedGoals, statName = "finishedgoals")
   saveStatistics(stats = gameStats.killedMobs, statName = "killedmobs")
   saveTree.add(son = statsElement)
@@ -170,7 +171,8 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Saving finished stories...", debugType = everything)
   for finishedStory in finishedStories.items:
     var
-      storyNode = newXmlTree(tag = "finishedstory", children = [], attributes = {
+      storyNode = newXmlTree(tag = "finishedstory", children = [],
+          attributes = {
         "index": finishedStory.index,
         "stepsamount": $finishedStory.stepsAmount}.toXmlAttributes)
     for text in finishedStory.stepsTexts.items:
@@ -237,17 +239,19 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
       debugType = everything)
   var diffNode = savedGame.child(name = "difficulty")
   newGameSettings.enemyDamageBonus = diffNode.attr(name =
-      "enemydamagebonus").parseFloat
+    "enemydamagebonus").parseFloat
   newGameSettings.playerDamageBonus = diffNode.attr(name =
-      "playerdamagebonus").parseFloat
+    "playerdamagebonus").parseFloat
   newGameSettings.enemyMeleeDamageBonus = diffNode.attr(name =
-      "enemymeleedamagebonus").parseFloat
+    "enemymeleedamagebonus").parseFloat
   newGameSettings.playerMeleeDamageBonus = diffNode.attr(name =
-      "playermeleedamagebonus").parseFloat
-  newGameSettings.experienceBonus = diffNode.attr(name = "experiencebonus").parseFloat
-  newGameSettings.reputationBonus = diffNode.attr(name = "reputationbonus").parseFloat
+    "playermeleedamagebonus").parseFloat
+  newGameSettings.experienceBonus = diffNode.attr(
+      name = "experiencebonus").parseFloat
+  newGameSettings.reputationBonus = diffNode.attr(
+      name = "reputationbonus").parseFloat
   newGameSettings.upgradeCostBonus = diffNode.attr(name =
-      "upgradecostbonus").parseFloat
+    "upgradecostbonus").parseFloat
   newGameSettings.pricesBonus = diffNode.attr(name = "pricesbonus").parseFloat
   logMessage(message = "done", debugType = everything)
   # Load the game date
@@ -267,10 +271,10 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
       skyMap[x][y].baseIndex = 0
       skyMap[x][y].eventIndex = -1
       skyMap[x][y].visited = false
-  for field in savedGame.findAll("field"):
+  for field in savedGame.findAll(tag = "field"):
     let
-      x = field.attr("x").parseInt
-      y = field.attr("y").parseInt
+      x = field.attr(name = "x").parseInt
+      y = field.attr(name = "y").parseInt
     skyMap[x][y].visited = true
   logMessage(message = "done", debugType = everything)
   # Load sky bases
@@ -283,110 +287,113 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   logMessage(message = "done", debugType = everything)
   # Load known recipes
   logMessage(message = "Loading known recipes...", debugType = everything)
-  for recipe in savedGame.findAll("recipe"):
-    knownRecipes.add(recipe.attr("index"))
+  for recipe in savedGame.findAll(tag = "recipe"):
+    knownRecipes.add(y = recipe.attr(name = "index"))
   logMessage(message = "done", debugType = everything)
   # Load messages
   logMessage(message = "Loading messages...", debugType = everything)
-  for message in savedGame.findAll("message"):
+  for message in savedGame.findAll(tag = "message"):
     restoreMessage(message = message.innerText, kind = parseEnum[MessageType](
-        s = message.attr("type")), color = parseEnum[MessageColor](
-        s = message.attr("color")))
+        s = message.attr(name = "type")), color = parseEnum[MessageColor](
+        s = message.attr(name = "color")))
   logMessage(message = "done", debugType = everything)
   # Load events
   logMessage(message = "Loading events...", debugType = everything)
-  for index, savedEvent in savedGame.findAll("event"):
-    var event = EventData(skyX: savedEvent.attr("x").parseInt,
-        skyY: savedEvent.attr("y").parseInt, time: savedEvent.attr(
-        "time").parseInt, eType: savedEvent.attr("type").parseInt.EventsTypes)
+  for index, savedEvent in savedGame.findAll(tag = "event"):
+    var event = EventData(skyX: savedEvent.attr(name = "x").parseInt,
+        skyY: savedEvent.attr(name = "y").parseInt, time: savedEvent.attr(
+        name = "time").parseInt, eType: savedEvent.attr(
+            name = "type").parseInt.EventsTypes)
     case event.eType
       of doublePrice:
-        event.itemIndex = savedEvent.attr("data").parseInt
+        event.itemIndex = savedEvent.attr(name = "data").parseInt
       of attackOnBase, enemyShip, enemyPatrol, trader, friendlyShip:
-        event.shipIndex = savedEvent.attr("data").parseInt
+        event.shipIndex = savedEvent.attr(name = "data").parseInt
       else:
-        event.data = savedEvent.attr("data").parseInt
-    eventsList.add(event)
+        event.data = savedEvent.attr(name = "data").parseInt
+    eventsList.add(y = event)
     skyMap[event.skyX][event.skyY].eventIndex = index
   logMessage(message = "done", debugType = everything)
   # Load the current story
-  let storyNode = savedGame.child("currentstory")
+  let storyNode = savedGame.child(name = "currentstory")
   if storyNode != nil:
     logMessage(message = "Loading the current story...", debugType = everything)
-    currentStory.index = storyNode.attr("index")
-    currentStory.step = storyNode.attr("step").parseInt
-    case storyNode.attr("currentstep")
+    currentStory.index = storyNode.attr(name = "index")
+    currentStory.step = storyNode.attr(name = "step").parseInt
+    case storyNode.attr(name = "currentstep")
     of "start":
       currentStory.currentStep = 0
     of "finish":
       currentStory.currentStep = -1
     else:
       for index, step in storiesList[currentStory.index].steps:
-        if step.index == storyNode.attr("currentStep"):
+        if step.index == storyNode.attr(name = "currentStep"):
           currentStory.currentStep = index
           break
-    currentStory.maxSteps = storyNode.attr("maxsteps").parseInt
-    currentStory.showText = storyNode.attr("showtext") == "Y"
-    currentStory.finishedStep = storyNode.attr(
-        "finishedstep").parseInt.StepConditionType
+    currentStory.maxSteps = storyNode.attr(name = "maxsteps").parseInt
+    currentStory.showText = storyNode.attr(name = "showtext") == "Y"
+    currentStory.finishedStep = storyNode.attr(name =
+      "finishedstep").parseInt.StepConditionType
     logMessage(message = "done", debugType = everything)
   # Load finished stories data
   logMessage(message = "Loading finished stories...", debugType = everything)
-  for savedStory in savedGame.findAll("finishedstory"):
+  for savedStory in savedGame.findAll(tag = "finishedstory"):
     var story = FinishedStoryData()
-    story.index = savedStory.attr("index")
-    story.stepsAmount = savedStory.attr("stepsamount").parseInt
+    story.index = savedStory.attr(name = "index")
+    story.stepsAmount = savedStory.attr(name = "stepsamount").parseInt
     for text in savedStory:
-      story.stepsTexts.add(text.innerText)
-    finishedStories.add(story)
+      story.stepsTexts.add(y = text.innerText)
+    finishedStories.add(y = story)
   logMessage(message = "done", debugType = everything)
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
-  for index, mission in savedGame.findAll("acceptedmission"):
-    var tmpMission = MissionData(mtype: mission.attr(
-        "type").parseInt.MissionsTypes, time: mission.attr("time").parseInt,
-        targetX: mission.attr("targetx").parseInt, targetY: mission.attr(
-        "targety").parseInt, reward: mission.attr("reward").parseInt,
-        startBase: mission.attr("startbase").parseInt, finished: mission.attr(
-        "finished") == "Y", multiplier: 1.0)
+  for index, mission in savedGame.findAll(tag = "acceptedmission"):
+    var tmpMission = MissionData(mtype: mission.attr(name =
+      "type").parseInt.MissionsTypes, time: mission.attr(
+          name = "time").parseInt,
+      targetX: mission.attr(name = "targetx").parseInt, targetY: mission.attr(name =
+      "targety").parseInt, reward: mission.attr(name = "reward").parseInt,
+      startBase: mission.attr(name = "startbase").parseInt,
+          finished: mission.attr(name =
+      "finished") == "Y", multiplier: 1.0)
     case tmpMission.mType
     of deliver:
-      tmpMission.itemIndex = mission.attr("target").parseInt
+      tmpMission.itemIndex = mission.attr(name = "target").parseInt
     of passenger:
-      tmpMission.data = mission.attr("target").parseInt
+      tmpMission.data = mission.attr(name = "target").parseInt
     of destroy:
-      tmpMission.shipIndex = mission.attr("target").parseInt
+      tmpMission.shipIndex = mission.attr(name = "target").parseInt
     else:
-      tmpMission.target = mission.attr("target").parseInt
-    let multiplier = mission.attr("multiplier")
+      tmpMission.target = mission.attr(name = "target").parseInt
+    let multiplier = mission.attr(name = "multiplier")
     if multiplier.len > 0:
       tmpMission.multiplier = multiplier.parseFloat
-    acceptedMissions.add(tmpMission)
+    acceptedMissions.add(y = tmpMission)
     skyMap[tmpMission.targetX][tmpMission.targetY].missionIndex = index
   logMessage(message = "done", debugType = everything)
   # Load game statistics
   logMessage(message = "Loading game statistics...", debugType = everything)
-  for stat in savedGame.findAll("statistics"):
-    gameStats.basesVisited = stat.attr("visitedbases").parseInt
-    gameStats.mapVisited = stat.attr("mapdiscovered").parseInt
-    gameStats.distanceTraveled = stat.attr("distancetraveled").parseInt
-    gameStats.acceptedMissions = stat.attr("acceptedmissions").parseInt
-    gameStats.points = stat.attr("points").parseInt
-  for item in savedGame.findAll("destroyedships"):
-    gameStats.destroyedShips.add(StatisticsData(index: item.attr("index"),
-        amount: item.attr("amount").parseInt))
-  for item in savedGame.findAll("finishedcrafts"):
-    gameStats.craftingOrders.add(StatisticsData(index: item.attr("index"),
-        amount: item.attr("amount").parseInt))
-  for item in savedGame.findAll("finishedmissions"):
-    gameStats.finishedMissions.add(StatisticsData(index: item.attr("index"),
-        amount: item.attr("amount").parseInt))
-  for item in savedGame.findAll("finishedgoals"):
-    gameStats.finishedGoals.add(StatisticsData(index: item.attr("index"),
-        amount: item.attr("amount").parseInt))
-  for item in savedGame.findAll("killedmobs"):
-    gameStats.killedMobs.add(StatisticsData(index: item.attr("index"),
-        amount: item.attr("amount").parseInt))
+  for stat in savedGame.findAll(tag = "statistics"):
+    gameStats.basesVisited = stat.attr(name = "visitedbases").parseInt
+    gameStats.mapVisited = stat.attr(name = "mapdiscovered").parseInt
+    gameStats.distanceTraveled = stat.attr(name = "distancetraveled").parseInt
+    gameStats.acceptedMissions = stat.attr(name = "acceptedmissions").parseInt
+    gameStats.points = stat.attr(name = "points").parseInt
+  for item in savedGame.findAll(tag = "destroyedships"):
+    gameStats.destroyedShips.add(y = StatisticsData(index: item.attr(
+        name = "index"), amount: item.attr(name = "amount").parseInt))
+  for item in savedGame.findAll(tag = "finishedcrafts"):
+    gameStats.craftingOrders.add(y = StatisticsData(index: item.attr(
+        name = "index"), amount: item.attr(name = "amount").parseInt))
+  for item in savedGame.findAll(tag = "finishedmissions"):
+    gameStats.finishedMissions.add(y = StatisticsData(index: item.attr(
+        name = "index"), amount: item.attr(name = "amount").parseInt))
+  for item in savedGame.findAll(tag = "finishedgoals"):
+    gameStats.finishedGoals.add(y = StatisticsData(index: item.attr(
+        name = "index"), amount: item.attr(name = "amount").parseInt))
+  for item in savedGame.findAll(tag = "killedmobs"):
+    gameStats.killedMobs.add(y = StatisticsData(index: item.attr(
+        name = "index"), amount: item.attr(name = "amount").parseInt))
   logMessage(message = "done", debugType = everything)
   # Load the player's current goal
   logMessage(message = "Loading game current goal...", debugType = everything)
