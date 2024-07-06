@@ -878,57 +878,62 @@ package body Bases.ShipyardUI is
                     "} -style Golden.TLabel");
             end if;
          when ShipModules.CARGO =>
-            Module_Label :=
-              Create
-                (pathName => ".moduledialog.cargolbl",
-                 options => "-text {Max cargo:}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+            if New_Info then
+               Module_Label :=
+                 Create
+                   (pathName => ".moduledialog.cargolbl",
+                    options => "-text {Max cargo:}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+               Module_Label := Create(pathName => ".moduledialog.cargo");
+            else
+               Module_Label := Get_Widget(pathName => ".moduledialog.cargo");
+            end if;
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value >
                  Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
-                  Module_Label :=
-                    Create
-                      (pathName => ".moduledialog.cargo",
-                       options =>
-                         "-text {" & Positive'Image(Max_Value) &
-                         " kg (bigger)} -style Headergreen.TLabel");
+                  configure
+                    (Widgt => Module_Label,
+                     options =>
+                       "-text {" & Positive'Image(Max_Value) &
+                       " kg (bigger)} -style Headergreen.TLabel");
                elsif Max_Value <
                  Get_Module
                    (Index =>
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
-                  Module_Label :=
-                    Create
-                      (pathName => ".moduledialog.cargo",
-                       options =>
-                         "-text {" & Positive'Image(Max_Value) &
-                         " kg (smaller)} -style Headerred.TLabel");
+                  configure
+                    (Widgt => Module_Label,
+                     options =>
+                       "-text {" & Positive'Image(Max_Value) &
+                       " kg (smaller)} -style Headerred.TLabel");
                else
-                  Module_Label :=
-                    Create
-                      (pathName => ".moduledialog.cargo",
-                       options =>
-                         "-text {" & Positive'Image(Max_Value) &
-                         " kg} -style Golden.TLabel");
+                  configure
+                    (Widgt => Module_Label,
+                     options =>
+                       "-text {" & Positive'Image(Max_Value) &
+                       " kg} -style Golden.TLabel");
                end if;
             else
-               New_Row := New_Row - 1;
-               Module_Label :=
-                 Create
-                   (pathName => ".moduledialog.cargo",
-                    options =>
-                      "-text {" & Positive'Image(Max_Value) &
-                      " kg} -style Golden.TLabel");
+               if New_Info then
+                  New_Row := New_Row - 1;
+               end if;
+               configure
+                 (Widgt => Module_Label,
+                  options =>
+                    "-text {" & Positive'Image(Max_Value) &
+                    " kg} -style Golden.TLabel");
             end if;
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Module_Label,
-               Options =>
-                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
-            New_Row := New_Row + 1;
+            if New_Info then
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Module_Label,
+                  Options =>
+                    "-sticky w -column 1 -row" & Positive'Image(New_Row));
+               New_Row := New_Row + 1;
+            end if;
          when CABIN =>
             if New_Info then
                Module_Label :=
