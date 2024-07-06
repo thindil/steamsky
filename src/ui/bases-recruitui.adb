@@ -48,7 +48,6 @@ with CoreUI;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Maps; use Maps;
--- with Maps.UI;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
@@ -155,8 +154,6 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tcl.Tk.Ada.Winfo;
       use CoreUI;
---      use Maps.UI;
---      use Tiny_String;
 
       Recruit_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".recruitframe", Interp => Interp);
@@ -166,16 +163,6 @@ package body Bases.RecruitUI is
          Convention => C,
          Import => True,
          External_Name => "showRecruitCommand";
---      Base_Index: constant Positive :=
---        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
---      Page: constant Positive :=
---        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
---         else 1);
---      --## rule off SIMPLIFIABLE_EXPRESSIONS
---      Start_Row: constant Positive :=
---        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
---      --## rule on SIMPLIFIABLE_EXPRESSIONS
---      Current_Row: Positive := 1;
    begin
       if Show_Ada_Recruit_Command
           (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) /=
@@ -197,152 +184,6 @@ package body Bases.RecruitUI is
               Tooltip_Text => "Press mouse button to sort the recruits.");
       end if;
       return TCL_OK;
---      if Winfo_Get(Widgt => Recruit_Frame, Info => "exists") = "0" then
---         Recruit_Frame :=
---           Create(pathName => Widget_Image(Win => Recruit_Frame));
---         Recruit_Table :=
---           Create_Table
---             (Parent => Widget_Image(Win => Recruit_Frame),
---              Headers =>
---                (1 => To_Unbounded_String(Source => "Name"),
---                 2 => To_Unbounded_String(Source => "Gender"),
---                 3 => To_Unbounded_String(Source => "Faction"),
---                 4 => To_Unbounded_String(Source => "Base cost"),
---                 5 => To_Unbounded_String(Source => "Highest stat"),
---                 6 => To_Unbounded_String(Source => "Highest skill")),
---              Command => "SortRecruits",
---              Tooltip_Text => "Press mouse button to sort the recruits.");
---         Bind
---           (Widgt => Recruit_Frame, Sequence => "<Configure>",
---            Script => "{ResizeCanvas " & Recruit_Table.Canvas & " %w %h}");
---      elsif Winfo_Get(Widgt => Recruit_Frame, Info => "ismapped") = "1" and
---        (Argc = 1 or
---         Recruit_Container.Length
---             (Container => Sky_Bases(Base_Index).Recruits) =
---           0) then
---         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---         Show_Sky_Map(Clear => True);
---         return TCL_OK;
---      end if;
---      Tcl_SetVar
---        (interp => Interp, varName => "gamestate", newValue => "recruit");
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Close_Button, Options => "-row 0 -column 1");
---      if Recruits_Indexes.Length /=
---        Recruit_Container.Length
---          (Container => Sky_Bases(Base_Index).Recruits) then
---         Recruits_Indexes.Clear;
---         Fill_Recruit_Indexes_Loop :
---         for I in
---           Recruit_Container.First_Index
---             (Container => Sky_Bases(Base_Index).Recruits) ..
---             Recruit_Container.Last_Index
---               (Container => Sky_Bases(Base_Index).Recruits) loop
---            Recruits_Indexes.Append(New_Item => I);
---         end loop Fill_Recruit_Indexes_Loop;
---      end if;
---      Clear_Table(Table => Recruit_Table);
---      Load_Recruits_Loop :
---      for I of Recruits_Indexes loop
---         if Current_Row < Start_Row then
---            Current_Row := Current_Row + 1;
---            goto End_Of_Loop;
---         end if;
---         Add_Button
---           (Table => Recruit_Table,
---            Text =>
---              Tiny_String.To_String
---                (Source =>
---                   Recruit_Container.Element
---                     (Container => Sky_Bases(Base_Index).Recruits, Index => I)
---                     .Name),
---            Tooltip => "Show recruit's details",
---            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 1);
---         Add_Button
---           (Table => Recruit_Table,
---            Text =>
---              (if
---                 Recruit_Container.Element
---                   (Container => Sky_Bases(Base_Index).Recruits, Index => I)
---                   .Gender =
---                 'F'
---               then "Female"
---               else "Male"),
---            Tooltip => "Show recruit's details",
---            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 2);
---         Add_Button
---           (Table => Recruit_Table,
---            Text =>
---              To_String
---                (Source =>
---                   Get_Faction
---                     (Index =>
---                        Recruit_Container.Element
---                          (Container => Sky_Bases(Base_Index).Recruits,
---                           Index => I)
---                          .Faction)
---                     .Name),
---            Tooltip => "Show recruit's details",
---            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 3);
---         Add_Button
---           (Table => Recruit_Table,
---            Text =>
---              Positive'Image
---                (Recruit_Container.Element
---                   (Container => Sky_Bases(Base_Index).Recruits, Index => I)
---                   .Price),
---            Tooltip => "Show recruit's details",
---            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 4);
---         Add_Button
---           (Table => Recruit_Table,
---            Text =>
---              To_String
---                (Source =>
---                   Get_Highest_Attribute
---                     (Base_Index => Base_Index, Member_Index => I)),
---            Tooltip => "Show recruit's details",
---            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 5);
---         Add_Button
---           (Table => Recruit_Table,
---            Text =>
---              To_String
---                (Source =>
---                   Get_Highest_Skill
---                     (Base_Index => Base_Index, Member_Index => I)),
---            Tooltip => "Show recruit's details",
---            Command => "ShowRecruitInfo" & Positive'Image(I), Column => 6,
---            New_Row => True);
---         exit Load_Recruits_Loop when Recruit_Table.Row =
---           Get_Integer_Setting(Name => "listsLimit") + 1;
---         <<End_Of_Loop>>
---      end loop Load_Recruits_Loop;
---      if Page > 1 then
---         if Recruit_Table.Row <
---           Get_Integer_Setting(Name => "listsLimit") + 1 then
---            Add_Pagination
---              (Table => Recruit_Table,
---               Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
---               Next_Command => "");
---         else
---            Add_Pagination
---              (Table => Recruit_Table,
---               Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
---               Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
---         end if;
---      elsif Recruit_Table.Row =
---        Get_Integer_Setting(Name => "listsLimit") + 1 then
---         Add_Pagination
---           (Table => Recruit_Table, Previous_Command => "",
---            Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
---      end if;
---      Update_Table(Table => Recruit_Table);
---      configure
---        (Widgt => Recruit_Table.Canvas,
---         options =>
---           "-scrollregion [list " &
---           BBox(CanvasWidget => Recruit_Table.Canvas, TagOrId => "all") & "]");
---      Show_Screen(New_Screen_Name => "recruitframe");
---      return TCL_OK;
    end Show_Recruit_Command;
 
    -- ****iv* RecruitUI/RecruitUI.Recruit_Index
