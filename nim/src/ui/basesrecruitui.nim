@@ -67,6 +67,17 @@ var
 proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Show the selected base available recruits
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowRecruit
   var recruitFrame = mainPaned & ".recruitframe"
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if tclEval2(script = "winfo exists " & recruitFrame) == "0":
