@@ -68,7 +68,7 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
   var recruitFrame = mainPaned & ".recruitframe"
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyX].baseIndex
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if tclEval2(script = "winfo exists " & recruitFrame) == "0":
     tclEval(script = "ttk::frame " & recruitFrame)
     recruitTable = createTable(parent = recruitFrame, headers = @[
