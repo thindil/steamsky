@@ -64,8 +64,9 @@ var
   recruitTable: TableWidget
   recruitsIndexes: seq[Natural]
 
-proc showRecruitCommand(clientData: cint; interp: PInterp;
-    argc: cint; argv: cstringArray): TclResults {.exportc.} =
+proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   var recruitFrame = mainPaned & ".recruitframe"
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyX].baseIndex
   if tclEval2(script = "winfo exists " & recruitFrame) == "0":
@@ -89,7 +90,10 @@ proc showRecruitCommand(clientData: cint; interp: PInterp;
       recruitsIndexes.add(y = index)
   clearTable(table = recruitTable)
   let
-    page = (if argc == 2: ($argv[1]).parseInt else: 1)
+    page = try:
+        (if argc == 2: ($argv[1]).parseInt else: 1)
+      except:
+        return showError(message = "Can't get the page.")
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
   var currentRow = 1
   for index in recruitsIndexes:
@@ -103,10 +107,13 @@ proc showRecruitCommand(clientData: cint; interp: PInterp;
         index].gender == 'F': "Female" else: "Male"),
         tooltip = "Show recruit's details", command = "ShowRecruitInfo " & $(
         index + 1), column = 2)
-    addButton(table = recruitTable, text = factionsList[skyBases[
-        baseIndex].recruits[index].faction].name,
-        tooltip = "Show recruit's details", command = "ShowRecruitInfo " & $(
-        index + 1), column = 3)
+    try:
+      addButton(table = recruitTable, text = factionsList[skyBases[
+          baseIndex].recruits[index].faction].name,
+          tooltip = "Show recruit's details", command = "ShowRecruitInfo " & $(
+          index + 1), column = 3)
+    except:
+      return showError(message = "Can't get the recruit name.")
     addButton(table = recruitTable, text = $skyBases[baseIndex].recruits[
         index].price, tooltip = "Show recruit's details",
         command = "ShowRecruitInfo " & $(index + 1), column = 4)
