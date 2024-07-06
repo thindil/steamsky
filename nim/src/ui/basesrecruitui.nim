@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[config, game, maps, tk, types]
-import coreui, mapsui, table, utilsui2
+import coreui, dialogs, mapsui, table, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
     memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
@@ -154,11 +154,31 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
   showScreen(newScreenName = "recruitframe")
   return tclOk
 
+var recruitIndex: Natural
+
+proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  recruitIndex = ($argv[1]).parseInt - 1
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    recruit = skyBases[baseIndex].recruits[recruitIndex]
+    recruitDialog = createDialog(name = ".recruitdialog", title = recruit.name)
+  const tabNames: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
+  tclSetVar(varName = "newtab", newValue = tabNames[0])
+  var frame = recruitDialog & " .buttonbox"
+  tclEval(script = "ttk::frame " & frame)
+  for index, tab in tabNames:
+    let tabButton = frame & "." & tab.toLowerAscii
+    tclEval(script = "ttk::radiobutton " & tabButton & " -text " & tab &
+        " -style Radio.Toolbutton -value " & tab.toLowerAscii & " -variable newtab -command ShowRecruitTab")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowRecruit", showRecruitCommand)
+#    addCommand("ShowRecruitInfo", showRecruitInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
