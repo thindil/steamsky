@@ -46,7 +46,7 @@ with Bases.Trade;
 with Config; use Config;
 with CoreUI;
 with Dialogs; use Dialogs;
-with Factions; use Factions;
+with Factions;
 with Maps; use Maps;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
@@ -61,6 +61,7 @@ package body Bases.RecruitUI is
    Recruit_Table: Table_Widget (Amount => 6);
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* RecruitUI/RecruitUI.Modules_Indexes
    -- FUNCTION
    -- Indexes of the available recruits in base
@@ -129,6 +130,7 @@ package body Bases.RecruitUI is
                   Get_Ada_Highest_Skill
                     (B_Index => Base_Index, M_Index => Member_Index)));
    end Get_Highest_Skill;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
    -- FUNCTION
@@ -234,6 +236,7 @@ package body Bases.RecruitUI is
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
       use Tcl.Tklib.Ada.Autoscroll;
+      use Factions;
       use Tiny_String;
 
       Base_Index: constant Positive :=
