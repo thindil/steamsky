@@ -12,3 +12,4 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - No refreshing information about the player's ship after trading
 - Can't hire the last recruit from a base
+- Crash when comparing modules in a shipyard
