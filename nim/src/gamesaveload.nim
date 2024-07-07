@@ -397,16 +397,16 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   logMessage(message = "done", debugType = everything)
   # Load the player's current goal
   logMessage(message = "Loading game current goal...", debugType = everything)
-  var goalNode = savedGame.child("currentgoal")
-  currentGoal = GoalData(index: goalNode.attr("index"), goalType: goalNode.attr(
-      "type").parseInt.GoalTypes, amount: goalNode.attr("amount").parseInt,
-      targetIndex: goalNode.attr("target"), multiplier: goalNode.attr(
+  var goalNode = savedGame.child(name = "currentgoal")
+  currentGoal = GoalData(index: goalNode.attr(name = "index"), goalType: goalNode.attr(name =
+      "type").parseInt.GoalTypes, amount: goalNode.attr(name = "amount").parseInt,
+      targetIndex: goalNode.attr(name = "target"), multiplier: goalNode.attr(name =
       "multiplier").parseInt)
   logMessage(message = "done", debugType = everything)
   # Load the player's career
   logMessage(message = "Loading the player's career...", debugType = everything)
-  let careerNode = savedGame.child("playercareer")
-  playerCareer = careerNode.attr("index")
+  let careerNode = savedGame.child(name = "playercareer")
+  playerCareer = careerNode.attr(name = "index")
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Finished loading the game.", debugType = everything)
 
@@ -420,11 +420,11 @@ proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
   while true:
     saveName = saveDirectory & playerShip.crew[0].name & "_" & playerShip.name &
         "_" & $getRandom(min = 100, max = 999) & ".sav"
-    if not fileExists(saveName):
+    if not fileExists(filename = saveName):
       break
   if renameSave:
-    if fileExists(oldSaveName):
-      moveFile(oldSaveName, saveName)
+    if fileExists(filename = oldSaveName):
+      moveFile(source = oldSaveName, dest = saveName)
 
 # Temporary code for interfacing with Ada
 
