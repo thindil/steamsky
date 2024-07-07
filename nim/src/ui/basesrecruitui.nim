@@ -167,10 +167,24 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = "newtab", newValue = tabNames[0])
   var frame = recruitDialog & " .buttonbox"
   tclEval(script = "ttk::frame " & frame)
+  var tabButton = ""
   for index, tab in tabNames:
-    let tabButton = frame & "." & tab.toLowerAscii
+    tabButton = frame & "." & tab.toLowerAscii
     tclEval(script = "ttk::radiobutton " & tabButton & " -text " & tab &
         " -style Radio.Toolbutton -value " & tab.toLowerAscii & " -variable newtab -command ShowRecruitTab")
+    tclEval(script = "grid " & tabButton & " -column " & $index & " -row 0")
+    tclEval(script = "bind " & tabButton & " <Escape> {" & recruitDialog & ".buttonbox2.button invoke;break}")
+  tclEval(script = "bind " & tabButton & " <Tab> {focus " & recruitDialog & ".buttonbox2.hirebutton;break}")
+  tclEval(script = "grid " & frame & " -pady {5 0} -columnspan 2")
+  let
+    recruitCanvas = recruitDialog & ".canvas"
+    yScroll = recruitDialog & ".yscroll"
+  tclEval(script = "ttk::scrollbar " & yScroll &
+      " -orient vertical -command [" & recruitCanvas & " yview]")
+  tclEval(script = "canvas " & recruitCanvas & " -yscrollcommand [list " &
+      yScroll & " set]")
+  tclEval(script = "grid " & recruitCanvas & " -sticky nwes -pady 5 -padx 5")
+  tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
