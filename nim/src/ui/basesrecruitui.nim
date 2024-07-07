@@ -188,14 +188,34 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   frame = recruitDialog & ".buttonbox2"
   tclEval(script = "ttk::frame " & frame)
   let button = recruitDialog & ".buttonbox2.hirebutton"
-  tclEval(script = "ttk::button " & button & " -text Negotiate -command {CloseDialog " & recruitDialog & ";Negotiate} -image negotiateicon -style Dialog.TButton")
+  tclEval(script = "ttk::button " & button &
+      " -text Negotiate -command {CloseDialog " & recruitDialog & ";Negotiate} -image negotiateicon -style Dialog.TButton")
   tclEval(script = "grid " & button)
   tclEval(script = "tooltip::tooltip " & button & " \"Start hiring negotiating.\"")
-  let dialogCloseButton = recruitDialog &  ".buttonbox2.button"
-  tclEval(script = "ttk::button " & dialogCloseButton & " -text Close -command {CloseDialog " & recruitDialog & "} -image exiticon -style Dialog.TButton")
+  let dialogCloseButton = recruitDialog & ".buttonbox2.button"
+  tclEval(script = "ttk::button " & dialogCloseButton &
+      " -text Close -command {CloseDialog " & recruitDialog & "} -image exiticon -style Dialog.TButton")
   tclEval(script = "grid " & dialogCloseButton & " -row 0 -column 1")
   tclEval(script = "tooltip::tooltip " & button & " \"Close dialog \\[Escape key\\]\"")
   tclEval(script = "grid " & frame & "  -pady {0 5}")
+  tclEval(script = "focus " & dialogCloseButton)
+  tclEval(script = "::autoscroll::autoscroll " & yScroll)
+  # General info about the selected recruit
+  frame = recruitCanvas & ".general"
+  tclEval(script = "ttk::frame " & frame)
+  let recruitText = frame & ".label"
+  tclEval(script = "text " & recruitText & " -height 3 -width 30")
+  tclEval(script = recruitText & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
+  let faction = factionsList[recruit.faction]
+  if "nogender" notin faction.flags:
+    tclEval(script = recruitText & " insert end {Gender: }")
+    tclEval(script = recruitText & " insert end {" & (if recruit.gender ==
+        'M': "Male" else: "Female") & "} [list gold]")
+  tclEval(script = recruitText & " insert end {\nFaction: }")
+  tclEval(script = recruitText & " insert end {" & faction.name & "} [list gold]")
+  tclEval(script = recruitText & " insert end {\nHome base: }")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
