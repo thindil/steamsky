@@ -185,6 +185,17 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       yScroll & " set]")
   tclEval(script = "grid " & recruitCanvas & " -sticky nwes -pady 5 -padx 5")
   tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1")
+  frame = recruitDialog & ".buttonbox2"
+  tclEval(script = "ttk::frame " & frame)
+  let button = recruitDialog & ".buttonbox2.hirebutton"
+  tclEval(script = "ttk::button " & button & " -text Negotiate -command {CloseDialog " & recruitDialog & ";Negotiate} -image negotiateicon -style Dialog.TButton")
+  tclEval(script = "grid " & button)
+  tclEval(script = "tooltip::tooltip " & button & " \"Start hiring negotiating.\"")
+  let dialogCloseButton = recruitDialog &  ".buttonbox2.button"
+  tclEval(script = "ttk::button " & dialogCloseButton & " -text Close -command {CloseDialog " & recruitDialog & "} -image exiticon -style Dialog.TButton")
+  tclEval(script = "grid " & dialogCloseButton & " -row 0 -column 1")
+  tclEval(script = "tooltip::tooltip " & button & " \"Close dialog \\[Escape key\\]\"")
+  tclEval(script = "grid " & frame & "  -pady {0 5}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
