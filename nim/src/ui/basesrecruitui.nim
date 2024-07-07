@@ -261,6 +261,18 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::label " & recruitLabel & " -text {" & skillsList[
         skill.index].name & ": }")
     tclEval(script = "grid " & recruitLabel & " -sticky w")
+    recruitLabel = progressFrame & ".label2"
+    tclEval(script = "ttk::label " & recruitLabel & " -text {" &
+        getSkillLevelName(skillLevel = skill.level) & "} -style Golden.TLabel")
+    tclEval(script = "grid " & recruitLabel & " -sticky we -column 1 -row 0 -padx {5 0}")
+    tclEval(script = "grid columnconfigure " & progressFrame & " " &
+        recruitLabel & " -weight 1")
+    tclEval(script = "grid rowconfigure " & progressFrame & " " & recruitLabel & " -weight 1")
+    var toolQuality = 100
+    for quality in skillsList[skill.index].toolsQuality:
+      if skill.level <= quality.level:
+        toolQuality = quality.quality
+        break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
