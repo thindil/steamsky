@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[config, game, maps, tk, types]
+import ../[config, crew, game, maps, tk, types]
 import coreui, dialogs, mapsui, table, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
@@ -216,6 +216,29 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recruitText & " insert end {\nFaction: }")
   tclEval(script = recruitText & " insert end {" & faction.name & "} [list gold]")
   tclEval(script = recruitText & " insert end {\nHome base: }")
+  tclEval(script = recruitText & " insert end {" & skyBases[
+      recruit.homeBase].name & "} [list gold]")
+  tclEval(script = recruitText & " configure -state disabled")
+  tclEval(script = "grid " & recruitText & " -sticky w")
+  tclEval(script = "grid " & frame)
+  # Statistics of the selected recruit
+  frame = recruitCanvas & ".attributes"
+  tclEval(script = "ttk::frame " & frame)
+  for index, attrib in recruit.attributes:
+    let progressFrame = frame & ".statinfo" & $index
+    tclEval(script = "ttk::frame " & progressFrame)
+    var recruitLabel = progressFrame & ".label"
+    tclEval(script = "ttk::label " & recruitLabel & " -text {" & attributesList[
+        index].name & ": }")
+    tclEval(script = "grid " & recruitLabel & " -sticky w")
+    recruitLabel = progressFrame & ".label2"
+    tclEval(script = "ttk::label " & recruitLabel & " -text {" &
+        getAttributeLevelName(attributeLevel = attrib.level) & "} -style Golden.TLabel")
+    tclEval(script = "grid " & recruitLabel & " -sticky we -column 1 -row 0 -padx {5 0}")
+    tclEval(script = "grid columnconfigure " & progressFrame & " " &
+        recruitLabel & " -weight 1")
+    tclEval(script = "grid rowconfigure " & progressFrame & " " & recruitLabel & " -weight 1")
+    let infoButton = progressFrame & ".button"
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
