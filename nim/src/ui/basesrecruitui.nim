@@ -225,7 +225,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   frame = recruitCanvas & ".attributes"
   tclEval(script = "ttk::frame " & frame)
   for index, attrib in recruit.attributes:
-    let progressFrame = frame & ".statinfo" & $index
+    let progressFrame = frame & ".statinfo" & $(index + 1)
     tclEval(script = "ttk::frame " & progressFrame)
     var recruitLabel = progressFrame & ".label"
     tclEval(script = "ttk::label " & recruitLabel & " -text {" & attributesList[
@@ -239,6 +239,28 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         recruitLabel & " -weight 1")
     tclEval(script = "grid rowconfigure " & progressFrame & " " & recruitLabel & " -weight 1")
     let infoButton = progressFrame & ".button"
+    tclEval(script = "ttk::button " & infoButton &
+        " -image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo " &
+        $(index + 1) & " .recruitdialog}")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected attribute.\"")
+    tclEval(script = "grid " & infoButton & " -column 2 -row 0")
+    tclEval(script = "grid " & progressFrame & " -sticky we -padx 5 -pady {5 0}")
+    tclEval(script = "update")
+    let progressBar = frame & ".level" & $(index + 1)
+    tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
+        attrib.level * 2) & " -length 360")
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
+    tclEval(script = "grid " & progressBar)
+  # Skills of the selected recruit
+  frame = recruitCanvas & ".skills"
+  tclEval(script = "ttk:frame " & frame)
+  for index, skill in recruit.skills:
+    let progressFrame = frame & ".skillinfo" & $(index + 1)
+    tclEval(script = "ttk::frame " & progressFrame)
+    var recruitLabel = progressFrame & ".label"
+    tclEval(script = "ttk::label " & recruitLabel & " -text {" & skillsList[
+        skill.index].name & ": }")
+    tclEval(script = "grid " & recruitLabel & " -sticky w")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
