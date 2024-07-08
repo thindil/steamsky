@@ -294,6 +294,21 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recruitText & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
+  for index, item in recruit.equipment:
+    if item > -1:
+      tclEval(script = recruitText & " insert end {" & (
+          $index).capitalizeAscii & ": }")
+      tclEval(script = recruitText & " insert end {" & itemsList[
+          recruit.inventory[item]].name & "\n} [list gold]")
+  tclEval(script = recruitText & " configure -state disabled")
+  tclEval(script = "grid " & recruitText & " -sticky w")
+  frame = recruitCanvas & ".general"
+  tclEval(script = recruitCanvas & " create window 32 0 -anchor nw -window " &
+      frame & " -tag info")
+  tclEval(script = "update")
+  tclEval(script = recruitCanvas & " configure -scrollregion [list " & tclEval2(
+      script = recruitCanvas & " bbox all") & "]")
+
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
