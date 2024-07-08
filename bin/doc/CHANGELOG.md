@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - No refreshing information about the player's ship after trading
 - Can't hire the last recruit from a base
 - Crash when comparing modules in a shipyard
+- Crash when showing information about the skill of the recruit in bases
 
 ## [10.0] - 2026-06-30
 
