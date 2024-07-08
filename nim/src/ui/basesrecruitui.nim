@@ -308,7 +308,12 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "update")
   tclEval(script = recruitCanvas & " configure -scrollregion [list " & tclEval2(
       script = recruitCanvas & " bbox all") & "]")
-
+  tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " &
+      recruitDialog & ".buttonbox.general;break}")
+  tclEval(script = "bind " & recruitDialog & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & dialogCloseButton & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
+  showDialog(dialog = recruitDialog, relativeY = 0.2)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -327,3 +332,6 @@ proc getAdaHighestAttribute(baseIndex, memberIndex: cint): cstring {.exportc.} =
 
 proc getAdaHighestRecSkill(baseIndex, memberIndex: cint): cstring {.exportc.} =
   return getHighestSkill(baseIndex = baseIndex, memberIndex = memberIndex - 1).cstring
+
+proc getRecruitIndex(): cint {.exportc.} =
+  return recruitIndex.cint + 1
