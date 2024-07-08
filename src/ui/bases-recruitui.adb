@@ -663,7 +663,11 @@ package body Bases.RecruitUI is
          begin
             Tool_Quality_Loop :
             for Quality of SkillsData_Container.Element
-              (Container => Skills_List, Index => I)
+              (Container => Skills_List,
+               Index =>
+                 Skills_Container.Element
+                   (Container => Recruit.Skills, Index => I)
+                   .Index)
               .Tools_Quality loop
                if Skills_Container.Element
                    (Container => Recruit.Skills, Index => I)
