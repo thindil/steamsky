@@ -158,6 +158,18 @@ var recruitIndex: Natural
 
 proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show information about the selected recruit
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowRecruitInfo recruitindex
+  ## RecruitIndex is a index of the recruit which menu will be shown
   recruitIndex = try:
       ($argv[1]).parseInt - 1
     except:
