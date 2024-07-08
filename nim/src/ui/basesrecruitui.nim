@@ -343,12 +343,27 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = recruitDialog, relativeY = 0.2)
   return tclOk
 
+proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    dailyPayment = tclGetVar(varName = "daily").parseFloat.Natural
+    tradePayment = tclGetVar(varName = "percent").parseFloat.Natural
+  tclSetVar(varName = "daily", newValue = $dailyPayment)
+  tclSetVar(varName = "percent", newValue = $tradePayment)
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    recruit = skyBases[baseIndex].recruits[recruitIndex]
+  var cost = recruit.price - ((dailyPayment - recruit.payment) * 50) - (
+      tradePayment * 5_000)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowRecruit", showRecruitCommand)
 #    addCommand("ShowRecruitInfo", showRecruitInfoCommand)
+#    addCommand("NegotiateHire", negotiateHireCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
