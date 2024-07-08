@@ -157,8 +157,11 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
 var recruitIndex: Natural
 
 proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  recruitIndex = ($argv[1]).parseInt - 1
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  recruitIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      return showError(message = "Can't get recruit index.")
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     recruit = skyBases[baseIndex].recruits[recruitIndex]
@@ -208,7 +211,10 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = recruitText & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
-  let faction = factionsList[recruit.faction]
+  let faction = try:
+      factionsList[recruit.faction]
+    except:
+      return showError(message = "Can't get the recruit's faction.")
   if "nogender" notin faction.flags:
     tclEval(script = recruitText & " insert end {Gender: }")
     tclEval(script = recruitText & " insert end {" & (if recruit.gender ==
@@ -258,8 +264,11 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     let progressFrame = frame & ".skillinfo" & $(index + 1)
     tclEval(script = "ttk::frame " & progressFrame)
     var recruitLabel = progressFrame & ".label"
-    tclEval(script = "ttk::label " & recruitLabel & " -text {" & skillsList[
-        skill.index].name & ": }")
+    try:
+      tclEval(script = "ttk::label " & recruitLabel & " -text {" & skillsList[
+          skill.index].name & ": }")
+    except:
+      return showError(message = "Can't get skill name.")
     tclEval(script = "grid " & recruitLabel & " -sticky w")
     recruitLabel = progressFrame & ".label2"
     tclEval(script = "ttk::label " & recruitLabel & " -text {" &
@@ -269,10 +278,13 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         recruitLabel & " -weight 1")
     tclEval(script = "grid rowconfigure " & progressFrame & " " & recruitLabel & " -weight 1")
     var toolQuality = 100
-    for quality in skillsList[skill.index].toolsQuality:
-      if skill.level <= quality.level:
-        toolQuality = quality.quality
-        break
+    try:
+      for quality in skillsList[skill.index].toolsQuality:
+        if skill.level <= quality.level:
+          toolQuality = quality.quality
+          break
+    except:
+      return showError(message = "Can't get tools for skill.")
     let infoButton = progressFrame & ".button"
     tclEval(script = "ttk::button " & infoButton &
         " -image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo " &
@@ -298,8 +310,11 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if item > -1:
       tclEval(script = recruitText & " insert end {" & (
           $index).capitalizeAscii & ": }")
-      tclEval(script = recruitText & " insert end {" & itemsList[
-          recruit.inventory[item]].name & "\n} [list gold]")
+      try:
+        tclEval(script = recruitText & " insert end {" & itemsList[
+            recruit.inventory[item]].name & "\n} [list gold]")
+      except:
+        return showError(message = "Can't get the recruit's equipment.")
   tclEval(script = recruitText & " configure -state disabled")
   tclEval(script = "grid " & recruitText & " -sticky w")
   frame = recruitCanvas & ".general"
