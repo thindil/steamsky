@@ -203,7 +203,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   # General info about the selected recruit
   frame = recruitCanvas & ".general"
   tclEval(script = "ttk::frame " & frame)
-  let recruitText = frame & ".label"
+  var recruitText = frame & ".label"
   tclEval(script = "text " & recruitText & " -height 3 -width 30")
   tclEval(script = recruitText & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
@@ -273,6 +273,27 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       if skill.level <= quality.level:
         toolQuality = quality.quality
         break
+    let infoButton = progressFrame & ".button"
+    tclEval(script = "ttk::button " & infoButton &
+        " -image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo " &
+        $(index + 1) & " .recruitdialog}")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected skill.\"")
+    tclEval(script = "grid " & infoButton & " -column 2 -row 0")
+    tclEval(script = "grid " & progressFrame & " -sticky we")
+    let progressBar = frame & ".level" & $(index + 1)
+    tclEval(script = "ttk::progressbar " & progressBar & " -value " &
+        $skill.level & " -length 360")
+    tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the skill.\"")
+    tclEval(script = "grid " & progressBar)
+  # Equipment of the selected recruit
+  frame = recruitCanvas & ".inventory"
+  tclEval(script = "ttk::frame " & frame)
+  recruitText = frame & ".label"
+  tclEval(script = "text " & recruitText & " -height " &
+      $recruit.equipment.len & " -width 30")
+  tclEval(script = recruitText & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
