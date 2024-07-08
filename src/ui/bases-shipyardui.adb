@@ -1515,6 +1515,39 @@ package body Bases.ShipyardUI is
             New_Row := New_Row + 1;
          end if;
       end if;
+      if Installing and then Ship_Module_Index > 0 then
+         if New_Info then
+            Module_Label :=
+              Create
+                (pathName => ".moduledialog.durabilitylbl",
+                 options => "-text {Durability: }");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label, Options => "-sticky w -padx {5 0}");
+            Module_Label := Create(pathName => ".moduledialog.durability");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Module_Label,
+               Options =>
+                 "-sticky w -column 1 -row" & Positive'Image(New_Row));
+            New_Row := New_Row + 1;
+         else
+            Module_Label := Get_Widget(pathName => ".moduledialog.durability");
+         end if;
+         if Player_Ship.Modules(Ship_Module_Index).Max_Durability >
+           Get_Module(Index => Get_Module_Index).Durability then
+            configure
+              (Widgt => Module_Label,
+               options => "-text {Weaker} -style Headerred.TLabel");
+         elsif Player_Ship.Modules(Ship_Module_Index).Max_Durability <
+           Get_Module(Index => Get_Module_Index).Durability then
+            configure
+              (Widgt => Module_Label,
+               options => "-text {Stronger} -style Headergreen.TLabel");
+         else
+            configure
+              (Widgt => Module_Label,
+               options => "-text {Same} -style Golden.TLabel");
+         end if;
+      end if;
       if Installing then
          if New_Info then
             Module_Label :=
