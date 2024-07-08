@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to saving and loading the game state from file.
+
 import std/[os, strutils, tables, xmltree, xmlparser]
 import contracts
 import basessaveload, config, game, goals, log, maps, messages, missions,
@@ -118,6 +120,10 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
 
   proc saveStatistics(stats: seq[StatisticsData],
       statName: string) {.sideEffect, raises: [], tags: [], contractual.} =
+    ## Save the selected game's statistic to the file
+    ##
+    ## * stats    - the game's statistics
+    ## * statName - the name of the statistic to save
     require:
       statName.len > 0
     body:
@@ -227,6 +233,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
 
 proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
+  ## Load the game from a file
   let savedGame = loadXml(path = saveName)
   logMessage(message = "Start loading game from file " & saveName & ".",
       debugType = everything)
@@ -430,14 +437,17 @@ proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
 
 proc getAdaSaveName(name: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   saveName = $name
 
 proc setAdaSaveName(name: var cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   name = saveName.cstring
 
 proc saveAdaGame(prettyPrint: cint) {.raises: [], tags: [WriteIOEffect,
     RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     saveGame(prettyPrint = prettyPrint == 1)
   except KeyError, IOError:
@@ -445,6 +455,7 @@ proc saveAdaGame(prettyPrint: cint) {.raises: [], tags: [WriteIOEffect,
 
 proc loadAdaGame() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     loadGame()
   except XmlError, ValueError, IOError, OSError, Exception:
@@ -452,6 +463,7 @@ proc loadAdaGame() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
 
 proc generateAdaSaveName(renameSave: cint) {.raises: [], tags: [WriteIOEffect,
     ReadIOEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     generateSaveName(renameSave = renameSave == 1)
   except OSError, IOError, Exception:
