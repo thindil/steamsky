@@ -165,7 +165,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     recruitDialog = createDialog(name = ".recruitdialog", title = recruit.name)
   const tabNames: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
   tclSetVar(varName = "newtab", newValue = tabNames[0])
-  var frame = recruitDialog & " .buttonbox"
+  var frame = recruitDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
   var tabButton = ""
   for index, tab in tabNames:
@@ -180,7 +180,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     recruitCanvas = recruitDialog & ".canvas"
     yScroll = recruitDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll &
-      " -orient vertical -command [" & recruitCanvas & " yview]")
+      " -orient vertical -command [list " & recruitCanvas & " yview]")
   tclEval(script = "canvas " & recruitCanvas & " -yscrollcommand [list " &
       yScroll & " set]")
   tclEval(script = "grid " & recruitCanvas & " -sticky nwes -pady 5 -padx 5")
@@ -253,7 +253,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & progressBar)
   # Skills of the selected recruit
   frame = recruitCanvas & ".skills"
-  tclEval(script = "ttk:frame " & frame)
+  tclEval(script = "ttk::frame " & frame)
   for index, skill in recruit.skills:
     let progressFrame = frame & ".skillinfo" & $(index + 1)
     tclEval(script = "ttk::frame " & progressFrame)
