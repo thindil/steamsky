@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling;
+-- with Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
@@ -29,24 +29,24 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+-- with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar;
+-- with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+-- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll;
+-- with Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade;
 with Config; use Config;
 with CoreUI;
 with Dialogs; use Dialogs;
-with Factions;
+-- with Factions;
 with Maps; use Maps;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
@@ -230,395 +230,406 @@ package body Bases.RecruitUI is
    function Show_Recruit_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Ada.Characters.Handling;
-      use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
-      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Tcl.Tklib.Ada.Autoscroll;
-      use Factions;
-      use Tiny_String;
-
-      Base_Index: constant Positive :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Recruit: Recruit_Data
-        (Amount_Of_Attributes => Attributes_Amount,
-         Amount_Of_Skills => Skills_Amount);
-      Recruit_Dialog: constant Ttk_Frame :=
-        Create_Dialog(Name => ".recruitdialog", Title => "");
-      Y_Scroll: constant Ttk_Scrollbar :=
-        Create
-          (pathName => Recruit_Dialog & ".yscroll",
-           options =>
-             "-orient vertical -command [list " & Recruit_Dialog &
-             ".canvas yview]");
-      Recruit_Canvas: constant Tk_Canvas :=
-        Create
-          (pathName => Recruit_Dialog & ".canvas",
-           options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      --## rule off IMPROPER_INITIALIZATION
-      Dialog_Close_Button, Info_Button, Button: Ttk_Button;
-      Progress_Bar: Ttk_ProgressBar;
-      Progress_Frame: Ttk_Frame;
-      Recruit_Label: Ttk_Label;
-      Recruit_Text: Tk_Text;
-      Tab_Button: Ttk_RadioButton;
-      --## rule on IMPROPER_INITIALIZATION
-      Frame: Ttk_Frame := Create(pathName => Recruit_Dialog & ".buttonbox");
-      Tab_Names: constant array(1 .. 4) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "General"),
-         2 => To_Unbounded_String(Source => "Attributes"),
-         3 => To_Unbounded_String(Source => "Skills"),
-         4 => To_Unbounded_String(Source => "Inventory"));
-      Faction: Faction_Record;
+--      use Ada.Characters.Handling;
+--      use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+--      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+--      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+--      use Tcl.Tklib.Ada.Autoscroll;
+--      use Factions;
+--      use Tiny_String;
+--
+--      Base_Index: constant Positive :=
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Recruit: Recruit_Data
+--        (Amount_Of_Attributes => Attributes_Amount,
+--         Amount_Of_Skills => Skills_Amount);
+--      Recruit_Dialog: constant Ttk_Frame :=
+--        Create_Dialog(Name => ".recruitdialog", Title => "");
+--      Y_Scroll: constant Ttk_Scrollbar :=
+--        Create
+--          (pathName => Recruit_Dialog & ".yscroll",
+--           options =>
+--             "-orient vertical -command [list " & Recruit_Dialog &
+--             ".canvas yview]");
+--      Recruit_Canvas: constant Tk_Canvas :=
+--        Create
+--          (pathName => Recruit_Dialog & ".canvas",
+--           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+--      --## rule off IMPROPER_INITIALIZATION
+--      Dialog_Close_Button, Info_Button, Button: Ttk_Button;
+--      Progress_Bar: Ttk_ProgressBar;
+--      Progress_Frame: Ttk_Frame;
+--      Recruit_Label: Ttk_Label;
+--      Recruit_Text: Tk_Text;
+--      Tab_Button: Ttk_RadioButton;
+--      --## rule on IMPROPER_INITIALIZATION
+--      Frame: Ttk_Frame := Create(pathName => Recruit_Dialog & ".buttonbox");
+--      Tab_Names: constant array(1 .. 4) of Unbounded_String :=
+--        (1 => To_Unbounded_String(Source => "General"),
+--         2 => To_Unbounded_String(Source => "Attributes"),
+--         3 => To_Unbounded_String(Source => "Skills"),
+--         4 => To_Unbounded_String(Source => "Inventory"));
+--      Faction: Faction_Record;
+      function Show_Ada_Recruit_Info_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Convention => C,
+         Import => True,
+         External_Name => "showRecruitInfoCommand";
+      function Get_Ada_Recruit_Index return Positive with
+         Convention => C,
+         Import => True,
+         External_Name => "getAdaRecruitIndex";
    begin
-      Recruit_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Recruit :=
-        Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Get_Recruit_Index);
-      Faction := Get_Faction(Index => Recruit.Faction);
-      Change_Title
-        (Dialog => Recruit_Dialog,
-         New_Title => To_String(Source => Recruit.Name));
-      Tcl_SetVar
-        (interp => Interp, varName => "newtab",
-         newValue => To_Lower(Item => To_String(Source => Tab_Names(1))));
-      Set_Tab_Buttons_Loop :
-      for I in Tab_Names'Range loop
-         Tab_Button :=
-           Create
-             (pathName =>
-                Frame & "." &
-                To_Lower(Item => To_String(Source => Tab_Names(I))),
-              options =>
-                " -text " & To_String(Source => Tab_Names(I)) &
-                " -style Radio.Toolbutton -value " &
-                To_Lower(Item => To_String(Source => Tab_Names(I))) &
-                " -variable newtab -command ShowRecruitTab");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Tab_Button,
-            Options => "-column" & Natural'Image(I - 1) & " -row 0");
-         Bind
-           (Widgt => Tab_Button, Sequence => "<Escape>",
-            Script =>
-              "{" & Recruit_Dialog & ".buttonbox2.button invoke;break}");
-      end loop Set_Tab_Buttons_Loop;
-      Bind
-        (Widgt => Tab_Button, Sequence => "<Tab>",
-         Script =>
-           "{focus " & Recruit_Dialog & ".buttonbox2.hirebutton;break}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Frame, Options => "-pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Recruit_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Y_Scroll,
-         Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
-      Frame := Create(pathName => Recruit_Dialog & ".buttonbox2");
-      Button :=
-        Create
-          (pathName => Recruit_Dialog & ".buttonbox2.hirebutton",
-           options =>
-             "-text Negotiate -command {CloseDialog " & Recruit_Dialog &
-             ";Negotiate} -image negotiateicon -style Dialog.TButton");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-      Add(Widget => Button, Message => "Start hiring negotiating.");
-      Dialog_Close_Button :=
-        Create
-          (pathName => Recruit_Dialog & ".buttonbox2.button",
-           options =>
-             "-text Close -command {CloseDialog " & Recruit_Dialog &
-             "} -image exiticon -style Dialog.TButton");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
-      Add
-        (Widget => Dialog_Close_Button,
-         Message => "Close dialog \[Escape key\]");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
-      Focus(Widgt => Dialog_Close_Button);
-      Autoscroll(Scroll => Y_Scroll);
-      -- General info about the selected recruit
-      Frame := Create(pathName => Recruit_Canvas & ".general");
-      Recruit_Text :=
-        Create(pathName => Frame & ".label", options => "-height 3 -width 30");
-      Tag_Configure
-        (TextWidget => Recruit_Text, TagName => "gold",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-goldenyellow)"));
-      if not Faction.Flags.Contains
-          (Item => To_Unbounded_String(Source => "nogender")) then
-         Insert
-           (TextWidget => Recruit_Text, Index => "end", Text => "{Gender: }");
-         Insert
-           (TextWidget => Recruit_Text, Index => "end",
-            Text =>
-              "{" & (if Recruit.Gender = 'M' then "Male" else "Female") &
-              "} [list gold]");
-      end if;
-      Insert
-        (TextWidget => Recruit_Text, Index => "end",
-         Text => "{" & LF & "Faction: }");
-      Insert
-        (TextWidget => Recruit_Text, Index => "end",
-         Text => "{" & To_String(Source => Faction.Name) & "} [list gold]");
-      Insert
-        (TextWidget => Recruit_Text, Index => "end",
-         Text => "{" & LF & "Home base: }");
-      Insert
-        (TextWidget => Recruit_Text, Index => "end",
-         Text =>
-           "{" & To_String(Source => Sky_Bases(Recruit.Home_Base).Name) &
-           "} [list gold]");
-      configure(Widgt => Recruit_Text, options => "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
-      -- Statistics of the selected recruit
-      Frame := Create(pathName => Recruit_Canvas & ".attributes");
-      Show_Recruit_Stats_Loop :
-      for I in Recruit.Attributes'Range loop
-         Progress_Frame :=
-           Create
-             (pathName =>
-                Frame & ".statinfo" &
-                Trim(Source => Positive'Image(I), Side => Left));
-         Recruit_Label :=
-           Create
-             (pathName => Progress_Frame & ".label",
-              options =>
-                "-text {" &
-                To_String
-                  (Source =>
-                     AttributesData_Container.Element
-                       (Container => Attributes_List, Index => I)
-                       .Name) &
-                ": }");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
-         Recruit_Label :=
-           Create
-             (pathName => Progress_Frame & ".label2",
-              options =>
-                "-text {" &
-                Get_Attribute_Level_Name
-                  (Attribute_Level => Recruit.Attributes(I).Level) &
-                "} -style Golden.TLabel");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Recruit_Label,
-            Options => "-sticky we -column 1 -row 0 -padx {5 0}");
-         Tcl.Tk.Ada.Grid.Column_Configure
-           (Master => Progress_Frame, Slave => Recruit_Label,
-            Options => "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure
-           (Master => Progress_Frame, Slave => Recruit_Label,
-            Options => "-weight 1");
-         Info_Button :=
-           Create
-             (pathName => Progress_Frame & ".button",
-              options =>
-                "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
-                Positive'Image(I) & " .recruitdialog}");
-         Tcl.Tklib.Ada.Tooltip.Add
-           (Widget => Info_Button,
-            Message =>
-              "Show detailed information about the selected attribute.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button, Options => "-column 2 -row 0");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Frame,
-            Options => "-sticky we -padx 5 -pady {5 0}");
-         Tcl_Eval(interp => Interp, strng => "update");
-         Progress_Bar :=
-           Create
-             (pathName =>
-                Frame & ".level" &
-                Trim(Source => Positive'Image(I), Side => Left),
-              options =>
-                "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
-                " -length 360");
-         Tcl.Tklib.Ada.Tooltip.Add
-           (Widget => Progress_Bar,
-            Message => "The current level of the attribute.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
-      end loop Show_Recruit_Stats_Loop;
-      -- Skills of the selected recruit
-      Frame := Create(pathName => Recruit_Canvas & ".skills");
-      Show_Recruit_Skills_Loop :
-      for I in
-        Skills_Container.First_Index(Container => Recruit.Skills) ..
-          Skills_Container.Last_Index(Container => Recruit.Skills) loop
-         Progress_Frame :=
-           Create
-             (pathName =>
-                Frame & ".skillinfo" &
-                Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-         Recruit_Label :=
-           Create
-             (pathName =>
-                Progress_Frame & ".label" &
-                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-              options =>
-                "-text {" &
-                To_String
-                  (Source =>
-                     SkillsData_Container.Element
-                       (Container => Skills_List,
-                        Index =>
-                          Skills_Container.Element
-                            (Container => Recruit.Skills, Index => I)
-                            .Index)
-                       .Name) &
-                ": }");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
-         Recruit_Label :=
-           Create
-             (pathName =>
-                Progress_Frame & ".label2" &
-                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-              options =>
-                "-text {" &
-                Get_Skill_Level_Name
-                  (Skill_Level =>
-                     Skills_Container.Element
-                       (Container => Recruit.Skills, Index => I)
-                       .Level) &
-                "} -style Golden.TLabel");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Recruit_Label,
-            Options => "-sticky we -column 1 -row 0 -padx {5 0}");
-         Tcl.Tk.Ada.Grid.Column_Configure
-           (Master => Progress_Frame, Slave => Recruit_Label,
-            Options => "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure
-           (Master => Progress_Frame, Slave => Recruit_Label,
-            Options => "-weight 1");
-         Add_Help_Button_Block :
-         declare
-            Tool_Quality: Positive := 100;
-         begin
-            Tool_Quality_Loop :
-            for Quality of SkillsData_Container.Element
-              (Container => Skills_List,
-               Index =>
-                 Skills_Container.Element
-                   (Container => Recruit.Skills, Index => I)
-                   .Index)
-              .Tools_Quality loop
-               if Skills_Container.Element
-                   (Container => Recruit.Skills, Index => I)
-                   .Level <=
-                 Quality.Level then
-                  Tool_Quality := Quality.Quality;
-                  exit Tool_Quality_Loop;
-               end if;
-            end loop Tool_Quality_Loop;
-            Info_Button :=
-              Create
-                (pathName => Progress_Frame & ".button",
-                 options =>
-                   "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                   Skills_Amount_Range'Image
-                     (Skills_Container.Element
-                        (Container => Recruit.Skills, Index => I)
-                        .Index) &
-                   Positive'Image(Tool_Quality) & " .recruitdialog}");
-         end Add_Help_Button_Block;
-         Tcl.Tklib.Ada.Tooltip.Add
-           (Widget => Info_Button,
-            Message => "Show detailed information about the selected skill.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Info_Button, Options => "-column 2 -row 0");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Progress_Frame, Options => "-sticky we");
-         Progress_Bar :=
-           Create
-             (pathName =>
-                Frame & ".level" &
-                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-              options =>
-                "-value" &
-                Positive'Image
-                  (Skills_Container.Element
-                     (Container => Recruit.Skills, Index => I)
-                     .Level) &
-                " -length 360");
-         Tcl.Tklib.Ada.Tooltip.Add
-           (Widget => Progress_Bar,
-            Message => "The current level of the skill.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
-      end loop Show_Recruit_Skills_Loop;
-      -- Equipment of the selected recruit
-      Frame := Create(pathName => Recruit_Canvas & ".inventory");
-      Recruit_Text :=
-        Create
-          (pathName => Frame & ".label",
-           options =>
-             "-height" & Natural'Image(Recruit.Equipment'Length) &
-             " -width 30");
-      Tag_Configure
-        (TextWidget => Recruit_Text, TagName => "gold",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-goldenyellow)"));
-      Show_Recruit_Equipment_Loop :
-      for I in Recruit.Equipment'Range loop
-         if Recruit.Equipment(I) > 0 then
-            Insert
-              (TextWidget => Recruit_Text, Index => "end",
-               Text =>
-                 "{" & Equipment_Locations'Image(I)(1) &
-                 To_Lower
-                   (Item =>
-                      Equipment_Locations'Image(I)
-                        (Equipment_Locations'Image(I)'First + 1 ..
-                             Equipment_Locations'Image(I)'Last)) &
-                 ": }");
-            Insert
-              (TextWidget => Recruit_Text, Index => "end",
-               Text =>
-                 "{" &
-                 To_String
-                   (Source =>
-                      Get_Proto_Item
-                        (Index =>
-                           Positive_Formal_Container.Element
-                             (Container => Recruit.Inventory,
-                              Index => Recruit.Equipment(I)))
-                        .Name) &
-                 LF & "} [list gold]");
-         end if;
-      end loop Show_Recruit_Equipment_Loop;
-      configure(Widgt => Recruit_Text, options => "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
-      Frame := Get_Widget(pathName => Recruit_Canvas & ".general");
-      Canvas_Create
-        (Parent => Recruit_Canvas, Child_Type => "window",
-         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
-      Tcl_Eval(interp => Interp, strng => "update");
-      configure
-        (Widgt => Recruit_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Recruit_Canvas, TagOrId => "all") & "]");
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Recruit_Dialog & ".buttonbox.general;break}");
-      Bind
-        (Widgt => Recruit_Dialog, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Show_Dialog(Dialog => Recruit_Dialog, Relative_Y => 0.2);
-      return TCL_OK;
+      Recruit_Index := Get_Ada_Recruit_Index;
+      return Show_Ada_Recruit_Info_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--      Recruit_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Recruit :=
+--        Recruit_Container.Element
+--          (Container => Sky_Bases(Base_Index).Recruits,
+--           Index => Get_Recruit_Index);
+--      Faction := Get_Faction(Index => Recruit.Faction);
+--      Change_Title
+--        (Dialog => Recruit_Dialog,
+--         New_Title => To_String(Source => Recruit.Name));
+--      Tcl_SetVar
+--        (interp => Interp, varName => "newtab",
+--         newValue => To_Lower(Item => To_String(Source => Tab_Names(1))));
+--      Set_Tab_Buttons_Loop :
+--      for I in Tab_Names'Range loop
+--         Tab_Button :=
+--           Create
+--             (pathName =>
+--                Frame & "." &
+--                To_Lower(Item => To_String(Source => Tab_Names(I))),
+--              options =>
+--                " -text " & To_String(Source => Tab_Names(I)) &
+--                " -style Radio.Toolbutton -value " &
+--                To_Lower(Item => To_String(Source => Tab_Names(I))) &
+--                " -variable newtab -command ShowRecruitTab");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Tab_Button,
+--            Options => "-column" & Natural'Image(I - 1) & " -row 0");
+--         Bind
+--           (Widgt => Tab_Button, Sequence => "<Escape>",
+--            Script =>
+--              "{" & Recruit_Dialog & ".buttonbox2.button invoke;break}");
+--      end loop Set_Tab_Buttons_Loop;
+--      Bind
+--        (Widgt => Tab_Button, Sequence => "<Tab>",
+--         Script =>
+--           "{focus " & Recruit_Dialog & ".buttonbox2.hirebutton;break}");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Frame, Options => "-pady {5 0} -columnspan 2");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Recruit_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Y_Scroll,
+--         Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+--      Frame := Create(pathName => Recruit_Dialog & ".buttonbox2");
+--      Button :=
+--        Create
+--          (pathName => Recruit_Dialog & ".buttonbox2.hirebutton",
+--           options =>
+--             "-text Negotiate -command {CloseDialog " & Recruit_Dialog &
+--             ";Negotiate} -image negotiateicon -style Dialog.TButton");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--      Add(Widget => Button, Message => "Start hiring negotiating.");
+--      Dialog_Close_Button :=
+--        Create
+--          (pathName => Recruit_Dialog & ".buttonbox2.button",
+--           options =>
+--             "-text Close -command {CloseDialog " & Recruit_Dialog &
+--             "} -image exiticon -style Dialog.TButton");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
+--      Add
+--        (Widget => Dialog_Close_Button,
+--         Message => "Close dialog \[Escape key\]");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
+--      Focus(Widgt => Dialog_Close_Button);
+--      Autoscroll(Scroll => Y_Scroll);
+--      -- General info about the selected recruit
+--      Frame := Create(pathName => Recruit_Canvas & ".general");
+--      Recruit_Text :=
+--        Create(pathName => Frame & ".label", options => "-height 3 -width 30");
+--      Tag_Configure
+--        (TextWidget => Recruit_Text, TagName => "gold",
+--         Options =>
+--           "-foreground " &
+--           Tcl_GetVar
+--             (interp => Interp,
+--              varName =>
+--                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+--                "::colors(-goldenyellow)"));
+--      if not Faction.Flags.Contains
+--          (Item => To_Unbounded_String(Source => "nogender")) then
+--         Insert
+--           (TextWidget => Recruit_Text, Index => "end", Text => "{Gender: }");
+--         Insert
+--           (TextWidget => Recruit_Text, Index => "end",
+--            Text =>
+--              "{" & (if Recruit.Gender = 'M' then "Male" else "Female") &
+--              "} [list gold]");
+--      end if;
+--      Insert
+--        (TextWidget => Recruit_Text, Index => "end",
+--         Text => "{" & LF & "Faction: }");
+--      Insert
+--        (TextWidget => Recruit_Text, Index => "end",
+--         Text => "{" & To_String(Source => Faction.Name) & "} [list gold]");
+--      Insert
+--        (TextWidget => Recruit_Text, Index => "end",
+--         Text => "{" & LF & "Home base: }");
+--      Insert
+--        (TextWidget => Recruit_Text, Index => "end",
+--         Text =>
+--           "{" & To_String(Source => Sky_Bases(Recruit.Home_Base).Name) &
+--           "} [list gold]");
+--      configure(Widgt => Recruit_Text, options => "-state disabled");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+--      -- Statistics of the selected recruit
+--      Frame := Create(pathName => Recruit_Canvas & ".attributes");
+--      Show_Recruit_Stats_Loop :
+--      for I in Recruit.Attributes'Range loop
+--         Progress_Frame :=
+--           Create
+--             (pathName =>
+--                Frame & ".statinfo" &
+--                Trim(Source => Positive'Image(I), Side => Left));
+--         Recruit_Label :=
+--           Create
+--             (pathName => Progress_Frame & ".label",
+--              options =>
+--                "-text {" &
+--                To_String
+--                  (Source =>
+--                     AttributesData_Container.Element
+--                       (Container => Attributes_List, Index => I)
+--                       .Name) &
+--                ": }");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
+--         Recruit_Label :=
+--           Create
+--             (pathName => Progress_Frame & ".label2",
+--              options =>
+--                "-text {" &
+--                Get_Attribute_Level_Name
+--                  (Attribute_Level => Recruit.Attributes(I).Level) &
+--                "} -style Golden.TLabel");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Recruit_Label,
+--            Options => "-sticky we -column 1 -row 0 -padx {5 0}");
+--         Tcl.Tk.Ada.Grid.Column_Configure
+--           (Master => Progress_Frame, Slave => Recruit_Label,
+--            Options => "-weight 1");
+--         Tcl.Tk.Ada.Grid.Row_Configure
+--           (Master => Progress_Frame, Slave => Recruit_Label,
+--            Options => "-weight 1");
+--         Info_Button :=
+--           Create
+--             (pathName => Progress_Frame & ".button",
+--              options =>
+--                "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+--                Positive'Image(I) & " .recruitdialog}");
+--         Tcl.Tklib.Ada.Tooltip.Add
+--           (Widget => Info_Button,
+--            Message =>
+--              "Show detailed information about the selected attribute.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Info_Button, Options => "-column 2 -row 0");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Progress_Frame,
+--            Options => "-sticky we -padx 5 -pady {5 0}");
+--         Tcl_Eval(interp => Interp, strng => "update");
+--         Progress_Bar :=
+--           Create
+--             (pathName =>
+--                Frame & ".level" &
+--                Trim(Source => Positive'Image(I), Side => Left),
+--              options =>
+--                "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
+--                " -length 360");
+--         Tcl.Tklib.Ada.Tooltip.Add
+--           (Widget => Progress_Bar,
+--            Message => "The current level of the attribute.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
+--      end loop Show_Recruit_Stats_Loop;
+--      -- Skills of the selected recruit
+--      Frame := Create(pathName => Recruit_Canvas & ".skills");
+--      Show_Recruit_Skills_Loop :
+--      for I in
+--        Skills_Container.First_Index(Container => Recruit.Skills) ..
+--          Skills_Container.Last_Index(Container => Recruit.Skills) loop
+--         Progress_Frame :=
+--           Create
+--             (pathName =>
+--                Frame & ".skillinfo" &
+--                Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+--         Recruit_Label :=
+--           Create
+--             (pathName =>
+--                Progress_Frame & ".label" &
+--                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--              options =>
+--                "-text {" &
+--                To_String
+--                  (Source =>
+--                     SkillsData_Container.Element
+--                       (Container => Skills_List,
+--                        Index =>
+--                          Skills_Container.Element
+--                            (Container => Recruit.Skills, Index => I)
+--                            .Index)
+--                       .Name) &
+--                ": }");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
+--         Recruit_Label :=
+--           Create
+--             (pathName =>
+--                Progress_Frame & ".label2" &
+--                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--              options =>
+--                "-text {" &
+--                Get_Skill_Level_Name
+--                  (Skill_Level =>
+--                     Skills_Container.Element
+--                       (Container => Recruit.Skills, Index => I)
+--                       .Level) &
+--                "} -style Golden.TLabel");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Recruit_Label,
+--            Options => "-sticky we -column 1 -row 0 -padx {5 0}");
+--         Tcl.Tk.Ada.Grid.Column_Configure
+--           (Master => Progress_Frame, Slave => Recruit_Label,
+--            Options => "-weight 1");
+--         Tcl.Tk.Ada.Grid.Row_Configure
+--           (Master => Progress_Frame, Slave => Recruit_Label,
+--            Options => "-weight 1");
+--         Add_Help_Button_Block :
+--         declare
+--            Tool_Quality: Positive := 100;
+--         begin
+--            Tool_Quality_Loop :
+--            for Quality of SkillsData_Container.Element
+--              (Container => Skills_List,
+--               Index =>
+--                 Skills_Container.Element
+--                   (Container => Recruit.Skills, Index => I)
+--                   .Index)
+--              .Tools_Quality loop
+--               if Skills_Container.Element
+--                   (Container => Recruit.Skills, Index => I)
+--                   .Level <=
+--                 Quality.Level then
+--                  Tool_Quality := Quality.Quality;
+--                  exit Tool_Quality_Loop;
+--               end if;
+--            end loop Tool_Quality_Loop;
+--            Info_Button :=
+--              Create
+--                (pathName => Progress_Frame & ".button",
+--                 options =>
+--                   "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+--                   Skills_Amount_Range'Image
+--                     (Skills_Container.Element
+--                        (Container => Recruit.Skills, Index => I)
+--                        .Index) &
+--                   Positive'Image(Tool_Quality) & " .recruitdialog}");
+--         end Add_Help_Button_Block;
+--         Tcl.Tklib.Ada.Tooltip.Add
+--           (Widget => Info_Button,
+--            Message => "Show detailed information about the selected skill.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Info_Button, Options => "-column 2 -row 0");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Progress_Frame, Options => "-sticky we");
+--         Progress_Bar :=
+--           Create
+--             (pathName =>
+--                Frame & ".level" &
+--                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+--              options =>
+--                "-value" &
+--                Positive'Image
+--                  (Skills_Container.Element
+--                     (Container => Recruit.Skills, Index => I)
+--                     .Level) &
+--                " -length 360");
+--         Tcl.Tklib.Ada.Tooltip.Add
+--           (Widget => Progress_Bar,
+--            Message => "The current level of the skill.");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
+--      end loop Show_Recruit_Skills_Loop;
+--      -- Equipment of the selected recruit
+--      Frame := Create(pathName => Recruit_Canvas & ".inventory");
+--      Recruit_Text :=
+--        Create
+--          (pathName => Frame & ".label",
+--           options =>
+--             "-height" & Natural'Image(Recruit.Equipment'Length) &
+--             " -width 30");
+--      Tag_Configure
+--        (TextWidget => Recruit_Text, TagName => "gold",
+--         Options =>
+--           "-foreground " &
+--           Tcl_GetVar
+--             (interp => Interp,
+--              varName =>
+--                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+--                "::colors(-goldenyellow)"));
+--      Show_Recruit_Equipment_Loop :
+--      for I in Recruit.Equipment'Range loop
+--         if Recruit.Equipment(I) > 0 then
+--            Insert
+--              (TextWidget => Recruit_Text, Index => "end",
+--               Text =>
+--                 "{" & Equipment_Locations'Image(I)(1) &
+--                 To_Lower
+--                   (Item =>
+--                      Equipment_Locations'Image(I)
+--                        (Equipment_Locations'Image(I)'First + 1 ..
+--                             Equipment_Locations'Image(I)'Last)) &
+--                 ": }");
+--            Insert
+--              (TextWidget => Recruit_Text, Index => "end",
+--               Text =>
+--                 "{" &
+--                 To_String
+--                   (Source =>
+--                      Get_Proto_Item
+--                        (Index =>
+--                           Positive_Formal_Container.Element
+--                             (Container => Recruit.Inventory,
+--                              Index => Recruit.Equipment(I)))
+--                        .Name) &
+--                 LF & "} [list gold]");
+--         end if;
+--      end loop Show_Recruit_Equipment_Loop;
+--      configure(Widgt => Recruit_Text, options => "-state disabled");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Text, Options => "-sticky w");
+--      Frame := Get_Widget(pathName => Recruit_Canvas & ".general");
+--      Canvas_Create
+--        (Parent => Recruit_Canvas, Child_Type => "window",
+--         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
+--      Tcl_Eval(interp => Interp, strng => "update");
+--      configure
+--        (Widgt => Recruit_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Recruit_Canvas, TagOrId => "all") & "]");
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
+--         Script => "{focus " & Recruit_Dialog & ".buttonbox.general;break}");
+--      Bind
+--        (Widgt => Recruit_Dialog, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Show_Dialog(Dialog => Recruit_Dialog, Relative_Y => 0.2);
+--      return TCL_OK;
    end Show_Recruit_Info_Command;
 
    -- ****o* RecruitUI/RecruitUI.Negotiate_Hire_Command

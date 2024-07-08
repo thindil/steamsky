@@ -333,5 +333,5 @@ proc getAdaHighestAttribute(baseIndex, memberIndex: cint): cstring {.exportc.} =
 proc getAdaHighestRecSkill(baseIndex, memberIndex: cint): cstring {.exportc.} =
   return getHighestSkill(baseIndex = baseIndex, memberIndex = memberIndex - 1).cstring
 
-proc getRecruitIndex(): cint {.exportc.} =
+proc getAdaRecruitIndex(): cint {.exportc.} =
   return recruitIndex.cint + 1
