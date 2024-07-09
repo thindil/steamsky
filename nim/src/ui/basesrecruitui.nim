@@ -353,32 +353,33 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     recruit = skyBases[baseIndex].recruits[recruitIndex]
-  var cost: Natural = recruit.price - ((dailyPayment - recruit.payment) * 50) -
+  var newCost: int = recruit.price - ((dailyPayment - recruit.payment) * 50) -
       (tradePayment * 5_000)
-  const dialogName = ".negotiateDialog"
+  const dialogName = ".negotiatedialog"
   let
     contractBox = dialogName & ".contract"
     contractLength = tclEval2(script = contractBox & " current").parseInt
-  cost = case contractLength
+  newCost = case contractLength
     of 1:
-      cost - (recruit.price.float * 0.1).int
+      newCost - (recruit.price.float * 0.1).int
     of 2:
-      cost - (recruit.price.float * 0.5).int
+      newCost - (recruit.price.float * 0.5).int
     of 3:
-      cost - (recruit.price.float * 0.75).int
+      newCost - (recruit.price.float * 0.75).int
     of 4:
-      cost - (recruit.price.float * 0.9).int
+      newCost - (recruit.price.float * 0.9).int
     else:
-      cost
-  if cost < 1:
-    cost = 1
+      newCost
+  if newCost < 1:
+    newCost = 1
+  var cost: Natural = newCost
   countPrice(price = cost, traderIndex = findMember(order = talk))
   let moneyInfo = dialogName & ".cost"
   tclEval(script = moneyInfo & " configure -state normal")
   tclEval(script = moneyInfo & " delete 2.0 end")
-  tclEval(script = moneyInfo & " insert end {\nHire for}")
+  tclEval(script = moneyInfo & " insert end {\nHire for }")
   tclEval(script = moneyInfo & " insert end {" & $cost & "} [list gold]")
-  tclEval(script = moneyInfo & " insert end {" & moneyName & "}")
+  tclEval(script = moneyInfo & " insert end { " & moneyName & "}")
   tclEval(script = moneyInfo & " configure -state disabled")
   let
     moneyIndex2 = findItem(inventory = playerShip.cargo,
