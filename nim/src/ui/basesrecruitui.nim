@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[bases, config, crew, game, maps, shipscrew, tk, types]
+import ../[bases, config, crew, crewinventory, game, maps, shipscrew, tk, types]
 import coreui, dialogs, mapsui, table, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
@@ -378,6 +378,14 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moneyInfo & " delete 2.0 end")
   tclEval(script = moneyInfo & " insert end {" & moneyName & "}")
   tclEval(script = moneyInfo & " configure -state disabled")
+  let
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    hireButton = dialogName & ".buttonbox.hirebutton"
+  if moneyIndex > -1 and playerShip.cargo[moneyIndex2].amount < cost:
+    tclEval(script = hireButton & " configure -state disabled")
+  else:
+    tclEval(script = hireButton & " configure -state !disabled")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
