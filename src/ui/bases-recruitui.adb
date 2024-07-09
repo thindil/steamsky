@@ -255,89 +255,91 @@ package body Bases.RecruitUI is
    function Negotiate_Hire_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "negotiateHireCommand";
       -- ****
 
-   function Negotiate_Hire_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      Dialog_Name: constant String := ".negotiatedialog";
-      Money_Index_2: constant Natural :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Base_Index: constant Positive :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Recruit: constant Recruit_Data :=
-        Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Get_Recruit_Index);
-      Cost: Integer;
-      Daily_Payment: constant Natural :=
-        Natural(Float'Value(Tcl_GetVar(interp => Interp, varName => "daily")));
-      Contract_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
-      Contract_Length: constant Natural :=
-        Natural'Value(Current(ComboBox => Contract_Box));
-      Trade_Payment: constant Natural :=
-        Natural
-          (Float'Value(Tcl_GetVar(interp => Interp, varName => "percent")));
-      Money_Info: constant Tk_Text :=
-        Get_Widget(pathName => Dialog_Name & ".cost", Interp => Interp);
-      Hire_Button: constant Ttk_Button :=
-        Get_Widget
-          (pathName => Dialog_Name & ".buttonbox.hirebutton",
-           Interp => Interp);
-   begin
-      Tcl_SetVar
-        (interp => Interp, varName => "daily",
-         newValue =>
-           Trim(Source => Natural'Image(Daily_Payment), Side => Left));
-      Tcl_SetVar
-        (interp => Interp, varName => "percent",
-         newValue =>
-           Trim(Source => Natural'Image(Trade_Payment), Side => Left));
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Cost :=
-        Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
-        (Trade_Payment * 5_000);
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      --## rule off ASSIGNMENTS
-      Cost :=
-        (case Contract_Length is
-           when 1 => Cost - Integer(Float(Recruit.Price) * 0.1),
-           when 2 => Cost - Integer(Float(Recruit.Price) * 0.5),
-           when 3 => Cost - Integer(Float(Recruit.Price) * 0.75),
-           when 4 => Cost - Integer(Float(Recruit.Price) * 0.9),
-           when others => Cost);
-      --## rule on ASSIGNMENTS
-      if Cost < 1 then
-         Cost := 1;
-      end if;
-      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-      configure(Widgt => Money_Info, options => "-state normal");
-      Delete(TextWidget => Money_Info, StartIndex => "2.0", Indexes => "end");
-      Insert
-        (TextWidget => Money_Info, Index => "end",
-         Text => "{" & LF & "Hire for}");
-      Insert
-        (TextWidget => Money_Info, Index => "end",
-         Text => "{" & Positive'Image(Cost) & "} [list gold]");
-      Insert
-        (TextWidget => Money_Info, Index => "end",
-         Text => "{ " & To_String(Source => Money_Name) & "}");
-      configure(Widgt => Money_Info, options => "-state disabled");
-      if Money_Index_2 > 0
-        and then
-          Inventory_Container.Element
-            (Container => Player_Ship.Cargo, Index => Money_Index_2)
-            .Amount <
-          Cost then
-         configure(Widgt => Hire_Button, options => "-state disabled");
-      else
-         configure(Widgt => Hire_Button, options => "-state !disabled");
-      end if;
-      return TCL_OK;
-   end Negotiate_Hire_Command;
+--   function Negotiate_Hire_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      Dialog_Name: constant String := ".negotiatedialog";
+--      Money_Index_2: constant Natural :=
+--        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+--      Base_Index: constant Positive :=
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Recruit: constant Recruit_Data :=
+--        Recruit_Container.Element
+--          (Container => Sky_Bases(Base_Index).Recruits,
+--           Index => Get_Recruit_Index);
+--      Cost: Integer;
+--      Daily_Payment: constant Natural :=
+--        Natural(Float'Value(Tcl_GetVar(interp => Interp, varName => "daily")));
+--      Contract_Box: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
+--      Contract_Length: constant Natural :=
+--        Natural'Value(Current(ComboBox => Contract_Box));
+--      Trade_Payment: constant Natural :=
+--        Natural
+--          (Float'Value(Tcl_GetVar(interp => Interp, varName => "percent")));
+--      Money_Info: constant Tk_Text :=
+--        Get_Widget(pathName => Dialog_Name & ".cost", Interp => Interp);
+--      Hire_Button: constant Ttk_Button :=
+--        Get_Widget
+--          (pathName => Dialog_Name & ".buttonbox.hirebutton",
+--           Interp => Interp);
+--   begin
+--      Tcl_SetVar
+--        (interp => Interp, varName => "daily",
+--         newValue =>
+--           Trim(Source => Natural'Image(Daily_Payment), Side => Left));
+--      Tcl_SetVar
+--        (interp => Interp, varName => "percent",
+--         newValue =>
+--           Trim(Source => Natural'Image(Trade_Payment), Side => Left));
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Cost :=
+--        Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
+--        (Trade_Payment * 5_000);
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      --## rule off ASSIGNMENTS
+--      Cost :=
+--        (case Contract_Length is
+--           when 1 => Cost - Integer(Float(Recruit.Price) * 0.1),
+--           when 2 => Cost - Integer(Float(Recruit.Price) * 0.5),
+--           when 3 => Cost - Integer(Float(Recruit.Price) * 0.75),
+--           when 4 => Cost - Integer(Float(Recruit.Price) * 0.9),
+--           when others => Cost);
+--      --## rule on ASSIGNMENTS
+--      if Cost < 1 then
+--         Cost := 1;
+--      end if;
+--      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+--      configure(Widgt => Money_Info, options => "-state normal");
+--      Delete(TextWidget => Money_Info, StartIndex => "2.0", Indexes => "end");
+--      Insert
+--        (TextWidget => Money_Info, Index => "end",
+--         Text => "{" & LF & "Hire for}");
+--      Insert
+--        (TextWidget => Money_Info, Index => "end",
+--         Text => "{" & Positive'Image(Cost) & "} [list gold]");
+--      Insert
+--        (TextWidget => Money_Info, Index => "end",
+--         Text => "{ " & To_String(Source => Money_Name) & "}");
+--      configure(Widgt => Money_Info, options => "-state disabled");
+--      if Money_Index_2 > 0
+--        and then
+--          Inventory_Container.Element
+--            (Container => Player_Ship.Cargo, Index => Money_Index_2)
+--            .Amount <
+--          Cost then
+--         configure(Widgt => Hire_Button, options => "-state disabled");
+--      else
+--         configure(Widgt => Hire_Button, options => "-state !disabled");
+--      end if;
+--      return TCL_OK;
+--   end Negotiate_Hire_Command;
 
    -- ****o* RecruitUI/RecruitUI.Hire_Command
    -- FUNCTION
