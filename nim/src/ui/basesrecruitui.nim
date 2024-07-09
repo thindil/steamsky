@@ -376,6 +376,8 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   let moneyInfo = dialogName & ".cost"
   tclEval(script = moneyInfo & " configure -state normal")
   tclEval(script = moneyInfo & " delete 2.0 end")
+  tclEval(script = moneyInfo & " insert end {\nHire for}")
+  tclEval(script = moneyInfo & " insert end {" & $cost & "} [list gold]")
   tclEval(script = moneyInfo & " insert end {" & moneyName & "}")
   tclEval(script = moneyInfo & " configure -state disabled")
   let
