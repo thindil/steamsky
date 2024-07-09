@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Can't hire the last recruit from a base
 - Crash when comparing modules in a shipyard
 - Crash when showing information about the skill of the recruit in bases
+- Showing information about the module's status in a shipyard
 
 ## [10.0] - 2026-06-30
 
