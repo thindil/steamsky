@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Information about durability difference between modules when installing a
+  module in shipyards
+
 ### Changed
 - Updated README.md
 - Updated information about the free space in the player's ship's cargo
