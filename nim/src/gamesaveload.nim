@@ -22,12 +22,12 @@ import contracts
 import basessaveload, config, game, goals, log, maps, messages, missions,
     shipssaveload, statistics, stories, types, utils
 
-const saveVersion = 5 ## The current version of the game saves files
+const saveVersion: Positive = 5 ## The current version of the game saves files
 
 type SaveGameInvalidData* = object of CatchableError
   ## Raised when there is an invalid data in the saved game file.
 
-var saveName*: string ## The full path to the game save file with file name
+var saveName*: string = "" ## The full path to the game save file with file name
 
 proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     IOError], tags: [WriteIOEffect, RootEffect], contractual.} =
@@ -37,11 +37,12 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   ##                 for reduce size of the file
   logMessage(message = "Start saving game in file " & saveName & ".",
       debugType = everything)
-  var saveTree = newXmlTree(tag = "save", children = [], attributes = {
+  var saveTree: XmlNode = newXmlTree(tag = "save", children = [], attributes = {
       "version": $saveVersion}.toXmlAttributes)
   logMessage(message = "Saving game difficulty settings...",
       debugType = everything)
-  let difficulties = [("enemydamagebonus", newGameSettings.enemyDamageBonus), (
+  let difficulties: array[8, tuple[key: string, val: BonusType]] = [(
+      "enemydamagebonus", newGameSettings.enemyDamageBonus), (
       "playerdamagebonus", newGameSettings.playerDamageBonus), (
       "enemymeleedamagebonus", newGameSettings.enemyMeleeDamageBonus), (
       "playermeleedamagebonus", newGameSettings.playerMeleeDamageBonus), (
@@ -50,7 +51,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       newGameSettings.upgradeCostBonus), ("pricesbonus",
       newGameSettings.pricesBonus)]
   var
-    diffElement = newElement(tag = "difficulty")
+    diffElement: XmlNode = newElement(tag = "difficulty")
     attrs: seq[tuple[key, val: string]] = @[]
   for difficulty in difficulties:
     attrs.add(y = (difficulty[0], $difficulty[1]))
@@ -58,7 +59,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   saveTree.add(son = diffElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving game time...", debugType = everything)
-  var dateElement = newElement(tag = "gamedate")
+  var dateElement: XmlNode = newElement(tag = "gamedate")
   dateElement.attrs = {"year": $gameDate.year, "month": $gameDate.month,
       "day": $gameDate.day, "hour": $gameDate.hour,
       "minutes": $gameDate.minutes}.toXmlAttributes
@@ -68,7 +69,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   for x in MapXRange.low .. MapXRange.high:
     for y in MapYRange.low .. MapYRange.high:
       if skyMap[x][y].visited:
-        var fieldElement = newElement(tag = "field")
+        var fieldElement: XmlNode = newElement(tag = "field")
         fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
         saveTree.add(son = fieldElement)
   logMessage(message = "done", debugType = everything)
@@ -80,15 +81,15 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving known recipes...", debugType = everything)
   for recipe in knownRecipes:
-    var recipeElement = newElement(tag = "recipe")
+    var recipeElement: XmlNode = newElement(tag = "recipe")
     recipeElement.attrs = {"index": recipe}.toXmlAttributes
     saveTree.add(son = recipeElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving messages...", debugType = everything)
-  let messagesToSave = (if gameSettings.savedMessages > messagesAmount(): messagesAmount() else: gameSettings.savedMessages)
+  let messagesToSave: Natural = (if gameSettings.savedMessages > messagesAmount(): messagesAmount() else: gameSettings.savedMessages)
   for i in (messagesAmount() - messagesToSave + 1) .. messagesAmount():
-    let message = getMessage(messageIndex = i)
-    var messageElement = newElement(tag = "message")
+    let message: MessageData = getMessage(messageIndex = i)
+    var messageElement: XmlNode = newElement(tag = "message")
     messageElement.attrs = {"type": $message.kind,
         "color": $message.color}.toXmlAttributes
     messageElement.add(son = newText(text = $message.message))
@@ -97,8 +98,8 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Saving events...", debugType = everything)
   for event in eventsList:
     var
-      eventElement = newElement(tag = "event")
-      eventData: string
+      eventElement: XmlNode = newElement(tag = "event")
+      eventData: string = ""
     case event.eType
     of doublePrice:
       eventData = $event.itemIndex
@@ -111,7 +112,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     saveTree.add(son = eventElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving game statistics...", debugType = everything)
-  var statsElement = newElement(tag = "statistics")
+  var statsElement: XmlNode = newElement(tag = "statistics")
   statsElement.attrs = {"visitedbases": $gameStats.basesVisited,
       "mapdiscovered": $gameStats.mapVisited,
       "distancetraveled": $gameStats.distanceTraveled,
@@ -128,7 +129,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       statName.len > 0
     body:
       for statistic in stats:
-        var statElement = newElement(tag = statName)
+        var statElement: XmlNode = newElement(tag = statName)
         statElement.attrs = {"index": statistic.index,
             "amount": $statistic.amount}.toXmlAttributes
         statsElement.add(son = statElement)
@@ -142,7 +143,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   saveTree.add(son = statsElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving current goal...", debugType = everything)
-  var goalElement = newElement(tag = "currentgoal")
+  var goalElement: XmlNode = newElement(tag = "currentgoal")
   goalElement.attrs = {"index": $currentGoal.index,
       "type": $currentGoal.goalType.ord, "amount": $currentGoal.amount,
       "target": currentGoal.targetIndex,
@@ -152,7 +153,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   if currentStory.index.len > 0:
     logMessage(message = "Saving current story...", debugType = everything)
     var
-      storyElement = newElement(tag = "currentstory")
+      storyElement: XmlNode = newElement(tag = "currentstory")
       attrs: seq[tuple[key, val: string]] = @[]
     attrs.add(y = ("index", currentStory.index))
     case currentStory.currentStep
@@ -177,12 +178,12 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Saving finished stories...", debugType = everything)
   for finishedStory in finishedStories.items:
     var
-      storyNode = newXmlTree(tag = "finishedstory", children = [],
+      storyNode: XmlNode = newXmlTree(tag = "finishedstory", children = [],
           attributes = {
         "index": finishedStory.index,
         "stepsamount": $finishedStory.stepsAmount}.toXmlAttributes)
     for text in finishedStory.stepsTexts.items:
-      var textElement = newElement(tag = "steptext")
+      var textElement: XmlNode = newElement(tag = "steptext")
       textElement.add(son = newText(text = text))
       storyNode.add(son = textElement)
     saveTree.add(son = storyNode)
@@ -190,7 +191,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Saving accepted missions...", debugType = everything)
   for mission in acceptedMissions:
     var
-      missionElement = newElement(tag = "acceptedmission")
+      missionElement: XmlNode = newElement(tag = "acceptedmission")
       attrs: seq[tuple[key, val: string]] = @[]
     attrs.add(y = ("type", $mission.mType.ord))
     case mission.mType
@@ -217,13 +218,13 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     saveTree.add(son = missionElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving player career...", debugType = everything)
-  var careerElement = newElement(tag = "playercareer")
+  var careerElement: XmlNode = newElement(tag = "playercareer")
   careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
   saveTree.add(son = careerElement)
   logMessage(message = "done", debugType = everything)
-  var saveText = $saveTree
+  var saveText: string = $saveTree
   if not prettyPrint:
-    var lines = saveText.splitLines
+    var lines: seq[string] = saveText.splitLines
     for line in lines.mitems:
       line = line.strip
     saveText = lines.join
@@ -234,7 +235,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
 proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game from a file
-  let savedGame = loadXml(path = saveName)
+  let savedGame: XmlNode = loadXml(path = saveName)
   logMessage(message = "Start loading game from file " & saveName & ".",
       debugType = everything)
   # Check the same game compatybility
@@ -244,7 +245,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   # Load the game difficulty settings
   logMessage(message = "Loading the game difficulty settings...",
       debugType = everything)
-  var diffNode = savedGame.child(name = "difficulty")
+  var diffNode: XmlNode = savedGame.child(name = "difficulty")
   newGameSettings.enemyDamageBonus = diffNode.attr(name =
     "enemydamagebonus").parseFloat
   newGameSettings.playerDamageBonus = diffNode.attr(name =
@@ -263,7 +264,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   logMessage(message = "done", debugType = everything)
   # Load the game date
   logMessage(message = "Loading the game time...", debugType = everything)
-  var dateNode = savedGame.child(name = "gamedate")
+  var dateNode: XmlNode = savedGame.child(name = "gamedate")
   gameDate.year = dateNode.attr(name = "year").parseInt
   gameDate.month = dateNode.attr(name = "month").parseInt
   gameDate.day = dateNode.attr(name = "day").parseInt
@@ -280,8 +281,8 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
       skyMap[x][y].visited = false
   for field in savedGame.findAll(tag = "field"):
     let
-      x = field.attr(name = "x").parseInt
-      y = field.attr(name = "y").parseInt
+      x: MapXRange = field.attr(name = "x").parseInt
+      y: MapYRange = field.attr(name = "y").parseInt
     skyMap[x][y].visited = true
   logMessage(message = "done", debugType = everything)
   # Load sky bases
@@ -307,7 +308,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   # Load events
   logMessage(message = "Loading events...", debugType = everything)
   for index, savedEvent in savedGame.findAll(tag = "event"):
-    var event = EventData(skyX: savedEvent.attr(name = "x").parseInt,
+    var event: EventData = EventData(skyX: savedEvent.attr(name = "x").parseInt,
         skyY: savedEvent.attr(name = "y").parseInt, time: savedEvent.attr(
         name = "time").parseInt, eType: savedEvent.attr(
             name = "type").parseInt.EventsTypes)
@@ -405,10 +406,11 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   # Load the player's current goal
   logMessage(message = "Loading game current goal...", debugType = everything)
   var goalNode = savedGame.child(name = "currentgoal")
-  currentGoal = GoalData(index: goalNode.attr(name = "index"), goalType: goalNode.attr(name =
-      "type").parseInt.GoalTypes, amount: goalNode.attr(name = "amount").parseInt,
-      targetIndex: goalNode.attr(name = "target"), multiplier: goalNode.attr(name =
-      "multiplier").parseInt)
+  currentGoal = GoalData(index: goalNode.attr(name = "index"),
+      goalType: goalNode.attr(name =
+    "type").parseInt.GoalTypes, amount: goalNode.attr(name = "amount").parseInt,
+    targetIndex: goalNode.attr(name = "target"), multiplier: goalNode.attr(name =
+    "multiplier").parseInt)
   logMessage(message = "done", debugType = everything)
   # Load the player's career
   logMessage(message = "Loading the player's career...", debugType = everything)
