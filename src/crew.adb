@@ -76,28 +76,6 @@ package body Crew is
       Set_Game_Date;
    end Wait_For_Rest;
 
-   function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String is
-      function Get_Ada_Skill_Level_Name(S_Level: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaSkillLevelName";
-   begin
-      return Value(Item => Get_Ada_Skill_Level_Name(S_Level => Skill_Level));
-   end Get_Skill_Level_Name;
-
-   function Get_Attribute_Level_Name
-     (Attribute_Level: Positive) return String is
-      function Get_Ada_Attribute_Level_Name
-        (A_Level: Integer) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaAttributeLevelName";
-   begin
-      return
-        Value
-          (Item => Get_Ada_Attribute_Level_Name(A_Level => Attribute_Level));
-   end Get_Attribute_Level_Name;
-
    function Member_To_Nim(Member: Member_Data) return Nim_Member_Data is
       use Tiny_String;
       Nim_Member: Nim_Member_Data :=
