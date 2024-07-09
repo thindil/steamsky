@@ -25,7 +25,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -33,14 +33,14 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade;
-with Config; use Config;
+with Config;
 with CoreUI;
-with Dialogs; use Dialogs;
+with Dialogs;
 with Maps; use Maps;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
@@ -444,6 +444,8 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.Canvas;
+
       Recruit_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => ".recruitdialog.canvas", Interp => Interp);
       Frame: constant Ttk_Frame :=
@@ -488,6 +490,11 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tklib.Ada.Tooltip;
+      use Config;
+      use Dialogs;
+
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
