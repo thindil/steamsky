@@ -344,10 +344,16 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    dailyPayment = tclGetVar(varName = "daily").parseFloat.Natural
-    tradePayment = tclGetVar(varName = "percent").parseFloat.Natural
+    dailyPayment = try:
+        tclGetVar(varName = "daily").parseFloat.Natural
+      except:
+        return showError(message = "Can't get daily payment.")
+    tradePayment = try:
+        tclGetVar(varName = "percent").parseFloat.Natural
+      except:
+        return showError(message = "Can't get trade payment.")
   tclSetVar(varName = "daily", newValue = $dailyPayment)
   tclSetVar(varName = "percent", newValue = $tradePayment)
   let
@@ -358,7 +364,10 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   const dialogName = ".negotiatedialog"
   let
     contractBox = dialogName & ".contract"
-    contractLength = tclEval2(script = contractBox & " current").parseInt
+    contractLength = try:
+        tclEval2(script = contractBox & " current").parseInt
+      except:
+        return showError(message = "Can't get contract length.")
   newCost = case contractLength
     of 1:
       newCost - (recruit.price.float * 0.1).int
@@ -373,7 +382,10 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   if newCost < 1:
     newCost = 1
   var cost: Natural = newCost
-  countPrice(price = cost, traderIndex = findMember(order = talk))
+  try:
+    countPrice(price = cost, traderIndex = findMember(order = talk))
+  except:
+    return showError(message = "Can't count price.")
   let moneyInfo = dialogName & ".cost"
   tclEval(script = moneyInfo & " configure -state normal")
   tclEval(script = moneyInfo & " delete 2.0 end")
