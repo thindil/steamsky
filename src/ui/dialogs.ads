@@ -148,18 +148,6 @@ package Dialogs is
       Convention => C;
       -- ****
 
-      -- ****f* Dialogs/Dialogs.Change_Title
-      -- FUNCTION
-      -- Change the title of the selected dialog
-      -- PARAMETERS
-      -- Dialog    - The dialog which title will be changed
-      -- New_Title - The new title for the selected dialog
-      -- HISTORY
-      -- 6.8 - Added
-      -- SOURCE
-   procedure Change_Title(Dialog: Ttk_Frame; New_Title: String);
-   -- ****
-
       -- ****f* Dialogs/Dialogs.Add_Commands
       -- FUNCTION
       -- Add Tcl commands related to dialogs

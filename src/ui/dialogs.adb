@@ -183,14 +183,6 @@ package body Dialogs is
       return TCL_OK;
    end Close_Dialog_Command;
 
-   procedure Change_Title(Dialog: Ttk_Frame; New_Title: String) is
-      Dialog_Header: constant Ttk_Label :=
-        Get_Widget(pathName => Dialog & ".header");
-   begin
-      configure
-        (Widgt => Dialog_Header, options => "-text {" & New_Title & "}");
-   end Change_Title;
-
    -- ****o* Dialogs/Dialogs.Update_Dialog_Command
    -- FUNCTION
    -- Update countdown timer on the selected dialog. If timer reach 0, close
