@@ -25,7 +25,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas;
+-- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -296,35 +296,37 @@ package body Bases.RecruitUI is
    function Show_Recruit_Tab_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showRecruitTabCommand";
       -- ****
 
-   function Show_Recruit_Tab_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tcl.Tk.Ada.Widgets.Canvas;
-
-      Recruit_Canvas: constant Tk_Canvas :=
-        Get_Widget(pathName => ".recruitdialog.canvas", Interp => Interp);
-      Frame: constant Ttk_Frame :=
-        Get_Widget
-          (pathName =>
-             Recruit_Canvas & "." &
-             Tcl_GetVar(interp => Interp, varName => "newtab"));
-   begin
-      Delete(CanvasWidget => Recruit_Canvas, TagOrId => "info");
-      Canvas_Create
-        (Parent => Recruit_Canvas, Child_Type => "window",
-         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
-      Tcl_Eval(interp => Interp, strng => "update");
-      configure
-        (Widgt => Recruit_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Recruit_Canvas, TagOrId => "all") & "]");
-      return TCL_OK;
-   end Show_Recruit_Tab_Command;
+--   function Show_Recruit_Tab_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tcl.Tk.Ada.Widgets.Canvas;
+--
+--      Recruit_Canvas: constant Tk_Canvas :=
+--        Get_Widget(pathName => ".recruitdialog.canvas", Interp => Interp);
+--      Frame: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName =>
+--             Recruit_Canvas & "." &
+--             Tcl_GetVar(interp => Interp, varName => "newtab"));
+--   begin
+--      Delete(CanvasWidget => Recruit_Canvas, TagOrId => "info");
+--      Canvas_Create
+--        (Parent => Recruit_Canvas, Child_Type => "window",
+--         Options => "32 0 -anchor nw -window " & Frame & " -tag info");
+--      Tcl_Eval(interp => Interp, strng => "update");
+--      configure
+--        (Widgt => Recruit_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Recruit_Canvas, TagOrId => "all") & "]");
+--      return TCL_OK;
+--   end Show_Recruit_Tab_Command;
 
    -- ****o* RecruitUI/RecruitUI.Negotiate_Command
    -- FUNCTION
