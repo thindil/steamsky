@@ -154,35 +154,35 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
     logMessage(message = "Saving current story...", debugType = everything)
     var
       storyElement: XmlNode = newElement(tag = "currentstory")
-      attrs: seq[tuple[key, val: string]] = @[]
-    attrs.add(y = ("index", currentStory.index))
+      attrs2: seq[tuple[key, val: string]] = @[]
+    attrs2.add(y = ("index", currentStory.index))
     case currentStory.currentStep
     of 0:
-      attrs.add(y = ("currentstep", "start"))
+      attrs2.add(y = ("currentstep", "start"))
     of -1:
-      attrs.add(y = ("currentstep", "finish"))
+      attrs2.add(y = ("currentstep", "finish"))
     else:
-      attrs.add(y = ("currentstep", storiesList[currentStory.index].steps[
+      attrs2.add(y = ("currentstep", storiesList[currentStory.index].steps[
           currentStory.currentStep].index))
-    attrs.add(y = ("maxsteps", $currentStory.maxSteps))
+    attrs2.add(y = ("maxsteps", $currentStory.maxSteps))
     if currentStory.showText:
-      attrs.add(y = ("showText", "Y"))
+      attrs2.add(y = ("showText", "Y"))
     else:
-      attrs.add(y = ("showText", "N"))
+      attrs2.add(y = ("showText", "N"))
     if currentStory.data.len > 0:
-      attrs.add(y = ("data", currentStory.data))
-    attrs.add(y = ("finishedstep", $currentStory.finishedStep.ord))
-    storyElement.attrs = attrs.toXmlAttributes
+      attrs2.add(y = ("data", currentStory.data))
+    attrs2.add(y = ("finishedstep", $currentStory.finishedStep.ord))
+    storyElement.attrs = attrs2.toXmlAttributes
     saveTree.add(son = storyElement)
     logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving finished stories...", debugType = everything)
-  for finishedStory in finishedStories.items:
+  for finishedStory in finishedStories:
     var
       storyNode: XmlNode = newXmlTree(tag = "finishedstory", children = [],
           attributes = {
         "index": finishedStory.index,
         "stepsamount": $finishedStory.stepsAmount}.toXmlAttributes)
-    for text in finishedStory.stepsTexts.items:
+    for text in finishedStory.stepsTexts:
       var textElement: XmlNode = newElement(tag = "steptext")
       textElement.add(son = newText(text = text))
       storyNode.add(son = textElement)
@@ -192,29 +192,29 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   for mission in acceptedMissions:
     var
       missionElement: XmlNode = newElement(tag = "acceptedmission")
-      attrs: seq[tuple[key, val: string]] = @[]
-    attrs.add(y = ("type", $mission.mType.ord))
+      attrs2: seq[tuple[key, val: string]] = @[]
+    attrs2.add(y = ("type", $mission.mType.ord))
     case mission.mType
     of deliver:
-      attrs.add(y = ("target", $mission.itemIndex))
+      attrs2.add(y = ("target", $mission.itemIndex))
     of passenger:
-      attrs.add(y = ("target", $mission.data))
+      attrs2.add(y = ("target", $mission.data))
     of destroy:
-      attrs.add(y = ("target", $mission.shipIndex))
+      attrs2.add(y = ("target", $mission.shipIndex))
     else:
-      attrs.add(y = ("target", $mission.target))
-    attrs.add(y = ("time", $mission.time))
-    attrs.add(y = ("targetx", $mission.targetX))
-    attrs.add(y = ("targety", $mission.targetY))
-    attrs.add(y = ("reward", $mission.reward))
-    attrs.add(y = ("startbase", $mission.startBase))
+      attrs2.add(y = ("target", $mission.target))
+    attrs2.add(y = ("time", $mission.time))
+    attrs2.add(y = ("targetx", $mission.targetX))
+    attrs2.add(y = ("targety", $mission.targetY))
+    attrs2.add(y = ("reward", $mission.reward))
+    attrs2.add(y = ("startbase", $mission.startBase))
     if mission.finished:
-      attrs.add(y = ("finished", "Y"))
+      attrs2.add(y = ("finished", "Y"))
     else:
-      attrs.add(y = ("finished", "N"))
+      attrs2.add(y = ("finished", "N"))
     if mission.multiplier != 1.0:
-      attrs.add(y = ("multiplier", $mission.multiplier))
-    missionElement.attrs = attrs.toXmlAttributes()
+      attrs2.add(y = ("multiplier", $mission.multiplier))
+    missionElement.attrs = attrs2.toXmlAttributes()
     saveTree.add(son = missionElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving player career...", debugType = everything)
@@ -323,7 +323,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
     skyMap[event.skyX][event.skyY].eventIndex = index
   logMessage(message = "done", debugType = everything)
   # Load the current story
-  let storyNode = savedGame.child(name = "currentstory")
+  let storyNode: XmlNode = savedGame.child(name = "currentstory")
   if storyNode != nil:
     logMessage(message = "Loading the current story...", debugType = everything)
     currentStory.index = storyNode.attr(name = "index")
@@ -346,7 +346,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   # Load finished stories data
   logMessage(message = "Loading finished stories...", debugType = everything)
   for savedStory in savedGame.findAll(tag = "finishedstory"):
-    var story = FinishedStoryData()
+    var story: FinishedStoryData = FinishedStoryData()
     story.index = savedStory.attr(name = "index")
     story.stepsAmount = savedStory.attr(name = "stepsamount").parseInt
     for text in savedStory:
@@ -356,7 +356,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   # Load accepted missions
   logMessage(message = "Loading accepted missions...", debugType = everything)
   for index, mission in savedGame.findAll(tag = "acceptedmission"):
-    var tmpMission = MissionData(mtype: mission.attr(name =
+    var tmpMission: MissionData = MissionData(mtype: mission.attr(name =
       "type").parseInt.MissionsTypes, time: mission.attr(
           name = "time").parseInt,
       targetX: mission.attr(name = "targetx").parseInt, targetY: mission.attr(name =
@@ -373,7 +373,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
       tmpMission.shipIndex = mission.attr(name = "target").parseInt
     else:
       tmpMission.target = mission.attr(name = "target").parseInt
-    let multiplier = mission.attr(name = "multiplier")
+    let multiplier: string = mission.attr(name = "multiplier")
     if multiplier.len > 0:
       tmpMission.multiplier = multiplier.parseFloat
     acceptedMissions.add(y = tmpMission)
@@ -405,7 +405,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   logMessage(message = "done", debugType = everything)
   # Load the player's current goal
   logMessage(message = "Loading game current goal...", debugType = everything)
-  var goalNode = savedGame.child(name = "currentgoal")
+  var goalNode: XmlNode = savedGame.child(name = "currentgoal")
   currentGoal = GoalData(index: goalNode.attr(name = "index"),
       goalType: goalNode.attr(name =
     "type").parseInt.GoalTypes, amount: goalNode.attr(name = "amount").parseInt,
@@ -414,7 +414,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   logMessage(message = "done", debugType = everything)
   # Load the player's career
   logMessage(message = "Loading the player's career...", debugType = everything)
-  let careerNode = savedGame.child(name = "playercareer")
+  let careerNode: XmlNode = savedGame.child(name = "playercareer")
   playerCareer = careerNode.attr(name = "index")
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Finished loading the game.", debugType = everything)
@@ -425,7 +425,7 @@ proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
   ## Generate an unique name for the save game file
   ##
   ## * renameSave - if true, rename the existing save game file.
-  let oldSaveName = saveName
+  let oldSaveName: string = saveName
   while true:
     saveName = saveDirectory & playerShip.crew[0].name & "_" & playerShip.name &
         "_" & $getRandom(min = 100, max = 999) & ".sav"
