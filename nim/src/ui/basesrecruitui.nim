@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[bases, config, crew, crewinventory, game, maps, shipscrew, tk, types]
+import ../[bases, basestrade, config, crew, crewinventory, game, maps,
+    shipscrew, tk, types]
 import coreui, dialogs, mapsui, table, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
@@ -418,9 +419,11 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   const dialogName = ".negotiatedialog"
   var scale = dialogName & ".percent"
-  let tradePayment = tclEval2(script = scale & " cget -value").parseFloat.Natural
+  let tradePayment = tclEval2(script = scale &
+      " cget -value").parseFloat.Natural
   scale = dialogName & ".daily"
-  let dailyPayment = tclEval2(script = scale & " cget -value").parseFloat.Natural
+  let dailyPayment = tclEval2(script = scale &
+      " cget -value").parseFloat.Natural
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     recruit = skyBases[baseIndex].recruits[recruitIndex]
@@ -451,7 +454,12 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
     contractLength2 = -1
   if newCost < 1:
     newCost = 1
-  return tclOk
+  hireRecruit(recruitIndex = recruitIndex, cost = newCost,
+      dailyPayment = dailyPayment, tradePayment = tradePayment,
+      contractLength = contractLength2)
+  tclEval(script = "CloseDialog " & dialogName)
+  return showRecruitCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowRecruit", "1"].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
