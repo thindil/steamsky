@@ -157,6 +157,7 @@ package body Bases.ShipyardUI is
         Get_Widget
           (pathName => Shipyard_Canvas & ".shipyard.install.options.search");
    begin
+      Get_Ship_From_Nim(Ship => Player_Ship);
       if Winfo_Get(Widgt => Shipyard_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
@@ -1526,16 +1527,16 @@ package body Bases.ShipyardUI is
            Get_Module(Index => Get_Module_Index).Durability then
             configure
               (Widgt => Module_Label,
-               options => "-text {Weaker} -style Headerred.TLabel");
+               options => "-text {weaker} -style Headerred.TLabel");
          elsif Player_Ship.Modules(Ship_Module_Index).Max_Durability <
            Get_Module(Index => Get_Module_Index).Durability then
             configure
               (Widgt => Module_Label,
-               options => "-text {Stronger} -style Headergreen.TLabel");
+               options => "-text {stronger} -style Headergreen.TLabel");
          else
             configure
               (Widgt => Module_Label,
-               options => "-text {Same} -style Golden.TLabel");
+               options => "-text {same} -style Golden.TLabel");
          end if;
       end if;
       if Installing then
