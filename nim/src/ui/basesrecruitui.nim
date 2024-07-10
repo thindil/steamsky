@@ -457,6 +457,7 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
   hireRecruit(recruitIndex = recruitIndex, cost = newCost,
       dailyPayment = dailyPayment, tradePayment = tradePayment,
       contractLength = contractLength2)
+  updateMessages()
   tclEval(script = "CloseDialog " & dialogName)
   return showRecruitCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowRecruit", "1"].allocCStringArray)
