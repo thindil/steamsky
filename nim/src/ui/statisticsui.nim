@@ -28,21 +28,25 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
   ## * refresh - if true, refresh the view, otherwise back to the sky map
   var statsFrame = mainPaned & ".statsframe"
   let statsCanvas = statsFrame & ".canvas"
-  var label = statsCanvas & ".stats.left.points"
+  var label = statsCanvas & ".stats.left.points.points"
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "stats.tcl")
     tclEval(script = "bind " & statsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
   elif tclEval2(script = "winfo ismapped " & label) == "1" and not refresh:
     tclEval(script = "InvokeButton " & closeButton)
     return
-  tclEval(script = label & " configure -text {Points: " & $getGamePoints() & "}")
+  tclEval(script = label & " configure -text {" & $getGamePoints() & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of points gained in this game\"")
-  var statsText = "Time passed:"
+  label = statsCanvas & ".stats.left.points.lblpoints"
+  tclEval(script = "tooltip::tooltip " & label & " \"The amount of points gained in this game\"")
+  var statsText = ""
   let minutesDiff = (gameDate.minutes + (gameDate.hour * 60) + (gameDate.day *
       1_440) + (gameDate.month * 43_200) + (gameDate.year * 518_400)) - 829_571_520
   minutesToDate(minutes = minutesDiff, infoText = statsText)
-  label = statsCanvas & ".stats.left.time"
+  label = statsCanvas & ".stats.left.time.time"
   tclEval(script = label & " configure -text {" & statsText & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"In game time which was passed since it started\"")
+  label = statsCanvas & ".stats.left.time.lbltime"
   tclEval(script = "tooltip::tooltip " & label & " \"In game time which was passed since it started\"")
   var visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
   statsText = try:

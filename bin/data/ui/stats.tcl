@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,11 +28,22 @@ SetScrollbarBindings $statscanvas .gameframe.paned.statsframe.scrolly
 set statsframe [ttk::frame $statscanvas.stats]
 grid [ttk::frame $statsframe.left] -sticky nwes -padx 5
 SetScrollbarBindings $statsframe.left .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.left.points] -sticky w
-SetScrollbarBindings $statsframe.left.points \
+grid [ttk::frame $statsframe.left.points] -sticky w
+SetScrollbarBindings $statsframe.left.points .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.points.lblpoints -text {Points: }] -sticky w
+SetScrollbarBindings $statsframe.left.points.lblpoints \
    .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.left.time] -sticky w
+grid [ttk::label $statsframe.left.points.points -style Golden.TLabel] \
+   -sticky w -row 0 -column 1
+SetScrollbarBindings $statsframe.left.points.points \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::frame $statsframe.left.time] -sticky w
 SetScrollbarBindings $statsframe.left.time .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.time.lbltime -text {Time passed:}] -sticky w
+SetScrollbarBindings $statsframe.left.time.lbltime .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.time.time -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.left.time.time .gameframe.paned.statsframe.scrolly
 grid [ttk::label $statsframe.left.bases] -sticky w
 SetScrollbarBindings $statsframe.left.bases \
    .gameframe.paned.statsframe.scrolly
