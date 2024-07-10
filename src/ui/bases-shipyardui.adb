@@ -157,6 +157,7 @@ package body Bases.ShipyardUI is
         Get_Widget
           (pathName => Shipyard_Canvas & ".shipyard.install.options.search");
    begin
+      Get_Ship_From_Nim(Ship => Player_Ship);
       if Winfo_Get(Widgt => Shipyard_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
