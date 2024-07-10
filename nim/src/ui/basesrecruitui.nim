@@ -414,6 +414,45 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = hireButton & " configure -state !disabled")
   return tclOk
 
+proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  const dialogName = ".negotiatedialog"
+  var scale = dialogName & ".percent"
+  let tradePayment = tclEval2(script = scale & " cget -value").parseFloat.Natural
+  scale = dialogName & ".daily"
+  let dailyPayment = tclEval2(script = scale & " cget -value").parseFloat.Natural
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    recruit = skyBases[baseIndex].recruits[recruitIndex]
+    contractBox = dialogName & ".contract"
+    contractLength = try:
+        tclEval2(script = contractBox & " current").parseInt
+      except:
+        return showError(message = "Can't get contract length.")
+  var
+    newCost: int = recruit.price - ((dailyPayment - recruit.payment) * 50) -
+      (tradePayment * 5_000)
+    contractLength2 = 0
+  case contractLength
+  of 1:
+    newCost = newCost - (recruit.price.float * 0.1).int
+    contractLength2 = 100
+  of 2:
+    newCost = newCost - (recruit.price.float * 0.5).int
+    contractLength2 = 30
+  of 3:
+    newCost = newCost - (recruit.price.float * 0.75).int
+    contractLength2 = 20
+  of 4:
+    newCost = newCost - (recruit.price.float * 0.9).int
+    contractLength2 = 10
+  else:
+    newCost = newCost
+    contractLength2 = -1
+  if newCost < 1:
+    newCost = 1
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -421,6 +460,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowRecruit", showRecruitCommand)
 #    addCommand("ShowRecruitInfo", showRecruitInfoCommand)
 #    addCommand("NegotiateHire", negotiateHireCommand)
+#    addCommand("Hire", hireCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
