@@ -37,7 +37,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
-with Bases.Trade;
+-- with Bases.Trade;
 with Config;
 with CoreUI;
 with Dialogs;
@@ -276,71 +276,73 @@ package body Bases.RecruitUI is
    function Hire_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "hireCommand";
       -- ****
 
-   function Hire_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Bases.Trade;
-
-      pragma Unreferenced(Argc, Argv);
-      Dialog_Name: constant String := ".negotiatedialog";
-      Cost, Contract_Length_2: Integer;
-      Base_Index: constant Positive :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Recruit: constant Recruit_Data :=
-        Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Get_Recruit_Index);
-      Scale: Ttk_Scale :=
-        Get_Widget(pathName => Dialog_Name & ".daily", Interp => Interp);
-      Daily_Payment: constant Natural :=
-        Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
-      Contract_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
-      Contract_Length: constant Natural :=
-        Natural'Value(Current(ComboBox => Contract_Box));
-      Trade_Payment: Natural;
-   begin
-      Scale.Name := New_String(Str => Dialog_Name & ".percent");
-      Trade_Payment :=
-        Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
-      --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Cost :=
-        Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
-        (Trade_Payment * 5_000);
-      --## rule on SIMPLIFIABLE_EXPRESSIONS
-      case Contract_Length is
-         when 1 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
-            Contract_Length_2 := 100;
-         when 2 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.5);
-            Contract_Length_2 := 30;
-         when 3 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.75);
-            Contract_Length_2 := 20;
-         when 4 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.9);
-            Contract_Length_2 := 10;
-         when others =>
-            Contract_Length_2 := -1;
-      end case;
-      if Cost < 1 then
-         Cost := 1;
-      end if;
-      Hire_Recruit
-        (Recruit_Index => Get_Recruit_Index, Cost => Cost,
-         Daily_Payment => Daily_Payment, Trade_Payment => Trade_Payment,
-         Contract_Length => Contract_Length_2);
-      Update_Messages;
-      Tcl_Eval(interp => Interp, strng => "CloseDialog " & Dialog_Name);
-      return
-        Show_Recruit_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "ShowRecruit" & "1");
-   end Hire_Command;
+--   function Hire_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Bases.Trade;
+--
+--      pragma Unreferenced(Argc, Argv);
+--      Dialog_Name: constant String := ".negotiatedialog";
+--      Cost, Contract_Length_2: Integer;
+--      Base_Index: constant Positive :=
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Recruit: constant Recruit_Data :=
+--        Recruit_Container.Element
+--          (Container => Sky_Bases(Base_Index).Recruits,
+--           Index => Get_Recruit_Index);
+--      Scale: Ttk_Scale :=
+--        Get_Widget(pathName => Dialog_Name & ".daily", Interp => Interp);
+--      Daily_Payment: constant Natural :=
+--        Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
+--      Contract_Box: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
+--      Contract_Length: constant Natural :=
+--        Natural'Value(Current(ComboBox => Contract_Box));
+--      Trade_Payment: Natural;
+--   begin
+--      Scale.Name := New_String(Str => Dialog_Name & ".percent");
+--      Trade_Payment :=
+--        Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
+--      --## rule off SIMPLIFIABLE_EXPRESSIONS
+--      Cost :=
+--        Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
+--        (Trade_Payment * 5_000);
+--      --## rule on SIMPLIFIABLE_EXPRESSIONS
+--      case Contract_Length is
+--         when 1 =>
+--            Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
+--            Contract_Length_2 := 100;
+--         when 2 =>
+--            Cost := Cost - Integer(Float(Recruit.Price) * 0.5);
+--            Contract_Length_2 := 30;
+--         when 3 =>
+--            Cost := Cost - Integer(Float(Recruit.Price) * 0.75);
+--            Contract_Length_2 := 20;
+--         when 4 =>
+--            Cost := Cost - Integer(Float(Recruit.Price) * 0.9);
+--            Contract_Length_2 := 10;
+--         when others =>
+--            Contract_Length_2 := -1;
+--      end case;
+--      if Cost < 1 then
+--         Cost := 1;
+--      end if;
+--      Hire_Recruit
+--        (Recruit_Index => Get_Recruit_Index, Cost => Cost,
+--         Daily_Payment => Daily_Payment, Trade_Payment => Trade_Payment,
+--         Contract_Length => Contract_Length_2);
+--      Update_Messages;
+--      Tcl_Eval(interp => Interp, strng => "CloseDialog " & Dialog_Name);
+--      return
+--        Show_Recruit_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => CArgv.Empty & "ShowRecruit" & "1");
+--   end Hire_Command;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Tab_Command
    -- FUNCTION
