@@ -416,14 +416,19 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, RootEffect], exportc.} =
   const dialogName = ".negotiatedialog"
   var scale = dialogName & ".percent"
-  let tradePayment = tclEval2(script = scale &
-      " cget -value").parseFloat.Natural
+  let tradePayment = try:
+      tclEval2(script = scale & " cget -value").parseFloat.Natural
+    except:
+      return showError(message = "Can't get trade payment.")
   scale = dialogName & ".daily"
-  let dailyPayment = tclEval2(script = scale &
-      " cget -value").parseFloat.Natural
+  let dailyPayment = try:
+      tclEval2(script = scale & " cget -value").parseFloat.Natural
+    except:
+      return showError(message = "Can't get daily payment")
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     recruit = skyBases[baseIndex].recruits[recruitIndex]
@@ -454,9 +459,16 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
     contractLength2 = -1
   if newCost < 1:
     newCost = 1
-  hireRecruit(recruitIndex = recruitIndex, cost = newCost,
-      dailyPayment = dailyPayment, tradePayment = tradePayment,
-      contractLength = contractLength2)
+  try:
+    hireRecruit(recruitIndex = recruitIndex, cost = newCost,
+        dailyPayment = dailyPayment, tradePayment = tradePayment,
+        contractLength = contractLength2)
+  except NoTraderError:
+    showMessage(text = "You don't have a trader to hire the recruit.",
+        title = "Can't hire the recruit.")
+    return tclOk
+  except:
+    return showError(message = "Can't hire the recruit.")
   updateMessages()
   tclEval(script = "CloseDialog " & dialogName)
   return showRecruitCommand(clientData = clientData, interp = interp, argc = 2,
