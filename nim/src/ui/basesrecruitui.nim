@@ -485,6 +485,18 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
   return showRecruitCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowRecruit", "1"].allocCStringArray)
 
+proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  const recruitCanvas = ".recruitdialog.canvas"
+  tclEval(script = recruitCanvas & " delete info")
+  let frame = recruitCanvas & "." & tclGetVar(varName = "newtab")
+  tclEval(script = recruitCanvas & " create window 32 0 -anchor nw -window " &
+      frame & " -tag info")
+  tclEval(script = "update")
+  tclEval(script = recruitCanvas & " configure -scrollregion [list " & tclEval2(
+      script = recruitCanvas & " bbox all") & "]")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -493,6 +505,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowRecruitInfo", showRecruitInfoCommand)
 #    addCommand("NegotiateHire", negotiateHireCommand)
 #    addCommand("Hire", hireCommand)
+#    addCommand("ShowRecruitTab", showRecruiTabCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
