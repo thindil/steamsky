@@ -44,14 +44,31 @@ SetScrollbarBindings $statsframe.left.time.lbltime .gameframe.paned.statsframe.s
 grid [ttk::label $statsframe.left.time.time -style Golden.TLabel] -sticky w \
    -row 0 -column 1
 SetScrollbarBindings $statsframe.left.time.time .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.left.bases] -sticky w
+grid [ttk::frame $statsframe.left.bases] -sticky w
 SetScrollbarBindings $statsframe.left.bases \
    .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.left.map] -sticky w
+grid [ttk::label $statsframe.left.bases.lblbases -text {Bases visited:}] -sticky w
+SetScrollbarBindings $statsframe.left.bases.lblbases \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.bases.bases -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.left.bases.bases .gameframe.paned.statsframe.scrolly
+grid [ttk::frame $statsframe.left.map] -sticky w
 SetScrollbarBindings $statsframe.left.map .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.left.distance] -sticky w
+grid [ttk::label $statsframe.left.map.lblmap -text {Map discovered:}] -sticky w
+SetScrollbarBindings $statsframe.left.map.lblmap .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.map.map -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.left.map.map .gameframe.paned.statsframe.scrolly
+grid [ttk::frame $statsframe.left.distance] -sticky w
 SetScrollbarBindings $statsframe.left.distance \
    .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.distance.lbldistance -text {Distance traveled:}] -sticky w
+SetScrollbarBindings $statsframe.left.distance.lbldistance \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.distance.distance -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.left.distance.distance .gameframe.paned.statsframe.scrolly
 grid [ttk::label $statsframe.left.crafts] -sticky w
 SetScrollbarBindings $statsframe.left.crafts .gameframe.paned.statsframe.scrolly
 grid [ttk::frame $statsframe.left.craftsframe] -sticky w

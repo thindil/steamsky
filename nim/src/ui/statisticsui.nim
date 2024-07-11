@@ -50,28 +50,33 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
   tclEval(script = "tooltip::tooltip " & label & " \"In game time which was passed since it started\"")
   var visitedPercent: float = (gameStats.basesVisited.float / 1_024.0) * 100.0
   statsText = try:
-      "Bases visited: " & $gameStats.basesVisited & " (" &
-         fmt"{visitedPercent:5.3f}" & "%)"
+      $gameStats.basesVisited & " (" & fmt"{visitedPercent:5.3f}" & "%)"
     except:
-      showError(message = "Can't shw info about visited bases.")
+      showError(message = "Can't show info about visited bases.")
       return
-  label = statsCanvas & ".stats.left.bases"
+  label = statsCanvas & ".stats.left.bases.bases"
   tclEval(script = label & " configure -text {" & statsText & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The amount of sky bases visited and total percentage of all bases\"")
+  label = statsCanvas & ".stats.left.bases.lblbases"
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of sky bases visited and total percentage of all bases\"")
   visitedPercent = (gameStats.mapVisited.float / (1_024.0 * 1_024.0)) * 100.0
   if visitedPercent < 0.001:
     visitedPercent = 0.001
   statsText = try:
-      "Map discovered: " & fmt"{visitedPercent:5.3f}" & "%"
+      fmt"{visitedPercent:5.3f}" & "%"
     except:
       showError(message = "Can't show info about discovered map.")
       return
-  label = statsCanvas & ".stats.left.map"
+  label = statsCanvas & ".stats.left.map.map"
   tclEval(script = label & " configure -text {" & statsText & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of unique map's fields visited\"")
-  statsText = "Distance traveled: " & $gameStats.distanceTraveled
-  label = statsCanvas & ".stats.left.distance"
+  label = statsCanvas & ".stats.left.map.lblmap"
+  tclEval(script = "tooltip::tooltip " & label & " \"The amount of unique map's fields visited\"")
+  statsText = $gameStats.distanceTraveled
+  label = statsCanvas & ".stats.left.distance.distance"
   tclEval(script = label & " configure -text {" & statsText & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of map's fields visited\"")
+  label = statsCanvas & ".stats.left.distance.lbldistance"
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of map's fields visited\"")
   statsFrame = statsCanvas & ".stats"
   var
