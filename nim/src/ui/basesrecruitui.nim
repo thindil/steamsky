@@ -570,6 +570,31 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & hireButton & " -text Hire -command {Hire} -image negotiate2icon -style Dialoggreen.TButton")
   tclEval(script = "tooltip::tooltip " & hireButton & " \"Hire the selected recruit.\"")
   tclEval(script = "bind " & contractBox & " <Tab> {focus " & hireButton & ";break}")
+  tclEval(script = "bind " & contractBox & " <Escape> {" & negotiateDialog & ".buttonbox.button invoke;break}")
+  let moneyInfo = negotiateDialog & ".cost"
+  tclEval(script = "text " & moneyInfo & " -height 2 -width 22 -wrap char")
+  tclEval(script = "grid " & moneyInfo)
+  var cost: Natural = recruit.price
+  countPrice(price = cost, traderIndex = findMember(order = talk))
+  tclEval(script = moneyInfo & " tag configure red -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  if moneyIndex > -1:
+    tclEval(script = moneyInfo & " insert end {You have }")
+    tclEval(script = moneyInfo & " insert end {" & $playerShip.cargo[
+        moneyIndex2].amount & "} [list gold]")
+    tclEval(script = moneyInfo & " insert end { " & moneyName & "}")
+    if playerShip.cargo[moneyIndex2].amount < cost:
+      tclEval(script = hireButton & " configure -state disabled")
+    else:
+      tclEval(script = hireButton & " configure -state !disabled")
+  else:
+    tclEval(script = moneyInfo & " insert end {You don't have enough money to recruit anyone} [list red]")
+    tclEval(script = hireButton & " configure -state disabled")
+  tclEval(script = moneyInfo & " insert end {\nHire for }")
+  tclEval(script = moneyInfo & " insert end {" & $cost & "} [list gold]")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
