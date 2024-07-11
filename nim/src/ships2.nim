@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,14 +16,18 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import game, types, utils
 
-proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
+proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Count the combat value of the player's ship based on its modules,
   ## weapons and ammunition.
   ##
   ## Returns the combat value of the player's ship.
-  proc countAmmoValue(itemTypeIndex: Natural; multiple: Positive): Natural =
+  proc countAmmoValue(itemTypeIndex: Natural;
+      multiple: Positive): Natural {.sideEffect, raises: [KeyError], tags: [],
+      contractual.} =
     for item in playerShip.cargo.items:
       if itemsList[item.protoIndex].itemType == itemsTypesList[itemTypeIndex]:
         result = result + itemsList[item.protoIndex].value[1] * multiple
@@ -48,36 +52,42 @@ proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [].} =
       discard
 
 proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Generate the name for the ship, based on its owner's faction. Based
   ## on libtcod names generator
   ##
   ## * factionIndex - the index of the faction to which the ship belongs
   ##
   ## Returns the randomly generated name of the ship
-  try:
-    if factionsList[factionIndex].namesType == robotic:
-      return $generateRoboticName()
-  except KeyError:
-    discard
-  result = shipsSyllablesStartList[getRandom(min = 0, max = (
-      shipsSyllablesStartList.len - 1))]
-  if getRandom(min = 1, max = 100) < 51:
-    result = result & shipsSyllablesMiddleList[getRandom(min = 0, max = (
-        shipsSyllablesMiddleList.len - 1))]
-  result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
-      shipsSyllablesEndList.len - 1))]
+  require:
+    factionsList.hasKey(key = factionIndex)
+  ensure:
+    result.len > 0
+  body:
+    try:
+      if factionsList[factionIndex].namesType == robotic:
+        return $generateRoboticName()
+    except KeyError:
+      discard
+    result = shipsSyllablesStartList[getRandom(min = 0, max = (
+        shipsSyllablesStartList.len - 1))]
+    if getRandom(min = 1, max = 100) < 51:
+      result = result & shipsSyllablesMiddleList[getRandom(min = 0, max = (
+          shipsSyllablesMiddleList.len - 1))]
+    result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
+        shipsSyllablesEndList.len - 1))]
 
 # Temporary code for interfacing with Ada
 
-proc countAdaCombatValue(): cint {.raises: [], tags: [], exportc.} =
+proc countAdaCombatValue(): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     return countCombatValue().cint
   except KeyError:
     return 0
 
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
-    ], tags: [], exportc.} =
+    ], tags: [], exportc, contractual.} =
   return generateShipName(factionIndex = $factionIndex).cstring
 
 
