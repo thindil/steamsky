@@ -486,7 +486,7 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowRecruit", "1"].allocCStringArray)
 
 proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   const recruitCanvas = ".recruitdialog.canvas"
   tclEval(script = recruitCanvas & " delete info")
   let frame = recruitCanvas & "." & tclGetVar(varName = "newtab")
