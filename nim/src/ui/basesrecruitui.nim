@@ -553,6 +553,23 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & spinBox & " <Escape> {" & dialogCloseButton & " invoke;break}")
   tclEval(script = "grid " & spinBox & " -row 0 -column 1 -padx {0 5}")
   tclEval(script = "grid " & labelFrame & " -padx 5")
+  scale = negotiateDialog & ".percent"
+  tclEval(script = "ttk::scale " & scale & " -from 0 -to 10 -command NegotiateHire -length 250 -variable percent")
+  tclEval(script = "grid " & scale)
+  label = negotiateDialog & ".contractlbl"
+  tclEval(script = "ttk::label " & label & " -text {Contract time:}")
+  tclEval(script = "grid " & label)
+  let contractBox = negotiateDialog & ".contract"
+  tclEval(script = "ttk::combobox " & contractBox & " -state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]")
+  tclEval(script = "grid " & contractBox)
+  tclEval(script = "bind " & contractBox & " <<ComboboxSelected>> {NegotiateHire}")
+  tclEval(script = "bind " & scale & " <Tab> {focus " & contractBox & ";break}")
+  tclEval(script = "bind " & scale & " <Escape> {" & negotiateDialog & ".buttonbox.button invoke;break}")
+  tclEval(script = contractBox & " current 0")
+  let hireButton = frame & ".hirebutton"
+  tclEval(script = "ttk::button " & hireButton & " -text Hire -command {Hire} -image negotiate2icon -style Dialoggreen.TButton")
+  tclEval(script = "tooltip::tooltip " & hireButton & " \"Hire the selected recruit.\"")
+  tclEval(script = "bind " & contractBox & " <Tab> {focus " & hireButton & ";break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
