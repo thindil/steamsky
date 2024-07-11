@@ -29,12 +29,11 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
+with Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
 with Config;
@@ -43,7 +42,7 @@ with Dialogs;
 with Maps; use Maps;
 with Ships.Crew;
 with Table; use Table;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Bases.RecruitUI is
 
@@ -188,6 +187,7 @@ package body Bases.RecruitUI is
    Recruit_Index: Positive;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****if* RecruitUI/RecruitUI.Get_Recruit_Index
    -- FUNCTION
    -- Get the index of the currently selected recruit
@@ -199,6 +199,7 @@ package body Bases.RecruitUI is
    begin
       return Recruit_Index;
    end Get_Recruit_Index;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Info_Command
    -- FUNCTION
@@ -356,7 +357,9 @@ package body Bases.RecruitUI is
       use Ada.Strings.Fixed;
       use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Widgets.TtkScale;
       use Tcl.Tklib.Ada.Tooltip;
       use Config;
       use Dialogs;
@@ -863,6 +866,7 @@ package body Bases.RecruitUI is
    end Validate_Negotiate_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowRecruit", Ada_Command => Show_Recruit_Command'Access);
