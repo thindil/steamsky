@@ -23,29 +23,12 @@
 package Bases.Trade is
 -- ****
 
-   -- ****f* BTrade/BTrade.Hire_Recruit
+   -- ****f* BTrade/BTrade.Buy_Recipe
    -- FUNCTION
-   -- Hire selected recruit from bases and add him/her to player ship crew
+   -- Buy new crafting recipe
    -- PARAMETERS
-   -- Recruit_Index   - Index of recruit, from base recruits list to hire
-   -- Cost            - Cost of hire of selected recruit
-   -- Daily_Payment   - Daily payment of selected recruit
-   -- Trade_Payment   - Percent of earnings from each trade which this recruit
-   --                  will take
-   -- Contract_Length - Length of the contract with this recruit in days. 0
-   --                  means infinite contract
+   -- Recipe_Index - Index of the recipe from base recipes list to buy
    -- SOURCE
-   procedure Hire_Recruit
-     (Recruit_Index: Recruit_Container.Extended_Index; Cost: Positive;
-      Daily_Payment, Trade_Payment: Natural; Contract_Length: Integer);
-      -- ****
-
-      -- ****f* BTrade/BTrade.Buy_Recipe
-      -- FUNCTION
-      -- Buy new crafting recipe
-      -- PARAMETERS
-      -- Recipe_Index - Index of the recipe from base recipes list to buy
-      -- SOURCE
    procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) with
       Pre => Tiny_String.Length(Source => Recipe_Index) > 0;
       -- ****
