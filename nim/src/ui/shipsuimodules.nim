@@ -322,7 +322,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "ttk::button " & infoButton &
           " -image cancelicon -command {" & closeDialogButton &
           " invoke;StopUpgrading " & $argv[1] & "} -style Small.TButton")
-      tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading the cabin's quality\"")
+      tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading the module.\"")
       tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
       tclEval(script = "bind " & infoButton & " <Escape> {" &
           closeDialogButton & " invoke; break}")
