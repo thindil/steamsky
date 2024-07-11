@@ -508,6 +508,24 @@ proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
       script = recruitCanvas & " bbox all") & "]")
   return tclOk
 
+proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    recruit = skyBases[baseIndex].recruits[recruitIndex]
+    negotiateDialog = createDialog(name = ".negotiatedialog", title = "Negotiate with " & recruit.name)
+  var labelFrame = negotiateDialog & ".dailylbl"
+  tclEval(script = "ttk::frame " & labelFrame)
+  var label = labelFrame & ".label"
+  tclEval(script = "ttk::label " & label & " -text {Daily payment:}")
+  tclEval(script = "grid " & label & " -pady {5 0}")
+  tclSetVar(varName = "daily", newValue = $recruit.payment)
+  var spinBox = labelFrame & ".field"
+  tclEval(script = "ttk::spinbox " & spinBox & " -from 0 -to " & $(recruit.payment * 2) & " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " & labelFrame & ".field}")
+  let dialogCloseButton = negotiateDialog & ".buttonbox.button"
+  tclEval(script = "bind " & spinBox & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -517,6 +535,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("NegotiateHire", negotiateHireCommand)
 #    addCommand("Hire", hireCommand)
 #    addCommand("ShowRecruitTab", showRecruiTabCommand)
+#    addCommand("Negotiate", negotiateCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
