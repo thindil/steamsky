@@ -20,3 +20,4 @@ All notable changes to this project will be documented in this file.
 - Crash when showing information about the skill of the recruit in bases
 - Showing information about the module's status in a shipyard
 - Outdated the player's ship's information after entering a shipyard screen
+- Tooltip for stop upgrading the module's button.
