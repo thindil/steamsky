@@ -513,7 +513,8 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     recruit = skyBases[baseIndex].recruits[recruitIndex]
-    negotiateDialog = createDialog(name = ".negotiatedialog", title = "Negotiate with " & recruit.name)
+    negotiateDialog = createDialog(name = ".negotiatedialog",
+        title = "Negotiate with " & recruit.name)
   var labelFrame = negotiateDialog & ".dailylbl"
   tclEval(script = "ttk::frame " & labelFrame)
   var label = labelFrame & ".label"
@@ -521,9 +522,37 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & label & " -pady {5 0}")
   tclSetVar(varName = "daily", newValue = $recruit.payment)
   var spinBox = labelFrame & ".field"
-  tclEval(script = "ttk::spinbox " & spinBox & " -from 0 -to " & $(recruit.payment * 2) & " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " & labelFrame & ".field}")
+  tclEval(script = "ttk::spinbox " & spinBox & " -from 0 -to " & $(
+      recruit.payment * 2) &
+      " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
+      labelFrame & ".field}")
+  let frame = negotiateDialog & ".buttonbox"
+  tclEval(script = "ttk::frame " & frame)
   let dialogCloseButton = negotiateDialog & ".buttonbox.button"
+  tclEval(script = "ttk::button " & dialogCloseButton &
+      " -text Close -command {CloseDialog " & negotiateDialog & "} -image cancelicon -style Dialogred.TButton")
   tclEval(script = "bind " & spinBox & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "grid " & spinBox & " -row 0 -column 1")
+  tclEval(script = "grid " & labelFrame)
+  var scale = negotiateDialog & ".daily"
+  tclEval(script = "ttk::scale " & scale &
+      " -from 0 -command NegotiateHire -length 250 -to " & $(recruit.payment *
+      2) & " -variable daily")
+  tclEval(script = "bind " & scale & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "grid " & scale)
+  labelFrame = negotiateDialog & ".percentlbl"
+  tclEval(script = "ttk::frame " & labelFrame)
+  label = labelFrame & ".label"
+  tclEval(script = "ttk::label " & label & " -text {Percent of profit from trades:}")
+  tclEval(script = "grid " & label & " -padx {5 0}")
+  tclSetVar(varName = "percent", newValue = "0")
+  spinBox = labelFrame & ".field"
+  tclEval(script = "ttk::spinbox " & spinBox &
+      " -from 0 -to 10 -width 2 -textvariable percent -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
+      labelFrame & ".field}")
+  tclEval(script = "bind " & spinBox & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "grid " & spinBox & " -row 0 -column 1 -padx {0 5}")
+  tclEval(script = "grid " & labelFrame & " -padx 5")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
