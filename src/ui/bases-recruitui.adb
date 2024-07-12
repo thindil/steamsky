@@ -167,27 +167,6 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Show_Recruit_Command;
 
-   -- ****iv* RecruitUI/RecruitUI.Recruit_Index
-   -- FUNCTION
-   -- The index of currently selected recruit
-   -- SOURCE
---   Recruit_Index: Positive;
-   -- ****
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****if* RecruitUI/RecruitUI.Get_Recruit_Index
-   -- FUNCTION
-   -- Get the index of the currently selected recruit
-   -- RESULT
-   -- The index of the currently selected recruit
-   -- SOURCE
---   function Get_Recruit_Index return Positive is
---      -- ****
---   begin
---      return Recruit_Index;
---   end Get_Recruit_Index;
-   --## rule on REDUCEABLE_SCOPE
-
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Info_Command
    -- FUNCTION
    -- Show information about the selected recruit
@@ -209,24 +188,6 @@ package body Bases.RecruitUI is
       Import => True,
       External_Name => "showRecruitInfoCommand";
       -- ****
-
---   function Show_Recruit_Info_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      function Show_Ada_Recruit_Info_Command
---        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
---         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
---         Convention => C,
---         Import => True,
---         External_Name => "showRecruitInfoCommand";
---      function Get_Ada_Recruit_Index return Positive with
---         Convention => C,
---         Import => True,
---         External_Name => "getAdaRecruitIndex";
---   begin
---      Recruit_Index := Get_Ada_Recruit_Index;
---      return Show_Ada_Recruit_Info_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
---   end Show_Recruit_Info_Command;
 
    -- ****o* RecruitUI/RecruitUI.Negotiate_Hire_Command
    -- FUNCTION
