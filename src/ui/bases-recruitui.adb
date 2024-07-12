@@ -13,34 +13,34 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1;
+-- with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 -- with Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+-- with Tcl.Tk.Ada.Widgets.Text;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkScale;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip;
-with Config;
+-- with Tcl.Tklib.Ada.Tooltip;
+-- with Config;
 with CoreUI;
-with Dialogs;
+-- with Dialogs;
 with Maps; use Maps;
-with Ships.Crew;
+-- with Ships.Crew;
 with Table; use Table;
 with Utils.UI;
 
@@ -184,7 +184,7 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- The index of currently selected recruit
    -- SOURCE
-   Recruit_Index: Positive;
+--   Recruit_Index: Positive;
    -- ****
 
    --## rule off REDUCEABLE_SCOPE
@@ -194,11 +194,11 @@ package body Bases.RecruitUI is
    -- RESULT
    -- The index of the currently selected recruit
    -- SOURCE
-   function Get_Recruit_Index return Positive is
-      -- ****
-   begin
-      return Recruit_Index;
-   end Get_Recruit_Index;
+--   function Get_Recruit_Index return Positive is
+--      -- ****
+--   begin
+--      return Recruit_Index;
+--   end Get_Recruit_Index;
    --## rule on REDUCEABLE_SCOPE
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Info_Command
@@ -218,26 +218,28 @@ package body Bases.RecruitUI is
    function Show_Recruit_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showRecruitInfoCommand";
       -- ****
 
-   function Show_Recruit_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      function Show_Ada_Recruit_Info_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Convention => C,
-         Import => True,
-         External_Name => "showRecruitInfoCommand";
-      function Get_Ada_Recruit_Index return Positive with
-         Convention => C,
-         Import => True,
-         External_Name => "getAdaRecruitIndex";
-   begin
-      Recruit_Index := Get_Ada_Recruit_Index;
-      return Show_Ada_Recruit_Info_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
-   end Show_Recruit_Info_Command;
+--   function Show_Recruit_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      function Show_Ada_Recruit_Info_Command
+--        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+--         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--         Convention => C,
+--         Import => True,
+--         External_Name => "showRecruitInfoCommand";
+--      function Get_Ada_Recruit_Index return Positive with
+--         Convention => C,
+--         Import => True,
+--         External_Name => "getAdaRecruitIndex";
+--   begin
+--      Recruit_Index := Get_Ada_Recruit_Index;
+--      return Show_Ada_Recruit_Info_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--   end Show_Recruit_Info_Command;
 
    -- ****o* RecruitUI/RecruitUI.Negotiate_Hire_Command
    -- FUNCTION
@@ -318,232 +320,234 @@ package body Bases.RecruitUI is
    function Negotiate_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "negotiateCommand";
       -- ****
 
-   function Negotiate_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Characters.Latin_1;
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Tcl.Tk.Ada.Widgets.Text;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Tcl.Tk.Ada.Widgets.TtkScale;
-      use Tcl.Tklib.Ada.Tooltip;
-      use Config;
-      use Dialogs;
-      use Ships.Crew;
-
-      Base_Index: constant Positive :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Recruit: constant Recruit_Data :=
-        Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits,
-           Index => Get_Recruit_Index);
-      Negotiate_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".negotiatedialog",
-           Title =>
-             "Negotiate with " &
-             Tiny_String.To_String(Source => Recruit.Name));
-      Frame: constant Ttk_Frame :=
-        Create(pathName => Negotiate_Dialog & ".buttonbox");
-      Hire_Button: constant Ttk_Button :=
-        Create
-          (pathName => Frame & ".hirebutton",
-           options =>
-             "-text Hire -command {Hire} -image negotiate2icon -style Dialoggreen.TButton");
-      Dialog_Close_Button: constant Ttk_Button :=
-        Create
-          (pathName => Negotiate_Dialog & ".buttonbox.button",
-           options =>
-             "-text Close -command {CloseDialog " & Negotiate_Dialog &
-             "} -image cancelicon -style Dialogred.TButton");
-      Label: Ttk_Label;
-      Scale: Ttk_Scale;
-      Spinbox: Ttk_SpinBox;
-      Label_Frame: Ttk_Frame;
-      Contract_Box: constant Ttk_ComboBox :=
-        Create
-          (pathName => Negotiate_Dialog & ".contract",
-           options =>
-             "-state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]");
-      Money_Index_2: constant Natural :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Cost: Positive;
-      Money_Info: constant Tk_Text :=
-        Create
-          (pathName => Negotiate_Dialog & ".cost",
-           options => "-height 2 -width 22 -wrap char");
-   begin
-      Label_Frame := Create(pathName => Negotiate_Dialog & ".dailylbl");
-      Label :=
-        Create
-          (pathName => Label_Frame & ".label",
-           options => "-text {Daily payment:}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
-      Tcl_SetVar
-        (interp => Interp, varName => "daily",
-         newValue =>
-           Trim(Source => Natural'Image(Recruit.Payment), Side => Left));
-      Spinbox :=
-        Create
-          (pathName => Label_Frame & ".field",
-           options =>
-             "-from 0 -to" & Natural'Image(Recruit.Payment * 2) &
-             " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
-             Label_Frame & ".field}");
-      Bind
-        (Widgt => Spinbox, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame);
-      Scale :=
-        Create
-          (pathName => Negotiate_Dialog & ".daily",
-           options =>
-             "-from 0 -command NegotiateHire -length 250 -to" &
-             Natural'Image(Recruit.Payment * 2) & " -variable daily");
-      Bind
-        (Widgt => Scale, Sequence => "<Escape>",
-         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
-      Label_Frame := Create(pathName => Negotiate_Dialog & ".percentlbl");
-      Label :=
-        Create
-          (pathName => Label_Frame & ".label",
-           options => "-text {Percent of profit from trades:}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
-      Tcl_SetVar(interp => Interp, varName => "percent", newValue => "0");
-      Spinbox :=
-        Create
-          (pathName => Label_Frame & ".field",
-           options =>
-             "-from 0 -to 10 -width 2 -textvariable percent -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
-             Label_Frame & ".field}");
-      Bind
-        (Widgt => Spinbox, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Spinbox, Options => "-row 0 -column 1 -padx {0 5}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame, Options => "-padx 5");
-      Scale :=
-        Create
-          (pathName => Negotiate_Dialog & ".percent",
-           options =>
-             "-from 0 -to 10 -command NegotiateHire -length 250 -variable percent");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
-      Label :=
-        Create
-          (pathName => Negotiate_Dialog & ".contractlbl",
-           options => "-text {Contract time:}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-      Tcl.Tk.Ada.Grid.Grid(Slave => Contract_Box);
-      Bind
-        (Widgt => Contract_Box, Sequence => "<<ComboboxSelected>>",
-         Script => "{NegotiateHire}");
-      Bind
-        (Widgt => Scale, Sequence => "<Tab>",
-         Script => "{focus " & Contract_Box & ";break}");
-      Bind
-        (Widgt => Scale, Sequence => "<Escape>",
-         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
-      Current(ComboBox => Contract_Box, NewIndex => "0");
-      Add(Widget => Hire_Button, Message => "Hire the selected recruit.");
-      Bind
-        (Widgt => Contract_Box, Sequence => "<Tab>",
-         Script => "{focus " & Hire_Button & ";break}");
-      Bind
-        (Widgt => Contract_Box, Sequence => "<Escape>",
-         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Money_Info);
-      Cost := Recruit.Price;
-      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-      Tag_Configure
-        (TextWidget => Money_Info, TagName => "red",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-red)"));
-      Tag_Configure
-        (TextWidget => Money_Info, TagName => "gold",
-         Options =>
-           "-foreground " &
-           Tcl_GetVar
-             (interp => Interp,
-              varName =>
-                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
-                "::colors(-goldenyellow)"));
-      if Money_Index_2 > 0 then
-         Insert
-           (TextWidget => Money_Info, Index => "end", Text => "{You have}");
-         Insert
-           (TextWidget => Money_Info, Index => "end",
-            Text =>
-              "{" &
-              Natural'Image
-                (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                   .Amount) &
-              "} [list gold]");
-         Insert
-           (TextWidget => Money_Info, Index => "end",
-            Text => "{ " & To_String(Source => Money_Name) & "}");
-         if Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => Money_Index_2)
-             .Amount <
-           Cost then
-            configure(Widgt => Hire_Button, options => "-state disabled");
-         else
-            configure(Widgt => Hire_Button, options => "-state !disabled");
-         end if;
-      else
-         Insert
-           (TextWidget => Money_Info, Index => "end",
-            Text =>
-              "{You don't have enough money to recruit anyone} [list red]");
-         configure(Widgt => Hire_Button, options => "-state disabled");
-      end if;
-      Insert
-        (TextWidget => Money_Info, Index => "end",
-         Text => "{" & LF & "Hire for}");
-      Insert
-        (TextWidget => Money_Info, Index => "end",
-         Text => "{" & Positive'Image(Cost) & "} [list gold]");
-      Insert
-        (TextWidget => Money_Info, Index => "end",
-         Text => "{ " & To_String(Source => Money_Name) & "}");
-      configure(Widgt => Money_Info, options => "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
-      Add
-        (Widget => Dialog_Close_Button,
-         Message => "Cancel negotiation \[Escape key\]");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
-      Focus(Widgt => Dialog_Close_Button);
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Negotiate_Dialog & ".dailylbl.field;break}");
-      Bind
-        (Widgt => Hire_Button, Sequence => "<Tab>",
-         Script => "{focus " & Dialog_Close_Button & ";break}");
-      Bind
-        (Widgt => Negotiate_Dialog, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Bind
-        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
-         Script => "{" & Dialog_Close_Button & " invoke;break}");
-      Show_Dialog(Dialog => Negotiate_Dialog, Relative_Y => 0.2);
-      return TCL_OK;
-   end Negotiate_Command;
+--   function Negotiate_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Ada.Characters.Latin_1;
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Tcl.Tk.Ada.Widgets.Text;
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Tcl.Tk.Ada.Widgets.TtkScale;
+--      use Tcl.Tklib.Ada.Tooltip;
+--      use Config;
+--      use Dialogs;
+--      use Ships.Crew;
+--
+--      Base_Index: constant Positive :=
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Recruit: constant Recruit_Data :=
+--        Recruit_Container.Element
+--          (Container => Sky_Bases(Base_Index).Recruits,
+--           Index => Get_Recruit_Index);
+--      Negotiate_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".negotiatedialog",
+--           Title =>
+--             "Negotiate with " &
+--             Tiny_String.To_String(Source => Recruit.Name));
+--      Frame: constant Ttk_Frame :=
+--        Create(pathName => Negotiate_Dialog & ".buttonbox");
+--      Hire_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Frame & ".hirebutton",
+--           options =>
+--             "-text Hire -command {Hire} -image negotiate2icon -style Dialoggreen.TButton");
+--      Dialog_Close_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => Negotiate_Dialog & ".buttonbox.button",
+--           options =>
+--             "-text Close -command {CloseDialog " & Negotiate_Dialog &
+--             "} -image cancelicon -style Dialogred.TButton");
+--      Label: Ttk_Label;
+--      Scale: Ttk_Scale;
+--      Spinbox: Ttk_SpinBox;
+--      Label_Frame: Ttk_Frame;
+--      Contract_Box: constant Ttk_ComboBox :=
+--        Create
+--          (pathName => Negotiate_Dialog & ".contract",
+--           options =>
+--             "-state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]");
+--      Money_Index_2: constant Natural :=
+--        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+--      Cost: Positive;
+--      Money_Info: constant Tk_Text :=
+--        Create
+--          (pathName => Negotiate_Dialog & ".cost",
+--           options => "-height 2 -width 22 -wrap char");
+--   begin
+--      Label_Frame := Create(pathName => Negotiate_Dialog & ".dailylbl");
+--      Label :=
+--        Create
+--          (pathName => Label_Frame & ".label",
+--           options => "-text {Daily payment:}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
+--      Tcl_SetVar
+--        (interp => Interp, varName => "daily",
+--         newValue =>
+--           Trim(Source => Natural'Image(Recruit.Payment), Side => Left));
+--      Spinbox :=
+--        Create
+--          (pathName => Label_Frame & ".field",
+--           options =>
+--             "-from 0 -to" & Natural'Image(Recruit.Payment * 2) &
+--             " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
+--             Label_Frame & ".field}");
+--      Bind
+--        (Widgt => Spinbox, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Spinbox, Options => "-row 0 -column 1");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame);
+--      Scale :=
+--        Create
+--          (pathName => Negotiate_Dialog & ".daily",
+--           options =>
+--             "-from 0 -command NegotiateHire -length 250 -to" &
+--             Natural'Image(Recruit.Payment * 2) & " -variable daily");
+--      Bind
+--        (Widgt => Scale, Sequence => "<Escape>",
+--         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
+--      Label_Frame := Create(pathName => Negotiate_Dialog & ".percentlbl");
+--      Label :=
+--        Create
+--          (pathName => Label_Frame & ".label",
+--           options => "-text {Percent of profit from trades:}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
+--      Tcl_SetVar(interp => Interp, varName => "percent", newValue => "0");
+--      Spinbox :=
+--        Create
+--          (pathName => Label_Frame & ".field",
+--           options =>
+--             "-from 0 -to 10 -width 2 -textvariable percent -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
+--             Label_Frame & ".field}");
+--      Bind
+--        (Widgt => Spinbox, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Spinbox, Options => "-row 0 -column 1 -padx {0 5}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label_Frame, Options => "-padx 5");
+--      Scale :=
+--        Create
+--          (pathName => Negotiate_Dialog & ".percent",
+--           options =>
+--             "-from 0 -to 10 -command NegotiateHire -length 250 -variable percent");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
+--      Label :=
+--        Create
+--          (pathName => Negotiate_Dialog & ".contractlbl",
+--           options => "-text {Contract time:}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Contract_Box);
+--      Bind
+--        (Widgt => Contract_Box, Sequence => "<<ComboboxSelected>>",
+--         Script => "{NegotiateHire}");
+--      Bind
+--        (Widgt => Scale, Sequence => "<Tab>",
+--         Script => "{focus " & Contract_Box & ";break}");
+--      Bind
+--        (Widgt => Scale, Sequence => "<Escape>",
+--         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
+--      Current(ComboBox => Contract_Box, NewIndex => "0");
+--      Add(Widget => Hire_Button, Message => "Hire the selected recruit.");
+--      Bind
+--        (Widgt => Contract_Box, Sequence => "<Tab>",
+--         Script => "{focus " & Hire_Button & ";break}");
+--      Bind
+--        (Widgt => Contract_Box, Sequence => "<Escape>",
+--         Script => "{" & Negotiate_Dialog & ".buttonbox.button invoke;break}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Money_Info);
+--      Cost := Recruit.Price;
+--      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+--      Tag_Configure
+--        (TextWidget => Money_Info, TagName => "red",
+--         Options =>
+--           "-foreground " &
+--           Tcl_GetVar
+--             (interp => Interp,
+--              varName =>
+--                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+--                "::colors(-red)"));
+--      Tag_Configure
+--        (TextWidget => Money_Info, TagName => "gold",
+--         Options =>
+--           "-foreground " &
+--           Tcl_GetVar
+--             (interp => Interp,
+--              varName =>
+--                "ttk::theme::" & To_String(Source => Get_Interface_Theme) &
+--                "::colors(-goldenyellow)"));
+--      if Money_Index_2 > 0 then
+--         Insert
+--           (TextWidget => Money_Info, Index => "end", Text => "{You have}");
+--         Insert
+--           (TextWidget => Money_Info, Index => "end",
+--            Text =>
+--              "{" &
+--              Natural'Image
+--                (Inventory_Container.Element
+--                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
+--                   .Amount) &
+--              "} [list gold]");
+--         Insert
+--           (TextWidget => Money_Info, Index => "end",
+--            Text => "{ " & To_String(Source => Money_Name) & "}");
+--         if Inventory_Container.Element
+--             (Container => Player_Ship.Cargo, Index => Money_Index_2)
+--             .Amount <
+--           Cost then
+--            configure(Widgt => Hire_Button, options => "-state disabled");
+--         else
+--            configure(Widgt => Hire_Button, options => "-state !disabled");
+--         end if;
+--      else
+--         Insert
+--           (TextWidget => Money_Info, Index => "end",
+--            Text =>
+--              "{You don't have enough money to recruit anyone} [list red]");
+--         configure(Widgt => Hire_Button, options => "-state disabled");
+--      end if;
+--      Insert
+--        (TextWidget => Money_Info, Index => "end",
+--         Text => "{" & LF & "Hire for}");
+--      Insert
+--        (TextWidget => Money_Info, Index => "end",
+--         Text => "{" & Positive'Image(Cost) & "} [list gold]");
+--      Insert
+--        (TextWidget => Money_Info, Index => "end",
+--         Text => "{ " & To_String(Source => Money_Name) & "}");
+--      configure(Widgt => Money_Info, options => "-state disabled");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Dialog_Close_Button, Options => "-row 0 -column 1");
+--      Add
+--        (Widget => Dialog_Close_Button,
+--         Message => "Cancel negotiation \[Escape key\]");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
+--      Focus(Widgt => Dialog_Close_Button);
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Tab>",
+--         Script => "{focus " & Negotiate_Dialog & ".dailylbl.field;break}");
+--      Bind
+--        (Widgt => Hire_Button, Sequence => "<Tab>",
+--         Script => "{focus " & Dialog_Close_Button & ";break}");
+--      Bind
+--        (Widgt => Negotiate_Dialog, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Bind
+--        (Widgt => Dialog_Close_Button, Sequence => "<Escape>",
+--         Script => "{" & Dialog_Close_Button & " invoke;break}");
+--      Show_Dialog(Dialog => Negotiate_Dialog, Relative_Y => 0.2);
+--      return TCL_OK;
+--   end Negotiate_Command;
 
    -- ****it* RecruitUI/RecruitUI.Recruits_Sort_Orders
    -- FUNCTION
