@@ -243,12 +243,6 @@ package Bases is
       Convention => C,
       External_Name => "getAdaBaseLocation";
 
-   procedure Get_Ada_Recruits
-     (Recruits: Recruit_Container.Vector; Base_Index: Bases_Range);
-
-   procedure Set_Ada_Recruits
-     (Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range);
-
    procedure Get_Base_Cargo(Base_Index: Natural);
 
    procedure Set_Base_Cargo(Base_Index: Natural);
