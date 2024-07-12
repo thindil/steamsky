@@ -509,7 +509,7 @@ proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     recruit = skyBases[baseIndex].recruits[recruitIndex]
@@ -575,7 +575,10 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "text " & moneyInfo & " -height 2 -width 22 -wrap char")
   tclEval(script = "grid " & moneyInfo)
   var cost: Natural = recruit.price
-  countPrice(price = cost, traderIndex = findMember(order = talk))
+  try:
+    countPrice(price = cost, traderIndex = findMember(order = talk))
+  except:
+    return showError(message = "Can't count hire cost.")
   tclEval(script = moneyInfo & " tag configure red -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
