@@ -84,9 +84,10 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
     statsList = gameStats.craftingOrders
   for craftingOrder in statsList:
     totalFinished = totalFinished + craftingOrder.amount
-  label = statsFrame & ".left.crafts"
-  tclEval(script = label & " configure -text {Crafting orders finished: " &
-      $totalFinished & "}")
+  label = statsFrame & ".left.crafts.crafts"
+  tclEval(script = label & " configure -text {" & $totalFinished & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of crafting orders finished in this game\"")
+  label = statsFrame & ".left.crafts.lblcrafts"
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of crafting orders finished in this game\"")
   statsFrame = statsCanvas & ".stats.left.craftsframe"
   var treeView = statsFrame & ".craftsview"
@@ -115,13 +116,15 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
   statsList = gameStats.finishedMissions
   for finishedMission in statsList:
     totalFinished = totalFinished + finishedMission.amount
-  label = statsCanvas & ".stats.left.missions"
+  label = statsCanvas & ".stats.left.missions.missions"
   var missionsPercent = 0
   if gameStats.acceptedMissions > 0:
     missionsPercent = ((totalFinished.float /
         gameStats.acceptedMissions.float) * 100.0).int
-  tclEval(script = label & " configure -text {Missions completed: " &
+  tclEval(script = label & " configure -text {" &
       $totalFinished & " (" & $missionsPercent & "%)}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of missions finished in this game\"")
+  label = statsCanvas & ".stats.left.missions.lblmissions"
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of missions finished in this game\"")
   statsFrame = statsCanvas & ".stats.left.missionsframe"
   treeView = statsFrame & ".missionsview"
@@ -173,9 +176,10 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
   statsList = gameStats.finishedGoals
   for finishedGoal in statsList:
     totalFinished = totalFinished + finishedGoal.amount
-  label = statsCanvas & ".stats.left.goals"
-  tclEval(script = label & " configure -text {Finished goals: " &
-      $totalFinished & "}")
+  label = statsCanvas & ".stats.left.goals.goals"
+  tclEval(script = label & " configure -text {" & $totalFinished & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of goals finished in this game\"")
+  label = statsCanvas & ".stats.left.lblgoals"
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of goals finished in this game\"")
   statsFrame = statsCanvas & ".stats.left.goalsframe"
   treeView = statsFrame & ".goalsview"

@@ -69,8 +69,13 @@ SetScrollbarBindings $statsframe.left.distance.lbldistance \
 grid [ttk::label $statsframe.left.distance.distance -style Golden.TLabel] -sticky w \
    -row 0 -column 1
 SetScrollbarBindings $statsframe.left.distance.distance .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.left.crafts] -sticky w
+grid [ttk::frame $statsframe.left.crafts] -sticky w
 SetScrollbarBindings $statsframe.left.crafts .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.crafts.lblcrafts -text {Crafting orders finished:}] -sticky w
+SetScrollbarBindings $statsframe.left.crafts.lblcrafts .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.crafts.crafts -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.left.crafts.crafts .gameframe.paned.statsframe.scrolly
 grid [ttk::frame $statsframe.left.craftsframe] -sticky w
 grid [ttk::treeview $statsframe.left.craftsframe.craftsview -show headings \
    -columns [list name amount] -selectmode none \
@@ -88,8 +93,15 @@ grid [ttk::scrollbar $statsframe.left.craftsframe.scrolly -orient vertical \
    -command [list $statsframe.left.craftsframe.craftsview yview]] -row 0 \
    -column 1 -sticky ns
 ::autoscroll::autoscroll $statsframe.left.craftsframe.scrolly
-grid [ttk::label $statsframe.left.missions] -sticky w
+grid [ttk::frame $statsframe.left.missions] -sticky w
 SetScrollbarBindings $statsframe.left.missions \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.missions.lblmissions -text {Missions completed:}] -sticky w
+SetScrollbarBindings $statsframe.left.missions.lblmissions \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.missions.missions -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.left.missions.missions \
    .gameframe.paned.statsframe.scrolly
 grid [ttk::frame $statsframe.left.missionsframe] -sticky w
 grid [ttk::treeview $statsframe.left.missionsframe.missionsview \
@@ -110,8 +122,13 @@ grid [ttk::scrollbar $statsframe.left.missionsframe.scrolly -orient vertical \
 ::autoscroll::autoscroll $statsframe.left.missionsframe.scrolly
 grid [ttk::button $statsframe.left.goal -text {Goals} \
    -command {ShowGoals $statsframe.left.goal}] -sticky w
-grid [ttk::label $statsframe.left.goals] -sticky w
+grid [ttk::frame $statsframe.left.goals] -sticky w
 SetScrollbarBindings $statsframe.left.goals .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.goals.lblgoals -text {Finished goals:}] -sticky w
+SetScrollbarBindings $statsframe.left.goals.lblgoals .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.goals.goals -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.left.goals.goals .gameframe.paned.statsframe.scrolly
 grid [ttk::frame $statsframe.left.goalsframe] -sticky w
 grid [ttk::treeview $statsframe.left.goalsframe.goalsview -show headings \
    -columns [list name amount] -selectmode none \
