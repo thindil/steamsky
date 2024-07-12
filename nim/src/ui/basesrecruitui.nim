@@ -595,6 +595,21 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = hireButton & " configure -state disabled")
   tclEval(script = moneyInfo & " insert end {\nHire for }")
   tclEval(script = moneyInfo & " insert end {" & $cost & "} [list gold]")
+  tclEval(script = moneyInfo & " insert end { " & moneyName & "}")
+  tclEval(script = moneyInfo & " configure -state disabled")
+  tclEval(script = "grid " & hireButton)
+  tclEval(script = "grid " & dialogCloseButton & " -row 0 -column 1")
+  tclEval(script = "tooltip::tooltip " & dialogCloseButton & " \"Cancel negotiation \\[Escape key\\]\"")
+  tclEval(script = "grid " & frame & " -pady {0 5}")
+  tclEval(script = "focus " & dialogCloseButton)
+  tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " &
+      negotiateDialog & ".dailylbl.field;break}")
+  tclEval(script = "bind " & hireButton & " <Tab> {focus " & dialogCloseButton & ";break}")
+  tclEval(script = "bind " & negotiateDialog & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & dialogCloseButton & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
+  showDialog(dialog = negotiateDialog, relativeY = 0.2)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
