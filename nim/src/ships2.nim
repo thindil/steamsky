@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to ships, like counting their combat value or
+## generate their names. Split from ships module to avoid circular
+## dependencies.
+
 import std/tables
 import contracts
 import game, types, utils
@@ -28,6 +32,13 @@ proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [],
   proc countAmmoValue(itemTypeIndex: Natural;
       multiple: Positive): Natural {.sideEffect, raises: [KeyError], tags: [],
       contractual.} =
+    ## Count the combat value of the ammunition on the player's ship.
+    ##
+    ## * itemTypeIndex - the index of the ammunition type
+    ## * multiple      - the multiplier which will be used to count the combat
+    ##                   value
+    ##
+    ## Returns the combat value of the ammunition on the player's ship
     for item in playerShip.cargo.items:
       if itemsList[item.protoIndex].itemType == itemsTypesList[itemTypeIndex]:
         result = result + itemsList[item.protoIndex].value[1] * multiple
@@ -81,6 +92,7 @@ proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
 
 proc countAdaCombatValue(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     return countCombatValue().cint
   except KeyError:
@@ -88,6 +100,7 @@ proc countAdaCombatValue(): cint {.raises: [], tags: [], exportc,
 
 proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
     ], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return generateShipName(factionIndex = $factionIndex).cstring
 
 
