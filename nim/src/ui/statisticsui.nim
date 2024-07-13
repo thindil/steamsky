@@ -231,9 +231,11 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
     tclEval(script = "grid " & statsFrame)
   else:
     tclEval(script = "grid remove " & statsFrame)
-  label = statsCanvas & ".stats.right.destroyed"
-  tclEval(script = label & " configure -text {Destroyed ships (Total: " &
-      $totalDestroyed & ")}")
+  label = statsCanvas & ".stats.right.destroyed.destroyed"
+  tclEval(script = label & " configure -text {" &
+      $totalDestroyed & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of destroyed ships in this game\"")
+  label = statsCanvas & ".stats.right.destroyed.lbldestroyed"
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of destroyed ships in this game\"")
   statsFrame = statsCanvas & ".stats.right.killedframe"
   treeView = statsFrame & ".killedview"
@@ -256,9 +258,11 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
     tclEval(script = "grid " & statsFrame)
   else:
     tclEval(script = "grid remove " & statsFrame)
-  label = statsCanvas & ".stats.right.killed"
-  tclEval(script = label & " configure -text {Killed enemies (Total: " &
-      $totalDestroyed & ")}")
+  label = statsCanvas & ".stats.right.killed.killed"
+  tclEval(script = label & " configure -text {" &
+      $totalDestroyed & "}")
+  tclEval(script = "tooltip::tooltip " & label & " \"The total amount of enemies killed in melee combat in this game\"")
+  label = statsCanvas & ".stats.right.killed.lblkilled"
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of enemies killed in melee combat in this game\"")
   tclEval(script = statsCanvas & " configure -height [expr & " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(

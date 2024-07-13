@@ -147,8 +147,15 @@ grid [ttk::scrollbar $statsframe.left.goalsframe.scrolly -orient vertical \
 ::autoscroll::autoscroll $statsframe.left.goalsframe.scrolly
 grid [ttk::frame $statsframe.right] -row 0 -column 1 -sticky nwes -padx 5
 SetScrollbarBindings $statsframe.right .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.right.destroyed] -sticky w
+grid [ttk::frame $statsframe.right.destroyed] -sticky w
 SetScrollbarBindings $statsframe.right.destroyed \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.right.destroyed.lbldestroyed -text {Destroyed ships:}] -sticky w
+SetScrollbarBindings $statsframe.right.destroyed.lbldestroyed \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.right.destroyed.destroyed -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.right.destroyed.destroyed \
    .gameframe.paned.statsframe.scrolly
 grid [ttk::frame $statsframe.right.destroyedframe] -sticky w
 grid [ttk::treeview $statsframe.right.destroyedframe.destroyedview \
@@ -168,8 +175,15 @@ grid [ttk::scrollbar $statsframe.right.destroyedframe.scrolly \
    -command [list $statsframe.right.destroyedframe.destroyedview yview]] \
    -row 0 -column 1 -sticky ns
 ::autoscroll::autoscroll $statsframe.right.destroyedframe.scrolly
-grid [ttk::label $statsframe.right.killed] -sticky w
+grid [ttk::frame $statsframe.right.killed] -sticky w
 SetScrollbarBindings $statsframe.right.killed \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.right.killed.lblkilled -text {Killed enemies:}] -sticky w
+SetScrollbarBindings $statsframe.right.killed.lblkilled \
+   .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.right.killed.killed -style Golden.TLabel] -sticky w \
+   -row 0 -column 1
+SetScrollbarBindings $statsframe.right.killed.killed \
    .gameframe.paned.statsframe.scrolly
 grid [ttk::frame $statsframe.right.killedframe] -sticky w
 grid [ttk::treeview $statsframe.right.killedframe.killedview -show headings \
