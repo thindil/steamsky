@@ -776,6 +776,20 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
   return showRecruitCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowRecruit", "1"].allocCStringArray)
 
+proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    spinBox = $argv[1]
+    value = (if argc == 3: $argv[2] else: tclEval2(script = spinBox & " get"))
+  if value.len == 0:
+    tclSetResult(value = "1")
+    return tclOk
+  if tclEval2(script = "ValidateSpinbox " & spinBox & " " & value & " {}") == "0":
+    return tclOk
+  tclEval(script = "NegotiateHire")
+  tclSetResult(value = "1")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -787,6 +801,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowRecruitTab", showRecruiTabCommand)
 #    addCommand("Negotiate", negotiateCommand)
 #    addCommand("SortRecruits", sortRecruitsCommand)
+#    addCommand("ValidateNegotiate", validateNegotiateCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
