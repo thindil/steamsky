@@ -39,26 +39,26 @@ proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [],
     ##                   value
     ##
     ## Returns the combat value of the ammunition on the player's ship
-    for item in playerShip.cargo.items:
+    for item in playerShip.cargo:
       if itemsList[item.protoIndex].itemType == itemsTypesList[itemTypeIndex]:
-        result = result + itemsList[item.protoIndex].value[1] * multiple
+        result += itemsList[item.protoIndex].value[1] * multiple
 
   for module in playerShip.modules:
     case modulesList[module.protoIndex].mType
     of ModuleType.batteringRam:
-      result = result + module.damage2
+      result += module.damage2
     of ModuleType.gun:
-      result = result + module.maxDurability + (module.damage * 10)
-      result = result + countAmmoValue(itemTypeIndex = modulesList[
+      result += module.maxDurability + (module.damage * 10)
+      result += countAmmoValue(itemTypeIndex = modulesList[
           module.protoIndex].value, multiple = 10)
     of ModuleType.armor:
-      result = result + module.maxDurability
+      result += module.maxDurability
     of ModuleType.harpoonGun:
-      result = result + module.maxDurability + (module.duration * 5)
-      result = result + countAmmoValue(itemTypeIndex = modulesList[
+      result += module.maxDurability + (module.duration * 5)
+      result += countAmmoValue(itemTypeIndex = modulesList[
           module.protoIndex].value, multiple = 5)
     of ModuleType.hull:
-      result = result + module.maxDurability + (module.maxModules * 10)
+      result += module.maxDurability + (module.maxModules * 10)
     else:
       discard
 
@@ -83,9 +83,9 @@ proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
     result = shipsSyllablesStartList[getRandom(min = 0, max = (
         shipsSyllablesStartList.len - 1))]
     if getRandom(min = 1, max = 100) < 51:
-      result = result & shipsSyllablesMiddleList[getRandom(min = 0, max = (
+      result &= shipsSyllablesMiddleList[getRandom(min = 0, max = (
           shipsSyllablesMiddleList.len - 1))]
-    result = result & shipsSyllablesEndList[getRandom(min = 0, max = (
+    result &= shipsSyllablesEndList[getRandom(min = 0, max = (
         shipsSyllablesEndList.len - 1))]
 
 # Temporary code for interfacing with Ada
