@@ -635,7 +635,8 @@ const defaultRecruitsSortOrder = none
 var recruitsSortOrder = defaultRecruitsSortOrder
 
 proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let column = try:
         (if argv[1] == "-1": Positive.high else: getColumnNumber(
             table = recruitTable, xPosition = ($argv[1]).parseInt))
