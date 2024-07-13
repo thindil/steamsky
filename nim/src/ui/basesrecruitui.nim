@@ -627,7 +627,8 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 type RecruitsSortOrders = enum
-  none, nameAsc, nameDesc, genderAsc, genderDesc, factionAsc, factionDesc, priceAsc, priceDesc, attributeAsc, attributeDesc, skillAsc, skillDesc
+  none, nameAsc, nameDesc, genderAsc, genderDesc, factionAsc, factionDesc,
+    priceAsc, priceDesc, attributeAsc, attributeDesc, skillAsc, skillDesc
 
 const defaultRecruitsSortOrder = none
 
@@ -675,6 +676,22 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if recruitsSortOrder == none:
     return tclOk
+  type LocalRecruitData = object
+    name: string
+    gender: char
+    faction: string
+    price: Positive = 1
+    attribute: string
+    skill: string
+    id: Natural = 0
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var localRecruits: seq[LocalRecruitData] = @[]
+  for index, recruit in skyBases[baseIndex].recruits:
+    localRecruits.add(y = LocalRecruitData(name: recruit.name,
+        gender: recruit.gender, faction: recruit.faction, price: recruit.price,
+        attribute: getHighestAttribute(baseIndex = baseIndex,
+        memberIndex = index), skill: getHighestSkill(baseIndex = baseIndex,
+        memberIndex = index), id: index))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
