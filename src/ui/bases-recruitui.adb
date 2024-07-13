@@ -19,15 +19,14 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Ada;
+with Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with Maps; use Maps;
+with Maps;
 with Table; use Table;
 with Utils.UI;
 
@@ -133,6 +132,8 @@ package body Bases.RecruitUI is
    function Show_Recruit_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Winfo;
       use CoreUI;
 
@@ -344,6 +345,7 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Maps;
       use Tiny_String;
 
       --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -543,6 +545,9 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Tcl.Ada;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+
       Spin_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1));
       Value: constant String :=
