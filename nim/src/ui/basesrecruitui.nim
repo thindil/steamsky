@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[bases, basestrade, config, crew, crewinventory, game, maps,
     shipscrew, tk, types]
 import coreui, dialogs, mapsui, table, utilsui2
@@ -692,7 +692,76 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
         attribute: getHighestAttribute(baseIndex = baseIndex,
         memberIndex = index), skill: getHighestSkill(baseIndex = baseIndex,
         memberIndex = index), id: index))
-  return tclOk
+  proc sortRecruits(x, y: LocalRecruitData): int =
+    case recruitsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of genderAsc:
+      if x.gender < y.gender:
+        return 1
+      else:
+        return -1
+    of genderDesc:
+      if x.gender > y.gender:
+        return 1
+      else:
+        return -1
+    of factionAsc:
+      if x.faction < y.faction:
+        return 1
+      else:
+        return -1
+    of factionDesc:
+      if x.faction > y.faction:
+        return 1
+      else:
+        return -1
+    of priceAsc:
+      if x.price < y.price:
+        return 1
+      else:
+        return -1
+    of priceDesc:
+      if x.price > y.price:
+        return 1
+      else:
+        return -1
+    of attributeAsc:
+      if x.attribute < y.attribute:
+        return 1
+      else:
+        return -1
+    of attributeDesc:
+      if x.attribute > y.attribute:
+        return 1
+      else:
+        return -1
+    of skillAsc:
+      if x.skill < y.skill:
+        return 1
+      else:
+        return -1
+    of skillDesc:
+      if x.skill > y.skill:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localRecruits.sort(cmp = sortRecruits)
+  recruitsIndexes = @[]
+  for recruit in localRecruits:
+    recruitsIndexes.add(y = recruit.id)
+  return showRecruitCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowRecruit", "1"].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
