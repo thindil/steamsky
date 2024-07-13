@@ -626,6 +626,57 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = negotiateDialog, relativeY = 0.2)
   return tclOk
 
+type RecruitsSortOrders = enum
+  none, nameAsc, nameDesc, genderAsc, genderDesc, factionAsc, factionDesc, priceAsc, priceDesc, attributeAsc, attributeDesc, skillAsc, skillDesc
+
+const defaultRecruitsSortOrder = none
+
+var recruitsSortOrder = defaultRecruitsSortOrder
+
+proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        (if argv[1] == "-1": Positive.high else: getColumnNumber(
+            table = recruitTable, xPosition = ($argv[1]).parseInt))
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if recruitsSortOrder == nameAsc:
+      recruitsSortOrder = nameDesc
+    else:
+      recruitsSortOrder = nameAsc
+  of 2:
+    if recruitsSortOrder == genderAsc:
+      recruitsSortOrder = genderDesc
+    else:
+      recruitsSortOrder = genderAsc
+  of 3:
+    if recruitsSortOrder == factionAsc:
+      recruitsSortOrder = factionDesc
+    else:
+      recruitsSortOrder = factionAsc
+  of 4:
+    if recruitsSortOrder == priceAsc:
+      recruitsSortOrder = priceDesc
+    else:
+      recruitsSortOrder = priceAsc
+  of 5:
+    if recruitsSortOrder == attributeAsc:
+      recruitsSortOrder = attributeDesc
+    else:
+      recruitsSortOrder = attributeAsc
+  of 6:
+    if recruitsSortOrder == skillAsc:
+      recruitsSortOrder = skillDesc
+    else:
+      recruitsSortOrder = skillAsc
+  else:
+    discard
+  if recruitsSortOrder == none:
+    return tclOk
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -636,6 +687,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("Hire", hireCommand)
 #    addCommand("ShowRecruitTab", showRecruiTabCommand)
 #    addCommand("Negotiate", negotiateCommand)
+#    addCommand("SortRecruits", sortRecruitsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
