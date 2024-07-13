@@ -164,69 +164,6 @@ package body Bases is
       Ada_Recruit.Home_Base := Recruit.Home_Base;
    end Recruit_From_Nim;
 
-   procedure Get_Ada_Recruits
-     (Recruits: Recruit_Container.Vector; Base_Index: Bases_Range) is
-
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Recruits_Array is array(1 .. 20) of Nim_Recruit_Data;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_Recruits: Nim_Recruits_Array;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Get_Ada_Base_Recruits
-        (N_Recruits: Nim_Recruits_Array; B_Index: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaRecruits";
-   begin
-      Convert_Recruits_Loop :
-      for I in
-        Recruit_Container.First_Index(Container => Recruits) ..
-          Recruit_Container.Last_Index(Container => Recruits) loop
-         Nim_Recruits(I) :=
-           Recruit_To_Nim
-             (Recruit =>
-                Recruit_Container.Element(Container => Recruits, Index => I));
-      end loop Convert_Recruits_Loop;
-      Get_Ada_Base_Recruits(N_Recruits => Nim_Recruits, B_Index => Base_Index);
-   end Get_Ada_Recruits;
-
-   procedure Set_Ada_Recruits
-     (Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range) is
-      use Interfaces.C;
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Recruits_Array is array(1 .. 20) of Nim_Recruit_Data;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_Recruits: Nim_Recruits_Array;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Set_Ada_Base_Recruits
-        (N_Recruits: in out Nim_Recruits_Array; B_Index: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaRecruits";
-   begin
-      --## rule off IMPROPER_INITIALIZATION
-      Set_Ada_Base_Recruits(N_Recruits => Nim_Recruits, B_Index => Base_Index);
-      Recruit_Container.Clear(Container => Recruits);
-      --## rule on IMPROPER_INITIALIZATION
-      Convert_Crew_Loop :
-      for Recruit of Nim_Recruits loop
-         exit Convert_Crew_Loop when Strlen(Item => Recruit.Name) = 0;
-         Convert_Recruit_Block :
-         declare
-            Temp_Recruit: Recruit_Data :=
-              Recruit_Data'
-                (Amount_Of_Attributes => Attributes_Amount,
-                 Amount_Of_Skills => Skills_Amount, others => <>);
-         begin
-            Recruit_From_Nim(Recruit => Recruit, Ada_Recruit => Temp_Recruit);
-            Recruit_Container.Append
-              (Container => Recruits, New_Item => Temp_Recruit);
-         end Convert_Recruit_Block;
-      end loop Convert_Crew_Loop;
-   end Set_Ada_Recruits;
-
    --## rule off TYPE_INITIAL_VALUES
    type Nim_Base_Cargo is record
       Proto_Index: Natural;
@@ -364,6 +301,34 @@ package body Bases is
          Import => True,
          Convention => C,
          External_Name => "getAdaBasePopulation";
+      procedure Get_Ada_Recruits
+        (Recruits: Recruit_Container.Vector; Base_Index: Bases_Range) is
+
+         --## rule off TYPE_INITIAL_VALUES
+         type Nim_Recruits_Array is array(1 .. 20) of Nim_Recruit_Data;
+         --## rule on TYPE_INITIAL_VALUES
+         --## rule off IMPROPER_INITIALIZATION
+         Nim_Recruits: Nim_Recruits_Array;
+         --## rule on IMPROPER_INITIALIZATION
+         procedure Get_Ada_Base_Recruits
+           (N_Recruits: Nim_Recruits_Array; B_Index: Integer) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaRecruits";
+      begin
+         Convert_Recruits_Loop :
+         for I in
+           Recruit_Container.First_Index(Container => Recruits) ..
+             Recruit_Container.Last_Index(Container => Recruits) loop
+            Nim_Recruits(I) :=
+              Recruit_To_Nim
+                (Recruit =>
+                   Recruit_Container.Element
+                     (Container => Recruits, Index => I));
+         end loop Convert_Recruits_Loop;
+         Get_Ada_Base_Recruits
+           (N_Recruits => Nim_Recruits, B_Index => Base_Index);
+      end Get_Ada_Recruits;
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
@@ -486,10 +451,46 @@ package body Bases is
             External_Name => "setAdaBaseReputation";
       begin
          Set_Ada_Base_Reputation
-           (B_Index => Ba_Index,
-            Level => Sky_Bases(Ba_Index).Reputation.Level,
+           (B_Index => Ba_Index, Level => Sky_Bases(Ba_Index).Reputation.Level,
             Experience => Sky_Bases(Ba_Index).Reputation.Experience);
       end Set_Base_Reputation;
+      procedure Set_Ada_Recruits
+        (Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range) is
+         use Interfaces.C;
+         --## rule off TYPE_INITIAL_VALUES
+         type Nim_Recruits_Array is array(1 .. 20) of Nim_Recruit_Data;
+         --## rule on TYPE_INITIAL_VALUES
+         --## rule off IMPROPER_INITIALIZATION
+         Nim_Recruits: Nim_Recruits_Array;
+         --## rule on IMPROPER_INITIALIZATION
+         procedure Set_Ada_Base_Recruits
+           (N_Recruits: in out Nim_Recruits_Array; B_Index: Integer) with
+            Import => True,
+            Convention => C,
+            External_Name => "setAdaRecruits";
+      begin
+         --## rule off IMPROPER_INITIALIZATION
+         Set_Ada_Base_Recruits
+           (N_Recruits => Nim_Recruits, B_Index => Base_Index);
+         Recruit_Container.Clear(Container => Recruits);
+         --## rule on IMPROPER_INITIALIZATION
+         Convert_Crew_Loop :
+         for Recruit of Nim_Recruits loop
+            exit Convert_Crew_Loop when Strlen(Item => Recruit.Name) = 0;
+            Convert_Recruit_Block :
+            declare
+               Temp_Recruit: Recruit_Data :=
+                 Recruit_Data'
+                   (Amount_Of_Attributes => Attributes_Amount,
+                    Amount_Of_Skills => Skills_Amount, others => <>);
+            begin
+               Recruit_From_Nim
+                 (Recruit => Recruit, Ada_Recruit => Temp_Recruit);
+               Recruit_Container.Append
+                 (Container => Recruits, New_Item => Temp_Recruit);
+            end Convert_Recruit_Block;
+         end loop Convert_Crew_Loop;
+      end Set_Ada_Recruits;
    begin
       Set_Ada_Base_Name(B_Index => Base_Index, B_Name => Name);
       Sky_Bases(Base_Index).Name :=
