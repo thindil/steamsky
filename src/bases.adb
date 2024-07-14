@@ -302,7 +302,7 @@ package body Bases is
          Convention => C,
          External_Name => "getAdaBasePopulation";
       procedure Get_Ada_Recruits
-        (Recruits: Recruit_Container.Vector; Base_Index: Bases_Range) is
+        (Recruits: Recruit_Container.Vector; B_Index: Bases_Range) is
 
          --## rule off TYPE_INITIAL_VALUES
          type Nim_Recruits_Array is array(1 .. 20) of Nim_Recruit_Data;
@@ -327,7 +327,7 @@ package body Bases is
                      (Container => Recruits, Index => I));
          end loop Convert_Recruits_Loop;
          Get_Ada_Base_Recruits
-           (N_Recruits => Nim_Recruits, B_Index => Base_Index);
+           (N_Recruits => Nim_Recruits, B_Index => B_Index);
       end Get_Ada_Recruits;
    begin
       Get_Ada_Base_Name
@@ -359,7 +359,7 @@ package body Bases is
          Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
          Date_Type => 2);
       Get_Ada_Recruits
-        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
+        (Recruits => Sky_Bases(Base_Index).Recruits, B_Index => Base_Index);
       Get_Ada_Base_Known
         (B_Index => Base_Index,
          Known => (if Sky_Bases(Base_Index).Known then 1 else 0));
@@ -455,7 +455,7 @@ package body Bases is
             Experience => Sky_Bases(Ba_Index).Reputation.Experience);
       end Set_Base_Reputation;
       procedure Set_Ada_Recruits
-        (Recruits: in out Recruit_Container.Vector; Base_Index: Bases_Range) is
+        (Recruits: in out Recruit_Container.Vector; B_Index: Bases_Range) is
          use Interfaces.C;
          --## rule off TYPE_INITIAL_VALUES
          type Nim_Recruits_Array is array(1 .. 20) of Nim_Recruit_Data;
@@ -471,7 +471,7 @@ package body Bases is
       begin
          --## rule off IMPROPER_INITIALIZATION
          Set_Ada_Base_Recruits
-           (N_Recruits => Nim_Recruits, B_Index => Base_Index);
+           (N_Recruits => Nim_Recruits, B_Index => B_Index);
          Recruit_Container.Clear(Container => Recruits);
          --## rule on IMPROPER_INITIALIZATION
          Convert_Crew_Loop :
@@ -517,7 +517,7 @@ package body Bases is
          Minutes => Sky_Bases(Base_Index).Recruit_Date.Minutes,
          Date_Type => 2);
       Set_Ada_Recruits
-        (Recruits => Sky_Bases(Base_Index).Recruits, Base_Index => Base_Index);
+        (Recruits => Sky_Bases(Base_Index).Recruits, B_Index => Base_Index);
       Set_Ada_Base_Known(B_Index => Base_Index, B_Known => Known);
       if Known = 1 then
          Sky_Bases(Base_Index).Known := True;
