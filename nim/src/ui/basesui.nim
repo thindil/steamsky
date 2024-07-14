@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
-import ../[game, tk]
+import ../[crewinventory, game, maps, tk]
 import coreui, mapsui, table
 
 var
@@ -40,6 +40,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     searchFrame = baseCanvas & ".base.searchframe"
     searchEntry = searchFrame & ".search"
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if argv[1] == "recipes":
     tclEval(script = "grid " & searchFrame)
     if argc != 3:
@@ -56,6 +57,34 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         itemsIndexes.add(y = index)
   else:
     tclEval(script = "grid remove " & searchFrame)
+    baseTable = createTable(parent = baseFrame, headers = @["Action", "Cost",
+        "Time"], scrollbar = mainPaned & ".baseframe.scrolly",
+        command = "SortBaseItems " & $argv[1],
+        tooltipText = "Press mouse button to sort the actions.")
+    if argv[1] == "heal" and itemsIndexes.len != playerShip.crew.len + 1:
+      itemsIndexes = @[]
+      for index, _ in playerShip.crew:
+        itemsIndexes.add(y = $(index + 1))
+      itemsIndexes.add(y = "0")
+    elif argv[1] == "repair" and itemsIndexes.len != playerShip.modules.len + 3:
+      itemsIndexes = @[]
+      for index, _ in playerShip.modules:
+        itemsIndexes.add(y = $(index + 1))
+      itemsIndexes.add(y = "0")
+      itemsIndexes.add(y = (if skyBases[baseIndex].population >
+          149: "-1" else: "-3"))
+      itemsIndexes.add(y = (if skyBases[baseIndex].population >
+          299: "-2" else: "-3"))
+  let
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    moneyLabel = baseCanvas & ".base.lblmoney"
+  if moneyIndex2 > -1:
+    tclEval(script = moneyLabel & " configure -text {You have " &
+        $playerShip.cargo[moneyIndex2].amount & " " & moneyName & ".}")
+  else:
+    tclEval(script = moneyLabel & " configure -text {You don't have " &
+        moneyName & " to buy anything.}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
