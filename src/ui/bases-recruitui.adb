@@ -13,15 +13,15 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+-- with Ada.Strings;
+-- with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
-with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+-- with Tcl.Ada;
+-- with Tcl.Tk.Ada;
+-- with Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Utils.UI;
 
 package body Bases.RecruitUI is
@@ -193,38 +193,40 @@ package body Bases.RecruitUI is
    function Validate_Negotiate_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "validateNegotiateCommand";
       -- ****
 
-   function Validate_Negotiate_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
-      use Tcl.Ada;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-
-      Spin_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1));
-      Value: constant String :=
-        (if Argc = 3 then CArgv.Arg(Argv => Argv, N => 2)
-         else Get(Widgt => Spin_Box));
-   begin
-      if Value = "" then
-         Tcl_SetResult(interp => Interp, str => "1");
-         return TCL_OK;
-      end if;
-      Tcl_Eval
-        (interp => Interp,
-         strng =>
-           "ValidateSpinbox " & CArgv.Arg(Argv => Argv, N => 1) & " " & Value &
-           " {}");
-      if Tcl_GetStringResult(interp => Interp) = "0" then
-         return TCL_OK;
-      end if;
-      Tcl_Eval(interp => Interp, strng => "NegotiateHire");
-      Tcl_SetResult(interp => Interp, str => "1");
-      return TCL_OK;
-   end Validate_Negotiate_Command;
+--   function Validate_Negotiate_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data);
+--      use Tcl.Ada;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+--
+--      Spin_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1));
+--      Value: constant String :=
+--        (if Argc = 3 then CArgv.Arg(Argv => Argv, N => 2)
+--         else Get(Widgt => Spin_Box));
+--   begin
+--      if Value = "" then
+--         Tcl_SetResult(interp => Interp, str => "1");
+--         return TCL_OK;
+--      end if;
+--      Tcl_Eval
+--        (interp => Interp,
+--         strng =>
+--           "ValidateSpinbox " & CArgv.Arg(Argv => Argv, N => 1) & " " & Value &
+--           " {}");
+--      if Tcl_GetStringResult(interp => Interp) = "0" then
+--         return TCL_OK;
+--      end if;
+--      Tcl_Eval(interp => Interp, strng => "NegotiateHire");
+--      Tcl_SetResult(interp => Interp, str => "1");
+--      return TCL_OK;
+--   end Validate_Negotiate_Command;
 
    procedure Add_Commands is
       use Utils.UI;
