@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
-import ../[crewinventory, game, maps, tk]
+import std/[os, strutils, tables]
+import ../[basestrade, config, crewinventory, game, maps, tk]
 import coreui, mapsui, table
 
 var
@@ -85,6 +85,28 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     tclEval(script = moneyLabel & " configure -text {You don't have " &
         moneyName & " to buy anything.}")
+  let
+    page = (if argc == 4: ($argv[3]).parseInt else: 1)
+    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow = 1
+  if argv[1] == "heal":
+    var firstIndex = ""
+    for index in itemsIndexes:
+      let crewIndex = index.parseInt - 1
+      if crewIndex > -1:
+        if playerShip.crew[crewIndex].health == 100:
+          continue
+        if firstIndex.len == 0:
+          firstIndex = $index
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      var cost, time: Natural = 0
+      healCost(cost = cost, time = time, memberIndex = crewIndex)
+      addButton(table = baseTable, text = (if crewIndex > -1: playerShip.crew[
+          crewIndex].name else: "Heal all wounded crew members"),
+          tooltip = "Show available options", command = "ShowBaseMenu heal " &
+          index, column = 1)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
