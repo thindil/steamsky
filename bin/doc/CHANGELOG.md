@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.0.1] - 2024-07-14
 
 ### Fixed
 - No refreshing information about the player's ship after trading
@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Tooltip for stop upgrading the module's button.
 - Game doesn't clear the list of accepted missions after quit
 
-## [10.0] - 2026-06-30
+## [10.0] - 2024-06-30
 
 ### Added
 - New mob for the starting player's ship
