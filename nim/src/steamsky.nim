@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,13 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parseopt, strutils]
+import contracts
 import game, log, tk
 # Temporary imports
 import basesship2
 import ui/[mainmenu, shipsuimodules, utilsui]
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
-    OSError, ValueError], tags: [ReadIOEffect, RootEffect].} =
+    OSError, ValueError], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
   ##
   ## Returns the pointer to the newly created Tcl interpreter
@@ -34,15 +35,15 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
       case key
       of "savedir":
         saveDirectory = val & DirSep
-        normalizePath(saveDirectory)
+        normalizePath(path = saveDirectory)
       of "modsdir":
         modsDirectory = val & DirSep
-        normalizePath(modsDirectory)
+        normalizePath(path = modsDirectory)
       of "datadir":
         dataDirectory = val & DirSep
-        normalizePath(dataDirectory)
+        normalizePath(path = dataDirectory)
       of "debug":
-        debugMode = parseEnum[DebugTypes](val)
+        debugMode = parseEnum[DebugTypes](s = val)
 
   # Create the game directories
   createDir(dir = saveDirectory)
