@@ -778,6 +778,19 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Validate value of numeric fields in negotiate dialog
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ValidateNegotiate field value
+  ## Field is Tcl path to the field which will be validated, value is
+  ## the new value of the field to validate
   let
     spinBox = $argv[1]
     value = (if argc == 3: $argv[2] else: tclEval2(script = spinBox & " get"))
