@@ -777,7 +777,7 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowRecruit", "1"].allocCStringArray)
 
 proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     spinBox = $argv[1]
     value = (if argc == 3: $argv[2] else: tclEval2(script = spinBox & " get"))
