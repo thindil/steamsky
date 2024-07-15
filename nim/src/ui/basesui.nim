@@ -184,30 +184,55 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   elif argv[1] == "recipes":
     let baseType = skyBases[baseIndex].baseType
     for index in itemsIndexes:
-      if index notin basesTypesList[baseType].recipes or index in knownRecipes or recipesList[index].reputation > skyBases[baseIndex].reputation.level:
+      if index notin basesTypesList[baseType].recipes or index in
+          knownRecipes or recipesList[index].reputation > skyBases[
+          baseIndex].reputation.level:
         continue
-      if argc > 2 and argv[2].len > 0 and not itemsList[recipesList[index].resultIndex].name.toLowerAscii.contains(sub = ($argv[2]).toLowerAscii):
+      if argc > 2 and argv[2].len > 0 and not itemsList[recipesList[
+          index].resultIndex].name.toLowerAscii.contains(sub = ($argv[
+          2]).toLowerAscii):
         continue
       if firstIndex.len == 0:
         firstIndex = index
       if currentRow < startRow:
         currentRow.inc
         continue
-      addButton(table = baseTable, text = itemsList[recipesList[index].resultIndex].name,
+      addButton(table = baseTable, text = itemsList[recipesList[
+          index].resultIndex].name,
         tooltip = "Show available options", command = "ShowBaseMenu recipes " &
         index, column = 1)
-      cost = if getPrice(baseType = baseTYpe, itemIndex = recipesList[index].resultIndex) > 0:
-          getPrice(baseType = baseType, itemIndex = recipesList[index].resultIndex)
+      cost = if getPrice(baseType = baseType, itemIndex = recipesList[
+          index].resultIndex) > 0:
+          getPrice(baseType = baseType, itemIndex = recipesList[
+              index].resultIndex) * recipesList[index].difficulty * 10
+        else:
+          recipesList[index].difficulty * 10
+      cost = (cost.float * newGameSettings.pricesBonus).int
+      if cost < 1:
+        cost = 1
+      countPrice(price = cost, traderIndex = findMember(order = talk))
       addButton(table = baseTable, text = $cost & " " & moneyName,
-          tooltip = "Show available options", command = "ShowBaseMenu recipes " &
+          tooltip = "Show available options",
+          command = "ShowBaseMenu recipes " &
           index, column = 2, color = getColor(actionCost = cost))
       formatTime()
       addButton(table = baseTable, text = formattedTime,
-          tooltip = "Show available options", command = "ShowBaseMenu recipes " &
+          tooltip = "Show available options",
+          command = "ShowBaseMenu recipes " &
           index, column = 3, newRow = true)
       if baseTable.row == gameSettings.listsLimit + 1:
         break
-
+  let arguments: string = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
+      "}" else: "{" & $argv[1] & "} {}")
+  addPagination(table = baseTable, previousCommand = (if page >
+      1: "ShowBaseUI " & arguments & " " & $(page - 1) else: ""),
+      nextCommand = (if baseTable.row < gameSettings.listsLimit +
+      1: "" else: "ShowBaseUI " & arguments & $(page + 1)))
+  updateTable(table = baseTable, grabFocus = tclEval2(script = "focus") != searchEntry)
+  if firstIndex.len == 0 and argc < 3:
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+    return tclOk
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
