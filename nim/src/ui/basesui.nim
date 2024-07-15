@@ -27,6 +27,20 @@ var
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         RootEffect], exportc.} =
+  ## Show the selected base action
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowBaseUI UIType search page
+  ## UIType can be heal, repair, recipes. Search is a string which will be
+  ## looked for in names of recipes (only). Page is the number of current
+  ## page on the list to show
   var baseFrame = mainPaned & ".baseframe"
   let baseCanvas = baseFrame & ".canvas"
   if tclEval2(script = "winfo exists " & baseCanvas) == "0":
@@ -281,6 +295,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
-#    addCommand("ShowBaseUi", showBaseUiCommand)
+#    addCommand("ShowBaseUI", showBaseUiCommand)
   except:
     showError(message = "Can't add a Tcl command.")
