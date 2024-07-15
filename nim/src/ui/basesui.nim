@@ -113,9 +113,10 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         if time mod 60 > 1:
           formattedTime.add(y = "s")
 
-  var currentRow = 1
+  var
+    currentRow = 1
+    firstIndex = ""
   if argv[1] == "heal":
-    var firstIndex = ""
     for index in itemsIndexes:
       let crewIndex = index.parseInt - 1
       if crewIndex > -1:
@@ -143,7 +144,6 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       if baseTable.row == gameSettings.listsLimit + 1:
         break
   elif argv[1] == "repair":
-    var firstIndex = ""
     for index in itemsIndexes:
       let moduleIndex = index.parseInt - 1
       if moduleIndex > -1:
@@ -184,8 +184,30 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   elif argv[1] == "recipes":
     let baseType = skyBases[baseIndex].baseType
     for index in itemsIndexes:
-      if index notin basesTypesList[baseType].recipes or index in knownRecipes:
+      if index notin basesTypesList[baseType].recipes or index in knownRecipes or recipesList[index].reputation > skyBases[baseIndex].reputation.level:
         continue
+      if argc > 2 and argv[2].len > 0 and not itemsList[recipesList[index].resultIndex].name.toLowerAscii.contains(sub = ($argv[2]).toLowerAscii):
+        continue
+      if firstIndex.len == 0:
+        firstIndex = index
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      addButton(table = baseTable, text = itemsList[recipesList[index].resultIndex].name,
+        tooltip = "Show available options", command = "ShowBaseMenu recipes " &
+        index, column = 1)
+      cost = if getPrice(baseType = baseTYpe, itemIndex = recipesList[index].resultIndex) > 0:
+          getPrice(baseType = baseType, itemIndex = recipesList[index].resultIndex)
+      addButton(table = baseTable, text = $cost & " " & moneyName,
+          tooltip = "Show available options", command = "ShowBaseMenu recipes " &
+          index, column = 2, color = getColor(actionCost = cost))
+      formatTime()
+      addButton(table = baseTable, text = formattedTime,
+          tooltip = "Show available options", command = "ShowBaseMenu recipes " &
+          index, column = 3, newRow = true)
+      if baseTable.row == gameSettings.listsLimit + 1:
+        break
+
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
