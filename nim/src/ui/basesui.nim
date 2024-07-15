@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basestrade, config, crewinventory, game, maps, tk]
+import ../[bases, basesship, basestrade, basestypes, config, crewinventory,
+    game, maps, shipscrew, tk, types]
 import coreui, mapsui, table
 
 var
@@ -146,7 +147,8 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     for index in itemsIndexes:
       let moduleIndex = index.parseInt - 1
       if moduleIndex > -1:
-        if playerShip.modules[moduleIndex].durability == playerShip.modules[moduleIndex].maxDurability:
+        if playerShip.modules[moduleIndex].durability == playerShip.modules[
+            moduleIndex].maxDurability:
           continue
         if firstIndex.len == 0:
           firstIndex = index
@@ -160,14 +162,30 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
       countPrice(price = cost, traderIndex = findMember(order = talk))
       addButton(table = baseTable, text = (case index
-          of "0":
-            "Slowly repair the whole ship"
-          of "-1":
-            "Repair the whole ship"
-          of "-2":
-            "Quickly repair the whole ship"
-          else:
-            playerShip.modules[moduleIndex].name))
+        of "0":
+          "Slowly repair the whole ship"
+        of "-1":
+          "Repair the whole ship"
+        of "-2":
+          "Quickly repair the whole ship"
+        else:
+          playerShip.modules[moduleIndex].name),
+        tooltip = "Show available options", command = "ShowBaseMenu repair " &
+        index, column = 1)
+      addButton(table = baseTable, text = $cost & " " & moneyName,
+          tooltip = "Show available options", command = "ShowBaseMenu repair " &
+          index, column = 2, color = getColor(actionCost = cost))
+      formatTime()
+      addButton(table = baseTable, text = formattedTime,
+          tooltip = "Show available options", command = "ShowBaseMenu repair " &
+          index, column = 3, newRow = true)
+      if baseTable.row == gameSettings.listsLimit + 1:
+        break
+  elif argv[1] == "recipes":
+    let baseType = skyBases[baseIndex].baseType
+    for index in itemsIndexes:
+      if index notin basesTypesList[baseType].recipes or index in knownRecipes:
+        continue
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
