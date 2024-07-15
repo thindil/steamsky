@@ -88,6 +88,30 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     page = (if argc == 4: ($argv[3]).parseInt else: 1)
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
+
+  proc getColor(actionCost: Natural): string =
+    if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < actionCost:
+      return "red"
+    return ""
+
+  var
+    cost, time: Natural = 0
+    formattedTime = ""
+
+  proc formatTime() =
+    if time < 60:
+      formattedTime = $time & " minute"
+      if time > 1:
+        formattedTime.add(y = "s")
+    else:
+      formattedTime = $(time / 60) & " hour"
+      if time / 60 > 1:
+        formattedTime.add(y = "s")
+      if time mod 60 > 0:
+        formattedTime.add(y = " and " & $(time mod 60) & " minute")
+        if time mod 60 > 1:
+          formattedTime.add(y = "s")
+
   var currentRow = 1
   if argv[1] == "heal":
     var firstIndex = ""
@@ -101,12 +125,20 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       if currentRow < startRow:
         currentRow.inc
         continue
-      var cost, time: Natural = 0
       healCost(cost = cost, time = time, memberIndex = crewIndex)
       addButton(table = baseTable, text = (if crewIndex > -1: playerShip.crew[
           crewIndex].name else: "Heal all wounded crew members"),
           tooltip = "Show available options", command = "ShowBaseMenu heal " &
           index, column = 1)
+      addButton(table = baseTable, text = $cost & " " & moneyName,
+          tooltip = "Show available options", command = "ShowBaseMenu heal " &
+          index, column = 2, color = getColor(actionCost = cost))
+      formatTime()
+      addButton(table = baseTable, text = formattedTime,
+          tooltip = "Show available options", command = "ShowBaseMenu heal " &
+          index, column = 3, newRow = true)
+      if baseTable.row == gameSettings.listsLimit + 1:
+        break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
