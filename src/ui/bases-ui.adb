@@ -201,6 +201,11 @@ package body Bases.UI is
 --        "1" then
 --         Destroy(Widgt => Base_Table.Canvas);
 --      end if;
+      if Show_Ada_Base_Ui_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
 --         Tcl.Tk.Ada.Grid.Grid(Slave => Search_Frame);
 --         if Argc /= 3 then
@@ -288,7 +293,7 @@ package body Bases.UI is
                        else "-3")));
          end if;
       end if;
-      return Show_Ada_Base_Ui_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+      return TCL_OK;
 --      if Money_Index_2 > 0 then
 --         configure
 --           (Widgt => Money_Label,

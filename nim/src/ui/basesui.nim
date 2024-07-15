@@ -48,7 +48,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = searchEntry & " configure -validatecommand {}")
       tclEval(script = searchEntry & " delete 0 end")
       tclEval(script = searchEntry & " configure -validatecommand {SearchRecipes %P}")
-    baseTable = createTable(parent = baseFrame, headers = @["Name", "Cost", ""],
+    baseTable = createTable(parent = baseFrame, headers = @["Name", "Cost"],
         scrollbar = mainPaned & ".baseframe.scrolly",
         command = "SortBaseItems " & $argv[1],
         tooltipText = "Press mouse button to sort the recipes.")
@@ -214,12 +214,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       addButton(table = baseTable, text = $cost & " " & moneyName,
           tooltip = "Show available options",
           command = "ShowBaseMenu recipes " &
-          index, column = 2, color = getColor(actionCost = cost))
-      formatTime()
-      addButton(table = baseTable, text = formattedTime,
-          tooltip = "Show available options",
-          command = "ShowBaseMenu recipes " &
-          index, column = 3, newRow = true)
+          index, column = 2, color = getColor(actionCost = cost), newRow = true)
       if baseTable.row == gameSettings.listsLimit + 1:
         break
   let arguments: string = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
