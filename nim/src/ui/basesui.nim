@@ -18,7 +18,7 @@
 import std/[os, strutils, tables]
 import ../[bases, basesship, basestrade, basestypes, config, crewinventory,
     game, maps, shipscrew, tk, types]
-import coreui, mapsui, table
+import coreui, mapsui, table, utilsui2
 
 var
   baseTable: TableWidget
@@ -233,6 +233,18 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & closeButton)
     showSkyMap(clear = true)
     return tclOk
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  baseFrame = baseCanvas & ".base"
+  tclEval(script = baseCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  tclEval(script = baseCanvas & " create window 0 0 -anchor nw -window " & baseFrame)
+  tclEval(script = "update")
+  tclEval(script = baseCanvas & " configure -scrollregion [list " & tclEval2(
+      script = baseCanvas & " bbox all") & "]")
+  showScreen(newScreenName = "baseframe")
+  tclSetResult(value = "1")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
