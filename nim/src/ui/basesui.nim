@@ -25,7 +25,8 @@ var
   itemsIndexes: seq[string]
 
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   var baseFrame = mainPaned & ".baseframe"
   let baseCanvas = baseFrame & ".canvas"
   if tclEval2(script = "winfo exists " & baseCanvas) == "0":
@@ -87,7 +88,10 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = moneyLabel & " configure -text {You don't have " &
         moneyName & " to buy anything.}")
   let
-    page = (if argc == 4: ($argv[3]).parseInt else: 1)
+    page = try:
+        (if argc == 4: ($argv[3]).parseInt else: 1)
+      except:
+        return showError(message = "Can't get the page number")
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
 
   proc getColor(actionCost: Natural): string =
@@ -118,7 +122,10 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     firstIndex = ""
   if argv[1] == "heal":
     for index in itemsIndexes:
-      let crewIndex = index.parseInt - 1
+      let crewIndex = try:
+          index.parseInt - 1
+        except:
+          return showError(message = "Can't get the crew index.")
       if crewIndex > -1:
         if playerShip.crew[crewIndex].health == 100:
           continue
@@ -129,7 +136,10 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         continue
       cost = 0
       time = 0
-      healCost(cost = cost, time = time, memberIndex = crewIndex)
+      try:
+        healCost(cost = cost, time = time, memberIndex = crewIndex)
+      except:
+        return showError(message = "Can't count heal cost")
       addButton(table = baseTable, text = (if crewIndex > -1: playerShip.crew[
           crewIndex].name else: "Heal all wounded crew members"),
           tooltip = "Show available options", command = "ShowBaseMenu heal " &
@@ -145,7 +155,10 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         break
   elif argv[1] == "repair":
     for index in itemsIndexes:
-      let moduleIndex = index.parseInt - 1
+      let moduleIndex = try:
+          index.parseInt - 1
+        except:
+          return showError(message = "Can't get module index.")
       if moduleIndex > -1:
         if playerShip.modules[moduleIndex].durability == playerShip.modules[
             moduleIndex].maxDurability:
@@ -159,8 +172,14 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         continue
       cost = 0
       time = 0
-      repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
-      countPrice(price = cost, traderIndex = findMember(order = talk))
+      try:
+        repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
+      except:
+        return showError(message = "Can't count repair cost")
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk))
+      except:
+        return showError(message = "Can't count repair price")
       addButton(table = baseTable, text = (case index
         of "0":
           "Slowly repair the whole ship"
@@ -184,33 +203,49 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   elif argv[1] == "recipes":
     let baseType = skyBases[baseIndex].baseType
     for index in itemsIndexes:
-      if index notin basesTypesList[baseType].recipes or index in
-          knownRecipes or recipesList[index].reputation > skyBases[
-          baseIndex].reputation.level:
-        continue
-      if argc > 2 and argv[2].len > 0 and not itemsList[recipesList[
-          index].resultIndex].name.toLowerAscii.contains(sub = ($argv[
-          2]).toLowerAscii):
-        continue
+      try:
+        if index notin basesTypesList[baseType].recipes or index in
+            knownRecipes or recipesList[index].reputation > skyBases[
+            baseIndex].reputation.level:
+          continue
+      except:
+        return showError(message = "Can't check recipe index")
+      try:
+        if argc > 2 and argv[2].len > 0 and not itemsList[recipesList[
+            index].resultIndex].name.toLowerAscii.contains(sub = ($argv[
+            2]).toLowerAscii):
+          continue
+      except:
+        return showError(message = "Can't check recipe index2")
       if firstIndex.len == 0:
         firstIndex = index
       if currentRow < startRow:
         currentRow.inc
         continue
-      addButton(table = baseTable, text = itemsList[recipesList[
-          index].resultIndex].name,
-        tooltip = "Show available options", command = "ShowBaseMenu recipes " &
-        index, column = 1)
-      cost = if getPrice(baseType = baseType, itemIndex = recipesList[
-          index].resultIndex) > 0:
-          getPrice(baseType = baseType, itemIndex = recipesList[
-              index].resultIndex) * recipesList[index].difficulty * 10
-        else:
-          recipesList[index].difficulty * 10
+      try:
+        addButton(table = baseTable, text = itemsList[recipesList[
+            index].resultIndex].name,
+          tooltip = "Show available options",
+            command = "ShowBaseMenu recipes " &
+          index, column = 1)
+      except:
+        return showError(message = "Can't add button")
+      try:
+        cost = if getPrice(baseType = baseType, itemIndex = recipesList[
+            index].resultIndex) > 0:
+            getPrice(baseType = baseType, itemIndex = recipesList[
+                index].resultIndex) * recipesList[index].difficulty * 10
+          else:
+            recipesList[index].difficulty * 10
+      except:
+        return showError(message = "Can't count recipe cost")
       cost = (cost.float * newGameSettings.pricesBonus).int
       if cost < 1:
         cost = 1
-      countPrice(price = cost, traderIndex = findMember(order = talk))
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk))
+      except:
+        return showError(message = "Can't count recipe price")
       addButton(table = baseTable, text = $cost & " " & moneyName,
           tooltip = "Show available options",
           command = "ShowBaseMenu recipes " &
