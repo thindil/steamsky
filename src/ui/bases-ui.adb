@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -13,27 +13,19 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Characters.Handling;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Interfaces.C; use Interfaces.C;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
--- with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
--- with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton;
--- with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tk.Ada.Widgets.TtkLabel;
--- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
--- with Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with BasesTypes; use BasesTypes;
@@ -90,88 +82,13 @@ package body Bases.UI is
    function Show_Base_Ui_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use Ada.Characters.Handling;
---      use GNAT.Directory_Operations;
---      use Tcl.Ada;
---      use Tcl.Tk.Ada.Widgets.Canvas;
---      use Tcl.Tk.Ada.Widgets.TtkEntry;
---      use Tcl.Tk.Ada.Widgets.TtkLabel;
---      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
---      use Tcl.Tk.Ada.Winfo;
       use CoreUI;
---      use Tiny_String;
 
       Base_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".baseframe", Interp => Interp);
---      Base_Canvas: constant Tk_Canvas :=
---        Get_Widget(pathName => Base_Frame & ".canvas", Interp => Interp);
---      Search_Frame: constant Ttk_Frame :=
---        Get_Widget
---          (pathName => Base_Canvas & ".base.searchframe", Interp => Interp);
---      Search_Entry: constant Ttk_Entry :=
---        Get_Widget(pathName => Search_Frame & ".search", Interp => Interp);
---      First_Index, Formatted_Time: Unbounded_String := Null_Unbounded_String;
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
---      Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
---      Cost, Time: Natural := 0;
---      Money_Index_2: constant Natural :=
---        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
---      Money_Label: constant Ttk_Label :=
---        Get_Widget
---          (pathName => Base_Canvas & ".base.lblmoney", Interp => Interp);
---      Page: constant Positive :=
---        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
---         else 1);
---      --## rule off SIMPLIFIABLE_EXPRESSIONS
---      Start_Row: constant Positive :=
---        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
---      --## rule on SIMPLIFIABLE_EXPRESSIONS
---      Arguments: constant String :=
---        (if Argc > 2 then
---           "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
---           CArgv.Arg(Argv => Argv, N => 2) & "}"
---         else CArgv.Arg(Argv => Argv, N => 1) & " {}");
---      Current_Row: Positive := 1;
---      procedure Format_Time is
---      begin
---         if Time < 60 then
---            Formatted_Time :=
---              To_Unbounded_String(Source => Natural'Image(Time) & " minute");
---            if Time > 1 then
---               Append(Source => Formatted_Time, New_Item => "s");
---            end if;
---         else
---            Formatted_Time :=
---              To_Unbounded_String
---                (Source => Positive'Image(Time / 60) & " hour");
---            if Time / 60 > 1 then
---               Append(Source => Formatted_Time, New_Item => "s");
---            end if;
---            if Time mod 60 > 0 then
---               Append
---                 (Source => Formatted_Time,
---                  New_Item =>
---                    " and" & Positive'Image(Time mod 60) & " minute");
---               if Time mod 60 > 1 then
---                  Append(Source => Formatted_Time, New_Item => "s");
---               end if;
---            end if;
---         end if;
---      end Format_Time;
---      function Get_Color(Action_Cost: Positive) return String is
---      begin
---         if Money_Index_2 = 0
---           or else
---             Inventory_Container.Element
---               (Container => Player_Ship.Cargo, Index => Money_Index_2)
---               .Amount <
---             Action_Cost then
---            return "red";
---         end if;
---         return "";
---      end Get_Color;
       function Show_Ada_Base_Ui_Command
         (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
          Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
@@ -179,44 +96,12 @@ package body Bases.UI is
          Convention => C,
          External_Name => "showBaseUiCommand";
    begin
---      if Winfo_Get(Widgt => Base_Canvas, Info => "exists") = "0" then
---         Tcl_EvalFile
---           (interp => Get_Context,
---            fileName =>
---              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
---              "base.tcl");
---         Bind
---           (Widgt => Base_Frame, Sequence => "<Configure>",
---            Script => "{ResizeCanvas %W.canvas %w %h}");
---      elsif Winfo_Get(Widgt => Base_Canvas, Info => "ismapped") = "1" and
---        Argc = 1 then
---         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---         Show_Sky_Map(Clear => True);
---         return TCL_OK;
---      end if;
---      Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
---      if Winfo_Get
---          (Widgt => Ttk_Frame'(Get_Widget(pathName => Base_Frame & ".table")),
---           Info => "exists") =
---        "1" then
---         Destroy(Widgt => Base_Table.Canvas);
---      end if;
       if Show_Ada_Base_Ui_Command
           (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
         TCL_ERROR then
          return TCL_ERROR;
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
---         Tcl.Tk.Ada.Grid.Grid(Slave => Search_Frame);
---         if Argc /= 3 then
---            configure(Widgt => Search_Entry, options => "-validatecommand {}");
---            Delete
---              (TextEntry => Search_Entry, FirstIndex => "0",
---               LastIndex => "end");
---            configure
---              (Widgt => Search_Entry,
---               options => "-validatecommand {SearchRecipes %P}");
---         end if;
          Base_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Base_Frame),
@@ -239,7 +124,6 @@ package body Bases.UI is
             end loop Fill_Recipes_Indexes_Loop;
          end if;
       else
---         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Search_Frame);
          Base_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Base_Frame),
@@ -294,289 +178,6 @@ package body Bases.UI is
          end if;
       end if;
       return TCL_OK;
---      if Money_Index_2 > 0 then
---         configure
---           (Widgt => Money_Label,
---            options =>
---              "-text {You have" &
---              Natural'Image
---                (Inventory_Container.Element
---                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
---                   .Amount) &
---              " " & To_String(Source => Money_Name) & ".}");
---      else
---         configure
---           (Widgt => Money_Label,
---            options =>
---              "-text {You don't have any " & To_String(Source => Money_Name) &
---              " to buy anything.}");
---      end if;
---      if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
---         Show_Wounded_Crew_Loop :
---         for I of Items_Indexes loop
---            if Integer'Value(To_String(Source => I)) > 0 then
---               if Player_Ship.Crew(Positive'Value(To_String(Source => I)))
---                   .Health =
---                 100 then
---                  goto End_Of_Wounded_Loop;
---               end if;
---               if First_Index = Null_Unbounded_String then
---                  First_Index := I;
---               end if;
---            end if;
---            if Current_Row < Start_Row then
---               Current_Row := Current_Row + 1;
---               goto End_Of_Wounded_Loop;
---            end if;
---            Cost := 0;
---            Time := 0;
---            Heal_Cost
---              (Cost => Cost, Time => Time,
---               Member_Index => Positive'Value(To_String(Source => I)));
---            Add_Button
---              (Table => Base_Table,
---               Text =>
---                 (if Integer'Value(To_String(Source => I)) > 0 then
---                    To_String
---                      (Source =>
---                         Player_Ship.Crew
---                           (Positive'Value(To_String(Source => I)))
---                           .Name)
---                  else "Heal all wounded crew members"),
---               Tooltip => "Show available options",
---               Command => "ShowBaseMenu heal " & To_String(Source => I),
---               Column => 1);
---            Add_Button
---              (Table => Base_Table,
---               Text =>
---                 Positive'Image(Cost) & " " & To_String(Source => Money_Name),
---               Tooltip => "Show available options",
---               Command => "ShowBaseMenu heal " & To_String(Source => I),
---               Column => 2, Color => Get_Color(Action_Cost => Cost));
---            Format_Time;
---            Add_Button
---              (Table => Base_Table,
---               Text => To_String(Source => Formatted_Time),
---               Tooltip => "Show available options",
---               Command => "ShowBaseMenu heal " & To_String(Source => I),
---               Column => 3, New_Row => True);
---            exit Show_Wounded_Crew_Loop when Base_Table.Row =
---              Get_Integer_Setting(Name => "listsLimit") + 1;
---            <<End_Of_Wounded_Loop>>
---         end loop Show_Wounded_Crew_Loop;
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
---         Show_Damaged_Modules_Loop :
---         for I of Items_Indexes loop
---            if Integer'Value(To_String(Source => I)) > 0 then
---               if Player_Ship.Modules(Positive'Value(To_String(Source => I)))
---                   .Durability =
---                 Player_Ship.Modules(Positive'Value(To_String(Source => I)))
---                   .Max_Durability then
---                  goto End_Of_Damaged_Modules_Loop;
---               end if;
---               if First_Index = Null_Unbounded_String then
---                  First_Index := I;
---               end if;
---            end if;
---            if Current_Row < Start_Row then
---               Current_Row := Current_Row + 1;
---               goto End_Of_Damaged_Modules_Loop;
---            end if;
---            if I = To_Unbounded_String(Source => "-3") then
---               goto End_Of_Damaged_Modules_Loop;
---            end if;
---            Cost := 0;
---            Time := 0;
---            Repair_Cost
---              (Cost => Cost, Time => Time,
---               Module_Index => Integer'Value(To_String(Source => I)));
---            Count_Price
---              (Price => Cost, Trader_Index => Find_Member(Order => TALK));
---            Add_Button
---              (Table => Base_Table,
---               Text =>
---                 (case Integer'Value(To_String(Source => I)) is
---                    when 0 => "Slowly repair the whole ship",
---                    when -1 => "Repair the whole ship",
---                    when -2 => "Quickly repair the whole ship",
---                    when others =>
---                      To_String
---                        (Source =>
---                           Player_Ship.Modules
---                             (Positive'Value(To_String(Source => I)))
---                             .Name)),
---               Tooltip => "Show available options",
---               Command => "ShowBaseMenu repair " & To_String(Source => I),
---               Column => 1);
---            Add_Button
---              (Table => Base_Table,
---               Text =>
---                 Positive'Image(Cost) & " " & To_String(Source => Money_Name),
---               Tooltip => "Show available options",
---               Command => "ShowBaseMenu repair " & To_String(Source => I),
---               Column => 2, Color => Get_Color(Action_Cost => Cost));
---            Format_Time;
---            Add_Button
---              (Table => Base_Table,
---               Text => To_String(Source => Formatted_Time),
---               Tooltip => "Show available options",
---               Command => "ShowBaseMenu repair " & To_String(Source => I),
---               Column => 3, New_Row => True);
---            exit Show_Damaged_Modules_Loop when Base_Table.Row =
---              Get_Integer_Setting(Name => "listsLimit") + 1;
---            <<End_Of_Damaged_Modules_Loop>>
---         end loop Show_Damaged_Modules_Loop;
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
---         Show_Available_Recipes_Loop :
---         for I of Items_Indexes loop
---            if not Has_Recipe
---                (Base_Type => Base_Type, Recipe => To_String(Source => I)) or
---              Is_Known_Recipe
---                (Recipe_Index =>
---                   To_Bounded_String(Source => To_String(Source => I))) or
---              Get_Recipe
---                  (Recipe_Index =>
---                     To_Bounded_String(Source => To_String(Source => I)))
---                  .Reputation >
---                Sky_Bases(Base_Index).Reputation.Level then
---               goto End_Of_Recipes_Loop;
---            end if;
---            if Argc > 2 and then CArgv.Arg(Argv => Argv, N => 2)'Length > 0
---              and then
---                Index
---                  (Source =>
---                     To_Lower
---                       (Item =>
---                          To_String
---                            (Source =>
---                               Get_Proto_Item
---                                 (Index =>
---                                    Get_Recipe
---                                      (Recipe_Index =>
---                                         To_Bounded_String
---                                           (Source => To_String(Source => I)))
---                                      .Result_Index)
---                                 .Name)),
---                   Pattern =>
---                     To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
---                0 then
---               goto End_Of_Recipes_Loop;
---            end if;
---            if First_Index = Null_Unbounded_String then
---               First_Index := I;
---            end if;
---            if Current_Row < Start_Row then
---               Current_Row := Current_Row + 1;
---               goto End_Of_Recipes_Loop;
---            end if;
---            Add_Button
---              (Table => Base_Table,
---               Text =>
---                 To_String
---                   (Source =>
---                      Get_Proto_Item
---                        (Index =>
---                           Get_Recipe
---                             (Recipe_Index =>
---                                To_Bounded_String
---                                  (Source => To_String(Source => I)))
---                             .Result_Index)
---                        .Name),
---               Tooltip => "Show available options",
---               Command =>
---                 "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
---               Column => 1);
---            Cost :=
---              (if
---                 Get_Price
---                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
---                    Item_Index =>
---                      Get_Recipe
---                        (Recipe_Index =>
---                           To_Bounded_String(Source => To_String(Source => I)))
---                        .Result_Index) >
---                 0
---               then
---                 Get_Price
---                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
---                    Item_Index =>
---                      Get_Recipe
---                        (Recipe_Index =>
---                           To_Bounded_String(Source => To_String(Source => I)))
---                        .Result_Index) *
---                 Get_Recipe
---                   (Recipe_Index =>
---                      To_Bounded_String(Source => To_String(Source => I)))
---                   .Difficulty *
---                 10
---               else Get_Recipe
---                   (Recipe_Index =>
---                      To_Bounded_String(Source => To_String(Source => I)))
---                   .Difficulty *
---                 10);
---            --## rule off ASSIGNMENTS
---            Cost :=
---              Natural(Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
---            --## rule on ASSIGNMENTS
---            if Cost = 0 then
---               Cost := 1;
---            end if;
---            Count_Price
---              (Price => Cost, Trader_Index => Find_Member(Order => TALK));
---            Add_Button
---              (Table => Base_Table,
---               Text =>
---                 Positive'Image(Cost) & " " & To_String(Source => Money_Name),
---               Tooltip => "Show available options",
---               Command =>
---                 "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
---               Column => 2, New_Row => True,
---               Color => Get_Color(Action_Cost => Cost));
---            exit Show_Available_Recipes_Loop when Base_Table.Row =
---              Get_Integer_Setting(Name => "listsLimit") + 1;
---            <<End_Of_Recipes_Loop>>
---         end loop Show_Available_Recipes_Loop;
---      end if;
---      Add_Pagination
---        (Table => Base_Table,
---         Previous_Command =>
---           (if Page > 1 then
---              "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
---            else ""),
---         Next_Command =>
---           (if Base_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1
---            then ""
---            else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
---      Update_Table
---        (Table => Base_Table,
---         Grab_Focus =>
---           (if Focus = Widget_Image(Win => Search_Entry) then False));
---      if First_Index = Null_Unbounded_String and Argc < 3 then
---         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---         Show_Sky_Map(Clear => True);
---         return TCL_OK;
---      end if;
---      Tcl.Tk.Ada.Grid.Grid
---        (Slave => Close_Button, Options => "-row 0 -column 1");
---      Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
---      configure
---        (Widgt => Base_Canvas,
---         options =>
---           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
---           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      Canvas_Create
---        (Parent => Base_Canvas, Child_Type => "window",
---         Options => "0 0 -anchor nw -window " & Base_Frame);
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      configure
---        (Widgt => Base_Canvas,
---         options =>
---           "-scrollregion [list " &
---           BBox(CanvasWidget => Base_Canvas, TagOrId => "all") & "]");
---      Show_Screen(New_Screen_Name => "baseframe");
---      Tcl_SetResult(interp => Interp, str => "1");
---      return TCL_OK;
    end Show_Base_Ui_Command;
 
    -- ****o* BUI/BUI.Base_Action_Command
