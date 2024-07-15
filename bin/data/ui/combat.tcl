@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -113,13 +113,9 @@ grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
    -sticky w -padx 5
 tooltip::tooltip $combatcanvas.frame.maxmin \
    {Maximize/minimize the enemy's ship info}
-grid [ttk::label $combatcanvas.frame.info] -padx 5
+grid [text $combatcanvas.frame.info -width 30 -wrap char] -padx 5
 SetScrollbarBindings $combatcanvas.frame.info $combatframe.enemy.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
-bind $combatframe.enemy <Configure> {
-   $combatframe.enemy.canvas.frame.info configure -wraplength [expr \
-      [winfo width $combatframe.enemy] - 10]
-}
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
 ::autoscroll::autoscroll $combatframe.enemy.scrollx
 # Enemy ship info damage

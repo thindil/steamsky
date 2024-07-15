@@ -377,7 +377,15 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   if game.enemy.ship.description.len > 0:
     enemyInfo = enemyInfo & "\n\n" & game.enemy.ship.description
   var label = mainPaned & ".combatframe.enemy.canvas.frame.info"
-  tclEval(script = label & " configure -text {" & enemyInfo & "}")
+  tclEval(script = label & " configure -state normal")
+  tclEval(script = label & " delete 1.0 end")
+  tclEval(script = label & " insert end {" & enemyInfo & "}")
+  try:
+    discard tclEval(script = label & " configure -state disabled -height " & $(
+        tclEval2(script = label & " count -displaylines 0.0 end").parseInt))
+  except:
+    showError(message = "Can't set the enemy's info height.")
+    return
   tclEval(script = "update")
   combatCanvas = mainPaned & ".combatframe.enemy.canvas"
   tclEval(script = combatCanvas & " configure -scrollregion [list " & tclEval2(
