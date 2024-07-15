@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## The main game module. Read the game configuration, command line arguments,
+## initialize graphic and start the game.
+
 import std/[os, parseopt, strutils]
 import contracts
 import game, log, tk
@@ -30,7 +33,7 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
 
   # Get the command line params if any
   if params.len() > 0:
-    var gameParams = initOptParser(cmdLine = $params)
+    var gameParams: OptParser = initOptParser(cmdLine = $params)
     for kind, key, val in gameParams.getopt():
       case key
       of "savedir":
