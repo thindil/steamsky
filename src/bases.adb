@@ -311,7 +311,7 @@ package body Bases is
          Nim_Recruits: Nim_Recruits_Array;
          --## rule on IMPROPER_INITIALIZATION
          procedure Get_Ada_Base_Recruits
-           (N_Recruits: Nim_Recruits_Array; B_Index: Integer) with
+           (N_Recruits: Nim_Recruits_Array; B_I: Integer) with
             Import => True,
             Convention => C,
             External_Name => "getAdaRecruits";
@@ -327,7 +327,7 @@ package body Bases is
                      (Container => Recruits, Index => I));
          end loop Convert_Recruits_Loop;
          Get_Ada_Base_Recruits
-           (N_Recruits => Nim_Recruits, B_Index => B_Index);
+           (N_Recruits => Nim_Recruits, B_I => B_Index);
       end Get_Ada_Recruits;
    begin
       Get_Ada_Base_Name
@@ -464,14 +464,14 @@ package body Bases is
          Nim_Recruits: Nim_Recruits_Array;
          --## rule on IMPROPER_INITIALIZATION
          procedure Set_Ada_Base_Recruits
-           (N_Recruits: in out Nim_Recruits_Array; B_Index: Integer) with
+           (N_Recruits: in out Nim_Recruits_Array; B_I: Integer) with
             Import => True,
             Convention => C,
             External_Name => "setAdaRecruits";
       begin
          --## rule off IMPROPER_INITIALIZATION
          Set_Ada_Base_Recruits
-           (N_Recruits => Nim_Recruits, B_Index => B_Index);
+           (N_Recruits => Nim_Recruits, B_I => B_Index);
          Recruit_Container.Clear(Container => Recruits);
          --## rule on IMPROPER_INITIALIZATION
          Convert_Crew_Loop :
