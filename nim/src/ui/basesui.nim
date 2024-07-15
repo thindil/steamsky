@@ -121,10 +121,12 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         if playerShip.crew[crewIndex].health == 100:
           continue
         if firstIndex.len == 0:
-          firstIndex = $index
+          firstIndex = index
       if currentRow < startRow:
         currentRow.inc
         continue
+      cost = 0
+      time = 0
       healCost(cost = cost, time = time, memberIndex = crewIndex)
       addButton(table = baseTable, text = (if crewIndex > -1: playerShip.crew[
           crewIndex].name else: "Heal all wounded crew members"),
@@ -139,6 +141,33 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
           index, column = 3, newRow = true)
       if baseTable.row == gameSettings.listsLimit + 1:
         break
+  elif argv[1] == "repair":
+    var firstIndex = ""
+    for index in itemsIndexes:
+      let moduleIndex = index.parseInt - 1
+      if moduleIndex > -1:
+        if playerShip.modules[moduleIndex].durability == playerShip.modules[moduleIndex].maxDurability:
+          continue
+        if firstIndex.len == 0:
+          firstIndex = index
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      if index == "-3":
+        continue
+      cost = 0
+      time = 0
+      repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+      addButton(table = baseTable, text = (case index
+          of "0":
+            "Slowly repair the whole ship"
+          of "-1":
+            "Repair the whole ship"
+          of "-2":
+            "Quickly repair the whole ship"
+          else:
+            playerShip.modules[moduleIndex].name))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
