@@ -88,21 +88,4 @@ package body Crafts is
       return Convert_Recipe_From_Nim(Crafting_Data => Nim_Recipe);
    end Get_Recipe;
 
-   function Is_Known_Recipe
-     (Recipe_Index: Tiny_String.Bounded_String) return Boolean is
-      function Is_Ada_Known_Recipe(R_Index: chars_ptr) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "isAdaKnownRecipe";
-   begin
-      if Is_Ada_Known_Recipe
-          (R_Index =>
-             New_String
-               (Str => Tiny_String.To_String(Source => Recipe_Index))) =
-        1 then
-         return True;
-      end if;
-      return False;
-   end Is_Known_Recipe;
-
 end Crafts;
