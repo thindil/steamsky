@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
+import contracts
 import factions, game, maps, messages, ships2, types, utils
 
 var
@@ -25,19 +26,23 @@ var
     ## The list of all traders' ships
 
 proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Get the list of all prototype's ships which are available only for the
   ## player
   ##
   ## * playerShips - the list of ships' prototypes available for the player
   ##
   ## Returns the updated parameter playerShips.
-  for index, faction in factionsList.pairs:
-    for career in faction.careers.values:
-      playerShips.add(y = career.shipIndex)
+  ensure:
+    playerShips.len > 0
+  body:
+    for index, faction in factionsList.pairs:
+      for career in faction.careers.values:
+        playerShips.add(y = career.shipIndex)
 
 proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
-    withTraders: bool = true) {.sideEffect, raises: [KeyError], tags: [].} =
+    withTraders: bool = true) {.sideEffect, raises: [KeyError], tags: [],
+        contractual.} =
   ## Create a list of enemy's ships
   ##
   ## * enemies     - the list of enemy's ships which will be created
@@ -47,30 +52,37 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
   ##                 combat ships. Default value is true
   ##
   ## Returns the updated paramater enemies
-  var playerValue = countCombatValue()
-  if getRandom(min = 1, max = 100) > 98:
-    playerValue = playerValue * 2
-  var playerShips: seq[Positive]
-  getPlayerShips(playerShips = playerShips)
-  for index, ship in protoShipsList:
-    if ship.combatValue <= playerValue and (owner == "Any" or ship.owner ==
-        owner) and not isFriendly(sourceFaction = playerShip.crew[0].faction,
-        targetFaction = ship.owner) and index notin playerShips and (
-        withTraders or tradersName notin ship.name):
-      enemies.add(y = index)
+  require:
+    owner.len > 0
+  body:
+    var playerValue = countCombatValue()
+    if getRandom(min = 1, max = 100) > 98:
+      playerValue = playerValue * 2
+    var playerShips: seq[Positive]
+    getPlayerShips(playerShips = playerShips)
+    for index, ship in protoShipsList:
+      if ship.combatValue <= playerValue and (owner == "Any" or ship.owner ==
+          owner) and not isFriendly(sourceFaction = playerShip.crew[0].faction,
+          targetFaction = ship.owner) and index notin playerShips and (
+          withTraders or tradersName notin ship.name):
+        enemies.add(y = index)
 
 proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Delete the selected event and update the map information
   ##
   ## * eventIndex - the index of the event to delete
-  skyMap[eventsList[eventIndex].skyX][eventsList[
-      eventIndex].skyY].eventIndex = -1
-  eventsList.delete(eventIndex)
-  for index, event in eventsList.pairs:
-    skyMap[event.skyX][event.skyY].eventIndex = index
+  require:
+    eventIndex < eventsList.len
+  body:
+    skyMap[eventsList[eventIndex].skyX][eventsList[
+        eventIndex].skyY].eventIndex = -1
+    eventsList.delete(eventIndex)
+    for index, event in eventsList.pairs:
+      skyMap[event.skyX][event.skyY].eventIndex = index
 
-proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
+proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [],
+    contractual.} =
   ## Update timer for all known events, delete events if the timers passed
   ##
   ## * minutes - the amount of minutes passed in the game
@@ -99,7 +111,7 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [].} =
       skyMap[event.skyX][event.skyY].eventIndex = index
 
 proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Set a new owner, population and reset dates for the abandoned base
   ##
   ## * baseIndex - the index of the base to recover
@@ -124,7 +136,8 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
   addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
       mType = otherMessage, color = cyan)
 
-proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [].} =
+proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Create the list of traders' ships needed for events
   for index, ship in protoShipsList:
     if ship.name.contains(tradersName):
@@ -138,7 +151,8 @@ proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [].} =
 
 # Temporary code for interfacing with Ada
 
-proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   var event = EventData(skyX: x, skyY: y, time: time, eType: eType.EventsTypes)
   case event.eType
     of doublePrice:
@@ -153,7 +167,7 @@ proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [], e
     eventsList.add(event)
 
 proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   if index > eventsList.len:
     x = -1
     return
@@ -169,7 +183,8 @@ proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
   else:
     data = eventsList[index - 1].data.cint
 
-proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [], exportc.} =
+proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
+    exportc, contractual.} =
   for ship in playerShips.mitems:
     ship = 0
   var nimShips: seq[Positive]
@@ -178,7 +193,7 @@ proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
     playerShips[index] = ship.cint
 
 proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
-    withTraders: cint) {.raises: [], tags: [], exportc.} =
+    withTraders: cint) {.raises: [], tags: [], exportc, contractual.} =
   for ship in enemies.mitems:
     ship = 0
   var nimShips: seq[Positive]
@@ -190,35 +205,39 @@ proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
   for index, ship in nimShips.pairs:
     enemies[index] = ship.cint
 
-proc updateAdaEvents(minutes: cint) {.raises: [], tags: [], exportc.} =
+proc updateAdaEvents(minutes: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     updateEvents(minutes = minutes)
   except KeyError:
     discard
 
-proc clearAdaEvents() {.raises: [], tags: [], exportc.} =
+proc clearAdaEvents() {.raises: [], tags: [], exportc, contractual.} =
   eventsList = @[]
 
-proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc.} =
+proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   deleteEvent(eventIndex = eventIndex - 1)
 
-proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc.} =
+proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     recoverBase(baseIndex = baseIndex)
   except KeyError:
     discard
 
-proc generateAdaTraders() {.raises: [], tags: [], exportc.} =
+proc generateAdaTraders() {.raises: [], tags: [], exportc, contractual.} =
   try:
     generateTraders()
   except:
     discard
 
-proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [], exportc.} =
+proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [],
+    exportc, contractual.} =
   if trader == 1:
     return traders.find(index).cint + 1
   else:
     return friendlyShips.find(index).cint + 1
 
-proc getAdaEventsAmount(): cint {.raises: [], tags: [], exportc.} =
+proc getAdaEventsAmount(): cint {.raises: [], tags: [], exportc, contractual.} =
   return eventsList.len.cint
