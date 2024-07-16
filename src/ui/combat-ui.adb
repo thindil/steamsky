@@ -112,7 +112,7 @@ package body Combat.UI is
         (Name => "ShowCombatInfo",
          Ada_Command => Show_Combat_Info_Command'Access);
       Add_Command
-        (Name => "CombatMaxMix", Ada_Command => Combat_Max_Min_Command'Access);
+        (Name => "CombatMaxMin", Ada_Command => Combat_Max_Min_Command'Access);
       Add_Command
         (Name => "ToggleAllCombat",
          Ada_Command => Toggle_All_Combat_Command'Access);

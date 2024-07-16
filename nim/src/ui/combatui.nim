@@ -965,23 +965,27 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     button = mainPaned & ".combatframe." & $argv[1] & ".canvas.frame.maxmin"
   if argv[2] == "show":
     for frameInfo in frames:
+      if frameInfo.name.len == 0:
+        break
       let frameName = mainPaned & ".combatframe." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frameName & " -columnspan 2 -rowspan 2 -row 0 -column 0")
       else:
         tclEval(script = "grid remove " & frameName)
-    tclEval(script = button & " -image movemapdownicon -commnad {CombatMaxMix " &
+    tclEval(script = button & " configure -image movemapdownicon -command {CombatMaxMin " &
         $argv[1] & " hide " & $argv[3] & "}")
   else:
     for frameInfo in frames:
+      if frameInfo.name.len == 0:
+        break
       let frameName = mainPaned & ".combatframe." & frameInfo.name
       if frameInfo.name == $argv[1]:
-        tclEval(script = "grid " & frameName)
-      else:
         tclEval(script = "grid configure " & frameName &
             " -columnspan 1 -rowspan 1 -column " & $frameInfo.column &
             " -row " & $frameInfo.row)
-    tclEval(script = button & " -image movemapdownicon -commnad {CombatMaxMix " &
+      else:
+        tclEval(script = "grid " & frameName)
+    tclEval(script = button & " configure -image movemapupicon -command {CombatMaxMin " &
         $argv[1] & " show " & $argv[3] & "}")
   return tclOk
 
