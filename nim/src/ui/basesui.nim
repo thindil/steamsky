@@ -16,9 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[bases, basesship, basestrade, basestypes, config, crewinventory,
-    game, maps, shipscrew, tk, types]
-import coreui, mapsui, table, utilsui2
+import ../[bases, basesship, basesship2, basestrade, basestypes, config,
+    crewinventory, game, maps, shipscrew, tk, types]
+import coreui, mapsui, table, updateheader, utilsui2
 
 var
   baseTable: TableWidget
@@ -291,10 +291,25 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let itemIndex = $argv[2]
+  if argv[1] == "heal":
+    healWounded(memberIndex = itemIndex.parseInt - 1)
+  elif argv[1] == "repair":
+    repairShip(moduleIndex = itemIndex.parseInt - 1)
+  elif argv[1] == "recipes":
+    buyRecipe(recipeIndex = itemIndex)
+  updateHeader()
+  updateMessages()
+  return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowBaseUI", $argv[1]].allocCStringArray)
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowBaseUI", showBaseUiCommand)
+#    addCommand("BaseAction", baseActionCommand)
   except:
     showError(message = "Can't add a Tcl command.")
