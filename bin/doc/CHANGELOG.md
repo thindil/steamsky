@@ -23,3 +23,4 @@ All notable changes to this project will be documented in this file.
 - Outdated the player's ship's information after entering a shipyard screen
 - Tooltip for stop upgrading the module's button.
 - Game doesn't clear the list of accepted missions after quit
+- Resizing sections in the combat screen
