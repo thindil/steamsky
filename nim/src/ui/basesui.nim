@@ -328,7 +328,8 @@ proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowBaseUI", $argv[1]].allocCStringArray)
 
 proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let searchText = $argv[1]
   if searchText.len == 0:
     return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
