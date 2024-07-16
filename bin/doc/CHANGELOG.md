@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Resizing sections in the combat screen
+
 ## [10.0.1] - 2024-07-14
 
 ### Fixed
