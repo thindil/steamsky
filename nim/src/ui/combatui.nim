@@ -306,8 +306,19 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
       script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
-  var enemyInfo = "Name: " & enemyName & "\nType: " & game.enemy.ship.name &
-      "\nHome: " & skyBases[game.enemy.ship.homeBase].name & "\nDistance:" & (
+  var label = mainPaned & ".combatframe.enemy.canvas.frame.info"
+  tclEval(script = label & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
+  tclEval(script = label & " configure -state normal")
+  tclEval(script = label & " delete 1.0 end")
+  tclEval(script = label & " insert end {Name: }")
+  tclEval(script = label & " insert end {" & enemyName & "} [list gold]")
+  tclEval(script = label & " insert end {\nType: }")
+  tclEval(script = label & " insert end {" & game.enemy.ship.name & "} [list gold]")
+  tclEval(script = label & " insert end {\nHome: }")
+  tclEval(script = label & " insert end {" & skyBases[game.enemy.ship.homeBase].name & "} [list gold]")
+  var enemyInfo = "\nDistance:" & (
       if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
       10_000 ..
       15_000: "Long" elif game.enemy.distance in 5_000 ..
@@ -376,9 +387,6 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
     enemyInfo = enemyInfo & "Unknown"
   if game.enemy.ship.description.len > 0:
     enemyInfo = enemyInfo & "\n\n" & game.enemy.ship.description
-  var label = mainPaned & ".combatframe.enemy.canvas.frame.info"
-  tclEval(script = label & " configure -state normal")
-  tclEval(script = label & " delete 1.0 end")
   tclEval(script = label & " insert end {" & enemyInfo & "}")
   try:
     discard tclEval(script = label & " configure -state disabled -height " & $(
