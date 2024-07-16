@@ -327,11 +327,21 @@ proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
   return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowBaseUI", $argv[1]].allocCStringArray)
 
+proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let searchText = $argv[1]
+  if searchText.len == 0:
+    return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
+        argv = @["ShowBaseUI", "recipes"].allocCStringArray)
+  return showBaseUiCommand(clientData = clientData, interp = interp, argc = 3,
+      argv = @["ShowBaseUI", "recipes", searchText].allocCStringArray)
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowBaseUI", showBaseUiCommand)
 #    addCommand("BaseAction", baseActionCommand)
+#    addCommand("SearchRecipes", searchRecipesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
