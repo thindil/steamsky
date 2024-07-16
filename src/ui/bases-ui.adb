@@ -34,7 +34,6 @@ with CoreUI;
 with Crafts; use Crafts;
 with Dialogs;
 with Maps; use Maps;
--- with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
@@ -201,30 +200,6 @@ package body Bases.UI is
       Convention => C,
       External_Name => "baseActionCommand";
       -- ****
-
---   function Base_Action_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      use Tiny_String;
---
---      Item_Index: constant String := CArgv.Arg(Argv => Argv, N => 2);
---   begin
---      if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
---         Heal_Wounded(Member_Index => Natural'Value(Item_Index));
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
---         Bases.Ship.Repair_Ship(Module_Index => Integer'Value(Item_Index));
---      elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
---         Buy_Recipe(Recipe_Index => To_Bounded_String(Source => Item_Index));
---      end if;
---      Update_Header;
---      Update_Messages;
---      return
---        Show_Base_Ui_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---           Argv =>
---             CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv => Argv, N => 1));
---   end Base_Action_Command;
 
    -- ****o* BUI/BUI.Search_Recipes_Command
    -- FUNCTION
