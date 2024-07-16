@@ -217,26 +217,28 @@ package body Bases.UI is
    function Search_Recipes_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "searchRecipesCommand";
       -- ****
 
-   function Search_Recipes_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
-   begin
-      if Search_Text'Length = 0 then
-         return
-           Show_Base_Ui_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-              Argv => CArgv.Empty & "ShowBaseUI" & "recipes");
-      end if;
-      return
-        Show_Base_Ui_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv => CArgv.Empty & "ShowBaseUI" & "recipes" & Search_Text);
-   end Search_Recipes_Command;
+--   function Search_Recipes_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
+--   begin
+--      if Search_Text'Length = 0 then
+--         return
+--           Show_Base_Ui_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--              Argv => CArgv.Empty & "ShowBaseUI" & "recipes");
+--      end if;
+--      return
+--        Show_Base_Ui_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+--           Argv => CArgv.Empty & "ShowBaseUI" & "recipes" & Search_Text);
+--   end Search_Recipes_Command;
 
    -- ****o* BUI/BUI.Show_Base_Menu_Command
    -- FUNCTION
