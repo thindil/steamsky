@@ -292,14 +292,24 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let itemIndex = $argv[2]
   if argv[1] == "heal":
-    healWounded(memberIndex = itemIndex.parseInt - 1)
+    try:
+      healWounded(memberIndex = itemIndex.parseInt - 1)
+    except:
+      return showError(message = "Can't heal wounded.")
   elif argv[1] == "repair":
-    repairShip(moduleIndex = itemIndex.parseInt - 1)
+    try:
+      repairShip(moduleIndex = itemIndex.parseInt - 1)
+    except:
+      return showError(message = "Can't repair the ship.")
   elif argv[1] == "recipes":
-    buyRecipe(recipeIndex = itemIndex)
+    try:
+      buyRecipe(recipeIndex = itemIndex)
+    except:
+      return showError(message = "Can't buy the recipe.")
   updateHeader()
   updateMessages()
   return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
