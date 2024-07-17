@@ -318,12 +318,15 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = label & " insert end {" & game.enemy.ship.name & "} [list gold]")
   tclEval(script = label & " insert end {\nHome: }")
   tclEval(script = label & " insert end {" & skyBases[game.enemy.ship.homeBase].name & "} [list gold]")
-  var enemyInfo = "\nDistance:" & (
+  tclEval(script = label & " insert end {\nDistance: }")
+  tclEval(script = label & " insert end {" & (
       if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
       10_000 ..
       15_000: "Long" elif game.enemy.distance in 5_000 ..
       10_000: "Medium" elif game.enemy.distance in 1_000 ..
-      5_000: "Short" else: "Close") & "\nStatus: "
+      5_000: "Short" else: "Close") & "} [list gold]")
+  tclEval(script = label & " insert end {\nStatus: }")
+  var enemyInfo = ""
   if game.enemy.distance < 15_000:
     if game.enemy.ship.modules[0].durability == 0:
       enemyInfo = enemyInfo & "Destroyed"
@@ -354,7 +357,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
           return
   else:
     enemyInfo = enemyInfo & "Unknown"
-  enemyInfo = enemyInfo & "\nSpeed: "
+  tclEval(script = label & " insert end {" & enemyInfo & "} [list gold]")
+  enemyInfo = "\nSpeed: "
   if game.enemy.distance < 15_000:
     case game.enemy.ship.speed
     of fullStop:
