@@ -384,7 +384,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
       elif speedDiff == 0:
         enemyInfo = enemyInfo & " (equal)"
       elif speedDiff > -250:
-        enemyInfo = enemyInfo & " (slowed)"
+        enemyInfo = enemyInfo & " (slower)"
       else:
         enemyInfo = enemyInfo & " (much slower)"
   else:
