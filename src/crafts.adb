@@ -15,12 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Crafts is
 
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data is
+      use Interfaces.C.Strings;
+
       --## rule off TYPE_INITIAL_VALUES
       type Material_Types_Array is array(0 .. 4) of chars_ptr;
       type Material_Amounts_Array is array(0 .. 4) of Integer;
