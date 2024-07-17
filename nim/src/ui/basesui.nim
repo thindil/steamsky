@@ -330,6 +330,17 @@ proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
 proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Show only this recipes which contains the selected sequence
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SearchRecipes TextToSearch
   let searchText = $argv[1]
   if searchText.len == 0:
     return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
