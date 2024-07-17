@@ -20,9 +20,9 @@ import contracts
 import factions, game, maps, messages, ships2, types, utils
 
 var
-  friendlyShips*: seq[Positive]
+  friendlyShips*: seq[Positive] = @[]
     ## The list of all ships which are friendlytowards the player
-  traders*: seq[Positive]
+  traders*: seq[Positive] = @[]
     ## The list of all traders' ships
 
 proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
@@ -55,10 +55,10 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
   require:
     owner.len > 0
   body:
-    var playerValue = countCombatValue()
+    var playerValue: Natural = countCombatValue()
     if getRandom(min = 1, max = 100) > 98:
       playerValue = playerValue * 2
-    var playerShips: seq[Positive]
+    var playerShips: seq[Positive] = @[]
     getPlayerShips(playerShips = playerShips)
     for index, ship in protoShipsList:
       if ship.combatValue <= playerValue and (owner == "Any" or ship.owner ==
@@ -77,7 +77,7 @@ proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
   body:
     skyMap[eventsList[eventIndex].skyX][eventsList[
         eventIndex].skyY].eventIndex = -1
-    eventsList.delete(eventIndex)
+    eventsList.delete(i = eventIndex)
     for index, event in eventsList.pairs:
       skyMap[event.skyX][event.skyY].eventIndex = index
 
@@ -86,18 +86,18 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [],
   ## Update timer for all known events, delete events if the timers passed
   ##
   ## * minutes - the amount of minutes passed in the game
-  let eventsAmount = eventsList.len
+  let eventsAmount: Natural = eventsList.len
   if eventsAmount == 0:
     return
-  var key = 0
+  var key: Natural = 0
   while key < eventsList.len:
-    let newTime = eventsList[key].time - minutes
+    let newTime: int = eventsList[key].time - minutes
     if newTime < 1:
       if eventsList[key].eType in {disease, attackOnBase} and getRandom(min = 1,
           max = 100) < 10:
-        let baseIndex = skyMap[eventsList[key].skyX][eventsList[
+        let baseIndex: ExtendedBasesRange = skyMap[eventsList[key].skyX][eventsList[
             key].skyY].baseIndex
-        var populationLost = getRandom(min = 1, max = 10)
+        var populationLost: Positive = getRandom(min = 1, max = 10)
         if populationLost > skyBases[baseIndex].population:
           populationLost = skyBases[baseIndex].population
           skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
@@ -118,7 +118,7 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
   var maxSpawnChance: Natural = 0
   for faction in factionsList.values:
     maxSpawnChance = maxSpawnChance + faction.spawnChance
-  var factionRoll = getRandom(min = 1, max = maxSpawnChance)
+  var factionRoll: Positive = getRandom(min = 1, max = maxSpawnChance)
   for index, faction in factionsList.pairs:
     if factionRoll < faction.spawnChance:
       skyBases[baseIndex].owner = index
@@ -140,20 +140,20 @@ proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [],
     contractual.} =
   ## Create the list of traders' ships needed for events
   for index, ship in protoShipsList:
-    if ship.name.contains(tradersName):
-      traders.add(index)
-  var playerShips: seq[Positive]
-  getPlayerShips(playerShips)
+    if ship.name.contains(sub = tradersName):
+      traders.add(y = index)
+  var playerShips: seq[Positive] = @[]
+  getPlayerShips(playerShips = playerShips)
   for index, ship in protoShipsList:
     if isFriendly(sourceFaction = playerShip.crew[0].faction,
         targetFaction = ship.owner) and index notin playerShips:
-      friendlyShips.add(index)
+      friendlyShips.add(y = index)
 
 # Temporary code for interfacing with Ada
 
 proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [],
     exportc, contractual.} =
-  var event = EventData(skyX: x, skyY: y, time: time, eType: eType.EventsTypes)
+  var event: EventData = EventData(skyX: x, skyY: y, time: time, eType: eType.EventsTypes)
   case event.eType
     of doublePrice:
       event.itemIndex = data
@@ -164,7 +164,7 @@ proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [],
   if index < eventsList.len - 1:
     eventsList[index - 1] = event
   else:
-    eventsList.add(event)
+    eventsList.add(y = event)
 
 proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
     tags: [], exportc, contractual.} =
@@ -187,7 +187,7 @@ proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
     exportc, contractual.} =
   for ship in playerShips.mitems:
     ship = 0
-  var nimShips: seq[Positive]
+  var nimShips: seq[Positive] = @[]
   getPlayerShips(playerShips = nimShips)
   for index, ship in nimShips.pairs:
     playerShips[index] = ship.cint
@@ -196,7 +196,7 @@ proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
     withTraders: cint) {.raises: [], tags: [], exportc, contractual.} =
   for ship in enemies.mitems:
     ship = 0
-  var nimShips: seq[Positive]
+  var nimShips: seq[Positive] = @[]
   try:
     generateEnemies(enemies = nimShips, owner = $owner,
         withTraders = withTraders == 1)
@@ -235,9 +235,9 @@ proc generateAdaTraders() {.raises: [], tags: [], exportc, contractual.} =
 proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
   if trader == 1:
-    return traders.find(index).cint + 1
+    return traders.find(item = index).cint + 1
   else:
-    return friendlyShips.find(index).cint + 1
+    return friendlyShips.find(item = index).cint + 1
 
 proc getAdaEventsAmount(): cint {.raises: [], tags: [], exportc, contractual.} =
   return eventsList.len.cint
