@@ -350,6 +350,19 @@ proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show menu with options for the selected item
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowBaseMenu action index
+  ## Action is name of action (heal,repair or recipe) and index is the index
+  ## of the item
   var cost, time: Natural = 0
   let
     action = $argv[1]
