@@ -307,7 +307,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
   var enemyInfo = "Name: " & enemyName & "\nType: " & game.enemy.ship.name &
-      "\nHome: " & skyBases[game.enemy.ship.homeBase].name & "\nDistance:" & (
+      "\nHome: " & skyBases[game.enemy.ship.homeBase].name & "\nDistance: " & (
       if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
       10_000 ..
       15_000: "Long" elif game.enemy.distance in 5_000 ..
@@ -369,7 +369,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
       elif speedDiff == 0:
         enemyInfo = enemyInfo & " (equal)"
       elif speedDiff > -250:
-        enemyInfo = enemyInfo & " (slowed)"
+        enemyInfo = enemyInfo & " (slower)"
       else:
         enemyInfo = enemyInfo & " (much slower)"
   else:
