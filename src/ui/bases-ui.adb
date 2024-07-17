@@ -36,7 +36,7 @@ with Dialogs;
 with Maps; use Maps;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Bases.UI is
 
@@ -221,24 +221,6 @@ package body Bases.UI is
       Convention => C,
       External_Name => "searchRecipesCommand";
       -- ****
-
---   function Search_Recipes_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
---   begin
---      if Search_Text'Length = 0 then
---         return
---           Show_Base_Ui_Command
---             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---              Argv => CArgv.Empty & "ShowBaseUI" & "recipes");
---      end if;
---      return
---        Show_Base_Ui_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
---           Argv => CArgv.Empty & "ShowBaseUI" & "recipes" & Search_Text);
---   end Search_Recipes_Command;
 
    -- ****o* BUI/BUI.Show_Base_Menu_Command
    -- FUNCTION
@@ -694,6 +676,7 @@ package body Bases.UI is
    end Sort_Base_Items_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowBaseUI", Ada_Command => Show_Base_Ui_Command'Access);
