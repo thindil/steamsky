@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,25 +43,14 @@ package Bases.Ship is
    Bases_Ship_Removing_Error: exception;
    -- ****
 
-   -- ****f* Ship/Ship.Repair_Ship
+   -- ****f* Ship/Ship.Upgrade_Ship
    -- FUNCTION
-   -- Repairs player ship in bases
+   -- Install or remove modules on player ship
    -- PARAMETERS
-   -- Module_Index - Index of player ship module to repair or 0 to repair whole
-   --                ship
+   -- Install      - If True, perform module installation on player ship. On
+   --                False, remove module
+   -- Module_Index - Index of prototype module to install or remove
    -- SOURCE
-   procedure Repair_Ship(Module_Index: Integer) with
-      Pre => Module_Index <= Player_Ship.Modules.Last_Index;
-      -- ****
-
-      -- ****f* Ship/Ship.Upgrade_Ship
-      -- FUNCTION
-      -- Install or remove modules on player ship
-      -- PARAMETERS
-      -- Install      - If True, perform module installation on player ship. On
-      --                False, remove module
-      -- Module_Index - Index of prototype module to install or remove
-      -- SOURCE
    procedure Upgrade_Ship(Install: Boolean; Module_Index: Positive) with
       Pre => Module_Index in
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index;
