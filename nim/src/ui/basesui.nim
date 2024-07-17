@@ -18,7 +18,7 @@
 import std/[os, strutils, tables]
 import ../[bases, basesship, basesship2, basestrade, basestypes, config,
     crewinventory, game, maps, shipscrew, tk, types]
-import coreui, mapsui, table, updateheader, utilsui2
+import coreui, dialogs, mapsui, table, updateheader, utilsui2
 
 var
   baseTable: TableWidget
@@ -348,6 +348,36 @@ proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
   return showBaseUiCommand(clientData = clientData, interp = interp, argc = 3,
       argv = @["ShowBaseUI", "recipes", searchText].allocCStringArray)
 
+proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  var cost, time: Natural = 0
+  let
+    action = $argv[1]
+    itemIndex = $argv[2]
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if action == "heal":
+    healCost(cost = cost, time = time, memberIndex = itemIndex.parseInt)
+  elif action == "repair":
+    repairCost(cost = cost, time = time, moduleIndex = itemIndex.parseInt)
+    countPrice(price = cost, traderIndex = findMember(order = talk))
+  else:
+    cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
+        itemIndex = recipesList[itemIndex].resultIndex) > 0: getPrice(
+        baseType = skyBases[baseIndex].baseType, itemIndex = recipesList[
+        itemIndex].resultIndex) * recipesList[itemIndex].difficulty *
+        10 else: recipesList[itemIndex].difficulty * 10)
+    cost = (cost.float * newGameSettings.pricesBonus).Natural
+    if cost < 1:
+      cost = 1
+    countPrice(price = cost, traderIndex = findMember(order = talk))
+  let
+    moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+    baseMenu = createDialog(name = ".basemenu", title = "Actions", parentName = ".")
+
+  proc addButton(name, label, command: string) =
+    discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -355,5 +385,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowBaseUI", showBaseUiCommand)
 #    addCommand("BaseAction", baseActionCommand)
 #    addCommand("SearchRecipes", searchRecipesCommand)
+#    addCommand("ShowBaseMenu", showBaseMenuCommand)
   except:
     showError(message = "Can't add a Tcl command.")
