@@ -349,27 +349,39 @@ proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowBaseUI", "recipes", searchText].allocCStringArray)
 
 proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   var cost, time: Natural = 0
   let
     action = $argv[1]
     itemIndex = $argv[2]
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if action == "heal":
-    healCost(cost = cost, time = time, memberIndex = itemIndex.parseInt)
+    try:
+      healCost(cost = cost, time = time, memberIndex = itemIndex.parseInt)
+    except:
+      return showError(message = "Can't count heal cost")
   elif action == "repair":
-    repairCost(cost = cost, time = time, moduleIndex = itemIndex.parseInt)
-    countPrice(price = cost, traderIndex = findMember(order = talk))
+    try:
+      repairCost(cost = cost, time = time, moduleIndex = itemIndex.parseInt)
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+    except:
+      return showError(message = "Can't count repair cost")
   else:
-    cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
-        itemIndex = recipesList[itemIndex].resultIndex) > 0: getPrice(
-        baseType = skyBases[baseIndex].baseType, itemIndex = recipesList[
-        itemIndex].resultIndex) * recipesList[itemIndex].difficulty *
-        10 else: recipesList[itemIndex].difficulty * 10)
+    try:
+      cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
+          itemIndex = recipesList[itemIndex].resultIndex) > 0: getPrice(
+          baseType = skyBases[baseIndex].baseType, itemIndex = recipesList[
+          itemIndex].resultIndex) * recipesList[itemIndex].difficulty *
+          10 else: recipesList[itemIndex].difficulty * 10)
+    except:
+      return showError(message = "Can't count the recipe cost")
     cost = (cost.float * newGameSettings.pricesBonus).Natural
     if cost < 1:
       cost = 1
-    countPrice(price = cost, traderIndex = findMember(order = talk))
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+    except:
+      return showError(message = "Can't count the recipe's price")
   let
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
