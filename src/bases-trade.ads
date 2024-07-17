@@ -23,38 +23,17 @@
 package Bases.Trade is
 -- ****
 
-   -- ****f* BTrade/BTrade.Buy_Recipe
+   -- ****f* BTrade/BTrade.Heal_Cost
    -- FUNCTION
-   -- Buy new crafting recipe
+   -- Count cost of healing action
    -- PARAMETERS
-   -- Recipe_Index - Index of the recipe from base recipes list to buy
+   -- Cost         - Overall cost of heal wounded player ship crew member(s)
+   -- Time         - Time needed to heal wounded player ship crew member(s)
+   -- Member_Index - Index of player ship crew member to heal or 0 for heal
+   --                all wounded crew members
+   -- RESULT
+   -- Parameters Cost and Time
    -- SOURCE
-   procedure Buy_Recipe(Recipe_Index: Tiny_String.Bounded_String) with
-      Pre => Tiny_String.Length(Source => Recipe_Index) > 0;
-      -- ****
-
-      -- ****f* BTrade/BTrade.Heal_Wounded
-      -- FUNCTION
-      -- Heals wounded crew members in bases
-      -- PARAMETERS
-      -- Member_Index - Index of player ship crew member to heal or 0 for heal
-      --               all wounded crew members
-      -- SOURCE
-   procedure Heal_Wounded(Member_Index: Crew_Container.Extended_Index) with
-      Pre => Member_Index <= Player_Ship.Crew.Last_Index;
-      -- ****
-
-      -- ****f* BTrade/BTrade.Heal_Cost
-      -- FUNCTION
-      -- Count cost of healing action
-      -- PARAMETERS
-      -- Cost         - Overall cost of heal wounded player ship crew member(s)
-      -- Time         - Time needed to heal wounded player ship crew member(s)
-      -- Member_Index - Index of player ship crew member to heal or 0 for heal
-      --                all wounded crew members
-      -- RESULT
-      -- Parameters Cost and Time
-      -- SOURCE
    procedure Heal_Cost
      (Cost, Time: in out Natural;
       Member_Index: Crew_Container.Extended_Index) with
