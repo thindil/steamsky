@@ -371,11 +371,31 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
       cost = 1
     countPrice(price = cost, traderIndex = findMember(order = talk))
   let
-    moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
-    baseMenu = createDialog(name = ".basemenu", title = "Actions", parentName = ".")
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    baseMenu = createDialog(name = ".basemenu", title = "Actions",
+        parentName = ".")
 
   proc addButton(name, label, command: string) =
-    discard
+    let button = baseMenu & name
+    tclEval(script = "ttk::button " & button & " -text {" & label &
+        "} -command {CloseDialog " & baseMenu & " .;" & command & "}")
+    tclEval(script = "grid " & button & " -sticky we -padx 5" & (
+        if command.len == 0: " -pady {0 3}" else: ""))
+    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & baseMenu & ".;break}")
+    if command.len == 0:
+      tclEval(script = "bind " & button & " <Tab> {focus " & baseMenu & ".action;break}")
+      tclEval(script = "focus " & button)
+
+  if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < cost:
+    addButton(name = ".action", label = "You don't have money for this", command = "")
+  else:
+    addButton(name = ".action", label = (if action ==
+        "heal": "Buy healing" elif action ==
+        "repair": "Buy repair" else: "Buy recipe"), command = "BaseAction " &
+        action & " " & itemIndex)
+    addButton(name = ".close", label = "Close", command = "")
+  showDialog(dialog = baseMenu, parentFrame = ".")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
