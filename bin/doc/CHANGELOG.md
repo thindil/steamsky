@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Resize button to the enemy's ship's status in the combat screen
+
 ### Fixed
 - Resizing sections in the combat screen
 - Typos in the enemy's information in the combat screen
