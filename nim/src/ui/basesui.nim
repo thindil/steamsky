@@ -462,23 +462,50 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     time: Positive = 1
     id: string
   var localItems: seq[LocalItemData] = @[]
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if argv[1] == "heal":
     for index, member in playerShip.crew:
       var cost, time: Natural = 0
       healCost(cost = cost, time = time, memberIndex = index)
-      localItems.add(y = LocalItemData(name: member.name, cost: cost, time: time, id: $(index + 1)))
+      localItems.add(y = LocalItemData(name: member.name, cost: cost,
+          time: time, id: $(index + 1)))
       cost = 0
       time = 0
       healCost(cost = cost, time = time, memberIndex = -1)
-      localItems.add(y = LocalItemData(name: "Heal all wounded crew members", cost: cost, time: time, id: "0"))
+      localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
+          cost: cost, time: time, id: "0"))
   elif argv[1] == "repair":
-
     var cost, time: Natural = 0
+
     proc countRepairCost(i: int) =
       repairCost(cost = cost, time = time, moduleIndex = i)
-      countPrice(cost = cost, traderIndex = findMember(order = talk))
+      countPrice(price = cost, traderIndex = findMember(order = talk))
 
     for index, module in playerShip.modules:
+      countRepairCost(i = index)
+      localItems.add(y = LocalItemData(name: module.name, cost: cost,
+          time: time, id: $(index + 1)))
+    if skyBases[baseIndex].population > 299:
+      countRepairCost(i = -1)
+      localItems.add(y = LocalItemData(name: "Slowly repair the whole ship",
+          cost: cost, time: time, id: "0"))
+      countRepairCost(i = -2)
+      localItems.add(y = LocalItemData(name: "Repair the whole ship",
+          cost: cost, time: time, id: "-1"))
+      countRepairCost(i = -3)
+      localItems.add(y = LocalItemData(name: "Quickly repair the whole ship",
+          cost: cost, time: time, id: "-2"))
+    elif skyBases[baseIndex].population > 149:
+      countRepairCost(i = -1)
+      localItems.add(y = LocalItemData(name: "Slowly repair the whole ship",
+          cost: cost, time: time, id: "0"))
+      countRepairCost(i = -2)
+      localItems.add(y = LocalItemData(name: "Repair the whole ship",
+          cost: cost, time: time, id: "-1"))
+    else:
+      countRepairCost(i = -1)
+      localItems.add(y = LocalItemData(name: "Slowly repair the whole ship",
+          cost: cost, time: time, id: "0"))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
