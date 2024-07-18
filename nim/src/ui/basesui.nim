@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[algorithm, os, strutils, tables]
 import ../[bases, basesship, basesship2, basestrade, basestypes, config,
     crewinventory, game, maps, shipscrew, tk, types]
 import coreui, dialogs, mapsui, table, updateheader, utilsui2
@@ -506,7 +506,59 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       countRepairCost(i = -1)
       localItems.add(y = LocalItemData(name: "Slowly repair the whole ship",
           cost: cost, time: time, id: "0"))
-  return tclOk
+  elif argv[1] == "recipes":
+    for index, recipe in recipesList:
+      var cost: Natural = 0
+      cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
+          itemIndex = recipe.resultIndex) > 0: getPrice(baseType = skyBases[
+          baseIndex].baseType, itemIndex = recipe.resultIndex) *
+          recipe.difficulty * 10 else: recipe.difficulty * 10)
+      cost = (cost.float * newGameSettings.pricesBonus).Natural
+      if cost < 1:
+        cost = 1
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+      localItems.add(y = LocalItemData(name: itemsList[recipe.resultIndex].name,
+          cost: cost, time: 1, id: index))
+  proc sortItems(x, y: LocalItemData): int =
+    case baseSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of costAsc:
+      if x.cost < y.cost:
+        return 1
+      else:
+        return -1
+    of costDesc:
+      if x.cost > y.cost:
+        return 1
+      else:
+        return -1
+    of timeAsc:
+      if x.time < y.time:
+        return 1
+      else:
+        return -1
+    of timeDesc:
+      if x.time > y.time:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localItems.sort(cmp = sortItems)
+  itemsIndexes = @[]
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
+  return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowBaseUI", $argv[1]].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
