@@ -430,7 +430,8 @@ const defaultBaseSortOrder: BaseSortOrders = none
 var baseSortOrder: BaseSortOrders = defaultBaseSortOrder
 
 proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let column = try:
         getColumnNumber(
             table = baseTable, xPosition = ($argv[2]).parseInt)
@@ -466,61 +467,97 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   if argv[1] == "heal":
     var cost, time: Natural = 0
     for index, member in playerShip.crew:
-      healCost(cost = cost, time = time, memberIndex = index)
+      try:
+        healCost(cost = cost, time = time, memberIndex = index)
+      except:
+        return showError(message = "Can't count heal cost.")
       localItems.add(y = LocalItemData(name: member.name, cost: cost,
           time: time, id: $(index + 1)))
     cost = 0
     time = 0
-    healCost(cost = cost, time = time, memberIndex = -1)
+    try:
+      healCost(cost = cost, time = time, memberIndex = -1)
+    except:
+      return showError(message = "Can't count heal cost2.")
     localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
         cost: cost, time: time, id: "0"))
   elif argv[1] == "repair":
     var cost, time: Natural = 0
 
-    proc countRepairCost(i: int) =
+    proc countRepairCost(i: int) {.raises: [KeyError], tags: [].} =
       cost = 0
       time = 0
       repairCost(cost = cost, time = time, moduleIndex = i)
       countPrice(price = cost, traderIndex = findMember(order = talk))
 
     for index, module in playerShip.modules:
-      countRepairCost(i = index)
+      try:
+        countRepairCost(i = index)
+      except:
+        return showError(message = "Can't count repair cost.")
       localItems.add(y = LocalItemData(name: module.name, cost: cost,
           time: time, id: $(index + 1)))
     if skyBases[baseIndex].population > 299:
-      countRepairCost(i = -1)
+      try:
+        countRepairCost(i = -1)
+      except:
+        return showError(message = "Can't count repair cost2.")
       localItems.add(y = LocalItemData(name: "Slowly repair the whole ship",
           cost: cost, time: time, id: "0"))
-      countRepairCost(i = -2)
+      try:
+        countRepairCost(i = -2)
+      except:
+        return showError(message = "Can't count repair cost3.")
       localItems.add(y = LocalItemData(name: "Repair the whole ship",
           cost: cost, time: time, id: "-1"))
-      countRepairCost(i = -3)
+      try:
+        countRepairCost(i = -3)
+      except:
+        return showError(message = "Can't count repair cost4.")
       localItems.add(y = LocalItemData(name: "Quickly repair the whole ship",
           cost: cost, time: time, id: "-2"))
     elif skyBases[baseIndex].population > 149:
-      countRepairCost(i = -1)
+      try:
+        countRepairCost(i = -1)
+      except:
+        return showError(message = "Can't count repair cost5.")
       localItems.add(y = LocalItemData(name: "Slowly repair the whole ship",
           cost: cost, time: time, id: "0"))
-      countRepairCost(i = -2)
+      try:
+        countRepairCost(i = -2)
+      except:
+        return showError(message = "Can't count repair cost6.")
       localItems.add(y = LocalItemData(name: "Repair the whole ship",
           cost: cost, time: time, id: "-1"))
     else:
-      countRepairCost(i = -1)
+      try:
+        countRepairCost(i = -1)
+      except:
+        return showError(message = "Can't count repair cost7.")
       localItems.add(y = LocalItemData(name: "Slowly repair the whole ship",
           cost: cost, time: time, id: "0"))
   elif argv[1] == "recipes":
     for index, recipe in recipesList:
       var cost: Natural = 0
-      cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
-          itemIndex = recipe.resultIndex) > 0: getPrice(baseType = skyBases[
-          baseIndex].baseType, itemIndex = recipe.resultIndex) *
-          recipe.difficulty * 10 else: recipe.difficulty * 10)
+      try:
+        cost = (if getPrice(baseType = skyBases[baseIndex].baseType,
+            itemIndex = recipe.resultIndex) > 0: getPrice(baseType = skyBases[
+            baseIndex].baseType, itemIndex = recipe.resultIndex) *
+            recipe.difficulty * 10 else: recipe.difficulty * 10)
+      except:
+        return showError(message = "Can't get recipe cost.")
       cost = (cost.float * newGameSettings.pricesBonus).Natural
       if cost < 1:
         cost = 1
-      countPrice(price = cost, traderIndex = findMember(order = talk))
-      localItems.add(y = LocalItemData(name: itemsList[recipe.resultIndex].name,
-          cost: cost, time: 1, id: index))
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk))
+      except:
+        return showError(message = "Can't count recipe cost.")
+      try:
+        localItems.add(y = LocalItemData(name: itemsList[
+            recipe.resultIndex].name, cost: cost, time: 1, id: index))
+      except:
+        return showError(message = "Can't add recipe.")
   proc sortItems(x, y: LocalItemData): int =
     case baseSortOrder
     of nameAsc:
