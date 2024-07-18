@@ -456,6 +456,29 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if baseSortOrder == none:
     return tclOk
+  type LocalItemData = object
+    name: string
+    cost: Positive = 1
+    time: Positive = 1
+    id: string
+  var localItems: seq[LocalItemData] = @[]
+  if argv[1] == "heal":
+    for index, member in playerShip.crew:
+      var cost, time: Natural = 0
+      healCost(cost = cost, time = time, memberIndex = index)
+      localItems.add(y = LocalItemData(name: member.name, cost: cost, time: time, id: $(index + 1)))
+      cost = 0
+      time = 0
+      healCost(cost = cost, time = time, memberIndex = -1)
+      localItems.add(y = LocalItemData(name: "Heal all wounded crew members", cost: cost, time: time, id: "0"))
+  elif argv[1] == "repair":
+
+    var cost, time: Natural = 0
+    proc countRepairCost(i: int) =
+      repairCost(cost = cost, time = time, moduleIndex = i)
+      countPrice(cost = cost, traderIndex = findMember(order = talk))
+
+    for index, module in playerShip.modules:
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
