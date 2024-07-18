@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the in-game events like generating enemies,
+## updating and deleting events, etc.
+
 import std/[strutils, tables]
 import contracts
 import factions, game, maps, messages, ships2, types, utils
@@ -153,6 +156,7 @@ proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [],
 
 proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   var event: EventData = EventData(skyX: x, skyY: y, time: time, eType: eType.EventsTypes)
   case event.eType
     of doublePrice:
@@ -168,6 +172,7 @@ proc getAdaEvent(index, x, y, time, eType, data: cint) {.raises: [], tags: [],
 
 proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if index > eventsList.len:
     x = -1
     return
@@ -185,6 +190,7 @@ proc setAdaEvent(index: cint; x, y, time, eType, data: var cint) {.raises: [],
 
 proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   for ship in playerShips.mitems:
     ship = 0
   var nimShips: seq[Positive] = @[]
@@ -194,6 +200,7 @@ proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
 
 proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
     withTraders: cint) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for ship in enemies.mitems:
     ship = 0
   var nimShips: seq[Positive] = @[]
@@ -207,26 +214,31 @@ proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
 
 proc updateAdaEvents(minutes: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     updateEvents(minutes = minutes)
   except KeyError:
     discard
 
 proc clearAdaEvents() {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   eventsList = @[]
 
 proc deleteAdaEvent(eventIndex: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   deleteEvent(eventIndex = eventIndex - 1)
 
 proc recoverAdaBase(baseIndex: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     recoverBase(baseIndex = baseIndex)
   except KeyError:
     discard
 
 proc generateAdaTraders() {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     generateTraders()
   except:
@@ -234,10 +246,12 @@ proc generateAdaTraders() {.raises: [], tags: [], exportc, contractual.} =
 
 proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   if trader == 1:
     return traders.find(item = index).cint + 1
   else:
     return friendlyShips.find(item = index).cint + 1
 
 proc getAdaEventsAmount(): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return eventsList.len.cint
