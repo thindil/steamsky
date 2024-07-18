@@ -317,7 +317,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = label & " insert end {\nType: }")
   tclEval(script = label & " insert end {" & game.enemy.ship.name & "} [list gold]")
   tclEval(script = label & " insert end {\nHome: }")
-  tclEval(script = label & " insert end {" & skyBases[game.enemy.ship.homeBase].name & "} [list gold]")
+  tclEval(script = label & " insert end {" & skyBases[
+      game.enemy.ship.homeBase].name & "} [list gold]")
   tclEval(script = label & " insert end {\nDistance: }")
   tclEval(script = label & " insert end {" & (
       if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
@@ -358,7 +359,8 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   else:
     enemyInfo = enemyInfo & "Unknown"
   tclEval(script = label & " insert end {" & enemyInfo & "} [list gold]")
-  enemyInfo = "\nSpeed: "
+  tclEval(script = label & " insert end {\nSpeed: }")
+  enemyInfo = ""
   if game.enemy.distance < 15_000:
     case game.enemy.ship.speed
     of fullStop:
@@ -389,9 +391,10 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
         enemyInfo = enemyInfo & " (much slower)"
   else:
     enemyInfo = enemyInfo & "Unknown"
+  tclEval(script = label & " insert end {" & enemyInfo & "} [list gold]")
   if game.enemy.ship.description.len > 0:
-    enemyInfo = enemyInfo & "\n\n" & game.enemy.ship.description
-  tclEval(script = label & " insert end {" & enemyInfo & "}")
+    tclEval(script = label & " insert end {" & "\n\n" &
+        game.enemy.ship.description & "}")
   try:
     discard tclEval(script = label & " configure -state disabled -height " & $(
         tclEval2(script = label & " count -displaylines 0.0 end").parseInt))
