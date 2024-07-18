@@ -306,7 +306,7 @@ package body Bases.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Import => True,
       Convention => C,
-      External_Name => "showBaseMenuCommand";
+      External_Name => "sortBaseItemsCommand";
       -- ****
 
 --   function Sort_Base_Items_Command

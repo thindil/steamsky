@@ -464,20 +464,22 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   var localItems: seq[LocalItemData] = @[]
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if argv[1] == "heal":
+    var cost, time: Natural = 0
     for index, member in playerShip.crew:
-      var cost, time: Natural = 0
       healCost(cost = cost, time = time, memberIndex = index)
       localItems.add(y = LocalItemData(name: member.name, cost: cost,
           time: time, id: $(index + 1)))
-      cost = 0
-      time = 0
-      healCost(cost = cost, time = time, memberIndex = -1)
-      localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
-          cost: cost, time: time, id: "0"))
+    cost = 0
+    time = 0
+    healCost(cost = cost, time = time, memberIndex = -1)
+    localItems.add(y = LocalItemData(name: "Heal all wounded crew members",
+        cost: cost, time: time, id: "0"))
   elif argv[1] == "repair":
     var cost, time: Natural = 0
 
     proc countRepairCost(i: int) =
+      cost = 0
+      time = 0
       repairCost(cost = cost, time = time, moduleIndex = i)
       countPrice(price = cost, traderIndex = findMember(order = talk))
 
