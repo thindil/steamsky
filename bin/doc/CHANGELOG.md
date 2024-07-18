@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Information about durability difference between modules when installing a
   module in shipyards
+- Resize button to the enemy's ship's status in the combat screen
 
 ### Changed
 - Updated README.md
