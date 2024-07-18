@@ -423,6 +423,41 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = baseMenu, parentFrame = ".")
   return tclOk
 
+type BaseSortOrders = enum
+  nameAsc, nameDesc, costAsc, costDesc, timeAsc, timeDesc, none
+
+const defaultBaseSortOrder: BaseSortOrders = none
+var baseSortOrder: BaseSortOrders = defaultBaseSortOrder
+
+proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        getColumnNumber(
+            table = baseTable, xPosition = ($argv[2]).parseInt)
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if baseSortOrder == nameAsc:
+      baseSortOrder = nameDesc
+    else:
+      baseSortOrder = nameAsc
+  of 2:
+    if baseSortOrder == costAsc:
+      baseSortOrder = costDesc
+    else:
+      baseSortOrder = costAsc
+  of 3:
+    if baseSortOrder == timeAsc:
+      baseSortOrder = timeDesc
+    else:
+      baseSortOrder = timeAsc
+  else:
+    discard
+  if baseSortOrder == none:
+    return tclOk
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
