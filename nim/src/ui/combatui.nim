@@ -416,6 +416,10 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
   except:
     showError(message = "Can't show the information about the enemy's ship's status.")
     return
+  button = frame & ".maxmin"
+  tclEval(script = "ttk::button " & button & " -style Small.TButton -image movemapupicon -command {CombatMaxMin status show combat}")
+  tclEval(script = "grid " & button & " -sticky w -padx 5 -row 0 -column 0")
+  tclEval(script = "tooltip::tooltip " & button & " \"Maximize/minimize the enemy's ship status info\"")
   row = 1
   if endCombat:
     game.enemy.distance = 100
