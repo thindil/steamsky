@@ -20,21 +20,18 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Bases.Ship; use Bases.Ship;
-with Bases.Trade; use Bases.Trade;
-with BasesTypes; use BasesTypes;
-with Config; use Config;
+with Bases.Ship;
+with Bases.Trade;
+with BasesTypes;
+with Config;
 with CoreUI;
 with Crafts; use Crafts;
--- with Dialogs;
 with Maps; use Maps;
-with Ships.Crew; use Ships.Crew;
+with Ships.Crew;
 with Table; use Table;
 with Utils.UI;
 
@@ -81,6 +78,8 @@ package body Bases.UI is
    function Show_Base_Ui_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
       use CoreUI;
 
@@ -245,116 +244,6 @@ package body Bases.UI is
       External_Name => "showBaseMenuCommand";
       -- ****
 
---   function Show_Base_Menu_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Dialogs;
---      use Tiny_String;
---
---      Cost, Time: Natural := 0;
---      Base_Index: constant Positive :=
---        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
---      Money_Index_2: constant Natural :=
---        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
---      Action: constant String := CArgv.Arg(Argv => Argv, N => 1);
---      Item_Index: constant String := CArgv.Arg(Argv => Argv, N => 2);
---      Base_Menu: constant Ttk_Frame :=
---        Create_Dialog
---          (Name => ".basemenu", Title => "Actions", Parent_Name => ".");
---      procedure Add_Button(Name, Label, Command: String) is
---         use Tcl.Tk.Ada.Widgets.TtkButton;
---
---         Button: constant Ttk_Button :=
---           Create
---             (pathName => Base_Menu & Name,
---              options =>
---                "-text {" & Label & "} -command {CloseDialog " & Base_Menu &
---                " .;" & Command & "}");
---      begin
---         Tcl.Tk.Ada.Grid.Grid
---           (Slave => Button,
---            Options =>
---              "-sticky we -padx 5" &
---              (if Command'Length = 0 then " -pady {0 3}" else ""));
---         Bind
---           (Widgt => Button, Sequence => "<Escape>",
---            Script => "{CloseDialog " & Base_Menu & " .;break}");
---         if Command'Length = 0 then
---            Bind
---              (Widgt => Button, Sequence => "<Tab>",
---               Script => "{focus " & Base_Menu & ".action;break}");
---            Focus(Widgt => Button);
---         end if;
---      end Add_Button;
---   begin
---      if Action = "heal" then
---         Heal_Cost
---           (Cost => Cost, Time => Time,
---            Member_Index => Integer'Value(Item_Index));
---      elsif Action = "repair" then
---         Repair_Cost
---           (Cost => Cost, Time => Time,
---            Module_Index => Integer'Value(Item_Index));
---         Count_Price
---           (Price => Cost, Trader_Index => Find_Member(Order => TALK));
---      else
---         Cost :=
---           (if
---              Get_Price
---                (Base_Type => Sky_Bases(Base_Index).Base_Type,
---                 Item_Index =>
---                   Get_Recipe
---                     (Recipe_Index => To_Bounded_String(Source => Item_Index))
---                     .Result_Index) >
---              0
---            then
---              Get_Price
---                (Base_Type => Sky_Bases(Base_Index).Base_Type,
---                 Item_Index =>
---                   Get_Recipe
---                     (Recipe_Index => To_Bounded_String(Source => Item_Index))
---                     .Result_Index) *
---              Get_Recipe
---                (Recipe_Index => To_Bounded_String(Source => Item_Index))
---                .Difficulty *
---              10
---            else Get_Recipe
---                (Recipe_Index => To_Bounded_String(Source => Item_Index))
---                .Difficulty *
---              10);
---         --## rule off ASSIGNMENTS
---         Cost :=
---           Natural(Float(Cost) * Get_Float_Setting(Name => "pricesBonus"));
---         --## rule on ASSIGNMENTS
---         if Cost = 0 then
---            Cost := 1;
---         end if;
---         Count_Price
---           (Price => Cost, Trader_Index => Find_Member(Order => TALK));
---      end if;
---      if Money_Index_2 = 0
---        or else
---          Inventory_Container.Element
---            (Container => Player_Ship.Cargo, Index => Money_Index_2)
---            .Amount <
---          Cost then
---         Add_Button
---           (Name => ".action", Label => "You don't have money for this",
---            Command => "");
---      else
---         Add_Button
---           (Name => ".action",
---            Label =>
---              (if Action = "heal" then "Buy healing"
---               elsif Action = "repair" then "Buy repair" else "Buy recipe"),
---            Command => "BaseAction " & Action & " " & Item_Index);
---         Add_Button(Name => ".close", Label => "Close", Command => "");
---      end if;
---      Show_Dialog(Dialog => Base_Menu, Parent_Frame => ".");
---      return TCL_OK;
---   end Show_Base_Menu_Command;
-
    -- ****it* BUI/BUI.Base_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the crafting recipes/healing/repair in bases
@@ -420,6 +309,10 @@ package body Bases.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Bases.Trade;
+      use BasesTypes;
+      use Config;
+      use Ships.Crew;
       use Tiny_String;
 
       --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -480,6 +373,7 @@ package body Bases.UI is
         (Index_Type => Positive, Element_Type => Local_Item_Data,
          Array_Type => Items_Array);
       procedure Count_Repair_Cost(I: Integer) is
+         use Bases.Ship;
       begin
          Cost := 0;
          Time := 0;
