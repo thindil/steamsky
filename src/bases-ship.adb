@@ -15,14 +15,17 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Trades; use Trades;
-with Maps; use Maps;
+with Ada.Strings.Unbounded;
+with Trades;
+with Maps;
 
 package body Bases.Ship is
 
    procedure Upgrade_Ship(Install: Boolean; Module_Index: Positive) is
+      use Ada.Strings.Unbounded;
       use Interfaces.C;
+      use Maps;
+      use Trades;
 
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
