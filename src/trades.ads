@@ -31,13 +31,6 @@ package Trades is
    Trader_Cargo: BaseCargo_Container.Vector (Capacity => 32);
    -- ****
 
-   -- ****e* Trades/Trades.Trade_Cant_Buy
-   -- FUNCTION
-   -- Raised when items is not available to buy
-   -- SOURCE
-   Trade_Cant_Buy: exception;
-   -- ****
-
    -- ****e* Trades/Trades.Trade_No_Free_Cargo
    -- FUNCTION
    -- Raised when no enough free cargo in ship
@@ -64,13 +57,6 @@ package Trades is
    -- Raised when base don't have enough money for buy item
    -- SOURCE
    Trade_No_Money_In_Base: exception;
-   -- ****
-
-   -- ****e* Trades/Trades.Trade_No_Trader
-   -- FUNCTION
-   -- Raised when no one is assigned to talk in bases duty
-   -- SOURCE
-   Trade_No_Trader: exception;
    -- ****
 
 end Trades;
