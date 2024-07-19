@@ -39,7 +39,7 @@ proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
   ensure:
     playerShips.len > 0
   body:
-    for index, faction in factionsList.pairs:
+    for index, faction in factionsList:
       for career in faction.careers.values:
         playerShips.add(y = career.shipIndex)
 
@@ -60,7 +60,7 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
   body:
     var playerValue: Natural = countCombatValue()
     if getRandom(min = 1, max = 100) > 98:
-      playerValue = playerValue * 2
+      playerValue *= 2
     var playerShips: seq[Positive] = @[]
     getPlayerShips(playerShips = playerShips)
     for index, ship in protoShipsList:
@@ -81,7 +81,7 @@ proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
     skyMap[eventsList[eventIndex].skyX][eventsList[
         eventIndex].skyY].eventIndex = -1
     eventsList.delete(i = eventIndex)
-    for index, event in eventsList.pairs:
+    for index, event in eventsList:
       skyMap[event.skyX][event.skyY].eventIndex = index
 
 proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [],
@@ -104,13 +104,13 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [],
         if populationLost > skyBases[baseIndex].population:
           populationLost = skyBases[baseIndex].population
           skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
-        skyBases[baseIndex].population = skyBases[baseIndex].population - populationLost
+        skyBases[baseIndex].population -= populationLost
       deleteEvent(eventIndex = key)
     else:
       eventsList[key].time = newTime
       key.inc
   if eventsAmount < eventsList.len:
-    for index, event in eventsList.pairs:
+    for index, event in eventsList:
       skyMap[event.skyX][event.skyY].eventIndex = index
 
 proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
@@ -120,16 +120,16 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
   ## * baseIndex - the index of the base to recover
   var maxSpawnChance: Natural = 0
   for faction in factionsList.values:
-    maxSpawnChance = maxSpawnChance + faction.spawnChance
+    maxSpawnChance += faction.spawnChance
   var factionRoll: Positive = getRandom(min = 1, max = maxSpawnChance)
-  for index, faction in factionsList.pairs:
+  for index, faction in factionsList:
     if factionRoll < faction.spawnChance:
       skyBases[baseIndex].owner = index
       skyBases[baseIndex].reputation.level = getReputation(
           sourceFaction = playerShip.crew[1].faction, targetFaction = skyBases[
           baseIndex].owner)
       break
-    factionRoll = factionRoll - faction.spawnChance
+    factionRoll -= faction.spawnChance
   skyBases[baseIndex].population = getRandom(min = 2, max = 50)
   skyBases[baseIndex].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
   skyBases[baseIndex].recruitDate = DateRecord(year: 0, month: 0, day: 0,
@@ -195,7 +195,7 @@ proc getAdaPlayerShips(playerShips: var array[30, cint]) {.raises: [], tags: [],
     ship = 0
   var nimShips: seq[Positive] = @[]
   getPlayerShips(playerShips = nimShips)
-  for index, ship in nimShips.pairs:
+  for index, ship in nimShips:
     playerShips[index] = ship.cint
 
 proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
@@ -209,7 +209,7 @@ proc generateAdaEnemies(enemies: var array[300, cint]; owner: cstring;
         withTraders = withTraders == 1)
   except KeyError:
     return
-  for index, ship in nimShips.pairs:
+  for index, ship in nimShips:
     enemies[index] = ship.cint
 
 proc updateAdaEvents(minutes: cint) {.raises: [], tags: [], exportc,
@@ -249,8 +249,7 @@ proc getTraderOrFriendly(index, trader: cint): cint {.raises: [], tags: [],
   ## Temporary C binding
   if trader == 1:
     return traders.find(item = index).cint + 1
-  else:
-    return friendlyShips.find(item = index).cint + 1
+  return friendlyShips.find(item = index).cint + 1
 
 proc getAdaEventsAmount(): cint {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
