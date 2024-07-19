@@ -41,22 +41,6 @@ package body BasesTypes is
       end loop Set_Bases_Types_Loop;
    end Load_Bases_Types;
 
-   function Get_Price
-     (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
-      return Natural is
-      function Get_Ada_Price
-        (B_Type: chars_ptr; I_Index: Positive) return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaPrice";
-   begin
-      return
-        Get_Ada_Price
-          (B_Type =>
-             New_String(Str => Tiny_String.To_String(Source => Base_Type)),
-           I_Index => Item_Index);
-   end Get_Price;
-
    function Get_Base_Type_Name
      (Base_Type: Tiny_String.Bounded_String) return String is
       function Get_Ada_Base_Type_Name(B_Type: chars_ptr) return chars_ptr with

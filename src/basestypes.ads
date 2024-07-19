@@ -31,20 +31,6 @@ package BasesTypes is
    procedure Load_Bases_Types;
    -- ****
 
-   -- ****f* BasesTypes/BasesTypes.Get_Price
-   -- FUNCTION
-   -- Get price of selected item in selected base type
-   -- PARAMETERS
-   -- Base_Type  - Base type to check
-   -- Item_Index - Index of item prototype to check
-   -- RESULT
-   -- Price of selected item in selected base type
-   -- SOURCE
-   function Get_Price
-     (Base_Type: Tiny_String.Bounded_String; Item_Index: Positive)
-      return Natural;
-      -- ****
-
 -- Temporary code to interact with Nim
 
    Bases_Types: array(0 .. 15) of Tiny_String.Bounded_String;
