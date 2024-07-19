@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/os
-import ../[game, tk]
-import coreui, table
+import std/[os, tables]
+import ../[game, items, tk, types]
+import coreui, mapsui, table
 
 var
   installTable, removeTable: TableWidget
@@ -26,7 +26,9 @@ var
 proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   var shipyardFrame = mainPaned & ".shipyardframe"
-  let shipyardCanvas = shipyardFrame & ".canvas"
+  let
+    shipyardCanvas = shipyardFrame & ".canvas"
+    moduleTypeBox = shipyardCanvas & ".shipyard.install.options.modules"
   if tclEval2(script = "winfo exists " & shipyardCanvas) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "shipyard.tcl")
     tclEval(script = "bind " & shipyardFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
@@ -41,6 +43,26 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
         scrollbar = ".gameframe.paned.shipyardframe.scrolly",
         command = "SortShipyardModules remove 0 {}",
         tooltipText = "Press mouse button to sort the modules.")
+  elif tclEval2(script = "winfo ismapped " & shipyardCanvas) == "1":
+    if argc == 1:
+      tclEval(script = "grid remove " & closeButton)
+      showSkyMap(clear = true)
+      return tclOk
+    tclEval(script = moduleTypeBox & " current " & $argv[1])
+  elif tclEval2(script = "winfo ismapped " & shipyardCanvas) == "0" and argc == 1:
+    tclEval(script = moduleTypeBox & " current 0")
+  tclSetVar(varName = "gamestate", newValue = "repair")
+  var
+    maxSize, allSpace = 1
+    usedSpace = 0
+  for module in playerShip.modules:
+    if module.mType == ModuleType2.hull:
+      maxSize = modulesList[module.protoIndex].value
+      usedSpace = module.installedModules
+      allSpace = module.maxModules
+      break
+  shipyardFrame = shipyardCanvas & ".shipyard"
+  let moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
