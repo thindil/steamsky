@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[config, crewinventory, game, maps, tk, types]
+import ../[bases, config, crewinventory, game, maps, shipscrew, shipmodules, tk, types]
 import coreui, mapsui, table
 
 var
@@ -110,6 +110,28 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = installTable, text = modulesList[index].name,
         tooltip = "Show the module's info", command = "ShowInstallInfo {" &
         $index & "}", column = 1)
+    addButton(table = installTable, text = getModuleType(moduleIndex = index),
+        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+        $index & "}", column = 2)
+    addButton(table = installTable, text = $moduleSize,
+        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+        $index & "}", column = 3, newRow = false, color = (if modulesList[
+            index].mType == ModuleType.hull: (if moduleSize <
+            allSpace: "red" elif moduleSize >
+            allSpace: "green" else: "") else: (if moduleSize >
+            maxSize: "red" else: "")))
+    addButton(table = installTable, text = modulesList[index].repairMaterial,
+        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+        $index & "}", column = 4)
+    var cost = modulesList[index].price
+    countPrice(price = cost, traderIndex = findMember(order = talk))
+    addButton(table = installTable, text = $cost,
+        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+        $index & "}", column = 5, newRow = true, color = (if moneyIndex2 >
+            -1 and cost <= playerShip.cargo[
+            moneyIndex2].amount: "" else: "red"))
+    if installTable.row == gameSettings.listsLimit + 1:
+      break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
