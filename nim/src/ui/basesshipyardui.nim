@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
-import ../[game, items, tk, types]
+import ../[crewinventory, game, tk, types]
 import coreui, mapsui, table
 
 var
@@ -62,7 +62,15 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       allSpace = module.maxModules
       break
   shipyardFrame = shipyardCanvas & ".shipyard"
-  let moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  var installInfo = (if moneyIndex2 > -1: "You have " & $playerShip.cargo[
+      moneyIndex2].amount & " " & moneyName &
+      "." else: "\nYou don't have any " & moneyName & " to install anything.")
+  installInfo.add(y = "\nYou have used " & $usedSpace &
+      " modules space from max " & $allSpace & " allowed.")
+  let moneyLabel = shipyardCanvas & ".shipyard.moneyinfo"
+  tclEval(script = moneyLabel & " configure -text {" & installInfo & "}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
