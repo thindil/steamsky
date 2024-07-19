@@ -56,25 +56,4 @@ package Bases.Ship is
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index;
       -- ****
 
-   -- ****f* Ship/Ship.Repair_Cost
-   -- FUNCTION
-   -- Count cost and time of repairs of player ship
-   -- PARAMETERS
-   -- Cost         - Overall cost of repair of player ship
-   -- Time         - Time needed for repair of player ship
-   -- Module_Index - Index of module on player ship to repair or 0 to repair
-   --                all damage modules, -1 for fast repair all ship and -2
-   --                for very fast repair all ship
-   -- RESULT
-   -- Parameters Cost and Time
-   -- SOURCE
-   procedure Repair_Cost
-     (Cost, Time: in out Natural; Module_Index: Integer) with
-      Pre => Module_Index in -2 .. Player_Ship.Modules.Last_Index,
-      Post => Cost > 0 and Time > 0,
-      Import => True,
-      Convention => C,
-      External_Name => "repairAdaCost";
-      -- ****
-
 end Bases.Ship;
