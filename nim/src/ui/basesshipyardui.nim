@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
-import ../[crewinventory, game, tk, types]
+import ../[crewinventory, game, maps, tk, types]
 import coreui, mapsui, table
 
 var
@@ -71,6 +71,26 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       " modules space from max " & $allSpace & " allowed.")
   let moneyLabel = shipyardCanvas & ".shipyard.moneyinfo"
   tclEval(script = moneyLabel & " configure -text {" & installInfo & "}")
+  tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
+  let searchEntry = shipyardCanvas & ".shipyard.install.options.search"
+  if argc < 3:
+    tclEval(script = searchEntry & " configure -validatecommand {}")
+    tclEval(script = searchEntry & " delete 0 end")
+    tclEval(script = searchEntry & " -validatecommand {ShowShipyard [" &
+        shipyardFrame & ".install.options.modules current] %P}")
+  if installIndexes.len == 0:
+    for index in modulesList.keys:
+      installIndexes.add(y = index)
+  let arguments = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
+      "}" elif argc == 2: "{" & $argv[1] & "} {}" else: "0 {}")
+  updateHeadersCommand(table = installTable,
+      command = "SortShipyardModules install " & arguments)
+  clearTable(table = installTable)
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  for index in installIndexes:
+    if modulesList[index].price == 0 or skyBases[baseIndex].reputation.level <
+        modulesList[index].reputation:
+      continue
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
