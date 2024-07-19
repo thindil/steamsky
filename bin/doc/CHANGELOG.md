@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of information about the free space in the player's ship's crew
   members' inventory
 - Updated look of the game's statistics' screen
+- Updated look of the enemy's information's section in the combat screen
 
 ### Fixed
 - No refreshing information about the player's ship after trading
