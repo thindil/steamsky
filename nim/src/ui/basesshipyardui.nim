@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
-import ../[crewinventory, game, maps, tk, types]
+import std/[os, strutils, tables]
+import ../[config, crewinventory, game, maps, tk, types]
 import coreui, mapsui, table
 
 var
@@ -86,11 +86,30 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   updateHeadersCommand(table = installTable,
       command = "SortShipyardModules install " & arguments)
   clearTable(table = installTable)
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    page = (if argc == 4: ($argv[3]).parseInt else: 1)
+    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow = 1
   for index in installIndexes:
     if modulesList[index].price == 0 or skyBases[baseIndex].reputation.level <
         modulesList[index].reputation:
       continue
+    let moduleType = ($argv[1]).parseInt
+    if argc > 1 and moduleType > 0 and moduleType != modulesList[
+        index].mType.ord:
+      continue
+    if argc > 2 and argv[2].len > 0 and not modulesList[
+        index].name.toLowerAscii.contains(sub = ($argv[2]).toLowerAscii):
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    let moduleSize = (if modulesList[index].mType ==
+        ModuleType.hull: modulesList[index].maxValue else: modulesList[index].size)
+    addButton(table = installTable, text = modulesList[index].name,
+        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+        $index & "}", column = 1)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
