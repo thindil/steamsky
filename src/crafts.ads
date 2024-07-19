@@ -63,9 +63,4 @@ package Crafts is
    function Get_Recipe
      (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data;
 
-   function Get_Recipes_Amount return Positive with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaRecipesAmount";
-
 end Crafts;
