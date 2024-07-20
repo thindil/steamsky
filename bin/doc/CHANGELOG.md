@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Resizing sections in the combat screen
 - Typos in the enemy's information in the combat screen
+- Information about the player's money in bases' shipyards
 
 ## [10.0.1] - 2024-07-14
 
