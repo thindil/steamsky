@@ -131,8 +131,7 @@ package body Bases.ShipyardUI is
            Interp => Interp);
       Cost, Used_Space: Natural := 0;
       Damage: Float := 0.0;
-      Money_Index_2: constant Natural :=
-        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Money_Index_2: Natural := 0;
       Max_Size, All_Space: Positive := 1;
       Install_Info: Unbounded_String := Null_Unbounded_String;
       Money_Label: constant Ttk_Label :=
@@ -158,6 +157,8 @@ package body Bases.ShipyardUI is
           (pathName => Shipyard_Canvas & ".shipyard.install.options.search");
    begin
       Get_Ship_From_Nim(Ship => Player_Ship);
+      Money_Index_2 :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       if Winfo_Get(Widgt => Shipyard_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
