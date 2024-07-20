@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[bases, config, crewinventory, game, maps, shipscrew, shipmodules, tk, types]
-import coreui, mapsui, table
+import coreui, mapsui, table, utilsui2
 
 var
   installTable, removeTable: TableWidget
@@ -154,8 +154,8 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
         $(index + 1) & "}", column = 1)
     addButton(table = removeTable, text = getModuleType(
-        moduleIndex = playerShip.modules[index].protoIndex), tooltip = "Show the module's info",
-            command = "ShowRemoveInfo {" &
+        moduleIndex = playerShip.modules[index].protoIndex),
+            tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
         $(index + 1) & "}", column = 2)
     addButton(table = removeTable, text = $modulesList[playerShip.modules[
         index].protoIndex].size, tooltip = "Show the module's info",
@@ -188,6 +188,11 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = shipyardCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
       script = mainPaned & " cget -width"))
+  tclEval(script = shipyardCanvas & " xview moveto 0.0")
+  tclEval(script = shipyardCanvas & " yview moveto 0.0")
+  showScreen(newScreenName = "shipyardframe")
+  tclSetResult(value = "1")
+  tclEval(script = "ShowShipyardTab show")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
