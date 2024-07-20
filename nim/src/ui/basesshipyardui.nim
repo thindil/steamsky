@@ -95,10 +95,10 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     if modulesList[index].price == 0 or skyBases[baseIndex].reputation.level <
         modulesList[index].reputation:
       continue
-    let moduleType = ($argv[1]).parseInt
-    if argc > 1 and moduleType > 0 and moduleType != modulesList[
-        index].mType.ord:
-      continue
+    if argc > 1:
+      let moduleType = ($argv[1]).parseInt
+      if moduleType > 0 and moduleType != modulesList[index].mType.ord:
+        continue
     if argc > 2 and argv[2].len > 0 and not modulesList[
         index].name.toLowerAscii.contains(sub = ($argv[2]).toLowerAscii):
       continue
