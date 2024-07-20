@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,9 +38,14 @@ bind $tradeframe.options.type <<ComboboxSelected>> \
    {ShowTrade [$tradeframe.options.type get]}
 grid [ttk::entry $tradeframe.options.search -validate key \
    -validatecommand {SearchTrade %P}] -column 2 -row 0
-grid [ttk::label $tradeframe.options.playerinfo -wraplength 300] -sticky nw \
-   -columnspan 2
+grid [ttk::frame $tradeframe.options.playerinfo] -sticky nw -columnspan 2
 SetScrollbarBindings $tradeframe.options.playerinfo \
+   .gameframe.paned.tradeframe.scrolly
+grid [ttk::label $tradeframe.options.playerinfo.moneyinfo -wraplength 300]
+SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo \
+   .gameframe.paned.tradeframe.scrolly
+grid [ttk::label $tradeframe.options.playerinfo.cargoinfo -wraplength 300]
+SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo \
    .gameframe.paned.tradeframe.scrolly
 grid [ttk::label $tradeframe.options.baseinfo -wraplength 300] -sticky nw \
    -column 2 -row 1

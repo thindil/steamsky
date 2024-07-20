@@ -345,8 +345,10 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't get free space.")
   if freeSpace < 0:
     freeSpace = 0
-  tradeInfo.add(y = "\nFree cargo space: " & $freeSpace & " kg.")
-  label = tradeFrame & ".options.playerinfo"
+  label = tradeFrame & ".options.playerinfo.moneyinfo"
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
+  tradeInfo = "Free cargo space: " & $freeSpace & " kg."
+  label = tradeFrame & ".options.playerinfo.cargoinfo"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tradeInfo = ""
   if baseIndex > 0:
