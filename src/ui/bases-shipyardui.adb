@@ -157,6 +157,20 @@ package body Bases.ShipyardUI is
               Command => "SortShipyardModules remove 0 {}",
               Tooltip_Text => "Press mouse button to sort the modules.");
       end if;
+      if Install_Indexes.Length = 0 then
+         Fill_Install_Indexes_Loop :
+         for I in 1 .. Get_Modules_Amount loop
+            Install_Indexes.Append(New_Item => I);
+         end loop Fill_Install_Indexes_Loop;
+      end if;
+      if Remove_Indexes.Length /= Player_Ship.Modules.Length then
+         Remove_Indexes.Clear;
+         Fill_Remove_Indexes_Loop :
+         for I in Player_Ship.Modules.Iterate loop
+            Remove_Indexes.Append
+              (New_Item => Modules_Container.To_Index(Position => I));
+         end loop Fill_Remove_Indexes_Loop;
+      end if;
       return TCL_OK;
    end Show_Shipyard_Command;
 
