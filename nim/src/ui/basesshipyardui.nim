@@ -135,7 +135,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   addPagination(table = installTable, previousCommand = (if page >
       1: "ShowShipyard " & arguments & " " & $(page - 1) else: ""),
       nextCommand = (if installTable.row < gameSettings.listsLimit +
-      1: "" else: "ShowShipyar " & arguments & " " & $(page + 1)))
+      1: "" else: "ShowShipyard " & arguments & " " & $(page + 1)))
   updateTable(table = installTable, grabFocus = tclEval2(script = "focus") != searchEntry)
   if removeIndexes.len != playerShip.modules.len:
     removeIndexes = @[]
@@ -147,6 +147,47 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     if modulesList[playerShip.modules[index].protoIndex].mType ==
         ModuleType.hull:
       continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    addButton(table = removeTable, text = playerShip.modules[index].name,
+        tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
+        $(index + 1) & "}", column = 1)
+    addButton(table = removeTable, text = getModuleType(
+        moduleIndex = playerShip.modules[index].protoIndex), tooltip = "Show the module's info",
+            command = "ShowRemoveInfo {" &
+        $(index + 1) & "}", column = 2)
+    addButton(table = removeTable, text = $modulesList[playerShip.modules[
+        index].protoIndex].size, tooltip = "Show the module's info",
+            command = "ShowRemoveInfo {" &
+        $(index + 1) & "}", column = 3)
+    addButton(table = removeTable, text = $modulesList[playerShip.modules[
+        index].protoIndex].repairMaterial, tooltip = "Show the module's info",
+            command = "ShowRemoveInfo {" &
+        $(index + 1) & "}", column = 4)
+    let damage = 1.0 - (playerShip.modules[index].durability.float /
+        playerShip.modules[index].maxDurability.float)
+    var cost: Natural = modulesList[playerShip.modules[
+        index].protoIndex].price - (modulesList[playerShip.modules[
+        index].protoIndex].price.float * damage).int
+    if cost == 0:
+      cost = 1
+    countPrice(price = cost, traderIndex = findMember(order = talk),
+        reduce = false)
+    addButton(table = removeTable, text = $cost,
+        tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
+        $(index + 1) & "}", column = 5, newRow = true)
+    if removeTable.row == gameSettings.listsLimit + 1:
+      break
+  addPagination(table = removeTable, previousCommand = (if page >
+      1: "ShowShipyard " & arguments & " " & $(page - 1) else: ""),
+      nextCommand = (if installTable.row < gameSettings.listsLimit +
+      1: "" else: "ShowShipyard " & arguments & " " & $(page + 1)))
+  updateTable(table = removeTable)
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  tclEval(script = shipyardCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
