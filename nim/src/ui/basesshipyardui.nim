@@ -132,6 +132,21 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
             moneyIndex2].amount: "" else: "red"))
     if installTable.row == gameSettings.listsLimit + 1:
       break
+  addPagination(table = installTable, previousCommand = (if page >
+      1: "ShowShipyard " & arguments & " " & $(page - 1) else: ""),
+      nextCommand = (if installTable.row < gameSettings.listsLimit +
+      1: "" else: "ShowShipyar " & arguments & " " & $(page + 1)))
+  updateTable(table = installTable, grabFocus = tclEval2(script = "focus") != searchEntry)
+  if removeIndexes.len != playerShip.modules.len:
+    removeIndexes = @[]
+    for index, _ in playerShip.modules:
+      removeIndexes.add(y = index)
+  clearTable(table = removeTable)
+  currentRow = 1
+  for index in removeIndexes:
+    if modulesList[playerShip.modules[index].protoIndex].mType ==
+        ModuleType.hull:
+      continue
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
