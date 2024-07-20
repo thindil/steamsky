@@ -24,7 +24,7 @@ var
   installIndexes, removeIndexes: seq[Natural]
 
 proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   var shipyardFrame = mainPaned & ".shipyardframe"
   let
     shipyardCanvas = shipyardFrame & ".canvas"
@@ -57,7 +57,10 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     usedSpace = 0
   for module in playerShip.modules:
     if module.mType == ModuleType2.hull:
-      maxSize = modulesList[module.protoIndex].value
+      maxSize = try:
+          modulesList[module.protoIndex].value
+        except:
+          return showError(message = "Can't get max size.")
       usedSpace = module.installedModules
       allSpace = module.maxModules
       break
@@ -88,43 +91,79 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   clearTable(table = installTable)
   let
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    page = (if argc == 4: ($argv[3]).parseInt else: 1)
+    page = try:
+        (if argc == 4: ($argv[3]).parseInt else: 1)
+      except:
+        return showError(message = "Can't get page.")
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
   var currentRow = 1
   for index in installIndexes:
-    if modulesList[index].price == 0 or skyBases[baseIndex].reputation.level <
-        modulesList[index].reputation:
-      continue
-    if argc > 1:
-      let moduleType = ($argv[1]).parseInt
-      if moduleType > 0 and moduleType != modulesList[index].mType.ord:
+    try:
+      if modulesList[index].price == 0 or skyBases[baseIndex].reputation.level <
+          modulesList[index].reputation:
         continue
-    if argc > 2 and argv[2].len > 0 and not modulesList[
-        index].name.toLowerAscii.contains(sub = ($argv[2]).toLowerAscii):
-      continue
+    except:
+      return showError(message = "Can't get proto module price.")
+    if argc > 1:
+      let moduleType = try:
+          ($argv[1]).parseInt
+        except:
+          return showError(message = "Can't get module type.")
+      try:
+        if moduleType > 0 and moduleType != modulesList[index].mType.ord:
+          continue
+      except:
+        return showError(message = "Can't get proto module's type.")
+    try:
+      if argc > 2 and argv[2].len > 0 and not modulesList[
+          index].name.toLowerAscii.contains(sub = ($argv[2]).toLowerAscii):
+        continue
+    except:
+      return showError(message = "Can't check modules' name.")
     if currentRow < startRow:
       currentRow.inc
       continue
-    let moduleSize = (if modulesList[index].mType ==
-        ModuleType.hull: modulesList[index].maxValue else: modulesList[index].size)
-    addButton(table = installTable, text = modulesList[index].name,
-        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
-        $index & "}", column = 1)
-    addButton(table = installTable, text = getModuleType(moduleIndex = index),
-        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
-        $index & "}", column = 2)
-    addButton(table = installTable, text = $moduleSize,
-        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
-        $index & "}", column = 3, newRow = false, color = (if modulesList[
-            index].mType == ModuleType.hull: (if moduleSize <
-            allSpace: "red" elif moduleSize >
-            allSpace: "green" else: "") else: (if moduleSize >
-            maxSize: "red" else: "")))
-    addButton(table = installTable, text = modulesList[index].repairMaterial,
-        tooltip = "Show the module's info", command = "ShowInstallInfo {" &
-        $index & "}", column = 4)
-    var cost = modulesList[index].price
-    countPrice(price = cost, traderIndex = findMember(order = talk))
+    let moduleSize = try:
+        (if modulesList[index].mType ==
+          ModuleType.hull: modulesList[index].maxValue else: modulesList[index].size)
+      except:
+        return showError(message = "Can't get size of the module.")
+    try:
+      addButton(table = installTable, text = modulesList[index].name,
+          tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+          $index & "}", column = 1)
+    except:
+      return showError(message = "Can't add button with name.")
+    try:
+      addButton(table = installTable, text = getModuleType(moduleIndex = index),
+          tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+          $index & "}", column = 2)
+    except:
+      return showError(message = "Can't add button with type.")
+    try:
+      addButton(table = installTable, text = $moduleSize,
+          tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+          $index & "}", column = 3, newRow = false, color = (if modulesList[
+              index].mType == ModuleType.hull: (if moduleSize <
+              allSpace: "red" elif moduleSize >
+              allSpace: "green" else: "") else: (if moduleSize >
+              maxSize: "red" else: "")))
+    except:
+      return showError(message = "Can't add button with size.")
+    try:
+      addButton(table = installTable, text = modulesList[index].repairMaterial,
+          tooltip = "Show the module's info", command = "ShowInstallInfo {" &
+          $index & "}", column = 4)
+    except:
+      return showError(message = "Can't add button with repair material.")
+    var cost = try:
+        modulesList[index].price
+      except:
+        return showError(message = "Can't get cost.")
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+    except:
+      return showError(message = "Can't count price.")
     addButton(table = installTable, text = $cost,
         tooltip = "Show the module's info", command = "ShowInstallInfo {" &
         $index & "}", column = 5, newRow = true, color = (if moneyIndex2 >
@@ -144,23 +183,32 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   clearTable(table = removeTable)
   currentRow = 1
   for index in removeIndexes:
-    if modulesList[playerShip.modules[index].protoIndex].mType ==
-        ModuleType.hull:
-      continue
+    try:
+      if modulesList[playerShip.modules[index].protoIndex].mType ==
+          ModuleType.hull:
+        continue
+    except:
+      return showError(message = "Can't check module type.")
     if currentRow < startRow:
       currentRow.inc
       continue
     addButton(table = removeTable, text = playerShip.modules[index].name,
         tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
         $(index + 1) & "}", column = 1)
-    addButton(table = removeTable, text = getModuleType(
-        moduleIndex = playerShip.modules[index].protoIndex),
-            tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
-        $(index + 1) & "}", column = 2)
-    addButton(table = removeTable, text = $modulesList[playerShip.modules[
-        index].protoIndex].size, tooltip = "Show the module's info",
-            command = "ShowRemoveInfo {" &
-        $(index + 1) & "}", column = 3)
+    try:
+      addButton(table = removeTable, text = getModuleType(
+          moduleIndex = playerShip.modules[index].protoIndex),
+              tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
+          $(index + 1) & "}", column = 2)
+    except:
+      return showError(message = "Can't add button with player's ship module type.")
+    try:
+      addButton(table = removeTable, text = $modulesList[playerShip.modules[
+          index].protoIndex].size, tooltip = "Show the module's info",
+              command = "ShowRemoveInfo {" &
+          $(index + 1) & "}", column = 3)
+    except:
+      return showError(message = "Can't add button with player's ship module size.")
     addButton(table = removeTable, text = $modulesList[playerShip.modules[
         index].protoIndex].repairMaterial, tooltip = "Show the module's info",
             command = "ShowRemoveInfo {" &
