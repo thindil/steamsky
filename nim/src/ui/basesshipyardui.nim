@@ -24,7 +24,8 @@ var
   installIndexes, removeIndexes: seq[Natural]
 
 proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   var shipyardFrame = mainPaned & ".shipyardframe"
   let
     shipyardCanvas = shipyardFrame & ".canvas"
@@ -209,19 +210,28 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
           $(index + 1) & "}", column = 3)
     except:
       return showError(message = "Can't add button with player's ship module size.")
-    addButton(table = removeTable, text = $modulesList[playerShip.modules[
-        index].protoIndex].repairMaterial, tooltip = "Show the module's info",
-            command = "ShowRemoveInfo {" &
-        $(index + 1) & "}", column = 4)
+    try:
+      addButton(table = removeTable, text = $modulesList[playerShip.modules[
+          index].protoIndex].repairMaterial, tooltip = "Show the module's info",
+              command = "ShowRemoveInfo {" &
+          $(index + 1) & "}", column = 4)
+    except:
+      return showError(message = "Can't add button with player's ship repair material.")
     let damage = 1.0 - (playerShip.modules[index].durability.float /
         playerShip.modules[index].maxDurability.float)
-    var cost: Natural = modulesList[playerShip.modules[
-        index].protoIndex].price - (modulesList[playerShip.modules[
-        index].protoIndex].price.float * damage).int
+    var cost: Natural = try:
+        modulesList[playerShip.modules[
+          index].protoIndex].price - (modulesList[playerShip.modules[
+          index].protoIndex].price.float * damage).int
+      except:
+        return showError(message = "Can't get cost of player's ship module.")
     if cost == 0:
       cost = 1
-    countPrice(price = cost, traderIndex = findMember(order = talk),
-        reduce = false)
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk),
+          reduce = false)
+    except:
+      return showError(message = "Can't count cost of player's ship module.")
     addButton(table = removeTable, text = $cost,
         tooltip = "Show the module's info", command = "ShowRemoveInfo {" &
         $(index + 1) & "}", column = 5, newRow = true)
