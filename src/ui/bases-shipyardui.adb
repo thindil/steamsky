@@ -131,7 +131,7 @@ package body Bases.ShipyardUI is
            Interp => Interp);
       Cost, Used_Space: Natural := 0;
       Damage: Float := 0.0;
-      Money_Index_2: Natural := 0;
+      Money_Index_2: Natural;
       Max_Size, All_Space: Positive := 1;
       Install_Info: Unbounded_String := Null_Unbounded_String;
       Money_Label: constant Ttk_Label :=
