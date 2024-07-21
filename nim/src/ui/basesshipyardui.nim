@@ -273,9 +273,9 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
   row.inc
   var
     mType: ModuleType
-    maxValue, value, weight, maxOwners, shipModuleIndex: Natural = 0
+    maxValue, value, weight, maxOwners, shipModuleIndex, cost: Natural = 0
     size: Positive = 1
-    speed: int = 0
+    speed, moneyIndex2: int = -1
     moduleLabel = ""
   if installing:
     mType = modulesList[moduleIndex].mType
@@ -296,6 +296,21 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         if moduleIterator == 0:
           shipModuleIndex = index
           break
+    cost = modulesList[moduleIndex].price
+    countPrice(price = cost, traderIndex = findMember(order = talk))
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    tclEval(script = moduleLabel & " configure -text {" & $cost & " " &
+        moneyName & "} " & (if moneyIndex == -1 or playerShip.cargo[
+        moneyIndex2].amount <
+        cost: "-style Headerred.TLabel" else: "-style Golden.TLabel"))
+    moduleLabel = ".moduledialog.time"
+    tclEval(script = moduleLabel & " -text {" & $modulesList[
+        moduleIndex].installTime & " minutes} -style Golden.TLabel")
+
+# Temporary code for testing
+var tmp: Positive = 1
+setModuleInfo(installing = true, row = tmp)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
