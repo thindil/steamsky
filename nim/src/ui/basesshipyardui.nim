@@ -391,6 +391,31 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = "ttk::label " & moduleLabel)
     else:
       moduleLabel = ".moduledialog.power"
+    if installing and shipModuleIndex > -1:
+      if maxValue < playerShip.modules[shipModuleIndex].power:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
+      elif maxValue > playerShip.modules[shipModuleIndex].power:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+      if newInfo:
+        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+        row.inc
+        moduleLabel = ".moduledialog.fuellbl"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Fuel usage:}")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+        moduleLabel = ".moduledialog.fuel"
+        tclEval(script = "ttk::label " & moduleLabel)
+      else:
+        moduleLabel = ".moduledialog.fuel"
+      if value < playerShip.modules[shipModuleIndex].fuelUsage:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (less)} -style Headergreen.TLabel")
+      elif value > playerShip.modules[shipModuleIndex].fuelUsage:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (more)} -style Headerred.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
+      if newInfo:
+        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
   else:
     discard
 
