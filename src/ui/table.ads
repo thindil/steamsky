@@ -235,21 +235,6 @@ package Table is
      (Table: Table_Widget; X_Position: Natural) return Positive;
      -- ****
 
-     -- ****f* Table/Table.Update_Headers_Command
-     -- FUNCTION
-     -- Update the Tcl command executed when the player clicked on Table_Widget
-     -- headers
-     -- PARAMETERS
-     -- Table   - The Table_Widget in which headers will be updated
-     -- Command - The Tcl command to execute. If empty, the command will be
-     --           removed
-     -- HISTORY
-     -- 6.5 - Added
-     -- SOURCE
-   procedure Update_Headers_Command(Table: Table_Widget; Command: String);
-   -- ****
-   --## rule on LOCAL_HIDING
-
    -- ****f* Table/Tabel.Add_Commands
    -- FUNCTION
    -- Add Tcl commands related to the Table_Widget

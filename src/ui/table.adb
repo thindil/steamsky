@@ -230,27 +230,6 @@ package body Table is
       return Get_Ada_Column_Number(Width => N_Width, X_Pos => X_Position);
    end Get_Column_Number;
 
-   --## rule off LOCAL_HIDING
-   procedure Update_Headers_Command(Table: Table_Widget; Command: String) is
-      --## rule on LOCAL_HIDING
-      N_Width: Nim_Width := (others => 0);
-      Index: Natural := 0;
-      procedure Update_Ada_Headers_Command
-        (Can, Com: chars_ptr; Width: Nim_Width) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaHeadersCommand";
-   begin
-      Convert_Width_Loop :
-      for Width of Table.Columns_Width loop
-         N_Width(Index) := Width;
-         Index := Index + 1;
-      end loop Convert_Width_Loop;
-      Update_Ada_Headers_Command
-        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
-         Com => New_String(Str => Command), Width => N_Width);
-   end Update_Headers_Command;
-
    function Update_Current_Row_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
