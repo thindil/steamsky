@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
@@ -1704,6 +1704,7 @@ package body Bases.ShipyardUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Characters.Latin_1;
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tklib.Ada.Tooltip;
       use Short_String;
