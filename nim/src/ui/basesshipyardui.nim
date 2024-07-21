@@ -439,16 +439,18 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
   of cargo:
     if newInfo:
       moduleLabel = ".moduledialog.cargolbl"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {Max cargo:}")
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max cargo: }")
       tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
       moduleLabel = ".moduledialog.cargo"
       tclEval(script = "ttk::label " & moduleLabel)
     else:
       moduleLabel = ".moduledialog.cargo"
     if installing and shipModuleIndex > -1:
-      if maxValue > modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue:
+      if maxValue > modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue:
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (bigger)} -style Headergreen.TLabel")
-      elif maxValue < modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue:
+      elif maxValue < modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue:
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (smaller)} -style Headerred.TLabel")
       else:
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
@@ -467,6 +469,55 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = "ttk::label " & moduleLabel)
     else:
       moduleLabel = ".moduledialog.quality"
+    if installing and shipModuleIndex > -1:
+      if maxValue < 30:
+        if playerShip.modules[shipModuleIndex].quality > maxValue:
+          tclEval(script = moduleLabel & " configure -text { minimal (worse)} -style Headerred.TLabel")
+        elif playerShip.modules[shipModuleIndex].quality < maxValue:
+          tclEval(script = moduleLabel & " configure -text { minimal (better)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text { minimal} -style Golden.TLabel")
+      elif maxValue < 60:
+        if playerShip.modules[shipModuleIndex].quality > maxValue:
+          tclEval(script = moduleLabel & " configure -text { basic (worse)} -style Headerred.TLabel")
+        elif playerShip.modules[shipModuleIndex].quality < maxValue:
+          tclEval(script = moduleLabel & " configure -text { basic (better)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text { basic} -style Golden.TLabel")
+      elif maxValue < 80:
+        if playerShip.modules[shipModuleIndex].quality > maxValue:
+          tclEval(script = moduleLabel & " configure -text { extended (worse)} -style Headerred.TLabel")
+        elif playerShip.modules[shipModuleIndex].quality < maxValue:
+          tclEval(script = moduleLabel & " configure -text { extended (better)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text { extended} -style Golden.TLabel")
+      else:
+        if playerShip.modules[shipModuleIndex].quality > maxValue:
+          tclEval(script = moduleLabel & " configure -text { luxury (worse)} -style Headerred.TLabel")
+        elif playerShip.modules[shipModuleIndex].quality < maxValue:
+          tclEval(script = moduleLabel & " configure -text { luxury (better)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text { luxury} -style Golden.TLabel")
+    else:
+      row.dec
+      if maxValue < 30:
+        tclEval(script = moduleLabel & " configure -text { minimal} -style Golden.TLabel")
+      elif maxValue < 60:
+        tclEval(script = moduleLabel & " configure -text { basic} -style Golden.TLabel")
+      elif maxValue < 80:
+        tclEval(script = moduleLabel & " configure -text { extended} -style Golden.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text { luxury} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+      moduleLabel = ".moduledialog.ownerslbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max owners: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.owners"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.owners"
   else:
     discard
 
@@ -480,7 +531,8 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 
 # Temporary code for interfacing with Ada
 
-proc setAdaModuleInfo(installing: cint, row: var cint, newInfo: cint) {.exportc.} =
+proc setAdaModuleInfo(installing: cint; row: var cint;
+    newInfo: cint) {.exportc.} =
   var newRow = row.Positive
   setModuleInfo(installing = installing == 1, row = newRow, newInfo = newInfo == 1)
   row = newRow.cint
