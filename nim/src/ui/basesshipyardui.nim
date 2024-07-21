@@ -267,6 +267,36 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ShowShipyardTab show")
   return tclOk
 
+var moduleIndex: Natural = 0
+
+proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
+  row.inc
+  var
+    mType: ModuleType
+    maxValue, value, weight, maxOwners, shipModuleIndex: Natural = 0
+    size: Positive = 1
+    speed: int = 0
+    moduleLabel = ""
+  if installing:
+    mType = modulesList[moduleIndex].mType
+    maxValue = modulesList[moduleIndex].maxValue
+    value = modulesList[moduleIndex].value
+    size = modulesList[moduleIndex].size
+    weight = modulesList[moduleIndex].weight
+    maxOwners = modulesList[moduleIndex].maxOwners
+    speed = modulesList[moduleIndex].speed
+    moduleLabel = ".moduledialog.cost"
+    let compareBox = ".moduledialog.compare.combo"
+    var moduleIterator = 1
+    if tclEval2(script = "winfo ismapped " & compareBox) == "1":
+      moduleIterator = tclEval2(script = compareBox & " current").parseInt + 1
+    for index, module in playerShip.modules:
+      if modulesList[module.protoIndex].mType == mType:
+        moduleIterator.dec
+        if moduleIterator == 0:
+          shipModuleIndex = index
+          break
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
