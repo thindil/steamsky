@@ -41,10 +41,15 @@ grid [ttk::entry $tradeframe.options.search -validate key \
 grid [ttk::frame $tradeframe.options.playerinfo] -sticky nw -columnspan 2
 SetScrollbarBindings $tradeframe.options.playerinfo \
    .gameframe.paned.tradeframe.scrolly
-grid [ttk::label $tradeframe.options.playerinfo.moneyinfo -wraplength 300]
+grid [ttk::label $tradeframe.options.playerinfo.moneyinfo -wraplength 300] \
+   -sticky w
 SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo \
    .gameframe.paned.tradeframe.scrolly
-grid [ttk::label $tradeframe.options.playerinfo.cargoinfo -wraplength 300]
+ttk::label $tradeframe.options.playerinfo.moneyinfo2 -wraplength 300 \
+   -style Golden.TLabel
+SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo2 \
+   .gameframe.paned.tradeframe.scrolly
+grid [ttk::label $tradeframe.options.playerinfo.cargoinfo -wraplength 300] -columnspan 2
 SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo \
    .gameframe.paned.tradeframe.scrolly
 grid [ttk::label $tradeframe.options.baseinfo -wraplength 300] -sticky nw \

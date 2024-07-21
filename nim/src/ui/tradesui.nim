@@ -335,19 +335,24 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       protoIndex = moneyIndex)
   var tradeInfo = ""
   if moneyIndex2 > -1:
-    tradeInfo = "You have " & $playerShip.cargo[moneyIndex2].amount & " " &
-        moneyName & "."
+    tradeInfo = "You have"
+    label = tradeFrame & ".options.playerinfo.moneyinfo2"
+    tclEval(script = label & " configure -text {" & $playerShip.cargo[moneyIndex2].amount & " " &
+        moneyName & "}")
+    tclEval(script = "grid " & label & " -row 0 -column 1 -sticky w")
   else:
     tradeInfo = "You don't have any " & moneyName & " to buy anything."
+    label = tradeFrame & ".options.playerinfo.moneyinfo2"
+    tclEval(script = "grid remove " & label)
+  label = tradeFrame & ".options.playerinfo.moneyinfo"
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
   var freeSpace = try:
       freeCargo(amount = 0)
     except:
       return showError(message = "Can't get free space.")
   if freeSpace < 0:
     freeSpace = 0
-  label = tradeFrame & ".options.playerinfo.moneyinfo"
-  tclEval(script = label & " configure -text {" & tradeInfo & "}")
-  tradeInfo = "Free cargo space: " & $freeSpace & " kg."
+  tradeInfo = "Free cargo space is " & $freeSpace & " kg."
   label = tradeFrame & ".options.playerinfo.cargoinfo"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tradeInfo = ""
