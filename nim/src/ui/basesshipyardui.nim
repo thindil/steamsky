@@ -518,6 +518,45 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = "ttk::label " & moduleLabel)
     else:
       moduleLabel = ".moduledialog.owners"
+    if installing and shipModuleIndex > -1:
+      if modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxOwners > maxOwners:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
+      elif modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners < maxOwners:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+    else:
+      tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    row.inc
+  of alchemyLab..greenhouse:
+    if newInfo:
+      moduleLabel = ".moduledialog.workerslbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max workers:}")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      if installing and shipModuleIndex == -1:
+        row.inc
+      moduleLabel = ".moduledialog.workers"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.workers"
+    if installing and shipModuleIndex > -1:
+      if modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxOwners > maxOwners:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
+      elif modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxOwners < maxOwners:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+    else:
+      if newInfo:
+        row.dec
+      tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
   else:
     discard
 
