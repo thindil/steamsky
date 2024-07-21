@@ -350,7 +350,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         row.inc
         tclEval(script = "grid " & moduleLabel & " -sticky w -columnspan 2 -padx {5 0}")
         moduleLabel = ".moduledialog.moduleslbl"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Modules space:}")
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Modules space: }")
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
         moduleLabel = ".moduledialog.modules"
         tclEval(script = "ttk::label " & moduleLabel)
@@ -366,7 +366,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
         row.inc
         moduleLabel = ".moduledialog.maxsizelbl"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Max module size:}")
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Max module size: }")
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
         tclEval(script = "ttk::label " & moduleLabel)
       else:
@@ -385,7 +385,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
   of engine:
     if newInfo:
       moduleLabel = ".moduledialog.powerlbl"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {Max power:}")
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max power: }")
       tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
       moduleLabel = ".moduledialog.power"
       tclEval(script = "ttk::label " & moduleLabel)
@@ -402,7 +402,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
         row.inc
         moduleLabel = ".moduledialog.fuellbl"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Fuel usage:}")
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Fuel usage: }")
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
         moduleLabel = ".moduledialog.fuel"
         tclEval(script = "ttk::label " & moduleLabel)
@@ -428,7 +428,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       if newInfo:
         row.inc
         moduleLabel = ".moduledialog.fuellbl"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {Fuel usage:}")
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Fuel usage: }")
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
         moduleLabel = ".moduledialog.fuel"
         tclEval(script = "ttk::label " & moduleLabel)
@@ -436,6 +436,37 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         row.inc
       else:
         moduleLabel = ".moduledialog.fuel"
+  of cargo:
+    if newInfo:
+      moduleLabel = ".moduledialog.cargolbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max cargo:}")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.cargo"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.cargo"
+    if installing and shipModuleIndex > -1:
+      if maxValue > modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (bigger)} -style Headergreen.TLabel")
+      elif maxValue < modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (smaller)} -style Headerred.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
+    else:
+      if newInfo:
+        row.dec
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+  of cabin:
+    if newInfo:
+      moduleLabel = ".moduledialog.qualitylbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Quality: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.quality"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.quality"
   else:
     discard
 
