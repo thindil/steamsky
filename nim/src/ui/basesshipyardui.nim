@@ -324,7 +324,8 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       maxValue = playerShip.modules[shipModuleIndex].damage
       value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
     of cargo:
-      maxValue = modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue
+      maxValue = modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].maxValue
       value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
     of hull:
       maxValue = playerShip.modules[shipModuleIndex].maxModules
@@ -337,13 +338,14 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       value = 0
     size = modulesList[playerShip.modules[shipModuleIndex].protoIndex].size
     weight = modulesList[playerShip.modules[shipModuleIndex].protoIndex].weight
-    maxOwners = modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxOwners
+    maxOwners = modulesList[playerShip.modules[
+        shipModuleIndex].protoIndex].maxOwners
     speed = modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed
   case mType
   of hull:
     if installing:
-      moduleLabel = ".moduledialog.hullinfo"
       if newInfo:
+        moduleLabel = ".moduledialog.hullinfo"
         tclEval(script = "ttk::label " & moduleLabel & " -text {Ship hull can be only replaced.} -style Golden.TLabel")
         row.inc
         tclEval(script = "grid " & moduleLabel & " -sticky w -columnspan 2 -padx {5 0}")
@@ -352,6 +354,45 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
         moduleLabel = ".moduledialog.modules"
         tclEval(script = "ttk::label " & moduleLabel)
+      else:
+        moduleLabel = ".moduledialog.modules"
+      if maxValue < playerShip.modules[shipModuleIndex].maxModules:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (smaller)} -style Headerred.TLabel")
+      elif maxValue > playerShip.modules[shipModuleIndex].maxModules:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (bigger)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+      if newInfo:
+        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+        row.inc
+        moduleLabel = ".moduledialog.maxsizelbl"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Max module size:}")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+        tclEval(script = "ttk::label " & moduleLabel)
+      else:
+        moduleLabel = ".moduledialog.maxsize"
+      if value < modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].value:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (smaller)} -style Headerred.TLabel")
+      elif value > modulesList[playerShip.modules[
+          shipModuleIndex].protoIndex].value:
+        tclEval(script = moduleLabel & " configure -text {" & $value & " (bigger)} -style Headergreen.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
+      if newInfo:
+        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+        row.inc
+  of engine:
+    if newInfo:
+      moduleLabel = ".moduledialog.powerlbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Max power:}")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.power"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.power"
+  else:
+    discard
 
 # Temporary code for testing
 var tmp: Positive = 1
