@@ -307,6 +307,51 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
     moduleLabel = ".moduledialog.time"
     tclEval(script = moduleLabel & " -text {" & $modulesList[
         moduleIndex].installTime & " minutes} -style Golden.TLabel")
+  else:
+    shipModuleIndex = moduleIndex
+    mType = modulesList[playerShip.modules[shipModuleIndex].protoIndex].mType
+    case mType
+    of harpoonGun:
+      maxValue = playerShip.modules[shipModuleIndex].duration
+      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+    of engine:
+      maxValue = playerShip.modules[shipModuleIndex].power
+      value = playerShip.modules[shipModuleIndex].fuelUsage
+    of cabin:
+      maxValue = playerShip.modules[shipModuleIndex].quality
+      value = playerShip.modules[shipModuleIndex].cleanliness
+    of gun:
+      maxValue = playerShip.modules[shipModuleIndex].damage
+      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+    of cargo:
+      maxValue = modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue
+      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+    of hull:
+      maxValue = playerShip.modules[shipModuleIndex].maxModules
+      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+    of batteringRam:
+      maxValue = playerShip.modules[shipModuleIndex].damage2
+      value = 0
+    else:
+      maxValue = 0
+      value = 0
+    size = modulesList[playerShip.modules[shipModuleIndex].protoIndex].size
+    weight = modulesList[playerShip.modules[shipModuleIndex].protoIndex].weight
+    maxOwners = modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxOwners
+    speed = modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed
+  case mType
+  of hull:
+    if installing:
+      moduleLabel = ".moduledialog.hullinfo"
+      if newInfo:
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Ship hull can be only replaced.} -style Golden.TLabel")
+        row.inc
+        tclEval(script = "grid " & moduleLabel & " -sticky w -columnspan 2 -padx {5 0}")
+        moduleLabel = ".moduledialog.moduleslbl"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Modules space:}")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+        moduleLabel = ".moduledialog.modules"
+        tclEval(script = "ttk::label " & moduleLabel)
 
 # Temporary code for testing
 var tmp: Positive = 1
