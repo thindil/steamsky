@@ -53,7 +53,7 @@ type
     killedMobs*: seq[StatisticsData]
     points*: Natural
 
-var gameStats* = GameStatsData(basesVisited: 1, mapVisited: 1,
+var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
 proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [],
@@ -139,7 +139,7 @@ proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [],
         updated = true
         break
     if not updated:
-      gameStats.finishedMissions.add(StatisticsData(index: mType, amount: 1))
+      gameStats.finishedMissions.add(y = StatisticsData(index: mType, amount: 1))
     gameStats.points = gameStats.points + 50
 
 proc clearGameStats*() {.sideEffect, raises: [], tags: [], contractual.} =
@@ -178,7 +178,7 @@ proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
         updated = true
         break
     if not updated:
-      gameStats.killedMobs.add(StatisticsData(
+      gameStats.killedMobs.add(y = StatisticsData(
           index: factionName.capitalizeAscii, amount: 1))
 
 proc updateDestroyedShips*(shipName: string) {.sideEffect, raises: [], tags: [],
@@ -203,7 +203,7 @@ proc updateDestroyedShips*(shipName: string) {.sideEffect, raises: [], tags: [],
         updated = true
         break
     if not updated:
-      gameStats.destroyedShips.add(StatisticsData(index: $shipIndex, amount: 1))
+      gameStats.destroyedShips.add(y = StatisticsData(index: $shipIndex, amount: 1))
 
 # Temporary code for interfacing with Ada
 
