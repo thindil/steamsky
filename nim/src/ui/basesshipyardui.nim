@@ -416,12 +416,28 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
       if newInfo:
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    else:
+      if newInfo:
+        row.dec
+        moduleLabel = ".moduledialog.power"
+        tclEval(script = "tt::label " & moduleLabel)
+        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      else:
+        moduleLabel = ".moduledialog.power"
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+      if newInfo:
+        row.inc
+        moduleLabel = ".moduledialog.fuellbl"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Fuel usage:}")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+        moduleLabel = ".moduledialog.fuel"
+        tclEval(script = "ttk::label " & moduleLabel)
+        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+        row.inc
+      else:
+        moduleLabel = ".moduledialog.fuel"
   else:
     discard
-
-# Temporary code for testing
-var tmp: Positive = 1
-setModuleInfo(installing = true, row = tmp)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
@@ -430,3 +446,10 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowShipyard", showShipyardCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc setAdaModuleInfo(installing: cint, row: var cint, newInfo: cint) {.exportc.} =
+  var newRow = row.Positive
+  setModuleInfo(installing = installing == 1, row = newRow, newInfo = newInfo == 1)
+  row = newRow.cint
