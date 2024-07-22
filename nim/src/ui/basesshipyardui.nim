@@ -656,8 +656,43 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
       else:
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+    else:
+      row.dec
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
   else:
     discard
+  if mType in {ModuleType.armor, turret} and not installing:
+    row.dec
+  if mType notin {ModuleType.hull, armor}:
+    if newInfo:
+      moduleLabel = ".moduledialog.sizelbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Size: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.size"
+      tclEval(script = "ttk::label " & moduleLabel)
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    else:
+      moduleLabel = ".moduledialog.size"
+    if installing:
+      var added = false
+      for module in playerShip.modules:
+        if module.mType == ModuleType2.hull and size > modulesList[
+            module.protoIndex].value:
+          tclEval(script = moduleLabel & " configure -text {" & $size & " (need a bigger hull)} -style Headerred.TLabel")
+          added = true
+          break
+      if not added:
+        tclEval(script = moduleLabel & " configure -text {" & $size & "} -style Golden.TLabel")
+      row.inc
+  if weight > 0:
+    if shipModuleIndex > -1:
+      if newInfo:
+        moduleLabel = ".moduledialog.weightlbl"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Weight:}")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
