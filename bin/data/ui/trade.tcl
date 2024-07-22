@@ -49,8 +49,16 @@ ttk::label $tradeframe.options.playerinfo.moneyinfo2 -wraplength 300 \
    -style Golden.TLabel
 SetScrollbarBindings $tradeframe.options.playerinfo.moneyinfo2 \
    .gameframe.paned.tradeframe.scrolly
-grid [ttk::label $tradeframe.options.playerinfo.cargoinfo -wraplength 300] -columnspan 2
+grid [ttk::frame $tradeframe.options.playerinfo.cargoinfo] -columnspan 2
 SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo \
+   .gameframe.paned.tradeframe.scrolly
+grid [ttk::label $tradeframe.options.playerinfo.cargoinfo.cargoinfo -wraplength 300 -text {Free cargo space is }] \
+   -sticky w
+SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo.cargoinfo \
+   .gameframe.paned.tradeframe.scrolly
+grid [ttk::label $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 -wraplength 300 \
+   -style Golden.TLabel] -sticky w -row 0 -column 1
+SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 \
    .gameframe.paned.tradeframe.scrolly
 grid [ttk::label $tradeframe.options.baseinfo -wraplength 300] -sticky nw \
    -column 2 -row 1
