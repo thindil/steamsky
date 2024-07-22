@@ -596,6 +596,19 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = "ttk::label " & moduleLabel)
     else:
       moduleLabel = ".moduledialog.ammo"
+    for index, item in itemsList:
+      if item.itemType == itemsTypesList[value - 1]:
+        tclEval(script = moduleLabel & " configure -text {Any" & item.name[item.name.find(sub = ' ')..^1] & "} -style Golden.TLabel")
+        if newInfo:
+          tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+          row.inc
+        break
+    if mType == ModuleType.gun:
+      if newInfo:
+        moduleLabel = ".moduledialog.ratelbl"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {Max fire rate: }")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+        moduleLabel = ".moduledialog.rate"
   else:
     discard
 
