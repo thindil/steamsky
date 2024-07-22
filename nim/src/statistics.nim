@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's player's statistics, like their data
+## structure, updating or resetting.
+
 import std/[strutils, tables]
 import contracts
 import config, game, types
@@ -221,10 +224,12 @@ type
 
 proc updateAdaCraftingOrders(index: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   updateCraftingOrders(index = $index)
 
 proc getAdaGameStats(value, stat: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   case stat
   of 0:
     gameStats.distanceTraveled = gameStats.distanceTraveled + value
@@ -235,6 +240,7 @@ proc getAdaGameStats(value, stat: cint) {.raises: [], tags: [], exportc,
 
 proc getAdaGameStatsList(name: cstring; statsList: array[512,
     AdaStatisticsData]) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   var list = case $name
     of "destroyedShips":
       gameStats.destroyedShips
@@ -266,6 +272,7 @@ proc getAdaGameStatsList(name: cstring; statsList: array[512,
 
 proc setAdaGameStats(stats: var AdaGameStats) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   stats.basesVisited = gameStats.basesVisited.cint
   stats.mapVisited = gameStats.mapVisited.cint
   stats.distanceTraveled = gameStats.distanceTraveled.cint
@@ -274,6 +281,7 @@ proc setAdaGameStats(stats: var AdaGameStats) {.raises: [], tags: [], exportc,
 
 proc setAdaGameStatsNumber(name: cstring; statsValue: var cint) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   case $name
   of "basesVisited":
     statsValue = gameStats.basesVisited.cint
@@ -286,6 +294,7 @@ proc setAdaGameStatsNumber(name: cstring; statsValue: var cint) {.raises: [],
 
 proc setAdaGameStatsList(name: cstring; statsList: var array[512,
     AdaStatisticsData]) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   var list = case $name
     of "destroyedShips":
       gameStats.destroyedShips
@@ -305,23 +314,29 @@ proc setAdaGameStatsList(name: cstring; statsList: var array[512,
 
 proc updateAdaFinishedGoals(index: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   updateFinishedGoals(index = $index)
 
 proc getAdaGamePoints(): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return getGamePoints().cint
 
 proc updateAdaFinishedMissions(mType: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   updateFinishedMissions(mType = $mType)
 
 proc clearAdaGameStats() {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   clearGameStats()
 
 proc updateAdaKilledMobs(mob: AdaMemberData; factionName: cstring) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   updateKilledMobs(mob = adaMemberToNim(adaMember = mob),
       factionName = $factionName)
 
 proc updateAdaDestroyedShips(shipName: cstring) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   updateDestroyedShips(shipName = $shipName)
