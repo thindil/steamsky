@@ -1558,20 +1558,20 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Label,
          Options =>
-           "-sticky w -padx 5 -pady {5 0} -row" & Positive'Image(Row) &
+           "-sticky w -padx {0 5} -pady {5 0} -row" & Positive'Image(Row) &
            " -column 1");
       Row := Row + 1;
       Module_Label :=
         Create
           (pathName => Module_Dialog & ".timelbl",
-           options => "-text {Install time: }");
+           options => "-text {Install time:}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Label, Options => "-sticky w -padx 5 -pady {5 0}");
       Module_Label := Create(pathName => Module_Dialog & ".time");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Label,
          Options =>
-           "-sticky w -padx 5 -pady {5 0} -row" & Positive'Image(Row) &
+           "-sticky w -padx {0 5} -pady {5 0} -row" & Positive'Image(Row) &
            " -column 1");
       Set_Module_Info(Installing => True, Row => Row);
       Set_Install_Button

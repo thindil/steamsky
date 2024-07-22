@@ -472,42 +472,42 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
     if installing and shipModuleIndex > -1:
       if maxValue < 30:
         if playerShip.modules[shipModuleIndex].quality > maxValue:
-          tclEval(script = moduleLabel & " configure -text { minimal (worse)} -style Headerred.TLabel")
+          tclEval(script = moduleLabel & " configure -text {minimal (worse)} -style Headerred.TLabel")
         elif playerShip.modules[shipModuleIndex].quality < maxValue:
-          tclEval(script = moduleLabel & " configure -text { minimal (better)} -style Headergreen.TLabel")
+          tclEval(script = moduleLabel & " configure -text {minimal (better)} -style Headergreen.TLabel")
         else:
-          tclEval(script = moduleLabel & " configure -text { minimal} -style Golden.TLabel")
+          tclEval(script = moduleLabel & " configure -text {minimal} -style Golden.TLabel")
       elif maxValue < 60:
         if playerShip.modules[shipModuleIndex].quality > maxValue:
-          tclEval(script = moduleLabel & " configure -text { basic (worse)} -style Headerred.TLabel")
+          tclEval(script = moduleLabel & " configure -text {basic (worse)} -style Headerred.TLabel")
         elif playerShip.modules[shipModuleIndex].quality < maxValue:
-          tclEval(script = moduleLabel & " configure -text { basic (better)} -style Headergreen.TLabel")
+          tclEval(script = moduleLabel & " configure -text {basic (better)} -style Headergreen.TLabel")
         else:
-          tclEval(script = moduleLabel & " configure -text { basic} -style Golden.TLabel")
+          tclEval(script = moduleLabel & " configure -text {basic} -style Golden.TLabel")
       elif maxValue < 80:
         if playerShip.modules[shipModuleIndex].quality > maxValue:
-          tclEval(script = moduleLabel & " configure -text { extended (worse)} -style Headerred.TLabel")
+          tclEval(script = moduleLabel & " configure -text {extended (worse)} -style Headerred.TLabel")
         elif playerShip.modules[shipModuleIndex].quality < maxValue:
-          tclEval(script = moduleLabel & " configure -text { extended (better)} -style Headergreen.TLabel")
+          tclEval(script = moduleLabel & " configure -text {extended (better)} -style Headergreen.TLabel")
         else:
-          tclEval(script = moduleLabel & " configure -text { extended} -style Golden.TLabel")
+          tclEval(script = moduleLabel & " configure -text {extended} -style Golden.TLabel")
       else:
         if playerShip.modules[shipModuleIndex].quality > maxValue:
-          tclEval(script = moduleLabel & " configure -text { luxury (worse)} -style Headerred.TLabel")
+          tclEval(script = moduleLabel & " configure -text {luxury (worse)} -style Headerred.TLabel")
         elif playerShip.modules[shipModuleIndex].quality < maxValue:
-          tclEval(script = moduleLabel & " configure -text { luxury (better)} -style Headergreen.TLabel")
+          tclEval(script = moduleLabel & " configure -text {luxury (better)} -style Headergreen.TLabel")
         else:
-          tclEval(script = moduleLabel & " configure -text { luxury} -style Golden.TLabel")
+          tclEval(script = moduleLabel & " configure -text {luxury} -style Golden.TLabel")
     else:
       row.dec
       if maxValue < 30:
-        tclEval(script = moduleLabel & " configure -text { minimal} -style Golden.TLabel")
+        tclEval(script = moduleLabel & " configure -text {minimal} -style Golden.TLabel")
       elif maxValue < 60:
-        tclEval(script = moduleLabel & " configure -text { basic} -style Golden.TLabel")
+        tclEval(script = moduleLabel & " configure -text {basic} -style Golden.TLabel")
       elif maxValue < 80:
-        tclEval(script = moduleLabel & " configure -text { extended} -style Golden.TLabel")
+        tclEval(script = moduleLabel & " configure -text {extended} -style Golden.TLabel")
       else:
-        tclEval(script = moduleLabel & " configure -text { luxury} -style Golden.TLabel")
+        tclEval(script = moduleLabel & " configure -text {luxury} -style Golden.TLabel")
     if newInfo:
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
       row.inc
@@ -694,7 +694,8 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         tclEval(script = "ttk::label " & moduleLabel & " -text {Weight:}")
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
         moduleLabel = ".moduledialog.weight"
-        tclEval(script = moduleLabel & " -sticky w -column 1 -row " & $row)
+        tclEval(script = "ttk::label " & moduleLabel)
+        tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
       else:
         moduleLabel = ".moduledialog.weight"
       if weight > playerShip.modules[shipModuleIndex].weight:
