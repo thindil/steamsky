@@ -305,7 +305,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         moneyIndex2].amount <
         cost: "-style Headerred.TLabel" else: "-style Golden.TLabel"))
     moduleLabel = ".moduledialog.time"
-    tclEval(script = moduleLabel & " -text {" & $modulesList[
+    tclEval(script = moduleLabel & " configure -text {" & $modulesList[
         moduleIndex].installTime & " minutes} -style Golden.TLabel")
   else:
     shipModuleIndex = moduleIndex
@@ -783,7 +783,8 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 # Temporary code for interfacing with Ada
 
 proc setAdaModuleInfo(installing: cint; row: var cint;
-    newInfo: cint) {.exportc.} =
+    newInfo, mIndex: cint) {.exportc.} =
+  moduleIndex = mIndex
   var newRow = row.Positive
   setModuleInfo(installing = installing == 1, row = newRow, newInfo = newInfo == 1)
   row = newRow.cint

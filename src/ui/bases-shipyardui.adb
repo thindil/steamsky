@@ -114,7 +114,9 @@ package body Bases.ShipyardUI is
          Import => True,
          External_Name => "showShipyardCommand";
    begin
-      if Show_Ada_Shipyard_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) = TCL_ERROR then
+      if Show_Ada_Shipyard_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
+        TCL_ERROR then
          return TCL_ERROR;
       end if;
       if Winfo_Get(Widgt => Shipyard_Canvas, Info => "exists") = "0" then
@@ -219,12 +221,14 @@ package body Bases.ShipyardUI is
 --      Money_Index_2: Natural := 0;
 --      Info_Text: Unbounded_String := Null_Unbounded_String;
       procedure Set_Ada_Module_Info
-        (I: Integer; R: in out Positive; N_Info: Integer) with
+        (I: Integer; R: in out Positive; N_Info, M_Index: Integer) with
          Convention => C,
          Import => True,
          External_Name => "setAdaModuleInfo";
    begin
-      Set_Ada_Module_Info(I => (if Installing then 1 else 0), R => Row, N_Info => (if New_Info then 1 else 0));
+      Set_Ada_Module_Info
+        (I => (if Installing then 1 else 0), R => Row,
+         N_Info => (if New_Info then 1 else 0), M_Index => Module_Index);
 --      Row := Row + 1;
 --      if Installing then
 --         M_Type := Get_Module(Index => Get_Module_Index).M_Type;
@@ -1560,7 +1564,7 @@ package body Bases.ShipyardUI is
       Module_Label :=
         Create
           (pathName => Module_Dialog & ".timelbl",
-           options => "-text {Install time:}");
+           options => "-text {Install time: }");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Module_Label, Options => "-sticky w -padx 5 -pady {5 0}");
       Module_Label := Create(pathName => Module_Dialog & ".time");
