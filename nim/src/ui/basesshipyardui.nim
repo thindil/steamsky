@@ -557,6 +557,45 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
     if newInfo:
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
       row.inc
+  of gun, harpoonGun:
+    if newInfo:
+      moduleLabel = ".moduledialog.strengthlbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Strength: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      if installing and shipModuleIndex == -1:
+        row.inc
+      moduleLabel = ".moduledialog.strength"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.strength"
+    if installing and shipModuleIndex > -1:
+      if mType == ModuleType.gun:
+        if playerShip.modules[shipModuleIndex].damage > maxValue:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
+        elif playerShip.modules[shipModuleIndex].damage < maxValue:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+      else:
+        if playerShip.modules[shipModuleIndex].duration > maxValue:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
+        elif playerShip.modules[shipModuleIndex].duration < maxValue:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+    else:
+      row.dec
+      tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
+    if newInfo:
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+      moduleLabel = ".moduledialog.ammolbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Ammunition: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.ammo"
+      tclEval(script = "ttk::label " & moduleLabel)
+    else:
+      moduleLabel = ".moduledialog.ammo"
   else:
     discard
 
