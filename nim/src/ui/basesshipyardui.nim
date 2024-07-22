@@ -715,9 +715,11 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       row.inc
     else:
       moduleLabel = ".moduledialog.durability"
-    if playerShip.modules[shipModuleIndex].maxDurability > modulesList[moduleIndex].durability:
+    if playerShip.modules[shipModuleIndex].maxDurability > modulesList[
+        moduleIndex].durability:
       tclEval(script = moduleLabel & " configure -text {weaker} -style Headerred.TLabel")
-    elif playerShip.modules[shipModuleIndex].maxDurability < modulesList[moduleIndex].durability:
+    elif playerShip.modules[shipModuleIndex].maxDurability < modulesList[
+        moduleIndex].durability:
       tclEval(script = moduleLabel & " configure -text {stronger} -style Headergreen.TLabel")
     else:
       tclEval(script = moduleLabel & " configure -text {same} -style Golden.TLabel")
@@ -731,7 +733,34 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
     else:
       moduleLabel = ".moduledialog.repair"
-    var mAmount = 0
+    var
+      mAmount = 0
+      infoText = ""
+    for item in itemsList.values:
+      if item.itemType == modulesList[moduleIndex].repairMaterial:
+        if mAmount > 0:
+          infoText.add(y = "{ or }")
+        infoText.add(y = item.name)
+        mAmount.inc
+    tclEval(script = moduleLabel & " configure -text {" & infoText & "} -style Golden.TLabel")
+    row.inc
+    if newInfo:
+      moduleLabel = ".moduledialog.repair2lbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Repair/Upgrade skill: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.repair2"
+      tclEval(script = "ttk::label " & moduleLabel & " -style Golden.TLabel")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    else:
+      moduleLabel = ".moduledialog.repair2"
+    tclEval(script = moduleLabel & " configure -text {" & skillsList[
+        modulesList[moduleIndex].repairSkill].name & "/" & attributesList[
+        skillsList[modulesList[moduleIndex].repairSkill].attribute].name & "}")
+    row.inc
+    if modulesList[moduleIndex].unique:
+      moduleLabel = ".moduledialog.unique"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {The module is unique. Only one module of that type can be installed on the ship.} -style Golden.TLabel -wraplength 450")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx 6 -columnspan 2")
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
