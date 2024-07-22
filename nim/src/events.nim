@@ -121,7 +121,7 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
   var maxSpawnChance: Natural = 0
   for faction in factionsList.values:
     maxSpawnChance += faction.spawnChance
-  var factionRoll: Positive = getRandom(min = 1, max = maxSpawnChance)
+  var factionRoll: Natural = getRandom(min = 1, max = maxSpawnChance)
   for index, faction in factionsList:
     if factionRoll < faction.spawnChance:
       skyBases[baseIndex].owner = index
