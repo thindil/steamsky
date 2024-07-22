@@ -761,6 +761,16 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       moduleLabel = ".moduledialog.unique"
       tclEval(script = "ttk::label " & moduleLabel & " -text {The module is unique. Only one module of that type can be installed on the ship.} -style Golden.TLabel -wraplength 450")
       tclEval(script = "grid " & moduleLabel & " -sticky w -padx 6 -columnspan 2")
+    if modulesList[moduleIndex].description.len > 0:
+      if newInfo:
+        moduleLabel = ".moduledialog.description"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {" & modulesList[
+            moduleIndex].description & "} -wraplength 450")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx 5 -pady {20 0} -columnspan 2")
+      else:
+        moduleLabel = ".moduledialog.description"
+        tclEval(script = moduleLabel & " configure -text {" & modulesList[
+            moduleIndex].description & "} -wraplength 450")
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
