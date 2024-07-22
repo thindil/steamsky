@@ -273,9 +273,9 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
   row.inc
   var
     mType: ModuleType
-    maxValue, value, weight, maxOwners, shipModuleIndex, cost: Natural = 0
+    maxValue, value, weight, maxOwners, cost: Natural = 0
     size: Positive = 1
-    speed, moneyIndex2: int = -1
+    speed, moneyIndex2, shipModuleIndex: int = -1
     moduleLabel = ""
   if installing:
     mType = modulesList[moduleIndex].mType
@@ -416,6 +416,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
       if newInfo:
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+        row.inc
     else:
       if newInfo:
         row.dec
@@ -617,24 +618,24 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       if installing and shipModuleIndex > -1:
         if modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed > speed:
           if speed > 0:
-            tclEval(script = moduleLabel & " -text {" & $speed & "/round (slower)} -style Headerred.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (slower)} -style Headerred.TLabel")
           else:
-            tclEval(script = moduleLabel & " -text {" & $speed & " rounds (slower)} -style Headerred.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds (slower)} -style Headerred.TLabel")
         elif modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed < speed:
           if speed > 0:
-            tclEval(script = moduleLabel & " -text {" & $speed & "/round (faster)} -style Headergreen.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (faster)} -style Headergreen.TLabel")
           else:
-            tclEval(script = moduleLabel & " -text {" & $speed & " rounds (faster)} -style Headergreen.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds (faster)} -style Headergreen.TLabel")
         else:
           if speed > 0:
-            tclEval(script = moduleLabel & " -text {" & $speed & "/round} -style Golden.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
           else:
-            tclEval(script = moduleLabel & " -text {" & $speed & " rounds} -style Golden.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds} -style Golden.TLabel")
       else:
         if speed > 0:
-          tclEval(script = moduleLabel & " -text {" & $speed & "/round} -style Golden.TLabel")
+          tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
         else:
-          tclEval(script = moduleLabel & " -text {" & $speed & " rounds} -style Golden.TLabel")
+          tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds} -style Golden.TLabel")
       if newInfo:
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
         row.inc
@@ -652,7 +653,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
     if installing and shipModuleIndex > -1:
       if playerShip.modules[shipModuleIndex].damage2 > maxValue:
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (weaker)} -style Headerred.TLabel")
-      elif playerShip.modules[shipModuleIndex].damage2 > maxValue:
+      elif playerShip.modules[shipModuleIndex].damage2 < maxValue:
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & " (stronger)} -style Headergreen.TLabel")
       else:
         tclEval(script = moduleLabel & " configure -text {" & $maxValue & "} -style Golden.TLabel")
