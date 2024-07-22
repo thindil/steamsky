@@ -596,7 +596,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = "ttk::label " & moduleLabel)
     else:
       moduleLabel = ".moduledialog.ammo"
-    for index, item in itemsList:
+    for item in itemsList.values:
       if item.itemType == itemsTypesList[value - 1]:
         tclEval(script = moduleLabel & " configure -text {Any" & item.name[
             item.name.find(sub = ' ')..^1] & "} -style Golden.TLabel")
@@ -693,6 +693,45 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         moduleLabel = ".moduledialog.weightlbl"
         tclEval(script = "ttk::label " & moduleLabel & " -text {Weight:}")
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+        moduleLabel = ".moduledialog.weight"
+        tclEval(script = moduleLabel & " -sticky w -column 1 -row " & $row)
+      else:
+        moduleLabel = ".moduledialog.weight"
+      if weight > playerShip.modules[shipModuleIndex].weight:
+        tclEval(script = moduleLabel & " configure -text {" & $weight & " kg (heavier)} -style Golden.TLabel")
+      elif weight < playerShip.modules[shipModuleIndex].weight:
+        tclEval(script = moduleLabel & " configure -text {" & $weight & " kg (lighter)} -style Golden.TLabel")
+      else:
+        tclEval(script = moduleLabel & " configure -text {" & $weight & " kg} -style Golden.TLabel")
+      row.inc
+  if installing and shipModuleIndex > -1:
+    if newInfo:
+      moduleLabel = ".moduledialog.durabilitylbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Durability: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.durability"
+      tclEval(script = "ttk::label " & moduleLabel)
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
+    else:
+      moduleLabel = ".moduledialog.durability"
+    if playerShip.modules[shipModuleIndex].maxDurability > modulesList[moduleIndex].durability:
+      tclEval(script = moduleLabel & " configure -text {weaker} -style Headerred.TLabel")
+    elif playerShip.modules[shipModuleIndex].maxDurability < modulesList[moduleIndex].durability:
+      tclEval(script = moduleLabel & " configure -text {stronger} -style Headergreen.TLabel")
+    else:
+      tclEval(script = moduleLabel & " configure -text {same} -style Golden.TLabel")
+  if installing:
+    if newInfo:
+      moduleLabel = ".moduledialog.repairlbl"
+      tclEval(script = "ttk::label " & moduleLabel & " -text {Repair/Upgrade material: }")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+      moduleLabel = ".moduledialog.repair"
+      tclEval(script = "ttk::label " & moduleLabel & " -style Golden.TLabel")
+      tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+    else:
+      moduleLabel = ".moduledialog.repair"
+    var mAmount = 0
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
