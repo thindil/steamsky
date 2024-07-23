@@ -271,6 +271,12 @@ var moduleIndex: Natural = 0
 
 proc setModuleInfo(installing: bool; row: var Positive;
     newInfo: bool = true) {.sideEffect, raises: [], tags: [].} =
+  ## Show information about selected module
+  ##
+  ## installing - If true, player looking at installing modules list
+  ## row        - The current row in the dialog
+  ## newInfo    - If true, create the new UI for the info, otherwise reuse old
+  ##              one. Default value is True.
   row.inc
   var
     mType: ModuleType
