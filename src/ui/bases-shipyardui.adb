@@ -841,7 +841,6 @@ package body Bases.ShipyardUI is
             else
                if New_Info then
                   Row := Row - 1;
-                  Module_Label := Create(pathName => ".moduledialog.power");
                   Tcl.Tk.Ada.Grid.Grid
                     (Slave => Module_Label,
                      Options =>
