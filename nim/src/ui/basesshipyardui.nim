@@ -269,7 +269,8 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
 
 var moduleIndex: Natural = 0
 
-proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
+proc setModuleInfo(installing: bool; row: var Positive;
+    newInfo: bool = true) {.sideEffect, raises: [], tags: [].} =
   row.inc
   var
     mType: ModuleType
@@ -278,26 +279,70 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
     speed, moneyIndex2, shipModuleIndex: int = -1
     moduleLabel = ""
   if installing:
-    mType = modulesList[moduleIndex].mType
-    maxValue = modulesList[moduleIndex].maxValue
-    value = modulesList[moduleIndex].value
-    size = modulesList[moduleIndex].size
-    weight = modulesList[moduleIndex].weight
-    maxOwners = modulesList[moduleIndex].maxOwners
-    speed = modulesList[moduleIndex].speed
+    mType = try:
+        modulesList[moduleIndex].mType
+      except:
+        showError(message = "Can't get protomodule type")
+        return
+    maxValue = try:
+        modulesList[moduleIndex].maxValue
+      except:
+        showError(message = "Can't get protomodule max value")
+        return
+    value = try:
+        modulesList[moduleIndex].value
+      except:
+        showError(message = "Can't get protomodule value")
+        return
+    size = try:
+        modulesList[moduleIndex].size
+      except:
+        showError(message = "Can't get protomodule size")
+        return
+    weight = try:
+        modulesList[moduleIndex].weight
+      except:
+        showError(message = "Can't get protomodule weight")
+        return
+    maxOwners = try:
+        modulesList[moduleIndex].maxOwners
+      except:
+        showError(message = "Can't get protomodule max owners")
+        return
+    speed = try:
+        modulesList[moduleIndex].speed
+      except:
+        showError(message = "Can't get protomodule speed")
+        return
     moduleLabel = ".moduledialog.cost"
     let compareBox = ".moduledialog.compare.combo"
     var moduleIterator = 1
     if tclEval2(script = "winfo ismapped " & compareBox) == "1":
-      moduleIterator = tclEval2(script = compareBox & " current").parseInt + 1
+      moduleIterator = try:
+          tclEval2(script = compareBox & " current").parseInt + 1
+        except:
+          showError(message = "Can't get protomodule iterator")
+          return
     for index, module in playerShip.modules:
-      if modulesList[module.protoIndex].mType == mType:
-        moduleIterator.dec
-        if moduleIterator == 0:
-          shipModuleIndex = index
-          break
-    cost = modulesList[moduleIndex].price
-    countPrice(price = cost, traderIndex = findMember(order = talk))
+      try:
+        if modulesList[module.protoIndex].mType == mType:
+          moduleIterator.dec
+          if moduleIterator == 0:
+            shipModuleIndex = index
+            break
+      except:
+        showError(message = "Can't get ship module index")
+        return
+    cost = try:
+        modulesList[moduleIndex].price
+      except:
+        showError(message = "Can't get protomodule cost")
+        return
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+    except:
+      showError(message = "Can't count protomodule cost")
+      return
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
     tclEval(script = moduleLabel & " configure -text {" & $cost & " " &
@@ -305,15 +350,29 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         moneyIndex2].amount <
         cost: "-style Headerred.TLabel" else: "-style Golden.TLabel"))
     moduleLabel = ".moduledialog.time"
-    tclEval(script = moduleLabel & " configure -text {" & $modulesList[
-        moduleIndex].installTime & " minutes} -style Golden.TLabel")
+    try:
+      discard tclEval(script = moduleLabel & " configure -text {" &
+          $modulesList[
+
+moduleIndex].installTime & " minutes} -style Golden.TLabel")
+    except:
+      showError(message = "Can't show install time")
+      return
   else:
     shipModuleIndex = moduleIndex - 1
-    mType = modulesList[playerShip.modules[shipModuleIndex].protoIndex].mType
+    mType = try:
+        modulesList[playerShip.modules[shipModuleIndex].protoIndex].mType
+      except:
+        showError(message = "Can't get module type")
+        return
     case mType
     of harpoonGun:
       maxValue = playerShip.modules[shipModuleIndex].duration
-      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+      value = try:
+          modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+      except:
+        showError(message = "Can't get module value")
+        return
     of engine:
       maxValue = playerShip.modules[shipModuleIndex].power
       value = playerShip.modules[shipModuleIndex].fuelUsage
@@ -322,25 +381,55 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       value = playerShip.modules[shipModuleIndex].cleanliness
     of gun:
       maxValue = playerShip.modules[shipModuleIndex].damage
-      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+      value = try:
+          modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+        except:
+          showError(message = "Can't get module value2")
+          return
     of cargo:
-      maxValue = modulesList[playerShip.modules[
-          shipModuleIndex].protoIndex].maxValue
-      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+      maxValue = try:
+          modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxValue
+        except:
+          showError(message = "Can't get module max value")
+          return
+      value = try:
+          modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+        except:
+          showError(message = "Can't get module value3")
+          return
     of hull:
       maxValue = playerShip.modules[shipModuleIndex].maxModules
-      value = modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+      value = try:
+          modulesList[playerShip.modules[shipModuleIndex].protoIndex].value
+        except:
+          showError(message = "Can't get module value4")
+          return
     of batteringRam:
       maxValue = playerShip.modules[shipModuleIndex].damage2
       value = 0
     else:
       maxValue = 0
       value = 0
-    size = modulesList[playerShip.modules[shipModuleIndex].protoIndex].size
-    weight = modulesList[playerShip.modules[shipModuleIndex].protoIndex].weight
-    maxOwners = modulesList[playerShip.modules[
-        shipModuleIndex].protoIndex].maxOwners
-    speed = modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed
+    size = try:
+        modulesList[playerShip.modules[shipModuleIndex].protoIndex].size
+      except:
+        showError(message = "Can't get module size")
+        return
+    weight = try:
+        modulesList[playerShip.modules[shipModuleIndex].protoIndex].weight
+      except:
+        showError(message = "Can't get module weight")
+        return
+    maxOwners = try:
+        modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxOwners
+      except:
+        showError(message = "Can't get module max owners")
+        return
+    speed = try:
+        modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed
+      except:
+        showError(message = "Can't get module size")
+        return
   case mType
   of hull:
     if installing:
