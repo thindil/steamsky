@@ -308,7 +308,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
     tclEval(script = moduleLabel & " configure -text {" & $modulesList[
         moduleIndex].installTime & " minutes} -style Golden.TLabel")
   else:
-    shipModuleIndex = moduleIndex
+    shipModuleIndex = moduleIndex - 1
     mType = modulesList[playerShip.modules[shipModuleIndex].protoIndex].mType
     case mType
     of harpoonGun:
@@ -368,6 +368,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         moduleLabel = ".moduledialog.maxsizelbl"
         tclEval(script = "ttk::label " & moduleLabel & " -text {Max module size: }")
         tclEval(script = "grid " & moduleLabel & " -sticky w -padx {5 0}")
+        moduleLabel = ".moduledialog.maxsize"
         tclEval(script = "ttk::label " & moduleLabel)
       else:
         moduleLabel = ".moduledialog.maxsize"
@@ -461,6 +462,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
     if newInfo:
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
+      row.inc
   of cabin:
     if newInfo:
       moduleLabel = ".moduledialog.qualitylbl"
@@ -620,22 +622,22 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
           if speed > 0:
             tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (slower)} -style Headerred.TLabel")
           else:
-            tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds (slower)} -style Headerred.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds (slower)} -style Headerred.TLabel")
         elif modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed < speed:
           if speed > 0:
             tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (faster)} -style Headergreen.TLabel")
           else:
-            tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds (faster)} -style Headergreen.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds (faster)} -style Headergreen.TLabel")
         else:
           if speed > 0:
             tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
           else:
-            tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds} -style Golden.TLabel")
+            tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds} -style Golden.TLabel")
       else:
         if speed > 0:
           tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
         else:
-          tclEval(script = moduleLabel & " configure -text {" & $speed & " rounds} -style Golden.TLabel")
+          tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds} -style Golden.TLabel")
       if newInfo:
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
         row.inc
