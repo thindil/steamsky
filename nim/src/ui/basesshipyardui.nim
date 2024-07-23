@@ -253,7 +253,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       break
   addPagination(table = removeTable, previousCommand = (if page >
       1: "ShowShipyard " & arguments & " " & $(page - 1) else: ""),
-      nextCommand = (if installTable.row < gameSettings.listsLimit +
+      nextCommand = (if removeTable.row < gameSettings.listsLimit +
       1: "" else: "ShowShipyard " & arguments & " " & $(page + 1)))
   updateTable(table = removeTable)
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
@@ -679,17 +679,17 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
     else:
       moduleLabel = ".moduledialog.size"
+    var added = false
     if installing:
-      var added = false
       for module in playerShip.modules:
         if module.mType == ModuleType2.hull and size > modulesList[
             module.protoIndex].value:
           tclEval(script = moduleLabel & " configure -text {" & $size & " (need a bigger hull)} -style Headerred.TLabel")
           added = true
           break
-      if not added:
-        tclEval(script = moduleLabel & " configure -text {" & $size & "} -style Golden.TLabel")
-      row.inc
+    if not added:
+      tclEval(script = moduleLabel & " configure -text {" & $size & "} -style Golden.TLabel")
+    row.inc
   if weight > 0:
     if shipModuleIndex > -1:
       if newInfo:
