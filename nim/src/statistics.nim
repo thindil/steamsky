@@ -67,7 +67,7 @@ proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [],
   require:
     index.len > 0
   body:
-    var updated = false
+    var updated: bool = false
     for craftingOrder in gameStats.craftingOrders.mitems:
       if craftingOrder.index == index:
         craftingOrder.amount.inc
@@ -75,7 +75,7 @@ proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [],
         break
     if not updated:
       gameStats.craftingOrders.add(y = StatisticsData(index: index, amount: 1))
-    gameStats.points = gameStats.points + 5
+    gameStats.points += 5
 
 proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [],
     contractual.} =
@@ -85,10 +85,10 @@ proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [],
   require:
     index.len > 0
   body:
-    var updated = false
+    var updated: bool = false
     for goal in goalsList.values:
       if goal.index == index:
-        gameStats.points = gameStats.points + (goal.amount * goal.multiplier)
+        gameStats.points += (goal.amount * goal.multiplier)
         break
     for goal in gameStats.finishedGoals.mitems:
       if goal.index == index:
@@ -106,13 +106,13 @@ proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [],
   ## by the game's difficulty settings
   ##
   ## Returns the real amount of the player's game's points
-  const malusIndexes = [1, 3, 4, 5]
-  let difficultyValues = [newGameSettings.enemyDamageBonus,
+  const malusIndexes: array[4, Positive] = [1, 3, 4, 5]
+  let difficultyValues: array[7, BonusType] = [newGameSettings.enemyDamageBonus,
       newGameSettings.playerDamageBonus, newGameSettings.enemyMeleeDamageBonus,
       newGameSettings.playerMeleeDamageBonus, newGameSettings.experienceBonus,
       newGameSettings.reputationBonus, newGameSettings.upgradeCostBonus]
-  var pointsBonus, value = 0.0
-  for index, difficulty in difficultyValues.pairs:
+  var pointsBonus, value: float = 0.0
+  for index, difficulty in difficultyValues:
     value = difficulty.float
     for malus in malusIndexes:
       if index == malus:
@@ -121,8 +121,8 @@ proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [],
         elif value > 1.0:
           value = 1.0 - value
         break
-    pointsBonus = pointsBonus + value
-  pointsBonus = pointsBonus / difficultyValues.len.float
+    pointsBonus += value
+  pointsBonus /= difficultyValues.len.float
   if pointsBonus < 0.01:
     pointsBonus = 0.01
   return (gameStats.points.float * pointsBonus).Natural
@@ -135,7 +135,7 @@ proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [],
   require:
     mType.len > 0
   body:
-    var updated = false
+    var updated: bool = false
     for finishedMission in gameStats.finishedMissions.mitems:
       if finishedMission.index == mType:
         finishedMission.amount.inc
@@ -143,7 +143,7 @@ proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [],
         break
     if not updated:
       gameStats.finishedMissions.add(y = StatisticsData(index: mType, amount: 1))
-    gameStats.points = gameStats.points + 50
+    gameStats.points += 50
 
 proc clearGameStats*() {.sideEffect, raises: [], tags: [], contractual.} =
   ## Reset the game statistics
@@ -171,10 +171,10 @@ proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
     factionName.len > 0
   body:
     for attribute in mob.attributes:
-      gameStats.points = gameStats.points + attribute.level
+      gameStats.points += attribute.level
     for skill in mob.skills:
-      gameStats.points = gameStats.points + skill.level
-    var updated = false
+      gameStats.points += skill.level
+    var updated: bool = false
     for killedMob in gameStats.killedMobs.mitems:
       if killedMob.index.toLowerAscii == factionName.tolowerAscii:
         killedMob.amount.inc
@@ -192,14 +192,14 @@ proc updateDestroyedShips*(shipName: string) {.sideEffect, raises: [], tags: [],
   require:
     shipName.len > 0
   body:
-    var shipIndex = 0
+    var shipIndex: Natural = 0
     for index, ship in protoShipsList:
       if ship.name == shipName:
         shipIndex = index
-        gameStats.points = gameStats.points + (ship.combatValue / 10).Natural
+        gameStats.points += (ship.combatValue / 10).Natural
     if shipIndex == 0:
       return
-    var updated = false
+    var updated: bool = false
     for destroyedShip in gameStats.destroyedShips.mitems:
       if destroyedShip.index == $shipIndex:
         destroyedShip.amount.inc
@@ -232,16 +232,16 @@ proc getAdaGameStats(value, stat: cint) {.raises: [], tags: [], exportc,
   ## Temporary C binding
   case stat
   of 0:
-    gameStats.distanceTraveled = gameStats.distanceTraveled + value
+    gameStats.distanceTraveled += value
   of 1:
-    gameStats.points = gameStats.points + value
+    gameStats.points += value
   else:
     discard
 
 proc getAdaGameStatsList(name: cstring; statsList: array[512,
     AdaStatisticsData]) {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  var list = case $name
+  var list: seq[StatisticsData] = case $name
     of "destroyedShips":
       gameStats.destroyedShips
     of "craftingOrders":
@@ -295,7 +295,7 @@ proc setAdaGameStatsNumber(name: cstring; statsValue: var cint) {.raises: [],
 proc setAdaGameStatsList(name: cstring; statsList: var array[512,
     AdaStatisticsData]) {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  var list = case $name
+  var list: seq[StatisticsData] = case $name
     of "destroyedShips":
       gameStats.destroyedShips
     of "craftingOrders":
@@ -308,7 +308,7 @@ proc setAdaGameStatsList(name: cstring; statsList: var array[512,
       gameStats.killedMobs
   for i in 0..statsList.high:
     statsList[i] = AdaStatisticsData(index: "".cstring, amount: 1)
-  for index, stat in list.pairs:
+  for index, stat in list:
     statsList[index] = AdaStatisticsData(index: stat.index.cstring,
         amount: stat.amount.cint)
 
