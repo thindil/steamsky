@@ -16,8 +16,8 @@
 with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
@@ -30,13 +30,12 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
 with Bases.Ship;
 with CoreUI; use CoreUI;
@@ -101,6 +100,7 @@ package body Bases.ShipyardUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use Tcl.Tk.Ada.Winfo;
 
       Shipyard_Frame: Ttk_Frame :=
         Get_Widget
@@ -228,7 +228,7 @@ package body Bases.ShipyardUI is
    begin
       Set_Ada_Module_Info
         (I => (if Installing then 1 else 0), R => Row,
-         N_Info => (if New_Info then 1 else 0), M_Index => Module_Index);
+         N_Info => (if New_Info then 1 else 0), M_Index => Get_Module_Index);
 --      Row := Row + 1;
 --      if Installing then
 --         M_Type := Get_Module(Index => Get_Module_Index).M_Type;
@@ -1386,6 +1386,7 @@ package body Bases.ShipyardUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
       use Tiny_String;
 
       Cost: Positive := 1;
@@ -1715,6 +1716,8 @@ package body Bases.ShipyardUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Ada.Characters.Latin_1;
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tklib.Ada.Tooltip;
       use Short_String;
