@@ -352,9 +352,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
     moduleLabel = ".moduledialog.time"
     try:
       discard tclEval(script = moduleLabel & " configure -text {" &
-          $modulesList[
-
-moduleIndex].installTime & " minutes} -style Golden.TLabel")
+          $modulesList[moduleIndex].installTime & " minutes} -style Golden.TLabel")
     except:
       showError(message = "Can't show install time")
       return
@@ -461,14 +459,18 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
         tclEval(script = "ttk::label " & moduleLabel)
       else:
         moduleLabel = ".moduledialog.maxsize"
-      if value < modulesList[playerShip.modules[
-          shipModuleIndex].protoIndex].value:
-        tclEval(script = moduleLabel & " configure -text {" & $value & " (smaller)} -style Headerred.TLabel")
-      elif value > modulesList[playerShip.modules[
-          shipModuleIndex].protoIndex].value:
-        tclEval(script = moduleLabel & " configure -text {" & $value & " (bigger)} -style Headergreen.TLabel")
-      else:
-        tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
+      try:
+        if value < modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].value:
+          tclEval(script = moduleLabel & " configure -text {" & $value & " (smaller)} -style Headerred.TLabel")
+        elif value > modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].value:
+          tclEval(script = moduleLabel & " configure -text {" & $value & " (bigger)} -style Headergreen.TLabel")
+        else:
+          discard tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
+      except:
+        showError(message = "Can't show module size")
+        return
       if newInfo:
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
         row.inc
@@ -537,14 +539,18 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
     else:
       moduleLabel = ".moduledialog.cargo"
     if installing and shipModuleIndex > -1:
-      if maxValue > modulesList[playerShip.modules[
-          shipModuleIndex].protoIndex].maxValue:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (bigger)} -style Headergreen.TLabel")
-      elif maxValue < modulesList[playerShip.modules[
-          shipModuleIndex].protoIndex].maxValue:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (smaller)} -style Headerred.TLabel")
-      else:
-        tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
+      try:
+        if maxValue > modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].maxValue:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (bigger)} -style Headergreen.TLabel")
+        elif maxValue < modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].maxValue:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg (smaller)} -style Headerred.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text {" & $maxValue & " kg} -style Golden.TLabel")
+      except:
+        showError(message = "Can't show module weight")
+        return
     else:
       if newInfo:
         row.dec
@@ -611,13 +617,18 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
     else:
       moduleLabel = ".moduledialog.owners"
     if installing and shipModuleIndex > -1:
-      if modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxOwners > maxOwners:
-        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
-      elif modulesList[playerShip.modules[
-          shipModuleIndex].protoIndex].maxOwners < maxOwners:
-        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
-      else:
-        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+      try:
+        if modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].maxOwners > maxOwners:
+          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
+        elif modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].maxOwners < maxOwners:
+          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+      except:
+        showError(message = "Can't show module owners")
+        return
     else:
       tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
     if newInfo:
@@ -635,13 +646,18 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
     else:
       moduleLabel = ".moduledialog.workers"
     if installing and shipModuleIndex > -1:
-      if modulesList[playerShip.modules[shipModuleIndex].protoIndex].maxOwners > maxOwners:
-        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
-      elif modulesList[playerShip.modules[
-          shipModuleIndex].protoIndex].maxOwners < maxOwners:
-        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
-      else:
-        tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+      try:
+        if modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].maxOwners > maxOwners:
+          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (less)} -style Headerred.TLabel")
+        elif modulesList[playerShip.modules[
+            shipModuleIndex].protoIndex].maxOwners < maxOwners:
+          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & " (more)} -style Headergreen.TLabel")
+        else:
+          tclEval(script = moduleLabel & " configure -text {" & $maxOwners & "} -style Golden.TLabel")
+      except:
+        showError(message = "Can't show module workers")
+        return
     else:
       if newInfo:
         row.dec
@@ -707,21 +723,29 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
       else:
         moduleLabel = ".moduledialog.rate"
       if installing and shipModuleIndex > -1:
-        if modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed > speed:
-          if speed > 0:
-            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (slower)} -style Headerred.TLabel")
+        try:
+          if modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed > speed:
+            if speed > 0:
+              tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (slower)} -style Headerred.TLabel")
+            else:
+              tclEval(script = moduleLabel & " configure -text {" & $(
+                  speed.abs) & " rounds (slower)} -style Headerred.TLabel")
+          elif modulesList[playerShip.modules[
+              shipModuleIndex].protoIndex].speed < speed:
+            if speed > 0:
+              tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (faster)} -style Headergreen.TLabel")
+            else:
+              tclEval(script = moduleLabel & " configure -text {" & $(
+                  speed.abs) & " rounds (faster)} -style Headergreen.TLabel")
           else:
-            tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds (slower)} -style Headerred.TLabel")
-        elif modulesList[playerShip.modules[shipModuleIndex].protoIndex].speed < speed:
-          if speed > 0:
-            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round (faster)} -style Headergreen.TLabel")
-          else:
-            tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds (faster)} -style Headergreen.TLabel")
-        else:
-          if speed > 0:
-            tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
-          else:
-            tclEval(script = moduleLabel & " configure -text {" & $(speed.abs) & " rounds} -style Golden.TLabel")
+            if speed > 0:
+              tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
+            else:
+              tclEval(script = moduleLabel & " configure -text {" & $(
+                  speed.abs) & " rounds} -style Golden.TLabel")
+        except:
+          showError(message = "Can't show fire rate")
+          return
       else:
         if speed > 0:
           tclEval(script = moduleLabel & " configure -text {" & $speed & "/round} -style Golden.TLabel")
@@ -771,11 +795,15 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
     var added = false
     if installing:
       for module in playerShip.modules:
-        if module.mType == ModuleType2.hull and size > modulesList[
-            module.protoIndex].value:
-          tclEval(script = moduleLabel & " configure -text {" & $size & " (need a bigger hull)} -style Headerred.TLabel")
-          added = true
-          break
+        try:
+          if module.mType == ModuleType2.hull and size > modulesList[
+              module.protoIndex].value:
+            tclEval(script = moduleLabel & " configure -text {" & $size & " (need a bigger hull)} -style Headerred.TLabel")
+            added = true
+            break
+        except:
+          showError(message = "Can't show module's size")
+          return
     if not added:
       tclEval(script = moduleLabel & " configure -text {" & $size & "} -style Golden.TLabel")
     row.inc
@@ -808,14 +836,18 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
       row.inc
     else:
       moduleLabel = ".moduledialog.durability"
-    if playerShip.modules[shipModuleIndex].maxDurability > modulesList[
-        moduleIndex].durability:
-      tclEval(script = moduleLabel & " configure -text {weaker} -style Headerred.TLabel")
-    elif playerShip.modules[shipModuleIndex].maxDurability < modulesList[
-        moduleIndex].durability:
-      tclEval(script = moduleLabel & " configure -text {stronger} -style Headergreen.TLabel")
-    else:
-      tclEval(script = moduleLabel & " configure -text {same} -style Golden.TLabel")
+    try:
+      if playerShip.modules[shipModuleIndex].maxDurability > modulesList[
+          moduleIndex].durability:
+        tclEval(script = moduleLabel & " configure -text {weaker} -style Headerred.TLabel")
+      elif playerShip.modules[shipModuleIndex].maxDurability < modulesList[
+          moduleIndex].durability:
+        tclEval(script = moduleLabel & " configure -text {stronger} -style Headergreen.TLabel")
+      else:
+        discard tclEval(script = moduleLabel & " configure -text {same} -style Golden.TLabel")
+    except:
+      showError(message = "Can't show module durability")
+      return
   if installing:
     if newInfo:
       moduleLabel = ".moduledialog.repairlbl"
@@ -830,11 +862,15 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
       mAmount = 0
       infoText = ""
     for item in itemsList.values:
-      if item.itemType == modulesList[moduleIndex].repairMaterial:
-        if mAmount > 0:
-          infoText.add(y = "{ or }")
-        infoText.add(y = item.name)
-        mAmount.inc
+      try:
+        if item.itemType == modulesList[moduleIndex].repairMaterial:
+          if mAmount > 0:
+            infoText.add(y = "{ or }")
+          infoText.add(y = item.name)
+          mAmount.inc
+      except:
+        showError(message = "Can't show repair material")
+        return
     tclEval(script = moduleLabel & " configure -text {" & infoText & "} -style Golden.TLabel")
     row.inc
     if newInfo:
@@ -846,24 +882,36 @@ moduleIndex].installTime & " minutes} -style Golden.TLabel")
       tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
     else:
       moduleLabel = ".moduledialog.repair2"
-    tclEval(script = moduleLabel & " configure -text {" & skillsList[
-        modulesList[moduleIndex].repairSkill].name & "/" & attributesList[
-        skillsList[modulesList[moduleIndex].repairSkill].attribute].name & "}")
+    try:
+      discard tclEval(script = moduleLabel & " configure -text {" & skillsList[
+          modulesList[moduleIndex].repairSkill].name & "/" & attributesList[
+          skillsList[modulesList[moduleIndex].repairSkill].attribute].name & "}")
+    except:
+      showError(message = "Can't show repair skill")
+      return
     row.inc
-    if modulesList[moduleIndex].unique:
-      moduleLabel = ".moduledialog.unique"
-      tclEval(script = "ttk::label " & moduleLabel & " -text {The module is unique. Only one module of that type can be installed on the ship.} -style Golden.TLabel -wraplength 450")
-      tclEval(script = "grid " & moduleLabel & " -sticky w -padx 6 -columnspan 2")
-    if modulesList[moduleIndex].description.len > 0:
-      if newInfo:
-        moduleLabel = ".moduledialog.description"
-        tclEval(script = "ttk::label " & moduleLabel & " -text {" & modulesList[
-            moduleIndex].description & "} -wraplength 450")
-        tclEval(script = "grid " & moduleLabel & " -sticky w -padx 5 -pady {20 0} -columnspan 2")
-      else:
-        moduleLabel = ".moduledialog.description"
-        tclEval(script = moduleLabel & " configure -text {" & modulesList[
-            moduleIndex].description & "} -wraplength 450")
+    try:
+      if modulesList[moduleIndex].unique:
+        moduleLabel = ".moduledialog.unique"
+        tclEval(script = "ttk::label " & moduleLabel & " -text {The module is unique. Only one module of that type can be installed on the ship.} -style Golden.TLabel -wraplength 450")
+        tclEval(script = "grid " & moduleLabel & " -sticky w -padx 6 -columnspan 2")
+    except:
+      showError(message = "Can't show module unique info")
+      return
+    try:
+      if modulesList[moduleIndex].description.len > 0:
+        if newInfo:
+          moduleLabel = ".moduledialog.description"
+          tclEval(script = "ttk::label " & moduleLabel & " -text {" &
+              modulesList[moduleIndex].description & "} -wraplength 450")
+          tclEval(script = "grid " & moduleLabel & " -sticky w -padx 5 -pady {20 0} -columnspan 2")
+        else:
+          moduleLabel = ".moduledialog.description"
+          tclEval(script = moduleLabel & " configure -text {" & modulesList[
+              moduleIndex].description & "} -wraplength 450")
+    except:
+      showError(message = "Can't show module's description")
+      return
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
