@@ -28,3 +28,4 @@ All notable changes to this project will be documented in this file.
 - Resizing sections in the combat screen
 - Typos in the enemy's information in the combat screen
 - Information about the player's money in bases' shipyards
+- Crash on viewing information about an installed engine in shipyards
