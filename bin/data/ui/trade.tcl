@@ -60,7 +60,13 @@ grid [ttk::label $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 -wraplength
    -style Golden.TLabel] -sticky w -row 0 -column 1
 SetScrollbarBindings $tradeframe.options.playerinfo.cargoinfo.cargoinfo2 \
    .gameframe.paned.tradeframe.scrolly
-grid [ttk::label $tradeframe.options.baseinfo -wraplength 300] -sticky nw \
-   -column 2 -row 1
+grid [ttk::frame $tradeframe.options.baseinfo] -sticky nw -column 2 -row 1
 SetScrollbarBindings $tradeframe.options.baseinfo \
+   .gameframe.paned.tradeframe.scrolly
+grid [ttk::label $tradeframe.options.baseinfo.baseinfo -wraplength 300] 
+SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo \
+   .gameframe.paned.tradeframe.scrolly
+grid [ttk::label $tradeframe.options.baseinfo.baseinfo2 -wraplength 300 \
+   -style Golden.TLabel] -sticky w -row 0 -column 1
+SetScrollbarBindings $tradeframe.options.baseinfo.baseinfo2 \
    .gameframe.paned.tradeframe.scrolly

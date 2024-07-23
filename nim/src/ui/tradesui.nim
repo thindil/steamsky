@@ -367,7 +367,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       tradeInfo.add(y = "Ship doesn't have any " & moneyName & " to buy anything.")
     else:
       tradeInfo.add(y = "Ship has " & $traderCargo[0].amount & " " & moneyName & ".")
-  label = tradeFrame & ".options.baseinfo"
+  label = tradeFrame & ".options.baseinfo.baseinfo"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   tclEval(script = tradeCanvas & " configure -height [expr " & tclEval2(
