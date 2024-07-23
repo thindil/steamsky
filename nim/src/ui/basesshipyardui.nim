@@ -422,7 +422,6 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
       if newInfo:
         row.dec
         moduleLabel = ".moduledialog.power"
-        tclEval(script = "tt::label " & moduleLabel)
         tclEval(script = "grid " & moduleLabel & " -sticky w -column 1 -row " & $row)
       else:
         moduleLabel = ".moduledialog.power"
@@ -438,6 +437,7 @@ proc setModuleInfo(installing: bool; row: var Positive; newInfo: bool = true) =
         row.inc
       else:
         moduleLabel = ".moduledialog.fuel"
+      tclEval(script = moduleLabel & " configure -text {" & $value & "} -style Golden.TLabel")
   of cargo:
     if newInfo:
       moduleLabel = ".moduledialog.cargolbl"
