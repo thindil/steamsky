@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[bases, config, crewinventory, game, maps, shipscrew, shipmodules, tk, types]
-import coreui, mapsui, table, utilsui2
+import coreui, dialogs, mapsui, table, utilsui2
 
 var
   installTable, removeTable: TableWidget
@@ -919,11 +919,33 @@ proc setModuleInfo(installing: bool; row: var Positive;
       showError(message = "Can't show module's description")
       return
 
+proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  moduleIndex = ($argv[1]).parseInt
+  var
+    moduleIterator = 0
+    compareModules = ""
+  for module in playerShip.modules:
+    if modulesList[module.protoIndex].mType == modulesList[moduleIndex].mType:
+      moduleIterator.inc
+      compareModules.add(y = "{" & module.name & "} ")
+  let moduleDialog = createDialog(name = ".moduledialog", title = modulesList[
+      moduleIndex].name, columns = 2)
+  if moduleIterator > 1:
+    let compareFrame = moduleDialog & ".compare"
+    tclEval(script = "ttk::frame " & compareFrame)
+    let compareBox = compareFrame & ".combo"
+    tclEval(script = "ttk::combobox " & compareBox &
+        " -state readonly -values {" & compareModules & "}")
+    tclEval(script = compareBox & " current 0")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowShipyard", showShipyardCommand)
+#    addCommand("ShowInstallInfo", showInstallInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
