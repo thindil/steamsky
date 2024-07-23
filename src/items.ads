@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -238,8 +238,5 @@ package Items is
       Import => True,
       Convention => C,
       External_Name => "getAdaProtoAmount";
-
-   function Get_Ada_Item_Type
-     (Item_Index: Natural) return Tiny_String.Bounded_String;
 
 end Items;

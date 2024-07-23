@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -208,17 +208,5 @@ package body Items is
              (Source => Value(Item => Temp_Nim_Record.Description)),
          Reputation => Temp_Nim_Record.Reputation);
    end Get_Proto_Item;
-
-   function Get_Ada_Item_Type
-     (Item_Index: Natural) return Tiny_String.Bounded_String is
-      function Get_Ada_Item_Type(I_Index: Natural) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaItemType";
-   begin
-      return
-        Tiny_String.To_Bounded_String
-          (Source => Value(Item => Get_Ada_Item_Type(I_Index => Item_Index)));
-   end Get_Ada_Item_Type;
 
 end Items;
