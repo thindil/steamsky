@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
+import contracts
 import events, game, log, maps, shipscargo, types, utils
 
 type
@@ -123,216 +124,221 @@ var
   finishedStories*: seq[FinishedStoryData]
 
 proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the stories data from the file
   ##
   ## * fileName - the name of the file to load
-  let storiesXml = try:
-      loadXml(path = fileName)
-    except XmlError, ValueError, IOError, OSError, Exception:
-      raise newException(exceptn = DataLoadingError,
-          message = "Can't load stories data file. Reason: " &
-          getCurrentExceptionMsg())
-  for storyNode in storiesXml:
-    if storyNode.kind != xnElement:
-      continue
-    let
-      storyIndex: string = storyNode.attr(name = "index")
-      storyAction: DataAction = try:
-          parseEnum[DataAction](storyNode.attr(name = "action").toLowerAscii)
-        except ValueError:
-          DataAction.add
-    if storyAction in [update, remove]:
-      if storyIndex notin storiesList:
+  require:
+    fileName.len > 0
+  body:
+    let storiesXml = try:
+        loadXml(path = fileName)
+      except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $storyAction & " story '" & $storyIndex & "', there is no story with that index.")
-    elif storyIndex in storiesList:
-      raise newException(exceptn = DataLoadingError,
-          message = "Can't add story '" & $storyIndex & "', there is an story with that index.")
-    if storyAction == DataAction.remove:
-      {.warning[ProveInit]: off.}
-      {.warning[UnsafeDefault]: off.}
-      storiesList.del(key = storyIndex)
-      {.warning[ProveInit]: on.}
-      {.warning[UnsafeDefault]: on.}
-      logMessage(message = "story removed: '" & $storyIndex & "'",
-          debugType = everything)
-      continue
-    var story: StoryData = if storyAction == DataAction.update:
-        try:
-          storiesList[storyIndex]
-        except ValueError:
+            message = "Can't load stories data file. Reason: " &
+            getCurrentExceptionMsg())
+    for storyNode in storiesXml:
+      if storyNode.kind != xnElement:
+        continue
+      let
+        storyIndex: string = storyNode.attr(name = "index")
+        storyAction: DataAction = try:
+            parseEnum[DataAction](storyNode.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      if storyAction in [update, remove]:
+        if storyIndex notin storiesList:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $storyAction & " story '" & $storyIndex & "', there is no story with that index.")
+      elif storyIndex in storiesList:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't add story '" & $storyIndex & "', there is an story with that index.")
+      if storyAction == DataAction.remove:
+        {.warning[ProveInit]: off.}
+        {.warning[UnsafeDefault]: off.}
+        storiesList.del(key = storyIndex)
+        {.warning[ProveInit]: on.}
+        {.warning[UnsafeDefault]: on.}
+        logMessage(message = "story removed: '" & $storyIndex & "'",
+            debugType = everything)
+        continue
+      var story: StoryData = if storyAction == DataAction.update:
+          try:
+            storiesList[storyIndex]
+          except ValueError:
+            StoryData(minSteps: 1, maxSteps: 1)
+        else:
           StoryData(minSteps: 1, maxSteps: 1)
-      else:
-        StoryData(minSteps: 1, maxSteps: 1)
-    var attribute = storyNode.attr(name = "name")
-    if attribute.len() > 0:
-      story.name = attribute
-    let startStep = storyNode.attr(name = "startstep")
-    let finalStep = storyNode.attr(name = "finalstep")
-    attribute = storyNode.attr(name = "start")
-    if attribute.len() > 0:
-      story.startCondition = try:
-          parseEnum[StartConditionType](attribute.toLowerAscii)
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $storyAction & " story '" & $storyIndex &
-                "', invalid starting condition: '" & attribute & "'.")
-    attribute = storyNode.attr(name = "minsteps")
-    if attribute.len() > 0:
-      story.minSteps = try:
-          attribute.parseInt()
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid minimal amount of steps.")
-    attribute = storyNode.attr(name = "maxsteps")
-    if attribute.len() > 0:
-      story.maxSteps = try:
-          attribute.parseInt()
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid maximum amount of steps.")
-    for startData in storyNode.findAll(tag = "startdata"):
-      let
-        value = startData.attr(name = "value")
-        dataAction: DataAction = try:
-            parseEnum[DataAction](startData.attr(name = "action").toLowerAscii)
-          except ValueError:
-            DataAction.add
-      case dataAction
-      of DataAction.add:
-        story.startData.add(value)
-      of remove:
-        var deleteIndex = -1
-        for index, data in story.startData.pairs:
-          if data == value:
-            deleteIndex = index
-            break
-        if deleteIndex > -1:
-          story.startData.delete(deleteIndex)
-      of update:
-        discard
-    for faction in storyNode.findAll(tag = "forbiddenfaction"):
-      let
-        value = faction.attr(name = "value")
-        factionAction: DataAction = try:
-            parseEnum[DataAction](faction.attr(name = "action").toLowerAscii)
-          except ValueError:
-            DataAction.add
-      case factionAction
-      of DataAction.add:
-        story.forbiddenFactions.add(value)
-      of remove:
-        var deleteIndex = -1
-        for index, data in story.forbiddenFactions.pairs:
-          if data == value:
-            deleteIndex = index
-            break
-        if deleteIndex > -1:
-          story.forbiddenFactions.delete(deleteIndex)
-      of update:
-        discard
-    for step in storyNode.findAll(tag = "step"):
-      var tempStep = StepData(index: step.attr(name = "index"),
-          finishCondition: askInBase)
-      let stepAction: DataAction = try:
-            parseEnum[DataAction](step.attr(name = "action").toLowerAscii)
-          except ValueError:
-            DataAction.add
-      var stepIndex = -1
-      for index, data in story.steps.pairs:
-        if data.index == tempStep.index:
-          stepIndex = index
-          break
-      if stepAction == remove:
-        story.steps.delete(stepIndex)
-      else:
-        if stepAction == update:
-          tempStep = story.steps[stepIndex]
-        attribute = step.attr(name = "finish")
-        if attribute.len() > 0:
-          tempStep.finishCondition = try:
-            parseEnum[StepConditionType](step.attr(
-                name = "finish").toLowerAscii)
+      var attribute = storyNode.attr(name = "name")
+      if attribute.len() > 0:
+        story.name = attribute
+      let startStep = storyNode.attr(name = "startstep")
+      let finalStep = storyNode.attr(name = "finalstep")
+      attribute = storyNode.attr(name = "start")
+      if attribute.len() > 0:
+        story.startCondition = try:
+            parseEnum[StartConditionType](attribute.toLowerAscii)
           except ValueError:
             raise newException(exceptn = DataLoadingError,
-                message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid step finish condition.")
-        for stepData in step.findAll(tag = "finishdata"):
-          let
-            dataAction: DataAction = try:
-                parseEnum[DataAction](stepData.attr(
-                    name = "action").toLowerAscii)
-              except ValueError:
-                DataAction.add
-            name = stepData.attr(name = "name")
-          case dataAction
-          of DataAction.add:
-            tempStep.finishData.add(StepFinishData(name: name,
-                value: stepData.attr(name = "value")))
-          of update:
-            for data in tempStep.finishData.mitems:
-              if data.name == name:
-                data.value = stepData.attr(name = "value")
-          of remove:
-            var deleteIndex = -1
-            for index, data in tempStep.finishData.pairs:
-              if data.name == name:
-                deleteIndex = index
-                break
-            if deleteIndex > -1:
-              tempStep.finishData.delete(deleteIndex)
-        for text in step.findAll(tag = "text"):
-          let
-            textAction: DataAction = try:
-                parseEnum[DataAction](text.attr(name = "action").toLowerAscii)
-              except ValueError:
-                DataAction.add
-            condition = try:
-                parseEnum[StepConditionType](text.attr(name = "condition"))
-              except ValueError:
-                raise newException(exceptn = DataLoadingError,
-                    message = "Can't " & $storyAction & " story '" &
-                        $storyIndex & "', invalid text condition.")
-          case textAction
-          of DataAction.add:
-            tempStep.texts.add(StepTextData(condition: condition,
-                text: text.innerText()))
-          of update:
-            for stepText in tempStep.texts.mitems:
-              if stepText.condition == condition:
-                stepText.text = text.innerText()
-          of remove:
-            var deleteIndex = -1
-            for index, data in tempStep.texts.pairs:
-              if data.condition == condition:
-                deleteIndex = index
-                break
-            if deleteIndex > -1:
-              tempStep.texts.delete(deleteIndex)
-        let failText = step.child(name = "failtext").innerText()
-        if failText.len() > 0:
-          tempStep.failText = failText
-        if tempStep.index == startStep:
-          story.startingStep = tempStep
-        elif tempStep.index == finalStep:
-          story.finalStep = tempStep
+              message = "Can't " & $storyAction & " story '" & $storyIndex &
+                  "', invalid starting condition: '" & attribute & "'.")
+      attribute = storyNode.attr(name = "minsteps")
+      if attribute.len() > 0:
+        story.minSteps = try:
+            attribute.parseInt()
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid minimal amount of steps.")
+      attribute = storyNode.attr(name = "maxsteps")
+      if attribute.len() > 0:
+        story.maxSteps = try:
+            attribute.parseInt()
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid maximum amount of steps.")
+      for startData in storyNode.findAll(tag = "startdata"):
+        let
+          value = startData.attr(name = "value")
+          dataAction: DataAction = try:
+              parseEnum[DataAction](startData.attr(
+                  name = "action").toLowerAscii)
+            except ValueError:
+              DataAction.add
+        case dataAction
+        of DataAction.add:
+          story.startData.add(value)
+        of remove:
+          var deleteIndex = -1
+          for index, data in story.startData.pairs:
+            if data == value:
+              deleteIndex = index
+              break
+          if deleteIndex > -1:
+            story.startData.delete(deleteIndex)
+        of update:
+          discard
+      for faction in storyNode.findAll(tag = "forbiddenfaction"):
+        let
+          value = faction.attr(name = "value")
+          factionAction: DataAction = try:
+              parseEnum[DataAction](faction.attr(name = "action").toLowerAscii)
+            except ValueError:
+              DataAction.add
+        case factionAction
+        of DataAction.add:
+          story.forbiddenFactions.add(value)
+        of remove:
+          var deleteIndex = -1
+          for index, data in story.forbiddenFactions.pairs:
+            if data == value:
+              deleteIndex = index
+              break
+          if deleteIndex > -1:
+            story.forbiddenFactions.delete(deleteIndex)
+        of update:
+          discard
+      for step in storyNode.findAll(tag = "step"):
+        var tempStep = StepData(index: step.attr(name = "index"),
+            finishCondition: askInBase)
+        let stepAction: DataAction = try:
+              parseEnum[DataAction](step.attr(name = "action").toLowerAscii)
+            except ValueError:
+              DataAction.add
+        var stepIndex = -1
+        for index, data in story.steps.pairs:
+          if data.index == tempStep.index:
+            stepIndex = index
+            break
+        if stepAction == remove:
+          story.steps.delete(stepIndex)
         else:
-          if stepAction == DataAction.add:
-            story.steps.add(tempStep)
+          if stepAction == update:
+            tempStep = story.steps[stepIndex]
+          attribute = step.attr(name = "finish")
+          if attribute.len() > 0:
+            tempStep.finishCondition = try:
+              parseEnum[StepConditionType](step.attr(
+                  name = "finish").toLowerAscii)
+            except ValueError:
+              raise newException(exceptn = DataLoadingError,
+                  message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid step finish condition.")
+          for stepData in step.findAll(tag = "finishdata"):
+            let
+              dataAction: DataAction = try:
+                  parseEnum[DataAction](stepData.attr(
+                      name = "action").toLowerAscii)
+                except ValueError:
+                  DataAction.add
+              name = stepData.attr(name = "name")
+            case dataAction
+            of DataAction.add:
+              tempStep.finishData.add(StepFinishData(name: name,
+                  value: stepData.attr(name = "value")))
+            of update:
+              for data in tempStep.finishData.mitems:
+                if data.name == name:
+                  data.value = stepData.attr(name = "value")
+            of remove:
+              var deleteIndex = -1
+              for index, data in tempStep.finishData.pairs:
+                if data.name == name:
+                  deleteIndex = index
+                  break
+              if deleteIndex > -1:
+                tempStep.finishData.delete(deleteIndex)
+          for text in step.findAll(tag = "text"):
+            let
+              textAction: DataAction = try:
+                  parseEnum[DataAction](text.attr(name = "action").toLowerAscii)
+                except ValueError:
+                  DataAction.add
+              condition = try:
+                  parseEnum[StepConditionType](text.attr(name = "condition"))
+                except ValueError:
+                  raise newException(exceptn = DataLoadingError,
+                      message = "Can't " & $storyAction & " story '" &
+                          $storyIndex & "', invalid text condition.")
+            case textAction
+            of DataAction.add:
+              tempStep.texts.add(StepTextData(condition: condition,
+                  text: text.innerText()))
+            of update:
+              for stepText in tempStep.texts.mitems:
+                if stepText.condition == condition:
+                  stepText.text = text.innerText()
+            of remove:
+              var deleteIndex = -1
+              for index, data in tempStep.texts.pairs:
+                if data.condition == condition:
+                  deleteIndex = index
+                  break
+              if deleteIndex > -1:
+                tempStep.texts.delete(deleteIndex)
+          let failText = step.child(name = "failtext").innerText()
+          if failText.len() > 0:
+            tempStep.failText = failText
+          if tempStep.index == startStep:
+            story.startingStep = tempStep
+          elif tempStep.index == finalStep:
+            story.finalStep = tempStep
           else:
-            story.steps[stepIndex] = tempStep
-    let endText = storyNode.child(name = "endtext").innerText()
-    if endText.len > 0:
-      story.endText = endText
-    if storyAction == DataAction.add:
-      logMessage(message = "Story added: '" & $storyIndex & "'",
-          debugType = everything)
-    else:
-      logMessage(message = "Story updated: '" & $storyIndex & "'",
-          debugType = everything)
-    storiesList[storyIndex] = story
+            if stepAction == DataAction.add:
+              story.steps.add(tempStep)
+            else:
+              story.steps[stepIndex] = tempStep
+      let endText = storyNode.child(name = "endtext").innerText()
+      if endText.len > 0:
+        story.endText = endText
+      if storyAction == DataAction.add:
+        logMessage(message = "Story added: '" & $storyIndex & "'",
+            debugType = everything)
+      else:
+        logMessage(message = "Story updated: '" & $storyIndex & "'",
+            debugType = everything)
+      storiesList[storyIndex] = story
 
-proc selectBase*(value: string): string {.sideEffect, raises: [], tags: [].} =
+proc selectBase*(value: string): string {.sideEffect, raises: [], tags: [],
+    contractual.} =
   ## Selecte the name of a base for a story
   ##
   ## * value - only value "any" has matter, otherwise ignored
@@ -348,8 +354,8 @@ proc selectBase*(value: string): string {.sideEffect, raises: [], tags: [].} =
       playerShip.destinationY = skyBases[baseIndex].skyY
       return skyBases[baseIndex].name
 
-func getStepData*(finishData: seq[StepFinishData];
-    name: string): string {.raises: [], tags: [].} =
+proc getStepData*(finishData: seq[StepFinishData];
+    name: string): string {.raises: [], tags: [], contractual.} =
   ## Get the finishing data of the selected step based on its name
   ##
   ## * finishData - the list of the step's data
@@ -357,13 +363,16 @@ func getStepData*(finishData: seq[StepFinishData];
   ##
   ## Returns the finishing data of the selected step with the selected name
   ## or empty string if nothing found.
-  result = ""
-  for data in finishData:
-    if data.name == name:
-      return data.value
+  require:
+    name.len > 0
+  body:
+    result = ""
+    for data in finishData:
+      if data.name == name:
+        return data.value
 
 proc selectLocation*(step: seq[StepFinishData]): string {.sideEffect, raises: [
-    ValueError], tags: [].} =
+    ValueError], tags: [], contractual.} =
   ## Get the location on the sky map for the story's step
   ##
   ## * step - the finishing data for the selected step
@@ -393,41 +402,47 @@ proc selectLocation*(step: seq[StepFinishData]): string {.sideEffect, raises: [
   playerShip.destinationY = locationY
 
 proc selectEnemy*(step: seq[StepFinishData]): string {.sideEffect, raises: [
-    ValueError], tags: [].} =
+    ValueError], tags: [], contractual.} =
   ## Get the enemy ship for the selected story's step
   ##
   ## * step - the finishing data for the selected step
   ##
   ## Returns the string with X and Y coordinates and the index of the
   ## prototype's ship
-  result = selectLocation(step = step)
-  var value = getStepData(finishData = step, name = "ship")
-  if value != "random":
-    return result & value
-  value = getStepData(finishData = step, name = "faction")
-  var enemies: seq[Positive]
-  generateEnemies(enemies = enemies, owner = value)
-  return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
+  ensure:
+    result.len > 0
+  body:
+    result = selectLocation(step = step)
+    var value = getStepData(finishData = step, name = "ship")
+    if value != "random":
+      return result & value
+    value = getStepData(finishData = step, name = "faction")
+    var enemies: seq[Positive]
+    generateEnemies(enemies = enemies, owner = value)
+    return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
 proc selectLoot*(step: seq[StepFinishData]): string {.sideEffect, raises: [
-    KeyError], tags: [].} =
+    KeyError], tags: [], contractual.} =
   ## Get the information about the item looted in this step of a story.
   ##
   ## * step - the finishing data for the selected step
   ##
   ## Returns the string with name of the item and index of the prototype's
   ## ship.
-  result = getStepData(finishData = step, name = "item") & ";"
-  var value = getStepData(finishData = step, name = "ship")
-  if value != "random":
-    return result & value
-  value = getStepData(finishData = step, name = "faction")
-  var enemies: seq[Positive]
-  generateEnemies(enemies = enemies, owner = value)
-  return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
+  ensure:
+    result.len > 0
+  body:
+    result = getStepData(finishData = step, name = "item") & ";"
+    var value = getStepData(finishData = step, name = "ship")
+    if value != "random":
+      return result & value
+    value = getStepData(finishData = step, name = "faction")
+    var enemies: seq[Positive]
+    generateEnemies(enemies = enemies, owner = value)
+    return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
 proc startStory*(factionName: string; condition: StartConditionType) {.sideEffect,
-    raises: [ValueError], tags: [].} =
+    raises: [ValueError], tags: [], contractual.} =
   ## If possible, start a story
   ##
   ## * factionName - the name of faction which is needed to start the story
@@ -477,7 +492,8 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return
 
-proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [].} =
+proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Get the text of the current step in the player's current story
   ##
   ## Returns the string with the current step text or empty string if nothing
@@ -493,12 +509,13 @@ proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [].}
     if text.condition == currentStory.finishedStep:
       return text.text
 
-proc clearCurrentStory*() {.sideEffect, raises: [], tags: [].} =
+proc clearCurrentStory*() {.sideEffect, raises: [], tags: [], contractual.} =
   ## Reset the player's current story
   currentStory = CurrentStoryData()
 
 proc getStoryLocation*(): tuple[storyX: MapXRange;
-    storyY: MapYRange] {.sideEffect, raises: [ValueError], tags: [].} =
+    storyY: MapYRange] {.sideEffect, raises: [ValueError], tags: [],
+        contractual.} =
   ## Get the target's location of the current player's story
   ##
   ## Returns tuple with X and Y coordinates on the map of the target for
@@ -558,7 +575,7 @@ type
     stepsTexts: array[10, cstring]
 
 proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
   try:
     loadStories(fileName = $fileName)
     return "".cstring
@@ -566,7 +583,7 @@ proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     return getCurrentExceptionMsg().cstring
 
 proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
-    raises: [], tags: [], exportc.} =
+    raises: [], tags: [], exportc, contractual.} =
   adaStory = AdaStoryData(startCondition: -1, minSteps: -1, maxSteps: -1)
   let recipeKey = strip(s = $index)
   if not storiesList.hasKey(key = recipeKey):
@@ -583,7 +600,8 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
   adaStory.minSteps = story.minSteps.cint
   adaStory.maxSteps = story.maxSteps.cint
 
-  proc convertStep(step: StepData): AdaStepData =
+  proc convertStep(step: StepData): AdaStepData {.raises: [], tags: [],
+      contractual.} =
     result = AdaStepData(index: step.index.cstring,
         finishCondition: step.finishCondition.ord.cint,
         failText: step.failText.cstring)
@@ -611,13 +629,14 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
     adaStory.forbiddenFactions[index] = faction.cstring
 
 proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   currentStory = CurrentStoryData(index: $story.index, step: story.step,
       currentStep: story.currentStep, maxSteps: story.maxSteps,
       showText: story.showText == 1, data: $story.data,
       finishedStep: story.finishedStep.StepConditionType)
 
-proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [], exportc.} =
+proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [],
+    exportc, contractual.} =
   story = AdaCurrentStoryData(index: currentStory.index.cstring,
       step: currentStory.step.cint, currentStep: currentStory.currentStep.cint,
       maxSteps: currentStory.maxSteps.cint, showText: (
@@ -625,7 +644,7 @@ proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [], 
       finishedStep: currentStory.finishedStep.ord.cint)
 
 proc getAdaStepData(finishData: array[10, AdaStepFinishData];
-    name: cstring): cstring {.raises: [], tags: [], exportc.} =
+    name: cstring): cstring {.raises: [], tags: [], exportc, contractual.} =
   var nimData: seq[StepFinishData]
   for data in finishData:
     if data.name.len == 0:
@@ -633,21 +652,23 @@ proc getAdaStepData(finishData: array[10, AdaStepFinishData];
     nimData.add(StepFinishData(name: $data.name, value: $data.value))
   return getStepData(nimData, $name).cstring
 
-proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: [], exportc.} =
+proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: [
+    ], exportc, contractual.} =
   try:
     startStory(factionName = $factionName,
         condition = condition.StartConditionType)
   except ValueError:
     discard
 
-proc getAdaCurrentStoryText(): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaCurrentStoryText(): cstring {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     return getCurrentStoryText().cstring
   except KeyError:
     return ""
 
 proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEffect,
-    raises: [], tags: [], exportc.} =
+    raises: [], tags: [], exportc, contractual.} =
   story.index = "".cstring
   story.stepsAmount = 1
   for text in story.stepsTexts.mitems:
@@ -660,13 +681,16 @@ proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEff
   for index, text in nimStory.stepsTexts:
     story.stepsTexts[index] = text.cstring
 
-proc clearAdaCurrentStory() {.sideEffect, raises: [], tags: [], exportc.} =
+proc clearAdaCurrentStory() {.sideEffect, raises: [], tags: [], exportc,
+    contractual.} =
   clearCurrentStory()
 
-proc setAdaStoryShowText(newValue: cint) {.sideEffect, raises: [], tags: [], exportc.} =
+proc setAdaStoryShowText(newValue: cint) {.sideEffect, raises: [], tags: [],
+    exportc, contractual.} =
   currentStory.showText = newValue == 1
 
-proc getAdaStoryLocation(x, y: var cint) {.sideEffect, raises: [], tags: [], exportc.} =
+proc getAdaStoryLocation(x, y: var cint) {.sideEffect, raises: [], tags: [],
+    exportc, contractual.} =
   try:
     (x, y) = getStoryLocation()
   except:
