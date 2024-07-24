@@ -920,17 +920,26 @@ proc setModuleInfo(installing: bool; row: var Positive;
       return
 
 proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  moduleIndex = ($argv[1]).parseInt
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  moduleIndex = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't set the module index.")
   var
     moduleIterator = 0
     compareModules = ""
-  for module in playerShip.modules:
-    if modulesList[module.protoIndex].mType == modulesList[moduleIndex].mType:
-      moduleIterator.inc
-      compareModules.add(y = "{" & module.name & "} ")
-  let moduleDialog = createDialog(name = ".moduledialog", title = modulesList[
-      moduleIndex].name, columns = 2)
+  try:
+    for module in playerShip.modules:
+      if modulesList[module.protoIndex].mType == modulesList[moduleIndex].mType:
+        moduleIterator.inc
+        compareModules.add(y = "{" & module.name & "} ")
+  except:
+    return showError(message = "Can't set module iterator.")
+  let moduleDialog = try:
+      createDialog(name = ".moduledialog", title = modulesList[
+          moduleIndex].name, columns = 2)
+    except:
+      return showError(message = "Can't create the dialog.")
   var row: Positive = 1
   if moduleIterator > 1:
     let compareFrame = moduleDialog & ".compare"
@@ -946,8 +955,14 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & compareFrame & " -pady {0 5} -columnspan 2")
     tclEval(script = "bind " & compareBox & " <<ComboboxSelected>> {CompareModules}")
     row = 2
-  var cost = modulesList[moduleIndex].price
-  countPrice(price = cost, traderIndex = findMember(order = talk))
+  var cost = try:
+      modulesList[moduleIndex].price
+    except:
+      return showError(message = "Can't set the cost.")
+  try:
+    countPrice(price = cost, traderIndex = findMember(order = talk))
+  except:
+    return showError(message = "Can't count the cost.")
   var moduleLabel = moduleDialog & ".costlbl"
   tclEval(script = "ttk::label " & moduleLabel & " -text {Install cost:}")
   tclEval(script = "grid " & moduleLabel & " -sticky w -padx 5 -pady {5 0}")
@@ -975,7 +990,8 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text Install -image buyicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule install}")
 
-  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) =
+  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.sideEffect,
+      raises: [KeyError], tags: [].} =
     var
       maxSize, usedSpace, allSpace = 0
       freeTurretIndex = -1
@@ -1018,7 +1034,10 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           tclEval(script = eLabel & " configure -text {You don't have a free turret to install the selected gun.}")
 
   tclEval(script = "ttk::label " & errorLabel & " -style Headerred.TLabel -wraplength 450 -text {}")
-  setInstallButton(eLabel = errorLabel, mIndex2 = moneyIndex2, cost2 = cost)
+  try:
+    setInstallButton(eLabel = errorLabel, mIndex2 = moneyIndex2, cost2 = cost)
+  except:
+    return showError(message = "Can't set install button.")
   if tclEval2(script = errorLabel & " cget -text") == "":
     tclEval(script = "grid " & installButton & " -padx {0 5}")
     addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Cancel",
