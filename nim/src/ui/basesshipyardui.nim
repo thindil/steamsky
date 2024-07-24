@@ -999,11 +999,30 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         break
     if mIndex2 == -1:
       tclEval(script = eLabel & " configure -text {You don't have any money to buy the module.}")
+    else:
+      if playerShip.cargo[mIndex2].amount < cost2:
+        tclEval(script = eLabel & " configure -text {You don't have enough money to buy the module.}")
+      elif hasUnique:
+        tclEval(script = eLabel & " configure -text {Only one module of that type can be installed on the ship.}")
+      elif modulesList[moduleIndex].mType notin {ModuleType.gun, harpoonGun, hull}:
+        if modulesList[moduleIndex].size > maxSize:
+          tclEval(script = eLabel & " configure -text {The selected module is too big for your's ship's hull.}")
+        elif allSpace - usedSpace < modulesList[moduleIndex].size and
+            modulesList[moduleIndex].mType != ModuleType.armor:
+          tclEval(script = eLabel & " configure -text {You don't have enough space in your ship's hull to install the module.}")
+        elif modulesList[moduleIndex].mType == ModuleType.hull and modulesList[
+            moduleIndex].maxValue < usedSpace:
+          tclEval(script = eLabel & " configure -text {The selected hull is too small to replace your current hull.}")
+        elif modulesList[moduleIndex].mType in {ModuleType.gun, harpoonGun} and
+            freeTurretIndex == -1:
+          tclEval(script = eLabel & " configure -text {You don't have a free turret to install the selected gun.}")
 
   tclEval(script = "ttk::label " & errorLabel & " -style Headerred.TLabel -wraplength 450 -text {}")
   setInstallButton(eLabel = errorLabel, mIndex2 = moneyIndex2, cost2 = cost)
   if tclEval2(script = errorLabel & " cget -text") == "":
     tclEval(script = "grid " & installButton & " -padx {0 5}")
+    addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Cancel",
+        command = "CloseDialog " & moduleDialog, column = 1, icon = "exiticon", color = "red")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
