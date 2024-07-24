@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Typos in the enemy's information in the combat screen
 - Information about the player's money in bases' shipyards
 - Crash on viewing information about an installed engine in shipyards
+- Showing information about the installed cockpit in shipyards
 
 ## [10.0.1] - 2024-07-14
 
