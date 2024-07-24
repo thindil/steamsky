@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[bases, config, crewinventory, game, maps, shipscrew, shipmodules, tk, types]
+import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
+    shipmodules, tk, types]
 import coreui, dialogs, mapsui, table, utilsui2
 
 var
@@ -1066,12 +1067,45 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = moduleDialog, relativeX = 0.25, relativeY = 0.15)
   return tclOk
 
+proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  try:
+    if argv[1] == "install":
+      upgradeShip(install = true, moduleIndex = moduleIndex)
+    else:
+      upgradeShip(install = false, moduleIndex = moduleIndex - 1)
+      tclEval(script = "SortShipyardModules remove 0 {} 10")
+    updateMessages()
+    return showShipyardCommand(clientData = clientData, interp = interp,
+        argc = 2, argv = @["ShowShipyard", "0"].allocCStringArray)
+  except NoMoneyError:
+    showMessage(text = "You don't have " & moneyName & " to pay for modules.",
+        title = "Can't install module.")
+  except NotEnoughMoneyError:
+    showMessage(text = "You don't have enough " & moneyName & " to pay for " &
+        getCurrentExceptionMsg() & ".", title = "Can't install module.")
+  except UniqueModuleError:
+    showMessage(text = "You can't install another " & getCurrentExceptionMsg() &
+        " because you have installed one module of that type. Remove the old first.",
+        title = "Can't install module.")
+  except InstallationError, RemovingError:
+    showMessage(text = getCurrentExceptionMsg(), title = "Can't " & (if argv[
+        1] == "install": "install" else: "remove") & " module.")
+  except NoFreeCargoError:
+    showMessage(text = "You don't have enough free space for " & moneyName &
+        " in ship cargo.", title = "Can't remove module")
+  except NoMoneyInBaseError:
+    showMessage(text = "Base don't haev enough " & moneyName &
+        " for buy this module.", title = "Can't remove module")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowShipyard", showShipyardCommand)
 #    addCommand("ShowInstallInfo", showInstallInfoCommand)
+#    addCommand("ManipulateModule", manipulateModuleCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
