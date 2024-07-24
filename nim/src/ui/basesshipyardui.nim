@@ -1023,6 +1023,17 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & installButton & " -padx {0 5}")
     addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Cancel",
         command = "CloseDialog " & moduleDialog, column = 1, icon = "exiticon", color = "red")
+  else:
+    tclEval(script = "grid " & errorLabel & " -padx 5 -columnspan 2 -sticky w")
+    addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Close",
+        command = "CloseDialog " & moduleDialog, column = 1, icon = "exiticon")
+  tclEval(script = "grid " & frame & " -pady {0 5} -columnspan 2")
+  let closeButton = moduleDialog & ".buttonbox.button"
+  tclEval(script = "focus " & closeButton)
+  tclEval(script = "bind " & closeButton & " <Tab> {focus " & installButton & ";break}")
+  tclEval(script = "bind " & moduleDialog & " <Escape> {" & closeButton & " invoke;break}")
+  tclEval(script = "bind " & closeButton & " <Escape> {" & closeButton & " invoke;break}")
+  showDialog(dialog = moduleDialog, relativeX = 0.25, relativeY = 0.15)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
