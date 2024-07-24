@@ -964,8 +964,16 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & moduleLabel &
       " -sticky w -padx {0 5} -pady {5 0} -row " & $row & " -column 1")
   setModuleInfo(installing = true, row = row)
-  let moneyIndex2 = findItem(inventory = playerShip.cargo,
-      protoIndex = moneyIndex)
+  let
+    moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    errorLabel = moduleDialog & ".errorLabel"
+    frame = moduleDialog & ".buttonbox"
+  tclEval(script = "ttk::frame " & frame)
+  let installButton = moduleDialog & ".buttonbox.install"
+  tclEval(script = "ttk::button " & installButton &
+      " -text Install -image buyicon -style Dialoggreen.TButton -command {CloseDialog " &
+      moduleDialog & ";ManipulateModule install}")
 
   proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) =
     var
@@ -983,7 +991,19 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           freeTurretIndex = index
       else:
         discard
+    var hasUnique = false
+    for module in playerShip.modules:
+      if modulesList[module.protoIndex].mType == modulesList[
+          moduleIndex].mType and modulesList[moduleIndex].unique:
+        hasUnique = true
+        break
+    if mIndex2 == -1:
+      tclEval(script = eLabel & " configure -text {You don't have any money to buy the module.}")
 
+  tclEval(script = "ttk::label " & errorLabel & " -style Headerred.TLabel -wraplength 450 -text {}")
+  setInstallButton(eLabel = errorLabel, mIndex2 = moneyIndex2, cost2 = cost)
+  if tclEval2(script = errorLabel & " cget -text") == "":
+    tclEval(script = "grid " & installButton & " -padx {0 5}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
