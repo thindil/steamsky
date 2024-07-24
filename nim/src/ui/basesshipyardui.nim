@@ -786,7 +786,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
       row.inc
   else:
     discard
-  if mType in {ModuleType.armor, turret} and not installing:
+  if mType in {ModuleType.armor, turret, cockpit} and not installing:
     row.dec
   if mType notin {ModuleType.hull, armor}:
     if newInfo:
