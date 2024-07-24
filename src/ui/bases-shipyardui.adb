@@ -1434,7 +1434,7 @@ package body Bases.ShipyardUI is
          when others =>
             null;
       end case;
-      if M_Type in ARMOR | TURRET and not Installing then
+      if M_Type in ARMOR | TURRET | COCKPIT and not Installing then
          Row := Row - 1;
       end if;
       if M_Type not in HULL | ARMOR then
