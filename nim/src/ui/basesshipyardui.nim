@@ -931,7 +931,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       compareModules.add(y = "{" & module.name & "} ")
   let moduleDialog = createDialog(name = ".moduledialog", title = modulesList[
       moduleIndex].name, columns = 2)
-  var row = 1
+  var row: Positive = 1
   if moduleIterator > 1:
     let compareFrame = moduleDialog & ".compare"
     tclEval(script = "ttk::frame " & compareFrame)
@@ -948,17 +948,42 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     row = 2
   var cost = modulesList[moduleIndex].price
   countPrice(price = cost, traderIndex = findMember(order = talk))
-  let moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
   var moduleLabel = moduleDialog & ".costlbl"
   tclEval(script = "ttk::label " & moduleLabel & " -text {Install cost:}")
   tclEval(script = "grid " & moduleLabel & " -sticky w -padx 5 -pady {5 0}")
   moduleLabel = moduleDialog & ".cost"
   tclEval(script = "ttk::label " & moduleLabel)
-  tclEval(script = "grid " & moduleLabel & " -sticky w -padx {0 5} -pady {5 0} -row " & $row & " -column 1")
+  tclEval(script = "grid " & moduleLabel &
+      " -sticky w -padx {0 5} -pady {5 0} -row " & $row & " -column 1")
   row.inc
   moduleLabel = moduleDialog & ".timelbl"
   tclEval(script = "ttk::label " & moduleLabel & " -text {Install time:}")
   tclEval(script = "grid " & moduleLabel & " -sticky w -padx 5 -pady {5 0}")
+  moduleLabel = moduleDialog & ".time"
+  tclEval(script = "ttk::label " & moduleLabel)
+  tclEval(script = "grid " & moduleLabel &
+      " -sticky w -padx {0 5} -pady {5 0} -row " & $row & " -column 1")
+  setModuleInfo(installing = true, row = row)
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+
+  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) =
+    var
+      maxSize, usedSpace, allSpace = 0
+      freeTurretIndex = -1
+    for index, module in playerShip.modules:
+      case module.mType
+      of hull:
+        maxSize = modulesList[module.protoIndex].value
+        usedSpace = module.installedModules
+        allSpace = module.maxModules
+      of turret:
+        if module.gunIndex == -1 and modulesList[module.protoIndex].size >=
+            modulesList[moduleIndex].size:
+          freeTurretIndex = index
+      else:
+        discard
+
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
