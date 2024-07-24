@@ -341,7 +341,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         moneyName & "}")
     tclEval(script = "grid " & label & " -row 0 -column 1 -sticky w")
   else:
-    tradeInfo = "You don't have any " & moneyName & " to buy anything."
+    tradeInfo = "You don't have any " & moneyName & " to buy anything"
     label = tradeFrame & ".options.playerinfo.moneyinfo2"
     tclEval(script = "grid remove " & label)
   label = tradeFrame & ".options.playerinfo.moneyinfo"
@@ -358,16 +358,27 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   tradeInfo = ""
   if baseIndex > 0:
     if skyBases[baseIndex].cargo[0].amount == 0:
-      tradeInfo.add(y = "Base doesn't have any " & moneyName & " to buy anything.")
+      tradeInfo.add(y = "Base doesn't have any " & moneyName & " to buy anything")
+      label = tradeFrame & ".options.baseinfo.baseinfo2"
+      tclEval(script = "grid remove " & label)
     else:
-      tradeInfo.add(y = "Base has " & $skyBases[baseIndex].cargo[0].amount &
-          " " & moneyName & ".")
+      tradeInfo.add(y = "Base has ")
   else:
     if traderCargo[0].amount == 0:
-      tradeInfo.add(y = "Ship doesn't have any " & moneyName & " to buy anything.")
+      tradeInfo.add(y = "Ship doesn't have any " & moneyName & " to buy anything")
+      label = tradeFrame & ".options.baseinfo.baseinfo2"
+      tclEval(script = "grid remove " & label)
     else:
-      tradeInfo.add(y = "Ship has " & $traderCargo[0].amount & " " & moneyName & ".")
+      tradeInfo.add(y = "Ship has ")
   label = tradeFrame & ".options.baseinfo.baseinfo"
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
+  label = tradeFrame & ".options.baseinfo.baseinfo2"
+  if baseIndex > 0:
+    if skyBases[baseIndex].cargo[0].amount > 0:
+      tradeInfo  = $skyBases[baseIndex].cargo[0].amount & " " & moneyName
+  else:
+    if traderCargo[0].amount > 0:
+      tradeInfo = $traderCargo[0].amount & " " & moneyName
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   tclEval(script = tradeCanvas & " configure -height [expr " & tclEval2(
