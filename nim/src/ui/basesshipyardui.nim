@@ -1115,21 +1115,31 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  moduleIndex = ($argv[1]).parseInt
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  moduleIndex = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't set module index.")
   tclEval(script = "tk busy " & gameHeader)
   tclEval(script = "tk busy " & mainPaned)
   let
     shipModuleIndex = moduleIndex - 1
     damagePercent = (playerShip.modules[shipModuleIndex].durability.float /
         playerShip.modules[shipModuleIndex].maxDurability.float)
-  var cost: Natural = modulesList[playerShip.modules[
-      shipModuleIndex].protoIndex].price - (modulesList[playerShip.modules[
-      shipModuleIndex].protoIndex].price.float * (1.0 - damagePercent)).Natural
+  var cost: Natural = try:
+        modulesList[playerShip.modules[
+        shipModuleIndex].protoIndex].price - (modulesList[playerShip.modules[
+        shipModuleIndex].protoIndex].price.float * (1.0 -
+            damagePercent)).Natural
+      except:
+        return showError(message = "Can't set the cost.")
   if cost == 0:
     cost = 1
-  countPrice(price = cost, traderIndex = findMember(order = talk),
-      reduce = false)
+  try:
+    countPrice(price = cost, traderIndex = findMember(order = talk),
+        reduce = false)
+  except:
+    return showError(message = "Can't count the cost.")
   let moduleDialog = createDialog(name = ".moduledialog",
       title = playerShip.modules[shipModuleIndex].name, columns = 2)
   var label = moduleDialog & ".gainlbl"
@@ -1143,8 +1153,11 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::label " & label & " -text {Removing time: }")
   tclEval(script = "grid " & label & " -sticky w -padx 5")
   label = moduleDialog & ".time"
-  tclEval(script = "ttk::label " & label & " -text {" & $modulesList[
-      playerShip.modules[shipModuleIndex].protoIndex].installTime & " minutes} -style Golden.TLabel")
+  try:
+    tclEval(script = "ttk::label " & label & " -text {" & $modulesList[
+        playerShip.modules[shipModuleIndex].protoIndex].installTime & " minutes} -style Golden.TLabel")
+  except:
+    return showError(message = "Can't show install time.")
   tclEval(script = "grid " & label & " -sticky w -padx 5 -row 2 -column 1")
   var row: Positive = 3
   setModuleInfo(installing = false, row = row)
@@ -1171,11 +1184,14 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "tooltip::tooltip " & damageBar & " \"" & statusTooltip & "\"")
     tclEval(script = "grid " & label & " -sticky w -padx {5 0}")
     tclEval(script = "grid " & damageBar & " -row " & $row & " -column 1 -sticky we -padx {0 5}")
-  if modulesList[playerShip.modules[shipModuleIndex].protoIndex].description.len > 0:
-    label = moduleDialog & ".description"
-    tclEval(script = "ttk::label " & label & " -text {\n" & modulesList[
-        playerShip.modules[shipModuleIndex].protoIndex].description & "} -wraplength 450")
-    tclEval(script = "grid " & label & " -sticky w -padx 5 -columnspan 2")
+  try:
+    if modulesList[playerShip.modules[shipModuleIndex].protoIndex].description.len > 0:
+      label = moduleDialog & ".description"
+      tclEval(script = "ttk::label " & label & " -text {\n" & modulesList[
+          playerShip.modules[shipModuleIndex].protoIndex].description & "} -wraplength 450")
+      tclEval(script = "grid " & label & " -sticky w -padx 5 -columnspan 2")
+  except:
+    return showError(message = "Can't show description.")
   let frame = moduleDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
   let removeButton = moduleDialog & ".buttonbox.install"
