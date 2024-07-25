@@ -1068,7 +1068,8 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   try:
     if argv[1] == "install":
       upgradeShip(install = true, moduleIndex = moduleIndex)
@@ -1097,6 +1098,9 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   except NoMoneyInBaseError:
     showMessage(text = "Base don't haev enough " & moneyName &
         " for buy this module.", title = "Can't remove module")
+  except:
+    showError(message = "Can't " & (if argv[1] ==
+        "install": "install" else: "remove") & " module.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
