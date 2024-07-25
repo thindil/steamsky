@@ -1135,6 +1135,34 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   var label = moduleDialog & ".gainlbl"
   tclEval(script = "ttk::label " & label & " -text {Remove gain: }")
   tclEval(script = "grid " & label & " -sticky w -padx 5")
+  label = moduleDialog & ".gain"
+  tclEval(script = "ttk::label " & label & " -text {" & $cost & " " &
+      moneyName & "} -style Headergreen.label")
+  tclEval(script = "grid " & label & " -sticky w -padx 5 -row 1 -column 1")
+  label = moduleDialog & ".timelbl"
+  tclEval(script = "ttk::label " & label & " -text {Removing time: }")
+  tclEval(script = "grid " & label & " -sticky w -padx 5")
+  label = moduleDialog & ".time"
+  tclEval(script = "ttk::label " & label & " -text {" & $modulesList[
+      playerShip.modules[shipModuleIndex].protoIndex].installTime & " minutes} -style Golden.TLabel")
+  tclEval(script = "grid " & label & " -sticky w -padx 5 -row 2 -column 1")
+  var row: Positive = 3
+  setModuleInfo(installing = false, row = row)
+  if damagePercent < 1.0:
+    var progressBarStyle, statusTooltip = ""
+    if damagePercent < 1.0 and damagePercent > 0.79:
+      progressBarStyle = " -style green.Horizontal.TProgressbar"
+      statusTooltip = "Slightly damaged"
+    elif damagePercent < 0.8 and damagePercent > 0.49:
+      progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+      statusTooltip = "Damaged"
+    elif damagePercent < 0.5 and damagePercent > 0.19:
+      progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+      statusTooltip = "Heavily damaged"
+    elif damagePercent < 0.2 and damagePercent > 0.0:
+      statusTooltip = "Almost destroyed"
+    elif damagePercent == 0.0:
+      statusTooltip = "Destroyed"
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
