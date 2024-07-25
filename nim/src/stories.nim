@@ -143,7 +143,8 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       let
         storyIndex: string = storyNode.attr(name = "index")
         storyAction: DataAction = try:
-            parseEnum[DataAction](storyNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = storyNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if storyAction in [update, remove]:
@@ -177,7 +178,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       attribute = storyNode.attr(name = "start")
       if attribute.len() > 0:
         story.startCondition = try:
-            parseEnum[StartConditionType](attribute.toLowerAscii)
+            parseEnum[StartConditionType](s = attribute.toLowerAscii)
           except ValueError:
             raise newException(exceptn = DataLoadingError,
               message = "Can't " & $storyAction & " story '" & $storyIndex &
@@ -200,13 +201,13 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         let
           value = startData.attr(name = "value")
           dataAction: DataAction = try:
-              parseEnum[DataAction](startData.attr(
+              parseEnum[DataAction](s = startData.attr(
                   name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
         case dataAction
         of DataAction.add:
-          story.startData.add(value)
+          story.startData.add(y = value)
         of remove:
           var deleteIndex = -1
           for index, data in story.startData.pairs:
@@ -214,19 +215,20 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               deleteIndex = index
               break
           if deleteIndex > -1:
-            story.startData.delete(deleteIndex)
+            story.startData.delete(i = deleteIndex)
         of update:
           discard
       for faction in storyNode.findAll(tag = "forbiddenfaction"):
         let
           value = faction.attr(name = "value")
           factionAction: DataAction = try:
-              parseEnum[DataAction](faction.attr(name = "action").toLowerAscii)
+              parseEnum[DataAction](s = faction.attr(
+                  name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
         case factionAction
         of DataAction.add:
-          story.forbiddenFactions.add(value)
+          story.forbiddenFactions.add(y = value)
         of remove:
           var deleteIndex = -1
           for index, data in story.forbiddenFactions.pairs:
@@ -234,14 +236,14 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               deleteIndex = index
               break
           if deleteIndex > -1:
-            story.forbiddenFactions.delete(deleteIndex)
+            story.forbiddenFactions.delete(i = deleteIndex)
         of update:
           discard
       for step in storyNode.findAll(tag = "step"):
         var tempStep = StepData(index: step.attr(name = "index"),
             finishCondition: askInBase)
         let stepAction: DataAction = try:
-              parseEnum[DataAction](step.attr(name = "action").toLowerAscii)
+              parseEnum[DataAction](s = step.attr(name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
         var stepIndex = -1
@@ -250,14 +252,14 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             stepIndex = index
             break
         if stepAction == remove:
-          story.steps.delete(stepIndex)
+          story.steps.delete(i = stepIndex)
         else:
           if stepAction == update:
             tempStep = story.steps[stepIndex]
           attribute = step.attr(name = "finish")
           if attribute.len() > 0:
             tempStep.finishCondition = try:
-              parseEnum[StepConditionType](step.attr(
+              parseEnum[StepConditionType](s = step.attr(
                   name = "finish").toLowerAscii)
             except ValueError:
               raise newException(exceptn = DataLoadingError,
@@ -265,14 +267,14 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           for stepData in step.findAll(tag = "finishdata"):
             let
               dataAction: DataAction = try:
-                  parseEnum[DataAction](stepData.attr(
+                  parseEnum[DataAction](s = stepData.attr(
                       name = "action").toLowerAscii)
                 except ValueError:
                   DataAction.add
               name = stepData.attr(name = "name")
             case dataAction
             of DataAction.add:
-              tempStep.finishData.add(StepFinishData(name: name,
+              tempStep.finishData.add(y = StepFinishData(name: name,
                   value: stepData.attr(name = "value")))
             of update:
               for data in tempStep.finishData.mitems:
@@ -285,22 +287,24 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   deleteIndex = index
                   break
               if deleteIndex > -1:
-                tempStep.finishData.delete(deleteIndex)
+                tempStep.finishData.delete(i = deleteIndex)
           for text in step.findAll(tag = "text"):
             let
               textAction: DataAction = try:
-                  parseEnum[DataAction](text.attr(name = "action").toLowerAscii)
+                  parseEnum[DataAction](s = text.attr(
+                      name = "action").toLowerAscii)
                 except ValueError:
                   DataAction.add
               condition = try:
-                  parseEnum[StepConditionType](text.attr(name = "condition"))
+                  parseEnum[StepConditionType](s = text.attr(
+                      name = "condition"))
                 except ValueError:
                   raise newException(exceptn = DataLoadingError,
                       message = "Can't " & $storyAction & " story '" &
                           $storyIndex & "', invalid text condition.")
             case textAction
             of DataAction.add:
-              tempStep.texts.add(StepTextData(condition: condition,
+              tempStep.texts.add(y = StepTextData(condition: condition,
                   text: text.innerText()))
             of update:
               for stepText in tempStep.texts.mitems:
@@ -313,7 +317,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   deleteIndex = index
                   break
               if deleteIndex > -1:
-                tempStep.texts.delete(deleteIndex)
+                tempStep.texts.delete(i = deleteIndex)
           let failText = step.child(name = "failtext").innerText()
           if failText.len() > 0:
             tempStep.failText = failText
@@ -323,7 +327,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             story.finalStep = tempStep
           else:
             if stepAction == DataAction.add:
-              story.steps.add(tempStep)
+              story.steps.add(y = tempStep)
             else:
               story.steps[stepIndex] = tempStep
       let endText = storyNode.child(name = "endtext").innerText()
@@ -488,7 +492,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
             maxSteps: getRandom(min = story.minSteps, max = story.maxSteps),
             showText: true, data: step, finishedStep: any)
         updateCargo(ship = playerShip, protoIndex = story.startData[0].parseInt, amount = 1)
-        finishedStories.add(FinishedStoryData(index: currentStory.index,
+        finishedStories.add(y = FinishedStoryData(index: currentStory.index,
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return
 
@@ -523,7 +527,7 @@ proc getStoryLocation*(): tuple[storyX: MapXRange;
   result = (1, 1)
   if currentStory.data.len == 0:
     return (playerShip.skyX, playerShip.skyY)
-  let coords = currentStory.data.split(';')
+  let coords = currentStory.data.split(sep = ';')
   if coords.len < 3:
     for skyBase in skyBases:
       if skyBase.name == currentStory.data:
@@ -615,12 +619,12 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
       result.texts[index] = AdaStepTextData(condition: data.condition.ord.cint,
           text: data.text.cstring)
 
-  adaStory.startingStep = convertStep(story.startingStep)
+  adaStory.startingStep = convertStep(step = story.startingStep)
   for index, step in adaStory.steps.mpairs:
     step.index = "".cstring
   for index, step in story.steps.pairs:
-    adaStory.steps[index] = convertStep(step)
-  adaStory.finalStep = convertStep(story.finalStep)
+    adaStory.steps[index] = convertStep(step = step)
+  adaStory.finalStep = convertStep(step = story.finalStep)
   adaStory.endText = story.endText.cstring
   adaStory.name = story.name.cstring
   for faction in adaStory.forbiddenFactions.mitems:
@@ -649,8 +653,8 @@ proc getAdaStepData(finishData: array[10, AdaStepFinishData];
   for data in finishData:
     if data.name.len == 0:
       break
-    nimData.add(StepFinishData(name: $data.name, value: $data.value))
-  return getStepData(nimData, $name).cstring
+    nimData.add(y = StepFinishData(name: $data.name, value: $data.value))
+  return getStepData(finishData = nimData, name = $name).cstring
 
 proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: [
     ], exportc, contractual.} =
