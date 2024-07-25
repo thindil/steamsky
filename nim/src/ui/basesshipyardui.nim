@@ -1137,7 +1137,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & label & " -sticky w -padx 5")
   label = moduleDialog & ".gain"
   tclEval(script = "ttk::label " & label & " -text {" & $cost & " " &
-      moneyName & "} -style Headergreen.label")
+      moneyName & "} -style Headergreen.TLabel")
   tclEval(script = "grid " & label & " -sticky w -padx 5 -row 1 -column 1")
   label = moduleDialog & ".timelbl"
   tclEval(script = "ttk::label " & label & " -text {Removing time: }")
@@ -1180,7 +1180,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::frame " & frame)
   let removeButton = moduleDialog & ".buttonbox.install"
   tclEval(script = "ttk::button " & removeButton &
-      " -text Remove -image sellicon -style Dialoggree.TButton -command {CloseDialog " &
+      " -text Remove -image sellicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule remove}")
   tclEval(script = "grid " & removeButton & " -padx {0 5}")
   addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Close",
