@@ -1114,6 +1114,29 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
         "install": "install" else: "remove") & " module.")
   return tclOk
 
+proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  moduleIndex = ($argv[1]).parseInt
+  tclEval(script = "tk busy " & gameHeader)
+  tclEval(script = "tk busy " & mainPaned)
+  let
+    shipModuleIndex = moduleIndex - 1
+    damagePercent = (playerShip.modules[shipModuleIndex].durability.float /
+        playerShip.modules[shipModuleIndex].maxDurability.float)
+  var cost: Natural = modulesList[playerShip.modules[
+      shipModuleIndex].protoIndex].price - (modulesList[playerShip.modules[
+      shipModuleIndex].protoIndex].price.float * (1.0 - damagePercent)).Natural
+  if cost == 0:
+    cost = 1
+  countPrice(price = cost, traderIndex = findMember(order = talk),
+      reduce = false)
+  let moduleDialog = createDialog(name = ".moduledialog",
+      title = playerShip.modules[shipModuleIndex].name, columns = 2)
+  var label = moduleDialog & ".gainlbl"
+  tclEval(script = "ttk::label " & label & " -text {Remove gain: }")
+  tclEval(script = "grid " & label & " -sticky w -padx 5")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -1121,6 +1144,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowShipyard", showShipyardCommand)
 #    addCommand("ShowInstallInfo", showInstallInfoCommand)
 #    addCommand("ManipulateModule", manipulateModuleCommand)
+#    addCommand("ShowRemoveInfo", showRemoveInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
