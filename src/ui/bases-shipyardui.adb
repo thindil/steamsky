@@ -15,7 +15,6 @@
 
 with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
--- with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -35,13 +34,11 @@ with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
--- with Bases.Ship;
 with CoreUI; use CoreUI;
 with Dialogs;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
--- with Trades;
 with Utils.UI;
 
 package body Bases.ShipyardUI is
@@ -261,77 +258,6 @@ package body Bases.ShipyardUI is
       Import => True,
       External_Name => "manipulateModuleCommand";
       -- ****
-
---   function Manipulate_Module_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      use Ada.Exceptions;
---      use Bases.Ship;
---      use Trades;
---   begin
---      if CArgv.Arg(Argv => Argv, N => 1) = "install" then
---         Bases.Ship.Upgrade_Ship
---           (Install => True, Module_Index => Get_Module_Index);
---      else
---         Bases.Ship.Upgrade_Ship
---           (Install => False, Module_Index => Get_Module_Index);
---         Tcl_Eval
---           (interp => Interp, strng => "SortShipyardModules remove 0 {} 10");
---      end if;
---      Update_Messages;
---      return
---        Show_Shipyard_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
---           Argv => CArgv.Empty & "ShowShipyard" & "0");
---   exception
---      when Trade_No_Money =>
---         Show_Message
---           (Text =>
---              "You don't have " & To_String(Source => Money_Name) &
---              " to pay for modules.",
---            Title => "Can't install module");
---         return TCL_OK;
---      when An_Exception : Trade_Not_Enough_Money =>
---         Show_Message
---           (Text =>
---              "You don't have enough " & To_String(Source => Money_Name) &
---              " to pay for " & Exception_Message(X => An_Exception) & ".",
---            Title => "Can't install module");
---         return TCL_OK;
---      when An_Exception : Bases_Ship_Unique_Module =>
---         Show_Message
---           (Text =>
---              "You can't install another " &
---              Exception_Message(X => An_Exception) &
---              " because you have installed one module that type. Remove old first.",
---            Title => "Can't install module");
---         return TCL_OK;
---      when An_Exception : Bases_Ship_Installation_Error |
---        Bases_Ship_Removing_Error =>
---         Show_Message
---           (Text => Exception_Message(X => An_Exception),
---            Title =>
---              "Can't" &
---              (if CArgv.Arg(Argv => Argv, N => 1) = "install" then "install"
---               else "remove") &
---              " module");
---         return TCL_OK;
---      when Trade_No_Free_Cargo =>
---         Show_Message
---           (Text =>
---              "You don't have enough free space for " &
---              To_String(Source => Money_Name) & " in ship cargo.",
---            Title => "Can't remove module");
---         return TCL_OK;
---      when Trade_No_Money_In_Base =>
---         Show_Message
---           (Text =>
---              "Base don't have enough " & To_String(Source => Money_Name) &
---              " for buy this module.",
---            Title => "Can't remove module");
---         return TCL_OK;
---   end Manipulate_Module_Command;
 
    -- ****f* ShipyardUI/ShipyardUI.Show_Remove_Info_Command
    -- FUNCTION
