@@ -1163,6 +1163,25 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       statusTooltip = "Almost destroyed"
     elif damagePercent == 0.0:
       statusTooltip = "Destroyed"
+    label = moduleDialog & ".damagelbl"
+    tclEval(script = "ttk::label " & label & " -text {Status:}")
+    let damageBar = moduleDialog & ".damage"
+    tclEval(script = "ttk::progressbar " & damageBar &
+        " -orient horizontal -maximum 1.0 -value " & $damagePercent & progressBarStyle)
+    tclEval(script = "tooltip::tooltip " & damageBar & " \"" & statusTooltip & "\"")
+    tclEval(script = "grid " & label & " -sticky w -padx {5 0}")
+    tclEval(script = "grid " & damageBar & " -row " & $row & " -column 1 -sticky we -padx {0 5}")
+  if modulesList[playerShip.modules[shipModuleIndex].protoIndex].description.len > 0:
+    label = moduleDialog & ".description"
+    tclEval(script = "ttk::label " & label & " -text {\n" & modulesList[
+        playerShip.modules[shipModuleIndex].protoIndex].description & "} -wraplength 450")
+    tclEval(script = "grid " & label & " -sticky w -padx 5 -columnspan 2")
+  let frame = moduleDialog & ".buttonbox"
+  tclEval(script = "ttk::frame " & frame)
+  let removeButton = moduleDialog & ".buttonbox.install"
+  tclEval(script = "ttk::button " & removeButton &
+      " -text Remove -image sellicon -style Dialoggree.TButton -command {CloseDialog " &
+      moduleDialog & ";ManipulateModule remove}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
