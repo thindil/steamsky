@@ -31,32 +31,4 @@ package Trades is
    Trader_Cargo: BaseCargo_Container.Vector (Capacity => 32);
    -- ****
 
-   -- ****e* Trades/Trades.Trade_No_Free_Cargo
-   -- FUNCTION
-   -- Raised when no enough free cargo in ship
-   -- SOURCE
-   Trade_No_Free_Cargo: exception;
-   -- ****
-
-   -- ****e* Trades/Trades.Trade_No_Money
-   -- FUNCTION
-   -- Raised when player don't have money
-   -- SOURCE
-   Trade_No_Money: exception;
-   -- ****
-
-   -- ****e* Trades/Trades.Trade_Not_Enough_Money
-   -- FUNCTION
-   -- Raised when player don't have enough money
-   -- SOURCE
-   Trade_Not_Enough_Money: exception;
-   -- ****
-
-   -- ****e* Trades/Trades.Trade_No_Money_In_Base
-   -- FUNCTION
-   -- Raised when base don't have enough money for buy item
-   -- SOURCE
-   Trade_No_Money_In_Base: exception;
-   -- ****
-
 end Trades;
