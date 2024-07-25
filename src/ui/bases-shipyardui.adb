@@ -22,27 +22,27 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
 -- with Bases.Ship;
 with CoreUI; use CoreUI;
-with Dialogs; use Dialogs;
+with Dialogs;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
 -- with Trades;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Bases.ShipyardUI is
 
@@ -179,6 +179,7 @@ package body Bases.ShipyardUI is
    Module_Index: Positive;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****if* ShipyardUI/ShipyardUI.Get_Module_Index
    -- FUNCTION
    -- Get the index of the currently selected module
@@ -190,6 +191,7 @@ package body Bases.ShipyardUI is
    begin
       return Module_Index;
    end Get_Module_Index;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****if* ShipyardUI/ShipyardUI.Set_Module_Info
    -- FUNCTION
@@ -353,10 +355,13 @@ package body Bases.ShipyardUI is
       use Ada.Characters.Latin_1;
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Widgets.TtkProgressBar;
       use Tcl.Tklib.Ada.Tooltip;
       use Short_String;
       use Tiny_String;
+      use Dialogs;
 
       Cost: Natural;
       Damage_Percent: Float;
@@ -554,6 +559,8 @@ package body Bases.ShipyardUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argv);
+      use Tcl.Ada;
+
       Shipyard_Canvas: constant Tk_Canvas :=
         Get_Widget
           (pathName => Main_Paned & ".shipyardframe.canvas", Interp => Interp);
@@ -898,6 +905,7 @@ package body Bases.ShipyardUI is
    end Compare_Modules_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowShipyard", Ada_Command => Show_Shipyard_Command'Access);
