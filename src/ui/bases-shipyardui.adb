@@ -13,29 +13,29 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1;
+-- with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
+-- with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip;
+-- with Tcl.Tklib.Ada.Tooltip;
 with CoreUI; use CoreUI;
-with Dialogs;
+-- with Dialogs;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
@@ -277,189 +277,196 @@ package body Bases.ShipyardUI is
    function Show_Remove_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Ada.Characters.Latin_1;
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-      use Tcl.Tklib.Ada.Tooltip;
-      use Short_String;
-      use Tiny_String;
-      use Dialogs;
-
-      Cost: Natural;
-      Damage_Percent: Float;
-      Ship_Module_Index: constant Natural :=
-        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Module_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".moduledialog",
-           Title =>
-             To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name),
-           Columns => 2);
-      Damage_Bar: constant Ttk_ProgressBar :=
-        Create
-          (pathName => Module_Dialog & ".damage",
-           options => "-orient horizontal -maximum 1.0");
-      Label: Ttk_Label :=
-        Create
-          (pathName => Module_Dialog & ".gainlbl",
-           options => "-text {Remove gain: }");
-      Remove_Button: Ttk_Button;
-      Close_Button: constant Ttk_Button :=
-        Get_Widget(pathName => Module_Dialog & ".buttonbox.button");
-      Frame: constant Ttk_Frame :=
-        Create(pathName => Module_Dialog & ".buttonbox");
-      Progress_Bar_Style, Status_Tooltip: Unbounded_String :=
-        Null_Unbounded_String;
-      Row: Positive := 3;
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Ada.Characters.Latin_1;
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+--      use Tcl.Tklib.Ada.Tooltip;
+--      use Short_String;
+--      use Tiny_String;
+--      use Dialogs;
+--
+--      Cost: Natural;
+--      Damage_Percent: Float;
+--      Ship_Module_Index: constant Natural :=
+--        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Module_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".moduledialog",
+--           Title =>
+--             To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name),
+--           Columns => 2);
+--      Damage_Bar: constant Ttk_ProgressBar :=
+--        Create
+--          (pathName => Module_Dialog & ".damage",
+--           options => "-orient horizontal -maximum 1.0");
+--      Label: Ttk_Label :=
+--        Create
+--          (pathName => Module_Dialog & ".gainlbl",
+--           options => "-text {Remove gain: }");
+--      Remove_Button: Ttk_Button;
+--      Close_Button: constant Ttk_Button :=
+--        Get_Widget(pathName => Module_Dialog & ".buttonbox.button");
+--      Frame: constant Ttk_Frame :=
+--        Create(pathName => Module_Dialog & ".buttonbox");
+--      Progress_Bar_Style, Status_Tooltip: Unbounded_String :=
+--        Null_Unbounded_String;
+--      Row: Positive := 3;
+      function Show_Ada_Remove_Info_Command
+         (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Convention => C,
+         Import => True,
+         External_Name => "showRemoveInfoCommand";
    begin
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
-      Damage_Percent :=
-        Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
-        Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability);
-      Cost :=
-        Get_Module(Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-          .Price -
-        Integer
-          (Float
-             (Get_Module
-                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                .Price) *
-           (1.0 - Damage_Percent));
-      if Cost = 0 then
-         Cost := 1;
-      end if;
-      Count_Price
-        (Price => Cost, Trader_Index => Find_Member(Order => TALK),
-         Reduce => False);
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
-      Label :=
-        Create
-          (pathName => Module_Dialog & ".gain",
-           options =>
-             "-text {" & Trim(Source => Positive'Image(Cost), Side => Left) &
-             " " & To_String(Source => Money_Name) &
-             "} -style Headergreen.TLabel");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Label, Options => "-sticky w -padx 5 -row 1 -column 1");
-      Label :=
-        Create
-          (pathName => Module_Dialog & ".timelbl",
-           options => "-text {Removing time: }");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
-      Label :=
-        Create
-          (pathName => Module_Dialog & ".time",
-           options =>
-             "-text {" &
-             Trim
-               (Source =>
-                  Positive'Image
-                    (Get_Module
-                       (Index =>
-                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                       .Install_Time),
-                Side => Left) &
-             " minutes} -style Golden.TLabel");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
-      Set_Module_Info(Installing => False, Row => Row);
-      if Damage_Percent < 1.0 then
-         if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
-            Progress_Bar_Style :=
-              To_Unbounded_String
-                (Source => " -style green.Horizontal.TProgressbar");
-            Status_Tooltip :=
-              To_Unbounded_String(Source => "Slightly damaged");
-         elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
-            Progress_Bar_Style :=
-              To_Unbounded_String
-                (Source => " -style yellow.Horizontal.TProgressbar");
-            Status_Tooltip := To_Unbounded_String(Source => "Damaged");
-         elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
-            Progress_Bar_Style :=
-              To_Unbounded_String
-                (Source => " -style yellow.Horizontal.TProgressbar");
-            Status_Tooltip := To_Unbounded_String(Source => "Heavily damaged");
-         elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
-            Progress_Bar_Style := Null_Unbounded_String;
-            Status_Tooltip :=
-              To_Unbounded_String(Source => "Almost destroyed");
-         elsif Damage_Percent = 0.0 then
-            Progress_Bar_Style := Null_Unbounded_String;
-            Status_Tooltip := To_Unbounded_String(Source => "Destroyed");
-         end if;
-         Label :=
-           Create
-             (pathName => Module_Dialog & ".damagelbl",
-              options => "-text {Status:}");
-         configure
-           (Widgt => Damage_Bar,
-            options =>
-              "-value" & Float'Image(Damage_Percent) &
-              To_String(Source => Progress_Bar_Style));
-         Add
-           (Widget => Damage_Bar,
-            Message => To_String(Source => Status_Tooltip));
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label, Options => "-sticky w -padx {5 0}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Damage_Bar,
-            Options =>
-              "-row" & Positive'Image(Row) &
-              " -column 1 -sticky we -padx {0 5}");
-      end if;
-      if Get_Module
-          (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-          .Description /=
-        Short_String.Null_Bounded_String then
-         Label :=
-           Create
-             (pathName => Module_Dialog & ".description",
-              options =>
-                "-text {" & LF &
-                To_String
-                  (Source =>
-                     Get_Module
-                       (Index =>
-                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                       .Description) &
-                "} -wraplength 450");
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label, Options => "-sticky w -padx 5 -columnspan 2");
-      end if;
-      Remove_Button :=
-        Create
-          (pathName => Module_Dialog & ".buttonbox.install",
-           options =>
-             "-text Remove -image sellicon -style Dialoggreen.TButton -command {CloseDialog " &
-             Module_Dialog & ";ManipulateModule remove}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
-      Add_Close_Button
-        (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
-         Command => "CloseDialog " & Module_Dialog, Column => 1,
-         Icon => "cancelicon", Color => "red");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Frame, Options => "-pady {0 5} -columnspan 2");
-      Focus(Widgt => Close_Button);
-      Bind
-        (Widgt => Close_Button, Sequence => "<Tab>",
-         Script => "{focus " & Remove_Button & ";break}");
-      Bind
-        (Widgt => Module_Dialog, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
-      Bind
-        (Widgt => Close_Button, Sequence => "<Escape>",
-         Script => "{" & Close_Button & " invoke;break}");
-      Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
-      return TCL_OK;
+      return Show_Ada_Remove_Info_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--      Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
+--      Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
+--      Damage_Percent :=
+--        Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
+--        Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability);
+--      Cost :=
+--        Get_Module(Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+--          .Price -
+--        Integer
+--          (Float
+--             (Get_Module
+--                (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+--                .Price) *
+--           (1.0 - Damage_Percent));
+--      if Cost = 0 then
+--         Cost := 1;
+--      end if;
+--      Count_Price
+--        (Price => Cost, Trader_Index => Find_Member(Order => TALK),
+--         Reduce => False);
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
+--      Label :=
+--        Create
+--          (pathName => Module_Dialog & ".gain",
+--           options =>
+--             "-text {" & Trim(Source => Positive'Image(Cost), Side => Left) &
+--             " " & To_String(Source => Money_Name) &
+--             "} -style Headergreen.TLabel");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Label, Options => "-sticky w -padx 5 -row 1 -column 1");
+--      Label :=
+--        Create
+--          (pathName => Module_Dialog & ".timelbl",
+--           options => "-text {Removing time: }");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
+--      Label :=
+--        Create
+--          (pathName => Module_Dialog & ".time",
+--           options =>
+--             "-text {" &
+--             Trim
+--               (Source =>
+--                  Positive'Image
+--                    (Get_Module
+--                       (Index =>
+--                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+--                       .Install_Time),
+--                Side => Left) &
+--             " minutes} -style Golden.TLabel");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Label, Options => "-sticky w -padx 5 -row 2 -column 1");
+--      Set_Module_Info(Installing => False, Row => Row);
+--      if Damage_Percent < 1.0 then
+--         if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
+--            Progress_Bar_Style :=
+--              To_Unbounded_String
+--                (Source => " -style green.Horizontal.TProgressbar");
+--            Status_Tooltip :=
+--              To_Unbounded_String(Source => "Slightly damaged");
+--         elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
+--            Progress_Bar_Style :=
+--              To_Unbounded_String
+--                (Source => " -style yellow.Horizontal.TProgressbar");
+--            Status_Tooltip := To_Unbounded_String(Source => "Damaged");
+--         elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
+--            Progress_Bar_Style :=
+--              To_Unbounded_String
+--                (Source => " -style yellow.Horizontal.TProgressbar");
+--            Status_Tooltip := To_Unbounded_String(Source => "Heavily damaged");
+--         elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
+--            Progress_Bar_Style := Null_Unbounded_String;
+--            Status_Tooltip :=
+--              To_Unbounded_String(Source => "Almost destroyed");
+--         elsif Damage_Percent = 0.0 then
+--            Progress_Bar_Style := Null_Unbounded_String;
+--            Status_Tooltip := To_Unbounded_String(Source => "Destroyed");
+--         end if;
+--         Label :=
+--           Create
+--             (pathName => Module_Dialog & ".damagelbl",
+--              options => "-text {Status:}");
+--         configure
+--           (Widgt => Damage_Bar,
+--            options =>
+--              "-value" & Float'Image(Damage_Percent) &
+--              To_String(Source => Progress_Bar_Style));
+--         Add
+--           (Widget => Damage_Bar,
+--            Message => To_String(Source => Status_Tooltip));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label, Options => "-sticky w -padx {5 0}");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Damage_Bar,
+--            Options =>
+--              "-row" & Positive'Image(Row) &
+--              " -column 1 -sticky we -padx {0 5}");
+--      end if;
+--      if Get_Module
+--          (Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+--          .Description /=
+--        Short_String.Null_Bounded_String then
+--         Label :=
+--           Create
+--             (pathName => Module_Dialog & ".description",
+--              options =>
+--                "-text {" & LF &
+--                To_String
+--                  (Source =>
+--                     Get_Module
+--                       (Index =>
+--                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+--                       .Description) &
+--                "} -wraplength 450");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Label, Options => "-sticky w -padx 5 -columnspan 2");
+--      end if;
+--      Remove_Button :=
+--        Create
+--          (pathName => Module_Dialog & ".buttonbox.install",
+--           options =>
+--             "-text Remove -image sellicon -style Dialoggreen.TButton -command {CloseDialog " &
+--             Module_Dialog & ";ManipulateModule remove}");
+--      Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
+--      Add_Close_Button
+--        (Name => Module_Dialog & ".buttonbox.button", Text => "Close",
+--         Command => "CloseDialog " & Module_Dialog, Column => 1,
+--         Icon => "cancelicon", Color => "red");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Frame, Options => "-pady {0 5} -columnspan 2");
+--      Focus(Widgt => Close_Button);
+--      Bind
+--        (Widgt => Close_Button, Sequence => "<Tab>",
+--         Script => "{focus " & Remove_Button & ";break}");
+--      Bind
+--        (Widgt => Module_Dialog, Sequence => "<Escape>",
+--         Script => "{" & Close_Button & " invoke;break}");
+--      Bind
+--        (Widgt => Close_Button, Sequence => "<Escape>",
+--         Script => "{" & Close_Button & " invoke;break}");
+--      Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
+--      return TCL_OK;
    end Show_Remove_Info_Command;
 
    -- ****o* ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command
