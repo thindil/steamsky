@@ -1070,6 +1070,17 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Install or remove the selected module
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ManipulateModule
   try:
     if argv[1] == "install":
       upgradeShip(install = true, moduleIndex = moduleIndex)
