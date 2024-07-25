@@ -1182,6 +1182,16 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & removeButton &
       " -text Remove -image sellicon -style Dialoggree.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule remove}")
+  tclEval(script = "grid " & removeButton & " -padx {0 5}")
+  addCloseButton(name = moduleDialog & ".buttonbox.button", text = "Close",
+      command = "CloseDialog " & moduleDialog, column = 1, icon = "cancelicon", color = "red")
+  tclEval(script = "grid " & frame & " -pady {0 5} -columnspan 2")
+  let closeButton = moduleDialog & ".buttonbox.button"
+  tclEval(script = "focus " & closeButton)
+  tclEval(script = "bind " & closeButton & " <Tab> {focus " & removeButton & ";break}")
+  tclEval(script = "bind " & moduleDialog & " <Escape> {" & closeButton & " invoke;break}")
+  tclEval(script = "bind " & closeButton & " <Escape> {" & closeButton & " invoke;break}")
+  showDialog(dialog = moduleDialog, relativeY = 0.2)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
