@@ -1116,6 +1116,17 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show information about the selected module to remove
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowRemoveInfo
   moduleIndex = try:
       ($argv[1]).parseInt
     except:
