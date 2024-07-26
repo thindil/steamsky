@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's stories, like reading them from a file,
+## setting the current story, progressing, etc.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import events, game, log, maps, shipscargo, types, utils
@@ -121,7 +124,7 @@ var
   storiesList* = initTable[string, StoryData]() ## The list of available stories in the game
   currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
       maxSteps: 1) ## Contains data about the current story on which the player is
-  finishedStories*: seq[FinishedStoryData]
+  finishedStories*: seq[FinishedStoryData] ## The list of finished stories
 
 proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
@@ -580,6 +583,7 @@ type
 
 proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     loadStories(fileName = $fileName)
     return "".cstring
@@ -588,6 +592,7 @@ proc loadAdaStories(fileName: cstring): cstring {.sideEffect, raises: [],
 
 proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   adaStory = AdaStoryData(startCondition: -1, minSteps: -1, maxSteps: -1)
   let recipeKey = strip(s = $index)
   if not storiesList.hasKey(key = recipeKey):
@@ -606,6 +611,7 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
 
   proc convertStep(step: StepData): AdaStepData {.raises: [], tags: [],
       contractual.} =
+    ## Temporary C binding
     result = AdaStepData(index: step.index.cstring,
         finishCondition: step.finishCondition.ord.cint,
         failText: step.failText.cstring)
@@ -634,6 +640,7 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
 
 proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   currentStory = CurrentStoryData(index: $story.index, step: story.step,
       currentStep: story.currentStep, maxSteps: story.maxSteps,
       showText: story.showText == 1, data: $story.data,
@@ -641,6 +648,7 @@ proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
 
 proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   story = AdaCurrentStoryData(index: currentStory.index.cstring,
       step: currentStory.step.cint, currentStep: currentStory.currentStep.cint,
       maxSteps: currentStory.maxSteps.cint, showText: (
@@ -649,6 +657,7 @@ proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [],
 
 proc getAdaStepData(finishData: array[10, AdaStepFinishData];
     name: cstring): cstring {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   var nimData: seq[StepFinishData]
   for data in finishData:
     if data.name.len == 0:
@@ -658,6 +667,7 @@ proc getAdaStepData(finishData: array[10, AdaStepFinishData];
 
 proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: [
     ], exportc, contractual.} =
+  ## Temporary C binding
   try:
     startStory(factionName = $factionName,
         condition = condition.StartConditionType)
@@ -666,6 +676,7 @@ proc startAdaStory(factionName: cstring; condition: cint) {.raises: [], tags: [
 
 proc getAdaCurrentStoryText(): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     return getCurrentStoryText().cstring
   except KeyError:
@@ -673,6 +684,7 @@ proc getAdaCurrentStoryText(): cstring {.raises: [], tags: [], exportc,
 
 proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   story.index = "".cstring
   story.stepsAmount = 1
   for text in story.stepsTexts.mitems:
@@ -687,14 +699,17 @@ proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEff
 
 proc clearAdaCurrentStory() {.sideEffect, raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   clearCurrentStory()
 
 proc setAdaStoryShowText(newValue: cint) {.sideEffect, raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   currentStory.showText = newValue == 1
 
 proc getAdaStoryLocation(x, y: var cint) {.sideEffect, raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     (x, y) = getStoryLocation()
   except:
