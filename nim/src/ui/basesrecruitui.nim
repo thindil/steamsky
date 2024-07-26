@@ -301,7 +301,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     let infoButton = progressFrame & ".button"
     tclEval(script = "ttk::button " & infoButton &
         " -image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo " &
-        $(index + 1) & " .recruitdialog}")
+        $(skill.index) & " " & $toolQuality & "  .recruitdialog}")
     tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected skill.\"")
     tclEval(script = "grid " & infoButton & " -column 2 -row 0")
     tclEval(script = "grid " & progressFrame & " -sticky we")
