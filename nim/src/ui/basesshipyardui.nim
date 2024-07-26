@@ -1222,7 +1222,8 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showShipyardTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let
     shipyardCanvas = mainPaned & ".shipyardframe.canvas"
     shipyardFrame = shipyardCanvas & ".shipyard"
