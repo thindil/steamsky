@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,8 +28,10 @@ pack [ttk::scrollbar .gameframe.paned.schoolframe.scrollx -orient horizontal \
 set schoolframe [ttk::frame $schoolcanvas.school]
 SetScrollbarBindings $schoolframe .gameframe.paned.schoolframe.scrolly
 set traintype amount
-grid [ttk::label $schoolframe.money]
-grid [ttk::frame $schoolframe.setting]
+grid [ttk::frame $schoolframe.money] -sticky w -pady 5 -padx 5
+grid [ttk::label $schoolframe.money.moneylbl] -sticky w
+grid [ttk::label $schoolframe.money.money] -sticky w -column 1 -row 0
+grid [ttk::frame $schoolframe.setting] -padx 5
 grid [ttk::button $schoolframe.setting.train -text {Train:} \
    -command TrainSkill]
 tooltip::tooltip $schoolframe.setting.train \
@@ -53,7 +55,7 @@ bind $schoolframe.setting.skill <<ComboboxSelected>> {
 grid [ttk::frame $schoolframe.amountbox] -sticky w
 grid [ttk::radiobutton $schoolframe.amountbox.radioamount \
    -text {Selected amount of times} -variable traintype -value amount] \
-   -columnspan 2 -sticky w
+   -columnspan 2 -sticky w -padx 5 -pady {5 0}
 tooltip::tooltip $schoolframe.amountbox.radioamount \
    {Train the selected skill the selected amount of times}
 grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}] -sticky w \
@@ -81,7 +83,7 @@ tooltip::tooltip $schoolframe.amountbox.cost \
 grid [ttk::frame $schoolframe.costbox] -sticky w
 grid [ttk::radiobutton $schoolframe.costbox.radioamount \
    -text {Selected maximum cost of training} -variable traintype -value cost] \
-   -columnspan 2 -sticky w
+   -columnspan 2 -sticky w -padx 5 -pady {5 0}
 tooltip::tooltip $schoolframe.costbox.radioamount \
    "Train the selected skill as long as you don't spend the selected\namount of money"
 grid [ttk::label $schoolframe.costbox.amountlbl -text {Cost:}] -sticky w \
