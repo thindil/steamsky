@@ -31,3 +31,4 @@ All notable changes to this project will be documented in this file.
 - Information about the player's money in bases' shipyards
 - Crash on viewing information about an installed engine in shipyards
 - Showing information about the installed cockpit in shipyards
+- Showing information about owned money in bases' schools
