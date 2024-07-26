@@ -19,9 +19,9 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
+-- with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -302,54 +302,56 @@ package body Bases.ShipyardUI is
    function Show_Shipyard_Tab_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showShipyardTabCommand";
       -- ****
 
-   function Show_Shipyard_Tab_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argv);
-      use Tcl.Ada;
-
-      Shipyard_Canvas: constant Tk_Canvas :=
-        Get_Widget
-          (pathName => Main_Paned & ".shipyardframe.canvas", Interp => Interp);
-      Shipyard_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Shipyard_Canvas & ".shipyard");
-      Frame: Ttk_Frame;
-   begin
-      if Tcl_GetVar(interp => Interp, varName => "newtab") = "install" then
-         Frame := Get_Widget(pathName => Shipyard_Frame & ".remove");
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
-         Frame := Get_Widget(pathName => Shipyard_Frame & ".install");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
-      else
-         Frame := Get_Widget(pathName => Shipyard_Frame & ".install");
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
-         Frame := Get_Widget(pathName => Shipyard_Frame & ".remove");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
-      end if;
-      Delete(CanvasWidget => Shipyard_Canvas, TagOrId => "all");
-      Canvas_Create
-        (Parent => Shipyard_Canvas, Child_Type => "window",
-         Options =>
-           "0 0 -anchor nw -window " & Widget_Image(Win => Shipyard_Frame));
-      Tcl_Eval(interp => Interp, strng => "update");
-      configure
-        (Widgt => Shipyard_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Shipyard_Canvas, TagOrId => "all") & "]");
-      Tcl_SetResult(interp => Interp, str => "1");
-      if Argc = 1 then
-         return
-           Show_Shipyard_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-              Argv => CArgv.Empty & "ShowShipyard" & "0");
-      else
-         return TCL_OK;
-      end if;
-   end Show_Shipyard_Tab_Command;
+--   function Show_Shipyard_Tab_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argv);
+--      use Tcl.Ada;
+--
+--      Shipyard_Canvas: constant Tk_Canvas :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".shipyardframe.canvas", Interp => Interp);
+--      Shipyard_Frame: constant Ttk_Frame :=
+--        Get_Widget(pathName => Shipyard_Canvas & ".shipyard");
+--      Frame: Ttk_Frame;
+--   begin
+--      if Tcl_GetVar(interp => Interp, varName => "newtab") = "install" then
+--         Frame := Get_Widget(pathName => Shipyard_Frame & ".remove");
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
+--         Frame := Get_Widget(pathName => Shipyard_Frame & ".install");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+--      else
+--         Frame := Get_Widget(pathName => Shipyard_Frame & ".install");
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
+--         Frame := Get_Widget(pathName => Shipyard_Frame & ".remove");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
+--      end if;
+--      Delete(CanvasWidget => Shipyard_Canvas, TagOrId => "all");
+--      Canvas_Create
+--        (Parent => Shipyard_Canvas, Child_Type => "window",
+--         Options =>
+--           "0 0 -anchor nw -window " & Widget_Image(Win => Shipyard_Frame));
+--      Tcl_Eval(interp => Interp, strng => "update");
+--      configure
+--        (Widgt => Shipyard_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Shipyard_Canvas, TagOrId => "all") & "]");
+--      Tcl_SetResult(interp => Interp, str => "1");
+--      if Argc = 1 then
+--         return
+--           Show_Shipyard_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--              Argv => CArgv.Empty & "ShowShipyard" & "0");
+--      else
+--         return TCL_OK;
+--      end if;
+--   end Show_Shipyard_Tab_Command;
 
    -- ****it* ShipyardUI/ShipyardUI.Modules_Sort_Orders
    -- FUNCTION
