@@ -592,6 +592,9 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't count hire cost.")
   tclEval(script = moneyInfo & " tag configure red -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-red)"))
+  tclEval(script = moneyInfo & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
