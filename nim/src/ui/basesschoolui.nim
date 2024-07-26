@@ -90,7 +90,7 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
     moneyLabel = schoolCanvas & ".school.money"
-  if moneyIndex2 > 0:
+  if moneyIndex2 > -1:
     tclEval(script = moneyLabel & " configure -text {You have " &
         $playerShip.cargo[moneyIndex2].amount & " " & moneyName & ".}")
   else:
