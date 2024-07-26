@@ -1221,6 +1221,32 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = moduleDialog, relativeY = 0.2)
   return tclOk
 
+proc showShipyardTabCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    shipyardCanvas = mainPaned & ".shipyardframe.canvas"
+    shipyardFrame = shipyardCanvas & ".shipyard"
+  if tclGetVar(varName = "newtab") == "install":
+    var frame = shipyardFrame & ".remove"
+    tclEval(script = "grid remove " & frame)
+    frame = shipyardFrame & ".install"
+    tclEval(script = "grid " & frame)
+  else:
+    var frame = shipyardFrame & ".install"
+    tclEval(script = "grid remove " & frame)
+    frame = shipyardFrame & ".remove"
+    tclEval(script = "grid " & frame)
+  tclEval(script = shipyardCanvas & " delete all")
+  tclEval(script = shipyardCanvas & " create window 0 0 -anchor nw -window " & shipyardFrame)
+  tclEval(script = "update")
+  tclEval(script = shipyardCanvas & " configure -scrollregion [list " &
+      tclEval2(script = shipyardCanvas & " bbox all") & "]")
+  tclSetResult(value = "1")
+  if argc == 1:
+    return showShipyardCommand(clientData = clientData, interp = interp,
+        argc = 2, argv = @["ShowShipyard", "0"].allocCStringArray)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -1229,6 +1255,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowInstallInfo", showInstallInfoCommand)
 #    addCommand("ManipulateModule", manipulateModuleCommand)
 #    addCommand("ShowRemoveInfo", showRemoveInfoCommand)
+#    addCommand("ShowShipyardTab", showShipyardTabCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
