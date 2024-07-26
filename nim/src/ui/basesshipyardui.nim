@@ -1259,6 +1259,53 @@ proc showShipyardTabCommand(clientData: cint; interp: PInterp; argc: cint;
         argc = 2, argv = @["ShowShipyard", "0"].allocCStringArray)
   return tclOk
 
+type ModulesSortOrders = enum
+  none, nameAsc, nameDesc, typeAsc, typeDesc, sizeAsc, sizeDesc, materialAsc,
+    materialDesc, priceAsc, priceDesc
+
+const defaultModulesSortOrder = none
+
+var modulesSortOrder = defaultModulesSortOrder
+
+proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        getColumnNumber(table = (if argv[1] ==
+            "install": installTable else: removeTable), xPosition = ($argv[4]).parseInt)
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if modulesSortOrder == nameAsc:
+      modulesSortOrder = nameDesc
+    else:
+      modulesSortOrder = nameAsc
+  of 2:
+    if modulesSortOrder == typeAsc:
+      modulesSortOrder = typeDesc
+    else:
+      modulesSortOrder = typeAsc
+  of 3:
+    if modulesSortOrder == sizeAsc:
+      modulesSortOrder = sizeDesc
+    else:
+      modulesSortOrder = sizeAsc
+  of 4:
+    if modulesSortOrder == materialAsc:
+      modulesSortOrder = materialDesc
+    else:
+      modulesSortOrder = materialAsc
+  of 5:
+    if modulesSortOrder == priceAsc:
+      modulesSortOrder = priceDesc
+    else:
+      modulesSortOrder = priceAsc
+  else:
+    discard
+  if modulesSortOrder == none:
+    return tclOk
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -1268,6 +1315,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ManipulateModule", manipulateModuleCommand)
 #    addCommand("ShowRemoveInfo", showRemoveInfoCommand)
 #    addCommand("ShowShipyardTab", showShipyardTabCommand)
+#    addCommand("SortShipyardModules", sortShipyardModulesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
