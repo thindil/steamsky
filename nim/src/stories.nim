@@ -121,10 +121,12 @@ type
     stepsTexts*: seq[string] = @[]
 
 var
-  storiesList* = initTable[string, StoryData]() ## The list of available stories in the game
-  currentStory*: CurrentStoryData = CurrentStoryData(step: 1,
-      maxSteps: 1) ## Contains data about the current story on which the player is
-  finishedStories*: seq[FinishedStoryData] ## The list of finished stories
+  storiesList*: Table[string, StoryData] = initTable[string, StoryData]()
+    ## The list of available stories in the game
+  currentStory*: CurrentStoryData = CurrentStoryData(step: 1, maxSteps: 1)
+    ## Contains data about the current story on which the player is
+  finishedStories*: seq[FinishedStoryData] = @[]
+    ## The list of finished stories
 
 proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
@@ -134,7 +136,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let storiesXml = try:
+    let storiesXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -173,11 +175,11 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             StoryData(minSteps: 1, maxSteps: 1)
         else:
           StoryData(minSteps: 1, maxSteps: 1)
-      var attribute = storyNode.attr(name = "name")
+      var attribute: string = storyNode.attr(name = "name")
       if attribute.len() > 0:
         story.name = attribute
-      let startStep = storyNode.attr(name = "startstep")
-      let finalStep = storyNode.attr(name = "finalstep")
+      let startStep: string = storyNode.attr(name = "startstep")
+      let finalStep: string = storyNode.attr(name = "finalstep")
       attribute = storyNode.attr(name = "start")
       if attribute.len() > 0:
         story.startCondition = try:
@@ -202,7 +204,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid maximum amount of steps.")
       for startData in storyNode.findAll(tag = "startdata"):
         let
-          value = startData.attr(name = "value")
+          value: string = startData.attr(name = "value")
           dataAction: DataAction = try:
               parseEnum[DataAction](s = startData.attr(
                   name = "action").toLowerAscii)
@@ -212,7 +214,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         of DataAction.add:
           story.startData.add(y = value)
         of remove:
-          var deleteIndex = -1
+          var deleteIndex: int = -1
           for index, data in story.startData.pairs:
             if data == value:
               deleteIndex = index
@@ -223,7 +225,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           discard
       for faction in storyNode.findAll(tag = "forbiddenfaction"):
         let
-          value = faction.attr(name = "value")
+          value: string = faction.attr(name = "value")
           factionAction: DataAction = try:
               parseEnum[DataAction](s = faction.attr(
                   name = "action").toLowerAscii)
@@ -233,7 +235,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         of DataAction.add:
           story.forbiddenFactions.add(y = value)
         of remove:
-          var deleteIndex = -1
+          var deleteIndex: int = -1
           for index, data in story.forbiddenFactions.pairs:
             if data == value:
               deleteIndex = index
@@ -243,13 +245,13 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         of update:
           discard
       for step in storyNode.findAll(tag = "step"):
-        var tempStep = StepData(index: step.attr(name = "index"),
+        var tempStep: StepData = StepData(index: step.attr(name = "index"),
             finishCondition: askInBase)
         let stepAction: DataAction = try:
               parseEnum[DataAction](s = step.attr(name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
-        var stepIndex = -1
+        var stepIndex: int = -1
         for index, data in story.steps.pairs:
           if data.index == tempStep.index:
             stepIndex = index
@@ -274,7 +276,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                       name = "action").toLowerAscii)
                 except ValueError:
                   DataAction.add
-              name = stepData.attr(name = "name")
+              name: string = stepData.attr(name = "name")
             case dataAction
             of DataAction.add:
               tempStep.finishData.add(y = StepFinishData(name: name,
@@ -284,7 +286,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 if data.name == name:
                   data.value = stepData.attr(name = "value")
             of remove:
-              var deleteIndex = -1
+              var deleteIndex: int = -1
               for index, data in tempStep.finishData.pairs:
                 if data.name == name:
                   deleteIndex = index
@@ -298,7 +300,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                       name = "action").toLowerAscii)
                 except ValueError:
                   DataAction.add
-              condition = try:
+              condition: StepConditionType = try:
                   parseEnum[StepConditionType](s = text.attr(
                       name = "condition"))
                 except ValueError:
@@ -314,14 +316,14 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 if stepText.condition == condition:
                   stepText.text = text.innerText()
             of remove:
-              var deleteIndex = -1
+              var deleteIndex: int = -1
               for index, data in tempStep.texts.pairs:
                 if data.condition == condition:
                   deleteIndex = index
                   break
               if deleteIndex > -1:
                 tempStep.texts.delete(i = deleteIndex)
-          let failText = step.child(name = "failtext").innerText()
+          let failText: string = step.child(name = "failtext").innerText()
           if failText.len() > 0:
             tempStep.failText = failText
           if tempStep.index == startStep:
@@ -333,7 +335,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               story.steps.add(y = tempStep)
             else:
               story.steps[stepIndex] = tempStep
-      let endText = storyNode.child(name = "endtext").innerText()
+      let endText: string = storyNode.child(name = "endtext").innerText()
       if endText.len > 0:
         story.endText = endText
       if storyAction == DataAction.add:
@@ -355,7 +357,8 @@ proc selectBase*(value: string): string {.sideEffect, raises: [], tags: [],
   if value == "any":
     return ""
   while true:
-    let baseIndex = getRandom(min = skyBases.low, max = skyBases.high)
+    let baseIndex: BasesRange = getRandom(min = skyBases.low,
+        max = skyBases.high)
     if skyBases[baseIndex].known and skyBases[baseIndex].reputation.level > -25:
       playerShip.destinationX = skyBases[baseIndex].skyX
       playerShip.destinationY = skyBases[baseIndex].skyY
@@ -386,8 +389,8 @@ proc selectLocation*(step: seq[StepFinishData]): string {.sideEffect, raises: [
   ##
   ## Returns the string with X and Y coordinates for the selected step's location.
   var
-    value = getStepData(finishData = step, name = "x")
-    locationX, locationY = 1
+    value: string = getStepData(finishData = step, name = "x")
+    locationX, locationY: Natural = 1
   if value == "random":
     locationX = getRandom(min = MapXRange.low, max = MapXRange.high)
     result = $locationX & ";"
@@ -420,11 +423,11 @@ proc selectEnemy*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     result.len > 0
   body:
     result = selectLocation(step = step)
-    var value = getStepData(finishData = step, name = "ship")
+    var value: string = getStepData(finishData = step, name = "ship")
     if value != "random":
       return result & value
     value = getStepData(finishData = step, name = "faction")
-    var enemies: seq[Positive]
+    var enemies: seq[Positive] = @[]
     generateEnemies(enemies = enemies, owner = value)
     return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
@@ -440,11 +443,11 @@ proc selectLoot*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     result.len > 0
   body:
     result = getStepData(finishData = step, name = "item") & ";"
-    var value = getStepData(finishData = step, name = "ship")
+    var value: string = getStepData(finishData = step, name = "ship")
     if value != "random":
       return result & value
     value = getStepData(finishData = step, name = "faction")
-    var enemies: seq[Positive]
+    var enemies: seq[Positive] = @[]
     generateEnemies(enemies = enemies, owner = value)
     return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
@@ -456,7 +459,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
   ## * condition   - the starting condition of the story
   if currentStory.index.len > 0:
     return
-  var factionIndex = ""
+  var factionIndex: string = ""
   for index, faction in factionsList:
     if faction.name == factionName:
       factionIndex = index
@@ -464,8 +467,8 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
   if factionIndex.len == 0:
     return
   var
-    nextStory = false
-    step = ""
+    nextStory: bool = false
+    step: string = ""
   for sIndex, story in storiesList.pairs:
     nextStory = false
     for forbiddenFaction in story.forbiddenFactions:
@@ -506,7 +509,7 @@ proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [],
   ## Returns the string with the current step text or empty string if nothing
   ## found.
   result = ""
-  let stepTexts = if currentStory.currentStep == -1:
+  let stepTexts: seq[StepTextData] = if currentStory.currentStep == -1:
       storiesList[currentStory.index].startingStep.texts
     elif currentStory.currentStep > -1:
       storiesList[currentStory.index].steps[currentStory.currentStep].texts
@@ -530,7 +533,7 @@ proc getStoryLocation*(): tuple[storyX: MapXRange;
   result = (1, 1)
   if currentStory.data.len == 0:
     return (playerShip.skyX, playerShip.skyY)
-  let coords = currentStory.data.split(sep = ';')
+  let coords: seq[string] = currentStory.data.split(sep = ';')
   if coords.len < 3:
     for skyBase in skyBases:
       if skyBase.name == currentStory.data:
@@ -594,10 +597,10 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
   adaStory = AdaStoryData(startCondition: -1, minSteps: -1, maxSteps: -1)
-  let recipeKey = strip(s = $index)
+  let recipeKey: string = strip(s = $index)
   if not storiesList.hasKey(key = recipeKey):
     return
-  let story = try:
+  let story: StoryData = try:
       storiesList[recipeKey]
     except KeyError:
       return
@@ -658,7 +661,7 @@ proc setAdaCurrentStory(story: var AdaCurrentStoryData) {.raises: [], tags: [],
 proc getAdaStepData(finishData: array[10, AdaStepFinishData];
     name: cstring): cstring {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  var nimData: seq[StepFinishData]
+  var nimData: seq[StepFinishData] = @[]
   for data in finishData:
     if data.name.len == 0:
       break
@@ -691,7 +694,7 @@ proc setAdaFinishedStory(index: cint; story: var AdaFinishedStoryData) {.sideEff
     text = "".cstring
   if index >= finishedStories.len:
     return
-  let nimStory = finishedStories[index - 1]
+  let nimStory: FinishedStoryData = finishedStories[index - 1]
   story.index = nimStory.index.cstring
   story.stepsAmount = nimStory.stepsAmount.cint
   for index, text in nimStory.stepsTexts:
