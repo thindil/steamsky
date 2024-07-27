@@ -46,7 +46,7 @@ package body Bases.ShipyardUI is
 
    -- ****iv* ShipyardUI/ShipyardUI.Module_Index
    -- SOURCE
-   Module_Index: Positive;
+--   Module_Index: Positive;
    -- ****
 
    --## rule off REDUCEABLE_SCOPE
@@ -56,11 +56,11 @@ package body Bases.ShipyardUI is
    -- RESULT
    -- The index of the currently selected module
    -- SOURCE
-   function Get_Module_Index return Positive is
-      -- ****
-   begin
-      return Module_Index;
-   end Get_Module_Index;
+--   function Get_Module_Index return Positive is
+--      -- ****
+--   begin
+--      return Module_Index;
+--   end Get_Module_Index;
 
    -- ****if* ShipyardUI/ShipyardUI.Set_Module_Info
    -- FUNCTION
@@ -71,19 +71,19 @@ package body Bases.ShipyardUI is
    -- New_Info   - If true, create the new UI for the info, otherwise reuse old
    --              one. Default value is True.
    -- SOURCE
-   procedure Set_Module_Info
-     (Installing: Boolean; Row: in out Positive; New_Info: Boolean := True) is
-      -- ****
-      procedure Set_Ada_Module_Info
-        (I: Integer; R: in out Positive; N_Info, M_Index: Integer) with
-         Convention => C,
-         Import => True,
-         External_Name => "setAdaModuleInfo";
-   begin
-      Set_Ada_Module_Info
-        (I => (if Installing then 1 else 0), R => Row,
-         N_Info => (if New_Info then 1 else 0), M_Index => Get_Module_Index);
-   end Set_Module_Info;
+--   procedure Set_Module_Info
+--     (Installing: Boolean; Row: in out Positive; New_Info: Boolean := True) is
+--      -- ****
+--      procedure Set_Ada_Module_Info
+--        (I: Integer; R: in out Positive; N_Info, M_Index: Integer) with
+--         Convention => C,
+--         Import => True,
+--         External_Name => "setAdaModuleInfo";
+--   begin
+--      Set_Ada_Module_Info
+--        (I => (if Installing then 1 else 0), R => Row,
+--         N_Info => (if New_Info then 1 else 0), M_Index => Get_Module_Index);
+--   end Set_Module_Info;
    --## rule on REDUCEABLE_SCOPE
 
    -- ****f* ShipyardUI/ShipyardUI.Show_Install_Info_Command
@@ -98,24 +98,26 @@ package body Bases.ShipyardUI is
    function Show_Install_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showInstallInfoCommand";
       -- ****
 
-   function Show_Install_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      function Show_Ada_Install_Info_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Convention => C,
-         Import => True,
-         External_Name => "showInstallInfoCommand";
-   begin
-      Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      return
-        Show_Ada_Install_Info_Command
-          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
-   end Show_Install_Info_Command;
+--   function Show_Install_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      function Show_Ada_Install_Info_Command
+--        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+--         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--         Convention => C,
+--         Import => True,
+--         External_Name => "showInstallInfoCommand";
+--   begin
+--      Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      return
+--        Show_Ada_Install_Info_Command
+--          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--   end Show_Install_Info_Command;
 
    -- ****f* ShipyardUI/ShipyardUI.Manipulate_Module_Command
    -- FUNCTION
@@ -146,26 +148,28 @@ package body Bases.ShipyardUI is
    function Show_Remove_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showRemoveInfoCommand";
       -- ****
 
-   function Show_Remove_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      function Show_Ada_Remove_Info_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Convention => C,
-         Import => True,
-         External_Name => "showRemoveInfoCommand";
-   begin
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      return
-        Show_Ada_Remove_Info_Command
-          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
-   end Show_Remove_Info_Command;
+--   function Show_Remove_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      function Show_Ada_Remove_Info_Command
+--        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+--         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--         Convention => C,
+--         Import => True,
+--         External_Name => "showRemoveInfoCommand";
+--   begin
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      return
+--        Show_Ada_Remove_Info_Command
+--          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--   end Show_Remove_Info_Command;
 
    -- ****o* ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command
    -- FUNCTION
@@ -229,18 +233,20 @@ package body Bases.ShipyardUI is
    function Compare_Modules_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "compareModulesCommand";
       -- ****
 
-   function Compare_Modules_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
-      Row: Positive := 3;
-   begin
-      Set_Module_Info(Installing => True, Row => Row, New_Info => False);
-      return TCL_OK;
-   end Compare_Modules_Command;
+--   function Compare_Modules_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+--      Row: Positive := 3;
+--   begin
+--      Set_Module_Info(Installing => True, Row => Row, New_Info => False);
+--      return TCL_OK;
+--   end Compare_Modules_Command;
 
    procedure Add_Commands is
       use Utils.UI;
