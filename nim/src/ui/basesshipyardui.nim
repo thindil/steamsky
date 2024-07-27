@@ -1270,6 +1270,21 @@ var modulesSortOrder = defaultModulesSortOrder
 proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Sort the ship modules lists
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortShipModules action moduletype page x
+  ## Action is a type of action, can be install or remove, moduletype is a
+  ## type of modules to show, page is the number of currently showed page
+  ## of list and x is X axis coordinate where the player clicked the mouse
+  ## button
   let column = try:
         getColumnNumber(table = (if argv[1] ==
             "install": installTable else: removeTable), xPosition = ($argv[4]).parseInt)
