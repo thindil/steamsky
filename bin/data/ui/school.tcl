@@ -30,7 +30,8 @@ SetScrollbarBindings $schoolframe .gameframe.paned.schoolframe.scrolly
 set traintype amount
 grid [ttk::frame $schoolframe.money] -sticky w -pady 5 -padx 5
 grid [ttk::label $schoolframe.money.moneylbl] -sticky w
-grid [ttk::label $schoolframe.money.money] -sticky w -column 1 -row 0
+grid [ttk::label $schoolframe.money.money -style Golden.TLabel] -sticky w \
+   -column 1 -row 0
 grid [ttk::frame $schoolframe.setting] -padx 5
 grid [ttk::button $schoolframe.setting.train -text {Train:} \
    -command TrainSkill]

@@ -86,16 +86,17 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     showSkyMap(clear = true)
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "crew")
-  let
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
-    moneyLabel = schoolCanvas & ".school.money.moneylbl"
+  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  var moneyLabel = schoolCanvas & ".school.money.moneylbl"
   if moneyIndex2 > -1:
-    tclEval(script = moneyLabel & " configure -text {You have " &
-        $playerShip.cargo[moneyIndex2].amount & " " & moneyName & ".}")
+    tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
+    moneyLabel = schoolCanvas & ".school.money.money"
+    tclEval(script = moneyLabel & " configure -text {" & $playerShip.cargo[
+        moneyIndex2].amount & " " & moneyName & "}")
   else:
     tclEval(script = moneyLabel & " configure -text {You don't have any " &
-        moneyName & " to pay for learning.}")
+        moneyName & " to pay for learning.} -style Headerred.TLabel")
   schoolFrame = schoolCanvas & ".school"
   if argc == 1:
     var comboList = ""
