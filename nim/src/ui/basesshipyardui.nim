@@ -1304,6 +1304,33 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     discard
   if modulesSortOrder == none:
     return tclOk
+  type LocalModuleData = object
+    name: string
+    mType: string
+    size: Natural
+    material: string
+    price: Positive = 1
+    id: Natural
+  var localModules: seq[LocalModuleData] = @[]
+  if argv[1] == "install":
+    for index, module in modulesList:
+      var cost: Natural = module.price
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+      if cost == 0:
+        cost = 1
+      localModules.add(y = LocalModuleData(name: module.name,
+          mType: getModuleType(moduleIndex = index), size: (if module.mType ==
+          ModuleType.hull: module.maxValue else: module.size),
+          material: module.repairMaterial, price: cost, id: index))
+  else:
+    for index, module in playerShip.modules:
+      let damage = 1.0 - (module.durability.float / module.maxDurability.float)
+      var cost: Natural = modulesList[module.protoIndex].price - (modulesList[
+          module.protoIndex].price.float * damage).Natural
+      if cost == 0:
+        cost = 1
+      countPrice(price = cost, traderIndex = findMember(order = talk),
+          reduce = false)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
