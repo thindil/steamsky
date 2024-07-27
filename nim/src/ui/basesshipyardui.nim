@@ -1434,6 +1434,17 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show the comparison between the selected modules in install info
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## CompareModules
   var row: Positive = 3
   setModuleInfo(installing = true, row = row, newInfo = false)
   return tclOk
