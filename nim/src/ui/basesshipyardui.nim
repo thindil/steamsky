@@ -1433,7 +1433,7 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowShipyard", $argv[2], $argv[3]].allocCStringArray)
 
 proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   var row: Positive = 3
   setModuleInfo(installing = true, row = row, newInfo = false)
   return tclOk
