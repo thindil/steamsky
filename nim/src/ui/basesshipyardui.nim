@@ -1268,7 +1268,8 @@ const defaultModulesSortOrder = none
 var modulesSortOrder = defaultModulesSortOrder
 
 proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let column = try:
         getColumnNumber(table = (if argv[1] ==
             "install": installTable else: removeTable), xPosition = ($argv[4]).parseInt)
@@ -1315,26 +1316,41 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   if argv[1] == "install":
     for index, module in modulesList:
       var cost: Natural = module.price
-      countPrice(price = cost, traderIndex = findMember(order = talk))
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk))
+      except:
+        return showError(message = "Can't count install cost.")
       if cost == 0:
         cost = 1
-      localModules.add(y = LocalModuleData(name: module.name,
-          mType: getModuleType(moduleIndex = index), size: (if module.mType ==
-          ModuleType.hull: module.maxValue else: module.size),
-          material: module.repairMaterial, price: cost, id: index))
+      try:
+        localModules.add(y = LocalModuleData(name: module.name,
+            mType: getModuleType(moduleIndex = index), size: (if module.mType ==
+            ModuleType.hull: module.maxValue else: module.size),
+            material: module.repairMaterial, price: cost, id: index))
+      except:
+        return showError(message = "Can't add module to install.")
   else:
     for index, module in playerShip.modules:
       let damage = 1.0 - (module.durability.float / module.maxDurability.float)
-      var cost: Natural = modulesList[module.protoIndex].price - (modulesList[
-          module.protoIndex].price.float * damage).Natural
+      var cost: Natural = try:
+          modulesList[module.protoIndex].price - (modulesList[
+              module.protoIndex].price.float * damage).Natural
+        except:
+          return showError(message = "Can't set price for module.")
       if cost == 0:
         cost = 1
-      countPrice(price = cost, traderIndex = findMember(order = talk),
-          reduce = false)
-      localModules.add(y = LocalModuleData(name: module.name,
-          mType: getModuleType(moduleIndex = module.protoIndex),
-          size: modulesList[module.protoIndex].size, material: modulesList[
-          module.protoIndex].repairMaterial, price: cost, id: index))
+      try:
+        countPrice(price = cost, traderIndex = findMember(order = talk),
+            reduce = false)
+      except:
+        return showError(message = "Can't count price for module.")
+      try:
+        localModules.add(y = LocalModuleData(name: module.name,
+            mType: getModuleType(moduleIndex = module.protoIndex),
+            size: modulesList[module.protoIndex].size, material: modulesList[
+            module.protoIndex].repairMaterial, price: cost, id: index))
+      except:
+        return showError(message = "Can't add module to remove.")
   proc sortModules(x, y: LocalModuleData): int =
     case modulesSortOrder
     of nameAsc:
