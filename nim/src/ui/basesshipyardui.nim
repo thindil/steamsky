@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[algorithm, os, strutils, tables]
 import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
     shipmodules, tk, types]
 import coreui, dialogs, mapsui, table, utilsui2
@@ -1331,7 +1331,75 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
         cost = 1
       countPrice(price = cost, traderIndex = findMember(order = talk),
           reduce = false)
-  return tclOk
+      localModules.add(y = LocalModuleData(name: module.name,
+          mType: getModuleType(moduleIndex = module.protoIndex),
+          size: modulesList[module.protoIndex].size, material: modulesList[
+          module.protoIndex].repairMaterial, price: cost, id: index))
+  proc sortModules(x, y: LocalModuleData): int =
+    case modulesSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of typeAsc:
+      if x.mType < y.mType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.mType > y.mType:
+        return 1
+      else:
+        return -1
+    of sizeAsc:
+      if x.size < y.size:
+        return 1
+      else:
+        return -1
+    of sizeDesc:
+      if x.size > y.size:
+        return 1
+      else:
+        return -1
+    of materialAsc:
+      if x.material < y.material:
+        return 1
+      else:
+        return -1
+    of materialDesc:
+      if x.material > y.material:
+        return 1
+      else:
+        return -1
+    of priceAsc:
+      if x.price < y.price:
+        return 1
+      else:
+        return -1
+    of priceDesc:
+      if x.price > y.price:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localModules.sort(cmp = sortModules)
+  if argv[1] == "install":
+    installIndexes = @[]
+    for module in localModules:
+      installIndexes.add(y = module.id)
+  else:
+    removeIndexes = @[]
+    for module in localModules:
+      removeIndexes.add(y = module.id)
+  return showShipyardCommand(clientData = clientData, interp = interp, argc = 3,
+      argv = @["ShowShipyard", $argv[2], $argv[3]].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
