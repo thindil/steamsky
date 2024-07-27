@@ -1432,6 +1432,12 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   return showShipyardCommand(clientData = clientData, interp = interp, argc = 3,
       argv = @["ShowShipyard", $argv[2], $argv[3]].allocCStringArray)
 
+proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  var row: Positive = 3
+  setModuleInfo(installing = true, row = row, newInfo = false)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -1442,6 +1448,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowRemoveInfo", showRemoveInfoCommand)
 #    addCommand("ShowShipyardTab", showShipyardTabCommand)
 #    addCommand("SortShipyardModules", sortShipyardModulesCommand)
+#    addCommand("CompareModules", compareModulesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
