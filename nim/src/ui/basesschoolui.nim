@@ -94,9 +94,12 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
     moneyLabel = schoolCanvas & ".school.money.money"
     tclEval(script = moneyLabel & " configure -text {" & $playerShip.cargo[
         moneyIndex2].amount & " " & moneyName & "}")
+    tclEval(script = "grid " & moneyLabel & " -column 1 -row 0")
   else:
     tclEval(script = moneyLabel & " configure -text {You don't have any " &
         moneyName & " to pay for learning.} -style Headerred.TLabel")
+    moneyLabel = schoolCanvas & ".school.money.money"
+    tclEval(script = "grid remove " & moneyLabel)
   schoolFrame = schoolCanvas & ".school"
   if argc == 1:
     var comboList = ""
