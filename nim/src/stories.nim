@@ -215,7 +215,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           story.startData.add(y = value)
         of remove:
           var deleteIndex: int = -1
-          for index, data in story.startData.pairs:
+          for index, data in story.startData:
             if data == value:
               deleteIndex = index
               break
@@ -236,7 +236,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           story.forbiddenFactions.add(y = value)
         of remove:
           var deleteIndex: int = -1
-          for index, data in story.forbiddenFactions.pairs:
+          for index, data in story.forbiddenFactions:
             if data == value:
               deleteIndex = index
               break
@@ -252,7 +252,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             except ValueError:
               DataAction.add
         var stepIndex: int = -1
-        for index, data in story.steps.pairs:
+        for index, data in story.steps:
           if data.index == tempStep.index:
             stepIndex = index
             break
@@ -287,7 +287,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   data.value = stepData.attr(name = "value")
             of remove:
               var deleteIndex: int = -1
-              for index, data in tempStep.finishData.pairs:
+              for index, data in tempStep.finishData:
                 if data.name == name:
                   deleteIndex = index
                   break
@@ -317,7 +317,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   stepText.text = text.innerText()
             of remove:
               var deleteIndex: int = -1
-              for index, data in tempStep.texts.pairs:
+              for index, data in tempStep.texts:
                 if data.condition == condition:
                   deleteIndex = index
                   break
@@ -469,7 +469,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
   var
     nextStory: bool = false
     step: string = ""
-  for sIndex, story in storiesList.pairs:
+  for sIndex, story in storiesList:
     nextStory = false
     for forbiddenFaction in story.forbiddenFactions:
       if forbiddenFaction.toLowerAscii == playerShip.crew[
@@ -478,8 +478,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
         break
     if nextStory:
       continue
-    case condition
-    of dropItem:
+    if condition == dropItem:
       if story.startData[1] == factionIndex and getRandom(min = 1,
           max = story.startData[2].parseInt) == 1:
         case story.startingStep.finishCondition
@@ -607,7 +606,7 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
   adaStory.startCondition = story.startCondition.ord.cint
   for data in adaStory.startData.mitems:
     data = "".cstring
-  for index, data in story.startData.pairs:
+  for index, data in story.startData:
     adaStory.startData[index] = data.cstring
   adaStory.minSteps = story.minSteps.cint
   adaStory.maxSteps = story.maxSteps.cint
@@ -621,24 +620,24 @@ proc getAdaStory(index: cstring; adaStory: var AdaStoryData) {.sideEffect,
     for index, data in result.finishData.mpairs:
       data = AdaStepFinishData(name: "".cstring, value: "".cstring)
       result.texts[index] = AdaStepTextData(condition: -1, text: "".cstring)
-    for index, data in step.finishData.pairs:
+    for index, data in step.finishData:
       result.finishData[index] = AdaStepFinishData(name: data.name.cstring,
           value: data.value.cstring)
-    for index, data in step.texts.pairs:
+    for index, data in step.texts:
       result.texts[index] = AdaStepTextData(condition: data.condition.ord.cint,
           text: data.text.cstring)
 
   adaStory.startingStep = convertStep(step = story.startingStep)
   for index, step in adaStory.steps.mpairs:
     step.index = "".cstring
-  for index, step in story.steps.pairs:
+  for index, step in story.steps:
     adaStory.steps[index] = convertStep(step = step)
   adaStory.finalStep = convertStep(step = story.finalStep)
   adaStory.endText = story.endText.cstring
   adaStory.name = story.name.cstring
   for faction in adaStory.forbiddenFactions.mitems:
     faction = "".cstring
-  for index, faction in story.forbiddenFactions.pairs:
+  for index, faction in story.forbiddenFactions:
     adaStory.forbiddenFactions[index] = faction.cstring
 
 proc getAdaCurrentStory(story: AdaCurrentStoryData) {.sideEffect, raises: [],
