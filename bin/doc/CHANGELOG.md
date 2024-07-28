@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.1] - 2024-07-28
 
 ### Added
 - Information about durability difference between modules when installing a
