@@ -15,13 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/os
-import ../[game, tk]
+import std/[os, tables]
+import ../[game, maps, tk]
 import coreui, mapsui, table
 
 var
   lootTable: TableWidget
-  itemsIndexes: seq[Natural]
+  itemsIndexes: seq[int]
+
+type ItemsSortOrders = enum
+  none, nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, ownedAsc, ownedDesc, availableAsc, availableDesc
+
+const defaultItemsSortOrder: ItemsSortOrders = none
+
+var itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
 
 proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
@@ -42,6 +49,23 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     showSkyMap(clear = true)
   lootFrame = lootCanvas & ".loot"
   var comboBox = lootFrame & ".options.type"
+  let
+    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    currentBaseCargo = skyBases[baseIndex].cargo
+  if itemsSortOrder == defaultItemsSortOrder:
+    itemsIndexes = @[]
+    for index, _ in playerShip.cargo:
+      itemsIndexes.add(y = index)
+    itemsIndexes.add(y = -1)
+    for index, _ in currentBaseCargo:
+      itemsIndexes.add(y = index)
+  clearTable(table = lootTable)
+  for index in itemsIndexes:
+    if index == -1:
+      break
+    let
+      protoIndex = playerShip.cargo[index].protoIndex
+      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[protoIndex].itemType else: itemsList[protoIndex].showType)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
