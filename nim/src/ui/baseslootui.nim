@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, tables]
-import ../[game, maps, tk]
+import std/[os, strutils, tables]
+import ../[basescargo, game, maps, tk]
 import coreui, mapsui, table
 
 var
@@ -24,7 +24,8 @@ var
   itemsIndexes: seq[int]
 
 type ItemsSortOrders = enum
-  none, nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, ownedAsc, ownedDesc, availableAsc, availableDesc
+  none, nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc,
+    ownedAsc, ownedDesc, availableAsc, availableDesc
 
 const defaultItemsSortOrder: ItemsSortOrders = none
 
@@ -60,12 +61,33 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, _ in currentBaseCargo:
       itemsIndexes.add(y = index)
   clearTable(table = lootTable)
+  var itemsTypes = "All"
   for index in itemsIndexes:
     if index == -1:
       break
     let
       protoIndex = playerShip.cargo[index].protoIndex
-      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[protoIndex].itemType else: itemsList[protoIndex].showType)
+      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType)
+    if not itemsTypes.contains(sub = "{" & itemType & "}"):
+      itemsTypes.add(y = " {" & itemType & "}")
+  var
+    currentItemIndex = 1
+    indexesList: seq[Natural]
+  for index in itemsIndexes:
+    currentItemIndex.inc
+    if index == -1:
+      break
+    let
+      protoIndex = playerShip.cargo[index].protoIndex
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          durability = playerShip.cargo[index].durability)
+    if baseCargoIndex > -1:
+      indexesList.add(y = baseCargoIndex)
+    let itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
+        protoIndex].itemType else: itemsList[protoIndex].showType)
+    if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
+      continue
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
