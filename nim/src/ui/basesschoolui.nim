@@ -247,7 +247,7 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
       except:
         return showError(message = "Can't get the training cost.")
     amountBox = mainPaned & ".schoolframe.canvas.school.costbox.amount"
-  if moneyIndex > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
+  if moneyIndex2 > -1 and cost <= playerShip.cargo[moneyIndex2].amount:
     tclEval(script = amountBox & " configure -from " & $cost & " -to " &
         $playerShip.cargo[moneyIndex2].amount)
     tclEval(script = "bind " & amountBox & " <<Increment>> {" & amountBox &
