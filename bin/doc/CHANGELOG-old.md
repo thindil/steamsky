@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project older versions are documented in this file.
 
-## [10.0] - 2026-06-30
+## [10.0] - 2024-06-30
 
 ### Added
 - New mob for the starting player's ship
