@@ -33,3 +33,4 @@ All notable changes to this project will be documented in this file.
 - Crash on viewing information about an installed engine in shipyards
 - Showing information about the installed cockpit in shipyards
 - Showing information about owned money in bases' schools
+- Typo in old changelog
