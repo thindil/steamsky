@@ -15,7 +15,34 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../tk
+import std/os
+import ../[game, tk]
+import coreui, mapsui, table
+
+var
+  lootTable: TableWidget
+  itemsIndexes: seq[Natural]
+
+proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  var lootFrame = mainPaned & ".lootframe"
+  let lootCanvas = lootFrame & ".canvas"
+  var label = lootCanvas & ".loot.options.typelabel"
+  if tclEval2(script = "winfo exists " & label) == "0":
+    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "loot.tcl")
+    tclEval(script = "bind " & lootFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+    lootFrame = lootCanvas & ".loot"
+    lootTable = createTable(parent = lootFrame, headers = @["Name", "Type",
+        "Durability", "Owned", "Available"],
+        scrollbar = ".gameframe.paned.lootframe.scrolly",
+        command = "SortLootItems",
+        tooltipText = "Press mouse button to sort the items.")
+  elif tclEval2(script = "winfo ismapped " & label) == "1" and argc == 1:
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+  lootFrame = lootCanvas & ".loot"
+  var comboBox = lootFrame & ".options.type"
+  return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
