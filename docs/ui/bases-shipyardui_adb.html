@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.0 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,160 +31,17 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo659">ShipyardUI/ShipyardUI.Sort_Modules_Command</a></li>
-<li>2. <a href="#robo658">ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command</a></li>
-<li>3. <a href="#robo657">ShipyardUI/ShipyardUI.Compare_Modules_Command</a></li>
-<li>4. <a href="#robo523">ShipyardUI/ShipyardUI.Show_Shipyard_Command</a></li>
-<li>5. <a href="#robo522">ShipyardUI/ShipyardUI.Show_Remove_Info_Command</a></li>
-<li>6. <a href="#robo521">ShipyardUI/ShipyardUI.Show_Install_Info_Command</a></li>
-<li>7. <a href="#robo520">ShipyardUI/ShipyardUI.Set_Module_Info</a></li>
-<li>8. <a href="#robo519">ShipyardUI/ShipyardUI.Manipulate_Module_Command</a></li>
-<li>9. <a href="#robo518">ShipyardUI/ShipyardUI.Get_Module_Index</a></li>
-<li>10. <a href="#robo366">ShipyardUI/ShipyardUI.Remove_Table</a></li>
-<li>11. <a href="#robo365">ShipyardUI/ShipyardUI.Remove_Indexes</a></li>
-<li>12. <a href="#robo364">ShipyardUI/ShipyardUI.Modules_Sort_Order</a></li>
-<li>13. <a href="#robo363">ShipyardUI/ShipyardUI.Module_Index</a></li>
-<li>14. <a href="#robo362">ShipyardUI/ShipyardUI.Install_Table</a></li>
-<li>15. <a href="#robo361">ShipyardUI/ShipyardUI.Install_Indexes</a></li>
-<li>16. <a href="#robo283">ShipyardUI/ShipyardUI.Default_Modules_Sort_Order</a></li>
-<li>17. <a href="#robo150">ShipyardUI/ShipyardUI.Modules_Sort_Orders</a></li>
+<li>1. <a href="#robo616">ShipyardUI/ShipyardUI.Sort_Modules_Command</a></li>
+<li>2. <a href="#robo615">ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command</a></li>
+<li>3. <a href="#robo614">ShipyardUI/ShipyardUI.Compare_Modules_Command</a></li>
+<li>4. <a href="#robo481">ShipyardUI/ShipyardUI.Show_Shipyard_Command</a></li>
+<li>5. <a href="#robo480">ShipyardUI/ShipyardUI.Show_Remove_Info_Command</a></li>
+<li>6. <a href="#robo479">ShipyardUI/ShipyardUI.Show_Install_Info_Command</a></li>
+<li>7. <a href="#robo478">ShipyardUI/ShipyardUI.Manipulate_Module_Command</a></li>
 </ul>
 <hr />
-<a name="ShipyardUI2fShipyardUI2eModules5fSort5fOrders"></a>
-<a name="robo150"></a><h2>ShipyardUI/ShipyardUI.Modules_Sort_Orders [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Sorting orders for the ship modules list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Modules_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span> SIZEASC<span class="sign">,</span> SIZEDESC<span class="sign">,</span> MATERIALASC<span class="sign">,</span>
-      MATERIALDESC<span class="sign">,</span> PRICEASC<span class="sign">,</span> PRICEDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
-      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">OPTIONS</p>
-<pre> NAMEASC      - Sort modules by name ascending
- NAMEDESC     - Sort modules by name descending
- TYPEASC      - Sort modules by type ascending
- TYPEDESC     - Sort modules by type descending
- SIZEASC      - Sort modules by size ascending
- SIZEDESC     - Sort modules by size descending
- MATERIALASC  - Sort modules by material ascending
- MATERIALDESC - Sort modules by material descending
- PRICEASC     - Sort modules by price ascending
- PRICEDESC    - Sort modules by price descending
- NONE       - No sorting modules (default)
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eDefault5fModules5fSort5fOrder"></a>
-<a name="robo283"></a><h2>ShipyardUI/ShipyardUI.Default_Modules_Sort_Order [ Constants ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Default sorting order for the player's ship's modules
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Default_Modules_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Modules_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eInstall5fIndexes"></a>
-<a name="robo361"></a><h2>ShipyardUI/ShipyardUI.Install_Indexes [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Indexes of the available modules to install
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Install_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eInstall5fTable"></a>
-<a name="robo362"></a><h2>ShipyardUI/ShipyardUI.Install_Table [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> <a href="./table_ads.html#robo63">Table</a> with info about the available modules
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Install_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 5<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eModule5fIndex"></a>
-<a name="robo363"></a><h2>ShipyardUI/ShipyardUI.Module_Index [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Module_Index<span class="sign">:</span> Positive<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eModules5fSort5fOrder"></a>
-<a name="robo364"></a><h2>ShipyardUI/ShipyardUI.Modules_Sort_Order [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The current sorting order for modules list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Modules_Sort_Order<span class="sign">:</span> Modules_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Modules_Sort_Order<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eRemove5fIndexes"></a>
-<a name="robo365"></a><h2>ShipyardUI/ShipyardUI.Remove_Indexes [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Indexes of the modules in the player's ship (to remove)
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Remove_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eRemove5fTable"></a>
-<a name="robo366"></a><h2>ShipyardUI/ShipyardUI.Remove_Table [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> <a href="./table_ads.html#robo63">Table</a> with info about the installed modules
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Remove_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 5<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="ShipyardUI2fShipyardUI2eGet5fModule5fIndex"></a>
-<a name="robo518"></a><h2>ShipyardUI/ShipyardUI.Get_Module_Index [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the index of the currently selected module
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Module_Index <span class="keyword">return</span> Positive <span class="keyword">is</span>
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The index of the currently selected module
-</pre>
-
-<hr />
 <a name="ShipyardUI2fShipyardUI2eManipulate5fModule5fCommand"></a>
-<a name="robo519"></a><h2>ShipyardUI/ShipyardUI.Manipulate_Module_Command [ Subprograms ]</h2>
+<a name="robo478"></a><h2>ShipyardUI/ShipyardUI.Manipulate_Module_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -194,7 +51,9 @@
 <pre class="source">   <span class="keyword">function</span> Manipulate_Module_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"manipulateModuleCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -204,24 +63,8 @@
 </pre>
 
 <hr />
-<a name="ShipyardUI2fShipyardUI2eSet5fModule5fInfo"></a>
-<a name="robo520"></a><h2>ShipyardUI/ShipyardUI.Set_Module_Info [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show information about selected module
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Set_Module_Info<span class="sign">(</span>Installing<span class="sign">:</span> Boolean<span class="sign">;</span> Row<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Installing - If true, player looking at installing modules list
- Row        - The current row in the dialog
-</pre>
-
-<hr />
 <a name="ShipyardUI2fShipyardUI2eShow5fInstall5fInfo5fCommand"></a>
-<a name="robo521"></a><h2>ShipyardUI/ShipyardUI.Show_Install_Info_Command [ Subprograms ]</h2>
+<a name="robo479"></a><h2>ShipyardUI/ShipyardUI.Show_Install_Info_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -231,7 +74,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Install_Info_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showInstallInfoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -242,7 +87,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eShow5fRemove5fInfo5fCommand"></a>
-<a name="robo522"></a><h2>ShipyardUI/ShipyardUI.Show_Remove_Info_Command [ Subprograms ]</h2>
+<a name="robo480"></a><h2>ShipyardUI/ShipyardUI.Show_Remove_Info_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -252,7 +97,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Remove_Info_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showRemoveInfoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -263,7 +110,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eShow5fShipyard5fCommand"></a>
-<a name="robo523"></a><h2>ShipyardUI/ShipyardUI.Show_Shipyard_Command [ Subprograms ]</h2>
+<a name="robo481"></a><h2>ShipyardUI/ShipyardUI.Show_Shipyard_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -273,7 +120,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Shipyard_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showShipyardCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -289,7 +138,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eCompare5fModules5fCommand"></a>
-<a name="robo657"></a><h2>ShipyardUI/ShipyardUI.Compare_Modules_Command [ Commands ]</h2>
+<a name="robo614"></a><h2>ShipyardUI/ShipyardUI.Compare_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -299,7 +148,9 @@
 <pre class="source">   <span class="keyword">function</span> Compare_Modules_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"compareModulesCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -316,7 +167,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eShow5fShipyard5fTab5fCommand"></a>
-<a name="robo658"></a><h2>ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command [ Commands ]</h2>
+<a name="robo615"></a><h2>ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -326,7 +177,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Shipyard_Tab_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showShipyardTabCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -343,7 +196,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eSort5fModules5fCommand"></a>
-<a name="robo659"></a><h2>ShipyardUI/ShipyardUI.Sort_Modules_Command [ Commands ]</h2>
+<a name="robo616"></a><h2>ShipyardUI/ShipyardUI.Sort_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo8">ShipyardUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -353,7 +206,9 @@
 <pre class="source">   <span class="keyword">function</span> Sort_Modules_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"sortShipyardModulesCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -374,7 +229,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-shipyardui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-06-30 03:22:47</p>
+<p>Generated from ./src/ui/bases-shipyardui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
 </div> <!-- footer -->
 </body>
 </html>

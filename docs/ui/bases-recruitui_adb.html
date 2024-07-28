@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.0 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,192 +31,18 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo651">RecruitUI/RecruitUI.Validate_Negotiate_Command</a></li>
-<li>2. <a href="#robo650">RecruitUI/RecruitUI.Sort_Recruits_Command</a></li>
-<li>3. <a href="#robo649">RecruitUI/RecruitUI.Show_Recruit_Tab_Command</a></li>
-<li>4. <a href="#robo648">RecruitUI/RecruitUI.Show_Recruit_Info_Command</a></li>
-<li>5. <a href="#robo647">RecruitUI/RecruitUI.Show_Recruit_Command</a></li>
-<li>6. <a href="#robo646">RecruitUI/RecruitUI.Negotiate_Hire_Command</a></li>
-<li>7. <a href="#robo645">RecruitUI/RecruitUI.Negotiate_Command</a></li>
-<li>8. <a href="#robo644">RecruitUI/RecruitUI.Hire_Command</a></li>
-<li>9. <a href="#robo501">RecruitUI/RecruitUI.Get_Recruit_Index</a></li>
-<li>10. <a href="#robo500">RecruitUI/RecruitUI.Get_Highest_Skill</a></li>
-<li>11. <a href="#robo499">RecruitUI/RecruitUI.Get_Highest_Attribute</a></li>
-<li>12. <a href="#robo359">RecruitUI/RecruitUI.Recruits_Sort_Order</a></li>
-<li>13. <a href="#robo358">RecruitUI/RecruitUI.Recruit_Table</a></li>
-<li>14. <a href="#robo357">RecruitUI/RecruitUI.Recruit_Index</a></li>
-<li>15. <a href="#robo356">RecruitUI/RecruitUI.Modules_Indexes</a></li>
-<li>16. <a href="#robo270">RecruitUI/RecruitUI.Default_Recruits_Sort_Order</a></li>
-<li>17. <a href="#robo138">RecruitUI/RecruitUI.Recruits_Sort_Orders</a></li>
+<li>1. <a href="#robo608">RecruitUI/RecruitUI.Validate_Negotiate_Command</a></li>
+<li>2. <a href="#robo607">RecruitUI/RecruitUI.Sort_Recruits_Command</a></li>
+<li>3. <a href="#robo606">RecruitUI/RecruitUI.Show_Recruit_Tab_Command</a></li>
+<li>4. <a href="#robo605">RecruitUI/RecruitUI.Show_Recruit_Info_Command</a></li>
+<li>5. <a href="#robo604">RecruitUI/RecruitUI.Show_Recruit_Command</a></li>
+<li>6. <a href="#robo603">RecruitUI/RecruitUI.Negotiate_Hire_Command</a></li>
+<li>7. <a href="#robo602">RecruitUI/RecruitUI.Negotiate_Command</a></li>
+<li>8. <a href="#robo601">RecruitUI/RecruitUI.Hire_Command</a></li>
 </ul>
 <hr />
-<a name="RecruitUI2fRecruitUI2eRecruits5fSort5fOrders"></a>
-<a name="robo138"></a><h2>RecruitUI/RecruitUI.Recruits_Sort_Orders [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Sorting orders for the list of available recruits in base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Recruits_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> GENDERASC<span class="sign">,</span> GENDERDESC<span class="sign">,</span> FACTIONDESC<span class="sign">,</span> FACTIONASC<span class="sign">,</span>
-      PRICEASC<span class="sign">,</span> PRICEDESC<span class="sign">,</span> ATTRIBUTEASC<span class="sign">,</span> ATTRIBUTEDESC<span class="sign">,</span> SKILLASC<span class="sign">,</span> SKILLDESC<span class="sign">,</span>
-      NONE<span class="sign">)</span> <span class="keyword">with</span>
-      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">OPTIONS</p>
-<pre> NAMEASC       - Sort recruits by name ascending
- NAMEDESC      - Sort recruits by name descending
- GENDERASC     - Sort recruits by gender ascending
- GENDERDESC    - Sort recruits by gender descending
- FACTIONASC    - Sort recruits by faction ascending
- FACTIONDESC   - Sort recruits by faction descending
- PRICEASC      - Sort recruits by price ascending
- PRICEDESC     - Sort recruits by price descending
- ATTRIBUTEASC  - Sort recruits by attribute ascending
- ATTRIBUTEDESC - Sort recruits by attribute descending
- SKILLASC      - Sort recruits by skill ascending
- SKILLDESC     - Sort recruits by skill descending
- NONE       - No sorting recruits (default)
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eDefault5fRecruits5fSort5fOrder"></a>
-<a name="robo270"></a><h2>RecruitUI/RecruitUI.Default_Recruits_Sort_Order [ Constants ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Default sorting order for the available recruits in base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Default_Recruits_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Recruits_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eModules5fIndexes"></a>
-<a name="robo356"></a><h2>RecruitUI/RecruitUI.Modules_Indexes [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Indexes of the available recruits in base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Recruits_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eRecruit5fIndex"></a>
-<a name="robo357"></a><h2>RecruitUI/RecruitUI.Recruit_Index [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The index of currently selected recruit
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Recruit_Index<span class="sign">:</span> Positive<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eRecruit5fTable"></a>
-<a name="robo358"></a><h2>RecruitUI/RecruitUI.Recruit_Table [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> <a href="./table_ads.html#robo63">Table</a> with info about the available recruits
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Recruit_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eRecruits5fSort5fOrder"></a>
-<a name="robo359"></a><h2>RecruitUI/RecruitUI.Recruits_Sort_Order [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The current sorting order for the available recruits in base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Recruits_Sort_Order<span class="sign">:</span> Recruits_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Recruits_Sort_Order<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eGet5fHighest5fAttribute"></a>
-<a name="robo499"></a><h2>RecruitUI/RecruitUI.Get_Highest_Attribute [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the highest attribute's name of the selected recruit
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Highest_Attribute
-     <span class="sign">(</span>Base_Index<span class="sign">,</span> Member_Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Base_Index   - The index of the base in which the recruit's attributes
-                will be check
- Member_Index - The index of the recruit which attributes will be check
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The name of the attribute with the highest level of the selected recruit
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.5 - Added
- 7.6 - Renamed parameters to Base_Index and Member_Index
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eGet5fHighest5fSkill"></a>
-<a name="robo500"></a><h2>RecruitUI/RecruitUI.Get_Highest_Skill [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the highest skill's name of the selected recruit
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Highest_Skill
-     <span class="sign">(</span>Base_Index<span class="sign">,</span> Member_Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Base_Index   - The index of the base in which the recruit's skills will
-                be check
- Member_Index - The index of the recruit which skills will be check
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The name of the skill with the highest level of the selected recruit
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.5 - Added
- 7.6 - Renamed parameters to Base_Index and Member_Index
-</pre>
-
-<hr />
-<a name="RecruitUI2fRecruitUI2eGet5fRecruit5fIndex"></a>
-<a name="robo501"></a><h2>RecruitUI/RecruitUI.Get_Recruit_Index [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the index of the currently selected recruit
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Recruit_Index <span class="keyword">return</span> Positive <span class="keyword">is</span>
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The index of the currently selected recruit
-</pre>
-
-<hr />
 <a name="RecruitUI2fRecruitUI2eHire5fCommand"></a>
-<a name="robo644"></a><h2>RecruitUI/RecruitUI.Hire_Command [ Commands ]</h2>
+<a name="robo601"></a><h2>RecruitUI/RecruitUI.Hire_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -226,7 +52,9 @@
 <pre class="source">   <span class="keyword">function</span> Hire_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"hireCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -243,7 +71,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eNegotiate5fCommand"></a>
-<a name="robo645"></a><h2>RecruitUI/RecruitUI.Negotiate_Command [ Commands ]</h2>
+<a name="robo602"></a><h2>RecruitUI/RecruitUI.Negotiate_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -253,7 +81,9 @@
 <pre class="source">   <span class="keyword">function</span> Negotiate_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"negotiateCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -270,7 +100,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eNegotiate5fHire5fCommand"></a>
-<a name="robo646"></a><h2>RecruitUI/RecruitUI.Negotiate_Hire_Command [ Commands ]</h2>
+<a name="robo603"></a><h2>RecruitUI/RecruitUI.Negotiate_Hire_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -280,7 +110,9 @@
 <pre class="source">   <span class="keyword">function</span> Negotiate_Hire_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"negotiateHireCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -297,7 +129,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eShow5fRecruit5fCommand"></a>
-<a name="robo647"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Command [ Commands ]</h2>
+<a name="robo604"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -307,7 +139,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Recruit_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showRecruitCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -324,7 +158,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eShow5fRecruit5fInfo5fCommand"></a>
-<a name="robo648"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Info_Command [ Commands ]</h2>
+<a name="robo605"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -334,7 +168,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Recruit_Info_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showRecruitInfoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -352,7 +188,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eShow5fRecruit5fTab5fCommand"></a>
-<a name="robo649"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Tab_Command [ Commands ]</h2>
+<a name="robo606"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Tab_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -362,7 +198,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Recruit_Tab_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showRecruitTabCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -379,7 +217,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eSort5fRecruits5fCommand"></a>
-<a name="robo650"></a><h2>RecruitUI/RecruitUI.Sort_Recruits_Command [ Commands ]</h2>
+<a name="robo607"></a><h2>RecruitUI/RecruitUI.Sort_Recruits_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -389,7 +227,9 @@
 <pre class="source">   <span class="keyword">function</span> Sort_Recruits_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"sortRecruitsCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -407,7 +247,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eValidate5fNegotiate5fCommand"></a>
-<a name="robo651"></a><h2>RecruitUI/RecruitUI.Validate_Negotiate_Command [ Commands ]</h2>
+<a name="robo608"></a><h2>RecruitUI/RecruitUI.Validate_Negotiate_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo5">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -417,7 +257,9 @@
 <pre class="source">   <span class="keyword">function</span> Validate_Negotiate_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"validateNegotiateCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -436,7 +278,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-06-30 03:22:47</p>
+<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
 </div> <!-- footer -->
 </body>
 </html>

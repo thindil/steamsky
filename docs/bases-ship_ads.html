@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.0 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,12 +33,10 @@
 <ul>
 <li>1. <a href="#robo7">Bases/Ship</a></li>
 <ul>
-<li>1.1. <a href="#robo381">Ship/Ship.Bases_Ship_Installation_Error</a></li>
-<li>1.2. <a href="#robo382">Ship/Ship.Bases_Ship_Removing_Error</a></li>
-<li>1.3. <a href="#robo383">Ship/Ship.Bases_Ship_Unique_Module</a></li>
-<li>1.4. <a href="#robo511">Ship/Ship.Repair_Cost</a></li>
-<li>1.5. <a href="#robo512">Ship/Ship.Repair_Ship</a></li>
-<li>1.6. <a href="#robo513">Ship/Ship.Upgrade_Ship</a></li>
+<li>1.1. <a href="#robo362">Ship/Ship.Bases_Ship_Installation_Error</a></li>
+<li>1.2. <a href="#robo363">Ship/Ship.Bases_Ship_Removing_Error</a></li>
+<li>1.3. <a href="#robo364">Ship/Ship.Bases_Ship_Unique_Module</a></li>
+<li>1.4. <a href="#robo473">Ship/Ship.Upgrade_Ship</a></li>
 </ul>
 </ul>
 <hr />
@@ -55,7 +53,7 @@
 
 <hr />
 <a name="Ship2fShip2eBases5fShip5fInstallation5fError"></a>
-<a name="robo381"></a><h2>Ship/Ship.Bases_Ship_Installation_Error [ Exceptions ]</h2>
+<a name="robo362"></a><h2>Ship/Ship.Bases_Ship_Installation_Error [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo7">Ship</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -67,7 +65,7 @@
 
 <hr />
 <a name="Ship2fShip2eBases5fShip5fRemoving5fError"></a>
-<a name="robo382"></a><h2>Ship/Ship.Bases_Ship_Removing_Error [ Exceptions ]</h2>
+<a name="robo363"></a><h2>Ship/Ship.Bases_Ship_Removing_Error [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo7">Ship</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -79,7 +77,7 @@
 
 <hr />
 <a name="Ship2fShip2eBases5fShip5fUnique5fModule"></a>
-<a name="robo383"></a><h2>Ship/Ship.Bases_Ship_Unique_Module [ Exceptions ]</h2>
+<a name="robo364"></a><h2>Ship/Ship.Bases_Ship_Unique_Module [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo7">Ship</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -90,53 +88,8 @@
 </pre>
 
 <hr />
-<a name="Ship2fShip2eRepair5fCost"></a>
-<a name="robo511"></a><h2>Ship/Ship.Repair_Cost [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo7">Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Count cost and time of repairs of player ship
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Repair_Cost
-     <span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> Module_Index<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Module_Index <span class="keyword">in</span> <span class="sign">-</span>2 <span class="sign">.</span><span class="sign">.</span> Player_Ship<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">,</span>
-      Post <span class="sign">=</span><span class="sign">&gt;</span> Cost <span class="sign">&gt;</span> 0 <span class="keyword">and</span> Time <span class="sign">&gt;</span> 0<span class="sign">,</span>
-      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
-      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"repairAdaCost"</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Cost         - Overall cost of repair of player ship
- Time         - Time needed for repair of player ship
- Module_Index - Index of module on player ship to repair or 0 to repair
-                all damage modules, -1 for fast repair all ship and -2
-                for very fast repair all ship
-</pre>
-<p class="item_name">RESULT</p>
-<pre> Parameters Cost and Time
-</pre>
-
-<hr />
-<a name="Ship2fShip2eRepair5fShip"></a>
-<a name="robo512"></a><h2>Ship/Ship.Repair_Ship [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo7">Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Repairs player ship in bases
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Repair_Ship<span class="sign">(</span>Module_Index<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Module_Index <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Module_Index - Index of player ship module to repair or 0 to repair whole
-                ship
-</pre>
-
-<hr />
 <a name="Ship2fShip2eUpgrade5fShip"></a>
-<a name="robo513"></a><h2>Ship/Ship.Upgrade_Ship [ Subprograms ]</h2>
+<a name="robo473"></a><h2>Ship/Ship.Upgrade_Ship [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo7">Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -155,7 +108,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-06-30 03:22:47</p>
+<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
 </div> <!-- footer -->
 </body>
 </html>
