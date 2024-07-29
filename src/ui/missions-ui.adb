@@ -16,8 +16,8 @@
 with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions;
-with Ada.Strings;
-with Ada.Strings.Fixed;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
@@ -191,20 +191,12 @@ package body Missions.UI is
          Mission_Label: constant Ttk_Label :=
            Get_Widget
              (pathName =>
-                Main_Paned & ".missionsframe.canvas.missions.missionslabel");
+                Main_Paned &
+                ".missionsframe.canvas.missions.missionslabel.missionslbl2");
       begin
-         if Missions_Limit > 0 then
-            configure
-              (Widgt => Mission_Label,
-               options =>
-                 "-text {You can take" & Natural'Image(Missions_Limit) &
-                 " more missions in from base.}");
-         else
-            configure
-              (Widgt => Mission_Label,
-               options =>
-                 "-text {You can't take any more missions from this base.}");
-         end if;
+         configure
+           (Widgt => Mission_Label,
+            options => "-text {" & Trim(Source => Natural'Image(Missions_Limit), Side => Left) & "}");
       end Show_Missions_Limit_Block;
       if Missions_Table.Row > 1 then
          Clear_Table(Table => Missions_Table);
@@ -988,8 +980,6 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
 
       Mission_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
