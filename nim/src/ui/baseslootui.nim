@@ -135,6 +135,20 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
           protoIndex].itemType else: itemsList[protoIndex].showType)
     if argc == 2 and argv[1] != "All" and itemType != $argv[1]:
       continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    let itemName = itemsList[protoIndex].name
+    addButton(table = lootTable, text = itemName, tooltip = tableTooltip,
+        command = "ShowLootItemInfo -" & $(index + 1), column = 1)
+    addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
+        command = "ShowLootItemInfo -" & $(index + 1), column = 2)
+    let itemDurability = (if currentBaseCargo[itemsIndexes[index]].durability <
+        100: getItemDamage(itemDurability = currentBaseCargo[itemsIndexes[
+        index]].durability) else: "Unused")
+    addProgressbar(table = lootTable, value = currentBaseCargo[
+        itemsIndexes[index]].durability, maxValue = defaultItemDurability,
+        tooltip = itemDurability, command = "ShowLootItemInfo -" & $(index + 1), column = 3)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
