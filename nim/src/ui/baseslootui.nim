@@ -32,7 +32,8 @@ const defaultItemsSortOrder: ItemsSortOrders = none
 var itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
 
 proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   var lootFrame = mainPaned & ".lootframe"
   let lootCanvas = lootFrame & ".canvas"
   var label = lootCanvas & ".loot.options.typelabel"
@@ -67,8 +68,11 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
       break
     let
       protoIndex = playerShip.cargo[index].protoIndex
-      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
-          protoIndex].itemType else: itemsList[protoIndex].showType)
+      itemType = try:
+          (if itemsList[protoIndex].showType.len == 0: itemsList[
+            protoIndex].itemType else: itemsList[protoIndex].showType)
+        except:
+          return showError(message = "Can't get item type.")
     if not itemsTypes.contains(sub = "{" & itemType & "}"):
       itemsTypes.add(y = " {" & itemType & "}")
   var
@@ -76,7 +80,10 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     indexesList: seq[Natural]
     currentRow = 1
   let
-    page = (if argc == 3: ($argv[2]).parseInt else: 1)
+    page = try:
+        (if argc == 3: ($argv[2]).parseInt else: 1)
+      except:
+        return showError(message = "Can't get page number.")
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
   const tableTooltip = "Show item's description and actions"
   for index in itemsIndexes:
@@ -89,8 +96,11 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
           durability = playerShip.cargo[index].durability)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
-    let itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
-        protoIndex].itemType else: itemsList[protoIndex].showType)
+    let itemType = try:
+        (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType)
+      except:
+        return showError(message = "Can't get item type2.")
     if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
       continue
     if currentRow < startRow:
@@ -120,8 +130,11 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   for index in currentItemIndex .. itemsIndexes.high:
     let
       protoIndex = currentBaseCargo[itemsIndexes[index]].protoIndex
-      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
-          protoIndex].itemType else: itemsList[protoIndex].showType)
+      itemType = try:
+          (if itemsList[protoIndex].showType.len == 0: itemsList[
+            protoIndex].itemType else: itemsList[protoIndex].showType)
+        except:
+          return showError(message = "Can't get item type3.")
     if not itemsTypes.contains(sub = "{" & itemType & "}"):
       itemsTypes.add(y = " {" & itemType & "}")
   for index in currentItemIndex .. itemsIndexes.high:
@@ -131,14 +144,20 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
       continue
     let
       protoIndex = currentBaseCargo[itemsIndexes[index]].protoIndex
-      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
-          protoIndex].itemType else: itemsList[protoIndex].showType)
+      itemType = try:
+          (if itemsList[protoIndex].showType.len == 0: itemsList[
+            protoIndex].itemType else: itemsList[protoIndex].showType)
+        except:
+          return showError(message = "Can't get item type4.")
     if argc == 2 and argv[1] != "All" and itemType != $argv[1]:
       continue
     if currentRow < startRow:
       currentRow.inc
       continue
-    let itemName = itemsList[protoIndex].name
+    let itemName = try:
+        itemsList[protoIndex].name
+      except:
+        return showError(message = "Can't get item name.")
     addButton(table = lootTable, text = itemName, tooltip = tableTooltip,
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 1)
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
@@ -174,7 +193,10 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
   if argc == 1:
     tclEval(script = comboBox & " current 0")
-  var freeSpace = freeCargo(amount = 0)
+  var freeSpace = try:
+      freeCargo(amount = 0)
+    except:
+      return showError(message = "Can't count free space.")
   if freeSpace < 0:
     freeSpace = 0
   let tradeInfo = "Free cargo space: " & $(freeSpace) & " kg."
