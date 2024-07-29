@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Crash on viewing information about an installed engine in shipyards
 - Showing information about the installed cockpit in shipyards
 - Showing information about owned money in bases' schools
+- Crash when dropping items in empty bases
 
 ## [10.0.1] - 2024-07-14
 
