@@ -19,12 +19,12 @@ with Ada.Strings;
 -- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with GNAT.Directory_Operations;
+-- with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
+-- with Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -128,8 +128,8 @@ package body Bases.LootUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Ada.Strings;
 --      use Ada.Strings.Fixed;
-      use GNAT.Directory_Operations;
-      use Tcl.Ada;
+--      use GNAT.Directory_Operations;
+--      use Tcl.Ada;
       use Tcl.Tk.Ada;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -180,15 +180,20 @@ package body Bases.LootUI is
          Import => True,
          External_Name => "showLootCommand";
    begin
+      if Show_Ada_Loot_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
-         Tcl_EvalFile
-           (interp => Get_Context,
-            fileName =>
-              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
-              "loot.tcl");
-         Bind
-           (Widgt => Loot_Frame, Sequence => "<Configure>",
-            Script => "{ResizeCanvas %W.canvas %w %h}");
+--         Tcl_EvalFile
+--           (interp => Get_Context,
+--            fileName =>
+--              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+--              "loot.tcl");
+--         Bind
+--           (Widgt => Loot_Frame, Sequence => "<Configure>",
+--            Script => "{ResizeCanvas %W.canvas %w %h}");
          Loot_Frame := Get_Widget(pathName => Loot_Canvas & ".loot");
          Loot_Table :=
            Create_Table
@@ -205,13 +210,13 @@ package body Bases.LootUI is
                    Interp => Interp),
               Command => "SortLootItems",
               Tooltip_Text => "Press mouse button to sort the items.");
-      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
-        Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
-         Show_Sky_Map(Clear => True);
-         return TCL_OK;
+--      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
+--        Argc = 1 then
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+--         Show_Sky_Map(Clear => True);
+--         return TCL_OK;
       end if;
-      return Show_Ada_Loot_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+      return TCL_OK;
 --      Loot_Frame.Name := New_String(Str => Loot_Canvas & ".loot");
 --      Combo_Box :=
 --        Get_Widget(pathName => Loot_Frame & ".options.type", Interp => Interp);
