@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basescargo, game, maps, tk]
+import ../[basescargo, config, game, items, maps, tk]
 import coreui, mapsui, table
 
 var
@@ -74,6 +74,11 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   var
     currentItemIndex = 1
     indexesList: seq[Natural]
+    currentRow = 1
+  let
+    page = (if argc == 3: ($argv[2]).parseInt else: 1)
+    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  const tableTooltip = "Show item's description and actions"
   for index in itemsIndexes:
     currentItemIndex.inc
     if index == -1:
@@ -88,6 +93,21 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         protoIndex].itemType else: itemsList[protoIndex].showType)
     if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
       continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    let itemName = getItemName(item = playerShip.cargo[index],
+        damageInfo = false, toLower = false)
+    addButton(table = lootTable, text = itemName, tooltip = tableTooltip,
+        command = "ShowLootItemInfo " & $(index + 1), column = 1)
+    addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
+        command = "ShowLootItemInfo " & $(index + 1), column = 2)
+    let itemDurability = (if playerShip.cargo[index].durability <
+        100: getItemDamage(itemDurability = playerShip.cargo[
+        index].durability) else: "Unused")
+    addProgressbar(table = lootTable, value = playerShip.cargo[
+        index].durability, maxValue = defaultItemDurability,
+        tooltip = itemDurability, command = "ShowLootItemInfo " & $(index + 1), column = 3)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
