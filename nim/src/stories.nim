@@ -128,6 +128,111 @@ var
   finishedStories*: seq[FinishedStoryData] = @[]
     ## The list of finished stories
 
+proc loadStep(step: XmlNode; story: var StoryData; storyIndex, startStep,
+    finalStep: string; storyAction: DataAction) {.sideEffect, raises: [
+    DataLoadingError], tags: [], contractual.} =
+  ## Load the single story's step from a file
+  ##
+  ## * step        - the step which will be loaded
+  ## * story       - the story to which the step will be loaded
+  ## * storyIndex  - the index of the story
+  ## * startStep   - the name of the starting step in the story
+  ## * finalStep   - the name of the final step in the story
+  ## * storyAction - the action which will be made with the story, like add,
+  ##                 remove, etc
+  ##
+  ## Returns the modified parameter story.
+  var tempStep: StepData = StepData(index: step.attr(name = "index"),
+      finishCondition: askInBase)
+  let stepAction: DataAction = try:
+        parseEnum[DataAction](s = step.attr(name = "action").toLowerAscii)
+      except ValueError:
+        DataAction.add
+  var stepIndex: int = -1
+  for index, data in story.steps:
+    if data.index == tempStep.index:
+      stepIndex = index
+      break
+  if stepAction == remove:
+    story.steps.delete(i = stepIndex)
+  else:
+    if stepAction == update:
+      tempStep = story.steps[stepIndex]
+    var attribute: string = step.attr(name = "finish")
+    if attribute.len() > 0:
+      tempStep.finishCondition = try:
+        parseEnum[StepConditionType](s = step.attr(
+            name = "finish").toLowerAscii)
+      except ValueError:
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid step finish condition.")
+    for stepData in step.findAll(tag = "finishdata"):
+      let
+        dataAction: DataAction = try:
+            parseEnum[DataAction](s = stepData.attr(
+                name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+        name: string = stepData.attr(name = "name")
+      case dataAction
+      of DataAction.add:
+        tempStep.finishData.add(y = StepFinishData(name: name,
+            value: stepData.attr(name = "value")))
+      of update:
+        for data in tempStep.finishData.mitems:
+          if data.name == name:
+            data.value = stepData.attr(name = "value")
+      of remove:
+        var deleteIndex: int = -1
+        for index, data in tempStep.finishData:
+          if data.name == name:
+            deleteIndex = index
+            break
+        if deleteIndex > -1:
+          tempStep.finishData.delete(i = deleteIndex)
+    for text in step.findAll(tag = "text"):
+      let
+        textAction: DataAction = try:
+            parseEnum[DataAction](s = text.attr(
+                name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+        condition: StepConditionType = try:
+            parseEnum[StepConditionType](s = text.attr(
+                name = "condition"))
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $storyAction & " story '" &
+                    $storyIndex & "', invalid text condition.")
+      case textAction
+      of DataAction.add:
+        tempStep.texts.add(y = StepTextData(condition: condition,
+            text: text.innerText()))
+      of update:
+        for stepText in tempStep.texts.mitems:
+          if stepText.condition == condition:
+            stepText.text = text.innerText()
+      of remove:
+        var deleteIndex: int = -1
+        for index, data in tempStep.texts:
+          if data.condition == condition:
+            deleteIndex = index
+            break
+        if deleteIndex > -1:
+          tempStep.texts.delete(i = deleteIndex)
+    let failText: string = step.child(name = "failtext").innerText()
+    if failText.len() > 0:
+      tempStep.failText = failText
+    if tempStep.index == startStep:
+      story.startingStep = tempStep
+    elif tempStep.index == finalStep:
+      story.finalStep = tempStep
+    else:
+      if stepAction == DataAction.add:
+        story.steps.add(y = tempStep)
+      else:
+        story.steps[stepIndex] = tempStep
+
 proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the stories data from the file
@@ -245,96 +350,9 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         of update:
           discard
       for step in storyNode.findAll(tag = "step"):
-        var tempStep: StepData = StepData(index: step.attr(name = "index"),
-            finishCondition: askInBase)
-        let stepAction: DataAction = try:
-              parseEnum[DataAction](s = step.attr(name = "action").toLowerAscii)
-            except ValueError:
-              DataAction.add
-        var stepIndex: int = -1
-        for index, data in story.steps:
-          if data.index == tempStep.index:
-            stepIndex = index
-            break
-        if stepAction == remove:
-          story.steps.delete(i = stepIndex)
-        else:
-          if stepAction == update:
-            tempStep = story.steps[stepIndex]
-          attribute = step.attr(name = "finish")
-          if attribute.len() > 0:
-            tempStep.finishCondition = try:
-              parseEnum[StepConditionType](s = step.attr(
-                  name = "finish").toLowerAscii)
-            except ValueError:
-              raise newException(exceptn = DataLoadingError,
-                  message = "Can't " & $storyAction & " story '" & $storyIndex & "', invalid step finish condition.")
-          for stepData in step.findAll(tag = "finishdata"):
-            let
-              dataAction: DataAction = try:
-                  parseEnum[DataAction](s = stepData.attr(
-                      name = "action").toLowerAscii)
-                except ValueError:
-                  DataAction.add
-              name: string = stepData.attr(name = "name")
-            case dataAction
-            of DataAction.add:
-              tempStep.finishData.add(y = StepFinishData(name: name,
-                  value: stepData.attr(name = "value")))
-            of update:
-              for data in tempStep.finishData.mitems:
-                if data.name == name:
-                  data.value = stepData.attr(name = "value")
-            of remove:
-              var deleteIndex: int = -1
-              for index, data in tempStep.finishData:
-                if data.name == name:
-                  deleteIndex = index
-                  break
-              if deleteIndex > -1:
-                tempStep.finishData.delete(i = deleteIndex)
-          for text in step.findAll(tag = "text"):
-            let
-              textAction: DataAction = try:
-                  parseEnum[DataAction](s = text.attr(
-                      name = "action").toLowerAscii)
-                except ValueError:
-                  DataAction.add
-              condition: StepConditionType = try:
-                  parseEnum[StepConditionType](s = text.attr(
-                      name = "condition"))
-                except ValueError:
-                  raise newException(exceptn = DataLoadingError,
-                      message = "Can't " & $storyAction & " story '" &
-                          $storyIndex & "', invalid text condition.")
-            case textAction
-            of DataAction.add:
-              tempStep.texts.add(y = StepTextData(condition: condition,
-                  text: text.innerText()))
-            of update:
-              for stepText in tempStep.texts.mitems:
-                if stepText.condition == condition:
-                  stepText.text = text.innerText()
-            of remove:
-              var deleteIndex: int = -1
-              for index, data in tempStep.texts:
-                if data.condition == condition:
-                  deleteIndex = index
-                  break
-              if deleteIndex > -1:
-                tempStep.texts.delete(i = deleteIndex)
-          let failText: string = step.child(name = "failtext").innerText()
-          if failText.len() > 0:
-            tempStep.failText = failText
-          if tempStep.index == startStep:
-            story.startingStep = tempStep
-          elif tempStep.index == finalStep:
-            story.finalStep = tempStep
-          else:
-            if stepAction == DataAction.add:
-              story.steps.add(y = tempStep)
-            else:
-              story.steps[stepIndex] = tempStep
+        loadStep(step = step, story = story, storyIndex = storyIndex,
+            startStep = startStep, finalStep = finalStep,
+            storyAction = storyAction)
       let endText: string = storyNode.child(name = "endtext").innerText()
       if endText.len > 0:
         story.endText = endText
