@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[basescargo, config, game, items, maps, shipscargo, tk]
-import coreui, mapsui, table
+import coreui, mapsui, table, utilsui2
 
 var
   lootTable: TableWidget
@@ -174,6 +174,24 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   if argc == 1:
     tclEval(script = comboBox & " current 0")
   var freeSpace = freeCargo(amount = 0)
+  if freeSpace < 0:
+    freeSpace = 0
+  let tradeInfo = "Free cargo space: " & $(freeSpace) & " kg."
+  label = lootCanvas & ".loot.options.playerinfo"
+  tclEval(script = label & " configure -text {" & tradeInfo & "}")
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  tclEval(script = lootCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  tclEval(script = lootCanvas & " create window 0 0 -anchor nw -window " & lootFrame)
+  tclEval(script = "update")
+  tclEval(script = lootCanvas & " configure -scrollregion [list " & tclEval2(
+      script = lootCanvas & " bbox all") & "]")
+  tclEval(script = lootCanvas & " xview moveto 0.0")
+  tclEval(script = lootCanvas & " yview moveto 0.0")
+  showScreen(newScreenName = "lootframe")
+  tclSetResult(value = "1")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
