@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basescargo, config, game, items, maps, tk]
+import ../[basescargo, config, game, items, maps, shipscargo, tk]
 import coreui, mapsui, table
 
 var
@@ -149,6 +149,31 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     addProgressbar(table = lootTable, value = currentBaseCargo[
         itemsIndexes[index]].durability, maxValue = defaultItemDurability,
         tooltip = itemDurability, command = "ShowLootItemInfo -" & $(index + 1), column = 3)
+    addButton(table = lootTable, text = "0", tooltip = tableTooltip,
+        command = "ShowLootItemInfo -" & $(index + 1), column = 4)
+    let baseAmount = skyBases[baseIndex].cargo[itemsIndexes[index]].amount
+    addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
+        command = "ShowLootItemInfo -" & $(index + 1), column = 5, newRow = true)
+  let arguments = (if argc > 1: "{" & $argv[1] & "}" else: "All")
+  if page > 1:
+    if lootTable.row < gameSettings.listsLimit + 1:
+      addPagination(table = lootTable, previousCommand = "ShowLoot " &
+          arguments & " " & $(page - 1))
+    else:
+      addPagination(table = lootTable, previousCommand = "ShowLoot " &
+          arguments & " " & $(page - 1), nextCommand = "ShowLoot " & arguments &
+          " " & $(page + 1))
+  elif lootTable.row == gameSettings.listsLimit + 1:
+    addPagination(table = lootTable, nextCommand = "ShowLoot " & arguments &
+        " " & $(page + 1))
+  updateTable(table = lootTable)
+  tclEval(script = "update")
+  tclEval(script = lootTable.canvas & " configure -scrollregion [list " &
+      tclEval2(script = lootTable.canvas & " bbox all") & "]")
+  tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
+  if argc == 1:
+    tclEval(script = comboBox & " current 0")
+  var freeSpace = freeCargo(amount = 0)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
