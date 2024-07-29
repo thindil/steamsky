@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when dropping items in empty bases
+
 ## [10.1] - 2024-07-28
 
 ### Added
