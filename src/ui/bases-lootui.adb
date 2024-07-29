@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2023 Bartek thindil Jasicki
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -429,7 +429,7 @@ package body Bases.LootUI is
                    Get_Item_Damage
                      (Item_Durability =>
                         BaseCargo_Container.Element
-                          (Container => Current_Base_Cargo, Index => I)
+                          (Container => Current_Base_Cargo, Index => Items_Indexes(I))
                           .Durability))
             else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
