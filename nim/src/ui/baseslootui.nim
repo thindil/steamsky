@@ -140,20 +140,21 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
       continue
     let itemName = itemsList[protoIndex].name
     addButton(table = lootTable, text = itemName, tooltip = tableTooltip,
-        command = "ShowLootItemInfo -" & $(index + 1), column = 1)
+        command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 1)
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
-        command = "ShowLootItemInfo -" & $(index + 1), column = 2)
+        command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 2)
     let itemDurability = (if currentBaseCargo[itemsIndexes[index]].durability <
         100: getItemDamage(itemDurability = currentBaseCargo[itemsIndexes[
         index]].durability) else: "Unused")
-    addProgressbar(table = lootTable, value = currentBaseCargo[
-        itemsIndexes[index]].durability, maxValue = defaultItemDurability,
-        tooltip = itemDurability, command = "ShowLootItemInfo -" & $(index + 1), column = 3)
+    addProgressbar(table = lootTable, value = currentBaseCargo[itemsIndexes[
+        index]].durability, maxValue = defaultItemDurability,
+        tooltip = itemDurability, command = "ShowLootItemInfo -" & $(
+        itemsIndexes[index] + 1), column = 3)
     addButton(table = lootTable, text = "0", tooltip = tableTooltip,
-        command = "ShowLootItemInfo -" & $(index + 1), column = 4)
+        command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 4)
     let baseAmount = skyBases[baseIndex].cargo[itemsIndexes[index]].amount
     addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
-        command = "ShowLootItemInfo -" & $(index + 1), column = 5, newRow = true)
+        command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 5, newRow = true)
   let arguments = (if argc > 1: "{" & $argv[1] & "}" else: "All")
   if page > 1:
     if lootTable.row < gameSettings.listsLimit + 1:
