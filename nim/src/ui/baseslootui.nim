@@ -108,6 +108,33 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     addProgressbar(table = lootTable, value = playerShip.cargo[
         index].durability, maxValue = defaultItemDurability,
         tooltip = itemDurability, command = "ShowLootItemInfo " & $(index + 1), column = 3)
+    addButton(table = lootTable, text = $playerShip.cargo[index].amount,
+        tooltip = tableTooltip, command = "ShowLootItemInfo " & $(index + 1), column = 4)
+    let baseAmount = if baseCargoIndex > 0: skyBases[baseIndex].cargo[
+        baseCargoIndex].amount else: 0
+    addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
+        command = "ShowLootItemInfo " & $(index + 1), column = 5, newRow = true)
+    if lootTable.row == gameSettings.listsLimit + 1:
+      break
+  currentItemIndex = playerShip.cargo.len + 2
+  for index in currentItemIndex .. itemsIndexes.high:
+    let
+      protoIndex = currentBaseCargo[itemsIndexes[index]].protoIndex
+      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType)
+    if not itemsTypes.contains(sub = "{" & itemType & "}"):
+      itemsTypes.add(y = " {" & itemType & "}")
+  for index in currentItemIndex .. itemsIndexes.high:
+    if lootTable.row == gameSettings.listsLimit + 1:
+      break
+    if indexesList.contains(item = itemsIndexes[index]):
+      continue
+    let
+      protoIndex = currentBaseCargo[itemsIndexes[index]].protoIndex
+      itemType = (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType)
+    if argc == 2 and argv[1] != "All" and itemType != $argv[1]:
+      continue
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
