@@ -231,8 +231,11 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
 var itemIndex = -1
 
 proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  itemIndex = ($argv[1]).parseInt
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  itemIndex = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't get item's index.")
   if itemIndex < 0:
     itemIndex.inc
   else:
@@ -249,41 +252,62 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   let protoIndex = (if cargoIndex > -1: playerShip.cargo[
       cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
       baseCargoIndex].protoIndex)
-  var itemInfo = "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}"
-  if itemsList[protoIndex].itemType == weaponType:
-    itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
-        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
-        3]].attribute].name & "{/gold}")
-    if itemsList[protoIndex].value[4] == 1:
-      itemInfo.add(y = "\n{gold}Can be used with shield.{/gold}")
-    else:
-      itemInfo.add(y = "\n{gold}Can't be used with shield (two-handed weapon).{/gold}")
-    itemInfo.add(y = "\nDamage type: {gold}")
-    case itemsList[protoIndex].value[5]
-    of 1:
-      itemInfo.add(y = "cutting{/gold}")
-    of 2:
-      itemInfo.add(y = "impaling{/gold}")
-    of 3:
-      itemInfo.add(y = "blunt{/gold}")
-    else:
-      discard
+  var itemInfo = try:
+      "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}"
+    except:
+      return showError(message = "Can't get item's weight.")
+  try:
+    if itemsList[protoIndex].itemType == weaponType:
+      itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[
+          protoIndex].value[3]].name & "/" & attributesList[skillsList[
+              itemsList[protoIndex].value[
+          3]].attribute].name & "{/gold}")
+      if itemsList[protoIndex].value[4] == 1:
+        itemInfo.add(y = "\n{gold}Can be used with shield.{/gold}")
+      else:
+        itemInfo.add(y = "\n{gold}Can't be used with shield (two-handed weapon).{/gold}")
+      itemInfo.add(y = "\nDamage type: {gold}")
+      case itemsList[protoIndex].value[5]
+      of 1:
+        itemInfo.add(y = "cutting{/gold}")
+      of 2:
+        itemInfo.add(y = "impaling{/gold}")
+      of 3:
+        itemInfo.add(y = "blunt{/gold}")
+      else:
+        discard
+  except:
+    return showError(message = "Can't show weapon info.")
   let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
       armsArmor, legsArmor, shieldType]
   for itemType in itemTypes:
-    if itemsList[protoIndex].itemType == itemType:
+    try:
+      if itemsList[protoIndex].itemType == itemType:
+        itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+            itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+        itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[
+            2] & "{/gold}")
+        break
+    except:
+      return showError(message = "Can't show weapon damage chance.")
+  try:
+    if itemsList[protoIndex].itemType in toolsList:
       itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
           itemData = itemsList[protoIndex].value[1]) & "{/gold}")
-      itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
-      break
-  if itemsList[protoIndex].itemType in toolsList:
-    itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
-        itemData = itemsList[protoIndex].value[1]) & "{/gold}")
-  if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
-      0..3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
-    itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
-  if itemsList[protoIndex].description.len > 0:
-    itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
+  except:
+    return showError(message = "Can't show tool damage chance.")
+  try:
+    if itemsList[protoIndex].itemType.len > 4 and itemsList[
+        protoIndex].itemType[0..3] == "Ammo" or itemsList[
+        protoIndex].itemType == "Harpoon":
+      itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  except:
+    return showError(message = "Can't show ammo info.")
+  try:
+    if itemsList[protoIndex].description.len > 0:
+      itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
+  except:
+    return showError(message = "Can't show item's description.")
   if cargoIndex > 0:
     baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
   else:
@@ -291,20 +315,26 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   var maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
       baseCargoIndex].amount else: 0)
   let
-    freeAmount = (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
-        itemsList[skyBases[baseIndex].cargo[
-        baseCargoIndex].protoIndex].weight.float).Natural else: 0)
+    freeAmount = try:
+        (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
+          itemsList[skyBases[baseIndex].cargo[
+          baseCargoIndex].protoIndex].weight.float).Natural else: 0)
+      except:
+        return showError(message = "Can't count free amount.")
     cargoMaxAmount = (if cargoIndex > -1: playerShip.cargo[
         cargoIndex].amount.Natural else: 0)
   if maxAmount > freeAmount:
     maxAmount = freeAmount
-  showInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
-      if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
-      tooltip: "Take item from the base", command: "LootAmount take " &
-      $maxAmount, icon: "giveicon", text: "Take", color: "")), button2 = (
-      if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
-      tooltip: "Drop item from the ship cargo", command: "LootAmount drop " &
-      $cargoMaxAmount, icon: "dropicon", text: "Drop", color: "")))
+  try:
+    showInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
+        if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Take item from the base", command: "LootAmount take " &
+        $maxAmount, icon: "giveicon", text: "Take", color: "")), button2 = (
+        if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Drop item from the ship cargo", command: "LootAmount drop " &
+        $cargoMaxAmount, icon: "dropicon", text: "Drop", color: "")))
+  except:
+    return showError(message = "Can't show the item's info.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
