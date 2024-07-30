@@ -22,7 +22,6 @@ import std/[os, parseopt, strutils]
 import contracts
 import game, log, tk
 # Temporary imports
-import basesship2
 import ui/[mainmenu, shipsuimodules, utilsui]
 
 proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
