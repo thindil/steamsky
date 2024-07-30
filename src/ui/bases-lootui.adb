@@ -375,7 +375,6 @@ package body Bases.LootUI is
                New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
       end loop Fill_Types_Base_Cargo_Loop;
-      --## rule on SIMPLIFIABLE_STATEMENTS
       Add_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          exit Add_Base_Cargo_Loop when Loot_Table.Row =
@@ -464,6 +463,7 @@ package body Bases.LootUI is
             Column => 5, New_Row => True);
          <<End_Of_Base_Cargo_Loop>>
       end loop Add_Base_Cargo_Loop;
+      --## rule on SIMPLIFIABLE_STATEMENTS
       if Page > 1 then
          if Loot_Table.Row < Get_Integer_Setting(Name => "listsLimit") + 1 then
             Add_Pagination
