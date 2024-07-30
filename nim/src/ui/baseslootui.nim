@@ -315,3 +315,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowLootItemInfo", showLootItemInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+proc getLootItemIndex(iIndex: cint) {.exportc.} =
+  itemIndex = iIndex

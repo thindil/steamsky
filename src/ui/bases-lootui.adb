@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1;
+-- with Ada.Characters.Latin_1;
 with Ada.Containers.Vectors;
 with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -213,220 +213,232 @@ package body Bases.LootUI is
    function Show_Loot_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Ada.Characters.Latin_1;
-      use Short_String;
-      use Tiny_String;
-
-      Item_Info: Unbounded_String := Null_Unbounded_String;
-      Proto_Index: Natural;
-      Cargo_Index, Base_Cargo_Index: Natural := 0;
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
-        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
-         5 => Legs_Armor, 6 => Shield_Type);
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Ada.Characters.Latin_1;
+--      use Short_String;
+--      use Tiny_String;
+--
+--      Item_Info: Unbounded_String := Null_Unbounded_String;
+--      Proto_Index: Natural;
+--      Cargo_Index, Base_Cargo_Index: Natural := 0;
+--      Base_Index: constant Natural :=
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
+--        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
+--         5 => Legs_Armor, 6 => Shield_Type);
+      procedure Get_Ada_Loot_Item_Index(I_Index: Integer) with
+         Convention => C,
+         Import => True,
+         External_Name => "getLootItemIndex";
+      function Show_Ada_Loot_Item_Info_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Convention => C,
+         Import => True,
+         External_Name => "showLootItemInfoCommand";
    begin
       Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
-      if Get_Item_Index < 0 then
-         Base_Cargo_Index := abs Get_Item_Index;
-      else
-         Cargo_Index := Get_Item_Index;
-      end if;
-      if Cargo_Index >
-        Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) or
-        Base_Cargo_Index >
-          Natural
-            (BaseCargo_Container.Length
-               (Container => Sky_Bases(Base_Index).Cargo)) then
-         return TCL_OK;
-      end if;
-      Proto_Index :=
-        (if Cargo_Index > 0 then
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => Cargo_Index)
-             .Proto_Index
-         else BaseCargo_Container.Element
-             (Container => Sky_Bases(Base_Index).Cargo,
-              Index => Base_Cargo_Index)
-             .Proto_Index);
-      Append
-        (Source => Item_Info,
-         New_Item =>
-           "Weight:{gold}" &
-           Integer'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
-           " kg{/gold}");
-      if Get_Proto_Item(Index => Proto_Index).I_Type = Weapon_Type then
-         Append
-           (Source => Item_Info,
-            New_Item =>
-              LF & "Skill: {gold}" &
-              To_String
-                (Source =>
-                   SkillsData_Container.Element
-                     (Container => Skills_List,
-                      Index =>
-                        Skills_Amount_Range
-                          (Get_Proto_Item(Index => Proto_Index).Value(3)))
-                     .Name) &
-              "/" &
-              To_String
-                (Source =>
-                   AttributesData_Container.Element
-                     (Container => Attributes_List,
-                      Index =>
-                        SkillsData_Container.Element
-                          (Container => Skills_List,
-                           Index =>
-                             Skills_Amount_Range
-                               (Get_Proto_Item(Index => Proto_Index).Value(3)))
-                          .Attribute)
-                     .Name) &
-              "{/gold}");
-         if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
-            Append
-              (Source => Item_Info,
-               New_Item => LF & "{gold}Can be used with shield.{/gold}");
-         else
-            Append
-              (Source => Item_Info,
-               New_Item =>
-                 LF &
-                 "{gold}Can't be used with shield (two-handed weapon).{/gold}");
-         end if;
-         Append(Source => Item_Info, New_Item => LF & "Damage type: {gold}");
-         case Get_Proto_Item(Index => Proto_Index).Value(5) is
-            when 1 =>
-               Append(Source => Item_Info, New_Item => "cutting{/gold}");
-            when 2 =>
-               Append(Source => Item_Info, New_Item => "impaling{/gold}");
-            when 3 =>
-               Append(Source => Item_Info, New_Item => "blunt{/gold}");
-            when others =>
-               null;
-         end case;
-      end if;
-      Show_Weapon_Info_Loop :
-      for ItemType of Item_Types loop
-         if Get_Proto_Item(Index => Proto_Index).I_Type = ItemType then
-            Append
-              (Source => Item_Info,
-               New_Item =>
-                 LF & "Damage chance: {gold}" &
-                 Get_Item_Chance_To_Damage
-                   (Item_Data =>
-                      Get_Proto_Item(Index => Proto_Index).Value(1)) &
-                 "{/gold}");
-            Append
-              (Source => Item_Info,
-               New_Item =>
-                 LF & "Strength:{gold}" &
-                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)) &
-                 "{/gold}");
-            exit Show_Weapon_Info_Loop;
-         end if;
-      end loop Show_Weapon_Info_Loop;
-      if Is_Tool(Item_Type => Get_Proto_Item(Index => Proto_Index).I_Type) then
-         Append
-           (Source => Item_Info,
-            New_Item =>
-              LF & "Damage chance: {gold}" &
-              Get_Item_Chance_To_Damage
-                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)) &
-              "{/gold}");
-      end if;
-      if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
-        and then
-        (Slice
-           (Source => Get_Proto_Item(Index => Proto_Index).I_Type, Low => 1,
-            High => 4) =
-         "Ammo" or
-         Get_Proto_Item(Index => Proto_Index).I_Type =
-           To_Bounded_String(Source => "Harpoon")) then
-         Append
-           (Source => Item_Info,
-            New_Item =>
-              LF & "Strength:{gold}" &
-              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)) &
-              "{/gold}");
-      end if;
-      if Get_Proto_Item(Index => Proto_Index).Description /=
-        Short_String.Null_Bounded_String then
-         Append
-           (Source => Item_Info,
-            New_Item =>
-              LF & LF &
-              To_String
-                (Source => Get_Proto_Item(Index => Proto_Index).Description));
-      end if;
-      if Cargo_Index > 0 then
-         Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
-      else
-         Cargo_Index :=
-           Find_Item
-             (Inventory => Player_Ship.Cargo, Proto_Index => Proto_Index);
-      end if;
-      Show_Info_Block :
-      declare
-         Max_Amount: Natural :=
-           (if Base_Cargo_Index > 0 then
-              BaseCargo_Container.Element
-                (Container => Sky_Bases(Base_Index).Cargo,
-                 Index => Base_Cargo_Index)
-                .Amount
-            else 0);
-         Free_Amount: constant Natural :=
-           (if Base_Cargo_Index > 0 then
-              Free_Cargo(Amount => 0) /
-              Get_Proto_Item
-                (Index =>
-                   BaseCargo_Container.Element
-                     (Container => Sky_Bases(Base_Index).Cargo,
-                      Index => Base_Cargo_Index)
-                     .Proto_Index)
-                .Weight
-            else 0);
-         Cargo_Max_Amount: constant Natural :=
-           (if Cargo_Index > 0 then
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                .Amount
-            else 0);
-      begin
-         if Max_Amount > Free_Amount then
-            Max_Amount := Free_Amount;
-         end if;
-         Show_Info
-           (Text => To_String(Source => Item_Info),
-            Title =>
-              To_String(Source => Get_Proto_Item(Index => Proto_Index).Name),
-            Button_1 =>
-              (if Max_Amount = 0 then Empty_Button_Settings
-               else
-                 (Tooltip =>
-                    To_Unbounded_String(Source => "Take item from the base"),
-                  Command =>
-                    To_Unbounded_String
-                      (Source =>
-                         "LootAmount take" & Natural'Image(Max_Amount)),
-                  Icon => To_Unbounded_String(Source => "giveicon"),
-                  Text => To_Unbounded_String(Source => "Take"),
-                  Color => Null_Unbounded_String)),
-            Button_2 =>
-              (if Cargo_Max_Amount = 0 then Empty_Button_Settings
-               else
-                 (Tooltip =>
-                    To_Unbounded_String
-                      (Source => "Drop item from the ship cargo"),
-                  Command =>
-                    To_Unbounded_String
-                      (Source =>
-                         "LootAmount drop" & Natural'Image(Cargo_Max_Amount)),
-                  Icon => To_Unbounded_String(Source => "dropicon"),
-                  Text => To_Unbounded_String(Source => "Drop"),
-                  Color => Null_Unbounded_String)));
-      end Show_Info_Block;
-      return TCL_OK;
+      Get_Ada_Loot_Item_Index(I_Index => Item_Index);
+      return Show_Ada_Loot_Item_Info_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--      if Get_Item_Index < 0 then
+--         Base_Cargo_Index := abs Get_Item_Index;
+--      else
+--         Cargo_Index := Get_Item_Index;
+--      end if;
+--      if Cargo_Index >
+--        Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) or
+--        Base_Cargo_Index >
+--          Natural
+--            (BaseCargo_Container.Length
+--               (Container => Sky_Bases(Base_Index).Cargo)) then
+--         return TCL_OK;
+--      end if;
+--      Proto_Index :=
+--        (if Cargo_Index > 0 then
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--             .Proto_Index
+--         else BaseCargo_Container.Element
+--             (Container => Sky_Bases(Base_Index).Cargo,
+--              Index => Base_Cargo_Index)
+--             .Proto_Index);
+--      Append
+--        (Source => Item_Info,
+--         New_Item =>
+--           "Weight:{gold}" &
+--           Integer'Image(Get_Proto_Item(Index => Proto_Index).Weight) &
+--           " kg{/gold}");
+--      if Get_Proto_Item(Index => Proto_Index).I_Type = Weapon_Type then
+--         Append
+--           (Source => Item_Info,
+--            New_Item =>
+--              LF & "Skill: {gold}" &
+--              To_String
+--                (Source =>
+--                   SkillsData_Container.Element
+--                     (Container => Skills_List,
+--                      Index =>
+--                        Skills_Amount_Range
+--                          (Get_Proto_Item(Index => Proto_Index).Value(3)))
+--                     .Name) &
+--              "/" &
+--              To_String
+--                (Source =>
+--                   AttributesData_Container.Element
+--                     (Container => Attributes_List,
+--                      Index =>
+--                        SkillsData_Container.Element
+--                          (Container => Skills_List,
+--                           Index =>
+--                             Skills_Amount_Range
+--                               (Get_Proto_Item(Index => Proto_Index).Value(3)))
+--                          .Attribute)
+--                     .Name) &
+--              "{/gold}");
+--         if Get_Proto_Item(Index => Proto_Index).Value(4) = 1 then
+--            Append
+--              (Source => Item_Info,
+--               New_Item => LF & "{gold}Can be used with shield.{/gold}");
+--         else
+--            Append
+--              (Source => Item_Info,
+--               New_Item =>
+--                 LF &
+--                 "{gold}Can't be used with shield (two-handed weapon).{/gold}");
+--         end if;
+--         Append(Source => Item_Info, New_Item => LF & "Damage type: {gold}");
+--         case Get_Proto_Item(Index => Proto_Index).Value(5) is
+--            when 1 =>
+--               Append(Source => Item_Info, New_Item => "cutting{/gold}");
+--            when 2 =>
+--               Append(Source => Item_Info, New_Item => "impaling{/gold}");
+--            when 3 =>
+--               Append(Source => Item_Info, New_Item => "blunt{/gold}");
+--            when others =>
+--               null;
+--         end case;
+--      end if;
+--      Show_Weapon_Info_Loop :
+--      for ItemType of Item_Types loop
+--         if Get_Proto_Item(Index => Proto_Index).I_Type = ItemType then
+--            Append
+--              (Source => Item_Info,
+--               New_Item =>
+--                 LF & "Damage chance: {gold}" &
+--                 Get_Item_Chance_To_Damage
+--                   (Item_Data =>
+--                      Get_Proto_Item(Index => Proto_Index).Value(1)) &
+--                 "{/gold}");
+--            Append
+--              (Source => Item_Info,
+--               New_Item =>
+--                 LF & "Strength:{gold}" &
+--                 Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(2)) &
+--                 "{/gold}");
+--            exit Show_Weapon_Info_Loop;
+--         end if;
+--      end loop Show_Weapon_Info_Loop;
+--      if Is_Tool(Item_Type => Get_Proto_Item(Index => Proto_Index).I_Type) then
+--         Append
+--           (Source => Item_Info,
+--            New_Item =>
+--              LF & "Damage chance: {gold}" &
+--              Get_Item_Chance_To_Damage
+--                (Item_Data => Get_Proto_Item(Index => Proto_Index).Value(1)) &
+--              "{/gold}");
+--      end if;
+--      if Length(Source => Get_Proto_Item(Index => Proto_Index).I_Type) > 4
+--        and then
+--        (Slice
+--           (Source => Get_Proto_Item(Index => Proto_Index).I_Type, Low => 1,
+--            High => 4) =
+--         "Ammo" or
+--         Get_Proto_Item(Index => Proto_Index).I_Type =
+--           To_Bounded_String(Source => "Harpoon")) then
+--         Append
+--           (Source => Item_Info,
+--            New_Item =>
+--              LF & "Strength:{gold}" &
+--              Integer'Image(Get_Proto_Item(Index => Proto_Index).Value(1)) &
+--              "{/gold}");
+--      end if;
+--      if Get_Proto_Item(Index => Proto_Index).Description /=
+--        Short_String.Null_Bounded_String then
+--         Append
+--           (Source => Item_Info,
+--            New_Item =>
+--              LF & LF &
+--              To_String
+--                (Source => Get_Proto_Item(Index => Proto_Index).Description));
+--      end if;
+--      if Cargo_Index > 0 then
+--         Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
+--      else
+--         Cargo_Index :=
+--           Find_Item
+--             (Inventory => Player_Ship.Cargo, Proto_Index => Proto_Index);
+--      end if;
+--      Show_Info_Block :
+--      declare
+--         Max_Amount: Natural :=
+--           (if Base_Cargo_Index > 0 then
+--              BaseCargo_Container.Element
+--                (Container => Sky_Bases(Base_Index).Cargo,
+--                 Index => Base_Cargo_Index)
+--                .Amount
+--            else 0);
+--         Free_Amount: constant Natural :=
+--           (if Base_Cargo_Index > 0 then
+--              Free_Cargo(Amount => 0) /
+--              Get_Proto_Item
+--                (Index =>
+--                   BaseCargo_Container.Element
+--                     (Container => Sky_Bases(Base_Index).Cargo,
+--                      Index => Base_Cargo_Index)
+--                     .Proto_Index)
+--                .Weight
+--            else 0);
+--         Cargo_Max_Amount: constant Natural :=
+--           (if Cargo_Index > 0 then
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--                .Amount
+--            else 0);
+--      begin
+--         if Max_Amount > Free_Amount then
+--            Max_Amount := Free_Amount;
+--         end if;
+--         Show_Info
+--           (Text => To_String(Source => Item_Info),
+--            Title =>
+--              To_String(Source => Get_Proto_Item(Index => Proto_Index).Name),
+--            Button_1 =>
+--              (if Max_Amount = 0 then Empty_Button_Settings
+--               else
+--                 (Tooltip =>
+--                    To_Unbounded_String(Source => "Take item from the base"),
+--                  Command =>
+--                    To_Unbounded_String
+--                      (Source =>
+--                         "LootAmount take" & Natural'Image(Max_Amount)),
+--                  Icon => To_Unbounded_String(Source => "giveicon"),
+--                  Text => To_Unbounded_String(Source => "Take"),
+--                  Color => Null_Unbounded_String)),
+--            Button_2 =>
+--              (if Cargo_Max_Amount = 0 then Empty_Button_Settings
+--               else
+--                 (Tooltip =>
+--                    To_Unbounded_String
+--                      (Source => "Drop item from the ship cargo"),
+--                  Command =>
+--                    To_Unbounded_String
+--                      (Source =>
+--                         "LootAmount drop" & Natural'Image(Cargo_Max_Amount)),
+--                  Icon => To_Unbounded_String(Source => "dropicon"),
+--                  Text => To_Unbounded_String(Source => "Drop"),
+--                  Color => Null_Unbounded_String)));
+--      end Show_Info_Block;
+--      return TCL_OK;
    end Show_Loot_Item_Info_Command;
 
    -- ****o* LUI/LUI.Loot_Item_Command
