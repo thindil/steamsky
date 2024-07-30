@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basescargo, config, game, items, maps, shipscargo, tk]
+import ../[basescargo, config, crewinventory, game, items, maps, shipscargo, tk]
 import coreui, mapsui, table, utilsui2
 
 var
@@ -276,6 +276,28 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           itemData = itemsList[protoIndex].value[1]) & "{/gold}")
       itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
       break
+  if itemsList[protoIndex].itemType in toolsList:
+    itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+        itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+  if itemsList[protoIndex].itemType.len > 4 and itemsList[protoIndex].itemType[
+      0..3] == "Ammo" or itemsList[protoIndex].itemType == "Harpoon":
+    itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  if itemsList[protoIndex].description.len > 0:
+    itemInfo.add(y = "\n\n" & itemsList[protoIndex].description)
+  if cargoIndex > 0:
+    baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
+  else:
+    cargoIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex)
+  var maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
+      baseCargoIndex].amount else: 0)
+  let
+    freeAmount = (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
+        itemsList[skyBases[baseIndex].cargo[
+        baseCargoIndex].protoIndex].weight.float).Natural else: 0)
+    cargoMaxAmount = (if cargoIndex > -1: playerShip.cargo[
+        cargoIndex].amount.Natural else: 0)
+  if maxAmount > freeAmount:
+    maxAmount = freeAmount
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
