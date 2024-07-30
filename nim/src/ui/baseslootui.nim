@@ -228,10 +228,39 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+var itemIndex = -1
+
+proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  itemIndex = ($argv[1]).parseInt
+  if itemIndex < 0:
+    itemIndex.inc
+  else:
+    itemIndex.dec
+  var baseCargoIndex, cargoIndex = -1
+  if itemIndex < 0:
+    baseCargoIndex = itemIndex.abs
+  else:
+    cargoIndex = itemIndex
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
+      baseIndex].cargo.high:
+    return tclOk
+  let protoIndex = (if cargoIndex > -1: playerShip.cargo[
+      cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
+      baseCargoIndex].protoIndex)
+  var itemInfo = "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}"
+  if itemsList[protoIndex].itemType == weaponType:
+    itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
+        3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
+        3]].attribute].name & "{/gold}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowLoot", showLootCommand)
+#    addCommand("ShowLootItemInfo", showLootItemInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
