@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated look of information about available missions in bases
+
 ### Fixed
 - Crash when dropping items in empty bases
 
