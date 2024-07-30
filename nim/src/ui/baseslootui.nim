@@ -34,6 +34,17 @@ var itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
 proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Show information about looting
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowLoot
   var lootFrame = mainPaned & ".lootframe"
   let lootCanvas = lootFrame & ".canvas"
   var label = lootCanvas & ".loot.options.typelabel"
@@ -221,6 +232,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
-#    addCommand("ShowRecruit", showRecruitCommand)
+#    addCommand("ShowLoot", showLootCommand)
   except:
     showError(message = "Can't add a Tcl command.")
