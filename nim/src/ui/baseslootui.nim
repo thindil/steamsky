@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[basescargo, config, crewinventory, game, items, maps, shipscargo, tk]
-import coreui, mapsui, table, utilsui2
+import coreui, dialogs, mapsui, table, utilsui2
 
 var
   lootTable: TableWidget
@@ -298,6 +298,13 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         cargoIndex].amount.Natural else: 0)
   if maxAmount > freeAmount:
     maxAmount = freeAmount
+  showInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
+      if maxAmount == 0: emptyButtonSettings else: ButtonSettings(
+      tooltip: "Take item from the base", command: "LootAmount take " &
+      $maxAmount, icon: "giveicon", text: "Take", color: "")), button2 = (
+      if cargoMaxAmount == 0: emptyButtonSettings else: ButtonSettings(
+      tooltip: "Drop item from the ship cargo", command: "LootAmount drop " &
+      $cargoMaxAmount, icon: "dropicon", text: "Drop", color: "")))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
