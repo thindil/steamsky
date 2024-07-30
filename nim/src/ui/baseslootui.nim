@@ -254,6 +254,28 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemInfo.add(y = "\nSkill: {gold}" & skillsList[itemsList[protoIndex].value[
         3]].name & "/" & attributesList[skillsList[itemsList[protoIndex].value[
         3]].attribute].name & "{/gold}")
+    if itemsList[protoIndex].value[4] == 1:
+      itemInfo.add(y = "\n{gold}Can be used with shield.{/gold}")
+    else:
+      itemInfo.add(y = "\n{gold}Can't be used with shield (two-handed weapon).{/gold}")
+    itemInfo.add(y = "\nDamage type: {gold}")
+    case itemsList[protoIndex].value[5]
+    of 1:
+      itemInfo.add(y = "cutting{/gold}")
+    of 2:
+      itemInfo.add(y = "impaling{/gold}")
+    of 3:
+      itemInfo.add(y = "blunt{/gold}")
+    else:
+      discard
+  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
+      armsArmor, legsArmor, shieldType]
+  for itemType in itemTypes:
+    if itemsList[protoIndex].itemType == itemType:
+      itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
+          itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+      itemInfo.add(y = "\nStrength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+      break
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
