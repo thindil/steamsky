@@ -155,45 +155,6 @@ package body Table is
    end Update_Table;
 
    --## rule off LOCAL_HIDING
-   procedure Add_Progress_Bar
-     (Table: in out Table_Widget; Value: Natural; Max_Value: Positive;
-      Tooltip, Command: String; Column: Positive;
-      New_Row, Invert_Colors: Boolean := False) is
-      --## rule on LOCAL_HIDING
-      N_Width: Nim_Width := (others => 0);
-      Index: Natural := 0;
-      Row: Positive := Table.Row;
-      procedure Add_Ada_Progressbar
-        (Can, Tt, Com: chars_ptr;
-         Val, Max_Val, Col, N_Row, R_Height, I_Colors: Integer;
-         Width: Nim_Width; R: in out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaProgressbar";
-   begin
-      Convert_Width_Loop :
-      for Width of Table.Columns_Width loop
-         N_Width(Index) := Width;
-         Index := Index + 1;
-      end loop Convert_Width_Loop;
-      Add_Ada_Progressbar
-        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
-         Tt => New_String(Str => Tooltip), Com => New_String(Str => Command),
-         Val => Value, Max_Val => Max_Value, Col => Column,
-         N_Row => (if New_Row then 1 else 0), R_Height => Table.Row_Height,
-         I_Colors => (if Invert_Colors then 1 else 0), Width => N_Width,
-         R => Row);
-      Table.Row := Row;
-      Index := 1;
-      Convert_Nim_Width_Loop :
-      for Width of N_Width loop
-         exit Convert_Nim_Width_Loop when Width = 0;
-         Table.Columns_Width(Index) := Width;
-         Index := Index + 1;
-      end loop Convert_Nim_Width_Loop;
-   end Add_Progress_Bar;
-
-   --## rule off LOCAL_HIDING
    procedure Add_Pagination
      (Table: Table_Widget; Previous_Command, Next_Command: String := "") is
       --## rule on LOCAL_HIDING
