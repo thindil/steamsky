@@ -94,13 +94,13 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-    moneyLabel = baseCanvas & ".base.lblmoney"
+    moneyLabel = baseCanvas & ".base.moneyframe.lblmoney"
   if moneyIndex2 > -1:
     tclEval(script = moneyLabel & " configure -text {You have " &
-        $playerShip.cargo[moneyIndex2].amount & " " & moneyName & ".}")
+        $playerShip.cargo[moneyIndex2].amount & " " & moneyName & ".} -style TLabel")
   else:
     tclEval(script = moneyLabel & " configure -text {You don't have " &
-        moneyName & " to buy anything.}")
+        moneyName & " to buy anything.} -style Headerred.TLabel")
   let
     page = try:
         (if argc == 4: ($argv[3]).parseInt else: 1)
