@@ -18,7 +18,7 @@
 import std/[os, strutils, tables]
 import ../[basescargo, config, crewinventory, game, items, maps, messages,
     shipscargo, tk, types]
-import coreui, dialogs, mapsui, table, utilsui2
+import coreui, dialogs, dialogs2, mapsui, table, updateheader, utilsui2
 
 var
   lootTable: TableWidget
@@ -395,8 +395,18 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
           durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
     updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
         durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
-    addMessage(message = "You took " & $amount & " " & itemsList[protoIndex].name & ".", mType = orderMessage)
-  return tclOk
+    addMessage(message = "You took " & $amount & " " & itemsList[
+        protoIndex].name & ".", mType = orderMessage)
+  if $argv[1] in ["take", "drop"]:
+    if closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
+        argv = @["CloseDialog", ".itemdialog"].allocCStringArray) == tclError:
+      return tclError
+  updateHeader()
+  updateMessages()
+  let typeBox = mainPaned & ".lootframe.canvas.loot.options.type"
+  return showLootCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowLoot", tclEval2(script = typeBox &
+      " get")].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
