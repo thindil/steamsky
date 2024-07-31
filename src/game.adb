@@ -260,18 +260,6 @@ package body Game is
          Get_Ada_Game_Strings(Values => Nim_Strings);
          Fuel_Type :=
            To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
-         Head_Armor :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(6)));
-         Chest_Armor :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(7)));
-         Arms_Armor :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(8)));
-         Legs_Armor :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(9)));
-         Shield_Type :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(10)));
-         Weapon_Type :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(11)));
          Money_Name :=
            To_Unbounded_String(Source => Value(Item => Nim_Strings(12)));
          Get_Ada_Game_Integers(Values => Nim_Integers);
