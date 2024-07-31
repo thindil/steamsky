@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basescargo, config, crewinventory, game, items, maps, shipscargo, tk]
+import ../[basescargo, config, crewinventory, game, items, maps, messages,
+    shipscargo, tk, types]
 import coreui, dialogs, mapsui, table, utilsui2
 
 var
@@ -375,6 +376,26 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       updateBaseCargo(protoIndex = protoIndex, amount = amount,
           durability = playerShip.cargo[cargoIndex].durability)
+    updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
+        durability = playerShip.cargo[cargoIndex].durability)
+    addMessage(message = "You drop " & $amount & " " & itemsList[
+        protoIndex].name & ".", mType = orderMessage)
+  else:
+    amount = (if argv[1] == "take": tclEval2(script = amountBox &
+        " get").parseInt else: ($argv[2]).parseInt)
+    if freeCargo(amount = -(amount * itemsList[protoIndex].weight)) < 0:
+      showMessage(text = "You can't take that much " & itemsList[
+          protoIndex].name & ".", title = "Too much taken")
+      return tclOk
+    if cargoIndex > -1:
+      updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,
+          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
+    else:
+      updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
+          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
+    updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
+        durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
+    addMessage(message = "You took " & $amount & " " & itemsList[protoIndex].name & ".", mType = orderMessage)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
