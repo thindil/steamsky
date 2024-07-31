@@ -132,7 +132,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltip = itemDurability, command = "ShowLootItemInfo " & $(index + 1), column = 3)
     addButton(table = lootTable, text = $playerShip.cargo[index].amount,
         tooltip = tableTooltip, command = "ShowLootItemInfo " & $(index + 1), column = 4)
-    let baseAmount = if baseCargoIndex > 0: skyBases[baseIndex].cargo[
+    let baseAmount = if baseCargoIndex > -1: skyBases[baseIndex].cargo[
         baseCargoIndex].amount else: 0
     addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
         command = "ShowLootItemInfo " & $(index + 1), column = 5, newRow = true)
@@ -253,7 +253,9 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     itemIndex.inc
   else:
     itemIndex.dec
-  var baseCargoIndex, cargoIndex = -1
+  var
+    cargoIndex = -1
+    baseCargoIndex = 0
   if itemIndex < 0:
     baseCargoIndex = itemIndex.abs
   else:
