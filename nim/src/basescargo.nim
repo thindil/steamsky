@@ -126,7 +126,7 @@ proc findBaseCargo*(protoIndex: Natural;
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability;
-    cargoIndex: cint = -1) {.sideEffect, raises: [KeyError], tags: [],
+    cargoIndex: int = -1) {.sideEffect, raises: [KeyError], tags: [],
         contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is
