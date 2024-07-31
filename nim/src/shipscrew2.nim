@@ -99,7 +99,8 @@ proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
   require:
     memberIndex < playerShip.crew.len
   body:
-    proc getModuleName(mType: ModuleType2): string =
+    proc getModuleName(mType: ModuleType2): string {.sideEffect, raises: [],
+        tags: [], contractual.} =
       result = ""
       for module in playerShip.modules:
         if module.mType == mType:
