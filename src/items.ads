@@ -201,17 +201,6 @@ package Items is
       Post => Get_Item_Chance_To_Damage'Result'Length > 0;
       -- ****
 
-      -- ****f* Items/Items.Is_Tool
-      -- FUNCTION
-      -- Check if the selected items type is tool
-      -- PARAMETERS
-      -- Item_Type - The type of items to check
-      -- RESULT
-      -- True if the Item_Type is tool, otherwise False
-      -- SOURCE
-   function Is_Tool(Item_Type: Tiny_String.Bounded_String) return Boolean;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    --## rule off TYPE_INITIAL_VALUES

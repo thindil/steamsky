@@ -105,21 +105,6 @@ package body Items is
       return Value(Item => Get_Ada_Item_Chance_To_Damage(I_Data => Item_Data));
    end Get_Item_Chance_To_Damage;
 
-   function Is_Tool(Item_Type: Tiny_String.Bounded_String) return Boolean is
-      function Is_Ada_Tool(I_Type: chars_ptr) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "isAdaTool";
-   begin
-      if Is_Ada_Tool
-          (I_Type =>
-             New_String(Str => Tiny_String.To_String(Source => Item_Type))) =
-        1 then
-         return True;
-      end if;
-      return False;
-   end Is_Tool;
-
    function Inventory_To_Nim
      (Inventory: Inventory_Container.Vector) return Nim_Inventory_Array is
       Nim_Inventory: Nim_Inventory_Array :=
