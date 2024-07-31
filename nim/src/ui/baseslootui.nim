@@ -353,7 +353,8 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   var baseCargoIndex, cargoIndex = -1
   if itemIndex < 0:
     baseCargoIndex = itemIndex.abs
@@ -370,35 +371,59 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
   var amount = 0
   let amountBox = ".itemdialog.amount"
   if $argv[1] in ["drop", "dropall"]:
-    amount = (if argv[1] == "drop": tclEval2(script = amountBox &
-        " get").parseInt else: playerShip.cargo[cargoIndex].amount)
+    amount = try:
+        (if argv[1] == "drop": tclEval2(script = amountBox &
+          " get").parseInt else: playerShip.cargo[cargoIndex].amount)
+      except:
+        return showError(message = "Can't get drop amount.")
     if baseCargoIndex > -1:
-      updateBaseCargo(cargoIndex = baseCargoIndex, amount = amount,
-          durability = playerShip.cargo[cargoIndex].durability)
+      try:
+        updateBaseCargo(cargoIndex = baseCargoIndex, amount = amount,
+            durability = playerShip.cargo[cargoIndex].durability)
+      except:
+        return showError(message = "Can't update the base's cargo.")
     else:
-      updateBaseCargo(protoIndex = protoIndex, amount = amount,
-          durability = playerShip.cargo[cargoIndex].durability)
+      try:
+        updateBaseCargo(protoIndex = protoIndex, amount = amount,
+            durability = playerShip.cargo[cargoIndex].durability)
+      except:
+        return showError(message = "Can't update the base's cargo2.")
     updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = -amount,
         durability = playerShip.cargo[cargoIndex].durability)
-    addMessage(message = "You drop " & $amount & " " & itemsList[
-        protoIndex].name & ".", mType = orderMessage)
+    try:
+      addMessage(message = "You drop " & $amount & " " & itemsList[
+          protoIndex].name & ".", mType = orderMessage)
+    except:
+      return showError(message = "Can't add message.")
   else:
-    amount = (if argv[1] == "take": tclEval2(script = amountBox &
-        " get").parseInt else: ($argv[2]).parseInt)
-    if freeCargo(amount = -(amount * itemsList[protoIndex].weight)) < 0:
-      showMessage(text = "You can't take that much " & itemsList[
-          protoIndex].name & ".", title = "Too much taken")
-      return tclOk
+    amount = try:
+        (if argv[1] == "take": tclEval2(script = amountBox &
+          " get").parseInt else: ($argv[2]).parseInt)
+      except:
+        return showError(message = "Can't get take amount.")
+    try:
+      if freeCargo(amount = -(amount * itemsList[protoIndex].weight)) < 0:
+        showMessage(text = "You can't take that much " & itemsList[
+            protoIndex].name & ".", title = "Too much taken")
+        return tclOk
+    except:
+      return showError(message = "Can't count free cargo.")
     if cargoIndex > -1:
       updateCargo(ship = playerShip, cargoIndex = cargoIndex, amount = amount,
           durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
     else:
       updateCargo(ship = playerShip, protoIndex = protoIndex, amount = amount,
           durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
-    updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
-        durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
-    addMessage(message = "You took " & $amount & " " & itemsList[
-        protoIndex].name & ".", mType = orderMessage)
+    try:
+      updateBaseCargo(cargoIndex = baseCargoIndex, amount = -(amount),
+          durability = skyBases[baseIndex].cargo[baseCargoIndex].durability)
+    except:
+      return showError(message = "Can't update the base's cargo3.")
+    try:
+      addMessage(message = "You took " & $amount & " " & itemsList[
+          protoIndex].name & ".", mType = orderMessage)
+    except:
+      return showError(message = "Can't add message2.")
   if $argv[1] in ["take", "drop"]:
     if closeDialogCommand(clientData = clientData, interp = interp, argc = 2,
         argv = @["CloseDialog", ".itemdialog"].allocCStringArray) == tclError:
