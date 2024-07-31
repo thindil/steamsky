@@ -34,7 +34,7 @@ with Dialogs; use Dialogs;
 with Maps; use Maps;
 with Maps.UI;
 with Messages;
-with Ships.Cargo; use Ships.Cargo;
+with Ships.Cargo;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 
@@ -224,7 +224,7 @@ package body Bases.LootUI is
          External_Name => "showLootItemInfoCommand";
    begin
       Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Get_Ada_Loot_Item_Index(I_Index => Item_Index);
+      Get_Ada_Loot_Item_Index(I_Index => Get_Item_Index);
       return
         Show_Ada_Loot_Item_Info_Command
           (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
@@ -258,6 +258,7 @@ package body Bases.LootUI is
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
       use Maps.UI;
       use Messages;
+      use Ships.Cargo;
       use Tiny_String;
 
       Base_Index: constant Natural :=
