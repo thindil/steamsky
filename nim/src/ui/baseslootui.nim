@@ -349,12 +349,41 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't show the item's info.")
   return tclOk
 
+proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  var baseCargoIndex, cargoIndex = -1
+  if itemIndex < 0:
+    baseCargoIndex = itemIndex.abs
+  else:
+    cargoIndex = itemIndex
+  var protoIndex = 0
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if cargoIndex > -1:
+    protoIndex = playerShip.cargo[cargoIndex].protoIndex
+    if baseCargoIndex == -1:
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
+  else:
+    protoIndex = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
+  var amount = 0
+  let amountBox = ".itemdialog.amount"
+  if $argv[1] in ["drop", "dropall"]:
+    amount = (if argv[1] == "drop": tclEval2(script = amountBox &
+        " get").parseInt else: playerShip.cargo[cargoIndex].amount)
+    if baseCargoIndex > -1:
+      updateBaseCargo(cargoIndex = baseCargoIndex, amount = amount,
+          durability = playerShip.cargo[cargoIndex].durability)
+    else:
+      updateBaseCargo(protoIndex = protoIndex, amount = amount,
+          durability = playerShip.cargo[cargoIndex].durability)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowLoot", showLootCommand)
 #    addCommand("ShowLootItemInfo", showLootItemInfoCommand)
+#    addCommand("lootItem", lootItemCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
