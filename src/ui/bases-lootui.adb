@@ -22,8 +22,8 @@ with Tcl; use Tcl;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -32,9 +32,9 @@ with Bases.Cargo; use Bases.Cargo;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Maps; use Maps;
-with Maps.UI;
-with Messages;
-with Ships.Cargo;
+-- with Maps.UI;
+-- with Messages;
+-- with Ships.Cargo;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 
@@ -247,154 +247,156 @@ package body Bases.LootUI is
    function Loot_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "lootItemCommand";
       -- ****
 
-   function Loot_Item_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-      use Maps.UI;
-      use Messages;
-      use Ships.Cargo;
-      use Tiny_String;
-
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Base_Cargo_Index, Cargo_Index: Natural := 0;
-      Amount: Natural;
-      Proto_Index: Natural;
-      Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
-      Type_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName => Main_Paned & ".lootframe.canvas.loot.options.type",
-           Interp => Interp);
-   begin
-      if Get_Item_Index < 0 then
-         Base_Cargo_Index := abs Get_Item_Index;
-      else
-         Cargo_Index := Get_Item_Index;
-      end if;
-      if Cargo_Index > 0 then
-         Proto_Index :=
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => Cargo_Index)
-             .Proto_Index;
-         if Base_Cargo_Index = 0 then
-            Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
-         end if;
-      else
-         Proto_Index :=
-           BaseCargo_Container.Element
-             (Container => Sky_Bases(Base_Index).Cargo,
-              Index => Base_Cargo_Index)
-             .Proto_Index;
-      end if;
-      if CArgv.Arg(Argv => Argv, N => 1) in "drop" | "dropall" then
-         Amount :=
-           (if CArgv.Arg(Argv => Argv, N => 1) = "drop" then
-              Positive'Value(Get(Widgt => Amount_Box))
-            else Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                .Amount);
-         if Base_Cargo_Index > 0 then
-            Update_Base_Cargo
-              (Cargo_Index => Base_Cargo_Index, Amount => Amount,
-               Durability =>
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                   .Durability);
-         else
-            Update_Base_Cargo
-              (Proto_Index => Proto_Index, Amount => Amount,
-               Durability =>
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                   .Durability);
-         end if;
-         Update_Cargo
-           (Ship => Player_Ship, Cargo_Index => Cargo_Index, Amount => -Amount,
-            Durability =>
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                .Durability);
-         Add_Message
-           (Message =>
-              "You drop" & Positive'Image(Amount) & " " &
-              To_String(Source => Get_Proto_Item(Index => Proto_Index).Name) &
-              ".",
-            M_Type => ORDERMESSAGE);
-      else
-         Amount :=
-           (if CArgv.Arg(Argv => Argv, N => 1) = "take" then
-              Positive'Value(Get(Widgt => Amount_Box))
-            else Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         if Free_Cargo
-             (Amount =>
-                0 - (Amount * Get_Proto_Item(Index => Proto_Index).Weight)) <
-           0 then
-            Show_Message
-              (Text =>
-                 "You can't take that much " &
-                 To_String
-                   (Source => Get_Proto_Item(Index => Proto_Index).Name) &
-                 ".",
-               Title => "Too much taken");
-            return TCL_OK;
-         end if;
-         --## rule off SIMPLIFIABLE_EXPRESSIONS
-         if Cargo_Index > 0 then
-            Update_Cargo
-              (Ship => Player_Ship, Cargo_Index => Cargo_Index,
-               Amount => Amount,
-               Durability =>
-                 BaseCargo_Container.Element
-                   (Container => Sky_Bases(Base_Index).Cargo,
-                    Index => Base_Cargo_Index)
-                   .Durability);
-         else
-            Update_Cargo
-              (Ship => Player_Ship, Proto_Index => Proto_Index,
-               Amount => Amount,
-               Durability =>
-                 BaseCargo_Container.Element
-                   (Container => Sky_Bases(Base_Index).Cargo,
-                    Index => Base_Cargo_Index)
-                   .Durability);
-         end if;
-         Update_Base_Cargo
-           (Cargo_Index => Base_Cargo_Index, Amount => (0 - Amount),
-            Durability =>
-              BaseCargo_Container.Element
-                (Container => Sky_Bases(Base_Index).Cargo,
-                 Index => Base_Cargo_Index)
-                .Durability);
-         Add_Message
-           (Message =>
-              "You took" & Positive'Image(Amount) & " " &
-              To_String(Source => Get_Proto_Item(Index => Proto_Index).Name) &
-              ".",
-            M_Type => ORDERMESSAGE);
-      end if;
-      if CArgv.Arg(Argv => Argv, N => 1) in "take" | "drop" then
-         if Close_Dialog_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-              Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
-           TCL_ERROR then
-            return TCL_ERROR;
-         end if;
-      end if;
-      Update_Header;
-      Update_Messages;
-      return
-        Show_Loot_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "ShowLoot" & Get(Widgt => Type_Box));
-   end Loot_Item_Command;
+--   function Loot_Item_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+--      use Maps.UI;
+--      use Messages;
+--      use Ships.Cargo;
+--      use Tiny_String;
+--
+--      Base_Index: constant Natural :=
+--        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--      Base_Cargo_Index, Cargo_Index: Natural := 0;
+--      Amount: Natural;
+--      Proto_Index: Natural;
+--      Amount_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
+--      Type_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName => Main_Paned & ".lootframe.canvas.loot.options.type",
+--           Interp => Interp);
+--   begin
+--      if Get_Item_Index < 0 then
+--         Base_Cargo_Index := abs Get_Item_Index;
+--      else
+--         Cargo_Index := Get_Item_Index;
+--      end if;
+--      if Cargo_Index > 0 then
+--         Proto_Index :=
+--           Inventory_Container.Element
+--             (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--             .Proto_Index;
+--         if Base_Cargo_Index = 0 then
+--            Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
+--         end if;
+--      else
+--         Proto_Index :=
+--           BaseCargo_Container.Element
+--             (Container => Sky_Bases(Base_Index).Cargo,
+--              Index => Base_Cargo_Index)
+--             .Proto_Index;
+--      end if;
+--      if CArgv.Arg(Argv => Argv, N => 1) in "drop" | "dropall" then
+--         Amount :=
+--           (if CArgv.Arg(Argv => Argv, N => 1) = "drop" then
+--              Positive'Value(Get(Widgt => Amount_Box))
+--            else Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--                .Amount);
+--         if Base_Cargo_Index > 0 then
+--            Update_Base_Cargo
+--              (Cargo_Index => Base_Cargo_Index, Amount => Amount,
+--               Durability =>
+--                 Inventory_Container.Element
+--                   (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--                   .Durability);
+--         else
+--            Update_Base_Cargo
+--              (Proto_Index => Proto_Index, Amount => Amount,
+--               Durability =>
+--                 Inventory_Container.Element
+--                   (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--                   .Durability);
+--         end if;
+--         Update_Cargo
+--           (Ship => Player_Ship, Cargo_Index => Cargo_Index, Amount => -Amount,
+--            Durability =>
+--              Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Cargo_Index)
+--                .Durability);
+--         Add_Message
+--           (Message =>
+--              "You drop" & Positive'Image(Amount) & " " &
+--              To_String(Source => Get_Proto_Item(Index => Proto_Index).Name) &
+--              ".",
+--            M_Type => ORDERMESSAGE);
+--      else
+--         Amount :=
+--           (if CArgv.Arg(Argv => Argv, N => 1) = "take" then
+--              Positive'Value(Get(Widgt => Amount_Box))
+--            else Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+--         --## rule off SIMPLIFIABLE_EXPRESSIONS
+--         if Free_Cargo
+--             (Amount =>
+--                0 - (Amount * Get_Proto_Item(Index => Proto_Index).Weight)) <
+--           0 then
+--            Show_Message
+--              (Text =>
+--                 "You can't take that much " &
+--                 To_String
+--                   (Source => Get_Proto_Item(Index => Proto_Index).Name) &
+--                 ".",
+--               Title => "Too much taken");
+--            return TCL_OK;
+--         end if;
+--         --## rule off SIMPLIFIABLE_EXPRESSIONS
+--         if Cargo_Index > 0 then
+--            Update_Cargo
+--              (Ship => Player_Ship, Cargo_Index => Cargo_Index,
+--               Amount => Amount,
+--               Durability =>
+--                 BaseCargo_Container.Element
+--                   (Container => Sky_Bases(Base_Index).Cargo,
+--                    Index => Base_Cargo_Index)
+--                   .Durability);
+--         else
+--            Update_Cargo
+--              (Ship => Player_Ship, Proto_Index => Proto_Index,
+--               Amount => Amount,
+--               Durability =>
+--                 BaseCargo_Container.Element
+--                   (Container => Sky_Bases(Base_Index).Cargo,
+--                    Index => Base_Cargo_Index)
+--                   .Durability);
+--         end if;
+--         Update_Base_Cargo
+--           (Cargo_Index => Base_Cargo_Index, Amount => (0 - Amount),
+--            Durability =>
+--              BaseCargo_Container.Element
+--                (Container => Sky_Bases(Base_Index).Cargo,
+--                 Index => Base_Cargo_Index)
+--                .Durability);
+--         Add_Message
+--           (Message =>
+--              "You took" & Positive'Image(Amount) & " " &
+--              To_String(Source => Get_Proto_Item(Index => Proto_Index).Name) &
+--              ".",
+--            M_Type => ORDERMESSAGE);
+--      end if;
+--      if CArgv.Arg(Argv => Argv, N => 1) in "take" | "drop" then
+--         if Close_Dialog_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--              Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
+--           TCL_ERROR then
+--            return TCL_ERROR;
+--         end if;
+--      end if;
+--      Update_Header;
+--      Update_Messages;
+--      return
+--        Show_Loot_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+--           Argv => CArgv.Empty & "ShowLoot" & Get(Widgt => Type_Box));
+--   end Loot_Item_Command;
 
    -- ****o* LUI/LUI.Loot_Amount_Command
    -- FUNCTION
