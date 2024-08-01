@@ -47,20 +47,4 @@ package Ships.Cargo is
       -- ****
       --## rule on LOCAL_HIDING
 
-      -- ****f* SCargo/SCargo.Free_Cargo
-      -- FUNCTION
-      -- Check how much is free space in cargo of selected ship
-      -- PARAMETERS
-      -- Amount - Amount of kilograms to add or delete before count free
-      --          cargo space
-      -- Ship   - Ship in which cargo will be check for free space. Default
-      --          is player ship
-      -- RESULT
-      -- Amount of free cargo space in kilograms after add or remove Amount
-      -- of kilograms
-      -- SOURCE
-   function Free_Cargo
-     (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer;
-      -- ****
-
 end Ships.Cargo;

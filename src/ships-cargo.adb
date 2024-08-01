@@ -57,22 +57,4 @@ package body Ships.Cargo is
    end Update_Cargo;
    --## rule on LOCAL_HIDING
 
-   function Free_Cargo
-     (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer is
-      function Free_Ada_Cargo
-        (A: Integer; Get_Player_Ship: Natural := 1) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "freeAdaCargo";
-   begin
-      Get_Ada_Modules(Ship => Ship);
-      Get_Ada_Ship_Cargo
-        (Cargo => Inventory_To_Nim(Inventory => Ship.Cargo),
-         Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-      return
-        Free_Ada_Cargo
-          (A => Amount,
-           Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-   end Free_Cargo;
-
 end Ships.Cargo;
