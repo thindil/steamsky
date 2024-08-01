@@ -28,7 +28,6 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
 with Bases.Cargo;
 with CoreUI;
--- with Dialogs;
 with Maps; use Maps;
 with Table; use Table;
 with Utils.UI;
@@ -271,61 +270,6 @@ package body Bases.LootUI is
       Import => True,
       External_Name => "lootAmountCommand";
       -- ****
-
---   function Loot_Amount_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Dialogs;
---      use Tiny_String;
---
---      Base_Index: constant Natural :=
---        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
---   begin
---      if CArgv.Arg(Argv => Argv, N => 1) = "drop" then
---         Show_Manipulate_Item
---           (Title =>
---              "Drop " &
---              Get_Item_Name
---                (Item =>
---                   Inventory_Container.Element
---                     (Container => Player_Ship.Cargo,
---                      Index => Get_Item_Index)),
---            Command => "LootItem drop", Action => "drop",
---            Item_Index => Get_Item_Index);
---      else
---         if Get_Item_Index > 0 then
---            Show_Manipulate_Item
---              (Title =>
---                 "Take " &
---                 Get_Item_Name
---                   (Item =>
---                      Inventory_Container.Element
---                        (Container => Player_Ship.Cargo,
---                         Index => Get_Item_Index)),
---               Command => "LootItem take", Action => "take",
---               Item_Index => Get_Item_Index,
---               Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
---         else
---            Show_Manipulate_Item
---              (Title =>
---                 "Take " &
---                 To_String
---                   (Source =>
---                      Get_Proto_Item
---                        (Index =>
---                           BaseCargo_Container.Element
---                             (Container => Sky_Bases(Base_Index).Cargo,
---                              Index => abs Get_Item_Index)
---                             .Proto_Index)
---                        .Name),
---               Command => "LootItem take", Action => "take",
---               Item_Index => abs Get_Item_Index,
---               Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
---         end if;
---      end if;
---      return TCL_OK;
---   end Loot_Amount_Command;
 
    -- ****o* LUI/LUI.Sort_Items_Command
    -- FUNCTION
