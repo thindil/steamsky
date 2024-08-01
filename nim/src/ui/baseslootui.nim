@@ -249,17 +249,13 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get item's index.")
-  if itemIndex < 0:
-    itemIndex.inc
-  else:
-    itemIndex.dec
   var
     cargoIndex = -1
     baseCargoIndex = 0
   if itemIndex < 0:
-    baseCargoIndex = itemIndex.abs
+    baseCargoIndex = (itemIndex + 1).abs
   else:
-    cargoIndex = itemIndex
+    cargoIndex = itemIndex - 1
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
       baseIndex].cargo.high:
@@ -369,9 +365,9 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## actiontype can be: drop, dropall, take, takeall
   var baseCargoIndex, cargoIndex = -1
   if itemIndex < 0:
-    baseCargoIndex = itemIndex.abs
+    baseCargoIndex = (itemIndex + 1).abs
   else:
-    cargoIndex = itemIndex
+    cargoIndex = itemIndex - 1
   var protoIndex = 0
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if cargoIndex > -1:
@@ -447,13 +443,27 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowLoot", tclEval2(script = typeBox &
       " get")].allocCStringArray)
 
+proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  if argv[1] == "drop":
+    showManipulateItem(title = "Drop " & getItemName(item = playerShip.cargo[
+        itemIndex - 1]), command = "LootItem drop", action = "drop",
+        itemIndex = itemIndex - 1)
+  else:
+    if itemIndex > 0:
+      showManipulateItem(title = "Take " & getItemName(item = playerShip.cargo[
+          itemIndex - 1]), command = "LootItem take", action = "take",
+          itemIndex = itemIndex - 1, maxAmount = ($argv[2]).parseInt)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowLoot", showLootCommand)
 #    addCommand("ShowLootItemInfo", showLootItemInfoCommand)
-#    addCommand("lootItem", lootItemCommand)
+#    addCommand("LootItem", lootItemCommand)
+#    addCommand("LootAmount", lootAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
