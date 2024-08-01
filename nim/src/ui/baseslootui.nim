@@ -481,6 +481,61 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't take item from base2.")
   return tclOk
 
+proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  let column = try:
+        getColumnNumber(table = lootTable, xPosition = ($argv[1]).parseInt)
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if itemsSortOrder == nameAsc:
+      itemsSortOrder = nameDesc
+    else:
+      itemsSortOrder = nameAsc
+  of 2:
+    if itemsSortOrder == typeAsc:
+      itemsSortOrder = typeDesc
+    else:
+      itemsSortOrder = typeAsc
+  of 3:
+    if itemsSortOrder == durabilityAsc:
+      itemsSortOrder = durabilityDesc
+    else:
+      itemsSortOrder = durabilityAsc
+  of 4:
+    if itemsSortOrder == ownedAsc:
+      itemsSortOrder = ownedDesc
+    else:
+      itemsSortOrder = ownedAsc
+  of 5:
+    if itemsSortOrder == availableAsc:
+      itemsSortOrder = availableDesc
+    else:
+      itemsSortOrder = availableAsc
+  else:
+    discard
+  if itemsSortOrder == none:
+    return tclOk
+  type LocalItemData = object
+    name: string
+    iType: string
+    damage: float
+    owned: Natural
+    available: Natural
+    id: Natural
+  var
+    localItems: seq[LocalItemData] = @[]
+    indexesList: seq[Natural] = @[]
+  for index, item in playerShip.cargo:
+    let
+      protoIndex = item.protoIndex
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex, durability = item.durability)
+    if baseCargoIndex > -1:
+      indexesList.add(y = baseCargoIndex)
+    localItems.add(LocalItemData(name: getItemName(item = item), iType: (if itemsList[protoIndex].showType.len == 0: itemsList[protoIndex].itemType else: itemsList[protoIndex].showType), damage: (item.durability.float / defaultItemDurability.float), owned: item.amount, available: (if baseCargoIndex > -1: localBaseCargo[baseCargoIndex].amount else: 0)))
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -489,6 +544,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowLootItemInfo", showLootItemInfoCommand)
 #    addCommand("LootItem", lootItemCommand)
 #    addCommand("LootAmount", lootAmountCommand)
+#    addCommand("SortLootItems", sortLootItemsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
