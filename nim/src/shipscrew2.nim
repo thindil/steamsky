@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to managing ship's crews like deleting members,
+## killing them or getting their current order . Split from shipscrew
+## module to avoid circular dependencies.
+
 import std/tables
 import contracts
 import crafts, game, halloffame, messages, missions, shipscrew, types, utils
@@ -101,6 +105,11 @@ proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
   body:
     proc getModuleName(mType: ModuleType2): string {.sideEffect, raises: [],
         tags: [], contractual.} =
+      ## Get the name of the selected module
+      ##
+      ## * mType - the type of the module which will be looking for
+      ##
+      ## Returns the name of the selected module
       result = ""
       for module in playerShip.modules:
         if module.mType == mType:
@@ -154,6 +163,7 @@ proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
 
 proc deleteAdaMember(memberIndex, inPlayerShip: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     if inPlayerShip == 1:
       deleteMember(memberIndex = memberIndex - 1, ship = playerShip)
@@ -165,6 +175,7 @@ proc deleteAdaMember(memberIndex, inPlayerShip: cint) {.raises: [], tags: [],
 proc deathAda(memberIndex: cint; reason: cstring; inPlayerShip,
     createBody: cint) {.raises: [], tags: [WriteIOEffect], exportc,
         contractual.} =
+  ## Temporary C binding
   try:
     if inPlayerShip == 1:
       death(memberIndex = memberIndex - 1, reason = $reason, ship = playerShip,
@@ -177,6 +188,7 @@ proc deathAda(memberIndex: cint; reason: cstring; inPlayerShip,
 
 proc getAdaCurrentOrder(memberIndex: cint): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return getCurrentOrder(memberIndex = memberIndex - 1).cstring
   except ValueError:
