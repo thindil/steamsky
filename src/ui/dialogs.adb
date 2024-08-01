@@ -16,6 +16,8 @@
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C; use Interfaces.C;
+with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -138,6 +140,26 @@ package body Dialogs is
         (New_Value =>
            To_Unbounded_String(Source => Value(Item => Local_Timer)));
    end Show_Dialog;
+
+   -- ****io* Dialogs/Dialogs.Close_Dialog_Command
+   -- FUNCTION
+   -- Close the selected dialog
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CloseDialog dialogname
+   -- Dialogname is name of the dialog to close
+   -- SOURCE
+   function Close_Dialog_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
 
    function Close_Dialog_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;

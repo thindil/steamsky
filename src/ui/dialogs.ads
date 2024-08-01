@@ -14,8 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C; use Interfaces.C;
-with CArgv;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Game; use Game;
 --## rule off REDUCEABLE_SCOPE
@@ -128,30 +126,10 @@ package Dialogs is
       Relative_X, Relative_Y: Damage_Factor := 0.3);
    -- ****
 
-   -- ****o* Dialogs/Dialogs.Close_Dialog_Command
+   -- ****f* Dialogs/Dialogs.Add_Commands
    -- FUNCTION
-   -- Close the selected dialog
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command.
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- CloseDialog dialogname
-   -- Dialogname is name of the dialog to close
+   -- Add Tcl commands related to dialogs
    -- SOURCE
-   function Close_Dialog_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-      -- ****f* Dialogs/Dialogs.Add_Commands
-      -- FUNCTION
-      -- Add Tcl commands related to dialogs
-      -- SOURCE
    procedure Add_Commands;
    -- ****
 
