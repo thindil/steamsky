@@ -445,6 +445,19 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show dialog to enter amount of items to drop or take
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## LootAmount action maxamount
+  ## Action which will be taken. Can be take or drop. Maxamount is the
+  ## maximum allowed amount of items to take
   if argv[1] == "drop":
     showManipulateItem(title = "Drop " & getItemName(item = playerShip.cargo[
         itemIndex - 1]), command = "LootItem drop", action = "drop",
