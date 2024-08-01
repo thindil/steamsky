@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[algorithm, os, strutils, tables]
 import ../[basescargo, config, crewinventory, game, items, maps, messages,
     shipscargo, tk, types]
 import coreui, dialogs, dialogs2, mapsui, table, updateheader, utilsui2
@@ -482,7 +482,7 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.exportc.} =
   let column = try:
         getColumnNumber(table = lootTable, xPosition = ($argv[1]).parseInt)
       except:
@@ -527,13 +527,79 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   var
     localItems: seq[LocalItemData] = @[]
     indexesList: seq[Natural] = @[]
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var localBaseCargo: seq[BaseCargo] = @[]
   for index, item in playerShip.cargo:
     let
       protoIndex = item.protoIndex
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex, durability = item.durability)
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          durability = item.durability)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
-    localItems.add(LocalItemData(name: getItemName(item = item), iType: (if itemsList[protoIndex].showType.len == 0: itemsList[protoIndex].itemType else: itemsList[protoIndex].showType), damage: (item.durability.float / defaultItemDurability.float), owned: item.amount, available: (if baseCargoIndex > -1: localBaseCargo[baseCargoIndex].amount else: 0)))
+    localItems.add(LocalItemData(name: getItemName(item = item), iType: (
+        if itemsList[protoIndex].showType.len == 0: itemsList[
+        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+        item.durability.float / defaultItemDurability.float),
+        owned: item.amount, available: (if baseCargoIndex > -1: localBaseCargo[
+        baseCargoIndex].amount else: 0), id: index))
+  proc sortItems(x, y: LocalItemData): int =
+    case itemsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of typeAsc:
+      if x.iType < y.iType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.iType > y.iType:
+        return 1
+      else:
+        return -1
+    of durabilityAsc:
+      if x.damage < y.damage:
+        return 1
+      else:
+        return -1
+    of durabilityDesc:
+      if x.damage > y.damage:
+        return 1
+      else:
+        return -1
+    of ownedAsc:
+      if x.owned < y.owned:
+        return 1
+      else:
+        return -1
+    of ownedDesc:
+      if x.owned > y.owned:
+        return 1
+      else:
+        return -1
+    of availableAsc:
+      if x.available < y.available:
+        return 1
+      else:
+        return -1
+    of availableDesc:
+      if x.available > y.available:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localItems.sort(cmp = sortItems)
+  itemsIndexes = @[]
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
