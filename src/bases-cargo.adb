@@ -19,26 +19,6 @@ with Maps; use Maps;
 
 package body Bases.Cargo is
 
-   procedure Update_Base_Cargo
-     (Proto_Index: Natural := 0; Amount: Integer;
-      Durability: Items_Durability := Default_Item_Durability;
-      Cargo_Index: Inventory_Container.Extended_Index := 0) is
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Update_Ada_Base_Cargo
-        (P_Index: Natural; A, D, C_Index: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaBaseCargo";
-   begin
-      Set_Ship_In_Nim;
-      Get_Base_Cargo(Base_Index => Base_Index);
-      Update_Ada_Base_Cargo
-        (P_Index => Proto_Index, A => Amount, D => Durability,
-         C_Index => Cargo_Index);
-      Set_Base_Cargo(Base_Index => Base_Index);
-   end Update_Base_Cargo;
-
    function Find_Base_Cargo
      (Proto_Index: Natural;
       Durability: Items_Durability := Items_Durability'Last) return Natural is

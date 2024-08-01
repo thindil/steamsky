@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -21,22 +21,6 @@
 -- SOURCE
 package Bases.Cargo is
 -- ****
-
-   -- ****f* BCargo/BCargo.Update_Base_Cargo
-   -- FUNCTION
-   -- Update cargo in base
-   -- PARAMETERS
-   -- Proto_Index - Index of item prototype. Can be empty if Cargo_Index is set
-   -- Amount      - Amount of item to add or remove
-   -- Durability  - Durability of item to add or remove. Can be empty
-   -- Cargo_Index - Index of item in sky base cargo. Can be empty if Proto_Index
-   --               is set
-   -- SOURCE
-   procedure Update_Base_Cargo
-     (Proto_Index: Natural := 0; Amount: Integer;
-      Durability: Items_Durability := Default_Item_Durability;
-      Cargo_Index: Inventory_Container.Extended_Index := 0);
-   -- ****
 
    -- ****f* BCargo/BCargo.Find_Base_Cargo
    -- FUNCTION
