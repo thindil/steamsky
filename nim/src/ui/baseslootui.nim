@@ -454,6 +454,11 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       showManipulateItem(title = "Take " & getItemName(item = playerShip.cargo[
           itemIndex - 1]), command = "LootItem take", action = "take",
           itemIndex = itemIndex - 1, maxAmount = ($argv[2]).parseInt)
+    else:
+      let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      showManipulateItem(title = "Take " & itemsList[skyBases[baseIndex].cargo[
+          (itemIndex + 1).abs].protoIndex].name, command = "LootItem take",
+          action = "take", itemIndex = (itemIndex + 1).abs, maxAmount = ($argv[2]).parseInt)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
