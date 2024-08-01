@@ -94,13 +94,18 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-    moneyLabel = baseCanvas & ".base.moneyframe.lblmoney"
+  var moneyLabel = baseCanvas & ".base.moneyframe.lblmoney"
   if moneyIndex2 > -1:
-    tclEval(script = moneyLabel & " configure -text {You have " &
-        $playerShip.cargo[moneyIndex2].amount & " " & moneyName & ".} -style TLabel")
+    tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
+    moneyLabel = baseCanvas & ".base.moneyframe.lblmoney2"
+    tclEval(script = moneyLabel & " configure -text {" & $playerShip.cargo[
+        moneyIndex2].amount & " " & moneyName & "}")
+    tclEval(script = "grid " & moneyLabel & " -column 1 -row 0")
   else:
-    tclEval(script = moneyLabel & " configure -text {You don't have " &
+    tclEval(script = moneyLabel & " configure -text {You don't have any " &
         moneyName & " to buy anything.} -style Headerred.TLabel")
+    moneyLabel = baseCanvas & ".base.moneyframe.lblmoney2"
+    tclEval(script = "grid remove " & moneyLabel)
   let
     page = try:
         (if argc == 4: ($argv[3]).parseInt else: 1)
