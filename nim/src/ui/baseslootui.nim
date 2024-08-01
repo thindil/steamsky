@@ -444,21 +444,28 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   if argv[1] == "drop":
     showManipulateItem(title = "Drop " & getItemName(item = playerShip.cargo[
         itemIndex - 1]), command = "LootItem drop", action = "drop",
         itemIndex = itemIndex - 1)
   else:
     if itemIndex > 0:
-      showManipulateItem(title = "Take " & getItemName(item = playerShip.cargo[
-          itemIndex - 1]), command = "LootItem take", action = "take",
-          itemIndex = itemIndex - 1, maxAmount = ($argv[2]).parseInt)
+      try:
+        showManipulateItem(title = "Take " & getItemName(
+            item = playerShip.cargo[itemIndex - 1]), command = "LootItem take",
+            action = "take", itemIndex = itemIndex - 1, maxAmount = ($argv[2]).parseInt)
+      except:
+        return showError(message = "Can't take item from base.")
     else:
       let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-      showManipulateItem(title = "Take " & itemsList[skyBases[baseIndex].cargo[
-          (itemIndex + 1).abs].protoIndex].name, command = "LootItem take",
-          action = "take", itemIndex = (itemIndex + 1).abs, maxAmount = ($argv[2]).parseInt)
+      try:
+        showManipulateItem(title = "Take " & itemsList[skyBases[
+            baseIndex].cargo[(itemIndex + 1).abs].protoIndex].name,
+            command = "LootItem take", action = "take", itemIndex = (itemIndex +
+            1).abs, maxAmount = ( $argv[2]).parseInt)
+      except:
+        return showError(message = "Can't take item from base2.")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
