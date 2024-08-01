@@ -20,18 +20,18 @@ with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
-with Bases.Cargo; use Bases.Cargo;
-with CoreUI; use CoreUI;
-with Dialogs; use Dialogs;
+with Bases.Cargo;
+with CoreUI;
+with Dialogs;
 with Maps; use Maps;
 with Table; use Table;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Bases.LootUI is
 
@@ -118,11 +118,13 @@ package body Bases.LootUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
       use Tcl.Tk.Ada.Winfo;
+      use CoreUI;
 
       Loot_Frame: Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".lootframe", Interp => Interp);
@@ -272,6 +274,7 @@ package body Bases.LootUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Dialogs;
       use Tiny_String;
 
       Base_Index: constant Natural :=
@@ -311,11 +314,11 @@ package body Bases.LootUI is
                         (Index =>
                            BaseCargo_Container.Element
                              (Container => Sky_Bases(Base_Index).Cargo,
-                              Index => abs (Get_Item_Index))
+                              Index => abs Get_Item_Index)
                              .Proto_Index)
                         .Name),
                Command => "LootItem take", Action => "take",
-               Item_Index => abs (Get_Item_Index),
+               Item_Index => abs Get_Item_Index,
                Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
          end if;
       end if;
@@ -346,6 +349,7 @@ package body Bases.LootUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Bases.Cargo;
       use Tiny_String;
 
       --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -575,6 +579,7 @@ package body Bases.LootUI is
    end Sort_Items_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command(Name => "ShowLoot", Ada_Command => Show_Loot_Command'Access);
       Add_Command
