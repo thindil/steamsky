@@ -16,9 +16,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Game; use Game;
---## rule off REDUCEABLE_SCOPE
-with Items; use Items;
---## rule on REDUCEABLE_SCOPE
 
 -- ****h* Dialogs/Dialogs
 -- FUNCTION
@@ -167,30 +164,6 @@ package Dialogs is
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
       Button_1, Button_2: Button_Settings := Empty_Button_Settings) with
       Pre => Text'Length > 0 and Parent_Name'Length > 0;
-      -- ****
-
-      -- ****f* Dialogs/Dialogs.Show_Manipulate_Item
-      -- FUNCTION
-      -- Show the dialog for manipulate items amount in cargo (like selling,
-      -- dropping, etc).
-      -- PARAMETERS
-      -- Title      - Title of the dialog
-      -- Command    - Tcl command which will be executed when the player hit
-      --              the button Ok
-      -- Action     - The name of action which the player is doing (like drop,
-      --              sell, ect)
-      -- Item_Index - The index of the item which will be manipulated
-      -- Max_Amount - Max amount of the items to manipualate. If zero, use max
-      --              amount of items from player ship cargo. Default value is
-      --              zero.
-      -- Cost       - The cost (in buying) or gain (in selling) for one item in
-      --              the game money. Can be zero. Default value is zero.
-      -- SOURCE
-   procedure Show_Manipulate_Item
-     (Title, Command, Action: String;
-      Item_Index: Inventory_Container.Extended_Index;
-      Max_Amount, Cost: Natural := 0) with
-      Pre => Title'Length > 0 and Command'Length > 0;
       -- ****
 
       -- ****f* Dialogs/Dialogs.Show_Question

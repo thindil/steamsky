@@ -639,22 +639,6 @@ package body Dialogs is
          B_2 => Nim_Button_2);
    end Show_Info;
 
-   procedure Show_Manipulate_Item
-     (Title, Command, Action: String;
-      Item_Index: Inventory_Container.Extended_Index;
-      Max_Amount, Cost: Natural := 0) is
-      procedure Show_Ada_Manipulate_Item
-        (Ti, Com, Act: chars_ptr; I_Index, M_Amount, C: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaManipulateItem";
-   begin
-      Show_Ada_Manipulate_Item
-        (Ti => New_String(Str => Title), Com => New_String(Str => Command),
-         Act => New_String(Str => Action), I_Index => Item_Index,
-         M_Amount => Max_Amount, C => Cost);
-   end Show_Manipulate_Item;
-
    procedure Show_Question
      (Question, Result: String; In_Game: Boolean := True) is
       procedure Show_Ada_Question(Q, R: chars_ptr; I_Game: Integer) with
