@@ -36,9 +36,9 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
   require:
     memberIndex < ship.crew.len
   body:
-    var deleted = false
+    var deleted: bool = false
     if ship.crew == playerShip.crew:
-      for index, mission in acceptedMissions.pairs:
+      for index, mission in acceptedMissions:
         if mission.mType == passenger and mission.data == memberIndex:
           deleteMission(missionIndex = index)
           deleted = true
@@ -72,7 +72,7 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
     memberIndex < ship.crew.len
     reason.len > 0
   body:
-    let memberName = ship.crew[memberIndex].name
+    let memberName: string = ship.crew[memberIndex].name
     if ship.crew == playerShip.crew:
       if memberIndex == 0:
         addMessage(message = "You died from " & reason & ".",
@@ -88,7 +88,7 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
       ship.cargo.add(y = InventoryData(protoIndex: corpseIndex, amount: 1,
           name: memberName & "'s corpse", durability: 100, price: 0))
     deleteMember(memberIndex = memberIndex, ship = ship)
-    for index, _ in ship.crew.pairs:
+    for index, _ in ship.crew:
       updateMorale(ship = ship, memberIndex = index, value = getRandom(
           min = -25, max = -10))
 
@@ -117,7 +117,7 @@ proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
             if owner == memberIndex:
               return module.name
 
-    let member = playerShip.crew[memberIndex]
+    let member: MemberData = playerShip.crew[memberIndex]
     case member.order
     of pilot:
       result = "Piloting the ship"
