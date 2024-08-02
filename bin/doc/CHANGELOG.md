@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Showing information about the installed cockpit in shipyards
 - Showing information about owned money in bases' schools
 - Crash when dropping items in empty bases
+- Showing the last combat screen when restaring the game
 
 ## [10.0.1] - 2024-07-14
 
