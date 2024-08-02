@@ -482,7 +482,8 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let column = try:
         getColumnNumber(table = lootTable, xPosition = ($argv[1]).parseInt)
       except:
@@ -536,12 +537,16 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           durability = item.durability)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
-    localItems.add(LocalItemData(name: getItemName(item = item), iType: (
-        if itemsList[protoIndex].showType.len == 0: itemsList[
-        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-        item.durability.float / defaultItemDurability.float),
-        owned: item.amount, available: (if baseCargoIndex > -1: localBaseCargo[
-        baseCargoIndex].amount else: 0), id: index))
+    try:
+      localItems.add(LocalItemData(name: getItemName(item = item), iType: (
+          if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+          item.durability.float / defaultItemDurability.float),
+          owned: item.amount, available: (if baseCargoIndex >
+          -1: localBaseCargo[
+          baseCargoIndex].amount else: 0), id: index))
+    except:
+      return showError(message = "Can't add player's ship's item.")
   proc sortItems(x, y: LocalItemData): int =
     case itemsSortOrder
     of nameAsc:
@@ -606,11 +611,14 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     if indexesList.contains(item = index):
       continue
     let protoIndex = item.protoIndex
-    localItems.add(y = LocalItemData(name: itemsList[protoIndex].name, iType: (
-        if itemsList[protoIndex].showType.len == 0: itemsList[
-        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
-        item.durability.float / defaultItemDurability.float), owned: 0,
-        available: item.amount, id: index))
+    try:
+      localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
+          iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
+          protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+          item.durability.float / defaultItemDurability.float), owned: 0,
+          available: item.amount, id: index))
+    except:
+      return showError(message = "Can't add the base's item.")
   localItems.sort(cmp = sortItems)
   for item in localItems:
     itemsIndexes.add(y = item.id)
