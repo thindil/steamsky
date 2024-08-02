@@ -601,6 +601,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   for item in localItems:
     itemsIndexes.add(y = item.id)
   itemsIndexes.add(y = -1)
+  localItems = @[]
   for index, item in localBaseCargo:
     if indexesList.contains(item = index):
       continue
