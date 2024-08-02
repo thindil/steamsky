@@ -607,6 +607,10 @@ package body Maps.UI is
          newValue => To_String(Source => Player_Ship.Name));
       Tcl_SetVar
         (interp => Get_Context, varName => "gamestate", newValue => "general");
+      if Winfo_Get(Widgt => Close_Button, Info => "ismapped") = "1" then
+         Show_Sky_Map(Clear => True);
+         Grid.Grid_Remove(Slave => Close_Button);
+      end if;
    end Create_Game_Ui;
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
