@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,13 +15,15 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Maps; use Maps;
+with Maps;
 
 package body Bases.Cargo is
 
    function Find_Base_Cargo
      (Proto_Index: Natural;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
+      use Maps;
+
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       function Find_Ada_Base_Cargo
