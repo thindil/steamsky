@@ -528,7 +528,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     localItems: seq[LocalItemData] = @[]
     indexesList: seq[Natural] = @[]
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  var localBaseCargo: seq[BaseCargo] = @[]
+  var localBaseCargo: seq[BaseCargo] = skyBases[baseIndex].cargo
   for index, item in playerShip.cargo:
     let
       protoIndex = item.protoIndex
@@ -600,7 +600,21 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   itemsIndexes = @[]
   for item in localItems:
     itemsIndexes.add(y = item.id)
-  return tclOk
+  itemsIndexes.add(y = -1)
+  for index, item in localBaseCargo:
+    if indexesList.contains(item = index):
+      continue
+    let protoIndex = item.protoIndex
+    localItems.add(y = LocalItemData(name: itemsList[protoIndex].name, iType: (
+        if itemsList[protoIndex].showType.len == 0: itemsList[
+        protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+        item.durability.float / defaultItemDurability.float), owned: 0,
+        available: item.amount, id: index))
+  localItems.sort(cmp = sortItems)
+  for item in localItems:
+    itemsIndexes.add(y = item.id)
+  return showLootCommand(clientData = clientData, interp = interp, argc = 2,
+      argv = @["ShowLoot", "All"].allocCStringArray)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
