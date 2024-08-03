@@ -559,7 +559,7 @@ proc setKeys*() {.sideEffect, raises: [], tags: [].} =
 
 import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
     craftsui, gameoptions, helpui, mapsuicommands, messagesui, ordersmenu,
-    shipsui, tradesui, waitmenu
+    shipsui, tradesui, waitmenu, knowledge
 
 proc createGameUi*() =
   let
@@ -728,6 +728,7 @@ proc createGameUi*() =
     basesui.addCommands()
     basesshipyardui.addCommands()
     baseslootui.addCommands()
+    knowledge.addCommands()
 
 # Temporary code for interfacing with Ada
 
