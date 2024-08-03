@@ -19,7 +19,7 @@ with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C.Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
@@ -78,34 +78,40 @@ package body Knowledge.Bases is
    -- SOURCE
    function Get_Reputation_Text(Reputation_Level: Integer) return String is
       -- ****
+      function Get_Ada_Reputation_Text
+        (Rep_Level: Integer) return chars_ptr with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaReputationText";
    begin
-      case Reputation_Level is
-         when -100 .. -75 =>
-            return "Hated";
-         when -74 .. -50 =>
-            return "Outlaw";
-         when -49 .. -25 =>
-            return "Hostile";
-         when -24 .. -1 =>
-            return "Unfriendly";
-         when 0 =>
-            return "Unknown";
-         when 1 .. 25 =>
-            return "Visitor";
-         when 26 .. 50 =>
-            return "Trader";
-         when 51 .. 75 =>
-            return "Friend";
-         when 76 .. 100 =>
-            return "Well known";
-         when others =>
-            return "";
-      end case;
+      return
+        Value(Item => Get_Ada_Reputation_Text(Rep_Level => Reputation_Level));
+--      case Reputation_Level is
+--         when -100 .. -75 =>
+--            return "Hated";
+--         when -74 .. -50 =>
+--            return "Outlaw";
+--         when -49 .. -25 =>
+--            return "Hostile";
+--         when -24 .. -1 =>
+--            return "Unfriendly";
+--         when 0 =>
+--            return "Unknown";
+--         when 1 .. 25 =>
+--            return "Visitor";
+--         when 26 .. 50 =>
+--            return "Trader";
+--         when 51 .. 75 =>
+--            return "Friend";
+--         when 76 .. 100 =>
+--            return "Well known";
+--         when others =>
+--            return "";
+--      end case;
    end Get_Reputation_Text;
 
    procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1) is
       use Ada.Characters.Handling;
-      use Interfaces.C.Strings;
       use GNAT.String_Split;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkEntry;
