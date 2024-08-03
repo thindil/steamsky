@@ -19,6 +19,11 @@ import ../tk
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
     tags: [].} =
+  ## Get the name of the reputation level in the selected base
+  ##
+  ## * reputationLevel - the numerical level of reputation in a base
+  ## 
+  ## Returns the name of the reputation level in the selected base
   case reputationLevel
   of -100 .. -75:
     return "Hated"
