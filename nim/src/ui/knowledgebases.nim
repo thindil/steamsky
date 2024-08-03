@@ -17,6 +17,29 @@
 
 import ../tk
 
+proc getReputationText(reputationLevel: int): string =
+  case reputationLevel
+  of -100 .. -75:
+    return "Hated"
+  of -74 .. -50:
+    return "Outlaw"
+  of -49 .. -25:
+    return "Hostile"
+  of -24 .. -1:
+    return "Unfriendly"
+  of 0:
+    return "Unknown"
+  of 1..25:
+    return "Visitor"
+  of 26..50:
+    return "Trader"
+  of 51..75:
+    return "Friend"
+  of 76..100:
+    return "Well known"
+  else:
+    return ""
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -24,3 +47,9 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowLoot", showLootCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc getAdaReputationText(reputationLevel: cint): cstring {.sideEffect,
+    raises: [], tags: [], exportc.} =
+  return getReputationText(reputationLevel = reputationLevel).cstring
