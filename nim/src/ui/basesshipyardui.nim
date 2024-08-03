@@ -88,7 +88,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       "." else: "\nYou don't have any " & moneyName & " to install anything.")
   installInfo.add(y = "\nYou have used " & $usedSpace &
       " modules space from max " & $allSpace & " allowed.")
-  let moneyLabel = shipyardCanvas & ".shipyard.moneyinfo"
+  let moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
   tclEval(script = moneyLabel & " configure -text {" & installInfo & "}")
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   let searchEntry = shipyardCanvas & ".shipyard.install.options.search"

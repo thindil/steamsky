@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,7 +35,13 @@ grid [ttk::radiobutton $shipyardframe.tabs.install -text {Install modules} \
 grid [ttk::radiobutton $shipyardframe.tabs.remove -text {Remove modules} \
    -style Radio.Toolbutton -value remove -variable newtab \
    -command ShowShipyardTab] -row 0 -column 1 -padx 5
-grid [ttk::label $shipyardframe.moneyinfo -wraplength 500] -sticky w
+grid [ttk::frame $shipyardframe.moneyinfo] -sticky w
+grid [ttk::label $shipyardframe.moneyinfo.lblmoney -wraplength 500] -sticky w
+grid [ttk::label $shipyardframe.moneyinfo.lblmoney2 -wraplength 500] -sticky w \
+   -column 1 -row 0
+grid [ttk::label $shipyardframe.moneyinfo.lblmodules -wraplength 500] -sticky w
+grid [ttk::label $shipyardframe.moneyinfo.lblmodules2 -wraplength 500] -sticky w \
+   -column 1 -row 1
 # Install modules
 set sinstall [ttk::frame $shipyardframe.install]
 SetScrollbarBindings $sinstall .gameframe.paned.shipyardframe.scrolly
