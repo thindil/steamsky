@@ -86,28 +86,6 @@ package body Knowledge.Bases is
    begin
       return
         Value(Item => Get_Ada_Reputation_Text(Rep_Level => Reputation_Level));
---      case Reputation_Level is
---         when -100 .. -75 =>
---            return "Hated";
---         when -74 .. -50 =>
---            return "Outlaw";
---         when -49 .. -25 =>
---            return "Hostile";
---         when -24 .. -1 =>
---            return "Unfriendly";
---         when 0 =>
---            return "Unknown";
---         when 1 .. 25 =>
---            return "Visitor";
---         when 26 .. 50 =>
---            return "Trader";
---         when 51 .. 75 =>
---            return "Friend";
---         when 76 .. 100 =>
---            return "Well known";
---         when others =>
---            return "";
---      end case;
    end Get_Reputation_Text;
 
    procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1) is
