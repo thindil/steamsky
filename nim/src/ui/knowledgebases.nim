@@ -17,7 +17,8 @@
 
 import ../tk
 
-proc getReputationText(reputationLevel: int): string =
+proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
+    tags: [].} =
   case reputationLevel
   of -100 .. -75:
     return "Hated"
