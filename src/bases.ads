@@ -243,8 +243,6 @@ package Bases is
       Convention => C,
       External_Name => "getAdaBaseLocation";
 
-   procedure Get_Base_Cargo(Base_Index: Natural);
-
    procedure Set_Base_In_Nim(Base_Index: Bases_Range);
 
    procedure Get_Base_From_Nim(Base_Index: Bases_Range);
