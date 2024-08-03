@@ -649,5 +649,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   except:
     showError(message = "Can't add a Tcl command.")
 
+# Temporary code for interfacing with Ada
+
 proc getLootItemIndex(iIndex: cint) {.exportc.} =
   itemIndex = iIndex
