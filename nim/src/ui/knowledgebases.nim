@@ -58,7 +58,7 @@ proc updateBasesList(baseName: string = "", page: Positive = 1) =
   let
     basesCanvas = mainPaned & ".knowledgeframe.bases.canvas"
     basesFrame = basesCanvas & ".frame"
-  var rows = tclEval2(script = "grid size " & basesFrame).split(" ")[2].parseInt
+  var rows = tclEval2(script = "grid size " & basesFrame).split(" ")[1].parseInt
   deleteWidgets(startIndex = 2, endIndex = rows - 1, frame = basesFrame)
   basesTable = createTable(parent = basesFrame, headers = @["Name", "Distance",
       "Coordinates", "Population", "Size", "Owner", "Type", "Reputation"],
@@ -190,3 +190,4 @@ proc updateAdaBasesList(baseName: cstring; page: cint) {.sideEffect, raises: [],
     updateBasesList(baseName = $baseName, page = page.Positive)
   except:
     echo getCurrentExceptionMsg()
+    echo getStackTrace(getCurrentException())
