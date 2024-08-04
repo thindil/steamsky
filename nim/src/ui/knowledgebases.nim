@@ -140,6 +140,35 @@ proc updateBasesList(baseName: string = "", page: Positive = 1) =
       addButton(table = basesTable, text = "not",
           tooltip = "Show the base's details", command = "ShowBaseInfo " &
           $index, column = 4, color = color)
+      addButton(table = basesTable, text = "",
+          tooltip = "Show the base's details", command = "ShowBaseInfo " &
+          $index, column = 5, color = color)
+      addButton(table = basesTable, text = "visited",
+          tooltip = "Show the base's details", command = "ShowBaseInfo " &
+          $index, column = 6, color = color)
+      addButton(table = basesTable, text = "",
+          tooltip = "Show the base's details", command = "ShowBaseInfo " &
+          $index, column = 7, color = color)
+      addButton(table = basesTable, text = "yet",
+          tooltip = "Show the base's details", command = "ShowBaseInfo " &
+          $index, column = 8, newRow = true, color = color)
+    rows.inc
+    if rows == gameSettings.listsLimit + 1 and index < skyBases.high:
+      break
+  if page > 1:
+    addPagination(table = basesTable, previousCommand = "ShowBases {" &
+        baseName & "} " & $(page - 1), nextCommand = (if basesTable.row <
+        gameSettings.listsLimit + 1: "" else: "ShowBases {" & baseName & "} " &
+        $(page + 1)))
+  elif basesTable.row == gameSettings.listsLimit + 2:
+    addPagination(table = basesTable, previousCommand = "",
+        nextCommand = "ShowBases {" & baseName & "} " & $(page + 1))
+  updateTable(table = basesTable, grabFocus = tclEval2(script = "focus") != searchEntry)
+  tclEval(script = basesCanvas & " xview moveto 0.0")
+  tclEval(script = basesCanvas & " yview moveto 0.0")
+  tclEval(script = "update")
+  tclEval(script = basesCanvas & " configure -scrollregion [list " & tclEval2(
+      script = basesCanvas & " bbox all") & "]")
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
@@ -156,8 +185,8 @@ proc getAdaReputationText(reputationLevel: cint): cstring {.sideEffect,
   return getReputationText(reputationLevel = reputationLevel).cstring
 
 proc updateAdaBasesList(baseName: cstring; page: cint) {.sideEffect, raises: [],
-    tags: [], exportc.} =
+    tags: [RootEffect], exportc.} =
   try:
     updateBasesList(baseName = $baseName, page = page.Positive)
   except:
-    discard
+    echo getCurrentExceptionMsg()
