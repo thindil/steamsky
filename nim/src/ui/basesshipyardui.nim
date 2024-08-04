@@ -83,12 +83,23 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   shipyardFrame = shipyardCanvas & ".shipyard"
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
-  var installInfo = (if moneyIndex2 > -1: "You have " & $playerShip.cargo[
-      moneyIndex2].amount & " " & moneyName &
-      "." else: "\nYou don't have any " & moneyName & " to install anything.")
-  installInfo.add(y = "\nYou have used " & $usedSpace &
-      " modules space from max " & $allSpace & " allowed.")
-  let moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
+  var installInfo = "You have used " & $usedSpace &
+      " modules space from max " & $allSpace & " allowed."
+  var moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
+  tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
+  if moneyIndex2 > -1:
+    tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
+    moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney2"
+    tclEval(script = moneyLabel & " configure -text {" & $playerShip.cargo[
+        moneyIndex2].amount & " " & moneyName & "}")
+    tclEval(script = "grid " & moneyLabel & " -column 1 -row 0")
+    tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
+  else:
+    tclEval(script = moneyLabel & " configure -text {You don't have any " &
+        moneyName & " to install anything.} -style Headerred.TLabel")
+    moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney2"
+    tclEval(script = "grid remove " & moneyLabel)
+  moneyLabel = shipyardCanvas & ".shipyard.modulesinfo.lblmodules"
   tclEval(script = moneyLabel & " configure -text {" & installInfo & "}")
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   let searchEntry = shipyardCanvas & ".shipyard.install.options.search"

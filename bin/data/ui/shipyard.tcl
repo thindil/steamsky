@@ -37,11 +37,12 @@ grid [ttk::radiobutton $shipyardframe.tabs.remove -text {Remove modules} \
    -command ShowShipyardTab] -row 0 -column 1 -padx 5
 grid [ttk::frame $shipyardframe.moneyinfo] -sticky w
 grid [ttk::label $shipyardframe.moneyinfo.lblmoney -wraplength 500] -sticky w
-grid [ttk::label $shipyardframe.moneyinfo.lblmoney2 -wraplength 500] -sticky w \
-   -column 1 -row 0
-grid [ttk::label $shipyardframe.moneyinfo.lblmodules -wraplength 500] -sticky w
-grid [ttk::label $shipyardframe.moneyinfo.lblmodules2 -wraplength 500] -sticky w \
-   -column 1 -row 1
+grid [ttk::label $shipyardframe.moneyinfo.lblmoney2 -wraplength 500 \
+   -style Golden.TLabel] -sticky w -column 1 -row 0
+grid [ttk::frame $shipyardframe.modulesinfo] -sticky w
+grid [ttk::label $shipyardframe.modulesinfo.lblmodules -wraplength 500] -sticky w
+grid [ttk::label $shipyardframe.modulesinfo.lblmodules2 -wraplength 500 \
+   -style Golden.TLabel] -sticky w -column 1 -row 0
 # Install modules
 set sinstall [ttk::frame $shipyardframe.install]
 SetScrollbarBindings $sinstall .gameframe.paned.shipyardframe.scrolly
