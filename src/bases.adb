@@ -174,45 +174,44 @@ package body Bases is
    type Nim_Cargo_Array is array(0 .. 127) of Nim_Base_Cargo;
    --## rule on TYPE_INITIAL_VALUES
 
-   procedure Get_Base_Cargo(Base_Index: Natural) is
-      procedure Get_Ada_Base_Cargo
-        (B_Index: Integer; Cargo: Nim_Cargo_Array) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseCargo";
-      function Cargo_To_Nim
-        (Cargo: BaseCargo_Container.Vector) return Nim_Cargo_Array is
-         Nim_Cargo: Nim_Cargo_Array :=
-           (others =>
-              (Proto_Index => 0, Amount => 1, Durability => 0, Price => 0));
-      begin
-         Fill_Nim_Array_Loop :
-         for I in
-           BaseCargo_Container.First_Index(Container => Cargo) ..
-             BaseCargo_Container.Last_Index(Container => Cargo) loop
-            Set_Item_Block :
-            declare
-               Item: constant Base_Cargo :=
-                 BaseCargo_Container.Element(Container => Cargo, Index => I);
-            begin
-               Nim_Cargo(I - 1) :=
-                 (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
-                  Durability => Item.Durability, Price => Item.Price);
-            end Set_Item_Block;
-         end loop Fill_Nim_Array_Loop;
-         return Nim_Cargo;
-      end Cargo_To_Nim;
-   begin
-      Get_Ada_Base_Cargo
-        (B_Index => Base_Index,
-         Cargo =>
-           Cargo_To_Nim
-             (Cargo =>
-                (if Base_Index > 0 then Sky_Bases(Base_Index).Cargo
-                 else Trader_Cargo)));
-   end Get_Base_Cargo;
-
    procedure Set_Base_In_Nim(Base_Index: Bases_Range) is
+      procedure Get_Base_Cargo(Base_Index: Natural) is
+         procedure Get_Ada_Base_Cargo
+           (B_Index: Integer; Cargo: Nim_Cargo_Array) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaBaseCargo";
+         function Cargo_To_Nim
+           (Cargo: BaseCargo_Container.Vector) return Nim_Cargo_Array is
+            Nim_Cargo: Nim_Cargo_Array :=
+              (others =>
+                 (Proto_Index => 0, Amount => 1, Durability => 0, Price => 0));
+         begin
+            Fill_Nim_Array_Loop :
+            for I in
+              BaseCargo_Container.First_Index(Container => Cargo) ..
+                BaseCargo_Container.Last_Index(Container => Cargo) loop
+               Set_Item_Block :
+               declare
+                  Item: constant Base_Cargo :=
+                    BaseCargo_Container.Element(Container => Cargo, Index => I);
+               begin
+                  Nim_Cargo(I - 1) :=
+                    (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
+                     Durability => Item.Durability, Price => Item.Price);
+               end Set_Item_Block;
+            end loop Fill_Nim_Array_Loop;
+            return Nim_Cargo;
+         end Cargo_To_Nim;
+      begin
+         Get_Ada_Base_Cargo
+           (B_Index => Base_Index,
+            Cargo =>
+              Cargo_To_Nim
+                (Cargo =>
+                   (if Base_Index > 0 then Sky_Bases(Base_Index).Cargo
+                    else Trader_Cargo)));
+      end Get_Base_Cargo;
       procedure Get_Ada_Base_Name(B_Index: Integer; B_Name: chars_ptr) with
          Import => True,
          Convention => C,
@@ -361,7 +360,7 @@ package body Bases is
       use Tiny_String;
       Name: chars_ptr;
       Known: Integer;
-      procedure Set_Base_Cargo(Base_Index: Natural) is
+      procedure Set_Base_Cargo(B_Index: Natural) is
          Nim_Cargo: Nim_Cargo_Array;
          procedure Set_Ada_Base_Cargo
            (B_Index: Integer; Cargo: out Nim_Cargo_Array) with
@@ -382,7 +381,7 @@ package body Bases is
                     (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
                      Durability => Item.Durability, Price => Item.Price));
             end loop Fill_Ada_Inventory_Loop;
-            if Base_Index > 0 then
+            if B_Index > 0 then
                BaseCargo_Container.Assign
                  (Target => Sky_Bases(B_Index).Cargo, Source => Ada_Cargo);
             else
@@ -392,8 +391,8 @@ package body Bases is
          end Cargo_From_Nim;
 
       begin
-         Set_Ada_Base_Cargo(B_Index => Base_Index, Cargo => Nim_Cargo);
-         Cargo_From_Nim(Cargo => Nim_Cargo, B_Index => Base_Index);
+         Set_Ada_Base_Cargo(B_Index => B_Index, Cargo => Nim_Cargo);
+         Cargo_From_Nim(Cargo => Nim_Cargo, B_Index => B_Index);
       end Set_Base_Cargo;
       procedure Set_Ada_Base_Name(B_Index: Integer; B_Name: out chars_ptr) with
          Import => True,
@@ -551,7 +550,7 @@ package body Bases is
       Set_Ada_Base_Owner(B_Index => Base_Index, B_Owner => Name);
       Sky_Bases(Base_Index).Owner :=
         To_Bounded_String(Source => Value(Item => Name));
-      Set_Base_Cargo(Base_Index => Base_Index);
+      Set_Base_Cargo(B_Index => Base_Index);
       Set_Ada_Base_Size(B_Index => Base_Index, Size => Known);
       Sky_Bases(Base_Index).Size := Bases_Size'Val(Known);
    end Get_Base_From_Nim;
