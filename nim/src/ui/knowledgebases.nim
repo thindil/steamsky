@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[config, game, maps, tk]
+import std/[strutils, tables]
+import ../[basestypes, config, game, maps, tk]
 import coreui, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
@@ -112,6 +112,34 @@ proc updateBasesList(baseName: string = "", page: Positive = 1) =
     addButton(table = basesTable, text = "X: " & $skyBases[index].skyX &
         " Y: " & $skyBases[index].skyY, tooltip = "The coordinates of the base",
         command = "ShowBaseInfo " & $index, column = 3, color = color)
+    if skyBases[index].visited.year > 0:
+      addButton(table = basesTable, text = case skyBases[index].population
+        of 0:
+          "empty"
+        of 1..150:
+          "small"
+        of 151..299:
+          "medium"
+        else:
+          "large", tooltip = "The population size of the base",
+              command = "ShowBaseInfo " & $index, column = 4, color = color)
+      addButton(table = basesTable, text = ($skyBases[index].size).toLowerAscii,
+          tooltip = "The size of the base", command = "ShowBaseInfo " & $index,
+          column = 5, color = color)
+      addButton(table = basesTable, text = factionsList[skyBases[
+          index].owner].name, tooltip = "The faction which own the base",
+          command = "ShowBaseInfo " & $index, column = 6, color = color)
+      addButton(table = basesTable, text = basesTypesList[skyBases[
+          index].baseType].name, tooltip = "The type of the base",
+          command = "ShowBaseInfo " & $index, column = 7, color = color)
+      addButton(table = basesTable, text = getReputationText(
+          reputationLevel = skyBases[index].reputation.level),
+          tooltip = "Your reputation in the base", command = "ShowBaseInfo " &
+          $index, column = 8, newRow = true, color = color)
+    else:
+      addButton(table = basesTable, text = "not",
+          tooltip = "Show the base's details", command = "ShowBaseInfo " &
+          $index, column = 4, color = color)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
