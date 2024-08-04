@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.0.2] - 2024-08-04
 
 ### Added
 - Resize button to the enemy's ship's status in the combat screen
