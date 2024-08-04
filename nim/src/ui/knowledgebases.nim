@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[game, tk]
+import ../[config, game, maps, tk]
 import coreui, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
@@ -80,6 +80,8 @@ proc updateBasesList(baseName: string = "", page: Positive = 1) =
   comboBox = basesFrame & ".options.owner"
   let basesOwner = tclEval2(script = comboBox & " get")
   rows = 0
+  let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow = 1
   for index in basesIndexes:
     if not skyBases[index].known:
       continue
@@ -88,6 +90,28 @@ proc updateBasesList(baseName: string = "", page: Positive = 1) =
       continue
     if basesStatus == "Only not visited" and skyBases[index].visited.year != 0:
       continue
+    if basesStatus == "Only visited" and skyBases[index].visited.year == 0:
+      continue
+    if skyBases[index].visited.year == 0 and (basesType != "Any" or
+        basesOwner != "Any"):
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    var color = (if skyBases[index].visited.year > 0: "green3" else: "")
+    if skyBases[index].skyX == playerShip.destinationX and skyBases[
+        index].skyY == playerShip.destinationY:
+      color = "yellow"
+    addButton(table = basesTable, text = skyBases[index].name,
+        tooltip = "Show the base's details", command = "ShowBaseInfo " & $index,
+        column = 1, color = color)
+    addButton(table = basesTable, text = $countDistance(destinationX = skyBases[
+        index].skyX, destinationY = skyBases[index].skyY),
+        tooltip = "The distance to the base", command = "ShowBaseInfo " &
+        $index, column = 2, color = color)
+    addButton(table = basesTable, text = "X: " & $skyBases[index].skyX &
+        " Y: " & $skyBases[index].skyY, tooltip = "The coordinates of the base",
+        command = "ShowBaseInfo " & $index, column = 3, color = color)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
