@@ -52,13 +52,18 @@ var
   basesTable: TableWidget
   basesIndexes: seq[Positive]
 
-proc updateBasesList(baseName: string = "", page: Positive = 1) =
+proc updateBasesList(baseName: string = "", page: Positive = 1) {.sideEffect,
+    raises: [], tags: [RootEffect].} =
   if basesTable.row > 1:
     clearTable(table = basesTable)
   let
     basesCanvas = mainPaned & ".knowledgeframe.bases.canvas"
     basesFrame = basesCanvas & ".frame"
-  var rows = tclEval2(script = "grid size " & basesFrame).split(" ")[1].parseInt
+  var rows = try:
+      tclEval2(script = "grid size " & basesFrame).split(" ")[1].parseInt
+    except:
+      showError(message = "Can't get the amount of rows.")
+      return
   deleteWidgets(startIndex = 2, endIndex = rows - 1, frame = basesFrame)
   basesTable = createTable(parent = basesFrame, headers = @["Name", "Distance",
       "Coordinates", "Population", "Size", "Owner", "Type", "Reputation"],
@@ -126,12 +131,20 @@ proc updateBasesList(baseName: string = "", page: Positive = 1) =
       addButton(table = basesTable, text = ($skyBases[index].size).toLowerAscii,
           tooltip = "The size of the base", command = "ShowBaseInfo " & $index,
           column = 5, color = color)
-      addButton(table = basesTable, text = factionsList[skyBases[
-          index].owner].name, tooltip = "The faction which own the base",
-          command = "ShowBaseInfo " & $index, column = 6, color = color)
-      addButton(table = basesTable, text = basesTypesList[skyBases[
-          index].baseType].name, tooltip = "The type of the base",
-          command = "ShowBaseInfo " & $index, column = 7, color = color)
+      try:
+        addButton(table = basesTable, text = factionsList[skyBases[
+            index].owner].name, tooltip = "The faction which own the base",
+            command = "ShowBaseInfo " & $index, column = 6, color = color)
+      except:
+        showError(message = "Can't show the faction name.")
+        return
+      try:
+        addButton(table = basesTable, text = basesTypesList[skyBases[
+            index].baseType].name, tooltip = "The type of the base",
+            command = "ShowBaseInfo " & $index, column = 7, color = color)
+      except:
+        showError(message = "Can't show the type of the base.")
+        return
       addButton(table = basesTable, text = getReputationText(
           reputationLevel = skyBases[index].reputation.level),
           tooltip = "Your reputation in the base", command = "ShowBaseInfo " &
