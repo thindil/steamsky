@@ -477,7 +477,7 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
                 reason = deathReason, ship = ship)
 
 proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
-    KeyError], tags: [].} =
+    KeyError], tags: [], contractual.} =
   ## Count the weight of the ship, its modules and cargo
   ##
   ## * ship - the ship which weight will be counted
@@ -490,7 +490,7 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
 
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord {.sideEffect,
-    raises: [KeyError], tags: [].} =
+    raises: [KeyError], tags: [], contractual.} =
   ## Create a new ship from the selected prototype
   ##
   ## * protoIndex     - the index of the ships' prototype used as base for the new
@@ -503,221 +503,227 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
   ##                    use default values for modules. Default value is true
   ##
   ## Returns the newly created ship with the selected parameters
-  let protoShip = protoShipsList[protoIndex]
-  result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
-    0: protoShip.name else: name), upgradeModule: -1, repairModule: -1, speed: speed)
-  # Add modules to ship
-  var upgradesAmount = (if randomUpgrades: getRandom(min = 0,
-      max = protoShip.modules.len) else: 0)
-  for moduleIndex in protoShip.modules:
-    var module = modulesList[moduleIndex]
-    if upgradesAmount > 0 and getRandom(min = 1, max = 100) > 50:
-      var weightGain = (module.weight / module.durability).Natural
-      if weightGain < 1:
-        weightGain = 1
-      let roll = getRandom(min = 1, max = 100)
-      case roll
-      of 1 .. 50:
-        let maxUpgradeValue: Positive = (module.durability.float * 1.5).Positive
-        module.durability = getRandom(min = module.durability,
-            max = maxUpgradeValue)
-        module.weight = module.weight + (weightGain * module.durability -
-            modulesList[moduleIndex].durability)
-      of 51 .. 75:
-        if modulesList[moduleIndex].mType == ModuleType.engine:
-          weightGain = weightGain * 10
-          let maxUpgradeValue: Positive = (module.value.float / 2.0).Positive
-          module.value = getRandom(min = maxUpgradeValue, max = modulesList[
-              moduleIndex].value)
-          module.weight = module.weight + (weightGain * modulesList[
-              moduleIndex].value - module.value)
-      of 76 .. 100:
-        case modulesList[moduleIndex].mType
-        of ModuleType.hull:
-          weightGain = weightGain * 10
-        of ModuleType.engine:
+  require:
+    protoShipsList.contains(key = protoIndex)
+  body:
+    let protoShip = protoShipsList[protoIndex]
+    result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
+      0: protoShip.name else: name), upgradeModule: -1, repairModule: -1, speed: speed)
+    # Add modules to ship
+    var upgradesAmount = (if randomUpgrades: getRandom(min = 0,
+        max = protoShip.modules.len) else: 0)
+    for moduleIndex in protoShip.modules:
+      var module = modulesList[moduleIndex]
+      if upgradesAmount > 0 and getRandom(min = 1, max = 100) > 50:
+        var weightGain = (module.weight / module.durability).Natural
+        if weightGain < 1:
           weightGain = 1
+        let roll = getRandom(min = 1, max = 100)
+        case roll
+        of 1 .. 50:
+          let maxUpgradeValue: Positive = (module.durability.float * 1.5).Positive
+          module.durability = getRandom(min = module.durability,
+              max = maxUpgradeValue)
+          module.weight = module.weight + (weightGain * module.durability -
+              modulesList[moduleIndex].durability)
+        of 51 .. 75:
+          if modulesList[moduleIndex].mType == ModuleType.engine:
+            weightGain = weightGain * 10
+            let maxUpgradeValue: Positive = (module.value.float / 2.0).Positive
+            module.value = getRandom(min = maxUpgradeValue, max = modulesList[
+                moduleIndex].value)
+            module.weight = module.weight + (weightGain * modulesList[
+                moduleIndex].value - module.value)
+        of 76 .. 100:
+          case modulesList[moduleIndex].mType
+          of ModuleType.hull:
+            weightGain = weightGain * 10
+          of ModuleType.engine:
+            weightGain = 1
+          else:
+            discard
+          if module.mType in {ModuleType.engine, ModuleType.cabin,
+              ModuleType.gun, ModuleType.batteringRam, ModuleType.hull,
+                  ModuleType.harpoonGun}:
+            let maxUpgradeValue: Positive = (module.maxValue.float * 1.5).Positive
+            module.maxValue = getRandom(min = module.maxValue,
+                max = maxUpgradeValue)
+            module.weight = module.weight + (weightGain * module.maxValue -
+                modulesList[moduleIndex].maxValue)
         else:
           discard
-        if module.mType in {ModuleType.engine, ModuleType.cabin, ModuleType.gun,
-            ModuleType.batteringRam, ModuleType.hull, ModuleType.harpoonGun}:
-          let maxUpgradeValue: Positive = (module.maxValue.float * 1.5).Positive
-          module.maxValue = getRandom(min = module.maxValue,
-              max = maxUpgradeValue)
-          module.weight = module.weight + (weightGain * module.maxValue -
-              modulesList[moduleIndex].maxValue)
-      else:
+        upgradesAmount.dec
+      var owners: seq[int] = @[]
+      if module.maxOwners > 0:
+        for i in 1 .. module.maxOwners:
+          owners.add(y = -1)
+      case module.mType
+      of ModuleType.engine:
+        result.modules.add(y = ModuleData(mType: ModuleType2.engine,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            fuelUsage: module.value, power: module.maxValue, disabled: false))
+      of ModuleType.cabin:
+        result.modules.add(y = ModuleData(mType: ModuleType2.cabin,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            cleanliness: module.value, quality: module.value))
+      of ModuleType.alchemyLab .. ModuleType.greenhouse:
+        result.modules.add(y = ModuleData(mType: ModuleType2.workshop,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            craftingTime: 0, craftingAmount: 0))
+      of ModuleType.medicalRoom:
+        result.modules.add(y = ModuleData(mType: ModuleType2.medicalRoom,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+      of ModuleType.cockpit:
+        result.modules.add(y = ModuleData(mType: ModuleType2.cockpit,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+      of ModuleType.trainingRoom:
+        result.modules.add(y = ModuleData(mType: ModuleType2.trainingRoom,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            trainedSkill: 0))
+      of ModuleType.turret:
+        result.modules.add(y = ModuleData(mType: ModuleType2.turret,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            gunIndex: -1))
+      of ModuleType.gun:
+        result.modules.add(y = ModuleData(mType: ModuleType2.gun,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            damage: module.maxValue, ammoIndex: -1))
+      of ModuleType.cargo:
+        result.modules.add(y = ModuleData(mType: ModuleType2.cargoRoom,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+      of ModuleType.hull:
+        result.modules.add(y = ModuleData(mType: ModuleType2.hull,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            installedModules: module.value, maxModules: module.maxValue))
+      of ModuleType.armor:
+        result.modules.add(y = ModuleData(mType: ModuleType2.armor,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
+      of ModuleType.batteringRam:
+        result.modules.add(y = ModuleData(mType: ModuleType2.batteringRam,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            damage2: module.maxValue, coolingDown: false))
+      of ModuleType.harpoonGun:
+        result.modules.add(y = ModuleData(mType: ModuleType2.harpoonGun,
+            name: module.name, protoIndex: moduleIndex, weight: module.weight,
+            durability: module.durability, maxDurability: module.durability,
+            owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
+            duration: module.maxValue, harpoonIndex: -1))
+      of ModuleType.any:
         discard
-      upgradesAmount.dec
-    var owners: seq[int] = @[]
-    if module.maxOwners > 0:
-      for i in 1 .. module.maxOwners:
-        owners.add(y = -1)
-    case module.mType
-    of ModuleType.engine:
-      result.modules.add(y = ModuleData(mType: ModuleType2.engine,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          fuelUsage: module.value, power: module.maxValue, disabled: false))
-    of ModuleType.cabin:
-      result.modules.add(y = ModuleData(mType: ModuleType2.cabin,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          cleanliness: module.value, quality: module.value))
-    of ModuleType.alchemyLab .. ModuleType.greenhouse:
-      result.modules.add(y = ModuleData(mType: ModuleType2.workshop,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          craftingTime: 0, craftingAmount: 0))
-    of ModuleType.medicalRoom:
-      result.modules.add(y = ModuleData(mType: ModuleType2.medicalRoom,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
-    of ModuleType.cockpit:
-      result.modules.add(y = ModuleData(mType: ModuleType2.cockpit,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
-    of ModuleType.trainingRoom:
-      result.modules.add(y = ModuleData(mType: ModuleType2.trainingRoom,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          trainedSkill: 0))
-    of ModuleType.turret:
-      result.modules.add(y = ModuleData(mType: ModuleType2.turret,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          gunIndex: -1))
-    of ModuleType.gun:
-      result.modules.add(y = ModuleData(mType: ModuleType2.gun,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          damage: module.maxValue, ammoIndex: -1))
-    of ModuleType.cargo:
-      result.modules.add(y = ModuleData(mType: ModuleType2.cargoRoom,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
-    of ModuleType.hull:
-      result.modules.add(y = ModuleData(mType: ModuleType2.hull,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          installedModules: module.value, maxModules: module.maxValue))
-    of ModuleType.armor:
-      result.modules.add(y = ModuleData(mType: ModuleType2.armor,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none))
-    of ModuleType.batteringRam:
-      result.modules.add(y = ModuleData(mType: ModuleType2.batteringRam,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          damage2: module.maxValue, coolingDown: false))
-    of ModuleType.harpoonGun:
-      result.modules.add(y = ModuleData(mType: ModuleType2.harpoonGun,
-          name: module.name, protoIndex: moduleIndex, weight: module.weight,
-          durability: module.durability, maxDurability: module.durability,
-          owner: owners, upgradeProgress: 0, upgradeAction: ShipUpgrade.none,
-          duration: module.maxValue, harpoonIndex: -1))
-    of ModuleType.any:
-      discard
-  # Set the ship crew
-  for protoMember in protoShip.crew:
-    let amount = (if protoMember.maxAmount ==
-        0: protoMember.minAmount else: getRandom(min = protoMember.minAmount,
-        max = protoMember.maxAmount))
-    for i in 1 .. amount:
-      let member = generateMob(mobIndex = protoMember.protoIndex,
-          factionIndex = protoShip.owner)
-      result.crew.add(y = member)
-      block setCabin:
+    # Set the ship crew
+    for protoMember in protoShip.crew:
+      let amount = (if protoMember.maxAmount ==
+          0: protoMember.minAmount else: getRandom(min = protoMember.minAmount,
+          max = protoMember.maxAmount))
+      for i in 1 .. amount:
+        let member = generateMob(mobIndex = protoMember.protoIndex,
+            factionIndex = protoShip.owner)
+        result.crew.add(y = member)
+        block setCabin:
+          for module in result.modules.mitems:
+            if module.mType == ModuleType2.cabin:
+              for index, owner in module.owner.mpairs:
+                if owner == -1:
+                  owner = result.crew.len - 1
+                  if index == 0:
+                    module.name = member.name & "'s Cabin"
+                  break setCabin
         for module in result.modules.mitems:
-          if module.mType == ModuleType2.cabin:
-            for index, owner in module.owner.mpairs:
-              if owner == -1:
-                owner = result.crew.len - 1
-                if index == 0:
-                  module.name = member.name & "'s Cabin"
-                break setCabin
-      for module in result.modules.mitems:
-        if module.owner.len > 0:
-          if module.owner[0] == -1 and module.mType in {ModuleType2.gun,
-              ModuleType2.harpoonGun} and member.order == gunner:
-            module.owner[0] = result.crew.len - 1
-            break
-          elif module.mType == ModuleType2.cockpit and member.order == pilot:
-            module.owner[0] = result.crew.len - 1
-  # Set ship cargo
-  for item in protoShip.cargo:
-    let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
-        max = item.maxAmount) else: item.minAmount)
-    result.cargo.add(y = InventoryData(protoIndex: item.protoIndex,
-        amount: amount, name: "", durability: 100, price: 0))
-  var
-    gunAssigned = false
-    amount = 0
-    hullIndex = -1
-  for index, module in result.modules.mpairs:
-    if module.mType == ModuleType2.turret:
-      for index2, module2 in result.modules.pairs:
-        if module2.mType in {ModuleType2.gun, ModuleType2.harpoonGun}:
-          gunAssigned = false
-          for module3 in result.modules:
-            if module2.mType == ModuleType2.turret and module3.gunIndex == index2:
-              gunAssigned = true
+          if module.owner.len > 0:
+            if module.owner[0] == -1 and module.mType in {ModuleType2.gun,
+                ModuleType2.harpoonGun} and member.order == gunner:
+              module.owner[0] = result.crew.len - 1
               break
-          if not gunAssigned:
-            module.gunIndex = index2
-    elif module.mType == ModuleType2.hull:
-      hullIndex = index
-    if modulesList[module.protoIndex].mType notin {ModuleType.gun,
-        ModuleType.harpoonGun, ModuleType.armor, ModuleType.hull}:
-      amount = amount + modulesList[module.protoIndex].size
-  result.modules[hullIndex].installedModules = amount
-  # Set known crafting recipes
-  for recipe in protoShip.knownRecipes:
-    knownRecipes.add(y = recipe)
-  # Set home base for ship
-  if skyMap[x][y].baseIndex > 0:
-    result.homeBase = skyMap[x][y].baseIndex
-  else:
-    var startX, startY, endX, endY: int
-    startX = x - 100
-    normalizeCoord(coord = startX)
-    startY = y - 100
-    normalizeCoord(coord = startY, isXAxis = false)
-    endX = x + 100
-    normalizeCoord(coord = endX)
-    endY = y + 100
-    normalizeCoord(coord = endY, isXAxis = false)
-    block basesLoop:
-      for skyX in startX .. endX:
-        for skyY in startY .. endY:
-          if skyMap[skyX][skyY].baseIndex > 0:
-            if skyBases[skyMap[skyX][skyY].baseIndex].owner == protoShip.owner:
-              result.homeBase = skyMap[skyX][skyY].baseIndex
-              break basesLoop
-    if result.homeBase == 0:
-      for index, base in skyBases.pairs:
-        if base.owner == protoShip.owner:
-          result.homeBase = index
-          break
+            elif module.mType == ModuleType2.cockpit and member.order == pilot:
+              module.owner[0] = result.crew.len - 1
+    # Set ship cargo
+    for item in protoShip.cargo:
+      let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
+          max = item.maxAmount) else: item.minAmount)
+      result.cargo.add(y = InventoryData(protoIndex: item.protoIndex,
+          amount: amount, name: "", durability: 100, price: 0))
+    var
+      gunAssigned = false
+      amount = 0
+      hullIndex = -1
+    for index, module in result.modules.mpairs:
+      if module.mType == ModuleType2.turret:
+        for index2, module2 in result.modules.pairs:
+          if module2.mType in {ModuleType2.gun, ModuleType2.harpoonGun}:
+            gunAssigned = false
+            for module3 in result.modules:
+              if module2.mType == ModuleType2.turret and module3.gunIndex == index2:
+                gunAssigned = true
+                break
+            if not gunAssigned:
+              module.gunIndex = index2
+      elif module.mType == ModuleType2.hull:
+        hullIndex = index
+      if modulesList[module.protoIndex].mType notin {ModuleType.gun,
+          ModuleType.harpoonGun, ModuleType.armor, ModuleType.hull}:
+        amount = amount + modulesList[module.protoIndex].size
+    result.modules[hullIndex].installedModules = amount
+    # Set known crafting recipes
+    for recipe in protoShip.knownRecipes:
+      knownRecipes.add(y = recipe)
+    # Set home base for ship
+    if skyMap[x][y].baseIndex > 0:
+      result.homeBase = skyMap[x][y].baseIndex
+    else:
+      var startX, startY, endX, endY: int
+      startX = x - 100
+      normalizeCoord(coord = startX)
+      startY = y - 100
+      normalizeCoord(coord = startY, isXAxis = false)
+      endX = x + 100
+      normalizeCoord(coord = endX)
+      endY = y + 100
+      normalizeCoord(coord = endY, isXAxis = false)
+      block basesLoop:
+        for skyX in startX .. endX:
+          for skyY in startY .. endY:
+            if skyMap[skyX][skyY].baseIndex > 0:
+              if skyBases[skyMap[skyX][skyY].baseIndex].owner ==
+                  protoShip.owner:
+                result.homeBase = skyMap[skyX][skyY].baseIndex
+                break basesLoop
       if result.homeBase == 0:
-        result.homeBase = getRandom(min = BasesRange.low, max = BasesRange.high)
-  # Set home base for crew members
-  for member in result.crew.mitems:
-    member.homeBase = (if getRandom(min = 1, max = 100) <
-        99: result.homeBase else: getRandom(min = BasesRange.low,
-        max = BasesRange.high))
+        for index, base in skyBases.pairs:
+          if base.owner == protoShip.owner:
+            result.homeBase = index
+            break
+        if result.homeBase == 0:
+          result.homeBase = getRandom(min = BasesRange.low,
+              max = BasesRange.high)
+    # Set home base for crew members
+    for member in result.crew.mitems:
+      member.homeBase = (if getRandom(min = 1, max = 100) <
+          99: result.homeBase else: getRandom(min = BasesRange.low,
+          max = BasesRange.high))
 
 # Temporary code for interfacing with Ada
 
@@ -759,7 +765,7 @@ type
     owner: cstring
 
 proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   if getPlayerShip == 1:
     playerShip.name = $shipData.name
     playerShip.skyX = shipData.skyX
@@ -782,7 +788,7 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
     npcShip.homeBase = shipData.homeBase
 
 proc getAdaShipModules(modules: array[1..75, AdaModuleData];
-    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   if getPlayerShip == 1:
     playerShip.modules = @[]
   else:
@@ -851,7 +857,7 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
       npcShip.modules.add(y = module)
 
 proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
-    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   if getPlayerShip == 1:
     playerShip.cargo = @[]
   else:
@@ -869,7 +875,7 @@ proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
           durability: adaItem.durability, price: adaItem.price))
 
 proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
-    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   let nimCargo = if getPlayerShip == 1:
       playerShip.cargo
     else:
@@ -884,7 +890,7 @@ proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
       cargo[index] = AdaInventoryData(protoIndex: 0)
 
 proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
-    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   if getPlayerShip == 1:
     playerShip.crew = @[]
   else:
@@ -898,7 +904,8 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
       npcShip.crew.add(y = adaMemberToNim(adaMember = adaMember))
 
 proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
-    memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc,
+        contractual.} =
   if getPlayerShip == 1:
     playerShip.crew[memberIndex - 1].inventory = @[]
   else:
@@ -918,7 +925,8 @@ proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
           durability: adaItem.durability, price: adaItem.price))
 
 proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
-    memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc,
+        contractual.} =
   let nimInventory = if getPlayerShip == 1:
       playerShip.crew[memberIndex - 1].inventory
     else:
@@ -933,7 +941,7 @@ proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
       inventory[index] = AdaInventoryData(protoIndex: 0)
 
 proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
-    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   let nimCrew = if getPlayerShip == 1:
       playerShip.crew
     else:
@@ -945,7 +953,7 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
   crew[index].name = "".cstring
 
 proc setAdaShip(shipData: var AdaShipData; getPlayerShip: cint = 1) {.raises: [
-    ], tags: [], exportc.} =
+    ], tags: [], exportc, contractual.} =
   let nimShip = if getPlayerShip == 1:
       playerShip
     else:
@@ -962,7 +970,7 @@ proc setAdaShip(shipData: var AdaShipData; getPlayerShip: cint = 1) {.raises: [
   shipData.homeBase = nimShip.homeBase.cint
 
 proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
-    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc.} =
+    getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   for i in modules.low..modules.high:
     modules[i] = AdaModuleData(name: "".cstring)
   let nimModules = if getPlayerShip == 1:
@@ -1012,7 +1020,7 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
     index.inc
 
 proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffect,
-    raises: [], tags: [], exportc.} =
+    raises: [], tags: [], exportc, contractual.} =
   adaProtoShip = AdaProtoShipData(name: "".cstring, accuracy: [0.cint, 0.cint],
       combatAi: -1, evasion: [0.cint, 0.cint], loot: [0.cint, 0.cint],
       perception: [0.cint, 0.cint], combatValue: -1, description: "".cstring,
@@ -1037,7 +1045,8 @@ proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffe
   adaProtoShip.owner = ship.owner.cstring
 
 proc getAdaProtoShipData(index, crew: cint; adaData: var array[15,
-    array[3, cint]]) {.sideEffect, raises: [], tags: [], exportc.} =
+    array[3, cint]]) {.sideEffect, raises: [], tags: [], exportc,
+        contractual.} =
   for data in adaData.mitems:
     data = [0.cint, 0.cint, 0.cint]
   if not protoShipsList.hasKey(key = index):
@@ -1056,7 +1065,7 @@ proc getAdaProtoShipData(index, crew: cint; adaData: var array[15,
           cargo.maxAmount.cint]
 
 proc getAdaProtoShipModules(index: cint; adaModules: var array[64,
-    cint]) {.sideEffect, raises: [], tags: [], exportc.} =
+    cint]) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
   for module in adaModules.mitems:
     module = 0.cint
   if not protoShipsList.hasKey(key = index):
@@ -1069,7 +1078,7 @@ proc getAdaProtoShipModules(index: cint; adaModules: var array[64,
     adaModules[mIndex] = module.cint
 
 proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
-    cstring]) {.sideEffect, raises: [], tags: [], exportc.} =
+    cstring]) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
   for recipe in adaRecipes.mitems:
     recipe = "".cstring
   if not protoShipsList.hasKey(key = index):
@@ -1082,7 +1091,8 @@ proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
     adaRecipes[rIndex] = recipe.cstring
 
 proc damageAdaModule(inPlayerShip, moduleIndex, damage: cint;
-    deathReason: cstring) {.raises: [], tags: [WriteIOEffect], exportc.} =
+    deathReason: cstring) {.raises: [], tags: [WriteIOEffect], exportc,
+        contractual.} =
   try:
     if inPlayerShip == 1:
       damageModule(ship = playerShip, moduleIndex = moduleIndex - 1,
@@ -1093,7 +1103,8 @@ proc damageAdaModule(inPlayerShip, moduleIndex, damage: cint;
   except KeyError, IOError:
     discard
 
-proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [], exportc.} =
+proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [],
+    exportc, contractual.} =
   try:
     if inPlayerShip == 1:
       return countShipWeight(ship = playerShip).cint
@@ -1103,7 +1114,7 @@ proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [], export
     return 1
 
 proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed,
-    randomUpgrades: cint) {.raises: [], tags: [], exportc.} =
+    randomUpgrades: cint) {.raises: [], tags: [], exportc, contractual.} =
   try:
     if playerShip.homeBase == 0:
       playerShip = createShip(protoIndex = protoIndex.Positive, name = $name,
@@ -1117,8 +1128,10 @@ proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed,
   except KeyError:
     discard
 
-proc getAdaProtoShipsAmount(): cint {.raises: [], tags: [], exportc.} =
+proc getAdaProtoShipsAmount(): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   return protoShipsList.len.cint
 
-func getAdaCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [], exportc.} =
+func getAdaCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [],
+    exportc, contractual.} =
   return getCabinQuality(quality = quality.Natural).cstring
