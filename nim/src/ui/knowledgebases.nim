@@ -52,8 +52,12 @@ var
   basesTable: TableWidget
   basesIndexes: seq[Positive]
 
-proc updateBasesList(baseName: string = "", page: Positive = 1) {.sideEffect,
+proc updateBasesList*(baseName: string = "", page: Positive = 1) {.sideEffect,
     raises: [], tags: [RootEffect].} =
+  ## Update and show list of known bases
+  ##
+  ## * baseName - the name of the base to find in the list
+  ## * page     - the current page of the bases' list to show
   if basesTable.row > 1:
     clearTable(table = basesTable)
   let
