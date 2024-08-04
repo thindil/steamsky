@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../tk
+import ../[game, tk]
 import coreui, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
@@ -48,7 +48,9 @@ proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
   else:
     return ""
 
-var basesTable: TableWidget
+var
+  basesTable: TableWidget
+  basesIndexes: seq[Positive]
 
 proc updateBasesList(baseName: string = "", page: Positive = 1) =
   if basesTable.row > 1:
@@ -56,13 +58,36 @@ proc updateBasesList(baseName: string = "", page: Positive = 1) =
   let
     basesCanvas = mainPaned & ".knowledgeframe.bases.canvas"
     basesFrame = basesCanvas & ".frame"
-    rows = tclEval2(script = "grid size " & basesFrame).split(" ")[2].parseInt
+  var rows = tclEval2(script = "grid size " & basesFrame).split(" ")[2].parseInt
   deleteWidgets(startIndex = 2, endIndex = rows - 1, frame = basesFrame)
   basesTable = createTable(parent = basesFrame, headers = @["Name", "Distance",
       "Coordinates", "Population", "Size", "Owner", "Type", "Reputation"],
       scrollbar = ".gameframe.paned.knowledgeframe.bases.scrolly",
       command = "SortKnownBases {" & baseName & "}",
       tooltipText = "Press mouse button to sort the bases.")
+  if basesIndexes.len == 0:
+    for index, _ in skyBases:
+      basesIndexes.add(y = index)
+  let searchEntry = basesFrame & ".options.search"
+  if baseName.len == 0:
+    tclEval(script = searchEntry & " configure -validatecommand {}")
+    tclEval(script = searchEntry & " delete 0 end")
+    tclEval(script = searchEntry & " configure -validatecommand {ShowBases %P}")
+  var comboBox = basesFrame & ".options.types"
+  let basesType = tclEval2(script = comboBox & " get")
+  comboBox = basesFrame & ".options.status"
+  let basesStatus = tclEval2(script = comboBox & " get")
+  comboBox = basesFrame & ".options.owner"
+  let basesOwner = tclEval2(script = comboBox & " get")
+  rows = 0
+  for index in basesIndexes:
+    if not skyBases[index].known:
+      continue
+    if baseName.len > 0 and not skyBases[index].name.toLowerAscii.contains(
+        sub = baseName.toLowerAscii):
+      continue
+    if basesStatus == "Only not visited" and skyBases[index].visited.year != 0:
+      continue
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
