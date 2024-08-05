@@ -83,8 +83,6 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   shipyardFrame = shipyardCanvas & ".shipyard"
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
-  var installInfo = "You have used " & $usedSpace &
-      " modules space from max " & $allSpace & " allowed."
   var moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney"
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   if moneyIndex2 > -1:
@@ -99,8 +97,10 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
         moneyName & " to install anything.} -style Headerred.TLabel")
     moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney2"
     tclEval(script = "grid remove " & moneyLabel)
-  moneyLabel = shipyardCanvas & ".shipyard.modulesinfo.lblmodules"
-  tclEval(script = moneyLabel & " configure -text {" & installInfo & "}")
+  moneyLabel = shipyardCanvas & ".shipyard.modulesinfo.lblmodules2"
+  tclEval(script = moneyLabel & " configure -text {" & $usedSpace & "}")
+  moneyLabel = shipyardCanvas & ".shipyard.modulesinfo.lblmodules4"
+  tclEval(script = moneyLabel & " configure -text {" & $allSpace & "}")
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
   let searchEntry = shipyardCanvas & ".shipyard.install.options.search"
   if argc < 3:

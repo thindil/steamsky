@@ -40,9 +40,16 @@ grid [ttk::label $shipyardframe.moneyinfo.lblmoney -wraplength 500] -sticky w
 grid [ttk::label $shipyardframe.moneyinfo.lblmoney2 -wraplength 500 \
    -style Golden.TLabel] -sticky w -column 1 -row 0
 grid [ttk::frame $shipyardframe.modulesinfo] -sticky w
-grid [ttk::label $shipyardframe.modulesinfo.lblmodules -wraplength 500] -sticky w
+grid [ttk::label $shipyardframe.modulesinfo.lblmodules -wraplength 500 \
+   -text {You have used }] -sticky w
 grid [ttk::label $shipyardframe.modulesinfo.lblmodules2 -wraplength 500 \
    -style Golden.TLabel] -sticky w -column 1 -row 0
+grid [ttk::label $shipyardframe.modulesinfo.lblmodules3 -wraplength 500 \
+   -text { modules space from max }] -sticky w -column 2 -row 0
+grid [ttk::label $shipyardframe.modulesinfo.lblmodules4 -wraplength 500 \
+   -style Golden.TLabel] -sticky w -column 3 -row 0
+grid [ttk::label $shipyardframe.modulesinfo.lblmodules5 -wraplength 500 \
+   -text { allowed.}] -sticky w -column 4 -row 0
 # Install modules
 set sinstall [ttk::frame $shipyardframe.install]
 SetScrollbarBindings $sinstall .gameframe.paned.shipyardframe.scrolly
