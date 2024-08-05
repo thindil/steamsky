@@ -16,7 +16,7 @@
 with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Interfaces.C; use Interfaces.C;
@@ -35,16 +35,16 @@ with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
-with Config; use Config;
+with Config;
 with CoreUI;
 with Dialogs;
 with Game; use Game;
-with Maps; use Maps;
+with Maps;
 with Messages;
-with Ships; use Ships;
+with Ships;
 with Table; use Table;
 with Utils;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Knowledge.Bases is
 
@@ -62,6 +62,7 @@ package body Knowledge.Bases is
    Bases_Indexes: Positive_Container.Vector;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****if* KBases/KBases.Get_Reputation_Text
    -- FUNCTION
    -- Get the name of the reputation level in the selected base
@@ -81,6 +82,7 @@ package body Knowledge.Bases is
       return
         Value(Item => Get_Ada_Reputation_Text(Rep_Level => Reputation_Level));
    end Get_Reputation_Text;
+   --## rule on REDUCEABLE_SCOPE
 
    procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1) is
       use Tcl.Tk.Ada.Widgets.Canvas;
@@ -192,8 +194,10 @@ package body Knowledge.Bases is
       use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tklib.Ada.Tooltip;
+      use Config;
       use Dialogs;
       use Messages;
+      use Ships;
       use Tiny_String;
 
       Base_Index: constant Positive :=
@@ -218,6 +222,7 @@ package body Knowledge.Bases is
              "} -style Dialoggreen.TButton");
       procedure Set_Reputation_Text(Reputation_Text: String) is
          use Ada.Strings;
+         use Ada.Strings.Fixed;
          use Tcl.Tk.Ada.Widgets.TtkLabel;
 
          Reputation_Bar: constant Ttk_Frame :=
@@ -574,6 +579,7 @@ package body Knowledge.Bases is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Maps;
       use Tiny_String;
 
       --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -765,6 +771,7 @@ package body Knowledge.Bases is
    end Sort_Bases_Command;
 
    procedure Add_Knowledge_Bases_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowBases", Ada_Command => Show_Bases_Command'Access);
