@@ -190,6 +190,20 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.sideEffect,
 proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Show the list of known bases to a player
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowBases ?basename? ?page?
+  ## Basename parameter is a string which will be looking for in the bases
+  ## names, page parameter is a index of page from which starts showing
+  ## bases.
   case argc
   of 3:
     try:
