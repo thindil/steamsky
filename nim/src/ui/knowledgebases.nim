@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[basestypes, config, game, maps, tk]
+import ../[basestypes, config, game, maps, messages, tk]
 import coreui, dialogs, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
