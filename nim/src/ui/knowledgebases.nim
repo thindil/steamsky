@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[basestypes, config, game, maps, tk]
-import coreui, table
+import coreui, dialogs, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
     tags: [].} =
@@ -217,11 +217,40 @@ proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    baseIndex = ($argv[1]).parseInt
+    baseDialog = createDialog(name = ".basedialog", title = skyBases[
+        baseIndex].name, columns = 3)
+    baseLabel = baseDialog & ".info"
+  tclEval(script = "text " & baseLabel & " -wrap char -height 5 -width 30")
+  tclEval(script = baseLabel & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
+  tclEval(script = baseLabel & " tag configure red -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-red)"))
+  tclEval(script = baseLabel & " tag configure green -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-green)"))
+  tclEval(script = baseLabel & " tag configure cyan -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-cyan)"))
+  tclEval(script = baseLabel & " insert end {Coordinates X: }")
+  tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyX & "} [list gold]")
+  tclEval(script = baseLabel & " insert end { Y: }")
+  tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyY & "} [list gold]")
+  if skyBases[baseIndex].visited.year > 0:
+    tclEval(script = baseLabel & " insert end {\nLastVisited: }")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowBases", showBasesCommand)
+#    addCommand("ShowBaseInfo", showBaseInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
