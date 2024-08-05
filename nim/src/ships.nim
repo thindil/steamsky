@@ -76,7 +76,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError,
                 message = "Can't add ship '" & shipNode.attr(name = "index") & "', invalid index.")
         shipAction: DataAction = try:
-            parseEnum[DataAction](shipNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = shipNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if shipAction in [update, remove]:
@@ -118,7 +119,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               message = "Can't " & $shipAction & " ship '" & $shipIndex &
                   "', invalid value for module index.")
           moduleAction: DataAction = try:
-              parseEnum[DataAction](module.attr(name = "action").toLowerAscii)
+              parseEnum[DataAction](s = module.attr(
+                  name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
         if moduleAction == DataAction.add:
@@ -158,7 +160,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       attribute = shipNode.attr(name = "combatai")
       if attribute.len() > 0:
         ship.combatAi = try:
-            parseEnum[ShipCombatAi](attribute.toLowerAscii)
+            parseEnum[ShipCombatAi](s = attribute.toLowerAscii)
         except ValueError:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship combat AI.")
@@ -247,7 +249,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 "', invalid value for cargo item index.")
         let
           itemAction: DataAction = try:
-              parseEnum[DataAction](item.attr(name = "action").toLowerAscii)
+              parseEnum[DataAction](s = item.attr(name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
           itemAmount = try:
@@ -308,7 +310,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 "', invalid value for known recipe index.")
         let
           recipeAction: DataAction = try:
-              parseEnum[DataAction](recipe.attr(name = "action").toLowerAscii)
+              parseEnum[DataAction](s = recipe.attr(
+                  name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
         if recipeAction == DataAction.add:
@@ -330,7 +333,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             message = "Can't " & $shipAction & " ship '" & $shipIndex &
                 "', invalid value for crew member index.")
         let memberAction: DataAction = try:
-              parseEnum[DataAction](member.attr(name = "action").toLowerAscii)
+              parseEnum[DataAction](s = member.attr(
+                  name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
         var memberAmount = try:
