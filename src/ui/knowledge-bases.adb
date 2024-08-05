@@ -143,27 +143,29 @@ package body Knowledge.Bases is
    function Show_Bases_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showBasesCommand";
       -- ****
 
-   function Show_Bases_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
-   begin
-      case Argc is
-         when 3 =>
-            Update_Bases_List
-              (Base_Name => CArgv.Arg(Argv => Argv, N => 1),
-               Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
-         when 2 =>
-            Update_Bases_List(Base_Name => CArgv.Arg(Argv => Argv, N => 1));
-         when others =>
-            Update_Bases_List;
-      end case;
-      Tcl_SetResult(interp => Interp, str => "1");
-      return TCL_OK;
-   end Show_Bases_Command;
+--   function Show_Bases_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data);
+--   begin
+--      case Argc is
+--         when 3 =>
+--            Update_Bases_List
+--              (Base_Name => CArgv.Arg(Argv => Argv, N => 1),
+--               Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+--         when 2 =>
+--            Update_Bases_List(Base_Name => CArgv.Arg(Argv => Argv, N => 1));
+--         when others =>
+--            Update_Bases_List;
+--      end case;
+--      Tcl_SetResult(interp => Interp, str => "1");
+--      return TCL_OK;
+--   end Show_Bases_Command;
 
    -- ****o* KBases/KBases.Show_Base_Info_Command
    -- FUNCTION
