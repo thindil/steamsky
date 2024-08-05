@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -23,32 +23,26 @@ type
     kind*: cint
     color*: cint
 
-func formattedTime*(year: int = gameDate.year, month: int = gameDate.month,
-    day: int = gameDate.day, hour: int = gameDate.hour,
-    minutes: int = gameDate.minutes): string {.gcsafe, raises: [], tags: [].} =
+proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [].} =
   ## Format the selected the game time, add leading zeroes, marks between
   ## values, etc.
   ##
-  ## * year    - The amount of years to format
-  ## * month   - The amount of months to format
-  ## * day     - The amount of days to format
-  ## * hour    - The amount of hours to format
-  ## * minutes - The amount of minutes to format
+  ## * time - The time to format. Default value is the current in-game date
   ##
   ## Returns the string with formatted time
-  result = $year & "-"
-  if month < 10:
+  result = $time.year & "-"
+  if time.month < 10:
     result.add("0")
-  result.add($month & "-")
-  if day < 10:
+  result.add($time.month & "-")
+  if time.day < 10:
     result.add("0")
-  result.add($day & " ")
-  if hour < 10:
+  result.add($time.day & " ")
+  if time.hour < 10:
     result.add("0")
-  result.add($hour & ":")
-  if minutes < 10:
+  result.add($time.hour & ":")
+  if time.minutes < 10:
     result.add("0")
-  result.add($minutes)
+  result.add($time.minutes)
 
 proc addMessage*(message: string; mType: MessageType;
     color: MessageColor = white) {.sideEffect, raises: [], tags: [].} =
@@ -61,8 +55,7 @@ proc addMessage*(message: string; mType: MessageType;
   ## * color   - The color used to draw the message
   if messagesList.len() == gameSettings.messagesLimit:
     messagesList.delete(i = 0)
-  messagesList.add(y = MessageData(message: "[" & formattedTime(gameDate.year,
-      gameDate.month, gameDate.day, gameDate.hour, gameDate.minutes) & "] " &
+  messagesList.add(y = MessageData(message: "[" & formattedTime(gameDate) & "] " &
       message, kind: mType, color: color))
 
 proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
@@ -144,7 +137,8 @@ proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
 
 proc formattedTime(year: cint, month: cint, day: cint, hour: cint,
     minutes: cint): cstring {.raises: [], tags: [], exportc.} =
-  return formattedTime(year.int, month.int, day.int, hour.int, minutes.int).cstring
+  return formattedTime(time = DateRecord(year: year.int, month: month.int,
+      day: day.int, hour: hour.int, minutes: minutes.int)).cstring
 
 proc addMessage(message: cstring; kind: cint; color: cint = ord(
     white)) {.sideEffect, raises: [], tags: [], exportc.} =
