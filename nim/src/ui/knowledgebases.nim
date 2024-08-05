@@ -243,6 +243,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyY & "} [list gold]")
   if skyBases[baseIndex].visited.year > 0:
     tclEval(script = baseLabel & " insert end {\nLastVisited: }")
+    tclEval(script = baseLabel & " insert end {" & formattedTime(time = skyBases[baseIndex].visited) & "} [list gold]")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
