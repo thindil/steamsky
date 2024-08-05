@@ -187,11 +187,23 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.sideEffect,
   tclEval(script = basesCanvas & " configure -scrollregion [list " & tclEval2(
       script = basesCanvas & " bbox all") & "]")
 
+proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  case argc
+  of 3:
+    updateBasesList(baseName = $argv[1], page = ($argv[2]).parseInt)
+  of 2:
+    updateBasesList(baseName = $argv[1])
+  else:
+    updateBasesList()
+  tclSetResult(value = "1")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
-#    addCommand("ShowLoot", showLootCommand)
+#    addCommand("ShowBases", showBasesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
