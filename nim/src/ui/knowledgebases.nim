@@ -188,10 +188,14 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.sideEffect,
       script = basesCanvas & " bbox all") & "]")
 
 proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   case argc
   of 3:
-    updateBasesList(baseName = $argv[1], page = ($argv[2]).parseInt)
+    try:
+      updateBasesList(baseName = $argv[1], page = ($argv[2]).parseInt)
+    except:
+      return showError(message = "Can't update the list of bases.")
   of 2:
     updateBasesList(baseName = $argv[1])
   else:
