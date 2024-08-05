@@ -20,7 +20,7 @@
 
 import std/random
 import contracts
-import types
+import game, types
 
 proc generateRoboticName*(): string {.sideEffect, raises: [],
     tags: [], contractual.} =
@@ -76,13 +76,15 @@ proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
     randomize()
     return rand(x = min .. max)
 
-proc daysDifference*(dateToCompare, currentDate: DateRecord): cint {.gcsafe,
-    sideEffect, raises: [], tags: [], contractual.} =
+proc daysDifference*(dateToCompare: DateRecord;
+    currentDate: DateRecord = gameDate): cint {.gcsafe, sideEffect, raises: [],
+    tags: [], contractual.} =
   ## Get the difference in days between two dates, mostly with the current
   ## date in the game
   ##
   ## * dateToCompare - the game date to compare
-  ## * currentDate   - the current game date to which the date will be compared
+  ## * currentDate   - the current game date to which the date will be compared.
+  ##                   Default value the current in-game date.
   ##
   ## Returns the difference in days between the two dates
   return (currentDate.day.cint + (30 * currentDate.month.cint) + (
