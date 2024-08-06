@@ -318,6 +318,25 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval2(script = baseLabel & " count -displaylines 0.0 end").parseInt /
       tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) - 1))
   tclEval(script = "grid " & baseLabel & " -row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w")
+  var baseButton = baseDialog & ".destination"
+  tclEval(script = "ttk::button " & baseButton &
+      " -text Target -image destinationicon -command {CloseDialog " &
+      baseDialog & ";SetDestination2 " & $skyBases[baseIndex].skyX & " " &
+      $skyBases[baseIndex].skyY & "} -style Dialoggreen.TButton")
+  tclEval(script = "tooltip::tooltip " & baseButton & " \"Set the base as the ship destination\"")
+  tclEval(script = "grid " & baseButton & " -row 3 -padx 5 -sticky e")
+  tclEval(script = "bind " & baseButton & " <Tab> {focus " & baseDialog & ".button;break}")
+  tclEval(script = "bind " & baseButton & " <Escape> {" & baseDialog & ".button invoke;break}")
+  addCloseButton(name = baseDialog & ".button", text = "Close",
+      command = "CloseDialog " & baseDialog, row = 3, column = 1)
+  baseButton = baseDialog & ".button"
+  tclEval(script = "bind " & baseButton & " <Tab> {focus " & baseDialog & ".show;break}")
+  baseButton = baseDialog & ".show"
+  tclEval(script = "ttk::button " & baseButton &
+      " -text Show -image show2icon -command {CloseDialog " & baseDialog &
+      ";ShowOnMap " & $skyBases[baseIndex].skyX & " " & $skyBases[
+      baseIndex].skyY & "} -style Dialoggreen.TButton")
+  tclEval(script = "tooltip::tooltip " & baseButton & " \"Show the base on the map\"")
 
   return tclOk
 
