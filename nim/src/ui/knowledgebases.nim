@@ -243,10 +243,45 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyY & "} [list gold]")
   if skyBases[baseIndex].visited.year > 0:
     tclEval(script = baseLabel & " insert end {\nLastVisited: }")
-    tclEval(script = baseLabel & " insert end {" & formattedTime(time = skyBases[baseIndex].visited) & "} [list gold]")
+    tclEval(script = baseLabel & " insert end {" & formattedTime(
+        time = skyBases[baseIndex].visited) & "} [list gold]")
     var timeDiff = 0
-    if skyBases[baseIndex].population > 0 and skyBases[baseIndex].reputation.level > -25:
-      timeDiff = 30 - daysDifference(dateToCompare = skyBases[baseIndex].recruitDate)
+    if skyBases[baseIndex].population > 0 and skyBases[
+        baseIndex].reputation.level > -25:
+      timeDiff = 30 - daysDifference(dateToCompare = skyBases[
+          baseIndex].recruitDate)
+      if timeDiff > 0:
+        tclEval(script = baseLabel & " insert end {\nNew recruits available in }")
+        tclEval(script = baseLabel & " insert end {" & $timeDiff & "} [list gold]")
+        tclEval(script = baseLabel & " insert end { days.}")
+      else:
+        tclEval(script = baseLabel & " insert end {\nNew recruits available now.} [list green]")
+    else:
+      tclEval(script = baseLabel & " insert end {\nYou can't recruit crew members at this base.} [list red]")
+    if skyBases[baseIndex].population > 0 and skyBases[
+        baseIndex].reputation.level > -25:
+      timeDiff = daysDifference(dateToCompare = skyBases[
+          baseIndex].askedForEvents)
+      if timeDiff < 7:
+        tclEval(script = baseLabel & " insert end {\nYou asked for events }")
+        tclEval(script = baseLabel & " insert end {" & $timeDiff & "} [list gold]")
+        tclEval(script = baseLabel & " insert end { days ago.}")
+      else:
+        tclEval(script = baseLabel & " insert end {\nYou can ask for events again.} [list green]")
+    else:
+      tclEval(script = baseLabel & " insert end {\nYou can't ask for events at this base.} [list red]")
+    if skyBases[baseIndex].population > 0 and skyBases[
+        baseIndex].reputation.level > -1:
+      timeDiff = 7 - daysDifference(dateToCompare = skyBases[
+          baseIndex].askedForEvents)
+      if timeDiff > 0:
+        tclEval(script = baseLabel & " insert end {\nNew missions available in }")
+        tclEval(script = baseLabel & " insert end {" & $timeDiff & "} [list gold]")
+        tclEval(script = baseLabel & " insert end { days.}")
+      else:
+        tclEval(script = baseLabel & " insert end {\nNew missions available now.} [list green]")
+    else:
+      tclEval(script = baseLabel & " insert end {\nYou can't take missions at this base.} [list red]")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
