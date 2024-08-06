@@ -98,7 +98,9 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     moneyLabel = shipyardCanvas & ".shipyard.moneyinfo.lblmoney2"
     tclEval(script = "grid remove " & moneyLabel)
   moneyLabel = shipyardCanvas & ".shipyard.modulesinfo.lblmodules2"
-  tclEval(script = moneyLabel & " configure -text {" & $usedSpace & "}")
+  tclEval(script = moneyLabel & " configure -text {" & $usedSpace &
+      "} -style " & (if usedSpace ==
+      allSpace: "Headerred.TLabel" else: "Headergreen.TLabel"))
   moneyLabel = shipyardCanvas & ".shipyard.modulesinfo.lblmodules4"
   tclEval(script = moneyLabel & " configure -text {" & $allSpace & "}")
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
