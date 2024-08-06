@@ -22,7 +22,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
@@ -173,6 +173,7 @@ package body Knowledge.Bases is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Characters.Latin_1;
+      use Tcl.Ada;
       use Tcl.Tk.Ada.Font;
       use Tcl.Tk.Ada.Widgets.Text;
       use Tcl.Tk.Ada.Widgets.TtkButton;
