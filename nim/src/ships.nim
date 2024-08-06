@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to ships, like getting a cabin's quality, loading
+## the ships' prototypes from a file, damagin a module in a ship, creating
+## a new ship, etc.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, maps, mobs, shipscrew2, types, utils
@@ -389,6 +393,11 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
       proc countAmmoValue(itemTypeIndex, multiple: Positive) {.sideEffect,
           raises: [KeyError], tags: [], contractual.} =
+        ## Add the combat value of the selected ammunition to the ship's combat
+        ## value
+        ##
+        ## * itemTypeIndex - the index of the ammunition's type
+        ## * multiple      - the multiplier to count the ship's combat value
         for item in ship.cargo.items:
           if itemsList[item.protoIndex].itemType == itemsTypesList[
               itemTypeIndex - 1]:
@@ -444,6 +453,12 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
 
     proc removeGun(moduleIndex2: Natural; ship: var ShipRecord) {.sideEffect,
         raises: [KeyError, IOError], tags: [WriteIOEffect], contractual.} =
+      ## Remove a gun from the ship and kill a gunner in it.
+      ##
+      ## * moduleIndex2 - the index of the gun to remove
+      ## * ship         - the ship in which the gun will be removed
+      ##
+      ## Returns the modified parameter ship.
       require:
         moduleIndex2 < ship.modules.len
       body:
@@ -770,6 +785,7 @@ type
 
 proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if getPlayerShip == 1:
     playerShip.name = $shipData.name
     playerShip.skyX = shipData.skyX
@@ -793,6 +809,7 @@ proc getAdaShip(shipData: AdaShipData; getPlayerShip: cint = 1) {.raises: [],
 
 proc getAdaShipModules(modules: array[1..75, AdaModuleData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if getPlayerShip == 1:
     playerShip.modules = @[]
   else:
@@ -862,6 +879,7 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
 
 proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if getPlayerShip == 1:
     playerShip.cargo = @[]
   else:
@@ -880,6 +898,7 @@ proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
 
 proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   let nimCargo = if getPlayerShip == 1:
       playerShip.cargo
     else:
@@ -895,6 +914,7 @@ proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
 
 proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if getPlayerShip == 1:
     playerShip.crew = @[]
   else:
@@ -909,7 +929,8 @@ proc getAdaShipCrew(crew: array[1..128, AdaMemberData];
 
 proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
     memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc,
-        contractual.} =
+    contractual.} =
+  ## Temporary C binding
   if getPlayerShip == 1:
     playerShip.crew[memberIndex - 1].inventory = @[]
   else:
@@ -930,7 +951,8 @@ proc getAdaCrewInventory(inventory: array[1..128, AdaInventoryData];
 
 proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
     memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc,
-        contractual.} =
+    contractual.} =
+  ## Temporary C binding
   let nimInventory = if getPlayerShip == 1:
       playerShip.crew[memberIndex - 1].inventory
     else:
@@ -946,6 +968,7 @@ proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
 
 proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   let nimCrew = if getPlayerShip == 1:
       playerShip.crew
     else:
@@ -958,6 +981,7 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
 
 proc setAdaShip(shipData: var AdaShipData; getPlayerShip: cint = 1) {.raises: [
     ], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   let nimShip = if getPlayerShip == 1:
       playerShip
     else:
@@ -975,6 +999,7 @@ proc setAdaShip(shipData: var AdaShipData; getPlayerShip: cint = 1) {.raises: [
 
 proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for i in modules.low..modules.high:
     modules[i] = AdaModuleData(name: "".cstring)
   let nimModules = if getPlayerShip == 1:
@@ -1025,6 +1050,7 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
 
 proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffect,
     raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   adaProtoShip = AdaProtoShipData(name: "".cstring, accuracy: [0.cint, 0.cint],
       combatAi: -1, evasion: [0.cint, 0.cint], loot: [0.cint, 0.cint],
       perception: [0.cint, 0.cint], combatValue: -1, description: "".cstring,
@@ -1048,9 +1074,9 @@ proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffe
   adaProtoShip.description = ship.description.cstring
   adaProtoShip.owner = ship.owner.cstring
 
-proc getAdaProtoShipData(index, crew: cint; adaData: var array[15,
-    array[3, cint]]) {.sideEffect, raises: [], tags: [], exportc,
-        contractual.} =
+proc getAdaProtoShipData(index, crew: cint; adaData: var array[15, array[3,
+    cint]]) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for data in adaData.mitems:
     data = [0.cint, 0.cint, 0.cint]
   if not protoShipsList.hasKey(key = index):
@@ -1070,6 +1096,7 @@ proc getAdaProtoShipData(index, crew: cint; adaData: var array[15,
 
 proc getAdaProtoShipModules(index: cint; adaModules: var array[64,
     cint]) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for module in adaModules.mitems:
     module = 0.cint
   if not protoShipsList.hasKey(key = index):
@@ -1083,6 +1110,7 @@ proc getAdaProtoShipModules(index: cint; adaModules: var array[64,
 
 proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
     cstring]) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   for recipe in adaRecipes.mitems:
     recipe = "".cstring
   if not protoShipsList.hasKey(key = index):
@@ -1096,7 +1124,8 @@ proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
 
 proc damageAdaModule(inPlayerShip, moduleIndex, damage: cint;
     deathReason: cstring) {.raises: [], tags: [WriteIOEffect], exportc,
-        contractual.} =
+    contractual.} =
+  ## Temporary C binding
   try:
     if inPlayerShip == 1:
       damageModule(ship = playerShip, moduleIndex = moduleIndex - 1,
@@ -1109,6 +1138,7 @@ proc damageAdaModule(inPlayerShip, moduleIndex, damage: cint;
 
 proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     if inPlayerShip == 1:
       return countShipWeight(ship = playerShip).cint
@@ -1119,6 +1149,7 @@ proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [],
 
 proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed,
     randomUpgrades: cint) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     if playerShip.homeBase == 0:
       playerShip = createShip(protoIndex = protoIndex.Positive, name = $name,
@@ -1134,8 +1165,10 @@ proc createAdaShip(protoIndex: cint; name: cstring; x, y, speed,
 
 proc getAdaProtoShipsAmount(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return protoShipsList.len.cint
 
 func getAdaCabinQuality*(quality: cint): cstring {.gcsafe, raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   return getCabinQuality(quality = quality.Natural).cstring
