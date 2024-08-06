@@ -282,6 +282,25 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = baseLabel & " insert end {\nNew missions available now.} [list green]")
     else:
       tclEval(script = baseLabel & " insert end {\nYou can't take missions at this base.} [list red]")
+
+    proc setReputationText(reputationText: string) =
+      let reputationLabel = baseDialog & ".reputationlabel"
+      tclEval(script = "ttk::label " & reputationLabel)
+      if skyBases[baseIndex].reputation.level == 0:
+        tclEval(script = reputationLabel & " configure -text {Reputation: Unknown}")
+      else:
+        tclEval(script = reputationLabel & " configure -text {Reputation:}")
+        let reputationBar = baseDialog & ".reputation"
+        tclEval(script = "ttk::frame " & reputationBar & " -width 204 -height 24 -style ProgressBar.TFrame")
+        tclEval(script = "grid " & reputationBar & " -row 2 -column 1 -padx 5 -columnspan 2")
+        tclEval(script = "grid propagate " & reputationBar & " off")
+        let reputationProgress = reputationBar & ".reputation"
+        tclEval(script = "ttk::frame " & reputationProgress &
+            " -height 18 -width " & $(skyBases[baseIndex].reputation.level.abs))
+        if skyBases[baseIndex].reputation.level > 0:
+          tclEval(script = reputationProgress & " configure -style GreenProgressBar.TFrame")
+          tclEval(script = "grid " & reputationProgress & " -padx {100 0} -pady 3")
+
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
