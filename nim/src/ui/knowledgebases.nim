@@ -218,9 +218,12 @@ proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    baseIndex = ($argv[1]).parseInt
+    baseIndex = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the base's index.")
     baseDialog = createDialog(name = ".basedialog", title = skyBases[
         baseIndex].name, columns = 3)
     baseLabel = baseDialog & ".info"
@@ -314,10 +317,13 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = baseLabel & " insert end {\nIt is your home base.} [list cyan]")
   else:
     tclEval(script = baseLabel & " insert end {\nNot visited yet.} [list red]")
-  tclEval(script = baseLabel & " configure -state disabled -height " & $((
-      tclEval2(script = baseLabel & " count -displaylines 0.0 end").parseInt /
-      tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) - (
-      if skyBases[baseIndex].visited.year > 0: 1 else: 0)))
+  try:
+    tclEval(script = baseLabel & " configure -state disabled -height " & $((
+        tclEval2(script = baseLabel & " count -displaylines 0.0 end").parseInt /
+        tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) - (
+        if skyBases[baseIndex].visited.year > 0: 1 else: 0)))
+  except:
+    return showError(message = "Can't configure text field.")
   tclEval(script = "grid " & baseLabel & " -row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w")
   var baseButton = baseDialog & ".destination"
   tclEval(script = "ttk::button " & baseButton &
