@@ -337,7 +337,10 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       ";ShowOnMap " & $skyBases[baseIndex].skyX & " " & $skyBases[
       baseIndex].skyY & "} -style Dialoggreen.TButton")
   tclEval(script = "tooltip::tooltip " & baseButton & " \"Show the base on the map\"")
-
+  tclEval(script = "grid " & baseButton & " -row 3 -column 2 -padx 5")
+  tclEval(script = "bind " & baseButton & " <Tab> {focus " & baseDialog & ".destination;break}")
+  tclEval(script = "bind " & baseButton & " <Escape> {" & baseDialog & ".button invoke;break}")
+  showDialog(dialog = baseDialog)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
