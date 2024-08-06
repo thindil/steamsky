@@ -242,7 +242,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = baseLabel & " insert end { Y: }")
   tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyY & "} [list gold]")
   if skyBases[baseIndex].visited.year > 0:
-    tclEval(script = baseLabel & " insert end {\nLastVisited: }")
+    tclEval(script = baseLabel & " insert end {\nLast visited: }")
     tclEval(script = baseLabel & " insert end {" & formattedTime(
         time = skyBases[baseIndex].visited) & "} [list gold]")
     var timeDiff = 0
@@ -316,7 +316,8 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = baseLabel & " insert end {\nNot visited yet.} [list red]")
   tclEval(script = baseLabel & " configure -state disabled -height " & $((
       tclEval2(script = baseLabel & " count -displaylines 0.0 end").parseInt /
-      tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) - 1))
+      tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) - (
+      if skyBases[baseIndex].visited.year > 0: 1 else: 0)))
   tclEval(script = "grid " & baseLabel & " -row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w")
   var baseButton = baseDialog & ".destination"
   tclEval(script = "ttk::button " & baseButton &
