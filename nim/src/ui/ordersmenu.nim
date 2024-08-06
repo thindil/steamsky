@@ -128,8 +128,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
         if skyBases[baseIndex].recruits.len > 0:
           addButton(name = ".recruits", label = "Recruit",
               command = "ShowRecruit", shortcut = "r", underline = 0)
-      if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents,
-          currentDate = gameDate) > 6:
+      if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
         addButton(name = ".events", label = "Ask for events",
             command = "AskForEvents", shortcut = "e", underline = 8)
       if not skyBases[baseIndex].askedForBases:

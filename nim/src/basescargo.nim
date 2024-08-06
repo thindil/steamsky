@@ -32,8 +32,7 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
         baseIndex].population else: 1)
   var chance: int = (if population < 150: 5 elif population <
       300: 10 else: 15)
-  chance += daysDifference(dateToCompare = skyBases[baseIndex].visited,
-      currentDate = gameDate)
+  chance += daysDifference(dateToCompare = skyBases[baseIndex].visited)
   if skyBases[baseIndex].cargo.len == 0:
     chance = 101
   if getRandom(min = 1, max = 100) > chance:

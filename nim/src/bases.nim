@@ -82,8 +82,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
 proc updatePopulation*() {.sideEffect, raises: [], tags: [].} =
   ## Update the base population if needed
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate,
-      currentDate = gameDate) < 30:
+  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
     return
   if skyBases[baseIndex].population > 0:
     if getRandom(min = 1, max = 100) > 30:
@@ -128,8 +127,8 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
     payment = payment + (getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = itemIndex) / 10).int
 
-  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate,
-      currentDate = gameDate) < 30 or skyBases[baseIndex].population == 0:
+  if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30 or
+      skyBases[baseIndex].population == 0:
     return
   var maxRecruits = (if skyBases[baseIndex].population < 150: 5 elif skyBases[
       baseIndex].population < 300: 10 else: 15)
@@ -262,8 +261,8 @@ proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
     return
   var chance = (if skyBases[baseIndex].population < 150: 1 elif skyBases[
       baseIndex].population < 300: 2 else: 5)
-  chance = chance + (daysDifference(dateToCompare = skyBases[baseIndex].visited,
-      currentDate = gameDate) / 10).int
+  chance = chance + (daysDifference(dateToCompare = skyBases[
+      baseIndex].visited) / 10).int
   if getRandom(min = 1, max = 100) > chance:
     return
   for item in skyBases[baseIndex].cargo.mitems:

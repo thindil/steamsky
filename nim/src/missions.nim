@@ -114,8 +114,8 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
   ## Generate available missions in the selected base if needed
   let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
-  if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate,
-      currentDate = gameDate) < 7 or skyBases[baseIndex].population == 0:
+  if daysDifference(dateToCompare = skyBases[baseIndex].missionsDate) < 7 or
+      skyBases[baseIndex].population == 0:
     return
   var missionsAmount: Natural = case skyBases[baseIndex].population
     of 1 .. 149:
