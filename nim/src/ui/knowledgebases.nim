@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[basestypes, config, game, maps, messages, tk]
+import ../[basestypes, config, game, maps, messages, tk, utils]
 import coreui, dialogs, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
@@ -244,6 +244,9 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   if skyBases[baseIndex].visited.year > 0:
     tclEval(script = baseLabel & " insert end {\nLastVisited: }")
     tclEval(script = baseLabel & " insert end {" & formattedTime(time = skyBases[baseIndex].visited) & "} [list gold]")
+    var timeDiff = 0
+    if skyBases[baseIndex].population > 0 and skyBases[baseIndex].reputation.level > -25:
+      timeDiff = 30 - daysDifference(dateToCompare = skyBases[baseIndex].recruitDate)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
