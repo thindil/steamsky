@@ -300,6 +300,24 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         if skyBases[baseIndex].reputation.level > 0:
           tclEval(script = reputationProgress & " configure -style GreenProgressBar.TFrame")
           tclEval(script = "grid " & reputationProgress & " -padx {100 0} -pady 3")
+        else:
+          tclEval(script = reputationProgress & " configure -style RedProgressBar.TFrame")
+          tclEval(script = "grid " & reputationProgress & " -padx {" & $(100 +
+              skyBases[baseIndex].reputation.level) & " 0} -pady 3")
+        tclEval(script = "tooltip::tooltip " & reputationBar & " \"" &
+            reputationText & "\"")
+      tclEval(script = "grid " & reputationLabel & " -row 2 -sticky w -padx {5 0}")
+
+    setReputationText(reputationText = getReputationText(
+        reputationLevel = skyBases[baseIndex].reputation.level))
+    if baseIndex == playerShip.homeBase:
+      tclEval(script = baseLabel & " insert end {\nIt is your home base.} [list cyan]")
+  else:
+    tclEval(script = baseLabel & " insert end {\nNot visited yet.} [list red]")
+  tclEval(script = baseLabel & " configure -state disabled -height " & $((
+      tclEval2(script = baseLabel & " count -displaylines 0.0 end").parseInt /
+      tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) - 1))
+  tclEval(script = "grid " & baseLabel & " -row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w")
 
   return tclOk
 
