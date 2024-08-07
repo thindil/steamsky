@@ -372,7 +372,8 @@ const defaultBasesSortOrder: BasesSortOrders = none
 var basesSortOrder: BasesSortOrders = defaultBasesSortOrder
 
 proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let column = try:
         getColumnNumber(table = basesTable, xPosition = ($argv[2]).parseInt)
       except:
