@@ -32,6 +32,7 @@ with CoreUI; use CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with Events;
+with Game; use Game;
 with Items;
 with Maps;
 with Maps.UI; use Maps.UI;
