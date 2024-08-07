@@ -362,12 +362,43 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = baseDialog)
   return tclOk
 
+type BasesSortOrders = enum
+  none, nameAsc, nameDesc, distanceAsc, distanceDesc, populationAsc,
+    populationDesc, sizeAsc, sideDesc, ownerAsc, ownerDesc, typeAsc, typeDesc,
+    reputationAsc, reputationDesc, coordAsc, coordDesc
+
+const defaultBasesSortOrder: BasesSortOrders = none
+
+var basesSortOrder: BasesSortOrders = defaultBasesSortOrder
+
+proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        getColumnNumber(table = basesTable, xPosition = ($argv[2]).parseInt)
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if basesSortOrder == nameAsc:
+      basesSortOrder = nameDesc
+    else:
+      basesSortOrder = nameAsc
+  of 2:
+    if basesSortOrder == distanceAsc:
+      basesSortOrder = distanceDesc
+    else:
+      basesSortOrder = distanceAsc
+  else:
+    discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard
 #    addCommand("ShowBases", showBasesCommand)
 #    addCommand("ShowBaseInfo", showBaseInfoCommand)
+#    addCommand("SortBases", sortasesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
