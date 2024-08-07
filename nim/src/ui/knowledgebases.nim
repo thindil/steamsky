@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[basestypes, config, game, maps, messages, tk, types, utils]
 import coreui, dialogs, table
 
@@ -514,8 +514,23 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
         return 1
       else:
         return -1
+    of reputationAsc:
+      if x.reputation < y.reputation:
+        return 1
+      else:
+        return -1
+    of reputationDesc:
+      if x.reputation > y.reputation:
+        return 1
+      else:
+        return -1
     of none:
       return -1
+  localBases.sort(cmp = sortBases)
+  basesIndexes = @[]
+  for base in localBases:
+    basesIndexes.add(y = base.id)
+  updateBasesList(baseName = $argv[1])
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
