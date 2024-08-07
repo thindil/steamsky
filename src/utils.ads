@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -14,8 +14,6 @@
 --
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
-
-with Game; use Game;
 
 -- ****h* Utils/Utils
 -- FUNCTION
@@ -38,21 +36,6 @@ package Utils is
       Import => True,
       Convention => C,
       External_Name => "getRandom";
-      -- ****
-
-      -- ****f* Utils/Utils.DaysDifference
-      -- FUNCTION
-      -- Count days difference between selected date and current game date
-      -- PARAMETERS
-      -- DateToCompare - In game date to compare with current game date
-      -- Current_Date - In game current date. Can be empty. Default value is
-      --                Game_Date
-      -- RESULT
-      -- Amount of days difference between DateToCompare and current game date
-      -- SOURCE
-   function Days_Difference
-     (Date_To_Compare: Date_Record; Current_Date: Date_Record := Game_Date)
-      return Integer;
       -- ****
 
 end Utils;
