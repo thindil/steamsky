@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[basestypes, config, game, maps, messages, tk, utils]
+import ../[basestypes, config, game, maps, messages, tk, types, utils]
 import coreui, dialogs, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
@@ -364,7 +364,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 type BasesSortOrders = enum
   none, nameAsc, nameDesc, distanceAsc, distanceDesc, populationAsc,
-    populationDesc, sizeAsc, sideDesc, ownerAsc, ownerDesc, typeAsc, typeDesc,
+    populationDesc, sizeAsc, sizeDesc, ownerAsc, ownerDesc, typeAsc, typeDesc,
     reputationAsc, reputationDesc, coordAsc, coordDesc
 
 const defaultBasesSortOrder: BasesSortOrders = none
@@ -388,8 +388,53 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
       basesSortOrder = distanceDesc
     else:
       basesSortOrder = distanceAsc
+  of 3:
+    if basesSortOrder == coordAsc:
+      basesSortOrder = coordDesc
+    else:
+      basesSortOrder = coordAsc
+  of 4:
+    if basesSortOrder == populationAsc:
+      basesSortOrder = populationDesc
+    else:
+      basesSortOrder = populationAsc
+  of 5:
+    if basesSortOrder == sizeAsc:
+      basesSortOrder = sizeDesc
+    else:
+      basesSortOrder = sizeAsc
+  of 6:
+    if basesSortOrder == ownerAsc:
+      basesSortOrder = ownerDesc
+    else:
+      basesSortOrder = ownerAsc
+  of 7:
+    if basesSortOrder == typeAsc:
+      basesSortOrder = typeDesc
+    else:
+      basesSortOrder = typeAsc
+  of 8:
+    if basesSortOrder == reputationAsc:
+      basesSortOrder = reputationDesc
+    else:
+      basesSortOrder = reputationAsc
   else:
     discard
+  if basesSortOrder == none:
+    return tclOk
+  type LocalBaseData = object
+    name: string
+    distance: Natural
+    coords: string
+    population: int
+    size: BasesSize
+    owner: string
+    baseType: string
+    reputation: int
+    id: Positive
+  var localBases: seq[LocalBaseData] = @[]
+  for index, base in skyBases:
+    localBases.add(y = LocalBaseData(name: base.name, distance: countDistance(destinationX = base.skyX, destinationY = base.skyY), coords: "X: " & $base.skyX & " Y: " & $base.skyY))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
