@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Updated look of information about available missions in bases
 - Updated look of information about available money when buying recipes, repair
   the ship or healing wounded crew members in bases
+- Updated look of information about available money and space on the player's
+  ship in shipyards
 
 ### Fixed
 - Crash when dropping items in empty bases
