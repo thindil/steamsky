@@ -431,10 +431,91 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     owner: string
     baseType: string
     reputation: int
-    id: Positive
+    id: BasesRange = 1
   var localBases: seq[LocalBaseData] = @[]
   for index, base in skyBases:
-    localBases.add(y = LocalBaseData(name: base.name, distance: countDistance(destinationX = base.skyX, destinationY = base.skyY), coords: "X: " & $base.skyX & " Y: " & $base.skyY))
+    localBases.add(y = LocalBaseData(name: base.name, distance: countDistance(
+        destinationX = base.skyX, destinationY = base.skyY), coords: "X: " &
+        $base.skyX & " Y: " & $base.skyY, population: (if base.visited.year ==
+        0: -1 else: base.population), size: (if base.visited.year ==
+        0: unknown else: base.size), owner: (if base.visited.year ==
+        0: "" else: base.owner), baseType: (if base.visited.year ==
+        0: "" else: base.baseType), reputation: (if base.visited.year ==
+        0: 200 else: base.reputation.level), id: index))
+  proc sortBases(x, y: LocalBaseData): int =
+    case basesSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of distanceAsc:
+      if x.distance < y.distance:
+        return 1
+      else:
+        return -1
+    of distanceDesc:
+      if x.distance > y.distance:
+        return 1
+      else:
+        return -1
+    of coordAsc:
+      if x.coords < y.coords:
+        return 1
+      else:
+        return -1
+    of coordDesc:
+      if x.coords > y.coords:
+        return 1
+      else:
+        return -1
+    of populationAsc:
+      if x.population < y.population:
+        return 1
+      else:
+        return -1
+    of populationDesc:
+      if x.population > y.population:
+        return 1
+      else:
+        return -1
+    of sizeAsc:
+      if x.size < y.size:
+        return 1
+      else:
+        return -1
+    of sizeDesc:
+      if x.size > y.size:
+        return 1
+      else:
+        return -1
+    of ownerAsc:
+      if x.owner < y.owner:
+        return 1
+      else:
+        return -1
+    of ownerDesc:
+      if x.owner > y.owner:
+        return 1
+      else:
+        return -1
+    of typeAsc:
+      if x.baseType < y.baseType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.baseType > y.baseType:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
