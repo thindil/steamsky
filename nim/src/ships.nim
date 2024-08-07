@@ -64,7 +64,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let shipsXml = try:
+    let shipsXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -85,10 +85,10 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           except ValueError:
             DataAction.add
       if shipAction in [update, remove]:
-        if shipIndex > protoShipsList.len():
+        if shipIndex > protoShipsList.len:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex & "', there is no ship with that index.")
-      elif shipIndex < protoShipsList.len():
+      elif shipIndex < protoShipsList.len:
         raise newException(exceptn = DataLoadingError,
             message = "Can't add ship '" & $shipIndex & "', there is an ship with that index.")
       if shipAction == DataAction.remove:
@@ -107,17 +107,17 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             ProtoShipData(combatValue: 1)
         else:
           ProtoShipData(combatValue: 1)
-      var attribute = shipNode.attr(name = "name")
-      if attribute.len() > 0:
+      var attribute: string = shipNode.attr(name = "name")
+      if attribute.len > 0:
         ship.name = attribute
       for module in shipNode.findAll(tag = "module"):
         let
-          moduleAmount = try:
-              module.attr(name = "amount").parseInt()
+          moduleAmount: int = try:
+              module.attr(name = "amount").parseInt
             except ValueError:
               1
-          moduleIndex = try:
-              module.attr(name = "index").parseInt()
+          moduleIndex: int = try:
+              module.attr(name = "index").parseInt
             except ValueError:
             raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex &
@@ -241,8 +241,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus perception.")
       for item in shipNode.findAll(tag = "cargo"):
-        let itemIndex = try:
-              item.attr(name = "index").parseInt()
+        let itemIndex: int = try:
+              item.attr(name = "index").parseInt
             except ValueError:
             raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex &
@@ -256,20 +256,20 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               parseEnum[DataAction](s = item.attr(name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
-          itemAmount = try:
-              item.attr(name = "amount").parseInt()
+          itemAmount: int = try:
+              item.attr(name = "amount").parseInt
             except ValueError:
               0
-        var minAmount, maxAmount = 0
+        var minAmount, maxAmount: int = 0
         if itemAmount == 0:
           minAmount = try:
-                item.attr(name = "minamount").parseInt()
+                item.attr(name = "minamount").parseInt
               except ValueError:
               raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $shipAction & " ship '" & $shipIndex &
                     "', invalid value for cargo item minamount.")
           maxAmount = try:
-              item.attr(name = "maxamount").parseInt()
+              item.attr(name = "maxamount").parseInt
             except ValueError:
             raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex &
@@ -297,17 +297,17 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 cargoItem.maxAmount = maxAmount
               break
         of DataAction.remove:
-          var cargoIndex = 0
+          var cargoIndex: Natural = 0
           while cargoIndex < ship.cargo.len:
             if ship.cargo[cargoIndex].protoIndex == itemIndex:
               ship.cargo.delete(i = cargoIndex)
               break
             cargoIndex.inc
       attribute = shipNode.attr(name = "owner")
-      if attribute.len() > 0:
+      if attribute.len > 0:
         ship.owner = attribute
       for recipe in shipNode.findAll(tag = "recipe"):
-        let recipeIndex = recipe.attr(name = "index")
+        let recipeIndex: string = recipe.attr(name = "index")
         if not recipesList.contains(key = recipeIndex):
           raise newException(exceptn = DataLoadingError,
             message = "Can't " & $shipAction & " ship '" & $shipIndex &
@@ -326,12 +326,11 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               ship.knownRecipes.delete(i = rIndex)
               break
       for member in shipNode.findAll(tag = "member"):
-        let memberIndex = try:
-              member.attr(name = "index").parseInt()
+        let memberIndex: int = try:
+              member.attr(name = "index").parseInt
             except ValueError:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for crew member index.")
+              raise newException(exceptn = DataLoadingError,
+                  message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for crew member index.")
         if not protoMobsList.contains(key = memberIndex):
           raise newException(exceptn = DataLoadingError,
             message = "Can't " & $shipAction & " ship '" & $shipIndex &
@@ -341,24 +340,23 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   name = "action").toLowerAscii)
             except ValueError:
               DataAction.add
-        var memberAmount = try:
-              member.attr(name = "amount").parseInt()
+        var memberAmount: Natural = try:
+              member.attr(name = "amount").parseInt
             except ValueError:
               0
-        var minAmount, maxAmount = 0
+        var minAmount, maxAmount: Natural = 0
         if memberAmount == 0:
           minAmount = try:
-                member.attr(name = "minamount").parseInt()
+                member.attr(name = "minamount").parseInt
               except ValueError:
                 0
           maxAmount = try:
-              member.attr(name = "maxamount").parseInt()
+              member.attr(name = "maxamount").parseInt
             except ValueError:
               1
           if minAmount > maxAmount:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for crew member amount range.")
+            raise newException(exceptn = DataLoadingError, message = "Can't " &
+                $shipAction & " ship '" & $shipIndex & "', invalid value for crew member amount range.")
           if minAmount == 0:
             memberAmount = 1
         case memberAction
@@ -380,7 +378,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                 crewMember.maxAmount = maxAmount
               break
         of DataAction.remove:
-          var crewIndex = 0
+          var crewIndex: Natural = 0
           while crewIndex < ship.crew.len:
             if ship.crew[crewIndex].protoIndex == memberIndex:
               {.warning[UnsafeSetLen]: off.}
@@ -406,7 +404,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
 
       for moduleIndex in ship.modules.items:
         try:
-          let module = modulesList[moduleIndex]
+          let module: BaseModuleData = modulesList[moduleIndex]
           case module.mType
           of ModuleType.hull, ModuleType.gun, ModuleType.batteringRam:
             ship.combatValue = ship.combatValue + module.durability + (
@@ -466,7 +464,7 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
           death(memberIndex = ship.modules[moduleIndex2].owner[0],
               reason = deathReason, ship = ship)
 
-    let realDamage = if damage > ship.modules[moduleIndex].durability:
+    let realDamage: Natural = if damage > ship.modules[moduleIndex].durability:
         ship.modules[moduleIndex].durability
       else:
         damage
@@ -478,7 +476,7 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
         if ship.crew == playerShip.crew:
           death(memberIndex = 0, reason = deathReason, ship = playerShip)
       of ModuleType.turret:
-        let weaponIndex = ship.modules[moduleIndex].gunIndex
+        let weaponIndex: int = ship.modules[moduleIndex].gunIndex
         if weaponIndex > -1:
           ship.modules[weaponIndex].durability = 0
           removeGun(moduleIndex2 = weaponIndex, ship = ship)
