@@ -24,7 +24,7 @@ proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     eventIndex = ($argv[1]).parseInt - 1
     baseIndex = skyMap[eventsList[eventIndex].skyX][eventsList[
-        eventIndex].skyX].baseIndex
+        eventIndex].skyY].baseIndex
   var eventInfo = "X: {gold}" & $eventsList[eventIndex].skyX &
       "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY & "{/gold}"
   case eventsList[eventIndex].eType
