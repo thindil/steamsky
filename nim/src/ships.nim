@@ -131,7 +131,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           for i in 1 .. moduleAmount:
             ship.modules.add(y = moduleIndex)
         else:
-          for mIndex, pModule in ship.modules.pairs:
+          for mIndex, pModule in ship.modules:
             if pModule == moduleIndex:
               {.warning[UnsafeSetLen]: off.}
               ship.modules.delete(i = mIndex)
@@ -321,7 +321,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         if recipeAction == DataAction.add:
           ship.knownRecipes.add(y = recipeIndex)
         else:
-          for rIndex, knownRecipe in ship.knownRecipes.pairs:
+          for rIndex, knownRecipe in ship.knownRecipes:
             if knownRecipe == recipeIndex:
               ship.knownRecipes.delete(i = rIndex)
               break
@@ -396,13 +396,13 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         ##
         ## * itemTypeIndex - the index of the ammunition's type
         ## * multiple      - the multiplier to count the ship's combat value
-        for item in ship.cargo.items:
+        for item in ship.cargo:
           if itemsList[item.protoIndex].itemType == itemsTypesList[
               itemTypeIndex - 1]:
             ship.combatValue = ship.combatValue + (itemsList[
                 item.protoIndex].value[1] * multiple)
 
-      for moduleIndex in ship.modules.items:
+      for moduleIndex in ship.modules:
         try:
           let module: BaseModuleData = modulesList[moduleIndex]
           case module.mType
@@ -523,19 +523,19 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
   require:
     protoShipsList.contains(key = protoIndex)
   body:
-    let protoShip = protoShipsList[protoIndex]
+    let protoShip: ProtoShipData = protoShipsList[protoIndex]
     result = ShipRecord(skyX: x, skyY: y, name: (if name.len ==
       0: protoShip.name else: name), upgradeModule: -1, repairModule: -1, speed: speed)
     # Add modules to ship
-    var upgradesAmount = (if randomUpgrades: getRandom(min = 0,
+    var upgradesAmount: Natural = (if randomUpgrades: getRandom(min = 0,
         max = protoShip.modules.len) else: 0)
     for moduleIndex in protoShip.modules:
-      var module = modulesList[moduleIndex]
+      var module: BaseModuleData = modulesList[moduleIndex]
       if upgradesAmount > 0 and getRandom(min = 1, max = 100) > 50:
-        var weightGain = (module.weight / module.durability).Natural
+        var weightGain: Natural = (module.weight / module.durability).Natural
         if weightGain < 1:
           weightGain = 1
-        let roll = getRandom(min = 1, max = 100)
+        let roll: Positive = getRandom(min = 1, max = 100)
         case roll
         of 1 .. 50:
           let maxUpgradeValue: Positive = (module.durability.float * 1.5).Positive
@@ -653,11 +653,11 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
         discard
     # Set the ship crew
     for protoMember in protoShip.crew:
-      let amount = (if protoMember.maxAmount ==
+      let amount: Natural = (if protoMember.maxAmount ==
           0: protoMember.minAmount else: getRandom(min = protoMember.minAmount,
           max = protoMember.maxAmount))
       for i in 1 .. amount:
-        let member = generateMob(mobIndex = protoMember.protoIndex,
+        let member: MemberData = generateMob(mobIndex = protoMember.protoIndex,
             factionIndex = protoShip.owner)
         result.crew.add(y = member)
         block setCabin:
@@ -679,17 +679,17 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
               module.owner[0] = result.crew.len - 1
     # Set ship cargo
     for item in protoShip.cargo:
-      let amount = (if item.maxAmount > 0: getRandom(min = item.minAmount,
-          max = item.maxAmount) else: item.minAmount)
+      let amount: Natural = (if item.maxAmount > 0: getRandom(
+          min = item.minAmount, max = item.maxAmount) else: item.minAmount)
       result.cargo.add(y = InventoryData(protoIndex: item.protoIndex,
           amount: amount, name: "", durability: 100, price: 0))
     var
-      gunAssigned = false
-      amount = 0
-      hullIndex = -1
+      gunAssigned: bool = false
+      amount: Natural = 0
+      hullIndex: int = -1
     for index, module in result.modules.mpairs:
       if module.mType == ModuleType2.turret:
-        for index2, module2 in result.modules.pairs:
+        for index2, module2 in result.modules:
           if module2.mType in {ModuleType2.gun, ModuleType2.harpoonGun}:
             gunAssigned = false
             for module3 in result.modules:
@@ -729,7 +729,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
                 result.homeBase = skyMap[skyX][skyY].baseIndex
                 break basesLoop
       if result.homeBase == 0:
-        for index, base in skyBases.pairs:
+        for index, base in skyBases:
           if base.owner == protoShip.owner:
             result.homeBase = index
             break
@@ -815,7 +815,7 @@ proc getAdaShipModules(modules: array[1..75, AdaModuleData];
   for adaModule in modules:
     if adaModule.mType == -1:
       return
-    var module: ModuleData
+    var module: ModuleData = ModuleData()
     case adaModule.mType.ModuleType2
     of ModuleType2.engine:
       module = ModuleData(mType: ModuleType2.engine,
@@ -897,7 +897,7 @@ proc getAdaShipCargo(cargo: array[1..128, AdaInventoryData];
 proc setAdaShipCargo(cargo: var array[1..128, AdaInventoryData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  let nimCargo = if getPlayerShip == 1:
+  let nimCargo: seq[InventoryData] = if getPlayerShip == 1:
       playerShip.cargo
     else:
       npcShip.cargo
@@ -951,7 +951,7 @@ proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
     memberIndex: cint; getPlayerShip: cint = 1) {.raises: [], tags: [], exportc,
     contractual.} =
   ## Temporary C binding
-  let nimInventory = if getPlayerShip == 1:
+  let nimInventory: seq[InventoryData] = if getPlayerShip == 1:
       playerShip.crew[memberIndex - 1].inventory
     else:
       npcShip.crew[memberIndex - 1].inventory
@@ -967,11 +967,11 @@ proc setAdaCrewInventory(inventory: var array[1..128, AdaInventoryData];
 proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
     getPlayerShip: cint = 1) {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  let nimCrew = if getPlayerShip == 1:
+  let nimCrew: seq[MemberData] = if getPlayerShip == 1:
       playerShip.crew
     else:
       npcShip.crew
-  var index = 1
+  var index: Positive = 1
   for member in nimCrew:
     crew[index] = adaMemberFromNim(member = member)
     index.inc
@@ -980,7 +980,7 @@ proc setAdaShipCrew(crew: var array[1..128, AdaMemberData];
 proc setAdaShip(shipData: var AdaShipData; getPlayerShip: cint = 1) {.raises: [
     ], tags: [], exportc, contractual.} =
   ## Temporary C binding
-  let nimShip = if getPlayerShip == 1:
+  let nimShip: ShipRecord = if getPlayerShip == 1:
       playerShip
     else:
       npcShip
@@ -1000,21 +1000,21 @@ proc setAdaShipModules(modules: var array[1..75, AdaModuleData];
   ## Temporary C binding
   for i in modules.low..modules.high:
     modules[i] = AdaModuleData(name: "".cstring)
-  let nimModules = if getPlayerShip == 1:
+  let nimModules: seq[ModuleData] = if getPlayerShip == 1:
       playerShip.modules
     else:
       npcShip.modules
-  var index = 1
+  var index: Positive = 1
   for module in nimModules:
     var
-      adaModule = AdaModuleData(name: module.name.cstring,
+      adaModule: AdaModuleData = AdaModuleData(name: module.name.cstring,
           protoIndex: module.protoIndex.cint, weight: module.weight.cint,
           durability: module.durability.cint,
           maxDurability: module.maxDurability.cint,
           upgradeProgress: module.upgradeProgress.cint,
           upgradeAction: module.upgradeAction.ord.cint,
           mType: module.mType.ModuleType2.ord.cint)
-      secondIndex = 1
+      secondIndex: Positive = 1
     case module.mType
     of ModuleType2.engine:
       adaModule.data = [module.fuelUsage.cint, module.power.cint, (
@@ -1055,7 +1055,7 @@ proc getAdaProtoShip(index: cint; adaProtoShip: var AdaProtoShipData) {.sideEffe
       owner: "".cstring)
   if not protoShipsList.hasKey(key = index):
     return
-  let ship = try:
+  let ship: ProtoShipData = try:
       protoShipsList[index]
     except KeyError:
       return
@@ -1079,16 +1079,16 @@ proc getAdaProtoShipData(index, crew: cint; adaData: var array[15, array[3,
     data = [0.cint, 0.cint, 0.cint]
   if not protoShipsList.hasKey(key = index):
     return
-  let ship = try:
+  let ship: ProtoShipData = try:
       protoShipsList[index]
     except KeyError:
       return
   if crew == 1:
-    for index, mob in ship.crew.pairs:
+    for index, mob in ship.crew:
       adaData[index] = [mob.protoIndex.cint, mob.minAmount.cint,
           mob.maxAmount.cint]
   else:
-    for index, cargo in ship.cargo.pairs:
+    for index, cargo in ship.cargo:
       adaData[index] = [cargo.protoIndex.cint, cargo.minAmount.cint,
           cargo.maxAmount.cint]
 
@@ -1099,11 +1099,11 @@ proc getAdaProtoShipModules(index: cint; adaModules: var array[64,
     module = 0.cint
   if not protoShipsList.hasKey(key = index):
     return
-  let ship = try:
+  let ship: ProtoShipData = try:
       protoShipsList[index]
     except KeyError:
       return
-  for mIndex, module in ship.modules.pairs:
+  for mIndex, module in ship.modules:
     adaModules[mIndex] = module.cint
 
 proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
@@ -1113,11 +1113,11 @@ proc getAdaProtoShipRecipes(index: cint; adaRecipes: var array[15,
     recipe = "".cstring
   if not protoShipsList.hasKey(key = index):
     return
-  let ship = try:
+  let ship: ProtoShipData = try:
       protoShipsList[index]
     except KeyError:
       return
-  for rIndex, recipe in ship.knownRecipes.pairs:
+  for rIndex, recipe in ship.knownRecipes:
     adaRecipes[rIndex] = recipe.cstring
 
 proc damageAdaModule(inPlayerShip, moduleIndex, damage: cint;
@@ -1140,8 +1140,7 @@ proc countAdaShipWeight(inPlayerShip: cint): cint {.raises: [], tags: [],
   try:
     if inPlayerShip == 1:
       return countShipWeight(ship = playerShip).cint
-    else:
-      return countShipWeight(ship = npcShip).cint
+    return countShipWeight(ship = npcShip).cint
   except KeyError:
     return 1
 
