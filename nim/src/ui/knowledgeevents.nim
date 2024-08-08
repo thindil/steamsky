@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[game, maps, tk]
-import dialogs
+import coreui, dialogs, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -70,6 +70,39 @@ proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       text: "Show", color: "green"))
   return tclOk
 
+var
+  eventsTable: TableWidget
+  eventsIndexes: seq[Natural]
+
+proc updateEventsList*(page: Positive = 1) =
+  if eventsTable.row > 1:
+    clearTable(table = eventsTable)
+  let
+    eventsCanvas = mainPaned & ".knowledgeframe.events.canvas"
+    eventsFrame = eventsCanvas & ".frame"
+  var rows = try:
+      tclEval2(script = "grid size " & eventsFrame).split(" ")[1].parseInt
+    except:
+      showError(message = "Can't get the amount of rows.")
+      return
+  deleteWidgets(startIndex = 2, endIndex = rows - 1, frame = eventsFrame)
+  var
+    label = ""
+    row = 1
+  if eventsList.len == 0:
+    label = eventsFrame & ".noevents"
+    tclEval(script = "ttk::label " & label & " -text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350")
+    tclEval(script = "grid " & label & " -padx 10")
+    tclEval(script = "bind " & eventsCanvas & " <Configure> {" & label &
+        " configure -wraplength [expr [winfo width " & eventsCanvas & "] - 10]}")
+  else:
+    tclEval(script = "bind " & eventsCanvas & " <Configure> {}")
+    row = 2
+    eventsTable = createTable(parent = eventsFrame, headers = @["Name",
+        "Distance", "Coordinates", "Details"], scrollbar = mainPaned &
+        ".knowledgeframe.evnets.scrolly", command = "SortKnownEvents",
+        tooltipText = "Press mouse button to sort the events.")
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the known events UI
   try:
@@ -77,3 +110,13 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowEventInfo", showEventInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc updateAdaEventsList(page: cint) {.sideEffect, raises: [],
+    tags: [], exportc.} =
+  try:
+    updateEventsList(page = page.Positive)
+  except:
+    echo getCurrentExceptionMsg()
+    echo getStackTrace(getCurrentException())
