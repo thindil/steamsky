@@ -26,7 +26,7 @@ proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     baseIndex = skyMap[eventsList[eventIndex].skyX][eventsList[
         eventIndex].skyX].baseIndex
   var eventInfo = "X: {gold}" & $eventsList[eventIndex].skyX &
-      "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY
+      "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY & "{/gold}"
   case eventsList[eventIndex].eType
   of enemyShip, enemyPatrol, trader, friendlyShip:
     eventInfo.add(y = "\nShip type: {gold}" & protoShipsList[eventsList[
