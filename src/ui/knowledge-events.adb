@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1;
+-- with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Containers;
 with Ada.Strings;
@@ -33,7 +33,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases; use Bases;
 with Config;
 with CoreUI;
-with Dialogs;
+-- with Dialogs;
 with Events; use Events;
 with Game; use Game;
 with Items; use Items;
@@ -69,101 +69,103 @@ package body Knowledge.Events is
    function Show_Event_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showEventInfoCommand";
       -- ****
 
-   function Show_Event_Info_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Ada.Characters.Latin_1;
-      use Dialogs;
-      use Tiny_String;
-
-      Event_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Event_Info: Unbounded_String;
-      Base_Index: constant Extended_Base_Range :=
-        Sky_Map
-          (Get_Event(Index => Event_Index).Sky_X,
-           Get_Event(Index => Event_Index).Sky_Y)
-          .Base_Index;
-   begin
-      Event_Info :=
-        To_Unbounded_String
-          (Source =>
-             "X:{gold}" &
-             Positive'Image(Get_Event(Index => Event_Index).Sky_X) &
-             "{/gold} Y:{gold}" &
-             Positive'Image(Get_Event(Index => Event_Index).Sky_Y) &
-             "{/gold}");
-      case Get_Event(Index => Event_Index).E_Type is
-         when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
-            Append
-              (Source => Event_Info,
-               New_Item =>
-                 LF & "Ship type: {gold}" &
-                 To_String
-                   (Source =>
-                      Get_Proto_Ship
-                        (Proto_Index =>
-                           Get_Event(Index => Event_Index).Ship_Index)
-                        .Name) &
-                 "{/gold}");
-         when FULLDOCKS | ATTACKONBASE | DISEASE =>
-            Append
-              (Source => Event_Info,
-               New_Item =>
-                 LF & "Base name: {gold}" &
-                 To_String(Source => Sky_Bases(Base_Index).Name) & "{/gold}");
-         when DOUBLEPRICE =>
-            Append
-              (Source => Event_Info,
-               New_Item =>
-                 LF & "Base name: {gold}" &
-                 To_String(Source => Sky_Bases(Base_Index).Name) & "{/gold}");
-            Append
-              (Source => Event_Info,
-               New_Item =>
-                 LF & "Item: {gold}" &
-                 To_String
-                   (Source =>
-                      Get_Proto_Item
-                        (Index => Get_Event(Index => Event_Index).Item_Index)
-                        .Name) &
-                 "{/gold}");
-         when NONE | BASERECOVERY =>
-            null;
-      end case;
-      Show_Info
-        (Text => To_String(Source => Event_Info), Title => "Event information",
-         Button_1 =>
-           (Tooltip =>
-              To_Unbounded_String
-                (Source => "Set the event as the ship destination"),
-            Command =>
-              To_Unbounded_String
-                (Source =>
-                   "SetDestination2" &
-                   Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
-                   Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
-            Icon => To_Unbounded_String(Source => "destinationicon"),
-            Text => To_Unbounded_String(Source => "Target"),
-            Color => To_Unbounded_String(Source => "green")),
-         Button_2 =>
-           (Tooltip =>
-              To_Unbounded_String(Source => "Show the event on the map"),
-            Command =>
-              To_Unbounded_String
-                (Source =>
-                   "ShowOnMap" &
-                   Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
-                   Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
-            Icon => To_Unbounded_String(Source => "show2icon"),
-            Text => To_Unbounded_String(Source => "Show"),
-            Color => To_Unbounded_String(Source => "green")));
-      return TCL_OK;
-   end Show_Event_Info_Command;
+--   function Show_Event_Info_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Ada.Characters.Latin_1;
+--      use Dialogs;
+--      use Tiny_String;
+--
+--      Event_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Event_Info: Unbounded_String;
+--      Base_Index: constant Extended_Base_Range :=
+--        Sky_Map
+--          (Get_Event(Index => Event_Index).Sky_X,
+--           Get_Event(Index => Event_Index).Sky_Y)
+--          .Base_Index;
+--   begin
+--      Event_Info :=
+--        To_Unbounded_String
+--          (Source =>
+--             "X:{gold}" &
+--             Positive'Image(Get_Event(Index => Event_Index).Sky_X) &
+--             "{/gold} Y:{gold}" &
+--             Positive'Image(Get_Event(Index => Event_Index).Sky_Y) &
+--             "{/gold}");
+--      case Get_Event(Index => Event_Index).E_Type is
+--         when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
+--            Append
+--              (Source => Event_Info,
+--               New_Item =>
+--                 LF & "Ship type: {gold}" &
+--                 To_String
+--                   (Source =>
+--                      Get_Proto_Ship
+--                        (Proto_Index =>
+--                           Get_Event(Index => Event_Index).Ship_Index)
+--                        .Name) &
+--                 "{/gold}");
+--         when FULLDOCKS | ATTACKONBASE | DISEASE =>
+--            Append
+--              (Source => Event_Info,
+--               New_Item =>
+--                 LF & "Base name: {gold}" &
+--                 To_String(Source => Sky_Bases(Base_Index).Name) & "{/gold}");
+--         when DOUBLEPRICE =>
+--            Append
+--              (Source => Event_Info,
+--               New_Item =>
+--                 LF & "Base name: {gold}" &
+--                 To_String(Source => Sky_Bases(Base_Index).Name) & "{/gold}");
+--            Append
+--              (Source => Event_Info,
+--               New_Item =>
+--                 LF & "Item: {gold}" &
+--                 To_String
+--                   (Source =>
+--                      Get_Proto_Item
+--                        (Index => Get_Event(Index => Event_Index).Item_Index)
+--                        .Name) &
+--                 "{/gold}");
+--         when NONE | BASERECOVERY =>
+--            null;
+--      end case;
+--      Show_Info
+--        (Text => To_String(Source => Event_Info), Title => "Event information",
+--         Button_1 =>
+--           (Tooltip =>
+--              To_Unbounded_String
+--                (Source => "Set the event as the ship destination"),
+--            Command =>
+--              To_Unbounded_String
+--                (Source =>
+--                   "SetDestination2" &
+--                   Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
+--                   Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
+--            Icon => To_Unbounded_String(Source => "destinationicon"),
+--            Text => To_Unbounded_String(Source => "Target"),
+--            Color => To_Unbounded_String(Source => "green")),
+--         Button_2 =>
+--           (Tooltip =>
+--              To_Unbounded_String(Source => "Show the event on the map"),
+--            Command =>
+--              To_Unbounded_String
+--                (Source =>
+--                   "ShowOnMap" &
+--                   Map_X_Range'Image(Get_Event(Index => Event_Index).Sky_X) &
+--                   Map_Y_Range'Image(Get_Event(Index => Event_Index).Sky_Y)),
+--            Icon => To_Unbounded_String(Source => "show2icon"),
+--            Text => To_Unbounded_String(Source => "Show"),
+--            Color => To_Unbounded_String(Source => "green")));
+--      return TCL_OK;
+--   end Show_Event_Info_Command;
 
    -- ****o* KEvents/KEvents.Show_Events_Command
    -- FUNCTION
