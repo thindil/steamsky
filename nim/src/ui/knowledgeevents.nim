@@ -20,23 +20,32 @@ import ../[game, maps, tk]
 import dialogs
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    eventIndex = ($argv[1]).parseInt - 1
+    eventIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the event index.")
     baseIndex = skyMap[eventsList[eventIndex].skyX][eventsList[
         eventIndex].skyY].baseIndex
   var eventInfo = "X: {gold}" & $eventsList[eventIndex].skyX &
       "{/gold} Y: {gold}" & $eventsList[eventIndex].skyY & "{/gold}"
   case eventsList[eventIndex].eType
   of enemyShip, enemyPatrol, trader, friendlyShip:
-    eventInfo.add(y = "\nShip type: {gold}" & protoShipsList[eventsList[
-        eventIndex].shipIndex].name & "{/gold}")
+    try:
+      eventInfo.add(y = "\nShip type: {gold}" & protoShipsList[eventsList[
+          eventIndex].shipIndex].name & "{/gold}")
+    except:
+      return showError(message = "Can't get the ship info")
   of fullDocks, attackOnBase, disease:
     eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
   of doublePrice:
     eventInfo.add(y = "\nBase name: {gold}" & skyBases[baseIndex].name & "{/gold}")
-    eventInfo.add(y = "\nItem: {gold}" & itemsList[eventsList[
-        eventIndex].itemIndex].name & "{/gold}")
+    try:
+      eventInfo.add(y = "\nItem: {gold}" & itemsList[eventsList[
+          eventIndex].itemIndex].name & "{/gold}")
+    except:
+      return showError(message = "Can't get the item info")
   of none, baseRecovery:
     discard
   showInfo(text = eventInfo, title = "Event information",
