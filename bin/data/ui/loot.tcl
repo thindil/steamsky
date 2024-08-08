@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,10 @@ SetScrollbarBindings $lootframe.options.typelabel \
 grid [ttk::combobox $lootframe.options.type -state readonly] -column 1 -row 0
 bind $lootframe.options.type <<ComboboxSelected>> \
    {ShowLoot [$lootframe.options.type get]}
-grid [ttk::label $lootframe.options.playerinfo -wraplength 300] -sticky nw \
+grid [ttk::frame $lootframe.options.info] -sticky nw \
    -columnspan 2
-SetScrollbarBindings $lootframe.options.playerinfo \
+grid [ttk::label $lootframe.options.info.playerinfo -wraplength 300]
+grid [ttk::label $lootframe.options.info.playerinfo2 -wraplength 300] \
+   -row 0 -column 1
+SetScrollbarBindings $lootframe.options.info \
    .gameframe.paned.tradeframe.scrolly

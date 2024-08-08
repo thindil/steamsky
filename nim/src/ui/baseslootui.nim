@@ -212,7 +212,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   if freeSpace < 0:
     freeSpace = 0
   let tradeInfo = "Free cargo space: " & $(freeSpace) & " kg."
-  label = lootCanvas & ".loot.options.playerinfo"
+  label = lootCanvas & ".loot.options.info.playerinfo"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   tclEval(script = lootCanvas & " configure -height [expr " & tclEval2(
