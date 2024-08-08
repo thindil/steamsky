@@ -32,7 +32,7 @@ with CoreUI; use CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with Events;
-with Game; use Game;
+with Game;
 with Items;
 with Maps;
 with Maps.UI; use Maps.UI;
@@ -129,6 +129,7 @@ package body Utils.UI is
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Bases;
       use Crew;
+      use Game;
       use Maps;
       use MainMenu;
       use Ships.Crew;
