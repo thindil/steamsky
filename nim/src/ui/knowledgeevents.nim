@@ -21,6 +21,18 @@ import dialogs
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show information about the selected event
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowEventInfo eventindex
+  ## EventIndex is the index of the event to show
   let
     eventIndex = try:
         ($argv[1]).parseInt - 1
