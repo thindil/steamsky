@@ -17,20 +17,20 @@ with Ada.Containers.Generic_Array_Sort;
 with Ada.Containers;
 with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.String_Split;
+-- with GNAT.String_Split;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases; use Bases;
-with Config;
+-- with Config;
 with CoreUI;
 with Events; use Events;
 with Game; use Game;
@@ -348,58 +348,63 @@ package body Knowledge.Events is
    end Add_Knowledge_Events_Commands;
 
    procedure Update_Events_List(Page: Positive := 1) is
-      use GNAT.String_Split;
+--      use GNAT.String_Split;
       use Tcl.Tk.Ada;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkFrame;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Config;
+--      use Config;
       use CoreUI;
-      use Tiny_String;
+--      use Tiny_String;
 
       Events_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Main_Paned & ".knowledgeframe.events.canvas");
       Events_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Events_Canvas & ".frame");
-      Tokens: Slice_Set;
-      Rows: Natural;
-      Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
-      Row: Positive := 1;
+--      Tokens: Slice_Set;
+--      Rows: Natural;
+--      Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
+--      Row: Positive := 1;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Start_Row: constant Positive :=
-        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+--      Start_Row: constant Positive :=
+--       ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Current_Row: Positive := 1;
-      Color: Unbounded_String := Null_Unbounded_String;
+--      Current_Row: Positive := 1;
+--      Color: Unbounded_String := Null_Unbounded_String;
+      procedure Update_Ada_Events_List(P: Positive) with
+         Convention => C,
+         Import => True,
+         External_Name => "updateAdaEventsList";
    begin
-      Create
-        (S => Tokens,
-         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Events_Frame),
-         Separators => " ");
-      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      if Events_Table.Row > 1 then
-         Clear_Table(Table => Events_Table);
-      end if;
-      Delete_Widgets
-        (Start_Index => 1, End_Index => Rows - 1, Frame => Events_Frame);
-      if Get_Events_Amount = 0 then
-         Label :=
-           Create
-             (pathName => Events_Frame & ".noevents",
-              options =>
-                "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
-         Bind
-           (Widgt => Events_Canvas, Sequence => "<Configure>",
-            Script =>
-              "{" & Label & " configure -wraplength [expr [winfo width " &
-              Events_Canvas & "] - 10]}");
-      else
-         Unbind(Widgt => Events_Canvas, Sequence => "<Configure>");
-         Row := 2;
+      Update_Ada_Events_List(P => Page);
+--      Create
+--        (S => Tokens,
+--         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Events_Frame),
+--         Separators => " ");
+--      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      if Events_Table.Row > 1 then
+--         Clear_Table(Table => Events_Table);
+--      end if;
+--      Delete_Widgets
+--        (Start_Index => 1, End_Index => Rows - 1, Frame => Events_Frame);
+--      if Get_Events_Amount = 0 then
+--         Label :=
+--           Create
+--             (pathName => Events_Frame & ".noevents",
+--              options =>
+--                "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
+--         Bind
+--           (Widgt => Events_Canvas, Sequence => "<Configure>",
+--            Script =>
+--              "{" & Label & " configure -wraplength [expr [winfo width " &
+--              Events_Canvas & "] - 10]}");
+      if Get_Events_Amount > 0 then
+--         Unbind(Widgt => Events_Canvas, Sequence => "<Configure>");
+--         Row := 2;
          Events_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Events_Frame),
@@ -413,244 +418,244 @@ package body Knowledge.Events is
                   (pathName => Main_Paned & ".knowledgeframe.events.scrolly"),
               Command => "SortKnownEvents",
               Tooltip_Text => "Press mouse button to sort the events.");
-         if Natural(Events_Indexes.Length) /= Get_Events_Amount then
-            Events_Indexes.Clear;
-            Fill_Event_Indexes_Loop :
-            for I in 1 .. Get_Events_Amount loop
-               Events_Indexes.Append(New_Item => I);
-            end loop Fill_Event_Indexes_Loop;
-         end if;
-         Load_Known_Events_Loop :
-         for Event of Events_Indexes loop
-            if Current_Row < Start_Row then
-               Current_Row := Current_Row + 1;
-               goto End_Of_Loop;
-            end if;
-            case Get_Event(Index => Event).E_Type is
-               when ENEMYSHIP =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "red"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Enemy ship spotted",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when FULLDOCKS =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "cyan"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Full docks in base",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when ATTACKONBASE =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "red"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Base is under attack",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when DISEASE =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "yellow3"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Disease in base",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when ENEMYPATROL =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "red3"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Enemy patrol",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when DOUBLEPRICE =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "lime"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Double price in base",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when TRADER =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "green"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Friendly trader spotted",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when FRIENDLYSHIP =>
-                  Color :=
-                    (if
-                       Get_Event(Index => Event).Sky_X =
-                       Player_Ship.Destination_X and
-                       Get_Event(Index => Event).Sky_Y =
-                         Player_Ship.Destination_Y
-                     then To_Unbounded_String(Source => "yellow")
-                     else To_Unbounded_String(Source => "green2"));
-                  Add_Button
-                    (Table => Events_Table, Text => "Friendly ship spotted",
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
-                     Column => 1, Color => To_String(Source => Color));
-               when NONE | BASERECOVERY =>
-                  null;
-            end case;
-            Add_Button
-              (Table => Events_Table,
-               Text =>
-                 Natural'Image
-                   (Count_Distance
-                      (Destination_X => Get_Event(Index => Event).Sky_X,
-                       Destination_Y => Get_Event(Index => Event).Sky_Y)),
-               Tooltip => "The distance to the event",
-               Command => "ShowEventInfo" & Positive'Image(Event), Column => 2,
-               Color => To_String(Source => Color));
-            Add_Button
-              (Table => Events_Table,
-               Text =>
-                 "X:" & Natural'Image(Get_Event(Index => Event).Sky_X) &
-                 " Y:" & Natural'Image(Get_Event(Index => Event).Sky_Y),
-               Tooltip => "The coordinates of the event on the map",
-               Command => "ShowEventInfo" & Positive'Image(Event), Column => 3,
-               Color => To_String(Source => Color));
-            case Get_Event(Index => Event).E_Type is
-               when DOUBLEPRICE =>
-                  Add_Button
-                    (Table => Events_Table,
-                     Text =>
-                       To_String
-                         (Source =>
-                            Get_Proto_Item
-                              (Index => Get_Event(Index => Event).Item_Index)
-                              .Name) &
-                       " in " &
-                       To_String
-                         (Source =>
-                            Sky_Bases
-                              (Sky_Map
-                                 (Get_Event(Index => Event).Sky_X,
-                                  Get_Event(Index => Event).Sky_Y)
-                                 .Base_Index)
-                              .Name),
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Event),
-                     Column => 4, New_Row => True,
-                     Color => To_String(Source => Color));
-               when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
-                  Add_Button
-                    (Table => Events_Table,
-                     Text =>
-                       To_String
-                         (Source =>
-                            Sky_Bases
-                              (Sky_Map
-                                 (Get_Event(Index => Event).Sky_X,
-                                  Get_Event(Index => Event).Sky_Y)
-                                 .Base_Index)
-                              .Name),
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Event),
-                     Column => 4, New_Row => True,
-                     Color => To_String(Source => Color));
-               when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
-                  Add_Button
-                    (Table => Events_Table,
-                     Text =>
-                       To_String
-                         (Source =>
-                            Get_Proto_Ship
-                              (Proto_Index =>
-                                 Get_Event(Index => Event).Ship_Index)
-                              .Name),
-                     Tooltip => "Show the event's details",
-                     Command => "ShowEventInfo" & Positive'Image(Event),
-                     Column => 4, New_Row => True,
-                     Color => To_String(Source => Color));
-               when NONE | BASERECOVERY =>
-                  null;
-            end case;
-            Row := Row + 1;
-            exit Load_Known_Events_Loop when Events_Table.Row =
-              Get_Integer_Setting(Name => "listsLimit") + 1;
-            <<End_Of_Loop>>
-         end loop Load_Known_Events_Loop;
-         if Page > 1 then
-            if Events_Table.Row <
-              Get_Integer_Setting(Name => "listsLimit") + 1 then
-               Add_Pagination
-                 (Table => Events_Table,
-                  Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
-                  Next_Command => "");
-            else
-               Add_Pagination
-                 (Table => Events_Table,
-                  Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
-                  Next_Command => "ShowEvents" & Positive'Image(Page + 1));
-            end if;
-         elsif Events_Table.Row >
-           Get_Integer_Setting(Name => "listsLimit") then
-            Add_Pagination
-              (Table => Events_Table, Previous_Command => "",
-               Next_Command => "ShowEvents" & Positive'Image(Page + 1));
-         end if;
-         Update_Table(Table => Events_Table);
+--         if Natural(Events_Indexes.Length) /= Get_Events_Amount then
+--            Events_Indexes.Clear;
+--            Fill_Event_Indexes_Loop :
+--            for I in 1 .. Get_Events_Amount loop
+--               Events_Indexes.Append(New_Item => I);
+--            end loop Fill_Event_Indexes_Loop;
+--         end if;
+--         Load_Known_Events_Loop :
+--         for Event of Events_Indexes loop
+--            if Current_Row < Start_Row then
+--               Current_Row := Current_Row + 1;
+--               goto End_Of_Loop;
+--            end if;
+--            case Get_Event(Index => Event).E_Type is
+--               when ENEMYSHIP =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "red"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Enemy ship spotted",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when FULLDOCKS =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "cyan"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Full docks in base",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when ATTACKONBASE =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "red"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Base is under attack",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when DISEASE =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "yellow3"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Disease in base",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when ENEMYPATROL =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "red3"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Enemy patrol",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when DOUBLEPRICE =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "lime"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Double price in base",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when TRADER =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "green"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Friendly trader spotted",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when FRIENDLYSHIP =>
+--                  Color :=
+--                    (if
+--                       Get_Event(Index => Event).Sky_X =
+--                       Player_Ship.Destination_X and
+--                       Get_Event(Index => Event).Sky_Y =
+--                         Player_Ship.Destination_Y
+--                     then To_Unbounded_String(Source => "yellow")
+--                     else To_Unbounded_String(Source => "green2"));
+--                  Add_Button
+--                    (Table => Events_Table, Text => "Friendly ship spotted",
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Row - 1),
+--                     Column => 1, Color => To_String(Source => Color));
+--               when NONE | BASERECOVERY =>
+--                  null;
+--            end case;
+--            Add_Button
+--              (Table => Events_Table,
+--               Text =>
+--                 Natural'Image
+--                   (Count_Distance
+--                      (Destination_X => Get_Event(Index => Event).Sky_X,
+--                       Destination_Y => Get_Event(Index => Event).Sky_Y)),
+--               Tooltip => "The distance to the event",
+--               Command => "ShowEventInfo" & Positive'Image(Event), Column => 2,
+--               Color => To_String(Source => Color));
+--            Add_Button
+--              (Table => Events_Table,
+--               Text =>
+--                 "X:" & Natural'Image(Get_Event(Index => Event).Sky_X) &
+--                 " Y:" & Natural'Image(Get_Event(Index => Event).Sky_Y),
+--               Tooltip => "The coordinates of the event on the map",
+--               Command => "ShowEventInfo" & Positive'Image(Event), Column => 3,
+--               Color => To_String(Source => Color));
+--            case Get_Event(Index => Event).E_Type is
+--               when DOUBLEPRICE =>
+--                  Add_Button
+--                    (Table => Events_Table,
+--                     Text =>
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Item
+--                              (Index => Get_Event(Index => Event).Item_Index)
+--                              .Name) &
+--                       " in " &
+--                       To_String
+--                         (Source =>
+--                            Sky_Bases
+--                              (Sky_Map
+--                                 (Get_Event(Index => Event).Sky_X,
+--                                  Get_Event(Index => Event).Sky_Y)
+--                                 .Base_Index)
+--                              .Name),
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Event),
+--                     Column => 4, New_Row => True,
+--                     Color => To_String(Source => Color));
+--               when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
+--                  Add_Button
+--                    (Table => Events_Table,
+--                     Text =>
+--                       To_String
+--                         (Source =>
+--                            Sky_Bases
+--                              (Sky_Map
+--                                 (Get_Event(Index => Event).Sky_X,
+--                                  Get_Event(Index => Event).Sky_Y)
+--                                 .Base_Index)
+--                              .Name),
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Event),
+--                     Column => 4, New_Row => True,
+--                     Color => To_String(Source => Color));
+--               when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
+--                  Add_Button
+--                    (Table => Events_Table,
+--                     Text =>
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Ship
+--                              (Proto_Index =>
+--                                 Get_Event(Index => Event).Ship_Index)
+--                              .Name),
+--                     Tooltip => "Show the event's details",
+--                     Command => "ShowEventInfo" & Positive'Image(Event),
+--                     Column => 4, New_Row => True,
+--                     Color => To_String(Source => Color));
+--               when NONE | BASERECOVERY =>
+--                  null;
+--            end case;
+--            Row := Row + 1;
+--            exit Load_Known_Events_Loop when Events_Table.Row =
+--              Get_Integer_Setting(Name => "listsLimit") + 1;
+--            <<End_Of_Loop>>
+--         end loop Load_Known_Events_Loop;
+--         if Page > 1 then
+--            if Events_Table.Row <
+--              Get_Integer_Setting(Name => "listsLimit") + 1 then
+--               Add_Pagination
+--                 (Table => Events_Table,
+--                  Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
+--                  Next_Command => "");
+--            else
+--               Add_Pagination
+--                 (Table => Events_Table,
+--                  Previous_Command => "ShowEvents" & Positive'Image(Page - 1),
+--                  Next_Command => "ShowEvents" & Positive'Image(Page + 1));
+--            end if;
+--         elsif Events_Table.Row >
+--           Get_Integer_Setting(Name => "listsLimit") then
+--            Add_Pagination
+--              (Table => Events_Table, Previous_Command => "",
+--               Next_Command => "ShowEvents" & Positive'Image(Page + 1));
+--         end if;
+--         Update_Table(Table => Events_Table);
       end if;
       --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      configure
-        (Widgt => Events_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Events_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Events_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Events_Canvas, Fraction => "0.0");
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      configure
+--        (Widgt => Events_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Events_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Events_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Events_Canvas, Fraction => "0.0");
    end Update_Events_List;
 
 end Knowledge.Events;
