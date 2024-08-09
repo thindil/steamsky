@@ -38,8 +38,9 @@ bind $lootframe.options.type <<ComboboxSelected>> \
    {ShowLoot [$lootframe.options.type get]}
 grid [ttk::frame $lootframe.options.info] -sticky nw \
    -columnspan 2
-grid [ttk::label $lootframe.options.info.playerinfo -wraplength 300]
-grid [ttk::label $lootframe.options.info.playerinfo2 -wraplength 300] \
-   -row 0 -column 1
+grid [ttk::label $lootframe.options.info.playerinfo -wraplength 300 \
+   -text {Free cargo space: }]
+grid [ttk::label $lootframe.options.info.playerinfo2 -wraplength 300 \
+   -style Golden.TLabel] -row 0 -column 1
 SetScrollbarBindings $lootframe.options.info \
    .gameframe.paned.tradeframe.scrolly
