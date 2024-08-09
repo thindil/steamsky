@@ -226,6 +226,18 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
 proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     RootEffect], exportc.} =
+  ## Show the list of known events to the player
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowEvents ?startindex?
+  ## Page parameter is a page number which will be show
   if argc == 2:
     try:
       updateEventsList(page = ($argv[1]).parseInt)
