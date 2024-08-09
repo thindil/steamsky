@@ -142,28 +142,6 @@ package Dialogs is
    procedure Show_Message
      (Text: String; Parent_Frame: String := ".gameframe"; Title: String) with
       Pre => Text'Length > 0 and Parent_Frame'Length > 0;
-   -- ****
-
-      -- ****f* Dialogs/Dialogs.Show_Info
-      -- FUNCTION
-      -- Show the selected info to a player
-      -- PARAMETERS
-      -- Text        - Text of info to show
-      -- Parent_Name - Name of the parent widget. If empty, then the main game
-      --               window will be used as parent for widget. Default value
-      --               is .gameframe
-      -- Title       - The text show in the dialog header.
-      -- Button_1    - The settings for the first optional button. If empty, the
-      --               button will not show. Default value is empty.
-      -- Button_2    - The setting for the second optional button. If empty,
-      --               the button will not show. Default value is empty.
-      -- HISTORY
-      -- 8.2 - Added parameter Wrap_Length
-      -- SOURCE
-   procedure Show_Info
-     (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1, Button_2: Button_Settings := Empty_Button_Settings) with
-      Pre => Text'Length > 0 and Parent_Name'Length > 0;
       -- ****
 
       -- ****f* Dialogs/Dialogs.Show_Question

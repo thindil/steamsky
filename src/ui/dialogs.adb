@@ -601,44 +601,6 @@ package body Dialogs is
            To_Unbounded_String(Source => Value(Item => Local_Timer)));
    end Show_Message;
 
-   procedure Show_Info
-     (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1, Button_2: Button_Settings := Empty_Button_Settings) is
-
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Button_Settings is record
-         Text: chars_ptr;
-         Command: chars_ptr;
-         Icon: chars_ptr;
-         Tooltip: chars_ptr;
-         Color: chars_ptr;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      Nim_Button_1: constant Nim_Button_Settings :=
-        (Text => New_String(Str => To_String(Source => Button_1.Text)),
-         Command => New_String(Str => To_String(Source => Button_1.Command)),
-         Icon => New_String(Str => To_String(Source => Button_1.Icon)),
-         Tooltip => New_String(Str => To_String(Source => Button_1.Tooltip)),
-         Color => New_String(Str => To_String(Source => Button_1.Color)));
-      Nim_Button_2: constant Nim_Button_Settings :=
-        (Text => New_String(Str => To_String(Source => Button_2.Text)),
-         Command => New_String(Str => To_String(Source => Button_2.Command)),
-         Icon => New_String(Str => To_String(Source => Button_2.Icon)),
-         Tooltip => New_String(Str => To_String(Source => Button_2.Tooltip)),
-         Color => New_String(Str => To_String(Source => Button_2.Color)));
-      procedure Show_Ada_Info
-        (Te, P_Name, Ti: chars_ptr; B_1, B_2: Nim_Button_Settings) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaInfo";
-   begin
-      Show_Ada_Info
-        (Te => New_String(Str => Text),
-         P_Name => New_String(Str => Parent_Name),
-         Ti => New_String(Str => Title), B_1 => Nim_Button_1,
-         B_2 => Nim_Button_2);
-   end Show_Info;
-
    procedure Show_Question
      (Question, Result: String; In_Game: Boolean := True) is
       procedure Show_Ada_Question(Q, R: chars_ptr; I_Game: Integer) with
