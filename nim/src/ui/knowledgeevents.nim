@@ -127,8 +127,55 @@ proc updateEventsList*(page: Positive = 1) =
         addButton(table = eventsTable, text = "Full docks in base",
             tooltip = "Show the event's details", command = "ShowEventInfo " &
             $(row - 1), column = 1, color = color)
-      else:
+      of attackOnBase:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "red")
+        addButton(table = eventsTable, text = "Base is under attack",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      of disease:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "yellow3")
+        addButton(table = eventsTable, text = "Disease in base",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      of enemyPatrol:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "red3")
+        addButton(table = eventsTable, text = "Enemy patrol",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      of doublePrice:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "lime")
+        addButton(table = eventsTable, text = "Double price in base",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      of trader:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "green")
+        addButton(table = eventsTable, text = "Friendly trader spotted",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      of friendlyShip:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "green")
+        addButton(table = eventsTable, text = "Friendly ship spotted",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      of none, baseRecovery:
         discard
+      addButton(table = eventsTable, text = $countDistance(
+          destinationX = eventsList[event].skyX, destinationY = eventsList[
+          event].skyY), tooltip = "The distance to the event",
+          command = "ShowEventInfo " & $(row - 1), column = 1, color = color)
+      addButton(table = eventsTable, text = "X: " & $eventsList[event].skyX &
+          " Y: " & $eventsList[event].skyY,
+          tooltip = "The coordinates of the event on the map",
+          command = "ShowEventInfo " & $(row - 1), column = 1, color = color)
+      case eventsList[event].eType
+      of doublePrice:
+        addButton(table = eventsTable, text = itemsList[eventsList[event].itemIndex].name & " in " & skyBases[skyMap[eventsList[event].skyX][eventsList[event].skyY].baseIndex].name, tooltip = "Show the event's details", command = "ShowEventInfo " & $(row - 1), column = 1, color = color)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the known events UI
