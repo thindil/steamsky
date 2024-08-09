@@ -399,8 +399,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         for item in ship.cargo:
           if itemsList[item.protoIndex].itemType == itemsTypesList[
               itemTypeIndex - 1]:
-            ship.combatValue = ship.combatValue + (itemsList[
-                item.protoIndex].value[1] * multiple)
+            ship.combatValue += (itemsList[item.protoIndex].value[1] * multiple)
 
       for moduleIndex in ship.modules:
         try:
@@ -412,9 +411,9 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             if module.mType == ModuleType.gun:
               countAmmoValue(itemTypeIndex = module.value, multiple = 10)
           of ModuleType.armor:
-            ship.combatValue = ship.combatValue + module.durability
+            ship.combatValue += module.durability
           of ModuleType.harpoonGun:
-            ship.combatValue = ship.combatValue + module.durability + (
+            ship.combatValue += module.durability + (
                 module.maxValue * 5)
             countAmmoValue(itemTypeIndex = module.value, multiple = 5)
           else:
@@ -468,8 +467,7 @@ proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
         ship.modules[moduleIndex].durability
       else:
         damage
-    ship.modules[moduleIndex].durability = ship.modules[
-        moduleIndex].durability - realDamage
+    ship.modules[moduleIndex].durability -= realDamage
     if ship.modules[moduleIndex].durability == 0:
       case modulesList[ship.modules[moduleIndex].protoIndex].mType
       of ModuleType.hull, ModuleType.engine:
@@ -501,9 +499,9 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
   ##
   ## Returns the total weight of the ship
   for module in ship.modules:
-    result = result + module.weight
+    result += module.weight
   for item in ship.cargo:
-    result = result + (item.amount * itemsList[item.protoIndex].weight)
+    result += (item.amount * itemsList[item.protoIndex].weight)
 
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
     speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord {.sideEffect,
@@ -541,20 +539,20 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
           let maxUpgradeValue: Positive = (module.durability.float * 1.5).Positive
           module.durability = getRandom(min = module.durability,
               max = maxUpgradeValue)
-          module.weight = module.weight + (weightGain * module.durability -
+          module.weight += (weightGain * module.durability -
               modulesList[moduleIndex].durability)
         of 51 .. 75:
           if modulesList[moduleIndex].mType == ModuleType.engine:
-            weightGain = weightGain * 10
+            weightGain *= 10
             let maxUpgradeValue: Positive = (module.value.float / 2.0).Positive
             module.value = getRandom(min = maxUpgradeValue, max = modulesList[
                 moduleIndex].value)
-            module.weight = module.weight + (weightGain * modulesList[
+            module.weight += (weightGain * modulesList[
                 moduleIndex].value - module.value)
         of 76 .. 100:
           case modulesList[moduleIndex].mType
           of ModuleType.hull:
-            weightGain = weightGain * 10
+            weightGain *= 10
           of ModuleType.engine:
             weightGain = 1
           else:
@@ -565,7 +563,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
             let maxUpgradeValue: Positive = (module.maxValue.float * 1.5).Positive
             module.maxValue = getRandom(min = module.maxValue,
                 max = maxUpgradeValue)
-            module.weight = module.weight + (weightGain * module.maxValue -
+            module.weight += (weightGain * module.maxValue -
                 modulesList[moduleIndex].maxValue)
         else:
           discard
@@ -702,7 +700,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
         hullIndex = index
       if modulesList[module.protoIndex].mType notin {ModuleType.gun,
           ModuleType.harpoonGun, ModuleType.armor, ModuleType.hull}:
-        amount = amount + modulesList[module.protoIndex].size
+        amount += modulesList[module.protoIndex].size
     result.modules[hullIndex].installedModules = amount
     # Set known crafting recipes
     for recipe in protoShip.knownRecipes:
