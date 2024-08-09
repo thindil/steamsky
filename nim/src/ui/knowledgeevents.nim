@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, maps, tk]
+import ../[config, game, maps, tk]
 import coreui, dialogs, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -102,6 +102,33 @@ proc updateEventsList*(page: Positive = 1) =
         "Distance", "Coordinates", "Details"], scrollbar = mainPaned &
         ".knowledgeframe.evnets.scrolly", command = "SortKnownEvents",
         tooltipText = "Press mouse button to sort the events.")
+    if eventsIndexes.len != eventsList.len:
+      eventsIndexes = @[]
+      for index, _ in eventsList:
+        eventsIndexes.add(y = index)
+    let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+    var
+      currentRow = 1
+      color = ""
+    for event in eventsIndexes:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      case eventsList[event].eType
+      of enemyShip:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "red")
+        addButton(table = eventsTable, text = "Enemy ship spotted",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      of fullDocks:
+        color = (if eventsList[event].skyX == playerShip.skyX and eventsList[
+            event].skyY == playerShip.skyY: "yellow" else: "cyan")
+        addButton(table = eventsTable, text = "Full docks in base",
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 1, color = color)
+      else:
+        discard
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the known events UI
