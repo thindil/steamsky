@@ -74,7 +74,7 @@ var
   eventsTable: TableWidget
   eventsIndexes: seq[Natural]
 
-proc updateEventsList*(page: Positive = 1) =
+proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
   if eventsTable.row > 1:
     clearTable(table = eventsTable)
   let
@@ -175,20 +175,29 @@ proc updateEventsList*(page: Positive = 1) =
           command = "ShowEventInfo " & $(row - 1), column = 3, color = color)
       case eventsList[event].eType
       of doublePrice:
-        addButton(table = eventsTable, text = itemsList[eventsList[
-            event].itemIndex].name & " in " & skyBases[skyMap[eventsList[
-            event].skyX][eventsList[event].skyY].baseIndex].name,
-            tooltip = "Show the event's details", command = "ShowEventInfo " &
-            $(row - 1), column = 4, newRow = true, color = color)
+        try:
+          addButton(table = eventsTable, text = itemsList[eventsList[
+              event].itemIndex].name & " in " & skyBases[skyMap[eventsList[
+              event].skyX][eventsList[event].skyY].baseIndex].name,
+              tooltip = "Show the event's details", command = "ShowEventInfo " &
+              $(row - 1), column = 4, newRow = true, color = color)
+        except:
+          showError(message = "Can't add item info button.")
+          return
       of attackOnBase, disease, fullDocks, enemyPatrol:
         addButton(table = eventsTable, text = skyBases[skyMap[eventsList[
             event].skyX][eventsList[event].skyY].baseIndex].name,
             tooltip = "Show the event's details", command = "ShowEventInfo " &
             $(row - 1), column = 4, newRow = true, color = color)
       of enemyShip, trader, friendlyShip:
-        addButton(table = eventsTable, text = protoShipsList[eventsList[
-            event].shipIndex].name, tooltip = "Show the event's details",
-            command = "ShowEventInfo " & $(row - 1), column = 4, newRow = true, color = color)
+        try:
+          addButton(table = eventsTable, text = protoShipsList[eventsList[
+              event].shipIndex].name, tooltip = "Show the event's details",
+              command = "ShowEventInfo " & $(row - 1), column = 4,
+                  newRow = true, color = color)
+        except:
+          showError(message = "Can't add ship info button.")
+          return
       of none, baseRecovery:
         discard
       row.inc
