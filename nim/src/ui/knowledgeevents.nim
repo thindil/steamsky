@@ -223,11 +223,21 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
   tclEval(script = eventsCanvas & " xview moveto 0.0")
   tclEval(script = eventsCanvas & " yview moveto 0.0")
 
+proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  if argc == 2:
+    updateEventsList(page = ($argv[1]).parseInt)
+  else:
+    updateEventsList()
+  tclSetResult(value = "1")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the known events UI
   try:
     discard
 #    addCommand("ShowEventInfo", showEventInfoCommand)
+#    addCommand("ShowEvents", showEventsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
