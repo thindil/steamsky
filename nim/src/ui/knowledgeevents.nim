@@ -224,9 +224,13 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
   tclEval(script = eventsCanvas & " yview moveto 0.0")
 
 proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   if argc == 2:
-    updateEventsList(page = ($argv[1]).parseInt)
+    try:
+      updateEventsList(page = ($argv[1]).parseInt)
+    except:
+      return showError(message = "Can't show the list of known events.")
   else:
     updateEventsList()
   tclSetResult(value = "1")
