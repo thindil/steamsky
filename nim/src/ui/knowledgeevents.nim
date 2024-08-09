@@ -168,14 +168,48 @@ proc updateEventsList*(page: Positive = 1) =
       addButton(table = eventsTable, text = $countDistance(
           destinationX = eventsList[event].skyX, destinationY = eventsList[
           event].skyY), tooltip = "The distance to the event",
-          command = "ShowEventInfo " & $(row - 1), column = 1, color = color)
+          command = "ShowEventInfo " & $(row - 1), column = 2, color = color)
       addButton(table = eventsTable, text = "X: " & $eventsList[event].skyX &
           " Y: " & $eventsList[event].skyY,
           tooltip = "The coordinates of the event on the map",
-          command = "ShowEventInfo " & $(row - 1), column = 1, color = color)
+          command = "ShowEventInfo " & $(row - 1), column = 3, color = color)
       case eventsList[event].eType
       of doublePrice:
-        addButton(table = eventsTable, text = itemsList[eventsList[event].itemIndex].name & " in " & skyBases[skyMap[eventsList[event].skyX][eventsList[event].skyY].baseIndex].name, tooltip = "Show the event's details", command = "ShowEventInfo " & $(row - 1), column = 1, color = color)
+        addButton(table = eventsTable, text = itemsList[eventsList[
+            event].itemIndex].name & " in " & skyBases[skyMap[eventsList[
+            event].skyX][eventsList[event].skyY].baseIndex].name,
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 4, newRow = true, color = color)
+      of attackOnBase, disease, fullDocks, enemyPatrol:
+        addButton(table = eventsTable, text = skyBases[skyMap[eventsList[
+            event].skyX][eventsList[event].skyY].baseIndex].name,
+            tooltip = "Show the event's details", command = "ShowEventInfo " &
+            $(row - 1), column = 4, newRow = true, color = color)
+      of enemyShip, trader, friendlyShip:
+        addButton(table = eventsTable, text = protoShipsList[eventsList[
+            event].shipIndex].name, tooltip = "Show the event's details",
+            command = "ShowEventInfo " & $(row - 1), column = 4, newRow = true, color = color)
+      of none, baseRecovery:
+        discard
+      row.inc
+      if eventsTable.row == gameSettings.listsLimit + 1:
+        break
+    if page > 1:
+      if eventsTable.row < gameSettings.listsLimit + 1:
+        addPagination(table = eventsTable, previousCommand = "ShowEvents " & $(
+            page - 1), nextCommand = "")
+      else:
+        addPagination(table = eventsTable, previousCommand = "ShowEvents " & $(
+            page - 1), nextCommand = "ShowEvents " & $(page + 1))
+    elif eventsTable.row > gameSettings.listsLimit:
+      addPagination(table = eventsTable, previousCommand = "",
+          nextCommand = "ShowEvents " & $(page + 1))
+    updateTable(table = eventsTable)
+  tclEval(script = "update")
+  tclEval(script = eventsCanvas & " configure -scrollregion [list " & tclEval2(
+      script = eventsCanvas & " bbox all") & "]")
+  tclEval(script = eventsCanvas & " xview moveto 0.0")
+  tclEval(script = eventsCanvas & " yview moveto 0.0")
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the known events UI
@@ -188,7 +222,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 # Temporary code for interfacing with Ada
 
 proc updateAdaEventsList(page: cint) {.sideEffect, raises: [],
-    tags: [], exportc.} =
+    tags: [RootEffect], exportc.} =
   try:
     updateEventsList(page = page.Positive)
   except:
