@@ -75,6 +75,9 @@ var
   eventsIndexes: seq[Natural]
 
 proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Update and show list of known events
+  ##
+  ## * page     - the current page of the events' list to show
   if eventsTable.row > 1:
     clearTable(table = eventsTable)
   let
