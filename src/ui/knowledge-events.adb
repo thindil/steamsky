@@ -20,22 +20,21 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
--- with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Bases; use Bases;
+with Bases;
 with CoreUI;
 with Events; use Events;
 with Game; use Game;
-with Items; use Items;
-with Maps; use Maps;
-with Ships; use Ships;
+with Items;
+with Maps;
+with Ships;
 with Table; use Table;
 with Utils;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Knowledge.Events is
 
@@ -90,21 +89,6 @@ package body Knowledge.Events is
       External_Name => "showEventsCommand";
       -- ****
 
---   function Show_Events_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data);
---   begin
---      if Argc = 2 then
---         Update_Events_List
---           (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
---      else
---         Update_Events_List;
---      end if;
---      Tcl_SetResult(interp => Interp, str => "1");
---      return TCL_OK;
---   end Show_Events_Command;
-
    -- ****it* KEvents/KEvents.Events_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the known events list
@@ -148,12 +132,14 @@ package body Knowledge.Events is
    -- ****
    --## rule on DIRECTLY_ACCESSED_GLOBALS
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* KEvents/KEvents.Events_Indexes
    -- FUNCTION
    -- Indexes of the known events
    -- SOURCE
    Events_Indexes: Positive_Container.Vector;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* KEvents/KEvents.Sort_Events_Command
    -- FUNCTION
@@ -179,6 +165,10 @@ package body Knowledge.Events is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Bases;
+      use Items;
+      use Maps;
+      use Ships;
       use Tiny_String;
 
       Column: constant Positive :=
@@ -335,6 +325,7 @@ package body Knowledge.Events is
    end Sort_Events_Command;
 
    procedure Add_Knowledge_Events_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowEventInfo",
