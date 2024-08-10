@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -33,7 +33,10 @@ package Knowledge.Events is
    -- PARAMETERS
    -- Page     - The current page of events list to show
    -- SOURCE
-   procedure Update_Events_List(Page: Positive := 1);
+   procedure Update_Events_List(Page: Positive := 1) with
+      Convention => C,
+      Import => True,
+      External_Name => "updateAdaEventsList";
    -- ****
 
 end Knowledge.Events;
