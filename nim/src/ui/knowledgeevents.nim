@@ -88,7 +88,7 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
     except:
       showError(message = "Can't get the amount of rows.")
       return
-  deleteWidgets(startIndex = 2, endIndex = rows - 1, frame = eventsFrame)
+  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = eventsFrame)
   var
     label = ""
     row = 1
@@ -103,7 +103,7 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
     row = 2
     eventsTable = createTable(parent = eventsFrame, headers = @["Name",
         "Distance", "Coordinates", "Details"], scrollbar = mainPaned &
-        ".knowledgeframe.evnets.scrolly", command = "SortKnownEvents",
+        ".knowledgeframe.events.scrolly", command = "SortKnownEvents",
         tooltipText = "Press mouse button to sort the events.")
     if eventsIndexes.len != eventsList.len:
       eventsIndexes = @[]
