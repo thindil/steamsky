@@ -56,6 +56,46 @@ proc getCabinQuality*(quality: Natural): string {.raises: [], tags: [],
     else:
       return "Palace room"
 
+proc loadShipModules(shipNode: XmlNode; shipAction: DataAction;
+    shipIndex: Natural; ship: var ProtoShipData) {.sideEffect, raises: [
+    DataLoadingError], tags: [], contractual.} =
+  ## Load the prototype's ship's modules from a file
+  ##
+  ## * shipNode   - the XML node with information about the prototype
+  ## * shipAction - the action to do with the ship, like add, delete
+  ## * shipIndex  - the index of the prototype of the ship
+  ## * ship       - the prototype of the ship
+  ##
+  ## Returns the modified parameter ship.
+  body:
+    for module in shipNode.findAll(tag = "module"):
+      let
+        moduleAmount: int = try:
+            module.attr(name = "amount").parseInt
+          except ValueError:
+            1
+        moduleIndex: int = try:
+            module.attr(name = "index").parseInt
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for module index.")
+        moduleAction: DataAction = try:
+            parseEnum[DataAction](s = module.attr(
+                name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      if moduleAction == DataAction.add:
+        for i in 1 .. moduleAmount:
+          ship.modules.add(y = moduleIndex)
+      else:
+        for mIndex, pModule in ship.modules:
+          if pModule == moduleIndex:
+            {.warning[UnsafeSetLen]: off.}
+            ship.modules.delete(i = mIndex)
+            {.warning[UnsafeSetLen]: on.}
+            break
+
 proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the ships data from the file
@@ -110,33 +150,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       var attribute: string = shipNode.attr(name = "name")
       if attribute.len > 0:
         ship.name = attribute
-      for module in shipNode.findAll(tag = "module"):
-        let
-          moduleAmount: int = try:
-              module.attr(name = "amount").parseInt
-            except ValueError:
-              1
-          moduleIndex: int = try:
-              module.attr(name = "index").parseInt
-            except ValueError:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for module index.")
-          moduleAction: DataAction = try:
-              parseEnum[DataAction](s = module.attr(
-                  name = "action").toLowerAscii)
-            except ValueError:
-              DataAction.add
-        if moduleAction == DataAction.add:
-          for i in 1 .. moduleAmount:
-            ship.modules.add(y = moduleIndex)
-        else:
-          for mIndex, pModule in ship.modules:
-            if pModule == moduleIndex:
-              {.warning[UnsafeSetLen]: off.}
-              ship.modules.delete(i = mIndex)
-              {.warning[UnsafeSetLen]: on.}
-              break
+      loadShipModules(shipNode = shipNode, shipAction = shipAction, shipIndex = shipIndex, ship = ship)
       attribute = shipNode.attr(name = "accuracy")
       if attribute.len() > 0:
         ship.accuracy.minValue = try:
@@ -431,7 +445,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       protoShipsList[shipIndex] = ship
 
-proc damageModule*(ship: var ShipRecord, moduleIndex: Natural, damage: Positive,
+proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;
     deathReason: string) {.sideEffect, raises: [KeyError, IOError], tags: [
     WriteIOEffect], contractual.} =
   ## Damage the selected module, kill its owner if the module was destroyed
@@ -503,8 +517,8 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
   for item in ship.cargo:
     result += (item.amount * itemsList[item.protoIndex].weight)
 
-proc createShip*(protoIndex: Positive; name: string; x: MapXRange, y: MapYRange,
-    speed: ShipSpeed, randomUpgrades: bool = true): ShipRecord {.sideEffect,
+proc createShip*(protoIndex: Positive; name: string; x: MapXRange; y: MapYRange;
+    speed: ShipSpeed; randomUpgrades: bool = true): ShipRecord {.sideEffect,
     raises: [KeyError], tags: [], contractual.} =
   ## Create a new ship from the selected prototype
   ##
