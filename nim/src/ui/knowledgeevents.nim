@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[config, game, maps, tk]
+import ../[config, game, maps, tk, types]
 import coreui, dialogs, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -58,7 +58,7 @@ proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           eventIndex].itemIndex].name & "{/gold}")
     except:
       return showError(message = "Can't get the item info")
-  of none, baseRecovery:
+  of EventsTypes.none, baseRecovery:
     discard
   showInfo(text = eventInfo, title = "Event information",
       button1 = ButtonSettings(tooltip: "Set the event as the ship destination",
@@ -166,7 +166,7 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
         addButton(table = eventsTable, text = "Friendly ship spotted",
             tooltip = "Show the event's details", command = "ShowEventInfo " &
             $(row - 1), column = 1, color = color)
-      of none, baseRecovery:
+      of EventsTypes.none, baseRecovery:
         discard
       addButton(table = eventsTable, text = $countDistance(
           destinationX = eventsList[event].skyX, destinationY = eventsList[
@@ -201,7 +201,7 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
         except:
           showError(message = "Can't add ship info button.")
           return
-      of none, baseRecovery:
+      of EventsTypes.none, baseRecovery:
         discard
       row.inc
       if eventsTable.row == gameSettings.listsLimit + 1:
@@ -285,6 +285,27 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
       eventsSortOrder = coordAsc
   else:
     discard
+  type LocalEventData = object
+    eType: EventsTypes
+    distance: Natural
+    coords: string
+    details: string
+    id: Natural
+  var localEvents: seq[LocalEventData]
+  for index, event in eventsList:
+    localEvents.add(y = LocalEventData(eType: event.eType,
+        distance: countDistance(destinationX = event.skyX,
+        destinationY = event.skyY), coords: "X: " & $event.skyX & " Y: " &
+        $event.skyY, details: (case event.eType
+    of doublePrice:
+      itemsList[event.itemIndex].name & " in " & skyBases[skyMap[event.skyX][
+          event.skyY].baseIndex].name
+    of attackOnBase, disease, fullDocks, enemyPatrol:
+      skyBases[skyMap[event.skyX][event.skyY].baseIndex].name
+    of enemyShip, trader, friendlyShip:
+      protoShipsList[event.shipIndex].name
+    of EventsTypes.none, baseRecovery:
+      ""), id: index))
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
