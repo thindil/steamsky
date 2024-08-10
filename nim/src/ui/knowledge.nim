@@ -16,13 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import ../tk
-import knowledgebases, knowledgeevents
+import knowledgebases, knowledgeevents, knowledgemissions
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
     knowledgebases.addCommands()
     knowledgeevents.addCommands()
+    knowledgemissions.addCommands()
 #    addCommand("ShowLoot", showLootCommand)
   except:
     showError(message = "Can't add a Tcl command.")
