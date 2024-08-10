@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
   the ship or healing wounded crew members in bases
 - Updated look of information about available money and space on the player's
   ship in shipyards
+- Updated look of information about available space on the player's ship
+  during looting an empty base
 
 ### Fixed
 - Crash when dropping items in empty bases
