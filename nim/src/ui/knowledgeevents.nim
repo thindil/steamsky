@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[config, game, maps, tk, types]
 import coreui, dialogs, table
 
@@ -306,6 +306,55 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
       protoShipsList[event.shipIndex].name
     of EventsTypes.none, baseRecovery:
       ""), id: index))
+  proc sortEvents(x, y: LocalEventData): int =
+    case eventsSortOrder
+    of typeAsc:
+      if x.eType < y.eType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.eType > y.eType:
+        return 1
+      else:
+        return -1
+    of distanceAsc:
+      if x.distance < y.distance:
+        return 1
+      else:
+        return -1
+    of distanceDesc:
+      if x.distance > y.distance:
+        return 1
+      else:
+        return -1
+    of detailsAsc:
+      if x.details < y.details:
+        return 1
+      else:
+        return -1
+    of detailsDesc:
+      if x.details > y.details:
+        return 1
+      else:
+        return -1
+    of coordAsc:
+      if x.coords < y.coords:
+        return 1
+      else:
+        return -1
+    of coordDesc:
+      if x.coords > y.coords:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localEvents.sort(cmp = sortEvents)
+  eventsIndexes = @[]
+  for event in localEvents:
+    eventsIndexes.add(y = event.id)
+  updateEventsList()
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
