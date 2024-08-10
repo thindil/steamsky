@@ -257,7 +257,8 @@ const defaultEventsSortOrder: EventsSortOrders = none
 var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
 
 proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let column = try:
         getColumnNumber(table = eventsTable, xPosition = ($argv[1]).parseInt)
       except:
@@ -293,19 +294,22 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     id: Natural
   var localEvents: seq[LocalEventData]
   for index, event in eventsList:
-    localEvents.add(y = LocalEventData(eType: event.eType,
-        distance: countDistance(destinationX = event.skyX,
-        destinationY = event.skyY), coords: "X: " & $event.skyX & " Y: " &
-        $event.skyY, details: (case event.eType
-    of doublePrice:
-      itemsList[event.itemIndex].name & " in " & skyBases[skyMap[event.skyX][
-          event.skyY].baseIndex].name
-    of attackOnBase, disease, fullDocks, enemyPatrol:
-      skyBases[skyMap[event.skyX][event.skyY].baseIndex].name
-    of enemyShip, trader, friendlyShip:
-      protoShipsList[event.shipIndex].name
-    of EventsTypes.none, baseRecovery:
-      ""), id: index))
+    try:
+      localEvents.add(y = LocalEventData(eType: event.eType,
+          distance: countDistance(destinationX = event.skyX,
+          destinationY = event.skyY), coords: "X: " & $event.skyX & " Y: " &
+          $event.skyY, details: (case event.eType
+      of doublePrice:
+        itemsList[event.itemIndex].name & " in " & skyBases[skyMap[event.skyX][
+            event.skyY].baseIndex].name
+      of attackOnBase, disease, fullDocks, enemyPatrol:
+        skyBases[skyMap[event.skyX][event.skyY].baseIndex].name
+      of enemyShip, trader, friendlyShip:
+        protoShipsList[event.shipIndex].name
+      of EventsTypes.none, baseRecovery:
+        ""), id: index))
+    except:
+      return showError(message = "Can't add local event.")
   proc sortEvents(x, y: LocalEventData): int =
     case eventsSortOrder
     of typeAsc:
