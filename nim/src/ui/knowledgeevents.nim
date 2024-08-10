@@ -248,12 +248,52 @@ proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+type EventsSortOrders = enum
+  none, typeAsc, typeDesc, distanceAsc, distanceDesc, detailsAsc, detailsDesc,
+    coordAsc, coordDesc
+
+const defaultEventsSortOrder: EventsSortOrders = none
+
+var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
+
+proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        getColumnNumber(table = eventsTable, xPosition = ($argv[1]).parseInt)
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if eventsSortOrder == typeAsc:
+      eventsSortOrder = typeDesc
+    else:
+      eventsSortOrder = typeAsc
+  of 2:
+    if eventsSortOrder == distanceAsc:
+      eventsSortOrder = distanceDesc
+    else:
+      eventsSortOrder = distanceAsc
+  of 3:
+    if eventsSortOrder == detailsAsc:
+      eventsSortOrder = detailsDesc
+    else:
+      eventsSortOrder = detailsAsc
+  of 4:
+    if eventsSortOrder == coordAsc:
+      eventsSortOrder = coordDesc
+    else:
+      eventsSortOrder = coordAsc
+  else:
+    discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the known events UI
   try:
     discard
 #    addCommand("ShowEventInfo", showEventInfoCommand)
 #    addCommand("ShowEvents", showEventsCommand)
+#    addCommand("SortEvents", sortEventsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
