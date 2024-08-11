@@ -20,9 +20,12 @@ import ../[missions, tk]
 import dialogs
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    missionIndex = ($argv[1]).parseInt - 1
+    missionIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the mission's index.")
     acceptedMission = acceptedMissions[missionIndex]
     missionMenu = createDialog(name = ".missionslistmenu", title = (
       case acceptedMission.mType
