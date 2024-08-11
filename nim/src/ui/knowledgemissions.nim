@@ -21,6 +21,18 @@ import dialogs
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show the menu with available the selected mission options
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowMissionMenu missionindex
+  ## MissionIndex is the index of the mission's menu to show
   let
     missionIndex = try:
         ($argv[1]).parseInt - 1
