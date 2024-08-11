@@ -42,7 +42,7 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     let button = missionMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & missionMenu & " .;" & command &
-        "} -image " & icon & " -style Dialog" & color & ".TButton")
+        "} -image " & icon & "icon -style Dialog" & color & ".TButton")
     tclEval(script = "grid " & button & " -sticky we -padx 5 -pady {0 5} -row 1 -column " & $column)
     tclEval(script = "tooltip::tooltip " & button & " \"" & tooltipText & "\"")
     tclEval(script = "bind " & button & " <Escape> {CloseDialog " &
