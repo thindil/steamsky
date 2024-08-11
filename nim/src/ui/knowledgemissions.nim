@@ -43,6 +43,25 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & missionMenu & " .;" & command &
         "} -image " & icon & " -style Dialog" & color & ".TButton")
+    tclEval(script = "grid " & button & " -sticky we -padx 5 -pady {0 5} -row 1 -column " & $column)
+    tclEval(script = "tooltip::tooltip " & button & " \"" & tooltipText & "\"")
+    tclEval(script = "bind " & button & " <Escape> {CloseDialog " &
+        missionMenu & " .;break}")
+    if name == ".show":
+      tclEval(script = "bind " & button & " <Tab> {focus " & missionMenu & ".destination;break}")
+      tclEval(script = "focus " & missionMenu & ".destination;break")
+
+  addButton(name = ".destination", tooltipText = "Set the mission as destination for the ship.",
+      command = "SetDestination2 " & $acceptedMission.targetX & " " &
+      $acceptedMission.targetY, icon = "destination", label = "Target",
+      column = 0, color = "green")
+  addButton(name = ".close", label = "Close", command = "", icon = "exit",
+      tooltipText = "Close the dialog.", column = 1)
+  addButton(name = ".show", tooltipText = "Show the mission on map.",
+      command = "ShowOnMap " & $acceptedMission.targetX & " " &
+      $acceptedMission.targetY, icon = "show2", label = "Show", column = 2,
+      color = "green")
+  showDialog(dialog = missionMenu, parentFrame = ".")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
