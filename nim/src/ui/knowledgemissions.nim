@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[missions, tk]
+import std/[strutils, tables]
+import ../[config, game, maps, missions, tk]
 import coreui, dialogs, table
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -108,7 +108,35 @@ proc updateMissionsList(page: Positive = 1) =
         scrollbar = ".gameframe.paned.knowledgeframe.missions.scrolly",
         command = "SortAccepted_Missions",
         tooltipText = "Press mouse button to sort the missions.")
-    var row = 2
+    if missionsIndexes.len != acceptedMissions.len:
+      missionsIndexes = @[]
+      for index, _ in acceptedMissions:
+        missionsIndexes.add(y = index)
+    var
+      row = 2
+      rows = 0
+      currentRow = 1
+    let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+    for index in missionsIndexes:
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      let
+        acceptedMission = acceptedMissions[index]
+        color = (if acceptedMission.targetX == playerShip.skyX and
+            acceptedMission.targetY == playerShip.skyY: "yellow" else: "")
+      addButton(table = missionsTable, text = getMissionType(
+          mType = acceptedMission.mType), tooltip = "Show the mission's menu",
+          command = "ShowMissionMenu " & $(row - 1), column = 1, color = color)
+      case acceptedMission.mType
+      of deliver:
+        addButton(table = missionsTable, text = itemsList[
+            acceptedMission.itemIndex].name & " to " & skyBases[skyMap[
+            acceptedMission.targetX][acceptedMission.targetY].baseIndex].name,
+            tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
+            $(row - 1), column = 4, color = color)
+      else:
+        discard
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the accepted missions UI
