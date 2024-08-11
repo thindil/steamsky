@@ -96,6 +96,82 @@ proc loadShipModules(shipNode: XmlNode; shipAction: DataAction;
             {.warning[UnsafeSetLen]: on.}
             break
 
+proc loadShipCargo(shipNode: XmlNode; shipAction: DataAction;
+    shipIndex: Natural; ship: var ProtoShipData) {.sideEffect, raises: [
+    DataLoadingError], tags: [], contractual.} =
+  ## Load the prototype's ship's cargo from a file
+  ##
+  ## * shipNode   - the XML node with information about the prototype
+  ## * shipAction - the action to do with the ship, like add, delete
+  ## * shipIndex  - the index of the prototype of the ship
+  ## * ship       - the prototype of the ship
+  ##
+  ## Returns the modified parameter ship.
+  body:
+    for item in shipNode.findAll(tag = "cargo"):
+      let itemIndex: int = try:
+            item.attr(name = "index").parseInt
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for cargo item index.")
+      if not itemsList.contains(key = itemIndex):
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for cargo item index.")
+      let
+        itemAction: DataAction = try:
+            parseEnum[DataAction](s = item.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+        itemAmount: int = try:
+            item.attr(name = "amount").parseInt
+          except ValueError:
+            0
+      var minAmount, maxAmount: int = 0
+      if itemAmount == 0:
+        minAmount = try:
+              item.attr(name = "minamount").parseInt
+            except ValueError:
+            raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                  "', invalid value for cargo item minamount.")
+        maxAmount = try:
+            item.attr(name = "maxamount").parseInt
+          except ValueError:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for cargo item maxamount.")
+        if minAmount > maxAmount:
+          raise newException(exceptn = DataLoadingError,
+            message = "Can't " & $shipAction & " ship '" & $shipIndex &
+                "', invalid value for cargo item amount range.")
+      case itemAction
+      of DataAction.add:
+        if itemAmount > 0:
+          ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
+              minAmount: itemAmount, maxAmount: 0))
+        else:
+          ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
+              minAmount: minAmount, maxAmount: maxAmount))
+      of DataAction.update:
+        for cargoItem in ship.cargo.mitems:
+          if cargoItem.protoIndex == itemIndex:
+            if itemAmount > 0:
+              cargoItem.minAmount = itemAmount
+              cargoItem.maxAmount = 0
+            else:
+              cargoItem.minAmount = minAmount
+              cargoItem.maxAmount = maxAmount
+            break
+      of DataAction.remove:
+        var cargoIndex: Natural = 0
+        while cargoIndex < ship.cargo.len:
+          if ship.cargo[cargoIndex].protoIndex == itemIndex:
+            ship.cargo.delete(i = cargoIndex)
+            break
+          cargoIndex.inc
+
 proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the ships data from the file
@@ -150,7 +226,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       var attribute: string = shipNode.attr(name = "name")
       if attribute.len > 0:
         ship.name = attribute
-      loadShipModules(shipNode = shipNode, shipAction = shipAction, shipIndex = shipIndex, ship = ship)
+      loadShipModules(shipNode = shipNode, shipAction = shipAction,
+          shipIndex = shipIndex, ship = ship)
       attribute = shipNode.attr(name = "accuracy")
       if attribute.len() > 0:
         ship.accuracy.minValue = try:
@@ -254,69 +331,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         if ship.perception.maxValue < ship.perception.minValue:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus perception.")
-      for item in shipNode.findAll(tag = "cargo"):
-        let itemIndex: int = try:
-              item.attr(name = "index").parseInt
-            except ValueError:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for cargo item index.")
-        if not itemsList.contains(key = itemIndex):
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                "', invalid value for cargo item index.")
-        let
-          itemAction: DataAction = try:
-              parseEnum[DataAction](s = item.attr(name = "action").toLowerAscii)
-            except ValueError:
-              DataAction.add
-          itemAmount: int = try:
-              item.attr(name = "amount").parseInt
-            except ValueError:
-              0
-        var minAmount, maxAmount: int = 0
-        if itemAmount == 0:
-          minAmount = try:
-                item.attr(name = "minamount").parseInt
-              except ValueError:
-              raise newException(exceptn = DataLoadingError,
-                message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                    "', invalid value for cargo item minamount.")
-          maxAmount = try:
-              item.attr(name = "maxamount").parseInt
-            except ValueError:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for cargo item maxamount.")
-          if minAmount > maxAmount:
-            raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                  "', invalid value for cargo item amount range.")
-        case itemAction
-        of DataAction.add:
-          if itemAmount > 0:
-            ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
-                minAmount: itemAmount, maxAmount: 0))
-          else:
-            ship.cargo.add(y = MobInventoryRecord(protoIndex: itemIndex,
-                minAmount: minAmount, maxAmount: maxAmount))
-        of DataAction.update:
-          for cargoItem in ship.cargo.mitems:
-            if cargoItem.protoIndex == itemIndex:
-              if itemAmount > 0:
-                cargoItem.minAmount = itemAmount
-                cargoItem.maxAmount = 0
-              else:
-                cargoItem.minAmount = minAmount
-                cargoItem.maxAmount = maxAmount
-              break
-        of DataAction.remove:
-          var cargoIndex: Natural = 0
-          while cargoIndex < ship.cargo.len:
-            if ship.cargo[cargoIndex].protoIndex == itemIndex:
-              ship.cargo.delete(i = cargoIndex)
-              break
-            cargoIndex.inc
+      loadShipCargo(shipNode = shipNode, shipAction = shipAction,
+          shipIndex = shipIndex, ship = ship)
       attribute = shipNode.attr(name = "owner")
       if attribute.len > 0:
         ship.owner = attribute
