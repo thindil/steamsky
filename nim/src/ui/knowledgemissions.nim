@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[config, game, maps, missions, tk]
-import coreui, dialogs, table
+import coreui, dialogs, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -135,8 +135,41 @@ proc updateMissionsList(page: Positive = 1) =
             acceptedMission.targetX][acceptedMission.targetY].baseIndex].name,
             tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
             $(row - 1), column = 4, color = color)
-      else:
-        discard
+      of patrol, explore:
+        addButton(table = missionsTable, text = "X: " &
+            $acceptedMission.targetX & " Y: " & $acceptedMission.targetY,
+            tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
+            $(row - 1), column = 4, color = color)
+      of destroy:
+        addButton(table = missionsTable, text = protoShipsList[
+            acceptedMission.shipIndex].name,
+            tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
+            $(row - 1), column = 4, color = color)
+      of passenger:
+        addButton(table = missionsTable, text = "To " & skyBases[skyMap[
+            acceptedMission.targetX][acceptedMission.targetY].baseIndex].name,
+            tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
+            $(row - 1), column = 4, color = color)
+      addButton(table = missionsTable, text = $countDistance(
+          destinationX = acceptedMission.targetX,
+          destinationY = acceptedMission.targetY),
+          tooltip = "The distance to the mission",
+          command = "ShowMissionMenu " & $(row - 1), column = 2, color = color)
+      addButton(table = missionsTable, text = "X: " & $acceptedMission.targetX &
+          " Y: " & $acceptedMission.targetY,
+          tooltip = "The coordinates of the mission on the map",
+          command = "ShowMissionMenu " & $(row - 1), column = 3, color = color)
+      var missionTime = ""
+      minutesToDate(minutes = acceptedMission.time, infoText = missionTime)
+      addButton(table = missionsTable, text = missionTime,
+          tooltip = "The time limit for finish and return the mission",
+          command = "ShowMissionMenu " & $(row - 1), column = 5, color = color)
+      addButton(table = missionsTable, text = $((acceptedMission.reward.float *
+          acceptedMission.multiplier).Natural) & " " & moneyName,
+          tooltip = "The base money reward for the mission",
+          command = "ShowMissionMenu " & $(row - 1), column = 6, newRow = true, color = color)
+      row.inc
+      rows.inc
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the accepted missions UI
