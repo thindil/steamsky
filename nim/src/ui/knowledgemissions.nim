@@ -17,7 +17,7 @@
 
 import std/strutils
 import ../[missions, tk]
-import dialogs
+import coreui, dialogs, table
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -79,6 +79,37 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = missionMenu, parentFrame = ".")
   return tclOk
 
+var
+  missionsTable: TableWidget
+  missionsIndexes: seq[Natural]
+
+proc updateMissionsList(page: Positive = 1) =
+  if missionsTable.row > 1:
+    clearTable(table = missionsTable)
+  let
+    missionsCanvas = mainPaned & ".knowledgeframe.missions.canvas"
+    missionsFrame = missionsCanvas & ".frame"
+  var rows = try:
+      tclEval2(script = "grid size " & missionsFrame).split(" ")[1].parseInt
+    except:
+      showError(message = "Can't get the amount of rows.")
+      return
+  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = missionsFrame)
+  if acceptedMissions.len == 0:
+    let label = missionsFrame & ".nomissions"
+    tclEval(script = "ttk::label " & label & " -text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350")
+    tclEval(script = "grid " & label & " -padx 10")
+    tclEval(script = "bind " & missionsCanvas & " <Configure> {" & label &
+        " configure -wraplength [expr [winfo width " & missionsCanvas & "] - 15]}")
+  else:
+    tclEval(script = "bind " & missionsCanvas & " <Configure> {}")
+    missionsTable = createTable(parent = missionsFrame, headers = @["Name",
+        "Distance", "Coordinates", "Details", "Time limit", "Base reward"],
+        scrollbar = ".gameframe.paned.knowledgeframe.missions.scrolly",
+        command = "SortAccepted_Missions",
+        tooltipText = "Press mouse button to sort the missions.")
+    var row = 2
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
@@ -86,3 +117,13 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowMissionMenu", showMissionsMenuCommand)
   except:
     showError(message = "Can't add a Tcl command.")
+
+# Temporary code for interfacing with Ada
+
+proc updateAdaMissionsList(page: cint) {.sideEffect, raises: [],
+    tags: [RootEffect], exportc.} =
+  try:
+    updateMissionsList(page = page.Positive)
+  except:
+    echo getCurrentExceptionMsg()
+    echo getStackTrace(getCurrentException())
