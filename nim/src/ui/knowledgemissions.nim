@@ -170,6 +170,24 @@ proc updateMissionsList(page: Positive = 1) =
           command = "ShowMissionMenu " & $(row - 1), column = 6, newRow = true, color = color)
       row.inc
       rows.inc
+      if rows == gameSettings.listsLimit and index != acceptedMissions.len:
+        break
+    if page > 1:
+      if rows < gameSettings.listsLimit:
+        addPagination(table = missionsTable, previousCommand = "ShowMissions " &
+            $(page - 1), nextCommand = "")
+      else:
+        addPagination(table = missionsTable, previousCommand = "ShowMissions " &
+            $(page - 1), nextCommand = "ShowMissions " & $(page + 1))
+    elif rows > gameSettings.listsLimit - 1:
+      addPagination(table = missionsTable, previousCommand = "",
+          nextCommand = "ShowMissions " & $(page + 1))
+    updateTable(table = missionsTable)
+  tclEval(script = "update")
+  tclEval(script = missionsCanvas & " configure -scrollregion [list " & tclEval2(
+      script = missionsCanvas & " bbox all") & "]")
+  tclEval(script = missionsCanvas & " xview moveto 0.0")
+  tclEval(script = missionsCanvas & " yview moveto 0.0")
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the accepted missions UI
