@@ -15,12 +15,40 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../[tk]
+import std/strutils
+import ../[missions, tk]
+import dialogs
+
+proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    missionIndex = ($argv[1]).parseInt - 1
+    acceptedMission = acceptedMissions[missionIndex]
+    missionMenu = createDialog(name = ".missionslistmenu", title = (
+      case acceptedMission.mType
+      of deliver:
+        "Deliver item"
+      of destroy:
+        "Destroy enemy"
+      of patrol:
+        "Patrol area"
+      of explore:
+        "Explore area"
+      of passenger:
+        "Transport passenger") & " mission actions", parentName = ".", columns = 3)
+
+  proc addButton(name, label, command, icon, tooltipText: string;
+      column: Natural; color: string = "") =
+    let button = missionMenu & name
+    tclEval(script = "ttk::button " & button & " -text {" & label &
+        "} -command {CloseDialog " & missionMenu & " .;" & command &
+        "} -image " & icon & " -style Dialog" & color & ".TButton")
+  return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
     discard
-#    addCommand("ShowEvents", showEventsCommand)
+#    addCommand("ShowMissionMenu", showMissionsMenuCommand)
   except:
     showError(message = "Can't add a Tcl command.")
