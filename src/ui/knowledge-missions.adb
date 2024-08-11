@@ -26,15 +26,12 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
--- with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
--- with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config;
 with CoreUI;
--- with Dialogs;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
@@ -67,78 +64,6 @@ package body Knowledge.Missions is
       Convention => C,
       External_Name => "showMissionsMenuCommand";
       -- ****
-
---   function Show_Missions_Menu_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Dialogs;
---
---      Mission_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Accepted_Mission: constant Mission_Data :=
---        Get_Accepted_Mission(Mission_Index => Mission_Index);
---      Mission_Menu: constant Ttk_Frame :=
---        Create_Dialog
---          (Name => ".missionslistmenu",
---           Title =>
---             (case Accepted_Mission.M_Type is when DELIVER => "Deliver item",
---                when DESTROY => "Destroy enemy", when PATROL => "Patrol area",
---                when EXPLORE => "Explore area",
---                when PASSENGER => "Transport passenger") &
---             " mission actions",
---           Parent_Name => ".", Columns => 3);
---      procedure Add_Button
---        (Name, Label, Command, Icon, Tooltip_Text: String; Column: Natural;
---         Color: String := "") is
---         use Tcl.Tk.Ada.Widgets.TtkButton;
---         use Tcl.Tklib.Ada.Tooltip;
---
---         Button: constant Ttk_Button :=
---           Create
---             (pathName => Mission_Menu & Name,
---              options =>
---                "-text {" & Label & "} -command {CloseDialog " & Mission_Menu &
---                " .;" & Command & "} -image " & Icon & "icon -style Dialog" &
---                Color & ".TButton");
---      begin
---         Tcl.Tk.Ada.Grid.Grid
---           (Slave => Button,
---            Options =>
---              "-sticky we -padx 5 -pady {0 5} -row 1 -column" &
---              Natural'Image(Column));
---         Add(Widget => Button, Message => Tooltip_Text);
---         Bind
---           (Widgt => Button, Sequence => "<Escape>",
---            Script => "{CloseDialog " & Mission_Menu & " .;break}");
---         if Name = ".show" then
---            Bind
---              (Widgt => Button, Sequence => "<Tab>",
---               Script => "{focus " & Mission_Menu & ".destination;break}");
---            Focus(Widgt => Button);
---         end if;
---      end Add_Button;
---   begin
---      Add_Button
---        (Name => ".destination",
---         Tooltip_Text => "Set the mission as destination for the ship.",
---         Command =>
---           "SetDestination2 " & Map_X_Range'Image(Accepted_Mission.Target_X) &
---           Map_Y_Range'Image(Accepted_Mission.Target_Y),
---         Icon => "destination", Label => "Target", Column => 0,
---         Color => "green");
---      Add_Button
---        (Name => ".close", Label => "Close", Command => "", Icon => "exit",
---         Tooltip_Text => "Close the dialog.", Column => 1);
---      Add_Button
---        (Name => ".show", Tooltip_Text => "Show the mission on map.",
---         Command =>
---           "ShowOnMap" & Map_X_Range'Image(Accepted_Mission.Target_X) &
---           Map_Y_Range'Image(Accepted_Mission.Target_Y),
---         Icon => "show2", Label => "Show", Column => 2, Color => "green");
---      Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
---      return TCL_OK;
---   end Show_Missions_Menu_Command;
 
    -- ****o* KMissions/KMissions.Show_Missions_Command
    -- FUNCTION
