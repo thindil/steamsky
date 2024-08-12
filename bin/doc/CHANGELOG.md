@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   ship in shipyards
 - Updated look of information about available space on the player's ship
   during looting an empty base
+- Made checked checkbutton a bit darker to match the game's default theme
 
 ### Fixed
 - Crash when dropping items in empty bases
