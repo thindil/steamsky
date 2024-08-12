@@ -172,6 +172,80 @@ proc loadShipCargo(shipNode: XmlNode; shipAction: DataAction;
             break
           cargoIndex.inc
 
+proc loadShipCrew(shipNode: XmlNode; shipAction: DataAction;
+    shipIndex: Natural; ship: var ProtoShipData) {.sideEffect, raises: [
+    DataLoadingError], tags: [], contractual.} =
+  ## Load the prototype's ship's crew from a file
+  ##
+  ## * shipNode   - the XML node with information about the prototype
+  ## * shipAction - the action to do with the ship, like add, delete
+  ## * shipIndex  - the index of the prototype of the ship
+  ## * ship       - the prototype of the ship
+  ##
+  ## Returns the modified parameter ship.
+  body:
+    for member in shipNode.findAll(tag = "member"):
+      let memberIndex: int = try:
+            member.attr(name = "index").parseInt
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for crew member index.")
+      if not protoMobsList.contains(key = memberIndex):
+        raise newException(exceptn = DataLoadingError,
+          message = "Can't " & $shipAction & " ship '" & $shipIndex &
+              "', invalid value for crew member index.")
+      let memberAction: DataAction = try:
+            parseEnum[DataAction](s = member.attr(
+                name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      var memberAmount: Natural = try:
+            member.attr(name = "amount").parseInt
+          except ValueError:
+            0
+      var minAmount, maxAmount: Natural = 0
+      if memberAmount == 0:
+        minAmount = try:
+              member.attr(name = "minamount").parseInt
+            except ValueError:
+              0
+        maxAmount = try:
+            member.attr(name = "maxamount").parseInt
+          except ValueError:
+            1
+        if minAmount > maxAmount:
+          raise newException(exceptn = DataLoadingError, message = "Can't " &
+              $shipAction & " ship '" & $shipIndex & "', invalid value for crew member amount range.")
+        if minAmount == 0:
+          memberAmount = 1
+      case memberAction
+      of DataAction.add:
+        if memberAmount > 0:
+          ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
+              minAmount: memberAmount, maxAmount: 0))
+        else:
+          ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
+              minAmount: minAmount, maxAmount: maxAmount))
+      of DataAction.update:
+        for crewMember in ship.crew.mitems:
+          if crewMember.protoIndex == memberIndex:
+            if memberAmount > 0:
+              crewMember.minAmount = memberAmount
+              crewMember.maxAmount = 0
+            else:
+              crewMember.minAmount = minAmount
+              crewMember.maxAmount = maxAmount
+            break
+      of DataAction.remove:
+        var crewIndex: Natural = 0
+        while crewIndex < ship.crew.len:
+          if ship.crew[crewIndex].protoIndex == memberIndex:
+            {.warning[UnsafeSetLen]: off.}
+            ship.crew.delete(i = crewIndex)
+            {.warning[UnsafeSetLen]: on.}
+            break
+          crewIndex.inc
+
 proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the ships data from the file
@@ -355,67 +429,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             if knownRecipe == recipeIndex:
               ship.knownRecipes.delete(i = rIndex)
               break
-      for member in shipNode.findAll(tag = "member"):
-        let memberIndex: int = try:
-              member.attr(name = "index").parseInt
-            except ValueError:
-              raise newException(exceptn = DataLoadingError,
-                  message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for crew member index.")
-        if not protoMobsList.contains(key = memberIndex):
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $shipAction & " ship '" & $shipIndex &
-                "', invalid value for crew member index.")
-        let memberAction: DataAction = try:
-              parseEnum[DataAction](s = member.attr(
-                  name = "action").toLowerAscii)
-            except ValueError:
-              DataAction.add
-        var memberAmount: Natural = try:
-              member.attr(name = "amount").parseInt
-            except ValueError:
-              0
-        var minAmount, maxAmount: Natural = 0
-        if memberAmount == 0:
-          minAmount = try:
-                member.attr(name = "minamount").parseInt
-              except ValueError:
-                0
-          maxAmount = try:
-              member.attr(name = "maxamount").parseInt
-            except ValueError:
-              1
-          if minAmount > maxAmount:
-            raise newException(exceptn = DataLoadingError, message = "Can't " &
-                $shipAction & " ship '" & $shipIndex & "', invalid value for crew member amount range.")
-          if minAmount == 0:
-            memberAmount = 1
-        case memberAction
-        of DataAction.add:
-          if memberAmount > 0:
-            ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
-                minAmount: memberAmount, maxAmount: 0))
-          else:
-            ship.crew.add(y = ProtoMemberData(protoIndex: memberIndex,
-                minAmount: minAmount, maxAmount: maxAmount))
-        of DataAction.update:
-          for crewMember in ship.crew.mitems:
-            if crewMember.protoIndex == memberIndex:
-              if memberAmount > 0:
-                crewMember.minAmount = memberAmount
-                crewMember.maxAmount = 0
-              else:
-                crewMember.minAmount = minAmount
-                crewMember.maxAmount = maxAmount
-              break
-        of DataAction.remove:
-          var crewIndex: Natural = 0
-          while crewIndex < ship.crew.len:
-            if ship.crew[crewIndex].protoIndex == memberIndex:
-              {.warning[UnsafeSetLen]: off.}
-              ship.crew.delete(i = crewIndex)
-              {.warning[UnsafeSetLen]: on.}
-              break
-            crewIndex.inc
+      loadShipCrew(shipNode = shipNode, shipAction = shipAction,
+          shipIndex = shipIndex, ship = ship)
       for description in shipNode.findAll(tag = "description"):
         ship.description = description.innerText()
 
