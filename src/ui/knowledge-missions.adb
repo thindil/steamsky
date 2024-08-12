@@ -20,7 +20,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
--- with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
@@ -82,21 +81,6 @@ package body Knowledge.Missions is
       Convention => C,
       External_Name => "showMissionsCommand";
       -- ****
-
---   function Show_Missions_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data);
---   begin
---      if Argc = 2 then
---         Update_Missions_List
---           (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
---      else
---         Update_Missions_List;
---      end if;
---      Tcl_SetResult(interp => Interp, str => "1");
---      return TCL_OK;
---   end Show_Missions_Command;
 
    -- ****iv* KMissions/KMissions.Missions_Table
    -- FUNCTION
