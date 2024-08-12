@@ -228,12 +228,62 @@ proc showMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
+type MissionsSortOrders = enum
+  none, typeAsc, typeDesc, distanceAsc, distanceDesc, detailsAsc, detailsDesc,
+    timeAsc, timeDesc, rewardAsc, rewardDesc, coordAsc, coordDesc
+
+const defaultMissionsSortOrder: MissionsSortOrders = none
+
+var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
+
+proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        getColumnNumber(table = missionsTable, xPosition = ($argv[1]).parseInt)
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if missionsSortOrder == typeAsc:
+      missionsSortOrder = typeDesc
+    else:
+      missionsSortOrder = typeAsc
+  of 2:
+    if missionsSortOrder == distanceAsc:
+      missionsSortOrder = distanceDesc
+    else:
+      missionsSortOrder = distanceAsc
+  of 3:
+    if missionsSortOrder == coordAsc:
+      missionsSortOrder = coordDesc
+    else:
+      missionsSortOrder = coordAsc
+  of 4:
+    if missionsSortOrder == detailsAsc:
+      missionsSortOrder = detailsDesc
+    else:
+      missionsSortOrder = detailsAsc
+  of 5:
+    if missionsSortOrder == timeAsc:
+      missionsSortOrder = timeDesc
+    else:
+      missionsSortOrder = timeAsc
+  of 6:
+    if missionsSortOrder == rewardAsc:
+      missionsSortOrder = rewardDesc
+    else:
+      missionsSortOrder = rewardAsc
+  else:
+    discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
     discard
 #    addCommand("ShowMissionMenu", showMissionsMenuCommand)
 #    addCommand("ShowMissions", showMissionsCommand)
+#    addCommand("SortMissions", sortMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
