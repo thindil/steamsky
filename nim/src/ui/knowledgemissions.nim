@@ -203,9 +203,14 @@ proc updateMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [Roo
   tclEval(script = missionsCanvas & " yview moveto 0.0")
 
 proc showMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   if argc == 2:
-    updateMissionsList(page = ($argv[1]).parseInt)
+    try:
+      updateMissionsList(page = ($argv[1]).parseInt)
+    except:
+      tclSetResult(value = "1")
+      return showError(message = "Can't show the list of missions.")
   else:
     updateMissionsList()
   tclSetResult(value = "1")
