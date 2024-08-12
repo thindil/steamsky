@@ -17,20 +17,20 @@ with Ada.Containers;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.String_Split;
+-- with GNAT.String_Split;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada;
+-- with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases; use Bases;
-with Config;
+-- with Config;
 with CoreUI;
 with Game; use Game;
 with Items; use Items;
@@ -390,56 +390,64 @@ package body Knowledge.Missions is
    end Add_Knowledge_Missions_Commands;
 
    procedure Update_Missions_List(Page: Positive := 1) is
-      use GNAT.String_Split;
+--      use GNAT.String_Split;
+      use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.Canvas;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-      use Config;
+--      use Config;
       use CoreUI;
-      use Tiny_String;
+--      use Tiny_String;
 
       Missions_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Main_Paned & ".knowledgeframe.missions.canvas");
       Missions_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Missions_Canvas & ".frame");
-      Tokens: Slice_Set;
-      Rows: Natural;
-      Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
-      Row: Positive := 1;
+ --     Tokens: Slice_Set;
+ --     Rows: Natural;
+ --     Label: Ttk_Label; --## rule line off IMPROPER_INITIALIZATION
+ --     Row: Positive := 1;
       --## rule off SIMPLIFIABLE_EXPRESSIONS
-      Start_Row: constant Positive :=
-        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
+--      Start_Row: constant Positive :=
+--        ((Page - 1) * Get_Integer_Setting(Name => "listsLimit")) + 1;
       --## rule on SIMPLIFIABLE_EXPRESSIONS
-      Current_Row: Positive := 1;
-      Mission_Time, Color: Unbounded_String := Null_Unbounded_String;
-      Accepted_Mission: Mission_Data := Empty_Mission;
+--      Current_Row: Positive := 1;
+--      Mission_Time, Color: Unbounded_String := Null_Unbounded_String;
+--      Accepted_Mission: Mission_Data := Empty_Mission;
+      procedure Update_Ada_Missions_List(P: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "updateAdaMissionsList";
    begin
-      Create
-        (S => Tokens,
-         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Missions_Frame),
-         Separators => " ");
-      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      if Missions_Table.Row > 1 then
-         Clear_Table(Table => Missions_Table);
-      end if;
-      Delete_Widgets
-        (Start_Index => 1, End_Index => Rows - 1, Frame => Missions_Frame);
-      if Get_Accepted_Missions_Amount = 0 then
-         Label :=
-           Create
-             (pathName => Missions_Frame & ".nomissions",
-              options =>
-                "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
-         Bind
-           (Widgt => Missions_Canvas, Sequence => "<Configure>",
-            Script =>
-              "{" & Label & " configure -wraplength [expr [winfo width " &
-              Missions_Canvas & "] - 15]}");
-      else
-         Unbind(Widgt => Missions_Canvas, Sequence => "<Configure>");
-         Row := 2;
+      Update_Ada_Missions_List(P => Page);
+--      Create
+--        (S => Tokens,
+--         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Missions_Frame),
+--         Separators => " ");
+--      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      if Missions_Table.Row > 1 then
+--         Clear_Table(Table => Missions_Table);
+--      end if;
+--      Delete_Widgets
+--        (Start_Index => 1, End_Index => Rows - 1, Frame => Missions_Frame);
+--      if Get_Accepted_Missions_Amount = 0 then
+--         Label :=
+--           Create
+--             (pathName => Missions_Frame & ".nomissions",
+--              options =>
+--                "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350");
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 10");
+--         Bind
+--           (Widgt => Missions_Canvas, Sequence => "<Configure>",
+--            Script =>
+--              "{" & Label & " configure -wraplength [expr [winfo width " &
+--              Missions_Canvas & "] - 15]}");
+--      else
+      if Get_Accepted_Missions_Amount > 0 then
+--         Unbind(Widgt => Missions_Canvas, Sequence => "<Configure>");
+--         Row := 2;
          Missions_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Missions_Frame),
@@ -464,170 +472,170 @@ package body Knowledge.Missions is
                Missions_Indexes.Append(New_Item => I);
             end loop Fill_Missions_Indexes_Loop;
          end if;
-         Rows := 0;
-         Load_Accepted_Missions_Loop :
-         for I of Missions_Indexes loop
-            if Current_Row < Start_Row then
-               Current_Row := Current_Row + 1;
-               goto End_Of_Loop;
-            end if;
-            Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
-            Color :=
-              (if
-                 Accepted_Mission.Target_X = Player_Ship.Destination_X and
-                 Accepted_Mission.Target_Y = Player_Ship.Destination_Y
-               then To_Unbounded_String(Source => "yellow")
-               else Null_Unbounded_String);
-            Add_Button
-              (Table => Missions_Table,
-               Text => Get_Mission_Type(M_Type => Accepted_Mission.M_Type),
-               Tooltip => "Show the mission's menu",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 1, Color => To_String(Source => Color));
-            case Accepted_Mission.M_Type is
-               when DELIVER =>
-                  Add_Button
-                    (Table => Missions_Table,
-                     Text =>
-                       To_String
-                         (Source =>
-                            Get_Proto_Item
-                              (Index => Accepted_Mission.Item_Index)
-                              .Name) &
-                       " to " &
-                       Tiny_String.To_String
-                         (Source =>
-                            Sky_Bases
-                              (Sky_Map
-                                 (Accepted_Mission.Target_X,
-                                  Accepted_Mission.Target_Y)
-                                 .Base_Index)
-                              .Name),
-                     Tooltip => "Show the mission's menu",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 4, Color => To_String(Source => Color));
-               when PATROL =>
-                  Add_Button
-                    (Table => Missions_Table,
-                     Text =>
-                       "X:" & Natural'Image(Accepted_Mission.Target_X) &
-                       " Y:" & Natural'Image(Accepted_Mission.Target_Y),
-                     Tooltip => "Show the mission's menu",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 4, Color => To_String(Source => Color));
-               when DESTROY =>
-                  Add_Button
-                    (Table => Missions_Table,
-                     Text =>
-                       To_String
-                         (Source =>
-                            Get_Proto_Ship
-                              (Proto_Index => Accepted_Mission.Ship_Index)
-                              .Name),
-                     Tooltip => "Show the mission's menu",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 4, Color => To_String(Source => Color));
-               when EXPLORE =>
-                  Add_Button
-                    (Table => Missions_Table,
-                     Text =>
-                       "X:" & Natural'Image(Accepted_Mission.Target_X) &
-                       " Y:" & Natural'Image(Accepted_Mission.Target_Y),
-                     Tooltip => "Show the mission's menu",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 4, Color => To_String(Source => Color));
-               when PASSENGER =>
-                  Add_Button
-                    (Table => Missions_Table,
-                     Text =>
-                       "To " &
-                       Tiny_String.To_String
-                         (Source =>
-                            Sky_Bases
-                              (Sky_Map
-                                 (Accepted_Mission.Target_X,
-                                  Accepted_Mission.Target_Y)
-                                 .Base_Index)
-                              .Name),
-                     Tooltip => "Show the mission's menu",
-                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-                     Column => 4, Color => To_String(Source => Color));
-            end case;
-            Add_Button
-              (Table => Missions_Table,
-               Text =>
-                 Natural'Image
-                   (Count_Distance
-                      (Destination_X => Accepted_Mission.Target_X,
-                       Destination_Y => Accepted_Mission.Target_Y)),
-               Tooltip => "The distance to the mission",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 2, Color => To_String(Source => Color));
-            Add_Button
-              (Table => Missions_Table,
-               Text =>
-                 "X:" & Natural'Image(Accepted_Mission.Target_X) & " Y:" &
-                 Natural'Image(Accepted_Mission.Target_Y),
-               Tooltip => "The coordinates of the mission on the map",
-               Command => "ShowMissionMenu" & Positive'Image(I), Column => 3);
-            Mission_Time := Null_Unbounded_String;
-            Minutes_To_Date
-              (Minutes => Accepted_Mission.Time, Info_Text => Mission_Time);
-            Add_Button
-              (Table => Missions_Table,
-               Text => To_String(Source => Mission_Time),
-               Tooltip => "The time limit for finish and return the mission",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 5, Color => To_String(Source => Color));
-            Add_Button
-              (Table => Missions_Table,
-               Text =>
-                 Natural'Image
-                   (Natural
-                      (Float(Accepted_Mission.Reward) *
-                       Float(Accepted_Mission.Multiplier))) &
-                 " " & To_String(Source => Money_Name),
-               Tooltip => "The base money reward for the mission",
-               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
-               Column => 6, New_Row => True,
-               Color => To_String(Source => Color));
-            Row := Row + 1;
-            Rows := Rows + 1;
-            exit Load_Accepted_Missions_Loop when Rows =
-              Get_Integer_Setting(Name => "listsLimit") and
-              I /= Get_Accepted_Missions_Amount;
-            <<End_Of_Loop>>
-         end loop Load_Accepted_Missions_Loop;
-         if Page > 1 then
-            if Rows < Get_Integer_Setting(Name => "listsLimit") then
-               Add_Pagination
-                 (Table => Missions_Table,
-                  Previous_Command =>
-                    "ShowMissions" & Positive'Image(Page - 1),
-                  Next_Command => "");
-            else
-               Add_Pagination
-                 (Table => Missions_Table,
-                  Previous_Command =>
-                    "ShowMissions" & Positive'Image(Page - 1),
-                  Next_Command => "ShowMissions" & Positive'Image(Page + 1));
-            end if;
-         elsif Rows > Get_Integer_Setting(Name => "listsLimit") - 1 then
-            Add_Pagination
-              (Table => Missions_Table, Previous_Command => "",
-               Next_Command => "ShowMissions" & Positive'Image(Page + 1));
-         end if;
-         Update_Table(Table => Missions_Table);
+--         Rows := 0;
+--         Load_Accepted_Missions_Loop :
+--         for I of Missions_Indexes loop
+--            if Current_Row < Start_Row then
+--               Current_Row := Current_Row + 1;
+--               goto End_Of_Loop;
+--            end if;
+--            Accepted_Mission := Get_Accepted_Mission(Mission_Index => I);
+--            Color :=
+--              (if
+--                 Accepted_Mission.Target_X = Player_Ship.Destination_X and
+--                 Accepted_Mission.Target_Y = Player_Ship.Destination_Y
+--               then To_Unbounded_String(Source => "yellow")
+--               else Null_Unbounded_String);
+--            Add_Button
+--              (Table => Missions_Table,
+--               Text => Get_Mission_Type(M_Type => Accepted_Mission.M_Type),
+--               Tooltip => "Show the mission's menu",
+--               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--               Column => 1, Color => To_String(Source => Color));
+--            case Accepted_Mission.M_Type is
+--               when DELIVER =>
+--                  Add_Button
+--                    (Table => Missions_Table,
+--                     Text =>
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Item
+--                              (Index => Accepted_Mission.Item_Index)
+--                              .Name) &
+--                       " to " &
+--                       Tiny_String.To_String
+--                         (Source =>
+--                            Sky_Bases
+--                              (Sky_Map
+--                                 (Accepted_Mission.Target_X,
+--                                  Accepted_Mission.Target_Y)
+--                                 .Base_Index)
+--                              .Name),
+--                     Tooltip => "Show the mission's menu",
+--                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--                     Column => 4, Color => To_String(Source => Color));
+--               when PATROL =>
+--                  Add_Button
+--                    (Table => Missions_Table,
+--                     Text =>
+--                       "X:" & Natural'Image(Accepted_Mission.Target_X) &
+--                       " Y:" & Natural'Image(Accepted_Mission.Target_Y),
+--                     Tooltip => "Show the mission's menu",
+--                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--                     Column => 4, Color => To_String(Source => Color));
+--               when DESTROY =>
+--                  Add_Button
+--                    (Table => Missions_Table,
+--                     Text =>
+--                       To_String
+--                         (Source =>
+--                            Get_Proto_Ship
+--                              (Proto_Index => Accepted_Mission.Ship_Index)
+--                              .Name),
+--                     Tooltip => "Show the mission's menu",
+--                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--                     Column => 4, Color => To_String(Source => Color));
+--               when EXPLORE =>
+--                  Add_Button
+--                    (Table => Missions_Table,
+--                     Text =>
+--                       "X:" & Natural'Image(Accepted_Mission.Target_X) &
+--                       " Y:" & Natural'Image(Accepted_Mission.Target_Y),
+--                     Tooltip => "Show the mission's menu",
+--                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--                     Column => 4, Color => To_String(Source => Color));
+--               when PASSENGER =>
+--                  Add_Button
+--                    (Table => Missions_Table,
+--                     Text =>
+--                       "To " &
+--                       Tiny_String.To_String
+--                         (Source =>
+--                            Sky_Bases
+--                              (Sky_Map
+--                                 (Accepted_Mission.Target_X,
+--                                  Accepted_Mission.Target_Y)
+--                                 .Base_Index)
+--                              .Name),
+--                     Tooltip => "Show the mission's menu",
+--                     Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--                     Column => 4, Color => To_String(Source => Color));
+--            end case;
+--            Add_Button
+--              (Table => Missions_Table,
+--               Text =>
+--                 Natural'Image
+--                   (Count_Distance
+--                      (Destination_X => Accepted_Mission.Target_X,
+--                       Destination_Y => Accepted_Mission.Target_Y)),
+--               Tooltip => "The distance to the mission",
+--               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--               Column => 2, Color => To_String(Source => Color));
+--            Add_Button
+--              (Table => Missions_Table,
+--               Text =>
+--                 "X:" & Natural'Image(Accepted_Mission.Target_X) & " Y:" &
+--                 Natural'Image(Accepted_Mission.Target_Y),
+--               Tooltip => "The coordinates of the mission on the map",
+--               Command => "ShowMissionMenu" & Positive'Image(I), Column => 3);
+--            Mission_Time := Null_Unbounded_String;
+--            Minutes_To_Date
+--              (Minutes => Accepted_Mission.Time, Info_Text => Mission_Time);
+--            Add_Button
+--              (Table => Missions_Table,
+--               Text => To_String(Source => Mission_Time),
+--               Tooltip => "The time limit for finish and return the mission",
+--               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--               Column => 5, Color => To_String(Source => Color));
+--            Add_Button
+--              (Table => Missions_Table,
+--               Text =>
+--                 Natural'Image
+--                   (Natural
+--                      (Float(Accepted_Mission.Reward) *
+--                       Float(Accepted_Mission.Multiplier))) &
+--                 " " & To_String(Source => Money_Name),
+--               Tooltip => "The base money reward for the mission",
+--               Command => "ShowMissionMenu" & Positive'Image(Row - 1),
+--               Column => 6, New_Row => True,
+--               Color => To_String(Source => Color));
+--            Row := Row + 1;
+--            Rows := Rows + 1;
+--            exit Load_Accepted_Missions_Loop when Rows =
+--              Get_Integer_Setting(Name => "listsLimit") and
+--              I /= Get_Accepted_Missions_Amount;
+--            <<End_Of_Loop>>
+--         end loop Load_Accepted_Missions_Loop;
+--         if Page > 1 then
+--            if Rows < Get_Integer_Setting(Name => "listsLimit") then
+--               Add_Pagination
+--                 (Table => Missions_Table,
+--                  Previous_Command =>
+--                    "ShowMissions" & Positive'Image(Page - 1),
+--                  Next_Command => "");
+--            else
+--               Add_Pagination
+--                 (Table => Missions_Table,
+--                  Previous_Command =>
+--                    "ShowMissions" & Positive'Image(Page - 1),
+--                  Next_Command => "ShowMissions" & Positive'Image(Page + 1));
+--            end if;
+--         elsif Rows > Get_Integer_Setting(Name => "listsLimit") - 1 then
+--            Add_Pagination
+--              (Table => Missions_Table, Previous_Command => "",
+--               Next_Command => "ShowMissions" & Positive'Image(Page + 1));
+--         end if;
+--         Update_Table(Table => Missions_Table);
       end if;
       --## rule on DIRECTLY_ACCESSED_GLOBALS
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      configure
-        (Widgt => Missions_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Missions_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(CanvasWidget => Missions_Canvas, Fraction => "0.0");
-      Yview_Move_To(CanvasWidget => Missions_Canvas, Fraction => "0.0");
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      configure
+--        (Widgt => Missions_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Missions_Canvas, TagOrId => "all") & "]");
+--      Xview_Move_To(CanvasWidget => Missions_Canvas, Fraction => "0.0");
+--      Yview_Move_To(CanvasWidget => Missions_Canvas, Fraction => "0.0");
    end Update_Missions_List;
 
 end Knowledge.Missions;
