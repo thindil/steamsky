@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[config, game, maps, missions, tk]
+import ../[config, game, maps, missions, tk, types]
 import coreui, dialogs, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -275,6 +275,21 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
       missionsSortOrder = rewardAsc
   else:
     discard
+  type LocalMissionData = object
+    mType: MissionsTypes
+    distance: Natural
+    coords: string
+    details: string
+    time: Natural
+    reward: Natural
+    id: Natural
+  var localMissions: seq[LocalMissionData]
+  for index, mission in acceptedMissions:
+    localMissions.add(y = LocalMissionData(mType: mission.mType, distance: countDistance(destinationX = mission.targetX, destinationY = mission.targetY), coords: "X: " & $mission.targetX & " Y: " & $mission.targetY), details: (case mission.mType
+      of deliver: itemsList[mission.itemIndex].name & " to " & skyBases[skyMap[mission.targetX][mission.targetY].baseIndex].name
+      of patrol, explore: "X: " & $mission.targetX & " Y: " & $mission.targetY
+      of destroy: protoShipsList[mission.shipIndex].name
+      of passenger: "To " & skyBases[skyMap[mission.targetX][mission.targetY].baseIndex].name), time: mission.time, reward: mission.reward, id: index)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
