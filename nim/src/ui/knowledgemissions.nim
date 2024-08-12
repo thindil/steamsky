@@ -83,7 +83,7 @@ var
   missionsTable: TableWidget
   missionsIndexes: seq[Natural]
 
-proc updateMissionsList(page: Positive = 1) =
+proc updateMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
   if missionsTable.row > 1:
     clearTable(table = missionsTable)
   let
@@ -130,21 +130,31 @@ proc updateMissionsList(page: Positive = 1) =
           command = "ShowMissionMenu " & $(row - 1), column = 1, color = color)
       case acceptedMission.mType
       of deliver:
-        addButton(table = missionsTable, text = itemsList[
-            acceptedMission.itemIndex].name & " to " & skyBases[skyMap[
-            acceptedMission.targetX][acceptedMission.targetY].baseIndex].name,
-            tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
-            $(row - 1), column = 4, color = color)
+        try:
+          addButton(table = missionsTable, text = itemsList[
+              acceptedMission.itemIndex].name & " to " & skyBases[skyMap[
+              acceptedMission.targetX][acceptedMission.targetY].baseIndex].name,
+              tooltip = "Show the mission's menu",
+                  command = "ShowMissionMenu " &
+              $(row - 1), column = 4, color = color)
+        except:
+          showError(message = "Can't add delivery button.")
+          return
       of patrol, explore:
         addButton(table = missionsTable, text = "X: " &
             $acceptedMission.targetX & " Y: " & $acceptedMission.targetY,
             tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
             $(row - 1), column = 4, color = color)
       of destroy:
-        addButton(table = missionsTable, text = protoShipsList[
-            acceptedMission.shipIndex].name,
-            tooltip = "Show the mission's menu", command = "ShowMissionMenu " &
-            $(row - 1), column = 4, color = color)
+        try:
+          addButton(table = missionsTable, text = protoShipsList[
+              acceptedMission.shipIndex].name,
+              tooltip = "Show the mission's menu",
+              command = "ShowMissionMenu " &
+              $(row - 1), column = 4, color = color)
+        except:
+          showError(message = "Can't add destroy button.")
+          return
       of passenger:
         addButton(table = missionsTable, text = "To " & skyBases[skyMap[
             acceptedMission.targetX][acceptedMission.targetY].baseIndex].name,
@@ -184,8 +194,8 @@ proc updateMissionsList(page: Positive = 1) =
           nextCommand = "ShowMissions " & $(page + 1))
     updateTable(table = missionsTable)
   tclEval(script = "update")
-  tclEval(script = missionsCanvas & " configure -scrollregion [list " & tclEval2(
-      script = missionsCanvas & " bbox all") & "]")
+  tclEval(script = missionsCanvas & " configure -scrollregion [list " &
+      tclEval2(script = missionsCanvas & " bbox all") & "]")
   tclEval(script = missionsCanvas & " xview moveto 0.0")
   tclEval(script = missionsCanvas & " yview moveto 0.0")
 
