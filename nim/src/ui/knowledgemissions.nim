@@ -202,11 +202,21 @@ proc updateMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [Roo
   tclEval(script = missionsCanvas & " xview moveto 0.0")
   tclEval(script = missionsCanvas & " yview moveto 0.0")
 
+proc showMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  if argc == 2:
+    updateMissionsList(page = ($argv[1]).parseInt)
+  else:
+    updateMissionsList()
+  tclSetResult(value = "1")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
     discard
 #    addCommand("ShowMissionMenu", showMissionsMenuCommand)
+#    addCommand("ShowMissions", showMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
