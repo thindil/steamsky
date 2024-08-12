@@ -84,6 +84,9 @@ var
   missionsIndexes: seq[Natural]
 
 proc updateMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
+  ## Update and show list of accepted missions
+  ##
+  ## * page     - the current page of the missions' list to show
   if missionsTable.row > 1:
     clearTable(table = missionsTable)
   let
