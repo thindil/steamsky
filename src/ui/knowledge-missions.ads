@@ -33,7 +33,10 @@ package Knowledge.Missions is
    -- PARAMETERS
    -- Page     - The current page of missions list to show
    -- SOURCE
-   procedure Update_Missions_List(Page: Positive := 1);
+   procedure Update_Missions_List(Page: Positive := 1) with
+      Import => True,
+      Convention => C,
+      External_Name => "updateAdaMissionsList";
    -- ****
 
 end Knowledge.Missions;
