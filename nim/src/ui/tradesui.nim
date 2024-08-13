@@ -710,15 +710,9 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
   updateHeader()
   updateMessages()
   let typeBox = ".gameframe.paned.tradeframe.canvas.trade.options.type"
-  tclEval(script = "bind " & typeBox & " <<ComboBoxSelected>> {}")
-  tclEval(script = typeBox & " current 0")
-  tclEval(script = "bind " & typeBox & " <<ComboBoxSelected>> {ShowTrade [" &
-      typeBox & " get]}")
-  if itemsSortOrder != defaultItemsSortOrder:
-    return sortTradeItemsCommand(clientData = clientData, interp = interp,
-        argc = 2, argv = @["SortTradeItem", "-1"].allocCStringArray)
   return showTradeCommand(clientData = clientData, interp = interp, argc = 2,
-      argv = @["ShowTrade", "All"].allocCStringArray)
+      argv = @["ShowTrade", tclEval2(script = typeBox &
+      " get")].allocCStringArray)
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
