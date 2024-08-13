@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[config, game, maps, missions, tk, types]
 import coreui, dialogs, table, utilsui2
 
@@ -364,6 +364,11 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+  localMissions.sort(cmp = sortMissions)
+  missionsIndexes = @[]
+  for mission in localMissions:
+    missionsIndexes.add(y = mission.id)
+  updateMissionsList()
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
