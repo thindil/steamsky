@@ -237,7 +237,8 @@ const defaultMissionsSortOrder: MissionsSortOrders = none
 var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    RootEffect], exportc.} =
   let column = try:
         getColumnNumber(table = missionsTable, xPosition = ($argv[1]).parseInt)
       except:
@@ -285,21 +286,24 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     id: Natural
   var localMissions: seq[LocalMissionData]
   for index, mission in acceptedMissions:
-    localMissions.add(y = LocalMissionData(mType: mission.mType,
-        distance: countDistance(destinationX = mission.targetX,
-        destinationY = mission.targetY), coords: "X: " & $mission.targetX &
-        " Y: " & $mission.targetY, details: (case mission.mType
-      of deliver:
-        itemsList[mission.itemIndex].name & " to " & skyBases[skyMap[
-            mission.targetX][mission.targetY].baseIndex].name
-      of patrol, explore:
-        "X: " & $mission.targetX & " Y: " & $mission.targetY
-      of destroy:
-        protoShipsList[mission.shipIndex].name
-      of passenger:
-        "To " & skyBases[skyMap[mission.targetX][
-            mission.targetY].baseIndex].name),
-      time: mission.time, reward: mission.reward, id: index))
+    try:
+      localMissions.add(y = LocalMissionData(mType: mission.mType,
+          distance: countDistance(destinationX = mission.targetX,
+          destinationY = mission.targetY), coords: "X: " & $mission.targetX &
+          " Y: " & $mission.targetY, details: (case mission.mType
+        of deliver:
+          itemsList[mission.itemIndex].name & " to " & skyBases[skyMap[
+              mission.targetX][mission.targetY].baseIndex].name
+        of patrol, explore:
+          "X: " & $mission.targetX & " Y: " & $mission.targetY
+        of destroy:
+          protoShipsList[mission.shipIndex].name
+        of passenger:
+          "To " & skyBases[skyMap[mission.targetX][
+              mission.targetY].baseIndex].name),
+        time: mission.time, reward: mission.reward, id: index))
+    except:
+      return showError(message = "Can't add the local mission.")
   proc sortMissions(x, y: LocalMissionData): int =
     case missionsSortOrder
     of typeAsc:
