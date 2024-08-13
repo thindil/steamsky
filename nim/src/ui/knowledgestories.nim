@@ -72,8 +72,27 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
             0].parseInt].name & " from ")
         if storyData[1] == "any":
           storyText.add(y = "any ")
+          let faction = factionsList[getStepData(finishData = step.finishData,
+              name = "faction")]
+          if faction.name.len > 0:
+            storyText.add(y = faction.name)
+          storyText.add(y = " ship.")
+        else:
+          for index, ship in protoShipsList:
+            if index == storyData[1].parseInt:
+              storyText.add(y = ship.name & ".")
+              break
       of any:
         discard
+    tclEval(script = storyView & " insert end {" & storyText & "}")
+    tclEval(script = "grid " & button)
+    button = frameName & ".options.set"
+    tclEval(script = "grid " & button)
+  else:
+    tclEval(script = "grid remove " & button)
+    button = frameName & ".options.set"
+    tclEval(script = "grid remove " & button)
+  tclEval(script = storyView & " configure -state disabled -height " & $rows)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
