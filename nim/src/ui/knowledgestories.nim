@@ -15,12 +15,36 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import ../tk
+import std/strutils
+import ../[stories, tk]
+import coreui
+
+proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = mainPaned & ".knowledgeframe.stories.canvas.frame"
+    storiesBox = frameName & ".options.titles"
+    storyIndex = tclEval2(script = storiesBox & " current").parseInt + 1
+  var button = frameName & ".options.show"
+  let
+    lineWidth = (tclEval2(script = "winfo reqwidth " & storiesBox).parseInt +
+        tclEval2(script = "winfo reqwidth " & button).parseInt) / tclEval2(
+        script = "font measure InterfaceFont { }").parseInt
+    storyView = frameName & ".view"
+  tclEval(script = storyView & " configure -state normal -width " & $lineWidth)
+  tclEval(script = storyView & " delete 1.0 end")
+  var
+    storyText = ""
+    rows = 1
+  for stepText in finishedStories[storyIndex].stepsTexts:
+    storyText.add(y = stepText & '\n')
+    rows.inc
+  return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of known stories
   try:
     discard
-#    addCommand("ShowBases", showBasesCommand)
+#    addCommand("ShowStory", showStoryCommand)
   except:
     showError(message = "Can't add a Tcl command.")
