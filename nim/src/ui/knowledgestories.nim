@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
+import std/[strutils, tables]
 import ../[stories, tk]
 import coreui
 
@@ -24,21 +24,31 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     frameName = mainPaned & ".knowledgeframe.stories.canvas.frame"
     storiesBox = frameName & ".options.titles"
-    storyIndex = tclEval2(script = storiesBox & " current").parseInt + 1
+    storyIndex = tclEval2(script = storiesBox & " current").parseInt
   var button = frameName & ".options.show"
   let
-    lineWidth = (tclEval2(script = "winfo reqwidth " & storiesBox).parseInt +
+    lineWidth = ((tclEval2(script = "winfo reqwidth " & storiesBox).parseInt +
         tclEval2(script = "winfo reqwidth " & button).parseInt) / tclEval2(
-        script = "font measure InterfaceFont { }").parseInt
+        script = "font measure InterfaceFont { }").parseInt).int
     storyView = frameName & ".view"
   tclEval(script = storyView & " configure -state normal -width " & $lineWidth)
   tclEval(script = storyView & " delete 1.0 end")
   var
     storyText = ""
     rows = 1
-  for stepText in finishedStories[storyIndex].stepsTexts:
+  let story = finishedStories[storyIndex]
+  for stepText in story.stepsTexts:
     storyText.add(y = stepText & '\n')
-    rows.inc
+    rows = rows + (stepText.len / lineWidth).int + 1
+  if story.stepsTexts.len < story.stepsAmount:
+    storyText.add(y = getCurrentStoryText() & '\n')
+    rows = rows + (getCurrentStoryText().len / lineWidth).int + 1
+    if currentStory.data.len > 0:
+      let step = (if currentStory.currentStep == -1: storiesList[
+          currentStory.index].startingStep elif currentStory.currentStep >
+          -1: storiesList[currentStory.index].steps[
+          currentStory.currentStep] else: storiesList[
+          currentStory.index].finalStep)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
