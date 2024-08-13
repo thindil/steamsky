@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[stories, tk]
+import ../[game, stories, tk]
 import coreui
 
 proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -44,11 +44,36 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     storyText.add(y = getCurrentStoryText() & '\n')
     rows = rows + (getCurrentStoryText().len / lineWidth).int + 1
     if currentStory.data.len > 0:
-      let step = (if currentStory.currentStep == -1: storiesList[
+      let
+        step = (if currentStory.currentStep == -1: storiesList[
           currentStory.index].startingStep elif currentStory.currentStep >
           -1: storiesList[currentStory.index].steps[
           currentStory.currentStep] else: storiesList[
           currentStory.index].finalStep)
+        storyData = currentStory.data.split(sep = ';')
+      case step.finishCondition
+      of askInBase:
+        if storyData.len < 2:
+          storyText.add(y = "You must travel to base " & currentStory.data & " at X: ")
+          for base in skyBases:
+            if base.name == currentStory.data:
+              storyText.add(y = $base.skyX & " Y: " & $base.skyY)
+              break
+        else:
+          storyText.add(y = "You can ask in any base.")
+      of destroyShip:
+        storyText.add(y = "You must find " & protoShipsList[storyData[
+            2].parseInt].name & " at X: " & storyData[0] & " Y: " & storyData[1])
+      of explore:
+        storyText.add(y = "You must travel to X: " & storyData[0] & " Y: " &
+            storyData[1])
+      of loot:
+        storyText.add(y = "You must loot: " & itemsList[storyData[
+            0].parseInt].name & " from ")
+        if storyData[1] == "any":
+          storyText.add(y = "any ")
+      of any:
+        discard
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
