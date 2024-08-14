@@ -27,3 +27,4 @@ var
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
   startX*, startY*: int           ## Coordinates of the top left point on the map
+  centerX*, centerY*: Positive          ## Coordinates of the center point on the map

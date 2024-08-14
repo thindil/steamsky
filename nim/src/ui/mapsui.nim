@@ -20,7 +20,6 @@ import ../[basestypes, config, game, maps, missions, statistics, stories, tk, ty
 import coreui, dialogs, themes, updateheader, utilsui2
 
 var
-  centerX*, centerY*: Positive          ## Coordinates of the center point on the map
   mapView = ".gameframe.paned.mapframe.map"
   menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]
