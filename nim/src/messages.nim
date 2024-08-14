@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import contracts
 import config, game, types
 
 type
@@ -23,7 +24,8 @@ type
     kind*: cint
     color*: cint
 
-proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [].} =
+proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [],
+    contractual.} =
   ## Format the selected the game time, add leading zeroes, marks between
   ## values, etc.
   ##
@@ -45,7 +47,8 @@ proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [].
   result.add($time.minutes)
 
 proc addMessage*(message: string; mType: MessageType;
-    color: MessageColor = white) {.sideEffect, raises: [], tags: [].} =
+    color: MessageColor = white) {.sideEffect, raises: [], tags: [],
+        contractual.} =
   ## Add the message to the messages list. Delete the oldest message if the
   ## adding will reach the max limit of messages. Same as above, but uses
   ## the standard types instead of compatible string or int.
@@ -53,18 +56,23 @@ proc addMessage*(message: string; mType: MessageType;
   ## * message - The message to add
   ## * mType   - The type of the message to add
   ## * color   - The color used to draw the message
-  if messagesList.len() == gameSettings.messagesLimit:
-    messagesList.delete(i = 0)
-  messagesList.add(y = MessageData(message: "[" & formattedTime(gameDate) & "] " &
-      message, kind: mType, color: color))
+  require:
+    message.len > 0
+  body:
+    if messagesList.len() == gameSettings.messagesLimit:
+      messagesList.delete(i = 0)
+    messagesList.add(y = MessageData(message: "[" & formattedTime(gameDate) &
+        "] " & message, kind: mType, color: color))
 
-proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc.} =
+proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   ## Get the index of the last message in the messagesList
   ##
   ## Returns the index of the last message in the messagesList
   return (messagesList.len() - 1).cint
 
-proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData =
+proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.raises: [],
+    tags: [], contractual.} =
   ## Get the selected message of the selected type
   ##
   ## * messageIndex - The index of the message. If positive, it is the index from
@@ -107,11 +115,12 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData =
     if index == messageIndex:
       return message
 
-proc clearMessages*() {.raises: [], tags: [], exportc.} =
+proc clearMessages*() {.raises: [], tags: [], exportc, contractual.} =
   ## Remove all the in-game messages
   messagesList = @[]
 
-proc messagesAmount*(kind: MessageType = default): int =
+proc messagesAmount*(kind: MessageType = default): int {.raises: [], tags: [],
+    contractual.} =
   ## Get the amount of the messages of the selected type
   ##
   ## * kind - The type of messages which amount will be get
@@ -125,23 +134,26 @@ proc messagesAmount*(kind: MessageType = default): int =
       result.inc
 
 proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
-    color: MessageColor = white) {.raises: [], tags: [].} =
+    color: MessageColor = white) {.raises: [], tags: [], contractual.} =
   ## Restore the selected message from the save file
   ##
   ## * message - The text of the message to restore
   ## * kind    - The kind of the message to restore
   ## * color   - The color used to draw the message
-  messagesList.add(MessageData(message: message, kind: kind, color: color))
+  require:
+    message.len > 0
+  body:
+    messagesList.add(MessageData(message: message, kind: kind, color: color))
 
 # Temporary code for interfacing with Ada
 
-proc formattedTime(year: cint, month: cint, day: cint, hour: cint,
-    minutes: cint): cstring {.raises: [], tags: [], exportc.} =
+proc formattedTime(year: cint; month: cint; day: cint; hour: cint;
+    minutes: cint): cstring {.raises: [], tags: [], exportc, contractual.} =
   return formattedTime(time = DateRecord(year: year.int, month: month.int,
       day: day.int, hour: hour.int, minutes: minutes.int)).cstring
 
 proc addMessage(message: cstring; kind: cint; color: cint = ord(
-    white)) {.sideEffect, raises: [], tags: [], exportc.} =
+    white)) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
   if messagesList.len() == gameSettings.messagesLimit:
     messagesList.delete(i = 0)
   messagesList.add(y = MessageData(message: "[" & $formattedTime(gameDate.year,
@@ -149,16 +161,17 @@ proc addMessage(message: cstring; kind: cint; color: cint = ord(
       $message, kind: kind.MessageType, color: color.MessageColor))
 
 proc getMessage(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   let nimMessage = getMessage(messageIndex.int, kind.MessageType)
   return MessageDataC(message: nimMessage.message.cstring,
       kind: nimMessage.kind.ord.cint, color: nimMessage.color.ord.cint)
 
-proc messagesAmount(kind: cint): cint {.raises: [], tags: [], exportc.} =
+proc messagesAmount(kind: cint): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   return messagesAmount(kind.MessageType).cint
 
 proc restoreMessage(message: cstring; kind: cint = ord(
     MessageType.default).cint; color: cint = ord(white).cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   messagesList.add(MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
