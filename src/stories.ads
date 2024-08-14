@@ -34,15 +34,6 @@ package Stories is
       Default_Value => DROPITEM;
       -- ****
 
-      --## rule off REDUCEABLE_SCOPE
-      -- ****d* Stories/Stories.Default_Start_Condition
-      -- FUNCTION
-      -- The default type of condition to start stories
-      -- SOURCE
-   Default_Start_Condition: constant Start_Condition_Type := DROPITEM;
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
-
    -- ****t* Stories/Stories.Step_Condition_Type
    -- FUNCTION
    -- Types of conditions to finish story step
@@ -51,15 +42,6 @@ package Stories is
      (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT) with
       Default_Value => ANY;
       -- ****
-
-      --## rule off REDUCEABLE_SCOPE
-      -- ****d* Stories/Stories.Default_Step_Condition
-      -- FUNCTION
-      -- The default type of the condition to finish the story
-      -- SOURCE
-   Default_Step_Condition: constant Step_Condition_Type := ANY;
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****s* Stories/Stories.Step_Text_Data
    -- FUNCTION
@@ -73,15 +55,6 @@ package Stories is
       Text: Unbounded_String;
    end record;
    -- ****
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****d* Stories/Stories.Empty_Step_Text
-   -- FUNCTION
-   -- Empty data for stories steps texts
-   -- SOURCE
-   Empty_Step_Text: constant Step_Text_Data := (others => <>);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****t* Stories/Stories.StepTexts_Container
    -- FUNCTION
@@ -143,13 +116,6 @@ package Stories is
    end record;
    -- ****
 
-   -- ****d* Stories/Stories.Empty_Step
-   -- FUNCTION
-   -- Empty story step information
-   -- SOURCE
-   Empty_Step: constant Step_Data := (others => <>);
-   -- ****
-
    -- ****t* Stories/Stories.Steps_Container
    -- FUNCTION
    -- Used to store stories steps
@@ -188,15 +154,6 @@ package Stories is
    end record;
    -- ****
 
-   --## rule off REDUCEABLE_SCOPE
-   -- ****d* Stories/Stories.Empty_Story
-   -- FUNCTION
-   -- Empty story inforation
-   -- SOURCE
-   Empty_Story: constant Story_Data := (others => <>);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
-
    -- ****s* Stories/Stories.Current_Story_Data
    -- FUNCTION
    -- Data structure for current active story
@@ -222,15 +179,6 @@ package Stories is
    end record;
    -- ****
 
-   --## rule off REDUCEABLE_SCOPE
-   -- ****d* Stories/Stories.Empty_Current_Story
-   -- FUNCTION
-   -- Empty current story data
-   -- SOURCE
-   Empty_Current_Story: constant Current_Story_Data := (others => <>);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
-
    -- ****s* Stories/Stories.Finished_Story_Data
    -- FUNCTION
    -- Data structure for finished story/steps
@@ -247,48 +195,15 @@ package Stories is
    end record;
    -- ****
 
-   --## rule off REDUCEABLE_SCOPE
-   -- ****d* Stories/Stories.Empty_Finished_Story
+   -- ****f* Stories/Stories.Get_Story_Location
    -- FUNCTION
-   -- Empty finished story data
-   -- SOURCE
-   Empty_Finished_Story: constant Finished_Story_Data := (others => <>);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
-
-   -- ****f* Stories/Stories.Get_Current_Story_Text
-   -- FUNCTION
-   -- Get text of current step in story
-   -- RESULT
-   -- Text of current step in current story
-   -- SOURCE
-   function Get_Current_Story_Text return Unbounded_String;
-   -- ****
-
-   -- ****f* Stories/Stories.Get_Step_Data
-   -- FUNCTION
-   -- Get step finish data with selected name
+   -- Get target location of current story
    -- PARAMETERS
-   -- Finish_Data - List of step data
-   -- Name        - Name of data to get
+   -- Story_X - X coordination of current story target
+   -- Story_Y - Y coordination of current story target
    -- RESULT
-   -- Selected data from FinishData parameter
+   -- Parameters X and Y
    -- SOURCE
-   function Get_Step_Data
-     (Finish_Data: StepData_Container.Vector; Name: String)
-      return Unbounded_String with
-      Pre => Name'Length > 0;
-      -- ****
-
-      -- ****f* Stories/Stories.Get_Story_Location
-      -- FUNCTION
-      -- Get target location of current story
-      -- PARAMETERS
-      -- Story_X - X coordination of current story target
-      -- Story_Y - Y coordination of current story target
-      -- RESULT
-      -- Parameters X and Y
-      -- SOURCE
    procedure Get_Story_Location
      (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) with
       Import => True,
@@ -299,7 +214,6 @@ package Stories is
 -- Temporary code to interact with Nim
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data;
-   function Get_Current_Story return Current_Story_Data;
    function Get_Story(Index: Unbounded_String) return Story_Data;
 
 end Stories;
