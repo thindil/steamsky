@@ -1,4 +1,4 @@
---    Copyright 2018-2023 Bartek thindil Jasicki
+--    Copyright 2018-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -201,15 +201,6 @@ package Factions is
       Bases_Types: BaseType_Container.Map;
       Weapon_Skill: SkillsData_Container.Extended_Index;
    end record;
-   -- ****
-
-   -- ****d* Factions/Factions.Empty_Faction
-   -- FUNCTION
-   -- Default empty faction
-   -- HISTORY
-   -- 8.3 - Added
-   -- SOURCE
-   Empty_Faction: constant Faction_Record := (others => <>);
    -- ****
 
 -- Temporary code to interact with Nim
