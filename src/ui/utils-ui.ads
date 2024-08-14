@@ -62,7 +62,9 @@ package Utils.UI is
    function Show_On_Map_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showOnMapCommand";
       -- ****
 
       -- ****o* UUI/UUI.Set_Destination_Command

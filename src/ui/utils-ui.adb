@@ -374,18 +374,18 @@ package body Utils.UI is
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
 
-   function Show_On_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-   begin
-      Set_Center_Point
-        (X => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
-         Y => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
-      Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
-      return TCL_OK;
-   end Show_On_Map_Command;
+--   function Show_On_Map_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--   begin
+--      Set_Center_Point
+--        (X => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+--         Y => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
+--      Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
+--      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+--      return TCL_OK;
+--   end Show_On_Map_Command;
 
    function Set_Destination_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
