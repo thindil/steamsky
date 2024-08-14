@@ -208,9 +208,15 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  centerX = ($argv[1]).parseInt
-  centerY = ($argv[2]).parseInt
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  centerX = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't set center X.")
+  centerY = try:
+      ($argv[2]).parseInt
+    except:
+      return showError(message = "Can't set center Y.")
   tclEval(script = "InvokeButton " & closeButton)
   tclEval(script = "grid remove " & closeButton)
   return tclOk
