@@ -88,19 +88,6 @@ package body Utils.UI is
       External_Name => "setTextVariableCommand";
       -- ****
 
---   function Set_Text_Variable_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---   begin
---      Get_Ada_Ship;
---      Tcl_Eval
---        (interp => Interp,
---         strng => "NimSetTextVariable " & CArgv.Arg(Argv => Argv, N => 1));
---      Set_Ada_Ship(Ship => Player_Ship);
---      return TCL_OK;
---   end Set_Text_Variable_Command;
-
    -- ****o* UUI/UUI.Process_Question_Command
    -- FUNCTION
    -- Process question from dialog when the player answer Yes there
