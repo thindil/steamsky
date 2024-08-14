@@ -21,6 +21,17 @@ import coreui
 
 proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show the current story information
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowStory
   let
     frameName = mainPaned & ".knowledgeframe.stories.canvas.frame"
     storiesBox = frameName & ".options.titles"
