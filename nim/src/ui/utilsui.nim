@@ -209,6 +209,19 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show the selected point on map
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the name was set, otherwise tclError
+  ##
+  ## Tcl:
+  ## ShowOnMap X Y
+  ## X is the x coordinate of point to show, Y is the y coordinate of point
+  ## to show
   centerX = try:
       ($argv[1]).parseInt
     except:
