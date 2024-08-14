@@ -207,6 +207,14 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     updateCrewInfo()
   return tclOk
 
+proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  centerX = ($argv[1]).parseInt
+  centerY = ($argv[2]).parseInt
+  tclEval(script = "InvokeButton " & closeButton)
+  tclEval(script = "grid remove " & closeButton)
+  return tclOk
+
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let answer = argv[1]
@@ -261,7 +269,8 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #  addCommand("ResizeCanvas", resizeCanvasCommand)
 #  addCommand("CheckAmount", checkAmountCommand)
 #  addCommand("ValidateAmount", validateAmountCommand)
-#  addCommand("NimSetTextVariable", setTextVariableCommand)
+#  addCommand("SetTextVariable", setTextVariableCommand)
+#  addCommand("ShowOnMapCommand", showOnMapCommand)
 
 # Temporary code for interfacing with Ada
 
