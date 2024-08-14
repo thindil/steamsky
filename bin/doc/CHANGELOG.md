@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 - Updated look of information about available space on the player's ship
   during looting an empty base
 - Made checked checkbutton a bit darker to match the game's default theme
+- Don't reset the items' type selection when buying or selling items in bases
+  or with ships
 
 ### Fixed
 - Crash when dropping items in empty bases
