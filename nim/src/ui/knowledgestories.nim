@@ -20,16 +20,22 @@ import ../[game, stories, tk]
 import coreui
 
 proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = mainPaned & ".knowledgeframe.stories.canvas.frame"
     storiesBox = frameName & ".options.titles"
-    storyIndex = tclEval2(script = storiesBox & " current").parseInt
+    storyIndex = try:
+        tclEval2(script = storiesBox & " current").parseInt
+      except:
+        return showError(message = "Can't get story index.")
   var button = frameName & ".options.show"
   let
-    lineWidth = ((tclEval2(script = "winfo reqwidth " & storiesBox).parseInt +
-        tclEval2(script = "winfo reqwidth " & button).parseInt) / tclEval2(
-        script = "font measure InterfaceFont { }").parseInt).int
+    lineWidth = try:
+        ((tclEval2(script = "winfo reqwidth " & storiesBox).parseInt +
+          tclEval2(script = "winfo reqwidth " & button).parseInt) / tclEval2(
+          script = "font measure InterfaceFont { }").parseInt).int
+      except:
+        return showError(message = "Can't get line width.")
     storyView = frameName & ".view"
   tclEval(script = storyView & " configure -state normal -width " & $lineWidth)
   tclEval(script = storyView & " delete 1.0 end")
@@ -41,15 +47,21 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     storyText.add(y = stepText & '\n')
     rows = rows + (stepText.len / lineWidth).int + 1
   if story.stepsTexts.len < story.stepsAmount:
-    storyText.add(y = getCurrentStoryText() & '\n')
-    rows = rows + (getCurrentStoryText().len / lineWidth).int + 1
+    try:
+      storyText.add(y = getCurrentStoryText() & '\n')
+      rows = rows + (getCurrentStoryText().len / lineWidth).int + 1
+    except:
+      return showError(message = "Can't get current story text.")
     if currentStory.data.len > 0:
       let
-        step = (if currentStory.currentStep == -1: storiesList[
-          currentStory.index].startingStep elif currentStory.currentStep >
-          -1: storiesList[currentStory.index].steps[
-          currentStory.currentStep] else: storiesList[
-          currentStory.index].finalStep)
+        step = try:
+            (if currentStory.currentStep == -1: storiesList[
+              currentStory.index].startingStep elif currentStory.currentStep >
+              -1: storiesList[currentStory.index].steps[
+              currentStory.currentStep] else: storiesList[
+              currentStory.index].finalStep)
+          except:
+            return showError(message = "Can't get the step.")
         storyData = currentStory.data.split(sep = ';')
       case step.finishCondition
       of askInBase:
@@ -62,26 +74,38 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
         else:
           storyText.add(y = "You can ask in any base.")
       of destroyShip:
-        storyText.add(y = "You must find " & protoShipsList[storyData[
-            2].parseInt].name & " at X: " & storyData[0] & " Y: " & storyData[1])
+        try:
+          storyText.add(y = "You must find " & protoShipsList[storyData[
+              2].parseInt].name & " at X: " & storyData[0] & " Y: " & storyData[1])
+        except:
+          return showError(message = "Can't get the destroy ship step.")
       of explore:
         storyText.add(y = "You must travel to X: " & storyData[0] & " Y: " &
             storyData[1])
       of loot:
-        storyText.add(y = "You must loot: " & itemsList[storyData[
-            0].parseInt].name & " from ")
+        try:
+          storyText.add(y = "You must loot: " & itemsList[storyData[
+              0].parseInt].name & " from ")
+        except:
+          return showError(message = "Can't get the loot data.")
         if storyData[1] == "any":
           storyText.add(y = "any ")
-          let faction = factionsList[getStepData(finishData = step.finishData,
-              name = "faction")]
+          let faction = try:
+              factionsList[getStepData(finishData = step.finishData,
+                name = "faction")]
+            except:
+              return showError(message = "Can't get the faction")
           if faction.name.len > 0:
             storyText.add(y = faction.name)
           storyText.add(y = " ship.")
         else:
           for index, ship in protoShipsList:
-            if index == storyData[1].parseInt:
-              storyText.add(y = ship.name & ".")
-              break
+            try:
+              if index == storyData[1].parseInt:
+                storyText.add(y = ship.name & ".")
+                break
+            except:
+              return showError(message = "Can't get the ship name.")
       of any:
         discard
     tclEval(script = storyView & " insert end {" & storyText & "}")
