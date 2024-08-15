@@ -150,6 +150,7 @@ package Factions is
       Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Factions/Factions.Faction_Record
    -- FUNCTION
    -- Data structure for faction
@@ -202,6 +203,7 @@ package Factions is
       Weapon_Skill: SkillsData_Container.Extended_Index;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
 -- Temporary code to interact with Nim
 
