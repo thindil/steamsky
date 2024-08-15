@@ -24,7 +24,6 @@ package body Stories is
       Name: chars_ptr;
       Value: chars_ptr;
    end record;
-   type Nim_Finish_Data_Array is array(0 .. 9) of Nim_Step_Finish_Data;
    --## rule on TYPE_INITIAL_VALUES
 
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data is
@@ -69,6 +68,7 @@ package body Stories is
          Text: chars_ptr;
       end record;
       type Nim_Text_Data_Array is array(0 .. 9) of Nim_Step_Text_Data;
+      type Nim_Finish_Data_Array is array(0 .. 9) of Nim_Step_Finish_Data;
       type Nim_Step_Data is record
          Index: chars_ptr;
          Finish_Condition: Integer;
