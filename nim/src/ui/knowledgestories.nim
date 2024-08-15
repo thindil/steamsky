@@ -131,8 +131,11 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
-  var (newX, newY) = getStoryLocation()
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  var (newX, newY) = try:
+      getStoryLocation()
+    except:
+      return showError(message = "Can't get the story location.")
   centerX = newX
   centerY = newY
   tclEval(script = "InvokeButton " & closeButton)
