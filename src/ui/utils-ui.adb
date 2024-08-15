@@ -35,7 +35,7 @@ with Events;
 with Game;
 with Items;
 with Maps;
-with Maps.UI; use Maps.UI;
+with Maps.UI;
 with MainMenu;
 with Messages; use Messages;
 with Missions;
@@ -118,6 +118,7 @@ package body Utils.UI is
       use Crew;
       use Game;
       use Maps;
+      use Maps.UI;
       use MainMenu;
       use Ships.Crew;
       use Tiny_String;
