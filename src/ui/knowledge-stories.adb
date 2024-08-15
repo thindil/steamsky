@@ -63,21 +63,6 @@ package body Knowledge.Stories is
       External_Name => "showStoryLocationCommand";
       -- ****
 
---   function Show_Story_Location_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      New_X, New_Y: Positive;
---   begin
---      Get_Story_Location(Story_X => New_X, Story_Y => New_Y);
---      return
---        Show_On_Map_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
---           Argv =>
---             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
---             Positive'Image(New_X) & Positive'Image(New_Y));
---   end Show_Story_Location_Command;
-
    -- ****o* KStories/KStories.Set_Story_Command
    -- FUNCTION
    -- Set the current story event as the player's ship destination
