@@ -313,27 +313,33 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
         0: " " & $cost else: "") & " " & button &
         "} -command {ValidateAmount " & amountBox & " " & $(itemIndex + 1) &
         " " & action & (if cost > 0: " " & $cost else: "") & " " & button & "}")
-  let maxButton = itemDialog & ".amountlbl"
-  if maxAmount == 0:
-    tclEval(script = "ttk::button " & maxButton & " -text {Amount (max: " &
-        $playerShip.cargo[itemIndex].amount & "):} -command {" & amountBox &
-        " set " & $playerShip.cargo[itemIndex].amount & ";" & amountBox & " validate}")
-    tclEval(script = "grid " & maxButton & " -padx {5 0}")
-    tclEval(script = "tooltip::tooltip " & maxButton &
-        " \"Max amount of items to " & action & ".\"")
-    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
-  else:
-    tclEval(script = "ttk::button " & maxButton & " -text {Amount (max: " &
-        $maxAmount & "):} -command {" & amountBox & " set " & $maxAmount & ";" &
-        amountBox & " validate}")
-    tclEval(script = "grid " & maxButton & " -padx {5 0}")
-    tclEval(script = "tooltip::tooltip " & maxButton &
-        " \"Max amount of items to " & action & "." & (if action in ["buy",
-        "sell"]: " It depends on bonuses\\nfrom the base's reputation and trader's skill level too." else: "") & "\"")
-    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  let
+    amountLabel = itemDialog & ".amountlbl"
+    newMaxAmount = (if maxAmount == 0: playerShip.cargo[itemIndex].amount else: maxAmount)
+  tclEval(script = "ttk::label " & amountLabel & " -text {Amount (max: " & $newMaxAmount & "):}")
+#  if maxAmount == 0:
+    # -command {" & amountBox & " set " & $playerShip.cargo[itemIndex].amount & ";" & amountBox & " validate}
+#    tclEval(script = "tooltip::tooltip " & maxButton &
+#        " \"Max amount of items to " & action & ".\"")
+#    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+#  else:
+    #  -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}
+#    tclEval(script = "tooltip::tooltip " & maxButton &
+#        " \"Max amount of items to " & action & "." & (if action in ["buy",
+#        "sell"]: " It depends on bonuses\\nfrom the base's reputation and trader's skill level too." else: "") & "\"")
+#    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  tclEval(script = "grid " & amountLabel & " -padx {5 0}")
+  # Add amount combobox
   tclEval(script = amountBox & " set 1")
   tclEval(script = "grid " & amountBox & " -column 1 -row 1 -padx {0 5}")
   tclEval(script = "bind " & amountBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+  # Add amount buttons
+  let amountFrame = itemDialog & ".amountframe"
+  tclEval(script = "ttk::frame " & amountFrame)
+  var amounts: seq[Positive]
+  amounts.add(y = 1)
+  tclEval(script = "grid " & amountFrame & " -padx 5")
+  # Add other labels
   var label = ""
   if cost > 0:
     label = itemDialog & ".costlbl"
@@ -344,17 +350,17 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
     tclEval(script = "ttk::label " & label & " -text { " & $cost & " " &
         moneyName & "} -style " & (if action ==
         "buy": "Golden.TLabel" else: "Headergreen.TLabel"))
-    tclEval(script = "grid " & label & " -column 1 -row 2 -padx {0 5}")
+    tclEval(script = "grid " & label & " -column 1 -row 3 -padx {0 5}")
   label = itemDialog & ".errorlbl"
   tclEval(script = "ttk::label " & label & " -style Headerred.TLabel -wraplength 370")
   tclEval(script = "grid " & label & " -columnspan 2 -padx 5")
   tclEval(script = "grid remove " & label)
-  tclEval(script = "grid " & button & " -column 0 -row 4 -pady {0 5}")
+  tclEval(script = "grid " & button & " -column 0 -row 5 -pady {0 5}")
   tclEval(script = "bind " & button & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   button = itemDialog & ".cancelbutton"
   tclEval(script = "ttk::button " & button & " -command {CloseDialog " &
       itemDialog & "} -image cancelicon -style Dialogred.TButton -text {Close}")
-  tclEval(script = "grid " & button & " -column 1 -row 4 -pady {0 5}")
+  tclEval(script = "grid " & button & " -column 1 -row 5 -pady {0 5}")
   tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
   tclEval(script = "focus " & button)
   tclEval(script = "bind " & button & " <Tab> {focus .itemdialog.dropbutton;break}")
