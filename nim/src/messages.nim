@@ -34,17 +34,17 @@ proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [],
   ## Returns the string with formatted time
   result = $time.year & "-"
   if time.month < 10:
-    result.add("0")
-  result.add($time.month & "-")
+    result.add(y = "0")
+  result.add(y = $time.month & "-")
   if time.day < 10:
-    result.add("0")
-  result.add($time.day & " ")
+    result.add(y = "0")
+  result.add(y = $time.day & " ")
   if time.hour < 10:
-    result.add("0")
-  result.add($time.hour & ":")
+    result.add(y = "0")
+  result.add(y = $time.hour & ":")
   if time.minutes < 10:
-    result.add("0")
-  result.add($time.minutes)
+    result.add(y = "0")
+  result.add(y = $time.minutes)
 
 proc addMessage*(message: string; mType: MessageType;
     color: MessageColor = white) {.sideEffect, raises: [], tags: [],
@@ -61,8 +61,8 @@ proc addMessage*(message: string; mType: MessageType;
   body:
     if messagesList.len() == gameSettings.messagesLimit:
       messagesList.delete(i = 0)
-    messagesList.add(y = MessageData(message: "[" & formattedTime(gameDate) &
-        "] " & message, kind: mType, color: color))
+    messagesList.add(y = MessageData(message: "[" & formattedTime(
+        time = gameDate) & "] " & message, kind: mType, color: color))
 
 proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc,
     contractual.} =
@@ -71,8 +71,8 @@ proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc,
   ## Returns the index of the last message in the messagesList
   return (messagesList.len() - 1).cint
 
-proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.raises: [],
-    tags: [], contractual.} =
+proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.raises: [
+    ], tags: [], contractual.} =
   ## Get the selected message of the selected type
   ##
   ## * messageIndex - The index of the message. If positive, it is the index from
@@ -93,7 +93,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
         return MessageData(message: messagesList[index].message,
             kind: messagesList[index].kind, color: messagesList[index].color)
       index = 1
-      for i in countdown(messagesList.len - 1, 0):
+      for i in countdown(a = messagesList.len - 1, b = 0):
         let message = MessageData(message: messagesList[i].message,
             kind: messagesList[i].kind, color: messagesList[i].color)
         if message.kind == kind:
@@ -107,7 +107,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
       messagesList[index].kind, color: messagesList[
       index].color)
   index = 0
-  for i in countup(0, messagesList.len - 1):
+  for i in countup(a = 0, b = messagesList.len - 1):
     let message = MessageData(message: messagesList[i].message,
         kind: messagesList[i].kind, color: messagesList[i].color)
     if message.kind == kind:
@@ -143,7 +143,7 @@ proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
   require:
     message.len > 0
   body:
-    messagesList.add(MessageData(message: message, kind: kind, color: color))
+    messagesList.add(y = MessageData(message: message, kind: kind, color: color))
 
 # Temporary code for interfacing with Ada
 
@@ -152,26 +152,29 @@ proc formattedTime(year: cint; month: cint; day: cint; hour: cint;
   return formattedTime(time = DateRecord(year: year.int, month: month.int,
       day: day.int, hour: hour.int, minutes: minutes.int)).cstring
 
-proc addMessage(message: cstring; kind: cint; color: cint = ord(
+proc addMessage(message: cstring; kind: cint; color: cint = ord(x =
     white)) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
   if messagesList.len() == gameSettings.messagesLimit:
     messagesList.delete(i = 0)
-  messagesList.add(y = MessageData(message: "[" & $formattedTime(gameDate.year,
-      gameDate.month, gameDate.day, gameDate.hour, gameDate.minutes) & "] " &
+  messagesList.add(y = MessageData(message: "[" & $formattedTime(
+      year = gameDate.year, month = gameDate.month, day = gameDate.day,
+          hour = gameDate.hour, minutes = gameDate.minutes) & "] " &
       $message, kind: kind.MessageType, color: color.MessageColor))
 
 proc getMessage(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
     tags: [], exportc, contractual.} =
-  let nimMessage = getMessage(messageIndex.int, kind.MessageType)
+  let nimMessage = getMessage(messageIndex = messageIndex.int,
+      kind = kind.MessageType)
   return MessageDataC(message: nimMessage.message.cstring,
       kind: nimMessage.kind.ord.cint, color: nimMessage.color.ord.cint)
 
 proc messagesAmount(kind: cint): cint {.raises: [], tags: [], exportc,
     contractual.} =
-  return messagesAmount(kind.MessageType).cint
+  return messagesAmount(kind = kind.MessageType).cint
 
 proc restoreMessage(message: cstring; kind: cint = ord(
-    MessageType.default).cint; color: cint = ord(white).cint) {.raises: [],
+    x = MessageType.default).cint; color: cint = ord(
+        x = white).cint) {.raises: [],
     tags: [], exportc, contractual.} =
-  messagesList.add(MessageData(message: $message, kind: kind.MessageType,
+  messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
