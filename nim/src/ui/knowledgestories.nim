@@ -130,10 +130,20 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = storyView & " configure -state disabled -height " & $rows)
   return tclOk
 
+proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  var (newX, newY) = getStoryLocation()
+  centerX = newX
+  centerY = newY
+  tclEval(script = "InvokeButton " & closeButton)
+  tclEval(script = "grid remove " & closeButton)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of known stories
   try:
     discard
 #    addCommand("ShowStory", showStoryCommand)
+#    addCommand("ShowStoryLocation", showStoryLocationCommand)
   except:
     showError(message = "Can't add a Tcl command.")
