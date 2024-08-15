@@ -289,7 +289,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #  addCommand("CheckAmount", checkAmountCommand)
 #  addCommand("ValidateAmount", validateAmountCommand)
 #  addCommand("SetTextVariable", setTextVariableCommand)
-#  addCommand("ShowOnMapCommand", showOnMapCommand)
+#  addCommand("ShowOnMap", showOnMapCommand)
 
 # Temporary code for interfacing with Ada
 
