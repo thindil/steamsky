@@ -147,10 +147,16 @@ proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
       getStoryLocation()
     except:
       return showError(message = "Can't get the story location.")
-  centerX = newX
-  centerY = newY
-  tclEval(script = "InvokeButton " & closeButton)
-  tclEval(script = "grid remove " & closeButton)
+  tclEval(script = "ShowOnMap " & $newX & " " & $newY)
+  return tclOk
+
+proc setStoryCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  var (newX, newY) = try:
+      getStoryLocation()
+    except:
+      return showError(message = "Can't get the story location.")
+  tclEval(script = "SetDestination2 " & $newX & " " & $newY)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -159,5 +165,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     discard
 #    addCommand("ShowStory", showStoryCommand)
 #    addCommand("ShowStoryLocation", showStoryLocationCommand)
+#    addCommand("SetStory", setStoryCommand)
   except:
     showError(message = "Can't add a Tcl command.")
