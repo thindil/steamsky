@@ -132,6 +132,17 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show the current story event on map
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowStoryLocation
   var (newX, newY) = try:
       getStoryLocation()
     except:
