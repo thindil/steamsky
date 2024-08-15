@@ -26,6 +26,7 @@ with Game; use Game;
 package Stories is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****t* Stories/Stories.Start_Condition_Type
    -- FUNCTION
    -- Types of conditions to start stories
@@ -194,6 +195,7 @@ package Stories is
       Steps_Texts: UnboundedString_Container.Vector;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****f* Stories/Stories.Get_Story_Location
    -- FUNCTION
