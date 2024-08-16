@@ -19,13 +19,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Stories is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Step_Finish_Data is record
-      Name: chars_ptr;
-      Value: chars_ptr;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    function Get_Finished_Story(Index: Positive) return Finished_Story_Data is
       use Interfaces.C;
 
@@ -68,6 +61,12 @@ package body Stories is
          Text: chars_ptr;
       end record;
       type Nim_Text_Data_Array is array(0 .. 9) of Nim_Step_Text_Data;
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Step_Finish_Data is record
+         Name: chars_ptr;
+         Value: chars_ptr;
+      end record;
+      --## rule on TYPE_INITIAL_VALUES
       type Nim_Finish_Data_Array is array(0 .. 9) of Nim_Step_Finish_Data;
       type Nim_Step_Data is record
          Index: chars_ptr;
