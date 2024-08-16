@@ -15,14 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to in-game messages, like adding, removing, finding
+## them, etc.
+
 import contracts
 import config, game, types
-
-type
-  MessageDataC* = object
-    message*: cstring
-    kind*: cint
-    color*: cint
 
 proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [],
     contractual.} =
@@ -147,13 +144,21 @@ proc restoreMessage*(message: string; kind: MessageType = MessageType.default;
 
 # Temporary code for interfacing with Ada
 
+type
+  MessageDataC = object
+    message: cstring
+    kind: cint
+    color: cint
+
 proc formattedTime(year: cint; month: cint; day: cint; hour: cint;
     minutes: cint): cstring {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return formattedTime(time = DateRecord(year: year.int, month: month.int,
       day: day.int, hour: hour.int, minutes: minutes.int)).cstring
 
 proc addMessage(message: cstring; kind: cint; color: cint = ord(x =
     white)) {.sideEffect, raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if messagesList.len() == gameSettings.messagesLimit:
     messagesList.delete(i = 0)
   messagesList.add(y = MessageData(message: "[" & $formattedTime(
@@ -163,6 +168,7 @@ proc addMessage(message: cstring; kind: cint; color: cint = ord(x =
 
 proc getMessage(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   let nimMessage = getMessage(messageIndex = messageIndex.int,
       kind = kind.MessageType)
   return MessageDataC(message: nimMessage.message.cstring,
@@ -170,11 +176,13 @@ proc getMessage(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
 
 proc messagesAmount(kind: cint): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return messagesAmount(kind = kind.MessageType).cint
 
 proc restoreMessage(message: cstring; kind: cint = ord(
     x = MessageType.default).cint; color: cint = ord(
         x = white).cint) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   messagesList.add(y = MessageData(message: $message, kind: kind.MessageType,
       color: color.MessageColor))
