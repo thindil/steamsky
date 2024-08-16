@@ -17,12 +17,14 @@
 
 import std/[os, strutils, tables]
 import ../[basestypes, game, stories, tk]
-import coreui, knowledgebases, knowledgeevents, knowledgemissions, knowledgestories
+import coreui, knowledgebases, knowledgeevents, knowledgemissions,
+    knowledgestories, utilsui2
 
 proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.exportc.} =
-  var knowledgeFrame = mainPaned & ".knowledgeframe"
-  let knowledgeCanvas = knowledgeFrame & ".bases.canvas"
+  var
+    knowledgeFrame = mainPaned & ".knowledgeframe"
+    knowledgeCanvas = knowledgeFrame & ".bases.canvas"
   if tclEval2(script = "winfo exists " & knowledgeFrame) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "knowledge.tcl")
     var comboValues = " {Any}"
@@ -82,6 +84,28 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
     let storiesBox = optionsFrame & ".titles"
     tclEval(script = "ttk::combobox " & storiesBox &
         " -state readonly -values [list " & finishedStoriesList & "]")
+    tclEval(script = "bind " & storiesBox & " <<ComboboxSelected>> ShowStory")
+    tclEval(script = storiesBox & " current " & $finishedStories.high)
+    tclEval(script = "grid " & storiesBox)
+    var button = optionsFrame & ".show"
+    tclEval(script = "ttk::button " & button & " -text {Show on map} -command ShowStoryLocation")
+    tclEval(script = "grid " & button & " -column 1 -row 0")
+    button = optionsFrame & ".set"
+    tclEval(script = "ttk::button " & button & " -text {Set as destination for ship} -command SetStory")
+    tclEval(script = "grid " & button & " -column 2 -row 0")
+    tclEval(script = "grid " & optionsFrame & " -sticky w")
+    let storiesView = knowledgeFrame & ".view"
+    tclEval(script = "text " & storiesView & " -wrap word")
+    tclEval(script = "grid " & storiesView & " -sticky w")
+    tclEval(script = "event generate " & storiesBox & " <<ComboboxSelected>>")
+  tclEval(script = "update")
+  knowledgeCanvas = mainPaned & ".knowledgeframe.stories.canvas"
+  tclEval(script = knowledgeCanvas & " configure -scrollregion [list " &
+      tclEval2(script = knowledgeCanvas & " bbox all") & "]")
+  tclEval(script = knowledgeCanvas & " xview moveto 0.0")
+  tclEval(script = knowledgeCanvas & " yview moveto 0.0")
+  # Show knowledge
+  showScreen(newScreenName = "knowledgeframe")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
