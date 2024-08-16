@@ -29,14 +29,14 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "knowledge.tcl")
     var comboValues = " {Any}"
     for baseType in basesTypesList.values:
-      comboValues.add(y = "{ " & baseType.name & "}")
+      comboValues.add(y = " { " & baseType.name & "}")
     var comboBox = knowledgeCanvas & ".frame.options.types"
     tclEval(script = comboBox & " configure -values [list" & comboValues & "]")
     tclEval(script = comboBox & " current 0")
     comboValues = " {Any}"
     comboBox = knowledgeCanvas & ".frame.options.owner"
     for faction in factionsList.values:
-      comboValues.add(y = "{ " & faction.name & "}")
+      comboValues.add(y = " { " & faction.name & "}")
     tclEval(script = comboBox & " configure -values [list" & comboValues & "]")
     tclEval(script = comboBox & " current 0")
   elif tclEval2(script = "winfo ismapped " & knowledgeFrame) == "1" and argc == 1:
