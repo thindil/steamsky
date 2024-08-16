@@ -83,7 +83,7 @@ var
   missionsTable: TableWidget
   missionsIndexes: seq[Natural]
 
-proc updateMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
+proc updateMissionsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
   ## Update and show list of accepted missions
   ##
   ## * page     - the current page of the missions' list to show
