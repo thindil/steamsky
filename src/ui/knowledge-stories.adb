@@ -16,7 +16,7 @@
 with Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Stories; use Stories;
+-- with Stories; use Stories;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge.Stories is
@@ -79,23 +79,25 @@ package body Knowledge.Stories is
    function Set_Story_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "setStoryCommand";
       -- ****
 
-   function Set_Story_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      New_X, New_Y: Positive;
-   begin
-      Get_Story_Location(Story_X => New_X, Story_Y => New_Y);
-      return
-        Set_Destination_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv =>
-             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
-             Positive'Image(New_X) & Positive'Image(New_Y));
-   end Set_Story_Command;
+--   function Set_Story_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      New_X, New_Y: Positive;
+--   begin
+--      Get_Story_Location(Story_X => New_X, Story_Y => New_Y);
+--      return
+--        Set_Destination_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+--           Argv =>
+--             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
+--             Positive'Image(New_X) & Positive'Image(New_Y));
+--   end Set_Story_Command;
 
    procedure Add_Knowledge_Stories_Commands is
    begin
