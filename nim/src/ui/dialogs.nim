@@ -315,19 +315,10 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
         " " & action & (if cost > 0: " " & $cost else: "") & " " & button & "}")
   let
     amountLabel = itemDialog & ".amountlbl"
-    newMaxAmount = (if maxAmount == 0: playerShip.cargo[itemIndex].amount else: maxAmount)
-  tclEval(script = "ttk::label " & amountLabel & " -text {Amount (max: " & $newMaxAmount & "):}")
-#  if maxAmount == 0:
-    # -command {" & amountBox & " set " & $playerShip.cargo[itemIndex].amount & ";" & amountBox & " validate}
-#    tclEval(script = "tooltip::tooltip " & maxButton &
-#        " \"Max amount of items to " & action & ".\"")
-#    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
-#  else:
-    #  -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}
-#    tclEval(script = "tooltip::tooltip " & maxButton &
-#        " \"Max amount of items to " & action & "." & (if action in ["buy",
-#        "sell"]: " It depends on bonuses\\nfrom the base's reputation and trader's skill level too." else: "") & "\"")
-#    tclEval(script = "bind " & maxButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
+    newMaxAmount = (if maxAmount == 0: playerShip.cargo[
+        itemIndex].amount else: maxAmount)
+  tclEval(script = "ttk::label " & amountLabel & " -text {Amount (max: " &
+      $newMaxAmount & "):}")
   tclEval(script = "grid " & amountLabel & " -padx {5 0}")
   # Add amount combobox
   tclEval(script = amountBox & " set 1")
@@ -336,9 +327,21 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
   # Add amount buttons
   let amountFrame = itemDialog & ".amountframe"
   tclEval(script = "ttk::frame " & amountFrame)
-  var amounts: seq[Positive]
-  amounts.add(y = 1)
-  tclEval(script = "grid " & amountFrame & " -padx 5")
+  const amounts: array[3, Positive] = [100, 500, 1000]
+  var column: Natural = 0
+  for amount in amounts:
+    if newMaxAmount <= amount:
+      break
+    let button = amountFrame & ".button" & $amount
+    tclEval(script = "ttk::button " & button & " -text {" & $amount &
+        "} -command {" & amountBox & " set " & $amount & ";" & amountBox & " validate} -style Dialog.TButton")
+    tclEval(script = "grid " & button & " -padx {5 0} -row 0 -column " & $column & " -sticky w")
+    column.inc
+  let allButton = amountFrame & ".button" & $newMaxAmount
+  tclEval(script = "ttk::button " & allButton & " -text {Max} -command {" &
+      amountBox & " set " & $newMaxAmount & ";" & amountBox & " validate} -style Dialog.TButton")
+  tclEval(script = "grid " & allButton & " -padx {5 0} -row 0 -column " & $column & " -sticky w")
+  tclEval(script = "grid " & amountFrame & " -padx 5 -pady 5 -columnspan 2")
   # Add other labels
   var label = ""
   if cost > 0:
