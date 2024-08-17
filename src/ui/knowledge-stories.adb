@@ -16,7 +16,7 @@
 with Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body Knowledge.Stories is
 
@@ -84,6 +84,7 @@ package body Knowledge.Stories is
       -- ****
 
    procedure Add_Knowledge_Stories_Commands is
+      use Utils.UI;
    begin
       Add_Command
         (Name => "ShowStory", Ada_Command => Show_Story_Command'Access);
