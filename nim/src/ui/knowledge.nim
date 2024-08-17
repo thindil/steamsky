@@ -151,6 +151,10 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = "grid configure " & frame &
             "-columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
             $frameInfo.column)
+      else:
+        tclEval(script = "grid " & frame)
+    tclEval(script = button & " configure -image movemapupicon -command {KnowledgeMaxMin " &
+        $argv[1] & " show}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
