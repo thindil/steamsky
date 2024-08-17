@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
@@ -21,16 +20,6 @@ with Utils;
 with Utils.UI;
 
 package body Knowledge.Bases is
-
-   procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1) is
-      use Interfaces.C.Strings;
-      procedure Update_Ada_Bases_List(B_Name: chars_ptr; P: Positive) with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaBasesList";
-   begin
-      Update_Ada_Bases_List(B_Name => New_String(Str => Base_Name), P => Page);
-   end Update_Bases_List;
 
    -- ****o* KBases/KBases.Show_Bases_Command
    -- FUNCTION
