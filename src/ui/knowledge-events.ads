@@ -27,16 +27,4 @@ package Knowledge.Events is
    procedure Add_Knowledge_Events_Commands;
    -- ****
 
-   -- ****f* KEvents/KEvents.Update_Events_List
-   -- FUNCTION
-   -- Update and show list of known events
-   -- PARAMETERS
-   -- Page     - The current page of events list to show
-   -- SOURCE
-   procedure Update_Events_List(Page: Positive := 1) with
-      Convention => C,
-      Import => True,
-      External_Name => "updateAdaEventsList";
-   -- ****
-
 end Knowledge.Events;
