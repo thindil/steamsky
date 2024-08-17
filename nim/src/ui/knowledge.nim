@@ -123,6 +123,36 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   showScreen(newScreenName = "knowledgeframe")
   return tclOk
 
+proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  type FrameInfo = object
+    name: string
+    column: Natural
+    row: Natural
+  const frames: array[4, FrameInfo] = [FrameInfo(name: "bases", column: 0,
+      row: 0), FrameInfo(name: "missions", column: 0, row: 1), FrameInfo(
+      name: "events", column: 1, row: 0), FrameInfo(name: "stories", column: 1, row: 1)]
+  let
+    frameName = mainPaned & ".knowledgeframe"
+    button = frameName & "." & $argv[1] & ".canvas.frame.maxmin"
+  if argv[2] == "show":
+    for frameInfo in frames:
+      let frame = frameName & "." & frameInfo.name
+      if frameInfo.name == $argv[1]:
+        tclEval(script = "grid configure " & frame & "-columnspan 2 -rowspan 2 -row 0 -column 0")
+      else:
+        tclEval(script = "grid remove " & frame)
+    tclEval(script = button & " configure -image movemapdownicon -command {KnowledgeMaxMin " &
+        $argv[1] & " hide}")
+  else:
+    for frameInfo in frames:
+      let frame = frameName & "." & frameInfo.name
+      if frameInfo.name == $argv[1]:
+        tclEval(script = "grid configure " & frame &
+            "-columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
+            $frameInfo.column)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -131,5 +161,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
     knowledgemissions.addCommands()
     knowledgestories.addCommands()
 #    addCommand("ShowKnowledge", showKnowledgeCommand)
+#    addCommand("KnowledgeMaxMin", knowledgeMaxMinCommand)
   except:
     showError(message = "Can't add a Tcl command.")
