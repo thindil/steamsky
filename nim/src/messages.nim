@@ -82,7 +82,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
   result = MessageData(message: "", kind: default, color: white)
   if messageIndex - 1 > messagesList.len:
     return
-  var index: int
+  var index: int = -1
   if messageIndex < 1:
     if messagesList.len + messageIndex > 0:
       if kind == default:
@@ -91,7 +91,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
             kind: messagesList[index].kind, color: messagesList[index].color)
       index = 1
       for i in countdown(a = messagesList.len - 1, b = 0):
-        let message = MessageData(message: messagesList[i].message,
+        let message: MessageData = MessageData(message: messagesList[i].message,
             kind: messagesList[i].kind, color: messagesList[i].color)
         if message.kind == kind:
           index.dec()
@@ -105,7 +105,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
       index].color)
   index = 0
   for i in countup(a = 0, b = messagesList.len - 1):
-    let message = MessageData(message: messagesList[i].message,
+    let message: MessageData = MessageData(message: messagesList[i].message,
         kind: messagesList[i].kind, color: messagesList[i].color)
     if message.kind == kind:
       index.inc()
@@ -169,7 +169,7 @@ proc addMessage(message: cstring; kind: cint; color: cint = ord(x =
 proc getMessage(messageIndex: cint; kind: cint): MessageDataC {.raises: [],
     tags: [], exportc, contractual.} =
   ## Temporary C binding
-  let nimMessage = getMessage(messageIndex = messageIndex.int,
+  let nimMessage: MessageData = getMessage(messageIndex = messageIndex.int,
       kind = kind.MessageType)
   return MessageDataC(message: nimMessage.message.cstring,
       kind: nimMessage.kind.ord.cint, color: nimMessage.color.ord.cint)
