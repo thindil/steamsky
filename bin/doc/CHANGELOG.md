@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 - Made checked checkbutton a bit darker to match the game's default theme
 - Don't reset the items' type selection when buying or selling items in bases
   or with ships
+- Redesigned dialogs for selling, buying and dropping items from the player's
+  ship cargo
 
 ### Fixed
 - Crash when dropping items in empty bases
