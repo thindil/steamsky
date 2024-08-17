@@ -21,7 +21,7 @@ import coreui, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
 proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
   var
     knowledgeFrame = mainPaned & ".knowledgeframe"
     knowledgeCanvas = knowledgeFrame & ".bases.canvas"
@@ -78,7 +78,11 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     var finishedStoriesList = ""
     for finishedStory in finishedStories:
-      finishedStoriesList.add(y = "{ " & storiesList[finishedStory.index].name & "}")
+      try:
+        finishedStoriesList.add(y = "{ " & storiesList[
+            finishedStory.index].name & "}")
+      except:
+        return showError(message = "Can't get finished story.")
     let optionsFrame = knowledgeFrame & ".options"
     tclEval(script = "ttk::frame " & optionsFrame)
     let storiesBox = optionsFrame & ".titles"
