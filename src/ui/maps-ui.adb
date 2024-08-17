@@ -622,14 +622,4 @@ package body Maps.UI is
       Show_Ada_Sky_Map(Cle => (if Clear then 1 else 0));
    end Show_Sky_Map;
 
-   function Get_General_Accelerator(Index: Positive) return String is
-
-      function Get_Ada_General_Accelerator(I: Positive) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaGeneralAccelerator";
-   begin
-      return Value(Item => Get_Ada_General_Accelerator(I => Index));
-   end Get_General_Accelerator;
-
 end Maps.UI;

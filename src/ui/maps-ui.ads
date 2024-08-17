@@ -57,7 +57,6 @@ package Maps.UI is
 
 -- Temporary code to interact with Nim
 
-   function Get_General_Accelerator(Index: Positive) return String;
    procedure Set_Center_Point(X, Y: Positive) with
       Import => True,
       Convention => C,
