@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -19,16 +19,6 @@
 -- SOURCE
 package Knowledge.Bases is
 -- ****
-
-   -- ****f* KBases/KBases.Update_Bases_List
-   -- FUNCTION
-   -- Update and show list of known bases
-   -- PARAMETERS
-   -- Base_Name - Name of the base to find on list
-   -- Page      - The current page of bases list to show
-   -- SOURCE
-   procedure Update_Bases_List(Base_Name: String := ""; Page: Positive := 1);
-   -- ****
 
    -- ****f* KBases/KBases.Add_Knowledge_Bases_Commands
    -- FUNCTION
