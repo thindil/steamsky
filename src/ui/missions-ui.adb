@@ -94,24 +94,6 @@ package body Missions.UI is
       External_Name => "showMissionCommand";
       -- ****
 
---   function Show_Mission_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Argc);
---      Mission_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---   begin
---      return
---        Show_On_Map_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
---           Argv =>
---             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
---             Map_X_Range'Image
---               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_X) &
---             Map_Y_Range'Image
---               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_Y));
---   end Show_Mission_Command;
-
    -- ****iv* MUI3/MUI3.Missions_Table
    -- FUNCTION
    -- Table with info about the known Missions
