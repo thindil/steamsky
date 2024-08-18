@@ -125,6 +125,18 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Maximize or minimize the selected section of knowledge info
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## KnowledgeMaxMin framename
+  ## Framename is name of the frame to maximize or minimize
   type FrameInfo = object
     name: string
     column: Natural
