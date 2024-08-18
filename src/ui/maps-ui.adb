@@ -17,7 +17,7 @@ with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
@@ -87,6 +87,7 @@ package body Maps.UI is
       use Ada.Strings;
       use Ada.Strings.Fixed;
       use Ada.Strings.Unbounded;
+      use Interfaces.C.Strings;
       use GNAT.Directory_Operations;
       use Tcl.Ada;
       use Tcl.Tk.Ada;
