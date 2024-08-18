@@ -139,7 +139,7 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     for frameInfo in frames:
       let frame = frameName & "." & frameInfo.name
       if frameInfo.name == $argv[1]:
-        tclEval(script = "grid configure " & frame & "-columnspan 2 -rowspan 2 -row 0 -column 0")
+        tclEval(script = "grid configure " & frame & " -columnspan 2 -rowspan 2 -row 0 -column 0")
       else:
         tclEval(script = "grid remove " & frame)
     tclEval(script = button & " configure -image movemapdownicon -command {KnowledgeMaxMin " &
@@ -149,7 +149,7 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
       let frame = frameName & "." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frame &
-            "-columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
+            " -columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
             $frameInfo.column)
       else:
         tclEval(script = "grid " & frame)
