@@ -21,8 +21,11 @@ import ../[game, tk]
 var baseIndex = 0
 
 proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
-  let missionIndex = ($argv[1]).parseInt - 1
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  let missionIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      return showError(message = "Can't get the mission index.")
   tclEval(script = "ShowOnMap " & $skyBases[baseIndex].missions[
       missionIndex].targetX & " " & $skyBases[baseIndex].missions[
       missionIndex].targetX)
