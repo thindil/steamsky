@@ -16,11 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
+import contracts
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
     messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
 proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
-    tags: [WriteIOEffect].} =
+    tags: [WriteIOEffect], contractual.} =
   ## Count the fuel usage when the player waits in the open space
   ##
   ## * minutes - the amount of minutes passed
@@ -47,7 +48,8 @@ proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded)
 
-proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].} =
+proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Check if all requirements for the ship's moving orders are valid
   ##
   ## Returns empty string if everything is ok, otherwise the message about the
@@ -83,7 +85,7 @@ proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [].
   return ""
 
 proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
-    raises: [KeyError, ValueError], tags: [].} =
+    raises: [KeyError, ValueError], tags: [], contractual.} =
   ## Count the real speed of the ship in meters per minute
   ##
   ## * ship     - the ship which speed will be count
@@ -132,7 +134,7 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
 
 proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Dock, undock or escape the player's ship from the currently visited base
   ##
   ## * docking - if true, the player is docking to the base
@@ -243,7 +245,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
       if $gameSettings.autoSave == $undock:
         saveGame()
 
-proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [].} =
+proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [], contractual.} =
   ## Count the amount of needed fuel to travel by one map cell by the player's
   ## ship
   ##
@@ -265,7 +267,7 @@ proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [].} =
         discard
 
 proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
-    KeyError], tags: [].} =
+    KeyError], tags: [], contractual.} =
   ## Change the player's ship's speed
   ##
   ## * speeedValue - the new value for the player's ship's speed
@@ -288,7 +290,7 @@ proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
 
 proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
     KeyError, ValueError, IOError, Exception], tags: [WriteIOEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Move the player's ship on the map
   ##
   ## * x       - the amount of fields in X axis by which the ship will be moved
@@ -355,7 +357,7 @@ proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
       death(memberIndex = 0, reason = "fall ot the ship", ship = playerShip)
       return 0
 
-  proc needRest(order: CrewOrders): bool =
+  proc needRest(order: CrewOrders): bool {.raises: [], tags: [], contractual.} =
     if findMember(order = order) == -1:
       for member in playerShip.crew:
         if member.previousOrder == order:
@@ -375,43 +377,46 @@ proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
 
 # Temporary code for interfacing with Ada
 
-proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
+proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc,
+    contractual.} =
   try:
     waitInPlace(minutes = minutes.Positive)
   except KeyError, IOError:
     discard
 
-proc haveAdaOrderRequirements(): cstring {.raises: [], tags: [], exportc.} =
+proc haveAdaOrderRequirements(): cstring {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     return haveOrderRequirements().cstring
   except KeyError:
     return ""
 
 proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   if ofPlayerShip == 1:
     return realSpeed(playerShip, infoOnly == 1).cint
   else:
     return realSpeed(npcShip, infoOnly == 1).cint
 
 proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc.} =
+    WriteIOEffect, RootEffect], exportc, contractual.} =
   try:
     return dockShip(docking = docking == 1, escape = escape == 1).cstring
   except KeyError, IOError, Exception:
     return getCurrentExceptionMsg().cstring
 
-proc countAdaFuelNeeded(): cint {.raises: [], tags: [], exportc.} =
+proc countAdaFuelNeeded(): cint {.raises: [], tags: [], exportc, contractual.} =
   return countFuelNeeded().cint
 
-proc changeAdaShipSpeed(speedValue: cint): cstring {.raises: [], tags: [], exportc.} =
+proc changeAdaShipSpeed(speedValue: cint): cstring {.raises: [], tags: [],
+    exportc, contractual.} =
   try:
     return changeShipSpeed(speedValue = speedValue.ShipSpeed).cstring
   except KeyError:
     return ""
 
 proc moveAdaShip(x, y: cint; message: var cstring): cint {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc.} =
+    WriteIOEffect, RootEffect], exportc, contractual.} =
   var mesg = ""
   try:
     result = moveShip(x, y, mesg).cint
