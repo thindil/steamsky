@@ -124,7 +124,7 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   type FrameInfo = object
     name: string
     column: Natural
