@@ -54,8 +54,7 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
         1: "s" else: "") & ".\"")
     for buttonName in moveButtonsNames:
       button = frameName & "." & buttonName
-      tclEval(script = button & " state disabled")
-      tclEval(script = "tooltip::tooltip " & button & " \"You have to give order 'Undock' from\nMenu->Ship orders first to move ship.\"")
+      tclEval(script = "grid remove " & button)
   else:
     tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
     tclEval(script = "grid " & speedBox)
@@ -73,14 +72,9 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
       button = frameName & ".wait"
       tclEval(script = button & " configure -image waiticon")
       tclEval(script = "tooltip::tooltip " & button & " \"Wait 1 minute.\"")
-    let moveButtonsTooltips = ["Move ship up and left", "Move ship up",
-        "Move ship up and right", "Move ship left", "Move ship right",
-        "Move ship down and left", "Move ship down", "Move ship down and right"]
     for index, name in moveButtonsNames:
       button = frameName & "." & name
-      tclEval(script = button & " state !disabled")
-      tclEval(script = "tooltip::tooltip " & button & " \"" &
-          moveButtonsTooltips[index] & "\"")
+      tclEval(script = "grid " & button)
 
 proc finishStory*() {.raises: [], tags: [], exportc.} =
   ## Finish the current player's story. Give experience and ask about

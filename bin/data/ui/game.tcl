@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2023 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -238,22 +238,30 @@ grid [ttk::button $bframe.box.moveto -command {MoveShip moveto} \
 tooltip::tooltip $bframe.box.moveto "Auto move your ship to its destination"
 grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
    -row 1 -sticky we
+tooltip::tooltip $bframe.nw "Move ship up and left"
 grid [ttk::button $bframe.n -command {MoveShip n} -style Move.TButton] \
    -column 1 -row 1 -sticky we
+tooltip::tooltip $bframe.n "Move ship up"
 grid [ttk::button $bframe.ne -command {MoveShip ne} -style Move.TButton] \
    -column 2 -row 1 -sticky we
+tooltip::tooltip $bframe.ne "Move ship up and right"
 grid [ttk::button $bframe.w -command {MoveShip w} -style Move.TButton] -row 2 \
    -sticky we
+tooltip::tooltip $bframe.w "Move ship left"
 grid [ttk::button $bframe.wait -command {MoveShip waitormove} \
    -style Move.TButton] -column 1 -row 2 -sticky we
 grid [ttk::button $bframe.e -command {MoveShip e} -style Move.TButton] \
    -column 2 -row 2 -sticky we
+tooltip::tooltip $bframe.e "Move ship right"
 grid [ttk::button $bframe.sw -command {MoveShip sw} -style Move.TButton] \
    -row 3 -sticky we
+tooltip::tooltip $bframe.sw "Move ship down and left"
 grid [ttk::button $bframe.s -command {MoveShip s} -style Move.TButton] \
    -column 1 -row 3 -sticky we
+tooltip::tooltip $bframe.s "Move ship down"
 grid [ttk::button $bframe.se -command {MoveShip se} -style Move.TButton] \
    -column 2 -row 3 -sticky we
+tooltip::tooltip $bframe.se "Move ship down and right"
 grid columnconfigure .gameframe.paned.controls \
    .gameframe.paned.controls.messages -weight 1
 grid .gameframe.paned -sticky nwes -padx 5 -pady {0 5}
