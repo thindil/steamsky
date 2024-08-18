@@ -89,26 +89,28 @@ package body Missions.UI is
    function Show_Mission_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showMissionCommand";
       -- ****
 
-   function Show_Mission_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      Mission_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-   begin
-      return
-        Show_On_Map_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv =>
-             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
-             Map_X_Range'Image
-               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_X) &
-             Map_Y_Range'Image
-               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_Y));
-   end Show_Mission_Command;
+--   function Show_Mission_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Argc);
+--      Mission_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--   begin
+--      return
+--        Show_On_Map_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+--           Argv =>
+--             CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
+--             Map_X_Range'Image
+--               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_X) &
+--             Map_Y_Range'Image
+--               (Sky_Bases(Get_Base_Index).Missions(Mission_Index).Target_Y));
+--   end Show_Mission_Command;
 
    -- ****iv* MUI3/MUI3.Missions_Table
    -- FUNCTION
@@ -479,6 +481,10 @@ package body Missions.UI is
         Get_Widget
           (pathName => Missions_Canvas & ".missions.missionslabel",
            Interp => Interp);
+      procedure Get_Ada_Mission_Base_Index(B_Index: Natural) with
+         Convention => C,
+         Import => True,
+         External_Name => "getMissionBaseIndex";
    begin
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
@@ -520,6 +526,7 @@ package body Missions.UI is
         (Slave => Close_Button, Options => "-row 0 -column 1");
       Set_Ada_Ship(Ship => Player_Ship);
       Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+      Get_Ada_Mission_Base_Index(B_Index => Base_Index);
       Get_Base_From_Nim(Base_Index => Get_Base_Index);
       if Sky_Bases(Get_Base_Index).Missions.Length = 0 then
          Show_Sky_Map(Clear => True);
