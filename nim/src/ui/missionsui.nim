@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
+import std/[strutils, tables]
 import ../[game, maps, missions, tk, types]
 import coreui, mapsui, table
 
@@ -78,7 +78,7 @@ proc refreshMissionsList(page: Positive = 1) =
   let
     missionsLimit = countMissionsAmount()
     missionLabel = mainPaned & ".missionsframe.canvas.missions.missionslabel.missionslbl2"
-  tclEval(script = missionLabel & " configure -text {" &  $missionsLimit & "}")
+  tclEval(script = missionLabel & " configure -text {" & $missionsLimit & "}")
   if missionsTable.row > 1:
     clearTable(table = missionsTable)
   if missionsIndexes.len != skyBases[baseIndex].missions.len:
@@ -91,11 +91,38 @@ proc refreshMissionsList(page: Positive = 1) =
     if currentRow < startRow:
       currentRow.inc
       continue
+    var
+      canAccept = true
+      cabinTaken = false
     if skyBases[baseIndex].missions[index].mType == passenger:
-      var canAccept, cabinTaken = false
+      canAccept = false
       for module in playerShip.modules:
-        if (module.mType == cabin and not canAccept) and module.quality >= skyBases[baseIndex].missions[index].data:
+        if (module.mType == ModuleType2.cabin and not canAccept) and
+            module.quality >= skyBases[baseIndex].missions[index].data:
           canAccept = false
+          cabinTaken = true
+          for owner in module.owner:
+            if owner == -1:
+              cabinTaken = false
+              canAccept = true
+              break
+          if canAccept:
+            break
+    addButton(table = missionsTable, text = getMissionType(mType = skyBases[
+        baseIndex].missions[index].mType),
+        tooltip = "Show more info about the mission",
+        command = "MissionMoreInfo " & $(index + 1), column = 1, color = (
+        if canAccept: "" elif cabinTaken: "yellow" else: "red"))
+    canAccept = true
+    cabinTaken = false
+    case skyBases[baseIndex].missions[index].mType
+    of deliver:
+      addButton(table = missionsTable, text = itemsList[skyBases[
+          baseIndex].missions[index].itemIndex].name & " to " & skyBases[skyMap[
+          skyBases[baseIndex].missions[index].targetX][skyMap[skyBases[
+          baseIndex].missions[index].targetY].baseIndex].name,
+        tooltip = "Show more info about the mission",
+        command = "MissionMoreInfo " & $(index + 1), column = 4)
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
