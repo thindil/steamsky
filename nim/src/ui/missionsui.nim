@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[game, tk]
+import ../[game, maps, missions, tk]
 
 var baseIndex = 0
 
@@ -43,6 +43,25 @@ proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
       missionIndex].targetX)
   return tclOk
 
+proc countMissionsAmount(): Natural =
+  result = (case skyBases[skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex].reputation.level
+    of 0..25:
+      1
+    of 26..50:
+      3
+    of 51..75:
+      5
+    of 76..100:
+      10
+    else:
+      0)
+  for mission in acceptedMissions:
+    if mission.startBase == skyMap[playerShip.skyX][playerShip.skyY].baseIndex:
+      result.dec
+      if result == 0:
+        break
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
@@ -55,3 +74,6 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 
 proc getMissionBaseIndex(bIndex: cint) {.exportc.} =
   baseIndex = bIndex
+
+proc countAdaMissionsAmount(): cint {.exportc.} =
+  return countMissionsAmount().cint
