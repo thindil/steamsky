@@ -52,6 +52,7 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = "tooltip::tooltip " & button & " \"Wait " &
         $gameSettings.waitMinutes & " minute" & (if gameSettings.waitMinutes >
         1: "s" else: "") & ".\"")
+    tclEval(script = "grid configure " & button & " -columnspan 3 -column 0 -row 1")
     for buttonName in moveButtonsNames:
       button = frameName & "." & buttonName
       tclEval(script = "grid remove " & button)
@@ -72,6 +73,7 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
       button = frameName & ".wait"
       tclEval(script = button & " configure -image waiticon")
       tclEval(script = "tooltip::tooltip " & button & " \"Wait 1 minute.\"")
+    tclEval(script = "grid configure " & button & " -columnspan 1 -column 1 -row 2")
     for index, name in moveButtonsNames:
       button = frameName & "." & name
       tclEval(script = "grid " & button)
