@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[events, game, maps, missions, tk, types, utils]
-import coreui, mapsui, table
+import coreui, mapsui, table, utilsui2
 
 var baseIndex = 0
 
@@ -86,7 +86,10 @@ proc refreshMissionsList(page: Positive = 1) =
     for index, _ in skyBases[baseIndex].missions:
       missionsIndexes.add(y = index)
   let startRow = ((page - 1) * 25) + 1
-  var currentRow = 1
+  var
+    currentRow = 1
+    row = 2
+    rows = 0
   for index in missionsIndexes:
     if currentRow < startRow:
       currentRow.inc
@@ -122,15 +125,45 @@ proc refreshMissionsList(page: Positive = 1) =
           mission.targetX][mission.targetY].baseIndex].name,
           tooltip = "Show more info about the mission",
           command = "MissionMoreInfo " & $(index + 1), column = 4)
-    of patrol:
-      addButton(table = missionsTable, text = "X:" & $mission.targetX & " Y: " & $mission.targetY,
-          tooltip = "Show more info about the mission",
+    of patrol, explore:
+      addButton(table = missionsTable, text = "X: " & $mission.targetX &
+          " Y: " & $mission.targetY, tooltip = "Show more info about the mission",
           command = "MissionMoreInfo " & $(index + 1), column = 4)
     of destroy:
       if mission.shipIndex == -1:
         var enemies: seq[Positive]
         generateEnemies(enemies = enemies, withTraders = false)
-        mission.shipIndex = enemies[getRandom(min = enemies.low, max = enemies.high)]
+        mission.shipIndex = enemies[getRandom(min = enemies.low,
+            max = enemies.high)]
+        skyBases[baseIndex].missions[index].shipIndex = mission.shipIndex
+      addButton(table = missionsTable, text = protoShipsList[
+          mission.shipIndex].name, tooltip = "Show more info about the mission",
+          command = "MissionMoreInfo " & $(index + 1), column = 4)
+    of passenger:
+      addButton(table = missionsTable, text = "To " & skyBases[skyMap[
+          mission.targetX][mission.targetY].baseIndex].name,
+          tooltip = "Show more info about the mission",
+          command = "MissionMoreInfo " & $(index + 1), column = 4)
+    addButton(table = missionsTable, text = $countDistance(
+        destinationX = mission.targetX, destinationY = mission.targetY),
+        tooltip = "The distance to the mission", command = "MissionMoreInfo " &
+        $(index + 1), column = 2)
+    addButton(table = missionsTable, text = "X: " & $mission.targetX & " Y: " &
+        $mission.targetY, tooltip = "Show more info about the mission",
+        command = "MissionMoreInfo " & $(index + 1), column = 3)
+    var missionTime = ""
+    minutesToDate(minutes = mission.time, infoText = missionTime)
+    addButton(table = missionsTable, text = missionTime,
+        tooltip = "The time limit for finish and return the mission",
+        command = "MissionMoreInfo " & $(index + 1), column = 5)
+    addButton(table = missionsTable, text = $((mission.reward.float *
+        mission.multiplier).Natural) & " " & moneyName,
+        tooltip = "The base money reward for the mission",
+        command = "MissionMoreInfo " & $(index + 1), column = 6, newRow = true)
+    row.inc
+    rows.inc
+    if rows == 25 and index != skyBases[baseIndex].missions.high:
+      break
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
