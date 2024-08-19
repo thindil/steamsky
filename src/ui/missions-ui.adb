@@ -117,29 +117,32 @@ package body Missions.UI is
    -- RESULT
    -- The amount of missions which the player can get from the base
    -- SOURCE
-   function Count_Missions_Amount return Natural is
+   function Count_Missions_Amount return Natural with
+      Convention => C,
+      Import => True,
+      External_Name => "countAdaMissionsAmount";
       -- ****
-      Missions_Limit: Natural;
-      Mission: Mission_Data := Empty_Mission;
-   begin
-      Missions_Limit :=
-        (case Sky_Bases
-           (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-           .Reputation
-           .Level is
-           when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
-           when 76 .. 100 => 10, when others => 0);
-      Count_Missions_Limit_Loop :
-      for I in 1 .. Get_Accepted_Missions_Amount loop
-         Mission := Get_Accepted_Mission(Mission_Index => I);
-         if Mission.Start_Base =
-           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index then
-            Missions_Limit := Missions_Limit - 1;
-            exit Count_Missions_Limit_Loop when Missions_Limit = 0;
-         end if;
-      end loop Count_Missions_Limit_Loop;
-      return Missions_Limit;
-   end Count_Missions_Amount;
+--      Missions_Limit: Natural;
+--      Mission: Mission_Data := Empty_Mission;
+--   begin
+--      Missions_Limit :=
+--        (case Sky_Bases
+--           (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
+--           .Reputation
+--           .Level is
+--           when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
+--           when 76 .. 100 => 10, when others => 0);
+--      Count_Missions_Limit_Loop :
+--      for I in 1 .. Get_Accepted_Missions_Amount loop
+--         Mission := Get_Accepted_Mission(Mission_Index => I);
+--         if Mission.Start_Base =
+--           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index then
+--            Missions_Limit := Missions_Limit - 1;
+--            exit Count_Missions_Limit_Loop when Missions_Limit = 0;
+--         end if;
+--      end loop Count_Missions_Limit_Loop;
+--      return Missions_Limit;
+--   end Count_Missions_Amount;
 
    -- ****if* MUI3/MUI3.Refresh_Missions_List
    -- FUNCTION
@@ -508,7 +511,7 @@ package body Missions.UI is
         (Slave => Close_Button, Options => "-row 0 -column 1");
       Set_Ada_Ship(Ship => Player_Ship);
       Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Get_Ada_Mission_Base_Index(B_Index => Base_Index);
+      Get_Ada_Mission_Base_Index(B_Index => Get_Base_Index);
       Get_Base_From_Nim(Base_Index => Get_Base_Index);
       if Sky_Bases(Get_Base_Index).Missions.Length = 0 then
          Show_Sky_Map(Clear => True);
