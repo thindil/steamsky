@@ -44,6 +44,9 @@ proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc countMissionsAmount(): Natural {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Count the amount of missions which the player can get from the selected
+  ##
+  ## Returns the amount of missions which the player can get from the base
   result = (case skyBases[skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex].reputation.level
     of 0..25:
