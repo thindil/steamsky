@@ -117,7 +117,7 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
               300.0)).Natural
   var shipSetSpeed = ship.speed
   if ship.name == playerShip.name and ship.speed in {docked, fullStop} and infoOnly:
-    shipSetSpeed = parseEnum[ShipSpeed]((
+    shipSetSpeed = parseEnum[ShipSpeed](s = (
         $gameSettings.undockSpeed).toLowerAscii)
     if shipSetSpeed == fullStop:
       shipSetSpeed = quarterSpeed
@@ -179,7 +179,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
     playerShip.speed = docked
     updateGame(minutes = 10)
   else:
-    playerShip.speed = parseEnum[ShipSpeed]((
+    playerShip.speed = parseEnum[ShipSpeed](s = (
         $gameSettings.undockSpeed).toLowerAscii)
     if (realSpeed(ship = playerShip).float / 1_000.0) < 0.5:
       return "You can't undock because your ship is overloaded."
@@ -239,7 +239,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
       addMessage(message = messageText, mType = orderMessage, color = color)
       gainRep(baseIndex = baseIndex, points = -(getRandom(min = 10, max = 30)))
     if playerShip.crew[0].health > 0:
-      playerShip.speed = parseEnum[ShipSpeed]((
+      playerShip.speed = parseEnum[ShipSpeed](s = (
           $gameSettings.undockSpeed).toLowerAscii)
       updateGame(minutes = 5)
       if $gameSettings.autoSave == $undock:
@@ -394,9 +394,9 @@ proc haveAdaOrderRequirements(): cstring {.raises: [], tags: [], exportc,
 proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
     tags: [], exportc, contractual.} =
   if ofPlayerShip == 1:
-    return realSpeed(playerShip, infoOnly == 1).cint
+    return realSpeed(ship = playerShip, infoOnly = infoOnly == 1).cint
   else:
-    return realSpeed(npcShip, infoOnly == 1).cint
+    return realSpeed(ship = npcShip, infoOnly = infoOnly == 1).cint
 
 proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
@@ -419,7 +419,7 @@ proc moveAdaShip(x, y: cint; message: var cstring): cint {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
   var mesg = ""
   try:
-    result = moveShip(x, y, mesg).cint
+    result = moveShip(x = x, y = y, message = mesg).cint
     message = mesg.cstring
   except ValueError, IOError, Exception:
     result = 0
