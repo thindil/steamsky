@@ -127,12 +127,10 @@ package body Missions.UI is
    -- FUNCTION
    -- Refresh the list of available missions
    -- PARAMETERS
-   -- List - The list of available missions in the selected base
    -- Page - The current page of the list to show. Can be empty. Default value
    --        is 1.
    -- SOURCE
-   procedure Refresh_Missions_List
-     (List: in out Mission_Container.Vector; Page: Positive := 1) is
+   procedure Refresh_Missions_List(Page: Positive := 1) is
       -- ****
       use Tiny_String;
 
@@ -146,7 +144,7 @@ package body Missions.UI is
       Can_Accept: Boolean := True;
       Cabin_Taken: Boolean := False;
    begin
-      if List.Length = 0 then
+      if Sky_Bases(Get_Base_Index).Missions.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Show_Sky_Map(Clear => True);
          return;
@@ -162,15 +160,19 @@ package body Missions.UI is
       begin
          configure
            (Widgt => Mission_Label,
-            options => "-text {" & Trim(Source => Natural'Image(Missions_Limit), Side => Left) & "}");
+            options =>
+              "-text {" &
+              Trim(Source => Natural'Image(Missions_Limit), Side => Left) &
+              "}");
       end Show_Missions_Limit_Block;
       if Missions_Table.Row > 1 then
          Clear_Table(Table => Missions_Table);
       end if;
-      if Missions_Indexes.Length /= List.Length then
+      if Missions_Indexes.Length /=
+        Sky_Bases(Get_Base_Index).Missions.Length then
          Missions_Indexes.Clear;
          Set_Missions_Indexes_Loop :
-         for I in List.Iterate loop
+         for I in Sky_Bases(Get_Base_Index).Missions.Iterate loop
             Missions_Indexes.Append
               (New_Item => Mission_Container.To_Index(Position => I));
          end loop Set_Missions_Indexes_Loop;
@@ -181,12 +183,13 @@ package body Missions.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         if List(I).M_Type = PASSENGER then
+         if Sky_Bases(Get_Base_Index).Missions(I).M_Type = PASSENGER then
             Can_Accept := False;
             Modules_Loop :
             for Module of Player_Ship.Modules loop
                if (Module.M_Type = CABIN and not Can_Accept)
-                 and then Module.Quality >= List(I).Data then
+                 and then Module.Quality >=
+                   Sky_Bases(Get_Base_Index).Missions(I).Data then
                   Can_Accept := False;
                   Cabin_Taken := True;
                   Can_Accept_Loop :
@@ -203,7 +206,9 @@ package body Missions.UI is
          end if;
          Add_Button
            (Table => Missions_Table,
-            Text => Get_Mission_Type(M_Type => List(I).M_Type),
+            Text =>
+              Get_Mission_Type
+                (M_Type => Sky_Bases(Get_Base_Index).Missions(I).M_Type),
             Tooltip => "Show more info about the mission",
             Command => "MissionMoreInfo" & Positive'Image(I), Column => 1,
             Color =>
@@ -211,19 +216,24 @@ package body Missions.UI is
                else "red"));
          Can_Accept := True;
          Cabin_Taken := False;
-         case List(I).M_Type is
+         case Sky_Bases(Get_Base_Index).Missions(I).M_Type is
             when DELIVER =>
                Add_Button
                  (Table => Missions_Table,
                   Text =>
                     To_String
                       (Source =>
-                         Get_Proto_Item(Index => List(I).Item_Index).Name) &
+                         Get_Proto_Item
+                           (Index =>
+                              Sky_Bases(Get_Base_Index).Missions(I).Item_Index)
+                           .Name) &
                     " to " &
                     To_String
                       (Source =>
                          Sky_Bases
-                           (Sky_Map(List(I).Target_X, List(I).Target_Y)
+                           (Sky_Map
+                              (Sky_Bases(Get_Base_Index).Missions(I).Target_X,
+                               Sky_Bases(Get_Base_Index).Missions(I).Target_Y)
                               .Base_Index)
                            .Name),
                   Tooltip => "Show more info about the mission",
@@ -233,13 +243,17 @@ package body Missions.UI is
                Add_Button
                  (Table => Missions_Table,
                   Text =>
-                    "X:" & Natural'Image(List(I).Target_X) & " Y:" &
-                    Natural'Image(List(I).Target_Y),
+                    "X:" &
+                    Natural'Image
+                      (Sky_Bases(Get_Base_Index).Missions(I).Target_X) &
+                    " Y:" &
+                    Natural'Image
+                      (Sky_Bases(Get_Base_Index).Missions(I).Target_Y),
                   Tooltip => "Show more info about the mission",
                   Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 4);
             when DESTROY =>
-               if List(I).Ship_Index = 0 then
+               if Sky_Bases(Get_Base_Index).Missions(I).Ship_Index = 0 then
                   --## rule off IMPROPER_INITIALIZATION
                   Get_Enemy_Name_Block :
                   declare
@@ -250,7 +264,7 @@ package body Missions.UI is
                   begin
                      Generate_Enemies
                        (Enemies => Enemies, With_Traders => False);
-                     List(I).Ship_Index :=
+                     Sky_Bases(Get_Base_Index).Missions(I).Ship_Index :=
                        Enemies
                          (Get_Random
                             (Min => Enemies.First_Index,
@@ -263,7 +277,9 @@ package body Missions.UI is
                   Text =>
                     To_String
                       (Source =>
-                         Get_Proto_Ship(Proto_Index => List(I).Ship_Index)
+                         Get_Proto_Ship
+                           (Proto_Index =>
+                              Sky_Bases(Get_Base_Index).Missions(I).Ship_Index)
                            .Name),
                   Tooltip => "Show more info about the mission",
                   Command => "MissionMoreInfo" & Positive'Image(I),
@@ -272,8 +288,12 @@ package body Missions.UI is
                Add_Button
                  (Table => Missions_Table,
                   Text =>
-                    "X:" & Natural'Image(List(I).Target_X) & " Y:" &
-                    Natural'Image(List(I).Target_Y),
+                    "X:" &
+                    Natural'Image
+                      (Sky_Bases(Get_Base_Index).Missions(I).Target_X) &
+                    " Y:" &
+                    Natural'Image
+                      (Sky_Bases(Get_Base_Index).Missions(I).Target_Y),
                   Tooltip => "Show more info about the mission",
                   Command => "MissionMoreInfo" & Positive'Image(I),
                   Column => 4);
@@ -285,7 +305,9 @@ package body Missions.UI is
                     To_String
                       (Source =>
                          Sky_Bases
-                           (Sky_Map(List(I).Target_X, List(I).Target_Y)
+                           (Sky_Map
+                              (Sky_Bases(Get_Base_Index).Missions(I).Target_X,
+                               Sky_Bases(Get_Base_Index).Missions(I).Target_Y)
                               .Base_Index)
                            .Name),
                   Tooltip => "Show more info about the mission",
@@ -297,19 +319,25 @@ package body Missions.UI is
             Text =>
               Natural'Image
                 (Count_Distance
-                   (Destination_X => List(I).Target_X,
-                    Destination_Y => List(I).Target_Y)),
+                   (Destination_X =>
+                      Sky_Bases(Get_Base_Index).Missions(I).Target_X,
+                    Destination_Y =>
+                      Sky_Bases(Get_Base_Index).Missions(I).Target_Y)),
             Tooltip => "The distance to the mission",
             Command => "MissionMoreInfo" & Positive'Image(I), Column => 2);
          Add_Button
            (Table => Missions_Table,
             Text =>
-              "X:" & Natural'Image(List(I).Target_X) & " Y:" &
-              Natural'Image(List(I).Target_Y),
+              "X:" &
+              Natural'Image(Sky_Bases(Get_Base_Index).Missions(I).Target_X) &
+              " Y:" &
+              Natural'Image(Sky_Bases(Get_Base_Index).Missions(I).Target_Y),
             Tooltip => "Show more info about the mission",
             Command => "MissionMoreInfo" & Positive'Image(I), Column => 3);
          Mission_Time := Null_Unbounded_String;
-         Minutes_To_Date(Minutes => List(I).Time, Info_Text => Mission_Time);
+         Minutes_To_Date
+           (Minutes => Sky_Bases(Get_Base_Index).Missions(I).Time,
+            Info_Text => Mission_Time);
          Add_Button
            (Table => Missions_Table, Text => To_String(Source => Mission_Time),
             Tooltip => "The time limit for finish and return the mission",
@@ -318,14 +346,17 @@ package body Missions.UI is
            (Table => Missions_Table,
             Text =>
               Natural'Image
-                (Natural(Float(List(I).Reward) * Float(List(I).Multiplier))) &
+                (Natural
+                   (Float(Sky_Bases(Get_Base_Index).Missions(I).Reward) *
+                    Float(Sky_Bases(Get_Base_Index).Missions(I).Multiplier))) &
               " " & To_String(Source => Money_Name),
             Tooltip => "The base money reward for the mission",
             Command => "MissionMoreInfo" & Positive'Image(I), Column => 6,
             New_Row => True);
          Row := Row + 1;
          Rows := Rows + 1;
-         exit Show_Missions_List_Loop when Rows = 25 and I /= List.Last_Index;
+         exit Show_Missions_List_Loop when Rows = 25 and
+           I /= Sky_Bases(Get_Base_Index).Missions.Last_Index;
          <<End_Of_Loop>>
       end loop Show_Missions_List_Loop;
       if Page > 1 then
@@ -386,7 +417,7 @@ package body Missions.UI is
       Accept_Mission(Mission_Index => Mission_Index);
       --## rule off DIRECTLY_ACCESSED_GLOBALS
       if Count_Missions_Amount > 0 then
-         Refresh_Missions_List(List => Sky_Bases(Get_Base_Index).Missions);
+         Refresh_Missions_List;
          Update_Table(Table => Missions_Table);
          Update_Messages;
       else
@@ -497,8 +528,7 @@ package body Missions.UI is
          return TCL_OK;
       end if;
       Refresh_Missions_List
-        (List => Sky_Bases(Get_Base_Index).Missions,
-         Page =>
+        (Page =>
            (if Argc > 1 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
             else 1));
       --## rule off DIRECTLY_ACCESSED_GLOBALS
@@ -1261,8 +1291,7 @@ package body Missions.UI is
       for Mission of Local_Missions loop
          Missions_Indexes.Append(New_Item => Mission.Id);
       end loop Fill_Missions_Indexes_Loop;
-      Refresh_Missions_List
-        (List => Sky_Bases(Get_Base_Index).Missions, Page => 1);
+      Refresh_Missions_List(Page => 1);
       Update_Table(Table => Missions_Table);
       --## rule on DIRECTLY_ACCESSED_GLOBALS
       return TCL_OK;
