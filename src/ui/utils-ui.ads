@@ -14,8 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C; use Interfaces.C;
-with CArgv; use CArgv;
 with Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Config; use Config;
@@ -44,36 +42,13 @@ package Utils.UI is
      (ClientData => Integer);
    -- ****
 
-   -- ****o* UUI/UUI.Show_On_Map_Command
+   -- ****f* UUI/UUI.Add_Command
    -- FUNCTION
-   -- Show the selected point on map
+   -- Add the selected command to Tcl interpreter
    -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed.
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowOnMap X Y
-   -- X is the x coordinate of point to show, Y is the y coordinate of point
-   -- to show
+   -- Name        - The name of the command which will be used in Tcl
+   -- Ada_Command - Ada function which will be invoked
    -- SOURCE
-   function Show_On_Map_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Import => True,
-      Convention => C,
-      External_Name => "showOnMapCommand";
-      -- ****
-
-      -- ****f* UUI/UUI.Add_Command
-      -- FUNCTION
-      -- Add the selected command to Tcl interpreter
-      -- PARAMETERS
-      -- Name        - The name of the command which will be used in Tcl
-      -- Ada_Command - Ada function which will be invoked
-      -- SOURCE
    procedure Add_Command
      (Name: String; Ada_Command: not null CreateCommands.Tcl_CmdProc) with
       Pre => Name'Length > 0;

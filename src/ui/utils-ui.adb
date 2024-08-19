@@ -15,7 +15,9 @@
 
 with Ada.Directories;
 with Ada.Strings;
+with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -444,6 +446,29 @@ package body Utils.UI is
       Import => True,
       Convention => C,
       External_Name => "validateAmountCommand";
+
+   -- ****o* UUI/UUI.Show_On_Map_Command
+   -- FUNCTION
+   -- Show the selected point on map
+   -- PARAMETERS
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOnMap X Y
+   -- X is the x coordinate of point to show, Y is the y coordinate of point
+   -- to show
+   -- SOURCE
+   function Show_On_Map_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Import => True,
+      Convention => C,
+      External_Name => "showOnMapCommand";
+      -- ****
 
    procedure Add_Commands is
       procedure Add_Ada_Commands with
