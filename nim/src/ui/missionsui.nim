@@ -164,6 +164,17 @@ proc refreshMissionsList(page: Positive = 1) =
     rows.inc
     if rows == 25 and index != skyBases[baseIndex].missions.high:
       break
+  if page > 1:
+    if rows < 25:
+      addPagination(table = missionsTable,
+          previousCommand = "ShowBaseMissions " & $(page - 1), nextCommand = "")
+    else:
+      addPagination(table = missionsTable,
+          previousCommand = "ShowBaseMissions " & $(page - 1),
+          nextCommand = "ShowBaseMissions " & $(page + 1))
+  elif rows > 24:
+    addPagination(table = missionsTable, previousCommand = "",
+        nextCommand = "ShowBaseMissions " & $(page + 1))
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
