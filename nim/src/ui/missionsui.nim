@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
-import ../[game, maps, missions, tk]
+import ../[game, maps, missions, tk, types]
+import coreui, mapsui, table
 
 var baseIndex = 0
 
@@ -65,6 +66,37 @@ proc countMissionsAmount(): Natural {.sideEffect, raises: [], tags: [], exportc.
       if result == 0:
         break
 
+var
+  missionsTable: TableWidget
+  missionsIndexes: seq[Natural]
+
+proc refreshMissionsList(page: Positive = 1) =
+  if skyBases[baseIndex].missions.len == 0:
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+    return
+  let
+    missionsLimit = countMissionsAmount()
+    missionLabel = mainPaned & ".missionsframe.canvas.missions.missionslabel.missionslbl2"
+  tclEval(script = missionLabel & " configure -text {" &  $missionsLimit & "}")
+  if missionsTable.row > 1:
+    clearTable(table = missionsTable)
+  if missionsIndexes.len != skyBases[baseIndex].missions.len:
+    missionsIndexes = @[]
+    for index, _ in skyBases[baseIndex].missions:
+      missionsIndexes.add(y = index)
+  let startRow = ((page - 1) * 25) + 1
+  var currentRow = 1
+  for index in missionsIndexes:
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    if skyBases[baseIndex].missions[index].mType == passenger:
+      var canAccept, cabinTaken = false
+      for module in playerShip.modules:
+        if (module.mType == cabin and not canAccept) and module.quality >= skyBases[baseIndex].missions[index].data:
+          canAccept = false
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
@@ -80,3 +112,6 @@ proc getMissionBaseIndex(bIndex: cint) {.exportc.} =
 
 proc countAdaMissionsAmount(): cint {.exportc.} =
   return countMissionsAmount().cint
+
+proc refreshAdaMissionsList(page: cint) {.exportc.} =
+  refreshMissionsList(page = page.Positive)
