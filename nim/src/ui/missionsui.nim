@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import ../[game, maps, missions, tk, types]
+import ../[events, game, maps, missions, tk, types, utils]
 import coreui, mapsui, table
 
 var baseIndex = 0
@@ -94,11 +94,12 @@ proc refreshMissionsList(page: Positive = 1) =
     var
       canAccept = true
       cabinTaken = false
-    if skyBases[baseIndex].missions[index].mType == passenger:
+    var mission = skyBases[baseIndex].missions[index]
+    if mission.mType == passenger:
       canAccept = false
       for module in playerShip.modules:
         if (module.mType == ModuleType2.cabin and not canAccept) and
-            module.quality >= skyBases[baseIndex].missions[index].data:
+            module.quality >= mission.data:
           canAccept = false
           cabinTaken = true
           for owner in module.owner:
@@ -108,21 +109,28 @@ proc refreshMissionsList(page: Positive = 1) =
               break
           if canAccept:
             break
-    addButton(table = missionsTable, text = getMissionType(mType = skyBases[
-        baseIndex].missions[index].mType),
-        tooltip = "Show more info about the mission",
+    addButton(table = missionsTable, text = getMissionType(
+        mType = mission.mType), tooltip = "Show more info about the mission",
         command = "MissionMoreInfo " & $(index + 1), column = 1, color = (
         if canAccept: "" elif cabinTaken: "yellow" else: "red"))
     canAccept = true
     cabinTaken = false
-    case skyBases[baseIndex].missions[index].mType
+    case mission.mType
     of deliver:
       addButton(table = missionsTable, text = itemsList[skyBases[
           baseIndex].missions[index].itemIndex].name & " to " & skyBases[skyMap[
-          skyBases[baseIndex].missions[index].targetX][skyMap[skyBases[
-          baseIndex].missions[index].targetY].baseIndex].name,
-        tooltip = "Show more info about the mission",
-        command = "MissionMoreInfo " & $(index + 1), column = 4)
+          mission.targetX][mission.targetY].baseIndex].name,
+          tooltip = "Show more info about the mission",
+          command = "MissionMoreInfo " & $(index + 1), column = 4)
+    of patrol:
+      addButton(table = missionsTable, text = "X:" & $mission.targetX & " Y: " & $mission.targetY,
+          tooltip = "Show more info about the mission",
+          command = "MissionMoreInfo " & $(index + 1), column = 4)
+    of destroy:
+      if mission.shipIndex == -1:
+        var enemies: seq[Positive]
+        generateEnemies(enemies = enemies, withTraders = false)
+        mission.shipIndex = enemies[getRandom(min = enemies.low, max = enemies.high)]
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
