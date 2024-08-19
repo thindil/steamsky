@@ -43,7 +43,7 @@ proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
       missionIndex].targetX)
   return tclOk
 
-proc countMissionsAmount(): Natural =
+proc countMissionsAmount(): Natural {.sideEffect, raises: [], tags: [], exportc.} =
   result = (case skyBases[skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex].reputation.level
     of 0..25:
