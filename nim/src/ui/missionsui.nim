@@ -192,7 +192,7 @@ proc refreshMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [].
         nextCommand = "ShowBaseMissions " & $(page + 1))
 
 proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
   var missionsFrame = mainPaned & ".missionsframe"
   let
     missionsCanvas = missionsFrame & ".canvas"
@@ -216,7 +216,10 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   if skyBases[baseIndex].missions.len == 0:
     showSkyMap(clear = true)
     return tclOk
-  refreshMissionsList(page = (if argc > 1: ($argv[1]).parseInt else: 1))
+  try:
+    refreshMissionsList(page = (if argc > 1: ($argv[1]).parseInt else: 1))
+  except:
+    return showError(message = "Can't referesh the list of missions.")
   updateTable(table = missionsTable)
   tclEval(script = missionsCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
