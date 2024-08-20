@@ -70,7 +70,7 @@ var
   missionsTable: TableWidget
   missionsIndexes: seq[Natural]
 
-proc refreshMissionsList(page: Positive = 1) =
+proc refreshMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [].} =
   if skyBases[baseIndex].missions.len == 0:
     tclEval(script = "grid remove " & closeButton)
     showSkyMap(clear = true)
@@ -120,11 +120,15 @@ proc refreshMissionsList(page: Positive = 1) =
     cabinTaken = false
     case mission.mType
     of deliver:
-      addButton(table = missionsTable, text = itemsList[skyBases[
-          baseIndex].missions[index].itemIndex].name & " to " & skyBases[skyMap[
-          mission.targetX][mission.targetY].baseIndex].name,
-          tooltip = "Show more info about the mission",
-          command = "MissionMoreInfo " & $(index + 1), column = 4)
+      try:
+        addButton(table = missionsTable, text = itemsList[skyBases[
+            baseIndex].missions[index].itemIndex].name & " to " & skyBases[skyMap[
+            mission.targetX][mission.targetY].baseIndex].name,
+            tooltip = "Show more info about the mission",
+            command = "MissionMoreInfo " & $(index + 1), column = 4)
+      except:
+        showError(message = "Can't add delivery button.")
+        return
     of patrol, explore:
       addButton(table = missionsTable, text = "X: " & $mission.targetX &
           " Y: " & $mission.targetY, tooltip = "Show more info about the mission",
@@ -132,13 +136,21 @@ proc refreshMissionsList(page: Positive = 1) =
     of destroy:
       if mission.shipIndex == -1:
         var enemies: seq[Positive]
-        generateEnemies(enemies = enemies, withTraders = false)
+        try:
+          generateEnemies(enemies = enemies, withTraders = false)
+        except:
+          showError(message = "Can't generate enemies.")
+          return
         mission.shipIndex = enemies[getRandom(min = enemies.low,
             max = enemies.high)]
         skyBases[baseIndex].missions[index].shipIndex = mission.shipIndex
-      addButton(table = missionsTable, text = protoShipsList[
-          mission.shipIndex].name, tooltip = "Show more info about the mission",
-          command = "MissionMoreInfo " & $(index + 1), column = 4)
+      try:
+        addButton(table = missionsTable, text = protoShipsList[
+            mission.shipIndex].name, tooltip = "Show more info about the mission",
+            command = "MissionMoreInfo " & $(index + 1), column = 4)
+      except:
+        showError(message = "Can't add destroy button.")
+        return
     of passenger:
       addButton(table = missionsTable, text = "To " & skyBases[skyMap[
           mission.targetX][mission.targetY].baseIndex].name,
