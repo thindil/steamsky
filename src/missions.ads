@@ -57,6 +57,7 @@ package Missions is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Missions/Missions.Mission_Data:
    -- FUNCTION
    -- Data structure for missions
@@ -95,14 +96,7 @@ package Missions is
       end case;
    end record;
    -- ****
-
-   -- ****d* Missions/Missions.Empty_Mission
-   -- FUNCTION
-   -- Default, empty mission data
-   -- SOURCE
-   Empty_Mission: constant Mission_Data :=
-     (M_Type => Default_Mission_Type, others => <>);
-   -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* Missions/Missions.Mission_Container
    -- FUNCTION
