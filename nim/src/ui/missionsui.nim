@@ -71,6 +71,9 @@ var
   missionsIndexes: seq[Natural]
 
 proc refreshMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [].} =
+  ## Refresh the list of available missions
+  ##
+  ## * page - The current page of the list to show. Default value is 1.
   if skyBases[baseIndex].missions.len == 0:
     tclEval(script = "grid remove " & closeButton)
     showSkyMap(clear = true)
