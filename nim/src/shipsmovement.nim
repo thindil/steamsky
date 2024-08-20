@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to moving ships on the map, like waiting in place,
+## counting a ship's speed, docking or undocking, etc.
+
 import std/[strutils, tables]
 import contracts
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
@@ -358,6 +361,12 @@ proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
       return 0
 
   proc needRest(order: CrewOrders): bool {.raises: [], tags: [], contractual.} =
+    ## Check if a crew member with the selected order need rest
+    ##
+    ## * order - the order for a crew member to check
+    ##
+    ## Returns true if a crew member with the selected order need rest,
+    ## otherwise false
     if findMember(order = order) == -1:
       for member in playerShip.crew:
         if member.previousOrder == order:
@@ -379,6 +388,7 @@ proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
 
 proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     waitInPlace(minutes = minutes.Positive)
   except KeyError, IOError:
@@ -386,6 +396,7 @@ proc waitAdaInPlace(minutes: cint) {.raises: [], tags: [WriteIOEffect], exportc,
 
 proc haveAdaOrderRequirements(): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     return haveOrderRequirements().cstring
   except KeyError:
@@ -393,6 +404,7 @@ proc haveAdaOrderRequirements(): cstring {.raises: [], tags: [], exportc,
 
 proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   if ofPlayerShip == 1:
     return realSpeed(ship = playerShip, infoOnly = infoOnly == 1).cint
   else:
@@ -400,16 +412,19 @@ proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
 
 proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return dockShip(docking = docking == 1, escape = escape == 1).cstring
   except KeyError, IOError, Exception:
     return getCurrentExceptionMsg().cstring
 
 proc countAdaFuelNeeded(): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return countFuelNeeded().cint
 
 proc changeAdaShipSpeed(speedValue: cint): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return changeShipSpeed(speedValue = speedValue.ShipSpeed).cstring
   except KeyError:
@@ -417,6 +432,7 @@ proc changeAdaShipSpeed(speedValue: cint): cstring {.raises: [], tags: [],
 
 proc moveAdaShip(x, y: cint; message: var cstring): cint {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   var mesg = ""
   try:
     result = moveShip(x = x, y = y, message = mesg).cint
