@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[os, strutils, tables]
 import ../[events, game, maps, missions, tk, types, utils]
 import coreui, mapsui, table, utilsui2
 
@@ -191,11 +191,32 @@ proc refreshMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [].
     addPagination(table = missionsTable, previousCommand = "",
         nextCommand = "ShowBaseMissions " & $(page + 1))
 
+proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  var missionsFrame = mainPaned & ".missionsframe"
+  let
+    missionsCanvas = missionsFrame & ".canvas"
+    label = missionsCanvas & ".missions.missionslabel"
+  if tclEval2(script = "winfo exists " & label) == "0":
+    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "missions.tcl")
+    tclEval(script = "bind " & missionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
+#    addCommand("ShowMission", showMissionCommand)
+#    addCommand("SetMission", setMissionCommand)
+    missionsTable = createTable(parent = missionsCanvas & ".missions",
+        headers = @["Name", "Distance", "Coordinates", "Details", "Time limit",
+        "Base reward"], scrollbar = mainPaned & ".missionsframe.scrolly",
+        command = "SortAvailableMissions",
+        tooltipText = "Press mouse button to sort the missions.")
+  elif tclEval2(script = "winfo ismapped " & label) == "1" and argc == 1:
+    showSkyMap(clear = true)
+    return tclOk
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     discard
-#    addCommand("ShowMission", showMissionCommand)
+#    addCommand("ShowBaseMissions", showBaseMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
