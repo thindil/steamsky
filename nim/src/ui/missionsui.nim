@@ -200,8 +200,8 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "missions.tcl")
     tclEval(script = "bind " & missionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
-#    addCommand("ShowMission", showMissionCommand)
-#    addCommand("SetMission", setMissionCommand)
+    # addCommand("ShowMission", showMissionCommand)
+    # addCommand("SetMission", setMissionCommand)
     missionsTable = createTable(parent = missionsCanvas & ".missions",
         headers = @["Name", "Distance", "Coordinates", "Details", "Time limit",
         "Base reward"], scrollbar = mainPaned & ".missionsframe.scrolly",
@@ -210,6 +210,24 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   elif tclEval2(script = "winfo ismapped " & label) == "1" and argc == 1:
     showSkyMap(clear = true)
     return tclOk
+  tclSetVar(varName = "gamestate", newValue = "missions")
+  tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  if skyBases[baseIndex].missions.len == 0:
+    showSkyMap(clear = true)
+    return tclOk
+  refreshMissionsList(page = (if argc > 1: ($argv[1]).parseInt else: 1))
+  updateTable(table = missionsTable)
+  tclEval(script = missionsCanvas & " configure -height [expr " & tclEval2(
+      script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
+      script = mainPaned & " cget -width"))
+  tclEval(script = "update")
+  missionsFrame = missionsCanvas & ".missions"
+  tclEval(script = missionsCanvas & " create window 0 0 -anchor nw -window " & missionsFrame)
+  tclEval(script = "update")
+  tclEval(script = missionsCanvas & " configure -scrollregion [list " &
+      tclEval2(script = missionsCanvas & " bbox all") & "]")
+  showScreen(newScreenName = "missionsframe")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
