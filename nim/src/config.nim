@@ -169,7 +169,7 @@ const
     interfaceFontSize: 14, interfaceTheme: "steamsky",
     messagesOrder: olderFirst, autoAskForBases: false,
     autoAskForEvents: false,
-    showTooltips: true, showLastMessages: true, messagesPosition: 213,
+    showTooltips: true, showLastMessages: true, messagesPosition: 256,
     fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
     topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25,
     waitMinutes: 1)
