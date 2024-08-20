@@ -19,8 +19,8 @@ with Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Interfaces.C.Strings;
-with GNAT.Directory_Operations;
+with Interfaces.C;
+-- with GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -33,7 +33,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+-- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo;
@@ -213,16 +213,15 @@ package body Missions.UI is
    function Show_Base_Missions_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data);
       use Interfaces.C;
-      use Interfaces.C.Strings;
-      use GNAT.Directory_Operations;
+--      use Interfaces.C.Strings;
+--      use GNAT.Directory_Operations;
       use Tcl.Tk.Ada.Widgets.Canvas;
-      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+--      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
       use Tcl.Tk.Ada.Winfo;
 
-      Missions_Frame: Ttk_Frame :=
+      Missions_Frame: constant Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".missionsframe", Interp => Interp);
       Missions_Canvas: constant Tk_Canvas :=
@@ -235,16 +234,25 @@ package body Missions.UI is
          Convention => C,
          Import => True,
          External_Name => "getMissionBaseIndex";
+      function Show_Ada_Base_Missions_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Convention => C,
+         Import => True,
+         External_Name => "showBaseMissionsCommand";
    begin
+      if Show_Ada_Base_Missions_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) = TCL_ERROR then
+         return TCL_ERROR;
+      end if;
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
-         Tcl_EvalFile
-           (interp => Get_Context,
-            fileName =>
-              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
-              "missions.tcl");
-         Bind
-           (Widgt => Missions_Frame, Sequence => "<Configure>",
-            Script => "{ResizeCanvas %W.canvas %w %h}");
+--         Tcl_EvalFile
+--           (interp => Get_Context,
+--            fileName =>
+--              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+--              "missions.tcl");
+--         Bind
+--           (Widgt => Missions_Frame, Sequence => "<Configure>",
+--            Script => "{ResizeCanvas %W.canvas %w %h}");
          Add_Command
            (Name => "ShowMission", Ada_Command => Show_Mission_Command'Access);
          Add_Command
@@ -265,49 +273,49 @@ package body Missions.UI is
               Command => "SortAvailableMissions",
               Tooltip_Text => "Press mouse button to sort the missions.");
          --## rule on DIRECTLY_ACCESSED_GLOBALS
-      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
-        Argc = 1 then
-         Show_Sky_Map(Clear => True);
-         return TCL_OK;
+--      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
+--        Argc = 1 then
+--         Show_Sky_Map(Clear => True);
+--         return TCL_OK;
       end if;
-      Tcl_SetVar
-        (interp => Interp, varName => "gamestate", newValue => "missions");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Close_Button, Options => "-row 0 -column 1");
+--      Tcl_SetVar
+--        (interp => Interp, varName => "gamestate", newValue => "missions");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Close_Button, Options => "-row 0 -column 1");
       Set_Ada_Ship(Ship => Player_Ship);
       Base_Index := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Get_Ada_Mission_Base_Index(B_Index => Get_Base_Index);
-      Get_Base_From_Nim(Base_Index => Get_Base_Index);
-      if Sky_Bases(Get_Base_Index).Missions.Length = 0 then
-         Show_Sky_Map(Clear => True);
-         return TCL_OK;
-      end if;
-      Refresh_Missions_List
-        (Page =>
-           (if Argc > 1 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
-            else 1));
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      Update_Table(Table => Missions_Table);
-      --## rule on DIRECTLY_ACCESSED_GLOBALS
-      configure
-        (Widgt => Missions_Canvas,
-         options =>
-           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
-           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      Missions_Frame.Name :=
-        New_String(Str => Widget_Image(Win => Missions_Canvas) & ".missions");
-      Canvas_Create
-        (Parent => Missions_Canvas, Child_Type => "window",
-         Options =>
-           "0 0 -anchor nw -window " & Widget_Image(Win => Missions_Frame));
-      Tcl_Eval(interp => Get_Context, strng => "update");
-      configure
-        (Widgt => Missions_Canvas,
-         options =>
-           "-scrollregion [list " &
-           BBox(CanvasWidget => Missions_Canvas, TagOrId => "all") & "]");
-      Show_Screen(New_Screen_Name => "missionsframe");
+--      Get_Base_From_Nim(Base_Index => Get_Base_Index);
+--      if Sky_Bases(Get_Base_Index).Missions.Length = 0 then
+--         Show_Sky_Map(Clear => True);
+--         return TCL_OK;
+--      end if;
+--      Refresh_Missions_List
+--        (Page =>
+--           (if Argc > 1 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
+--            else 1));
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      Update_Table(Table => Missions_Table);
+--      --## rule on DIRECTLY_ACCESSED_GLOBALS
+--      configure
+--        (Widgt => Missions_Canvas,
+--         options =>
+--           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+--           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      Missions_Frame.Name :=
+--        New_String(Str => Widget_Image(Win => Missions_Canvas) & ".missions");
+--      Canvas_Create
+--        (Parent => Missions_Canvas, Child_Type => "window",
+--         Options =>
+--           "0 0 -anchor nw -window " & Widget_Image(Win => Missions_Frame));
+--      Tcl_Eval(interp => Get_Context, strng => "update");
+--      configure
+--        (Widgt => Missions_Canvas,
+--         options =>
+--           "-scrollregion [list " &
+--           BBox(CanvasWidget => Missions_Canvas, TagOrId => "all") & "]");
+--      Show_Screen(New_Screen_Name => "missionsframe");
       return TCL_OK;
    end Show_Base_Missions_Command;
 
