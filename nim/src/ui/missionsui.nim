@@ -212,7 +212,7 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "missions")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].missions.len == 0:
     showSkyMap(clear = true)
     return tclOk
