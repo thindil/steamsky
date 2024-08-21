@@ -193,6 +193,18 @@ proc refreshMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [].
 
 proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+  ## Accept the mission in a base
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetMission missionindex
+  ## MissionIndex is the index of the mission to accept
   let missionIndex = try:
       ($argv[1]).parseInt - 1
     except:
