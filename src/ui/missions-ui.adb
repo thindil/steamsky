@@ -15,7 +15,6 @@
 
 with Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
--- with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -34,7 +33,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
--- with Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with CoreUI; use CoreUI;
@@ -42,7 +40,6 @@ with Config;
 with Dialogs; use Dialogs;
 with Items; use Items;
 with Maps; use Maps;
--- with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Table; use Table;
 with Utils;
@@ -109,19 +106,6 @@ package body Missions.UI is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****if* MUI3/MUI3.Count_Missions_Amount
-   -- FUNCTION
-   -- Count the amount of missions which the player can get from the selected
-   -- base
-   -- RESULT
-   -- The amount of missions which the player can get from the base
-   -- SOURCE
---   function Count_Missions_Amount return Natural with
---      Convention => C,
---      Import => True,
---      External_Name => "countAdaMissionsAmount";
-      -- ****
-
    -- ****if* MUI3/MUI3.Refresh_Missions_List
    -- FUNCTION
    -- Refresh the list of available missions
@@ -157,40 +141,6 @@ package body Missions.UI is
       External_Name => "setMissionCommand";
       -- ****
 
---   function Set_Mission_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Ada.Exceptions;
---
---      Mission_Index: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---   begin
---      Sky_Bases(Get_Base_Index).Missions(Mission_Index).Multiplier :=
---        Reward_Multiplier
---          (Float'Value
---             (Tcl_GetVar(interp => Get_Context, varName => "reward")) /
---           100.0);
---      Accept_Mission(Mission_Index => Mission_Index);
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      if Count_Missions_Amount > 0 then
---         Refresh_Missions_List;
---         Update_Table(Table => Missions_Table);
---         Update_Messages;
---      else
---         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---         Show_Sky_Map(Clear => True);
---      end if;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      return TCL_OK;
---   exception
---      when An_Exception : Missions_Accepting_Error =>
---         Show_Message
---           (Text => Exception_Message(X => An_Exception),
---            Title => "Can't accept mission");
---         return TCL_OK;
---   end Set_Mission_Command;
-
    -- ****o* MUI3/MIU3.Show_Base_Missions_Command
    -- FUNCTION
    -- Show the list of available missions in the base
@@ -218,17 +168,12 @@ package body Missions.UI is
       use Interfaces.C;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
---      use Tcl.Tk.Ada.Winfo;
 
       Missions_Frame: constant Ttk_Frame :=
         Get_Widget
           (pathName => Main_Paned & ".missionsframe", Interp => Interp);
       Missions_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Missions_Frame & ".canvas", Interp => Interp);
---      Label: constant Ttk_Label :=
---        Get_Widget
---          (pathName => Missions_Canvas & ".missions.missionslabel",
---           Interp => Interp);
       procedure Get_Ada_Mission_Base_Index(B_Index: Natural) with
          Convention => C,
          Import => True,
