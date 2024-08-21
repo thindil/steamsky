@@ -34,10 +34,10 @@ proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
   for module in playerShip.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
       baseFuelNeeded = baseFuelNeeded - 1
-  var fuelNeeded = baseFuelNeeded * (minutes / 10).int
+  var fuelNeeded: int = baseFuelNeeded * (minutes / 10).int
   if getRandom(min = 1, max = 10) < (minutes mod 10):
     fuelNeeded = fuelNeeded * baseFuelNeeded
-  let fuelIndex = findItem(inventory = playerShip.cargo, itemType = fuelType)
+  let fuelIndex: int = findItem(inventory = playerShip.cargo, itemType = fuelType)
   if fuelIndex == -1:
     addMessage(message = "Ship falls from the sky due to a lack of fuel.",
         mType = otherMessage, color = red)
@@ -99,11 +99,11 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
   if ship.name == playerShip.name and not infoOnly:
     if haveOrderRequirements().len > 0:
       return
-  var baseSpeed = 0
+  var baseSpeed: int = 0
   for module in ship.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
       baseSpeed = module.power * 10
-      var damage = 1.0 - (module.durability.float / module.maxDurability.float)
+      var damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
       result = result + (baseSpeed - (baseSpeed.float * damage).Natural)
   result = ((result.float / countShipWeight(ship = ship).float) *
       100_000.0).Natural
@@ -118,7 +118,7 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
         if module.mType == ModuleType2.hull:
           result = result + (result.float * ((module.maxModules * 2).float /
               300.0)).Natural
-  var shipSetSpeed = ship.speed
+  var shipSetSpeed: ShipSpeed = ship.speed
   if ship.name == playerShip.name and ship.speed in {docked, fullStop} and infoOnly:
     shipSetSpeed = parseEnum[ShipSpeed](s = (
         $gameSettings.undockSpeed).toLowerAscii)
@@ -146,7 +146,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
   ##
   ## Returns empty string if the player successfully docked, undocked or
   ## escaped from the base. Otherwise return message what goes wrong.
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   result = haveOrderRequirements()
   if result.len > 0:
     return
@@ -156,7 +156,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
           mType = orderMessage)
       if $gameSettings.autoSave == $dock:
         saveGame()
-      var memberIndex = 0
+      var memberIndex: int = 0
       while memberIndex < playerShip.crew.len:
         if playerShip.crew[memberIndex].contractLength == 0:
           deleteMember(memberIndex = memberIndex, ship = playerShip)
@@ -189,7 +189,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
     playerShip.speed = docked
     if not escape:
       if skyBases[baseIndex].population > 0:
-        let moneyIndex2 = findItem(inventory = playerShip.cargo,
+        let moneyIndex2: int = findItem(inventory = playerShip.cargo,
             protoIndex = moneyIndex)
         if moneyIndex2 == -1:
           return "You can't undock from this base because you don't have any " &
@@ -202,7 +202,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
         dockingCost = (dockingCost.float * newGameSettings.pricesBonus).int
         if dockingCost == 0:
           dockingCost = 1
-        let traderIndex = findMember(order = talk)
+        let traderIndex: int = findMember(order = talk)
         countPrice(price = dockingCost, traderIndex = traderIndex)
         if dockingCost > playerShip.cargo[moneyIndex2].amount:
           return "You can't undock to this base because you don't have enough " &
@@ -211,7 +211,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
         if traderIndex > -1:
           gainExp(amount = 1, skillNumber = talkingSkill,
               crewIndex = traderIndex)
-        let fuelIndex = findItem(inventory = playerShip.cargo,
+        let fuelIndex: int = findItem(inventory = playerShip.cargo,
             itemType = fuelType)
         if fuelIndex == -1:
           return "You can't undock from base because you don't have any fuel."
@@ -219,19 +219,19 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
             baseIndex].name & ". You also paid " & $dockingCost & " " &
             moneyName & " of docking fee.", mType = orderMessage)
       else:
-        let fuelIndex = findItem(inventory = playerShip.cargo,
+        let fuelIndex: int = findItem(inventory = playerShip.cargo,
             itemType = fuelType)
         if fuelIndex == -1:
           return "You can't undock from base because you don't have any fuel."
         addMessage(message = "Ship undocked from base " & skyBases[
             baseIndex].name & ".", mType = orderMessage)
     else:
-      let roll = getRandom(min = 1, max = 100)
+      let roll: Positive = getRandom(min = 1, max = 100)
       var
-        messageText = "Ship escaped from base " & skyBases[baseIndex].name & " without paying."
-        color = white
+        messageText: string = "Ship escaped from base " & skyBases[baseIndex].name & " without paying."
+        color: MessageColor = white
       if roll in 1 .. 40:
-        let moduleIndex = getRandom(min = playerShip.modules.low,
+        let moduleIndex: Natural = getRandom(min = playerShip.modules.low,
             max = playerShip.modules.high)
         messageText = messageText & " But your ship (" & playerShip.modules[
             moduleIndex].name & ") takes damage."
@@ -254,7 +254,7 @@ proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [], contractual.} =
   ##
   ## Returns the amount of needed fuel.
   result = 0
-  var speed = playerShip.speed
+  var speed: ShipSpeed = playerShip.speed
   if speed in {docked, fullStop}:
     speed = gameSettings.undockSpeed
   for module in playerShip.modules:
@@ -277,7 +277,7 @@ proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
   ##
   ## Returns an empty string if the speed was changed successfully, otherwise
   ## returns a message with information what goes wrong.
-  var haveEngine = false
+  var haveEngine: bool = false
   for module in playerShip.modules:
     if module.mType == ModuleType2.engine and (module.durability > 0 and
         not module.disabled):
@@ -316,29 +316,29 @@ proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
   message = haveOrderRequirements()
   if message.len > 0:
     return 0
-  var fuelIndex = findItem(inventory = playerShip.cargo, itemType = fuelType)
+  var fuelIndex: int = findItem(inventory = playerShip.cargo, itemType = fuelType)
   if fuelIndex == -1:
     message = "You don't have any fuel."
     return 0
-  let fuelNeeded = countFuelNeeded()
+  let fuelNeeded: int = countFuelNeeded()
   if playerShip.cargo[fuelIndex].amount < fuelNeeded:
     message = "You don't have enough fuel (" & itemsList[playerShip.cargo[
         fuelIndex].protoIndex].name & ")."
     return 0
-  let speed = realSpeed(ship = playerShip).float / 1_000.0
+  let speed: float = realSpeed(ship = playerShip).float / 1_000.0
   if speed < 0.5:
     message = "You can't fly because your ship is overloaded."
     return 0
   let
-    newX = playerShip.skyX + x
-    newY = playerShip.skyY + y
+    newX: int = playerShip.skyX + x
+    newY: int = playerShip.skyY + y
   if newX < 1 or newX > 1_024 or newY < 1 or newY > 1_024:
     return 0;
   playerShip.skyX = newX
   playerShip.skyY = newY
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded)
-  var timePassed = (100.0 / speed).int
+  var timePassed: int = (100.0 / speed).int
   if timePassed > 0:
     case playerShip.speed
     of quarterSpeed:
@@ -433,7 +433,7 @@ proc changeAdaShipSpeed(speedValue: cint): cstring {.raises: [], tags: [],
 proc moveAdaShip(x, y: cint; message: var cstring): cint {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
   ## Temporary C binding
-  var mesg = ""
+  var mesg: string = ""
   try:
     result = moveShip(x = x, y = y, message = mesg).cint
     message = mesg.cstring
