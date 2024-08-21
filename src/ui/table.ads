@@ -169,27 +169,6 @@ package Table is
       Pre => Table.Row_Height > 1;
       -- ****
 
-      -- ****f* Table/Table.Add_Pagination
-      -- FUNCTION
-      -- Add pagination buttons to the bottom of the table
-      -- PARAMETERS
-      -- Table            - The Table_Widget to which buttons will be added
-      -- Previous_Command - The Tcl command which will be executed by the previous
-      --                    button. If empty, button will not be shown. Default
-      --                    value is empty
-      -- Next_Command     - The Tcl command which will be executed by the next
-      --                    button. If empty, button will not be shown. Default
-      --                    value is empty
-      -- HISTORY
-      -- 5.9 - Added
-      -- 7.1 - Renamed to Add_Pagination
-      -- 7.6 - Added default values for Previous_Command and Next_Command
-      -- SOURCE
-   procedure Add_Pagination
-     (Table: Table_Widget; Previous_Command, Next_Command: String := "") with
-      Pre => Table.Row_Height > 1;
-      -- ****
-
       -- ****f* Table/Table.Get_Column_Number
       -- FUNCTION
       -- Get the number of the Table_Widget column for the selected X axis

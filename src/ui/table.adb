@@ -155,23 +155,6 @@ package body Table is
    end Update_Table;
 
    --## rule off LOCAL_HIDING
-   procedure Add_Pagination
-     (Table: Table_Widget; Previous_Command, Next_Command: String := "") is
-      --## rule on LOCAL_HIDING
-      procedure Add_Ada_Pagination
-        (Can, P_Command, N_Command: chars_ptr; R, R_Height: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaPagination";
-   begin
-      Add_Ada_Pagination
-        (Can => New_String(Str => Widget_Image(Win => Table.Canvas)),
-         P_Command => New_String(Str => Previous_Command),
-         N_Command => New_String(Str => Next_Command), R => Table.Row,
-         R_Height => Table.Row_Height);
-   end Add_Pagination;
-
-   --## rule off LOCAL_HIDING
    function Get_Column_Number
      (Table: Table_Widget; X_Position: Natural) return Positive is
       --## rule on LOCAL_HIDING
