@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[events, game, maps, missions, tk, types, utils]
+import ../[events, game, maps, missions, missions2, tk, types, utils]
 import coreui, mapsui, table, utilsui2
 
 var baseIndex = 0
@@ -190,6 +190,21 @@ proc refreshMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [].
   elif rows > 24:
     addPagination(table = missionsTable, previousCommand = "",
         nextCommand = "ShowBaseMissions " & $(page + 1))
+
+proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  let missionIndex = ($argv[1]).parseInt - 1
+  skyBases[baseIndex].missions[missionIndex].multiplier = (tclGetVar(
+      varName = "reward").parseFloat / 100.0)
+  acceptMission(missionIndex = missionIndex)
+  if countMissionsAmount() > 0:
+    refreshMissionsList()
+    updateTable(table = missionsTable)
+    updateMessages()
+  else:
+    tclEval(script = "grid remove " & closeButton)
+    showSkyMap(clear = true)
+  return tclOk
 
 proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
