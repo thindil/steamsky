@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[events, game, maps, missions, missions2, tk, types, utils]
-import coreui, mapsui, table, utilsui2
+import coreui, dialogs, mapsui, table, utilsui2
 
 var baseIndex = 0
 
@@ -192,11 +192,23 @@ proc refreshMissionsList(page: Positive = 1) {.sideEffect, raises: [], tags: [].
         nextCommand = "ShowBaseMissions " & $(page + 1))
 
 proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
-  let missionIndex = ($argv[1]).parseInt - 1
-  skyBases[baseIndex].missions[missionIndex].multiplier = (tclGetVar(
-      varName = "reward").parseFloat / 100.0)
-  acceptMission(missionIndex = missionIndex)
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+  let missionIndex = try:
+      ($argv[1]).parseInt - 1
+    except:
+      return showError(message = "Can't get the mission index.")
+  try:
+    skyBases[baseIndex].missions[missionIndex].multiplier = (tclGetVar(
+        varName = "reward").parseFloat / 100.0)
+  except:
+    return showError(message = "Can't set the mission's multiplier.")
+  try:
+    acceptMission(missionIndex = missionIndex)
+  except MissionAcceptingError:
+    showMessage(text = getCurrentExceptionMsg(), title = "Can't accept mission")
+    return tclOk
+  except:
+    return showError(message = "Can't accept mission.")
   if countMissionsAmount() > 0:
     refreshMissionsList()
     updateTable(table = missionsTable)
