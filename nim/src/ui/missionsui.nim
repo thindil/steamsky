@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[config, events, game, maps, missions, missions2, tk, types, utils]
+import ../[config, events, game, maps, missions, missions2, ships, tk, types, utils]
 import coreui, dialogs, mapsui, table, utilsui2
 
 var baseIndex = 0
@@ -314,8 +314,37 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = label & " insert end {\nTo base: }")
     tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
         mission.targetY].baseIndex].name & "} [list gold]")
-  else:
-    discard
+  of patrol:
+    tclEval(script = label & " insert end {Patrol selected area} [list gold]")
+  of destroy:
+    tclEval(script = label & " insert end {Target: }")
+    tclEval(script = label & " insert end {" & protoShipsList[
+        mission.shipIndex].name & "} [list gold]")
+  of explore:
+    tclEval(script = label & " insert end {Explore selected area} [list gold]")
+  of passenger:
+    var canAccept, cabinTaken = false
+    for module in playerShip.modules:
+      if (module.mType == ModuleType2.cabin and not canAccept) and
+          module.quality >= mission.data:
+        canAccept = true
+        cabinTaken = false
+        for owner in module.owner:
+          if owner > -1:
+            cabinTaken = true
+            canAccept = false
+            break
+        if canAccept:
+          break
+    if baseIndex == 0:
+      canAccept = true
+    tclEval(script = label & " insert end {Needed quality of cabin: }")
+    tclEval(script = label & " insert end {" & getCabinQuality(
+        quality = mission.data) & (
+        if canAccept: "} [list green]" elif cabinTaken: " (taken)} [list gold]" else: " (no cabin)} [list red]"))
+    tclEval(script = label & " insert end {\nTo base: }")
+    tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
+        mission.targetY].baseIndex].name & "} [list gold]")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
