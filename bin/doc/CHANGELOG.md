@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file.
   or with ships
 - Redesigned dialogs for selling, buying and dropping items from the player's
   ship cargo
+- Redesigned the movement's buttons on the map, added the player's ship's
+  orders button
 
 ### Fixed
 - Crash when dropping items in empty bases
