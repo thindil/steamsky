@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings;
 with Maps; use Maps;
 with Ships;
 
@@ -72,34 +71,6 @@ package body Events is
    begin
       Generate_Ada_Traders;
    end Generate_Traders;
-
-   procedure Generate_Enemies
-     (Enemies: in out Positive_Container.Vector;
-      Owner: Tiny_String.Bounded_String :=
-        Tiny_String.To_Bounded_String(Source => "Any");
-      With_Traders: Boolean := True) is
-      use Interfaces.C.Strings;
-
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Ships_Array is array(0 .. 299) of Natural;
-      --## rule on TYPE_INITIAL_VALUES
-      Nim_Ships: Nim_Ships_Array;
-      procedure Generate_Ada_Enemies
-        (E: out Nim_Ships_Array; O: chars_ptr; W_Traders: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaEnemies";
-   begin
-      Generate_Ada_Enemies
-        (E => Nim_Ships,
-         O => New_String(Str => Tiny_String.To_String(Source => Owner)),
-         W_Traders => (if With_Traders then 1 else 0));
-      Convert_Ships_Loop :
-      for Ship of Nim_Ships loop
-         exit Convert_Ships_Loop when Ship = 0;
-         Enemies.Append(New_Item => Ship);
-      end loop Convert_Ships_Loop;
-   end Generate_Enemies;
 
    procedure Set_Event(Index: Positive) is
       X, Y, Time, E_Type, Data: Integer;

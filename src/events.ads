@@ -104,22 +104,6 @@ package Events is
    procedure Generate_Traders;
    -- ****
 
-   -- ****f* Events/Events.GenerateEnemies
-   -- FUNCTION
-   -- Create list of enemies ships
-   -- PARAMETERS
-   -- Enemies      - List of enemies to generate
-   -- Owner        - Index of faction which enemies list should contains.
-   --                Default all factions
-   -- With_Traders - Did list should contains enemy traders too. Default true
-   -- SOURCE
-   procedure Generate_Enemies
-     (Enemies: in out Positive_Container.Vector;
-      Owner: Tiny_String.Bounded_String :=
-        Tiny_String.To_Bounded_String(Source => "Any");
-      With_Traders: Boolean := True);
-   -- ****
-
 -- Temporary code to interact with Nim
 
    procedure Get_Ada_Event(Index, X, Y, Time, E_Type, Data: Integer) with
