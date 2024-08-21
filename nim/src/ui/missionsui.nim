@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[events, game, maps, missions, missions2, tk, types, utils]
+import ../[config, events, game, maps, missions, missions2, tk, types, utils]
 import coreui, dialogs, mapsui, table, utilsui2
 
 var baseIndex = 0
@@ -285,11 +285,45 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   showScreen(newScreenName = "missionsframe")
   return tclOk
 
+proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  let
+    missionIndex = ($argv[1]).parseInt - 1
+    mission = skyBases[baseIndex].missions[missionIndex]
+    missionDialog = createDialog(name = ".missiondialog",
+        title = "More info about " & getMissionType(mType = mission.mType))
+    label = missionDialog & ".infolabel"
+  tclEval(script = "text " & label & " -height 5 -width 30")
+  tclEval(script = label & " tag configure gold -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-goldenyellow)"))
+  tclEval(script = label & " tag configure red -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-red)"))
+  tclEval(script = label & " tag configure green -foreground " & tclGetVar(
+      varName = "ttk::theme::" & gameSettings.interfaceTheme &
+      "::colors(-green)"))
+  case mission.mType
+  of deliver:
+    tclEval(script = label & " insert end {Item: }")
+    tclEval(script = label & " insert end {" & itemsList[
+        mission.itemIndex].name & "} [list gold]")
+    tclEval(script = label & " insert end {\nWeight: }")
+    tclEval(script = label & " insert end {" & $itemsList[
+        mission.itemIndex].weight & "} [list gold]")
+    tclEval(script = label & " insert end {\nTo base: }")
+    tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
+        mission.targetY].baseIndex].name & "} [list gold]")
+  else:
+    discard
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     discard
 #    addCommand("ShowBaseMissions", showBaseMissionsCommand)
+#    addCommand("MissionMoreInfo", missionMoreInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
