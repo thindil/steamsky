@@ -22,6 +22,12 @@ with Bases; use Bases;
 
 package body Missions is
 
+   function Get_Accepted_Mission(Mission_Index: Positive) return Mission_Data;
+   function Get_Accepted_Missions_Amount return Natural with
+      Import => True,
+      Convention => C,
+      External_Name => "getAdaAcceptedMissionsAmount";
+
    procedure Accept_Mission(Mission_Index: Positive) is
       use Interfaces.C;
 

@@ -33,13 +33,6 @@ package Missions is
       Default_Value => DELIVER;
       -- ****
 
-      -- ****d* Missions/Missions.Default_Mission_Type
-      -- FUNCTION
-      -- Default type of missions
-      -- SOURCE
-   Default_Mission_Type: constant Missions_Types := DELIVER;
-   -- ****
-
    -- ****t* Missions/Missions.Reward_Multiplier
    -- FUNCTION
    -- Used for count reward for finished missions
@@ -149,10 +142,4 @@ package Missions is
 
    procedure Get_Missions(Base_Index: Positive);
    procedure Set_Missions(Base_Index: Positive);
-   function Get_Accepted_Mission(Mission_Index: Positive) return Mission_Data;
-   function Get_Accepted_Missions_Amount return Natural with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaAcceptedMissionsAmount";
-
 end Missions;
