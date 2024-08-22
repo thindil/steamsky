@@ -287,9 +287,12 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    missionIndex = ($argv[1]).parseInt - 1
+    missionIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get mission index.")
     mission = skyBases[baseIndex].missions[missionIndex]
     missionDialog = createDialog(name = ".missiondialog",
         title = "More info about " & getMissionType(mType = mission.mType))
@@ -308,11 +311,17 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   case mission.mType
   of deliver:
     tclEval(script = label & " insert end {Item: }")
-    tclEval(script = label & " insert end {" & itemsList[
-        mission.itemIndex].name & "} [list gold]")
+    try:
+      tclEval(script = label & " insert end {" & itemsList[
+          mission.itemIndex].name & "} [list gold]")
+    except:
+      return showError(message = "Can't get item name.")
     tclEval(script = label & " insert end {\nWeight: }")
-    tclEval(script = label & " insert end {" & $itemsList[
-        mission.itemIndex].weight & "} [list gold]")
+    try:
+      tclEval(script = label & " insert end {" & $itemsList[
+          mission.itemIndex].weight & "} [list gold]")
+    except:
+      return showError(message = "Can't get item weight.")
     tclEval(script = label & " insert end {\nTo base: }")
     tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
         mission.targetY].baseIndex].name & "} [list gold]")
@@ -320,8 +329,11 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = label & " insert end {Patrol selected area} [list gold]")
   of destroy:
     tclEval(script = label & " insert end {Target: }")
-    tclEval(script = label & " insert end {" & protoShipsList[
-        mission.shipIndex].name & "} [list gold]")
+    try:
+      tclEval(script = label & " insert end {" & protoShipsList[
+          mission.shipIndex].name & "} [list gold]")
+    except:
+      return showError(message = "Can't get ship's name.")
   of explore:
     tclEval(script = label & " insert end {Explore selected area} [list gold]")
   of passenger:
@@ -359,8 +371,11 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = label & " insert end {" & missionInfo & "} [list gold]")
     tclEval(script = label & " insert end {\nApprox fuel usage: }")
     tclEval(script = label & " insert end {" & $travelValues[2] & " } [list gold]")
-    tclEval(script = label & " insert end {" & itemsList[findProtoItem(
-        itemType = fuelType)].name & "}")
+    try:
+      tclEval(script = label & " insert end {" & itemsList[findProtoItem(
+          itemType = fuelType)].name & "}")
+    except:
+      return showError(message = "Can't get fuel name.")
   tclEval(script = label & " configure -state disabled")
   tclEval(script = "grid " & label & " -padx 5")
   let buttonsFrame = missionDialog & ".buttons"
