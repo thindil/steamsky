@@ -19,6 +19,8 @@ import std/[strutils, tables]
 import ../[config, crew, game, items, messages, shipscrew, shipsmovement, tk, types]
 import coreui, dialogs
 
+type TravelArray* = array[1..2, Natural]
+
 proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
   ## Clear the old screen and show the selected to the player
   ##
@@ -127,7 +129,7 @@ proc getSkillMarks*(skillIndex: Positive;
   if memberIndex == crewIndex:
     result = result & "+"
 
-proc travelInfo*(distance: Natural): array[1 .. 2, Natural] {.sideEffect,
+proc travelInfo*(distance: Natural): TravelArray {.sideEffect,
     raises: [], tags: [].} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
