@@ -28,34 +28,6 @@ package body Missions is
       Convention => C,
       External_Name => "getAdaAcceptedMissionsAmount";
 
-   procedure Accept_Mission(Mission_Index: Positive) is
-      use Interfaces.C;
-
-      Base_Index: constant Bases_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Mission: Mission_Data;
-      Message: chars_ptr;
-      function Accept_Ada_Mission(M_Index: Positive) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "acceptAdaMission";
-   begin
-      Set_Base_In_Nim(Base_Index => Base_Index);
-      Set_Ship_In_Nim;
-      Get_Missions(Base_Index => Base_Index);
-      Message := Accept_Ada_Mission(M_Index => Mission_Index);
-      if Strlen(Item => Message) > 0 then
-         raise Missions_Accepting_Error with Value(Item => Message);
-      end if;
-      Set_Missions(Base_Index => Base_Index);
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Get_Base_From_Nim(Base_Index => Base_Index);
-      Mission :=
-        Get_Accepted_Mission(Mission_Index => Get_Accepted_Missions_Amount);
-      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index :=
-        Get_Accepted_Missions_Amount;
-   end Accept_Mission;
-
    function Auto_Finish_Missions return String is
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
