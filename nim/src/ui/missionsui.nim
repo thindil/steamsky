@@ -345,6 +345,17 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = label & " insert end {\nTo base: }")
     tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
         mission.targetY].baseIndex].name & "} [list gold]")
+  let travelValues = travelInfo(distance = (if mission.mType in {deliver,
+      passenger}: countDistance(destinationX = mission.targetX,
+      destinationY = mission.targetY) else: countDistance(
+      destinationX = mission.targetX, destinationY = mission.targetY) * 2))
+  if travelValues[1] > 0:
+    var missionInfo = ""
+    minutesToDate(minutes = travelValues[1], infoText = missionInfo)
+    tclEval(script = label & " insert end {\nETA:}")
+    tclEval(script = label & " insert end {" & missionInfo & "} [list gold]")
+    tclEval(script = label & " insert end {\nApprox fuel usage: }")
+    tclEval(script = label & " insert end {" & $travelValues[2] & "} [list gold]")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
