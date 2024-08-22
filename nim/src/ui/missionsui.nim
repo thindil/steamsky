@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[config, events, game, maps, missions, missions2, ships, tk, types, utils]
+import ../[config, events, game, items, maps, missions, missions2, ships, tk,
+    types, utils]
 import coreui, dialogs, mapsui, table, utilsui2
 
 var baseIndex = 0
@@ -355,7 +356,21 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = label & " insert end {\nETA:}")
     tclEval(script = label & " insert end {" & missionInfo & "} [list gold]")
     tclEval(script = label & " insert end {\nApprox fuel usage: }")
-    tclEval(script = label & " insert end {" & $travelValues[2] & "} [list gold]")
+    tclEval(script = label & " insert end {" & $travelValues[2] & " } [list gold]")
+    tclEval(script = label & " insert end {" & itemsList[findProtoItem(
+        itemType = fuelType)].name & "}")
+  tclEval(script = label & " configure -state disabled")
+  tclEval(script = "grid " & label & " -padx 5")
+  let buttonsFrame = missionDialog & ".buttons"
+  tclEval(script = "ttk::frame " & buttonsFrame)
+  var button = buttonsFrame & ".button1"
+  tclEval(script = "ttk::button " & button &
+      " -text Show -image show2icon -command {CloseDialog " & missionDialog &
+      ";set mappreview 1;ShowOnMap " & $mission.targetX & " " &
+      $mission.targetY & "} -style Dialoggreen.TButton")
+  tclEval(script = "tooltip::tooltip " & button & " \"Show the mission on the map\"")
+  tclEval(script = "grid " & button & " -padx 5")
+  tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button;break}")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
