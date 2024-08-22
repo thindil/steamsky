@@ -25,6 +25,7 @@ with Game; use Game;
 package Missions is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****t* Missions/Missions.Missions_Types
    -- FUNCTION
    -- Types of missions
@@ -50,7 +51,6 @@ package Missions is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
-   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Missions/Missions.Mission_Data:
    -- FUNCTION
    -- Data structure for missions
@@ -104,16 +104,6 @@ package Missions is
    -- Raised when mission can't be accepted
    -- SOURCE
    Missions_Accepting_Error: exception;
-   -- ****
-
-   -- ****f* Missions/Missions.Accept_Mission
-   -- FUNCTION
-   -- Accept selected mission from base
-   -- PARAMETERS
-   -- Mission_Index - Base list of available missions index of mission to
-   --                 accept
-   -- SOURCE
-   procedure Accept_Mission(Mission_Index: Positive);
    -- ****
 
    -- ****f* Missions/Missions.Auto_Finish_Missions
