@@ -304,6 +304,7 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = label & " tag configure green -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-green)"))
+  var canAccept = true
   case mission.mType
   of deliver:
     tclEval(script = label & " insert end {Item: }")
@@ -324,7 +325,8 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of explore:
     tclEval(script = label & " insert end {Explore selected area} [list gold]")
   of passenger:
-    var canAccept, cabinTaken = false
+    var cabinTaken = false
+    canAccept = false
     for module in playerShip.modules:
       if (module.mType == ModuleType2.cabin and not canAccept) and
           module.quality >= mission.data:
@@ -371,6 +373,22 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tooltip::tooltip " & button & " \"Show the mission on the map\"")
   tclEval(script = "grid " & button & " -padx 5")
   tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button;break}")
+  tclEval(script = "bind " & button & " <Escape> {" & buttonsFrame & ".button invoke;break}")
+  addCloseButton(name = buttonsFrame & ".button", text = "Close",
+      command = "CloseDialog " & missionDialog, column = 1)
+  if canAccept:
+    button = buttonsFrame & ".button"
+    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button2;break}")
+    button = buttonsFrame & ".button2"
+    tclEval(script = "ttk::button " & button &
+        " -text Accept -image negotiateicon -command {CloseDialog " &
+        missionDialog & ";AcceptMission " & $argv[1] & "} -style Dialog.TButton")
+    tclEval(script = "tooltip::tooltip " & button & " \"Start negiotiating accepting the mission\"")
+    tclEval(script = "grid " & button & " -row 0 -column 2 -padx 5")
+    tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
+    tclEval(script = "bind " & button & " <Escape> {" & buttonsFrame & ".button invoke;break}")
+  tclEval(script = "grid " & buttonsFrame & " -padx 5 -pady 5")
+  showDialog(dialog = missionDialog)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
