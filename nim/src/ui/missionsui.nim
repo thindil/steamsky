@@ -418,12 +418,37 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = missionDialog)
   return tclOk
 
+proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  let
+    missionIndex = ($argv[1]).parseInt - 1
+    mission = skyBases[baseIndex].missions[missionIndex]
+    missionDialog = createDialog(name = ".missiondialog", title = "Accept " &
+        getMissionType(mType = mission.mType), columns = 2)
+    rewardScale = missionDialog & ".reward"
+  tclEval(script = "ttk::scale " & rewardScale &
+      " -from 0 -to 200 -variable reward -command {UpdateMissionReward " &
+      $argv[1] & "} -length 300")
+  tclEval(script = "tooltip::tooltip " & rewardScale & " \"Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.\"")
+  let buttonsBox = missionDialog & ".buttons"
+  tclEval(script = "ttk::frame " & buttonsBox)
+  var button = buttonsBox & ".accept"
+  tclEval(script = "ttk::button " & button &
+      " -text Accept -command {CloseDialog " & missionDialog & ";SetMission " &
+      $argv[1] & "} -image negotiate2icon -style Dialoggreen.TButton")
+  let rewardField = missionDialog & ".rewardfield"
+  tclEval(script = "ttk::spinbox " & rewardField &
+      " -from 0 -to 200 -textvariable reward -validate key -validatecommand {ValidateSpinbox %W %P " &
+      button & "} -width 3")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     discard
 #    addCommand("ShowBaseMissions", showBaseMissionsCommand)
 #    addCommand("MissionMoreInfo", missionMoreInfoCommand)
+#    addCommand("AcceptMission", acceptMissionCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
