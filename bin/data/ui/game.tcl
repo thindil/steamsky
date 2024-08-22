@@ -237,6 +237,7 @@ grid [ttk::button $bframe.box.moveto -command {MoveShip moveto} \
    -style Move.TButton] -row 0 -column 1
 tooltip::tooltip $bframe.box.moveto "Auto move your ship to its destination"
 grid [ttk::button $bframe.box.orders -command {ShowOrders} -text {Ship Orders}]
+tooltip::tooltip $bframe.box.orders "Show available orders for your ship."
 grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
    -row 1 -sticky we
 tooltip::tooltip $bframe.nw "Move ship up and left"
