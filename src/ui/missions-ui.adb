@@ -35,7 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
-with CoreUI; use CoreUI;
+with CoreUI;
 with Config;
 with Dialogs; use Dialogs;
 with Items; use Items;
@@ -104,7 +104,6 @@ package body Missions.UI is
    -- SOURCE
    Missions_Indexes: Positive_Container.Vector;
    -- ****
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****if* MUI3/MUI3.Refresh_Missions_List
    -- FUNCTION
@@ -118,6 +117,7 @@ package body Missions.UI is
       Import => True,
       External_Name => "refreshAdaMissionsList";
       -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* MUI3/MIU3.Set_Mission_Command
    -- FUNCTION
@@ -168,6 +168,7 @@ package body Missions.UI is
       use Interfaces.C;
       use Tcl.Tk.Ada.Widgets.Canvas;
       use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+      use CoreUI;
 
       Missions_Frame: constant Ttk_Frame :=
         Get_Widget
