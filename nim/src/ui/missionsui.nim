@@ -288,6 +288,18 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show more info about the selected mission
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MissionMoreInfo missionindex
+  ## MissionIndex is the index of the mission's info to show
   let
     missionIndex = try:
         ($argv[1]).parseInt - 1
