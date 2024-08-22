@@ -53,7 +53,7 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
       needSaveGame = true
 
   var tiredPoints: Natural = 0
-  for i in 1 .. minutes:
+  for i in 1..minutes:
     if (gameDate.minutes + i) mod 15 == 0:
       tiredPoints.inc
   let addedMinutes: Natural = minutes mod 60
@@ -334,8 +334,8 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     # Set the game time
     gameDate = startDate
     # Generate the game's world
-    for x in MapXRange.low .. MapXRange.high:
-      for y in MapYRange.low .. MapYRange.high:
+    for x in MapXRange.low..MapXRange.high:
+      for y in MapYRange.low..MapYRange.high:
         skyMap[x][y] = SkyCell(baseIndex: 0, visited: false, eventIndex: -1,
             missionIndex: -1)
     var
@@ -350,7 +350,7 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
       basePopulation: Natural = 0
       baseReputation: ReputationRange = 0
       baseSize: BasesSize = unknown
-    for i in skyBases.low .. skyBases.high:
+    for i in skyBases.low..skyBases.high:
       var factionRoll: Natural = getRandom(min = 1, max = maxSpawnRoll)
       for index, faction in factionsList:
         if factionRoll < faction.spawnChance:
@@ -378,9 +378,9 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
       baseSize = case basePopulation
         of 0:
           getRandom(min = 0, max = 2).BasesSize
-        of 1 .. 149:
+        of 1..149:
           small
-        of 150 .. 299:
+        of 150..299:
           medium
         else: big
       skyBases[i].name = generateBaseName(factionIndex = baseOwner)
@@ -433,10 +433,10 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
               posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
               posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
               attempts = 1
-          for j in -5 .. 5:
+          for j in -5..5:
             var tempX: int = posX + j
             normalizeCoord(coord = tempX)
-            for k in -5 .. 5:
+            for k in -5..5:
               var tempY: int = posY + k
               normalizeCoord(coord = tempY, isXAxis = false)
               if skyMap[tempX][tempY].baseIndex > 0:
