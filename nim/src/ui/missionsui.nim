@@ -440,6 +440,24 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::spinbox " & rewardField &
       " -from 0 -to 200 -textvariable reward -validate key -validatecommand {ValidateSpinbox %W %P " &
       button & "} -width 3")
+  tclEval(script = "tooltip::tooltip " & rewardField & " \"Lower value - more reputation from mission but less money,\nhigher value - more money from mission but less reputation.\"")
+  let rewardBox = missionDialog & ".rewardbox"
+  tclEval(script = "ttk::frame " & rewardBox)
+  var rewardLabel = rewardBox & ".rewardlbl"
+  tclEval(script = "ttk::label " & rewardLabel & " -text {Reward: }")
+  tclEval(script = "grid " & rewardLabel & " -stick w")
+  rewardLabel = rewardBox & ".rewardlbl2"
+  tclEval(script = "ttk::label " & rewardLabel & " -text {" & $((
+      mission.reward.float * mission.multiplier).Natural) & "} -style Golden.TLabel")
+  tclEval(script = "grid " & rewardLabel & " -row 0 -column 1 -stick w")
+  tclEval(script = "grid " & rewardBox & " -columnspan 2 -padx 5 -stick w")
+  rewardLabel = missionDialog & ".rewardinfo"
+  tclEval(script = "ttk::label " & rewardLabel & " -text {Percent of " &
+      moneyName & " as reward:}")
+  tclEval(script = "grid " & rewardLabel & " -columnspan 2 -padx 5 -stick w")
+  tclSetVar(varName = "reward", newValue = "100")
+  tclEval(script = "grid " & rewardScale & " -padx {5 0} -stick w")
+  tclEval(script = "grid " & rewardField & " -row 3 -column 1 -padx {0 5} -stick w")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
