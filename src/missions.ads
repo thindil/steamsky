@@ -99,13 +99,6 @@ package Missions is
      (Index_Type => Positive, Element_Type => Mission_Data);
    -- ****
 
-   -- ****e* Missions/Missions.Missions_Accepting_Error
-   -- FUNCTION
-   -- Raised when mission can't be accepted
-   -- SOURCE
-   Missions_Accepting_Error: exception;
-   -- ****
-
    -- ****f* Missions/Missions.Auto_Finish_Missions
    -- FUNCTION
    -- Finish all possible missions.
