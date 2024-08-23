@@ -419,9 +419,12 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
-    missionIndex = ($argv[1]).parseInt - 1
+    missionIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the mission index.")
     mission = skyBases[baseIndex].missions[missionIndex]
     missionDialog = createDialog(name = ".missiondialog", title = "Accept " &
         getMissionType(mType = mission.mType), columns = 2)
