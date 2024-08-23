@@ -458,6 +458,20 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = "reward", newValue = "100")
   tclEval(script = "grid " & rewardScale & " -padx {5 0} -stick w")
   tclEval(script = "grid " & rewardField & " -row 3 -column 1 -padx {0 5} -stick w")
+  tclEval(script = "bind " & rewardField & " <Tab> {focus " & button & ";break}")
+  tclEval(script = "bind " & rewardField & " <Escape> {" & missionDialog & ".buttons.cancel invoke;break}")
+  tclEval(script = "grid " & button & " -pady 5")
+  tclEval(script = "bind " & button & " <Escape> {" & missionDialog & ".buttons.cancel invoke;break}")
+  button = buttonsBox & ".cancel"
+  tclEval(script = "ttk::button " & button &
+      " -text Cancel -command {CloseDialog " & missionDialog & "} -image cancelicon -style Dialogred.TButton")
+  tclEval(script = "grid " & button & " -row 0 -column 1 -pady 5 -padx 5")
+  tclEval(script = "bind " & button & " <Tab> {focus " & rewardScale & ";break}")
+  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+  tclEval(script = "bind " & rewardScale & " <Escape> {" & button & " invoke;break}")
+  tclEval(script = "grid " & buttonsBox & " -columnspan 2 -pady 5")
+  showDialog(dialog = missionDialog)
+  tclEval(script = "focus " & button)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
