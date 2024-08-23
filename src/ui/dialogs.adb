@@ -98,26 +98,6 @@ package body Dialogs is
       return New_Dialog;
    end Create_Dialog;
 
-   --## rule off LOCAL_HIDING
-   procedure Add_Close_Button
-     (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row, Column: Natural := 0; Icon: String := "exiticon";
-      Color: String := "") is
-
-      procedure Add_Ada_Close_Button
-        (N, T, Com: chars_ptr; Col_Span, R, Col: Integer;
-         I, Colo: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "addAdaCloseButton";
-   begin
-      Add_Ada_Close_Button
-        (N => New_String(Str => Name), T => New_String(Str => Text),
-         Com => New_String(Str => Command), Col_Span => Column_Span, R => Row,
-         Col => Column, I => New_String(Str => Icon),
-         Colo => New_String(Str => Color));
-   end Add_Close_Button;
-
    procedure Show_Dialog
      (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
       With_Timer: Boolean := False;
