@@ -219,7 +219,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
         upgradeProgress = module.attr(name = "upgradeprogress").parseInt
       if module.attr(name = "mtype") == "":
         case modulesList[protoIndex].mType
-        of alchemyLab .. greenhouse:
+        of alchemyLab..greenhouse:
           mType = workshop
         of medicalRoom:
           mType = medicalRoom
