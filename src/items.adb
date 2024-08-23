@@ -17,20 +17,6 @@
 
 package body Items is
 
-   function Find_Proto_Item
-     (Item_Type: Tiny_String.Bounded_String) return Natural is
-      use Tiny_String;
-
-      function Find_Ada_Proto_Item(Itype: chars_ptr) return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "findAdaProtoItem";
-   begin
-      return
-        Find_Ada_Proto_Item
-          (Itype => New_String(Str => To_String(Source => Item_Type)));
-   end Find_Proto_Item;
-
    function Get_Item_Damage
      (Item_Durability: Items_Durability;
       To_Lower, With_Colors: Boolean := False) return String is

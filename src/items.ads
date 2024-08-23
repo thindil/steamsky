@@ -120,19 +120,6 @@ package Items is
      (Index_Type => Positive, Element_Type => Inventory_Data);
    -- ****
 
-   -- ****f* Items/Items.Find_Proto_Item
-   -- FUNCTION
-   -- Search for prototype index of selected item
-   -- PARAMETERS
-   -- Item_Type - Item type of item which map index is looking for
-   -- RESULT
-   -- Prototype index of the item or 0 if index can't be found
-   -- SOURCE
-   function Find_Proto_Item
-     (Item_Type: Tiny_String.Bounded_String) return Natural with
-      Pre => Tiny_String.Length(Source => Item_Type) > 0;
-      -- ****
-
       -- ****f* Items/Items.Get_Item_Damage
       -- FUNCTION
       -- Get description of item damage
