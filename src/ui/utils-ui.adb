@@ -15,6 +15,7 @@
 
 with Ada.Directories;
 with Ada.Strings;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv; use CArgv;
@@ -499,29 +500,6 @@ package body Utils.UI is
         (Name => "SetDestination2",
          Ada_Command => Set_Destination_Command'Access);
    end Add_Commands;
-
-   procedure Minutes_To_Date
-     (Minutes: Natural; Info_Text: in out Unbounded_String) is
-      procedure Min_To_Date(Mins: Natural; Info: in out chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "minutesAdaToDate";
-      New_Text: chars_ptr := New_String(Str => To_String(Source => Info_Text));
-   begin
-      Min_To_Date(Mins => Minutes, Info => New_Text);
-      Info_Text := To_Unbounded_String(Source => Value(Item => New_Text));
-   end Minutes_To_Date;
-
-   function Travel_Info(Distance: Positive) return Travel_Array is
-      Result: Travel_Array;
-      procedure Travel_Ada_Info(D: Positive; Res: out Travel_Array) with
-         Import => True,
-         Convention => C,
-         External_Name => "travelAdaInfo";
-   begin
-      Travel_Ada_Info(D => Distance, Res => Result);
-      return Result;
-   end Travel_Info;
 
    procedure Update_Messages is
       procedure Update_Ada_Messages with

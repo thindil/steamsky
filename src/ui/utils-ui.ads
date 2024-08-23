@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Config; use Config;
@@ -59,33 +58,6 @@ package Utils.UI is
       -- Add various, UI related Tcl commands
       -- SOURCE
    procedure Add_Commands;
-   -- ****
-
-   -- ****f* UUI/UUI.Minutes_To_Date
-   -- FUNCTION
-   -- Convert minutes to game date and add it to text
-   -- PARAMETERS
-   -- Minutes  - Amount of minutes to convert
-   -- Info_Text - Text to which time info will be added
-   -- RESULT
-   -- Parameter InfoText
-   -- SOURCE
-   procedure Minutes_To_Date
-     (Minutes: Natural; Info_Text: in out Unbounded_String);
-   -- ****
-
-   -- ****f* UUI/UUI.Travel_Info
-   -- FUNCTION
-   -- Count the ETA and fuel usage for the selected distance
-   -- PARAMETERS
-   -- Distance - Distance in map fields to destination point
-   -- RESULT
-   -- The array with two values, the first is estimated time to travel the
-   -- distance, the second is the amount of fuel needed to travel the distance.
-   -- HISTORY
-   -- 9.1 - Changed into function and removed parameters
-   -- SOURCE
-   function Travel_Info(Distance: Positive) return Travel_Array;
    -- ****
 
    -- ****f* UUI/UUI.Update_Messages
