@@ -341,13 +341,6 @@ package Game is
    Skills_Amount: SkillsData_Container.Extended_Index := 0;
    -- ****
 
-   -- ****v* Game/Game.Fuel_Type
-   -- FUNCTION
-   -- Name of item type used as fuel for ships
-   -- SOURCE
-   Fuel_Type: Tiny_String.Bounded_String;
-   -- ****
-
    -- ****v* Game/Game.Money_Index
    -- FUNCTION
    -- Index of item used as money

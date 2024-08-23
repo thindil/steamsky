@@ -258,8 +258,6 @@ package body Game is
             end loop Fill_Skills_Loop;
          end Fill_Skills_Block;
          Get_Ada_Game_Strings(Values => Nim_Strings);
-         Fuel_Type :=
-           To_Bounded_String(Source => Value(Item => Nim_Strings(4)));
          Money_Name :=
            To_Unbounded_String(Source => Value(Item => Nim_Strings(12)));
          Get_Ada_Game_Integers(Values => Nim_Integers);
