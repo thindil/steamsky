@@ -229,6 +229,8 @@ bind .gameframe.paned.controls <Configure> {
 set bframe [ttk::frame .gameframe.paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
 grid [ttk::frame $bframe.box] -columnspan 3 -sticky we
+grid [ttk::button $bframe.box.orders -command {ShowOrders} -text {Ship Orders}]
+tooltip::tooltip $bframe.box.orders "Show available orders for your ship."
 grid [ttk::combobox $bframe.box.speed -state readonly -values [list {Full stop} \
    {Quarted speed} {Half speed} {Full speed}] -width 10] -sticky we
 tooltip::tooltip $bframe.box.speed \
@@ -236,8 +238,6 @@ tooltip::tooltip $bframe.box.speed \
 grid [ttk::button $bframe.box.moveto -command {MoveShip moveto} \
    -style Move.TButton] -row 0 -column 1
 tooltip::tooltip $bframe.box.moveto "Auto move your ship to its destination"
-grid [ttk::button $bframe.box.orders -command {ShowOrders} -text {Ship Orders}]
-tooltip::tooltip $bframe.box.orders "Show available orders for your ship."
 grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
    -row 1 -sticky we
 tooltip::tooltip $bframe.nw "Move ship up and left"
