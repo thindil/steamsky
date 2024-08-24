@@ -15,7 +15,7 @@
 
 with Ada.Directories;
 with Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv; use CArgv;
@@ -116,6 +116,7 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Directories;
+      use Ada.Strings.Unbounded;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Bases;
       use Crew;
