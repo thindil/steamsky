@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[algorithm, os, strutils, tables]
 import ../[config, events, game, items, maps, missions, missions2, ships, tk,
     types, utils]
 import coreui, dialogs, mapsui, table, utilsui2
@@ -631,8 +631,34 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
         return 1
       else:
         return -1
+    of rewardAsc:
+      if x.reward < y.reward:
+        return 1
+      else:
+        return -1
+    of rewardDesc:
+      if x.reward > y.reward:
+        return 1
+      else:
+        return -1
+    of coordAsc:
+      if x.coords < y.coords:
+        return 1
+      else:
+        return -1
+    of coordDesc:
+      if x.coords > y.coords:
+        return 1
+      else:
+        return -1
     of none:
       return -1
+  localMissions.sort(cmp = sortMissions)
+  missionsIndexes = @[]
+  for mission in localMissions:
+    missionsIndexes.add(y = mission.id)
+  refreshMissionsList()
+  updateTable(table = missionsTable)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
