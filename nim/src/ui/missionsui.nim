@@ -489,6 +489,18 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus " & button)
   return tclOk
 
+proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  let value = tclGetVar(varName = "reward").parseFloat.Natural
+  tclSetVar(varName = "reward", newValue = $(value.Natural))
+  let
+    missionIndex = ($argv[1]).parseInt - 1
+    mission = skyBases[baseIndex].missions[missionIndex]
+    rewardLabel = ".missiondialog.rewardbox.rewardlbl2"
+  tclEval(script = rewardLabel & " configure -text {" & $((
+      mission.reward.float * value.float) / 100.0).Natural & " " & moneyName & "}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
@@ -496,6 +508,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("ShowBaseMissions", showBaseMissionsCommand)
 #    addCommand("MissionMoreInfo", missionMoreInfoCommand)
 #    addCommand("AcceptMission", acceptMissionCommand)
+#    addCommand("UpdateMissionReward", updateMissionRewardCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
