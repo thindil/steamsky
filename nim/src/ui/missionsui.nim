@@ -491,6 +491,18 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Update the information about the selected mission reward
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## UpdateMissionReward missionindex
+  ## MissionIndex is the index of the mission to update info
   let value = try:
       tclGetVar(varName = "reward").parseFloat.Natural
     except:
