@@ -519,6 +519,66 @@ proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
       mission.reward.float * value.float) / 100.0).Natural & " " & moneyName & "}")
   return tclOk
 
+type MissionsSortOrders = enum
+  none, typeAsc, typeDesc, distanceAsc, distanceDesc, detailsAsc, detailsDesc,
+    timeAsc, timeDesc, rewardAsc, rewardDesc, coordAsc, coordDesc
+
+const defaultMissionsSortOrder: MissionsSortOrders = none
+
+var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
+
+proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
+   argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        getColumnNumber(table = missionsTable, xPosition = ($argv[1]).parseInt)
+      except:
+        return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if missionsSortOrder == typeAsc:
+      missionsSortOrder = typeDesc
+    else:
+      missionsSortOrder = typeAsc
+  of 2:
+    if missionsSortOrder == distanceAsc:
+      missionsSortOrder = distanceDesc
+    else:
+      missionsSortOrder = distanceAsc
+  of 3:
+    if missionsSortOrder == detailsAsc:
+      missionsSortOrder = detailsDesc
+    else:
+      missionsSortOrder = detailsAsc
+  of 4:
+    if missionsSortOrder == timeAsc:
+      missionsSortOrder = timeDesc
+    else:
+      missionsSortOrder = timeAsc
+  of 5:
+    if missionsSortOrder == rewardAsc:
+      missionsSortOrder = rewardDesc
+    else:
+      missionsSortOrder = rewardAsc
+  of 6:
+    if missionsSortOrder == coordAsc:
+      missionsSortOrder = coordDesc
+    else:
+      missionsSortOrder = coordAsc
+  else:
+    discard
+  if missionsSortOrder == none:
+    return tclOk
+  type LocalMissionData = object
+    mType: MissionsTypes
+    distance: Natural
+    coords: string
+    details: string
+    time: Natural
+    reward: Natural
+    id: Natural
+  var localMissions: seq[LocalMissionData] = @[]
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
@@ -527,6 +587,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("MissionMoreInfo", missionMoreInfoCommand)
 #    addCommand("AcceptMission", acceptMissionCommand)
 #    addCommand("UpdateMissionReward", updateMissionRewardCommand)
+#    addCommand("SortAvailableMissions", sortAvailableMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
