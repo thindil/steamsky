@@ -490,11 +490,17 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.exportc.} =
-  let value = tclGetVar(varName = "reward").parseFloat.Natural
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  let value = try:
+      tclGetVar(varName = "reward").parseFloat.Natural
+    except:
+      return showError(message = "Can't get the value.")
   tclSetVar(varName = "reward", newValue = $(value.Natural))
   let
-    missionIndex = ($argv[1]).parseInt - 1
+    missionIndex = try:
+        ($argv[1]).parseInt - 1
+      except:
+        return showError(message = "Can't get the mission's index.")
     mission = skyBases[baseIndex].missions[missionIndex]
     rewardLabel = ".missiondialog.rewardbox.rewardlbl2"
   tclEval(script = rewardLabel & " configure -text {" & $((
