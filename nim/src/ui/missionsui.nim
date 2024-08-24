@@ -577,6 +577,62 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     reward: Natural
     id: Natural
   var localMissions: seq[LocalMissionData] = @[]
+  for index, mission in skyBases[baseIndex].missions:
+    localMissions.add(y = LocalMissionData(mType: mission.mType,
+        distance: countDistance(destinationX = mission.targetX,
+        destinationY = mission.targetY), coords: "X: " & $mission.targetX &
+        " Y: " & $mission.targetY, details: (case mission.mType
+      of deliver: itemsList[mission.itemIndex].name & " to " & skyBases[skyMap[
+          mission.targetX][mission.targetY].baseIndex].name
+      of patrol, explore: "X: " & $mission.targetX & " Y: " & $mission.targetY
+      of destroy: protoShipsList[mission.shipIndex].name
+      of passenger: "To " & skyBases[skyMap[mission.targetX][
+          mission.targetY].baseIndex].name), time: mission.time,
+          reward: mission.reward, id: index))
+  proc sortMissions(x, y: LocalMissionData): int =
+    case missionsSortOrder
+    of typeAsc:
+      if x.mType < y.mType:
+        return 1
+      else:
+        return -1
+    of typeDesc:
+      if x.mType > y.mType:
+        return 1
+      else:
+        return -1
+    of distanceAsc:
+      if x.distance < y.distance:
+        return 1
+      else:
+        return -1
+    of distanceDesc:
+      if x.distance > y.distance:
+        return 1
+      else:
+        return -1
+    of detailsAsc:
+      if x.details < y.details:
+        return 1
+      else:
+        return -1
+    of detailsDesc:
+      if x.details > y.details:
+        return 1
+      else:
+        return -1
+    of timeAsc:
+      if x.time < y.time:
+        return 1
+      else:
+        return -1
+    of timeDesc:
+      if x.time > y.time:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
