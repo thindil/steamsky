@@ -15,7 +15,7 @@
 
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C;
 with CArgv; use CArgv;
@@ -25,7 +25,7 @@ with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases; use Bases;
 with CoreUI;
@@ -273,41 +273,43 @@ package body Missions.UI is
    function Update_Mission_Reward_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "updateMissionRewardCommand";
       -- ****
 
-   function Update_Mission_Reward_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-
-      Mission_Index: constant Positive :=
-        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Reward_Label: constant Ttk_Label :=
-        Get_Widget
-          (pathName => ".missiondialog.rewardbox.rewardlbl2",
-           Interp => Interp);
-      Mission: constant Mission_Data :=
-        Sky_Bases(Get_Base_Index).Missions(Mission_Index);
-      Value: constant Natural :=
-        Natural
-          (Float'Value(Tcl_GetVar(interp => Interp, varName => "reward")));
-   begin
-      Tcl_SetVar
-        (interp => Interp, varName => "reward",
-         newValue => Trim(Source => Natural'Image(Value), Side => Left));
-      configure
-        (Widgt => Reward_Label,
-         options =>
-           "-text {" &
-           Natural'Image
-             (Natural(Float(Mission.Reward) * (Float(Value) / 100.0))) &
-           " " & To_String(Source => Money_Name) & "}");
-      return TCL_OK;
-   end Update_Mission_Reward_Command;
+--   function Update_Mission_Reward_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--
+--      Mission_Index: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Reward_Label: constant Ttk_Label :=
+--        Get_Widget
+--          (pathName => ".missiondialog.rewardbox.rewardlbl2",
+--           Interp => Interp);
+--      Mission: constant Mission_Data :=
+--        Sky_Bases(Get_Base_Index).Missions(Mission_Index);
+--      Value: constant Natural :=
+--        Natural
+--          (Float'Value(Tcl_GetVar(interp => Interp, varName => "reward")));
+--   begin
+--      Tcl_SetVar
+--        (interp => Interp, varName => "reward",
+--         newValue => Trim(Source => Natural'Image(Value), Side => Left));
+--      configure
+--        (Widgt => Reward_Label,
+--         options =>
+--           "-text {" &
+--           Natural'Image
+--             (Natural(Float(Mission.Reward) * (Float(Value) / 100.0))) &
+--           " " & To_String(Source => Money_Name) & "}");
+--      return TCL_OK;
+--   end Update_Mission_Reward_Command;
 
    -- ****it* MUI3/MUI3.Missions_Sort_Orders
    -- FUNCTION
