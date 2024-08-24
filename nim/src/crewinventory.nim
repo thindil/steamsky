@@ -40,7 +40,7 @@ proc findItem*(inventory: seq[InventoryData];
   ## Returns the index of the item in the selected inventory which meet searching
   ## criteria or -1 if item not found.
   ensure:
-    result in -1 .. inventory.high
+    result in -1..inventory.high
   body:
     result = -1
     try:
@@ -70,7 +70,7 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
   ##
   ## Returns the amount of kilograms of free space in the crew member's inventory
   require:
-    memberIndex in playerShip.crew.low .. playerShip.crew.high
+    memberIndex in playerShip.crew.low..playerShip.crew.high
   body:
     result = 50 + playerShip.crew[memberIndex].attributes[strengthIndex].level
     for item in playerShip.crew[memberIndex].inventory:
@@ -90,7 +90,7 @@ proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
   ##
   ## Returns true if the item is used, otherwise false
   require:
-    memberIndex in playerShip.crew.low .. playerShip.crew.high
+    memberIndex in playerShip.crew.low..playerShip.crew.high
   body:
     return itemIndex in playerShip.crew[memberIndex].equipment
 
@@ -102,7 +102,7 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
   ## * memberIndex - the index of the crew member which will stop using the item
   ## * itemIndex   - the index of the item to stop using
   require:
-    memberIndex in playerShip.crew.low .. playerShip.crew.high
+    memberIndex in playerShip.crew.low..playerShip.crew.high
   body:
     for item in playerShip.crew[memberIndex].equipment.mitems:
       if item == itemIndex:
@@ -130,7 +130,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
   ##
   ## Returns the updated ship argument
   require:
-    memberIndex in playerShip.crew.low .. playerShip.crew.high
+    memberIndex in playerShip.crew.low..playerShip.crew.high
   body:
     var itemIndex: int = -1
     if inventoryIndex == -1:
@@ -237,7 +237,7 @@ proc getTrainingToolQuality*(memberIndex: Natural;
   ## Returns numeric value for the minimum training tool quality required to
   ## train the selected skill.
   require:
-    memberIndex in playerShip.crew.low .. playerShip.crew.high
+    memberIndex in playerShip.crew.low..playerShip.crew.high
   body:
     result = 100
     for skill in playerShip.crew[memberIndex].skills:
