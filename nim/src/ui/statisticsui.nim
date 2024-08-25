@@ -275,6 +275,14 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
       script = statsCanvas & " bbox all") & "]")
   showScreen(newScreenName = "statsframe")
 
+proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+  ## Adds Tcl commands related to the list of available missions
+  try:
+    discard
+#    addCommand("ShowBaseMissions", showBaseMissionsCommand)
+  except:
+    showError(message = "Can't add a Tcl command.")
+
 # Temporary code for interfacing with Ada
 
 proc showAdaStatistics(refresh: cint) {.raises: [], tags: [], exportc.} =
