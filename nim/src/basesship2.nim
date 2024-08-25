@@ -44,7 +44,7 @@ proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
   ##                 the whole player's ship. -1 - slow repair, -2 normal speed,
   ##                 -3 fast repair.
   require:
-    moduleIndex in -3 .. playerShip.modules.high
+    moduleIndex in -3..playerShip.modules.high
   body:
     var cost, time: Natural = 0
     repairCost(cost = cost, time = time, moduleIndex = moduleIndex)
@@ -147,7 +147,7 @@ proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
       for i in 1 .. modulesList[moduleIndex].maxOwners:
         owners.add(y = -1)
       case modulesList[moduleIndex].mType
-      of alchemyLab .. greenhouse:
+      of alchemyLab..greenhouse:
         playerShip.modules.add(y = ModuleData(mType: workshop,
             name: modulesList[moduleIndex].name, protoIndex: moduleIndex,
                 weight: modulesList[
