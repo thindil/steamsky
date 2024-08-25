@@ -144,13 +144,23 @@ package body Statistics.UI is
    procedure Set_Sorting_Order
      (Sorting_Order: in out List_Sort_Orders; Column: Positive) is
      -- ****
+      New_Order: Integer := List_Sort_Orders'Pos(Sorting_Order);
+      procedure Set_Ada_Sorting_Order(S_Order: in out Integer; C: Positive) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaSortingOrder";
    begin
-      Sorting_Order :=
-        (case Column is
-           when 1 => (if Sorting_Order = NAMEASC then NAMEDESC else NAMEASC),
-           when 2 =>
-             (if Sorting_Order = AMOUNTASC then AMOUNTDESC else AMOUNTASC),
-           when others => NONE);
+      if Sorting_Order /= NONE then
+         New_Order := List_Sort_Orders'Pos(Sorting_Order) - 1;
+      else
+         New_Order := 0;
+      end if;
+      Set_Ada_Sorting_Order(S_Order => New_Order, C => Column);
+      if New_Order > 0 then
+         Sorting_Order := List_Sort_Orders'Val(New_Order - 1);
+      else
+         Sorting_Order := NONE;
+      end if;
    end Set_Sorting_Order;
 
    --## rule off DIRECTLY_ACCESSED_GLOBALS
