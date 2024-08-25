@@ -151,9 +151,9 @@ package body Statistics.UI is
          External_Name => "setAdaSortingOrder";
    begin
       if Sorting_Order /= NONE then
-         New_Order := List_Sort_Orders'Pos(Sorting_Order) - 1;
+         New_Order := List_Sort_Orders'Pos(Sorting_Order) + 1;
       else
-         New_Order := 0;
+         New_Order := 4;
       end if;
       Set_Ada_Sorting_Order(S_Order => New_Order, C => Column);
       if New_Order > 0 then
