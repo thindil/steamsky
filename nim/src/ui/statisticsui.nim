@@ -275,6 +275,26 @@ proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].}
       script = statsCanvas & " bbox all") & "]")
   showScreen(newScreenName = "statsframe")
 
+type ListSortOrders = enum
+  none, nameAsc, nameDesc, amountAsc, amountDesc
+
+const defaultListSortOrder: ListSortOrders = none
+
+proc setSortingOrder(sortingOrder: var ListSortOrders; column: Positive) =
+  sortingOrder = case column
+    of 1:
+      if sortingOrder == nameAsc:
+        nameDesc
+      else:
+        nameAsc
+    of 2:
+      if sortingOrder == amountAsc:
+        amountDesc
+      else:
+        amountAsc
+    else:
+      none
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
@@ -290,3 +310,9 @@ proc showAdaStatistics(refresh: cint) {.raises: [], tags: [], exportc.} =
     showStatistics(refresh = refresh == 1)
   except:
     echo getCurrentExceptionMsg()
+
+proc setAdaSortingOrder(sortingOrder: var cint; column: cint) {.raises: [],
+    tags: [], exportc.} =
+  var sortOrder = sortingOrder.ListSortOrders
+  setSortingOrder(sortingOrder = sortOrder, column = column.Positive)
+  sortingOrder = sortOrder.ord.cint
