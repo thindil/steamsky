@@ -529,6 +529,18 @@ var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+  ## Sort the list of available missions
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortAvailableMissions x
+  ## X is X axis coordinate where the player clicked the mouse button
   let column = try:
         getColumnNumber(table = missionsTable, xPosition = ($argv[1]).parseInt)
       except:
