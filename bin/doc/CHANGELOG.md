@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.2] - 2024-08-25
 
 ### Added
 - New icon for food amount information. Author: Lorc (https://game-icons.net),
