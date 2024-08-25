@@ -58,24 +58,6 @@ package Maps is
    Sky_Map: array(Map_X_Range, Map_Y_Range) of Sky_Cell;
    -- ****
 
-   -- ****f* Maps/Maps.Count_Distance
-   -- FUNCTION
-   -- Count distance (in map fields) between player ship and the destination
-   -- point
-   -- PARAMETERS
-   -- Destination_X - X coordinate of the destination point
-   -- Destination_Y - Y coordinate of the destination point
-   -- RESULT
-   -- Distance between player ship and destination point
-   -- SOURCE
-   function Count_Distance
-     (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range)
-      return Natural with
-      Import => True,
-      Convention => C,
-      External_Name => "countAdaDistance";
-      -- ****
-
 -- Temporary code to interact with Nim
 
    procedure Get_Ada_Map_Cell
