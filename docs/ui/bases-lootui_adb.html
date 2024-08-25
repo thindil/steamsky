@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,134 +31,15 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo579">LUI/LUI.Sort_Items_Command</a></li>
-<li>2. <a href="#robo578">LUI/LUI.Show_Trade_Loot_Info_Command</a></li>
-<li>3. <a href="#robo577">LUI/LUI.Show_Loot_Command</a></li>
-<li>4. <a href="#robo576">LUI/LUI.Loot_Item_Command</a></li>
-<li>5. <a href="#robo575">LUI/LUI.Loot_Amount_Command</a></li>
-<li>6. <a href="#robo436">LUI/LUI.Item_Index</a></li>
-<li>7. <a href="#robo435">LUI/LUI.Get_Item_Index</a></li>
-<li>8. <a href="#robo335">LUI/LUI.Loot_Table</a></li>
-<li>9. <a href="#robo334">LUI/LUI.Items_Sort_Order</a></li>
-<li>10. <a href="#robo333">LUI/LUI.Items_Indexes</a></li>
-<li>11. <a href="#robo252">LUI/LUI.Default_Items_Sort_Order</a></li>
-<li>12. <a href="#robo126">LUI/LUI.Items_Sort_Orders</a></li>
+<li>1. <a href="#robo504">LUI/LUI.Sort_Items_Command</a></li>
+<li>2. <a href="#robo503">LUI/LUI.Show_Trade_Loot_Info_Command</a></li>
+<li>3. <a href="#robo502">LUI/LUI.Show_Loot_Command</a></li>
+<li>4. <a href="#robo501">LUI/LUI.Loot_Item_Command</a></li>
+<li>5. <a href="#robo500">LUI/LUI.Loot_Amount_Command</a></li>
 </ul>
 <hr />
-<a name="LUI2fLUI2eItems5fSort5fOrders"></a>
-<a name="robo126"></a><h2>LUI/LUI.Items_Sort_Orders [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Sorting orders for the looting list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Items_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span> DURABILITYASC<span class="sign">,</span> DURABILITYDESC<span class="sign">,</span>
-      OWNEDASC<span class="sign">,</span> OWNEDDESC<span class="sign">,</span> AVAILABLEASC<span class="sign">,</span> AVAILABLEDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
-      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">OPTIONS</p>
-<pre> NAMEASC        - Sort items by name ascending
- NAMEDESC       - Sort items by name descending
- TYPEASC        - Sort items by type ascending
- TYPEDESC       - Sort items by type descending
- DURABILITYASC  - Sort items by durability ascending
- DURABILITYDESC - Sort items by durability descending
- OWNEDASC       - Sort items by owned amount ascending
- OWNEDDESC      - Sort items by owned amount descending
- AVAILABLEASC   - Sort items by available amount ascending
- AVAILABLEDESC  - Sort items by available amount descending
- NONE           - No sorting modules (default)
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="LUI2fLUI2eDefault5fItems5fSort5fOrder"></a>
-<a name="robo252"></a><h2>LUI/LUI.Default_Items_Sort_Order [ Constants ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Default sorting order for the looting list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Default_Items_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Items_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="LUI2fLUI2eItems5fIndexes"></a>
-<a name="robo333"></a><h2>LUI/LUI.Items_Indexes [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Indexes of the items for loot
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Items_Indexes<span class="sign">:</span> Natural_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="LUI2fLUI2eItems5fSort5fOrder"></a>
-<a name="robo334"></a><h2>LUI/LUI.Items_Sort_Order [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The current sorting order for the looting list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Items_Sort_Order<span class="sign">:</span> Items_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Items_Sort_Order<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="LUI2fLUI2eLoot5fTable"></a>
-<a name="robo335"></a><h2>LUI/LUI.Loot_Table [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> <a href="./table_ads.html#robo63">Table</a> with info about the available items to loot
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Loot_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 5<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="LUI2fLUI2eGet5fItem5fIndex"></a>
-<a name="robo435"></a><h2>LUI/LUI.Get_Item_Index [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the index of the currently selected item
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Item_Index <span class="keyword">return</span> Integer <span class="keyword">is</span>
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The index of the currently selected item
-</pre>
-
-<hr />
-<a name="LUI2fLUI2eItem5fIndex"></a>
-<a name="robo436"></a><h2>LUI/LUI.Item_Index [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Index of the currently selected item
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Item_Index<span class="sign">:</span> Integer<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="LUI2fLUI2eLoot5fAmount5fCommand"></a>
-<a name="robo575"></a><h2>LUI/LUI.Loot_Amount_Command [ Commands ]</h2>
+<a name="robo500"></a><h2>LUI/LUI.Loot_Amount_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -168,7 +49,9 @@
 <pre class="source">   <span class="keyword">function</span> Loot_Amount_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"lootAmountCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -187,7 +70,7 @@
 
 <hr />
 <a name="LUI2fLUI2eLoot5fItem5fCommand"></a>
-<a name="robo576"></a><h2>LUI/LUI.Loot_Item_Command [ Commands ]</h2>
+<a name="robo501"></a><h2>LUI/LUI.Loot_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -197,7 +80,9 @@
 <pre class="source">   <span class="keyword">function</span> Loot_Item_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"lootItemCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -215,7 +100,7 @@
 
 <hr />
 <a name="LUI2fLUI2eShow5fLoot5fCommand"></a>
-<a name="robo577"></a><h2>LUI/LUI.Show_Loot_Command [ Commands ]</h2>
+<a name="robo502"></a><h2>LUI/LUI.Show_Loot_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -225,7 +110,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Loot_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showLootCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -242,7 +129,7 @@
 
 <hr />
 <a name="LUI2fLUI2eShow5fTrade5fLoot5fInfo5fCommand"></a>
-<a name="robo578"></a><h2>LUI/LUI.Show_Trade_Loot_Info_Command [ Commands ]</h2>
+<a name="robo503"></a><h2>LUI/LUI.Show_Trade_Loot_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -252,7 +139,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Loot_Item_Info_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showLootItemInfoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -270,7 +159,7 @@
 
 <hr />
 <a name="LUI2fLUI2eSort5fItems5fCommand"></a>
-<a name="robo579"></a><h2>LUI/LUI.Sort_Items_Command [ Commands ]</h2>
+<a name="robo504"></a><h2>LUI/LUI.Sort_Items_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo4">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -280,7 +169,9 @@
 <pre class="source">   <span class="keyword">function</span> Sort_Items_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"sortLootItemsCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -298,7 +189,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
+<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
 </div> <!-- footer -->
 </body>
 </html>

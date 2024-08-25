@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,129 +31,17 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo600">MUI3/MUI3.Sort_Available_Missions_Command</a></li>
-<li>2. <a href="#robo599">MUI3/MIU3.Update_Mission_Reward_Command</a></li>
-<li>3. <a href="#robo598">MUI3/MIU3.Show_Base_Missions_Command</a></li>
-<li>4. <a href="#robo597">MUI3/MIU3.Set_Mission_Command</a></li>
-<li>5. <a href="#robo596">MUI3/MIU3.Mission_More_Info_Command</a></li>
-<li>6. <a href="#robo595">MUI3/MIU3.Accept_Mission_Command</a></li>
-<li>7. <a href="#robo463">MUI3/MUI3.Refresh_Missions_List</a></li>
-<li>8. <a href="#robo462">MUI3/MUI3.Get_Base_Index</a></li>
-<li>9. <a href="#robo461">MUI3/MUI3.Count_Missions_Amount</a></li>
-<li>10. <a href="#robo459">MUI3/MIU3.Show_Mission_Command</a></li>
-<li>11. <a href="#robo346">MUI3/MUI3.Missions_Table</a></li>
-<li>12. <a href="#robo345">MUI3/MUI3.Missions_Sort_Order</a></li>
-<li>13. <a href="#robo344">MUI3/MUI3.Missions_Indexes</a></li>
-<li>14. <a href="#robo343">MUI3/MIU3.Base_Index</a></li>
-<li>15. <a href="#robo265">MUI3/MUI3.Default_Missions_Sort_Order</a></li>
-<li>16. <a href="#robo136">MUI3/MUI3.Missions_Sort_Orders</a></li>
+<li>1. <a href="#robo525">MUI3/MUI3.Sort_Available_Missions_Command</a></li>
+<li>2. <a href="#robo524">MUI3/MIU3.Update_Mission_Reward_Command</a></li>
+<li>3. <a href="#robo523">MUI3/MIU3.Show_Base_Missions_Command</a></li>
+<li>4. <a href="#robo522">MUI3/MIU3.Set_Mission_Command</a></li>
+<li>5. <a href="#robo521">MUI3/MIU3.Mission_More_Info_Command</a></li>
+<li>6. <a href="#robo520">MUI3/MIU3.Accept_Mission_Command</a></li>
+<li>7. <a href="#robo396">MUI3/MIU3.Show_Mission_Command</a></li>
 </ul>
 <hr />
-<a name="MUI32fMUI32eMissions5fSort5fOrders"></a>
-<a name="robo136"></a><h2>MUI3/MUI3.Missions_Sort_Orders [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Sorting orders for the list of available missions
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Missions_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span> DISTANCEASC<span class="sign">,</span> DISTANCEDESC<span class="sign">,</span> DETAILSASC<span class="sign">,</span> DETAILSDESC<span class="sign">,</span>
-      TIMEASC<span class="sign">,</span> TIMEDESC<span class="sign">,</span> REWARDASC<span class="sign">,</span> REWARDDESC<span class="sign">,</span> COORDASC<span class="sign">,</span> COORDDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
-      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">OPTIONS</p>
-<pre> TYPEASC      - Sort missions by type ascending
- TYPEDESC     - Sort missions by type descending
- DISTANCEASC  - Sort missions by distance ascending
- DISTANCEDESC - Sort missions by distance descending
- DETAILSASC   - Sort missions by details ascending
- DETAILSDESC  - Sort missions by details descending
- TIMEASC      - Sort missions by time ascending
- TIMEDESC     - Sort missions by time descending
- REWARDASC    - Sort missions by reward ascending
- REWARDDESC   - Sort missions by reward descending
- COORDASC     - Sort missions by coordinates ascending
- COORDDESC    - Sort missions by coordinates descending
- NONE         - No sorting missions (default)
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.5 - Added
- 8.4 - Added sorting by coordinates
-</pre>
-
-<hr />
-<a name="MUI32fMUI32eDefault5fMissions5fSort5fOrder"></a>
-<a name="robo265"></a><h2>MUI3/MUI3.Default_Missions_Sort_Order [ Constants ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Default sorting order for the list of available missions
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Default_Missions_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Missions_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.5 - Added
-</pre>
-
-<hr />
-<a name="MUI32fMIU32eBase5fIndex"></a>
-<a name="robo343"></a><h2>MUI3/MIU3.Base_Index [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Index of the base in which available missions will be show
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Base_Index<span class="sign">:</span> Natural<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="MUI32fMUI32eMissions5fIndexes"></a>
-<a name="robo344"></a><h2>MUI3/MUI3.Missions_Indexes [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Indexes of the available missions in base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Missions_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.5 - Added
-</pre>
-
-<hr />
-<a name="MUI32fMUI32eMissions5fSort5fOrder"></a>
-<a name="robo345"></a><h2>MUI3/MUI3.Missions_Sort_Order [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The current sorting order for the list of available missions
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Missions_Sort_Order<span class="sign">:</span> Missions_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Missions_Sort_Order<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.5 - Added
-</pre>
-
-<hr />
-<a name="MUI32fMUI32eMissions5fTable"></a>
-<a name="robo346"></a><h2>MUI3/MUI3.Missions_Table [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> <a href="./table_ads.html#robo63">Table</a> with info about the known <a href="../missions_ads.html#robo45">Missions</a>
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Missions_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="MUI32fMIU32eShow5fMission5fCommand"></a>
-<a name="robo459"></a><h2>MUI3/MIU3.Show_Mission_Command [ Subprograms ]</h2>
+<a name="robo396"></a><h2>MUI3/MIU3.Show_Mission_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -163,7 +51,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Mission_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showMissionCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -180,57 +70,8 @@
 </pre>
 
 <hr />
-<a name="MUI32fMUI32eCount5fMissions5fAmount"></a>
-<a name="robo461"></a><h2>MUI3/MUI3.Count_Missions_Amount [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Count the amount of missions which the player can get from the selected
- base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Count_Missions_Amount <span class="keyword">return</span> Natural <span class="keyword">is</span>
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The amount of missions which the player can get from the base
-</pre>
-
-<hr />
-<a name="MUI32fMUI32eGet5fBase5fIndex"></a>
-<a name="robo462"></a><h2>MUI3/MUI3.Get_Base_Index [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the base index
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Base_Index <span class="keyword">return</span> Natural <span class="keyword">is</span>
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The current base index in the list of bases
-</pre>
-
-<hr />
-<a name="MUI32fMUI32eRefresh5fMissions5fList"></a>
-<a name="robo463"></a><h2>MUI3/MUI3.Refresh_Missions_List [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Refresh the list of available missions
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Refresh_Missions_List
-     <span class="sign">(</span>List<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Mission_Container<span class="sign">.</span>Vector<span class="sign">;</span> Page<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">)</span> <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> List - The list of available missions in the selected base
- Page - The current page of the list to show. Can be empty. Default value
-        is 1.
-</pre>
-
-<hr />
 <a name="MUI32fMIU32eAccept5fMission5fCommand"></a>
-<a name="robo595"></a><h2>MUI3/MIU3.Accept_Mission_Command [ Commands ]</h2>
+<a name="robo520"></a><h2>MUI3/MIU3.Accept_Mission_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -240,7 +81,9 @@
 <pre class="source">   <span class="keyword">function</span> Accept_Mission_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"acceptMissionCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -258,7 +101,7 @@
 
 <hr />
 <a name="MUI32fMIU32eMission5fMore5fInfo5fCommand"></a>
-<a name="robo596"></a><h2>MUI3/MIU3.Mission_More_Info_Command [ Commands ]</h2>
+<a name="robo521"></a><h2>MUI3/MIU3.Mission_More_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -268,7 +111,9 @@
 <pre class="source">   <span class="keyword">function</span> Mission_More_Info_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"missionMoreInfoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -286,7 +131,7 @@
 
 <hr />
 <a name="MUI32fMIU32eSet5fMission5fCommand"></a>
-<a name="robo597"></a><h2>MUI3/MIU3.Set_Mission_Command [ Commands ]</h2>
+<a name="robo522"></a><h2>MUI3/MIU3.Set_Mission_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -296,7 +141,9 @@
 <pre class="source">   <span class="keyword">function</span> Set_Mission_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"setMissionCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -314,7 +161,7 @@
 
 <hr />
 <a name="MUI32fMIU32eShow5fBase5fMissions5fCommand"></a>
-<a name="robo598"></a><h2>MUI3/MIU3.Show_Base_Missions_Command [ Commands ]</h2>
+<a name="robo523"></a><h2>MUI3/MIU3.Show_Base_Missions_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -343,7 +190,7 @@
 
 <hr />
 <a name="MUI32fMIU32eUpdate5fMission5fReward5fCommand"></a>
-<a name="robo599"></a><h2>MUI3/MIU3.Update_Mission_Reward_Command [ Commands ]</h2>
+<a name="robo524"></a><h2>MUI3/MIU3.Update_Mission_Reward_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -353,7 +200,9 @@
 <pre class="source">   <span class="keyword">function</span> Update_Mission_Reward_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"updateMissionRewardCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -371,7 +220,7 @@
 
 <hr />
 <a name="MUI32fMUI32eSort5fAvailable5fMissions5fCommand"></a>
-<a name="robo600"></a><h2>MUI3/MUI3.Sort_Available_Missions_Command [ Commands ]</h2>
+<a name="robo525"></a><h2>MUI3/MUI3.Sort_Available_Missions_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo46">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -381,7 +230,9 @@
 <pre class="source">   <span class="keyword">function</span> Sort_Available_Missions_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"sortAvailableMissionsCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -402,7 +253,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/missions-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
+<p>Generated from ./src/ui/missions-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
 </div> <!-- footer -->
 </body>
 </html>

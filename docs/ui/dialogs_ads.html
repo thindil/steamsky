@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -33,29 +33,24 @@
 <ul>
 <li>1. <a href="#robo20">Dialogs/Dialogs</a></li>
 <ul>
-<li>1.1. <a href="#robo171">Dialogs/Dialogs.Button_Settings</a></li>
-<li>1.2. <a href="#robo221">Dialogs/Dialogs.Empty_Button_Settings</a></li>
-<li>1.3. <a href="./dialogs_adb.html#robo301">Dialogs/Dialogs.Mouse_X_Position</a></li>
-<li>1.4. <a href="./dialogs_adb.html#robo302">Dialogs/Dialogs.Timer_Id</a></li>
-<li>1.5. <a href="#robo382">Dialogs/Dialogs.Add_Close_Button</a></li>
-<li>1.6. <a href="#robo383">Dialogs/Dialogs.Add_Commands</a></li>
-<li>1.7. <a href="#robo384">Dialogs/Dialogs.Create_Dialog</a></li>
-<li>1.8. <a href="./dialogs_adb.html#robo385">Dialogs/Dialogs.Get_Mouse_X_Position</a></li>
-<li>1.9. <a href="./dialogs_adb.html#robo386">Dialogs/Dialogs.Get_Mouse_Y_Position</a></li>
-<li>1.10. <a href="./dialogs_adb.html#robo387">Dialogs/Dialogs.Get_Timer_Id</a></li>
-<li>1.11. <a href="./dialogs_adb.html#robo388">Dialogs/Dialogs.Mouse_Y_Position</a></li>
-<li>1.12. <a href="./dialogs_adb.html#robo389">Dialogs/Dialogs.Set_Timer_Id</a></li>
-<li>1.13. <a href="#robo390">Dialogs/Dialogs.Show_Dialog</a></li>
-<li>1.14. <a href="#robo391">Dialogs/Dialogs.Show_Info</a></li>
-<li>1.15. <a href="#robo392">Dialogs/Dialogs.Show_Manipulate_Item</a></li>
-<li>1.16. <a href="#robo393">Dialogs/Dialogs.Show_Message</a></li>
-<li>1.17. <a href="#robo394">Dialogs/Dialogs.Show_Question</a></li>
-<li>1.18. <a href="./dialogs_adb.html#robo395">Dialogs/Set_Mouse_X_Position</a></li>
-<li>1.19. <a href="./dialogs_adb.html#robo396">Dialogs/Set_Mouse_Y_Position</a></li>
-<li>1.20. <a href="#robo550">Dialogs/Dialogs.Close_Dialog_Command</a></li>
-<li>1.21. <a href="./dialogs_adb.html#robo551">Dialogs/Dialogs.Move_Dialog_Command</a></li>
-<li>1.22. <a href="./dialogs_adb.html#robo552">Dialogs/Dialogs.Set_Mouse_Position_Command</a></li>
-<li>1.23. <a href="./dialogs_adb.html#robo553">Dialogs/Dialogs.Update_Dialog_Command</a></li>
+<li>1.1. <a href="./dialogs_adb.html#robo277">Dialogs/Dialogs.Mouse_X_Position</a></li>
+<li>1.2. <a href="./dialogs_adb.html#robo278">Dialogs/Dialogs.Timer_Id</a></li>
+<li>1.3. <a href="#robo333">Dialogs/Dialogs.Add_Commands</a></li>
+<li>1.4. <a href="#robo334">Dialogs/Dialogs.Create_Dialog</a></li>
+<li>1.5. <a href="./dialogs_adb.html#robo335">Dialogs/Dialogs.Get_Mouse_X_Position</a></li>
+<li>1.6. <a href="./dialogs_adb.html#robo336">Dialogs/Dialogs.Get_Mouse_Y_Position</a></li>
+<li>1.7. <a href="./dialogs_adb.html#robo337">Dialogs/Dialogs.Get_Timer_Id</a></li>
+<li>1.8. <a href="./dialogs_adb.html#robo338">Dialogs/Dialogs.Mouse_Y_Position</a></li>
+<li>1.9. <a href="./dialogs_adb.html#robo339">Dialogs/Dialogs.Set_Timer_Id</a></li>
+<li>1.10. <a href="#robo340">Dialogs/Dialogs.Show_Dialog</a></li>
+<li>1.11. <a href="#robo341">Dialogs/Dialogs.Show_Message</a></li>
+<li>1.12. <a href="#robo342">Dialogs/Dialogs.Show_Question</a></li>
+<li>1.13. <a href="./dialogs_adb.html#robo343">Dialogs/Set_Mouse_X_Position</a></li>
+<li>1.14. <a href="./dialogs_adb.html#robo344">Dialogs/Set_Mouse_Y_Position</a></li>
+<li>1.15. <a href="./dialogs_adb.html#robo475">Dialogs/Dialogs.Close_Dialog_Command</a></li>
+<li>1.16. <a href="./dialogs_adb.html#robo476">Dialogs/Dialogs.Move_Dialog_Command</a></li>
+<li>1.17. <a href="./dialogs_adb.html#robo477">Dialogs/Dialogs.Set_Mouse_Position_Command</a></li>
+<li>1.18. <a href="./dialogs_adb.html#robo478">Dialogs/Dialogs.Update_Dialog_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -71,84 +66,8 @@
 </pre>
 
 <hr />
-<a name="Dialogs2fDialogs2eButton5fSettings"></a>
-<a name="robo171"></a><h2>Dialogs/Dialogs.Button_Settings [ Records ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_records.html#robo_top_of_doc">Records</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Data structure for setting various options for a dialog's buttons
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Button_Settings <span class="keyword">is</span> <span class="keyword">record</span>
-      Text<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
-      Command<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
-      Icon<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
-      Tooltip<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
-      Color<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
-   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Text    - The text to display on the button. If empty, the button will
-           not be displayed. Default value is empty
- Command - The Tcl command to execute when the button pressed. Default
-           value is empty
- Icon    - The Tcl icon to display on the button. Default value is empty
- Tooltip - The button's tooltip text. Default value is empty
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 7.7 - Added
-</pre>
-
-<hr />
-<a name="Dialogs2fDialogs2eEmpty5fButton5fSettings"></a>
-<a name="robo221"></a><h2>Dialogs/Dialogs.Empty_Button_Settings [ Constants ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Default value of Button_Settings
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Empty_Button_Settings<span class="sign">:</span> <span class="keyword">constant</span> Button_Settings <span class="sign">:</span><span class="sign">=</span>
-     <span class="sign">(</span>Text <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">,</span> Command <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">,</span>
-      Icon <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">,</span> Tooltip <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">,</span>
-      Color <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Dialogs2fDialogs2eAdd5fClose5fButton"></a>
-<a name="robo382"></a><h2>Dialogs/Dialogs.Add_Close_Button [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Add button to close the selected dialog and set proper bindings for
- it.
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Add_Close_Button
-     <span class="sign">(</span>Name<span class="sign">,</span> Text<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span> Column_Span<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-      Row<span class="sign">,</span> Column<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span> Icon<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"exiticon"</span><span class="sign">;</span>
-      Color<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">)</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Name        - The Tk path name for the button
- Text        - The text to display on the button
- Command     - The Tcl command to run when the button was clicked
- Column_Span - The amount of columns to merge when placing the close
-               button. Can be empty. Default value is 1 (no merging).
- Row         - The row in which the button will be placed. Can be empty.
-               Default value is 0 (place button in the next row)
- Column      - The column in which the button will be placed. Can be empty.
-               Default value is 0 (place button in the first column)
- Icon        - The Tcl image which will be displayed on the button instead
-               of text
- Color       - The color of the text on the button. Can be empty. Default
-               value is empty, which mean the default color used for buttons.
-               Other options depends on the current game's theme.
-</pre>
-
-<hr />
 <a name="Dialogs2fDialogs2eAdd5fCommands"></a>
-<a name="robo383"></a><h2>Dialogs/Dialogs.Add_Commands [ Subprograms ]</h2>
+<a name="robo333"></a><h2>Dialogs/Dialogs.Add_Commands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -160,7 +79,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eCreate5fDialog"></a>
-<a name="robo384"></a><h2>Dialogs/Dialogs.Create_Dialog [ Subprograms ]</h2>
+<a name="robo334"></a><h2>Dialogs/Dialogs.Create_Dialog [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -186,7 +105,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eShow5fDialog"></a>
-<a name="robo390"></a><h2>Dialogs/Dialogs.Show_Dialog [ Subprograms ]</h2>
+<a name="robo340"></a><h2>Dialogs/Dialogs.Show_Dialog [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -213,67 +132,8 @@
 </pre>
 
 <hr />
-<a name="Dialogs2fDialogs2eShow5fInfo"></a>
-<a name="robo391"></a><h2>Dialogs/Dialogs.Show_Info [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show the selected info to a player
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Show_Info
-     <span class="sign">(</span>Text<span class="sign">:</span> String<span class="sign">;</span> Parent_Name<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">".gameframe"</span><span class="sign">;</span> Title<span class="sign">:</span> String<span class="sign">;</span>
-      Button_1<span class="sign">,</span> Button_2<span class="sign">:</span> Button_Settings <span class="sign">:</span><span class="sign">=</span> Empty_Button_Settings<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Text<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0 and Parent_Name'</span>Length <span class="sign">&gt;</span> 0<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Text        - Text of info to show
- Parent_Name - Name of the parent widget. If empty, then the main game
-               window will be used as parent for widget. Default value
-               is .gameframe
- Title       - The text show in the dialog header.
- Button_1    - The settings for the first optional button. If empty, the
-               button will not show. Default value is empty.
- Button_2    - The setting for the second optional button. If empty,
-               the button will not show. Default value is empty.
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 8.2 - Added parameter Wrap_Length
-</pre>
-
-<hr />
-<a name="Dialogs2fDialogs2eShow5fManipulate5fItem"></a>
-<a name="robo392"></a><h2>Dialogs/Dialogs.Show_Manipulate_Item [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show the dialog for manipulate items amount in cargo (like selling,
- dropping, etc).
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Show_Manipulate_Item
-     <span class="sign">(</span>Title<span class="sign">,</span> Command<span class="sign">,</span> Action<span class="sign">:</span> String<span class="sign">;</span>
-      Item_Index<span class="sign">:</span> Inventory_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
-      Max_Amount<span class="sign">,</span> Cost<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Title<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0 and Command'</span>Length <span class="sign">&gt;</span> 0<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Title      - Title of the dialog
- Command    - Tcl command which will be executed when the player hit
-              the button Ok
- Action     - The name of action which the player is doing (like drop,
-              sell, ect)
- Item_Index - The index of the item which will be manipulated
- Max_Amount - Max amount of the items to manipualate. If zero, use max
-              amount of items from player ship cargo. Default value is
-              zero.
- Cost       - The cost (in buying) or gain (in selling) for one item in
-              the game money. Can be zero. Default value is zero.
-</pre>
-
-<hr />
 <a name="Dialogs2fDialogs2eShow5fMessage"></a>
-<a name="robo393"></a><h2>Dialogs/Dialogs.Show_Message [ Subprograms ]</h2>
+<a name="robo341"></a><h2>Dialogs/Dialogs.Show_Message [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -293,7 +153,7 @@
 
 <hr />
 <a name="Dialogs2fDialogs2eShow5fQuestion"></a>
-<a name="robo394"></a><h2>Dialogs/Dialogs.Show_Question [ Subprograms ]</h2>
+<a name="robo342"></a><h2>Dialogs/Dialogs.Show_Question [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -313,37 +173,9 @@
 <pre> 5.9 - Added
 </pre>
 
-<hr />
-<a name="Dialogs2fDialogs2eClose5fDialog5fCommand"></a>
-<a name="robo550"></a><h2>Dialogs/Dialogs.Close_Dialog_Command [ Commands ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Dialogs</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Close the selected dialog
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Close_Dialog_Command
-     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Client_Data - Custom data send to the command. Unused
- Interp      - Tcl interpreter in which command was executed.
- Argc        - Number of arguments passed to the command.
- Argv        - Values of arguments passed to the command.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> CloseDialog dialogname
- Dialogname is name of the dialog to close
-</pre>
-
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/dialogs.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
+<p>Generated from ./src/ui/dialogs.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
 </div> <!-- footer -->
 </body>
 </html>

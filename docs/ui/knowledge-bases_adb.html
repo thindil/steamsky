@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,130 +31,13 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo564">KBases/KBases.Sort_Bases_Command</a></li>
-<li>2. <a href="#robo563">KBases/KBases.Show_Bases_Command</a></li>
-<li>3. <a href="#robo562">KBases/KBases.Show_Base_Info_Command</a></li>
-<li>4. <a href="#robo424">KBases/KBases.Get_Reputation_Text</a></li>
-<li>5. <a href="#robo325">KBases/KBases.Modules_Indexes</a></li>
-<li>6. <a href="#robo324">KBases/KBases.Bases_Table</a></li>
-<li>7. <a href="#robo323">KBases/KBases.Bases_Sort_Order</a></li>
-<li>8. <a href="#robo248">KBases/KBases.Default_Bases_Sort_Order</a></li>
-<li>9. <a href="#robo122">KBases/KBases.Bases_Sort_Orders</a></li>
+<li>1. <a href="#robo489">KBases/KBases.Sort_Bases_Command</a></li>
+<li>2. <a href="#robo488">KBases/KBases.Show_Bases_Command</a></li>
+<li>3. <a href="#robo487">KBases/KBases.Show_Base_Info_Command</a></li>
 </ul>
 <hr />
-<a name="KBases2fKBases2eBases5fSort5fOrders"></a>
-<a name="robo122"></a><h2>KBases/KBases.Bases_Sort_Orders [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Sorting orders for the known bases list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Bases_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> DISTANCEASC<span class="sign">,</span> DISTANCEDESC<span class="sign">,</span> POPULATIONASC<span class="sign">,</span>
-      POPULATIONDESC<span class="sign">,</span> SIZEASC<span class="sign">,</span> SIZEDESC<span class="sign">,</span> OWNERASC<span class="sign">,</span> OWNERDESC<span class="sign">,</span> TYPEASC<span class="sign">,</span>
-      TYPEDESC<span class="sign">,</span> REPUTATIONASC<span class="sign">,</span> REPUTATIONDESC<span class="sign">,</span> COORDASC<span class="sign">,</span> COORDDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
-      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">OPTIONS</p>
-<pre> NAMEASC        - Sort bases by name ascending
- NAMEDESC       - Sort bases by name descending
- DISTANCEASC    - Sort bases by distance ascending
- DISTANCEDESC   - Sort bases by distance descending
- POPULATIONASC  - Sort bases by population ascending
- POPULATIONDESC - Sort bases by population descending
- SIZEASC        - Sort bases by size ascending
- SIZEDESC       - Sort bases by size descending
- OWNERASC       - Sort bases by owner ascending
- OWNERDESC      - Sort bases by owner descending
- TYPEASC        - Sort bases by type ascending
- TYPEDESC       - Sort bases by type descending
- REPUTATIONASC  - Sort bases by reputation ascending
- REPUTATIONDESC - Sort bases by reputation descending
- COORDASC       - Sort bases by coordinates ascending
- COORDDESC      - Sort bases by coordinates descending
- NONE           - No sorting bases (default)
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
- 8.4 - Added sorting by coordinates
-</pre>
-
-<hr />
-<a name="KBases2fKBases2eDefault5fBases5fSort5fOrder"></a>
-<a name="robo248"></a><h2>KBases/KBases.Default_Bases_Sort_Order [ Constants ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Default sorting order for the list of known bases
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Default_Bases_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Bases_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="KBases2fKBases2eBases5fSort5fOrder"></a>
-<a name="robo323"></a><h2>KBases/KBases.Bases_Sort_Order [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The current sorting order for known bases list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Bases_Sort_Order<span class="sign">:</span> Bases_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Bases_Sort_Order<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="KBases2fKBases2eBases5fTable"></a>
-<a name="robo324"></a><h2>KBases/KBases.Bases_Table [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> <a href="./table_ads.html#robo63">Table</a> with info about the know bases
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Bases_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 8<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="KBases2fKBases2eModules5fIndexes"></a>
-<a name="robo325"></a><h2>KBases/KBases.Modules_Indexes [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Indexes of the player ship modules
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Bases_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="KBases2fKBases2eGet5fReputation5fText"></a>
-<a name="robo424"></a><h2>KBases/KBases.Get_Reputation_Text [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get the name of the reputation level in the selected base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_Reputation_Text<span class="sign">(</span>Reputation_Level<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Reputation_Level - The numerical level of reputation in a base
-</pre>
-<p class="item_name">RESULT</p>
-<pre> The name of the reputation level in the selected base
-</pre>
-
-<hr />
 <a name="KBases2fKBases2eShow5fBase5fInfo5fCommand"></a>
-<a name="robo562"></a><h2>KBases/KBases.Show_Base_Info_Command [ Commands ]</h2>
+<a name="robo487"></a><h2>KBases/KBases.Show_Base_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -164,7 +47,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Base_Info_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showBaseInfoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -182,7 +67,7 @@
 
 <hr />
 <a name="KBases2fKBases2eShow5fBases5fCommand"></a>
-<a name="robo563"></a><h2>KBases/KBases.Show_Bases_Command [ Commands ]</h2>
+<a name="robo488"></a><h2>KBases/KBases.Show_Bases_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -192,7 +77,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Bases_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showBasesCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -212,7 +99,7 @@
 
 <hr />
 <a name="KBases2fKBases2eSort5fBases5fCommand"></a>
-<a name="robo564"></a><h2>KBases/KBases.Sort_Bases_Command [ Commands ]</h2>
+<a name="robo489"></a><h2>KBases/KBases.Sort_Bases_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-bases_ads.html#robo33">KBases</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -222,7 +109,9 @@
 <pre class="source">   <span class="keyword">function</span> Sort_Bases_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"sortBasesCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -240,7 +129,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/knowledge-bases.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
+<p>Generated from ./src/ui/knowledge-bases.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
 </div> <!-- footer -->
 </body>
 </html>

@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.1 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,102 +31,13 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo567">KEvents/KEvents.Sort_Events_Command</a></li>
-<li>2. <a href="#robo566">KEvents/KEvents.Show_Events_Command</a></li>
-<li>3. <a href="#robo565">KEvents/KEvents.Show_Event_Info_Command</a></li>
-<li>4. <a href="#robo328">KEvents/KEvents.Events_Table</a></li>
-<li>5. <a href="#robo327">KEvents/KEvents.Events_Sort_Order</a></li>
-<li>6. <a href="#robo326">KEvents/KEvents.Events_Indexes</a></li>
-<li>7. <a href="#robo249">KEvents/KEvents.Default_Events_Sort_Order</a></li>
-<li>8. <a href="#robo123">KEvents/KEvents.Events_Sort_Orders</a></li>
+<li>1. <a href="#robo492">KEvents/KEvents.Sort_Events_Command</a></li>
+<li>2. <a href="#robo491">KEvents/KEvents.Show_Events_Command</a></li>
+<li>3. <a href="#robo490">KEvents/KEvents.Show_Event_Info_Command</a></li>
 </ul>
 <hr />
-<a name="KEvents2fKEvents2eEvents5fSort5fOrders"></a>
-<a name="robo123"></a><h2>KEvents/KEvents.Events_Sort_Orders [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Sorting orders for the known events list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Events_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span> DISTANCEASC<span class="sign">,</span> DISTANCEDESC<span class="sign">,</span> DETAILSASC<span class="sign">,</span> DETAILSDESC<span class="sign">,</span>
-      COORDASC<span class="sign">,</span> COORDDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
-      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">OPTIONS</p>
-<pre> TYPEASC      - Sort events by type ascending
- TYPEDESC     - Sort events by type descending
- DISTANCEASC  - Sort events by distance ascending
- DISTANCEDESC - Sort events by distance descending
- DETAILSASC   - Sort events by details ascending
- DETAILSDESC  - Sort events by details descending
- COORDASC     - Sort events by coordinates ascending
- COORDDESC    - Sort events by coordinates descending
- NONE         - No sorting events (default)
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
- 8.4 - Added sorting by coordinates
-</pre>
-
-<hr />
-<a name="KEvents2fKEvents2eDefault5fEvents5fSort5fOrder"></a>
-<a name="robo249"></a><h2>KEvents/KEvents.Default_Events_Sort_Order [ Constants ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Default sorting order for the known events
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Default_Events_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Events_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="KEvents2fKEvents2eEvents5fIndexes"></a>
-<a name="robo326"></a><h2>KEvents/KEvents.Events_Indexes [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Indexes of the known events
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Events_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="KEvents2fKEvents2eEvents5fSort5fOrder"></a>
-<a name="robo327"></a><h2>KEvents/KEvents.Events_Sort_Order [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The current sorting order for known events list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Events_Sort_Order<span class="sign">:</span> Events_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Events_Sort_Order<span class="sign">;</span>
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 6.4 - Added
-</pre>
-
-<hr />
-<a name="KEvents2fKEvents2eEvents5fTable"></a>
-<a name="robo328"></a><h2>KEvents/KEvents.Events_Table [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> <a href="./table_ads.html#robo63">Table</a> with info about the known events
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Events_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 4<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="KEvents2fKEvents2eShow5fEvent5fInfo5fCommand"></a>
-<a name="robo565"></a><h2>KEvents/KEvents.Show_Event_Info_Command [ Commands ]</h2>
+<a name="robo490"></a><h2>KEvents/KEvents.Show_Event_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -136,7 +47,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Event_Info_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showEventInfoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -154,7 +67,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eShow5fEvents5fCommand"></a>
-<a name="robo566"></a><h2>KEvents/KEvents.Show_Events_Command [ Commands ]</h2>
+<a name="robo491"></a><h2>KEvents/KEvents.Show_Events_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -164,7 +77,9 @@
 <pre class="source">   <span class="keyword">function</span> Show_Events_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"showEventsCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -182,7 +97,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eSort5fEvents5fCommand"></a>
-<a name="robo567"></a><h2>KEvents/KEvents.Sort_Events_Command [ Commands ]</h2>
+<a name="robo492"></a><h2>KEvents/KEvents.Sort_Events_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -192,7 +107,9 @@
 <pre class="source">   <span class="keyword">function</span> Sort_Events_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"sortEventsCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -210,7 +127,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/knowledge-events.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-07-28 03:44:29</p>
+<p>Generated from ./src/ui/knowledge-events.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
 </div> <!-- footer -->
 </body>
 </html>
