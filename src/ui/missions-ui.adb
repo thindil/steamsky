@@ -15,11 +15,11 @@
 
 -- with Ada.Containers.Generic_Array_Sort;
 -- with Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+-- with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 -- with Tcl.Tk.Ada;
 -- with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 -- with Tcl.Tk.Ada.Widgets.Canvas;
@@ -155,6 +155,7 @@ package body Missions.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Interfaces.C;
+      use Tcl.Ada;
 --      use Tcl.Tk.Ada.Widgets.Canvas;
 --      use Tcl.Tk.Ada.Widgets.TtkFrame;
 --      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
