@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- New icon for food amount information. Author: Lorc (https://game-icons.net),
+  license CC BY 3.0
+
 ### Changed
 - Updated look of information about available missions in bases
 - Updated look of information about available money when buying recipes, repair
