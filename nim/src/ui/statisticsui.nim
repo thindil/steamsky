@@ -306,7 +306,7 @@ type
   SortingList = seq[SortingData]
 
 proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let column = try:
         ($argv[1]).parseInt
       except:
@@ -316,8 +316,11 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   var localCrafting: SortingList = @[]
   for index, order in gameStats.craftingOrders:
-    localCrafting.add(y = SortingData(name: itemsList[recipesList[
-        order.index].resultIndex].name, amount: order.amount, id: index))
+    try:
+      localCrafting.add(y = SortingData(name: itemsList[recipesList[
+          order.index].resultIndex].name, amount: order.amount, id: index))
+    except:
+      return showError(message = "Can't add local order.")
   proc sortCrafting(x, y: SortingData): int =
     case craftingSortOrder
     of nameAsc:
