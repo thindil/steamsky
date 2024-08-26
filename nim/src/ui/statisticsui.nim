@@ -295,11 +295,15 @@ proc setSortingOrder(sortingOrder: var ListSortOrders; column: Positive) =
     else:
       none
 
+proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     discard
-#    addCommand("ShowBaseMissions", showBaseMissionsCommand)
+#    addCommand("SortFinishedCrafting", sortFinishedCraftingCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
