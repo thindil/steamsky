@@ -280,7 +280,8 @@ type ListSortOrders = enum
 
 const defaultListSortOrder: ListSortOrders = none
 
-proc setSortingOrder(sortingOrder: var ListSortOrders; column: Positive) =
+proc setSortingOrder(sortingOrder: var ListSortOrders;
+    column: Positive) {.sideEffect, raises: [], tags: [].} =
   sortingOrder = case column
     of 1:
       if sortingOrder == nameAsc:
