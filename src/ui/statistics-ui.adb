@@ -19,11 +19,9 @@ with Ada.Strings.Fixed;
 with Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
--- with Crafts;
 with Game; use Game;
 use Game.Tiny_String;
 with Goals;
--- with Items;
 with Missions;
 with Ships;
 with Utils.UI;
@@ -31,13 +29,6 @@ with Utils.UI;
 package body Statistics.UI is
 
    --## rule off REDUCEABLE_SCOPE
-   -- ****iv* SUI/SUI.Crafting_Indexes
-   -- FUNCTION
-   -- Indexes of the finished crafting orders
-   -- SOURCE
---   Crafting_Indexes: Positive_Container.Vector;
-   -- ****
-
    -- ****iv* SUI/SUI.Missions_Indexes
    -- FUNCTION
    -- Indexes of the finished missions
@@ -163,17 +154,6 @@ package body Statistics.UI is
       end if;
    end Set_Sorting_Order;
 
-   --## rule off DIRECTLY_ACCESSED_GLOBALS
-   -- ****iv* SUI/SUI.Crafting_Sort_Order
-   -- FUNCTION
-   -- The current sorting order for the list of finished crafting orders
-   -- HISTORY
-   -- 6.5 - Added
-   -- SOURCE
---   Crafting_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
-   -- ****
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
-
    -- ****o* SUI/SUI.Sort_Crafting_Command
    -- FUNCTION
    -- Sort the list of finished crafting orders
@@ -195,90 +175,6 @@ package body Statistics.UI is
       Convention => C,
       External_Name => "sortFinishedCraftingCommand";
       -- ****
-
---   function Sort_Crafting_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Crafts;
---      use Items;
---
---      Column: constant Positive :=
---        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Crafting_Orders: constant Statistics_Container.Vector :=
---        Get_Game_Stats_List(Name => "craftingOrders");
---      --## rule off IMPROPER_INITIALIZATION
---      Local_Crafting: Sorting_Array(1 .. Positive(Crafting_Orders.Length));
---      --## rule on IMPROPER_INITIALIZATION
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      function Get_Crafting_Sort_Order return List_Sort_Orders is
---      begin
---         return Crafting_Sort_Order;
---      end Get_Crafting_Sort_Order;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      function "<"(Left, Right: Sorting_Data) return Boolean is
---      begin
---         if Get_Crafting_Sort_Order = NAMEASC
---           and then Left.Name < Right.Name then
---            return True;
---         end if;
---         if Get_Crafting_Sort_Order = NAMEDESC
---           and then Left.Name > Right.Name then
---            return True;
---         end if;
---         if Get_Crafting_Sort_Order = AMOUNTASC
---           and then Left.Amount < Right.Amount then
---            return True;
---         end if;
---         if Get_Crafting_Sort_Order = AMOUNTDESC
---           and then Left.Amount > Right.Amount then
---            return True;
---         end if;
---         return False;
---      end "<";
---      procedure Sort_Crafting is new Ada.Containers.Generic_Array_Sort
---        (Index_Type => Positive, Element_Type => Sorting_Data,
---         Array_Type => Sorting_Array);
---   begin
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Set_Sorting_Order
---        (Sorting_Order => Crafting_Sort_Order, Column => Column);
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      if Get_Crafting_Sort_Order = NONE then
---         return TCL_OK;
---      end if;
---      Fill_Local_Crafting_Loop :
---      for I in Crafting_Orders.Iterate loop
---         Local_Crafting(Statistics_Container.To_Index(Position => I)) :=
---           (Name =>
---              To_Unbounded_String
---                (Source =>
---                   To_String
---                     (Source =>
---                        Get_Proto_Item
---                          (Index =>
---                             Get_Recipe
---                               (Recipe_Index =>
---                                  To_Bounded_String
---                                    (Source =>
---                                       To_String
---                                         (Source => Crafting_Orders(I).Index)))
---                               .Result_Index)
---                          .Name)),
---            Amount => Crafting_Orders(I).Amount,
---            Id => Statistics_Container.To_Index(Position => I));
---      end loop Fill_Local_Crafting_Loop;
---      Sort_Crafting(Container => Local_Crafting);
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Crafting_Indexes.Clear;
---      Fill_Crafting_Indexes_Loop :
---      for Order of Local_Crafting loop
---         Crafting_Indexes.Append(New_Item => Order.Id);
---      end loop Fill_Crafting_Indexes_Loop;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      Show_Statistics(Refresh => True);
---      return TCL_OK;
---   end Sort_Crafting_Command;
 
    --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUI/SUI.Missions_Sort_Order
