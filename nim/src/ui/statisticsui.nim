@@ -371,11 +371,68 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   showStatistics(refresh = true)
   return tclOk
 
+var missionsSortOrder: ListSortOrders = defaultListSortOrder
+
+proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the column number.")
+  setSortingOrder(sortingOrder = missionsSortOrder, column = column)
+  if missionsSortOrder == none:
+    return tclOk
+  var localMissions: SortingList = @[]
+  for index, mission in gameStats.finishedMissions:
+    localMissions.add(y = SortingData(name: (
+      case mission.index.parseInt.MissionsTypes
+        of deliver:
+          "Delivered items"
+        of patrol:
+          "Patroled areas"
+        of destroy:
+          "Destroyed ships"
+        of explore:
+          "Explored areas"
+        of passenger:
+          "Passengers transported"), amount: mission.amount, id: index))
+  proc sortMissions(x, y: SortingData): int =
+    case craftingSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      else:
+        return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localMissions.sort(cmp = sortMissions)
+  missionsIndexes = @[]
+  for mission in localMissions:
+    missionsIndexes.add(y = mission.id)
+  showStatistics(refresh = true)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     discard
 #    addCommand("SortFinishedCrafting", sortFinishedCraftingCommand)
+#    addCommand("SortFinishedMissions", sortFinishedMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
