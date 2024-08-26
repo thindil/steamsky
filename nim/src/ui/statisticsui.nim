@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strformat, strutils, tables]
+import std/[algorithm, os, strformat, strutils, tables]
 import ../[game, goals, statistics, tk, types]
 import coreui, utilsui2
 
@@ -315,8 +315,38 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   if craftingSortOrder == none:
     return tclOk
   var localCrafting: SortingList = @[]
-  for index, _ in gameStats.craftingOrders:
-    discard
+  for index, order in gameStats.craftingOrders:
+    localCrafting.add(y = SortingData(name: itemsList[recipesList[
+        order.index].resultIndex].name, amount: order.amount, id: index))
+  proc sortCrafting(x, y: SortingData): int =
+    case craftingSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      else:
+        return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localCrafting.sort(cmp = sortCrafting)
+  craftingIndexes = @[]
+  for order in localCrafting:
+    craftingIndexes.add(y = order.id)
+  showStatistics(refresh = true)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
