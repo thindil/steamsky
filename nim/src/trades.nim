@@ -50,7 +50,7 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
           else: getRandom(min = 1, max = 1000)
         itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
         newItemIndex: Natural = 0
-      for i in 1 .. itemsList.len:
+      for i in 1..itemsList.len:
         itemIndex.dec
         if itemIndex == 0:
           newItemIndex = i
