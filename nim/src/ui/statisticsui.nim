@@ -295,8 +295,28 @@ proc setSortingOrder(sortingOrder: var ListSortOrders; column: Positive) =
     else:
       none
 
+var craftingSortOrder: ListSortOrders = defaultListSortOrder
+
+type
+  SortingData = object
+    name: string
+    amount: Positive = 1
+    id: Natural
+
+  SortingList = seq[SortingData]
+
 proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the column number.")
+  setSortingOrder(sortingOrder = craftingSortOrder, column = column)
+  if craftingSortOrder == none:
+    return tclOk
+  var localCrafting: SortingList = @[]
+  for index, _ in gameStats.craftingOrders:
+    discard
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
