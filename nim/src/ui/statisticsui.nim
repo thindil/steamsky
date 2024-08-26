@@ -282,6 +282,12 @@ const defaultListSortOrder: ListSortOrders = none
 
 proc setSortingOrder(sortingOrder: var ListSortOrders;
     column: Positive) {.sideEffect, raises: [], tags: [].} =
+  ## Set sorting order for the selected list
+  ##
+  ## * sortingOrder - the sorting order to set
+  ## * column       - the column in ttk_tree_view whith was clicked
+  ##
+  ## Returns the modified parameter sortingOrder
   sortingOrder = case column
     of 1:
       if sortingOrder == nameAsc:
