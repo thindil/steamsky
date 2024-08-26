@@ -144,18 +144,18 @@ package body Statistics.UI is
    procedure Set_Sorting_Order
      (Sorting_Order: in out List_Sort_Orders; Column: Positive) is
      -- ****
-      New_Order: Integer := List_Sort_Orders'Pos(Sorting_Order);
-      procedure Set_Ada_Sorting_Order(S_Order: in out Integer; C: Positive) with
+      New_Order: Integer;
+      procedure Set_Ada_Sorting_Order(S_Order: in out Integer; Col: Positive) with
          Import => True,
          Convention => C,
          External_Name => "setAdaSortingOrder";
    begin
-      if Sorting_Order /= NONE then
-         New_Order := List_Sort_Orders'Pos(Sorting_Order) + 1;
-      else
+      if Sorting_Order = NONE then
          New_Order := 4;
+      else
+         New_Order := List_Sort_Orders'Pos(Sorting_Order) + 1;
       end if;
-      Set_Ada_Sorting_Order(S_Order => New_Order, C => Column);
+      Set_Ada_Sorting_Order(S_Order => New_Order, Col => Column);
       if New_Order > 0 then
          Sorting_Order := List_Sort_Orders'Val(New_Order - 1);
       else
