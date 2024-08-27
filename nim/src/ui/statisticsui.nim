@@ -508,6 +508,55 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
   showStatistics(refresh = true)
   return tclOk
 
+var destroyedSortOrder: ListSortOrders = defaultListSortOrder
+
+proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the column number.")
+  setSortingOrder(sortingOrder = destroyedSortOrder, column = column)
+  if destroyedSortOrder == none:
+    return tclOk
+  var localDestroyed: SortingList = @[]
+  for index, destroyed in gameStats.destroyedShips:
+    for i, ship in protoShipsList:
+      if $i == destroyed.index:
+        localDestroyed.add(y = SortingData(name: ship.name,
+            amount: destroyed.amount, id: index))
+        break
+  proc sortDestroyed(x, y: SortingData): int =
+    case goalsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      else:
+        return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localDestroyed.sort(cmp = sortDestroyed)
+  destroyedIndexes = @[]
+  for ship in localDestroyed:
+    destroyedIndexes.add(y = ship.id)
+  showStatistics(refresh = true)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
@@ -515,6 +564,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("SortFinishedCrafting", sortFinishedCraftingCommand)
 #    addCommand("SortFinishedMissions", sortFinishedMissionsCommand)
 #    addCommand("SortFinishedGoals", sortFinishedGoalsCommand)
+#    addCommand("SortDestroyedShips", sortDestroyedCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
