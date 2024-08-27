@@ -1147,6 +1147,8 @@ story.
   deconstruct order button in the assing crafting order dialog. Optional.
 * Key `GiveOrderColoredIcon`: Path to the SVG image which will be used for give
   order to the crew member button in the assigning order's dialog. Optional.
+* Key `FoodIcon`: Path to the SVG image which will be used to show the amount
+  of food. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
