@@ -58,9 +58,4 @@ package Crafts is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
--- Temporary code to interact with Nim
-
-   function Get_Recipe
-     (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data;
-
 end Crafts;
