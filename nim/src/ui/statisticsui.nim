@@ -374,7 +374,7 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
 var missionsSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let column = try:
         ($argv[1]).parseInt
       except:
@@ -384,8 +384,9 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   var localMissions: SortingList = @[]
   for index, mission in gameStats.finishedMissions:
-    localMissions.add(y = SortingData(name: (
-      case mission.index.parseInt.MissionsTypes
+    try:
+      localMissions.add(y = SortingData(name: (
+        case mission.index.parseInt.MissionsTypes
         of deliver:
           "Delivered items"
         of patrol:
@@ -396,6 +397,8 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
           "Explored areas"
         of passenger:
           "Passengers transported"), amount: mission.amount, id: index))
+    except:
+      return showError(message = "Can't add local mission.")
   proc sortMissions(x, y: SortingData): int =
     case craftingSortOrder
     of nameAsc:
