@@ -20,7 +20,7 @@ with Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 with Game; use Game;
-with Goals;
+-- with Goals;
 with Ships;
 with Utils.UI;
 
@@ -30,7 +30,7 @@ package body Statistics.UI is
    -- FUNCTION
    -- Indexes of the finished goals
    -- SOURCE
-   Goals_Indexes: Positive_Container.Vector;
+--   Goals_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****iv* SUI/SUI.Destroyed_Indexes
@@ -195,7 +195,7 @@ package body Statistics.UI is
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
-   Goals_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
+--   Goals_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
    --## rule on DIRECTLY_ACCESSED_GLOBALS
 
@@ -216,80 +216,82 @@ package body Statistics.UI is
    function Sort_Goals_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "sortFinishedGoalsCommand";
       -- ****
 
-   function Sort_Goals_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Goals;
-
-      Column: constant Positive :=
-        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Proto_Index: Positive := 1;
-      Finished_Goals: constant Statistics_Container.Vector :=
-        Get_Game_Stats_List(Name => "finishedGoals");
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      --## rule off IMPROPER_INITIALIZATION
-      Local_Goals: Sorting_Array(1 .. Positive(Finished_Goals.Length));
-      --## rule on IMPROPER_INITIALIZATION
-      function Get_Goals_Sort_Order return List_Sort_Orders is
-      begin
-         return Goals_Sort_Order;
-      end Get_Goals_Sort_Order;
-      --## rule off DIRECTLY_ACCESSED_GLOBALS
-      function "<"(Left, Right: Sorting_Data) return Boolean is
-      begin
-         if Get_Goals_Sort_Order = NAMEASC and then Left.Name < Right.Name then
-            return True;
-         end if;
-         if Get_Goals_Sort_Order = NAMEDESC
-           and then Left.Name > Right.Name then
-            return True;
-         end if;
-         if Get_Goals_Sort_Order = AMOUNTASC
-           and then Left.Amount < Right.Amount then
-            return True;
-         end if;
-         if Get_Goals_Sort_Order = AMOUNTDESC
-           and then Left.Amount > Right.Amount then
-            return True;
-         end if;
-         return False;
-      end "<";
-      procedure Sort_Goals is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Sorting_Data,
-         Array_Type => Sorting_Array);
-   begin
-      Set_Sorting_Order(Sorting_Order => Goals_Sort_Order, Column => Column);
-      if Get_Goals_Sort_Order = NONE then
-         return TCL_OK;
-      end if;
-      Fill_Local_Goals_Loop :
-      for I in Finished_Goals.Iterate loop
-         Get_Proto_Goal_Loop :
-         for J in 1 .. 256 loop
-            if Get_Goal(Index => J).Index = Finished_Goals(I).Index then
-               Proto_Index := J;
-               exit Get_Proto_Goal_Loop;
-            end if;
-         end loop Get_Proto_Goal_Loop;
-         Local_Goals(Statistics_Container.To_Index(Position => I)) :=
-           (Name =>
-              To_Unbounded_String(Source => Goal_Text(Index => Proto_Index)),
-            Amount => Finished_Goals(I).Amount,
-            Id => Statistics_Container.To_Index(Position => I));
-      end loop Fill_Local_Goals_Loop;
-      Sort_Goals(Container => Local_Goals);
-      Goals_Indexes.Clear;
-      Fill_Goals_Indexes_Loop :
-      for Goal of Local_Goals loop
-         Goals_Indexes.Append(New_Item => Goal.Id);
-      end loop Fill_Goals_Indexes_Loop;
-      Show_Statistics(Refresh => True);
-      return TCL_OK;
-   end Sort_Goals_Command;
+--   function Sort_Goals_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Goals;
+--
+--      Column: constant Positive :=
+--        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Proto_Index: Positive := 1;
+--      Finished_Goals: constant Statistics_Container.Vector :=
+--        Get_Game_Stats_List(Name => "finishedGoals");
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      --## rule off IMPROPER_INITIALIZATION
+--      Local_Goals: Sorting_Array(1 .. Positive(Finished_Goals.Length));
+--      --## rule on IMPROPER_INITIALIZATION
+--      function Get_Goals_Sort_Order return List_Sort_Orders is
+--      begin
+--         return Goals_Sort_Order;
+--      end Get_Goals_Sort_Order;
+--      --## rule off DIRECTLY_ACCESSED_GLOBALS
+--      function "<"(Left, Right: Sorting_Data) return Boolean is
+--      begin
+--         if Get_Goals_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+--            return True;
+--         end if;
+--         if Get_Goals_Sort_Order = NAMEDESC
+--           and then Left.Name > Right.Name then
+--            return True;
+--         end if;
+--         if Get_Goals_Sort_Order = AMOUNTASC
+--           and then Left.Amount < Right.Amount then
+--            return True;
+--         end if;
+--         if Get_Goals_Sort_Order = AMOUNTDESC
+--           and then Left.Amount > Right.Amount then
+--            return True;
+--         end if;
+--         return False;
+--      end "<";
+--      procedure Sort_Goals is new Ada.Containers.Generic_Array_Sort
+--        (Index_Type => Positive, Element_Type => Sorting_Data,
+--         Array_Type => Sorting_Array);
+--   begin
+--      Set_Sorting_Order(Sorting_Order => Goals_Sort_Order, Column => Column);
+--      if Get_Goals_Sort_Order = NONE then
+--         return TCL_OK;
+--      end if;
+--      Fill_Local_Goals_Loop :
+--      for I in Finished_Goals.Iterate loop
+--         Get_Proto_Goal_Loop :
+--         for J in 1 .. 256 loop
+--            if Get_Goal(Index => J).Index = Finished_Goals(I).Index then
+--               Proto_Index := J;
+--               exit Get_Proto_Goal_Loop;
+--            end if;
+--         end loop Get_Proto_Goal_Loop;
+--         Local_Goals(Statistics_Container.To_Index(Position => I)) :=
+--           (Name =>
+--              To_Unbounded_String(Source => Goal_Text(Index => Proto_Index)),
+--            Amount => Finished_Goals(I).Amount,
+--            Id => Statistics_Container.To_Index(Position => I));
+--      end loop Fill_Local_Goals_Loop;
+--      Sort_Goals(Container => Local_Goals);
+--      Goals_Indexes.Clear;
+--      Fill_Goals_Indexes_Loop :
+--      for Goal of Local_Goals loop
+--         Goals_Indexes.Append(New_Item => Goal.Id);
+--      end loop Fill_Goals_Indexes_Loop;
+--      Show_Statistics(Refresh => True);
+--      return TCL_OK;
+--   end Sort_Goals_Command;
 
    -- ****iv* SUI/SUI.Destroyed_Sort_Order
    -- FUNCTION
