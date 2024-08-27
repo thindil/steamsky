@@ -412,7 +412,7 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't add local mission.")
   proc sortMissions(x, y: SortingData): int =
-    case craftingSortOrder
+    case missionsSortOrder
     of nameAsc:
       if x.name < y.name:
         return 1
@@ -442,12 +442,64 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   showStatistics(refresh = true)
   return tclOk
 
+var goalsSortOrder: ListSortOrders = defaultListSortOrder
+
+proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the column number.")
+  setSortingOrder(sortingOrder = goalsSortOrder, column = column)
+  if goalsSortOrder == none:
+    return tclOk
+  var localGoals: SortingList = @[]
+  for index, finishedGoal in gameStats.finishedGoals:
+    var protoIndex = -1
+    for i, goal in goalsList:
+      if goal.index == finishedGoal.index:
+        protoIndex = i
+        break
+    localGoals.add(y = SortingData(name: goalText(index = protoIndex),
+        amount: finishedGoal.amount, id: index))
+  proc sortGoals(x, y: SortingData): int =
+    case goalsSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      else:
+        return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localGoals.sort(cmp = sortGoals)
+  goalsIndexes = @[]
+  for goal in localGoals:
+    goalsIndexes.add(y = goal.id)
+  showStatistics(refresh = true)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     discard
 #    addCommand("SortFinishedCrafting", sortFinishedCraftingCommand)
 #    addCommand("SortFinishedMissions", sortFinishedMissionsCommand)
+#    addCommand("SortFinishedGoals", sortFinishedGoalsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
