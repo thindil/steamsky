@@ -445,7 +445,7 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
 var goalsSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let column = try:
         ($argv[1]).parseInt
       except:
@@ -460,8 +460,11 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
       if goal.index == finishedGoal.index:
         protoIndex = i
         break
-    localGoals.add(y = SortingData(name: goalText(index = protoIndex),
-        amount: finishedGoal.amount, id: index))
+    try:
+      localGoals.add(y = SortingData(name: goalText(index = protoIndex),
+          amount: finishedGoal.amount, id: index))
+    except:
+      return showError(message = "Can't add local goal.")
   proc sortGoals(x, y: SortingData): int =
     case goalsSortOrder
     of nameAsc:
