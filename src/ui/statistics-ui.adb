@@ -14,13 +14,13 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings;
+-- with Ada.Strings.Fixed;
 with Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 with Game; use Game;
-with Ships;
+-- with Ships;
 with Utils.UI;
 
 package body Statistics.UI is
@@ -29,7 +29,7 @@ package body Statistics.UI is
    -- FUNCTION
    -- Indexes of the destroyed ships
    -- SOURCE
-   Destroyed_Indexes: Positive_Container.Vector;
+--   Destroyed_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****iv* SUI/SUI.Killed_Indexes
@@ -208,7 +208,7 @@ package body Statistics.UI is
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
-   Destroyed_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
+--   Destroyed_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
 
    -- ****o* SUI/SUI.Sort_Destroyed_Command
@@ -228,80 +228,82 @@ package body Statistics.UI is
    function Sort_Destroyed_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "sortDestroyedCommand";
       -- ****
 
-   function Sort_Destroyed_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Ships;
-
-      Column: constant Positive :=
-        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
-      Destroyed_Ships: constant Statistics_Container.Vector :=
-        Get_Game_Stats_List(Name => "destroyedShips");
-      --## rule off IMPROPER_INITIALIZATION
-      Local_Destroyed: Sorting_Array(1 .. Positive(Destroyed_Ships.Length));
-      --## rule on IMPROPER_INITIALIZATION
-      function "<"(Left, Right: Sorting_Data) return Boolean is
-      begin
-         if Destroyed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
-            return True;
-         end if;
-         if Destroyed_Sort_Order = NAMEDESC
-           and then Left.Name > Right.Name then
-            return True;
-         end if;
-         if Destroyed_Sort_Order = AMOUNTASC
-           and then Left.Amount < Right.Amount then
-            return True;
-         end if;
-         if Destroyed_Sort_Order = AMOUNTDESC
-           and then Left.Amount > Right.Amount then
-            return True;
-         end if;
-         return False;
-      end "<";
-      procedure Sort_Destroyed is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Sorting_Data,
-         Array_Type => Sorting_Array);
-   begin
-      Set_Sorting_Order
-        (Sorting_Order => Destroyed_Sort_Order, Column => Column);
-      if Destroyed_Sort_Order = NONE then
-         return TCL_OK;
-      end if;
-      Fill_Local_Destroyed_Loop :
-      for I in Destroyed_Ships.Iterate loop
-         Get_Proto_Ship_Loop :
-         for J in 1 .. Get_Proto_Ships_Amount loop
-            if To_Unbounded_String
-                (Source => Trim(Source => Positive'Image(J), Side => Left)) =
-              Destroyed_Ships(I).Index then
-               Local_Destroyed(Statistics_Container.To_Index(Position => I)) :=
-                 (Name =>
-                    To_Unbounded_String
-                      (Source =>
-                         Tiny_String.To_String
-                           (Source => Get_Proto_Ship(Proto_Index => J).Name)),
-                  Amount => Destroyed_Ships(I).Amount,
-                  Id => Statistics_Container.To_Index(Position => I));
-               exit Get_Proto_Ship_Loop;
-            end if;
-         end loop Get_Proto_Ship_Loop;
-      end loop Fill_Local_Destroyed_Loop;
-      Sort_Destroyed(Container => Local_Destroyed);
-      Destroyed_Indexes.Clear;
-      Fill_Destroyed_Indexes_Loop :
-      for Ship of Local_Destroyed loop
-         Destroyed_Indexes.Append(New_Item => Ship.Id);
-      end loop Fill_Destroyed_Indexes_Loop;
-      Show_Statistics(Refresh => True);
-      return TCL_OK;
-   end Sort_Destroyed_Command;
+--   function Sort_Destroyed_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Ships;
+--
+--      Column: constant Positive :=
+--        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+--      Destroyed_Ships: constant Statistics_Container.Vector :=
+--        Get_Game_Stats_List(Name => "destroyedShips");
+--      --## rule off IMPROPER_INITIALIZATION
+--      Local_Destroyed: Sorting_Array(1 .. Positive(Destroyed_Ships.Length));
+--      --## rule on IMPROPER_INITIALIZATION
+--      function "<"(Left, Right: Sorting_Data) return Boolean is
+--      begin
+--         if Destroyed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+--            return True;
+--         end if;
+--         if Destroyed_Sort_Order = NAMEDESC
+--           and then Left.Name > Right.Name then
+--            return True;
+--         end if;
+--         if Destroyed_Sort_Order = AMOUNTASC
+--           and then Left.Amount < Right.Amount then
+--            return True;
+--         end if;
+--         if Destroyed_Sort_Order = AMOUNTDESC
+--           and then Left.Amount > Right.Amount then
+--            return True;
+--         end if;
+--         return False;
+--      end "<";
+--      procedure Sort_Destroyed is new Ada.Containers.Generic_Array_Sort
+--        (Index_Type => Positive, Element_Type => Sorting_Data,
+--         Array_Type => Sorting_Array);
+--   begin
+--      Set_Sorting_Order
+--        (Sorting_Order => Destroyed_Sort_Order, Column => Column);
+--      if Destroyed_Sort_Order = NONE then
+--         return TCL_OK;
+--      end if;
+--      Fill_Local_Destroyed_Loop :
+--      for I in Destroyed_Ships.Iterate loop
+--         Get_Proto_Ship_Loop :
+--         for J in 1 .. Get_Proto_Ships_Amount loop
+--            if To_Unbounded_String
+--                (Source => Trim(Source => Positive'Image(J), Side => Left)) =
+--              Destroyed_Ships(I).Index then
+--               Local_Destroyed(Statistics_Container.To_Index(Position => I)) :=
+--                 (Name =>
+--                    To_Unbounded_String
+--                      (Source =>
+--                         Tiny_String.To_String
+--                           (Source => Get_Proto_Ship(Proto_Index => J).Name)),
+--                  Amount => Destroyed_Ships(I).Amount,
+--                  Id => Statistics_Container.To_Index(Position => I));
+--               exit Get_Proto_Ship_Loop;
+--            end if;
+--         end loop Get_Proto_Ship_Loop;
+--      end loop Fill_Local_Destroyed_Loop;
+--      Sort_Destroyed(Container => Local_Destroyed);
+--      Destroyed_Indexes.Clear;
+--      Fill_Destroyed_Indexes_Loop :
+--      for Ship of Local_Destroyed loop
+--         Destroyed_Indexes.Append(New_Item => Ship.Id);
+--      end loop Fill_Destroyed_Indexes_Loop;
+--      Show_Statistics(Refresh => True);
+--      return TCL_OK;
+--   end Sort_Destroyed_Command;
 
    -- ****iv* SUI/SUI.Killed_Sort_Order
    -- FUNCTION
