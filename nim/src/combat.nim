@@ -83,7 +83,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
     var
       itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
       newItemIndex: Natural = 0
-    for i in 1 .. itemsList.len:
+    for i in 1..itemsList.len:
       itemIndex.dec
       if itemIndex == 0:
         newItemIndex = i
@@ -349,7 +349,7 @@ proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
         skillIndex = unarmedSkill) + getRandom(min = 1, max = 50)
   result.hitChance -= (getSkillLevel(member = defender,
       skillIndex = dodgeSkill) + getRandom(min = 1, max = 50))
-  for i in helmet .. legs:
+  for i in helmet..legs:
     if defender.equipment[i] > -1:
       result.hitChance += itemsList[defender.inventory[
           defender.equipment[i]].protoIndex].value[3]
@@ -399,7 +399,7 @@ proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
   ## Returns true if the defender survived the attack, otherwise false
   let hitLocation: EquipmentLocations = getRandom(min = helmet.int,
         max = legs.int).EquipmentLocations
-  const locationNames: array[helmet .. legs, string] = ["head", "torso",
+  const locationNames: array[helmet..legs, string] = ["head", "torso",
         "arm", "leg"]
   var
     attacker: MemberData = if playerAttack2: playerShip.crew[attackerIndex2]
@@ -732,7 +732,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
   logMessage(message = "Chance to hit: " & $hitChance,
       debugType = DebugTypes.combat)
   let enemyNameOwner: string = enemyName & " (" & factionName & ")"
-  for shoot in 1 .. shoots:
+  for shoot in 1..shoots:
     var shootMessage: string = ""
     if ship.crew == playerShip.crew:
       shootMessage = if module.mType in {ModuleType2.gun, harpoonGun}:
