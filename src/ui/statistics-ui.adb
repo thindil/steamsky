@@ -21,19 +21,10 @@ with CArgv;
 with Tcl; use Tcl;
 with Game; use Game;
 with Goals;
--- with Missions;
 with Ships;
 with Utils.UI;
 
 package body Statistics.UI is
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****iv* SUI/SUI.Missions_Indexes
-   -- FUNCTION
-   -- Indexes of the finished missions
-   -- SOURCE
---    Missions_Indexes: Positive_Container.Vector;
-   -- ****
 
    -- ****iv* SUI/SUI.Goals_Indexes
    -- FUNCTION
@@ -175,17 +166,6 @@ package body Statistics.UI is
       External_Name => "sortFinishedCraftingCommand";
       -- ****
 
-   --## rule off DIRECTLY_ACCESSED_GLOBALS
-   -- ****iv* SUI/SUI.Missions_Sort_Order
-   -- FUNCTION
-   -- The current sorting order for the list of finished missions
-   -- HISTORY
-   -- 6.5 - Added
-   -- SOURCE
---   Missions_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
-   -- ****
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
-
    -- ****o* SUI/SUI.Sort_Missions_Command
    -- FUNCTION
    -- Sort the list of finished missions
@@ -207,88 +187,6 @@ package body Statistics.UI is
       Convention => C,
       External_Name => "sortFinishedMissionsCommand";
       -- ****
-
---   function Sort_Missions_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      use Missions;
---
---      Column: constant Positive :=
---        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Finished_Missions: constant Statistics_Container.Vector :=
---        Get_Game_Stats_List(Name => "finishedMissions");
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      --## rule off IMPROPER_INITIALIZATION
---      Local_Missions: Sorting_Array(1 .. Positive(Finished_Missions.Length));
---      --## rule on IMPROPER_INITIALIZATION
---      function Get_Missions_Sort_Order return List_Sort_Orders is
---      begin
---         return Missions_Sort_Order;
---      end Get_Missions_Sort_Order;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      function "<"(Left, Right: Sorting_Data) return Boolean is
---      begin
---         if Get_Missions_Sort_Order = NAMEASC
---           and then Left.Name < Right.Name then
---            return True;
---         end if;
---         if Get_Missions_Sort_Order = NAMEDESC
---           and then Left.Name > Right.Name then
---            return True;
---         end if;
---         if Get_Missions_Sort_Order = AMOUNTASC
---           and then Left.Amount < Right.Amount then
---            return True;
---         end if;
---         if Get_Missions_Sort_Order = AMOUNTDESC
---           and then Left.Amount > Right.Amount then
---            return True;
---         end if;
---         return False;
---      end "<";
---      procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
---        (Index_Type => Positive, Element_Type => Sorting_Data,
---         Array_Type => Sorting_Array);
---   begin
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Set_Sorting_Order
---        (Sorting_Order => Missions_Sort_Order, Column => Column);
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      if Get_Missions_Sort_Order = NONE then
---         return TCL_OK;
---      end if;
---      Fill_Local_Missions_Loop :
---      for I in Finished_Missions.Iterate loop
---         Local_Missions(Statistics_Container.To_Index(Position => I)) :=
---           (Name =>
---              (case Missions_Types'Val
---                 (Integer'Value
---                    (To_String(Source => Finished_Missions(I).Index))) is
---                 when DELIVER =>
---                   To_Unbounded_String(Source => "Delivered items"),
---                 when PATROL =>
---                   To_Unbounded_String(Source => "Patroled areas"),
---                 when DESTROY =>
---                   To_Unbounded_String(Source => "Destroyed ships"),
---                 when EXPLORE =>
---                   To_Unbounded_String(Source => "Explored areas"),
---                 when PASSENGER =>
---                   To_Unbounded_String(Source => "Passengers transported")),
---            Amount => Finished_Missions(I).Amount,
---            Id => Statistics_Container.To_Index(Position => I));
---      end loop Fill_Local_Missions_Loop;
---      Sort_Missions(Container => Local_Missions);
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      Missions_Indexes.Clear;
---      Fill_Missions_Indexes_Loop :
---      for Mission of Local_Missions loop
---         Missions_Indexes.Append(New_Item => Mission.Id);
---      end loop Fill_Missions_Indexes_Loop;
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      Show_Statistics(Refresh => True);
---      return TCL_OK;
---   end Sort_Missions_Command;
 
    --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUI/SUI.Goals_Sort_Order
