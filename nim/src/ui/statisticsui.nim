@@ -511,7 +511,7 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
 var destroyedSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let column = try:
         ($argv[1]).parseInt
       except:
