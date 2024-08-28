@@ -512,6 +512,18 @@ var destroyedSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Sort the list of destroyed enemy ships
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortDestroyedShips x
+  ## X is the number of column where the player clicked the mouse button
   let column = try:
         ($argv[1]).parseInt
       except:
