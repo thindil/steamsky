@@ -32,6 +32,7 @@ package body Statistics.UI is
 --   Destroyed_Indexes: Positive_Container.Vector;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* SUI/SUI.Killed_Indexes
    -- FUNCTION
    -- Indexes of the killed mobs
@@ -95,6 +96,7 @@ package body Statistics.UI is
    end record;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****it* SUI/SUI.Sorting_Array
    -- FUNCTION
    -- Array used to sort various lists
@@ -135,6 +137,7 @@ package body Statistics.UI is
          Sorting_Order := NONE;
       end if;
    end Set_Sorting_Order;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUI/SUI.Sort_Crafting_Command
    -- FUNCTION
@@ -305,6 +308,7 @@ package body Statistics.UI is
 --      return TCL_OK;
 --   end Sort_Destroyed_Command;
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* SUI/SUI.Killed_Sort_Order
    -- FUNCTION
    -- The current sorting order for the list of killed enemies
@@ -313,6 +317,7 @@ package body Statistics.UI is
    -- SOURCE
    Killed_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****o* SUI/SUI.Sort_Killed_Command
    -- FUNCTION
@@ -342,9 +347,11 @@ package body Statistics.UI is
         Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Killed_Mobs: constant Statistics_Container.Vector :=
         Get_Game_Stats_List(Name => "killedMobs");
+      --## rule off DIRECTLY_ACCESSED_GLOBALS
       --## rule off IMPROPER_INITIALIZATION
       Local_Killed: Sorting_Array(1 .. Positive(Killed_Mobs.Length));
       --## rule on IMPROPER_INITIALIZATION
+      --## rule on DIRECTLY_ACCESSED_GLOBALS
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Killed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
