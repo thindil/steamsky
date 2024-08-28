@@ -573,6 +573,18 @@ var killedSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Sort the list of killed enemies
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortKilledEnemies x
+  ## X is the number of column where the player clicked the mouse button
   let column = try:
         ($argv[1]).parseInt
       except:
