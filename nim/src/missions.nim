@@ -118,20 +118,20 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
       skyBases[baseIndex].population == 0:
     return
   var missionsAmount: Natural = case skyBases[baseIndex].population
-    of 1 .. 149:
+    of 1..149:
       getRandom(min = 1, max = 5)
-    of 150 .. 299:
+    of 150..299:
       getRandom(min = 1, max = 10)
     else:
       getRandom(min = 1, max = 15)
   missionsAmount = case skyBases[baseIndex].reputation.level
-    of 1 .. 25:
+    of 1..25:
       missionsAmount + 1
-    of 26 .. 50:
+    of 26..50:
       missionsAmount + 3
-    of 51 .. 75:
+    of 51..75:
       missionsAmount + 5
-    of 76 .. 100:
+    of 76..100:
       missionsAmount + 10
     else:
       missionsAmount
@@ -149,8 +149,8 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
   normalizeCoord(coord = maxY, isXAxis = false)
   var basesInRange: seq[Positive] = @[]
   for index, base in skyBases:
-    if index != baseIndex and skyBases[index].skyX in minX .. maxX and skyBases[
-        index].skyY in minY .. maxY and skyBases[index].population > 0:
+    if index != baseIndex and skyBases[index].skyX in minX..maxX and skyBases[
+        index].skyY in minY..maxY and skyBases[index].population > 0:
       basesInRange.add(y = index)
   while missionsAmount > basesInRange.len:
     let tmpBaseIndex: Positive = getRandom(min = 1, max = 1024)
@@ -164,7 +164,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
     generateEnemies(enemies = enemies)
   var missionX, missionY: int = 1
   const qualitiesArray: array[10, int] = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
-  for i in 1 .. missionsAmount:
+  for i in 1..missionsAmount:
     var mission: MissionData = MissionData(time: 1, reward: 1, startBase: 1)
     let mType: MissionsTypes = getRandom(min = MissionsTypes.low.int,
         max = MissionsTypes.high.int).MissionsTypes
@@ -188,7 +188,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
     of patrol:
       mission = MissionData(mtype: patrol, time: 1, targetX: 0, targetY: 0,
           reward: 1, startBase: 1, finished: false, multiplier: 1.0, target: 1)
-      for j in 1 .. 10:
+      for j in 1..10:
         missionX = getRandom(min = minX, max = maxX)
         missionY = getRandom(min = minY, max = maxY)
         if skyMap[missionX][missionY].visited and skyMap[missionX][
@@ -200,7 +200,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
     of explore:
       mission = MissionData(mtype: explore, time: 1, targetX: 0, targetY: 0,
           reward: 1, startBase: 1, finished: false, multiplier: 1.0, target: 1)
-      for j in 1 .. 10:
+      for j in 1..10:
         missionX = getRandom(min = minX, max = maxX)
         missionY = getRandom(min = minY, max = maxY)
         if not skyMap[missionX][missionY].visited and skyMap[missionX][
