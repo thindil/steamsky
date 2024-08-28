@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash when dropping items in empty bases
-- Showing the last combat screen when restaring the game
+- Showing the last combat screen when restarting the game
 
 ## [10.1] - 2024-07-28
 
