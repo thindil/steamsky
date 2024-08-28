@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated modding guide
 
+### Fixed
+- Typo in changelog
+
 ## [10.2] - 2024-08-25
 
 ### Added
