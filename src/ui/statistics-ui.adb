@@ -13,23 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Containers.Generic_Array_Sort;
 with Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
--- with Game; use Game;
 with Utils.UI;
 
 package body Statistics.UI is
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****iv* SUI/SUI.Killed_Indexes
-   -- FUNCTION
-   -- Indexes of the killed mobs
-   -- SOURCE
---   Killed_Indexes: Positive_Container.Vector;
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
 
    procedure Show_Statistics(Refresh: Boolean := False) is
       procedure Show_Ada_Statistics(Refr: Integer) with
@@ -39,95 +28,6 @@ package body Statistics.UI is
    begin
       Show_Ada_Statistics(Refr => (if Refresh then 1 else 0));
    end Show_Statistics;
-
-   -- ****it* SUI/SUI.Lists_Sort_Orders
-   -- FUNCTION
-   -- Sorting orders for the various lists
-   -- OPTIONS
-   -- NAMEASC    - Sort list by name ascending
-   -- NAMEDESC   - Sort list by name descending
-   -- AMOUNTASC  - Sort list by amount ascending
-   -- AMOUNTDESC - Sort list by amount descending
-   -- NONE       - No sorting list (default)
-   -- HISTORY
-   -- 6.5 - Added
-   -- 6.6 - Changed to List_Sort_Orders
-   -- SOURCE
---   type List_Sort_Orders is
---     (NAMEASC, NAMEDESC, AMOUNTASC, AMOUNTDESC, NONE) with
---      Default_Value => NONE;
-      -- ****
-
-      -- ****id* SUI/SUI.Default_List_Sort_Order
-      -- FUNCTION
-      -- Default sorting order for the various lists
-      -- HISTORY
-      -- 6.5 - Added
-      -- 6.6 - Changed to Default_List_Sort_Order
-      -- SOURCE
---   Default_List_Sort_Order: constant List_Sort_Orders := NONE;
-   -- ****
-
-   --## rule off TYPE_INITIAL_VALUES
-   -- ****is* SUI/SUI.Sorting_Data
-   -- FUNCTION
-   -- Data structure used to sort various lists
-   -- PARAMETERS
-   -- Name   - The name of the item (mission, goal, crafting order, etc)
-   -- Amount - The amount of the item (mission, goal, crafting order, etc)
-   -- Id     - The index of the item on the list
-   -- HISTORY
-   -- 6.6 - Added
-   -- SOURCE
---   type Sorting_Data is record
---      Name: Unbounded_String;
---      Amount: Positive;
---      Id: Positive;
---   end record;
-   -- ****
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****it* SUI/SUI.Sorting_Array
-   -- FUNCTION
-   -- Array used to sort various lists
-   -- SOURCE
---   type Sorting_Array is array(Positive range <>) of Sorting_Data;
-   -- ****
-   --## rule on TYPE_INITIAL_VALUES
-
-   -- ****if* SUI/SUI.Set_Sorting_Order
-   -- FUNCTION
-   -- Set sorting order for the selected list
-   -- PARAMETERS
-   -- Sorting_Order - The sorting order to set
-   -- Column        - The column in ttk_tree_view whith was clicked
-   -- OUTPUT
-   -- Parameter Sorting_Order
-   -- HISTORY
-   -- 6.6 - Added
-   -- SOURCE
---   procedure Set_Sorting_Order
---     (Sorting_Order: in out List_Sort_Orders; Column: Positive) is
---     -- ****
---      New_Order: Integer;
---      procedure Set_Ada_Sorting_Order(S_Order: in out Integer; Col: Positive) with
---         Import => True,
---         Convention => C,
---         External_Name => "setAdaSortingOrder";
---   begin
---      if Sorting_Order = NONE then
---         New_Order := 4;
---      else
---         New_Order := List_Sort_Orders'Pos(Sorting_Order) + 1;
---      end if;
---      Set_Ada_Sorting_Order(S_Order => New_Order, Col => Column);
---      if New_Order > 0 then
---         Sorting_Order := List_Sort_Orders'Val(New_Order - 1);
---      else
---         Sorting_Order := NONE;
---      end if;
---   end Set_Sorting_Order;
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* SUI/SUI.Sort_Crafting_Command
    -- FUNCTION
@@ -217,17 +117,6 @@ package body Statistics.UI is
       External_Name => "sortDestroyedCommand";
       -- ****
 
-   --## rule off DIRECTLY_ACCESSED_GLOBALS
-   -- ****iv* SUI/SUI.Killed_Sort_Order
-   -- FUNCTION
-   -- The current sorting order for the list of killed enemies
-   -- HISTORY
-   -- 6.6 - Added
-   -- SOURCE
---   Killed_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
-   -- ****
-   --## rule on DIRECTLY_ACCESSED_GLOBALS
-
    -- ****o* SUI/SUI.Sort_Killed_Command
    -- FUNCTION
    -- Sort the list of killed enemies
@@ -249,61 +138,6 @@ package body Statistics.UI is
       Convention => C,
       External_Name => "sortDestroyedCommand";
       -- ****
-
---   function Sort_Killed_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc);
---      Column: constant Positive :=
---        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Killed_Mobs: constant Statistics_Container.Vector :=
---        Get_Game_Stats_List(Name => "killedMobs");
---      --## rule off DIRECTLY_ACCESSED_GLOBALS
---      --## rule off IMPROPER_INITIALIZATION
---      Local_Killed: Sorting_Array(1 .. Positive(Killed_Mobs.Length));
---      --## rule on IMPROPER_INITIALIZATION
---      --## rule on DIRECTLY_ACCESSED_GLOBALS
---      function "<"(Left, Right: Sorting_Data) return Boolean is
---      begin
---         if Killed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
---            return True;
---         end if;
---         if Killed_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
---            return True;
---         end if;
---         if Killed_Sort_Order = AMOUNTASC
---           and then Left.Amount < Right.Amount then
---            return True;
---         end if;
---         if Killed_Sort_Order = AMOUNTDESC
---           and then Left.Amount > Right.Amount then
---            return True;
---         end if;
---         return False;
---      end "<";
---      procedure Sort_Killed is new Ada.Containers.Generic_Array_Sort
---        (Index_Type => Positive, Element_Type => Sorting_Data,
---         Array_Type => Sorting_Array);
---   begin
---      Set_Sorting_Order(Sorting_Order => Killed_Sort_Order, Column => Column);
---      if Killed_Sort_Order = NONE then
---         return TCL_OK;
---      end if;
---      Fill_Local_Killed_Loop :
---      for I in Killed_Mobs.Iterate loop
---         Local_Killed(Statistics_Container.To_Index(Position => I)) :=
---           (Name => Killed_Mobs(I).Index, Amount => Killed_Mobs(I).Amount,
---            Id => Statistics_Container.To_Index(Position => I));
---      end loop Fill_Local_Killed_Loop;
---      Sort_Killed(Container => Local_Killed);
---      Killed_Indexes.Clear;
---      Fill_Killed_Indexes_Loop :
---      for Mob of Local_Killed loop
---         Killed_Indexes.Append(New_Item => Mob.Id);
---      end loop Fill_Killed_Indexes_Loop;
---      Show_Statistics(Refresh => True);
---      return TCL_OK;
---   end Sort_Killed_Command;
 
    procedure Add_Commands is
       use Utils.UI;
