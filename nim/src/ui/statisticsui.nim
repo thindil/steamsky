@@ -539,7 +539,7 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
             amount: destroyed.amount, id: index))
         break
   proc sortDestroyed(x, y: SortingData): int =
-    case goalsSortOrder
+    case destroyedSortOrder
     of nameAsc:
       if x.name < y.name:
         return 1
@@ -569,6 +569,51 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
   showStatistics(refresh = true)
   return tclOk
 
+var killedSortOrder: ListSortOrders = defaultListSortOrder
+
+proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the column number.")
+  setSortingOrder(sortingOrder = killedSortOrder, column = column)
+  if killedSortOrder == none:
+    return tclOk
+  var localKilled: SortingList = @[]
+  for index, killed in gameStats.killedMobs:
+    localKilled.add(y = SortingData(name: killed.index, amount: killed.amount, id: index))
+  proc sortKilled(x, y: SortingData): int =
+    case killedSortOrder
+    of nameAsc:
+      if x.name < y.name:
+        return 1
+      else:
+        return -1
+    of nameDesc:
+      if x.name > y.name:
+        return 1
+      else:
+        return -1
+    of amountAsc:
+      if x.amount < y.amount:
+        return 1
+      else:
+        return -1
+    of amountDesc:
+      if x.amount > y.amount:
+        return 1
+      else:
+        return -1
+    of none:
+      return -1
+  localKilled.sort(cmp = sortKilled)
+  killedIndexes = @[]
+  for mob in localKilled:
+    killedIndexes.add(y = mob.id)
+  showStatistics(refresh = true)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Adds Tcl commands related to the list of available missions
   try:
@@ -577,6 +622,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #    addCommand("SortFinishedMissions", sortFinishedMissionsCommand)
 #    addCommand("SortFinishedGoals", sortFinishedGoalsCommand)
 #    addCommand("SortDestroyedShips", sortDestroyedCommand)
+#    addCommand("SortKilledMobs", sortKilledCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
