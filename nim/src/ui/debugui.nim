@@ -15,8 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/os
+import std/[os, strutils, tables]
 import ../[game, tk]
+
+proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.ship"
+    moduleCombo = frameName & ".module"
+    moduleIndex = tclEval2(script = moduleCombo & " current").parseInt
+    protoCombo = frameName & ".proto"
+  tclEval(script = protoCombo & " set {" & modulesList[playerShip.modules[
+      moduleIndex].protoIndex].name & "}")
+  var spinBox = frameName & ".weight"
+  tclEval(script = spinBox & " set " & $playerShip.modules[moduleIndex].weight)
+  spinBox = frameName & ".dur"
+  tclEval(script = spinBox & " set " & $playerShip.modules[
+      moduleIndex].durability)
+  spinBox = frameName & ".maxdur"
+  tclEval(script = spinBox & " set " & $playerShip.modules[
+      moduleIndex].maxDurability)
+  spinBox = frameName & ".upgrade"
+  tclEval(script = spinBox & " set " & $playerShip.modules[
+      moduleIndex].upgradeProgress)
+  return tclOk
 
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
@@ -36,3 +58,4 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
+#    addCommand("RefreshModule", refreshModuleCommand)
