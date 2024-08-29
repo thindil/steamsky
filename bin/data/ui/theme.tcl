@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2023 Bartek thindil Jasicki
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -225,13 +225,16 @@ namespace eval ttk::theme::steamsky {
 
       # Labels setting
       # Labels with red text
-      ttk::style configure Headerred.TLabel -foreground $colors(-red)
+      ttk::style configure Headerred.TLabel -foreground $colors(-red) \
+         -compound left
       # Labels with green text
-      ttk::style configure Headergreen.TLabel -foreground $colors(-green)
+      ttk::style configure Headergreen.TLabel -foreground $colors(-green) \
+         -compound left
       # Labels with gray text
       ttk::style configure Gray.TLabel -foreground $colors(-gray)
       # Labels with golden text
-      ttk::style configure Golden.TLabel -foreground $colors(-goldenyellow)
+      ttk::style configure Golden.TLabel -foreground $colors(-goldenyellow) \
+         -compound left
       # Dialogs header label
       ttk::style configure Header.TLabel -background $colors(-darkorange) \
          -anchor center -justify center -relief solid -padding {5 0 5 0} \
