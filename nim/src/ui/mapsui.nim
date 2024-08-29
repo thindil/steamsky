@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
-import ../[basestypes, config, game, maps, missions, statistics, stories, tk, types]
+import ../[basestypes, config, game, log, maps, missions, statistics, stories, tk, types]
 import coreui, dialogs, themes, updateheader, utilsui2
 
 var
@@ -553,8 +553,8 @@ proc setKeys*() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = "bind . <" & keyName & "> {ToggleFullScreen}")
 
 import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
-    craftsui, gameoptions, helpui, knowledge, mapsuicommands, messagesui,
-    missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
+    craftsui, debugui, gameoptions, helpui, knowledge, mapsuicommands,
+    messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
 
 proc createGameUi*() =
   let
@@ -736,6 +736,8 @@ proc createGameUi*() =
     tclEval(script = "bind " & mapView & " <Button-4> {ZoomMap raise}")
     tclEval(script = "bind " & mapView & " <Button-5> {ZoomMap lower}")
     setKeys()
+    if debugMode == menu:
+      showDebugUi()
 
 # Temporary code for interfacing with Ada
 
