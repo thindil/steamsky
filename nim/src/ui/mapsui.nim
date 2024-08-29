@@ -726,6 +726,16 @@ proc createGameUi*() =
     knowledge.addCommands()
     missionsui.addCommands()
     statisticsui.addCommands()
+    let messagesFrame = paned & ".controls.messages"
+    tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeLastMessages}")
+    tclEval(script = "bind " & mapView & " <Configure> {DrawMap}")
+    tclEval(script = "bind " & mapView & " <Motion> {UpdateMapInfo %x %y}")
+    tclEval(script = "bind " & mapView & "<Button-" & (
+        if gameSettings.rightButton: "3" else: "1") & "> {ShowDestinationMenu %X %Y}")
+    tclEval(script = "bind " & mapView & " <MouseWheel> {if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}")
+    tclEval(script = "bind " & mapView & " <Button-4> {ZoomMap raise}")
+    tclEval(script = "bind " & mapView & " <Button-5> {ZoomMap lower}")
+    setKeys()
 
 # Temporary code for interfacing with Ada
 
