@@ -64,22 +64,25 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = "tooltip::tooltip " & label &
         " \"Low level of drinks on ship. Only " & $itemAmount & " left.\"")
     tclEval(script = "grid " & label)
-  label = gameHeader & ".nofood"
-  tclEval(script = "grid remove " & label)
+  label = gameHeader & ".food"
   itemAmount = try:
       getItemsAmount(iType = "Food")
     except KeyError:
       showError("Can't get items amount (3).")
       return
   if itemAmount == 0:
-    tclEval(script = label & " configure -image nofoodicon")
+    tclEval(script = label & " configure -image nofoodicon -text {" &
+        $itemAmount & "} -style Headerred.TLabel")
     tclEval(script = "tooltip::tooltip " & label & " \"You don't have any food in ship but your crew needs them to live.\"")
-    tclEval(script = "grid " & label)
   elif itemAmount <= gameSettings.lowFood:
-    tclEval(script = label & " configure -image lowfoodicon")
+    tclEval(script = label & " configure -image lowfoodicon -text {" &
+        $itemAmount & "} -style Golden.TLabel")
     tclEval(script = "tooltip::tooltip " & label &
         " \"Low level of food on ship. Only " & $itemAmount & " left.\"")
-    tclEval(script = "grid " & label)
+  else:
+    tclEval(script = label & " configure -image foodicon -text {" &
+        $itemAmount & "} -style Headergreen.TLabel")
+    tclEval(script = "tooltip::tooltip " & label & " \"The amount of food in the ship.\"")
   var havePilot, haveEngineer, haveTrader, haveUpgrader, haveCleaner,
     haveRepairman = false
   for member in playerShip.crew:

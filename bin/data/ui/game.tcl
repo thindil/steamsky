@@ -27,7 +27,7 @@ grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .gameframe.header.time {The game time}
 grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
 grid [ttk::label .gameframe.header.nofuel] -row 0 -column 3 -padx 3
-grid [ttk::label .gameframe.header.nofood] -row 0 -column 4 -padx 3
+grid [ttk::label .gameframe.header.food] -row 0 -column 4 -padx 3
 grid [ttk::label .gameframe.header.nodrink] -row 0 -column 5 -padx 3
 grid [ttk::label .gameframe.header.overloaded] -row 0 -column 6 -padx 3
 grid [ttk::label .gameframe.header.pilot] -row 0 -column 7 -padx 3
