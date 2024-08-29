@@ -48,7 +48,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
   if baseIndex == 0:
     case roll
     # Engine damaged
-    of 1 .. 5:
+    of 1..5:
       let engineerIndex: int = findMember(order = engineer)
       if engineerIndex > -1 and playerShip.speed != fullStop:
         var roll2: Positive = getRandom(min = 1, max = 100)
@@ -76,7 +76,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
         gainExp(amount = 1, skillNumber = engineeringSkill,
             crewIndex = engineerIndex)
     # Bad weather
-    of 6 .. 20:
+    of 6..20:
       let pilotIndex: int = findMember(order = pilot)
       if pilotIndex > 0:
         addMessage(message = "Sudden bad weather causes your travel to take longer.",
@@ -90,7 +90,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
             itemType = fuelType), amount = countFuelNeeded())
         updateGame(minutes = timePassed)
     # Friendly trader
-    of 21 .. 23:
+    of 21..23:
       eventsList.add(y = EventData(eType: trader, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: traders[getRandom(min = traders.low, max = traders.high)]))
@@ -100,7 +100,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       gainPerception()
       updateOrders(ship = playerShip)
     # Friendly ship
-    of 24 .. 30:
+    of 24..30:
       eventsList.add(y = EventData(eType: friendlyShip, skyX: playerShip.skyX,
           skyY: playerShip.skyY, time: getRandom(min = 30, max = 45),
           shipIndex: friendlyShips[getRandom(min = friendlyShips.low,
@@ -159,14 +159,14 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
             cargoIndex = roll2)
     # Events outside a base
     else:
-      if roll in 21 .. 30 and skyBases[baseIndex].reputation.level == -100:
+      if roll in 21..30 and skyBases[baseIndex].reputation.level == -100:
         roll = 31
       if "diseaseimmune" in factionsList[skyBases[baseIndex].owner].flags and
           roll == 21:
         roll = 20
       case roll
       # Base is attacked
-      of 1 .. 20:
+      of 1..20:
         var enemies: seq[Positive] = @[]
         generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
         eventsList.add(y = EventData(eType: attackOnBase, skyX: playerShip.skyX,
@@ -182,7 +182,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
             skyY: playerShip.skyY, time: getRandom(min = 10_000, max = 12_000), data: 1))
         addMessage(message = "You can't dock to the base now, it is closed due to a disease.",
             mType = otherMessage)
-      of 22 .. 30:
+      of 22..30:
         var newItemIndex: Natural = 0
         while true:
           var itemIndex: int = getRandom(min = 1, max = itemsList.len)
@@ -202,7 +202,7 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
       # Full docks or enemy patrol
       else:
         # Enemy patrol (only at an enemy base)
-        if roll in 20 .. 40 and not isFriendly(sourceFaction = playerShip.crew[
+        if roll in 20..40 and not isFriendly(sourceFaction = playerShip.crew[
             0].faction, targetFaction = skyBases[baseIndex].owner):
           var enemies: seq[Positive] = @[]
           generateEnemies(enemies = enemies, owner = skyBases[baseIndex].owner,
