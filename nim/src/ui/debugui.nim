@@ -18,5 +18,21 @@
 import std/os
 import ../[game, tk]
 
+proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let frameName = ".debugdialog.main"
+  var spinBox = frameName & ".ship.x"
+  tclEval(script = spinBox & " set " & $playerShip.skyX)
+  spinBox = frameName & ".ship.y"
+  tclEval(script = spinBox & " set " & $playerShip.skyY)
+  var valuesList = ""
+  for module in playerShip.modules:
+    valuesList.add(y = " {" & module.name & "}")
+  var comboBox = frameName & ".ship.module"
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  tclEval(script = comboBox & " current 0")
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
+#    addCommand("Refresh", refreshCommand)
