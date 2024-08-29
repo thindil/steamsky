@@ -72,9 +72,4 @@ package Statistics is
    function Get_Game_Points return Natural;
       -- ****
 
--- Temporary code to interact with Nim
-
-   function Get_Game_Stats_List
-     (Name: String) return Statistics_Container.Vector;
-
 end Statistics;
