@@ -19,14 +19,20 @@ import std/[os, strutils, tables]
 import ../[game, tk]
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.ship"
     moduleCombo = frameName & ".module"
-    moduleIndex = tclEval2(script = moduleCombo & " current").parseInt
+    moduleIndex = try:
+        tclEval2(script = moduleCombo & " current").parseInt
+      except:
+        return showError(message = "Can't get the module's index.")
     protoCombo = frameName & ".proto"
-  tclEval(script = protoCombo & " set {" & modulesList[playerShip.modules[
-      moduleIndex].protoIndex].name & "}")
+  try:
+    tclEval(script = protoCombo & " set {" & modulesList[playerShip.modules[
+        moduleIndex].protoIndex].name & "}")
+  except:
+    return showError(message = "Can't get the proto module.")
   var spinBox = frameName & ".weight"
   tclEval(script = spinBox & " set " & $playerShip.modules[moduleIndex].weight)
   spinBox = frameName & ".dur"
