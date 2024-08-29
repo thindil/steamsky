@@ -70,6 +70,14 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   var comboBox = frameName & ".ship.module"
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
   tclEval(script = comboBox & " current 0")
+  discard refreshModuleCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+  comboBox = frameName & ".crew.member"
+  valuesList = ""
+  for member in playerShip.crew:
+    valuesList.add(y = " {" & member.name & "}")
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  tclEval(script = comboBox & " current 0")
   return tclOk
 
 proc showDebugUi*() =
