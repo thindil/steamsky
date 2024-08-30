@@ -140,11 +140,14 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.cargo"
     cargoCombo = frameName & ".update"
-    itemIndex = tclEval2(script = cargoCombo & " current").parseInt
+    itemIndex = try:
+        tclEval2(script = cargoCombo & " current").parseInt
+      except:
+        return showError(message = "Can't get the item index.")
     amountBox = frameName & ".updateamount"
   tclEval(script = amountBox & " set " & $playerShip.cargo[itemIndex].amount)
   return tclOk
