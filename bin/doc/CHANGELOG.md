@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Information about amount of food in the player's ship to the game's header
+
 ### Changed
 - Updated modding guide
 
