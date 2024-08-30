@@ -86,7 +86,9 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
         index].name & "}")
     tclEval(script = "grid " & label)
     spinBox = memberFrame & ".value" & $(index + 1)
-    tclEval(script = "ttk::spinbox " & spinBox & " -from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P " & frameName & ".change} -width 5")
+    tclEval(script = "ttk::spinbox " & spinBox &
+        " -from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P " &
+        frameName & ".change} -width 5")
     tclEval(script = spinBox & " set " & $attribute.level)
     tclEval(script = "grid " & spinBox & " -column 1 -row " & $(index + 1))
   memberFrame = frameName & ".skills"
@@ -95,13 +97,23 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   var skillsIndexes: seq[Natural]
   for index, skill in member.skills:
     let label = memberFrame & ".label" & $(index + 1)
-    tclEval(script = "ttk::label " & label & " -text {" & skillsList[skill.index].name & "}")
+    tclEval(script = "ttk::label " & label & " -text {" & skillsList[
+        skill.index].name & "}")
     tclEval(script = "grid " & label)
     spinBox = memberFrame & ".value" & $(index + 1)
-    tclEval(script = "ttk::spinbox " & spinBox & " -from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P " & frameName & ".change} -width 5")
+    tclEval(script = "ttk::spinbox " & spinBox &
+        " -from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P " &
+        frameName & ".change} -width 5")
     tclEval(script = spinBox & " set " & $skill.level)
     tclEval(script = "grid " & spinBox & " -column 1 -row " & $(index + 1))
     skillsIndexes.add(y = skill.index)
+  var skillsListValues = ""
+  for index, skill in skillsList:
+    if index notin skillsIndexes:
+      skillsListValues.add(y = " " & skill.name)
+  comboBox = frameName & ".addskill.skills"
+  tclEval(script = comboBox & " configure -values [list" & $skillsListValues & "]")
+  tclEval(script = comboBox & " current 0")
   return tclOk
 
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
