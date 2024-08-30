@@ -139,6 +139,16 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = comboBox & " current 0")
   return tclOk
 
+proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.cargo"
+    cargoCombo = frameName & ".update"
+    itemIndex = tclEval2(script = cargoCombo & " current").parseInt
+    amountBox = frameName & ".updateamount"
+  tclEval(script = amountBox & " set " & $playerShip.cargo[itemIndex].amount)
+  return tclOk
+
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   let frameName = ".debugdialog.main"
@@ -176,3 +186,4 @@ proc showDebugUi*() =
 #    addCommand("Refresh", refreshCommand)
 #    addCommand("RefreshModule", refreshModuleCommand)
 #    addCommand("RefreshMember", refreshMemberCommand)
+#    addCommand("RefreshCargo", refreshCargoCommand)
