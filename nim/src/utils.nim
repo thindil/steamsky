@@ -55,10 +55,10 @@ proc getRandom(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
   require:
     min <= max
   ensure:
-    result in min .. max
+    result in min..max
   body:
     randomize()
-    return rand(x = min .. max)
+    return rand(x = min..max)
 
 proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
     tags: [], contractual.} =
@@ -71,10 +71,10 @@ proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
   require:
     min <= max
   ensure:
-    result in min .. max
+    result in min..max
   body:
     randomize()
-    return rand(x = min .. max)
+    return rand(x = min..max)
 
 proc daysDifference*(dateToCompare: DateRecord;
     currentDate: DateRecord = gameDate): cint {.gcsafe, sideEffect, raises: [],
