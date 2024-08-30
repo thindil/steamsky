@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[game, tk]
+import ../[game, items, tk]
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -158,6 +158,15 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   valuesList = ""
   for member in playerShip.crew:
     valuesList.add(y = " {" & member.name & "}")
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  tclEval(script = comboBox & " current 0")
+  discard refreshMemberCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+  comboBox = frameName & ".cargo.update"
+  valuesList = ""
+  for item in playerShip.cargo:
+    valuesList.add(y = " {" & getItemName(item = item, damageInfo = false,
+        toLower = false) & "}")
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
   tclEval(script = comboBox & " current 0")
   return tclOk
