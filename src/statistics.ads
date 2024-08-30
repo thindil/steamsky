@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 -- ****h* Statistics/Statistics
@@ -25,6 +24,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Statistics is
 -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Statistics/Statistics.Statistics_Data
    -- FUNCTION
    -- Data for finished goals, destroyed ships and killed mobs
@@ -37,23 +37,7 @@ package Statistics is
       Amount: Positive := 1;
    end record;
    -- ****
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****d* Statistics/Statistics.Empty_Statistics_Data
-   -- FUNCTION
-   -- Empty statistic data
-   -- SOURCE
-   Empty_Statistics_Data: constant Statistics_Data := (others => <>);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
-
-   -- ****t* Statistics/Statistics.Statistics_Container
-   -- FUNCTION
-   -- Used to store game statistics data
-   -- SOURCE
-   package Statistics_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Statistics_Data);
-   -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****f* Statistics/Statistics.Clear_Game_Stats
    -- FUNCTION
