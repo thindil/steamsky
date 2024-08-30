@@ -58,11 +58,14 @@ proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let frameName = ".debugdialog.main.crew"
   var comboBox = frameName & ".member"
   let
-    memberIndex = tclEval2(script = comboBox & " current").parseInt
+    memberIndex = try:
+        tclEval2(script = comboBox & " current").parseInt
+      except:
+        return showError(message = "Can't get the member index.")
     member = playerShip.crew[memberIndex]
   var spinBox = frameName & ".stats2.health"
   tclEval(script = spinBox & " set " & $member.health)
@@ -78,7 +81,10 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = spinBox & " set " & $member.loyalty)
   var
     memberFrame = frameName & ".stats"
-    rows = tclEval2(script = "grid size " & memberFrame).split[1].parseInt
+    rows = try:
+        tclEval2(script = "grid size " & memberFrame).split[1].parseInt
+      except:
+        return showError(message = "Can't get the amount of rows.")
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = memberFrame)
   for index, attribute in member.attributes:
     let label = memberFrame & ".label" & $(index + 1)
@@ -92,13 +98,19 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = spinBox & " set " & $attribute.level)
     tclEval(script = "grid " & spinBox & " -column 1 -row " & $(index + 1))
   memberFrame = frameName & ".skills"
-  rows = tclEval2(script = "grid size " & memberFrame).split[1].parseInt
+  rows = try:
+      tclEval2(script = "grid size " & memberFrame).split[1].parseInt
+    except:
+      return showError(message = "Can't get the amount of rows (2).")
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = memberFrame)
   var skillsIndexes: seq[Natural]
   for index, skill in member.skills:
     let label = memberFrame & ".label" & $(index + 1)
-    tclEval(script = "ttk::label " & label & " -text {" & skillsList[
-        skill.index].name & "}")
+    try:
+      tclEval(script = "ttk::label " & label & " -text {" & skillsList[
+          skill.index].name & "}")
+    except:
+      return showError(message = "Can't add the skill label.")
     tclEval(script = "grid " & label)
     spinBox = memberFrame & ".value" & $(index + 1)
     tclEval(script = "ttk::spinbox " & spinBox &
