@@ -57,6 +57,36 @@ proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       moduleIndex].upgradeProgress)
   return tclOk
 
+proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let frameName = ".debugdialog.main.crew"
+  var comboBox = frameName & ".member"
+  let
+    memberIndex = tclEval2(script = comboBox & " current").parseInt
+    member = playerShip.crew[memberIndex]
+  var spinBox = frameName & ".stats2.health"
+  tclEval(script = spinBox & " set " & $member.health)
+  spinBox = frameName & ".stats2.thirst"
+  tclEval(script = spinBox & " set " & $member.thirst)
+  spinBox = frameName & ".stats2.hunger"
+  tclEval(script = spinBox & " set " & $member.hunger)
+  spinBox = frameName & ".stats2.tired"
+  tclEval(script = spinBox & " set " & $member.tired)
+  spinBox = frameName & ".stats2.morale"
+  tclEval(script = spinBox & " set " & $member.morale[1])
+  spinBox = frameName & ".stats2.loyalty"
+  tclEval(script = spinBox & " set " & $member.loyalty)
+  var
+    memberFrame = frameName & ".stats"
+    rows = tclEval2(script = "grid size " & memberFrame).split[1].parseInt
+  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = memberFrame)
+  for index, _ in member.attributes:
+    let label = memberFrame & ".label"
+    tclEval(script = "ttk::label " & label & " -text {" & attributesList[
+        index].name & "}")
+    tclEval(script = "grid " & label)
+  return tclOk
+
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.exportc.} =
   let frameName = ".debugdialog.main"
@@ -84,3 +114,4 @@ proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
 #    addCommand("RefreshModule", refreshModuleCommand)
+#    addCommand("RefreshMember", refreshMemberCommand)
