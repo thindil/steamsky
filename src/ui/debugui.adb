@@ -110,31 +110,33 @@ package body DebugUI is
    function Refresh_Cargo_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "refreshCargoCommand";
       -- ****
 
-   function Refresh_Cargo_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      Frame_Name: constant String := ".debugdialog.main.cargo";
-      Cargo_Combo: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
-      Item_Index: Positive;
-      Amount_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
-   begin
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Item_Index := Natural'Value(Current(ComboBox => Cargo_Combo)) + 1;
-      Set
-        (SpinBox => Amount_Box,
-         Value =>
-           Positive'Image
-             (Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Item_Index)
-                .Amount));
-      return TCL_OK;
-   end Refresh_Cargo_Command;
+--   function Refresh_Cargo_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      Frame_Name: constant String := ".debugdialog.main.cargo";
+--      Cargo_Combo: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
+--      Item_Index: Positive;
+--      Amount_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
+--   begin
+--      Get_Ship_From_Nim(Ship => Player_Ship);
+--      Item_Index := Natural'Value(Current(ComboBox => Cargo_Combo)) + 1;
+--      Set
+--        (SpinBox => Amount_Box,
+--         Value =>
+--           Positive'Image
+--             (Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Item_Index)
+--                .Amount));
+--      return TCL_OK;
+--   end Refresh_Cargo_Command;
 
    -- ****o* DebugUI/DebugUI.Refresh_Events_Command
    -- FUNCTION
