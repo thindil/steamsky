@@ -164,7 +164,7 @@ proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.world.deleteevent"
     eventsButton = frameName & ".deleteevent"
@@ -177,32 +177,35 @@ proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & eventsBox)
   var valuesList = ""
   for index, event in eventsList:
-    case event.eType
-    of enemyShip:
-      valuesList.add(y = " {Enemy ship: " & protoShipsList[
-          event.shipIndex].name & "}")
-    of attackOnBase:
-      valuesList.add(y = " {Attack on base: " & protoShipsList[
-          event.shipIndex].name & "}")
-    of disease:
-      valuesList.add(y = " {Disease in base: " & skyBases[skyMap[event.skyX][
-          event.skyY].baseIndex].name & "}")
-    of doublePrice:
-      valuesList.add(y = " {Double price in base: " & skyBases[skyMap[
-          event.skyX][event.skyY].baseIndex].name & "}")
-    of fullDocks:
-      valuesList.add(y = " {Full docks in base: " & skyBases[skyMap[event.skyX][
-          event.skyY].baseIndex].name & "}")
-    of enemyPatrol:
-      valuesList.add(y = " {Enemy patrol: " & protoShipsList[
-          event.shipIndex].name & "}")
-    of trader:
-      valuesList.add(y = " {Trader: " & protoShipsList[event.shipIndex].name & "}")
-    of friendlyShip:
-      valuesList.add(y = " {Friendly ship: " & protoShipsList[
-          event.shipIndex].name & "}")
-    else:
-      discard
+    try:
+      case event.eType
+      of enemyShip:
+        valuesList.add(y = " {Enemy ship: " & protoShipsList[
+            event.shipIndex].name & "}")
+      of attackOnBase:
+        valuesList.add(y = " {Attack on base: " & protoShipsList[
+            event.shipIndex].name & "}")
+      of disease:
+        valuesList.add(y = " {Disease in base: " & skyBases[skyMap[event.skyX][
+            event.skyY].baseIndex].name & "}")
+      of doublePrice:
+        valuesList.add(y = " {Double price in base: " & skyBases[skyMap[
+            event.skyX][event.skyY].baseIndex].name & "}")
+      of fullDocks:
+        valuesList.add(y = " {Full docks in base: " & skyBases[skyMap[
+            event.skyX][event.skyY].baseIndex].name & "}")
+      of enemyPatrol:
+        valuesList.add(y = " {Enemy patrol: " & protoShipsList[
+            event.shipIndex].name & "}")
+      of trader:
+        valuesList.add(y = " {Trader: " & protoShipsList[event.shipIndex].name & "}")
+      of friendlyShip:
+        valuesList.add(y = " {Friendly ship: " & protoShipsList[
+            event.shipIndex].name & "}")
+      else:
+        discard
+    except:
+      return showError(message = "Can't add event to the list.")
   tclEval(script = eventsBox & " configure -values [list" & $valuesList & "]")
   tclEval(script = eventsBox & " current 0")
   return tclOk
