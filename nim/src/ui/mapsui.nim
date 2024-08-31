@@ -77,6 +77,12 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
     for index, name in moveButtonsNames:
       button = frameName & "." & name
       tclEval(script = "grid " & button)
+  button = frameName & ".box.orders"
+  if skyMap[playerShip.skyX][playerShip.skyY].eventIndex == -1 and skyMap[
+      playerShip.skyX][playerShip.skyY].baseIndex == 0:
+    tclEval(script = "grid remove " & button)
+  else:
+    tclEval(script = "grid " & button)
 
 proc finishStory*() {.raises: [], tags: [], exportc.} =
   ## Finish the current player's story. Give experience and ask about
