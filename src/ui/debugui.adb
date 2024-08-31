@@ -14,13 +14,12 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations;
--- with GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
@@ -33,8 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
--- with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Crew; use Crew;
@@ -48,7 +46,7 @@ with Maps.UI;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body DebugUI is
 
@@ -114,29 +112,6 @@ package body DebugUI is
       Import => True,
       External_Name => "refreshCargoCommand";
       -- ****
-
---   function Refresh_Cargo_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      Frame_Name: constant String := ".debugdialog.main.cargo";
---      Cargo_Combo: constant Ttk_ComboBox :=
---        Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
---      Item_Index: Positive;
---      Amount_Box: constant Ttk_SpinBox :=
---        Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
---   begin
---      Get_Ship_From_Nim(Ship => Player_Ship);
---      Item_Index := Natural'Value(Current(ComboBox => Cargo_Combo)) + 1;
---      Set
---        (SpinBox => Amount_Box,
---         Value =>
---           Positive'Image
---             (Inventory_Container.Element
---                (Container => Player_Ship.Cargo, Index => Item_Index)
---                .Amount));
---      return TCL_OK;
---   end Refresh_Cargo_Command;
 
    -- ****o* DebugUI/DebugUI.Refresh_Events_Command
    -- FUNCTION
@@ -677,6 +652,9 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
+
       Frame_Name: constant String := ".debugdialog.main.crew";
       Combo_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
@@ -1026,6 +1004,8 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+
       Frame_Name: constant String := ".debugdialog.main.world";
       Event_Combo: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
@@ -1190,6 +1170,7 @@ package body DebugUI is
    procedure Show_Debug_Ui is
       use GNAT.Directory_Operations;
       use Tcl.Ada;
+      use Utils.UI;
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.bases";
