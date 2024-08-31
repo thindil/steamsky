@@ -193,6 +193,8 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
         toLower = false) & "}")
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
   tclEval(script = comboBox & " current 0")
+  discard refreshCargoCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
   return tclOk
 
 proc showDebugUi*() =
