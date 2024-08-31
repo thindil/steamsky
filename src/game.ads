@@ -378,7 +378,7 @@ package Game is
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
-   Attributes_Amount: Natural := 0;
+   Attributes_Amount: Natural := 4;
    -- ****
 
    -- ****v* Game/Game.Talking_Skill
