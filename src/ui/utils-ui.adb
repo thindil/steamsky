@@ -23,6 +23,7 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -519,19 +520,6 @@ package body Utils.UI is
    begin
       Nim_Show_Screen(Screen_Name => New_String(Str => New_Screen_Name));
    end Show_Screen;
-
-   procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) is
-      procedure Delete_Widgts
-        (S_Index, E_Index: Integer; Parent: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "deleteAdaWidgets";
-   begin
-      Delete_Widgts
-        (S_Index => Start_Index, E_Index => End_Index,
-         Parent => New_String(Str => Widget_Image(Win => Frame)));
-   end Delete_Widgets;
 
    procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
       procedure Set_Ada_Fonts(N_Size, F_Type: Integer) with

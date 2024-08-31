@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Tcl.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Config; use Config;
 
 -- ****h* Utils/UUI
@@ -66,20 +65,6 @@ package Utils.UI is
    -- SOURCE
    procedure Show_Screen(New_Screen_Name: String) with
       Pre => New_Screen_Name'Length > 0;
-      -- ****
-
-      -- ****f* UUI/UUI.Delete_Widgets
-      -- FUNCTION
-      -- Remove widgets from the selected frame
-      -- PARAMETERS
-      -- Start_Index - The first row from which widgets will be removed
-      -- End_Index   - The last row in which widgets will be removed
-      -- Frame       - The fram from which widgets will be removed
-      -- HISTORY
-      -- 5.9 - Added
-      -- SOURCE
-   procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class);
       -- ****
 
    -- ****f* UUI/UUI.Set_Fonts
