@@ -372,14 +372,6 @@ package Game is
      To_Unbounded_String(Source => "data" & Dir_Separator);
    -- ****
 
-   -- ****v* Game/Game.Attributes_List
-   -- FUNCTION
-   -- Contains data for all characters attributes
-   -- SOURCE
-   Attributes_List: AttributesData_Container.Vector
-     (Capacity => Count_Type(Default_Attributes_Amount));
-   -- ****
-
    -- ****v* Game/Game.Attributes_Amount
    -- FUNCTION
    -- The amount of attributes in the game

@@ -143,38 +143,6 @@ package body Game is
             Convention => C,
             External_Name => "getAdaGameIntegers";
       begin
-         Item_Index := 0;
-         Fill_Attributes_Block :
-         declare
-            --## rule off TYPE_INITIAL_VALUES
-            type Attribute_Nim_Array is array(0 .. 1) of chars_ptr;
-            --## rule on TYPE_INITIAL_VALUES
-            Attribute_Array: Attribute_Nim_Array;
-            procedure Get_Ada_Attribute
-              (I_Index: Natural; Attribute: out Attribute_Nim_Array) with
-               Import => True,
-               Convention => C,
-               External_Name => "getAdaAttribute";
-         begin
-            Fill_Attributes_Loop :
-            loop
-               Get_Ada_Attribute
-                 (I_Index => Attributes_Amount, Attribute => Attribute_Array);
-               exit Fill_Attributes_Loop when Strlen
-                   (Item => Attribute_Array(0)) =
-                 0;
-               AttributesData_Container.Append
-                 (Container => Attributes_List,
-                  New_Item =>
-                    (Name =>
-                       Tiny_String.To_Bounded_String
-                         (Source => Value(Item => Attribute_Array(0))),
-                     Description =>
-                       Short_String.To_Bounded_String
-                         (Source => Value(Item => Attribute_Array(1)))));
-               Attributes_Amount := Attributes_Amount + 1;
-            end loop Fill_Attributes_Loop;
-         end Fill_Attributes_Block;
          Fill_Skills_Block :
          declare
             --## rule off TYPE_INITIAL_VALUES
