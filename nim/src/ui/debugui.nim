@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[game, items, tk]
+import ../[game, items, maps, tk]
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -161,6 +161,48 @@ proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't get the item index.")
     amountBox = frameName & ".updateamount"
   tclEval(script = amountBox & " set " & $playerShip.cargo[itemIndex].amount)
+  return tclOk
+
+proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.world.deleteevent"
+    eventsButton = frameName & ".deleteevent"
+    eventsBox = frameName & ".delete"
+  if eventsList.len == 0:
+    tclEval(script = "grid remove " & eventsButton)
+    tclEval(script = "grid remove " & eventsBox)
+    return tclOk
+  tclEval(script = "grid " & eventsButton)
+  tclEval(script = "grid " & eventsBox)
+  var valuesList = ""
+  for index, event in eventsList:
+    case event.eType
+    of enemyShip:
+      valuesList.add(y = " {Enemy ship: " & protoShipsList[
+          event.shipIndex].name & "}")
+    of attackOnBase:
+      valuesList.add(y = " {Attack on base: " & protoShipsList[
+          event.shipIndex].name & "}")
+    of disease:
+      valuesList.add(y = " {Disease in base: " & skyBases[skyMap[event.skyX][
+          event.skyY].baseIndex].name & "}")
+    of doublePrice:
+      valuesList.add(y = " {Double price in base: " & skyBases[skyMap[
+          event.skyX][event.skyY].baseIndex].name & "}")
+    of fullDocks:
+      valuesList.add(y = " {Full docks in base: " & skyBases[skyMap[event.skyX][
+          event.skyY].baseIndex].name & "}")
+    of enemyPatrol:
+      valuesList.add(y = " {Enemy patrol: " & protoShipsList[
+          event.shipIndex].name & "}")
+    of trader:
+      valuesList.add(y = " {Trader: " & protoShipsList[event.shipIndex].name & "}")
+    of friendlyShip:
+      valuesList.add(y = " {Friendly ship: " & protoShipsList[
+          event.shipIndex].name & "}")
+    else:
+      discard
   return tclOk
 
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
