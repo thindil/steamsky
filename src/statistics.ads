@@ -15,29 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-
 -- ****h* Statistics/Statistics
 -- FUNCTION
 -- Provides code for manipulate the game statistic
 -- SOURCE
 package Statistics is
 -- ****
-
-   --## rule off TYPE_INITIAL_VALUES
-   -- ****s* Statistics/Statistics.Statistics_Data
-   -- FUNCTION
-   -- Data for finished goals, destroyed ships and killed mobs
-   -- PARAMETERS
-   -- Index  - Index of goal or ship name or name of fraction of killed mobs
-   -- Amount - Amount of finished goals or ships or mobs of that type
-   -- SOURCE
-   type Statistics_Data is record
-      Index: Unbounded_String;
-      Amount: Positive := 1;
-   end record;
-   -- ****
-   --## rule on TYPE_INITIAL_VALUES
 
    -- ****f* Statistics/Statistics.Clear_Game_Stats
    -- FUNCTION
