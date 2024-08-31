@@ -258,7 +258,7 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) {.raises: [],
   if endIndex < startIndex:
     return
   let interp: PInterp = getInterp()
-  for i in startIndex .. endIndex:
+  for i in startIndex..endIndex:
     if tclEval(script = "grid slaves " & frame & " -row " & $i) == tclError:
       return
     let tclResult: string = $interp.tclGetResult()
