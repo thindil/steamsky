@@ -203,6 +203,8 @@ proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
           event.shipIndex].name & "}")
     else:
       discard
+  tclEval(script = eventsBox & " configure -values [list" & $valuesList & "]")
+  tclEval(script = eventsBox & " current 0")
   return tclOk
 
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
