@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[game, items, maps, tk]
+import ../[basestypes, game, items, maps, tk]
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -268,6 +268,33 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = argc, argv = argv)
   return tclOk
 
+proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.bases"
+    nameEntry = frameName & ".name"
+    baseName = tclEval2(script = nameEntry & " get")
+  var baseIndex = 0
+  for index, base in skyBases:
+    if base.name == baseName:
+      baseIndex = index
+      break
+  if baseIndex == 0:
+    return tclOk
+  var comboBox = frameName & ".type"
+  tclEval(script = comboBox & " set " & basesTypesList[skyBases[
+      baseIndex].baseType].name)
+  comboBox = frameName & ".owner"
+  tclEval(script = comboBox & " set " & factionsList[skyBases[
+      baseIndex].owner].name)
+  comboBox = frameName & ".size"
+  tclEval(script = comboBox & " current " & $(skyBases[baseIndex].size.ord))
+  var spinBox = frameName & ".population"
+  tclEval(script = spinBox & " set " & $skyBases[baseIndex].population)
+  spinBox = frameName & ".reputation"
+  tclEval(script = spinBox & " set " & $skyBases[baseIndex].reputation.level)
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -275,3 +302,4 @@ proc showDebugUi*() =
 #    addCommand("RefreshMember", refreshMemberCommand)
 #    addCommand("RefreshCargo", refreshCargoCommand)
 #    addCommand("RefreshEvents", refreshEventsCommand)
+#    addCommand("RefreshBase", refreshBaseCommand)
