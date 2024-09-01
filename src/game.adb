@@ -124,10 +124,6 @@ package body Game is
          Convention => C,
          External_Name => "loadAdaGameData";
       procedure Load_Data is
-         use Interfaces.C;
-         use Tiny_String;
-
-         Item_Index: Natural;
          --## rule off TYPE_INITIAL_VALUES
          type Nim_Strings_Array is array(0 .. 12) of chars_ptr;
          type Nim_Integers_Array is array(0 .. 10) of Integer;
@@ -145,6 +141,9 @@ package body Game is
       begin
          Fill_Skills_Block :
          declare
+            use Interfaces.C;
+
+            Item_Index: Natural := 0;
             --## rule off TYPE_INITIAL_VALUES
             type Nim_Skill_Record is record
                Name: chars_ptr;
@@ -169,6 +168,8 @@ package body Game is
                exit Fill_Skills_Loop when Strlen(Item => Skill.Name) = 0;
                Load_Skill_Block :
                declare
+                  use Tiny_String;
+
                   --## rule off TYPE_INITIAL_VALUES
                   type Nim_Tools_Array is array(0 .. 15, 0 .. 1) of Integer;
                   --## rule on TYPE_INITIAL_VALUES
