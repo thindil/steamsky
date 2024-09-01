@@ -79,7 +79,7 @@ proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
   ## Returns the selected skill level with bonuses or maluses from health,
   ## hunger, tiredness and morale
   ensure:
-    result in 0 .. 100
+    result in 0..100
   body:
     result = 0
     for skill in member.skills:
