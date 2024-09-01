@@ -17,7 +17,7 @@ with Ada.Directories;
 with Ada.Strings;
 with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -513,6 +513,8 @@ package body Utils.UI is
    end Update_Messages;
 
    procedure Show_Screen(New_Screen_Name: String) is
+      use Interfaces.C.Strings;
+
       procedure Nim_Show_Screen(Screen_Name: chars_ptr) with
          Import => True,
          Convention => C,
