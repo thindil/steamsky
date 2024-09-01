@@ -223,6 +223,17 @@ proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Refresh the whole game information
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## Refresh
   let frameName = ".debugdialog.main"
   var spinBox = frameName & ".ship.x"
   tclEval(script = spinBox & " set " & $playerShip.skyX)
