@@ -293,6 +293,11 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = spinBox & " set " & $skyBases[baseIndex].population)
   spinBox = frameName & ".reputation"
   tclEval(script = spinBox & " set " & $skyBases[baseIndex].reputation.level)
+  spinBox = frameName & ".money"
+  if skyBases[baseIndex].cargo.len > 0:
+    tclEval(script = spinBox & " set " & $skyBases[baseIndex].cargo[0].amount)
+  else:
+    tclEval(script = spinBox & " set 0")
   return tclOk
 
 proc showDebugUi*() =
