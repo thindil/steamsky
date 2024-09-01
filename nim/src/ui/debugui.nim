@@ -253,6 +253,8 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = comboBox & " current 0")
   discard refreshCargoCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
+  discard refreshEventsCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
   return tclOk
 
 proc showDebugUi*() =
@@ -261,3 +263,4 @@ proc showDebugUi*() =
 #    addCommand("RefreshModule", refreshModuleCommand)
 #    addCommand("RefreshMember", refreshMemberCommand)
 #    addCommand("RefreshCargo", refreshCargoCommand)
+#    addCommand("RefreshEvents", refreshEventsCommand)
