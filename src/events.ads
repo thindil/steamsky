@@ -119,8 +119,6 @@ package Events is
       Convention => C,
       External_Name => "getTraderOrFriendly";
 
-   function Get_Event(Index: Positive) return Event_Data;
-
    function Get_Events_Amount return Natural with
       Import => True,
       Convention => C,
