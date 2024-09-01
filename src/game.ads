@@ -185,23 +185,6 @@ package Game is
    subtype Attributes_Amount_Range is Positive range 1 .. 16;
    -- ****
 
-   -- ****d* Game/Game.Default_Attributes_Amount
-   -- FUNCTION
-   -- The default amount of the attributes available in the game
-   -- HISTORY
-   -- 6.6 -  Added
-   -- SOURCE
-   Default_Attributes_Amount: constant Attributes_Amount_Range := 16;
-   -- ****
-
-   -- ****t* Game/Game.AttributesData_Container
-   -- FUNCTION
-   -- Used to store attributes data
-   -- SOURCE
-   package AttributesData_Container is new Formal_Vectors
-     (Index_Type => Attributes_Amount_Range, Element_Type => Attribute_Record);
-   -- ****
-
    -- ****t* Game/Game.Skill_Range
    -- FUNCTION
    -- Range used for skills but also for health, tiredness, hunger, thirst and
