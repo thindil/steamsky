@@ -222,7 +222,7 @@ proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let frameName = ".debugdialog.main"
   var spinBox = frameName & ".ship.x"
   tclEval(script = spinBox & " set " & $playerShip.skyX)

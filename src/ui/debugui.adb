@@ -151,7 +151,7 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C,
       Import => True,
-      External_Name => "refreshEventsCommand";
+      External_Name => "refreshCommand";
       -- ****
 
 --   function Refresh_Command
