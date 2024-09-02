@@ -17,6 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[basestypes, game, gamesaveload, items, maps, tk]
+import mapsui
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -318,7 +319,8 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugSaveGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Save the game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -336,6 +338,16 @@ proc debugSaveGameCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't save the game.")
   return tclOk
 
+proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let frameName = ".debugdialog.main.ship"
+  var spinBox = frameName & ".x"
+  playerShip.skyX = tclEval2(script = spinBox & " get").parseInt
+  spinBox = frameName & ".y"
+  playerShip.skyY = tclEval2(script = spinBox & " get").parseInt
+  showSkyMap(clear = true)
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -345,3 +357,4 @@ proc showDebugUi*() =
 #    addCommand("RefreshEvents", refreshEventsCommand)
 #    addCommand("RefreshBase", refreshBaseCommand)
 #    addCommand("DebugSaveGame", debugSaveGameCommand)
+#    addCommand("DebugMoveShip", debugMoveShipCommand)
