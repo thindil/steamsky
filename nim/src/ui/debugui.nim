@@ -269,7 +269,7 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.bases"
     nameEntry = frameName & ".name"
@@ -282,11 +282,17 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   if baseIndex == 0:
     return tclOk
   var comboBox = frameName & ".type"
-  tclEval(script = comboBox & " set " & basesTypesList[skyBases[
-      baseIndex].baseType].name)
+  try:
+    tclEval(script = comboBox & " set " & basesTypesList[skyBases[
+        baseIndex].baseType].name)
+  except:
+    return showError(message = "Can't set base's type.")
   comboBox = frameName & ".owner"
-  tclEval(script = comboBox & " set " & factionsList[skyBases[
-      baseIndex].owner].name)
+  try:
+    tclEval(script = comboBox & " set " & factionsList[skyBases[
+        baseIndex].owner].name)
+  except:
+    return showError(message = "Can't set owner's name.")
   comboBox = frameName & ".size"
   tclEval(script = comboBox & " current " & $(skyBases[baseIndex].size.ord))
   var spinBox = frameName & ".population"
