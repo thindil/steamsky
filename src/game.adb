@@ -143,7 +143,7 @@ package body Game is
          declare
             use Interfaces.C;
 
-            Item_Index: Natural := 0;
+            Item_Index: Natural;
             --## rule off TYPE_INITIAL_VALUES
             type Nim_Skill_Record is record
                Name: chars_ptr;
