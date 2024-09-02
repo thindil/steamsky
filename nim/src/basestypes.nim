@@ -292,7 +292,7 @@ proc getAdaBasesTypes(basesTypes: var array[0..15, cstring]) {.raises: [],
     basesTypes[i] = key.cstring
     i.inc
   i.inc
-  for index in i .. 15:
+  for index in i..15:
     basesTypes[i] = ""
 
 proc getAdaBaseTypeName(baseType: cstring): cstring {.raises: [], tags: [],
