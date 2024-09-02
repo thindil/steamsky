@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers;
+-- with Ada.Containers;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -170,75 +170,77 @@ package body DebugUI is
    function Refresh_Base_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "refreshBaseCommand";
       -- ****
 
-   function Refresh_Base_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Containers;
-      use Tiny_String;
-
-      Frame_Name: constant String := ".debugdialog.main.bases";
-      Name_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
-      Base_Index: Natural := 0;
-      Base_Name: constant Bounded_String :=
-        To_Bounded_String(Source => Get(Widgt => Name_Entry));
-      Combo_Box: Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
-      Spin_Box: Ttk_SpinBox :=
-        Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
-   begin
-      Find_Base_Index_Loop :
-      for I in Sky_Bases'Range loop
-         if Sky_Bases(I).Name = Base_Name then
-            Base_Index := I;
-            exit Find_Base_Index_Loop;
-         end if;
-      end loop Find_Base_Index_Loop;
-      if Base_Index = 0 then
-         return TCL_OK;
-      end if;
-      Set
-        (ComboBox => Combo_Box,
-         Value =>
-           Get_Base_Type_Name(Base_Type => Sky_Bases(Base_Index).Base_Type));
-      Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
-      Set
-        (ComboBox => Combo_Box,
-         Value =>
-           To_String
-             (Source =>
-                Get_Faction(Index => Sky_Bases(Base_Index).Owner).Name));
-      Combo_Box.Name := New_String(Str => Frame_Name & ".size");
-      Current
-        (ComboBox => Combo_Box,
-         NewIndex =>
-           Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
-      Set
-        (SpinBox => Spin_Box,
-         Value => Natural'Image(Sky_Bases(Base_Index).Population));
-      Spin_Box.Name := New_String(Str => Frame_Name & ".reputation");
-      Set
-        (SpinBox => Spin_Box,
-         Value => Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
-      Spin_Box.Name := New_String(Str => Frame_Name & ".money");
-      if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) >
-        0 then
-         Set
-           (SpinBox => Spin_Box,
-            Value =>
-              Natural'Image
-                (BaseCargo_Container.Element
-                   (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
-                   .Amount));
-      else
-         Set(SpinBox => Spin_Box, Value => "0");
-      end if;
-      return TCL_OK;
-   end Refresh_Base_Command;
+--   function Refresh_Base_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Ada.Containers;
+--      use Tiny_String;
+--
+--      Frame_Name: constant String := ".debugdialog.main.bases";
+--      Name_Entry: constant Ttk_Entry :=
+--        Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
+--      Base_Index: Natural := 0;
+--      Base_Name: constant Bounded_String :=
+--        To_Bounded_String(Source => Get(Widgt => Name_Entry));
+--      Combo_Box: Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
+--      Spin_Box: Ttk_SpinBox :=
+--        Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
+--   begin
+--      Find_Base_Index_Loop :
+--      for I in Sky_Bases'Range loop
+--         if Sky_Bases(I).Name = Base_Name then
+--            Base_Index := I;
+--            exit Find_Base_Index_Loop;
+--         end if;
+--      end loop Find_Base_Index_Loop;
+--      if Base_Index = 0 then
+--         return TCL_OK;
+--      end if;
+--      Set
+--        (ComboBox => Combo_Box,
+--         Value =>
+--           Get_Base_Type_Name(Base_Type => Sky_Bases(Base_Index).Base_Type));
+--      Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
+--      Set
+--        (ComboBox => Combo_Box,
+--         Value =>
+--           To_String
+--             (Source =>
+--                Get_Faction(Index => Sky_Bases(Base_Index).Owner).Name));
+--      Combo_Box.Name := New_String(Str => Frame_Name & ".size");
+--      Current
+--        (ComboBox => Combo_Box,
+--         NewIndex =>
+--           Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
+--      Set
+--        (SpinBox => Spin_Box,
+--         Value => Natural'Image(Sky_Bases(Base_Index).Population));
+--      Spin_Box.Name := New_String(Str => Frame_Name & ".reputation");
+--      Set
+--        (SpinBox => Spin_Box,
+--         Value => Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
+--      Spin_Box.Name := New_String(Str => Frame_Name & ".money");
+--      if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) >
+--        0 then
+--         Set
+--           (SpinBox => Spin_Box,
+--            Value =>
+--              Natural'Image
+--                (BaseCargo_Container.Element
+--                   (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
+--                   .Amount));
+--      else
+--         Set(SpinBox => Spin_Box, Value => "0");
+--      end if;
+--      return TCL_OK;
+--   end Refresh_Base_Command;
 
    -- ****o* DebugUI/DebugUI.Save_Game_Command
    -- FUNCTION
