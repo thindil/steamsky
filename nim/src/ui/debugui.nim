@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basestypes, game, items, maps, tk]
+import ../[basestypes, game, gamesaveload, items, maps, tk]
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -317,6 +317,11 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = spinBox & " set 0")
   return tclOk
 
+proc debugSaveGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  saveGame(prettyPrint = true)
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -325,3 +330,4 @@ proc showDebugUi*() =
 #    addCommand("RefreshCargo", refreshCargoCommand)
 #    addCommand("RefreshEvents", refreshEventsCommand)
 #    addCommand("RefreshBase", refreshBaseCommand)
+#    addCommand("DebugSaveGame", debugSaveGameCommand)
