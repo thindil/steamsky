@@ -37,7 +37,6 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
--- with Game.SaveLoad;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI;
@@ -194,17 +193,6 @@ package body DebugUI is
       Import => True,
       External_Name => "debugSaveGameCommand";
       -- ****
-
---   function Save_Game_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
---      use Game.SaveLoad;
---
---   begin
---      Save_Game(Pretty_Print => True);
---      return TCL_OK;
---   end Save_Game_Command;
 
    -- ****o* DebugUI/DebugUI.Move_Ship_Command
    -- FUNCTION
