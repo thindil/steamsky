@@ -270,6 +270,17 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Refresh the information about the selected base
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## RefreshBase
   let
     frameName = ".debugdialog.main.bases"
     nameEntry = frameName & ".name"
