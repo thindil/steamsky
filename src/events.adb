@@ -20,57 +20,6 @@ with Ships;
 
 package body Events is
 
-   function Get_Event(Index: Positive) return Event_Data is
-      X, Y, Time, E_Type, Data: Integer;
-      procedure Set_Ada_Event(I: Positive; X1, Y1, T, E, D: out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaEvent";
-   begin
-      Set_Ada_Event
-        (I => Index, X1 => X, Y1 => Y, T => Time, E => E_Type, D => Data);
-      if X = -1 then
-         return Empty_Event;
-      end if;
-      Sky_Map(X, Y).Event_Index := Index;
-      case E_Type is
-         when 1 =>
-            return
-              (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
-               Ship_Index => Data);
-         when 2 =>
-            return
-              (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y, Time => Time,
-               Ship_Index => Data);
-         when 3 =>
-            return
-              (E_Type => DISEASE, Sky_X => X, Sky_Y => Y, Time => Time,
-               Data => Data);
-         when 4 =>
-            return
-              (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y, Time => Time,
-               Item_Index => Data);
-         when 6 =>
-            return
-              (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y, Time => Time,
-               Data => Data);
-         when 7 =>
-            return
-              (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y, Time => Time,
-               Ship_Index => Data);
-         when 8 =>
-            return
-              (E_Type => TRADER, Sky_X => X, Sky_Y => Y, Time => Time,
-               Ship_Index => Data);
-         when 9 =>
-            return
-              (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
-               Ship_Index => Data);
-         when others =>
-            return Empty_Event;
-      end case;
-   end Get_Event;
-
    function Check_For_Event return Boolean is
       use Ships;
 
@@ -99,6 +48,57 @@ package body Events is
          Import => True,
          Convention => C,
          External_Name => "deleteAdaEvent";
+      function Get_Event(Index: Positive) return Event_Data is
+         X, Y, Time, E_Type, Data: Integer;
+         procedure Set_Ada_Event
+           (I: Positive; X1, Y1, T, E, D: out Integer) with
+            Import => True,
+            Convention => C,
+            External_Name => "setAdaEvent";
+      begin
+         Set_Ada_Event
+           (I => Index, X1 => X, Y1 => Y, T => Time, E => E_Type, D => Data);
+         if X = -1 then
+            return Empty_Event;
+         end if;
+         Sky_Map(X, Y).Event_Index := Index;
+         case E_Type is
+            when 1 =>
+               return
+                 (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data);
+            when 2 =>
+               return
+                 (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data);
+            when 3 =>
+               return
+                 (E_Type => DISEASE, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Data => Data);
+            when 4 =>
+               return
+                 (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Item_Index => Data);
+            when 6 =>
+               return
+                 (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Data => Data);
+            when 7 =>
+               return
+                 (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data);
+            when 8 =>
+               return
+                 (E_Type => TRADER, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data);
+            when 9 =>
+               return
+                 (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
+                  Ship_Index => Data);
+            when others =>
+               return Empty_Event;
+         end case;
+      end Get_Event;
    begin
       Delete_Ada_Event(E_Index => Event_Index);
       Sky_Map
