@@ -318,8 +318,11 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugSaveGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  saveGame(prettyPrint = true)
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+  try:
+    saveGame(prettyPrint = true)
+  except:
+    return showError(message = "Can't save the game.")
   return tclOk
 
 proc showDebugUi*() =
