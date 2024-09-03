@@ -419,10 +419,13 @@ proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let frameName = ".debugdialog.main.crew"
   var comboBox = frameName & ".member"
-  let memberIndex = tclEval2(script = comboBox & " current").parseInt
+  let memberIndex = try:
+      tclEval2(script = comboBox & " current").parseInt
+    except:
+      return showError(message = "Can't get member index.")
   comboBox = frameName & ".addskill.skills"
   var skillName = tclEval2(script = comboBox & " get")
   for index, skill in skillsList:
