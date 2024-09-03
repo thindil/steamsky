@@ -366,11 +366,14 @@ proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.ship"
     moduleBox = frameName & ".module"
-    moduleIndex = tclEval2(script = moduleBox & " current").parseInt
+    moduleIndex = try:
+        tclEval2(script = moduleBox & " current").parseInt
+      except:
+        return showError(message = "Can't get module index.")
     protoCombo = frameName & ".proto"
   var value = tclEval2(script = protoCombo & " get")
   for index, module in modulesList:
@@ -379,17 +382,29 @@ proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       playerShip.modules[moduleIndex].protoIndex = index
       break
   var spinBox = frameName & ".weight"
-  playerShip.modules[moduleIndex].weight = tclEval2(script = spinBox &
-      " get").parseInt
+  playerShip.modules[moduleIndex].weight = try:
+      tclEval2(script = spinBox &
+        " get").parseInt
+    except:
+      return showError(message = "Can't set weight.")
   spinBox = frameName & ".dur"
-  playerShip.modules[moduleIndex].durability = tclEval2(script = spinBox &
-      " get").parseInt
+  playerShip.modules[moduleIndex].durability = try:
+      tclEval2(script = spinBox &
+        " get").parseInt
+    except:
+      return showError(message = "Can't set durability.")
   spinBox = frameName & ".maxdur"
-  playerShip.modules[moduleIndex].maxDurability = tclEval2(script = spinBox &
-      " get").parseInt
+  playerShip.modules[moduleIndex].maxDurability = try:
+      tclEval2(script = spinBox &
+        " get").parseInt
+    except:
+      return showError(message = "Can't set max durability.")
   spinBox = frameName & ".upgrade"
-  playerShip.modules[moduleIndex].upgradeProgress = tclEval2(script = spinBox &
-      " get").parseInt
+  playerShip.modules[moduleIndex].upgradeProgress = try:
+      tclEval2(script = spinBox &
+        " get").parseInt
+    except:
+      return showError(message = "Can't set upgrade progress.")
   return tclOk
 
 proc showDebugUi*() =
