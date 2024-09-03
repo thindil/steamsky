@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basestypes, game, gamesaveload, items, maps, tk]
+import ../[basestypes, game, gamesaveload, items, maps, tk, types]
 import mapsui
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -418,6 +418,21 @@ proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't set upgrade progress.")
   return tclOk
 
+proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let frameName = ".debugdialog.main.crew"
+  var comboBox = frameName & ".member"
+  let memberIndex = tclEval2(script = comboBox & " current").parseInt
+  comboBox = frameName & ".addskill.skills"
+  var skillName = tclEval2(script = comboBox & " get")
+  for index, skill in skillsList:
+    if skill.name == skillName:
+      playerShip.crew[memberIndex].skills.add(y = SkillInfo(index: index,
+          level: 1, experience: 0))
+      return refreshMemberCommand(clientData = clientData, interp = interp,
+          argc = argc, argv = argv)
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -429,3 +444,4 @@ proc showDebugUi*() =
 #    addCommand("DebugSaveGame", debugSaveGameCommand)
 #    addCommand("DebugMoveShip", debugMoveShipCommand)
 #    addCommand("DebugUpdateModule", debugUpdateModuleCommand)
+#    addCommand("DebugAddSkill", debugAddSkillCommand)
