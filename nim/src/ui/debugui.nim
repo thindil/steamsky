@@ -340,6 +340,17 @@ proc debugSaveGameCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Move the player ship
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## DebugMoveShip
   let frameName = ".debugdialog.main.ship"
   var spinBox = frameName & ".x"
   playerShip.skyX = try:
