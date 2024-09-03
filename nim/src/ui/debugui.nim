@@ -365,6 +365,33 @@ proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   showSkyMap(clear = true)
   return tclOk
 
+proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.ship"
+    moduleBox = frameName & ".module"
+    moduleIndex = tclEval2(script = moduleBox & " current").parseInt
+    protoCombo = frameName & ".proto"
+  var value = tclEval2(script = protoCombo & " get")
+  for index, module in modulesList:
+    if module.name == value:
+      value = ""
+      playerShip.modules[moduleIndex].protoIndex = index
+      break
+  var spinBox = frameName & ".weight"
+  playerShip.modules[moduleIndex].weight = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".dur"
+  playerShip.modules[moduleIndex].durability = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".maxdur"
+  playerShip.modules[moduleIndex].maxDurability = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".upgrade"
+  playerShip.modules[moduleIndex].upgradeProgress = tclEval2(script = spinBox &
+      " get").parseInt
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -375,3 +402,4 @@ proc showDebugUi*() =
 #    addCommand("RefreshBase", refreshBaseCommand)
 #    addCommand("DebugSaveGame", debugSaveGameCommand)
 #    addCommand("DebugMoveShip", debugMoveShipCommand)
+#    addCommand("DebugUpdateModule", debugUpdateModuleCommand)
