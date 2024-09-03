@@ -232,53 +232,8 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C,
       Import => True,
-      External_Name => "debugMoveShipCommand";
+      External_Name => "debugUpdateModuleCommand";
       -- ****
-
---   function Update_Module_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      use Tiny_String;
---
---      Frame_Name: constant String := ".debugdialog.main.ship";
---      Module_Box: constant Ttk_ComboBox :=
---        Get_Widget(pathName => Frame_Name & ".module", Interp => Interp);
---      Module_Index: constant Positive :=
---        Natural'Value(Current(ComboBox => Module_Box)) + 1;
---      Proto_Combo: constant Ttk_ComboBox :=
---        Get_Widget(pathName => Frame_Name & ".proto", Interp => Interp);
---      Value: Unbounded_String :=
---        To_Unbounded_String(Source => Get(Widgt => Proto_Combo));
---      Spin_Box: Ttk_SpinBox :=
---        Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
---   begin
---      Set_Ada_Modules(Ship => Player_Ship);
---      Update_Proto_Index_Loop :
---      for I in 1 .. Get_Modules_Amount loop
---         if To_String(Source => Get_Module(Index => I).Name) =
---           To_String(Source => Value) then
---            Value := Null_Unbounded_String;
---            Player_Ship.Modules(Module_Index).Proto_Index := I;
---            exit Update_Proto_Index_Loop;
---         end if;
---      end loop Update_Proto_Index_Loop;
---      Player_Ship.Modules(Module_Index).Weight :=
---        Natural'Value(Get(Widgt => Spin_Box));
---      Spin_Box.Name := New_String(Str => Frame_Name & ".dur");
---      Player_Ship.Modules(Module_Index).Durability :=
---        Natural'Value(Get(Widgt => Spin_Box));
---      --## rule off ASSIGNMENTS
---      Spin_Box.Name := New_String(Str => Frame_Name & ".maxdur");
---      Player_Ship.Modules(Module_Index).Max_Durability :=
---        Natural'Value(Get(Widgt => Spin_Box));
---      Spin_Box.Name := New_String(Str => Frame_Name & ".upgrade");
---      --## rule on ASSIGNMENTS
---      Player_Ship.Modules(Module_Index).Upgrade_Progress :=
---        Natural'Value(Get(Widgt => Spin_Box));
---      Get_Ada_Modules;
---      return TCL_OK;
---   end Update_Module_Command;
 
    -- ****o* DebugUI/DebugUI.Add_Skill_Command
    -- FUNCTION
