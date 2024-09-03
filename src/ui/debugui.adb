@@ -39,7 +39,6 @@ with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
--- with Maps.UI;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -214,25 +213,6 @@ package body DebugUI is
       Import => True,
       External_Name => "debugMoveShipCommand";
       -- ****
-
---   function Move_Ship_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      use Maps.UI;
---
---      Frame_Name: constant String := ".debugdialog.main.ship";
---      Spin_Box: Ttk_SpinBox :=
---        Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
---   begin
---      Set_Ada_Ship(Ship => Player_Ship);
---      Player_Ship.Sky_X := Positive'Value(Get(Widgt => Spin_Box));
---      Spin_Box.Name := New_String(Str => Frame_Name & ".y");
---      Player_Ship.Sky_Y := Positive'Value(Get(Widgt => Spin_Box));
---      Get_Ada_Ship;
---      Show_Sky_Map(Clear => True);
---      return TCL_OK;
---   end Move_Ship_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Module_Command
    -- FUNCTION
