@@ -339,12 +339,18 @@ proc debugSaveGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let frameName = ".debugdialog.main.ship"
   var spinBox = frameName & ".x"
-  playerShip.skyX = tclEval2(script = spinBox & " get").parseInt
+  playerShip.skyX = try:
+      tclEval2(script = spinBox & " get").parseInt
+    except:
+      return showError(message = "Can't get X coord.")
   spinBox = frameName & ".y"
-  playerShip.skyY = tclEval2(script = spinBox & " get").parseInt
+  playerShip.skyY = try:
+      tclEval2(script = spinBox & " get").parseInt
+    except:
+      return showError(message = "Can't get Y coord.")
   showSkyMap(clear = true)
   return tclOk
 
