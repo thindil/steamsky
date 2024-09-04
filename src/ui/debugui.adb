@@ -33,13 +33,13 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
-with Crew; use Crew;
+with Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
-with ShipModules; use ShipModules;
+with ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Utils.UI;
@@ -256,44 +256,6 @@ package body DebugUI is
       External_Name => "debugAddSkillCommand";
       -- ****
 
---   function Add_Skill_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use Tiny_String;
---
---      Frame_Name: constant String := ".debugdialog.main.crew";
---      Combo_Box: Ttk_ComboBox :=
---        Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
---      Member_Index: constant Positive :=
---        Natural'Value(Current(ComboBox => Combo_Box)) + 1;
---      Skill_Name: Unbounded_String;
---   begin
---      Set_Ada_Crew(Ship => Player_Ship);
---      Combo_Box.Name := New_String(Str => Frame_Name & ".addskill.skills");
---      Skill_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
---      Add_Skill_Loop :
---      for I in 1 .. Skills_Amount loop
---         if To_Unbounded_String
---             (Source =>
---                To_String
---                  (Source =>
---                     SkillsData_Container.Element
---                       (Container => Skills_List, Index => I)
---                       .Name)) =
---           Skill_Name then
---            Skills_Container.Append
---              (Container => Player_Ship.Crew(Member_Index).Skills,
---               New_Item => (Index => I, Level => 1, Experience => 0));
---            return
---              Refresh_Member_Command
---                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---                 Argv => Argv);
---         end if;
---      end loop Add_Skill_Loop;
---      Get_Ada_Crew;
---      return TCL_OK;
---   end Add_Skill_Command;
-
    -- ****o* DebugUI/DebugUI.Update_Member_Command
    -- FUNCTION
    -- Update the selected crew member
@@ -319,6 +281,7 @@ package body DebugUI is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Crew;
 
       Frame_Name: constant String := ".debugdialog.main.crew";
       Combo_Box: constant Ttk_ComboBox :=
@@ -931,6 +894,8 @@ package body DebugUI is
       Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
       Load_Proto_Modules_Block :
       declare
+         use ShipModules;
+
          Module: Base_Module_Data := (others => <>);
       begin
          Load_Modules_Prototypes_Loop :
