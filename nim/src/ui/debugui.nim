@@ -447,6 +447,37 @@ proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
           argc = argc, argv = argv)
   return tclOk
 
+proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.crew"
+    comboBox = frameName & ".member"
+    memberIndex = tclEval2(script = comboBox & " current").parseInt
+  var spinBox = frameName & ".stats2.health"
+  playerShip.crew[memberIndex].health = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".stats2.thirst"
+  playerShip.crew[memberIndex].thirst = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".stats2.hunger"
+  playerShip.crew[memberIndex].hunger = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".stats2.tired"
+  playerShip.crew[memberIndex].tired = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".stats2.morale"
+  playerShip.crew[memberIndex].morale[1] = tclEval2(script = spinBox &
+      " get").parseInt
+  spinBox = frameName & ".stats2.loyalty"
+  playerShip.crew[memberIndex].loyalty = tclEval2(script = spinBox &
+      " get").parseInt
+  for index, attrib in playerShip.crew[memberIndex].attributes.mpairs:
+    spinBox = frameName & ".stats.value" & $(index + 1)
+    var localAttrib = MobAttributeRecord(level: tclEval2(script = spinBox &
+        " get").parseInt, experience: attrib.experience)
+    attrib = localAttrib
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -459,3 +490,4 @@ proc showDebugUi*() =
 #    addCommand("DebugMoveShip", debugMoveShipCommand)
 #    addCommand("DebugUpdateModule", debugUpdateModuleCommand)
 #    addCommand("DebugAddSkill", debugAddSkillCommand)
+#    addCommand("DebugUpdateMember", debugUpdateMemberCommand)
