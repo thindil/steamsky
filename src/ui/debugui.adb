@@ -14,7 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -33,7 +33,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
-with Crew;
+-- with Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
@@ -272,89 +272,91 @@ package body DebugUI is
    function Update_Member_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "debugUpdateMemberCommand";
       -- ****
 
-   function Update_Member_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Crew;
-
-      Frame_Name: constant String := ".debugdialog.main.crew";
-      Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
-      Member_Index: Positive;
-      Spin_Box: Ttk_SpinBox :=
-        Get_Widget
-          (pathName => Frame_Name & ".stats2.health", Interp => Interp);
-      --## rule off IMPROPER_INITIALIZATION
-      Local_Attribute: Mob_Attribute_Record;
-      --## rule on IMPROPER_INITIALIZATION
-   begin
-      Set_Ada_Crew(Ship => Player_Ship);
-      Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
-      Player_Ship.Crew(Member_Index).Health :=
-        Skill_Range'Value(Get(Widgt => Spin_Box));
-      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.thirst");
-      Player_Ship.Crew(Member_Index).Thirst :=
-        Skill_Range'Value(Get(Widgt => Spin_Box));
-      --## rule off ASSIGNMENTS
-      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.hunger");
-      Player_Ship.Crew(Member_Index).Hunger :=
-        Skill_Range'Value(Get(Widgt => Spin_Box));
-      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.tired");
-      Player_Ship.Crew(Member_Index).Tired :=
-        Skill_Range'Value(Get(Widgt => Spin_Box));
-      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.morale");
-      Player_Ship.Crew(Member_Index).Morale(1) :=
-        Skill_Range'Value(Get(Widgt => Spin_Box));
-      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.loyalty");
-      --## rule on ASSIGNMENTS
-      Player_Ship.Crew(Member_Index).Loyalty :=
-        Skill_Range'Value(Get(Widgt => Spin_Box));
-      Update_Stats_Loop :
-      for I in Player_Ship.Crew(Member_Index).Attributes'Range loop
-         Spin_Box.Name :=
-           New_String
-             (Str =>
-                Frame_Name & ".stats.value" &
-                Trim(Source => Positive'Image(I), Side => Left));
-         Local_Attribute :=
-           (Level => Positive'Value(Get(Widgt => Spin_Box)),
-            Experience =>
-              Player_Ship.Crew(Member_Index).Attributes(I).Experience);
-         Player_Ship.Crew(Member_Index).Attributes(I) := Local_Attribute;
-      end loop Update_Stats_Loop;
-      Update_Skills_Loop :
-      for I in
-        Skills_Container.First_Index
-          (Container => Player_Ship.Crew(Member_Index).Skills) ..
-          Skills_Container.Last_Index
-            (Container => Player_Ship.Crew(Member_Index).Skills) loop
-         Spin_Box.Name :=
-           New_String
-             (Str =>
-                Frame_Name & ".skills.value" &
-                Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
-         Update_Skill_Block :
-         declare
-            New_Skill: Skill_Info :=
-              Skills_Container.Element
-                (Container => Player_Ship.Crew(Member_Index).Skills,
-                 Index => I);
-         begin
-            New_Skill.Level := Positive'Value(Get(Widgt => Spin_Box));
-            Skills_Container.Replace_Element
-              (Container => Player_Ship.Crew(Member_Index).Skills, Index => I,
-               New_Item => New_Skill);
-         end Update_Skill_Block;
-      end loop Update_Skills_Loop;
-      Get_Ada_Crew;
-      return TCL_OK;
-   end Update_Member_Command;
+--   function Update_Member_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Crew;
+--
+--      Frame_Name: constant String := ".debugdialog.main.crew";
+--      Combo_Box: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
+--      Member_Index: Positive;
+--      Spin_Box: Ttk_SpinBox :=
+--        Get_Widget
+--          (pathName => Frame_Name & ".stats2.health", Interp => Interp);
+--      --## rule off IMPROPER_INITIALIZATION
+--      Local_Attribute: Mob_Attribute_Record;
+--      --## rule on IMPROPER_INITIALIZATION
+--   begin
+--      Set_Ada_Crew(Ship => Player_Ship);
+--      Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
+--      Player_Ship.Crew(Member_Index).Health :=
+--        Skill_Range'Value(Get(Widgt => Spin_Box));
+--      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.thirst");
+--      Player_Ship.Crew(Member_Index).Thirst :=
+--        Skill_Range'Value(Get(Widgt => Spin_Box));
+--      --## rule off ASSIGNMENTS
+--      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.hunger");
+--      Player_Ship.Crew(Member_Index).Hunger :=
+--        Skill_Range'Value(Get(Widgt => Spin_Box));
+--      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.tired");
+--      Player_Ship.Crew(Member_Index).Tired :=
+--        Skill_Range'Value(Get(Widgt => Spin_Box));
+--      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.morale");
+--      Player_Ship.Crew(Member_Index).Morale(1) :=
+--        Skill_Range'Value(Get(Widgt => Spin_Box));
+--      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.loyalty");
+--      --## rule on ASSIGNMENTS
+--      Player_Ship.Crew(Member_Index).Loyalty :=
+--        Skill_Range'Value(Get(Widgt => Spin_Box));
+--      Update_Stats_Loop :
+--      for I in Player_Ship.Crew(Member_Index).Attributes'Range loop
+--         Spin_Box.Name :=
+--           New_String
+--             (Str =>
+--                Frame_Name & ".stats.value" &
+--                Trim(Source => Positive'Image(I), Side => Left));
+--         Local_Attribute :=
+--           (Level => Positive'Value(Get(Widgt => Spin_Box)),
+--            Experience =>
+--              Player_Ship.Crew(Member_Index).Attributes(I).Experience);
+--         Player_Ship.Crew(Member_Index).Attributes(I) := Local_Attribute;
+--      end loop Update_Stats_Loop;
+--      Update_Skills_Loop :
+--      for I in
+--        Skills_Container.First_Index
+--          (Container => Player_Ship.Crew(Member_Index).Skills) ..
+--          Skills_Container.Last_Index
+--            (Container => Player_Ship.Crew(Member_Index).Skills) loop
+--         Spin_Box.Name :=
+--           New_String
+--             (Str =>
+--                Frame_Name & ".skills.value" &
+--                Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+--         Update_Skill_Block :
+--         declare
+--            New_Skill: Skill_Info :=
+--              Skills_Container.Element
+--                (Container => Player_Ship.Crew(Member_Index).Skills,
+--                 Index => I);
+--         begin
+--            New_Skill.Level := Positive'Value(Get(Widgt => Spin_Box));
+--            Skills_Container.Replace_Element
+--              (Container => Player_Ship.Crew(Member_Index).Skills, Index => I,
+--               New_Item => New_Skill);
+--         end Update_Skill_Block;
+--      end loop Update_Skills_Loop;
+--      Get_Ada_Crew;
+--      return TCL_OK;
+--   end Update_Member_Command;
 
    -- ****o* DebugUI/DebugUI.Add_Item_Command
    -- FUNCTION
