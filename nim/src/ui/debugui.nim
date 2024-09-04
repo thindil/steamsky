@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basestypes, game, gamesaveload, items, maps, tk, types]
+import ../[basestypes, game, gamesaveload, items, maps, shipscargo, tk, types]
 import mapsui
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -517,6 +517,24 @@ proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't set member skill.")
   return tclOk
 
+proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.cargo"
+    itemEntry = frameName & ".add"
+    itemBox = frameName & ".amount"
+    itemName = tclEval2(script = itemEntry & " get")
+  var itemIndex = -1
+  for index, item in itemsList:
+    if item.name == itemName:
+      itemIndex = index
+      break
+  if itemIndex == -1:
+    return tclOk
+  updateCargo(ship = playerShip, protoIndex = itemIndex, amount = tclEval2(
+      script = itemBox & " get").parseInt)
+  return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -530,3 +548,4 @@ proc showDebugUi*() =
 #    addCommand("DebugUpdateModule", debugUpdateModuleCommand)
 #    addCommand("DebugAddSkill", debugAddSkillCommand)
 #    addCommand("DebugUpdateMember", debugUpdateMemberCommand)
+#    addCommand("DebugAddItem", debugAddItemCommand)
