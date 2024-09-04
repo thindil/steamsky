@@ -448,35 +448,62 @@ proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.crew"
     comboBox = frameName & ".member"
-    memberIndex = tclEval2(script = comboBox & " current").parseInt
+    memberIndex = try:
+        tclEval2(script = comboBox & " current").parseInt
+      except:
+        return showError(message = "Can't get member index.")
   var spinBox = frameName & ".stats2.health"
-  playerShip.crew[memberIndex].health = tclEval2(script = spinBox &
-      " get").parseInt
+  try:
+    playerShip.crew[memberIndex].health = tclEval2(script = spinBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set member health.")
   spinBox = frameName & ".stats2.thirst"
-  playerShip.crew[memberIndex].thirst = tclEval2(script = spinBox &
-      " get").parseInt
+  try:
+    playerShip.crew[memberIndex].thirst = tclEval2(script = spinBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set member thirst.")
   spinBox = frameName & ".stats2.hunger"
-  playerShip.crew[memberIndex].hunger = tclEval2(script = spinBox &
-      " get").parseInt
+  try:
+    playerShip.crew[memberIndex].hunger = tclEval2(script = spinBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set member hunger.")
   spinBox = frameName & ".stats2.tired"
-  playerShip.crew[memberIndex].tired = tclEval2(script = spinBox &
-      " get").parseInt
+  try:
+    playerShip.crew[memberIndex].tired = tclEval2(script = spinBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set member tired.")
   spinBox = frameName & ".stats2.morale"
-  playerShip.crew[memberIndex].morale[1] = tclEval2(script = spinBox &
-      " get").parseInt
+  try:
+    playerShip.crew[memberIndex].morale[1] = tclEval2(script = spinBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set member morale.")
   spinBox = frameName & ".stats2.loyalty"
-  playerShip.crew[memberIndex].loyalty = tclEval2(script = spinBox &
-      " get").parseInt
+  try:
+    playerShip.crew[memberIndex].loyalty = tclEval2(script = spinBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set member loyalty.")
   for index, attrib in playerShip.crew[memberIndex].attributes.mpairs:
     spinBox = frameName & ".stats.value" & $(index + 1)
-    attrib.level = tclEval2(script = spinBox & " get").parseInt
+    try:
+      attrib.level = tclEval2(script = spinBox & " get").parseInt
+    except:
+      return showError(message = "Can't set member attribute.")
   for index, skill in playerShip.crew[memberIndex].skills.mpairs:
     spinBox = frameName & ".skills.value" & $(index + 1)
-    skill.level = tclEval2(script = spinBox & " get").parseInt
+    try:
+      skill.level = tclEval2(script = spinBox & " get").parseInt
+    except:
+      return showError(message = "Can't set member skill.")
   return tclOk
 
 proc showDebugUi*() =
