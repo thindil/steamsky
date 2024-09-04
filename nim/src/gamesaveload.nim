@@ -66,8 +66,8 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   saveTree.add(son = dateElement)
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving map...", debugType = everything)
-  for x in MapXRange.low .. MapXRange.high:
-    for y in MapYRange.low .. MapYRange.high:
+  for x in MapXRange.low..MapXRange.high:
+    for y in MapYRange.low..MapYRange.high:
       if skyMap[x][y].visited:
         var fieldElement: XmlNode = newElement(tag = "field")
         fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
@@ -87,7 +87,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Saving messages...", debugType = everything)
   let messagesToSave: Natural = (if gameSettings.savedMessages > messagesAmount(): messagesAmount() else: gameSettings.savedMessages)
-  for i in (messagesAmount() - messagesToSave + 1) .. messagesAmount():
+  for i in (messagesAmount() - messagesToSave + 1)..messagesAmount():
     let message: MessageData = getMessage(messageIndex = i)
     var messageElement: XmlNode = newElement(tag = "message")
     messageElement.attrs = {"type": $message.kind,
@@ -273,8 +273,8 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   logMessage(message = "done", debugType = everything)
   # Load the sky map
   logMessage(message = "Loading the map...", debugType = everything)
-  for x in 1 .. 1_024:
-    for y in 1 .. 1_024:
+  for x in 1..1_024:
+    for y in 1..1_024:
       skyMap[x][y].missionIndex = -1
       skyMap[x][y].baseIndex = 0
       skyMap[x][y].eventIndex = -1
