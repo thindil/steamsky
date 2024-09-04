@@ -473,9 +473,10 @@ proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
       " get").parseInt
   for index, attrib in playerShip.crew[memberIndex].attributes.mpairs:
     spinBox = frameName & ".stats.value" & $(index + 1)
-    var localAttrib = MobAttributeRecord(level: tclEval2(script = spinBox &
-        " get").parseInt, experience: attrib.experience)
-    attrib = localAttrib
+    attrib.level = tclEval2(script = spinBox & " get").parseInt
+  for index, skill in playerShip.crew[memberIndex].skills.mpairs:
+    spinBox = frameName & ".skills.value" & $(index + 1)
+    skill.level = tclEval2(script = spinBox & " get").parseInt
   return tclOk
 
 proc showDebugUi*() =
