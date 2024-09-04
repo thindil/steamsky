@@ -518,7 +518,7 @@ proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.cargo"
     itemEntry = frameName & ".add"
@@ -531,8 +531,11 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
       break
   if itemIndex == -1:
     return tclOk
-  updateCargo(ship = playerShip, protoIndex = itemIndex, amount = tclEval2(
-      script = itemBox & " get").parseInt)
+  try:
+    updateCargo(ship = playerShip, protoIndex = itemIndex, amount = tclEval2(
+        script = itemBox & " get").parseInt)
+  except:
+    return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc showDebugUi*() =
