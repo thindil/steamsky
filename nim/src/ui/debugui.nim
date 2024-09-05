@@ -601,7 +601,16 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
       skyBases[baseIndex].owner = index
       break
   baseCombo = frameName & ".size"
-  skyBases[baseIndex].size = parseEnum[BaseSize](s = tclEval2(script = baseCombo & " get"))
+  skyBases[baseIndex].size = parseEnum[BasesSize](s = tclEval2(
+      script = baseCombo & " get"))
+  var baseBox = frameName & ".population"
+  skyBases[baseIndex].population = tclEval2(script = baseBox & " get").parseInt
+  baseBox = frameName & ".reputation"
+  skyBases[baseIndex].reputation.level = tclEval2(script = baseBox &
+      " get").parseInt
+  baseBox = frameName & ".money"
+  skyBases[baseIndex].cargo[0].amount = tclEval2(script = baseCombo &
+      " get").parseInt
   return tclOk
 
 proc showDebugUi*() =
