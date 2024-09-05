@@ -570,13 +570,13 @@ proc addModulesToShip(randomUpgrades: bool; protoShip: ProtoShipData;
           weightGain = 1
         let roll: Positive = getRandom(min = 1, max = 100)
         case roll
-        of 1 .. 50:
+        of 1..50:
           let maxUpgradeValue: Positive = (module.durability.float * 1.5).Positive
           module.durability = getRandom(min = module.durability,
               max = maxUpgradeValue)
           module.weight += (weightGain * module.durability -
               modulesList[moduleIndex].durability)
-        of 51 .. 75:
+        of 51..75:
           if modulesList[moduleIndex].mType == ModuleType.engine:
             weightGain *= 10
             let maxUpgradeValue: Positive = (module.value.float / 2.0).Positive
@@ -584,7 +584,7 @@ proc addModulesToShip(randomUpgrades: bool; protoShip: ProtoShipData;
                 moduleIndex].value)
             module.weight += (weightGain * modulesList[
                 moduleIndex].value - module.value)
-        of 76 .. 100:
+        of 76..100:
           case modulesList[moduleIndex].mType
           of ModuleType.hull:
             weightGain *= 10
@@ -713,7 +713,7 @@ proc createShip*(protoIndex: Positive; name: string; x: MapXRange; y: MapYRange;
       let amount: Natural = (if protoMember.maxAmount ==
           0: protoMember.minAmount else: getRandom(min = protoMember.minAmount,
           max = protoMember.maxAmount))
-      for i in 1 .. amount:
+      for i in 1..amount:
         let member: MemberData = generateMob(mobIndex = protoMember.protoIndex,
             factionIndex = protoShip.owner)
         result.crew.add(y = member)
