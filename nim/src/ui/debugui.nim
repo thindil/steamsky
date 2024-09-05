@@ -578,7 +578,7 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.bases"
     baseEntry = frameName & ".name"
@@ -601,16 +601,29 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
       skyBases[baseIndex].owner = index
       break
   baseCombo = frameName & ".size"
-  skyBases[baseIndex].size = parseEnum[BasesSize](s = tclEval2(
-      script = baseCombo & " get"))
+  try:
+    skyBases[baseIndex].size = parseEnum[BasesSize](s = tclEval2(
+        script = baseCombo & " get"))
+  except:
+    return showError(message = "Can't set the base's size.")
   var baseBox = frameName & ".population"
-  skyBases[baseIndex].population = tclEval2(script = baseBox & " get").parseInt
+  try:
+    skyBases[baseIndex].population = tclEval2(script = baseBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set the base's population.")
   baseBox = frameName & ".reputation"
-  skyBases[baseIndex].reputation.level = tclEval2(script = baseBox &
-      " get").parseInt
+  try:
+    skyBases[baseIndex].reputation.level = tclEval2(script = baseBox &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set the base's reputation.")
   baseBox = frameName & ".money"
-  skyBases[baseIndex].cargo[0].amount = tclEval2(script = baseCombo &
-      " get").parseInt
+  try:
+    skyBases[baseIndex].cargo[0].amount = tclEval2(script = baseCombo &
+        " get").parseInt
+  except:
+    return showError(message = "Can't set the base's money.")
   return tclOk
 
 proc showDebugUi*() =
