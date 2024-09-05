@@ -39,7 +39,7 @@ with Items; use Items;
 with Maps; use Maps;
 with ShipModules;
 with Ships; use Ships;
-with Ships.Cargo;
+-- with Ships.Cargo;
 with Utils.UI;
 
 package body DebugUI is
@@ -312,30 +312,32 @@ package body DebugUI is
    function Update_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "debugUpdateItemCommand";
       -- ****
 
-   function Update_Item_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Ships.Cargo;
-
-      Frame_Name: constant String := ".debugdialog.main.cargo";
-      Item_Combo: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
-      Item_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
-      Item_Index: Positive;
-   begin
-      Item_Index := Natural'Value(Current(ComboBox => Item_Combo)) + 1;
-      Update_Cargo
-        (Ship => Player_Ship, Amount => Positive'Value(Get(Widgt => Item_Box)),
-         Cargo_Index => Item_Index);
-      return
-        Refresh_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
-   end Update_Item_Command;
+--   function Update_Item_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Ships.Cargo;
+--
+--      Frame_Name: constant String := ".debugdialog.main.cargo";
+--      Item_Combo: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
+--      Item_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
+--      Item_Index: Positive;
+--   begin
+--      Item_Index := Natural'Value(Current(ComboBox => Item_Combo)) + 1;
+--      Update_Cargo
+--        (Ship => Player_Ship, Amount => Positive'Value(Get(Widgt => Item_Box)),
+--         Cargo_Index => Item_Index);
+--      return
+--        Refresh_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv);
+--   end Update_Item_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Base_Command
    -- FUNCTION
