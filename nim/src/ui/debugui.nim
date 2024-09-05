@@ -550,14 +550,20 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.cargo"
     itemCombo = frameName & ".update"
     itemBox = frameName & ".updateamount"
-    itemIndex = tclEval2(script = itemCombo & " current").parseInt
-  updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
-      " get").parseInt, cargoIndex = itemIndex)
+    itemIndex = try:
+        tclEval2(script = itemCombo & " current").parseInt
+      except:
+        return showError(message = "Can't geet item index.")
+  try:
+    updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
+        " get").parseInt, cargoIndex = itemIndex)
+  except:
+    return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc showDebugUi*() =
