@@ -577,6 +577,33 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
+proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.bases"
+    baseEntry = frameName & ".name"
+    baseName = tclEval2(script = baseEntry & " get")
+  var baseIndex = 0
+  for index, base in skyBases:
+    if base.name == baseName:
+      baseIndex = index
+      break
+  if baseIndex == 0:
+    return tclOk
+  var baseCombo = frameName & ".type"
+  for baseType in basesTypesList.values:
+    if baseType.name == tclEval2(script = baseCombo & " get"):
+      skyBases[baseIndex].baseType = baseType.name
+      break
+  baseCombo = frameName & ".owner"
+  for index, faction in factionsList:
+    if faction.name == tclEval2(script = baseCombo & " get"):
+      skyBases[baseIndex].owner = index
+      break
+  baseCombo = frameName & ".size"
+  skyBases[baseIndex].size = parseEnum[BaseSize](s = tclEval2(script = baseCombo & " get"))
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -592,3 +619,4 @@ proc showDebugUi*() =
 #    addCommand("DebugUpdateMember", debugUpdateMemberCommand)
 #    addCommand("DebugAddItem", debugAddItemCommand)
 #    addCommand("DebugUpdateItem", debugUpdateItemCommand)
+#    addCommand("DebugUpdateBase", debugUpdateBaseCommand)
