@@ -39,7 +39,7 @@ with Items; use Items;
 with Maps; use Maps;
 with ShipModules;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
+with Ships.Cargo;
 with Utils.UI;
 
 package body DebugUI is
@@ -296,39 +296,6 @@ package body DebugUI is
       External_Name => "debugAddItemCommand";
       -- ****
 
---   function Add_Item_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use Tiny_String;
---
---      Frame_Name: constant String := ".debugdialog.main.cargo";
---      Item_Entry: constant Ttk_Entry :=
---        Get_Widget(pathName => Frame_Name & ".add", Interp => Interp);
---      Item_Box: constant Ttk_SpinBox :=
---        Get_Widget(pathName => Frame_Name & ".amount", Interp => Interp);
---      Item_Name: Bounded_String;
---      Item_Index: Natural := 0;
---   begin
---      Item_Name := To_Bounded_String(Source => Get(Widgt => Item_Entry));
---      Find_Index_Loop :
---      for I in 1 .. Get_Proto_Amount loop
---         if Get_Proto_Item(Index => I).Name = Item_Name then
---            Item_Index := I;
---            exit Find_Index_Loop;
---         end if;
---      end loop Find_Index_Loop;
---      if Item_Index = 0 then
---         return TCL_OK;
---      end if;
---      Update_Cargo
---        (Ship => Player_Ship, Proto_Index => Item_Index,
---         Amount => Positive'Value(Get(Widgt => Item_Box)));
---      return
---        Refresh_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---           Argv => Argv);
---   end Add_Item_Command;
-
    -- ****o* DebugUI/DebugUI.Update_Item_Command
    -- FUNCTION
    -- Update the amount of an item in the player ship cargo
@@ -351,6 +318,8 @@ package body DebugUI is
    function Update_Item_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Ships.Cargo;
+
       Frame_Name: constant String := ".debugdialog.main.cargo";
       Item_Combo: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
