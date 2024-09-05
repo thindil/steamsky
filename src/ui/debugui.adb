@@ -332,76 +332,78 @@ package body DebugUI is
    function Update_Base_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "debugUpdateBaseCommand";
       -- ****
 
-   function Update_Base_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tiny_String;
-
-      Frame_Name: constant String := ".debugdialog.main.bases";
-      Base_Index: Natural := 0;
-      Base_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
-      Base_Name: Bounded_String;
-      Base_Combo: Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
-      Base_Box: Ttk_SpinBox :=
-        Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
-      Item: Base_Cargo; --## rule line off IMPROPER_INITIALIZATION
-   begin
-      Base_Name := To_Bounded_String(Source => Get(Widgt => Base_Entry));
-      Find_Index_Loop :
-      for I in Sky_Bases'Range loop
-         Get_Base_From_Nim(Base_Index => I);
-         if Sky_Bases(I).Name = Base_Name then
-            Base_Index := I;
-            exit Find_Index_Loop;
-         end if;
-      end loop Find_Index_Loop;
-      if Base_Index = 0 then
-         return TCL_OK;
-      end if;
-      Update_Base_Type_Loop :
-      for Base_Type of Bases_Types loop
-         exit Update_Base_Type_Loop when Length(Source => Base_Type) = 0;
-         if Get_Base_Type_Name(Base_Type => Base_Type) =
-           Get(Widgt => Base_Combo) then
-            Sky_Bases(Base_Index).Base_Type := Base_Type;
-            exit Update_Base_Type_Loop;
-         end if;
-      end loop Update_Base_Type_Loop;
-      Base_Combo.Name := New_String(Str => Frame_Name & ".owner");
-      Update_Base_Owner_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         if Get_Faction(Number => I).Name =
-           To_Bounded_String(Source => Get(Widgt => Base_Combo)) then
-            Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number => I);
-            exit Update_Base_Owner_Loop;
-         end if;
-      end loop Update_Base_Owner_Loop;
-      Base_Combo.Name := New_String(Str => Frame_Name & ".size");
-      Sky_Bases(Base_Index).Size := Bases_Size'Value(Get(Widgt => Base_Combo));
-      Sky_Bases(Base_Index).Population :=
-        Natural'Value(Get(Widgt => Base_Box));
-      Base_Box.Name := New_String(Str => Frame_Name & ".reputation");
-      Sky_Bases(Base_Index).Reputation.Level :=
-        Integer'Value(Get(Widgt => Base_Box));
-      --## rule off ASSIGNMENTS
-      Base_Box.Name := New_String(Str => Frame_Name & ".money");
-      Item :=
-        BaseCargo_Container.Element
-          (Container => Sky_Bases(Base_Index).Cargo, Index => 1);
-      Item.Amount := Natural'Value(Get(Widgt => Base_Box));
-      --## rule on ASSIGNMENTS
-      BaseCargo_Container.Replace_Element
-        (Container => Sky_Bases(Base_Index).Cargo, Index => 1,
-         New_Item => Item);
-      Set_Base_In_Nim(Base_Index => Base_Index);
-      return TCL_OK;
-   end Update_Base_Command;
+--   function Update_Base_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tiny_String;
+--
+--      Frame_Name: constant String := ".debugdialog.main.bases";
+--      Base_Index: Natural := 0;
+--      Base_Entry: constant Ttk_Entry :=
+--        Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
+--      Base_Name: Bounded_String;
+--      Base_Combo: Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
+--      Base_Box: Ttk_SpinBox :=
+--        Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
+--      Item: Base_Cargo; --## rule line off IMPROPER_INITIALIZATION
+--   begin
+--      Base_Name := To_Bounded_String(Source => Get(Widgt => Base_Entry));
+--      Find_Index_Loop :
+--      for I in Sky_Bases'Range loop
+--         Get_Base_From_Nim(Base_Index => I);
+--         if Sky_Bases(I).Name = Base_Name then
+--            Base_Index := I;
+--            exit Find_Index_Loop;
+--         end if;
+--      end loop Find_Index_Loop;
+--      if Base_Index = 0 then
+--         return TCL_OK;
+--      end if;
+--      Update_Base_Type_Loop :
+--      for Base_Type of Bases_Types loop
+--         exit Update_Base_Type_Loop when Length(Source => Base_Type) = 0;
+--         if Get_Base_Type_Name(Base_Type => Base_Type) =
+--           Get(Widgt => Base_Combo) then
+--            Sky_Bases(Base_Index).Base_Type := Base_Type;
+--            exit Update_Base_Type_Loop;
+--         end if;
+--      end loop Update_Base_Type_Loop;
+--      Base_Combo.Name := New_String(Str => Frame_Name & ".owner");
+--      Update_Base_Owner_Loop :
+--      for I in 1 .. Get_Factions_Amount loop
+--         if Get_Faction(Number => I).Name =
+--           To_Bounded_String(Source => Get(Widgt => Base_Combo)) then
+--            Sky_Bases(Base_Index).Owner := Get_Faction_Index(Number => I);
+--            exit Update_Base_Owner_Loop;
+--         end if;
+--      end loop Update_Base_Owner_Loop;
+--      Base_Combo.Name := New_String(Str => Frame_Name & ".size");
+--      Sky_Bases(Base_Index).Size := Bases_Size'Value(Get(Widgt => Base_Combo));
+--      Sky_Bases(Base_Index).Population :=
+--        Natural'Value(Get(Widgt => Base_Box));
+--      Base_Box.Name := New_String(Str => Frame_Name & ".reputation");
+--      Sky_Bases(Base_Index).Reputation.Level :=
+--        Integer'Value(Get(Widgt => Base_Box));
+--      --## rule off ASSIGNMENTS
+--      Base_Box.Name := New_String(Str => Frame_Name & ".money");
+--      Item :=
+--        BaseCargo_Container.Element
+--          (Container => Sky_Bases(Base_Index).Cargo, Index => 1);
+--      Item.Amount := Natural'Value(Get(Widgt => Base_Box));
+--      --## rule on ASSIGNMENTS
+--      BaseCargo_Container.Replace_Element
+--        (Container => Sky_Bases(Base_Index).Cargo, Index => 1,
+--         New_Item => Item);
+--      Set_Base_In_Nim(Base_Index => Base_Index);
+--      return TCL_OK;
+--   end Update_Base_Command;
 
    -- ****o* DebugUI/DebugUI.Add_Ship_Command
    -- FUNCTION
