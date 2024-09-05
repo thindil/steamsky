@@ -591,9 +591,9 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   if baseIndex == 0:
     return tclOk
   var baseCombo = frameName & ".type"
-  for baseType in basesTypesList.values:
+  for index, baseType in basesTypesList:
     if baseType.name == tclEval2(script = baseCombo & " get"):
-      skyBases[baseIndex].baseType = baseType.name
+      skyBases[baseIndex].baseType = index
       break
   baseCombo = frameName & ".owner"
   for index, faction in factionsList:
@@ -603,7 +603,7 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   baseCombo = frameName & ".size"
   try:
     skyBases[baseIndex].size = parseEnum[BasesSize](s = tclEval2(
-        script = baseCombo & " get"))
+        script = baseCombo & " get").toLowerAscii)
   except:
     return showError(message = "Can't set the base's size.")
   var baseBox = frameName & ".population"
@@ -620,7 +620,7 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't set the base's reputation.")
   baseBox = frameName & ".money"
   try:
-    skyBases[baseIndex].cargo[0].amount = tclEval2(script = baseCombo &
+    skyBases[baseIndex].cargo[0].amount = tclEval2(script = baseBox &
         " get").parseInt
   except:
     return showError(message = "Can't set the base's money.")
