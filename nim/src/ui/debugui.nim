@@ -549,6 +549,17 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't update the cargo.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
+proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.cargo"
+    itemCombo = frameName & ".update"
+    itemBox = frameName & ".updateamount"
+    itemIndex = tclEval2(script = itemCombo & " current").parseInt
+  updateCargo(ship = playerShip, amount = tclEval2(script = itemBox &
+      " get").parseInt, cargoIndex = itemIndex)
+  return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -563,3 +574,4 @@ proc showDebugUi*() =
 #    addCommand("DebugAddSkill", debugAddSkillCommand)
 #    addCommand("DebugUpdateMember", debugUpdateMemberCommand)
 #    addCommand("DebugAddItem", debugAddItemCommand)
+#    addCommand("DebugUpdateItem", debugUpdateItemCommand)
