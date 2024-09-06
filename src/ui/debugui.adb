@@ -353,64 +353,66 @@ package body DebugUI is
    function Add_Ship_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "debugAddShipCommand";
       -- ****
 
-   function Add_Ship_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tiny_String;
-
-      Frame_Name: constant String := ".debugdialog.main.world";
-      Ship_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => Frame_Name & ".ship", Interp => Interp);
-      Ship_Name: Bounded_String;
-      Npc_Ship_X, Npc_Ship_Y, Duration: Positive;
-      Ship_Box: Ttk_SpinBox :=
-        Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
-   begin
-      Ship_Name := To_Bounded_String(Source => Get(Widgt => Ship_Entry));
-      Npc_Ship_X := Positive'Value(Get(Widgt => Ship_Box));
-      Ship_Box.Name := New_String(Str => Frame_Name & ".y");
-      Npc_Ship_Y := Positive'Value(Get(Widgt => Ship_Box));
-      --## rule off ASSIGNMENTS
-      Ship_Box.Name := New_String(Str => Frame_Name & ".duration");
-      --## rule on ASSIGNMENTS
-      Duration := Positive'Value(Get(Widgt => Ship_Box));
-      Add_Ship_Event_Loop :
-      for I in 1 .. Get_Proto_Ships_Amount loop
-         if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
-            if Get_Trader_Or_Friendly(Index => I, Get_Trader => 1) > 0 then
-               Get_Ada_Event
-                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
-                  Y => Npc_Ship_Y, Time => Duration,
-                  E_Type => Events_Types'Pos(TRADER), Data => I);
-            elsif Get_Trader_Or_Friendly(Index => I, Get_Trader => 0) > 0 then
-               Get_Ada_Event
-                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
-                  Y => Npc_Ship_Y, Time => Duration,
-                  E_Type => Events_Types'Pos(FRIENDLYSHIP), Data => I);
-            else
-               Get_Ada_Event
-                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
-                  Y => Npc_Ship_Y, Time => Duration,
-                  E_Type => Events_Types'Pos(ENEMYSHIP), Data => I);
-            end if;
-            Get_Ada_Map_Cell
-              (X => Npc_Ship_X, Y => Npc_Ship_Y,
-               Base_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Base_Index,
-               Event_Index => Get_Events_Amount,
-               Mission_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Mission_Index,
-               Visited =>
-                 (if Sky_Map(Npc_Ship_X, Npc_Ship_Y).Visited then 1 else 0));
-            return
-              Refresh_Events_Command
-                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-                 Argv => Argv);
-         end if;
-      end loop Add_Ship_Event_Loop;
-      return TCL_OK;
-   end Add_Ship_Command;
+--   function Add_Ship_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tiny_String;
+--
+--      Frame_Name: constant String := ".debugdialog.main.world";
+--      Ship_Entry: constant Ttk_Entry :=
+--        Get_Widget(pathName => Frame_Name & ".ship", Interp => Interp);
+--      Ship_Name: Bounded_String;
+--      Npc_Ship_X, Npc_Ship_Y, Duration: Positive;
+--      Ship_Box: Ttk_SpinBox :=
+--        Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
+--   begin
+--      Ship_Name := To_Bounded_String(Source => Get(Widgt => Ship_Entry));
+--      Npc_Ship_X := Positive'Value(Get(Widgt => Ship_Box));
+--      Ship_Box.Name := New_String(Str => Frame_Name & ".y");
+--      Npc_Ship_Y := Positive'Value(Get(Widgt => Ship_Box));
+--      --## rule off ASSIGNMENTS
+--      Ship_Box.Name := New_String(Str => Frame_Name & ".duration");
+--      --## rule on ASSIGNMENTS
+--      Duration := Positive'Value(Get(Widgt => Ship_Box));
+--      Add_Ship_Event_Loop :
+--      for I in 1 .. Get_Proto_Ships_Amount loop
+--         if Get_Proto_Ship(Proto_Index => I).Name = Ship_Name then
+--            if Get_Trader_Or_Friendly(Index => I, Get_Trader => 1) > 0 then
+--               Get_Ada_Event
+--                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
+--                  Y => Npc_Ship_Y, Time => Duration,
+--                  E_Type => Events_Types'Pos(TRADER), Data => I);
+--            elsif Get_Trader_Or_Friendly(Index => I, Get_Trader => 0) > 0 then
+--               Get_Ada_Event
+--                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
+--                  Y => Npc_Ship_Y, Time => Duration,
+--                  E_Type => Events_Types'Pos(FRIENDLYSHIP), Data => I);
+--            else
+--               Get_Ada_Event
+--                 (Index => Get_Events_Amount + 1, X => Npc_Ship_X,
+--                  Y => Npc_Ship_Y, Time => Duration,
+--                  E_Type => Events_Types'Pos(ENEMYSHIP), Data => I);
+--            end if;
+--            Get_Ada_Map_Cell
+--              (X => Npc_Ship_X, Y => Npc_Ship_Y,
+--               Base_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Base_Index,
+--               Event_Index => Get_Events_Amount,
+--               Mission_Index => Sky_Map(Npc_Ship_X, Npc_Ship_Y).Mission_Index,
+--               Visited =>
+--                 (if Sky_Map(Npc_Ship_X, Npc_Ship_Y).Visited then 1 else 0));
+--            return
+--              Refresh_Events_Command
+--                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--                 Argv => Argv);
+--         end if;
+--      end loop Add_Ship_Event_Loop;
+--      return TCL_OK;
+--   end Add_Ship_Command;
 
    -- ****o* DebugUI/DebugUI.Toggle_Item_Entry_Command
    -- FUNCTION
