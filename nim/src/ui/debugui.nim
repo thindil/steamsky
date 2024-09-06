@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[basestypes, game, gamesaveload, items, maps, shipscargo, tk, types]
+import ../[basestypes, events, game, gamesaveload, items, maps, shipscargo, tk, types]
 import mapsui
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -637,6 +637,25 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't set the base's money.")
   return tclOk
 
+proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.world"
+    shipEntry = frameName & ".ship"
+    shipName = tclEval2(script = shipEntry & " get")
+  var shipBox = frameName & ".x"
+  let npcShipX = tclEval2(script = shipBox & " get").parseInt
+  shipBox = frameName & ".y"
+  let npcShipY = tclEval2(script = shipBox & " get").parseInt
+  shipBox = frameName & ".duration"
+  let duration = tclEval2(script = shipBox & " get").parseInt
+  for index, ship in protoShipsList:
+    if ship.name == shipName:
+      if index in traders:
+        eventsList.add(y = EventData(skyX: npcShipX, skyY: npcShipY,
+            time: duration, eType: trader, shipIndex: index))
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -653,3 +672,4 @@ proc showDebugUi*() =
 #    addCommand("DebugAddItem", debugAddItemCommand)
 #    addCommand("DebugUpdateItem", debugUpdateItemCommand)
 #    addCommand("DebugUpdateBase", debugUpdateBaseCommand)
+#    addCommand("DebugAddShip", debugAddShipCommand)
