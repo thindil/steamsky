@@ -654,6 +654,13 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
       if index in traders:
         eventsList.add(y = EventData(skyX: npcShipX, skyY: npcShipY,
             time: duration, eType: trader, shipIndex: index))
+      elif index in friendlyShips:
+        eventsList.add(y = EventData(skyX: npcShipX, skyY: npcShipY,
+            time: duration, eType: friendlyShip, shipIndex: index))
+      else:
+        eventsList.add(y = EventData(skyX: npcShipX, skyY: npcShipY,
+            time: duration, eType: enemyShip, shipIndex: index))
+      return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
   return tclOk
 
 proc showDebugUi*() =
