@@ -684,6 +684,21 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
           argc = argc, argv = argv)
   return tclOk
 
+proc toggleItemEntryCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.world"
+    eventCombo = frameName & ".event"
+    itemEntry = frameName & ".item"
+    itemLabel = frameName & ".itemlbl"
+  if tclEval2(script = eventCombo & " current") == "1":
+    tclEval(script = "grid " & itemLabel)
+    tclEval(script = "grid " & itemEntry)
+  else:
+    tclEval(script = "grid remove " & itemLabel)
+    tclEval(script = "grid remove " & itemEntry)
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -701,3 +716,4 @@ proc showDebugUi*() =
 #    addCommand("DebugUpdateItem", debugUpdateItemCommand)
 #    addCommand("DebugUpdateBase", debugUpdateBaseCommand)
 #    addCommand("DebugAddShip", debugAddShipCommand)
+#    addCommand("ToggleItemEntry", toggleItemEntryCommand)
