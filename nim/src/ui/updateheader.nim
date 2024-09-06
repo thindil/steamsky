@@ -32,22 +32,25 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
       showError(message = "Can't show the speed of the ship.")
       return
     tclEval(script = "tooltip::tooltip " & label & " \"Game time and current ship speed.\"")
-  label = gameHeader & ".nofuel"
-  tclEval(script = "grid remove " & label)
+  label = gameHeader & ".fuel"
   var itemAmount = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
         showError(message = "Can't get items amount.")
         return
   if itemAmount == 0:
-    tclEval(script = label & " configure -image nofuelicon")
+    tclEval(script = label & " configure -image nofuelicon -text {" &
+        $itemAmount & "} -style Headerred.TLabel")
     tclEval(script = "tooltip::tooltip " & label & " \"You can't travel anymore, because you don't have any fuel for ship.\"")
-    tclEval(script = "grid " & label)
   elif itemAmount <= gameSettings.lowFuel:
-    tclEval(script = label & " configure -image lowfuelicon")
+    tclEval(script = label & " configure -image lowfuelicon -text {" &
+        $itemAmount & "} -style Golden.TLabel")
     tclEval(script = "tooltip::tooltip " & label &
         " \"Low level of fuel on ship. Only " & $itemAmount & " left.\"")
-    tclEval(script = "grid " & label)
+  else:
+    tclEval(script = label & " configure -image fuelicon -text {" &
+        $itemAmount & "} -style Headergreen.TLabel")
+    tclEval(script = "tooltip::tooltip " & label & " \"The amount of fuel in the ship's cargo.\"")
   label = gameHeader & ".nodrink"
   tclEval(script = "grid remove " & label)
   itemAmount = try:
@@ -82,7 +85,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   else:
     tclEval(script = label & " configure -image foodicon -text {" &
         $itemAmount & "} -style Headergreen.TLabel")
-    tclEval(script = "tooltip::tooltip " & label & " \"The amount of food in the ship.\"")
+    tclEval(script = "tooltip::tooltip " & label & " \"The amount of food in the ship's cargo.\"")
   var havePilot, haveEngineer, haveTrader, haveUpgrader, haveCleaner,
     haveRepairman = false
   for member in playerShip.crew:

@@ -26,7 +26,7 @@ tooltip::tooltip .gameframe.header.closebutton {Back to the game map [Escape key
 grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .gameframe.header.time {The game time}
 grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
-grid [ttk::label .gameframe.header.nofuel] -row 0 -column 3 -padx 3
+grid [ttk::label .gameframe.header.fuel] -row 0 -column 3 -padx 3
 grid [ttk::label .gameframe.header.food] -row 0 -column 4 -padx 3
 grid [ttk::label .gameframe.header.nodrink] -row 0 -column 5 -padx 3
 grid [ttk::label .gameframe.header.overloaded] -row 0 -column 6 -padx 3
