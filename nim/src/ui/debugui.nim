@@ -685,7 +685,7 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleItemEntryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.world"
     eventCombo = frameName & ".event"
