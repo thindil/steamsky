@@ -638,17 +638,26 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.world"
     shipEntry = frameName & ".ship"
     shipName = tclEval2(script = shipEntry & " get")
   var shipBox = frameName & ".x"
-  let npcShipX = tclEval2(script = shipBox & " get").parseInt
+  let npcShipX = try:
+      tclEval2(script = shipBox & " get").parseInt
+    except:
+      return showError(message = "Can't get X coord.")
   shipBox = frameName & ".y"
-  let npcShipY = tclEval2(script = shipBox & " get").parseInt
+  let npcShipY = try:
+      tclEval2(script = shipBox & " get").parseInt
+    except:
+      return showError(message = "Can't get Y coord.")
   shipBox = frameName & ".duration"
-  let duration = tclEval2(script = shipBox & " get").parseInt
+  let duration = try:
+      tclEval2(script = shipBox & " get").parseInt
+    except:
+      return showError(message = "Can't get duration.")
   for index, ship in protoShipsList:
     if ship.name == shipName:
       if index in traders:
@@ -660,7 +669,8 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         eventsList.add(y = EventData(skyX: npcShipX, skyY: npcShipY,
             time: duration, eType: enemyShip, shipIndex: index))
-      return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
+      return refreshCommand(clientData = clientData, interp = interp,
+          argc = argc, argv = argv)
   return tclOk
 
 proc showDebugUi*() =
