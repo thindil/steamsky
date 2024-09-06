@@ -22,14 +22,14 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Bases; use Bases;
 with BasesTypes;
 with Events; use Events;
@@ -374,32 +374,34 @@ package body DebugUI is
    function Toggle_Item_Entry_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "toggleItemEntryCommand";
       -- ****
 
-   function Toggle_Item_Entry_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-
-      Frame_Name: constant String := ".debugdialog.main.world";
-      Event_Combo: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
-      Item_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => Frame_Name & ".item", Interp => Interp);
-      Item_Label: constant Ttk_Label :=
-        Get_Widget(pathName => Frame_Name & ".itemlbl", Interp => Interp);
-   begin
-      if Current(ComboBox => Event_Combo) = "1" then
-         Tcl.Tk.Ada.Grid.Grid(Slave => Item_Label);
-         Tcl.Tk.Ada.Grid.Grid(Slave => Item_Entry);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Item_Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Item_Entry);
-      end if;
-      return TCL_OK;
-   end Toggle_Item_Entry_Command;
+--   function Toggle_Item_Entry_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--
+--      Frame_Name: constant String := ".debugdialog.main.world";
+--      Event_Combo: constant Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
+--      Item_Entry: constant Ttk_Entry :=
+--        Get_Widget(pathName => Frame_Name & ".item", Interp => Interp);
+--      Item_Label: constant Ttk_Label :=
+--        Get_Widget(pathName => Frame_Name & ".itemlbl", Interp => Interp);
+--   begin
+--      if Current(ComboBox => Event_Combo) = "1" then
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Item_Label);
+--         Tcl.Tk.Ada.Grid.Grid(Slave => Item_Entry);
+--      else
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Item_Label);
+--         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Item_Entry);
+--      end if;
+--      return TCL_OK;
+--   end Toggle_Item_Entry_Command;
 
    -- ****o* DebugUI/DebugUI.Add_Event_Command
    -- FUNCTION
