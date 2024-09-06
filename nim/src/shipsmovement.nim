@@ -33,10 +33,10 @@ proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
   var baseFuelNeeded: int = 0
   for module in playerShip.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
-      baseFuelNeeded = baseFuelNeeded - 1
+      baseFuelNeeded -= 1
   var fuelNeeded: int = baseFuelNeeded * (minutes / 10).int
   if getRandom(min = 1, max = 10) < (minutes mod 10):
-    fuelNeeded = fuelNeeded * baseFuelNeeded
+    fuelNeeded *= baseFuelNeeded
   let fuelIndex: int = findItem(inventory = playerShip.cargo, itemType = fuelType)
   if fuelIndex == -1:
     addMessage(message = "Ship falls from the sky due to a lack of fuel.",
@@ -104,20 +104,20 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
     if module.mType == ModuleType2.engine and not module.disabled:
       baseSpeed = module.power * 10
       var damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
-      result = result + (baseSpeed - (baseSpeed.float * damage).Natural)
+      result += (baseSpeed - (baseSpeed.float * damage).Natural)
   result = ((result.float / countShipWeight(ship = ship).float) *
       100_000.0).Natural
   if ship.crew.len > 0:
-    if "sentientships" notin factionsList[ship.crew[0].faction].flags:
-      for member in ship.crew:
-        if member.order == pilot:
-          result = result + (result.float * (getSkillLevel(member = member,
-              skillIndex = pilotingSkill).float / 300.0)).Natural
-    else:
+    if "sentientships" in factionsList[ship.crew[0].faction].flags:
       for module in ship.modules:
         if module.mType == ModuleType2.hull:
-          result = result + (result.float * ((module.maxModules * 2).float /
+          result += (result.float * ((module.maxModules * 2).float /
               300.0)).Natural
+    else:
+      for member in ship.crew:
+        if member.order == pilot:
+          result += (result.float * (getSkillLevel(member = member,
+              skillIndex = pilotingSkill).float / 300.0)).Natural
   var shipSetSpeed: ShipSpeed = ship.speed
   if ship.name == playerShip.name and ship.speed in {docked, fullStop} and infoOnly:
     shipSetSpeed = parseEnum[ShipSpeed](s = (
@@ -187,7 +187,29 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
     if (realSpeed(ship = playerShip).float / 1_000.0) < 0.5:
       return "You can't undock because your ship is overloaded."
     playerShip.speed = docked
-    if not escape:
+    if escape:
+      let roll: Positive = getRandom(min = 1, max = 100)
+      var
+        messageText: string = "Ship escaped from base " & skyBases[baseIndex].name & " without paying."
+        color: MessageColor = white
+      if roll in 1..40:
+        let moduleIndex: Natural = getRandom(min = playerShip.modules.low,
+            max = playerShip.modules.high)
+        messageText = messageText & " But your ship (" & playerShip.modules[
+            moduleIndex].name & ") takes damage."
+        color = red
+        damageModule(ship = playerShip, moduleIndex = moduleIndex,
+            damage = getRandom(min = 1, max = 30),
+            deathReason = "damage during escaping from the base")
+      addMessage(message = messageText, mType = orderMessage, color = color)
+      gainRep(baseIndex = baseIndex, points = -(getRandom(min = 10, max = 30)))
+    if playerShip.crew[0].health > 0:
+      playerShip.speed = parseEnum[ShipSpeed](s = (
+          $gameSettings.undockSpeed).toLowerAscii)
+      updateGame(minutes = 5)
+      if $gameSettings.autoSave == $undock:
+        saveGame()
+    else:
       if skyBases[baseIndex].population > 0:
         let moneyIndex2: int = findItem(inventory = playerShip.cargo,
             protoIndex = moneyIndex)
@@ -225,28 +247,6 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
           return "You can't undock from base because you don't have any fuel."
         addMessage(message = "Ship undocked from base " & skyBases[
             baseIndex].name & ".", mType = orderMessage)
-    else:
-      let roll: Positive = getRandom(min = 1, max = 100)
-      var
-        messageText: string = "Ship escaped from base " & skyBases[baseIndex].name & " without paying."
-        color: MessageColor = white
-      if roll in 1 .. 40:
-        let moduleIndex: Natural = getRandom(min = playerShip.modules.low,
-            max = playerShip.modules.high)
-        messageText = messageText & " But your ship (" & playerShip.modules[
-            moduleIndex].name & ") takes damage."
-        color = red
-        damageModule(ship = playerShip, moduleIndex = moduleIndex,
-            damage = getRandom(min = 1, max = 30),
-            deathReason = "damage during escaping from the base")
-      addMessage(message = messageText, mType = orderMessage, color = color)
-      gainRep(baseIndex = baseIndex, points = -(getRandom(min = 10, max = 30)))
-    if playerShip.crew[0].health > 0:
-      playerShip.speed = parseEnum[ShipSpeed](s = (
-          $gameSettings.undockSpeed).toLowerAscii)
-      updateGame(minutes = 5)
-      if $gameSettings.autoSave == $undock:
-        saveGame()
 
 proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [], contractual.} =
   ## Count the amount of needed fuel to travel by one map cell by the player's
@@ -261,11 +261,11 @@ proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [], contractual.} =
     if module.mType == ModuleType2.engine and not module.disabled:
       case speed
       of quarterSpeed:
-        result = result - (module.fuelUsage / 4).int
+        result -= (module.fuelUsage / 4).int
       of halfSpeed:
-        result = result - (module.fuelUsage / 2).int
+        result -= (module.fuelUsage / 2).int
       of fullSpeed:
-        result = result - module.fuelUsage
+        result -= module.fuelUsage
       else:
         discard
 
@@ -407,8 +407,7 @@ proc realAdaSpeed(ofPlayerShip, infoOnly: cint): cint {.raises: [ValueError],
   ## Temporary C binding
   if ofPlayerShip == 1:
     return realSpeed(ship = playerShip, infoOnly = infoOnly == 1).cint
-  else:
-    return realSpeed(ship = npcShip, infoOnly = infoOnly == 1).cint
+  return realSpeed(ship = npcShip, infoOnly = infoOnly == 1).cint
 
 proc dockAdaShip(docking, escape: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
