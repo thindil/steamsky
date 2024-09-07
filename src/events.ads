@@ -1,4 +1,4 @@
---    Copyright 2016-2023 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -112,12 +112,6 @@ package Events is
       External_Name => "getAdaEvent";
 
    procedure Set_Event(Index: Positive);
-
-   function Get_Trader_Or_Friendly
-     (Index, Get_Trader: Natural) return Natural with
-      Import => True,
-      Convention => C,
-      External_Name => "getTraderOrFriendly";
 
    function Get_Events_Amount return Natural with
       Import => True,
