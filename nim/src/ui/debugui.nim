@@ -730,7 +730,7 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
     eventType = tclEval2(script = eventBox & " current").parseInt
     durationBox = frameName & ".baseduration"
     duration = tclEval2(script = durationBox & " get").parseInt
-  var added = false
+  var added = true
   case eventType
   of 0:
     eventsList.add(y = EventData(skyX: skyBases[baseIndex].skyX, skyY: skyBases[
@@ -738,15 +738,23 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
   of 1:
     eventBox = frameName & ".item"
     eventName = tclEval2(script = eventBox & " get")
+    added = false
     for index, item in itemsList:
       if item.name == eventName:
         eventsList.add(y = EventData(skyX: skyBases[baseIndex].skyX,
             skyY: skyBases[baseIndex].skyY, time: duration, eType: doublePrice,
             itemIndex: index))
         added = true
+  of 2:
+    eventsList.add(y = EventData(skyX: skyBases[baseIndex].skyX, skyY: skyBases[
+        baseIndex].skyY, time: duration, eType: fullDocks))
   else:
     discard
-  return tclOk
+  if not added:
+    return tclOk
+  skyMap[skyBases[baseIndex].skyX][skyBases[
+      baseIndex].skyY].eventIndex = eventsList.high
+  return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
