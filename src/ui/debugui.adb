@@ -21,22 +21,21 @@ with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Bases; use Bases;
 with BasesTypes;
 with Events; use Events;
 with Factions;
 with Game; use Game;
 with Items; use Items;
-with Maps; use Maps;
+with Maps;
 with ShipModules;
-with Ships; use Ships;
+with Ships;
 with Utils.UI;
 
 package body DebugUI is
@@ -399,7 +398,11 @@ package body DebugUI is
    function Add_Event_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Maps;
       use Tiny_String;
+
       Frame_Name: constant String := ".debugdialog.main.world";
       Event_Entry: constant Ttk_Entry :=
         Get_Widget(pathName => Frame_Name & ".base", Interp => Interp);
@@ -523,9 +526,12 @@ package body DebugUI is
    procedure Show_Debug_Ui is
       use GNAT.Directory_Operations;
       use Tcl.Ada;
+      use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets;
       use BasesTypes;
       use Factions;
       use Utils.UI;
+      use Ships;
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.bases";
