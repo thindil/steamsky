@@ -28,7 +28,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Bases; use Bases;
 with BasesTypes;
-with Events; use Events;
+-- with Events; use Events;
 with Factions;
 with Game; use Game;
 with Items; use Items;
@@ -411,24 +411,26 @@ package body DebugUI is
    function Delete_Event_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "debugAddEventCommand";
       -- ****
 
-   function Delete_Event_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      Event_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName => ".debugdialog.main.world.deleteevent.delete",
-           Interp => Interp);
-   begin
-      Delete_Event
-        (Event_Index => Natural'Value(Current(ComboBox => Event_Box)) + 1);
-      return
-        Refresh_Events_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
-   end Delete_Event_Command;
+--   function Delete_Event_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      Event_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName => ".debugdialog.main.world.deleteevent.delete",
+--           Interp => Interp);
+--   begin
+--      Delete_Event
+--        (Event_Index => Natural'Value(Current(ComboBox => Event_Box)) + 1);
+--      return
+--        Refresh_Events_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv);
+--   end Delete_Event_Command;
 
    procedure Show_Debug_Ui is
       use GNAT.Directory_Operations;
