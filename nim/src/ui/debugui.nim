@@ -680,6 +680,7 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         eventsList.add(y = EventData(skyX: npcShipX, skyY: npcShipY,
             time: duration, eType: enemyShip, shipIndex: index))
+      skyMap[npcShipX][npcShipY].eventIndex = eventsList.high
       return refreshCommand(clientData = clientData, interp = interp,
           argc = argc, argv = argv)
   return tclOk
@@ -710,6 +711,43 @@ proc toggleItemEntryCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & itemEntry)
   return tclOk
 
+proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    frameName = ".debugdialog.main.world"
+    eventEntry = frameName & ".base"
+  var
+    eventName = tclEval2(script = eventEntry & " get")
+    baseIndex = 0
+  for index, base in skyBases:
+    if base.name == eventName:
+      baseIndex = index
+      break
+  if baseIndex == 0:
+    return tclOk
+  var eventBox = frameName & ".event"
+  let
+    eventType = tclEval2(script = eventBox & " current").parseInt
+    durationBox = frameName & ".baseduration"
+    duration = tclEval2(script = durationBox & " get").parseInt
+  var added = false
+  case eventType
+  of 0:
+    eventsList.add(y = EventData(skyX: skyBases[baseIndex].skyX, skyY: skyBases[
+        baseIndex].skyY, time: duration, eType: disease))
+  of 1:
+    eventBox = frameName & ".item"
+    eventName = tclEval2(script = eventBox & " get")
+    for index, item in itemsList:
+      if item.name == eventName:
+        eventsList.add(y = EventData(skyX: skyBases[baseIndex].skyX,
+            skyY: skyBases[baseIndex].skyY, time: duration, eType: doublePrice,
+            itemIndex: index))
+        added = true
+  else:
+    discard
+  return tclOk
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -728,3 +766,4 @@ proc showDebugUi*() =
 #    addCommand("DebugUpdateBase", debugUpdateBaseCommand)
 #    addCommand("DebugAddShip", debugAddShipCommand)
 #    addCommand("ToggleItemEntry", toggleItemEntryCommand)
+#    addCommand("DebugAddEvent", debugAddEventCommand)
