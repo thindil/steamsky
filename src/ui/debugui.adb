@@ -26,14 +26,14 @@ with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Bases; use Bases;
 with BasesTypes;
 with Events; use Events;
 with Factions;
 with Game; use Game;
 with Items; use Items;
-with Maps;
+-- with Maps;
 with ShipModules;
 with Ships;
 with Utils.UI;
@@ -392,101 +392,103 @@ package body DebugUI is
    function Add_Event_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "debugAddEventCommand";
       -- ****
 
-   function Add_Event_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.TtkEntry;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-      use Maps;
-      use Tiny_String;
-
-      Frame_Name: constant String := ".debugdialog.main.world";
-      Event_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => Frame_Name & ".base", Interp => Interp);
-      Event_Name: Unbounded_String;
-      Base_Index, Event_Type: Natural := 0;
-      Event_Box: Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
-      Duration_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => Frame_Name & ".baseduration", Interp => Interp);
-      Added: Boolean := True;
-   begin
-      Event_Name := To_Unbounded_String(Source => Get(Widgt => Event_Entry));
-      Find_Base_Index_Loop :
-      for I in Sky_Bases'Range loop
-         if To_String(Source => Sky_Bases(I).Name) =
-           To_String(Source => Event_Name) then
-            Base_Index := I;
-            exit Find_Base_Index_Loop;
-         end if;
-      end loop Find_Base_Index_Loop;
-      if Base_Index = 0 then
-         return TCL_OK;
-      end if;
-      Event_Type := Natural'Value(Current(ComboBox => Event_Box));
-      case Event_Type is
-         when 0 =>
-            Get_Ada_Event
-              (Index => Get_Events_Amount + 1,
-               X => Sky_Bases(Base_Index).Sky_X,
-               Y => Sky_Bases(Base_Index).Sky_Y,
-               Time => Positive'Value(Get(Widgt => Duration_Box)),
-               E_Type => Events_Types'Pos(DISEASE), Data => 1);
-         when 1 =>
-            Event_Box.Name := New_String(Str => Frame_Name & ".item");
-            Event_Name :=
-              To_Unbounded_String(Source => Get(Widgt => Event_Box));
-            Added := False;
-            Find_Item_Loop :
-            for I in 1 .. Get_Proto_Amount loop
-               if To_String(Source => Get_Proto_Item(Index => I).Name) =
-                 To_String(Source => Event_Name) then
-                  Get_Ada_Event
-                    (Index => Get_Events_Amount + 1,
-                     X => Sky_Bases(Base_Index).Sky_X,
-                     Y => Sky_Bases(Base_Index).Sky_Y,
-                     Time => Positive'Value(Get(Widgt => Duration_Box)),
-                     E_Type => Events_Types'Pos(DOUBLEPRICE), Data => I);
-                  Added := True;
-                  exit Find_Item_Loop;
-               end if;
-            end loop Find_Item_Loop;
-         when 2 =>
-            Get_Ada_Event
-              (Index => Get_Events_Amount + 1,
-               X => Sky_Bases(Base_Index).Sky_X,
-               Y => Sky_Bases(Base_Index).Sky_Y,
-               Time => Positive'Value(Get(Widgt => Duration_Box)),
-               E_Type => Events_Types'Pos(FULLDOCKS), Data => 1);
-         when others =>
-            null;
-      end case;
-      if not Added then
-         return TCL_OK;
-      end if;
-      Get_Ada_Map_Cell
-        (X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_Y,
-         Base_Index =>
-           Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
-             .Base_Index,
-         Event_Index => Get_Events_Amount,
-         Mission_Index =>
-           Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
-             .Mission_Index,
-         Visited =>
-           (if
-              Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
-                .Visited
-            then 1
-            else 0));
-      return
-        Refresh_Events_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
-   end Add_Event_Command;
+--   function Add_Event_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tcl.Tk.Ada.Widgets.TtkEntry;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+--      use Maps;
+--      use Tiny_String;
+--
+--      Frame_Name: constant String := ".debugdialog.main.world";
+--      Event_Entry: constant Ttk_Entry :=
+--        Get_Widget(pathName => Frame_Name & ".base", Interp => Interp);
+--      Event_Name: Unbounded_String;
+--      Base_Index, Event_Type: Natural := 0;
+--      Event_Box: Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
+--      Duration_Box: constant Ttk_SpinBox :=
+--        Get_Widget(pathName => Frame_Name & ".baseduration", Interp => Interp);
+--      Added: Boolean := True;
+--   begin
+--      Event_Name := To_Unbounded_String(Source => Get(Widgt => Event_Entry));
+--      Find_Base_Index_Loop :
+--      for I in Sky_Bases'Range loop
+--         if To_String(Source => Sky_Bases(I).Name) =
+--           To_String(Source => Event_Name) then
+--            Base_Index := I;
+--            exit Find_Base_Index_Loop;
+--         end if;
+--      end loop Find_Base_Index_Loop;
+--      if Base_Index = 0 then
+--         return TCL_OK;
+--      end if;
+--      Event_Type := Natural'Value(Current(ComboBox => Event_Box));
+--      case Event_Type is
+--         when 0 =>
+--            Get_Ada_Event
+--              (Index => Get_Events_Amount + 1,
+--               X => Sky_Bases(Base_Index).Sky_X,
+--               Y => Sky_Bases(Base_Index).Sky_Y,
+--               Time => Positive'Value(Get(Widgt => Duration_Box)),
+--               E_Type => Events_Types'Pos(DISEASE), Data => 1);
+--         when 1 =>
+--            Event_Box.Name := New_String(Str => Frame_Name & ".item");
+--            Event_Name :=
+--              To_Unbounded_String(Source => Get(Widgt => Event_Box));
+--            Added := False;
+--            Find_Item_Loop :
+--            for I in 1 .. Get_Proto_Amount loop
+--               if To_String(Source => Get_Proto_Item(Index => I).Name) =
+--                 To_String(Source => Event_Name) then
+--                  Get_Ada_Event
+--                    (Index => Get_Events_Amount + 1,
+--                     X => Sky_Bases(Base_Index).Sky_X,
+--                     Y => Sky_Bases(Base_Index).Sky_Y,
+--                     Time => Positive'Value(Get(Widgt => Duration_Box)),
+--                     E_Type => Events_Types'Pos(DOUBLEPRICE), Data => I);
+--                  Added := True;
+--                  exit Find_Item_Loop;
+--               end if;
+--            end loop Find_Item_Loop;
+--         when 2 =>
+--            Get_Ada_Event
+--              (Index => Get_Events_Amount + 1,
+--               X => Sky_Bases(Base_Index).Sky_X,
+--               Y => Sky_Bases(Base_Index).Sky_Y,
+--               Time => Positive'Value(Get(Widgt => Duration_Box)),
+--               E_Type => Events_Types'Pos(FULLDOCKS), Data => 1);
+--         when others =>
+--            null;
+--      end case;
+--      if not Added then
+--         return TCL_OK;
+--      end if;
+--      Get_Ada_Map_Cell
+--        (X => Sky_Bases(Base_Index).Sky_X, Y => Sky_Bases(Base_Index).Sky_Y,
+--         Base_Index =>
+--           Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+--             .Base_Index,
+--         Event_Index => Get_Events_Amount,
+--         Mission_Index =>
+--           Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+--             .Mission_Index,
+--         Visited =>
+--           (if
+--              Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
+--                .Visited
+--            then 1
+--            else 0));
+--      return
+--        Refresh_Events_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv);
+--   end Add_Event_Command;
 
    -- ****o* DebugUI/DebugUI.Delete_Event_Command
    -- FUNCTION
