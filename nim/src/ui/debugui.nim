@@ -773,6 +773,12 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
       baseIndex].skyY].eventIndex = eventsList.high
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
+proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let eventBox = ".debugdialog.main.world.deleteevent.delete"
+  deleteEvent(eventIndex = tclEval2(script = eventBox & " current").parseInt)
+  return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
+
 proc showDebugUi*() =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
@@ -792,3 +798,4 @@ proc showDebugUi*() =
 #    addCommand("DebugAddShip", debugAddShipCommand)
 #    addCommand("ToggleItemEntry", toggleItemEntryCommand)
 #    addCommand("DebugAddEvent", debugAddEventCommand)
+#    addCommand("DebugDeleteEvent", debugDeleteEventCommand)
