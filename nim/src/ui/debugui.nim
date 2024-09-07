@@ -712,7 +712,7 @@ proc toggleItemEntryCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     frameName = ".debugdialog.main.world"
     eventEntry = frameName & ".base"
@@ -727,9 +727,15 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   var eventBox = frameName & ".event"
   let
-    eventType = tclEval2(script = eventBox & " current").parseInt
+    eventType = try:
+        tclEval2(script = eventBox & " current").parseInt
+      except:
+        return showError(message = "Can't get event type.")
     durationBox = frameName & ".baseduration"
-    duration = tclEval2(script = durationBox & " get").parseInt
+    duration = try:
+        tclEval2(script = durationBox & " get").parseInt
+      except:
+        return showError(message = "Can't get event duration.")
   var added = true
   case eventType
   of 0:
