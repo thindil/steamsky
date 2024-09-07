@@ -413,7 +413,7 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C,
       Import => True,
-      External_Name => "debugAddEventCommand";
+      External_Name => "debugDeleteEventCommand";
       -- ****
 
 --   function Delete_Event_Command

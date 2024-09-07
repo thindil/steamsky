@@ -774,9 +774,12 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let eventBox = ".debugdialog.main.world.deleteevent.delete"
-  deleteEvent(eventIndex = tclEval2(script = eventBox & " current").parseInt)
+  try:
+    deleteEvent(eventIndex = tclEval2(script = eventBox & " current").parseInt)
+  except:
+    return showError(message = "Can't delete event.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc showDebugUi*() =
