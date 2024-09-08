@@ -752,15 +752,24 @@ proc createGameUi*() =
     tclEval(script = "wm attributes . -fullscreen 1")
   for index, accel in mapAccelerators.mpairs:
     let pos = accel.rfind(sub = '-')
-    tclEval(script = "bind . <" & accel[0..pos] & "KeyPress-" & accel[pos + 1..^1] & "> {InvokeMenu " & accel & "}")
+    tclEval(script = "bind . <" & accel[0..pos] & "KeyPress-" & accel[pos +
+        1..^1] & "> {InvokeMenu " & accel & "}")
   if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.header"):
     let header = gameFrame & ".header"
     tclEval(script = "grid " & header)
   updateHeader()
   centerX = playerShip.skyX
   centerY = playerShip.skyY
-  for baseType in basesTypesList:
-    tclEval(script = mapView & " tag configure " & baseType.name & " -foreground #" & baseType.color)
+  for baseType in basesTypesList.values:
+    tclEval(script = mapView & " tag configure " & baseType.name &
+        " -foreground #" & baseType.color)
+  let panedPosition = (if gameSettings.windowHeight -
+      gameSettings.messagesPosition <
+      0: gameSettings.windowHeight else: gameSettings.windowHeight -
+      gameSettings.messagesPosition)
+  tclEval(script = paned & " sashpos 0 " & $panedPosition)
+  if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.paned"):
+    tclEval(script = "grid " & paned)
 
 # Temporary code for interfacing with Ada
 
