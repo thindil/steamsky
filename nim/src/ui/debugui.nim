@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[strutils, tables]
 import ../[basestypes, events, game, gamesaveload, items, maps, shipscargo, tk, types]
 import mapsui
 
@@ -794,25 +794,25 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc showDebugUi*() {.exportc.} =
-  tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
-#    addCommand("Refresh", refreshCommand)
-#    addCommand("RefreshModule", refreshModuleCommand)
-#    addCommand("RefreshMember", refreshMemberCommand)
-#    addCommand("RefreshCargo", refreshCargoCommand)
-#    addCommand("RefreshEvents", refreshEventsCommand)
-#    addCommand("RefreshBase", refreshBaseCommand)
-#    addCommand("DebugSaveGame", debugSaveGameCommand)
-#    addCommand("DebugMoveShip", debugMoveShipCommand)
-#    addCommand("DebugUpdateModule", debugUpdateModuleCommand)
-#    addCommand("DebugAddSkill", debugAddSkillCommand)
-#    addCommand("DebugUpdateMember", debugUpdateMemberCommand)
-#    addCommand("DebugAddItem", debugAddItemCommand)
-#    addCommand("DebugUpdateItem", debugUpdateItemCommand)
-#    addCommand("DebugUpdateBase", debugUpdateBaseCommand)
-#    addCommand("DebugAddShip", debugAddShipCommand)
-#    addCommand("ToggleItemEntry", toggleItemEntryCommand)
-#    addCommand("DebugAddEvent", debugAddEventCommand)
-#    addCommand("DebugDeleteEvent", debugDeleteEventCommand)
+#  tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
+#  addCommand("Refresh", refreshCommand)
+#  addCommand("RefreshModule", refreshModuleCommand)
+#  addCommand("RefreshMember", refreshMemberCommand)
+#  addCommand("RefreshCargo", refreshCargoCommand)
+#  addCommand("RefreshEvents", refreshEventsCommand)
+#  addCommand("RefreshBase", refreshBaseCommand)
+#  addCommand("DebugSaveGame", debugSaveGameCommand)
+#  addCommand("DebugMoveShip", debugMoveShipCommand)
+#  addCommand("DebugUpdateModule", debugUpdateModuleCommand)
+#  addCommand("DebugAddSkill", debugAddSkillCommand)
+#  addCommand("DebugUpdateMember", debugUpdateMemberCommand)
+#  addCommand("DebugAddItem", debugAddItemCommand)
+#  addCommand("DebugUpdateItem", debugUpdateItemCommand)
+#  addCommand("DebugUpdateBase", debugUpdateBaseCommand)
+#  addCommand("DebugAddShip", debugAddShipCommand)
+#  addCommand("ToggleItemEntry", toggleItemEntryCommand)
+#  addCommand("DebugAddEvent", debugAddEventCommand)
+#  addCommand("DebugDeleteEvent", debugDeleteEventCommand)
   var valuesList = ""
   for baseType in basesTypesList.values:
     valuesList.add(y = " {" & baseType.name & "}")
@@ -842,3 +842,11 @@ proc showDebugUi*() {.exportc.} =
   for item in itemsList.values:
     valuesList.add(y = " {" & item.name & "}")
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  comboBox = ".debugdialog.main.world.item"
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  valuesList = ""
+  comboBox = ".debugdialog.main.world.ship"
+  for index, ship in protoShipsList:
+    valuesList.add(y = " {" & ship.name & "}")
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  tclEval(script = "Refresh")
