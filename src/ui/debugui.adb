@@ -16,22 +16,22 @@
 with Ada.Strings;
 with Ada.Strings.Unbounded;
 with Interfaces.C;
-with Interfaces.C.Strings;
+-- with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkEntry;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Bases;
-with BasesTypes;
-with Factions;
+-- with Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+-- with Bases;
+-- with BasesTypes;
+-- with Factions;
 with Game;
-with Items;
-with ShipModules;
-with Ships;
+-- with Items;
+-- with ShipModules;
+-- with Ships;
 with Utils.UI;
 
 package body DebugUI is
@@ -416,24 +416,28 @@ package body DebugUI is
 
    procedure Show_Debug_Ui is
       use Ada.Strings.Unbounded;
-      use Interfaces.C.Strings;
+--      use Interfaces.C.Strings;
       use GNAT.Directory_Operations;
       use Tcl.Ada;
       use Tcl.Tk.Ada;
-      use Tcl.Tk.Ada.Widgets;
-      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-      use Bases;
-      use BasesTypes;
-      use Factions;
+--      use Tcl.Tk.Ada.Widgets;
+--      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+--      use Bases;
+--      use BasesTypes;
+--      use Factions;
       use Game;
-      use Items;
+--      use Items;
       use Utils.UI;
-      use Ships;
-      use Tiny_String;
+--      use Ships;
+--      use Tiny_String;
 
-      Frame_Name: constant String := ".debugdialog.main.bases";
-      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type");
-      Values_List: Unbounded_String := Null_Unbounded_String;
+--      Frame_Name: constant String := ".debugdialog.main.bases";
+--      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type");
+--      Values_List: Unbounded_String := Null_Unbounded_String;
+      procedure Show_Ada_Debug_Ui with
+         Convention => C,
+         Import => True,
+         External_Name => "showDebugUi";
    begin
       Tcl_EvalFile
         (interp => Get_Context,
@@ -482,99 +486,100 @@ package body DebugUI is
       Add_Command
         (Name => "DebugDeleteEvent",
          Ada_Command => Delete_Event_Command'Access);
-      Load_Bases_Types_Loop :
-      for BaseType of Bases_Types loop
-         exit Load_Bases_Types_Loop when Length(Source => BaseType) = 0;
-         Append
-           (Source => Values_List,
-            New_Item =>
-              " {" & Get_Base_Type_Name(Base_Type => BaseType) & "}");
-      end loop Load_Bases_Types_Loop;
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
-      Load_Factions_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         Append
-           (Source => Values_List,
-            New_Item =>
-              " {" & To_String(Source => Get_Faction(Number => I).Name) & "}");
-      end loop Load_Factions_Loop;
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(Str => Frame_Name & ".name");
-      Load_Bases_Loop :
-      for Base of Sky_Bases loop
-         Append
-           (Source => Values_List,
-            New_Item => " {" & To_String(Source => Base.Name) & "}");
-      end loop Load_Bases_Loop;
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.base");
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
-      Load_Proto_Modules_Block :
-      declare
-         use ShipModules;
-
-         Module: Base_Module_Data := (others => <>);
-      begin
-         Load_Modules_Prototypes_Loop :
-         for I in 1 .. Get_Modules_Amount loop
-            Module := Get_Module(Index => I);
-            if Length(Source => Module.Name) > 0 then
-               Append
-                 (Source => Values_List,
-                  New_Item =>
-                    " {" & To_String(Source => Get_Module(Index => I).Name) &
-                    "}");
-            end if;
-         end loop Load_Modules_Prototypes_Loop;
-      end Load_Proto_Modules_Block;
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(Str => ".debugdialog.main.cargo.add");
-      Load_Items_Loop :
-      for I in 1 .. Get_Proto_Amount loop
-         Append
-           (Source => Values_List,
-            New_Item =>
-              " {" & To_String(Source => Get_Proto_Item(Index => I).Name) &
-              "}");
-      end loop Load_Items_Loop;
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.item");
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.ship");
-      Load_Ships_Loop :
-      for I in 1 .. Get_Proto_Ships_Amount loop
-         Append
-           (Source => Values_List,
-            New_Item =>
-              " {" &
-              To_String(Source => Get_Proto_Ship(Proto_Index => I).Name) &
-              "}");
-      end loop Load_Ships_Loop;
-      configure
-        (Widgt => Combo_Box,
-         options => "-values [list" & To_String(Source => Values_List) & "]");
-      Tcl_Eval(interp => Get_Context, strng => "Refresh");
+      Show_Ada_Debug_Ui;
+--      Load_Bases_Types_Loop :
+--      for BaseType of Bases_Types loop
+--         exit Load_Bases_Types_Loop when Length(Source => BaseType) = 0;
+--         Append
+--           (Source => Values_List,
+--            New_Item =>
+--              " {" & Get_Base_Type_Name(Base_Type => BaseType) & "}");
+--      end loop Load_Bases_Types_Loop;
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Values_List := Null_Unbounded_String;
+--      Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
+--      Load_Factions_Loop :
+--      for I in 1 .. Get_Factions_Amount loop
+--         Append
+--           (Source => Values_List,
+--            New_Item =>
+--              " {" & To_String(Source => Get_Faction(Number => I).Name) & "}");
+--      end loop Load_Factions_Loop;
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Values_List := Null_Unbounded_String;
+--      Combo_Box.Name := New_String(Str => Frame_Name & ".name");
+--      Load_Bases_Loop :
+--      for Base of Sky_Bases loop
+--         Append
+--           (Source => Values_List,
+--            New_Item => " {" & To_String(Source => Base.Name) & "}");
+--      end loop Load_Bases_Loop;
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.base");
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Values_List := Null_Unbounded_String;
+--      Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
+--      Load_Proto_Modules_Block :
+--      declare
+--         use ShipModules;
+--
+--         Module: Base_Module_Data := (others => <>);
+--      begin
+--         Load_Modules_Prototypes_Loop :
+--         for I in 1 .. Get_Modules_Amount loop
+--            Module := Get_Module(Index => I);
+--            if Length(Source => Module.Name) > 0 then
+--               Append
+--                 (Source => Values_List,
+--                  New_Item =>
+--                    " {" & To_String(Source => Get_Module(Index => I).Name) &
+--                    "}");
+--            end if;
+--         end loop Load_Modules_Prototypes_Loop;
+--      end Load_Proto_Modules_Block;
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Values_List := Null_Unbounded_String;
+--      Combo_Box.Name := New_String(Str => ".debugdialog.main.cargo.add");
+--      Load_Items_Loop :
+--      for I in 1 .. Get_Proto_Amount loop
+--         Append
+--           (Source => Values_List,
+--            New_Item =>
+--              " {" & To_String(Source => Get_Proto_Item(Index => I).Name) &
+--              "}");
+--      end loop Load_Items_Loop;
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.item");
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Values_List := Null_Unbounded_String;
+--      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.ship");
+--      Load_Ships_Loop :
+--      for I in 1 .. Get_Proto_Ships_Amount loop
+--         Append
+--           (Source => Values_List,
+--            New_Item =>
+--              " {" &
+--              To_String(Source => Get_Proto_Ship(Proto_Index => I).Name) &
+--              "}");
+--      end loop Load_Ships_Loop;
+--      configure
+--        (Widgt => Combo_Box,
+--         options => "-values [list" & To_String(Source => Values_List) & "]");
+--      Tcl_Eval(interp => Get_Context, strng => "Refresh");
    end Show_Debug_Ui;
 
 end DebugUI;
