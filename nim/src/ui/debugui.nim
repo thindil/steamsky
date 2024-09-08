@@ -794,6 +794,7 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc showDebugUi*() {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Show debug ui to the player
 #  tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #  addCommand("Refresh", refreshCommand)
 #  addCommand("RefreshModule", refreshModuleCommand)
