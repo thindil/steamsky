@@ -88,15 +88,6 @@ package Events is
    function Check_For_Event return Boolean;
    -- ****
 
-   -- ****f* Events/Events.Delete_Event
-   -- FUNCTION
-   -- Delete selected event
-   -- PARAMETERS
-   -- EventIndex - Index of the event to delete
-   -- SOURCE
-   procedure Delete_Event(Event_Index: Positive);
-   -- ****
-
    -- ****f* Events/Events.Generate_Traders
    -- FUNCTION
    -- Create list of traders needed for trader event
@@ -105,11 +96,6 @@ package Events is
    -- ****
 
 -- Temporary code to interact with Nim
-
-   procedure Get_Ada_Event(Index, X, Y, Time, E_Type, Data: Integer) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaEvent";
 
    procedure Set_Event(Index: Positive);
 
