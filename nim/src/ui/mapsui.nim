@@ -744,6 +744,23 @@ proc createGameUi*() =
     setKeys()
     if debugMode == menu:
       showDebugUi()
+  else:
+    tclEval(script = "pack " & gameFrame & " -fill both -expand true")
+  tclSetVar(varName = "refreshmap", newValue = "1")
+  tclEval(script = "wm title . {Steam Sky}")
+  if gameSettings.fullScreen:
+    tclEval(script = "wm attributes . -fullscreen 1")
+  for index, accel in mapAccelerators.mpairs:
+    let pos = accel.rfind(sub = '-')
+    tclEval(script = "bind . <" & accel[0..pos] & "KeyPress-" & accel[pos + 1..^1] & "> {InvokeMenu " & accel & "}")
+  if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.header"):
+    let header = gameFrame & ".header"
+    tclEval(script = "grid " & header)
+  updateHeader()
+  centerX = playerShip.skyX
+  centerY = playerShip.skyY
+  for baseType in basesTypesList:
+    tclEval(script = mapView & " tag configure " & baseType.name & " -foreground #" & baseType.color)
 
 # Temporary code for interfacing with Ada
 
