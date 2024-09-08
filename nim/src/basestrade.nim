@@ -57,7 +57,7 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
       recruit = skyBases[baseIndex].recruits[recruitIndex]
     var inventory: seq[InventoryData]
     for item in recruit.inventory:
-      inventory.add(InventoryData(protoIndex: item, amount: 1, name: "",
+      inventory.add(y = InventoryData(protoIndex: item, amount: 1, name: "",
           durability: defaultItemDurability, price: 0))
     var morale: Natural = 0
     if "nomorale" in factionsList[skyBases[baseIndex].owner].flags:
@@ -66,7 +66,7 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
       morale = 50 + skyBases[baseIndex].reputation.level
       if morale > 100:
         morale = 100
-    playerShip.crew.add(MemberData(name: recruit.name, gender: recruit.gender,
+    playerShip.crew.add(y = MemberData(name: recruit.name, gender: recruit.gender,
         health: 100, tired: 0, skills: recruit.skills, hunger: 0, thirst: 0,
         order: rest, previousOrder: rest, orderTime: 15,
         attributes: recruit.attributes, inventory: inventory,
@@ -80,7 +80,7 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
     gainRep(baseIndex = baseIndex, points = 1)
     addMessage(message = "You hired " & recruit.name & " for " & $price & " " &
         moneyName & ".", mType = tradeMessage)
-    skyBases[baseIndex].recruits.delete(recruitIndex)
+    skyBases[baseIndex].recruits.delete(i = recruitIndex)
     skyBases[baseIndex].population.dec
     updateGame(minutes = 5)
 
@@ -121,7 +121,7 @@ proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
       moneyIndex2 = checkMoney(price = cost, message = recipeName)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost)
-    knownRecipes.add(recipeIndex)
+    knownRecipes.add(y = recipeIndex)
     addMessage(message = "You bought the recipe for " & recipeName & " for " &
         $cost & " of " & moneyName & ".", mType = tradeMessage)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
@@ -217,7 +217,6 @@ proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
   ## skill reached maximum level and can't be trained.
   require:
     memberIndex < playerShip.crew.len
-    skillIndex < playerShip.crew[memberIndex].skills.len
   body:
     result = (100.0 * newGameSettings.pricesBonus).Natural
     for skill in playerShip.crew[memberIndex].skills:
