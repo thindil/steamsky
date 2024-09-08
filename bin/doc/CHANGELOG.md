@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typo in changelog
+- Crash on finishing a crafting order by the player's ship's crew member
 
 ## [10.2] - 2024-08-25
 
