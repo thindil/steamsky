@@ -793,7 +793,7 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't delete event.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
-proc showDebugUi*() =
+proc showDebugUi*() {.exportc.} =
   tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #    addCommand("Refresh", refreshCommand)
 #    addCommand("RefreshModule", refreshModuleCommand)
@@ -813,3 +813,32 @@ proc showDebugUi*() =
 #    addCommand("ToggleItemEntry", toggleItemEntryCommand)
 #    addCommand("DebugAddEvent", debugAddEventCommand)
 #    addCommand("DebugDeleteEvent", debugDeleteEventCommand)
+  var valuesList = ""
+  for baseType in basesTypesList.values:
+    valuesList.add(y = " {" & baseType.name & "}")
+  let frameName = ".debugdialog.main.bases"
+  var comboBox = frameName & ".type"
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  valuesList = ""
+  comboBox = frameName & ".owner"
+  for faction in factionsList.values:
+    valuesList.add(y = " {" & faction.name & "}")
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  valuesList = ""
+  comboBox = frameName & ".name"
+  for base in skyBases:
+    valuesList.add(y = " {" & base.name & "}")
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  comboBox = ".debugdialog.main.world.base"
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  valuesList = ""
+  comboBox = ".debugdialog.main.ship.proto"
+  for module in modulesList.values:
+    if module.name.len > 0:
+      valuesList.add(y = " {" & module.name & "}")
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
+  valuesList = ""
+  comboBox = ".debugdialog.main.cargo.add"
+  for item in itemsList.values:
+    valuesList.add(y = " {" & item.name & "}")
+  tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
