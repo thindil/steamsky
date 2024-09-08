@@ -793,7 +793,7 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't delete event.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
-proc showDebugUi*() {.exportc.} =
+proc showDebugUi*() {.sideEffect, raises: [], tags: [], exportc.} =
 #  tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
 #  addCommand("Refresh", refreshCommand)
 #  addCommand("RefreshModule", refreshModuleCommand)
