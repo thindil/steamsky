@@ -624,6 +624,8 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
           for key, recipe in recipesList:
             if recipe.resultIndex == recipe.resultIndex:
               knownRecipes.add(y = key)
+        if module.craftingAmount == 0:
+          break
       module.craftingTime = recipeTime
       if craftedAmount > 0:
         finishCrafting(recipe = recipe, module = module,
