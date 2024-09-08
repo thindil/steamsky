@@ -14,9 +14,9 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
@@ -25,13 +25,11 @@ with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Bases; use Bases;
+with Bases;
 with BasesTypes;
--- with Events; use Events;
 with Factions;
-with Game; use Game;
-with Items; use Items;
+with Game;
+with Items;
 with ShipModules;
 with Ships;
 with Utils.UI;
@@ -416,29 +414,19 @@ package body DebugUI is
       External_Name => "debugDeleteEventCommand";
       -- ****
 
---   function Delete_Event_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      Event_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName => ".debugdialog.main.world.deleteevent.delete",
---           Interp => Interp);
---   begin
---      Delete_Event
---        (Event_Index => Natural'Value(Current(ComboBox => Event_Box)) + 1);
---      return
---        Refresh_Events_Command
---          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---           Argv => Argv);
---   end Delete_Event_Command;
-
    procedure Show_Debug_Ui is
+      use Ada.Strings.Unbounded;
+      use Interfaces.C.Strings;
       use GNAT.Directory_Operations;
       use Tcl.Ada;
       use Tcl.Tk.Ada;
       use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Bases;
       use BasesTypes;
       use Factions;
+      use Game;
+      use Items;
       use Utils.UI;
       use Ships;
       use Tiny_String;
