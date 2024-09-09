@@ -429,9 +429,4 @@ package Ships is
 
    function Get_Proto_Ship(Proto_Index: Positive) return Proto_Ship_Data;
 
-   function Get_Proto_Ships_Amount return Positive with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaProtoShipsAmount";
-
 end Ships;
