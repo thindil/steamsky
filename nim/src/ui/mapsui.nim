@@ -562,7 +562,7 @@ import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
     craftsui, debugui, gameoptions, helpui, knowledge, mapsuicommands,
     messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
 
-proc createGameUi*() =
+proc createGameUi*() {.exportc.} =
   let
     gameFrame = ".gameframe"
     paned = gameFrame & ".paned"
@@ -713,47 +713,47 @@ proc createGameUi*() =
         mapAccelerators[30] = "Control-End"
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
-    mapsuicommands.addCommands()
+#    mapsuicommands.addCommands()
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "game.tcl")
     setTheme()
-    ordersmenu.addCommands()
-    waitmenu.addCommands()
-    helpui.addCommands()
-    shipsui.addCommands()
-    craftsui.addCommands()
-    messagesui.addCommands()
-    gameoptions.addCommands()
-    tradesui.addCommands()
-    basesschoolui.addCommands()
-    basesrecruitui.addCommands()
-    basesui.addCommands()
-    basesshipyardui.addCommands()
-    baseslootui.addCommands()
-    knowledge.addCommands()
-    missionsui.addCommands()
-    statisticsui.addCommands()
+#    ordersmenu.addCommands()
+#    waitmenu.addCommands()
+#    helpui.addCommands()
+#    shipsui.addCommands()
+#    craftsui.addCommands()
+#    messagesui.addCommands()
+#    gameoptions.addCommands()
+#    tradesui.addCommands()
+#    basesschoolui.addCommands()
+#    basesrecruitui.addCommands()
+#    basesui.addCommands()
+#    basesshipyardui.addCommands()
+#    baseslootui.addCommands()
+#    knowledge.addCommands()
+#    missionsui.addCommands()
+#    statisticsui.addCommands()
     let messagesFrame = paned & ".controls.messages"
     tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeLastMessages}")
     tclEval(script = "bind " & mapView & " <Configure> {DrawMap}")
     tclEval(script = "bind " & mapView & " <Motion> {UpdateMapInfo %x %y}")
-    tclEval(script = "bind " & mapView & "<Button-" & (
+    tclEval(script = "bind " & mapView & " <Button-" & (
         if gameSettings.rightButton: "3" else: "1") & "> {ShowDestinationMenu %X %Y}")
     tclEval(script = "bind " & mapView & " <MouseWheel> {if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}")
     tclEval(script = "bind " & mapView & " <Button-4> {ZoomMap raise}")
     tclEval(script = "bind " & mapView & " <Button-5> {ZoomMap lower}")
     setKeys()
-    if debugMode == menu:
-      showDebugUi()
+#    if debugMode == menu:
+#      showDebugUi()
   else:
     tclEval(script = "pack " & gameFrame & " -fill both -expand true")
   tclSetVar(varName = "refreshmap", newValue = "1")
   tclEval(script = "wm title . {Steam Sky}")
   if gameSettings.fullScreen:
     tclEval(script = "wm attributes . -fullscreen 1")
-  for index, accel in mapAccelerators.mpairs:
+  for accel in menuAccelerators:
     let pos = accel.rfind(sub = '-')
-    tclEval(script = "bind . <" & accel[0..pos] & "KeyPress-" & accel[pos +
-        1..^1] & "> {InvokeMenu " & accel & "}")
+    tclEval(script = "bind . <" & accel[0..pos] & "KeyPress-" &
+      accel[pos + 1..^1] & "> {InvokeMenu " & accel & "}")
   if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.header"):
     let header = gameFrame & ".header"
     tclEval(script = "grid " & header)
@@ -770,6 +770,23 @@ proc createGameUi*() =
   tclEval(script = paned & " sashpos 0 " & $panedPosition)
   if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.paned"):
     tclEval(script = "grid " & paned)
+  tclEval(script = "update")
+  let button = paned & ".mapframe.buttons.hide"
+  tclEval(script = button & " invoke")
+  tclEval(script = "bind . <Escape> {InvokeButton " & closeButton & "}")
+  updateMessages()
+  if not newStart:
+    tclEval(script = "DrawMap")
+  updateMoveButtons()
+  updateMapInfo()
+  if not gameSettings.showLastMessages:
+    let messagesFrame = paned & ".controls.messages"
+    tclEval(script = "grid remove " & messagesFrame)
+  tclSetVar(varName = "shipname", newValue = playerShip.name)
+  tclSetVar(varName = "gamestate", newValue = "general")
+  if tclEval2(script = "winfo ismapped " & closeButton) == "1":
+    showSkyMap(clear = true)
+    tclEval(script = "grid remove " & closeButton)
 
 # Temporary code for interfacing with Ada
 
