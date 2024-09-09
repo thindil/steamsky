@@ -563,6 +563,7 @@ import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
     messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
 
 proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  ## Create the game UI and show sky map to the player
   let
     gameFrame = ".gameframe"
     paned = gameFrame & ".paned"
