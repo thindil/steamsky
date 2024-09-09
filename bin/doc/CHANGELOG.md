@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Information about amount of food and fuel in the player's ship to the game's
   header
-- New icon for fuel amount information. Author: Lorc (https://game-icons.net),
-  license CC BY 3.0
+- New icons for fuel and drinks amount information. Authors: Lorc, Delapouite
+  (https://game-icons.net), license CC BY 3.0
 
 ### Changed
 - Updated modding guide
