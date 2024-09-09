@@ -1359,7 +1359,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   except:
     showError(message = "Can't add a Tcl command.")
 
-import shipsui
+import showshipinfo
 
 proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
