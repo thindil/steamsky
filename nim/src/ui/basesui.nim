@@ -276,7 +276,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   addPagination(table = baseTable, previousCommand = (if page >
       1: "ShowBaseUI " & arguments & " " & $(page - 1) else: ""),
       nextCommand = (if baseTable.row < gameSettings.listsLimit +
-      1: "" else: "ShowBaseUI " & arguments & $(page + 1)))
+      1: "" else: "ShowBaseUI " & arguments & " " & $(page + 1)))
   updateTable(table = baseTable, grabFocus = tclEval2(script = "focus") != searchEntry)
   if firstIndex.len == 0 and argc < 3:
     tclEval(script = "grid remove " & closeButton)
