@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to buying various services in bases, like hiring
+## recruirs, buying crafting recipes or heal wounded crew members.
+
 import std/tables
 import contracts
 import bases, basescargo, basestypes, config, game, game2, crewinventory, items,
@@ -28,6 +31,12 @@ type
 
 proc checkMoney(price: Positive; message: string = ""): int {.sideEffect,
     raises: [NoMoneyError, NotEnoughMoneyError], tags: [], contractual.} =
+  ## Check if there is enough money on the player's ship
+  ##
+  ## * price   - the amount of money to compare
+  ## * message - the message shown when there is no or not enough money
+  ##
+  ## Returns the index of the money in the player's ship's cargo
   body:
     result = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
     if result == -1:
@@ -287,6 +296,7 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
 proc hireAdaRecruit(recruitIndex, cost, dailyPayment, tradePayment,
     contractLength: cint): cstring {.raises: [], tags: [WriteIOEffect,
     RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     hireRecruit(recruitIndex = recruitIndex - 1, cost = cost,
         dailyPayment = dailyPayment, tradePayment = tradePayment,
@@ -297,6 +307,7 @@ proc hireAdaRecruit(recruitIndex, cost, dailyPayment, tradePayment,
 
 proc buyAdaRecipe(recipeIndex: cstring): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     buyRecipe(recipeIndex = $recipeIndex)
     return "".cstring
@@ -305,6 +316,7 @@ proc buyAdaRecipe(recipeIndex: cstring): cstring {.raises: [], tags: [
 
 proc healAdaCost(cost, time: var cint; memberIndex: cint) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   var
     nimCost = 0.Natural
     nimTime = 0.Natural
@@ -317,6 +329,7 @@ proc healAdaCost(cost, time: var cint; memberIndex: cint) {.raises: [], tags: []
 
 proc healAdaWounded(memberIndex: cint): cstring {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     healWounded(memberIndex = memberIndex - 1)
     return "".cstring
@@ -325,6 +338,7 @@ proc healAdaWounded(memberIndex: cint): cstring {.raises: [], tags: [
 
 proc trainAdaCost(memberIndex, skillIndex: cint): cint {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   try:
     return trainCost(memberIndex = memberIndex - 1,
         skillIndex = skillIndex).cint
@@ -333,6 +347,7 @@ proc trainAdaCost(memberIndex, skillIndex: cint): cint {.raises: [], tags: [],
 
 proc trainAdaSkill(memberIndex, skillIndex, amount, isAmount: cint) {.raises: [
     ], tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     trainSkill(memberIndex = memberIndex - 1, skillIndex = skillIndex,
         amount = amount, isAmount = isAmount == 1)
