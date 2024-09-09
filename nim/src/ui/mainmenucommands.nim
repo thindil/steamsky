@@ -17,7 +17,7 @@
 
 import std/[os, osproc, strutils]
 import ../[config, events, game, halloffame, tk]
-import dialogs
+import dialogs, mapsui
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
@@ -185,6 +185,7 @@ proc startGame() =
   tclEval(script = "wm geometry " & $gameSettings.windowWidth & "x" &
       $gameSettings.windowHeight & "+" & $x & "+" & $y)
   generateTraders()
+  createGameUi()
 
 proc addCommands*() =
   discard
