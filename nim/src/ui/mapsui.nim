@@ -562,7 +562,7 @@ import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
     craftsui, debugui, gameoptions, helpui, knowledge, mapsuicommands,
     messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
 
-proc createGameUi*() {.exportc.} =
+proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   let
     gameFrame = ".gameframe"
     paned = gameFrame & ".paned"
@@ -574,9 +574,17 @@ proc createGameUi*() {.exportc.} =
     var configFile = newFileStream(fileName)
     if configFile != nil:
       var parser: CfgParser
-      parser.open(configFile, fileName)
+      try:
+        parser.open(configFile, fileName)
+      except:
+        showError(message = "Can't open the shortcut's configuration file.")
+        return
       while true:
-        var entry = parser.next
+        var entry = try:
+            parser.next
+          except:
+            showError(message = "Can't get next shortcut setting.")
+            return
         case entry.kind
           of cfgEof:
             break
@@ -684,7 +692,11 @@ proc createGameUi*() {.exportc.} =
               fullScreenAccel = entry.value
           of cfgError:
             showError(message = "Can't set keyboard shortcuts. Message: " & entry.msg)
-      parser.close()
+      try:
+        parser.close()
+      except:
+        showError(message = "Can't close the shortcuts' configuration file.")
+        return
     else:
       if DirSep == '\\':
         mapAccelerators[5] = "Home"
