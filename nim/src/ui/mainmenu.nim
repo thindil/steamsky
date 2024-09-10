@@ -43,7 +43,7 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowLoadGame
-  if loadTable.rowHeight == 1:
+  if loadTable.rowHeight == 0:
     loadTable = createTable(parent = ".loadmenu.list", headers = @[
         "Player name", "Ship name", "Last saved"], command = "SortSaves",
         tooltipText = "Press mouse button to sort the saved games.")
