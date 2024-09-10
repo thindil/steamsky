@@ -38,9 +38,6 @@ package BasesTypes is
    function Get_Base_Type_Name
      (Base_Type: Tiny_String.Bounded_String) return String;
 
-   function Get_Base_Type_Color
-     (Base_Type: Tiny_String.Bounded_String) return String;
-
    function Get_Base_Type_Description
      (Base_Type: Tiny_String.Bounded_String) return String;
 

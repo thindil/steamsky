@@ -57,22 +57,6 @@ package body BasesTypes is
                     (Str => Tiny_String.To_String(Source => Base_Type))));
    end Get_Base_Type_Name;
 
-   function Get_Base_Type_Color
-     (Base_Type: Tiny_String.Bounded_String) return String is
-      function Get_Ada_Base_Type_Color(B_Type: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseTypeColor";
-   begin
-      return
-        Value
-          (Item =>
-             Get_Ada_Base_Type_Color
-               (B_Type =>
-                  New_String
-                    (Str => Tiny_String.To_String(Source => Base_Type))));
-   end Get_Base_Type_Color;
-
    function Get_Base_Type_Description
      (Base_Type: Tiny_String.Bounded_String) return String is
       function Get_Ada_Base_Type_Description
