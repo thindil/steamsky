@@ -172,19 +172,31 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
       res = "deletesave", inGame = false)
   return tclOk
 
-proc startGame() =
+proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
+    RootEffect].} =
   let mainWindow = "."
-  var x: int = ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
-      gameSettings.windowWidth) / 2).int
+  var x: int = try:
+      ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
+        gameSettings.windowWidth) / 2).int
+    except:
+      showError(message = "Can't get window X position")
+      return
   if x < 0:
     x = 0
-  var y: int = ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt -
-      gameSettings.windowHeight) / 2).int
+  var y: int = try:
+      ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt -
+        gameSettings.windowHeight) / 2).int
+    except:
+      showError(message = "Can't get window Y position")
+      return
   if y < 0:
     y = 0
   tclEval(script = "wm geometry " & $gameSettings.windowWidth & "x" &
       $gameSettings.windowHeight & "+" & $x & "+" & $y)
-  generateTraders()
+  try:
+    generateTraders()
+  except:
+    showError(message = "Can't generate traders")
   createGameUi()
 
 proc addCommands*() =
