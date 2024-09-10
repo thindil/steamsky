@@ -13,25 +13,25 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Calendar.Formatting;
-with Ada.Calendar.Time_Zones;
+-- with Ada.Calendar.Formatting;
+-- with Ada.Calendar.Time_Zones;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Containers.Vectors;
-with Ada.Directories;
+-- with Ada.Containers.Vectors;
+-- with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split;
+-- with GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+-- with Tcl.Tk.Ada.Widgets.Toplevel;
+-- with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+-- use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -146,54 +146,60 @@ package body MainMenu.Commands is
    function Show_Load_Game_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Ada.Calendar.Time_Zones;
-      use Ada.Containers;
-      use Ada.Directories;
-      use GNAT.String_Split;
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Ada.Calendar.Time_Zones;
+--      use Ada.Containers;
+--      use Ada.Directories;
+--      use GNAT.String_Split;
 
-      Files: Search_Type;
-      Found_File: Directory_Entry_Type;
-      Tokens: Slice_Set; --## rule line off IMPROPER_INITIALIZATION
-      type Save_Record is record  --## rule line off TYPE_INITIAL_VALUES
-         Player_Name: Unbounded_String;
-         Ship_Name: Unbounded_String;
-         Save_Time: Unbounded_String;
-         File_Name: Unbounded_String;
-      end record;
-      package Saves_Container is new Vectors
-        (Index_Type => Positive, Element_Type => Save_Record);
-      Saves: Saves_Container.Vector := Saves_Container.Empty_Vector;
-      function "<"(Left, Right: Save_Record) return Boolean is
-      begin
-         if Get_Save_Sort_Order = PLAYERASC
-           and then Left.Player_Name < Right.Player_Name then
-            return True;
-         end if;
-         if Get_Save_Sort_Order = PLAYERDESC
-           and then Left.Player_Name > Right.Player_Name then
-            return True;
-         end if;
-         if Get_Save_Sort_Order = SHIPASC
-           and then Left.Ship_Name < Right.Ship_Name then
-            return True;
-         end if;
-         if Get_Save_Sort_Order = SHIPDESC
-           and then Left.Ship_Name > Right.Ship_Name then
-            return True;
-         end if;
-         if Get_Save_Sort_Order = TIMEASC
-           and then Left.Save_Time < Right.Save_Time then
-            return True;
-         end if;
-         if Get_Save_Sort_Order = TIMEDESC
-           and then Left.Save_Time > Right.Save_Time then
-            return True;
-         end if;
-         return False;
-      end "<";
-      package Saves_Sorting is new Saves_Container.Generic_Sorting;
+--      Files: Search_Type;
+--      Found_File: Directory_Entry_Type;
+--      Tokens: Slice_Set; --## rule line off IMPROPER_INITIALIZATION
+--      type Save_Record is record  --## rule line off TYPE_INITIAL_VALUES
+--         Player_Name: Unbounded_String;
+--         Ship_Name: Unbounded_String;
+--         Save_Time: Unbounded_String;
+--         File_Name: Unbounded_String;
+--      end record;
+--      package Saves_Container is new Vectors
+--        (Index_Type => Positive, Element_Type => Save_Record);
+--      Saves: Saves_Container.Vector := Saves_Container.Empty_Vector;
+--      function "<"(Left, Right: Save_Record) return Boolean is
+--      begin
+--         if Get_Save_Sort_Order = PLAYERASC
+--           and then Left.Player_Name < Right.Player_Name then
+--            return True;
+--         end if;
+--         if Get_Save_Sort_Order = PLAYERDESC
+--           and then Left.Player_Name > Right.Player_Name then
+--            return True;
+--         end if;
+--         if Get_Save_Sort_Order = SHIPASC
+--           and then Left.Ship_Name < Right.Ship_Name then
+--            return True;
+--         end if;
+--         if Get_Save_Sort_Order = SHIPDESC
+--           and then Left.Ship_Name > Right.Ship_Name then
+--            return True;
+--         end if;
+--         if Get_Save_Sort_Order = TIMEASC
+--           and then Left.Save_Time < Right.Save_Time then
+--            return True;
+--         end if;
+--         if Get_Save_Sort_Order = TIMEDESC
+--           and then Left.Save_Time > Right.Save_Time then
+--            return True;
+--         end if;
+--         return False;
+--      end "<";
+--      package Saves_Sorting is new Saves_Container.Generic_Sorting;
       Local_Load_Table: Table_Widget := Get_Load_Table;
+      function Show_Ada_Load_Game_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "showLoadGameCommand";
    begin
       if Local_Load_Table.Row_Height = 1 then
          Local_Load_Table :=
@@ -208,101 +214,102 @@ package body MainMenu.Commands is
       else
          Clear_Table(Table => Local_Load_Table);
       end if;
-      Start_Search
-        (Search => Files, Directory => To_String(Source => Save_Directory),
-         Pattern => "*.sav");
-      Load_Saves_List_Loop :
-      while More_Entries(Search => Files) loop
-         Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
-         Create
-           (S => Tokens, From => Simple_Name(Directory_Entry => Found_File),
-            Separators => "_");
-         if Slice_Count(S => Tokens) = 3 then
-            Saves.Append
-              (New_Item =>
-                 (Player_Name =>
-                    To_Unbounded_String
-                      (Source => Slice(S => Tokens, Index => 1)),
-                  Ship_Name =>
-                    To_Unbounded_String
-                      (Source => Slice(S => Tokens, Index => 2)),
-                  Save_Time =>
-                    To_Unbounded_String
-                      (Source =>
-                         Ada.Calendar.Formatting.Image
-                           (Date =>
-                              Modification_Time(Directory_Entry => Found_File),
-                            Include_Time_Fraction => False,
-                            Time_Zone => UTC_Time_Offset)),
-                  File_Name =>
-                    To_Unbounded_String
-                      (Source => Simple_Name(Directory_Entry => Found_File))));
-         else
-            Saves.Append
-              (New_Item =>
-                 (Player_Name => To_Unbounded_String(Source => "Unknown"),
-                  Ship_Name => To_Unbounded_String(Source => "Unknown"),
-                  Save_Time =>
-                    To_Unbounded_String
-                      (Source =>
-                         Ada.Calendar.Formatting.Image
-                           (Date =>
-                              Modification_Time(Directory_Entry => Found_File),
-                            Include_Time_Fraction => False,
-                            Time_Zone => UTC_Time_Offset)),
-                  File_Name =>
-                    To_Unbounded_String
-                      (Source => Simple_Name(Directory_Entry => Found_File))));
-         end if;
-      end loop Load_Saves_List_Loop;
-      End_Search(Search => Files);
-      Saves_Sorting.Sort(Container => Saves);
-      Show_Saved_Games_Loop :
-      for Save of Saves loop
-         Add_Button
-           (Table => Local_Load_Table,
-            Text => To_String(Source => Save.Player_Name),
-            Tooltip =>
-              "Press mouse " &
-              (if Get_Boolean_Setting(Name => "rightButton") then "right"
-               else "left") &
-              " button to show available options",
-            Command =>
-              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
-            Column => 1);
-         Add_Button
-           (Table => Local_Load_Table,
-            Text => To_String(Source => Save.Ship_Name),
-            Tooltip =>
-              "Press mouse " &
-              (if Get_Boolean_Setting(Name => "rightButton") then "right"
-               else "left") &
-              " button to show available options",
-            Command =>
-              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
-            Column => 2);
-         Add_Button
-           (Table => Local_Load_Table,
-            Text => To_String(Source => Save.Save_Time),
-            Tooltip =>
-              "Press mouse " &
-              (if Get_Boolean_Setting(Name => "rightButton") then "right"
-               else "left") &
-              " button to show available options",
-            Command =>
-              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
-            Column => 3, New_Row => True);
-      end loop Show_Saved_Games_Loop;
-      Update_Table(Table => Local_Load_Table);
-      if Local_Load_Table.Row = 1 then
-         Unbind_From_Main_Window(Interp => Interp, Sequence => "<Alt-b>");
-         Unbind_From_Main_Window(Interp => Interp, Sequence => "<Escape>");
-         Tcl.Tk.Ada.Pack.Pack_Forget
-           (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
-         Show_Main_Menu;
-      end if;
       Load_Table := Local_Load_Table;
-      return TCL_OK;
+      return Show_Ada_Load_Game_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--      Start_Search
+--        (Search => Files, Directory => To_String(Source => Save_Directory),
+--         Pattern => "*.sav");
+--      Load_Saves_List_Loop :
+--      while More_Entries(Search => Files) loop
+--         Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
+--         Create
+--           (S => Tokens, From => Simple_Name(Directory_Entry => Found_File),
+--            Separators => "_");
+--         if Slice_Count(S => Tokens) = 3 then
+--            Saves.Append
+--              (New_Item =>
+--                 (Player_Name =>
+--                    To_Unbounded_String
+--                      (Source => Slice(S => Tokens, Index => 1)),
+--                  Ship_Name =>
+--                    To_Unbounded_String
+--                      (Source => Slice(S => Tokens, Index => 2)),
+--                  Save_Time =>
+--                    To_Unbounded_String
+--                      (Source =>
+--                         Ada.Calendar.Formatting.Image
+--                           (Date =>
+--                              Modification_Time(Directory_Entry => Found_File),
+--                            Include_Time_Fraction => False,
+--                            Time_Zone => UTC_Time_Offset)),
+--                  File_Name =>
+--                    To_Unbounded_String
+--                      (Source => Simple_Name(Directory_Entry => Found_File))));
+--         else
+--            Saves.Append
+--              (New_Item =>
+--                 (Player_Name => To_Unbounded_String(Source => "Unknown"),
+--                  Ship_Name => To_Unbounded_String(Source => "Unknown"),
+--                  Save_Time =>
+--                    To_Unbounded_String
+--                      (Source =>
+--                         Ada.Calendar.Formatting.Image
+--                           (Date =>
+--                              Modification_Time(Directory_Entry => Found_File),
+--                            Include_Time_Fraction => False,
+--                            Time_Zone => UTC_Time_Offset)),
+--                  File_Name =>
+--                    To_Unbounded_String
+--                      (Source => Simple_Name(Directory_Entry => Found_File))));
+--         end if;
+--      end loop Load_Saves_List_Loop;
+--      End_Search(Search => Files);
+--      Saves_Sorting.Sort(Container => Saves);
+--      Show_Saved_Games_Loop :
+--      for Save of Saves loop
+--         Add_Button
+--           (Table => Local_Load_Table,
+--            Text => To_String(Source => Save.Player_Name),
+--            Tooltip =>
+--              "Press mouse " &
+--              (if Get_Boolean_Setting(Name => "rightButton") then "right"
+--               else "left") &
+--              " button to show available options",
+--            Command =>
+--              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
+--            Column => 1);
+--         Add_Button
+--           (Table => Local_Load_Table,
+--            Text => To_String(Source => Save.Ship_Name),
+--            Tooltip =>
+--              "Press mouse " &
+--              (if Get_Boolean_Setting(Name => "rightButton") then "right"
+--               else "left") &
+--              " button to show available options",
+--            Command =>
+--              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
+--            Column => 2);
+--         Add_Button
+--           (Table => Local_Load_Table,
+--            Text => To_String(Source => Save.Save_Time),
+--            Tooltip =>
+--              "Press mouse " &
+--              (if Get_Boolean_Setting(Name => "rightButton") then "right"
+--               else "left") &
+--              " button to show available options",
+--            Command =>
+--              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
+--            Column => 3, New_Row => True);
+--      end loop Show_Saved_Games_Loop;
+--      Update_Table(Table => Local_Load_Table);
+--      if Local_Load_Table.Row = 1 then
+--         Unbind_From_Main_Window(Interp => Interp, Sequence => "<Alt-b>");
+--         Unbind_From_Main_Window(Interp => Interp, Sequence => "<Escape>");
+--         Tcl.Tk.Ada.Pack.Pack_Forget
+--           (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
+--         Show_Main_Menu;
+--      end if;
+--      return TCL_OK;
    end Show_Load_Game_Command;
 
    -- ****if* MCommands/MCommands.StartGame
