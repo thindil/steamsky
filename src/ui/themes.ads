@@ -46,16 +46,6 @@ package Themes is
       External_Name => "loadAdaThemes";
       -- ****
 
-      -- ****f* Themes/Themes.Set_Theme
-      -- FUNCTION
-      -- Set values for the current theme
-      -- SOURCE
-   procedure Set_Theme with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaTheme";
-      -- ****
-
       -- ****f* Themes/Themes.Load_Theme_Images
       -- FUNCTION
       -- Load all images for the selected the game's theme
