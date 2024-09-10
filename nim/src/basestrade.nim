@@ -56,15 +56,15 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
   ## * tradePayment   - the percent of trade gain as payment for the recruit
   ## * contractLength - the length of the contract. 0 means infinite contract
   body:
-    let traderIndex = findMember(order = talk)
+    let traderIndex: int = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     var price: Natural = cost
     countPrice(price = price, traderIndex = traderIndex)
     let
-      baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-      recruit = skyBases[baseIndex].recruits[recruitIndex]
-    var inventory: seq[InventoryData]
+      baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    var inventory: seq[InventoryData] = @[]
     for item in recruit.inventory:
       inventory.add(y = InventoryData(protoIndex: item, amount: 1, name: "",
           durability: defaultItemDurability, price: 0))
@@ -83,7 +83,7 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
             2: tradePayment],
         contractLength: contractLength, morale: [1: morale, 2: 0],
         loyalty: morale, homeBase: recruit.homeBase, faction: recruit.faction))
-    let moneyIndex2 = checkMoney(price = price, message = recruit.name)
+    let moneyIndex2: int = checkMoney(price = price, message = recruit.name)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
     gainRep(baseIndex = baseIndex, points = 1)
@@ -105,13 +105,13 @@ proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
     recipeIndex.len > 0
   body:
     let
-      baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-      baseType = skyBases[baseIndex].baseType
+      baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      baseType: string = skyBases[baseIndex].baseType
     if recipeIndex notin basesTypesList[baseType].recipes:
       raise newException(exceptn = CantBuyError, message = "")
     if recipeIndex in knownRecipes:
       raise newException(exceptn = AlreadyKnownError, message = "")
-    let traderIndex = findMember(order = talk)
+    let traderIndex: int = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     var cost: Natural = 0
@@ -126,8 +126,8 @@ proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
       cost = 1
     countPrice(price = cost, traderIndex = traderIndex)
     let
-      recipeName = itemsList[recipesList[recipeIndex].resultIndex].name
-      moneyIndex2 = checkMoney(price = cost, message = recipeName)
+      recipeName: string = itemsList[recipesList[recipeIndex].resultIndex].name
+      moneyIndex2: int = checkMoney(price = cost, message = recipeName)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost)
     knownRecipes.add(y = recipeIndex)
@@ -158,8 +158,8 @@ proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
           playerShip.crew[memberIndex].faction].healingTools))
     else:
       for member in playerShip.crew:
-        time = time + (5 * (100 - member.health))
-        cost = cost + ((5 * (100 - member.health)) * getPrice(baseType = "0",
+        time += (5 * (100 - member.health))
+        cost += ((5 * (100 - member.health)) * getPrice(baseType = "0",
             itemIndex = findProtoItem(itemType = factionsList[
             member.faction].healingTools)))
     cost = (cost.float * newGameSettings.pricesBonus).Natural
@@ -168,7 +168,7 @@ proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
     countPrice(price = cost, traderIndex = findMember(order = talk))
     if time == 0:
       time = 1
-    let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     if "temple" in factionsList[skyBases[baseIndex].owner].flags:
       cost = (cost / 2).Natural
       if cost == 0:
@@ -188,7 +188,7 @@ proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
     healCost(cost = cost, time = time, memberIndex = memberIndex)
     if cost == 0:
       raise newException(exceptn = CantHealError, message = "")
-    let traderIndex = findMember(order = talk)
+    let traderIndex: int = findMember(order = talk)
     if traderIndex == -1:
       raise newException(exceptn = NoTraderError, message = "")
     if memberIndex > -1:
@@ -206,11 +206,11 @@ proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
               moduleIndex = -1, checkPriorities = false)
       addMessage(message = "You paid for healing all wounded crew members for " &
           $cost & " " & moneyName & ".", mType = tradeMessage)
-    var moneyIndex2 = checkMoney(price = cost)
+    var moneyIndex2: int = checkMoney(price = cost)
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-    let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = time)
 
@@ -257,19 +257,19 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
   body:
     giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
         moduleIndex = 0, checkPriorities = false)
-    let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     var
       maxAmount: int = amount
       sessions, overallCost: Natural = 0
     while maxAmount > 0:
       let
-        cost = trainCost(memberIndex = memberIndex, skillIndex = skillIndex)
-        moneyIndex2 = findItem(inventory = playerShip.cargo,
+        cost: Natural = trainCost(memberIndex = memberIndex, skillIndex = skillIndex)
+        moneyIndex2: int = findItem(inventory = playerShip.cargo,
             protoIndex = moneyIndex)
       if cost == 0 or playerShip.cargo[moneyIndex2].amount < cost or (
           not isAmount and maxAmount < cost):
         break
-      var gainedExp = getRandom(min = 10, max = 60) + playerShip.crew[
+      var gainedExp: Positive = getRandom(min = 10, max = 60) + playerShip.crew[
           memberIndex].attributes[skillsList[skillIndex].attribute].level
       if gainedExp > 100:
         gainedExp = 100
@@ -277,14 +277,14 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
           crewIndex = memberIndex)
       updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
       updateBaseCargo(protoIndex = moneyIndex, amount = cost)
-      let traderIndex = findMember(order = talk)
+      let traderIndex: int = findMember(order = talk)
       if traderIndex > 0:
         gainExp(amount = 5, skillNumber = talkingSkill, crewIndex = traderIndex)
       gainRep(baseIndex = baseIndex, points = 5)
       updateGame(minutes = 60)
       sessions.inc
-      overallCost = overallCost + cost
-      maxAmount = maxAmount - (if isAmount: 1 else: cost)
+      overallCost += cost
+      maxAmount -= (if isAmount: 1 else: cost)
     if sessions > 0:
       addMessage(message = "You purchased " & $sessions &
           " training session(s) in " & skillsList[skillIndex].name & " for " &
@@ -318,8 +318,8 @@ proc healAdaCost(cost, time: var cint; memberIndex: cint) {.raises: [], tags: []
     exportc, contractual.} =
   ## Temporary C binding
   var
-    nimCost = 0.Natural
-    nimTime = 0.Natural
+    nimCost: Natural = 0
+    nimTime: Natural = 0
   try:
     healCost(cost = nimCost, time = nimTime, memberIndex = memberIndex - 1)
   except:
