@@ -160,7 +160,9 @@ package body MainMenu.Commands is
          Clear_Table(Table => Local_Load_Table);
       end if;
       Load_Table := Local_Load_Table;
-      return Show_Ada_Load_Game_Command(C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+      return
+        Show_Ada_Load_Game_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
    end Show_Load_Game_Command;
 
    -- ****if* MCommands/MCommands.StartGame
