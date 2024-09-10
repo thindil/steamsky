@@ -50,13 +50,6 @@ package Utils.UI is
    procedure Add_Commands;
    -- ****
 
-   -- ****f* UUI/UUI.Update_Messages
-   -- FUNCTION
-   -- Update game messages
-   -- SOURCE
-   procedure Update_Messages;
-   -- ****
-
    -- ****f* UUI/UUI.Show_Screen
    -- FUNCTION
    -- Remove an old screen from the window and add a new to it

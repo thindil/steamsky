@@ -92,6 +92,13 @@ package body Utils.UI is
       External_Name => "setTextVariableCommand";
       -- ****
 
+   -- ****if* UUI/UUI.Update_Messages
+   -- FUNCTION
+   -- Update game messages
+   -- SOURCE
+   procedure Update_Messages;
+   -- ****
+
    -- ****o* UUI/UUI.Process_Question_Command
    -- FUNCTION
    -- Process question from dialog when the player answer Yes there
