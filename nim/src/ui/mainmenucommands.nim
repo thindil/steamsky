@@ -192,13 +192,13 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
       return
   if y < 0:
     y = 0
-  tclEval(script = "wm geometry " & $gameSettings.windowWidth & "x" &
+  tclEval(script = "wm geometry . " & $gameSettings.windowWidth & "x" &
       $gameSettings.windowHeight & "+" & $x & "+" & $y)
   try:
     generateTraders()
   except:
     showError(message = "Can't generate traders")
-  createGameUi()
+#  createGameUi()
 
 proc addCommands*() =
   discard
