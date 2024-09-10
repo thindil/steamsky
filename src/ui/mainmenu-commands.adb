@@ -20,7 +20,6 @@ with Ada.Containers.Vectors;
 with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings;
--- with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split;
@@ -40,15 +39,12 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
--- with Tcl.Tk.Ada.Winfo;
--- with Tcl.Tk.Ada.Wm;
 with BasesTypes; use BasesTypes;
 with Combat.UI;
 with Config; use Config;
 with CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
--- with Events;
 with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad;
@@ -315,53 +311,13 @@ package body MainMenu.Commands is
    -- SOURCE
    procedure Start_Game is
       -- ****
---      use Ada.Strings;
---      use Ada.Strings.Fixed;
---      use Tcl.Tk.Ada.Widgets.Toplevel;
---      use Tcl.Tk.Ada.Winfo;
---      use Tcl.Tk.Ada.Wm;
---      use Events;
       use Maps.UI;
 
---      Main_Window: constant Tk_Toplevel :=
---        Get_Main_Window(Interp => Get_Context);
---      X, Y: Integer;
       procedure Start_Ada_Game with
          Convention => C,
          Import => True,
          External_Name => "startGame";
    begin
---      X :=
---        (Positive'Value
---           (Winfo_Get(Widgt => Main_Window, Info => "vrootwidth")) -
---         Get_Integer_Setting(Name => "windowWidth")) /
---        2;
---      if X < 0 then
---         X := 0;
---      end if;
---      Y :=
---        (Positive'Value
---           (Winfo_Get(Widgt => Main_Window, Info => "vrootheight")) -
---         Get_Integer_Setting(Name => "windowHeight")) /
---        2;
---      if Y < 0 then
---         Y := 0;
---      end if;
---      Wm_Set
---        (Widgt => Main_Window, Action => "geometry",
---         Options =>
---           Trim
---             (Source =>
---                Positive'Image(Get_Integer_Setting(Name => "windowWidth")),
---              Side => Left) &
---           "x" &
---           Trim
---             (Source =>
---                Positive'Image(Get_Integer_Setting(Name => "windowHeight")),
---              Side => Left) &
---           "+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
---           Trim(Source => Positive'Image(Y), Side => Left));
---      Generate_Traders;
       Start_Ada_Game;
       Create_Game_Ui;
    end Start_Game;
