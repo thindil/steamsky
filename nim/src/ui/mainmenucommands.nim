@@ -173,7 +173,8 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
-    RootEffect].} =
+    RootEffect], exportc.} =
+  ##  Start the game
   let mainWindow = "."
   var x: int = try:
       ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
