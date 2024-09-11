@@ -16,10 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables]
+import contracts
 import config, crewinventory, game, items, maps, messages, utils,
     shipscargo, shipscrew, shipscrew2, types
 
-proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEffect].} =
+proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [
+    RootEffect], contractual.} =
   ## Pay daily payments to the player's ship crew members and update the lenght
   ## of their contracts
   let moneyIndex2 = findItem(inventory = playerShip.cargo,
@@ -73,70 +75,77 @@ proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [RootEff
     memberIndex.inc
 
 proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
-    raises: [], tags: [].} =
+    raises: [], tags: [], contractual.} =
   ## Get the attribute level name for the selected attribute or its numerical
   ## value if the player set it in the configuration.
   ##
   ## * attributeLevel - the level of an attribute which value will be get
   ##
   ## Returns the string representation of the selected level of an attribute.
-  if gameSettings.showNumbers:
-    return $attributeLevel
-  case attributeLevel
-  of 1 .. 5:
-    return "Very low"
-  of 6 .. 10:
-    return "Low"
-  of 11 .. 15:
-    return "Below average"
-  of 16 .. 30:
-    return "Average"
-  of 31 .. 35:
-    return "Above average"
-  of 36 .. 40:
-    return "High"
-  of 41 .. 49:
-    return "Very high"
-  else:
-    return "Outstanding"
+  ensure:
+    result.len > 0
+  body:
+    if gameSettings.showNumbers:
+      return $attributeLevel
+    case attributeLevel
+    of 1 .. 5:
+      return "Very low"
+    of 6 .. 10:
+      return "Low"
+    of 11 .. 15:
+      return "Below average"
+    of 16 .. 30:
+      return "Average"
+    of 31 .. 35:
+      return "Above average"
+    of 36 .. 40:
+      return "High"
+    of 41 .. 49:
+      return "Very high"
+    else:
+      return "Outstanding"
 
 proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [
-    ], tags: [].} =
+    ], tags: [], contractual.} =
   ## Get the skill level name for the selected skill or its numerical
   ## value if the player set it in the configuration.
   ##
   ## * attributeLevel - the level of a skill which value will be get
   ##
   ## Returns the string representation of the selected level of a skill.
-  if gameSettings.showNumbers:
-    return $skillLevel
-  case skillLevel
-  of 0:
-    return "Untrained"
-  of 1 .. 10:
-    return "Beginner"
-  of 11 .. 20:
-    return "Novice"
-  of 21 .. 30:
-    return "Apprentice"
-  of 31 .. 40:
-    return "Practitioner"
-  of 41 .. 50:
-    return "Competent"
-  of 51 .. 60:
-    return "Respected"
-  of 61 .. 70:
-    return "Renowned"
-  of 71 .. 80:
-    return "Master"
-  of 81 .. 90:
-    return "Grand-Master"
-  of 91 .. 99:
-    return "Legendary"
-  else:
-    return "Ultimate"
+  ensure:
+    result.len > 0
+  body:
+    if gameSettings.showNumbers:
+      return $skillLevel
+    case skillLevel
+    of 0:
+      return "Untrained"
+    of 1 .. 10:
+      return "Beginner"
+    of 11 .. 20:
+      return "Novice"
+    of 21 .. 30:
+      return "Apprentice"
+    of 31 .. 40:
+      return "Practitioner"
+    of 41 .. 50:
+      return "Competent"
+    of 51 .. 60:
+      return "Respected"
+    of 61 .. 70:
+      return "Renowned"
+    of 71 .. 80:
+      return "Master"
+    of 81 .. 90:
+      return "Grand-Master"
+    of 91 .. 99:
+      return "Legendary"
+    else:
+      return "Ultimate"
 
-proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [].} =
+proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [],
+    contractual.} =
   ## Find index of cabin which belongs to the selected crew member
   ##
   ## * memberIndex - the index of the player's ship crew member which will be
@@ -144,16 +153,21 @@ proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [].} 
   ##
   ## Returns the index of the cabin which belongs to the selected crew member
   ## or -1 if nothing found
-  for index, module in playerShip.modules.pairs:
-    if module.mType == ModuleType2.cabin:
-      for owner in module.owner:
-        if owner == memberIndex:
-          return index
-  return -1
+  require:
+    memberIndex < playerShip.crew.len
+  ensure:
+    result in -1..playerShip.modules.high
+  body:
+    for index, module in playerShip.modules.pairs:
+      if module.mType == ModuleType2.cabin:
+        for owner in module.owner:
+          if owner == memberIndex:
+            return index
+    return -1
 
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
-    Exception], tags: [WriteIOEffect, RootEffect].} =
+    Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Update the player's ship crew
   ##
   ## * minutes     - the amount of minutes which passed
@@ -163,16 +177,18 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     i: int = 0
     tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: int = 0
 
-  proc updateMember(member: var MemberData) =
+  proc updateMember(member: var MemberData) {.raises: [KeyError,
+      CrewNoSpaceError], tags: [], contractual.} =
 
-    func normalizeStat(stat: var int; maxValue: Positive = 100) {.raises: [],
-        tags: [].} =
+    proc normalizeStat(stat: var int; maxValue: Positive = 100) {.raises: [],
+        tags: [], contractual.} =
       if stat > maxValue:
         stat = maxValue
       elif stat < 0:
         stat = 0
 
-    proc consume(itemType: string): Natural =
+    proc consume(itemType: string): Natural {.raises: [KeyError,
+        CrewNoSpaceError], tags: [], contractual.} =
       var
         itemIndex: int = findItem(inventory = playerShip.cargo,
             itemType = itemType)
@@ -575,24 +591,27 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
 
 # Temporary code for interfacing with Ada
 
-proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc.} =
+proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc,
+    contractual.} =
   try:
     dailyPayment()
   except KeyError, Exception:
     discard
 
 proc getAdaAttributeLevelName(attributeLevel: cint): cstring {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   return getAttributeLevelName(attributeLevel = attributeLevel.Positive).cstring
 
-proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [],
+    exportc, contractual.} =
   return getSkillLevelName(skillLevel = skillLevel.Natural).cstring
 
-proc findAdaCabin(memberIndex: cint): cint {.raises: [], tags: [], exportc.} =
+proc findAdaCabin(memberIndex: cint): cint {.raises: [], tags: [], exportc,
+    contractual.} =
   return findCabin(memberIndex = memberIndex - 1).cint + 1
 
 proc updateAdaCrew(minutes, tiredPoints, inCombat: cint) {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc.} =
+    WriteIOEffect, RootEffect], exportc, contractual.} =
   try:
     updateCrew(minutes = minutes, tiredPoints = tiredPoints,
         inCombat = inCombat == 1)
