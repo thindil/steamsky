@@ -172,6 +172,25 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
       res = "deletesave", inGame = false)
   return tclOk
 
+proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let frameName = ".newgamemenu.canvas.player"
+  var comboBox = frameName & ".faction"
+  let factionName = tclEval2(script = comboBox & " get")
+  var label = ""
+  if factionName == "Random":
+    label = frameName & ".labelcareer"
+    tclEval(script = "grid remove " & label)
+    comboBox = frameName & ".career"
+    tclEval(script = comboBox & " set Random")
+    tclEval(script = "grid remove " & comboBox)
+    label = frameName & ".labelbase"
+    tclEval(script = "grid remove " & label)
+    comboBox = frameName & ".base"
+    tclEval(script = comboBox & " set Any")
+    tclEval(script = "grid remove " & comboBox)
+  return tclOk
+
 proc addCommands*() =
   discard
 #  addCommand("OpenLink", openLinkCommand)
@@ -179,3 +198,4 @@ proc addCommands*() =
 #  addCommand("ShowNews", showNewsCommand)
 #  addCommand("ShowHallOfFame", showHallOfFameCommand)
 #  addCommand("DeleteGame", deleteGameCommand)
+#  addCommand("SetFaction", setFactionCommand)
