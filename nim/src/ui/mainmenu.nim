@@ -162,6 +162,18 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
 proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+  ## Load the selected save file and start the game
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## LoadGame file
+  ## File is the name of the saved game which will be loaded
   tclEval(script = "pack forget .loadmenu")
   saveName = $argv[1]
   try:
