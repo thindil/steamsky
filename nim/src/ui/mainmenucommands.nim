@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc, strutils]
-import ../[config, events, game, halloffame, tk]
-import dialogs, mapsui
+import std/[os, osproc]
+import ../[game, halloffame, tk]
+import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
@@ -171,34 +171,6 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   showQuestion(question = "Are you sure you want delete this savegame?",
       res = "deletesave", inGame = false)
   return tclOk
-
-proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
-    RootEffect], exportc.} =
-  ##  Start the game
-  let mainWindow = "."
-  var x: int = try:
-      ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
-        gameSettings.windowWidth) / 2).int
-    except:
-      showError(message = "Can't get window X position")
-      return
-  if x < 0:
-    x = 0
-  var y: int = try:
-      ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt -
-        gameSettings.windowHeight) / 2).int
-    except:
-      showError(message = "Can't get window Y position")
-      return
-  if y < 0:
-    y = 0
-  tclEval(script = "wm geometry . " & $gameSettings.windowWidth & "x" &
-      $gameSettings.windowHeight & "+" & $x & "+" & $y)
-  try:
-    generateTraders()
-  except:
-    showError(message = "Can't generate traders")
-#  createGameUi()
 
 proc addCommands*() =
   discard
