@@ -88,13 +88,6 @@ package Events is
    function Check_For_Event return Boolean;
    -- ****
 
-   -- ****f* Events/Events.Generate_Traders
-   -- FUNCTION
-   -- Create list of traders needed for trader event
-   -- SOURCE
-   procedure Generate_Traders;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    procedure Set_Event(Index: Positive);

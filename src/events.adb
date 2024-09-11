@@ -43,15 +43,6 @@ package body Events is
       return False;
    end Check_For_Event;
 
-   procedure Generate_Traders is
-      procedure Generate_Ada_Traders with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaTraders";
-   begin
-      Generate_Ada_Traders;
-   end Generate_Traders;
-
    procedure Set_Event(Index: Positive) is
       X, Y, Time, E_Type, Data: Integer;
       procedure Set_Ada_Event(I: Positive; X1, Y1, T, E, D: out Integer) with
