@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, os, strutils, times]
-import ../[config, events, game, tk]
-import mainmenucommands, table
+import ../[config, events, game, gamesaveload, tk]
+import dialogs, mainmenucommands, table
 
 type SaveSortOrders = enum
   playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
@@ -161,6 +161,20 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
   except:
     showError(message = "Can't generate traders")
   #createGameUi()
+
+proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  tclEval(script = "pack forget .loadmenu")
+  saveName = $argv[1]
+  try:
+    loadGame()
+    startGame()
+  except:
+    showMainMenu()
+    showMessage(text = "Can't load this game. Reason: " &
+        getCurrentExceptionMsg(), parentFrame = ".",
+        title = "Can't load the game")
+  return tclOk
 
 proc createMainMenu*() =
   let
