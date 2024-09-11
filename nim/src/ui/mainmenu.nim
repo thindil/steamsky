@@ -27,7 +27,7 @@ var
   saveSortOrder = timeDesc
   mainMenuFrame = ""
 
-proc showMainMenu*()
+proc showMainMenu*() {.raises: [].}
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
@@ -128,10 +128,7 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind . <Alt-b> {}")
     tclEval(script = "bind . <Escape> {}")
     tclEval(script = "pack forget .loadmenu")
-    try:
-      showMainMenu()
-    except:
-      showError(message = "Can't show the main menu.")
+    showMainMenu()
   return tclOk
 
 proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
@@ -163,7 +160,8 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
   #createGameUi()
 
 proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
   tclEval(script = "pack forget .loadmenu")
   saveName = $argv[1]
   try:
@@ -195,10 +193,16 @@ proc createMainMenu*() =
 proc showMainMenu() =
   let mainWindow = "."
   var
-    x: int = ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
-        600) / 2).int
-    y: int = ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt -
-        400) / 2).int
+    x: int = try:
+        ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt - 600) / 2).int
+      except:
+        showError(message = "Can't count X coord")
+        return
+    y: int = try:
+        ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt - 400) / 2).int
+      except:
+        showError(message = "Can't count Y coord")
+        return
   if x < 0:
     x = 0
   if y < 0:
