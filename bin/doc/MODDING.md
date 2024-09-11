@@ -1151,6 +1151,8 @@ story.
   of food. Optional.
 * Key `FuelIcon`: Path to the SVG image which will be used to show the amount
   of fuel. Optional.
+* Key `DrinksIcon`: Path to the SVG image which will be used to show the amount
+  of drinks. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
