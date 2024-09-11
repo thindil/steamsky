@@ -21,7 +21,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
+-- with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -206,15 +206,21 @@ package body MainMenu.Commands is
    function Load_Game_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
       use Ada.Exceptions;
       use Game.SaveLoad;
 
+      function Load_Ada_Game_Command
+        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+         Import => True,
+         Convention => C,
+         External_Name => "loadGameCommand";
    begin
-      Tcl.Tk.Ada.Pack.Pack_Forget
-        (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
-      Load_Game
-        (File_Name => CArgv.Arg(Argv => Argv, N => 1));
+      if Load_Ada_Game_Command
+          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv) =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
       Start_Game;
       return TCL_OK;
    exception
