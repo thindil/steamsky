@@ -132,11 +132,7 @@ package body Utils.UI is
    begin
       if Result = "deletesave" then
          Delete_File
-           (Name =>
-              To_String
-                (Source =>
-                   Save_Directory &
-                   Tcl_GetVar(interp => Interp, varName => "deletesave")));
+           (Name => Tcl_GetVar(interp => Interp, varName => "deletesave"));
          Tcl_UnsetVar(interp => Interp, varName => "deletesave");
          Tcl_Eval(interp => Interp, strng => "ShowLoadGame");
       elsif Result = "sethomebase" then
