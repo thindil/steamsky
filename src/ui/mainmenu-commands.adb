@@ -33,7 +33,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with BasesTypes; use BasesTypes;
 with Combat.UI;
-with Config; use Config;
+with Config;
 with CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
@@ -101,7 +101,7 @@ package body MainMenu.Commands is
    -- SOURCE
    Save_Sort_Order: Save_Sort_Orders := Default_Save_Sort_Order;
    -- ****
-
+   --## rule off REDUCEABLE_SCOPE
    -- ****if* MCommands/MCommands.Get_Save_Sort_Order
    -- FUNCTION
    -- Get the current sorting order for the saved games list
@@ -115,6 +115,7 @@ package body MainMenu.Commands is
       return Save_Sort_Order;
    end Get_Save_Sort_Order;
    -- ****
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* MCommands/MCommads.Show_Load_Game_Command
    -- FUNCTION
@@ -213,9 +214,7 @@ package body MainMenu.Commands is
       Tcl.Tk.Ada.Pack.Pack_Forget
         (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
       Load_Game
-        (File_Name =>
-           To_String(Source => Save_Directory) &
-           CArgv.Arg(Argv => Argv, N => 1));
+        (File_Name => CArgv.Arg(Argv => Argv, N => 1));
       Start_Game;
       return TCL_OK;
    exception
@@ -586,6 +585,7 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Config;
       use Goals;
       use Tiny_String;
       use Utils;
