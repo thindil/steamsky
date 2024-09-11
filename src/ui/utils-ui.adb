@@ -92,13 +92,6 @@ package body Utils.UI is
       External_Name => "setTextVariableCommand";
       -- ****
 
-   -- ****if* UUI/UUI.Update_Messages
-   -- FUNCTION
-   -- Update game messages
-   -- SOURCE
-   procedure Update_Messages;
-   -- ****
-
    -- ****o* UUI/UUI.Process_Question_Command
    -- FUNCTION
    -- Process question from dialog when the player answer Yes there
@@ -298,6 +291,14 @@ package body Utils.UI is
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
             Member_Index: constant Positive :=
               Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+            procedure Update_Messages is
+               procedure Update_Ada_Messages with
+                  Import => True,
+                  Convention => C,
+                  External_Name => "updateAdaMessages";
+            begin
+               Update_Ada_Messages;
+            end Update_Messages;
          begin
             Add_Message
               (Message =>
@@ -509,15 +510,6 @@ package body Utils.UI is
         (Name => "SetDestination2",
          Ada_Command => Set_Destination_Command'Access);
    end Add_Commands;
-
-   procedure Update_Messages is
-      procedure Update_Ada_Messages with
-         Import => True,
-         Convention => C,
-         External_Name => "updateAdaMessages";
-   begin
-      Update_Ada_Messages;
-   end Update_Messages;
 
    procedure Show_Screen(New_Screen_Name: String) is
       use Interfaces.C.Strings;
