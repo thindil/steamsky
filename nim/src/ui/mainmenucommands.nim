@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc]
+import std/[os, osproc, tables]
 import ../[game, halloffame, tk]
 import dialogs
 
@@ -178,6 +178,15 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
   var comboBox = frameName & ".faction"
   let factionName = tclEval2(script = comboBox & " get")
   var label = ""
+
+  proc updateInfo(newText: string) =
+    let infoText = ".newgamemenu.info.text"
+    tclEval(script = infoText & " configure -state normal")
+    tclEval(script = infoText & " delete 1.0 end")
+    tclEval(script = infoText & " insert end {Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later\n\n.}")
+    tclEval(script = infoText & " insert end " & newText)
+    tclEval(script = infoText & " configure -state disabled")
+
   if factionName == "Random":
     label = frameName & ".labelcareer"
     tclEval(script = "grid remove " & label)
@@ -189,6 +198,29 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
     comboBox = frameName & ".base"
     tclEval(script = comboBox & " set Any")
     tclEval(script = "grid remove " & comboBox)
+    updateInfo(newText = "{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}")
+    return tclOk
+  label = frameName & ".labelcareer"
+  tclEval(script = "grid " & label)
+  comboBox = frameName & ".career"
+  tclEval(script = "grid " & comboBox)
+  label = frameName & ".labelbase"
+  tclEval(script = "grid " & label)
+  comboBox = frameName & ".base"
+  tclEval(script = "grid " & comboBox)
+  let genderFrame = frameName & ".gender"
+  for faction in factionsList.values:
+    if faction.name != factionName:
+      continue
+    if "nogender" in faction.flags:
+      label = frameName & ".labelgender"
+      tclEval(script = "grid remove " & label)
+      tclEval(script = "grid remove " & genderFrame)
+      tclSetVar(varName = "playergender", newValue = "M")
+    else:
+      label = frameName & ".labelgender"
+      tclEval(script = "grid " & label)
+      tclEval(script = "grid " & genderFrame)
   return tclOk
 
 proc addCommands*() =
