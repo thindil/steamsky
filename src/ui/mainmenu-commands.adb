@@ -21,7 +21,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
--- with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -30,7 +29,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with BasesTypes; use BasesTypes;
 with Combat.UI;
 with Config;
@@ -254,118 +252,6 @@ package body MainMenu.Commands is
       Convention => C,
       External_Name => "setFactionCommand";
       -- ****
-
---   function Set_Faction_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      use Tcl.Tk.Ada.Grid;
---      use Tcl.Tk.Ada.Widgets.TtkLabel;
---      use Tiny_String;
---
---      Faction_Name: Bounded_String;
---      Values: Unbounded_String := Null_Unbounded_String;
---      Frame_Name: constant String := ".newgamemenu.canvas.player";
---      Combo_Box: Ttk_ComboBox :=
---        Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
---      Label: Ttk_Label := Get_Widget(pathName => ".", Interp => Interp);
---      Gender_Frame: constant Ttk_Frame :=
---        Get_Widget(pathName => Frame_Name & ".gender", Interp => Interp);
---      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
---      procedure Update_Info(New_Text: String) is
---         Info_Text: constant Tk_Text :=
---           Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
---      begin
---         configure(Widgt => Info_Text, options => "-state normal");
---         Delete
---           (TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
---         Insert
---           (TextWidget => Info_Text, Index => "end",
---            Text =>
---              "{Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later." &
---              LF & LF & "}");
---         Insert(TextWidget => Info_Text, Index => "end", Text => New_Text);
---         configure(Widgt => Info_Text, options => "-state disabled");
---      end Update_Info;
---   begin
---      Faction_Name := To_Bounded_String(Source => Get(Widgt => Combo_Box));
---      if Faction_Name = To_Bounded_String(Source => "Random") then
---         Label.Name := New_String(Str => Frame_Name & ".labelcareer");
---         Grid_Remove(Slave => Label);
---         Combo_Box.Name := New_String(Str => Frame_Name & ".career");
---         Set(ComboBox => Combo_Box, Value => "Random");
---         Grid_Remove(Slave => Combo_Box);
---         Label.Name := New_String(Str => Frame_Name & ".labelbase");
---         Grid_Remove(Slave => Label);
---         Combo_Box.Name := New_String(Str => Frame_Name & ".base");
---         Set(ComboBox => Combo_Box, Value => "Any");
---         Grid_Remove(Slave => Combo_Box);
---         Update_Info
---           (New_Text =>
---              "{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
---         return TCL_OK;
---      end if;
---      Label.Name := New_String(Str => Frame_Name & ".labelcareer");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
---      Combo_Box.Name := New_String(Str => Frame_Name & ".career");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
---      Label.Name := New_String(Str => Frame_Name & ".labelbase");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
---      Combo_Box.Name := New_String(Str => Frame_Name & ".base");
---      Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
---      Load_Faction_Based_Info_Loop :
---      for I in 1 .. Get_Factions_Amount loop
---         Faction := Get_Faction(Number => I);
---         if Faction.Name /= Faction_Name then
---            goto End_Of_Faction_Info_Loop;
---         end if;
---         if Faction.Flags.Contains
---             (Item => To_Unbounded_String(Source => "nogender")) then
---            Label.Name := New_String(Str => Frame_Name & ".labelgender");
---            Grid_Remove(Slave => Label);
---            Grid_Remove(Slave => Gender_Frame);
---            Tcl_SetVar
---              (interp => Interp, varName => "playergender", newValue => "M");
---         else
---            Label.Name := New_String(Str => Frame_Name & ".labelgender");
---            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
---            Tcl.Tk.Ada.Grid.Grid(Slave => Gender_Frame);
---         end if;
---         Values := Null_Unbounded_String;
---         Load_Careers_Loop :
---         for J in Faction.Careers.Iterate loop
---            Append
---              (Source => Values, New_Item => " " & Faction.Careers(J).Name);
---         end loop Load_Careers_Loop;
---         Append(Source => Values, New_Item => " Random");
---         Combo_Box.Name := New_String(Str => Frame_Name & ".career");
---         configure
---           (Widgt => Combo_Box,
---            options => "-values [list " & To_String(Source => Values) & "]");
---         Set(ComboBox => Combo_Box, Value => "General");
---         Values := To_Unbounded_String(Source => " Any");
---         Load_Bases_Types_Loop :
---         for J in Faction.Bases_Types.Iterate loop
---            Append
---              (Source => Values,
---               New_Item =>
---                 " {" &
---                 Get_Base_Type_Name
---                   (Base_Type => BaseType_Container.Key(Position => J)) &
---                 "}");
---         end loop Load_Bases_Types_Loop;
---         Combo_Box.Name := New_String(Str => Frame_Name & ".base");
---         configure
---           (Widgt => Combo_Box,
---            options => "-values [list " & To_String(Source => Values) & "]");
---         Set(ComboBox => Combo_Box, Value => "Any");
---         Update_Info
---           (New_Text => "{" & To_String(Source => Faction.Description) & "}");
---         exit Load_Faction_Based_Info_Loop;
---         <<End_Of_Faction_Info_Loop>>
---      end loop Load_Faction_Based_Info_Loop;
---      return TCL_OK;
---   end Set_Faction_Command;
 
    -- ****o* MCommands/MCommands.Set_Career_Command
    -- FUNCTION
