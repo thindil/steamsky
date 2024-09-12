@@ -269,59 +269,61 @@ package body MainMenu.Commands is
    function Set_Career_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "setCareerCommand";
       -- ****
 
-   function Set_Career_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc, Argv);
-      use Tiny_String;
-
-      Faction_Name: Bounded_String;
-      Career_Name: Unbounded_String;
-      Frame_Name: constant String := ".newgamemenu.canvas.player";
-      Combo_Box: Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
-      Info_Text: constant Tk_Text :=
-        Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
-      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
-   begin
-      Faction_Name := To_Bounded_String(Source => Get(Widgt => Combo_Box));
-      Combo_Box.Name := New_String(Str => Frame_Name & ".career");
-      Career_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
-      configure(Widgt => Info_Text, options => "-state normal");
-      Delete(TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
-      Insert
-        (TextWidget => Info_Text, Index => "end",
-         Text =>
-           "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
-           LF & LF & "}");
-      Set_Faction_Careers_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         Faction := Get_Faction(Number => I);
-         if Faction.Name = Faction_Name then
-            Load_Careers_Loop :
-            for Career of Faction.Careers loop
-               if Career.Name = Career_Name then
-                  Insert
-                    (TextWidget => Info_Text, Index => "end",
-                     Text =>
-                       "{" & To_String(Source => Career.Description) & "}");
-                  exit Set_Faction_Careers_Loop;
-               end if;
-            end loop Load_Careers_Loop;
-         end if;
-      end loop Set_Faction_Careers_Loop;
-      if Career_Name = "Random" then
-         Insert
-           (TextWidget => Info_Text, Index => "end",
-            Text =>
-              "{Career will be randomly selected for you during creating new game. Not recommended for new player.}");
-      end if;
-      configure(Widgt => Info_Text, options => "-state disabled");
-      return TCL_OK;
-   end Set_Career_Command;
+--   function Set_Career_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc, Argv);
+--      use Tiny_String;
+--
+--      Faction_Name: Bounded_String;
+--      Career_Name: Unbounded_String;
+--      Frame_Name: constant String := ".newgamemenu.canvas.player";
+--      Combo_Box: Ttk_ComboBox :=
+--        Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
+--      Info_Text: constant Tk_Text :=
+--        Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
+--      Faction: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
+--   begin
+--      Faction_Name := To_Bounded_String(Source => Get(Widgt => Combo_Box));
+--      Combo_Box.Name := New_String(Str => Frame_Name & ".career");
+--      Career_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+--      configure(Widgt => Info_Text, options => "-state normal");
+--      Delete(TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
+--      Insert
+--        (TextWidget => Info_Text, Index => "end",
+--         Text =>
+--           "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
+--           LF & LF & "}");
+--      Set_Faction_Careers_Loop :
+--      for I in 1 .. Get_Factions_Amount loop
+--         Faction := Get_Faction(Number => I);
+--         if Faction.Name = Faction_Name then
+--            Load_Careers_Loop :
+--            for Career of Faction.Careers loop
+--               if Career.Name = Career_Name then
+--                  Insert
+--                    (TextWidget => Info_Text, Index => "end",
+--                     Text =>
+--                       "{" & To_String(Source => Career.Description) & "}");
+--                  exit Set_Faction_Careers_Loop;
+--               end if;
+--            end loop Load_Careers_Loop;
+--         end if;
+--      end loop Set_Faction_Careers_Loop;
+--      if Career_Name = "Random" then
+--         Insert
+--           (TextWidget => Info_Text, Index => "end",
+--            Text =>
+--              "{Career will be randomly selected for you during creating new game. Not recommended for new player.}");
+--      end if;
+--      configure(Widgt => Info_Text, options => "-state disabled");
+--      return TCL_OK;
+--   end Set_Career_Command;
 
    -- ****o* MCommands/MCommands.Set_Base_Command
    -- FUNCTION
