@@ -173,7 +173,7 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let frameName = ".newgamemenu.canvas.player"
   var comboBox = frameName & ".faction"
   let factionName = tclEval2(script = comboBox & " get")
@@ -230,7 +230,10 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = comboBox & " set General")
     values = " Any"
     for baseType in faction.basesTypes.keys:
-      values.add(y = " {" & basesTypesList[baseType].name & "}")
+      try:
+        values.add(y = " {" & basesTypesList[baseType].name & "}")
+      except:
+        return showError(message = "Can't add base type.")
     comboBox = frameName & ".base"
     tclEval(script = comboBox & " configure -values [list " & values & "]")
     tclEval(script = comboBox & " set Any")
