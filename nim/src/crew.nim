@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the player's ship's crew like daily payments,
+## getting attributes or skills names, etc. Split from the crew module to
+## avoid circular dependencies.
+
 import std/[tables]
 import contracts
 import config, crewinventory, game, items, maps, messages, utils,
@@ -179,9 +183,20 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
 
   proc updateMember(member: var MemberData) {.raises: [KeyError,
       CrewNoSpaceError], tags: [], contractual.} =
+    ## Update the selected crew member
+    ##
+    ## * member - the crew member to update
+    ##
+    ## Returns the modified parameter member
 
     proc normalizeStat(stat: var int; maxValue: Positive = 100) {.raises: [],
         tags: [], contractual.} =
+      ## Normalize the value for the selected statistic
+      ##
+      ## * stat     - the stat to normalize
+      ## * maxValue - the max value for the stat. Default value is 100.
+      ##
+      ## Return the modified parameter stat
       if stat > maxValue:
         stat = maxValue
       elif stat < 0:
@@ -189,6 +204,12 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
 
     proc consume(itemType: string): Natural {.raises: [KeyError,
         CrewNoSpaceError], tags: [], contractual.} =
+      ## Eat or drink the selected type of consumable
+      ##
+      ## * itemType - the type of item to consume
+      ##
+      ## Returns amount of bonus from the used consumable or 0 if nothing was
+      ## consumed
       var
         itemIndex: int = findItem(inventory = playerShip.cargo,
             itemType = itemType)
@@ -593,6 +614,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
 
 proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     dailyPayment()
   except KeyError, Exception:
@@ -600,18 +622,22 @@ proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc,
 
 proc getAdaAttributeLevelName(attributeLevel: cint): cstring {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return getAttributeLevelName(attributeLevel = attributeLevel.Positive).cstring
 
 proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   return getSkillLevelName(skillLevel = skillLevel.Natural).cstring
 
 proc findAdaCabin(memberIndex: cint): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return findCabin(memberIndex = memberIndex - 1).cint + 1
 
 proc updateAdaCrew(minutes, tiredPoints, inCombat: cint) {.raises: [], tags: [
     WriteIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     updateCrew(minutes = minutes, tiredPoints = tiredPoints,
         inCombat = inCombat == 1)
