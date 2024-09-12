@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,13 +37,6 @@ package Game.SaveLoad is
    --               false
    -- SOURCE
    procedure Save_Game(Pretty_Print: Boolean := False);
-   -- ****
-
-   -- ****f* GSaveLoad/GSaveLoad.Load_Game
-   -- FUNCTION
-   -- Load game from file
-   -- SOURCE
-   procedure Load_Game(File_Name: String);
    -- ****
 
 end Game.SaveLoad;

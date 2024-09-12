@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Exceptions;
-with Interfaces.C.Strings;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -47,40 +45,5 @@ package body Game.SaveLoad is
       end loop Get_Map_Y_Loop;
       Save_Ada_Game(P_Print => (if Pretty_Print then 1 else 0));
    end Save_Game;
-
-   procedure Load_Game(File_Name: String) is
-      use Ada.Exceptions;
-      use Interfaces.C.Strings;
-
-      procedure Get_Ada_Save_Name(Name: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaSaveName";
-      procedure Load_Ada_Game with
-         Import => True,
-         Convention => C,
-         External_Name => "loadAdaGame";
-   begin
-      Get_Ada_Save_Name(Name => New_String(Str => File_Name));
-      Load_Ada_Game;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Get_Bases_Loop :
-      for I in Sky_Bases'Range loop
-         Get_Base_From_Nim(Base_Index => I);
-      end loop Get_Bases_Loop;
-      Get_Map_Y_Loop :
-      for Y in 1 .. 1_024 loop
-         Get_Map_X_Loop :
-         for X in 1 .. 1_024 loop
-            Set_Map_Cell(X => X, Y => Y);
-         end loop Get_Map_X_Loop;
-      end loop Get_Map_Y_Loop;
-      Set_Game_Date;
-   exception
-      when An_Exception : others =>
-         Player_Ship.Crew.Clear;
-         raise Save_Game_Invalid_Data
-           with Exception_Message(X => An_Exception);
-   end Load_Game;
 
 end Game.SaveLoad;
