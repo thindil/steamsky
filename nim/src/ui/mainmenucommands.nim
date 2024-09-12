@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, osproc, tables]
-import ../[game, halloffame, tk]
+import ../[basestypes, game, halloffame, tk]
 import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -183,7 +183,7 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
     let infoText = ".newgamemenu.info.text"
     tclEval(script = infoText & " configure -state normal")
     tclEval(script = infoText & " delete 1.0 end")
-    tclEval(script = infoText & " insert end {Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later\n\n.}")
+    tclEval(script = infoText & " insert end {Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.\n\n}")
     tclEval(script = infoText & " insert end " & newText)
     tclEval(script = infoText & " configure -state disabled")
 
@@ -221,6 +221,21 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
       label = frameName & ".labelgender"
       tclEval(script = "grid " & label)
       tclEval(script = "grid " & genderFrame)
+    var values = ""
+    for career in faction.careers.values:
+      values.add(y = " " & career.name)
+    values.add(y = " Random")
+    comboBox = frameName & ".career"
+    tclEval(script = comboBox & " configure -values [list " & values & "]")
+    tclEval(script = comboBox & " set General")
+    values = " Any"
+    for baseType in faction.basesTypes.keys:
+      values.add(y = " {" & basesTypesList[baseType].name & "}")
+    comboBox = frameName & ".base"
+    tclEval(script = comboBox & " configure -values [list " & values & "]")
+    tclEval(script = comboBox & " set Any")
+    updateInfo(newText = "{" & faction.description & "}")
+    break
   return tclOk
 
 proc addCommands*() =
