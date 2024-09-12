@@ -253,7 +253,7 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let frameName = ".newgamemenu.canvas.player"
   var comboBox = frameName & ".faction"
   let factionName = tclEval2(script = comboBox & " get")
