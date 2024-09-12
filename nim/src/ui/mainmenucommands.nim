@@ -287,6 +287,24 @@ proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = infoText & " configure -state disabled")
   return tclOk
 
+proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    comboBox = ".newgamemenu.canvas.player.base"
+    baseName = tclEval2(script = comboBox & " get")
+    infoText = ".newgamemenu.info.text"
+  tclEval(script = infoText & " configure -state normal")
+  tclEval(script = infoText & " delete 1.0 end")
+  tclEval(script = infoText & " insert end {Select your starting base type from a list. Your starting base is your home base, where you can gain faster experience. Home base can be changed later. Some types of bases are better starting points than others. More info about each base type can be found after selecting it.\n\n}")
+  for baseType in basesTypesList.values:
+    if baseType.name == baseName:
+      tclEval(script = infoText & " insert end {" & baseType.description & "}")
+      break
+  if baseName == "Any":
+    tclEval(script = infoText & " insert end {Start the game in randomly selected base type.}")
+  tclEval(script = infoText & " configure -state disabled")
+  return tclOk
+
 proc addCommands*() =
   discard
 #  addCommand("OpenLink", openLinkCommand)
@@ -296,3 +314,4 @@ proc addCommands*() =
 #  addCommand("DeleteGame", deleteGameCommand)
 #  addCommand("SetFaction", setFactionCommand)
 #  addCommand("SetCareer", setCareerCommand)
+#  addCommand("SetBase", setBaseCommand)
