@@ -51,22 +51,25 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
     tclEval(script = label & " configure -image fuelicon -text {" &
         $itemAmount & "} -style Headergreen.TLabel")
     tclEval(script = "tooltip::tooltip " & label & " \"The amount of fuel in the ship's cargo.\"")
-  label = gameHeader & ".nodrink"
-  tclEval(script = "grid remove " & label)
+  label = gameHeader & ".drinks"
   itemAmount = try:
       getItemsAmount(iType = "Drinks")
     except KeyError:
       showError("Can't get items amount (2).")
       return
   if itemAmount == 0:
-    tclEval(script = label & " configure -image nodrinksicon")
+    tclEval(script = label & " configure -image nodrinksicon -text {" &
+        $itemAmount & "} -style Headerred.TLabel")
     tclEval(script = "tooltip::tooltip " & label & " \"You don't have any drinks in ship but your crew needs them to live.\"")
-    tclEval(script = "grid " & label)
   elif itemAmount <= gameSettings.lowDrinks:
-    tclEval(script = label & " configure -image lowdrinksicon")
+    tclEval(script = label & " configure -image lowdrinksicon -text {" &
+        $itemAmount & "} -style Golden.TLabel")
     tclEval(script = "tooltip::tooltip " & label &
         " \"Low level of drinks on ship. Only " & $itemAmount & " left.\"")
-    tclEval(script = "grid " & label)
+  else:
+    tclEval(script = label & " configure -image drinksicon -text {" &
+        $itemAmount & "} -style Headergreen.TLabel")
+    tclEval(script = "tooltip::tooltip " & label & " \"The amount of drinks in the ship's cargo.\"")
   label = gameHeader & ".food"
   itemAmount = try:
       getItemsAmount(iType = "Food")
