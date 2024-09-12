@@ -252,6 +252,30 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
     break
   return tclOk
 
+proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let frameName = ".newgamemenu.canvas.player"
+  var comboBox = frameName & ".faction"
+  let factionName = tclEval2(script = comboBox & " get")
+  comboBox = frameName & ".career"
+  let
+    careerName = tclEval2(script = comboBox & " get")
+    infoText = ".newgamemenu.info.text"
+  tclEval(script = infoText & " configure -state normal")
+  tclEval(script = infoText & " delete 1.0 end")
+  tclEval(script = infoText & " insert end {Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.\n\n}")
+  for faction in factionsList.values:
+    if faction.name == factionName:
+      for career in faction.careers.values:
+        if career.name == careerName:
+          tclEval(script = infoText & " insert end {" & career.description & "}")
+          break
+      break
+  if careerName == "Random":
+    tclEval(script = infoText & " insert end {Career will be randomly selected for you during creating new game. Not recommended for new player.}")
+  tclEval(script = infoText & " configure -state disabled")
+  return tclOk
+
 proc addCommands*() =
   discard
 #  addCommand("OpenLink", openLinkCommand)
@@ -260,3 +284,4 @@ proc addCommands*() =
 #  addCommand("ShowHallOfFame", showHallOfFameCommand)
 #  addCommand("DeleteGame", deleteGameCommand)
 #  addCommand("SetFaction", setFactionCommand)
+#  addCommand("SetCareer", setCareerCommand)
