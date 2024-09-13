@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -22,7 +21,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
--- with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -294,48 +292,6 @@ package body MainMenu.Commands is
       Convention => C,
       External_Name => "setBaseCommand";
       -- ****
-
---   function Set_Base_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      Base_Name: Unbounded_String;
---      Combo_Box: constant Ttk_ComboBox :=
---        Get_Widget
---          (pathName => ".newgamemenu.canvas.player.base", Interp => Interp);
---      Info_Text: constant Tk_Text :=
---        Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
---   begin
---      Base_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
---      configure(Widgt => Info_Text, options => "-state normal");
---      Delete(TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
---      Insert
---        (TextWidget => Info_Text, Index => "end",
---         Text =>
---           "{Select your starting base type from a list. Your starting base is your home base, where you can gain faster experience. Home base can be changed later. Some types of bases are better starting points than others. More info about each base type can be found after selecting it." &
---           LF & LF & "}");
---      Find_Base_Type_Loop :
---      for Base_Type of Bases_Types loop
---         exit Find_Base_Type_Loop when Tiny_String.Length
---             (Source => Base_Type) =
---           0;
---         if Get_Base_Type_Name(Base_Type => Base_Type) = Base_Name then
---            Insert
---              (TextWidget => Info_Text, Index => "end",
---               Text =>
---                 "{" & Get_Base_Type_Description(Base_Type => Base_Type) &
---                 "}");
---            exit Find_Base_Type_Loop;
---         end if;
---      end loop Find_Base_Type_Loop;
---      if Base_Name = "Any" then
---         Insert
---           (TextWidget => Info_Text, Index => "end",
---            Text => "{Start the game in randomly selected base type.}");
---      end if;
---      configure(Widgt => Info_Text, options => "-state disabled");
---      return TCL_OK;
---   end Set_Base_Command;
 
    -- ****o* MCommands/MCommands.Random_Name_Command
    -- FUNCTION
