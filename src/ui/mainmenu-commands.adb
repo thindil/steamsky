@@ -31,14 +31,14 @@ with BasesTypes; use BasesTypes;
 with Combat.UI;
 with Config;
 with CoreUI;
-with Crew;
+-- with Crew;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad;
 with Goals;
 with Maps.UI;
-with Ships;
+-- with Ships;
 with Table; use Table;
 with Utils;
 with Utils.UI; use Utils.UI;
@@ -311,58 +311,60 @@ package body MainMenu.Commands is
    function Random_Name_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "randomNameCommand";
       -- ****
 
-   function Random_Name_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Crew;
-      use Ships;
-      use Tiny_String;
-
-      Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget
-          (pathName => ".newgamemenu.canvas.player.faction", Interp => Interp);
-      Faction_Name: constant Bounded_String :=
-        To_Bounded_String(Source => Get(Widgt => Combo_Box));
-      Faction_Index: Bounded_String := Null_Bounded_String;
-      Gender: Character := 'M';
-      Name_Entry: constant Ttk_Entry :=
-        Get_Widget
-          (pathName =>
-             ".newgamemenu.canvas.player." & CArgv.Arg(Argv => Argv, N => 1) &
-             "name",
-           Interp => Interp);
-   begin
-      Find_Faction_Index_Loop :
-      for I in 1 .. Get_Factions_Amount loop
-         if Get_Faction(Number => I).Name = Faction_Name then
-            Faction_Index := Get_Faction_Index(Number => I);
-            exit Find_Faction_Index_Loop;
-         end if;
-      end loop Find_Faction_Index_Loop;
-      if CArgv.Arg(Argv => Argv, N => 1) = "player" then
-         Gender := Tcl_GetVar(interp => Interp, varName => "playergender")(1);
-         Delete
-           (TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
-         Insert
-           (TextEntry => Name_Entry, Index => "end",
-            Text =>
-              To_String
-                (Source =>
-                   Generate_Member_Name
-                     (Gender => Gender, Faction_Index => Faction_Index)));
-         return TCL_OK;
-      end if;
-      Delete(TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
-      Insert
-        (TextEntry => Name_Entry, Index => "end",
-         Text =>
-           To_String(Source => Generate_Ship_Name(Owner => Faction_Index)));
-      return TCL_OK;
-   end Random_Name_Command;
+--   function Random_Name_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Crew;
+--      use Ships;
+--      use Tiny_String;
+--
+--      Combo_Box: constant Ttk_ComboBox :=
+--        Get_Widget
+--          (pathName => ".newgamemenu.canvas.player.faction", Interp => Interp);
+--      Faction_Name: constant Bounded_String :=
+--        To_Bounded_String(Source => Get(Widgt => Combo_Box));
+--      Faction_Index: Bounded_String := Null_Bounded_String;
+--      Gender: Character := 'M';
+--      Name_Entry: constant Ttk_Entry :=
+--        Get_Widget
+--          (pathName =>
+--             ".newgamemenu.canvas.player." & CArgv.Arg(Argv => Argv, N => 1) &
+--             "name",
+--           Interp => Interp);
+--   begin
+--      Find_Faction_Index_Loop :
+--      for I in 1 .. Get_Factions_Amount loop
+--         if Get_Faction(Number => I).Name = Faction_Name then
+--            Faction_Index := Get_Faction_Index(Number => I);
+--            exit Find_Faction_Index_Loop;
+--         end if;
+--      end loop Find_Faction_Index_Loop;
+--      if CArgv.Arg(Argv => Argv, N => 1) = "player" then
+--         Gender := Tcl_GetVar(interp => Interp, varName => "playergender")(1);
+--         Delete
+--           (TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
+--         Insert
+--           (TextEntry => Name_Entry, Index => "end",
+--            Text =>
+--              To_String
+--                (Source =>
+--                   Generate_Member_Name
+--                     (Gender => Gender, Faction_Index => Faction_Index)));
+--         return TCL_OK;
+--      end if;
+--      Delete(TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
+--      Insert
+--        (TextEntry => Name_Entry, Index => "end",
+--         Text =>
+--           To_String(Source => Generate_Ship_Name(Owner => Faction_Index)));
+--      return TCL_OK;
+--   end Random_Name_Command;
 
    -- ****o* MCommands/MCommands.New_Game_Command
    -- FUNCTION
