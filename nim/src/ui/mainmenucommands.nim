@@ -317,7 +317,7 @@ proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     comboBox = ".newgamemenu.canvas.player.faction"
     factionName = tclEval2(script = comboBox & " get")
