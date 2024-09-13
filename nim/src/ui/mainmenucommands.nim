@@ -288,7 +288,7 @@ proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     comboBox = ".newgamemenu.canvas.player.base"
     baseName = tclEval2(script = comboBox & " get")
