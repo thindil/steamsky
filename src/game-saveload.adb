@@ -15,13 +15,16 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Bases; use Bases;
-with Maps; use Maps;
-with Ships; use Ships;
+with Bases;
+with Maps;
+with Ships;
 
 package body Game.SaveLoad is
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
+      use Bases;
+      use Maps;
+      use Ships;
       procedure Save_Ada_Game(P_Print: Integer) with
          Import => True,
          Convention => C,
