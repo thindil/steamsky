@@ -363,6 +363,26 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
   var textEntry = playerFrameName & ".playername"
   newGameSettings.playerName = tclEval2(script = textEntry & " get")
+  textEntry = playerFrameName & ".shipname"
+  newGameSettings.shipName = tclEval2(script = textEntry & " get")
+  var comboBox = playerFrameName & ".faction"
+  if tclEval2(script = comboBox & " get") == "Random":
+    newGameSettings.playerFaction = "random"
+  else:
+    block setFaction:
+      for index, faction in factionsList:
+        if faction.name == tclEval2(script = comboBox & " get"):
+          newGameSettings.playerFaction = index
+          comboBox = playerFrameName & ".career"
+          for key, career in faction.careers:
+            if career.name == tclEval2(script = comboBox & " get"):
+              newGameSettings.playerCareer = key
+              break setFaction
+  comboBox = playerFrameName & ".career"
+  if tclEval2(script = comboBox & " get") == "Random":
+    newGameSettings.playerCareer = "random"
+  comboBox = playerFrameName & ".base"
+  newGameSettings.startingBase = "Any"
   return tclOk
 
 proc addCommands*() =
