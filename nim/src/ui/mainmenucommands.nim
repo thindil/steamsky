@@ -318,6 +318,19 @@ proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Generate random player or ship name
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## RandomName type
+  ## Type is type of name which should be generated. Possible options are
+  ## player or ship
   let
     comboBox = ".newgamemenu.canvas.player.faction"
     factionName = tclEval2(script = comboBox & " get")
