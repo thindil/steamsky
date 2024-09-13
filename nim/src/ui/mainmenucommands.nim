@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, osproc, tables]
-import ../[basestypes, game, halloffame, ships2, shipscrew, tk]
+import ../[basestypes, config, game, goals, halloffame, ships2, shipscrew, tk, utils]
 import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -352,6 +352,19 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
       factionIndex = factionIndex))
   return tclOk
 
+proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  newGameSettings.playerGender = tclGetVar(varName = "playergender")[0]
+  let
+    playerFrameName = ".newgamemenu.canvas.player"
+    goalButton = playerFrameName & ".goal"
+  if tclEval2(script = goalButton & " cget -text") == "Random":
+    clearCurrentGoal()
+    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
+  var textEntry = playerFrameName & ".playername"
+  newGameSettings.playerName = tclEval2(script = textEntry & " get")
+  return tclOk
+
 proc addCommands*() =
   discard
 #  addCommand("OpenLink", openLinkCommand)
@@ -363,3 +376,4 @@ proc addCommands*() =
 #  addCommand("SetCareer", setCareerCommand)
 #  addCommand("SetBase", setBaseCommand)
 #  addCommand("RandomName", randomNameCommand)
+#  addCommand("NewGame", newGameCommand)
