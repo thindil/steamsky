@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, osproc, tables]
-import ../[basestypes, game, halloffame, tk]
+import ../[basestypes, game, halloffame, ships2, shipscrew, tk]
 import dialogs
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -316,6 +316,29 @@ proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = infoText & " configure -state disabled")
   return tclOk
 
+proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    comboBox = ".newgamemenu.canvas.player.faction"
+    factionName = tclEval2(script = comboBox & " get")
+  var factionIndex = ""
+  for index, faction in factionsList:
+    if faction.name == factionName:
+      factionIndex = index
+      break
+  let nameEntry = ".newgamemenu.canvas.player." & $argv[1] & "name"
+  if argv[1] == "player":
+    var gender = 'M'
+    gender = tclGetVar(varName = "playergender")[0]
+    tclEval(script = nameEntry & " delete 0 end")
+    tclEval(script = nameEntry & " insert end " & generateMemberName(
+        gender = gender, factionIndex = factionIndex))
+    return tclOk
+  tclEval(script = nameEntry & " delete 0 end")
+  tclEval(script = nameEntry & " insert end " & generateShipName(
+      factionIndex = factionIndex))
+  return tclOk
+
 proc addCommands*() =
   discard
 #  addCommand("OpenLink", openLinkCommand)
@@ -326,3 +349,4 @@ proc addCommands*() =
 #  addCommand("SetFaction", setFactionCommand)
 #  addCommand("SetCareer", setCareerCommand)
 #  addCommand("SetBase", setBaseCommand)
+#  addCommand("RandomName", randomNameCommand)
