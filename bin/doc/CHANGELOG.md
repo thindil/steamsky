@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Information about amount of food and fuel in the player's ship to the game's
-  header
+- Information about amount of food, fuel and drinks in the player's ship to the
+  game's header (GitHub issue #97)
 - New icons for fuel and drinks amount information. Authors: Lorc, Delapouite
   (https://game-icons.net), license CC BY 3.0
 
