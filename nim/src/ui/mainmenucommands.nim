@@ -289,6 +289,17 @@ proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Set starting base description
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetBase
   let
     comboBox = ".newgamemenu.canvas.player.base"
     baseName = tclEval2(script = comboBox & " get")
