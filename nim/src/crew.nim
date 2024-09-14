@@ -169,6 +169,47 @@ proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [],
             return index
     return -1
 
+proc memberRest(memberIndex: Natural; tiredLevel, healthLevel: var int;
+    times: int) {.sideEffect, raises: [KeyError], tags: [], contractual.} =
+  ## Count the effect of the rest on the selected player's ship's crew member
+  ##
+  ## * memberIndex - the index of the crew member which rests
+  ## * tiredLevel  - the level of tiredness of the crew member
+  ## * healthLevel - the level of health of the crew member
+  ## * times       - how many cycles the crew member rested
+  ##
+  ## Returns modified parameters tiredLevel and healthLevel
+  require:
+    memberIndex < playerShip.crew.len
+    times > 0
+  body:
+    let cabinIndex: int = findCabin(memberIndex = memberIndex)
+    var restAmount: int = 0
+    if playerShip.crew[memberIndex].tired > 0:
+      if cabinIndex > -1:
+        var damage: float = 1.0 - (playerShip.modules[
+            cabinIndex].durability.float / playerShip.modules[
+            cabinIndex].maxDurability.float)
+        restAmount = playerShip.modules[cabinIndex].cleanliness - (
+            playerShip.modules[cabinIndex].cleanliness.float *
+            damage).Natural
+        if restAmount == 0:
+          restAmount = 1
+        tiredLevel -= (times * restAmount)
+      else:
+        tiredLevel -= times
+      if tiredLevel < 0:
+        tiredLevel = 0
+    if "nofatigue" notin factionsList[playerShip.crew[
+        memberIndex].faction].flags and healthLevel in 1..99 and cabinIndex > 0:
+      healthLevel += times
+      if healthLevel > 100:
+        healthLevel = 100
+    if playerShip.crew[memberIndex].morale[1] < 50:
+      updateMorale(ship = playerShip, memberIndex = memberIndex, value = times + restAmount)
+      if playerShip.crew[memberIndex].morale[1] > 50:
+        playerShip.crew[memberIndex].morale = [1: 50.Natural, 2: 0]
+
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
@@ -372,32 +413,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     tiredLevel = playerShip.crew[i].tired
     if times > 0:
       if playerShip.crew[i].order == rest:
-        let cabinIndex: int = findCabin(memberIndex = i)
-        var restAmount: int = 0
-        if playerShip.crew[i].tired > 0:
-          if cabinIndex > -1:
-            var damage: float = 1.0 - (playerShip.modules[
-                cabinIndex].durability.float / playerShip.modules[
-                cabinIndex].maxDurability.float)
-            restAmount = playerShip.modules[cabinIndex].cleanliness - (
-                playerShip.modules[cabinIndex].cleanliness.float *
-                damage).Natural
-            if restAmount == 0:
-              restAmount = 1
-            tiredLevel -= (times * restAmount)
-          else:
-            tiredLevel -= times
-          if tiredLevel < 0:
-            tiredLevel = 0
-        if "nofatigue" notin factionsList[playerShip.crew[i].faction].flags and
-            healthLevel in 1..99 and cabinIndex > 0:
-          healthLevel += times
-          if healthLevel > 100:
-            healthLevel = 100
-        if playerShip.crew[i].morale[1] < 50:
-          updateMorale(ship = playerShip, memberIndex = i, value = times + restAmount)
-          if playerShip.crew[i].morale[1] > 50:
-            playerShip.crew[i].morale = [1: 50.Natural, 2: 0]
+        memberRest(memberIndex = i, tiredLevel = tiredLevel, healthLevel = healthLevel, times = times)
       else:
         if playerShip.crew[i].order != talk:
           tiredLevel += times
@@ -507,7 +523,8 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
             giveOrders(ship = playerShip, memberIndex = i, givenOrder = rest)
         of clean:
           var
-            toolIndex: int = findTools(memberIndex = i, itemType = cleaningTools, order = clean)
+            toolIndex: int = findTools(memberIndex = i,
+                itemType = cleaningTools, order = clean)
             needCleaning: bool = false
           if toolIndex > -1:
             for module in playerShip.modules.mitems:
@@ -551,8 +568,8 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
                     skillIndex = module.trainedSkill
                     break findSkillIndex
           if skillsList[skillIndex].tool.len > 0:
-            var toolIndex: int = findTools(memberIndex = i, itemType = skillsList[
-                skillIndex].tool, order = train,
+            var toolIndex: int = findTools(memberIndex = i,
+                itemType = skillsList[skillIndex].tool, order = train,
                 toolQuality = getTrainingToolQuality(memberIndex = i,
                 skillIndex = skillIndex))
             if toolIndex > -1:
