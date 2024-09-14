@@ -18,7 +18,7 @@
 import std/[algorithm, math, os, strutils, tables]
 import ../[bases, basestypes, basescargo, config, crewinventory, events, game,
     items, maps, shipscargo, shipscrew, tk, trades, types]
-import coreui, dialogs, dialogs2, mapsui, table, updateheader, utilsui2
+import coreui, dialogs, dialogs2, errordialog, mapsui, table, updateheader, utilsui2
 
 type ItemsSortOrders = enum
   nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,

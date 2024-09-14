@@ -18,7 +18,7 @@
 import std/[algorithm, os, strutils, tables]
 import ../[config, events, game, items, maps, missions, missions2, ships, tk,
     types, utils]
-import coreui, dialogs, mapsui, table, utilsui2
+import coreui, dialogs, errordialog, mapsui, table, utilsui2
 
 var baseIndex = 0
 

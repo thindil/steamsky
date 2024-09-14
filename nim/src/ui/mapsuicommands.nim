@@ -18,7 +18,7 @@
 import std/strutils
 import ../[config, crew2, events2, game, game2, maps, messages, missions2,
     shipscargo, shipscrew, shipsmovement, tk, types]
-import combatui, coreui, dialogs, ordersmenu, statisticsui
+import combatui, coreui, dialogs, errordialog, ordersmenu, statisticsui
 
 const buttonNames: array[1 .. 13, string] = ["show", "nw", "n", "ne", "w",
     "wait", "e", "sw", "s", "se", "hide", "left", "right"]

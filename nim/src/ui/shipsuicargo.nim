@@ -18,7 +18,7 @@
 import std/[algorithm, strutils, tables]
 import ../[config, crewinventory, game, items, messages, missions, shipscargo,
     stories, tk, types]
-import coreui, dialogs, dialogs2, table, updateheader, utilsui2
+import coreui, dialogs, dialogs2, errordialog, table, updateheader, utilsui2
 
 var
   cargoTable: TableWidget

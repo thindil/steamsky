@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import ../[game, tk]
-import coreui, shipsuicargo, shipsuicrew, shipsuimodules
+import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

@@ -17,7 +17,7 @@
 
 import std/[os, strutils]
 import ../[config, game, messages, tk, types]
-import coreui, dialogs, utilsui2
+import coreui, dialogs, errordialog, utilsui2
 
 proc showMessage(message: MessageData; messageView: string;
     messagesType: MessageType) {.sideEffect, raises: [], tags: [].} =
