@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[config, game, maps, tk, types]
-import coreui, dialogs, table
+import coreui, dialogs, errordialog, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

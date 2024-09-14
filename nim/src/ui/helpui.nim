@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[basestypes, config, game, help, items, tk]
-import dialogs, themes
+import dialogs, errordialog, themes
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}

@@ -19,7 +19,7 @@ import std/[tables, strutils]
 import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
     shipsmovement, stories, stories2, tk, trades, types, utils]
-import combatui, coreui, dialogs, dialogs2, updateheader, utilsui2
+import combatui, coreui, dialogs, dialogs2, errordialog, updateheader, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

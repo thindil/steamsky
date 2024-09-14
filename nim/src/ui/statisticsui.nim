@@ -17,7 +17,7 @@
 
 import std/[algorithm, os, strformat, strutils, tables]
 import ../[game, goals, statistics, tk, types]
-import coreui, utilsui2
+import coreui, errordialog, utilsui2
 
 var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes,
   killedIndexes: seq[Natural]

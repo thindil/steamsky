@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[basestypes, config, game, maps, messages, tk, types, utils]
-import coreui, dialogs, table
+import coreui, dialogs, errordialog, table
 
 proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
     tags: [].} =

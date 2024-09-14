@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[config, game, maps, missions, tk, types]
-import coreui, dialogs, table, utilsui2
+import coreui, dialogs, errordialog, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

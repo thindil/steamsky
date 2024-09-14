@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[game, stories, tk]
-import coreui
+import coreui, errordialog
 
 proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

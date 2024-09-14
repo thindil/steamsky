@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[basestypes, game, stories, tk]
-import coreui, knowledgebases, knowledgeevents, knowledgemissions,
+import coreui, errordialog, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
 proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;

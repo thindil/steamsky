@@ -17,7 +17,7 @@
 
 import std/strutils
 import ../[crew2, game, game2, shipsmovement, tk, types]
-import coreui, dialogs, updateheader, utilsui2
+import coreui, dialogs, errordialog, updateheader, utilsui2
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
