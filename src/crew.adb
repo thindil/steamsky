@@ -36,28 +36,6 @@ package body Crew is
       Set_Ada_Crew(Ship => Player_Ship);
    end Gain_Exp;
 
-   function Generate_Member_Name
-     (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
-      return Tiny_String.Bounded_String is
-      use Tiny_String;
-      function Generate_Ada_Member_Name
-        (Crew_Gender: Character; F_Index: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaMemberName";
-   begin
-      return
-        To_Bounded_String
-          (Source =>
-             Value
-               (Item =>
-                  Generate_Ada_Member_Name
-                    (Crew_Gender => Gender,
-                     F_Index =>
-                       New_String
-                         (Str => To_String(Source => Faction_Index)))));
-   end Generate_Member_Name;
-
    procedure Wait_For_Rest is
       use Bases;
       use Maps;

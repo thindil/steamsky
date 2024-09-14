@@ -238,22 +238,6 @@ package Crew is
       Pre => Skill_Number <= Skills_Amount;
       -- ****
 
-      -- ****f* Crew/Crew.Generate_Member_Name
-      -- FUNCTION
-      -- Generate random name for crew member
-      -- PARAMETERS
-      -- Gender        - Gender of crew member which name will be generated
-      -- Faction_Index - Faction to which crew member belongs
-      -- RESULT
-      -- Random name for crew member
-      -- SOURCE
-   function Generate_Member_Name
-     (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
-      return Tiny_String.Bounded_String with
-      Pre => Gender in 'M' | 'F' and
-      Tiny_String.Length(Source => Faction_Index) > 0;
-      -- ****
-
       -- ****f* Crew/Crew.Wait_For_Rest
       -- FUNCTION
       -- Wait until whole crew is rested
