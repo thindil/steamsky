@@ -18,7 +18,7 @@
 import std/[os, math, strutils, tables]
 import ../[combat, config, crewinventory, game, items, maps, messages,
     shipscrew, shipmodules, shipsmovement, tk, types]
-import coreui, dialogs, utilsui2, updateheader
+import coreui, dialogs, errordialog, utilsui2, updateheader
 
 proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
   ## Update the list of in-game messages in combat, delete old ones and show

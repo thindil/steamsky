@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[basestypes, events, game, gamesaveload, items, maps, shipscargo, tk, types]
-import mapsui
+import errordialog, mapsui
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

@@ -17,7 +17,7 @@
 
 import std/[algorithm, math, os, strutils, tables]
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
-import coreui, dialogs, table, updateheader, utilsui2
+import coreui, dialogs, errordialog, table, updateheader, utilsui2
 
 proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe

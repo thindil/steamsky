@@ -18,7 +18,7 @@
 import std/[algorithm, strutils, tables]
 import ../[bases, basestrade, config, crew, crewinventory, game, maps,
     shipscrew, tk, types]
-import coreui, dialogs, mapsui, table, utilsui2
+import coreui, dialogs, errordialog, mapsui, table, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
     memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =

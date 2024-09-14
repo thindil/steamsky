@@ -17,7 +17,7 @@
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[config, game, tk]
-import coreui
+import coreui, errordialog
 
 type ThemeRecord* = object
   ## Data structure for themes settings

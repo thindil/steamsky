@@ -18,7 +18,7 @@
 import std/[algorithm, os, strutils, tables]
 import ../[basescargo, config, crewinventory, game, items, maps, messages,
     shipscargo, tk, types]
-import coreui, dialogs, dialogs2, mapsui, table, updateheader, utilsui2
+import coreui, dialogs, errordialog, dialogs2, mapsui, table, updateheader, utilsui2
 
 var
   lootTable: TableWidget

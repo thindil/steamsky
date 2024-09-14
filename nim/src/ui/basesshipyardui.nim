@@ -18,7 +18,7 @@
 import std/[algorithm, os, strutils, tables]
 import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
     shipmodules, tk, types]
-import coreui, dialogs, mapsui, table, utilsui2
+import coreui, dialogs, errordialog, mapsui, table, utilsui2
 
 var
   installTable, removeTable: TableWidget

@@ -17,7 +17,7 @@
 
 import std/[os, strutils, tables]
 import ../[basestrade, crew, crewinventory, game, tk, types]
-import coreui, dialogs, mapsui, utilsui2
+import coreui, dialogs, errordialog, mapsui, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

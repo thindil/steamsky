@@ -17,7 +17,7 @@
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import ../[basestypes, config, game, log, maps, missions, statistics, stories, tk, types]
-import coreui, dialogs, themes, updateheader, utilsui2
+import coreui, dialogs, errordialog, themes, updateheader, utilsui2
 
 var
   mapView = ".gameframe.paned.mapframe.map"
