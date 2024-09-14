@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc, tables]
+import std/[os, osproc, strutils, tables]
 import ../[basestypes, config, game, goals, halloffame, ships2, shipscrew, tk, utils]
-import dialogs
+import dialogs, errordialog
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
@@ -383,6 +383,20 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     newGameSettings.playerCareer = "random"
   comboBox = playerFrameName & ".base"
   newGameSettings.startingBase = "Any"
+  for baseType in basesTypesList.values:
+    if baseType.name == tclEval2(script = comboBox & " get"):
+      newGameSettings.startingBase = baseType.name
+      break
+  let difficultyFrameName = ".newgamemenu.canvas.difficulty"
+  comboBox = difficultyFrameName & ".difficultylevel"
+  newGameSettings.difficultyLevel = tclEval2(script = comboBox &
+      " current").parseInt.DifficultyType
+  var spinBox = difficultyFrameName & ".enemydamage"
+  newGameSettings.enemyDamageBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
+  spinBox = difficultyFrameName & ".playerdamage"
+  newGameSettings.playerDamageBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
   return tclOk
 
 proc addCommands*() =
