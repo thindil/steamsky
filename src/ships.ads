@@ -371,27 +371,14 @@ package Ships is
    Player_Ship: Ship_Record;
    -- ****
 
-   -- ****f* Ships/Ships.Generate_Ship_Name
+   -- ****f* Ships/Ships.Get_Cabin_Quality
    -- FUNCTION
-   -- Generate random name for ship
+   -- Get description of quality of selected cabin in player ship
    -- PARAMETERS
-   -- Owner - Index of faction to which ship belongs
+   -- Quality - Numeric value of cabin quality
    -- RESULT
-   -- Random name for a ship
+   -- Description of cabin quality
    -- SOURCE
-   function Generate_Ship_Name
-     (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
-      Pre => Tiny_String.Length(Source => Owner) > 0;
-      -- ****
-
-      -- ****f* Ships/Ships.Get_Cabin_Quality
-      -- FUNCTION
-      -- Get description of quality of selected cabin in player ship
-      -- PARAMETERS
-      -- Quality - Numeric value of cabin quality
-      -- RESULT
-      -- Description of cabin quality
-      -- SOURCE
    function Get_Cabin_Quality(Quality: Natural) return String with
       Post => Get_Cabin_Quality'Result'Length > 0;
       -- ****

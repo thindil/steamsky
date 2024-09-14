@@ -20,25 +20,6 @@ with Maps;
 
 package body Ships is
 
-   function Generate_Ship_Name
-     (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
-      use Tiny_String;
-
-      function Generate_Ada_Ship_Name(F_Index: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "generateAdaShipName";
-   begin
-      return
-        To_Bounded_String
-          (Source =>
-             Value
-               (Item =>
-                  Generate_Ada_Ship_Name
-                    (F_Index =>
-                       New_String(Str => To_String(Source => Owner)))));
-   end Generate_Ship_Name;
-
    function Get_Cabin_Quality(Quality: Natural) return String is
       function Get_Cabin_Quality_Nim(Q: Natural) return chars_ptr with
          Import => True,
