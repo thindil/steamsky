@@ -383,9 +383,9 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     newGameSettings.playerCareer = "random"
   comboBox = playerFrameName & ".base"
   newGameSettings.startingBase = "Any"
-  for baseType in basesTypesList.values:
+  for index, baseType in basesTypesList:
     if baseType.name == tclEval2(script = comboBox & " get"):
-      newGameSettings.startingBase = baseType.name
+      newGameSettings.startingBase = index
       break
   let difficultyFrameName = ".newgamemenu.canvas.difficulty"
   comboBox = difficultyFrameName & ".difficultylevel"
