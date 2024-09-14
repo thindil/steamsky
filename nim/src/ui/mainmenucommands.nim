@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, osproc, strutils, tables]
-import ../[basestypes, config, game, goals, halloffame, ships2, shipscrew, tk, utils]
+import ../[basestypes, config, game, game2, goals, halloffame, ships2, shipscrew, tk, utils]
 import dialogs, errordialog
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -397,6 +397,26 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
   spinBox = difficultyFrameName & ".playerdamage"
   newGameSettings.playerDamageBonus = tclEval2(script = spinBox &
       " get").parseFloat / 100.0
+  spinBox = difficultyFrameName & ".enemymeleedamage"
+  newGameSettings.enemyMeleeDamageBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
+  spinBox = difficultyFrameName & ".playermeleedamage"
+  newGameSettings.playerMeleeDamageBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
+  spinBox = difficultyFrameName & ".experience"
+  newGameSettings.experienceBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
+  spinBox = difficultyFrameName & ".reputation"
+  newGameSettings.reputationBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
+  spinBox = difficultyFrameName & ".upgrade"
+  newGameSettings.upgradeCostBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
+  spinBox = difficultyFrameName & ".prices"
+  newGameSettings.pricesBonus = tclEval2(script = spinBox &
+      " get").parseFloat / 100.0
+  newGame()
+  # startGame()
   return tclOk
 
 proc addCommands*() =
