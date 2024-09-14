@@ -264,21 +264,3 @@ proc deleteWidgets*(startIndex, endIndex: int; frame: string) {.raises: [],
     let tclResult: string = $interp.tclGetResult()
     for widget in tclResult.split():
       tclEval(script = "destroy " & widget)
-
-proc showError*(message: string; e: ref Exception = getCurrentException(
-    )): TclResults {.discardable, sideEffect, raises: [], tags: [],
-        contractual.} =
-  ## Show the error dialog with the message containing technical details about the issue
-  ##
-  ## * message - the message to show in the error dialog
-  ## * e       - the exception which happened. Default value is the current exception
-  ##
-  ## This procedure always returns tclOk
-  var debugInfo: string = message
-  if e != nil:
-    debugInfo.add(y = " Reason: " & getCurrentExceptionMsg())
-    when defined(debug):
-      debugInfo.add(y = "\nStack trace:\n" & e.getStackTrace)
-  tclEval(script = "bgerror {" & debugInfo & "}")
-  return tclOk
-
