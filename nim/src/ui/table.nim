@@ -17,6 +17,7 @@
 
 import std/strutils
 import ../[config, tk]
+import errordialog
 
 type
   TableWidget* = object

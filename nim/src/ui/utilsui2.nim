@@ -17,7 +17,7 @@
 
 import std/[strutils, tables]
 import ../[config, crew, game, items, messages, shipscrew, shipsmovement, tk, types]
-import coreui, dialogs
+import coreui, dialogs, errordialog
 
 type TravelArray* = array[1..2, Natural]
 

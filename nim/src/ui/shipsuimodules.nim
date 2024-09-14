@@ -18,7 +18,7 @@
 import std/[algorithm, strutils, tables]
 import ../[game, config, crafts, crewinventory, items, messages, missions,
     ships, shipscargo, shipscrew, shipsupgrade, tk, types]
-import dialogs, updateheader, shipsuicrew, table, utilsui2
+import dialogs, errordialog, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =

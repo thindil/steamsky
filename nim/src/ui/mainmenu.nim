@@ -17,7 +17,7 @@
 
 import std/[algorithm, os, strutils, times]
 import ../[config, events, game, gamesaveload, tk]
-import dialogs, mainmenucommands, table
+import dialogs, errordialog, mainmenucommands, table
 
 type SaveSortOrders = enum
   playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc

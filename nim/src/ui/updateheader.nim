@@ -17,7 +17,7 @@
 
 import std/tables
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
-import coreui, dialogs
+import coreui, dialogs, errordialog
 
 proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
   ## Update in-game header with information about time, state of the crew

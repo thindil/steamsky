@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[config, crewinventory, game, items, shipscargo, shipscrew, tk, types]
-import coreui, dialogs, table, utilsui2
+import coreui, dialogs, errordialog, table, utilsui2
 
 var
   inventoryTable: TableWidget

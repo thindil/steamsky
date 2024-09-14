@@ -17,7 +17,7 @@
 
 import std/strutils
 import ../[config, game, tk]
-import coreui
+import coreui, errordialog
 
 type ButtonSettings* = object
   text*, command*, icon*, tooltip*, color*: string

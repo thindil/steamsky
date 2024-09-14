@@ -17,7 +17,7 @@
 
 import std/[algorithm, strutils, tables]
 import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
-import coreui, dialogs, shipsuicrewinventory, table, updateheader, utilsui2
+import coreui, dialogs, errordialog, shipsuicrewinventory, table, updateheader, utilsui2
 
 var
   crewTable: TableWidget
