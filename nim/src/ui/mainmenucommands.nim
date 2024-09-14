@@ -16,7 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, osproc, strutils, tables]
-import ../[basestypes, config, game, game2, goals, halloffame, ships2, shipscrew, tk, utils]
+import ../[basestypes, config, game, game2, goals, halloffame, ships2,
+    shipscrew, tk, utils]
 import dialogs, errordialog
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -353,14 +354,18 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    ReadIOEffect, WriteIOEffect], exportc.} =
   newGameSettings.playerGender = tclGetVar(varName = "playergender")[0]
   let
     playerFrameName = ".newgamemenu.canvas.player"
     goalButton = playerFrameName & ".goal"
   if tclEval2(script = goalButton & " cget -text") == "Random":
     clearCurrentGoal()
-    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len)]
+    currentGoal = try:
+        goalsList[getRandom(min = 1, max = goalsList.len)]
+      except:
+        return showError(message = "Can't set the current goal.")
   var textEntry = playerFrameName & ".playername"
   newGameSettings.playerName = tclEval2(script = textEntry & " get")
   textEntry = playerFrameName & ".shipname"
@@ -389,33 +394,63 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
       break
   let difficultyFrameName = ".newgamemenu.canvas.difficulty"
   comboBox = difficultyFrameName & ".difficultylevel"
-  newGameSettings.difficultyLevel = tclEval2(script = comboBox &
-      " current").parseInt.DifficultyType
+  newGameSettings.difficultyLevel = try:
+      tclEval2(script = comboBox &
+        " current").parseInt.DifficultyType
+    except:
+      return showError(message = "Can't set difficulty.")
   var spinBox = difficultyFrameName & ".enemydamage"
-  newGameSettings.enemyDamageBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
+  newGameSettings.enemyDamageBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set enemy bonus.")
   spinBox = difficultyFrameName & ".playerdamage"
-  newGameSettings.playerDamageBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
+  newGameSettings.playerDamageBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set player bonus.")
   spinBox = difficultyFrameName & ".enemymeleedamage"
-  newGameSettings.enemyMeleeDamageBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
+  newGameSettings.enemyMeleeDamageBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set enemy melee bonus.")
   spinBox = difficultyFrameName & ".playermeleedamage"
-  newGameSettings.playerMeleeDamageBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
+  newGameSettings.playerMeleeDamageBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set player melee bonus.")
   spinBox = difficultyFrameName & ".experience"
-  newGameSettings.experienceBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
+  newGameSettings.experienceBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set experience bonus.")
   spinBox = difficultyFrameName & ".reputation"
-  newGameSettings.reputationBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
+  newGameSettings.reputationBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set reputation bonus.")
   spinBox = difficultyFrameName & ".upgrade"
-  newGameSettings.upgradeCostBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
+  newGameSettings.upgradeCostBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set upgrade cost bonus.")
   spinBox = difficultyFrameName & ".prices"
-  newGameSettings.pricesBonus = tclEval2(script = spinBox &
-      " get").parseFloat / 100.0
-  newGame()
+  newGameSettings.pricesBonus = try:
+      tclEval2(script = spinBox &
+        " get").parseFloat / 100.0
+    except:
+      return showError(message = "Can't set prices bonus.")
+  try:
+    newGame()
+  except:
+    return showError(message = "Can't start the new game.")
   # startGame()
   return tclOk
 
