@@ -85,7 +85,7 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     shipsuimodules.addCommands()
