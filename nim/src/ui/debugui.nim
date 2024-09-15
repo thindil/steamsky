@@ -20,7 +20,7 @@ import ../[basestypes, events, game, gamesaveload, items, maps, shipscargo, tk, 
 import errordialog, mapsui
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Refresh the information about selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -59,7 +59,7 @@ proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Refresh the information about selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -141,7 +141,7 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Refresh the information about the player ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -165,7 +165,7 @@ proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Refresh the list of events
   ##
   ## * clientData - the additional data for the Tcl command
@@ -223,7 +223,7 @@ proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Refresh the whole game information
   ##
   ## * clientData - the additional data for the Tcl command
@@ -270,7 +270,7 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Refresh the information about the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -339,7 +339,7 @@ proc debugSaveGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Move the player ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -366,7 +366,7 @@ proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Update the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -419,7 +419,7 @@ proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Add a new skill to the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -448,7 +448,7 @@ proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Update the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -518,7 +518,7 @@ proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Add a new item to the player ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -550,7 +550,7 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Update the amount of an item in the player ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -578,7 +578,7 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Update the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -638,7 +638,7 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Add a new ship based event to the game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -712,7 +712,7 @@ proc toggleItemEntryCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Add a new base event to the game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -774,7 +774,7 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
 proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Remove the selected event from the game
   ##
   ## * clientData - the additional data for the Tcl command

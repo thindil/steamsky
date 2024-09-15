@@ -129,7 +129,7 @@ var accels: array[53, AccelData] = [AccelData(shortcut: menuAccelerators[1],
     configName: "ResizeFourth")]
 
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show the selected options tab
   ##
   ## * clientData - the additional data for the Tcl command
@@ -259,7 +259,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = argc, argv = argv)
 
 proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Set the selected font
   ##
   ## * clientData - the additional data for the Tcl command
@@ -289,7 +289,7 @@ proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Set the default values for fonts
   ##
   ## * clientData - the additional data for the Tcl command
@@ -635,7 +635,7 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = keyEntry & " insert 0 " & accel.shortcut)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard

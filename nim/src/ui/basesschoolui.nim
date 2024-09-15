@@ -20,7 +20,7 @@ import ../[basestrade, crew, crewinventory, game, tk, types]
 import coreui, dialogs, errordialog, mapsui, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Set list of available to train skills for the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -64,7 +64,7 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show the selected base school
   ##
   ## * clientData - the additional data for the Tcl command
@@ -189,7 +189,7 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
 
 proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Update the cost of training
   ##
   ## * clientData - the additional data for the Tcl command
@@ -230,7 +230,7 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
     argc: cint; argv: cstringArray): TclResults {.sideEffect, raises: [],
-    tags: [], exportc.} =
+    tags: [WriteIOEffect], exportc.} =
   ## Update the minimal and maximum values of spinbox with training cost
   ##
   ## * clientData - the additional data for the Tcl command
@@ -264,7 +264,7 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
   tclEval(script = amountBox & " set " & $cost)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard

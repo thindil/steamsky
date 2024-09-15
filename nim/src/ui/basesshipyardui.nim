@@ -284,7 +284,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
 var moduleIndex: Natural = 0
 
 proc setModuleInfo(installing: bool; row: var Positive;
-    newInfo: bool = true) {.sideEffect, raises: [], tags: [].} =
+    newInfo: bool = true) {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Show information about selected module
   ##
   ## installing - If true, player looking at installing modules list
@@ -934,7 +934,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
       return
 
 proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show information about the selected module to install
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1128,7 +1128,7 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show information about the selected module to remove
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1446,7 +1446,7 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowShipyard", $argv[2], $argv[3]].allocCStringArray)
 
 proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show the comparison between the selected modules in install info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1462,7 +1462,7 @@ proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   setModuleInfo(installing = true, row = row, newInfo = false)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard

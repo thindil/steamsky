@@ -37,7 +37,7 @@ proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
           break
 
 proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var bool) {.sideEffect, raises: [], tags: [].} =
+    hasMaterials: var bool) {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Check if the selected recipe can be crafted (has all requirements meet)
   ##
   ## * recipe       - The crafting recipe to check
@@ -78,7 +78,7 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     canCraft = true
 
 proc checkStudyPrerequisities(canCraft, hasTool,
-    hasWorkplace: var bool) {.sideEffect, raises: [], tags: [].} =
+    hasWorkplace: var bool) {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Check if the study and decontruct recipes can be crafted
   ##
   ## * canCraft      - If recipe can be crafter then it will be True, otherwise
@@ -456,7 +456,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCrafting", "1"].allocCStringArray)
 
 proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show dialog to set the selected recipe as crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -673,7 +673,7 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show information about the selected recipe
   ##
   ## * clientData - the additional data for the Tcl command
@@ -876,7 +876,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = recipeDialog, relativeX = 0.2, relativeY = 0.1)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
@@ -896,7 +896,7 @@ proc checkAdaTool(toolNeeded: cstring): int {.sideEffect, raises: [], tags: [], 
   return 0
 
 proc isAdaCraftable(adaRecipe: AdaCraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var cint) {.sideEffect, raises: [], tags: [], exportc.} =
+    hasMaterials: var cint) {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   var
     materials: seq[string]
     amounts: seq[Positive]
@@ -920,7 +920,7 @@ proc isAdaCraftable(adaRecipe: AdaCraftData; canCraft, hasWorkplace, hasTool,
   hasMaterials = (if hMaterials: 1 else: 0)
 
 proc checkAdaStudyPrerequisities(canCraft, hasTool,
-    hasWorkplace: var cint) {.sideEffect, raises: [], tags: [], exportc.} =
+    hasWorkplace: var cint) {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   var cCraft, hTool, hWorkplace: bool = false
   try:
     checkStudyPrerequisities(canCraft = cCraft, hasTool = hTool,

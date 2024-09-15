@@ -84,7 +84,7 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
   else:
     tclEval(script = "grid " & button)
 
-proc finishStory*() {.raises: [], tags: [], exportc.} =
+proc finishStory*() {.raises: [], tags: [WriteIOEffect], exportc.} =
   ## Finish the current player's story. Give experience and ask about
   ## finishing the game
   gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
@@ -96,7 +96,7 @@ proc finishStory*() {.raises: [], tags: [], exportc.} =
     showError(message = "Can't get the end text of the current story. Result: " &
         tclGetResult2())
 
-proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
+proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Show the sky map, draw the map, update the header, etc
   ##
   ## * clear - if true, remove the old subwindow and replace it with the one
@@ -130,7 +130,7 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [].} =
             res = "showstats")
     currentStory.showText = true
 
-proc drawMap*() {.sideEffect, raises: [], tags: [].} =
+proc drawMap*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Draw the map on the screen
   var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
@@ -296,7 +296,7 @@ proc drawMap*() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = mapView & " configure -state disable")
 
 proc updateMapInfo*(x: Positive = playerShip.skyX;
-    y: Positive = playerShip.skyY) {.sideEffect, raises: [], tags: [].} =
+    y: Positive = playerShip.skyY) {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Update frame with information about the map cell on which the player
   ## currently points.
   ##
@@ -803,7 +803,7 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffec
 
 # Temporary code for interfacing with Ada
 
-proc updateAdaHeader() {.raises: [], tags: [], exportc.} =
+proc updateAdaHeader() {.raises: [], tags: [WriteIOEffect], exportc.} =
   try:
     updateHeader()
   except:
@@ -812,13 +812,13 @@ proc updateAdaHeader() {.raises: [], tags: [], exportc.} =
 proc updateAdaMoveButtons() {.raises: [], tags: [], exportc.} =
   updateMoveButtons()
 
-proc finishAdaStory() {.raises: [], tags: [], exportc.} =
+proc finishAdaStory() {.raises: [], tags: [WriteIOEffect], exportc.} =
   try:
     finishStory()
   except:
     discard
 
-proc showAdaSkyMap(clear: cint) {.raises: [], tags: [], exportc.} =
+proc showAdaSkyMap(clear: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
   try:
     showSkyMap(clear == 1)
   except:
@@ -856,13 +856,13 @@ proc getAdaFullScreenAccel(): cstring {.raises: [], tags: [], exportc.} =
 proc setAdaFullScreenAccel(value: cstring) {.raises: [], tags: [], exportc.} =
   fullScreenAccel = $value
 
-proc drawAdaMap() {.raises: [], tags: [], exportc.} =
+proc drawAdaMap() {.raises: [], tags: [WriteIOEffect], exportc.} =
   try:
     drawMap()
   except:
     discard
 
-proc updateAdaMapInfo(x, y: cint) {.raises: [], tags: [], exportc.} =
+proc updateAdaMapInfo(x, y: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
   try:
     updateMapInfo(x = x.Positive, y = y.Positive)
   except:
