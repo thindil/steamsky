@@ -33,8 +33,6 @@ package BasesTypes is
 
 -- Temporary code to interact with Nim
 
-   Bases_Types: array(0 .. 15) of Tiny_String.Bounded_String;
-
    function Get_Base_Type_Name
      (Base_Type: Tiny_String.Bounded_String) return String;
 

@@ -22,23 +22,8 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 package body BasesTypes is
 
    procedure Load_Bases_Types is
-      use Tiny_String;
-
-      --## rule off TYPE_INITIAL_VALUES
-      type Ada_Bases_Types is array(0 .. 10) of chars_ptr;
-      --## rule on TYPE_INITIAL_VALUES
-      A_Bases_Types: Ada_Bases_Types;
-      procedure Get_Ada_Bases_Types(B_Types: out Ada_Bases_Types) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBasesTypes";
    begin
-      Get_Ada_Bases_Types(B_Types => A_Bases_Types);
-      Set_Bases_Types_Loop :
-      for I in A_Bases_Types'Range loop
-         Bases_Types(I) :=
-           To_Bounded_String(Source => Value(Item => A_Bases_Types(I)));
-      end loop Set_Bases_Types_Loop;
+      null;
    end Load_Bases_Types;
 
    function Get_Base_Type_Name
