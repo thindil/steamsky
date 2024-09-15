@@ -216,7 +216,4 @@ package Factions is
       Convention => C,
       External_Name => "getAdaFactionsAmount";
 
-   function Get_Faction_Index
-     (Number: Positive) return Tiny_String.Bounded_String;
-
 end Factions;

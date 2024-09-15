@@ -1,4 +1,4 @@
---    Copyright 2018-2023 Bartek thindil Jasicki
+--    Copyright 2018-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,6 +18,9 @@
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Factions is
+
+   function Get_Faction_Index
+     (Number: Positive) return Tiny_String.Bounded_String;
 
    function Get_Faction
      (Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
