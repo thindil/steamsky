@@ -22,7 +22,7 @@ import coreui, errordialog, utilsui2
 var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes,
   killedIndexes: seq[Natural]
 
-proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [].} =
+proc showStatistics*(refresh: bool = false) {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Show the game statistics to the player
   ##
   ## * refresh - if true, refresh the view, otherwise back to the sky map
@@ -313,7 +313,7 @@ type
   SortingList = seq[SortingData]
 
 proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Sort the list of finished crafting orders
   ##
   ## * clientData - the additional data for the Tcl command
@@ -374,7 +374,7 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
 var missionsSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Sort the list of finished missions
   ##
   ## * clientData - the additional data for the Tcl command
@@ -445,7 +445,7 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
 var goalsSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Sort the list of finished goals
   ##
   ## * clientData - the additional data for the Tcl command
@@ -511,7 +511,7 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
 var destroyedSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Sort the list of destroyed enemy ships
   ##
   ## * clientData - the additional data for the Tcl command
@@ -572,7 +572,7 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
 var killedSortOrder: ListSortOrders = defaultListSortOrder
 
 proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Sort the list of killed enemies
   ##
   ## * clientData - the additional data for the Tcl command
@@ -626,7 +626,7 @@ proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
   showStatistics(refresh = true)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     discard
@@ -640,7 +640,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 
 # Temporary code for interfacing with Ada
 
-proc showAdaStatistics(refresh: cint) {.raises: [], tags: [], exportc.} =
+proc showAdaStatistics(refresh: cint) {.raises: [], tags: [WriteIOEffect], exportc.} =
   try:
     showStatistics(refresh = refresh == 1)
   except:

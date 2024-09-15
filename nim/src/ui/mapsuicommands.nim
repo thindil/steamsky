@@ -113,7 +113,7 @@ proc moveMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.}
   ## Draw the sky map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -125,8 +125,9 @@ proc drawMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DrawMap
+
 proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.}
   ## Zoom in or our the sky map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -140,7 +141,7 @@ proc zoomMapCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ZoomMap
 
 proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.}
   ## Update the information about the selected map's cell
   ##
   ## * clientData - the additional data for the Tcl command
@@ -155,7 +156,7 @@ proc updateMapInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## X and Y are coordinates of the map cell which info will be show
 
 proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.}
   ## Create and show the destination menu dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -170,7 +171,7 @@ proc showDestinationMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## X and Y are the map coordinates for which the destination menu will be show
 
 proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.}
   ## Set the current map cell as the destination for the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -184,7 +185,7 @@ proc setShipDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetDestination
 
 proc moveMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.}
   ## Move the map in the selected direction
   ##
   ## * clientData - the additional data for the Tcl command
@@ -250,7 +251,7 @@ proc resignGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showStatsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show the screen with the player's game statistics
   ##
   ## * clientData - the additional data for the Tcl command
@@ -267,7 +268,7 @@ proc showStatsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.}
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.}
   ## Show the sky map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -353,7 +354,7 @@ proc toggleFullScreenCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resizeLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Resize the last messages window
   ##
   ## * clientData - the additional data for the Tcl command
@@ -417,7 +418,7 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Shortcut, the keyboard shortcut which was pressed
 
 proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Set the new speed for the player's ship
   ##
   ## * clientData - the additional data for the Tcl command

@@ -126,7 +126,7 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Wait
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     discard

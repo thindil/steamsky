@@ -20,7 +20,7 @@ import ../[game, stories, tk]
 import coreui, errordialog
 
 proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show the current story information
   ##
   ## * clientData - the additional data for the Tcl command
@@ -131,7 +131,7 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show the current story event on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -151,7 +151,7 @@ proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Set the current story event as the player's ship destination
   ##
   ## * clientData - the additional data for the Tcl command
@@ -170,7 +170,7 @@ proc setStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "SetDestination2 " & $newX & " " & $newY)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the list of known stories
   try:
     discard

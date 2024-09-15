@@ -22,7 +22,7 @@ import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
 import combatui, coreui, dialogs, dialogs2, errordialog, updateheader, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Show available the player's ship's orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -446,7 +446,7 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Pray
 
 proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Set the selected base as the home base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -469,7 +469,7 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Generate cargo for the trader and show the trading UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -551,7 +551,7 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## If argument type is free, deliver medicines for free, otherwise deliver
   ## medicines for a price
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Adds Tcl commands related to the orders menu
   try:
     discard
