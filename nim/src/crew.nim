@@ -210,6 +210,102 @@ proc memberRest(memberIndex: Natural; tiredLevel, healthLevel: var int;
       if playerShip.crew[memberIndex].morale[1] > 50:
         playerShip.crew[memberIndex].morale = [1: 50.Natural, 2: 0]
 
+proc healOrder(memberIndex: Natural; times: int) {.sideEffect, raises: [
+    KeyError, CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
+    contractual.} =
+  ## Execute heal wounded crew members order for the selected crew member
+  ##
+  ## * memberIndex - the index of the member for which the order will be executed
+  ## * times       - how many cycles the crew member healed wounded
+  require:
+    memberIndex < playerShip.crew.len
+    times > 0
+  body:
+    var haveMedicalRoom: bool = false
+    for module in playerShip.modules:
+      if modulesList[module.protoIndex].mType ==
+          ModuleType.medicalRoom and module.durability > 0 and memberIndex in module.owner:
+        haveMedicalRoom = true
+        break
+    var
+      healAmount: int = 1
+      toolIndex: int = 0
+    for member in playerShip.crew:
+      let faction: FactionData = factionsList[member.faction]
+      if member.name != playerShip.crew[memberIndex].name and member.health < 100:
+        healAmount = times * (getSkillLevel(
+          member = playerShip.crew[memberIndex],
+          skillIndex = faction.healingSkill) / 20).int
+        toolIndex = 0
+        if healAmount < times:
+          healAmount = times
+        if not haveMedicalRoom:
+          healAmount = (healAmount / 2).int
+        if healAmount > 0:
+          healAmount *= (-1)
+          toolIndex = findItem(inventory = playerShip.cargo,
+              itemType = faction.healingTools)
+          if toolIndex > -1:
+            if playerShip.cargo[toolIndex].amount < healAmount.abs:
+              healAmount = playerShip.cargo[toolIndex].amount
+            else:
+              healAmount = healAmount.abs
+            updateCargo(ship = playerShip, amount = -(healAmount))
+          else:
+            toolIndex = findItem(inventory = playerShip.crew[
+                memberIndex].inventory, itemType = faction.healingTools)
+            if toolIndex > -1:
+              if playerShip.crew[memberIndex].inventory[toolIndex].amount <
+                  healAmount.abs:
+                healAmount = playerShip.crew[memberIndex].inventory[
+                    toolIndex].amount
+              else:
+                healAmount = healAmount.abs
+              updateInventory(memberIndex = memberIndex, amount = -(healAmount),
+                  inventoryIndex = toolIndex, ship = playerShip)
+        if healAmount > 0:
+          for index, member in playerShip.crew.mpairs:
+            if member.health < 100 and index != memberIndex:
+              if member.health + healAmount > SkillRange.high:
+                member.health = SkillRange.high
+              else:
+                member.health += healAmount
+              addMessage(message = playerShip.crew[memberIndex].name &
+                  " healed " & member.name & " a bit.", mType = orderMessage)
+              gainExp(amount = times, skillNumber = faction.healingSkill,
+                  crewIndex = memberIndex)
+              break
+        else:
+          if toolIndex == -1:
+            addMessage(message = "You don't have any " &
+                faction.healingTools &
+                " to continue healing the wounded " & member.name & ".",
+                mType = orderMessage, color = red)
+          else:
+            addMessage(message = playerShip.crew[memberIndex].name &
+                " is not enough experienced to heal " & member.name &
+                " in that amount of time.", mType = orderMessage,
+                color = red)
+    healAmount = 1
+    for index, member in playerShip.crew:
+      if member.health < 100 and index != memberIndex:
+        healAmount = 0
+        var faction: FactionData = factionsList[member.faction]
+        toolIndex = findItem(inventory = playerShip.cargo,
+            itemType = faction.healingTools)
+        if toolIndex == -1:
+          toolIndex = findItem(inventory = playerShip.crew[
+              memberIndex].inventory, itemType = faction.healingTools)
+          if toolIndex == -1:
+            healAmount = -1
+        break
+    if healAmount > 0:
+      addMessage(message = playerShip.crew[memberIndex].name &
+          " finished healing the wounded.", mType = orderMessage, color = green)
+    if healAmount != 0:
+      giveOrders(ship = playerShip, memberIndex = memberIndex,
+          givenOrder = rest)
+
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
@@ -413,7 +509,8 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     tiredLevel = playerShip.crew[i].tired
     if times > 0:
       if playerShip.crew[i].order == rest:
-        memberRest(memberIndex = i, tiredLevel = tiredLevel, healthLevel = healthLevel, times = times)
+        memberRest(memberIndex = i, tiredLevel = tiredLevel,
+            healthLevel = healthLevel, times = times)
       else:
         if playerShip.crew[i].order != talk:
           tiredLevel += times
@@ -439,88 +536,7 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
           if playerShip.speed == docked:
             tiredLevel = playerShip.crew[i].tired
         of heal:
-          var haveMedicalRoom: bool = false
-          for module in playerShip.modules:
-            if modulesList[module.protoIndex].mType ==
-                ModuleType.medicalRoom and module.durability > 0 and i in module.owner:
-              haveMedicalRoom = true
-              break
-          var
-            healAmount: int = 1
-            toolIndex: int = 0
-          for member in playerShip.crew:
-            let faction: FactionData = factionsList[member.faction]
-            if member.name != playerShip.crew[i].name and member.health < 100:
-              healAmount = times * (getSkillLevel(
-                member = playerShip.crew[i],
-                skillIndex = faction.healingSkill) / 20).int
-              toolIndex = 0
-              if healAmount < times:
-                healAmount = times
-              if not haveMedicalRoom:
-                healAmount = (healAmount / 2).int
-              if healAmount > 0:
-                healAmount *= (-1)
-                toolIndex = findItem(inventory = playerShip.cargo,
-                    itemType = faction.healingTools)
-                if toolIndex > -1:
-                  if playerShip.cargo[toolIndex].amount < healAmount.abs:
-                    healAmount = playerShip.cargo[toolIndex].amount
-                  else:
-                    healAmount = healAmount.abs
-                  updateCargo(ship = playerShip, amount = -(healAmount))
-                else:
-                  toolIndex = findItem(inventory = playerShip.crew[i].inventory,
-                      itemType = faction.healingTools)
-                  if toolIndex > -1:
-                    if playerShip.crew[i].inventory[toolIndex].amount <
-                        healAmount.abs:
-                      healAmount = playerShip.crew[i].inventory[
-                          toolIndex].amount
-                    else:
-                      healAmount = healAmount.abs
-                    updateInventory(memberIndex = i, amount = -(healAmount),
-                        inventoryIndex = toolIndex, ship = playerShip)
-              if healAmount > 0:
-                for index, member in playerShip.crew.mpairs:
-                  if member.health < 100 and index != i:
-                    if member.health + healAmount > SkillRange.high:
-                      member.health = SkillRange.high
-                    else:
-                      member.health += healAmount
-                    addMessage(message = playerShip.crew[i].name & " healed " &
-                        member.name & " a bit.", mType = orderMessage)
-                    gainExp(amount = times, skillNumber = faction.healingSkill, crewIndex = i)
-                    break
-              else:
-                if toolIndex == -1:
-                  addMessage(message = "You don't have any " &
-                      faction.healingTools &
-                      " to continue healing the wounded " & member.name & ".",
-                      mType = orderMessage, color = red)
-                else:
-                  addMessage(message = playerShip.crew[i].name &
-                      " is not enough experienced to heal " & member.name &
-                      " in that amount of time.", mType = orderMessage,
-                      color = red)
-          healAmount = 1
-          for index, member in playerShip.crew:
-            if member.health < 100 and index != i:
-              healAmount = 0
-              var faction: FactionData = factionsList[member.faction]
-              toolIndex = findItem(inventory = playerShip.cargo,
-                  itemType = faction.healingTools)
-              if toolIndex == -1:
-                toolIndex = findItem(inventory = playerShip.crew[i].inventory,
-                    itemType = faction.healingTools)
-                if toolIndex == -1:
-                  healAmount = -1
-              break
-          if healAmount > 0:
-            addMessage(message = playerShip.crew[i].name &
-                " finished healing the wounded.", mType = orderMessage, color = green)
-          if healAmount != 0:
-            giveOrders(ship = playerShip, memberIndex = i, givenOrder = rest)
+          healOrder(memberIndex = i, times = times)
         of clean:
           var
             toolIndex: int = findTools(memberIndex = i,
