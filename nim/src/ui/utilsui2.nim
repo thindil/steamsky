@@ -102,7 +102,7 @@ proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = messagesView & " configure -state disable")
 
 proc getSkillMarks*(skillIndex: Positive;
-    memberIndex: Natural): string {.sideEffect, raises: [], tags: [].} =
+    memberIndex: Natural): string {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Get the marks with information about the skill level for the selected
   ## skill for the selected crew member
   ##
@@ -130,7 +130,7 @@ proc getSkillMarks*(skillIndex: Positive;
     result = result & "+"
 
 proc travelInfo*(distance: Natural): TravelArray {.sideEffect,
-    raises: [], tags: [].} =
+    raises: [], tags: [WriteIOEffect].} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
   ## * Distance - Distance in map fields to destination point
@@ -253,7 +253,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [
 proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [
-    KeyError], tags: [].} =
+    KeyError], tags: [WriteIOEffect].} =
   ## Show info about selected item in ship cargo or crew member inventory
   ##
   ## * Parent       - The name of the parent widget
@@ -360,14 +360,14 @@ proc updateAdaMessages() {.exportc, raises: [], tags: [].} =
   updateMessages()
 
 proc getAdaSkillMarks(skillIndex, memberIndex: cint): cstring {.exportc,
-    raises: [], tags: [].} =
+    raises: [], tags: [WriteIOEffect].} =
   try:
     return getSkillMarks(skillIndex, memberIndex - 1).cstring
   except:
     return ""
 
 proc travelAdaInfo(distance: cint; res: var array[1 .. 2, cint]) {.exportc,
-    raises: [], tags: [].} =
+    raises: [], tags: [WriteIOEffect].} =
   res = [0.cint, 0.cint]
   try:
     let nimRes = travelInfo(distance = distance.Positive)
@@ -382,7 +382,7 @@ proc minutesAdaToDate*(minutes: cint; infoText: var cstring) {.exportc, gcsafe,
   infoText = nimText.cstring
 
 proc showAdaInventoryInfo(parent: cstring; itemIndex, memberIndex: cint;
-    button1, button2: AdaButtonSettings) {.exportc, raises: [], tags: [].} =
+    button1, button2: AdaButtonSettings) {.exportc, raises: [], tags: [WriteIOEffect].} =
   let
     nimButton1 = ButtonSettings(text: $button1.text, command: $button1.command,
         icon: $button1.icon, tooltip: $button1.tooltip, color: $button1.color)

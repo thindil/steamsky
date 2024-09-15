@@ -612,7 +612,7 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
 
-proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
+proc loadThemeImages*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Load all images of the current game theme
   const imagesNames = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
@@ -677,7 +677,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [].} =
       "::LoadImages {" & theme.fileName.parentDir & "} " & $(
       gameSettings.interfaceFontSize + 8))
 
-proc setTheme*() {.sideEffect, raises: [], tags: [].} =
+proc setTheme*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Set images and buttons for the current game theme
   loadThemeImages()
   tclEval(script = gameHeader & ".nofuel configure -image nofuelicon")
@@ -724,16 +724,16 @@ proc loadAdaThemes() {.raises: [], tags: [WriteIOEffect, ReadDirEffect,
     ReadIOEffect, RootEffect], exportc.} =
   loadThemes()
 
-proc loadAdaThemeImages() {.raises: [], tags: [], exportc.} =
+proc loadAdaThemeImages() {.raises: [], tags: [WriteIOEffect], exportc.} =
   try:
     loadThemeImages()
   except:
     discard
 
-proc setAdaTheme() {.raises: [], tags: [], exportc.} =
+proc setAdaTheme() {.raises: [], tags: [WriteIOEffect], exportc.} =
   setTheme()
 
-proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [], exportc.} =
+proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [WriteIOEffect], exportc.} =
   let theme = try:
         themesList[gameSettings.interfaceTheme]
       except:

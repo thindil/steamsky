@@ -19,7 +19,7 @@ import std/tables
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
-proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
+proc updateHeader*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
   ## Update in-game header with information about time, state of the crew
   ## members, etc.
   var label = gameHeader & ".time"
