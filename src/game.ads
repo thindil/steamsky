@@ -531,13 +531,6 @@ package Game is
    function Tiny_String_Hash is new Ada.Strings.Bounded.Hash(Tiny_String);
    -- ****
 
-   -- ****f* Game/Game.New_Game
-   -- FUNCTION
-   -- Start new game: create map, place ship, crew, etc
-   -- SOURCE
-   procedure New_Game;
-   -- ****
-
    -- ****f* Game/Game.Update_Game
    -- FUNCTION
    -- Game ticks (update time, crew, ship, etc)

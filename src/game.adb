@@ -19,7 +19,6 @@ with Ada.Exceptions;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Bases; use Bases;
 with BasesTypes;
-with Config;
 with Events;
 with Goals;
 with Log;
@@ -28,35 +27,6 @@ with Ships; use Ships;
 with Statistics; use Statistics;
 
 package body Game is
-
-   procedure New_Game is
-      use Config;
-      procedure New_Ada_Game with
-         Import => True,
-         Convention => C,
-         External_Name => "newAdaGame";
-   begin
-      -- Save game configuration
-      Save_Config;
-      -- Set game statistics
-      Clear_Game_Stats;
-      -- Start the new game
-      New_Ada_Game;
-      -- Get data from Nim
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Get_Bases_Loop :
-      for I in Sky_Bases'Range loop
-         Get_Base_From_Nim(Base_Index => I);
-      end loop Get_Bases_Loop;
-      Get_Map_Y_Loop :
-      for Y in 1 .. 1_024 loop
-         Get_Map_X_Loop :
-         for X in 1 .. 1_024 loop
-            Set_Map_Cell(X => X, Y => Y);
-         end loop Get_Map_X_Loop;
-      end loop Get_Map_Y_Loop;
-      Set_Game_Date;
-   end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
       use Events;
