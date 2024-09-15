@@ -88,16 +88,6 @@ package body Config is
         Value(Item => Get_Ada_String_Setting(N => New_String(Str => Name)));
    end Get_String_Setting;
 
-   procedure Set_String_Setting(Name, Value: String) is
-      procedure Set_Ada_String_Setting(N, V: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaStringSetting";
-   begin
-      Set_Ada_String_Setting
-        (N => New_String(Str => Name), V => New_String(Str => Value));
-   end Set_String_Setting;
-
    function Get_Float_Setting(Name: String) return Bonus_Type is
       function Get_Ada_Float_Setting(N: chars_ptr) return Bonus_Type with
          Import => True,
@@ -107,25 +97,9 @@ package body Config is
       return Get_Ada_Float_Setting(N => New_String(Str => Name));
    end Get_Float_Setting;
 
-   procedure Set_Float_Setting(Name: String; Value: Bonus_Type) is
-      procedure Set_Ada_Float_Setting(N: chars_ptr; V: Bonus_Type) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaFloatSetting";
-   begin
-      Set_Ada_Float_Setting(N => New_String(Str => Name), V => Value);
-   end Set_Float_Setting;
-
    function Get_Difficulty return Difficulty_Type is
    begin
       return Difficulty_Type'Val(Get_Integer_Setting(Name => "difficulty"));
    end Get_Difficulty;
-
-   procedure Set_Difficulty(Value: Difficulty_Type) is
-   begin
-      Set_Ada_Integer_Setting
-        (N => New_String(Str => "difficulty"),
-         V => Difficulty_Type'Pos(Value));
-   end Set_Difficulty;
 
 end Config;

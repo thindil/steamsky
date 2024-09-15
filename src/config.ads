@@ -136,18 +136,11 @@ package Config is
    procedure Set_Integer_Setting(Name: String; Value: Integer);
    function Get_Interface_Theme return Unbounded_String;
    function Get_String_Setting(Name: String) return String;
-   procedure Set_String_Setting(Name, Value: String);
    function Get_Float_Setting(Name: String) return Bonus_Type;
-   procedure Set_Float_Setting(Name: String; Value: Bonus_Type);
    function Get_Difficulty return Difficulty_Type;
-   procedure Set_Difficulty(Value: Difficulty_Type);
    function Get_Gender return Character with
       Import => True,
       Convention => C,
       External_Name => "getAdaGender";
-   procedure Set_Gender(Value: Character) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaGender";
 
 end Config;
