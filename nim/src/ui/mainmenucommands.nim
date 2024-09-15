@@ -52,7 +52,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadDirEffect, ReadIOEffect], exportc.} =
+    ReadDirEffect, ReadIOEffect, WriteIOEffect], exportc.} =
   ## Show the selected file content
   ##
   ## * clientData - the additional data for the Tcl command
@@ -88,7 +88,7 @@ var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadIOEffect, ReadDirEffect], exportc.} =
+    ReadIOEffect, ReadDirEffect, WriteIOEffect], exportc.} =
   ## Show the list of changes in the game, all or just recent, since the last
   ## release
   ##
@@ -174,7 +174,7 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
   ## Set faction destription and available bases and careers
   ##
   ## * clientData - the additional data for the Tcl command
@@ -356,6 +356,17 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
 proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     ReadIOEffect, WriteIOEffect], exportc.} =
+  ## Set all parameters and start a new game
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## NewGame
   newGameSettings.playerGender = tclGetVar(varName = "playergender")[0]
   let
     playerFrameName = ".newgamemenu.canvas.player"
