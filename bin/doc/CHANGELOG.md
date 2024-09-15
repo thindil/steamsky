@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.0.3] - 2024-09-15
 
 ### Fixed
 - Crash on finishing a crafting order by the player's ship's crew member
