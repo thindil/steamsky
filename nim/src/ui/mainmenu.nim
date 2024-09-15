@@ -17,7 +17,7 @@
 
 import std/[algorithm, os, strutils, times]
 import ../[config, events, game, gamesaveload, tk]
-import dialogs, errordialog, mainmenucommands, table
+import coreui, dialogs, errordialog, mainmenucommands, table, utilsui2
 
 type SaveSortOrders = enum
   playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
@@ -186,6 +186,17 @@ proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
         title = "Can't load the game")
   return tclOk
 
+proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  tclEval(script = closeButton & " configure -command ShowSkyMap")
+  tclSetVar(varName = "gamestate", newValue = "general")
+  tclEval(script = "grid remove " & closeButton)
+  showScreen(newScreenName = "mapframe")
+  tclEval(script = "DrawMap")
+  tclEval(script = "update")
+  showMainMenu()
+  return tclOk
+
 proc createMainMenu*() =
   let
     uiDirectory = dataDirectory & "ui" & DirSep
@@ -201,6 +212,7 @@ proc createMainMenu*() =
   mainmenucommands.addCommands()
   #addCommand("ShowLoadGame", showLoadGameCommand)
   #addCommand("LoadGame", loadGameCommand)
+  #addCommand("ShowMainMenu", showMainMenuCommand)
 
 proc showMainMenu() =
   let mainWindow = "."
