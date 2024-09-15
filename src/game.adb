@@ -64,9 +64,6 @@ package body Game is
          Convention => C,
          External_Name => "endAdaGame";
    begin
-      if Save then
-         Set_Ship_In_Nim;
-      end if;
       End_Ada_Game(S => (if Save then 1 else 0));
       Clear_Game_Stats;
       Clear_Current_Goal;
