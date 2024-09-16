@@ -19,9 +19,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 
 package body Factions is
 
-   function Get_Faction_Index
-     (Number: Positive) return Tiny_String.Bounded_String;
-
    function Get_Faction
      (Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Number: Natural := 0) return Faction_Record is
@@ -89,6 +86,19 @@ package body Factions is
          Import => True,
          Convention => C,
          External_Name => "getAdaFactionBase";
+      function Get_Faction_Index
+        (Number: Positive) return Tiny_String.Bounded_String is
+         function Get_Ada_Faction_Index
+           (Faction_Number: Positive) return chars_ptr with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaFactionIndex";
+      begin
+         return
+           Tiny_String.To_Bounded_String
+             (Source =>
+                Value(Item => Get_Ada_Faction_Index(Faction_Number => Number)));
+      end Get_Faction_Index;
    begin
       if Length(Source => Index) > 0 then
          Faction_Index := Index;
@@ -271,19 +281,5 @@ package body Factions is
       end loop Load_Faction_Bases_Loop;
       return Temp_Record;
    end Get_Faction;
-
-   function Get_Faction_Index
-     (Number: Positive) return Tiny_String.Bounded_String is
-      function Get_Ada_Faction_Index
-        (Faction_Number: Positive) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaFactionIndex";
-   begin
-      return
-        Tiny_String.To_Bounded_String
-          (Source =>
-             Value(Item => Get_Ada_Faction_Index(Faction_Number => Number)));
-   end Get_Faction_Index;
 
 end Factions;
