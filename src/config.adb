@@ -28,15 +28,6 @@ package body Config is
       Load_Ada_Config;
    end Load_Config;
 
-   procedure Save_Config is
-      procedure Save_Ada_Config with
-         Import => True,
-         Convention => C,
-         External_Name => "saveAdaConfig";
-   begin
-      Save_Ada_Config;
-   end Save_Config;
-
    function Get_Boolean_Setting(Name: String) return Boolean is
       function Get_Ada_Boolean_Setting(N: chars_ptr) return Integer with
          Import => True,
@@ -58,12 +49,11 @@ package body Config is
       return Get_Ada_Integer_Setting(N => New_String(Str => Name));
    end Get_Integer_Setting;
 
-   procedure Set_Ada_Integer_Setting(N: chars_ptr; V: Integer) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaIntegerSetting";
-
    procedure Set_Integer_Setting(Name: String; Value: Integer) is
+      procedure Set_Ada_Integer_Setting(N: chars_ptr; V: Integer) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaIntegerSetting";
    begin
       Set_Ada_Integer_Setting(N => New_String(Str => Name), V => Value);
    end Set_Integer_Setting;
