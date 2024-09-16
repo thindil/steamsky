@@ -173,7 +173,7 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [],
-        tags: [WriteIOEffect].} =
+        tags: [WriteIOEffect, TimeEffect].} =
   ## Show the dialog with the selected text to the player
   ##
   ## * text       - the text to show in the dialog. Can use special tags for colors,
@@ -403,7 +403,7 @@ proc showAdaQuestion(question, res: cstring; inGame: cint) {.exportc, raises: [
   showQuestion($question, $res, inGame == 1)
 
 proc showAdaInfo(text, parentName, title: cstring; button1,
-    button2: AdaButtonSettings) {.exportc, raises: [], tags: [WriteIOEffect].} =
+    button2: AdaButtonSettings) {.exportc, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   let
     nimButton1 = ButtonSettings(text: $button1.text, command: $button1.command,
         icon: $button1.icon, tooltip: $button1.tooltip, color: $button1.color)

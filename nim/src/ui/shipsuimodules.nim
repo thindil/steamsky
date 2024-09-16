@@ -21,7 +21,7 @@ import ../[game, config, crafts, crewinventory, items, messages, missions,
 import dialogs, errordialog, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show information about the selected module and set option for it
   ##
   ## * clientData - the additional data for the Tcl command
@@ -59,7 +59,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
       columnSpan: Natural = 0; wrapLength: Natural = 0;
       countHeight: bool = false; secondary: bool = false) {.sideEffect,
-          raises: [], tags: [WriteIOEffect].} =
+          raises: [], tags: [WriteIOEffect, TimeEffect].} =
     label = name
     tclEval(script = "ttk::label " & label & " -text {" & labelText &
         "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
@@ -333,7 +333,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't count the height of the button (3).")
 
   proc addOwnersInfo(ownersName: string; addButton: bool = false;
-      row: Natural = 0) {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+      row: Natural = 0) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
     var ownersText = ownersName
     if module.owner.len > 1:
       ownersText.add("s")
@@ -1222,7 +1222,7 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Get the next active button in assing crew dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1337,7 +1337,7 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = ammoMenu, parentFrame = ".")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     discard

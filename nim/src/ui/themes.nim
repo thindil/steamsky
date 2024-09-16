@@ -347,7 +347,7 @@ let
       drinksIcon: defaultThemeIconPath & "drinks.svg")
     ## The default game'st theme
 
-proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
+proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     ReadDirEffect, ReadIOEffect, RootEffect].} =
   ## Load all data of the game themes
   var theme = defaultTheme
@@ -612,7 +612,7 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect,
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
 
-proc loadThemeImages*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc loadThemeImages*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Load all images of the current game theme
   const imagesNames = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
@@ -677,7 +677,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
       "::LoadImages {" & theme.fileName.parentDir & "} " & $(
       gameSettings.interfaceFontSize + 8))
 
-proc setTheme*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc setTheme*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Set images and buttons for the current game theme
   loadThemeImages()
   tclEval(script = gameHeader & ".nofuel configure -image nofuelicon")
@@ -720,20 +720,20 @@ proc setTheme*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
 
 # Temporary code for interfacing with Ada
 
-proc loadAdaThemes() {.raises: [], tags: [WriteIOEffect, ReadDirEffect,
+proc loadAdaThemes() {.raises: [], tags: [WriteIOEffect, TimeEffect, ReadDirEffect,
     ReadIOEffect, RootEffect], exportc.} =
   loadThemes()
 
-proc loadAdaThemeImages() {.raises: [], tags: [WriteIOEffect], exportc.} =
+proc loadAdaThemeImages() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   try:
     loadThemeImages()
   except:
     discard
 
-proc setAdaTheme() {.raises: [], tags: [WriteIOEffect], exportc.} =
+proc setAdaTheme() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   setTheme()
 
-proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [WriteIOEffect], exportc.} =
+proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   let theme = try:
         themesList[gameSettings.interfaceTheme]
       except:

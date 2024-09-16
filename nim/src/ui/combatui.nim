@@ -61,7 +61,7 @@ proc updateCombatMessages() {.sideEffect, raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc updateCombatUi() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc updateCombatUi() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Update the combat UI, remove the old elements and add new, depending
   ## on the information to show
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -574,7 +574,7 @@ proc updateBoardingUi() {.sideEffect, raises: [], tags: [].} =
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect], exportc.} =
+        WriteIOEffect, TimeEffect, RootEffect], exportc.} =
   ## Excecute the combat orders and go the next turn
   ##
   ## * clientData - the additional data for the Tcl command
@@ -648,7 +648,7 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Set the combat order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -720,7 +720,7 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Set the boarding order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -748,7 +748,7 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Set the melee combat party (boarding or defenders)
   ##
   ## * clientData - the additional data for the Tcl command
@@ -929,7 +929,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show information about the selected mob in combat
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1139,7 +1139,7 @@ proc showCombatUi(newCombat: bool = true) =
 proc updateCombatAdaMessages() {.raises: [], tags: [], exportc.} =
   updateCombatMessages()
 
-proc updateAdaCombatUi() {.raises: [], tags: [WriteIOEffect], exportc.} =
+proc updateAdaCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   updateCombatUi()
 
 proc showAdaCombatFrame(frameName: cstring) {.raises: [], tags: [], exportc.} =

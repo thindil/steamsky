@@ -187,7 +187,7 @@ proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
   tclEval(script = closeButton & " configure -command ShowSkyMap")
   tclSetVar(varName = "gamestate", newValue = "general")
   tclEval(script = "grid remove " & closeButton)

@@ -474,7 +474,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
 proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show UI to move the selected item to the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -688,7 +688,7 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
 proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Select or deselect the selected item in the inventory
   ##
   ## * clientData - the additional data for the Tcl command
@@ -714,7 +714,7 @@ proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show detailed information about the selected item in crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -822,7 +822,7 @@ proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     tclSetResult(value = "0")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard
