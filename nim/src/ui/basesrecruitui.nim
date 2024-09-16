@@ -158,7 +158,7 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
 var recruitIndex: Natural
 
 proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show information about the selected recruit
   ##
   ## * clientData - the additional data for the Tcl command
@@ -345,7 +345,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Update information about hiring of the selected recruit
   ##
   ## * clientData - the additional data for the Tcl command
@@ -417,7 +417,7 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect], exportc.} =
+        WriteIOEffect, TimeEffect, RootEffect], exportc.} =
   ## Hire the selected recruit
   ##
   ## * clientData - the additional data for the Tcl command
@@ -509,7 +509,7 @@ proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show negotation UI to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -806,7 +806,7 @@ proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard

@@ -131,7 +131,7 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     showMainMenu()
   return tclOk
 
-proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
+proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect, ReadIOEffect,
     RootEffect], exportc.} =
   ##  Start the game
   let mainWindow = "."
@@ -161,7 +161,7 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, ReadIOEffect,
 
 proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+    WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect], exportc.} =
   ## Load the selected save file and start the game
   ##
   ## * clientData - the additional data for the Tcl command
