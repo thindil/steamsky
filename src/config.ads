@@ -122,13 +122,6 @@ package Config is
    procedure Load_Config;
    -- ****
 
-   -- ****f* Config/Config.SaveConfig
-   -- FUNCTION
-   -- Save game configuration to file
-   -- SOURCE
-   procedure Save_Config;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    function Get_Boolean_Setting(Name: String) return Boolean;
