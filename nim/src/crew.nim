@@ -210,7 +210,7 @@ proc memberRest(memberIndex: Natural; tiredLevel, healthLevel: var int;
       if playerShip.crew[memberIndex].morale[1] > 50:
         playerShip.crew[memberIndex].morale = [1: 50.Natural, 2: 0]
 
-proc healOrder(memberIndex: Natural; times: int) {.sideEffect, raises: [
+proc memberHeal(memberIndex: Natural; times: int) {.sideEffect, raises: [
     KeyError, CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
     contractual.} =
   ## Execute heal wounded crew members order for the selected crew member
@@ -305,6 +305,52 @@ proc healOrder(memberIndex: Natural; times: int) {.sideEffect, raises: [
     if healAmount != 0:
       giveOrders(ship = playerShip, memberIndex = memberIndex,
           givenOrder = rest)
+
+proc memberClean(memberIndex: Natural; times: int) {.sideEffect, raises: [
+    KeyError, CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
+    contractual.} =
+  ## Execute clean the ship order for the selected crew member
+  ##
+  ## * memberIndex - the index of the member for which the order will be executed
+  ## * times       - how many cycles clean the ship
+  require:
+    memberIndex < playerShip.crew.len
+    times > 0
+  body:
+    var
+      toolIndex: int = findTools(memberIndex = memberIndex,
+          itemType = cleaningTools, order = clean)
+      needCleaning: bool = false
+    if toolIndex > -1:
+      for module in playerShip.modules.mitems:
+        if module.mType == ModuleType2.cabin and module.cleanliness <
+            module.quality:
+          if module.cleanliness + times > module.quality:
+            module.cleanliness = module.quality
+          else:
+            module.cleanliness += times
+          damageItem(inventory = playerShip.crew[memberIndex].inventory,
+              itemIndex = toolIndex, memberIndex = memberIndex,
+                  ship = playerShip)
+          break
+    for module in playerShip.modules:
+      if module.mType == ModuleType2.cabin and module.cleanliness <
+          module.quality:
+        needCleaning = true
+        if toolIndex == -1:
+          addMessage(message = playerShip.crew[memberIndex].name &
+              " can't continue cleaning the ship because don't have any cleaning tools.",
+              mtype = orderMessage, color = red)
+          giveOrders(ship = playerShip, memberIndex = memberIndex,
+              givenOrder = rest)
+        break
+    if not needCleaning:
+      addMessage(message = "Cleaning the ship have been finished.",
+          mType = orderMessage, color = green)
+      for index, member in playerShip.crew:
+        if member.order == clean:
+          giveOrders(ship = playerShip, memberIndex = index,
+              givenOrder = rest)
 
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
@@ -536,41 +582,9 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
           if playerShip.speed == docked:
             tiredLevel = playerShip.crew[i].tired
         of heal:
-          healOrder(memberIndex = i, times = times)
+          memberHeal(memberIndex = i, times = times)
         of clean:
-          var
-            toolIndex: int = findTools(memberIndex = i,
-                itemType = cleaningTools, order = clean)
-            needCleaning: bool = false
-          if toolIndex > -1:
-            for module in playerShip.modules.mitems:
-              if module.mType == ModuleType2.cabin and module.cleanliness <
-                  module.quality:
-                if module.cleanliness + times > module.quality:
-                  module.cleanliness = module.quality
-                else:
-                  module.cleanliness += times
-                damageItem(inventory = playerShip.crew[i].inventory,
-                    itemIndex = toolIndex, memberIndex = i, ship = playerShip)
-                break
-          for module in playerShip.modules:
-            if module.mType == ModuleType2.cabin and module.cleanliness <
-                module.quality:
-              needCleaning = true
-              if toolIndex == -1:
-                addMessage(message = playerShip.crew[i].name &
-                    " can't continue cleaning the ship because don't have any cleaning tools.",
-                    mtype = orderMessage, color = red)
-                giveOrders(ship = playerShip, memberIndex = i,
-                    givenOrder = rest)
-              break
-          if not needCleaning:
-            addMessage(message = "Cleaning the ship have been finished.",
-                mType = orderMessage, color = green)
-            for index, member in playerShip.crew:
-              if member.order == clean:
-                giveOrders(ship = playerShip, memberIndex = index,
-                    givenOrder = rest)
+          memberClean(memberIndex = i, times = times)
         of talk:
           if skyMap[playerShip.skyX][playerShip.skyY].baseIndex == 0:
             giveOrders(ship = playerShip, memberIndex = i, givenOrder = rest)
