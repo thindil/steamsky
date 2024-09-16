@@ -52,7 +52,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadDirEffect, ReadIOEffect, WriteIOEffect], exportc.} =
+    ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect], exportc.} =
   ## Show the selected file content
   ##
   ## * clientData - the additional data for the Tcl command
@@ -88,7 +88,7 @@ var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadIOEffect, ReadDirEffect, WriteIOEffect], exportc.} =
+    ReadIOEffect, ReadDirEffect, WriteIOEffect, TimeEffect], exportc.} =
   ## Show the list of changes in the game, all or just recent, since the last
   ## release
   ##
@@ -174,7 +174,7 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Set faction destription and available bases and careers
   ##
   ## * clientData - the additional data for the Tcl command
@@ -355,7 +355,7 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadIOEffect, WriteIOEffect], exportc.} =
+    ReadIOEffect, WriteIOEffect, TimeEffect], exportc.} =
   ## Set all parameters and start a new game
   ##
   ## * clientData - the additional data for the Tcl command
