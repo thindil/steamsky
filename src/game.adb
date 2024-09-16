@@ -17,19 +17,21 @@
 
 with Ada.Exceptions;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Bases; use Bases;
+with Bases;
 with BasesTypes;
 with Events;
 with Goals;
 with Log;
-with Maps; use Maps;
+with Maps;
 with Ships; use Ships;
-with Statistics; use Statistics;
+with Statistics;
 
 package body Game is
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
+      use Bases;
       use Events;
+      use Maps;
 
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -58,6 +60,7 @@ package body Game is
 
    procedure End_Game(Save: Boolean) is
       use Goals;
+      use Statistics;
 
       procedure End_Ada_Game(S: Integer) with
          Import => True,
