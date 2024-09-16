@@ -208,7 +208,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show the selected point on map
   ##
   ## * clientData - the additional data for the Tcl command

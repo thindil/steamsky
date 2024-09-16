@@ -272,7 +272,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCargo"].allocCStringArray)
 
 proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show UI to give the selected item from the ship cargo to the selected
   ## crew member
   ##
@@ -404,7 +404,7 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show UI to drop the selected item from the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -481,7 +481,7 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Drop selected amount of the selected item from the ship's cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -510,7 +510,7 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Update max give amount after selecting the crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -553,7 +553,7 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       "):} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     discard

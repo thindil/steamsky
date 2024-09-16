@@ -113,7 +113,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, RootEffect], exportc.}
+        WriteIOEffect, TimeEffect, RootEffect], exportc.}
   ## Wait the selected amount of time
   ##
   ## * clientData - the additional data for the Tcl command
@@ -126,7 +126,7 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Wait
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     discard

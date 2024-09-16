@@ -218,7 +218,7 @@ proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show information about the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -546,7 +546,7 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   updateBasesList(baseName = $argv[1])
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     discard

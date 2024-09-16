@@ -20,7 +20,7 @@ import ../[config, game, maps, missions, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show the menu with available the selected mission options
   ##
   ## * clientData - the additional data for the Tcl command
@@ -387,7 +387,7 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMissionsList()
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
     discard

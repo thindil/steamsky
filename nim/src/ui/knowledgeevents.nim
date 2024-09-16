@@ -20,7 +20,7 @@ import ../[config, game, maps, tk, types]
 import coreui, dialogs, errordialog, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show information about the selected event
   ##
   ## * clientData - the additional data for the Tcl command
@@ -373,7 +373,7 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   updateEventsList()
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the known events UI
   try:
     discard
