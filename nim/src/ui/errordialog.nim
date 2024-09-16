@@ -15,25 +15,29 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import times
 import contracts
 import ../[game, tk]
 
 proc showError*(message: string; e: ref Exception = getCurrentException()): TclResults {.discardable,
-    sideEffect, raises: [], tags: [WriteIOEffect], contractual.} =
+    sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], contractual.} =
   ## Show the error dialog with the message containing technical details about the issue
   ##
   ## * message - the message to show in the error dialog
   ## * e       - the exception which happened. Default value is the current exception
   ##
   ## This procedure always returns tclOk
-  var debugInfo: string = message
+  var debugInfo: string = $now() & '\n' & gameVersion & '\n' & message
   if e != nil:
     debugInfo.add(y = " Reason: " & getCurrentExceptionMsg())
     when defined(debug):
       debugInfo.add(y = "\nStack trace:\n" & e.getStackTrace)
   debugInfo.add(y = "\nLast Tcl error: " & tclGetVar(varName = "errorInfo"))
   try:
-    writeFile(fileName = saveDirectory & "error.log", content = debugInfo)
+    let errorLog: File = open(fileName = saveDirectory & "error.log",
+        mode = fmAppend)
+    errorLog.write(s = debugInfo & "\n---------------------------\n")
+    errorLog.close
   except:
     debugInfo.add(y = "Can't save error to file. Reason: " &
         getCurrentExceptionMsg())
