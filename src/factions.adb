@@ -15,13 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Factions is
 
    function Get_Faction
      (Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Number: Natural := 0) return Faction_Record is
+      use Interfaces.C.Strings;
       use Tiny_String;
 
       Temp_Record: Faction_Record; --## rule line off IMPROPER_INITIALIZATION
@@ -87,7 +88,7 @@ package body Factions is
          Convention => C,
          External_Name => "getAdaFactionBase";
       function Get_Faction_Index
-        (Number: Positive) return Tiny_String.Bounded_String is
+        (N: Positive) return Tiny_String.Bounded_String is
          function Get_Ada_Faction_Index
            (Faction_Number: Positive) return chars_ptr with
             Import => True,
@@ -97,13 +98,13 @@ package body Factions is
          return
            Tiny_String.To_Bounded_String
              (Source =>
-                Value(Item => Get_Ada_Faction_Index(Faction_Number => Number)));
+                Value(Item => Get_Ada_Faction_Index(Faction_Number => N)));
       end Get_Faction_Index;
    begin
       if Length(Source => Index) > 0 then
          Faction_Index := Index;
       else
-         Faction_Index := Get_Faction_Index(Number => Number);
+         Faction_Index := Get_Faction_Index(N => Number);
       end if;
       Get_Ada_Faction
         (F_Index => New_String(Str => To_String(Source => Index)),
