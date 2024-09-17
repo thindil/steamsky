@@ -352,6 +352,192 @@ proc memberClean(memberIndex: Natural; times: int) {.sideEffect, raises: [
           giveOrders(ship = playerShip, memberIndex = index,
               givenOrder = rest)
 
+proc normalizeStat(stat: var int; maxValue: Positive = 100) {.raises: [],
+    tags: [], contractual.} =
+  ## Normalize the value for the selected statistic
+  ##
+  ## * stat     - the stat to normalize
+  ## * maxValue - the max value for the stat. Default value is 100.
+  ##
+  ## Return the modified parameter stat
+  if stat > maxValue:
+    stat = maxValue
+  elif stat < 0:
+    stat = 0
+
+proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
+    KeyError, CrewNoSpaceError], tags: [], contractual.} =
+  ## Eat or drink the selected type of consumable
+  ##
+  ## * itemType    - the type of item to consume
+  ## * memberIndex - the index of the crew member which will consume
+  ##
+  ## Returns amount of bonus from the used consumable or 0 if nothing was
+  ## consumed
+  var
+    itemIndex: int = findItem(inventory = playerShip.cargo,
+        itemType = itemType)
+    consumeValue: Natural = 0
+  if itemIndex > -1:
+    consumeValue = itemsList[playerShip.cargo[itemIndex].protoIndex].value[1]
+    if itemsList[playerShip.cargo[itemIndex].protoIndex].value.len > 1 and
+        itemsList[playerShip.cargo[itemIndex].protoIndex].value[2] != 0:
+      updateMorale(ship = playerShip, memberIndex = memberIndex,
+          value = itemsList[playerShip.cargo[itemIndex].protoIndex].value[2])
+    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+        itemIndex].protoIndex, amount = -1)
+    return consumeValue
+  itemIndex = findItem(inventory = playerShip.crew[memberIndex].inventory,
+      itemType = itemType)
+  if itemIndex > -1:
+    consumeValue = itemsList[playerShip.crew[memberIndex].inventory[
+        itemIndex].protoIndex].value[1]
+    if itemsList[playerShip.crew[memberIndex].inventory[
+        itemIndex].protoIndex].value.len > 1 and itemsList[playerShip.crew[
+        memberIndex].inventory[itemIndex].protoIndex].value[2] != 0:
+      updateMorale(ship = playerShip, memberIndex = memberIndex,
+          value = itemsList[playerShip.crew[memberIndex].inventory[
+              itemIndex].protoIndex].value[2])
+    updateInventory(memberIndex = memberIndex, amount = -1,
+        inventoryIndex = itemIndex, ship = playerShip)
+    return consumeValue
+  return 0
+
+proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
+    thirstLevel: var int; memberIndex, orderTime: int; minutes: Positive;
+    inCombat: bool) {.raises: [KeyError, CrewNoSpaceError], tags: [],
+    contractual.} =
+  ## Update the selected crew member
+  ##
+  ## * member      - the crew member to update
+  ## * tiredLevel  - the level of tiredness of the crew member
+  ## * healthLevel - the level of health of the crew member
+  ## * hungerLevel - the level of hunger of the crew member
+  ## * thirstLevel - the level of thirst of the crew member
+  ## * memberIndex - the index of the crew member which will be updated
+  ## * orderTime   - the time spent on the current order
+  ## * minutes     - the amount of minutes which passed
+  ## * inCombat    - if true, the player is in combat
+  ##
+  ## Returns the modified parameters member, tiredLevel, healthLevel,
+  ## hungerLevel and thirstLevel
+
+  if "nofatigue" in factionsList[member.faction].flags:
+    tiredLevel = 0
+  var backToWork: bool = true
+  if tiredLevel == 0 and member.order == rest and member.previousOrder != rest:
+    if member.previousOrder notin [repair, clean] and findMember(
+        order = member.previousOrder) > -1:
+      backToWork = false
+    if member.previousOrder in [gunner, craft]:
+      block moduleLoop:
+        for module in playerShip.modules.mitems:
+          if (member.previousOrder == gunner and module.mType ==
+              ModuleType2.gun) and module.owner[0] in [memberIndex, -1]:
+            backToWork = true
+            module.owner[0] = memberIndex
+            break moduleLoop
+          elif (member.previousOrder == craft and module.mType ==
+              ModuleType2.workshop) and module.craftingIndex.len > 0:
+            for owner in module.owner.mitems:
+              if owner == memberIndex:
+                backToWork = true
+                owner = memberIndex
+                break moduleLoop
+            for owner in module.owner.mitems:
+              if owner == -1:
+                backToWork = true
+                owner = memberIndex
+                break moduleLoop
+    if backToWork:
+      member.order = member.previousOrder
+      member.orderTime = 15
+      addMessage(message = member.name & " returns to work fully rested.",
+          mType = orderMessage, color = yellow)
+      updateMorale(ship = playerShip, memberIndex = memberIndex, value = 1)
+    member.previousOrder = rest
+  if (tiredLevel > 80 + member.attributes[conditionIndex].level) and
+      member.order != rest and not inCombat:
+    var canRest: bool = true
+    if member.order == boarding and harpoonDuration == 0 and
+        game.enemy.harpoonDuration == 0:
+      canRest = false
+    if canRest:
+      member.previousOrder = member.order
+      member.order = rest
+      member.orderTime = 15
+      if member.equipment[tool] > -1:
+        updateCargo(ship = playerShip, protoIndex = member.inventory[
+            member.equipment[tool]].protoIndex, amount = 1,
+            durability = member.inventory[member.equipment[tool]].durability)
+        updateInventory(memberIndex = memberIndex, amount = -1,
+            inventoryIndex = member.equipment[tool], ship = playerShip)
+        member.equipment[tool] = -1
+      addMessage(message = member.name &
+          " is too tired to work, they're going to rest.",
+          mType = orderMessage, color = yellow)
+      block findNewCabin:
+        if findCabin(memberIndex = memberIndex) == -1:
+          for module in playerShip.modules.mitems:
+            if module.mType == ModuleType2.cabin and module.durability > 0:
+              for owner in module.owner.mitems:
+                if owner == -1:
+                  owner = memberIndex
+                  addMessage(message = member.name & " take " & module.name &
+                      " as own cabin.", mType = otherMessage)
+                  break findNewCabin
+    else:
+      addMessage(message = member.name &
+          " is very tired but they can't go to rest.", mType = orderMessage, color = red)
+      updateMorale(ship = playerShip, memberIndex = memberIndex,
+          value = getRandom(min = -5, max = -1))
+  normalizeStat(stat = tiredLevel, maxValue = 150)
+  member.tired = tiredLevel
+  if hungerLevel > 80:
+    var consumeResult: int = 0
+    for foodType in factionsList[member.faction].foodTypes:
+      consumeResult = consume(itemType = foodType, memberIndex = memberIndex)
+      if consumeResult > 0:
+        break
+    if hungerLevel - consumeResult < SkillRange.low:
+      hungerLevel = SkillRange.low
+    else:
+      hungerLevel -= consumeResult
+    if consumeResult == 0:
+      addMessage(message = member.name &
+          " is hungry, but they can't find anything to eat.",
+          mType = otherMessage, color = red)
+      updateMorale(ship = playerShip, memberIndex = memberIndex,
+          value = getRandom(min = -10, max = -5))
+  normalizeStat(stat = hungerLevel)
+  member.hunger = hungerLevel
+  if thirstLevel > 40:
+    var consumeResult: int = 0
+    for drinksType in factionsList[member.faction].drinksTypes:
+      consumeResult = consume(itemType = drinksType, memberIndex = memberIndex)
+      if consumeResult > 0:
+        break
+    if thirstLevel - consumeResult < SkillRange.low:
+      thirstLevel = SkillRange.low
+    else:
+      thirstLevel -= consumeResult
+    if consumeResult == 0:
+      addMessage(message = member.name &
+          " is thirsty, but they can't find anything to drink.",
+          mType = otherMessage, color = red)
+      updateMorale(ship = playerShip, memberIndex = memberIndex,
+          value = getRandom(min = -20, max = -10))
+  normalizeStat(stat = thirstLevel)
+  member.thirst = thirstLevel
+  normalizeStat(stat = healthLevel)
+  member.health = healthLevel
+  if member.order notin [repair, craft, upgrading]:
+    member.orderTime = orderTime
+  if member.skills.len == 0:
+    member.contractLength -= minutes
+    if member.contractLength < 0:
+      member.contractLength = 0
+
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
     inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
@@ -363,179 +549,6 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
   var
     i: int = 0
     tiredLevel, hungerLevel, thirstLevel, healthLevel, orderTime: int = 0
-
-  proc updateMember(member: var MemberData) {.raises: [KeyError,
-      CrewNoSpaceError], tags: [], contractual.} =
-    ## Update the selected crew member
-    ##
-    ## * member - the crew member to update
-    ##
-    ## Returns the modified parameter member
-
-    proc normalizeStat(stat: var int; maxValue: Positive = 100) {.raises: [],
-        tags: [], contractual.} =
-      ## Normalize the value for the selected statistic
-      ##
-      ## * stat     - the stat to normalize
-      ## * maxValue - the max value for the stat. Default value is 100.
-      ##
-      ## Return the modified parameter stat
-      if stat > maxValue:
-        stat = maxValue
-      elif stat < 0:
-        stat = 0
-
-    proc consume(itemType: string): Natural {.raises: [KeyError,
-        CrewNoSpaceError], tags: [], contractual.} =
-      ## Eat or drink the selected type of consumable
-      ##
-      ## * itemType - the type of item to consume
-      ##
-      ## Returns amount of bonus from the used consumable or 0 if nothing was
-      ## consumed
-      var
-        itemIndex: int = findItem(inventory = playerShip.cargo,
-            itemType = itemType)
-        consumeValue: Natural = 0
-      if itemIndex > -1:
-        consumeValue = itemsList[playerShip.cargo[itemIndex].protoIndex].value[1]
-        if itemsList[playerShip.cargo[itemIndex].protoIndex].value.len > 1 and
-            itemsList[playerShip.cargo[itemIndex].protoIndex].value[2] != 0:
-          updateMorale(ship = playerShip, memberIndex = i, value = itemsList[
-              playerShip.cargo[itemIndex].protoIndex].value[2])
-        updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
-            itemIndex].protoIndex, amount = -1)
-        return consumeValue
-      itemIndex = findItem(inventory = playerShip.crew[i].inventory,
-          itemType = itemType)
-      if itemIndex > -1:
-        consumeValue = itemsList[playerShip.crew[i].inventory[
-            itemIndex].protoIndex].value[1]
-        if itemsList[playerShip.crew[i].inventory[
-            itemIndex].protoIndex].value.len > 1 and itemsList[playerShip.crew[
-            i].inventory[itemIndex].protoIndex].value[2] != 0:
-          updateMorale(ship = playerShip, memberIndex = i, value = itemsList[
-              playerShip.crew[i].inventory[itemIndex].protoIndex].value[2])
-        updateInventory(memberIndex = i, amount = -1,
-            inventoryIndex = itemIndex, ship = playerShip)
-        return consumeValue
-      return 0
-
-    if "nofatigue" in factionsList[member.faction].flags:
-      tiredLevel = 0
-    var backToWork: bool = true
-    if tiredLevel == 0 and member.order == rest and member.previousOrder != rest:
-      if member.previousOrder notin [repair, clean] and findMember(
-          order = member.previousOrder) > -1:
-        backToWork = false
-      if member.previousOrder in [gunner, craft]:
-        block moduleLoop:
-          for module in playerShip.modules.mitems:
-            if (member.previousOrder == gunner and module.mType ==
-                ModuleType2.gun) and module.owner[0] in [i, -1]:
-              backToWork = true
-              module.owner[0] = i
-              break moduleLoop
-            elif (member.previousOrder == craft and module.mType ==
-                ModuleType2.workshop) and module.craftingIndex.len > 0:
-              for owner in module.owner.mitems:
-                if owner == i:
-                  backToWork = true
-                  owner = i
-                  break moduleLoop
-              for owner in module.owner.mitems:
-                if owner == -1:
-                  backToWork = true
-                  owner = i
-                  break moduleLoop
-      if backToWork:
-        member.order = member.previousOrder
-        member.orderTime = 15
-        addMessage(message = member.name & " returns to work fully rested.",
-            mType = orderMessage, color = yellow)
-        updateMorale(ship = playerShip, memberIndex = i, value = 1)
-      member.previousOrder = rest
-    if (tiredLevel > 80 + member.attributes[conditionIndex].level) and
-        member.order != rest and not inCombat:
-      var canRest: bool = true
-      if member.order == boarding and harpoonDuration == 0 and
-          game.enemy.harpoonDuration == 0:
-        canRest = false
-      if canRest:
-        member.previousOrder = member.order
-        member.order = rest
-        member.orderTime = 15
-        if member.equipment[tool] > -1:
-          updateCargo(ship = playerShip, protoIndex = member.inventory[
-              member.equipment[tool]].protoIndex, amount = 1,
-              durability = member.inventory[member.equipment[tool]].durability)
-          updateInventory(memberIndex = i, amount = -1,
-              inventoryIndex = member.equipment[tool], ship = playerShip)
-          member.equipment[tool] = -1
-        addMessage(message = member.name &
-            " is too tired to work, they're going to rest.",
-            mType = orderMessage, color = yellow)
-        block findNewCabin:
-          if findCabin(memberIndex = i) == -1:
-            for module in playerShip.modules.mitems:
-              if module.mType == ModuleType2.cabin and module.durability > 0:
-                for owner in module.owner.mitems:
-                  if owner == -1:
-                    owner = i
-                    addMessage(message = member.name & " take " & module.name &
-                        " as own cabin.", mType = otherMessage)
-                    break findNewCabin
-      else:
-        addMessage(message = member.name &
-            " is very tired but they can't go to rest.", mType = orderMessage, color = red)
-        updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
-            min = -5, max = -1))
-    normalizeStat(stat = tiredLevel, maxValue = 150)
-    member.tired = tiredLevel
-    if hungerLevel > 80:
-      var consumeResult: int = 0
-      for foodType in factionsList[member.faction].foodTypes:
-        consumeResult = consume(itemType = foodType)
-        if consumeResult > 0:
-          break
-      if hungerLevel - consumeResult < SkillRange.low:
-        hungerLevel = SkillRange.low
-      else:
-        hungerLevel -= consumeResult
-      if consumeResult == 0:
-        addMessage(message = member.name &
-            " is hungry, but they can't find anything to eat.",
-            mType = otherMessage, color = red)
-        updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
-            min = -10, max = -5))
-    normalizeStat(stat = hungerLevel)
-    member.hunger = hungerLevel
-    if thirstLevel > 40:
-      var consumeResult: int = 0
-      for drinksType in factionsList[member.faction].drinksTypes:
-        consumeResult = consume(itemType = drinksType)
-        if consumeResult > 0:
-          break
-      if thirstLevel - consumeResult < SkillRange.low:
-        thirstLevel = SkillRange.low
-      else:
-        thirstLevel -= consumeResult
-      if consumeResult == 0:
-        addMessage(message = member.name &
-            " is thirsty, but they can't find anything to drink.",
-            mType = otherMessage, color = red)
-        updateMorale(ship = playerShip, memberIndex = i, value = getRandom(
-            min = -20, max = -10))
-    normalizeStat(stat = thirstLevel)
-    member.thirst = thirstLevel
-    normalizeStat(stat = healthLevel)
-    member.health = healthLevel
-    if member.order notin [repair, craft, upgrading]:
-      member.orderTime = orderTime
-    if member.skills.len == 0:
-      member.contractLength -= minutes
-      if member.contractLength < 0:
-        member.contractLength = 0
 
   while i < playerShip.crew.len:
     var currentMinutes: int = minutes
@@ -654,7 +667,10 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
         if i == 0:
           break
     if healthLevel > SkillRange.low:
-      updateMember(member = playerShip.crew[i])
+      updateMember(member = playerShip.crew[i], tiredLevel = tiredLevel,
+          healthLevel = healthLevel, hungerLevel = hungerLevel,
+          thirstLevel = thirstLevel, memberIndex = i, orderTime = orderTime,
+          minutes = minutes, inCombat = inCombat)
       i.inc
 
 # Temporary code for interfacing with Ada
