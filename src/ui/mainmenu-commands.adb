@@ -16,21 +16,19 @@
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Unbounded;
--- with Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Combat.UI;
--- with CoreUI;
 with Dialogs; use Dialogs;
 with Game;
 with Game.SaveLoad;
 with Maps.UI;
 with Table; use Table;
 with Utils;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body MainMenu.Commands is
 
@@ -366,26 +364,6 @@ package body MainMenu.Commands is
       External_Name => "showMainMenuCommand";
       -- ****
 
---   function Show_Main_Menu_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc, Argv);
---      use Tcl.Ada;
---      use CoreUI;
---
---   begin
---      Widgets.configure
---        (Widgt => Close_Button, options => "-command ShowSkyMap");
---      Tcl_SetVar
---        (interp => Interp, varName => "gamestate", newValue => "general");
---      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---      Show_Screen(New_Screen_Name => "mapframe");
---      Tcl_Eval(interp => Get_Context, strng => "DrawMap");
---      Tcl_Eval(interp => Get_Context, strng => "update");
---      Show_Main_Menu;
---      return TCL_OK;
---   end Show_Main_Menu_Command;
-
    -- ****o* MCommands/MCommands.Show_Load_Game_Menu_Command
    -- FUNCTION
    -- Show available options for the selected saved game
@@ -416,6 +394,7 @@ package body MainMenu.Commands is
         Create_Dialog
           (Name => ".loadfilemenu", Title => "Actions", Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
+         use Tcl.Tk.Ada.Widgets;
          use Tcl.Tk.Ada.Widgets.TtkButton;
 
          Button: constant Ttk_Button :=
@@ -537,6 +516,7 @@ package body MainMenu.Commands is
       External_Name => "deleteGameCommand";
 
    procedure Add_Commands is
+      use Utils.UI;
    begin
       Add_Command(Name => "OpenLink", Ada_Command => Open_Link_Command'Access);
       Add_Command(Name => "ShowFile", Ada_Command => Show_File_Command'Access);
