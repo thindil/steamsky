@@ -467,7 +467,7 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let loadMenu = createDialog(name = ".loadfilemenu", title = "Actions",
       parentName = ".")
 
