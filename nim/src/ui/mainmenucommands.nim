@@ -174,7 +174,8 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, TimeEffect], exportc.} =
   ## Set faction destription and available bases and careers
   ##
   ## * clientData - the additional data for the Tcl command
@@ -465,6 +466,30 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
   # startGame()
   return tclOk
 
+proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let loadMenu = createDialog(name = ".loadfilemenu", title = "Actions",
+      parentName = ".")
+
+  proc addButton(name, label, command: string) =
+    let button = loadMenu & name
+    tclEval(script = "ttk::button " & button & " -text {" & label &
+        "} -command {CloseDialog " & loadMenu & " .;" & command & "}")
+    tclEval(script = "grid " & button & " -sticky we -padx 5" & (
+        if command.len == 0: " -pady {0 3}" else: ""))
+    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & loadMenu & " .;break}")
+    if command.len == 0:
+      tclEval(script = "bind " & button & " <Tab> {focus " & loadMenu & ".load;break}")
+      tclEval(script = "focus " & button)
+
+  addButton(name = ".load", label = "Load the game", command = "LoadGame " &
+      $argv[1])
+  addButton(name = ".delete", label = "Delete the game",
+      command = "DeleteGame " & $argv[1])
+  addButton(name = ".close", label = "Close", command = "")
+  showDialog(dialog = loadMenu, parentFrame = ".")
+  return tclOk
+
 proc addCommands*() =
   discard
 #  addCommand("OpenLink", openLinkCommand)
@@ -477,3 +502,4 @@ proc addCommands*() =
 #  addCommand("SetBase", setBaseCommand)
 #  addCommand("RandomName", randomNameCommand)
 #  addCommand("NewGame", newGameCommand)
+#  addCommand("ShowLoadGameMenu", showLoadGameMenuCommand)
