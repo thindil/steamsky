@@ -131,8 +131,8 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     showMainMenu()
   return tclOk
 
-proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect, ReadIOEffect,
-    RootEffect], exportc.} =
+proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
+    ReadIOEffect, RootEffect], exportc.} =
   ##  Start the game
   let mainWindow = "."
   var x: int = try:
@@ -187,7 +187,8 @@ proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
   ## Clear the main game window and show main menu
   ##
   ## * clientData - the additional data for the Tcl command
@@ -208,6 +209,30 @@ proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   showMainMenu()
   return tclOk
 
+proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let column = getColumnNumber(table = loadTable, xPosition = ($argv[1]).parseInt)
+  case column
+  of 1:
+    if saveSortOrder == playerAsc:
+      saveSortOrder = playerDesc
+    else:
+      saveSortOrder = playerAsc
+  of 2:
+    if saveSortOrder == shipAsc:
+      saveSortOrder = shipDesc
+    else:
+      saveSortOrder = shipAsc
+  of 3:
+    if saveSortOrder == timeAsc:
+      saveSortOrder = timeDesc
+    else:
+      saveSortOrder = timeAsc
+  else:
+    discard
+  return showLoadGameCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+
 proc createMainMenu*() =
   let
     uiDirectory = dataDirectory & "ui" & DirSep
@@ -224,6 +249,7 @@ proc createMainMenu*() =
   #addCommand("ShowLoadGame", showLoadGameCommand)
   #addCommand("LoadGame", loadGameCommand)
   #addCommand("ShowMainMenu", showMainMenuCommand)
+#  addCommand("SortSaves", sortSavesCommand)
 
 proc showMainMenu() =
   let mainWindow = "."
