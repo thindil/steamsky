@@ -210,8 +210,12 @@ proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
-  let column = getColumnNumber(table = loadTable, xPosition = ($argv[1]).parseInt)
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect], exportc.} =
+  let column = try:
+      getColumnNumber(table = loadTable, xPosition = ($argv[1]).parseInt)
+    except:
+      return showError(message = "Can't get the column number.")
   case column
   of 1:
     if saveSortOrder == playerAsc:
