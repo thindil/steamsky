@@ -16,11 +16,11 @@
 with Ada.Exceptions;
 with Ada.Strings;
 with Ada.Strings.Unbounded;
-with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada;
+-- with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Combat.UI;
 with Dialogs; use Dialogs;
 with Game;
@@ -381,55 +381,57 @@ package body MainMenu.Commands is
    function Show_Load_Game_Menu_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showLoadGameMenuCommand";
       -- ****
 
-   function Show_Load_Game_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
-
-      Load_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".loadfilemenu", Title => "Actions", Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         use Tcl.Tk.Ada.Widgets;
-         use Tcl.Tk.Ada.Widgets.TtkButton;
-
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Load_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Load_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Load_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Load_Menu & ".load;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Add_Button
-        (Name => ".load", Label => "Load the game",
-         Command => "LoadGame " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button
-        (Name => ".delete", Label => "Delete the game",
-         Command => "DeleteGame " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Load_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Load_Game_Menu_Command;
+--   function Show_Load_Game_Menu_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--
+--      Load_Menu: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".loadfilemenu", Title => "Actions", Parent_Name => ".");
+--      procedure Add_Button(Name, Label, Command: String) is
+--         use Tcl.Tk.Ada.Widgets;
+--         use Tcl.Tk.Ada.Widgets.TtkButton;
+--
+--         Button: constant Ttk_Button :=
+--           Create
+--             (pathName => Load_Menu & Name,
+--              options =>
+--                "-text {" & Label & "} -command {CloseDialog " & Load_Menu &
+--                " .;" & Command & "}");
+--      begin
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Slave => Button,
+--            Options =>
+--              "-sticky we -padx 5" &
+--              (if Command'Length = 0 then " -pady {0 3}" else ""));
+--         Bind
+--           (Widgt => Button, Sequence => "<Escape>",
+--            Script => "{CloseDialog " & Load_Menu & " .;break}");
+--         if Command'Length = 0 then
+--            Bind
+--              (Widgt => Button, Sequence => "<Tab>",
+--               Script => "{focus " & Load_Menu & ".load;break}");
+--            Focus(Widgt => Button);
+--         end if;
+--      end Add_Button;
+--   begin
+--      Add_Button
+--        (Name => ".load", Label => "Load the game",
+--         Command => "LoadGame " & CArgv.Arg(Argv => Argv, N => 1));
+--      Add_Button
+--        (Name => ".delete", Label => "Delete the game",
+--         Command => "DeleteGame " & CArgv.Arg(Argv => Argv, N => 1));
+--      Add_Button(Name => ".close", Label => "Close", Command => "");
+--      Show_Dialog(Dialog => Load_Menu, Parent_Frame => ".");
+--      return TCL_OK;
+--   end Show_Load_Game_Menu_Command;
 
    -- ****o* MCommands/MCommands.Sort_Saves_Command
    -- FUNCTION
