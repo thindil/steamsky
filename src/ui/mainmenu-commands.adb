@@ -14,14 +14,14 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
-with Ada.Strings;
-with Ada.Strings.Unbounded;
+-- with Ada.Strings;
+-- with Ada.Strings.Unbounded;
 with Combat.UI;
 with Dialogs; use Dialogs;
 with Game;
 with Game.SaveLoad;
 with Maps.UI;
-with Table; use Table;
+-- with Table; use Table;
 with Utils;
 with Utils.UI;
 
@@ -31,7 +31,7 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Table with info about the available saved games
    -- SOURCE
-   Load_Table: Table_Widget (Amount => 3);
+--   Load_Table: Table_Widget (Amount => 3);
    -- ****
 
    -- ****if* MCommands/MCommands.Get_Load_Table
@@ -42,11 +42,11 @@ package body MainMenu.Commands is
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
-   function Get_Load_Table return Table_Widget is
-      -- ****
-   begin
-      return Load_Table;
-   end Get_Load_Table;
+--   function Get_Load_Table return Table_Widget is
+--      -- ****
+--   begin
+--      return Load_Table;
+--   end Get_Load_Table;
 
    -- ****it* MCommands/MCommands.Save_Sort_Orders
    -- FUNCTION
@@ -59,9 +59,9 @@ package body MainMenu.Commands is
    -- TIMEASC    - Sort by save time ascending
    -- TIMEDESC   - Sort by save time descending
    -- SOURCE
-   type Save_Sort_Orders is
-     (PLAYERASC, PLAYERDESC, SHIPASC, SHIPDESC, TIMEASC, TIMEDESC) with
-      Default_Value => TIMEDESC;
+--   type Save_Sort_Orders is
+--     (PLAYERASC, PLAYERDESC, SHIPASC, SHIPDESC, TIMEASC, TIMEDESC) with
+--      Default_Value => TIMEDESC;
    -- ****
 
      -- ****id* MCommands/MCommands.Default_Save_Sort_Order
@@ -70,14 +70,14 @@ package body MainMenu.Commands is
      -- HISTORY
      -- 6.6 - Added
      -- SOURCE
-   Default_Save_Sort_Order: constant Save_Sort_Orders := TIMEDESC;
+--   Default_Save_Sort_Order: constant Save_Sort_Orders := TIMEDESC;
    -- ****
 
    -- ****iv* MCommands/MCommands.Save_Sort_Order
    -- FUNCTION
    -- The current sorting order for the saved game list
    -- SOURCE
-   Save_Sort_Order: Save_Sort_Orders := Default_Save_Sort_Order;
+--   Save_Sort_Order: Save_Sort_Orders := Default_Save_Sort_Order;
    -- ****
    --## rule off REDUCEABLE_SCOPE
    -- ****if* MCommands/MCommands.Get_Save_Sort_Order
@@ -88,10 +88,10 @@ package body MainMenu.Commands is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   function Get_Save_Sort_Order return Save_Sort_Orders is
-   begin
-      return Save_Sort_Order;
-   end Get_Save_Sort_Order;
+--   function Get_Save_Sort_Order return Save_Sort_Orders is
+--   begin
+--      return Save_Sort_Order;
+--   end Get_Save_Sort_Order;
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
@@ -111,40 +111,42 @@ package body MainMenu.Commands is
    function Show_Load_Game_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "showLoadGameCommand";
       -- ****
 
-   function Show_Load_Game_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      Local_Load_Table: Table_Widget := Get_Load_Table;
-      use Ada.Strings.Unbounded;
-
-      function Show_Ada_Load_Game_Command
-        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
-         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-         Import => True,
-         Convention => C,
-         External_Name => "showLoadGameCommand";
-   begin
-      if Local_Load_Table.Row_Height = 1 then
-         Local_Load_Table :=
-           Create_Table
-             (Parent => ".loadmenu.list",
-              Headers =>
-                (1 => To_Unbounded_String(Source => "Player name"),
-                 2 => To_Unbounded_String(Source => "Ship name"),
-                 3 => To_Unbounded_String(Source => "Last saved")),
-              Command => "SortSaves",
-              Tooltip_Text => "Press mouse button to sort the saved games.");
-      else
-         Clear_Table(Table => Local_Load_Table);
-      end if;
-      Load_Table := Local_Load_Table;
-      return
-        Show_Ada_Load_Game_Command
-          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
-   end Show_Load_Game_Command;
+--   function Show_Load_Game_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      Local_Load_Table: Table_Widget := Get_Load_Table;
+--      use Ada.Strings.Unbounded;
+--
+--      function Show_Ada_Load_Game_Command
+--        (C_Data: Integer; I: Tcl.Tcl_Interp; Ac: Interfaces.C.int;
+--         Av: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "showLoadGameCommand";
+--   begin
+--      if Local_Load_Table.Row_Height = 1 then
+--         Local_Load_Table :=
+--           Create_Table
+--             (Parent => ".loadmenu.list",
+--              Headers =>
+--                (1 => To_Unbounded_String(Source => "Player name"),
+--                 2 => To_Unbounded_String(Source => "Ship name"),
+--                 3 => To_Unbounded_String(Source => "Last saved")),
+--              Command => "SortSaves",
+--              Tooltip_Text => "Press mouse button to sort the saved games.");
+--      else
+--         Clear_Table(Table => Local_Load_Table);
+--      end if;
+--      Load_Table := Local_Load_Table;
+--      return
+--        Show_Ada_Load_Game_Command
+--          (C_Data => Client_Data, I => Interp, Ac => Argc, Av => Argv);
+--   end Show_Load_Game_Command;
 
    -- ****if* MCommands/MCommands.StartGame
    -- FUNCTION
@@ -398,44 +400,46 @@ package body MainMenu.Commands is
    function Sort_Saves_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "sortSavesCommand";
       -- ****
 
-   function Sort_Saves_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      Column: constant Positive :=
-        Get_Column_Number
-          (Table => Get_Load_Table,
-           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
-   begin
-      case Column is
-         when 1 =>
-            if Get_Save_Sort_Order = PLAYERASC then
-               Save_Sort_Order := PLAYERDESC;
-            else
-               Save_Sort_Order := PLAYERASC;
-            end if;
-         when 2 =>
-            if Get_Save_Sort_Order = SHIPASC then
-               Save_Sort_Order := SHIPDESC;
-            else
-               Save_Sort_Order := SHIPASC;
-            end if;
-         when 3 =>
-            if Get_Save_Sort_Order = TIMEASC then
-               Save_Sort_Order := TIMEDESC;
-            else
-               Save_Sort_Order := TIMEASC;
-            end if;
-         when others =>
-            null;
-      end case;
-      return
-        Show_Load_Game_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-           Argv => Argv);
-   end Sort_Saves_Command;
+--   function Sort_Saves_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      Column: constant Positive :=
+--        Get_Column_Number
+--          (Table => Get_Load_Table,
+--           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+--   begin
+--      case Column is
+--         when 1 =>
+--            if Get_Save_Sort_Order = PLAYERASC then
+--               Save_Sort_Order := PLAYERDESC;
+--            else
+--               Save_Sort_Order := PLAYERASC;
+--            end if;
+--         when 2 =>
+--            if Get_Save_Sort_Order = SHIPASC then
+--               Save_Sort_Order := SHIPDESC;
+--            else
+--               Save_Sort_Order := SHIPASC;
+--            end if;
+--         when 3 =>
+--            if Get_Save_Sort_Order = TIMEASC then
+--               Save_Sort_Order := TIMEDESC;
+--            else
+--               Save_Sort_Order := TIMEASC;
+--            end if;
+--         when others =>
+--            null;
+--      end case;
+--      return
+--        Show_Load_Game_Command
+--          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--           Argv => Argv);
+--   end Sort_Saves_Command;
 
    function Show_File_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
