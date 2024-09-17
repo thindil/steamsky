@@ -17,7 +17,6 @@ with Ada.Directories;
 with Ada.Strings;
 with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -506,17 +505,6 @@ package body Utils.UI is
         (Name => "SetDestination2",
          Ada_Command => Set_Destination_Command'Access);
    end Add_Commands;
-
-   procedure Show_Screen(New_Screen_Name: String) is
-      use Interfaces.C.Strings;
-
-      procedure Nim_Show_Screen(Screen_Name: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaScreen";
-   begin
-      Nim_Show_Screen(Screen_Name => New_String(Str => New_Screen_Name));
-   end Show_Screen;
 
    procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
       procedure Set_Ada_Fonts(N_Size, F_Type: Integer) with

@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -49,16 +49,6 @@ package Utils.UI is
       -- SOURCE
    procedure Add_Commands;
    -- ****
-
-   -- ****f* UUI/UUI.Show_Screen
-   -- FUNCTION
-   -- Remove an old screen from the window and add a new to it
-   -- PARAMETERS
-   -- NewScreenName - Part of th name of the new Ttk_Frame to add
-   -- SOURCE
-   procedure Show_Screen(New_Screen_Name: String) with
-      Pre => New_Screen_Name'Length > 0;
-      -- ****
 
    -- ****f* UUI/UUI.Set_Fonts
    -- FUNCTION
