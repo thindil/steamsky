@@ -59,6 +59,19 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
 proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     WriteIOEffect, TimeEffect], exportc.} =
+  ## Update countdown timer on the selected dialog. If timer reach 0, close
+  ## dialog
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## UpdateDialog dialogname
+  ## Dialogname is name of the dialog to update
   let messageButton = $argv[1] & ".button"
   if tclEval2(script = "winfo exists " & messageButton) == "0":
     return closeDialogCommand(clientData = clientData, interp = interp,
