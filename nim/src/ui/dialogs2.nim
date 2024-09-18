@@ -105,9 +105,19 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::button " & okButton & " -text {" & $argv[4] &
       "} -command {SetTextVariable " & $argv[2] & ";CloseDialog " &
       stringDialog & "} -image edit2icon -style Dialoggreen.TButton")
+  tclEval(script = "grid " & okButton & " -row 3 -pady 5 -padx 5")
+  tclEval(script = okButton & " state disabled")
   let cancelButton = stringDialog & ".closebutton"
   tclEval(script = "ttk::button " & cancelButton &
       " -text Cancel -command {CloseDialog " & stringDialog & "} -image cancelicon -style Dialogred.TButton")
+  tclEval(script = "grid " & cancelButton & " -row 3 -column 1 -pady 5 -padx 5")
+  tclEval(script = "bind " & cancelButton & " <Tab> {focus .getstring.entry;break}")
+  tclEval(script = "bind " & cancelButton & " <Escape> {" & cancelButton & " invoke;break}")
+  tclEval(script = "bind " & okButton & " <Escape> {" & cancelButton & " invoke;break}")
+  tclEval(script = "bind " & stringEntry & " <Escape> {" & cancelButton & " invoke;break}")
+  tclEval(script = "bind " & stringEntry & " <Return> {" & okButton & " invoke;break}")
+  tclEval(script = "focus " & stringEntry)
+  showDialog(dialog = stringDialog)
   return tclOk
 
 proc addCommands*() =
