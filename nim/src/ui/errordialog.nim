@@ -80,8 +80,9 @@ proc addCloseButton(name, text, command: string; columnSpan: Positive = 1;
   tclEval(script = "bind " & button & " <Tab> {break}")
   tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
 
-proc showDialog(dialog: string; parentFrame: string = ".gameframe"; relativeX: float = 0.3;
-    relativeY: float = 0.3) {.sideEffect, raises: [], tags: [].} =
+proc showDialog(dialog: string; parentFrame: string = ".gameframe";
+    relativeX: float = 0.3; relativeY: float = 0.3) {.sideEffect, raises: [],
+        tags: [].} =
   ## Show the selected dialog to the player
   ##
   ## * dialog      - the Tk path (name) of the dialog to show
@@ -94,8 +95,9 @@ proc showDialog(dialog: string; parentFrame: string = ".gameframe"; relativeX: f
       $relativeX & " -rely " & $relativeY)
   tclEval(script = "raise " & dialog)
 
-proc showError*(message: string; e: ref Exception = getCurrentException()): TclResults {.discardable,
-    sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], contractual.} =
+proc showError*(message: string; e: ref Exception = getCurrentException(
+    )): TclResults {.discardable, sideEffect, raises: [], tags: [WriteIOEffect,
+        TimeEffect], contractual.} =
   ## Show the error dialog with the message containing technical details about the issue
   ##
   ## * message - the message to show in the error dialog
@@ -117,10 +119,16 @@ proc showError*(message: string; e: ref Exception = getCurrentException()): TclR
     debugInfo.add(y = "Can't save error to file. Reason: " &
         getCurrentExceptionMsg())
   let
-    errorDialog = createDialog(name = ".errordialog", title = "Error Info", parentName = ".")
-    errorLabel = tclEval2(script = "ttk::label " & errorDialog & ".technical -wraplength 275 -text {" & debugInfo & "}")
+    parentName = (if tclEval2(script = "winfo exists .gameframe") ==
+        "1": ".gameframe" else: ".")
+    errorDialog = createDialog(name = ".errordialog", title = "Ooops, error!",
+        parentName = parentName)
+    errorLabel = tclEval2(script = "ttk::label " & errorDialog &
+        ".technical -wraplength 650 -text {" & debugInfo & "}")
   tclEval(script = "grid " & errorLabel & " -padx 5")
-  addCloseButton(name = errorDialog & ".close", text = "Close", command = "{CloseDialog " & errorDialog & " .}", row = 2)
-  showDialog(dialog = errorDialog)
+  addCloseButton(name = errorDialog & ".close", text = "Close",
+      command = "CloseDialog " & errorDialog & (if parentName ==
+      ".": " ." else: ""), row = 2)
+  showDialog(dialog = errorDialog, relativeX = 0.1, relativeY = 0.1)
   # tclEval(script = "bgerror {" & debugInfo & "}")
   return tclOk
