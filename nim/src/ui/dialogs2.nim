@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+import std/strutils
 import ../tk
 import dialogs
 
@@ -55,8 +56,26 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "destroy " & dialog)
   return tclOk
 
+proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let messageButton = $argv[1] & ".button"
+  if tclEval2(script = "winfo exists " & messageButton) == "0":
+    return closeDialogCommand(clientData = clientData, interp = interp,
+        argc = argc, argv = argv)
+  let
+    text = tclEval2(script = messageButton & " cget -text")
+    seconds = text[0..^1].parseInt - 1
+  if seconds == 0:
+    return closeDialogCommand(clientData = clientData, interp = interp,
+        argc = argc, argv = argv)
+  tclEval(script = messageButton & " configure -text {Close " & $seconds & "}")
+  timerId = tclEval2(script = "after 1000 {UpdateDialog " & $argv[1] & (
+      if argc == 3: " " & $argv[2] else: "") & "}")
+  return tclOk
+
 proc addCommands*() =
   # addCommand("CloseDialog", closeDialogCommand)
+  # addCommand("UpdateDialog", updateDialogCommand)
   discard
 
 # Temporary code for interfacing with Ada
