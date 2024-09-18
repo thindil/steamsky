@@ -17,7 +17,7 @@
 
 import std/[algorithm, os, strutils, times]
 import ../[config, events, game, gamesaveload, tk]
-import coreui, dialogs, errordialog, mainmenucommands, table, utilsui2
+import coreui, dialogs, dialogs2, errordialog, mainmenucommands, table, utilsui2
 
 type SaveSortOrders = enum
   playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
@@ -265,7 +265,8 @@ proc createMainMenu*() =
   #addCommand("ShowLoadGame", showLoadGameCommand)
   #addCommand("LoadGame", loadGameCommand)
   #addCommand("ShowMainMenu", showMainMenuCommand)
-#  addCommand("SortSaves", sortSavesCommand)
+  #addCommand("SortSaves", sortSavesCommand)
+  dialogs2.addCommands()
 
 proc showMainMenu() =
   let mainWindow = "."
