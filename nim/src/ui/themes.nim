@@ -680,9 +680,9 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffe
 proc setTheme*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Set images and buttons for the current game theme
   loadThemeImages()
-  tclEval(script = gameHeader & ".nofuel configure -image nofuelicon")
-  tclEval(script = gameHeader & ".nofood configure -image foodicon")
-  tclEval(script = gameHeader & ".nodrink configure -image nodrinksicon")
+  tclEval(script = gameHeader & ".fuel configure -image fuelicon")
+  tclEval(script = gameHeader & ".food configure -image foodicon")
+  tclEval(script = gameHeader & ".drinks configure -image drinksicon")
   tclEval(script = gameHeader & ".overloaded configure -image overloadedicon")
   tclEval(script = gameHeader & ".pilot configure -image piloticon")
   tclEval(script = gameHeader & ".engineer configure -image engineericon")
