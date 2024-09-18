@@ -212,6 +212,18 @@ proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     WriteIOEffect, TimeEffect, RootEffect], exportc.} =
+  ## Sort the saved games list
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortSaves x
+  ## X is X axis coordinate where the player clicked the mouse button
   let column = try:
       getColumnNumber(table = loadTable, xPosition = ($argv[1]).parseInt)
     except:
