@@ -23,17 +23,17 @@ with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkWidget;
+-- with Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Game; use Game;
+-- with Game; use Game;
 with Utils.UI;
 
 package body Dialogs is
@@ -69,60 +69,60 @@ package body Dialogs is
       Timer_Id := New_Value;
    end Set_Timer_Id;
 
-   function Create_Dialog
-     (Name, Title: String; Title_Width: Positive := 275;
-      Columns: Positive := 1; Parent_Name: String := ".gameframe")
-      return Ttk_Frame is
-
-      New_Dialog: Ttk_Frame;
-      Temp_Timer_Id: chars_ptr :=
-        New_String(Str => To_String(Source => Get_Timer_Id));
-      function Create_Ada_Dialog
-        (N, T: chars_ptr; T_Width, Cols: Positive; P_Name: chars_ptr;
-         Timer_Name: out chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "createAdaDialog";
-   begin
-      New_Dialog :=
-        Get_Widget
-          (pathName =>
-             Value
-               (Item =>
-                  Create_Ada_Dialog
-                    (N => New_String(Str => Name),
-                     T => New_String(Str => Title), T_Width => Title_Width,
-                     Cols => Columns, P_Name => New_String(Str => Parent_Name),
-                     Timer_Name => Temp_Timer_Id)));
-      Set_Timer_Id
-        (New_Value =>
-           To_Unbounded_String(Source => Value(Item => Temp_Timer_Id)));
-      return New_Dialog;
-   end Create_Dialog;
-
-   procedure Show_Dialog
-     (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
-      With_Timer: Boolean := False;
-      Relative_X, Relative_Y: Damage_Factor := 0.3) is
-
-      Local_Timer: chars_ptr;
-      function Show_Ada_Dialog
-        (D, P_Frame: chars_ptr; W_Timer: Integer; Rel_X, Rel_Y: Damage_Factor)
-         return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaDialog";
-   begin
-      Local_Timer :=
-        Show_Ada_Dialog
-          (D => New_String(Str => Widget_Image(Win => Dialog)),
-           P_Frame => New_String(Str => Parent_Frame),
-           W_Timer => (if With_Timer then 1 else 0), Rel_X => Relative_X,
-           Rel_Y => Relative_Y);
-      Set_Timer_Id
-        (New_Value =>
-           To_Unbounded_String(Source => Value(Item => Local_Timer)));
-   end Show_Dialog;
+--   function Create_Dialog
+--     (Name, Title: String; Title_Width: Positive := 275;
+--      Columns: Positive := 1; Parent_Name: String := ".gameframe")
+--      return Ttk_Frame is
+--
+--      New_Dialog: Ttk_Frame;
+--      Temp_Timer_Id: chars_ptr :=
+--        New_String(Str => To_String(Source => Get_Timer_Id));
+--      function Create_Ada_Dialog
+--        (N, T: chars_ptr; T_Width, Cols: Positive; P_Name: chars_ptr;
+--         Timer_Name: out chars_ptr) return chars_ptr with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "createAdaDialog";
+--   begin
+--      New_Dialog :=
+--        Get_Widget
+--          (pathName =>
+--             Value
+--               (Item =>
+--                  Create_Ada_Dialog
+--                    (N => New_String(Str => Name),
+--                     T => New_String(Str => Title), T_Width => Title_Width,
+--                     Cols => Columns, P_Name => New_String(Str => Parent_Name),
+--                     Timer_Name => Temp_Timer_Id)));
+--      Set_Timer_Id
+--        (New_Value =>
+--           To_Unbounded_String(Source => Value(Item => Temp_Timer_Id)));
+--      return New_Dialog;
+--   end Create_Dialog;
+--
+--   procedure Show_Dialog
+--     (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
+--      With_Timer: Boolean := False;
+--      Relative_X, Relative_Y: Damage_Factor := 0.3) is
+--
+--      Local_Timer: chars_ptr;
+--      function Show_Ada_Dialog
+--        (D, P_Frame: chars_ptr; W_Timer: Integer; Rel_X, Rel_Y: Damage_Factor)
+--         return chars_ptr with
+--         Import => True,
+--         Convention => C,
+--         External_Name => "showAdaDialog";
+--   begin
+--      Local_Timer :=
+--        Show_Ada_Dialog
+--          (D => New_String(Str => Widget_Image(Win => Dialog)),
+--           P_Frame => New_String(Str => Parent_Frame),
+--           W_Timer => (if With_Timer then 1 else 0), Rel_X => Relative_X,
+--           Rel_Y => Relative_Y);
+--      Set_Timer_Id
+--        (New_Value =>
+--           To_Unbounded_String(Source => Value(Item => Local_Timer)));
+--   end Show_Dialog;
 
    -- ****io* Dialogs/Dialogs.Close_Dialog_Command
    -- FUNCTION
@@ -272,76 +272,78 @@ package body Dialogs is
    function Get_String_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "getStringCommand";
       -- ****
 
-   function Get_String_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.TtkEntry;
-      use Tcl.Tk.Ada.Widgets.TtkWidget;
-
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      String_Dialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".getstring", Title => CArgv.Arg(Argv => Argv, N => 3),
-           Title_Width => 275, Columns => 2);
-      String_Label: constant Ttk_Label :=
-        Create
-          (pathName => String_Dialog & ".text",
-           options =>
-             "-text {" & CArgv.Arg(Argv => Argv, N => 1) &
-             "} -wraplength 300");
-      String_Entry: constant Ttk_Entry :=
-        Create
-          (pathName => String_Dialog & ".entry",
-           options =>
-             "-validate key -validatecommand {set value %P;if {$value == {} || [string length $value] > 64} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
-      Ok_Button: constant Ttk_Button :=
-        Create
-          (pathName => String_Dialog & ".okbutton",
-           options =>
-             "-text {" & CArgv.Arg(Argv => Argv, N => 4) &
-             "} -command {SetTextVariable " & CArgv.Arg(Argv => Argv, N => 2) &
-             "; CloseDialog " & String_Dialog &
-             "} -image edit2icon -style Dialoggreen.TButton");
-      Cancel_Button: constant Ttk_Button :=
-        Create
-          (pathName => String_Dialog & ".closebutton",
-           options =>
-             "-text Cancel -command {CloseDialog " & String_Dialog &
-             "} -image cancelicon -style Dialogred.TButton");
-   begin
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => String_Label,
-         Options => "-padx 5 -pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => String_Entry, Options => "-sticky we -padx 5 -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Ok_Button, Options => "-row 3 -pady 5 -padx 5");
-      State(Widget => Ok_Button, StateSpec => "disabled");
-      Tcl.Tk.Ada.Grid.Grid
-        (Slave => Cancel_Button,
-         Options => "-row 3 -column 1 -pady 5 -padx 5");
-      Bind
-        (Widgt => Cancel_Button, Sequence => "<Tab>",
-         Script => "{focus .getstring.entry;break}");
-      Bind
-        (Widgt => Cancel_Button, Sequence => "<Escape>",
-         Script => "{" & Cancel_Button & " invoke;break}");
-      Bind
-        (Widgt => Ok_Button, Sequence => "<Escape>",
-         Script => "{" & Cancel_Button & " invoke;break}");
-      Bind
-        (Widgt => String_Entry, Sequence => "<Escape>",
-         Script => "{" & Cancel_Button & " invoke;break}");
-      Bind
-        (Widgt => String_Entry, Sequence => "<Return>",
-         Script => "{" & Ok_Button & " invoke;break}");
-      Focus(Widgt => String_Entry);
-      Show_Dialog(Dialog => String_Dialog);
-      return TCL_OK;
-   end Get_String_Command;
+--   function Get_String_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tcl.Tk.Ada.Widgets.TtkEntry;
+--      use Tcl.Tk.Ada.Widgets.TtkWidget;
+--
+--      pragma Unreferenced(Client_Data, Interp, Argc);
+--      String_Dialog: constant Ttk_Frame :=
+--        Create_Dialog
+--          (Name => ".getstring", Title => CArgv.Arg(Argv => Argv, N => 3),
+--           Title_Width => 275, Columns => 2);
+--      String_Label: constant Ttk_Label :=
+--        Create
+--          (pathName => String_Dialog & ".text",
+--           options =>
+--             "-text {" & CArgv.Arg(Argv => Argv, N => 1) &
+--             "} -wraplength 300");
+--      String_Entry: constant Ttk_Entry :=
+--        Create
+--          (pathName => String_Dialog & ".entry",
+--           options =>
+--             "-validate key -validatecommand {set value %P;if {$value == {} || [string length $value] > 64} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
+--      Ok_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => String_Dialog & ".okbutton",
+--           options =>
+--             "-text {" & CArgv.Arg(Argv => Argv, N => 4) &
+--             "} -command {SetTextVariable " & CArgv.Arg(Argv => Argv, N => 2) &
+--             "; CloseDialog " & String_Dialog &
+--             "} -image edit2icon -style Dialoggreen.TButton");
+--      Cancel_Button: constant Ttk_Button :=
+--        Create
+--          (pathName => String_Dialog & ".closebutton",
+--           options =>
+--             "-text Cancel -command {CloseDialog " & String_Dialog &
+--             "} -image cancelicon -style Dialogred.TButton");
+--   begin
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => String_Label,
+--         Options => "-padx 5 -pady {5 0} -columnspan 2");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => String_Entry, Options => "-sticky we -padx 5 -columnspan 2");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Ok_Button, Options => "-row 3 -pady 5 -padx 5");
+--      State(Widget => Ok_Button, StateSpec => "disabled");
+--      Tcl.Tk.Ada.Grid.Grid
+--        (Slave => Cancel_Button,
+--         Options => "-row 3 -column 1 -pady 5 -padx 5");
+--      Bind
+--        (Widgt => Cancel_Button, Sequence => "<Tab>",
+--         Script => "{focus .getstring.entry;break}");
+--      Bind
+--        (Widgt => Cancel_Button, Sequence => "<Escape>",
+--         Script => "{" & Cancel_Button & " invoke;break}");
+--      Bind
+--        (Widgt => Ok_Button, Sequence => "<Escape>",
+--         Script => "{" & Cancel_Button & " invoke;break}");
+--      Bind
+--        (Widgt => String_Entry, Sequence => "<Escape>",
+--         Script => "{" & Cancel_Button & " invoke;break}");
+--      Bind
+--        (Widgt => String_Entry, Sequence => "<Return>",
+--         Script => "{" & Ok_Button & " invoke;break}");
+--      Focus(Widgt => String_Entry);
+--      Show_Dialog(Dialog => String_Dialog);
+--      return TCL_OK;
+--   end Get_String_Command;
 
    -- ****iv* Dialogs/Dialogs.Mouse_X_Position
    -- FUNCTION
