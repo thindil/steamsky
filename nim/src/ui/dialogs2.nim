@@ -90,9 +90,30 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
       if argc == 3: " " & $argv[2] else: "") & "}")
   return tclOk
 
+proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    stringDialog = createDialog(name = ".getstring", title = $argv[3],
+        titleWidth = 275, columns = 2)
+    stringLabel = stringDialog & ".text"
+  tclEval(script = "ttk::label " & stringLabel & " -text {" & $argv[1] & "} -wraplength 300")
+  tclEval(script = "grid " & stringLabel & " -padx 5 -pady {5 0} -columnspan 2")
+  let stringEntry = stringDialog & ".entry"
+  tclEval(script = "ttk::entry " & stringEntry & " -validate key -validatecommand {set value %P;if {$value == {} || [string length $value] > 64} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}")
+  tclEval(script = "grid " & stringEntry & " -sticky we -padx 5 -columnspan 2")
+  let okButton = stringDialog & ".okbutton"
+  tclEval(script = "ttk::button " & okButton & " -text {" & $argv[4] &
+      "} -command {SetTextVariable " & $argv[2] & ";CloseDialog " &
+      stringDialog & "} -image edit2icon -style Dialoggreen.TButton")
+  let cancelButton = stringDialog & ".closebutton"
+  tclEval(script = "ttk::button " & cancelButton &
+      " -text Cancel -command {CloseDialog " & stringDialog & "} -image cancelicon -style Dialogred.TButton")
+  return tclOk
+
 proc addCommands*() =
   # addCommand("CloseDialog", closeDialogCommand)
   # addCommand("UpdateDialog", updateDialogCommand)
+  # addCommand("GetString", getStringCommand)
   discard
 
 # Temporary code for interfacing with Ada
