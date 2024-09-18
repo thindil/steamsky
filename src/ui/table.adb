@@ -81,40 +81,6 @@ package body Table is
       return New_Table;
    end Create_Table;
 
-   --## rule off LOCAL_HIDING
-   procedure Clear_Table(Table: in out Table_Widget) is
-      --## rule on LOCAL_HIDING
-      procedure Clear_Ada_Table(Columns, Rows: Positive; Canv: chars_ptr) with
-         Import => True,
-         Convention => C,
-         External_Name => "clearAdaTable";
-   begin
-      Clear_Ada_Table
-        (Columns => Table.Amount, Rows => Table.Row,
-         Canv => New_String(Str => Widget_Image(Win => Table.Canvas)));
-      Table.Row := 1;
-   end Clear_Table;
-
-   --## rule off LOCAL_HIDING
-   function Get_Column_Number
-     (Table: Table_Widget; X_Position: Natural) return Positive is
-      --## rule on LOCAL_HIDING
-      N_Width: Nim_Width := (others => 0);
-      Index: Natural := 0;
-      function Get_Ada_Column_Number
-        (Width: Nim_Width; X_Pos: Integer) return Positive with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaColumnNumber";
-   begin
-      Convert_Width_Loop :
-      for Width of Table.Columns_Width loop
-         N_Width(Index) := Width;
-         Index := Index + 1;
-      end loop Convert_Width_Loop;
-      return Get_Ada_Column_Number(Width => N_Width, X_Pos => X_Position);
-   end Get_Column_Number;
-
    function Update_Current_Row_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
