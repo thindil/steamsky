@@ -17,7 +17,7 @@
 
 import std/strutils
 import ../tk
-import dialogs
+import dialogs, errordialog
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -57,14 +57,18 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, TimeEffect], exportc.} =
   let messageButton = $argv[1] & ".button"
   if tclEval2(script = "winfo exists " & messageButton) == "0":
     return closeDialogCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
   let
     text = tclEval2(script = messageButton & " cget -text")
-    seconds = text[0..^1].parseInt - 1
+    seconds = try:
+        text[0..^1].parseInt - 1
+      except:
+        return showError(message = "Can't get amount of seconds.")
   if seconds == 0:
     return closeDialogCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
