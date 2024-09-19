@@ -138,7 +138,7 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
 var mouseXPosition, mouseYPosition = 0
 
 proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   mouseXPosition = try:
       ($argv[2]).parseInt
     except:
