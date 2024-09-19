@@ -22,7 +22,6 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
--- with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -39,20 +38,6 @@ package body Dialogs is
    -- SOURCE
    Timer_Id: Unbounded_String := Null_Unbounded_String;
    -- ****
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****if* Dialogs/Dialogs.Get_Timer_Id
-   -- FUNCTION
-   -- Get the Id of the auto close timer
-   -- RESULT
-   -- The Id of the auto close timer
-   -- SOURCE
---   function Get_Timer_Id return Unbounded_String is
---      -- ****
---   begin
---      return Timer_Id;
---   end Get_Timer_Id;
-   --## rule on REDUCEABLE_SCOPE
 
    -- ****if* Dialogs/Dialogs.Set_Timer_Id
    -- FUNCTION
@@ -87,50 +72,6 @@ package body Dialogs is
       Import => True,
       External_Name => "closeDialogCommand";
       -- ****
-
---   function Close_Dialog_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data);
---      Dialog: Ttk_Frame :=
---        Get_Widget
---          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
---      Frame: Ttk_Frame :=
---        Get_Widget(pathName => ".gameframe.header", Interp => Interp);
---   begin
---      if Get_Timer_Id /= Null_Unbounded_String then
---         Cancel(id_or_script => To_String(Source => Get_Timer_Id));
---         Set_Timer_Id(New_Value => Null_Unbounded_String);
---      end if;
---      if Argc = 3 then
---         Frame :=
---           Get_Widget
---             (pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
---         if Tcl.Tk.Ada.Busy.Status(Window => Frame) = "1" then
---            Tcl.Tk.Ada.Busy.Forget(Window => Frame);
---         end if;
---         if CArgv.Arg(Argv => Argv, N => 2) = ".memberdialog" then
---            Frame :=
---              Get_Widget
---                (pathName => Frame & ".buttons.button", Interp => Interp);
---            if Winfo_Get(Widgt => Frame, Info => "exists") = "0" then
---               Frame :=
---                 Get_Widget
---                   (pathName => ".memberdialog.button", Interp => Interp);
---            end if;
---         end if;
---         Focus(Widgt => Frame);
---         Destroy(Widgt => Dialog);
---         return TCL_OK;
---      end if;
---      if Tcl.Tk.Ada.Busy.Status(Window => Frame) = "1" then
---         Tcl.Tk.Ada.Busy.Forget(Window => Frame);
---         Frame := Get_Widget(pathName => ".gameframe.paned");
---         Tcl.Tk.Ada.Busy.Forget(Window => Frame);
---      end if;
---      Destroy(Widgt => Dialog);
---      return TCL_OK;
---   end Close_Dialog_Command;
 
    -- ****o* Dialogs/Dialogs.Update_Dialog_Command
    -- FUNCTION
