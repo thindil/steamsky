@@ -403,6 +403,46 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
     return consumeValue
   return 0
 
+proc memberSendRest(member: var MemberData; memberIndex: int) {.sideEffect,
+    raises: [KeyError], tags: [], contractual.} =
+  ## Send the selected member on rest or back to work if they are rested
+  ##
+  ## * member      - the crew member to send to rest
+  ## * memberIndex - the index of the crew member which will be send to rest
+  ##
+  ## Returns the modified parameter member
+  var backToWork: bool = true
+  if member.previousOrder notin [repair, clean] and findMember(
+      order = member.previousOrder) > -1:
+    backToWork = false
+  if member.previousOrder in [gunner, craft]:
+    block moduleLoop:
+      for module in playerShip.modules.mitems:
+        if (member.previousOrder == gunner and module.mType ==
+            ModuleType2.gun) and module.owner[0] in [memberIndex, -1]:
+          backToWork = true
+          module.owner[0] = memberIndex
+          break moduleLoop
+        elif (member.previousOrder == craft and module.mType ==
+            ModuleType2.workshop) and module.craftingIndex.len > 0:
+          for owner in module.owner.mitems:
+            if owner == memberIndex:
+              backToWork = true
+              owner = memberIndex
+              break moduleLoop
+          for owner in module.owner.mitems:
+            if owner == -1:
+              backToWork = true
+              owner = memberIndex
+              break moduleLoop
+  if backToWork:
+    member.order = member.previousOrder
+    member.orderTime = 15
+    addMessage(message = member.name & " returns to work fully rested.",
+        mType = orderMessage, color = yellow)
+    updateMorale(ship = playerShip, memberIndex = memberIndex, value = 1)
+  member.previousOrder = rest
+
 proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
     thirstLevel: var int; memberIndex, orderTime: int; minutes: Positive;
     inCombat: bool) {.raises: [KeyError, CrewNoSpaceError], tags: [],
@@ -424,38 +464,8 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
 
   if "nofatigue" in factionsList[member.faction].flags:
     tiredLevel = 0
-  var backToWork: bool = true
   if tiredLevel == 0 and member.order == rest and member.previousOrder != rest:
-    if member.previousOrder notin [repair, clean] and findMember(
-        order = member.previousOrder) > -1:
-      backToWork = false
-    if member.previousOrder in [gunner, craft]:
-      block moduleLoop:
-        for module in playerShip.modules.mitems:
-          if (member.previousOrder == gunner and module.mType ==
-              ModuleType2.gun) and module.owner[0] in [memberIndex, -1]:
-            backToWork = true
-            module.owner[0] = memberIndex
-            break moduleLoop
-          elif (member.previousOrder == craft and module.mType ==
-              ModuleType2.workshop) and module.craftingIndex.len > 0:
-            for owner in module.owner.mitems:
-              if owner == memberIndex:
-                backToWork = true
-                owner = memberIndex
-                break moduleLoop
-            for owner in module.owner.mitems:
-              if owner == -1:
-                backToWork = true
-                owner = memberIndex
-                break moduleLoop
-    if backToWork:
-      member.order = member.previousOrder
-      member.orderTime = 15
-      addMessage(message = member.name & " returns to work fully rested.",
-          mType = orderMessage, color = yellow)
-      updateMorale(ship = playerShip, memberIndex = memberIndex, value = 1)
-    member.previousOrder = rest
+    memberSendRest(member = member, memberIndex = memberIndex)
   if (tiredLevel > 80 + member.attributes[conditionIndex].level) and
       member.order != rest and not inCombat:
     var canRest: bool = true
