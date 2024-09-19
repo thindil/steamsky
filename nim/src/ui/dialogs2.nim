@@ -139,6 +139,18 @@ var mouseXPosition, mouseYPosition = 0
 
 proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Set the mouse position
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetMousePosition x y
+  ## X and Y are current position of the mouse
   mouseXPosition = try:
       ($argv[2]).parseInt
     except:
