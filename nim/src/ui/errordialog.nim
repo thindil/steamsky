@@ -121,14 +121,23 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   let
     parentName = (if tclEval2(script = "winfo exists .gameframe") ==
         "1": ".gameframe" else: ".")
-    errorDialog = createDialog(name = ".errordialog", title = "Ooops, error!",
+    errorDialog = createDialog(name = ".errordialog", title = message,
         parentName = parentName)
-    errorLabel = tclEval2(script = "ttk::label " & errorDialog &
-        ".technical -wraplength 650 -text {" & debugInfo & "}")
+  var errorLabel = errorDialog & ".general"
+  tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {Oops, something bad happens and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:}")
   tclEval(script = "grid " & errorLabel & " -padx 5")
+  let errorButton = errorDialog & ".link"
+  tclEval(script = "ttk::button " & errorButton & " -text {https://www.laeran.pl.eu.org/repositories/steamsky/ticket} -command {OpenLink https://www.laeran.pl.eu.org/repositories/steamsky/ticket} -style Toolbutton")
+  tclEval(script = "grid " & errorButton)
+  errorLabel = errorDialog & ".general2"
+  tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {or if you prefer, on one of the game community options:}")
+  tclEval(script = "grid " & errorLabel & " -padx 5")
+  errorLabel = errorDialog & ".technical"
+  tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {" &
+      debugInfo & "}")
+  tclEval(script = "grid " & errorLabel & " -padx 5 -pady {10 0}")
   addCloseButton(name = errorDialog & ".close", text = "Close",
       command = "CloseDialog " & errorDialog & (if parentName ==
-      ".": " ." else: ""), row = 2)
+      ".": " ." else: ""), row = 5)
   showDialog(dialog = errorDialog, relativeX = 0.1, relativeY = 0.1)
-  # tclEval(script = "bgerror {" & debugInfo & "}")
   return tclOk
