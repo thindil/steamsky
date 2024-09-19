@@ -135,10 +135,30 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = stringDialog)
   return tclOk
 
+var mouseXPosition, mouseYPosition = 0
+
+proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  mouseXPosition = try:
+      ($argv[2]).parseInt
+    except:
+      0
+  mouseYPosition = try:
+      ($argv[3]).parseInt
+    except:
+      0
+  let dialogHeader = $argv[1]
+  if mouseXPosition > 0 and mouseYPosition > 0:
+    tclEval(script = dialogHeader & " configure -cursor fleur")
+  else:
+    tclEval(script = dialogHeader & " configure -cursor hand1")
+  return tclOk
+
 proc addCommands*() =
   # addCommand("CloseDialog", closeDialogCommand)
   # addCommand("UpdateDialog", updateDialogCommand)
   # addCommand("GetString", getStringCommand)
+  # addCommand("SetMousePosition", setMousePositionCommand)
   discard
 
 # Temporary code for interfacing with Ada
