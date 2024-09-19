@@ -92,6 +92,21 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+  ## Get string value from the player, like new ship or module name
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## GetString caption closeaction title okbutton
+  ## Caption is the text showed above entry field in the dialog, variable
+  ## is the variable which will be set, title is the title of the dialog and
+  ## okbutton is the text which will be displayed on the confirmation
+  ## button
   let
     stringDialog = createDialog(name = ".getstring", title = $argv[3],
         titleWidth = 275, columns = 2)
