@@ -91,7 +91,7 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     stringDialog = createDialog(name = ".getstring", title = $argv[3],
         titleWidth = 275, columns = 2)
