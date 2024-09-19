@@ -28,7 +28,6 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Utils.UI;
 
@@ -305,35 +304,6 @@ package body Dialogs is
       Import => True,
       External_Name => "setMousePositionCommand";
       -- ****
-
---   function Set_Mouse_Position_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---      use Tcl.Tk.Ada.Widgets.TtkLabel;
---
---      Dialog_Header: constant Ttk_Label :=
---        Get_Widget
---          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
---   begin
---      Assign_Mouse_Position_Block :
---      begin
---         Set_Mouse_X_Position
---           (New_Value => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
---         Set_Mouse_Y_Position
---           (New_Value => Natural'Value(CArgv.Arg(Argv => Argv, N => 3)));
---      exception
---         when Constraint_Error =>
---            Set_Mouse_X_Position(New_Value => 0);
---            Set_Mouse_Y_Position(New_Value => 0);
---      end Assign_Mouse_Position_Block;
---      if Get_Mouse_X_Position > 0 and Get_Mouse_Y_Position > 0 then
---         configure(Widgt => Dialog_Header, options => "-cursor fleur");
---      else
---         configure(Widgt => Dialog_Header, options => "-cursor hand1");
---      end if;
---      return TCL_OK;
---   end Set_Mouse_Position_Command;
 
    -- ****o* Dialogs/Dialogs.Move_Dialog_Command
    -- FUNCTION
