@@ -14,12 +14,12 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with CArgv;
 with Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets;
 with Utils.UI;
 
 package body Table is
@@ -28,9 +28,11 @@ package body Table is
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip_Text: String := "") return Table_Widget is
+      use Interfaces.C.Strings;
       use Tcl;
       use Tcl.Ada;
       use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets;
 
       --## rule off IMPROPER_INITIALIZATION
       New_Table: Table_Widget (Amount => Headers'Length);
