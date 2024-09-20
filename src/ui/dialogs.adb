@@ -15,7 +15,6 @@
 
 with Ada.Strings;
 with Ada.Strings.Fixed;
--- with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
@@ -25,31 +24,11 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
--- with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Utils.UI;
 
 package body Dialogs is
-
-   -- ****iv* Dialogs/Dialogs.Timer_Id
-   -- FUNCTION
-   -- Id of timer for auto close command
-   -- SOURCE
---   Timer_Id: Unbounded_String := Null_Unbounded_String;
-   -- ****
-
-   -- ****if* Dialogs/Dialogs.Set_Timer_Id
-   -- FUNCTION
-   -- Set the Id of the auto close timer
-   -- PARAMETERS
-   -- New_Value - the new Id for the auto close timer
-   -- SOURCE
---   procedure Set_Timer_Id(New_Value: Unbounded_String) is
---      -- ****
---   begin
---      Timer_Id := New_Value;
---   end Set_Timer_Id;
 
    -- ****io* Dialogs/Dialogs.Close_Dialog_Command
    -- FUNCTION
@@ -95,54 +74,6 @@ package body Dialogs is
       Import => True,
       External_Name => "updateDialogCommand";
       -- ****
-
---   function Update_Dialog_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      use Tcl.Tk.Ada.Widgets.TtkButton;
---
---      Message_Button: constant Ttk_Button :=
---        Get_Widget
---          (pathName => CArgv.Arg(Argv => Argv, N => 1) & ".button",
---           Interp => Interp);
---   begin
---      if Winfo_Get(Widgt => Message_Button, Info => "exists") = "0" then
---         return
---           Close_Dialog_Command
---             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---              Argv => Argv);
---      end if;
---      Update_Timer_Block:
---      declare
---         Text: constant String :=
---           Widgets.cget(Widgt => Message_Button, option => "-text");
---         Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
---      begin
---         if Seconds = 0 then
---            return
---              Close_Dialog_Command
---                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
---                 Argv => Argv);
---         end if;
---         Widgets.configure
---           (Widgt => Message_Button,
---            options => "-text {Close" & Positive'Image(Seconds) & "}");
---         Set_Timer_Id
---           (New_Value =>
---              To_Unbounded_String
---                (Source =>
---                   After
---                     (Ms => 1_000,
---                      Script =>
---                        "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
---                        (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
---                         else ""))));
---         if Length(Source => Timer_Id) = 0 then
---            return TCL_OK;
---         end if;
---      end Update_Timer_Block;
---      return TCL_OK;
---   end Update_Dialog_Command;
 
    -- ****o* UUI/UUI.Get_String_Command
    -- FUNCTION
