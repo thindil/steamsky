@@ -190,6 +190,20 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     mainWindowHeight = tclEval2(script = "winfo height .").parseInt
   if mouseYPosition < currentYMouse and dialogY + dialogHeight + 5 > mainWindowHeight:
     return tclOk
+
+  proc getCoordinate(name: string): int =
+    let value = tclEval2(script = "lindex [place configure " & dialog & " -" &
+        name & "] 4")
+    if value.len == 0:
+      return 0
+    return value.parseInt
+
+  let
+    newX = getCoordinate(name = "x") - (mouseXPosition - currentXMouse)
+    newY = getCoordinate(name = "y") - (mouseYPosition - currentYMouse)
+  tclEval(script = "place configure " & dialog & " -x " & $newX & " -y " & $newY)
+  mouseXPosition = currentXMouse
+  mouseYPosition = currentYMouse
   return tclOk
 
 proc addCommands*() =
