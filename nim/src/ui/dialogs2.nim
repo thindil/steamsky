@@ -167,36 +167,66 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, TimeEffect], exportc.} =
   if mouseXPosition == 0 and mouseYPosition == 0:
     return tclOk
   let
-    currentXMouse = ($argv[2]).parseInt
-    currentYMouse = ($argv[3]).parseInt
+    currentXMouse = try:
+        ($argv[2]).parseInt
+      except:
+        return showError(message = "Can't get current mouse X.")
+    currentYMouse = try:
+        ($argv[3]).parseInt
+      except:
+        return showError(message = "Can't get current mouse Y.")
     dialog = $argv[1]
-    dialogX = tclEval2(script = "winfo x " & dialog).parseInt
-    dialogY = tclEval2(script = "winfo y " & dialog).parseInt
+    dialogX = try:
+        tclEval2(script = "winfo x " & dialog).parseInt
+      except:
+        return showError(message = "Can't get dialog X.")
+    dialogY = try:
+        tclEval2(script = "winfo y " & dialog).parseInt
+      except:
+        return showError(message = "Can't get dialog X.")
   if mouseXPosition > currentXMouse and dialogX < 5:
     return tclOk
   if mouseYPosition > currentYMouse and dialogY < 5:
     return tclOk
   let
-    dialogWidth = tclEval2(script = "winfo width " & dialog).parseInt
-    mainWindowWidth = tclEval2(script = "winfo width .").parseInt
+    dialogWidth = try:
+        tclEval2(script = "winfo width " & dialog).parseInt
+      except:
+        return showError(message = "Can't get dialog width.")
+    mainWindowWidth = try:
+        tclEval2(script = "winfo width .").parseInt
+      except:
+        return showError(message = "Can't get main window width.")
   if mouseXPosition < currentXMouse and dialogX + dialogWidth > mainWindowWidth:
     return tclOk
   let
-    dialogHeight = tclEval2(script = "winfo height " & dialog).parseInt
-    mainWindowHeight = tclEval2(script = "winfo height .").parseInt
+    dialogHeight = try:
+        tclEval2(script = "winfo height " & dialog).parseInt
+      except:
+        return showError(message = "Can't get dialog height.")
+    mainWindowHeight = try:
+        tclEval2(script = "winfo height .").parseInt
+      except:
+        return showError(message = "Can't get main window height.")
   if mouseYPosition < currentYMouse and dialogY + dialogHeight + 5 > mainWindowHeight:
     return tclOk
 
-  proc getCoordinate(name: string): int =
+  proc getCoordinate(name: string): int {.sideEffect, raises: [], tags: [
+      WriteIOEffect, TimeEffect].} =
     let value = tclEval2(script = "lindex [place configure " & dialog & " -" &
         name & "] 4")
     if value.len == 0:
       return 0
-    return value.parseInt
+    try:
+      return value.parseInt
+    except:
+      showError(message = "Can't get coordinate.")
+      return 0
 
   let
     newX = getCoordinate(name = "x") - (mouseXPosition - currentXMouse)
