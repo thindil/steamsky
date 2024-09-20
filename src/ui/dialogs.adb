@@ -15,7 +15,7 @@
 
 with Ada.Strings;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+-- with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
@@ -25,8 +25,8 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Utils.UI;
 
@@ -36,7 +36,7 @@ package body Dialogs is
    -- FUNCTION
    -- Id of timer for auto close command
    -- SOURCE
-   Timer_Id: Unbounded_String := Null_Unbounded_String;
+--   Timer_Id: Unbounded_String := Null_Unbounded_String;
    -- ****
 
    -- ****if* Dialogs/Dialogs.Set_Timer_Id
@@ -45,11 +45,11 @@ package body Dialogs is
    -- PARAMETERS
    -- New_Value - the new Id for the auto close timer
    -- SOURCE
-   procedure Set_Timer_Id(New_Value: Unbounded_String) is
-      -- ****
-   begin
-      Timer_Id := New_Value;
-   end Set_Timer_Id;
+--   procedure Set_Timer_Id(New_Value: Unbounded_String) is
+--      -- ****
+--   begin
+--      Timer_Id := New_Value;
+--   end Set_Timer_Id;
 
    -- ****io* Dialogs/Dialogs.Close_Dialog_Command
    -- FUNCTION
@@ -91,56 +91,58 @@ package body Dialogs is
    function Update_Dialog_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "updateDialogCommand";
       -- ****
 
-   function Update_Dialog_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tcl.Tk.Ada.Widgets.TtkButton;
-
-      Message_Button: constant Ttk_Button :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1) & ".button",
-           Interp => Interp);
-   begin
-      if Winfo_Get(Widgt => Message_Button, Info => "exists") = "0" then
-         return
-           Close_Dialog_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-              Argv => Argv);
-      end if;
-      Update_Timer_Block:
-      declare
-         Text: constant String :=
-           Widgets.cget(Widgt => Message_Button, option => "-text");
-         Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
-      begin
-         if Seconds = 0 then
-            return
-              Close_Dialog_Command
-                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
-                 Argv => Argv);
-         end if;
-         Widgets.configure
-           (Widgt => Message_Button,
-            options => "-text {Close" & Positive'Image(Seconds) & "}");
-         Set_Timer_Id
-           (New_Value =>
-              To_Unbounded_String
-                (Source =>
-                   After
-                     (Ms => 1_000,
-                      Script =>
-                        "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
-                        (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
-                         else ""))));
-         if Length(Source => Timer_Id) = 0 then
-            return TCL_OK;
-         end if;
-      end Update_Timer_Block;
-      return TCL_OK;
-   end Update_Dialog_Command;
+--   function Update_Dialog_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      use Tcl.Tk.Ada.Widgets.TtkButton;
+--
+--      Message_Button: constant Ttk_Button :=
+--        Get_Widget
+--          (pathName => CArgv.Arg(Argv => Argv, N => 1) & ".button",
+--           Interp => Interp);
+--   begin
+--      if Winfo_Get(Widgt => Message_Button, Info => "exists") = "0" then
+--         return
+--           Close_Dialog_Command
+--             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--              Argv => Argv);
+--      end if;
+--      Update_Timer_Block:
+--      declare
+--         Text: constant String :=
+--           Widgets.cget(Widgt => Message_Button, option => "-text");
+--         Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
+--      begin
+--         if Seconds = 0 then
+--            return
+--              Close_Dialog_Command
+--                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+--                 Argv => Argv);
+--         end if;
+--         Widgets.configure
+--           (Widgt => Message_Button,
+--            options => "-text {Close" & Positive'Image(Seconds) & "}");
+--         Set_Timer_Id
+--           (New_Value =>
+--              To_Unbounded_String
+--                (Source =>
+--                   After
+--                     (Ms => 1_000,
+--                      Script =>
+--                        "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
+--                        (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
+--                         else ""))));
+--         if Length(Source => Timer_Id) = 0 then
+--            return TCL_OK;
+--         end if;
+--      end Update_Timer_Block;
+--      return TCL_OK;
+--   end Update_Dialog_Command;
 
    -- ****o* UUI/UUI.Get_String_Command
    -- FUNCTION
@@ -174,6 +176,7 @@ package body Dialogs is
    Mouse_X_Position: Natural := 0;
    -- ****
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****if* Dialogs/Dialogs.Get_Mouse_X_Position
    -- FUNCTION
    -- Get the X position of the mouse pointer
@@ -228,6 +231,7 @@ package body Dialogs is
    begin
       Mouse_Y_Position := New_Value;
    end Set_Mouse_Y_Position;
+   --## rule on REDUCEABLE_SCOPE
 
    -- ****o* Dialogs/Dialogs.Set_Mouse_Position_Command
    -- FUNCTION
@@ -279,6 +283,7 @@ package body Dialogs is
       use Ada.Strings;
       use Ada.Strings.Fixed;
       use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Tcl.Tk.Ada.Widgets.TtkFrame;
 
       Dialog: constant Ttk_Frame :=
         Get_Widget
@@ -366,21 +371,21 @@ package body Dialogs is
    procedure Show_Message
      (Text: String; Parent_Frame: String := ".gameframe"; Title: String) is
 
-      Local_Timer: chars_ptr;
       function Show_Ada_Message
         (Te, P_Frame, Ti: chars_ptr) return chars_ptr with
          Import => True,
          Convention => C,
          External_Name => "showAdaMessage";
    begin
-      Local_Timer :=
-        Show_Ada_Message
-          (Te => New_String(Str => Text),
-           P_Frame => New_String(Str => Parent_Frame),
-           Ti => New_String(Str => Title));
-      Set_Timer_Id
-        (New_Value =>
-           To_Unbounded_String(Source => Value(Item => Local_Timer)));
+      if Strlen
+          (Item =>
+             Show_Ada_Message
+               (Te => New_String(Str => Text),
+                P_Frame => New_String(Str => Parent_Frame),
+                Ti => New_String(Str => Title))) =
+        0 then
+         return;
+      end if;
    end Show_Message;
 
    procedure Show_Question
