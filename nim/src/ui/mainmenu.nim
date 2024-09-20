@@ -17,7 +17,8 @@
 
 import std/[algorithm, os, strutils, times]
 import ../[config, events, game, gamesaveload, tk]
-import coreui, dialogs, dialogs2, errordialog, mainmenucommands, table, utilsui, utilsui2
+import coreui, dialogs, dialogs2, errordialog, mainmenucommands, showmainmenu,
+    table, utilsui, utilsui2
 
 type SaveSortOrders = enum
   playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
@@ -26,8 +27,6 @@ var
   loadTable: TableWidget
   saveSortOrder = timeDesc
   mainMenuFrame = ""
-
-proc showMainMenu*() {.raises: [].}
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
@@ -268,32 +267,3 @@ proc createMainMenu*() =
   #addCommand("SortSaves", sortSavesCommand)
   dialogs2.addCommands()
   utilsui.addCommands()
-
-proc showMainMenu() =
-  let mainWindow = "."
-  var
-    x: int = try:
-        ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt - 600) / 2).int
-      except:
-        showError(message = "Can't count X coord")
-        return
-    y: int = try:
-        ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt - 400) / 2).int
-      except:
-        showError(message = "Can't count Y coord")
-        return
-  if x < 0:
-    x = 0
-  if y < 0:
-    y = 0
-  if gameSettings.fullScreen:
-    tclEval(script = "wm attributes " & mainWindow & " -fullscreen 0")
-  if tclGetVar(varName = "tlc_platform(os)") == "Linux":
-    tclEval(script = "wm attributes " & mainWindow & " -zoomed 0")
-  else:
-    tclEval(script = "wm state " & mainWindow & " normal")
-  tclEval(script = "wm title " & mainWindow & " {Steam Sky - Main Menu}")
-  tclEval(script = "wm geometry " & mainWindow & " 600x400+" & $x & "+" & $y)
-  let gameFrame = ".gameframe"
-  if tclEval2(script = "winfo exists " & gameFrame) == "1":
-    tclEval(script = "pack forget " & gameFrame)
