@@ -169,6 +169,19 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
 proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, TimeEffect], exportc.} =
+  ## Move the selected dialog around
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## MoveDialog dialogname x y
+  ## Dialogname is name of the dialog to move, x and y are the current
+  ## position of the mouse to count where to move the dialog
   if mouseXPosition == 0 and mouseYPosition == 0:
     return tclOk
   let
