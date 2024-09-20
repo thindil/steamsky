@@ -13,19 +13,19 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings;
-with Ada.Strings.Fixed;
+-- with Ada.Strings;
+-- with Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
-with Tcl; use Tcl;
-with Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Place;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl; -- use Tcl;
+-- with Tcl.Ada;
+-- with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+-- with Tcl.Tk.Ada.Place;
+-- with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Utils.UI;
 
 package body Dialogs is
@@ -104,7 +104,7 @@ package body Dialogs is
    -- FUNCTION
    -- The current mouse position in X coordinates
    -- SOURCE
-   Mouse_X_Position: Natural := 0;
+--   Mouse_X_Position: Natural := 0;
    -- ****
 
    --## rule off REDUCEABLE_SCOPE
@@ -114,11 +114,11 @@ package body Dialogs is
    -- RESULT
    -- The X axis position of the mouse pointer
    -- SOURCE
-   function Get_Mouse_X_Position return Natural is
-      -- ****
-   begin
-      return Mouse_X_Position;
-   end Get_Mouse_X_Position;
+--   function Get_Mouse_X_Position return Natural is
+--      -- ****
+--   begin
+--      return Mouse_X_Position;
+--   end Get_Mouse_X_Position;
 
    -- ****if* Dialogs/Set_Mouse_X_Position
    -- FUNCTION
@@ -126,17 +126,17 @@ package body Dialogs is
    -- PARAMETERS
    -- New_Value - the new value for mouse pointer X position
    -- SOURCE
-   procedure Set_Mouse_X_Position(New_Value: Natural) is
-      -- ****
-   begin
-      Mouse_X_Position := New_Value;
-   end Set_Mouse_X_Position;
+--   procedure Set_Mouse_X_Position(New_Value: Natural) is
+--      -- ****
+--   begin
+--      Mouse_X_Position := New_Value;
+--   end Set_Mouse_X_Position;
 
    -- ****if* Dialogs/Dialogs.Mouse_Y_Position
    -- FUNCTION
    -- The current mouse position in Y coordinates
    -- SOURCE
-   Mouse_Y_Position: Natural := 0;
+--   Mouse_Y_Position: Natural := 0;
    -- ****
 
    -- ****if* Dialogs/Dialogs.Get_Mouse_Y_Position
@@ -145,11 +145,11 @@ package body Dialogs is
    -- RESULT
    -- The Y axis position of the mouse pointer
    -- SOURCE
-   function Get_Mouse_Y_Position return Natural is
-      -- ****
-   begin
-      return Mouse_Y_Position;
-   end Get_Mouse_Y_Position;
+--   function Get_Mouse_Y_Position return Natural is
+--      -- ****
+--   begin
+--      return Mouse_Y_Position;
+--   end Get_Mouse_Y_Position;
 
    -- ****if* Dialogs/Set_Mouse_Y_Position
    -- FUNCTION
@@ -157,11 +157,11 @@ package body Dialogs is
    -- PARAMETERS
    -- New_Value - the new value for mouse pointer X position
    -- SOURCE
-   procedure Set_Mouse_Y_Position(New_Value: Natural) is
-      -- ****
-   begin
-      Mouse_Y_Position := New_Value;
-   end Set_Mouse_Y_Position;
+--   procedure Set_Mouse_Y_Position(New_Value: Natural) is
+--      -- ****
+--   begin
+--      Mouse_Y_Position := New_Value;
+--   end Set_Mouse_Y_Position;
    --## rule on REDUCEABLE_SCOPE
 
    -- ****o* Dialogs/Dialogs.Set_Mouse_Position_Command
@@ -204,84 +204,86 @@ package body Dialogs is
    function Move_Dialog_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "moveDialogCommand";
       -- ****
 
-   function Move_Dialog_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
-      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
-
-      Dialog: constant Ttk_Frame :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      New_X, New_Y, Current_X_Mouse, Current_Y_Mouse: Integer;
-      Header: constant Ttk_Frame := Get_Widget(pathName => Dialog & ".header");
-      function Get_Coordinate(Name: String) return Integer is
-         use Tcl.Ada;
-      begin
-         Tcl_Eval
-           (interp => Interp,
-            strng =>
-              "lindex [place configure " & Dialog & " -" & Name & "] 4");
-         if Tcl_GetResult(interp => Interp) = "" then
-            return 0;
-         end if;
-         return Integer'Value(Tcl_GetResult(interp => Interp));
-      end Get_Coordinate;
-   begin
-      if Get_Mouse_X_Position = 0 and Get_Mouse_Y_Position = 0 then
-         return TCL_OK;
-      end if;
-      Current_X_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Current_Y_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
-      if Get_Mouse_X_Position > Current_X_Mouse
-        and then Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) <
-          5 then
-         return TCL_OK;
-      end if;
-      if Get_Mouse_Y_Position > Current_Y_Mouse
-        and then Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) <
-          5 then
-         return TCL_OK;
-      end if;
-      if Get_Mouse_X_Position < Current_X_Mouse
-        and then
-          Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) +
-            Integer'Value(Winfo_Get(Widgt => Dialog, Info => "width")) >
-          Integer'Value
-            (Winfo_Get
-               (Widgt => Get_Main_Window(Interp => Interp),
-                Info => "width")) then
-         return TCL_OK;
-      end if;
-      if Get_Mouse_Y_Position < Current_Y_Mouse
-        and then
-          Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) +
-            Integer'Value(Winfo_Get(Widgt => Header, Info => "height")) + 5 >
-          Integer'Value
-            (Winfo_Get
-               (Widgt => Get_Main_Window(Interp => Interp),
-                Info => "height")) then
-         return TCL_OK;
-      end if;
-      New_X :=
-        Get_Coordinate(Name => "x") - (Get_Mouse_X_Position - Current_X_Mouse);
-      New_Y :=
-        Get_Coordinate(Name => "y") - (Get_Mouse_Y_Position - Current_Y_Mouse);
-      Tcl.Tk.Ada.Place.Place_Configure
-        (Slave => Dialog,
-         Options =>
-           "-x " & Trim(Source => Integer'Image(New_X), Side => Left) &
-           " -y " & Trim(Source => Integer'Image(New_Y), Side => Left));
-      Set_Mouse_X_Position(New_Value => Current_X_Mouse);
-      Set_Mouse_Y_Position(New_Value => Current_Y_Mouse);
-      return TCL_OK;
-   end Move_Dialog_Command;
+--   function Move_Dialog_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Ada.Strings;
+--      use Ada.Strings.Fixed;
+--      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+--      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--
+--      Dialog: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+--      New_X, New_Y, Current_X_Mouse, Current_Y_Mouse: Integer;
+--      Header: constant Ttk_Frame := Get_Widget(pathName => Dialog & ".header");
+--      function Get_Coordinate(Name: String) return Integer is
+--         use Tcl.Ada;
+--      begin
+--         Tcl_Eval
+--           (interp => Interp,
+--            strng =>
+--              "lindex [place configure " & Dialog & " -" & Name & "] 4");
+--         if Tcl_GetResult(interp => Interp) = "" then
+--            return 0;
+--         end if;
+--         return Integer'Value(Tcl_GetResult(interp => Interp));
+--      end Get_Coordinate;
+--   begin
+--      if Get_Mouse_X_Position = 0 and Get_Mouse_Y_Position = 0 then
+--         return TCL_OK;
+--      end if;
+--      Current_X_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
+--      Current_Y_Mouse := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
+--      if Get_Mouse_X_Position > Current_X_Mouse
+--        and then Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) <
+--          5 then
+--         return TCL_OK;
+--      end if;
+--      if Get_Mouse_Y_Position > Current_Y_Mouse
+--        and then Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) <
+--          5 then
+--         return TCL_OK;
+--      end if;
+--      if Get_Mouse_X_Position < Current_X_Mouse
+--        and then
+--          Integer'Value(Winfo_Get(Widgt => Dialog, Info => "x")) +
+--            Integer'Value(Winfo_Get(Widgt => Dialog, Info => "width")) >
+--          Integer'Value
+--            (Winfo_Get
+--               (Widgt => Get_Main_Window(Interp => Interp),
+--                Info => "width")) then
+--         return TCL_OK;
+--      end if;
+--      if Get_Mouse_Y_Position < Current_Y_Mouse
+--        and then
+--          Integer'Value(Winfo_Get(Widgt => Dialog, Info => "y")) +
+--            Integer'Value(Winfo_Get(Widgt => Header, Info => "height")) + 5 >
+--          Integer'Value
+--            (Winfo_Get
+--               (Widgt => Get_Main_Window(Interp => Interp),
+--                Info => "height")) then
+--         return TCL_OK;
+--      end if;
+--      New_X :=
+--        Get_Coordinate(Name => "x") - (Get_Mouse_X_Position - Current_X_Mouse);
+--      New_Y :=
+--        Get_Coordinate(Name => "y") - (Get_Mouse_Y_Position - Current_Y_Mouse);
+--      Tcl.Tk.Ada.Place.Place_Configure
+--        (Slave => Dialog,
+--         Options =>
+--           "-x " & Trim(Source => Integer'Image(New_X), Side => Left) &
+--           " -y " & Trim(Source => Integer'Image(New_Y), Side => Left));
+--      Set_Mouse_X_Position(New_Value => Current_X_Mouse);
+--      Set_Mouse_Y_Position(New_Value => Current_Y_Mouse);
+--      return TCL_OK;
+--   end Move_Dialog_Command;
 
    procedure Add_Commands is
       use Utils.UI;
