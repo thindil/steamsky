@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import times
+import std/[strutils, times]
 import contracts
 import ../[config, game, tk]
 import coreui
@@ -113,7 +113,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   try:
     let errorLog: File = open(fileName = saveDirectory & "error.log",
         mode = fmAppend)
-    errorLog.write(s = debugInfo & "\n---------------------------\n")
+    errorLog.write(s = debugInfo & '\n' & repeat(c = '-', count = 80) & '\n')
     errorLog.close
   except:
     debugInfo.add(y = "Can't save error to file. Reason: " &
@@ -124,20 +124,33 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
     errorDialog = createDialog(name = ".errordialog", title = message,
         parentName = parentName)
   var errorLabel = errorDialog & ".general"
-  tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {Oops, something bad happens and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:}")
-  tclEval(script = "grid " & errorLabel & " -padx 5")
-  let errorButton = errorDialog & ".link"
+  tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:}")
+  tclEval(script = "grid " & errorLabel & " -padx 5 -sticky w")
+  var errorButton = errorDialog & ".link"
   tclEval(script = "ttk::button " & errorButton & " -text {https://www.laeran.pl.eu.org/repositories/steamsky/ticket} -command {OpenLink https://www.laeran.pl.eu.org/repositories/steamsky/ticket} -style Toolbutton")
   tclEval(script = "grid " & errorButton)
   errorLabel = errorDialog & ".general2"
   tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {or if you prefer, on one of the game community options:}")
-  tclEval(script = "grid " & errorLabel & " -padx 5")
+  tclEval(script = "grid " & errorLabel & " -padx 5 -sticky w")
+  errorButton = errorDialog & ".social"
+  tclEval(script = "ttk::button " & errorButton & " -text {https://thindil.itch.io/steam-sky} -command {OpenLink https://thindil.itch.io/steam-sky} -style Toolbutton")
+  tclEval(script = "grid " & errorButton)
+  errorLabel = errorDialog & ".general3"
+  tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {and attach (if possible) file with saved game or 'error.log'.}")
+  tclEval(script = "grid " & errorLabel & " -padx 5 -sticky w")
   errorLabel = errorDialog & ".technical"
-  tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {" &
-      debugInfo & "}")
-  tclEval(script = "grid " & errorLabel & " -padx 5 -pady {10 0}")
+  let yScroll = errorDialog & ".yscroll"
+  tclEval(script = "ttk::scrollbar " & yScroll &
+      " -orient vertical -command [list " & errorLabel & " yview]")
+  tclEval(script = "text " & errorLabel &
+      " -wrap char -width 55 -height 10 -yscrollcommand [list " & yScroll & " set]")
+  tclEval(script = errorLabel & " configure -state enabled")
+  tclEval(script = errorLabel & " insert end {" & debugInfo & "}")
+  tclEval(script = errorLabel & " configure -state disabled")
+  tclEval(script = "grid " & errorLabel & " -padx {5 0} -pady {10 0} -sticky w")
+  tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -pady {10 0} -row 6 -column 1")
   addCloseButton(name = errorDialog & ".close", text = "Close",
       command = "CloseDialog " & errorDialog & (if parentName ==
-      ".": " ." else: ""), row = 5)
-  showDialog(dialog = errorDialog, relativeX = 0.1, relativeY = 0.1)
+      ".": " ." else: ""), row = 7)
+  showDialog(dialog = errorDialog, relativeX = 0.1, relativeY = 0.05)
   return tclOk
