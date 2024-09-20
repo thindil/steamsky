@@ -16,11 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[math, tables]
+import contracts
 import bases, basestypes, factions, events, game, game2, maps, messages, ships2,
     shipscrew, types, utils
 
 proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
-    WriteIOEffect, RootEffect].} =
+    WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known events in a base or a friendly ship. Generates new
   ## events
   let traderIndex = findMember(order = talk)
@@ -58,7 +59,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
   var maxY: int = playerShip.skyY + 100
   normalizeCoord(coord = maxY, isXAxis = false)
   var enemies: seq[Positive]
-  generateEnemies(enemies)
+  generateEnemies(enemies = enemies)
   for i in 1 .. eventsAmount:
     var
       event = getRandom(min = 1, max = 5).EventsTypes
@@ -107,22 +108,22 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
               eventY].baseIndex].population == 0:
             break
     let
-      diffX = abs(playerShip.skyX - eventX)
-      diffY = abs(playerShip.skyY - eventY)
-      eventTime = (60 * sqrt((diffX ^ 2).float + (diffY ^ 2).float)).Natural
+      diffX = abs(x = playerShip.skyX - eventX)
+      diffY = abs(x = playerShip.skyY - eventY)
+      eventTime = (60 * sqrt(x = (diffX ^ 2).float + (diffY ^ 2).float)).Natural
     case event
     of enemyShip:
-      eventsList.add(EventData(eType: enemyShip, skyX: eventX,
+      eventsList.add(y = EventData(eType: enemyShip, skyX: eventX,
           skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 60),
           shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)]))
     of attackOnBase:
       generateEnemies(enemies = enemies, owner = "Any", withTraders = false)
-      eventsList.add(EventData(eType: attackOnBase, skyX: eventX,
+      eventsList.add(y = EventData(eType: attackOnBase, skyX: eventX,
           skyY: eventY, time: getRandom(min = eventTime, max = eventTime + 120),
           shipIndex: enemies[getRandom(min = 0, max = enemies.len - 1)]))
       generateEnemies(enemies = enemies)
     of disease:
-      eventsList.add(EventData(eType: disease, skyX: eventX,
+      eventsList.add(y = EventData(eType: disease, skyX: eventX,
           skyY: eventY, time: getRandom(min = 10_000, max = 12_000), data: 1))
     of doublePrice:
       var newItemIndex = 0
@@ -135,7 +136,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
                 eventY].baseIndex].baseType, itemIndex = j) > 0:
               newItemIndex = j
               break setDoublePrice
-      eventsList.add(EventData(eType: doublePrice, skyX: eventX,
+      eventsList.add(y = EventData(eType: doublePrice, skyX: eventX,
           skyY: eventY, time: getRandom(min = eventTime * 3, max = eventTime *
               4), itemIndex: newItemIndex))
     of baseRecovery:
@@ -148,7 +149,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
   updateGame(minutes = 30)
 
 proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
-    WriteIOEffect, RootEffect].} =
+    WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known bases in a base or a friendly ship.
   let traderIndex = findMember(order = talk)
   if traderIndex == -1:
@@ -235,13 +236,15 @@ proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
 
 # Temporary code for interfacing with Ada
 
-proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
+    contractual.} =
   try:
     askForEvents()
   except KeyError, IOError, Exception:
     discard
 
-proc askAdaForBases() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc.} =
+proc askAdaForBases() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
+    contractual.} =
   try:
     askForBases()
   except KeyError, IOError, Exception:
