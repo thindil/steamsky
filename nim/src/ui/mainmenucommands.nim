@@ -15,10 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, osproc, strutils, tables]
-import ../[basestypes, config, game, game2, goals, halloffame, ships2,
-    shipscrew, tk, utils]
-import dialogs, errordialog
+import std/[algorithm, os, osproc, strutils, tables, times]
+import ../[basestypes, config, game, game2, gamesaveload, goals, halloffame,
+    ships2, shipscrew, tk, utils]
+import coreui, dialogs, errordialog, showmainmenu, table, utilsui2
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
@@ -502,6 +502,205 @@ proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = loadMenu, parentFrame = ".")
   return tclOk
 
+proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        RootEffect], exportc.} =
+  ## Clear the main game window and show main menu
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowMainMenu
+  tclEval(script = closeButton & " configure -command ShowSkyMap")
+  tclSetVar(varName = "gamestate", newValue = "general")
+  tclEval(script = "grid remove " & closeButton)
+  showScreen(newScreenName = "mapframe")
+  tclEval(script = "DrawMap")
+  tclEval(script = "update")
+  showMainMenu()
+  return tclOk
+
+proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect], exportc.} =
+  ## Load the selected save file and start the game
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## LoadGame file
+  ## File is the name of the saved game which will be loaded
+  tclEval(script = "pack forget .loadmenu")
+  saveName = $argv[1]
+  try:
+    loadGame()
+    #startGame()
+  except:
+    showMainMenu()
+    showMessage(text = "Can't load this game. Reason: " &
+        getCurrentExceptionMsg(), parentFrame = ".",
+        title = "Can't load the game")
+  return tclOk
+
+type SaveSortOrders = enum
+  playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
+
+var
+  loadTable: TableWidget
+  saveSortOrder = timeDesc
+
+proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    ReadDirEffect, RootEffect], exportc.} =
+  ## Show the list of available saved games
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowLoadGame
+  if loadTable.rowHeight == 0:
+    loadTable = createTable(parent = ".loadmenu.list", headers = @[
+        "Player name", "Ship name", "Last saved"], command = "SortSaves",
+        tooltipText = "Press mouse button to sort the saved games.")
+  else:
+    clearTable(table = loadTable)
+  type SaveRecord = object
+    playerName, shipName, saveTime, fileName: string
+  var saves: seq[SaveRecord]
+  try:
+    for file in walkFiles(saveDirectory & "*.sav"):
+      let
+        (_, name, _) = splitFile(path = file)
+        parts = name.split('_')
+      try:
+        if parts.len == 3:
+          saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
+              saveTime: file.getLastModificationTime.format(
+                  "yyyy-MM-dd hh:mm:ss"),
+              fileName: file))
+        else:
+          saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
+              saveTime: file.getLastModificationTime.format(
+                  "yyyy-MM-dd hh:mm:ss"),
+              fileName: file))
+      except:
+        showError(message = "Can't add information about the save file.")
+        return
+  except:
+    showError(message = "Can't read saved games files")
+
+  proc sortSaves(x, y: SaveRecord): int =
+    case saveSortOrder
+    of playerAsc:
+      if x.playerName < y.playerName:
+        return 1
+      else:
+        return -1
+    of playerDesc:
+      if x.playerName > y.playerName:
+        return 1
+      else:
+        return -1
+    of shipAsc:
+      if x.shipName < y.shipName:
+        return 1
+      else:
+        return -1
+    of shipDesc:
+      if x.shipName > y.shipName:
+        return 1
+      else:
+        return -1
+    of timeAsc:
+      if x.saveTime < y.saveTime:
+        return 1
+      else:
+        return -1
+    of timeDesc:
+      if x.saveTime > y.saveTime:
+        return 1
+      else:
+        return -1
+  saves.sort(cmp = sortSaves)
+  for save in saves:
+    addButton(table = loadTable, text = save.playerName,
+        tooltip = "Press mouse " & (
+        if gameSettings.rightButton: "right" else: "left") &
+        " button to show available option", command = "ShowLoadGameMenu " &
+        save.fileName, column = 1)
+    addButton(table = loadTable, text = save.shipName,
+        tooltip = "Press mouse " & (
+        if gameSettings.rightButton: "right" else: "left") &
+        " button to show available option", command = "ShowLoadGameMenu " &
+        save.fileName, column = 2)
+    addButton(table = loadTable, text = save.saveTime,
+        tooltip = "Press mouse " & (
+        if gameSettings.rightButton: "right" else: "left") &
+        " button to show available option", command = "ShowLoadGameMenu " &
+        save.fileName, column = 3, newRow = true)
+  updateTable(table = loadTable)
+  if loadTable.row == 1:
+    tclEval(script = "bind . <Alt-b> {}")
+    tclEval(script = "bind . <Escape> {}")
+    tclEval(script = "pack forget .loadmenu")
+    showMainMenu()
+  return tclOk
+
+proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect], exportc.} =
+  ## Sort the saved games list
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortSaves x
+  ## X is X axis coordinate where the player clicked the mouse button
+  let column = try:
+      getColumnNumber(table = loadTable, xPosition = ($argv[1]).parseInt)
+    except:
+      return showError(message = "Can't get the column number.")
+  case column
+  of 1:
+    if saveSortOrder == playerAsc:
+      saveSortOrder = playerDesc
+    else:
+      saveSortOrder = playerAsc
+  of 2:
+    if saveSortOrder == shipAsc:
+      saveSortOrder = shipDesc
+    else:
+      saveSortOrder = shipAsc
+  of 3:
+    if saveSortOrder == timeAsc:
+      saveSortOrder = timeDesc
+    else:
+      saveSortOrder = timeAsc
+  else:
+    discard
+  return showLoadGameCommand(clientData = clientData, interp = interp,
+      argc = argc, argv = argv)
+
 proc addCommands*() =
   discard
 #  addCommand("OpenLink", openLinkCommand)
@@ -515,3 +714,7 @@ proc addCommands*() =
 #  addCommand("RandomName", randomNameCommand)
 #  addCommand("NewGame", newGameCommand)
 #  addCommand("ShowLoadGameMenu", showLoadGameMenuCommand)
+#  addCommand("ShowMainMenu", showMainMenuCommand)
+#  addCommand("LoadGame", loadGameCommand)
+#  addCommand("ShowLoadGame", showLoadGameCommand)
+#  addCommand("SortSaves", sortSavesCommand)
