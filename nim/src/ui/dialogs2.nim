@@ -79,7 +79,7 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     text = tclEval2(script = messageButton & " cget -text")
     seconds = try:
-        text[0..^1].parseInt - 1
+        text[6..^1].parseInt - 1
       except:
         return showError(message = "Can't get amount of seconds.")
   if seconds == 0:
