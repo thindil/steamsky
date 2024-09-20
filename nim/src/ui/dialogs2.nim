@@ -166,11 +166,38 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = dialogHeader & " configure -cursor hand1")
   return tclOk
 
+proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  if mouseXPosition == 0 and mouseYPosition == 0:
+    return tclOk
+  let
+    currentXMouse = ($argv[2]).parseInt
+    currentYMouse = ($argv[3]).parseInt
+    dialog = $argv[1]
+    dialogX = tclEval2(script = "winfo x " & dialog).parseInt
+    dialogY = tclEval2(script = "winfo y " & dialog).parseInt
+  if mouseXPosition > currentXMouse and dialogX < 5:
+    return tclOk
+  if mouseYPosition > currentYMouse and dialogY < 5:
+    return tclOk
+  let
+    dialogWidth = tclEval2(script = "winfo width " & dialog).parseInt
+    mainWindowWidth = tclEval2(script = "winfo width .").parseInt
+  if mouseXPosition < currentXMouse and dialogX + dialogWidth > mainWindowWidth:
+    return tclOk
+  let
+    dialogHeight = tclEval2(script = "winfo height " & dialog).parseInt
+    mainWindowHeight = tclEval2(script = "winfo height .").parseInt
+  if mouseYPosition < currentYMouse and dialogY + dialogHeight + 5 > mainWindowHeight:
+    return tclOk
+  return tclOk
+
 proc addCommands*() =
   # addCommand("CloseDialog", closeDialogCommand)
   # addCommand("UpdateDialog", updateDialogCommand)
   # addCommand("GetString", getStringCommand)
   # addCommand("SetMousePosition", setMousePositionCommand)
+  # addCommand("MoveDialog", moveDialogCommand)
   discard
 
 # Temporary code for interfacing with Ada
