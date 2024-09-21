@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the sky bases interactions like asking for events or
+## bases. Split from the bases module to avoid circular dependencies.
+
 import std/[math, tables]
 import contracts
 import bases, basestypes, factions, events, game, game2, maps, messages, ships2,
@@ -238,6 +241,7 @@ proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
 
 proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     askForEvents()
   except KeyError, IOError, Exception:
@@ -245,6 +249,7 @@ proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
 
 proc askAdaForBases() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     askForBases()
   except KeyError, IOError, Exception:
