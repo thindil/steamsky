@@ -26,9 +26,9 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar;
+-- with Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Bases;
 with Combat.UI;
 with CoreUI; use CoreUI;
@@ -338,50 +338,52 @@ package body Utils.UI is
    function Set_Scrollbar_Bindings_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "setScrollbarBindingsCommand";
       -- ****
 
-   function Set_Scrollbar_Bindings_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
-      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-
-      Widget: constant Ttk_Frame :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      Scrollbar: constant Ttk_Scrollbar :=
-        Get_Widget
-          (pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
-   begin
-      Bind
-        (Widgt => Widget, Sequence => "<Button-4>",
-         Script =>
-           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-           Scrollbar & " <Button-4>}}");
-      Bind
-        (Widgt => Widget, Sequence => "<Key-Prior>",
-         Script =>
-           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-           Scrollbar & " <Button-4>}}");
-      Bind
-        (Widgt => Widget, Sequence => "<Button-5>",
-         Script =>
-           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-           Scrollbar & " <Button-5>}}");
-      Bind
-        (Widgt => Widget, Sequence => "<Key-Next>",
-         Script =>
-           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-           Scrollbar & " <Button-5>}}");
-      Bind
-        (Widgt => Widget, Sequence => "<MouseWheel>",
-         Script =>
-           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-           Scrollbar & " <MouseWheel> -delta %D}}");
-      return TCL_OK;
-   end Set_Scrollbar_Bindings_Command;
+--   function Set_Scrollbar_Bindings_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--      use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+--
+--      Widget: constant Ttk_Frame :=
+--        Get_Widget
+--          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+--      Scrollbar: constant Ttk_Scrollbar :=
+--        Get_Widget
+--          (pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
+--   begin
+--      Bind
+--        (Widgt => Widget, Sequence => "<Button-4>",
+--         Script =>
+--           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+--           Scrollbar & " <Button-4>}}");
+--      Bind
+--        (Widgt => Widget, Sequence => "<Key-Prior>",
+--         Script =>
+--           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+--           Scrollbar & " <Button-4>}}");
+--      Bind
+--        (Widgt => Widget, Sequence => "<Button-5>",
+--         Script =>
+--           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+--           Scrollbar & " <Button-5>}}");
+--      Bind
+--        (Widgt => Widget, Sequence => "<Key-Next>",
+--         Script =>
+--           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+--           Scrollbar & " <Button-5>}}");
+--      Bind
+--        (Widgt => Widget, Sequence => "<MouseWheel>",
+--         Script =>
+--           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+--           Scrollbar & " <MouseWheel> -delta %D}}");
+--      return TCL_OK;
+--   end Set_Scrollbar_Bindings_Command;
 
    -- ****io* UUI/UUI.Set_Destination_Command
    -- FUNCTION
