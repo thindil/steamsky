@@ -138,6 +138,15 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   errorLabel = errorDialog & ".general3"
   tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {and attach (if possible) file with saved game or 'error.log'.}")
   tclEval(script = "grid " & errorLabel & " -padx 5 -sticky w")
+  let errorFrame = errorDialog & ".frame"
+  tclEval(script = "ttk::frame " & errorFrame)
+  errorButton = errorFrame & ".showdirectory"
+  tclEval(script = "ttk::button " & errorButton & " -text {Open directory with saved games} -command {OpenLink {" & saveDirectory & "}}")
+  tclEval(script = "grid " & errorButton)
+  addCloseButton(name = errorFrame & ".close", text = "Close",
+      command = "CloseDialog " & errorDialog & (if parentName ==
+      ".": " ." else: ""), row = 0, column = 1)
+  tclEval(script = "grid " & errorFrame)
   errorLabel = errorDialog & ".technical"
   let yScroll = errorDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll &
@@ -147,10 +156,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   tclEval(script = errorLabel & " configure -state enabled")
   tclEval(script = errorLabel & " insert end {" & debugInfo & "}")
   tclEval(script = errorLabel & " configure -state disabled")
-  tclEval(script = "grid " & errorLabel & " -padx {5 0} -pady {10 0} -sticky w")
-  tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -pady {10 0} -row 6 -column 1")
-  addCloseButton(name = errorDialog & ".close", text = "Close",
-      command = "CloseDialog " & errorDialog & (if parentName ==
-      ".": " ." else: ""), row = 7)
+  tclEval(script = "grid " & errorLabel & " -padx {5 0} -pady 10 -sticky w")
+  tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -pady 10 -row 7 -column 1")
   showDialog(dialog = errorDialog, relativeX = 0.1, relativeY = 0.05)
   return tclOk
