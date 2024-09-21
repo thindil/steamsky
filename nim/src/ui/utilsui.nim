@@ -418,6 +418,23 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
       scrollbar & "]} {event generate " & scrollbar & " <MouseWheel> -delta %D}}")
   return tclOk
 
+proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    posX = ($argv[1]).parseInt
+    posY = ($argv[2]).parseInt
+  if posX == playerShip.skyX and posY == playerShip.skyY:
+    showMessage(text = "You are at this location now.",
+        title = "Can't set destination")
+    return tclOk
+  playerShip.destinationX = posX
+  playerShip.destinationY = posY
+  addMessage(message = "You set the travel destination for your ship.",
+      mType = orderMessage)
+  tclEval(script = "InvokeButton " & closeButton)
+  tclEval(script = "grid remove " & closeButton)
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Add Tcl commands related to the various UI elements
   discard
@@ -428,6 +445,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #  addCommand("ShowOnMap", showOnMapCommand)
 #  addCommand("ProcessQuestion", processQuestionCommand)
 #  addCommand("SetScrollbarBindings", setScrollbarBindingsCommand)
+#  addCommand("SetDestination2", setDestination2Command)
 
 # Temporary code for interfacing with Ada
 
