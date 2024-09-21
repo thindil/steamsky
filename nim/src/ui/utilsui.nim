@@ -17,8 +17,9 @@
 
 import std/[os, strutils, tables]
 import ../[bases, config, crew2, crewinventory, events2, game, game2,
-    maps, messages, missions2, shipscargo, shipscrew, tk, types]
-import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew, shipsuimodules2
+    maps, messages, missions2, shipscargo, shipscrew, shipscrew2, tk, types]
+import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew,
+    shipsuimodules2, showmainmenu, statisticsui
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -208,7 +209,8 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, TimeEffect], exportc.} =
   ## Show the selected point on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -280,6 +282,19 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     gameSettings.messagesPosition = gameSettings.windowHeight - tclEval2(
         script = mainPaned & " sashpos 0").parseInt
     endGame(save = true)
+    showMainMenu()
+  elif answer == "resign":
+    death(memberIndex = 0, reason = "resignation", ship = playerShip)
+    showQuestion(question = "You are dead. Would you like to see your game statistics?",
+        res = "showstats")
+  elif answer == "showstats":
+    let button = gameHeader & ".menubutton"
+    tclEval(script = "grid " & button)
+    tclEval(script = closeButton & " configure -command ShowMainMenu")
+    tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+    tclSetVar(varName = "gamestate", newValue = "dead")
+    showStatistics()
+    endGame(save = false)
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
@@ -290,6 +305,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #  addCommand("ValidateAmount", validateAmountCommand)
 #  addCommand("SetTextVariable", setTextVariableCommand)
 #  addCommand("ShowOnMap", showOnMapCommand)
+#  addCommand("ProcessQuestion", processQuestionCommand)
 
 # Temporary code for interfacing with Ada
 
