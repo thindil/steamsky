@@ -16,10 +16,10 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[bases, config, crew2, crewinventory, events2, game, game2,
-    maps, messages, missions2, shipscargo, shipscrew, shipscrew2, tk, types]
+import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
+    messages, missions2, shipscargo, shipscrew, shipscrew2, tk, types, utils]
 import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew,
-    shipsuimodules2, showmainmenu, statisticsui
+    shipsuimodules2, showmainmenu, statisticsui, updateheader
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -295,6 +295,35 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclSetVar(varName = "gamestate", newValue = "dead")
     showStatistics()
     endGame(save = false)
+  elif answer == "mainmenu":
+    gameSettings.messagesPosition = gameSettings.windowHeight - tclEval2(
+        script = mainPaned & " sashpos 0").parseInt
+    endGame(save = false)
+    showMainMenu()
+  elif answer == "messages":
+    let typeBox = mainPaned & ".messagesframe.canvas.messages.options.types"
+    clearMessages()
+    tclEval(script = typeBox & " current 0")
+    tclEval(script = "ShowLastMessages")
+  elif answer == "retire":
+    death(memberIndex = 0, reason = "retired after finished the game",
+        ship = playerShip)
+    showQuestion(question = "You are dead. Would you like to see your game statistics?",
+        res = "showstats")
+  else:
+    let
+      baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      memberIndex = ($argv[1]).parseInt - 1
+    addMessage(message = "You dismissed " & playerShip.crew[memberIndex].name &
+        ".", mType = orderMessage)
+    deleteMember(memberIndex = memberIndex, ship = playerShip)
+    skyBases[baseIndex].population.inc
+    for index, _ in playerShip.crew:
+      updateMorale(ship = playerShip, memberIndex = index, value = getRandom(
+          min = -5, max = -1))
+    updateCrewInfo()
+    updateHeader()
+    updateMessages()
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
