@@ -237,10 +237,14 @@ proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+        WriteIOEffect, TimeEffect, RootEffect].} =
   let answer = argv[1]
   if answer == "deletesave":
-    removeFile(saveDirectory & tclGetVar("deletesave"))
+    try:
+      removeFile(saveDirectory & tclGetVar("deletesave"))
+    except:
+      return showError(message = "Can't remove the save file.")
     tclUnsetVar("deletesave")
     tclEval(script = "ShowLoadGame")
   elif answer == "sethomebase":
@@ -252,7 +256,10 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       return tclOk
     let traderIndex = findMember(order = talk)
     var price: Natural = 1_000
-    countPrice(price = price, traderIndex = traderIndex)
+    try:
+      countPrice(price = price, traderIndex = traderIndex)
+    except:
+      return showError(message = "Can't count price.")
     if playerShip.cargo[moneyIndex2].amount < price:
       showMessage(text = "You don't have enough " & moneyName &
           " for change ship home base.", title = "No money")
@@ -262,14 +269,26 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     addMessage(message = "You changed your ship home base to: " & skyBases[
         playerShip.homeBase].name, mType = otherMessage)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-    updateGame(minutes = 10)
+    try:
+      updateGame(minutes = 10)
+    except:
+      return showError(message = "Can't update the game.")
     showSkyMap()
   elif answer == "nopilot":
-    waitForRest()
-    let startsCombat = checkForEvent()
+    try:
+      waitForRest()
+    except:
+      return showError(message = "Can't wait for rest.")
+    let startsCombat = try:
+        checkForEvent()
+      except:
+        return showError(message = "Can't start a combat.")
     var message: string
     if not startsCombat and gameSettings.autoFinish:
-      message = autoFinishMissions()
+      message = try:
+          autoFinishMissions()
+        except:
+          return showError(message = "Can't autofinish mission.")
     if message.len > 0:
       showMessage(text = message, title = "Error")
     centerX = playerShip.skyX
@@ -279,12 +298,21 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       showSkyMap()
   elif answer == "quit":
-    gameSettings.messagesPosition = gameSettings.windowHeight - tclEval2(
-        script = mainPaned & " sashpos 0").parseInt
-    endGame(save = true)
+    gameSettings.messagesPosition = try:
+        gameSettings.windowHeight - tclEval2(script = mainPaned &
+            " sashpos 0").parseInt
+      except:
+        return showError(message = "Can't set messages position.")
+    try:
+      endGame(save = true)
+    except:
+      return showError(message = "Can't end the game.")
     showMainMenu()
   elif answer == "resign":
-    death(memberIndex = 0, reason = "resignation", ship = playerShip)
+    try:
+      death(memberIndex = 0, reason = "resignation", ship = playerShip)
+    except:
+      return showError(message = "Can't kill the player.")
     showQuestion(question = "You are dead. Would you like to see your game statistics?",
         res = "showstats")
   elif answer == "showstats":
@@ -294,11 +322,20 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & closeButton & " -row 0 -column 1")
     tclSetVar(varName = "gamestate", newValue = "dead")
     showStatistics()
-    endGame(save = false)
+    try:
+      endGame(save = false)
+    except:
+      return showError(message = "Can't end the game2.")
   elif answer == "mainmenu":
-    gameSettings.messagesPosition = gameSettings.windowHeight - tclEval2(
-        script = mainPaned & " sashpos 0").parseInt
-    endGame(save = false)
+    gameSettings.messagesPosition = try:
+        gameSettings.windowHeight - tclEval2(script = mainPaned &
+            " sashpos 0").parseInt
+      except:
+        return showError(message = "Can't set messages position.")
+    try:
+      endGame(save = false)
+    except:
+      return showError(message = "Can't end the game3.")
     showMainMenu()
   elif answer == "messages":
     let typeBox = mainPaned & ".messagesframe.canvas.messages.options.types"
@@ -306,21 +343,33 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = typeBox & " current 0")
     tclEval(script = "ShowLastMessages")
   elif answer == "retire":
-    death(memberIndex = 0, reason = "retired after finished the game",
-        ship = playerShip)
+    try:
+      death(memberIndex = 0, reason = "retired after finished the game",
+          ship = playerShip)
+    except:
+      return showError(message = "Can't kill the player2.")
     showQuestion(question = "You are dead. Would you like to see your game statistics?",
         res = "showstats")
   else:
     let
       baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-      memberIndex = ($argv[1]).parseInt - 1
+      memberIndex = try:
+          ($argv[1]).parseInt - 1
+        except:
+          return showError(message = "Can't get the member index.")
     addMessage(message = "You dismissed " & playerShip.crew[memberIndex].name &
         ".", mType = orderMessage)
-    deleteMember(memberIndex = memberIndex, ship = playerShip)
+    try:
+      deleteMember(memberIndex = memberIndex, ship = playerShip)
+    except:
+      return showError(message = "Can't delete the member.")
     skyBases[baseIndex].population.inc
     for index, _ in playerShip.crew:
-      updateMorale(ship = playerShip, memberIndex = index, value = getRandom(
-          min = -5, max = -1))
+      try:
+        updateMorale(ship = playerShip, memberIndex = index, value = getRandom(
+            min = -5, max = -1))
+      except:
+        return showError(message = "Can't update the crew's morale.")
     updateCrewInfo()
     updateHeader()
     updateMessages()
