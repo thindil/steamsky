@@ -19,7 +19,7 @@ import std/[os, strutils, tables]
 import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
     messages, missions2, shipscargo, shipscrew, shipscrew2, tk, types, utils]
 import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew,
-    shipsuimodules2, showmainmenu, statisticsui, updateheader
+    shipsuimodules2, showmainmenu, statisticsui, updateheader, utilsui2
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
