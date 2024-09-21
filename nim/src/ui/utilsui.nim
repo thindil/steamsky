@@ -239,6 +239,18 @@ proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
         WriteIOEffect, TimeEffect, RootEffect].} =
+  ## Process question from dialog when the player answer Yes there
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the name was set, otherwise tclError
+  ##
+  ## Tcl:
+  ## ProcessQuestion answer
+  ## Answer is the answer set for the selected question
   let answer = argv[1]
   if answer == "deletesave":
     try:
