@@ -388,7 +388,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
   let
     widget = $argv[1]
     scrollbar = $argv[2]
