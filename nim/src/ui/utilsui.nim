@@ -387,6 +387,23 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     updateMessages()
   return tclOk
 
+proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    widget = $argv[1]
+    scrollbar = $argv[2]
+  tclEval(script = "bind " & widget & " <Button-4> {if {[winfo ismapped " &
+      scrollbar & "]} {event generate " & scrollbar & " <Button-4>}}")
+  tclEval(script = "bind " & widget & " <Key-Prior> {if {[winfo ismapped " &
+      scrollbar & "]} {event generate " & scrollbar & " <Button-4>}}")
+  tclEval(script = "bind " & widget & " <Button-5> {if {[winfo ismapped " &
+      scrollbar & "]} {event generate " & scrollbar & " <Button-5>}}")
+  tclEval(script = "bind " & widget & " <Key-Next> {if {[winfo ismapped " &
+      scrollbar & "]} {event generate " & scrollbar & " <Button-5>}}")
+  tclEval(script = "bind " & widget & " <MouseWheel> {if {[winfo ismapped " &
+      scrollbar & "]} {event generate " & scrollbar & " <MouseWheel> -delta %D}}")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [].} =
   ## Add Tcl commands related to the various UI elements
   discard
@@ -396,6 +413,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [].} =
 #  addCommand("SetTextVariable", setTextVariableCommand)
 #  addCommand("ShowOnMap", showOnMapCommand)
 #  addCommand("ProcessQuestion", processQuestionCommand)
+#  addCommand("SetScrollbarBindings", setScrollbarBindingsCommand)
 
 # Temporary code for interfacing with Ada
 
