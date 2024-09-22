@@ -419,10 +419,17 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, TimeEffect], exportc.} =
   let
-    posX = ($argv[1]).parseInt
-    posY = ($argv[2]).parseInt
+    posX = try:
+        ($argv[1]).parseInt
+      except:
+        return showError(message = "Can't get the X position.")
+    posY = try:
+        ($argv[2]).parseInt
+      except:
+        return showError(message = "Can't get the Y position.")
   if posX == playerShip.skyX and posY == playerShip.skyY:
     showMessage(text = "You are at this location now.",
         title = "Can't set destination")
