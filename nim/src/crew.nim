@@ -157,8 +157,6 @@ proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [],
   ##
   ## Returns the index of the cabin which belongs to the selected crew member
   ## or -1 if nothing found
-  require:
-    memberIndex < playerShip.crew.len
   ensure:
     result in -1..playerShip.modules.high
   body:
