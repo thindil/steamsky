@@ -17,7 +17,7 @@
 
 import std/[os, strutils]
 import ../[config, events, game, tk]
-import dialogs2, errordialog, mainmenucommands, utilsui
+import dialogs2, errordialog, goalsui, mainmenucommands, utilsui
 
 proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     ReadIOEffect, RootEffect], exportc.} =
@@ -62,3 +62,4 @@ proc createMainMenu*() =
   mainmenucommands.addCommands()
   dialogs2.addCommands()
   utilsui.addCommands()
+  goalsui.addCommands()
