@@ -27,11 +27,11 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known events in a base or a friendly ship. Generates new
   ## events
-  let traderIndex = findMember(order = talk)
+  let traderIndex: int = findMember(order = talk)
   if traderIndex == -1:
     return
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  var maxEvents: Natural
+  let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var maxEvents: Natural = 0
   # Asking in base
   if baseIndex > 0:
     maxEvents = (if skyBases[baseIndex].population < 150: 5 elif skyBases[
@@ -42,7 +42,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
         "'.", mType = orderMessage)
     gainRep(baseIndex = baseIndex, points = 1)
   else:
-    let shipIndex = eventsList[skyMap[playerShip.skyX][
+    let shipIndex: Positive = eventsList[skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex].shipIndex
     maxEvents = (if protoShipsList[shipIndex].crew.len <
         5: 1 elif protoShipsList[shipIndex].crew.len < 10: 3 else: 5)
@@ -52,7 +52,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
     deleteEvent(eventIndex = skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex)
     updateOrders(ship = playerShip)
-  let eventsAmount = getRandom(min = 1, max = maxEvents)
+  let eventsAmount: Positive = getRandom(min = 1, max = maxEvents)
   var minX: int = playerShip.skyX - 100
   normalizeCoord(coord = minX)
   var maxX: int = playerShip.skyX + 100
@@ -61,13 +61,13 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
   normalizeCoord(coord = minY, isXAxis = false)
   var maxY: int = playerShip.skyY + 100
   normalizeCoord(coord = maxY, isXAxis = false)
-  var enemies: seq[Positive]
+  var enemies: seq[Positive] = @[]
   generateEnemies(enemies = enemies)
-  for i in 1 .. eventsAmount:
+  for i in 1..eventsAmount:
     var
-      event = getRandom(min = 1, max = 5).EventsTypes
-      attempts = 10
-      eventX, eventY = 0
+      event: EventsTypes = getRandom(min = 1, max = 5).EventsTypes
+      attempts: int = 10
+      eventX, eventY: int = 0
     while true:
       if event == enemyShip:
         eventX = getRandom(min = minX, max = maxX)
@@ -77,7 +77,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
             eventY].eventIndex == -1:
           break
       else:
-        let tmpBaseIndex = getRandom(min = 1, max = 1024)
+        let tmpBaseIndex: Positive = getRandom(min = 1, max = 1024)
         eventX = skyBases[tmpBaseIndex].skyX
         eventY = skyBases[tmpBaseIndex].skyY
         attempts.dec
@@ -111,9 +111,9 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
               eventY].baseIndex].population == 0:
             break
     let
-      diffX = abs(x = playerShip.skyX - eventX)
-      diffY = abs(x = playerShip.skyY - eventY)
-      eventTime = (60 * sqrt(x = (diffX ^ 2).float + (diffY ^ 2).float)).Natural
+      diffX: Natural = abs(x = playerShip.skyX - eventX)
+      diffY: Natural = abs(x = playerShip.skyY - eventY)
+      eventTime: Natural = (60 * sqrt(x = (diffX ^ 2).float + (diffY ^ 2).float)).Natural
     case event
     of enemyShip:
       eventsList.add(y = EventData(eType: enemyShip, skyX: eventX,
@@ -129,10 +129,10 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
       eventsList.add(y = EventData(eType: disease, skyX: eventX,
           skyY: eventY, time: getRandom(min = 10_000, max = 12_000), data: 1))
     of doublePrice:
-      var newItemIndex = 0
+      var newItemIndex: int = 0
       block setDoublePrice:
         while true:
-          var itemIndex = getRandom(min = 1, max = itemsList.len)
+          var itemIndex: Positive = getRandom(min = 1, max = itemsList.len)
           for j in 1 .. itemsList.len:
             itemIndex.dec
             if itemIndex <= 0 and getPrice(baseType = skyBases[skyMap[eventX][
@@ -154,14 +154,14 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
 proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known bases in a base or a friendly ship.
-  let traderIndex = findMember(order = talk)
+  let traderIndex: int = findMember(order = talk)
   if traderIndex == -1:
     return
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    shipIndex = (if baseIndex == 0: eventsList[skyMap[playerShip.skyX][
+    baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    shipIndex: Natural = (if baseIndex == 0: eventsList[skyMap[playerShip.skyX][
         playerShip.skyY].eventIndex].shipIndex else: 0)
-  var amount, radius: Natural
+  var amount, radius: Natural = 0
   # Asking in base
   if baseIndex > 0:
     if skyBases[baseIndex].population < 150:
@@ -192,14 +192,14 @@ proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
         playerShip.skyY].eventIndex)
     updateOrders(ship = playerShip)
   block findBases:
-    for x in -radius .. radius:
-      for y in -radius .. radius:
+    for x in -radius..radius:
+      for y in -radius..radius:
         var
           tempX: int = playerShip.skyX + x
           tempY: int = playerShip.skyY + y
         normalizeCoord(coord = tempX)
         normalizeCoord(coord = tempY, isXAxis = false)
-        let tmpBaseIndex = skyMap[tempX][tempY].baseIndex
+        let tmpBaseIndex: Natural = skyMap[tempX][tempY].baseIndex
         if tmpBaseIndex > 0 and not skyBases[tmpBaseIndex].known:
           skyBases[tmpBaseIndex].known = true
           amount.dec
@@ -216,7 +216,7 @@ proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
     else:
       amount = (if protoShipsList[shipIndex].crew.len <
           5: 1 elif protoShipsList[shipIndex].crew.len < 10: 2 else: 4)
-    var unknownBases = 0
+    var unknownBases: int = 0
     for base in skyBases:
       if not base.known:
         unknownBases.inc
@@ -224,7 +224,7 @@ proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
         break
     if unknownBases >= amount:
       while true:
-        let tmpBaseIndex = getRandom(min = 1, max = 1_024)
+        let tmpBaseIndex: Positive = getRandom(min = 1, max = 1_024)
         if not skyBases[tmpBaseIndex].known:
           skyBases[tmpBaseIndex].known = true
           amount.dec
