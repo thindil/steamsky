@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -35,14 +35,13 @@
 <ul>
 <li>1.1. <a href="./ui/crafts-ui_ads.html#robo16">Crafts/CUI4</a></li>
 <ul>
-<li>1.1.1. <a href="./ui/crafts-ui_ads.html#robo331">CUI4/CUI4.Add_Commands</a></li>
-<li>1.1.2. <a href="./ui/crafts-ui_adb.html#robo452">CUI4/CUI4.Set_Crafting_Command</a></li>
-<li>1.1.3. <a href="./ui/crafts-ui_adb.html#robo453">CUI4/CUI4.Show_Crafting_Command</a></li>
-<li>1.1.4. <a href="./ui/crafts-ui_adb.html#robo454">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
-<li>1.1.5. <a href="./ui/crafts-ui_adb.html#robo455">CUI4/CUI4.Show_Set_Recipe_Command</a></li>
-<li>1.1.6. <a href="./ui/crafts-ui_adb.html#robo456">CUI4/CUI4.Sort_Crafting_Command</a></li>
+<li>1.1.1. <a href="./ui/crafts-ui_ads.html#robo302">CUI4/CUI4.Add_Commands</a></li>
+<li>1.1.2. <a href="./ui/crafts-ui_adb.html#robo398">CUI4/CUI4.Set_Crafting_Command</a></li>
+<li>1.1.3. <a href="./ui/crafts-ui_adb.html#robo399">CUI4/CUI4.Show_Crafting_Command</a></li>
+<li>1.1.4. <a href="./ui/crafts-ui_adb.html#robo400">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
+<li>1.1.5. <a href="./ui/crafts-ui_adb.html#robo401">CUI4/CUI4.Show_Set_Recipe_Command</a></li>
+<li>1.1.6. <a href="./ui/crafts-ui_adb.html#robo402">CUI4/CUI4.Sort_Crafting_Command</a></li>
 </ul>
-<li>1.2. <a href="#robo160">Crafts/Crafts.Craft_Data</a></li>
 </ul>
 </ul>
 <hr />
@@ -57,46 +56,9 @@
 <pre class="source"><span class="keyword">package</span> <strong>Crafts</strong> <span class="keyword">is</span>
 </pre>
 
-<hr />
-<a name="Crafts2fCrafts2eCraft5fData"></a>
-<a name="robo160"></a><h2>Crafts/Crafts.Craft_Data [ Records ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Data structure for recipes
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Craft_Data <span class="keyword">is</span> <span class="keyword">record</span>
-      Material_Types<span class="sign">:</span> TinyString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-      Material_Amounts<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-      Result_Index<span class="sign">:</span> Natural<span class="sign">;</span>
-      Result_Amount<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
-      Workplace<span class="sign">:</span> Module_Type<span class="sign">;</span>
-      Skill<span class="sign">:</span> SkillsData_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
-      Time<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-      Difficulty<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-      Tool<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">;</span>
-      Reputation<span class="sign">:</span> Reputation_Range<span class="sign">;</span>
-      Tool_Quality<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Material_Types   - Types of material needed for recipe
- Material_Amounts - Amounts of material needed for recipe
- Result_Index     - Prototype index of crafted item
- Result_Amount    - Amount of products
- Workplace        - <a href="./bases-ship_ads.html#robo7">Ship</a> module needed for crafting
- Skill            - Skill used in crafting item
- Time             - Minutes needed for finish recipe
- Difficulty       - How difficult is recipe to discover
- Tool             - Type of tool used to craft item
- Reputation       - Minimal reputation in base needed to buy that recipe
- Tool_Quality     - Minimal quality of tool needed to craft that recipe
-</pre>
-
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
+<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-09-22 03:31:44</p>
 </div> <!-- footer -->
 </body>
 </html>

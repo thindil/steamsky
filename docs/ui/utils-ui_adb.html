@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,15 +31,15 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo574">UUI/UUI.Show_On_Map_Command</a></li>
-<li>2. <a href="#robo573">UUI/UUI.Set_Text_Variable_Command</a></li>
-<li>3. <a href="#robo572">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
-<li>4. <a href="#robo571">UUI/UUI.Set_Destination_Command</a></li>
-<li>5. <a href="#robo570">UUI/UUI.Process_Question_Command</a></li>
+<li>1. <a href="#robo520">UUI/UUI.Show_On_Map_Command</a></li>
+<li>2. <a href="#robo519">UUI/UUI.Set_Text_Variable_Command</a></li>
+<li>3. <a href="#robo518">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
+<li>4. <a href="#robo517">UUI/UUI.Set_Destination_Command</a></li>
+<li>5. <a href="#robo516">UUI/UUI.Process_Question_Command</a></li>
 </ul>
 <hr />
 <a name="UUI2fUUI2eProcess5fQuestion5fCommand"></a>
-<a name="robo570"></a><h2>UUI/UUI.Process_Question_Command [ Commands ]</h2>
+<a name="robo516"></a><h2>UUI/UUI.Process_Question_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -67,7 +67,7 @@
 
 <hr />
 <a name="UUI2fUUI2eSet5fDestination5fCommand"></a>
-<a name="robo571"></a><h2>UUI/UUI.Set_Destination_Command [ Commands ]</h2>
+<a name="robo517"></a><h2>UUI/UUI.Set_Destination_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -77,7 +77,9 @@
 <pre class="source">   <span class="keyword">function</span> Set_Destination_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"setDestination2Command"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -96,7 +98,7 @@
 
 <hr />
 <a name="UUI2fUUI2eSet5fScrollbar5fBindings5fCommand"></a>
-<a name="robo572"></a><h2>UUI/UUI.Set_Scrollbar_Bindings_Command [ Commands ]</h2>
+<a name="robo518"></a><h2>UUI/UUI.Set_Scrollbar_Bindings_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -107,7 +109,9 @@
 <pre class="source">   <span class="keyword">function</span> Set_Scrollbar_Bindings_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"setScrollbarBindingsCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ClientData - Custom data send to the command. Unused
@@ -126,7 +130,7 @@
 
 <hr />
 <a name="UUI2fUUI2eSet5fText5fVariable5fCommand"></a>
-<a name="robo573"></a><h2>UUI/UUI.Set_Text_Variable_Command [ Commands ]</h2>
+<a name="robo519"></a><h2>UUI/UUI.Set_Text_Variable_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -156,7 +160,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShow5fOn5fMap5fCommand"></a>
-<a name="robo574"></a><h2>UUI/UUI.Show_On_Map_Command [ Commands ]</h2>
+<a name="robo520"></a><h2>UUI/UUI.Show_On_Map_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -187,7 +191,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/utils-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
+<p>Generated from ./src/ui/utils-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-09-22 03:31:44</p>
 </div> <!-- footer -->
 </body>
 </html>

@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -33,19 +33,16 @@
 <ul>
 <li>1. <a href="#robo68">Utils/UUI</a></li>
 <ul>
-<li>1.1. <a href="#robo154">UUI/UUI.CreateCommands</a></li>
-<li>1.2. <a href="#robo440">UUI/UUI.Add_Command</a></li>
-<li>1.3. <a href="#robo441">UUI/UUI.Add_Commands</a></li>
-<li>1.4. <a href="#robo442">UUI/UUI.Delete_Widgets</a></li>
-<li>1.5. <a href="#robo443">UUI/UUI.Set_Fonts</a></li>
-<li>1.6. <a href="#robo444">UUI/UUI.Show_Screen</a></li>
-<li>1.7. <a href="#robo445">UUI/UUI.Update_Messages</a></li>
-<li>1.8. <a href="./dialogs_adb.html#robo569">UUI/UUI.Get_String_Command</a></li>
-<li>1.9. <a href="./utils-ui_adb.html#robo570">UUI/UUI.Process_Question_Command</a></li>
-<li>1.10. <a href="./utils-ui_adb.html#robo571">UUI/UUI.Set_Destination_Command</a></li>
-<li>1.11. <a href="./utils-ui_adb.html#robo572">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
-<li>1.12. <a href="./utils-ui_adb.html#robo573">UUI/UUI.Set_Text_Variable_Command</a></li>
-<li>1.13. <a href="./utils-ui_adb.html#robo574">UUI/UUI.Show_On_Map_Command</a></li>
+<li>1.1. <a href="#robo149">UUI/UUI.CreateCommands</a></li>
+<li>1.2. <a href="#robo389">UUI/UUI.Add_Command</a></li>
+<li>1.3. <a href="#robo390">UUI/UUI.Add_Commands</a></li>
+<li>1.4. <a href="#robo391">UUI/UUI.Set_Fonts</a></li>
+<li>1.5. <a href="./dialogs_adb.html#robo515">UUI/UUI.Get_String_Command</a></li>
+<li>1.6. <a href="./utils-ui_adb.html#robo516">UUI/UUI.Process_Question_Command</a></li>
+<li>1.7. <a href="./utils-ui_adb.html#robo517">UUI/UUI.Set_Destination_Command</a></li>
+<li>1.8. <a href="./utils-ui_adb.html#robo518">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
+<li>1.9. <a href="./utils-ui_adb.html#robo519">UUI/UUI.Set_Text_Variable_Command</a></li>
+<li>1.10. <a href="./utils-ui_adb.html#robo520">UUI/UUI.Show_On_Map_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -62,7 +59,7 @@
 
 <hr />
 <a name="UUI2fUUI2eCreateCommands"></a>
-<a name="robo154"></a><h2>UUI/UUI.CreateCommands [ Types ]</h2>
+<a name="robo149"></a><h2>UUI/UUI.CreateCommands [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">UUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -75,7 +72,7 @@
 
 <hr />
 <a name="UUI2fUUI2eAdd5fCommand"></a>
-<a name="robo440"></a><h2>UUI/UUI.Add_Command [ Subprograms ]</h2>
+<a name="robo389"></a><h2>UUI/UUI.Add_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -93,7 +90,7 @@
 
 <hr />
 <a name="UUI2fUUI2eAdd5fCommands"></a>
-<a name="robo441"></a><h2>UUI/UUI.Add_Commands [ Subprograms ]</h2>
+<a name="robo390"></a><h2>UUI/UUI.Add_Commands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -104,29 +101,8 @@
 </pre>
 
 <hr />
-<a name="UUI2fUUI2eDelete5fWidgets"></a>
-<a name="robo442"></a><h2>UUI/UUI.Delete_Widgets [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Remove widgets from the selected frame
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Delete_Widgets
-     <span class="sign">(</span>Start_Index<span class="sign">,</span> End_Index<span class="sign">:</span> Integer<span class="sign">;</span> Frame<span class="sign">:</span> Tk_Widget<span class="keyword">'Class</span><span class="sign">);</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Start_Index - The first row from which widgets will be removed
- End_Index   - The last row in which widgets will be removed
- Frame       - The fram from which widgets will be removed
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 5.9 - Added
-</pre>
-
-<hr />
 <a name="UUI2fUUI2eSet5fFonts"></a>
-<a name="robo443"></a><h2>UUI/UUI.Set_Fonts [ Subprograms ]</h2>
+<a name="robo391"></a><h2>UUI/UUI.Set_Fonts [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -143,37 +119,9 @@
 <pre> 7.1 - Added
 </pre>
 
-<hr />
-<a name="UUI2fUUI2eShow5fScreen"></a>
-<a name="robo444"></a><h2>UUI/UUI.Show_Screen [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Remove an old screen from the window and add a new to it
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Show_Screen<span class="sign">(</span>New_Screen_Name<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> New_Screen_Name<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> NewScreenName - Part of th name of the new Ttk_Frame to add
-</pre>
-
-<hr />
-<a name="UUI2fUUI2eUpdate5fMessages"></a>
-<a name="robo445"></a><h2>UUI/UUI.Update_Messages [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Update game messages
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> Update_Messages<span class="sign">;</span>
-</pre>
-
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
+<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-09-22 03:31:44</p>
 </div> <!-- footer -->
 </body>
 </html>

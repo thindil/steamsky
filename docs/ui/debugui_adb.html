@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steam Sky 10.2 code documentation</a>
+<a name="robo_top_of_doc">Steam Sky 10.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,28 +31,28 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo474">DebugUI/DebugUI.Update_Module_Command</a></li>
-<li>2. <a href="#robo473">DebugUI/DebugUI.Update_Member_Command</a></li>
-<li>3. <a href="#robo472">DebugUI/DebugUI.Update_Item_Command</a></li>
-<li>4. <a href="#robo471">DebugUI/DebugUI.Update_Base_Command</a></li>
-<li>5. <a href="#robo470">DebugUI/DebugUI.Toggle_Item_Entry_Command</a></li>
-<li>6. <a href="#robo469">DebugUI/DebugUI.Save_Game_Command</a></li>
-<li>7. <a href="#robo468">DebugUI/DebugUI.Refresh_Module_Command</a></li>
-<li>8. <a href="#robo467">DebugUI/DebugUI.Refresh_Member_Command</a></li>
-<li>9. <a href="#robo466">DebugUI/DebugUI.Refresh_Events_Command</a></li>
-<li>10. <a href="#robo465">DebugUI/DebugUI.Refresh_Command</a></li>
-<li>11. <a href="#robo464">DebugUI/DebugUI.Refresh_Cargo_Command</a></li>
-<li>12. <a href="#robo463">DebugUI/DebugUI.Refresh_Base_Command</a></li>
-<li>13. <a href="#robo462">DebugUI/DebugUI.Move_Ship_Command</a></li>
-<li>14. <a href="#robo461">DebugUI/DebugUI.Delete_Event_Command</a></li>
-<li>15. <a href="#robo460">DebugUI/DebugUI.Add_Skill_Command</a></li>
-<li>16. <a href="#robo459">DebugUI/DebugUI.Add_Ship_Command</a></li>
-<li>17. <a href="#robo458">DebugUI/DebugUI.Add_Item_Command</a></li>
-<li>18. <a href="#robo457">DebugUI/DebugUI.Add_Event_Command</a></li>
+<li>1. <a href="#robo420">DebugUI/DebugUI.Update_Module_Command</a></li>
+<li>2. <a href="#robo419">DebugUI/DebugUI.Update_Member_Command</a></li>
+<li>3. <a href="#robo418">DebugUI/DebugUI.Update_Item_Command</a></li>
+<li>4. <a href="#robo417">DebugUI/DebugUI.Update_Base_Command</a></li>
+<li>5. <a href="#robo416">DebugUI/DebugUI.Toggle_Item_Entry_Command</a></li>
+<li>6. <a href="#robo415">DebugUI/DebugUI.Save_Game_Command</a></li>
+<li>7. <a href="#robo414">DebugUI/DebugUI.Refresh_Module_Command</a></li>
+<li>8. <a href="#robo413">DebugUI/DebugUI.Refresh_Member_Command</a></li>
+<li>9. <a href="#robo412">DebugUI/DebugUI.Refresh_Events_Command</a></li>
+<li>10. <a href="#robo411">DebugUI/DebugUI.Refresh_Command</a></li>
+<li>11. <a href="#robo410">DebugUI/DebugUI.Refresh_Cargo_Command</a></li>
+<li>12. <a href="#robo409">DebugUI/DebugUI.Refresh_Base_Command</a></li>
+<li>13. <a href="#robo408">DebugUI/DebugUI.Move_Ship_Command</a></li>
+<li>14. <a href="#robo407">DebugUI/DebugUI.Delete_Event_Command</a></li>
+<li>15. <a href="#robo406">DebugUI/DebugUI.Add_Skill_Command</a></li>
+<li>16. <a href="#robo405">DebugUI/DebugUI.Add_Ship_Command</a></li>
+<li>17. <a href="#robo404">DebugUI/DebugUI.Add_Item_Command</a></li>
+<li>18. <a href="#robo403">DebugUI/DebugUI.Add_Event_Command</a></li>
 </ul>
 <hr />
 <a name="DebugUI2fDebugUI2eAdd5fEvent5fCommand"></a>
-<a name="robo457"></a><h2>DebugUI/DebugUI.Add_Event_Command [ Commands ]</h2>
+<a name="robo403"></a><h2>DebugUI/DebugUI.Add_Event_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -62,7 +62,9 @@
 <pre class="source">   <span class="keyword">function</span> Add_Event_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugAddEventCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -79,7 +81,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eAdd5fItem5fCommand"></a>
-<a name="robo458"></a><h2>DebugUI/DebugUI.Add_Item_Command [ Commands ]</h2>
+<a name="robo404"></a><h2>DebugUI/DebugUI.Add_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -89,7 +91,9 @@
 <pre class="source">   <span class="keyword">function</span> Add_Item_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugAddItemCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -106,7 +110,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eAdd5fShip5fCommand"></a>
-<a name="robo459"></a><h2>DebugUI/DebugUI.Add_Ship_Command [ Commands ]</h2>
+<a name="robo405"></a><h2>DebugUI/DebugUI.Add_Ship_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -116,7 +120,9 @@
 <pre class="source">   <span class="keyword">function</span> Add_Ship_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugAddShipCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -133,7 +139,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eAdd5fSkill5fCommand"></a>
-<a name="robo460"></a><h2>DebugUI/DebugUI.Add_Skill_Command [ Commands ]</h2>
+<a name="robo406"></a><h2>DebugUI/DebugUI.Add_Skill_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -143,7 +149,9 @@
 <pre class="source">   <span class="keyword">function</span> Add_Skill_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugAddSkillCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -160,7 +168,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eDelete5fEvent5fCommand"></a>
-<a name="robo461"></a><h2>DebugUI/DebugUI.Delete_Event_Command [ Commands ]</h2>
+<a name="robo407"></a><h2>DebugUI/DebugUI.Delete_Event_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -170,7 +178,9 @@
 <pre class="source">   <span class="keyword">function</span> Delete_Event_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugDeleteEventCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -187,7 +197,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eMove5fShip5fCommand"></a>
-<a name="robo462"></a><h2>DebugUI/DebugUI.Move_Ship_Command [ Commands ]</h2>
+<a name="robo408"></a><h2>DebugUI/DebugUI.Move_Ship_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -197,7 +207,9 @@
 <pre class="source">   <span class="keyword">function</span> Move_Ship_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugMoveShipCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -214,7 +226,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eRefresh5fBase5fCommand"></a>
-<a name="robo463"></a><h2>DebugUI/DebugUI.Refresh_Base_Command [ Commands ]</h2>
+<a name="robo409"></a><h2>DebugUI/DebugUI.Refresh_Base_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -224,7 +236,9 @@
 <pre class="source">   <span class="keyword">function</span> Refresh_Base_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"refreshBaseCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -241,7 +255,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eRefresh5fCargo5fCommand"></a>
-<a name="robo464"></a><h2>DebugUI/DebugUI.Refresh_Cargo_Command [ Commands ]</h2>
+<a name="robo410"></a><h2>DebugUI/DebugUI.Refresh_Cargo_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -251,7 +265,9 @@
 <pre class="source">   <span class="keyword">function</span> Refresh_Cargo_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"refreshCargoCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -268,7 +284,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eRefresh5fCommand"></a>
-<a name="robo465"></a><h2>DebugUI/DebugUI.Refresh_Command [ Commands ]</h2>
+<a name="robo411"></a><h2>DebugUI/DebugUI.Refresh_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -278,7 +294,9 @@
 <pre class="source">   <span class="keyword">function</span> Refresh_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"refreshCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -295,7 +313,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eRefresh5fEvents5fCommand"></a>
-<a name="robo466"></a><h2>DebugUI/DebugUI.Refresh_Events_Command [ Commands ]</h2>
+<a name="robo412"></a><h2>DebugUI/DebugUI.Refresh_Events_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -305,7 +323,9 @@
 <pre class="source">   <span class="keyword">function</span> Refresh_Events_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"refreshEventsCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -322,7 +342,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eRefresh5fMember5fCommand"></a>
-<a name="robo467"></a><h2>DebugUI/DebugUI.Refresh_Member_Command [ Commands ]</h2>
+<a name="robo413"></a><h2>DebugUI/DebugUI.Refresh_Member_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -332,7 +352,9 @@
 <pre class="source">   <span class="keyword">function</span> Refresh_Member_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"refreshMemberCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -349,7 +371,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eRefresh5fModule5fCommand"></a>
-<a name="robo468"></a><h2>DebugUI/DebugUI.Refresh_Module_Command [ Commands ]</h2>
+<a name="robo414"></a><h2>DebugUI/DebugUI.Refresh_Module_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -359,7 +381,9 @@
 <pre class="source">   <span class="keyword">function</span> Refresh_Module_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"refreshModuleCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -376,7 +400,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eSave5fGame5fCommand"></a>
-<a name="robo469"></a><h2>DebugUI/DebugUI.Save_Game_Command [ Commands ]</h2>
+<a name="robo415"></a><h2>DebugUI/DebugUI.Save_Game_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -386,7 +410,9 @@
 <pre class="source">   <span class="keyword">function</span> Save_Game_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugSaveGameCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -403,7 +429,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eToggle5fItem5fEntry5fCommand"></a>
-<a name="robo470"></a><h2>DebugUI/DebugUI.Toggle_Item_Entry_Command [ Commands ]</h2>
+<a name="robo416"></a><h2>DebugUI/DebugUI.Toggle_Item_Entry_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -413,7 +439,9 @@
 <pre class="source">   <span class="keyword">function</span> Toggle_Item_Entry_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"toggleItemEntryCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -430,7 +458,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eUpdate5fBase5fCommand"></a>
-<a name="robo471"></a><h2>DebugUI/DebugUI.Update_Base_Command [ Commands ]</h2>
+<a name="robo417"></a><h2>DebugUI/DebugUI.Update_Base_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -440,7 +468,9 @@
 <pre class="source">   <span class="keyword">function</span> Update_Base_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugUpdateBaseCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -457,7 +487,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eUpdate5fItem5fCommand"></a>
-<a name="robo472"></a><h2>DebugUI/DebugUI.Update_Item_Command [ Commands ]</h2>
+<a name="robo418"></a><h2>DebugUI/DebugUI.Update_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -467,7 +497,9 @@
 <pre class="source">   <span class="keyword">function</span> Update_Item_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugUpdateItemCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command.
@@ -484,7 +516,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eUpdate5fMember5fCommand"></a>
-<a name="robo473"></a><h2>DebugUI/DebugUI.Update_Member_Command [ Commands ]</h2>
+<a name="robo419"></a><h2>DebugUI/DebugUI.Update_Member_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -494,7 +526,9 @@
 <pre class="source">   <span class="keyword">function</span> Update_Member_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugUpdateMemberCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -511,7 +545,7 @@
 
 <hr />
 <a name="DebugUI2fDebugUI2eUpdate5fModule5fCommand"></a>
-<a name="robo474"></a><h2>DebugUI/DebugUI.Update_Module_Command [ Commands ]</h2>
+<a name="robo420"></a><h2>DebugUI/DebugUI.Update_Module_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo19">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -521,7 +555,9 @@
 <pre class="source">   <span class="keyword">function</span> Update_Module_Command
      <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">,</span>
+      Import <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      External_Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"debugUpdateModuleCommand"</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Client_Data - Custom data send to the command. Unused
@@ -538,7 +574,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-08-25 03:38:39</p>
+<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2024-09-22 03:31:44</p>
 </div> <!-- footer -->
 </body>
 </html>
