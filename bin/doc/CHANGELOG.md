@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Show the player's ship's orders' button only when there are any available
   orders
+- Updated the look of the dialog with information about an error
 
 ### Fixed
 - Typo in changelog
