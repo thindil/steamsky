@@ -16,19 +16,19 @@
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Interfaces.C;
-with GNAT.Directory_Operations;
+-- with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel;
+-- with Tcl.Tk.Ada.Widgets.TtkFrame;
+-- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tklib.Ada.Tooltip;
-with Config;
-with Game;
+-- with Config;
+-- with Game;
 with Utils;
 with Utils.UI;
 
@@ -51,72 +51,74 @@ package body Goals.UI is
    function Show_Goals_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Convention => C,
+      Import => True,
+      External_Name => "showGoalsCommand";
       -- ****
 
-   function Show_Goals_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use GNAT.Directory_Operations;
-      use Tcl.Tk.Ada.Widgets.TtkFrame;
-      use Tcl.Tk.Ada.Widgets.TtkLabel;
-      use Config;
-      use Game;
-
-      Goals_Dialog: constant Ttk_Frame :=
-        Get_Widget(pathName => ".goalsdialog", Interp => Interp);
-      Goals_View: constant Ttk_Tree_View :=
-        Get_Widget(pathName => Goals_Dialog & ".view", Interp => Interp);
-      Select_Button: constant Ttk_Button :=
-        Get_Widget
-          (pathName => Goals_Dialog & ".selectbutton", Interp => Interp);
-      Dialog_Header: constant Ttk_Label :=
-        Get_Widget(pathName => Goals_Dialog & ".header", Interp => Interp);
-      Goal: Goal_Data := (others => <>);
-   begin
-      Tcl_EvalFile
-        (interp => Interp,
-         fileName =>
-           To_String(Source => Data_Directory) & "ui" & Dir_Separator &
-           "goals.tcl");
-      Load_Goals_Loop :
-      for I in 1 .. 256 loop
-         Goal := Get_Goal(Index => I);
-         if Length(Source => Goal.Index) > 0 then
-            Insert
-              (TreeViewWidget => Goals_View,
-               Options =>
-                 Goal_Types'Image(Goal.G_Type) & " end -id {" &
-                 To_String(Source => Goal.Index) & "} -text {" &
-                 Goal_Text
-                   (Index => Natural'Value(To_String(Source => Goal.Index))) &
-                 "}");
-         end if;
-      end loop Load_Goals_Loop;
-      configure
-        (Widgt => Select_Button,
-         options =>
-           "-command {SetGoal " & CArgv.Arg(Argv => Argv, N => 1) & "}");
-      Bind
-        (Widgt => Dialog_Header,
-         Sequence =>
-           "<ButtonPress-" &
-           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
-           ">",
-         Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
-      Bind
-        (Widgt => Dialog_Header, Sequence => "<Motion>",
-         Script => "{MoveDialog " & Goals_Dialog & " %X %Y}");
-      Bind
-        (Widgt => Dialog_Header,
-         Sequence =>
-           "<ButtonRelease-" &
-           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
-           ">",
-         Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
-      return TCL_OK;
-   end Show_Goals_Command;
+--   function Show_Goals_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use GNAT.Directory_Operations;
+--      use Tcl.Tk.Ada.Widgets.TtkFrame;
+--      use Tcl.Tk.Ada.Widgets.TtkLabel;
+--      use Config;
+--      use Game;
+--
+--      Goals_Dialog: constant Ttk_Frame :=
+--        Get_Widget(pathName => ".goalsdialog", Interp => Interp);
+--      Goals_View: constant Ttk_Tree_View :=
+--        Get_Widget(pathName => Goals_Dialog & ".view", Interp => Interp);
+--      Select_Button: constant Ttk_Button :=
+--        Get_Widget
+--          (pathName => Goals_Dialog & ".selectbutton", Interp => Interp);
+--      Dialog_Header: constant Ttk_Label :=
+--        Get_Widget(pathName => Goals_Dialog & ".header", Interp => Interp);
+--      Goal: Goal_Data := (others => <>);
+--   begin
+--      Tcl_EvalFile
+--        (interp => Interp,
+--         fileName =>
+--           To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+--           "goals.tcl");
+--      Load_Goals_Loop :
+--      for I in 1 .. 256 loop
+--         Goal := Get_Goal(Index => I);
+--         if Length(Source => Goal.Index) > 0 then
+--            Insert
+--              (TreeViewWidget => Goals_View,
+--               Options =>
+--                 Goal_Types'Image(Goal.G_Type) & " end -id {" &
+--                 To_String(Source => Goal.Index) & "} -text {" &
+--                 Goal_Text
+--                   (Index => Natural'Value(To_String(Source => Goal.Index))) &
+--                 "}");
+--         end if;
+--      end loop Load_Goals_Loop;
+--      configure
+--        (Widgt => Select_Button,
+--         options =>
+--           "-command {SetGoal " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+--      Bind
+--        (Widgt => Dialog_Header,
+--         Sequence =>
+--           "<ButtonPress-" &
+--           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+--           ">",
+--         Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
+--      Bind
+--        (Widgt => Dialog_Header, Sequence => "<Motion>",
+--         Script => "{MoveDialog " & Goals_Dialog & " %X %Y}");
+--      Bind
+--        (Widgt => Dialog_Header,
+--         Sequence =>
+--           "<ButtonRelease-" &
+--           (if Get_Boolean_Setting(Name => "rightButton") then "3" else "1") &
+--           ">",
+--         Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
+--      return TCL_OK;
+--   end Show_Goals_Command;
 
    -- ****o* GUI/GUI.Set_Goal_Command
    -- FUNCTION
