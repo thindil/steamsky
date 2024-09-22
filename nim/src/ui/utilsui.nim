@@ -421,6 +421,19 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
     WriteIOEffect, TimeEffect], exportc.} =
+  ## Set the selected map point as the player's ship destination
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## Returns tclOk if the name was set, otherwise tclError
+  ##
+  ## Tcl:
+  ## SetDestination2 X Y
+  ## X is the x coordinate of point to set, Y is the y coordinate of point
+  ## to set
   let
     posX = try:
         ($argv[1]).parseInt
