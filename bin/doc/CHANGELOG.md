@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.3] - 2024-09-22
 
 ### Added
 - Information about amount of food, fuel and drinks in the player's ship to the
