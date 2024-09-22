@@ -366,34 +366,6 @@ package body Utils.UI is
       External_Name => "setDestination2Command";
       -- ****
 
---   function Set_Destination_Command
---     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
---      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
---      pragma Unreferenced(Client_Data, Argc);
---   begin
---      Set_Ada_Ship(Ship => Player_Ship);
---      if Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) =
---        Player_Ship.Sky_X and
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) =
---          Player_Ship.Sky_Y then
---         Show_Message
---           (Text => "You are at this location now.",
---            Title => "Can't set destination");
---         return TCL_OK;
---      end if;
---      Player_Ship.Destination_X :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
---      Player_Ship.Destination_Y :=
---        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
---      Get_Ada_Ship;
---      Add_Message
---        (Message => "You set the travel destination for your ship.",
---         M_Type => ORDERMESSAGE);
---      Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
---      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
---      return TCL_OK;
---   end Set_Destination_Command;
-
    function Resize_Canvas_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
