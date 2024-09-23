@@ -59,19 +59,31 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   let
     goalsView = ".goalsdialog.view"
-    selectedGoal = tclEval2(script = goalsView & " selection").parseInt
+    selectedGoal = try:
+        tclEval2(script = goalsView & " selection").parseInt
+      except:
+        return showError(message = "Can't get the goal.")
   clearCurrentGoal()
   let buttonName = $argv[1]
   if selectedGoal > 0:
-    currentGoal = goalsList[selectedGoal]
+    try:
+      currentGoal = goalsList[selectedGoal]
+    except:
+      return showError(message = "Can't set the current goal.")
   elif "newgamemenu" notin buttonName:
-    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
+    try:
+      currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
+    except:
+      return showError(message = "Can't set random current goal.")
   let goalButton = buttonName
   if selectedGoal > 0:
-    var buttonText = goalText(index = selectedGoal)
+    var buttonText = try:
+        goalText(index = selectedGoal)
+      except:
+        return showError(message = "Can't get the goal's text.")
     tclEval(script = "tooltip::tooltip " & goalButton & " \"" & buttonText & "\"")
     if buttonText.len > 16:
       buttonText = buttonText[0..16] & "..."
