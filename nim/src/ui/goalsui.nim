@@ -71,8 +71,14 @@ proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
     currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
   let goalButton = buttonName
   if selectedGoal > 0:
-    let buttonText = goalText(index = selectedGoal)
+    var buttonText = goalText(index = selectedGoal)
     tclEval(script = "tooltip::tooltip " & goalButton & " \"" & buttonText & "\"")
+    if buttonText.len > 16:
+      buttonText = buttonText[0..16] & "..."
+    tclEval(script = goalButton & " configure -text {" & buttonText & "}")
+  else:
+    tclEval(script = goalButton & " configure -text {Random}")
+  tclEval(script = ".goalsdialog.closebutton invoke")
   return tclOk
 
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
