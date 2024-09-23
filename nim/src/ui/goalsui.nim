@@ -20,15 +20,19 @@ import ../[config, game, goals, tk]
 import errordialog
 
 proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.exportc.} =
+    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    WriteIOEffect, TimeEffect], exportc.} =
   tclEvalFile(dataDirectory & "ui" & DirSep & "goals.tcl")
   let
     goalsDialog = ".goalsdialog"
     goalsView = goalsDialog & ".view"
   for goal in goalsList.values:
-    tclEval(script = goalsView & " insert " & ($goal.goalType).toUpperAscii &
-        " end -id {" & goal.index & "} -text {" & goalText(
-        index = goal.index.parseInt) & "}")
+    try:
+      tclEval(script = goalsView & " insert " & ($goal.goalType).toUpperAscii &
+          " end -id {" & goal.index & "} -text {" & goalText(
+          index = goal.index.parseInt) & "}")
+    except:
+      return showError(message = "Can't add a goal.")
   let selectButton = goalsDialog & ".selectbutton"
   tclEval(script = selectButton & " configure -command {SetGoal " & $argv[1] & "}")
   let dialogHeader = goalsDialog & ".header"
