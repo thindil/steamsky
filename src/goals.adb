@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -36,37 +36,5 @@ package body Goals is
    begin
       Clear_Ada_Current_Goal;
    end Clear_Current_Goal;
-
-   function Get_Goal(Index: Positive) return Goal_Data is
-      use Interfaces.C;
-
-      --## rule off TYPE_INITIAL_VALUES
-      type Nim_Goal_Data is record
-         Index: chars_ptr;
-         G_Type: Integer;
-         Amount: Natural;
-         Target_Index: chars_ptr;
-         Multiplier: Positive;
-      end record;
-      --## rule on TYPE_INITIAL_VALUES
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_Goal: Nim_Goal_Data;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Get_Ada_Goal(I: Natural; Goal: out Nim_Goal_Data) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaGoal";
-   begin
-      Get_Ada_Goal(I => Index, Goal => Nim_Goal);
-      if Strlen(Item => Nim_Goal.Index) = 0 then
-         return Empty_Goal;
-      end if;
-      return
-        (Index => To_Unbounded_String(Source => Value(Item => Nim_Goal.Index)),
-         G_Type => Goal_Types'Val(Nim_Goal.G_Type), Amount => Nim_Goal.Amount,
-         Target_Index =>
-           To_Unbounded_String(Source => Value(Item => Nim_Goal.Target_Index)),
-         Multiplier => Nim_Goal.Multiplier);
-   end Get_Goal;
 
 end Goals;

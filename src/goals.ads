@@ -1,4 +1,4 @@
---    Copyright 2017-2023 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -95,7 +95,6 @@ package Goals is
       Import => True,
       Convention => C,
       External_Name => "getAdaGoalsAmount";
-   function Get_Goal(Index: Positive) return Goal_Data;
    procedure Set_Current_Goal(Index: Positive) with
       Import => True,
       Convention => C,
