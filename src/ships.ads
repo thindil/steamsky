@@ -406,10 +406,6 @@ package Ships is
 
    procedure Set_Ada_Modules(Ship: in out Ship_Record);
 
-   procedure Get_Ada_Ship(Ship: Ship_Record := Player_Ship);
-
-   procedure Set_Ada_Ship(Ship: in out Ship_Record);
-
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship);
 
    procedure Get_Ship_From_Nim(Ship: in out Ship_Record);
