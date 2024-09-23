@@ -19,13 +19,13 @@ with Interfaces.C;
 -- with GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
+with Tcl.Ada;
 with Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 -- with Tcl.Tk.Ada.Widgets.TtkFrame;
 -- with Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tklib.Ada.Tooltip;
 -- with Config;
 -- with Game;
@@ -145,7 +145,11 @@ package body Goals.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       use Ada.Strings.Fixed;
+      use Tcl.Ada;
       use Tcl.Tklib.Ada.Tooltip;
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkTreeView;
       use Utils;
 
       Goals_View: constant Ttk_Tree_View :=
