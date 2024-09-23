@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables, strutils]
-import ../[config, game, goals, tk]
+import ../[config, game, goals, tk, utils]
 import errordialog
 
 proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -58,11 +58,29 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
       dialogHeader & " 0 0}")
   return tclOk
 
+proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.exportc.} =
+  let
+    goalsView = ".goalsdialog.view"
+    selectedGoal = tclEval2(script = goalsView & " selection").parseInt
+  clearCurrentGoal()
+  let buttonName = $argv[1]
+  if selectedGoal > 0:
+    currentGoal = goalsList[selectedGoal]
+  elif "newgamemenu" notin buttonName:
+    currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
+  let goalButton = buttonName
+  if selectedGoal > 0:
+    let buttonText = goalText(index = selectedGoal)
+    tclEval(script = "tooltip::tooltip " & goalButton & " \"" & buttonText & "\"")
+  return tclOk
+
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
     TimeEffect].} =
   ## Adds Tcl commands related to the goals UI
   try:
     discard
 #    addCommand("ShowGoals", showGoalsCommand)
+#    addCommand("SetGoal", setGoalCommand)
   except:
     showError(message = "Can't add a Tcl command.")
