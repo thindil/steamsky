@@ -85,3 +85,24 @@ proc createMainMenu*() =
     return
   let playerFrameName = ".newgamemenu.canvas.player"
   var textEntry = playerFrameName & ".playername"
+  tclEval(script = textEntry & " delete 0 end")
+  tclEval(script = textEntry & " insert 0 {" & newGameSettings.playerName & "}")
+  tclSetVar(varName = "playergender", newValue = $newGameSettings.playerGender)
+  textEntry = playerFrameName & ".shipname"
+  tclEval(script = textEntry & " delete 0 end")
+  tclEval(script = textEntry & " insert 0 {" & newGameSettings.shipName & "}")
+  var values = ""
+  for faction in factionsList.values:
+    if faction.careers.len > 0:
+      values = values & " {" & faction.name & "}"
+  values.add(y = " Random")
+  var comboBox = playerFrameName & ".faction"
+  tclEval(script = comboBox & " configure -values [list" & values & "]")
+  if newGameSettings.playerFaction == "random":
+    tclEval(script = comboBox & " set Random")
+  else:
+    tclEval(script = comboBox & " set {" & factionsList[newGameSettings.playerFaction].name & "}")
+  tclEval(script = "SetFaction")
+  comboBox = playerFrameName & ".career"
+  if newGameSettings.playerCareer == "random":
+    tclEval(script = comboBox & " set Random")
