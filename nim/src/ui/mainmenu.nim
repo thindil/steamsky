@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils]
+import std/[os, strutils, tables]
 import ../[config, events, game, tk]
-import dialogs2, errordialog, goalsui, mainmenucommands, utilsui
+import dialogs2, errordialog, goalsui, mainmenucommands, table, themes, utilsui
 
 proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     ReadIOEffect, RootEffect], exportc.} =
@@ -58,8 +58,16 @@ proc createMainMenu*() =
         dataDirectory & "\" is the proper place where the game data files exists?} -icon error -type ok")
     tclEval(script = "exit 1")
     return
-  let icon = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
   mainmenucommands.addCommands()
   dialogs2.addCommands()
   utilsui.addCommands()
   goalsui.addCommands()
+  table.addCommands()
+  let icon = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
+  tclEval(script = "wm iconphoto . -default " & icon)
+  tclEvalFile(fileName = themesList[gameSettings.interfaceTheme].fileName)
+  tclEval(script = "ttk::style theme use " & gameSettings.interfaceTheme)
+  loadThemeImages()
+  tclEvalFile(fileName = uiDirectory & "mainmenu.tcl")
+  if not gameSettings.showTooltips:
+    tclEval(script = "tooltip::tooltip disable")
