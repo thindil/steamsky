@@ -55,7 +55,7 @@ proc createMainMenu*() =
     uiDirectory = dataDirectory & "ui" & DirSep
     iconPath = uiDirectory & "images" & DirSep & "icon.png"
     mainWindow = "."
-  if not dirExists(iconPath):
+  if not fileExists(iconPath):
     tclEval(script = "wm withdraw " & mainWindow)
     tclEval(script = "tk_messageBox -message {Couldn't not find the game data files and the game have to stop. Are you sure that directory \"" &
         dataDirectory & "\" is the proper place where the game data files exists?} -icon error -type ok")

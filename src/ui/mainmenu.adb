@@ -49,12 +49,12 @@ with Config; use Config;
 with Dialogs; use Dialogs;
 -- with Factions;
 with Game; use Game;
--- with Goals.UI;
--- with MainMenu.Commands;
+with Goals.UI;
+with MainMenu.Commands;
 -- with Maps.UI;
--- with Table;
+with Table;
 -- with Themes;
--- with Utils.UI;
+with Utils.UI;
 
 package body MainMenu is
 
@@ -132,7 +132,6 @@ package body MainMenu is
          Import => True,
          External_Name => "createAdaMainMenu";
    begin
-      Create_Ada_Main_Menu;
 --      if not Exists(Name => Icon_Path) then
 --         Wm_Set(Widgt => Main_Window, Action => "withdraw");
 --         if MessageBox
@@ -147,11 +146,12 @@ package body MainMenu is
 --      end if;
 --      Icon :=
 --        Create(pathName => "logo", options => "-file {" & Icon_Path & "}");
---      MainMenu.Commands.Add_Commands;
---      Dialogs.Add_Commands;
---      Utils.UI.Add_Commands;
---      Goals.UI.Add_Commands;
---      Table.Add_Commands;
+      MainMenu.Commands.Add_Commands;
+      Dialogs.Add_Commands;
+      Utils.UI.Add_Commands;
+      Goals.UI.Add_Commands;
+      Table.Add_Commands;
+      Create_Ada_Main_Menu;
 --      Wm_Set
 --        (Widgt => Main_Window, Action => "iconphoto",
 --         Options => "-default " & Icon);
