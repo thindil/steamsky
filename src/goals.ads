@@ -89,15 +89,4 @@ package Goals is
    procedure Clear_Current_Goal;
    -- ****
 
--- Temporary code to interact with Nim
-
-   function Get_Goals_Amount return Positive with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaGoalsAmount";
-   procedure Set_Current_Goal(Index: Positive) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaCurrentGoal2";
-
 end Goals;
