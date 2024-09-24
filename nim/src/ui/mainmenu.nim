@@ -101,32 +101,63 @@ proc createMainMenu*() =
   if newGameSettings.playerFaction == "random":
     tclEval(script = comboBox & " set Random")
   else:
-    tclEval(script = comboBox & " set {" & factionsList[newGameSettings.playerFaction].name & "}")
+    tclEval(script = comboBox & " set {" & factionsList[
+        newGameSettings.playerFaction].name & "}")
   tclEval(script = "SetFaction")
   comboBox = playerFrameName & ".career"
   if newGameSettings.playerCareer == "random":
     tclEval(script = comboBox & " set Random")
   else:
-    tclEval(script = comboBox & " set {" & careersList[newGameSettings.playerCareer].name & "}")
+    tclEval(script = comboBox & " set {" & careersList[
+        newGameSettings.playerCareer].name & "}")
   comboBox = playerFrameName & ".base"
-  tclEval(script = comboBox & " set " & (if newGameSettings.startingBase == "Any": "Any" else: "{" & basesTypesList[newGameSettings.startingBase].name & "}"))
+  tclEval(script = comboBox & " set " & (if newGameSettings.startingBase ==
+      "Any": "Any" else: "{" & basesTypesList[
+      newGameSettings.startingBase].name & "}"))
   let difficultyFrameName = ".newgamemenu.canvas.difficulty"
   comboBox = difficultyFrameName & ".difficultylevel"
   var spinBox = difficultyFrameName & ".enemydamage"
-  tclEval(script = spinBox & " set " & $((newGameSettings.enemyDamageBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((newGameSettings.enemyDamageBonus *
+      100.0).Natural))
   spinBox = difficultyFrameName & ".playerdamage"
-  tclEval(script = spinBox & " set " & $((newGameSettings.playerDamageBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((newGameSettings.playerDamageBonus *
+      100.0).Natural))
   spinBox = difficultyFrameName & ".enemymeleedamage"
-  tclEval(script = spinBox & " set " & $((newGameSettings.enemyMeleeDamageBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((
+      newGameSettings.enemyMeleeDamageBonus * 100.0).Natural))
   spinBox = difficultyFrameName & ".playermeleedamage"
-  tclEval(script = spinBox & " set " & $((newGameSettings.playerMeleeDamageBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((
+      newGameSettings.playerMeleeDamageBonus * 100.0).Natural))
   spinBox = difficultyFrameName & ".experience"
-  tclEval(script = spinBox & " set " & $((newGameSettings.experienceBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((newGameSettings.experienceBonus *
+      100.0).Natural))
   spinBox = difficultyFrameName & ".reputation"
-  tclEval(script = spinBox & " set " & $((newGameSettings.reputationBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((newGameSettings.reputationBonus *
+      100.0).Natural))
   spinBox = difficultyFrameName & ".upgrade"
-  tclEval(script = spinBox & " set " & $((newGameSettings.upgradeCostBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((newGameSettings.upgradeCostBonus *
+      100.0).Natural))
   spinBox = difficultyFrameName & ".prices"
-  tclEval(script = spinBox & " set " & $((newGameSettings.pricesBonus * 100.0).Natural))
+  tclEval(script = spinBox & " set " & $((newGameSettings.pricesBonus *
+      100.0).Natural))
   tclEval(script = "SetPoints")
-  showMainMenu()
+  tclEval(script = comboBox & " current " & $(
+      newGameSettings.difficultyLevel.ord))
+  tclEval(script = "event generate " & comboBox & " <<ComboboxSelected")
+  var button = ".newgamemenu.canvas.player.randomplayer"
+  tclEval(script = button & " configure -image randomicon")
+  button = ".newgamemenu.canvas.player.randomship"
+  tclEval(script = button & " configure -image randomicon")
+  button = ".newgamemenu.canvas.player.gender.male"
+  tclEval(script = button & " configure -image maleicon")
+  button = ".newgamemenu.canvas.player.gender.female"
+  tclEval(script = button & " configure -image femaleicon")
+  # showMainMenu()
+
+# Temporary code for interfacing with Ada
+
+proc createAdaMainMenu() {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+  try:
+    createMainMenu()
+  except:
+    echo getCurrentExceptionMsg()
