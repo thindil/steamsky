@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[config, events, game, game2, tk]
+import ../[basestypes, careers, config, events, game, game2, tk]
 import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu, table,
     themes, utilsui, utilsui2
 
@@ -106,3 +106,27 @@ proc createMainMenu*() =
   comboBox = playerFrameName & ".career"
   if newGameSettings.playerCareer == "random":
     tclEval(script = comboBox & " set Random")
+  else:
+    tclEval(script = comboBox & " set {" & careersList[newGameSettings.playerCareer].name & "}")
+  comboBox = playerFrameName & ".base"
+  tclEval(script = comboBox & " set " & (if newGameSettings.startingBase == "Any": "Any" else: "{" & basesTypesList[newGameSettings.startingBase].name & "}"))
+  let difficultyFrameName = ".newgamemenu.canvas.difficulty"
+  comboBox = difficultyFrameName & ".difficultylevel"
+  var spinBox = difficultyFrameName & ".enemydamage"
+  tclEval(script = spinBox & " set " & $((newGameSettings.enemyDamageBonus * 100.0).Natural))
+  spinBox = difficultyFrameName & ".playerdamage"
+  tclEval(script = spinBox & " set " & $((newGameSettings.playerDamageBonus * 100.0).Natural))
+  spinBox = difficultyFrameName & ".enemymeleedamage"
+  tclEval(script = spinBox & " set " & $((newGameSettings.enemyMeleeDamageBonus * 100.0).Natural))
+  spinBox = difficultyFrameName & ".playermeleedamage"
+  tclEval(script = spinBox & " set " & $((newGameSettings.playerMeleeDamageBonus * 100.0).Natural))
+  spinBox = difficultyFrameName & ".experience"
+  tclEval(script = spinBox & " set " & $((newGameSettings.experienceBonus * 100.0).Natural))
+  spinBox = difficultyFrameName & ".reputation"
+  tclEval(script = spinBox & " set " & $((newGameSettings.reputationBonus * 100.0).Natural))
+  spinBox = difficultyFrameName & ".upgrade"
+  tclEval(script = spinBox & " set " & $((newGameSettings.upgradeCostBonus * 100.0).Natural))
+  spinBox = difficultyFrameName & ".prices"
+  tclEval(script = spinBox & " set " & $((newGameSettings.pricesBonus * 100.0).Natural))
+  tclEval(script = "SetPoints")
+  showMainMenu()
