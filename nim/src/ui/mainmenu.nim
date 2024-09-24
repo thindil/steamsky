@@ -16,8 +16,9 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
-import ../[config, events, game, tk]
-import dialogs2, errordialog, goalsui, mainmenucommands, table, themes, utilsui
+import ../[config, events, game, game2, tk]
+import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu, table,
+    themes, utilsui, utilsui2
 
 proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     ReadIOEffect, RootEffect], exportc.} =
@@ -47,6 +48,8 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     showError(message = "Can't generate traders")
   #createGameUi()
 
+var dataError: string
+
 proc createMainMenu*() =
   let
     uiDirectory = dataDirectory & "ui" & DirSep
@@ -71,3 +74,14 @@ proc createMainMenu*() =
   tclEvalFile(fileName = uiDirectory & "mainmenu.tcl")
   if not gameSettings.showTooltips:
     tclEval(script = "tooltip::tooltip disable")
+  setFonts(newSize = gameSettings.mapFontSize, fontType = mapFont)
+  setFonts(newSize = gameSettings.helpFontSize, fontType = helpFont)
+  setFonts(newSize = gameSettings.interfaceFontSize, fontType = interfaceFont)
+  let versionLabel = ".mainmenu.version"
+  tclEval(script = versionLabel & " configure -text {" & gameVersion & " development}")
+  dataError = loadGameData()
+  if dataError.len > 0:
+    showMainMenu()
+    return
+  let playerFrameName = ".newgamemenu.canvas.player"
+  var textEntry = playerFrameName & ".playername"
