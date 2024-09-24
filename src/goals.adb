@@ -15,11 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Goals is
 
    function Goal_Text(Index: Natural) return String is
+      use Interfaces.C.Strings;
+
       function Goal_Ada_Text(I: Natural) return chars_ptr with
          Import => True,
          Convention => C,
