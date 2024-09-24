@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New icon for expand info's section. Author: Delapouite
+  (https://game-icons.net), license CC BY 3.0
+
 ## [10.3] - 2024-09-22
 
 ### Added
