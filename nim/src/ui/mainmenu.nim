@@ -50,7 +50,8 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
 
 var dataError: string
 
-proc createMainMenu*() =
+proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
+    WriteIOEffect, TimeEffect, RootEffect].} =
   let
     uiDirectory = dataDirectory & "ui" & DirSep
     iconPath = uiDirectory & "images" & DirSep & "icon.png"
@@ -68,7 +69,11 @@ proc createMainMenu*() =
   table.addCommands()
   let icon = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
   tclEval(script = "wm iconphoto . -default " & icon)
-  tclEvalFile(fileName = themesList[gameSettings.interfaceTheme].fileName)
+  try:
+    tclEvalFile(fileName = themesList[gameSettings.interfaceTheme].fileName)
+  except:
+    showError(message = "Can't eval interface theme file.")
+    return
   tclEval(script = "ttk::style theme use " & gameSettings.interfaceTheme)
   loadThemeImages()
   tclEvalFile(fileName = uiDirectory & "mainmenu.tcl")
@@ -79,7 +84,11 @@ proc createMainMenu*() =
   setFonts(newSize = gameSettings.interfaceFontSize, fontType = interfaceFont)
   let versionLabel = ".mainmenu.version"
   tclEval(script = versionLabel & " configure -text {" & gameVersion & " development}")
-  dataError = loadGameData()
+  try:
+    dataError = loadGameData()
+  except:
+    showError(message = "Can't load the game's data.")
+    return
   if dataError.len > 0:
     showMainMenu()
     return
@@ -101,19 +110,28 @@ proc createMainMenu*() =
   if newGameSettings.playerFaction == "random":
     tclEval(script = comboBox & " set Random")
   else:
-    tclEval(script = comboBox & " set {" & factionsList[
-        newGameSettings.playerFaction].name & "}")
+    try:
+      discard tclEval(script = comboBox & " set {" & factionsList[
+          newGameSettings.playerFaction].name & "}")
+    except:
+      showError(message = "Can't set player's faction.")
   tclEval(script = "SetFaction")
   comboBox = playerFrameName & ".career"
   if newGameSettings.playerCareer == "random":
     tclEval(script = comboBox & " set Random")
   else:
-    tclEval(script = comboBox & " set {" & careersList[
-        newGameSettings.playerCareer].name & "}")
+    try:
+      discard tclEval(script = comboBox & " set {" & careersList[
+          newGameSettings.playerCareer].name & "}")
+    except:
+      showError(message = "Can't set player's career")
   comboBox = playerFrameName & ".base"
-  tclEval(script = comboBox & " set " & (if newGameSettings.startingBase ==
-      "Any": "Any" else: "{" & basesTypesList[
-      newGameSettings.startingBase].name & "}"))
+  try:
+    discard tclEval(script = comboBox & " set " & (
+        if newGameSettings.startingBase == "Any": "Any" else: "{" &
+        basesTypesList[newGameSettings.startingBase].name & "}"))
+  except:
+    showError(message = "Can't set starting base.")
   let difficultyFrameName = ".newgamemenu.canvas.difficulty"
   comboBox = difficultyFrameName & ".difficultylevel"
   var spinBox = difficultyFrameName & ".enemydamage"
