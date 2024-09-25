@@ -21,7 +21,8 @@ import errordialog, dialogs
 
 var dataError*: string
 
-proc showMainMenu*() =
+proc showMainMenu*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
+    ReadDirEffect, WriteDirEffect].} =
   let mainWindow = "."
   var
     x: int = try:
