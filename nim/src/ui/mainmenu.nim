@@ -52,6 +52,7 @@ var dataError: string
 
 proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
     WriteIOEffect, TimeEffect, RootEffect].} =
+  ## Create the main menu UI
   let
     uiDirectory = dataDirectory & "ui" & DirSep
     iconPath = uiDirectory & "images" & DirSep & "icon.png"
