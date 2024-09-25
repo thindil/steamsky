@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Game; use Game; --## rule line off REDUCEABLE_SCOPE
-
 -- ****h* BasesTypes/BasesTypes
 -- FUNCTION
 -- Provide code for bases types
@@ -30,10 +28,5 @@ package BasesTypes is
    -- SOURCE
    procedure Load_Bases_Types;
    -- ****
-
--- Temporary code to interact with Nim
-
-   function Get_Base_Type_Name
-     (Base_Type: Tiny_String.Bounded_String) return String;
 
 end BasesTypes;
