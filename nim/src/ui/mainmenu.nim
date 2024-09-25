@@ -48,8 +48,6 @@ proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     showError(message = "Can't generate traders")
   #createGameUi()
 
-var dataError: string
-
 proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
     WriteIOEffect, TimeEffect, RootEffect].} =
   ## Create the main menu UI

@@ -19,6 +19,8 @@ import std/[os, sequtils, strutils]
 import ../[config, game, tk]
 import errordialog
 
+var dataError*: string
+
 proc showMainMenu*() =
   let mainWindow = "."
   var
