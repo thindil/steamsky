@@ -464,19 +464,19 @@ package body Ships is
       Nim_Cargo: constant Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
       Map_Cell: constant Sky_Cell := Sky_Map(Ship.Sky_X, Ship.Sky_Y);
-      procedure Get_Ada_Ship(Ship: Ship_Record := Player_Ship) is
+      procedure Get_Ada_Ship(Ada_Ship: Ship_Record := Player_Ship) is
          Nim_Ship: constant Nim_Ship_Data :=
-           (Name => New_String(Str => Tiny_String.To_String(Source => Ship.Name)),
-            Sky_X => Ship.Sky_X, Sky_Y => Ship.Sky_Y,
-            Speed => Ship_Speed'Pos(Ship.Speed),
-            Upgrade_Module => Ship.Upgrade_Module,
-            Destination_X => Ship.Destination_X,
-            Destination_Y => Ship.Destination_Y,
-            Repair_Module => Ship.Repair_Module,
+           (Name => New_String(Str => Tiny_String.To_String(Source => Ada_Ship.Name)),
+            Sky_X => Ada_Ship.Sky_X, Sky_Y => Ada_Ship.Sky_Y,
+            Speed => Ship_Speed'Pos(Ada_Ship.Speed),
+            Upgrade_Module => Ada_Ship.Upgrade_Module,
+            Destination_X => Ada_Ship.Destination_X,
+            Destination_Y => Ada_Ship.Destination_Y,
+            Repair_Module => Ada_Ship.Repair_Module,
             Description =>
               New_String
-                (Str => Short_String.To_String(Source => Ship.Description)),
-            Home_Base => Ship.Home_Base);
+                (Str => Short_String.To_String(Source => Ada_Ship.Description)),
+            Home_Base => Ada_Ship.Home_Base);
          procedure Get_Ada_Ship
            (Ship_Data: Nim_Ship_Data; Is_Player_Ship: Integer) with
             Import => True,
@@ -485,7 +485,7 @@ package body Ships is
       begin
          Get_Ada_Ship
            (Ship_Data => Nim_Ship,
-            Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+            Is_Player_Ship => (if Ada_Ship = Player_Ship then 1 else 0));
       end Get_Ada_Ship;
    begin
       Get_Ada_Map_Cell
@@ -493,7 +493,7 @@ package body Ships is
          Visited => (if Map_Cell.Visited then 1 else 0),
          Event_Index => Map_Cell.Event_Index,
          Mission_Index => Map_Cell.Mission_Index);
-      Get_Ada_Ship(Ship => Ship);
+      Get_Ada_Ship(Ada_Ship => Ship);
       Get_Ada_Modules(Ship => Ship);
       Get_Ada_Ship_Cargo
         (Cargo => Nim_Cargo,
@@ -506,7 +506,7 @@ package body Ships is
       Nim_Cargo: Nim_Inventory_Array :=
         Inventory_To_Nim(Inventory => Ship.Cargo);
       --## rule on IMPROPER_INITIALIZATION
-      procedure Set_Ada_Ship(Ship: in out Ship_Record) is
+      procedure Set_Ada_Ship(Ada_Ship: in out Ship_Record) is
          Nim_Ship: Nim_Ship_Data; --## rule line off IMPROPER_INITIALIZATION
          procedure Set_Ada_Ship
            (N_Ship: in out Nim_Ship_Data; Is_Player_Ship: Integer) with
@@ -517,20 +517,20 @@ package body Ships is
          --## rule off IMPROPER_INITIALIZATION
          Set_Ada_Ship
            (N_Ship => Nim_Ship,
-            Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-         Ship.Name :=
+            Is_Player_Ship => (if Ada_Ship = Player_Ship then 1 else 0));
+         Ada_Ship.Name :=
            Tiny_String.To_Bounded_String(Source => Value(Item => Nim_Ship.Name));
-         Ship.Sky_X := Nim_Ship.Sky_X;
-         Ship.Sky_Y := Nim_Ship.Sky_Y;
-         Ship.Speed := Ship_Speed'Val(Nim_Ship.Speed);
-         Ship.Upgrade_Module := Nim_Ship.Upgrade_Module;
-         Ship.Destination_X := Nim_Ship.Destination_X;
-         Ship.Destination_Y := Nim_Ship.Destination_Y;
-         Ship.Repair_Module := Nim_Ship.Repair_Module;
-         Ship.Description :=
+         Ada_Ship.Sky_X := Nim_Ship.Sky_X;
+         Ada_Ship.Sky_Y := Nim_Ship.Sky_Y;
+         Ada_Ship.Speed := Ship_Speed'Val(Nim_Ship.Speed);
+         Ada_Ship.Upgrade_Module := Nim_Ship.Upgrade_Module;
+         Ada_Ship.Destination_X := Nim_Ship.Destination_X;
+         Ada_Ship.Destination_Y := Nim_Ship.Destination_Y;
+         Ada_Ship.Repair_Module := Nim_Ship.Repair_Module;
+         Ada_Ship.Description :=
            Short_String.To_Bounded_String
              (Source => Value(Item => Nim_Ship.Description));
-         Ship.Home_Base := Nim_Ship.Home_Base;
+         Ada_Ship.Home_Base := Nim_Ship.Home_Base;
          --## rule on IMPROPER_INITIALIZATION
       end Set_Ada_Ship;
    begin
@@ -542,7 +542,7 @@ package body Ships is
          Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
       Set_Ada_Crew(Ship => Ship);
       Set_Ada_Modules(Ship => Ship);
-      Set_Ada_Ship(Ship => Ship);
+      Set_Ada_Ship(Ada_Ship => Ship);
    end Get_Ship_From_Nim;
 
    function Get_Proto_Ship(Proto_Index: Positive) return Proto_Ship_Data is
