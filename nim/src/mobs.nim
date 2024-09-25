@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's mobs, like loading them from files and
+## generating random one.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import factions, game, items, log, shipscrew, types, utils
@@ -361,6 +364,7 @@ type
 
 proc getAdaMob(index: cint; adaMob: var AdaMobData) {.sideEffect, raises: [
     ], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   adaMob = AdaMobData()
   if not protoMobsList.hasKey(key = index):
     return
@@ -391,6 +395,7 @@ proc getAdaMob(index: cint; adaMob: var AdaMobData) {.sideEffect, raises: [
 proc adaGenerateMob(mobIndex: cint, factionIndex: cstring;
     adaMember: var AdaMemberData, adaInventory: var array[128,
     AdaInventoryData]) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     let member: MemberData = generateMob(mobIndex = mobIndex,
         factionIndex = $factionIndex)
@@ -401,4 +406,5 @@ proc adaGenerateMob(mobIndex: cint, factionIndex: cstring;
 
 proc adaGetProtoMobsAmount(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return protoMobsList.len.cint
