@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/strutils
-import ../[config, tk]
+import std/[os, sequtils, strutils]
+import ../[config, game, tk]
 import errordialog
 
 proc showMainMenu*() =
@@ -47,3 +47,17 @@ proc showMainMenu*() =
   let gameFrame = ".gameframe"
   if tclEval2(script = "winfo exists " & gameFrame) == "1":
     tclEval(script = "pack forget " & gameFrame)
+  let mainMenuFrame = ".mainmenu"
+  tclEval(script = "pack " & mainMenuFrame & " -fill both -expand true")
+  var button = ".mainmenu.loadgame"
+  if walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0:
+    tclEval(script = "pack " & button & " -after .mainmenu.newgame")
+  else:
+    tclEval(script = "pack forget " & button)
+    button = ".mainmenu.newgame"
+    tclEval(script = "focus " & button)
+  button = ".mainmenu.halloffame"
+  if fileExists(fileName = saveDirectory & "halloffame.dat"):
+    tclEval(script = "pack " & button & " -before .mainmenu.news")
+  else:
+    tclEval(script = "pack forget " & button)
