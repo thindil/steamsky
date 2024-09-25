@@ -68,13 +68,33 @@ proc showMainMenu*() =
     tclEval(script = "pack forget " & button)
     button = ".mainmenu.loadgame"
     tclEval(script = "pack forget " & button)
-    showMessage(text = "Can't load game data files. Error: " & dataError, parentFrame = ".", title = "The game data error")
+    showMessage(text = "Can't load game data files. Error: " & dataError,
+        parentFrame = ".", title = "The game data error")
     return
   try:
-    writeFile(fileName = saveDirectory & "test.txt", content = "test")
+    writeFile(fileName = saveDirectory & "test.txt", content = "")
     removeFile(file = saveDirectory & "test.txt")
   except IOError, OSError:
     button = ".mainmenu.newgame"
     tclEval(script = "pack forget " & button)
     button = ".mainmenu.loadgame"
     tclEval(script = "pack forget " & button)
+    when defined(windows):
+      showMessage(text = "You don't have permissions to write to directory \"" &
+          saveDirectory &
+          "\" which is set as directory for saved games. Please run the game as Administrator or select different directory.",
+          parentFrame = ".", title = "Can't save the game")
+    else:
+      showMessage(text = "You don't have permissions to write to directory " &
+          saveDirectory &
+          "\" which is set as directory for saved games. Please select different directory.",
+          parentFrame = ".", title = "Can't save the game")
+
+# Temporary code for interfacing with Ada
+
+proc showAdaMainMenu() {.sideEffect, raises: [], tags: [WriteDirEffect,
+    ReadDirEffect, TimeEffect, WriteIOEffect], exportc.} =
+  try:
+    showMainMenu()
+  except:
+    echo getCurrentExceptionMsg()
