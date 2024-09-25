@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -31,7 +31,10 @@ package MainMenu is
    -- FUNCTION
    -- Show main menu to a player
    -- SOURCE
-   procedure Show_Main_Menu;
+   procedure Show_Main_Menu with
+      Convention => C,
+      Import => True,
+      External_Name => "showAdaMainMenu";
    -- ****
 
 end MainMenu;
