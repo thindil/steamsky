@@ -17,7 +17,7 @@
 
 import std/[os, sequtils, strutils]
 import ../[config, game, tk]
-import errordialog
+import errordialog, dialogs
 
 var dataError*: string
 
@@ -62,4 +62,19 @@ proc showMainMenu*() =
   if fileExists(fileName = saveDirectory & "halloffame.dat"):
     tclEval(script = "pack " & button & " -before .mainmenu.news")
   else:
+    tclEval(script = "pack forget " & button)
+  if dataError.len > 0:
+    button = ".mainmenu.newgame"
+    tclEval(script = "pack forget " & button)
+    button = ".mainmenu.loadgame"
+    tclEval(script = "pack forget " & button)
+    showMessage(text = "Can't load game data files. Error: " & dataError, parentFrame = ".", title = "The game data error")
+    return
+  try:
+    writeFile(fileName = saveDirectory & "test.txt", content = "test")
+    removeFile(file = saveDirectory & "test.txt")
+  except IOError, OSError:
+    button = ".mainmenu.newgame"
+    tclEval(script = "pack forget " & button)
+    button = ".mainmenu.loadgame"
     tclEval(script = "pack forget " & button)
