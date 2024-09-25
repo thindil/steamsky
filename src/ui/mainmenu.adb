@@ -14,41 +14,40 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -- with Ada.Containers;
-with Ada.Directories; use Ada.Directories;
+with Ada.Directories;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Interfaces.C.Strings;
+with GNAT.Directory_Operations;
+with Tcl;
+with Tcl.Ada;
+with Tcl.Tk.Ada;
 -- with Tcl.Tk.Ada.Dialogs;
 -- with Tcl.Tk.Ada.Event;
 -- with Tcl.Tk.Ada.Font;
 -- with Tcl.Tk.Ada.Image.Photo;
 with Tcl.Tk.Ada.Pack;
 -- with Tcl.Tk.Ada.TtkStyle;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 -- with Tcl.Tk.Ada.Widgets.TtkEntry;
 -- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 -- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 -- with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with Tcl.Tk.Ada.Wm;
 -- with Tcl.Tklib.Ada.Tooltip;
 -- with BasesTypes;
 -- with Careers;
-with Config; use Config;
+with Config;
 with Dialogs; use Dialogs;
 -- with Factions;
-with Game; use Game;
+with Game;
 with Goals.UI;
 with MainMenu.Commands;
 -- with Maps.UI;
@@ -58,6 +57,7 @@ with Utils.UI;
 
 package body MainMenu is
 
+   --## rule off REDUCEABLE_SCOPE
    -- ****iv* MainMenu/MainMenu.Main_Menu_Frame
    -- FUNCTION
    -- Ttk Frame with content of main menu
@@ -65,12 +65,14 @@ package body MainMenu is
    Main_Menu_Frame: Ttk_Frame;
    -- ****
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* MainMenu/MainMenu.Data_Error
    -- FUNCTION
    -- Stores error message from loading the game data
    -- SOURCE
    Data_Error: Unbounded_String;
    -- ****
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
    -- ****if* MainMenu/MainMenu.Get_Data_Error
    -- FUNCTION
@@ -81,6 +83,7 @@ package body MainMenu is
    begin
       return To_String(Source => Data_Error);
    end Get_Data_Error;
+   --## rule on REDUCEABLE_SCOPE
 
    procedure Create_Main_Menu is
 --      use Ada.Containers;
@@ -335,9 +338,21 @@ package body MainMenu is
    end Create_Main_Menu;
 
    procedure Show_Main_Menu is
+      use Ada.Directories;
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use Interfaces.C.Strings;
+      use GNAT.Directory_Operations;
+      use Tcl.Ada;
+      use Tcl.Tk.Ada;
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.Toplevel;
+      use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Winfo;
+      use Tcl.Tk.Ada.Wm;
+      use Config;
+      use Game;
 
       Main_Window: constant Tk_Toplevel :=
         Get_Main_Window(Interp => Get_Context);
