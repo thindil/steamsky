@@ -23,6 +23,7 @@ var dataError*: string
 
 proc showMainMenu*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     ReadDirEffect, WriteDirEffect].} =
+  ## Show the main menu to the player
   let mainWindow = "."
   var
     x: int = try:
@@ -53,12 +54,17 @@ proc showMainMenu*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
   let mainMenuFrame = ".mainmenu"
   tclEval(script = "pack " & mainMenuFrame & " -fill both -expand true")
   var button = ".mainmenu.loadgame"
-  if walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0:
-    tclEval(script = "pack " & button & " -after .mainmenu.newgame")
-  else:
-    tclEval(script = "pack forget " & button)
-    button = ".mainmenu.newgame"
-    tclEval(script = "focus " & button)
+  try:
+    if walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0:
+      tclEval(script = "pack " & button & " -after .mainmenu.newgame")
+    else:
+      tclEval(script = "pack forget " & button)
+      button = ".mainmenu.newgame"
+      tclEval(script = "focus " & button)
+  except:
+    showMessage(text = "Can't check if saved games exists. Error: " &
+        getCurrentExceptionMsg(), parentFrame = ".",
+        title = "Can't check saves")
   button = ".mainmenu.halloffame"
   if fileExists(fileName = saveDirectory & "halloffame.dat"):
     tclEval(script = "pack " & button & " -before .mainmenu.news")
