@@ -254,7 +254,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   let answer = argv[1]
   if answer == "deletesave":
     try:
-      removeFile(saveDirectory & tclGetVar("deletesave"))
+      removeFile(tclGetVar("deletesave"))
     except:
       return showError(message = "Can't remove the save file.")
     tclUnsetVar("deletesave")
