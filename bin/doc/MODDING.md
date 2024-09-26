@@ -1153,6 +1153,8 @@ story.
   of fuel. Optional.
 * Key `DrinksIcon`: Path to the SVG image which will be used to show the amount
   of drinks. Optional.
+* Key `ExpandIcon`: Path to the SVG image which will be used to expand an
+  section of information, for example in the ship info screen. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
