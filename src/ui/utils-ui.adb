@@ -13,38 +13,38 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories;
-with Ada.Strings;
-with Ada.Strings.Unbounded;
+-- with Ada.Directories;
+-- with Ada.Strings;
+-- with Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Bases;
-with Combat.UI;
-with CoreUI;
-with Crew;
-with Dialogs;
-with Events;
-with Game;
-with Items;
-with Maps;
-with Maps.UI;
-with MainMenu;
-with Messages;
-with Missions;
-with Ships;
-with Ships.Cargo;
-with Ships.Crew;
-with Ships.UI.Crew;
-with Statistics.UI;
+-- with Tcl.Tk.Ada.Grid;
+-- with Tcl.Tk.Ada.Widgets;
+-- with Tcl.Tk.Ada.Widgets.TtkButton;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry;
+-- with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+-- with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+-- with Bases;
+-- with Combat.UI;
+-- with CoreUI;
+-- with Crew;
+-- with Dialogs;
+-- with Events;
+-- with Game;
+-- with Items;
+-- with Maps;
+-- with Maps.UI;
+-- with MainMenu;
+-- with Messages;
+-- with Missions;
+-- with Ships;
+-- with Ships.Cargo;
+-- with Ships.Crew;
+-- with Ships.UI.Crew;
+-- with Statistics.UI;
 
 package body Utils.UI is
 
@@ -106,221 +106,223 @@ package body Utils.UI is
    function Process_Question_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
+      Import => True,
+      Convention => C,
+      External_Name => "processQuestionCommand";
       -- ****
 
-   function Process_Question_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Ada.Directories;
-      use Ada.Strings.Unbounded;
-      use Tcl.Tk.Ada.Widgets;
-      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-      use Bases;
-      use CoreUI;
-      use Crew;
-      use Dialogs;
-      use Game;
-      use Maps;
-      use Maps.UI;
-      use MainMenu;
-      use Messages;
-      use Ships;
-      use Ships.Crew;
-      use Tiny_String;
-
-      Result: constant String := CArgv.Arg(Argv => Argv, N => 1);
-   begin
-      if Result = "deletesave" then
-         Delete_File
-           (Name => Tcl_GetVar(interp => Interp, varName => "deletesave"));
-         Tcl_UnsetVar(interp => Interp, varName => "deletesave");
-         Tcl_Eval(interp => Interp, strng => "ShowLoadGame");
-      elsif Result = "sethomebase" then
-         Set_Home_Base_Block :
-         declare
-            use Items;
-            use Ships.Cargo;
-
-            Trader_Index: constant Natural := Find_Member(Order => TALK);
-            Price: Positive := 1_000;
-            Money_Index2: constant Natural :=
-              Find_Item
-                (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-         begin
-            if Money_Index2 = 0 then
-               Show_Message
-                 (Text =>
-                    "You don't have any " & To_String(Source => Money_Name) &
-                    " for change ship home base.",
-                  Title => "No money");
-               return TCL_OK;
-            end if;
-            Count_Price(Price => Price, Trader_Index => Trader_Index);
-            if Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => Money_Index2)
-                .Amount <
-              Price then
-               Show_Message
-                 (Text =>
-                    "You don't have enough " &
-                    To_String(Source => Money_Name) &
-                    " for change ship home base.",
-                  Title => "No money");
-               return TCL_OK;
-            end if;
-            Player_Ship.Home_Base :=
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-            Update_Cargo
-              (Ship => Player_Ship, Cargo_Index => Money_Index2,
-               Amount => -Price);
-            Add_Message
-              (Message =>
-                 "You changed your ship home base to: " &
-                 To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name),
-               M_Type => OTHERMESSAGE);
-            Gain_Exp
-              (Amount => 1, Skill_Number => Talking_Skill,
-               Crew_Index => Trader_Index);
-            Update_Game(Minutes => 10);
-            Show_Sky_Map;
-         end Set_Home_Base_Block;
-      elsif Result = "nopilot" then
-         Wait_For_Rest;
-         Check_For_Combat_Block :
-         declare
-            use Combat.UI;
-            use Events;
-            use Missions;
-
-            Starts_Combat: constant Boolean := Check_For_Event;
-            Message: Unbounded_String := Null_Unbounded_String;
-         begin
-            if not Starts_Combat and
-              Get_Boolean_Setting(Name => "autoFinish") then
-               Message := To_Unbounded_String(Source => Auto_Finish_Missions);
-            end if;
-            if Message /= Null_Unbounded_String then
-               Show_Message
-                 (Text => To_String(Source => Message), Title => "Error");
-            end if;
-            Set_Center_Point(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
-            if Starts_Combat then
-               Show_Combat_Ui;
-            else
-               Show_Sky_Map;
-            end if;
-         end Check_For_Combat_Block;
-      elsif Result = "quit" then
-         Set_Integer_Setting
-           (Name => "messagesPosition",
-            Value =>
-              Get_Integer_Setting(Name => "windowHeight") -
-              Natural'Value(SashPos(Paned => Main_Paned, Index => "0")));
-         End_Game(Save => True);
-         Show_Main_Menu;
-      elsif Result = "resign" then
-         Death
-           (Member_Index => 1,
-            Reason => To_Unbounded_String(Source => "resignation"),
-            Ship => Player_Ship);
-         Show_Question
-           (Question =>
-              "You are dead. Would you like to see your game statistics?",
-            Result => "showstats");
-      elsif Result = "showstats" then
-         Show_Game_Stats_Block :
-         declare
-            use Tcl.Tk.Ada.Widgets.TtkButton;
-            use Statistics.UI;
-
-            Button: constant Ttk_Button :=
-              Get_Widget(pathName => Game_Header & ".menubutton");
-         begin
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-            Widgets.configure
-              (Widgt => Close_Button, options => "-command ShowMainMenu");
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Close_Button, Options => "-row 0 -column 1");
-            Tcl_SetVar
-              (interp => Interp, varName => "gamestate", newValue => "dead");
-            Show_Statistics;
-            End_Game(Save => False);
-         end Show_Game_Stats_Block;
-      elsif Result = "mainmenu" then
-         Set_Integer_Setting
-           (Name => "messagesPosition",
-            Value =>
-              Get_Integer_Setting(Name => "windowHeight") -
-              Natural'Value(SashPos(Paned => Main_Paned, Index => "0")));
-         End_Game(Save => False);
-         Show_Main_Menu;
-      elsif Result = "messages" then
-         Show_Last_Messages_Block :
-         declare
-            use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-
-            Type_Box: constant Ttk_ComboBox :=
-              Get_Widget
-                (pathName =>
-                   Main_Paned & ".messagesframe.canvas.messages.options.types",
-                 Interp => Get_Context);
-         begin
-            Clear_Messages;
-            Current(ComboBox => Type_Box, NewIndex => "0");
-            Tcl_Eval(interp => Get_Context, strng => "ShowLastMessages");
-         end Show_Last_Messages_Block;
-      elsif Result = "retire" then
-         Death
-           (Member_Index => 1,
-            Reason =>
-              To_Unbounded_String(Source => "retired after finished the game"),
-            Ship => Player_Ship);
-         Show_Question
-           (Question =>
-              "You are dead. Would you like to see your game statistics?",
-            Result => "showstats");
-      else
-         Dismiss_Member_Block :
-         declare
-            use Ships.UI.Crew;
-            Base_Index: constant Positive :=
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-            Member_Index: constant Positive :=
-              Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-            procedure Update_Messages is
-               procedure Update_Ada_Messages with
-                  Import => True,
-                  Convention => C,
-                  External_Name => "updateAdaMessages";
-            begin
-               Update_Ada_Messages;
-            end Update_Messages;
-         begin
-            Add_Message
-              (Message =>
-                 "You dismissed " &
-                 To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-                 ".",
-               M_Type => ORDERMESSAGE);
-            Delete_Member(Member_Index => Member_Index, Ship => Player_Ship);
-            Sky_Bases(Base_Index).Population :=
-              Sky_Bases(Base_Index).Population + 1;
-            Update_Morale_Loop :
-            for I in Player_Ship.Crew.Iterate loop
-               Update_Morale
-                 (Ship => Player_Ship,
-                  Member_Index => Crew_Container.To_Index(Position => I),
-                  Amount => Get_Random(Min => -5, Max => -1));
-            end loop Update_Morale_Loop;
-            Update_Crew_Info;
-            Update_Header;
-            Update_Messages;
-         end Dismiss_Member_Block;
-      end if;
-      return TCL_OK;
-   end Process_Question_Command;
+--   function Process_Question_Command
+--     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+--      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+--      pragma Unreferenced(Client_Data, Argc);
+--      use Ada.Directories;
+--      use Ada.Strings.Unbounded;
+--      use Tcl.Tk.Ada.Widgets;
+--      use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+--      use Bases;
+--      use CoreUI;
+--      use Crew;
+--      use Dialogs;
+--      use Game;
+--      use Maps;
+--      use Maps.UI;
+--      use MainMenu;
+--      use Messages;
+--      use Ships;
+--      use Ships.Crew;
+--      use Tiny_String;
+--
+--      Result: constant String := CArgv.Arg(Argv => Argv, N => 1);
+--   begin
+--      if Result = "deletesave" then
+--         Delete_File
+--           (Name => Tcl_GetVar(interp => Interp, varName => "deletesave"));
+--         Tcl_UnsetVar(interp => Interp, varName => "deletesave");
+--         Tcl_Eval(interp => Interp, strng => "ShowLoadGame");
+--      elsif Result = "sethomebase" then
+--         Set_Home_Base_Block :
+--         declare
+--            use Items;
+--            use Ships.Cargo;
+--
+--            Trader_Index: constant Natural := Find_Member(Order => TALK);
+--            Price: Positive := 1_000;
+--            Money_Index2: constant Natural :=
+--              Find_Item
+--                (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+--         begin
+--            if Money_Index2 = 0 then
+--               Show_Message
+--                 (Text =>
+--                    "You don't have any " & To_String(Source => Money_Name) &
+--                    " for change ship home base.",
+--                  Title => "No money");
+--               return TCL_OK;
+--            end if;
+--            Count_Price(Price => Price, Trader_Index => Trader_Index);
+--            if Inventory_Container.Element
+--                (Container => Player_Ship.Cargo, Index => Money_Index2)
+--                .Amount <
+--              Price then
+--               Show_Message
+--                 (Text =>
+--                    "You don't have enough " &
+--                    To_String(Source => Money_Name) &
+--                    " for change ship home base.",
+--                  Title => "No money");
+--               return TCL_OK;
+--            end if;
+--            Player_Ship.Home_Base :=
+--              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--            Update_Cargo
+--              (Ship => Player_Ship, Cargo_Index => Money_Index2,
+--               Amount => -Price);
+--            Add_Message
+--              (Message =>
+--                 "You changed your ship home base to: " &
+--                 To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name),
+--               M_Type => OTHERMESSAGE);
+--            Gain_Exp
+--              (Amount => 1, Skill_Number => Talking_Skill,
+--               Crew_Index => Trader_Index);
+--            Update_Game(Minutes => 10);
+--            Show_Sky_Map;
+--         end Set_Home_Base_Block;
+--      elsif Result = "nopilot" then
+--         Wait_For_Rest;
+--         Check_For_Combat_Block :
+--         declare
+--            use Combat.UI;
+--            use Events;
+--            use Missions;
+--
+--            Starts_Combat: constant Boolean := Check_For_Event;
+--            Message: Unbounded_String := Null_Unbounded_String;
+--         begin
+--            if not Starts_Combat and
+--              Get_Boolean_Setting(Name => "autoFinish") then
+--               Message := To_Unbounded_String(Source => Auto_Finish_Missions);
+--            end if;
+--            if Message /= Null_Unbounded_String then
+--               Show_Message
+--                 (Text => To_String(Source => Message), Title => "Error");
+--            end if;
+--            Set_Center_Point(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
+--            if Starts_Combat then
+--               Show_Combat_Ui;
+--            else
+--               Show_Sky_Map;
+--            end if;
+--         end Check_For_Combat_Block;
+--      elsif Result = "quit" then
+--         Set_Integer_Setting
+--           (Name => "messagesPosition",
+--            Value =>
+--              Get_Integer_Setting(Name => "windowHeight") -
+--              Natural'Value(SashPos(Paned => Main_Paned, Index => "0")));
+--         End_Game(Save => True);
+--         Show_Main_Menu;
+--      elsif Result = "resign" then
+--         Death
+--           (Member_Index => 1,
+--            Reason => To_Unbounded_String(Source => "resignation"),
+--            Ship => Player_Ship);
+--         Show_Question
+--           (Question =>
+--              "You are dead. Would you like to see your game statistics?",
+--            Result => "showstats");
+--      elsif Result = "showstats" then
+--         Show_Game_Stats_Block :
+--         declare
+--            use Tcl.Tk.Ada.Widgets.TtkButton;
+--            use Statistics.UI;
+--
+--            Button: constant Ttk_Button :=
+--              Get_Widget(pathName => Game_Header & ".menubutton");
+--         begin
+--            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+--            Widgets.configure
+--              (Widgt => Close_Button, options => "-command ShowMainMenu");
+--            Tcl.Tk.Ada.Grid.Grid
+--              (Slave => Close_Button, Options => "-row 0 -column 1");
+--            Tcl_SetVar
+--              (interp => Interp, varName => "gamestate", newValue => "dead");
+--            Show_Statistics;
+--            End_Game(Save => False);
+--         end Show_Game_Stats_Block;
+--      elsif Result = "mainmenu" then
+--         Set_Integer_Setting
+--           (Name => "messagesPosition",
+--            Value =>
+--              Get_Integer_Setting(Name => "windowHeight") -
+--              Natural'Value(SashPos(Paned => Main_Paned, Index => "0")));
+--         End_Game(Save => False);
+--         Show_Main_Menu;
+--      elsif Result = "messages" then
+--         Show_Last_Messages_Block :
+--         declare
+--            use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+--
+--            Type_Box: constant Ttk_ComboBox :=
+--              Get_Widget
+--                (pathName =>
+--                   Main_Paned & ".messagesframe.canvas.messages.options.types",
+--                 Interp => Get_Context);
+--         begin
+--            Clear_Messages;
+--            Current(ComboBox => Type_Box, NewIndex => "0");
+--            Tcl_Eval(interp => Get_Context, strng => "ShowLastMessages");
+--         end Show_Last_Messages_Block;
+--      elsif Result = "retire" then
+--         Death
+--           (Member_Index => 1,
+--            Reason =>
+--              To_Unbounded_String(Source => "retired after finished the game"),
+--            Ship => Player_Ship);
+--         Show_Question
+--           (Question =>
+--              "You are dead. Would you like to see your game statistics?",
+--            Result => "showstats");
+--      else
+--         Dismiss_Member_Block :
+--         declare
+--            use Ships.UI.Crew;
+--            Base_Index: constant Positive :=
+--              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
+--            Member_Index: constant Positive :=
+--              Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+--            procedure Update_Messages is
+--               procedure Update_Ada_Messages with
+--                  Import => True,
+--                  Convention => C,
+--                  External_Name => "updateAdaMessages";
+--            begin
+--               Update_Ada_Messages;
+--            end Update_Messages;
+--         begin
+--            Add_Message
+--              (Message =>
+--                 "You dismissed " &
+--                 To_String(Source => Player_Ship.Crew(Member_Index).Name) &
+--                 ".",
+--               M_Type => ORDERMESSAGE);
+--            Delete_Member(Member_Index => Member_Index, Ship => Player_Ship);
+--            Sky_Bases(Base_Index).Population :=
+--              Sky_Bases(Base_Index).Population + 1;
+--            Update_Morale_Loop :
+--            for I in Player_Ship.Crew.Iterate loop
+--               Update_Morale
+--                 (Ship => Player_Ship,
+--                  Member_Index => Crew_Container.To_Index(Position => I),
+--                  Amount => Get_Random(Min => -5, Max => -1));
+--            end loop Update_Morale_Loop;
+--            Update_Crew_Info;
+--            Update_Header;
+--            Update_Messages;
+--         end Dismiss_Member_Block;
+--      end if;
+--      return TCL_OK;
+--   end Process_Question_Command;
 
    -- ****o* UUI/UUI.Set_Scrollbar_Bindings_Command
    -- FUNCTION
@@ -442,14 +444,5 @@ package body Utils.UI is
         (Name => "SetDestination2",
          Ada_Command => Set_Destination_Command'Access);
    end Add_Commands;
-
-   procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
-      procedure Set_Ada_Fonts(N_Size, F_Type: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaFonts";
-   begin
-      Set_Ada_Fonts(N_Size => New_Size, F_Type => Font_Types'Pos(Font_Type));
-   end Set_Fonts;
 
 end Utils.UI;
