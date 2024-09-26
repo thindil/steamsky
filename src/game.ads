@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
-with Ada.Strings.Bounded.Hash;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Indefinite_Vectors;
@@ -62,14 +61,6 @@ package Game is
    -- Current the game version
    -- SOURCE
    Game_Version: constant String := "Version: 10.4";
-   -- ****
-
-   -- ****t* Game/Game.UnboundedString_Container
-   -- FUNCTION
-   -- Used to store Unbounded_String values as list
-   -- SOURCE
-   package UnboundedString_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Unbounded_String);
    -- ****
 
    -- ****t* Game/Game.Positive_Container
@@ -131,15 +122,6 @@ package Game is
    -- 6.5 - Added
    -- SOURCE
    package Tiny_String is new Generic_Bounded_Length(Max => 64);
-   -- ****
-
-   -- ****t* Game/Game.TinyString_Container
-   -- FUNCTION
-   -- Used to store Tiny_String values as list
-   -- SOURCE
-   package TinyString_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String,
-      "=" => Tiny_String."=");
    -- ****
 
    -- ****t* Game/Game.TinyString_Formal_Container
@@ -518,19 +500,6 @@ package Game is
    Data_Loading_Error: exception;
    -- ****
 
-   -- ****f* Game/Game.Tiny_String_Hash
-   -- FUNCTION
-   -- Compute the hash of the selected Tiny_String
-   -- PARAMETERS
-   -- Key - The Tiny_String which hash will be computed
-   -- RESULT
-   -- The String with hash of the selected Tiny_String
-   -- HISTORY
-   -- 6.8 - Added
-   -- SOURCE
-   function Tiny_String_Hash is new Ada.Strings.Bounded.Hash(Tiny_String);
-   -- ****
-
    -- ****f* Game/Game.Update_Game
    -- FUNCTION
    -- Game ticks (update time, crew, ship, etc)
@@ -564,16 +533,6 @@ package Game is
       Post => Find_Skill_Index'Result <=
       SkillsData_Container.Length(Container => Skills_List);
       -- ****
-
-      -- ****f* Game/Game.Load_Game_Data
-      -- FUNCTION
-      -- Load game data from files
-      -- RESULT
-      -- Empty string if everything was ok, otherwise message with info what
-      -- goes wrong
-      -- SOURCE
-   function Load_Game_Data return String;
-   -- ****
 
 -- Temporary code to interact with Nim
 
