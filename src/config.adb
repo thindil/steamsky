@@ -58,38 +58,4 @@ package body Config is
       Set_Ada_Integer_Setting(N => New_String(Str => Name), V => Value);
    end Set_Integer_Setting;
 
-   function Get_Interface_Theme return Unbounded_String is
-      function Get_Ada_Interface_Theme return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaInterfaceTheme";
-   begin
-      return
-        To_Unbounded_String(Source => Value(Item => Get_Ada_Interface_Theme));
-   end Get_Interface_Theme;
-
-   function Get_String_Setting(Name: String) return String is
-      function Get_Ada_String_Setting(N: chars_ptr) return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaStringSetting";
-   begin
-      return
-        Value(Item => Get_Ada_String_Setting(N => New_String(Str => Name)));
-   end Get_String_Setting;
-
-   function Get_Float_Setting(Name: String) return Bonus_Type is
-      function Get_Ada_Float_Setting(N: chars_ptr) return Bonus_Type with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaFloatSetting";
-   begin
-      return Get_Ada_Float_Setting(N => New_String(Str => Name));
-   end Get_Float_Setting;
-
-   function Get_Difficulty return Difficulty_Type is
-   begin
-      return Difficulty_Type'Val(Get_Integer_Setting(Name => "difficulty"));
-   end Get_Difficulty;
-
 end Config;

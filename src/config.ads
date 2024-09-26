@@ -15,10 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
---## rule off REDUCEABLE_SCOPE
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
---## rule on REDUCEABLE_SCOPE
-
 -- ****h* Config/Config
 -- FUNCTION
 -- Provide code for load and save the game configuration
@@ -106,15 +102,6 @@ package Config is
       Default_Value => HELPFONT;
       -- ****
 
-      -- ****d* Config/Config.Help_Font_Type
-      -- FUNCTION
-      -- Default type of font used when setting them
-      -- HISTORY
-      -- 7.8 - Added
-      -- SOURCE
-   Help_Font_Type: constant Font_Types := HELPFONT;
-   -- ****
-
       -- ****f* Config/Config.Load_Config
       -- FUNCTION
       -- Load game configuration from file
@@ -127,13 +114,5 @@ package Config is
    function Get_Boolean_Setting(Name: String) return Boolean;
    function Get_Integer_Setting(Name: String) return Integer;
    procedure Set_Integer_Setting(Name: String; Value: Integer);
-   function Get_Interface_Theme return Unbounded_String;
-   function Get_String_Setting(Name: String) return String;
-   function Get_Float_Setting(Name: String) return Bonus_Type;
-   function Get_Difficulty return Difficulty_Type;
-   function Get_Gender return Character with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaGender";
 
 end Config;
