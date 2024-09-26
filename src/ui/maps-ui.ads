@@ -20,13 +20,6 @@
 package Maps.UI is
 -- ****
 
-   -- ****v* MUI/MUI.Default_Fonts_Sizes
-   -- FUNCTION
-   -- Default sizes of the game fonts
-   -- SOURCE
-   Default_Fonts_Sizes: array(1 .. 3) of Positive;
-   -- ****
-
    -- ****f* MUI/MUI.Update_Header
    -- FUNCTION
    -- Update the game information on the UI header (time, crew, etc)
