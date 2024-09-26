@@ -46,20 +46,4 @@ package Themes is
       External_Name => "loadAdaThemes";
       -- ****
 
-      -- ****f* Themes/Themes.Load_Theme_Images
-      -- FUNCTION
-      -- Load all images for the selected the game's theme
-      -- HISTORY
-      -- 7.1 - Added
-      -- SOURCE
-   procedure Load_Theme_Images with
-      Import => True,
-      Convention => C,
-      External_Name => "loadAdaThemeImages";
-      -- ****
-
--- Temporary code to interact with Nim
-
-   function Get_Icon(Name: String) return String;
-
 end Themes;
