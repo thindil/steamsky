@@ -238,7 +238,7 @@ proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect].} =
+        WriteIOEffect, TimeEffect, RootEffect], exportc.} =
   ## Process question from dialog when the player answer Yes there
   ##
   ## * clientData - the additional data for the Tcl command
