@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Tcl.Ada;
-with Config; use Config;
 
 -- ****h* Utils/UUI
 -- FUNCTION
@@ -48,18 +47,6 @@ package Utils.UI is
       -- Add various, UI related Tcl commands
       -- SOURCE
    procedure Add_Commands;
-   -- ****
-
-   -- ****f* UUI/UUI.Set_Fonts
-   -- FUNCTION
-   -- Set all the game fonts to the selected size
-   -- PARAMETERS
-   -- New_Size  - The new size of the selected font's type
-   -- Font_Type - The type of the font
-   -- HISTORY
-   -- 7.1 - Added
-   -- SOURCE
-   procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types);
    -- ****
 
 end Utils.UI;
