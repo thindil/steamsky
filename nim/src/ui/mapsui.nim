@@ -741,7 +741,7 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
 #    basesrecruitui.addCommands()
 #    basesui.addCommands()
 #    basesshipyardui.addCommands()
-#    baseslootui.addCommands()
+    baseslootui.addCommands()
 #    knowledge.addCommands()
 #    missionsui.addCommands()
 #    statisticsui.addCommands()
