@@ -163,7 +163,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             mob.attributes[i] = MobAttributeRecord(level: minLevel,
                 experience: maxLevel)
       for priority in mobNode.findAll(tag = "priority"):
-        for index, order in orderNames.pairs:
+        for index, order in orderNames:
           if order == priority.attr(name = "name"):
             mob.priorities[index + 1] = if priority.attr(name = "value") == "Normal":
                 1
@@ -232,7 +232,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
               break
         of DataAction.remove:
           var deleteIndex: int = -1
-          for index, mitem in mob.inventory.pairs:
+          for index, mitem in mob.inventory:
             if mitem.protoIndex == itemIndex:
               deleteIndex = index
               break
@@ -242,7 +242,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         item = -1
       for item in mobNode.findAll(tag = "equipment"):
         let slotName: string = item.attr(name = "slot")
-        for index, name in equipmentNames.pairs:
+        for index, name in equipmentNames:
           if name == slotName:
             mob.equipment[index.EquipmentLocations] = try:
                 item.attr(name = "index").parseInt() - 1
@@ -374,22 +374,22 @@ proc getAdaMob(index: cint; adaMob: var AdaMobData) {.sideEffect, raises: [
       return
   for attribute in adaMob.attributes.mitems:
     attribute = [0.cint, 0.cint]
-  for index, attribute in mob.attributes.pairs:
+  for index, attribute in mob.attributes:
     adaMob.attributes[index] = [attribute.level.cint, attribute.experience.cint]
   for skill in adaMob.skills.mitems:
     skill = [0.cint, 0.cint, 0.cint]
-  for index, skill in mob.skills.pairs:
+  for index, skill in mob.skills:
     adaMob.skills[index] = [skill.index.cint, skill.level.cint,
         skill.experience.cint]
   adaMob.order = mob.order.ord.cint
-  for index, priority in mob.priorities.pairs:
+  for index, priority in mob.priorities:
     adaMob.priorities[index] = priority.cint
   for item in adaMob.inventory.mitems:
     item = [0.cint, 0.cint, 0.cint]
-  for index, item in mob.inventory.pairs:
+  for index, item in mob.inventory:
     adaMob.inventory[index] = [item.protoIndex.cint, item.minAmount.cint,
         item.maxAmount.cint]
-  for index, item in mob.equipment.pairs:
+  for index, item in mob.equipment:
     adaMob.equipment[index.ord] = item.cint + 1
 
 proc adaGenerateMob(mobIndex: cint, factionIndex: cstring;
