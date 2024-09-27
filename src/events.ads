@@ -79,15 +79,6 @@ package Events is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
-   -- ****f* Events/Events.Check_For_Event
-   -- FUNCTION
-   -- Check if event happen
-   -- RESULT
-   -- Return true if combat starts, otherwise false
-   -- SOURCE
-   function Check_For_Event return Boolean;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    procedure Set_Event(Index: Positive);

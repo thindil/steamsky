@@ -16,32 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Maps; use Maps;
-with Ships;
 
 package body Events is
-
-   function Check_For_Event return Boolean is
-      use Ships;
-
-      Result: Integer;
-      function Check_Ada_For_Event return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "checkAdaForEvent";
-   begin
-      Set_Ship_In_Nim;
-      Result := Check_Ada_For_Event;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Map_Cell(X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y);
-      Set_Events_In_Ada_Loop :
-      for I in 1 .. Get_Events_Amount loop
-         Set_Event(Index => I);
-      end loop Set_Events_In_Ada_Loop;
-      if Result = 1 then
-         return True;
-      end if;
-      return False;
-   end Check_For_Event;
 
    procedure Set_Event(Index: Positive) is
       X, Y, Time, E_Type, Data: Integer;
