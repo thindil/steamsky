@@ -809,15 +809,14 @@ proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
-    discard
-#    addCommand("ShowRecruit", showRecruitCommand)
-#    addCommand("ShowRecruitInfo", showRecruitInfoCommand)
-#    addCommand("NegotiateHire", negotiateHireCommand)
-#    addCommand("Hire", hireCommand)
-#    addCommand("ShowRecruitTab", showRecruiTabCommand)
-#    addCommand("Negotiate", negotiateCommand)
-#    addCommand("SortRecruits", sortRecruitsCommand)
-#    addCommand("ValidateNegotiate", validateNegotiateCommand)
+    addCommand("ShowRecruit", showRecruitCommand)
+    addCommand("ShowRecruitInfo", showRecruitInfoCommand)
+    addCommand("NegotiateHire", negotiateHireCommand)
+    addCommand("Hire", hireCommand)
+    addCommand("ShowRecruitTab", showRecruitTabCommand)
+    addCommand("Negotiate", negotiateCommand)
+    addCommand("SortRecruits", sortRecruitsCommand)
+    addCommand("ValidateNegotiate", validateNegotiateCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
