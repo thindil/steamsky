@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with Bases;
-with Bases.RecruitUI;
 with Bases.SchoolUI;
 with Bases.ShipyardUI;
 with Bases.UI;
@@ -105,7 +104,6 @@ package body Maps.UI is
          GameOptions.Add_Commands;
          Trades.UI.Add_Commands;
          SchoolUI.Add_Commands;
-         RecruitUI.Add_Commands;
          Bases.UI.Add_Commands;
          ShipyardUI.Add_Commands;
          Knowledge.Add_Commands;
