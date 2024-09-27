@@ -119,13 +119,4 @@ package body Combat.UI is
       Add_Command(Name => "SetParty", Ada_Command => Set_Party_Command'Access);
    end Add_Combat_Commands;
 
-   procedure Show_Combat_Ui(New_Combat: Boolean := True) is
-      procedure Show_Ada_Combat_Ui(N_Combat: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaCombatUi";
-   begin
-      Show_Ada_Combat_Ui(N_Combat => (if New_Combat then 1 else 0));
-   end Show_Combat_Ui;
-
 end Combat.UI;
