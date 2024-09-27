@@ -15,44 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Bases;
-with Maps;
-with Ships; use Ships;
-
 package body Crew is
-
-   procedure Gain_Exp
-     (Amount: Natural; Skill_Number: Skills_Amount_Range;
-      Crew_Index: Positive) is
-      procedure Gain_Ada_Exp(A, S_Number, C_Index: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "gainAdaExp";
-   begin
-      Get_Ada_Crew;
-      Gain_Ada_Exp
-        (A => Amount, S_Number => Integer(Skill_Number),
-         C_Index => Crew_Index);
-      Set_Ada_Crew(Ship => Player_Ship);
-   end Gain_Exp;
-
-   procedure Wait_For_Rest is
-      use Bases;
-      use Maps;
-      Base_Index: constant Extended_Base_Range :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      procedure Wait_Ada_For_Rest with
-         Import => True,
-         Convention => C,
-         External_Name => "waitAdaForRest";
-   begin
-      Wait_Ada_For_Rest;
-      if Base_Index > 0 then
-         Get_Base_From_Nim(Base_Index => Base_Index);
-      end if;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Set_Game_Date;
-   end Wait_For_Rest;
 
    function Member_To_Nim(Member: Member_Data) return Nim_Member_Data is
       use Tiny_String;

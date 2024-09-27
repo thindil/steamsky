@@ -224,27 +224,6 @@ package Crew is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****f* Crew/Crew.Gain_Exp
-   -- FUNCTION
-   -- Gain experience in selected skill.
-   -- PARAMETERS
-   -- Amoun t      - Amount of gained experience
-   -- Skill_Number - Index of skill in skills list
-   -- Crew_Index   - Crew index of member
-   -- SOURCE
-   procedure Gain_Exp
-     (Amount: Natural; Skill_Number: Skills_Amount_Range;
-      Crew_Index: Positive) with
-      Pre => Skill_Number <= Skills_Amount;
-      -- ****
-
-      -- ****f* Crew/Crew.Wait_For_Rest
-      -- FUNCTION
-      -- Wait until whole crew is rested
-      -- SOURCE
-   procedure Wait_For_Rest;
-   -- ****
-
 -- Temporary code to interact with Nim
 
    --## rule off TYPE_INITIAL_VALUES
