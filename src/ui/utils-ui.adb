@@ -16,13 +16,15 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada;
 
 package body Utils.UI is
 
    procedure Add_Command
      (Name: String; Ada_Command: not null CreateCommands.Tcl_CmdProc) is
+      use Tcl.Ada;
+      use Tcl.Tk.Ada;
+
       Command: Tcl.Tcl_Command;
       Steam_Sky_Add_Command_Error: exception;
    begin
