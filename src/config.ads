@@ -22,13 +22,6 @@
 package Config is
 -- ****
 
-   -- ****t* Config/Config.Bonus_Type
-   -- FUNCTION
-   -- Used to store the game difficulty settings
-   -- SOURCE
-   subtype Bonus_Type is Float range 0.0 .. 5.0;
-   -- ****
-
    -- ****t* Config/Config.Difficulty_Type
    -- FUNCTION
    -- Used to set the game difficulty level
@@ -92,6 +85,7 @@ package Config is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****t* Config/Config.Font_Types
    -- FUNCTION
    -- Types of fonts, used ot set their size
@@ -101,6 +95,7 @@ package Config is
    type Font_Types is (HELPFONT, INTERFACEFONT, MAPFONT) with
       Default_Value => HELPFONT;
       -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
       -- ****f* Config/Config.Load_Config
       -- FUNCTION
@@ -108,11 +103,5 @@ package Config is
       -- SOURCE
    procedure Load_Config;
    -- ****
-
--- Temporary code to interact with Nim
-
-   function Get_Boolean_Setting(Name: String) return Boolean;
-   function Get_Integer_Setting(Name: String) return Integer;
-   procedure Set_Integer_Setting(Name: String; Value: Integer);
 
 end Config;
