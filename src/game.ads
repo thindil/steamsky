@@ -306,20 +306,6 @@ package Game is
    Skills_Amount: SkillsData_Container.Extended_Index := 0;
    -- ****
 
-   -- ****v* Game/Game.Money_Index
-   -- FUNCTION
-   -- Index of item used as money
-   -- SOURCE
-   Money_Index: Positive;
-   -- ****
-
-   -- ****v* Game/Game.Money_Name
-   -- FUNCTION
-   -- Name of money (taken from MoneyIndex)
-   -- SOURCE
-   Money_Name: Unbounded_String;
-   -- ****
-
    -- ****v* Game/Game.Save_Directory
    -- FUNCTION
    -- Path to directory where are savegame and logs
@@ -344,13 +330,6 @@ package Game is
    -- 6.6 - Added
    -- SOURCE
    Attributes_Amount: Natural := 4;
-   -- ****
-
-   -- ****v* Game/Game.Talking_Skill
-   -- FUNCTION
-   -- Index of skill used for talk in bases or with other ships
-   -- SOURCE
-   Talking_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Doc_Directory
@@ -498,25 +477,6 @@ package Game is
    -- Raised when error occurs during loading any game data
    -- SOURCE
    Data_Loading_Error: exception;
-   -- ****
-
-   -- ****f* Game/Game.Update_Game
-   -- FUNCTION
-   -- Game ticks (update time, crew, ship, etc)
-   -- PARAMETERS
-   -- Minutes  - Amount of in-game minutes passed
-   -- InCombat - Did player is in combat currently. Default false
-   -- SOURCE
-   procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False);
-   -- ****
-
-   -- ****f* Game/Game.End_Game
-   -- FUNCTION
-   -- Save (or not) game and clear all temporary data
-   -- PARAMETERS
-   -- Save - Did game should be saved to file or not
-   -- SOURCE
-   procedure End_Game(Save: Boolean);
    -- ****
 
    -- ****f* Game/Game.Find_Skill_Index
