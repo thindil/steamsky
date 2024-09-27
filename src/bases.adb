@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Maps;
 with Trades; use Trades;
 
 package body Bases is
@@ -32,26 +31,6 @@ package body Bases is
          Level => Sky_Bases(Base_Index).Reputation.Level,
          Experience => Sky_Bases(Base_Index).Reputation.Experience);
    end Get_Base_Reputation;
-
-   procedure Count_Price
-     (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
-      Reduce: Boolean := True) is
-      use Maps;
-
-      procedure Count_Ada_Price(P: in out Integer; T_Index, R: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "countAdaPrice";
-   begin
-      Get_Ada_Crew;
-      if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         Get_Base_Reputation
-           (Base_Index =>
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index);
-      end if;
-      Count_Ada_Price
-        (P => Price, T_Index => Trader_Index, R => (if Reduce then 1 else 0));
-   end Count_Price;
 
    function Generate_Base_Name
      (Faction_Index: Tiny_String.Bounded_String)

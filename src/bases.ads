@@ -21,9 +21,6 @@ with Game; use Game;
 with Crew; use Crew;
 with Items; use Items;
 with Missions; use Missions;
---## rule off REDUCEABLE_SCOPE
-with Ships; use Ships;
---## rule on REDUCEABLE_SCOPE
 
 -- ****h* Bases/Bases
 -- FUNCTION
@@ -202,24 +199,6 @@ package Bases is
    -- SOURCE
    Sky_Bases: array(Bases_Range) of Base_Record;
    -- ****
-
-   -- ****f* Bases/Bases.Count_Price
-   -- FUNCTION
-   -- Count price for actions with bases (buying/selling/docking/ect)
-   -- PARAMETERS
-   -- Price        - Cost of action with the base
-   -- Trader_Index - Index of crew member assigned as trader or 0 if noone is
-   --                assigned
-   -- Reduce       - If true, reduce cost of action, otherwise raise. Default
-   --                is true
-   -- RESULT
-   -- Parameter Cost
-   -- SOURCE
-   procedure Count_Price
-     (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
-      Reduce: Boolean := True) with
-      Pre => Trader_Index <= Player_Ship.Crew.Last_Index;
-      -- ****
 
       -- ****f* Bases/Bases.Generate_Base_Name
       -- FUNCTION
