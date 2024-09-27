@@ -22,6 +22,70 @@ import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import factions, game, items, log, shipscrew, types, utils
 
+proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord; mobAction: DataAction;
+    mobIndex: Natural) {.raises: [DataLoadingError], tags: [], contractual.} =
+  ## Load skills of the selected mobile's prototype
+  ##
+  ## * mobNode   - the XML node with data about the mobile's prototype
+  ## * mob       - the mobile prototype to which the skills will be modified
+  ## * mobAction - the action to take with skills
+  ## * mobIndex  - the index of the mobile to add
+  ##
+  ## Returns modified parameter mob
+  body:
+    for skill in mobNode.findAll(tag = "skill"):
+      let skillName: string = skill.attr(name = "name")
+      var skillIndex: int = if skillName == "WeaponSkill":
+          skillsList.len + 1
+        else:
+          findSkillIndex(skillName = skillName)
+      if skillIndex == 0:
+        raise newException(exceptn = DataLoadingError, message = "Can't " &
+            $mobAction & " mob '" & $mobIndex & "', there no skill named '" &
+            skillName & "'.")
+      let skillAction: DataAction = try:
+          parseEnum[DataAction](s = skill.attr(name = "action").toLowerAscii)
+        except ValueError:
+          DataAction.add
+      var skillLevel, minLevel, maxLevel: Natural = 0
+      if skillAction in [DataAction.add, DataAction.update]:
+        skillLevel = try:
+          skill.attr(name = "level").parseInt()
+        except ValueError:
+          0
+        if skillLevel == 0:
+          minLevel = try:
+            skill.attr(name = "minlevel").parseInt()
+          except ValueError:
+            0
+          maxLevel = try:
+            skill.attr(name = "maxlevel").parseInt()
+          except ValueError:
+            0
+          if minLevel >= maxLevel:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $mobAction & " mob '" & $mobIndex &
+                "', invalid range for skill '" & skillName & "'.")
+      case skillAction
+      of DataAction.add:
+        if skillLevel > 0:
+          mob.skills.add(y = SkillInfo(index: skillIndex, level: skillLevel,
+              experience: 0))
+        else:
+          mob.skills.add(y = SkillInfo(index: skillIndex, level: minLevel,
+              experience: maxLevel))
+      of DataAction.update:
+        for mskill in mob.skills.mitems:
+          if mskill.index == skillIndex:
+            if skillLevel > 0:
+              mskill.level = skillLevel
+            else:
+              mskill.level = minLevel
+              mskill.experience = maxLevel
+            break
+      of DataAction.remove:
+        mob.skills.delete(i = skillIndex)
+
 proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the Mobs data from the file
@@ -80,58 +144,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             ProtoMobRecord()
         else:
           ProtoMobRecord()
-      for skill in mobNode.findAll(tag = "skill"):
-        let skillName: string = skill.attr(name = "name")
-        var skillIndex: int = if skillName == "WeaponSkill":
-            skillsList.len + 1
-          else:
-            findSkillIndex(skillName = skillName)
-        if skillIndex == 0:
-          raise newException(exceptn = DataLoadingError, message = "Can't " &
-              $mobAction & " mob '" & $mobIndex & "', there no skill named '" &
-              skillName & "'.")
-        let skillAction: DataAction = try:
-            parseEnum[DataAction](s = skill.attr(name = "action").toLowerAscii)
-          except ValueError:
-            DataAction.add
-        var skillLevel, minLevel, maxLevel: Natural = 0
-        if skillAction in [DataAction.add, DataAction.update]:
-          skillLevel = try:
-            skill.attr(name = "level").parseInt()
-          except ValueError:
-            0
-          if skillLevel == 0:
-            minLevel = try:
-              skill.attr(name = "minlevel").parseInt()
-            except ValueError:
-              0
-            maxLevel = try:
-              skill.attr(name = "maxlevel").parseInt()
-            except ValueError:
-              0
-            if minLevel >= maxLevel:
-              raise newException(exceptn = DataLoadingError,
-                  message = "Can't " & $mobAction & " mob '" & $mobIndex &
-                  "', invalid range for skill '" & skillName & "'.")
-        case skillAction
-        of DataAction.add:
-          if skillLevel > 0:
-            mob.skills.add(y = SkillInfo(index: skillIndex, level: skillLevel,
-                experience: 0))
-          else:
-            mob.skills.add(y = SkillInfo(index: skillIndex, level: minLevel,
-                experience: maxLevel))
-        of DataAction.update:
-          for mskill in mob.skills.mitems:
-            if mskill.index == skillIndex:
-              if skillLevel > 0:
-                mskill.level = skillLevel
-              else:
-                mskill.level = minLevel
-                mskill.experience = maxLevel
-              break
-        of DataAction.remove:
-          mob.skills.delete(i = skillIndex)
+      loadSkills(mobNode = mobNode, mob = mob, mobAction = mobAction, mobIndex = mobIndex)
       let attributes: seq[XmlNode] = mobNode.findAll(tag = "attribute")
       for i in attributes.low..attributes.high:
         let attrLevel: Natural = try:
@@ -259,7 +272,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       protoMobsList[mobIndex] = mob
 
-proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData {.sideEffect,
+proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.sideEffect,
     raises: [KeyError], tags: [], contractual.} =
   ## Generate random mob from the selected prototype and the faction.
   ##
@@ -311,7 +324,7 @@ proc generateMob*(mobIndex: Natural, factionIndex: string): MemberData {.sideEff
       result.inventory.add(y = InventoryData(protoIndex: item.protoIndex,
           amount: amount, name: "", durability: defaultItemDurability, price: 0))
     result.equipment = protoMob.equipment
-    for i in weapon .. legs:
+    for i in weapon..legs:
       if result.equipment[i] == -1:
         var equipmentItemIndex: Natural = 0
         if getRandom(min = 1, max = 100) > 95:
@@ -392,8 +405,8 @@ proc getAdaMob(index: cint; adaMob: var AdaMobData) {.sideEffect, raises: [
   for index, item in mob.equipment:
     adaMob.equipment[index.ord] = item.cint + 1
 
-proc adaGenerateMob(mobIndex: cint, factionIndex: cstring;
-    adaMember: var AdaMemberData, adaInventory: var array[128,
+proc adaGenerateMob(mobIndex: cint; factionIndex: cstring;
+    adaMember: var AdaMemberData; adaInventory: var array[128,
     AdaInventoryData]) {.raises: [], tags: [], exportc, contractual.} =
   ## Temporary C binding
   try:
