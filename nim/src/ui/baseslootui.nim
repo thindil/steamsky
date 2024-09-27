@@ -33,8 +33,8 @@ const defaultItemsSortOrder: ItemsSortOrders = none
 var itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
 
 proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show information about looting
   ##
   ## * clientData - the additional data for the Tcl command
@@ -232,7 +232,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
 var itemIndex = -1
 
 proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -349,8 +349,8 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Take or drop the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -444,7 +444,7 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show dialog to enter amount of items to drop or take
   ##
   ## * clientData - the additional data for the Tcl command
@@ -482,8 +482,8 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Sort the looting list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -637,7 +637,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   return showLootCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowLoot", "All"].allocCStringArray)
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowLoot", showLootCommand)
