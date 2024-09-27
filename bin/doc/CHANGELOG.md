@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New icon for expand info's section. Author: Delapouite
   (https://game-icons.net), license CC BY 3.0
 
+### Changed
+- Updated modding guide
+
 ## [10.3] - 2024-09-22
 
 ### Added
