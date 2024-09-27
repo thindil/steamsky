@@ -41,21 +41,4 @@ package Dialogs is
       Pre => Text'Length > 0 and Parent_Frame'Length > 0;
       -- ****
 
-      -- ****f* Dialogs/Dialogs.Show_Question
-      -- FUNCTION
-      -- Show the dialog with question to the player
-      -- PARAMETERS
-      -- Question - The question which will be the player asked for
-      -- Result   - The value set for Ok button
-      -- In_Game  - The question in show during game
-      -- HISTORY
-      -- 5.9 - Added
-      -- SOURCE
-   procedure Show_Question
-     (Question, Result: String; In_Game: Boolean := True) with
-      Pre => Question'Length > 0;
-      -- ****
-
--- Temporary code to interact with Nim
-
 end Dialogs;

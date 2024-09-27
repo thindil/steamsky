@@ -172,16 +172,4 @@ package body Dialogs is
       end if;
    end Show_Message;
 
-   procedure Show_Question
-     (Question, Result: String; In_Game: Boolean := True) is
-      procedure Show_Ada_Question(Q, R: chars_ptr; I_Game: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaQuestion";
-   begin
-      Show_Ada_Question
-        (Q => New_String(Str => Question), R => New_String(Str => Result),
-         I_Game => (if In_Game then 1 else 0));
-   end Show_Question;
-
 end Dialogs;
