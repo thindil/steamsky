@@ -20,39 +20,11 @@
 package Maps.UI is
 -- ****
 
-   -- ****f* MUI/MUI.Update_Header
-   -- FUNCTION
-   -- Update the game information on the UI header (time, crew, etc)
-   -- SOURCE
-   procedure Update_Header with
-      Import => True,
-      Convention => C,
-      External_Name => "updateAdaHeader";
-
-   -- ****
-
    -- ****f* MUI/MUI.Create_Game_Ui
    -- FUNCTION
    -- Create the game UI and show sky map to the player
    -- SOURCE
    procedure Create_Game_Ui;
    -- ****
-
-   -- ****f* MUI/MUI.Show_Sky_Map
-   -- FUNCTION
-   -- Show sky map - draw map, update header, etc
-   -- PARAMETERS
-   -- Clear - If true (when back from other screen), remove old subwindow and
-   -- add map
-   -- SOURCE
-   procedure Show_Sky_Map(Clear: Boolean := False);
-   -- ****
-
--- Temporary code to interact with Nim
-
-   procedure Set_Center_Point(X, Y: Positive) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaCenterPoint";
 
 end Maps.UI;
