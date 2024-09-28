@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with Bases;
-with Bases.SchoolUI;
 with Bases.ShipyardUI;
 with Bases.UI;
 with Crafts.UI;
@@ -103,7 +102,6 @@ package body Maps.UI is
          Messages.UI.Add_Commands;
          GameOptions.Add_Commands;
          Trades.UI.Add_Commands;
-         SchoolUI.Add_Commands;
          Bases.UI.Add_Commands;
          ShipyardUI.Add_Commands;
          Knowledge.Add_Commands;
@@ -115,14 +113,5 @@ package body Maps.UI is
       end if;
       Create_Ada_Game_Ui;
    end Create_Game_Ui;
-
-   procedure Show_Sky_Map(Clear: Boolean := False) is
-      procedure Show_Ada_Sky_Map(Cle: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaSkyMap";
-   begin
-      Show_Ada_Sky_Map(Cle => (if Clear then 1 else 0));
-   end Show_Sky_Map;
 
 end Maps.UI;

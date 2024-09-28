@@ -267,12 +267,11 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
-    discard
-#    addCommand("SetSchoolSkills", setSchoolSkillsCommand)
-#    addCommand("ShowSchool", showSchoolCommand)
-#    addCommand("TrainSkill", trainSkillCommand)
-#    addCommand("UpdateSchoolCost", updateSchoolCostCommand)
-#    addCommand("UpdateSchoolSelectedCost", updateSchoolSelectedCostCommand)
+    addCommand("SetSchoolSkills", setSchoolSkillsCommand)
+    addCommand("ShowSchool", showSchoolCommand)
+    addCommand("TrainSkill", trainSkillCommand)
+    addCommand("UpdateSchoolCost", updateSchoolCostCommand)
+    addCommand("UpdateSchoolSelectedCost", updateSchoolSelectedCostCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
