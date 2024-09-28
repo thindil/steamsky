@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2024 Bartek thindil Jasicki
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ ttk::frame $knowledgecanvas.frame
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.bases.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
-   -image movemapupicon -command {KnowledgeMaxMin bases show}] -sticky w \
+   -image expandicon -command {KnowledgeMaxMin bases show}] -sticky w \
    -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of known bases}
@@ -96,7 +96,7 @@ grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.missions.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
-   -image movemapupicon -command {KnowledgeMaxMin missions show}] \
+   -image expandicon -command {KnowledgeMaxMin missions show}] \
    -sticky w -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of accepted missions}
@@ -120,7 +120,7 @@ grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.events.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
-   -image movemapupicon -command {KnowledgeMaxMin events show}] \
+   -image expandicon -command {KnowledgeMaxMin events show}] \
    -sticky w -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of known events}
@@ -144,7 +144,7 @@ grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.stories.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
-   -image movemapupicon -command {KnowledgeMaxMin stories show}] \
+   -image expandicon -command {KnowledgeMaxMin stories show}] \
    -sticky w -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of known stories}

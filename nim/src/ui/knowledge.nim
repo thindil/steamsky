@@ -165,7 +165,7 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
             $frameInfo.column)
       else:
         tclEval(script = "grid " & frame)
-    tclEval(script = button & " configure -image movemapupicon -command {KnowledgeMaxMin " &
+    tclEval(script = button & " configure -image expandicon -command {KnowledgeMaxMin " &
         $argv[1] & " show}")
   return tclOk
 

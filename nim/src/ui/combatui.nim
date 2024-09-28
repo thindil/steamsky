@@ -276,7 +276,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect
   except:
     discard
   var button = frame & ".maxmin"
-  tclEval(script = "ttk::button " & button & " -style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}")
+  tclEval(script = "ttk::button " & button & " -style Small.TButton -image expandicon -command {CombatMaxMin damage show combat}")
   tclEval(script = "grid " & button & " -sticky w -padx 5 -row 0 -column 0")
   tclEval(script = "tooltip::tooltip " & button & " \"Maximize/minimize the ship status info\"")
   var row = 1
@@ -417,7 +417,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect
     showError(message = "Can't show the information about the enemy's ship's status.")
     return
   button = frame & ".maxmin"
-  tclEval(script = "ttk::button " & button & " -style Small.TButton -image movemapupicon -command {CombatMaxMin status show combat}")
+  tclEval(script = "ttk::button " & button & " -style Small.TButton -image expandicon -command {CombatMaxMin status show combat}")
   tclEval(script = "grid " & button & " -sticky w -padx 5 -row 0 -column 0")
   tclEval(script = "tooltip::tooltip " & button & " \"Maximize/minimize the enemy's ship status info\"")
   row = 1
@@ -1012,7 +1012,7 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
             " -row " & $frameInfo.row)
       else:
         tclEval(script = "grid " & frameName)
-    tclEval(script = button & " configure -image movemapupicon -command {CombatMaxMin " &
+    tclEval(script = button & " configure -image expandicon -command {CombatMaxMin " &
         $argv[1] & " show " & $argv[3] & "}")
   return tclOk
 
