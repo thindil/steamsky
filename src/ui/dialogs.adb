@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl;
@@ -154,6 +154,7 @@ package body Dialogs is
 
    procedure Show_Message
      (Text: String; Parent_Frame: String := ".gameframe"; Title: String) is
+      use Interfaces.C.Strings;
 
       function Show_Ada_Message
         (Te, P_Frame, Ti: chars_ptr) return chars_ptr with
