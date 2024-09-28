@@ -15,11 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Maps; use Maps;
+with Maps;
 
 package body Events is
 
    procedure Set_Event(Index: Positive) is
+      use Maps;
       X, Y, Time, E_Type, Data: Integer;
       procedure Set_Ada_Event(I: Positive; X1, Y1, T, E, D: out Integer) with
          Import => True,
