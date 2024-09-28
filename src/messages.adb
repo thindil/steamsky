@@ -35,19 +35,6 @@ package body Messages is
                 Hour => Time.Hour, Minutes => Time.Minutes));
    end Formated_Time;
 
-   procedure Add_Message
-     (Message: String; M_Type: Message_Type; Color: Message_Color := WHITE) is
-      procedure Nim_Add_Message
-        (Msg: chars_ptr; Mtype: Integer; Mcolor: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "addMessage";
-   begin
-      Nim_Add_Message
-        (Msg => New_String(Str => Message), Mtype => Message_Type'Pos(M_Type),
-         Mcolor => Message_Color'Pos(Color));
-   end Add_Message;
-
    function Get_Last_Message_Index return Natural is
       function Nim_Get_Last_Message_Index return Integer with
          Import => True,
