@@ -256,15 +256,6 @@ package Ships is
    end record;
    -- ****
 
-   --## rule off REDUCEABLE_SCOPE
-   -- ****d* Ships/Ships.Empty_Ship
-   -- FUNCTION
-   -- Empty record for ship data
-   -- SOURCE
-   Empty_Ship: constant Ship_Record := (others => <>);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
-
    -- ****s* Ships/Ships.Proto_Member_Data
    -- FUNCTION
    -- Data structure for proto crew info
@@ -409,7 +400,5 @@ package Ships is
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship);
 
    procedure Get_Ship_From_Nim(Ship: in out Ship_Record);
-
-   function Get_Proto_Ship(Proto_Index: Positive) return Proto_Ship_Data;
 
 end Ships;
