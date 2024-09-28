@@ -19,19 +19,6 @@ with Trades; use Trades;
 
 package body Bases is
 
-   procedure Get_Base_Reputation(Base_Index: Bases_Range) is
-      procedure Get_Ada_Base_Reputation
-        (B_Index, Level, Experience: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaBaseReputation";
-   begin
-      Get_Ada_Base_Reputation
-        (B_Index => Base_Index,
-         Level => Sky_Bases(Base_Index).Reputation.Level,
-         Experience => Sky_Bases(Base_Index).Reputation.Experience);
-   end Get_Base_Reputation;
-
    function Generate_Base_Name
      (Faction_Index: Tiny_String.Bounded_String)
       return Tiny_String.Bounded_String is
@@ -173,7 +160,8 @@ package body Bases is
                Set_Item_Block :
                declare
                   Item: constant Base_Cargo :=
-                    BaseCargo_Container.Element(Container => Cargo, Index => I);
+                    BaseCargo_Container.Element
+                      (Container => Cargo, Index => I);
                begin
                   Nim_Cargo(I - 1) :=
                     (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
@@ -188,8 +176,7 @@ package body Bases is
             Cargo =>
               Cargo_To_Nim
                 (Cargo =>
-                   (if B_I > 0 then Sky_Bases(B_I).Cargo
-                    else Trader_Cargo)));
+                   (if B_I > 0 then Sky_Bases(B_I).Cargo else Trader_Cargo)));
       end Get_Base_Cargo;
       procedure Get_Ada_Base_Name(B_Index: Integer; B_Name: chars_ptr) with
          Import => True,
@@ -269,9 +256,20 @@ package body Bases is
                    Recruit_Container.Element
                      (Container => Recruits, Index => I));
          end loop Convert_Recruits_Loop;
-         Get_Ada_Base_Recruits
-           (N_Recruits => Nim_Recruits, B_I => B_Index);
+         Get_Ada_Base_Recruits(N_Recruits => Nim_Recruits, B_I => B_Index);
       end Get_Ada_Recruits;
+      procedure Get_Base_Reputation(Base_Index: Bases_Range) is
+         procedure Get_Ada_Base_Reputation
+           (B_Index, Level, Experience: Integer) with
+            Import => True,
+            Convention => C,
+            External_Name => "getAdaBaseReputation";
+      begin
+         Get_Ada_Base_Reputation
+           (B_Index => Base_Index,
+            Level => Sky_Bases(Base_Index).Reputation.Level,
+            Experience => Sky_Bases(Base_Index).Reputation.Experience);
+      end Get_Base_Reputation;
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
@@ -447,8 +445,7 @@ package body Bases is
             External_Name => "setAdaRecruits";
       begin
          --## rule off IMPROPER_INITIALIZATION
-         Set_Ada_Base_Recruits
-           (N_Recruits => Nim_Recruits, B_I => B_Index);
+         Set_Ada_Base_Recruits(N_Recruits => Nim_Recruits, B_I => B_Index);
          Recruit_Container.Clear(Container => Recruits);
          --## rule on IMPROPER_INITIALIZATION
          Convert_Crew_Loop :
