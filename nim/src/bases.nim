@@ -16,34 +16,39 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import basestypes, config, factions, game, goals, items, maps, shipscrew, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Generate the name for the sky base, based on its owner's faction. Based
   ## on libtcod names generator
   ##
   ## * factionIndex - the index of the faction which owns the base
   ##
   ## Returns the randomly generated name of the base
-  try:
-    if factionsList[factionIndex].namesType == robotic:
-      return generateRoboticName()
-  except KeyError:
-    discard
-  if getRandom(min = 1, max = 100) < 16:
-    result = basesSyllablesPreList[getRandom(min = 0, max = (
-        basesSyllablesPreList.len() - 1))] & " "
-  result = result & basesSyllablesStartList[getRandom(min = 0, max = (
-      basesSyllablesStartList.len - 1))]
-  result = result & basesSyllablesEndList[getRandom(min = 0, max = (
-      basesSyllablesEndList.len - 1))]
-  if getRandom(min = 1, max = 100) < 16:
-    result = result & " " & basesSyllablesPostList[getRandom(min = 0, max = (
-        basesSyllablesPostList.len - 1))]
+  require:
+    factionsList.hasKey(key = factionIndex)
+  body:
+    try:
+      if factionsList[factionIndex].namesType == robotic:
+        return generateRoboticName()
+    except KeyError:
+      discard
+    if getRandom(min = 1, max = 100) < 16:
+      result = basesSyllablesPreList[getRandom(min = 0, max = (
+          basesSyllablesPreList.len() - 1))] & " "
+    result = result & basesSyllablesStartList[getRandom(min = 0, max = (
+        basesSyllablesStartList.len - 1))]
+    result = result & basesSyllablesEndList[getRandom(min = 0, max = (
+        basesSyllablesEndList.len - 1))]
+    if getRandom(min = 1, max = 100) < 16:
+      result = result & " " & basesSyllablesPostList[getRandom(min = 0, max = (
+          basesSyllablesPostList.len - 1))]
 
 proc countPrice*(price: var Natural; traderIndex: int;
-    reduce: bool = true) {.sideEffect, raises: [KeyError], tags: [].} =
+    reduce: bool = true) {.sideEffect, raises: [KeyError], tags: [],
+        contractual.} =
   ## Count the price of the action, like selling, buying, docking in a base
   ##
   ## * price       - the price which will be checked for bonuses or maluses
@@ -79,7 +84,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
   else:
     price = price + bonus
 
-proc updatePopulation*() {.sideEffect, raises: [], tags: [].} =
+proc updatePopulation*() {.sideEffect, raises: [], tags: [], contractual.} =
   ## Update the base population if needed
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
@@ -100,7 +105,8 @@ proc updatePopulation*() {.sideEffect, raises: [], tags: [].} =
     skyBases[baseIndex].population = getRandom(min = 5, max = 10)
     skyBases[baseIndex].owner = getRandomFaction()
 
-proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
+proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Generate available recruits in the base if needed
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var
@@ -112,7 +118,8 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
     price, payment: Natural = 0
 
   proc addInventory(itemsIndexes: seq[Positive];
-      equipIndex: EquipmentLocations) =
+      equipIndex: EquipmentLocations) {.raises: [KeyError], tags: [],
+      contractual.} =
     if getRandom(min = 1, max = 100) > 80:
       return
     let itemIndex = getRandomItem(itemsIndexes = itemsIndexes,
@@ -228,7 +235,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [].} =
   skyBases[baseIndex].recruits = baseRecruits
 
 proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Change the player reputation in the selected sky base
   ##
   ## * baseIndex - the index of the base in which the reputation will change
@@ -254,7 +261,7 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
   if skyBases[baseIndex].reputation.level == 100:
     updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
 
-proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
+proc updatePrices*() {.sideEffect, raises: [], tags: [], contractual.} =
   ## Random changes to the items' prices in the selected base
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
@@ -275,21 +282,21 @@ proc updatePrices*() {.sideEffect, raises: [], tags: [].} =
 # Temporary code for interfacing with Ada
 
 proc generateAdaBaseName(factionIndex: cstring): cstring {.exportc, raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   return generateBaseName(factionIndex = $factionIndex).cstring
 
 proc getAdaBaseReputation(baseIndex, level, experience: cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   skyBases[baseIndex].reputation = ReputationData(level: level,
       experience: experience)
 
 proc setAdaBaseReputation(baseIndex: cint; level,
-    experience: var cint) {.raises: [], tags: [], exportc.} =
+    experience: var cint) {.raises: [], tags: [], exportc, contractual.} =
   level = skyBases[baseIndex].reputation.level
   experience = skyBases[baseIndex].reputation.experience.cint
 
 proc countAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
-    raises: [], tags: [].} =
+    raises: [], tags: [], contractual.} =
   try:
     var newPrice: Natural = price
     countPrice(price = newPrice, traderIndex = traderIndex - 1, reduce = (
@@ -298,31 +305,36 @@ proc countAdaPrice(price: var cint; traderIndex, reduce: cint) {.exportc,
   except KeyError:
     discard
 
-proc getAdaBaseLocation(baseIndex, x, y: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaBaseLocation(baseIndex, x, y: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   skyBases[baseIndex].skyX = x
   skyBases[baseIndex].skyY = y
 
-proc setAdaBaseLocation(baseIndex: cint; x, y: var cint) {.raises: [], tags: [], exportc.} =
+proc setAdaBaseLocation(baseIndex: cint; x, y: var cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   x = skyBases[baseIndex].skyX
   y = skyBases[baseIndex].skyY
 
-proc getAdaBaseOwner(baseIndex: cint; owner: cstring) {.raises: [], tags: [], exportc.} =
+proc getAdaBaseOwner(baseIndex: cint; owner: cstring) {.raises: [], tags: [],
+    exportc, contractual.} =
   skyBases[baseIndex].owner = $owner
 
-proc setAdaBaseOwner(baseIndex: cint; owner: var cstring) {.raises: [], tags: [], exportc.} =
+proc setAdaBaseOwner(baseIndex: cint; owner: var cstring) {.raises: [], tags: [],
+    exportc, contractual.} =
   owner = skyBases[baseIndex].owner.cstring
 
-proc getAdaBasePopulation(baseIndex, population: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaBasePopulation(baseIndex, population: cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   skyBases[baseIndex].population = population
 
 proc setAdaBasePopulation(baseIndex: cint; population: var cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   population = skyBases[baseIndex].population.cint
 
-proc updateAdaPopulation() {.raises: [], tags: [], exportc.} =
+proc updateAdaPopulation() {.raises: [], tags: [], exportc, contractual.} =
   updatePopulation()
 
-proc generateAdaRecruits() {.raises: [], tags: [], exportc.} =
+proc generateAdaRecruits() {.raises: [], tags: [], exportc, contractual.} =
   try:
     generateRecruits()
   except KeyError:
@@ -342,7 +354,7 @@ type
     inventory*: array[7, cint]
 
 proc adaRecruitToNim(adaRecruit: AdaRecruitData): RecruitData {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   result = RecruitData(name: $adaRecruit.name, gender: adaRecruit.gender,
       homeBase: adaRecruit.homeBase, faction: $adaRecruit.faction,
       payment: adaRecruit.payment, price: adaRecruit.price)
@@ -364,7 +376,7 @@ proc adaRecruitToNim(adaRecruit: AdaRecruitData): RecruitData {.raises: [],
     result.inventory.add(y = item)
 
 proc adaRecruitFromNim(recruit: RecruitData): AdaRecruitData {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   result = AdaRecruitData()
   for attribute in result.attributes.mitems:
     attribute = [0.cint, 0.cint]
@@ -392,7 +404,7 @@ proc adaRecruitFromNim(recruit: RecruitData): AdaRecruitData {.raises: [],
   result.faction = recruit.faction.cstring
 
 proc getAdaRecruits(recruits: array[1..20, AdaRecruitData];
-    baseIndex: cint) {.raises: [], tags: [], exportc.} =
+    baseIndex: cint) {.raises: [], tags: [], exportc, contractual.} =
   skyBases[baseIndex].recruits = @[]
   for adaRecruit in recruits:
     if adaRecruit.name.len == 0:
@@ -401,7 +413,7 @@ proc getAdaRecruits(recruits: array[1..20, AdaRecruitData];
         adaRecruit = adaRecruit))
 
 proc setAdaRecruits(recruits: var array[1..20, AdaRecruitData];
-    baseIndex: cint) {.raises: [], tags: [], exportc.} =
+    baseIndex: cint) {.raises: [], tags: [], exportc, contractual.} =
   var index = 1
   for recruit in recruits.mitems:
     recruit.name = "".cstring
@@ -409,11 +421,12 @@ proc setAdaRecruits(recruits: var array[1..20, AdaRecruitData];
     recruits[index] = adaRecruitFromNim(recruit = recruit)
     index.inc
 
-proc getAdaBaseType(baseIndex: cint; baseType: cstring) {.raises: [], tags: [], exportc.} =
+proc getAdaBaseType(baseIndex: cint; baseType: cstring) {.raises: [], tags: [],
+    exportc, contractual.} =
   skyBases[baseIndex].baseType = $baseType
 
 proc setAdaBaseType(baseIndex: cint; baseType: var cstring) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   baseType = skyBases[baseIndex].baseType.cstring
 
 type
@@ -424,7 +437,7 @@ type
     price: cint
 
 proc getAdaBaseCargo(baseIndex: cint; cargo: array[128,
-    AdaBaseCargo]) {.raises: [], tags: [], exportc.} =
+    AdaBaseCargo]) {.raises: [], tags: [], exportc, contractual.} =
   var nimCargo: seq[BaseCargo]
   for adaItem in cargo:
     if adaItem.protoIndex == 0:
@@ -438,7 +451,7 @@ proc getAdaBaseCargo(baseIndex: cint; cargo: array[128,
     traderCargo = nimCargo
 
 proc setAdaBaseCargo(baseIndex: cint; cargo: var array[128,
-    AdaBaseCargo]) {.raises: [], tags: [], exportc.} =
+    AdaBaseCargo]) {.raises: [], tags: [], exportc, contractual.} =
   let nimCargo = if baseIndex > 0:
       skyBases[baseIndex].cargo
     else:
@@ -451,11 +464,11 @@ proc setAdaBaseCargo(baseIndex: cint; cargo: var array[128,
     else:
       cargo[index] = AdaBaseCargo(protoIndex: 0)
 
-proc updateAdaPrices() {.raises: [], tags: [], exportc.} =
+proc updateAdaPrices() {.raises: [], tags: [], exportc, contractual.} =
   updatePrices()
 
 proc getAdaBaseDate(baseIndex, year, month, day, hour,
-    minutes, dateType: cint) {.raises: [], tags: [], exportc.} =
+    minutes, dateType: cint) {.raises: [], tags: [], exportc, contractual.} =
   let nimDate = DateRecord(year: year, month: month, day: day, hour: hour,
       minutes: minutes)
   case dateType
@@ -471,7 +484,7 @@ proc getAdaBaseDate(baseIndex, year, month, day, hour,
     discard
 
 proc setAdaBaseDate(baseIndex, dateType: cint; year, month, day, hour,
-    minutes: var cint) {.raises: [], tags: [], exportc.} =
+    minutes: var cint) {.raises: [], tags: [], exportc, contractual.} =
   case dateType
   of 0:
     year = skyBases[baseIndex].visited.year
@@ -500,31 +513,38 @@ proc setAdaBaseDate(baseIndex, dateType: cint; year, month, day, hour,
   else:
     discard
 
-proc getAdaBaseName(baseIndex: cint; name: cstring) {.raises: [], tags: [], exportc.} =
+proc getAdaBaseName(baseIndex: cint; name: cstring) {.raises: [], tags: [],
+    exportc, contractual.} =
   skyBases[baseIndex].name = $name
 
-proc setAdaBaseName(baseIndex: cint; name: var cstring) {.raises: [], tags: [], exportc.} =
+proc setAdaBaseName(baseIndex: cint; name: var cstring) {.raises: [], tags: [],
+    exportc, contractual.} =
   name = skyBases[baseIndex].name.cstring
 
-proc getAdaBaseKnown(baseIndex, known: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaBaseKnown(baseIndex, known: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   skyBases[baseIndex].known = known == 1
 
-proc setAdaBaseKnown(baseIndex: cint; known: var cint) {.raises: [], tags: [], exportc.} =
+proc setAdaBaseKnown(baseIndex: cint; known: var cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   known = skyBases[baseIndex].known.cint
 
 proc getAdaBaseAskedForBases(baseIndex, askedForBases: cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   skyBases[baseIndex].askedForBases = askedForBases == 1
 
 proc setAdaBaseAskedForBases(baseIndex: cint;
-    askedForBases: var cint) {.raises: [], tags: [], exportc.} =
+    askedForBases: var cint) {.raises: [], tags: [], exportc, contractual.} =
   askedForBases = skyBases[baseIndex].askedForBases.cint
 
-proc getAdaBaseSize(baseIndex, size: cint) {.raises: [], tags: [], exportc.} =
+proc getAdaBaseSize(baseIndex, size: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   skyBases[baseIndex].size = size.BasesSize
 
-proc setAdaBaseSize(baseIndex: cint; size: var cint) {.raises: [], tags: [], exportc.} =
+proc setAdaBaseSize(baseIndex: cint; size: var cint) {.raises: [], tags: [],
+    exportc, contractual.} =
   size = skyBases[baseIndex].size.ord.cint
 
-proc gainAdaRep(baseIndex, points: cint) {.raises: [], tags: [], exportc.} =
+proc gainAdaRep(baseIndex, points: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   gainRep(baseIndex = baseIndex, points = points)
