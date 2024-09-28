@@ -82,11 +82,4 @@ package Goals is
       Post => Goal_Text'Result'Length > 0;
       -- ****
 
-      -- ****f* Goals/Goals.Clear_Current_Goal
-      -- FUNCTION
-      -- Reset current goal
-      -- SOURCE
-   procedure Clear_Current_Goal;
-   -- ****
-
 end Goals;

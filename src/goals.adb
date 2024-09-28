@@ -30,13 +30,4 @@ package body Goals is
       return Value(Item => Goal_Ada_Text(I => Index));
    end Goal_Text;
 
-   procedure Clear_Current_Goal is
-      procedure Clear_Ada_Current_Goal with
-         Import => True,
-         Convention => C,
-         External_Name => "clearAdaCurrentGoal";
-   begin
-      Clear_Ada_Current_Goal;
-   end Clear_Current_Goal;
-
 end Goals;
