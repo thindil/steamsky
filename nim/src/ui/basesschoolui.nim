@@ -20,7 +20,7 @@ import ../[basestrade, crew, crewinventory, game, tk, types]
 import coreui, dialogs, errordialog, mapsui, utilsui2
 
 proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Set list of available to train skills for the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -64,7 +64,7 @@ proc setSchoolSkillsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show the selected base school
   ##
   ## * clientData - the additional data for the Tcl command
@@ -127,7 +127,7 @@ proc showSchoolCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "focus -force " & trainButton)
   return tclOk
 
-proc getMemberIndex(): Natural {.sideEffect, raises: [], tags: [].} =
+proc getMemberIndex(): Natural {.raises: [], tags: [].} =
   ## Get the index in the player ship of the currently selected member
   ##
   ## Returns the crew member's index
@@ -153,8 +153,8 @@ proc getSkillIndex(): Positive =
       break
 
 proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect].} =
   ## Train the selected skill
   ##
   ## * clientData - the additional data for the Tcl command
@@ -189,7 +189,7 @@ proc trainSkillCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["TrainSkill", $getMemberIndex()].allocCStringArray)
 
 proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Update the cost of training
   ##
   ## * clientData - the additional data for the Tcl command
@@ -229,8 +229,8 @@ proc updateSchoolCostCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
-    argc: cint; argv: cstringArray): TclResults {.sideEffect, raises: [],
-    tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argc: cint; argv: cstringArray): TclResults {.raises: [],
+    tags: [WriteIOEffect, TimeEffect].} =
   ## Update the minimal and maximum values of spinbox with training cost
   ##
   ## * clientData - the additional data for the Tcl command
@@ -264,7 +264,7 @@ proc updateSchoolSelectedCostCommand(clientData: cint; interp: PInterp;
   tclEval(script = amountBox & " set " & $cost)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("SetSchoolSkills", setSchoolSkillsCommand)
@@ -277,8 +277,8 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
 
 # Temporary code for interfacing with Ada
 
-proc getAdaMemberIndex(): cint {.sideEffect, raises: [], tags: [], exportc.} =
+proc getAdaMemberIndex(): cint {.raises: [], tags: [].} =
   return getMemberIndex().cint + 1
 
-proc getAdaSkillIndex(): cint {.sideEffect, raises: [], tags: [], exportc.} =
+proc getAdaSkillIndex(): cint {.raises: [], tags: [].} =
   return getSkillIndex().cint
