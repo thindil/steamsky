@@ -1,4 +1,4 @@
---    Copyright 2017-2022 Bartek thindil Jasicki
+--    Copyright 2017-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -45,21 +45,5 @@ package Log is
    -- SOURCE
    Debug_Mode: Debug_Types := Default_Debug_Mode;
    -- ****
-
-   -- ****f* Log/Log.Log_Message
-   -- FUNCTION
-   -- Log message (if proper type) to file in debug mode
-   -- PARAMETERS
-   -- Message      - Message to write to debug log file
-   -- Message_Type - Type of message to write to debug log file
-   -- New_Line     - If true, add new line character after message. Default is
-   --                true
-   -- Time_Stamp   - If true, add timestamp before message. Default is true
-   -- SOURCE
-   procedure Log_Message
-     (Message: String; Message_Type: Debug_Types;
-      New_Line, Time_Stamp: Boolean := True) with
-      Pre => Message'Length > 0;
-      -- ****
 
 end Log;
