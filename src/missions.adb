@@ -16,8 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Ships;
-with Maps;
 with Bases; use Bases;
 
 package body Missions is
@@ -131,60 +129,6 @@ package body Missions is
       end loop Convert_Missions_Loop;
       return Missions_List;
    end Set_Missions_List;
-
-   function Auto_Finish_Missions return String is
-      use Maps;
-      use Ships;
-
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Message: chars_ptr;
-      function Auto_Ada_Finish_Mission return chars_ptr with
-         Import => True,
-         Convention => C,
-         External_Name => "autoAdaFinishMissions";
-      function Get_Accepted_Mission
-        (Mission_Index: Positive) return Mission_Data is
-      begin
-         return Set_Missions_List(Base_Index => 0)(Mission_Index);
-      end Get_Accepted_Mission;
-      function Get_Accepted_Missions_Amount return Natural with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaAcceptedMissionsAmount";
-   begin
-      if Base_Index = 0 then
-         return "";
-      end if;
-      Set_Ship_In_Nim;
-      Get_Ada_Base_Location
-        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
-         Y => Sky_Bases(Base_Index).Sky_Y);
-      Message := Auto_Ada_Finish_Mission;
-      Get_Ship_From_Nim(Ship => Player_Ship);
-      Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
-        .Mission_Index :=
-        0;
-      Update_Map_Loop :
-      for I in 1 .. Get_Accepted_Missions_Amount loop
-         if Get_Accepted_Mission(Mission_Index => I).Finished then
-            Sky_Map
-              (Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base)
-                 .Sky_X,
-               Sky_Bases(Get_Accepted_Mission(Mission_Index => I).Start_Base)
-                 .Sky_Y)
-              .Mission_Index :=
-              I;
-         else
-            Sky_Map
-              (Get_Accepted_Mission(Mission_Index => I).Target_X,
-               Get_Accepted_Mission(Mission_Index => I).Target_Y)
-              .Mission_Index :=
-              I;
-         end if;
-      end loop Update_Map_Loop;
-      return Value(Item => Message);
-   end Auto_Finish_Missions;
 
    function Get_Mission_Type(M_Type: Missions_Types) return String is
       function Get_Ada_Mission_Type(M_T: Integer) return chars_ptr with

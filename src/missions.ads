@@ -99,16 +99,6 @@ package Missions is
      (Index_Type => Positive, Element_Type => Mission_Data);
    -- ****
 
-   -- ****f* Missions/Missions.Auto_Finish_Missions
-   -- FUNCTION
-   -- Finish all possible missions.
-   -- RESULT
-   -- Empty string if everything is ok, otherwise message with information
-   -- what goes wrong
-   -- SOURCE
-   function Auto_Finish_Missions return String;
-   -- ****
-
    -- ****f* Missions/Missions.Get_Mission_Type
    -- FUNCTION
    -- Get the name of the type of the selected mission
