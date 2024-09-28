@@ -15,12 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Game is
 
    function Find_Skill_Index
      (Skill_Name: String) return SkillsData_Container.Extended_Index is
+      use Interfaces.C.Strings;
+
       function Find_Ada_Skill_Index
         (S_Name: chars_ptr) return SkillsData_Container.Extended_Index with
          Import => True,
