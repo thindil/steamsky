@@ -17,15 +17,6 @@
 
 package body Statistics is
 
-   procedure Clear_Game_Stats is
-      procedure Clear_Ada_Game_Stats with
-         Import => True,
-         Convention => C,
-         External_Name => "clearAdaGameStats";
-   begin
-      Clear_Ada_Game_Stats;
-   end Clear_Game_Stats;
-
    function Get_Game_Points return Natural is
       function Get_Ada_Game_Points return Natural with
          Import => True,

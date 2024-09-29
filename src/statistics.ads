@@ -22,14 +22,6 @@
 package Statistics is
 -- ****
 
-   -- ****f* Statistics/Statistics.Clear_Game_Stats
-   -- FUNCTION
-   -- Clear game statistics
-   -- SOURCE
-   procedure Clear_Game_Stats with
-      Post => Get_Game_Points = 0;
-      -- ****
-
       -- ****f* Statistics/Statistics.Get_Game_Points
       -- FUNCTION
       -- Get amount of gained points multiplied by difficulty bonus
