@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- Use the new icon for expand infos' sections on various screens
 
 ## [10.3] - 2024-09-22
 
