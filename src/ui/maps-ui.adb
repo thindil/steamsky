@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with Bases;
-with Bases.ShipyardUI;
 with Bases.UI;
 with Crafts.UI;
 with CoreUI;
@@ -72,7 +71,6 @@ package body Maps.UI is
       use Tcl.Tk.Ada.Widgets.TtkFrame;
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Winfo;
-      use Bases;
       use CoreUI;
       use DebugUI;
       use Log;
@@ -103,7 +101,6 @@ package body Maps.UI is
          GameOptions.Add_Commands;
          Trades.UI.Add_Commands;
          Bases.UI.Add_Commands;
-         ShipyardUI.Add_Commands;
          Knowledge.Add_Commands;
          Missions.UI.Add_Commands;
          Statistics.UI.Add_Commands;

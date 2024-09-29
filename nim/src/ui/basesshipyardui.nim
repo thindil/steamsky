@@ -1465,14 +1465,13 @@ proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
-    discard
-#    addCommand("ShowShipyard", showShipyardCommand)
-#    addCommand("ShowInstallInfo", showInstallInfoCommand)
-#    addCommand("ManipulateModule", manipulateModuleCommand)
-#    addCommand("ShowRemoveInfo", showRemoveInfoCommand)
-#    addCommand("ShowShipyardTab", showShipyardTabCommand)
-#    addCommand("SortShipyardModules", sortShipyardModulesCommand)
-#    addCommand("CompareModules", compareModulesCommand)
+    addCommand("ShowShipyard", showShipyardCommand)
+    addCommand("ShowInstallInfo", showInstallInfoCommand)
+    addCommand("ManipulateModule", manipulateModuleCommand)
+    addCommand("ShowRemoveInfo", showRemoveInfoCommand)
+    addCommand("ShowShipyardTab", showShipyardTabCommand)
+    addCommand("SortShipyardModules", sortShipyardModulesCommand)
+    addCommand("CompareModules", compareModulesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
