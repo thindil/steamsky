@@ -20,8 +20,6 @@ with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
-with Bases;
-with Bases.UI;
 with Crafts.UI;
 with CoreUI;
 with DebugUI;
@@ -100,7 +98,6 @@ package body Maps.UI is
          Messages.UI.Add_Commands;
          GameOptions.Add_Commands;
          Trades.UI.Add_Commands;
-         Bases.UI.Add_Commands;
          Knowledge.Add_Commands;
          Missions.UI.Add_Commands;
          Statistics.UI.Add_Commands;

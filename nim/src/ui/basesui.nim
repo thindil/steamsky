@@ -607,10 +607,9 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
-    discard
-#    addCommand("ShowBaseUI", showBaseUiCommand)
-#    addCommand("BaseAction", baseActionCommand)
-#    addCommand("SearchRecipes", searchRecipesCommand)
-#    addCommand("ShowBaseMenu", showBaseMenuCommand)
+    addCommand("ShowBaseUI", showBaseUiCommand)
+    addCommand("BaseAction", baseActionCommand)
+    addCommand("SearchRecipes", searchRecipesCommand)
+    addCommand("ShowBaseMenu", showBaseMenuCommand)
   except:
     showError(message = "Can't add a Tcl command.")
