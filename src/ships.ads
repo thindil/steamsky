@@ -221,6 +221,7 @@ package Ships is
      (Index_Type => Positive, Element_Type => Member_Data);
    -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Ships/Ships.Ship_Record
    -- FUNCTION
    -- Data structure for ships
@@ -255,6 +256,7 @@ package Ships is
       Home_Base: Extended_Base_Range;
    end record;
    -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****s* Ships/Ships.Proto_Member_Data
    -- FUNCTION
