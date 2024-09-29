@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -19,16 +19,6 @@
 -- SOURCE
 package Ships.UI.Crew is
 -- ****
-
-   -- ****f* SUCrew/SUCrew.Update_Crew_Info
-   -- FUNCTION
-   -- Update information about the player ship crew members
-   -- PARAMETERS
-   -- Page  - The number of current page of crew list to show
-   -- Skill - The index of skill with which the crew members will be show
-   -- SOURCE
-   procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0);
-   -- ****
 
    -- ****f* SUCrew/SUCrew.Add_Commands
    -- FUNCTION
