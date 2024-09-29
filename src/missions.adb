@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 with Bases; use Bases;
 
 package body Missions is
@@ -36,101 +36,9 @@ package body Missions is
    type Nim_Missions_Array is array(0 .. 49) of Nim_Mission_Data;
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****if* Missions/Missions.Set_Missions_List
-   -- FUNCTION
-   -- Get the list of missions from Nim
-   -- PARAMETERS
-   -- Base_Index - The index of the base which missions will be get. If set to
-   --              zero, get the list of accepted missions
-   -- RESULT
-   -- The list with the selected missions
-   -- SOURCE
-   function Set_Missions_List
-     (Base_Index: Natural) return Mission_Container.Vector is
-     -- ****
-      --## rule off IMPROPER_INITIALIZATION
-      Nim_Missions: Nim_Missions_Array;
-      Missions_List: Mission_Container.Vector;
-      --## rule on IMPROPER_INITIALIZATION
-      procedure Set_Ada_Missions
-        (N_Missions: out Nim_Missions_Array; B_Index: Natural) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaMissions";
-   begin
-      Set_Ada_Missions(N_Missions => Nim_Missions, B_Index => Base_Index);
-      Convert_Missions_Loop :
-      for Nim_Mission of Nim_Missions loop
-         exit Convert_Missions_Loop when Nim_Mission.Time = 0;
-         case Nim_Mission.M_Type is
-            when 0 =>
-               Missions_List.Append
-                 (New_Item =>
-                    (M_Type => DELIVER, Time => Nim_Mission.Time,
-                     Target_X => Nim_Mission.Target_X,
-                     Target_Y => Nim_Mission.Target_Y,
-                     Reward => Nim_Mission.Reward,
-                     Start_Base => Nim_Mission.Start_Base,
-                     Finished =>
-                       (if Nim_Mission.Finished = 1 then True else False),
-                     Multiplier => Nim_Mission.Multiplier,
-                     Item_Index => Nim_Mission.Data));
-            when 1 =>
-               Missions_List.Append
-                 (New_Item =>
-                    (M_Type => DESTROY, Time => Nim_Mission.Time,
-                     Target_X => Nim_Mission.Target_X,
-                     Target_Y => Nim_Mission.Target_Y,
-                     Reward => Nim_Mission.Reward,
-                     Start_Base => Nim_Mission.Start_Base,
-                     Finished =>
-                       (if Nim_Mission.Finished = 1 then True else False),
-                     Multiplier => Nim_Mission.Multiplier,
-                     Ship_Index => Nim_Mission.Data));
-            when 2 =>
-               Missions_List.Append
-                 (New_Item =>
-                    (M_Type => PATROL, Time => Nim_Mission.Time,
-                     Target_X => Nim_Mission.Target_X,
-                     Target_Y => Nim_Mission.Target_Y,
-                     Reward => Nim_Mission.Reward,
-                     Start_Base => Nim_Mission.Start_Base,
-                     Finished =>
-                       (if Nim_Mission.Finished = 1 then True else False),
-                     Multiplier => Nim_Mission.Multiplier,
-                     Target => Nim_Mission.Data));
-            when 3 =>
-               Missions_List.Append
-                 (New_Item =>
-                    (M_Type => EXPLORE, Time => Nim_Mission.Time,
-                     Target_X => Nim_Mission.Target_X,
-                     Target_Y => Nim_Mission.Target_Y,
-                     Reward => Nim_Mission.Reward,
-                     Start_Base => Nim_Mission.Start_Base,
-                     Finished =>
-                       (if Nim_Mission.Finished = 1 then True else False),
-                     Multiplier => Nim_Mission.Multiplier,
-                     Target => Nim_Mission.Data));
-            when 4 =>
-               Missions_List.Append
-                 (New_Item =>
-                    (M_Type => PASSENGER, Time => Nim_Mission.Time,
-                     Target_X => Nim_Mission.Target_X,
-                     Target_Y => Nim_Mission.Target_Y,
-                     Reward => Nim_Mission.Reward,
-                     Start_Base => Nim_Mission.Start_Base,
-                     Finished =>
-                       (if Nim_Mission.Finished = 1 then True else False),
-                     Multiplier => Nim_Mission.Multiplier,
-                     Data => Nim_Mission.Data));
-            when others =>
-               null;
-         end case;
-      end loop Convert_Missions_Loop;
-      return Missions_List;
-   end Set_Missions_List;
-
    function Get_Mission_Type(M_Type: Missions_Types) return String is
+      use Interfaces.C.Strings;
+
       function Get_Ada_Mission_Type(M_T: Integer) return chars_ptr with
          Import => True,
          Convention => C,
@@ -181,6 +89,89 @@ package body Missions is
    end Get_Missions;
 
    procedure Set_Missions(Base_Index: Positive) is
+      function Set_Missions_List
+        (Base_Index: Natural) return Mission_Container.Vector is
+         --## rule off IMPROPER_INITIALIZATION
+         Nim_Missions: Nim_Missions_Array;
+         Missions_List: Mission_Container.Vector;
+         --## rule on IMPROPER_INITIALIZATION
+         procedure Set_Ada_Missions
+           (N_Missions: out Nim_Missions_Array; B_Index: Natural) with
+            Import => True,
+            Convention => C,
+            External_Name => "setAdaMissions";
+      begin
+         Set_Ada_Missions(N_Missions => Nim_Missions, B_Index => Base_Index);
+         Convert_Missions_Loop :
+         for Nim_Mission of Nim_Missions loop
+            exit Convert_Missions_Loop when Nim_Mission.Time = 0;
+            case Nim_Mission.M_Type is
+               when 0 =>
+                  Missions_List.Append
+                    (New_Item =>
+                       (M_Type => DELIVER, Time => Nim_Mission.Time,
+                        Target_X => Nim_Mission.Target_X,
+                        Target_Y => Nim_Mission.Target_Y,
+                        Reward => Nim_Mission.Reward,
+                        Start_Base => Nim_Mission.Start_Base,
+                        Finished =>
+                          (if Nim_Mission.Finished = 1 then True else False),
+                        Multiplier => Nim_Mission.Multiplier,
+                        Item_Index => Nim_Mission.Data));
+               when 1 =>
+                  Missions_List.Append
+                    (New_Item =>
+                       (M_Type => DESTROY, Time => Nim_Mission.Time,
+                        Target_X => Nim_Mission.Target_X,
+                        Target_Y => Nim_Mission.Target_Y,
+                        Reward => Nim_Mission.Reward,
+                        Start_Base => Nim_Mission.Start_Base,
+                        Finished =>
+                          (if Nim_Mission.Finished = 1 then True else False),
+                        Multiplier => Nim_Mission.Multiplier,
+                        Ship_Index => Nim_Mission.Data));
+               when 2 =>
+                  Missions_List.Append
+                    (New_Item =>
+                       (M_Type => PATROL, Time => Nim_Mission.Time,
+                        Target_X => Nim_Mission.Target_X,
+                        Target_Y => Nim_Mission.Target_Y,
+                        Reward => Nim_Mission.Reward,
+                        Start_Base => Nim_Mission.Start_Base,
+                        Finished =>
+                          (if Nim_Mission.Finished = 1 then True else False),
+                        Multiplier => Nim_Mission.Multiplier,
+                        Target => Nim_Mission.Data));
+               when 3 =>
+                  Missions_List.Append
+                    (New_Item =>
+                       (M_Type => EXPLORE, Time => Nim_Mission.Time,
+                        Target_X => Nim_Mission.Target_X,
+                        Target_Y => Nim_Mission.Target_Y,
+                        Reward => Nim_Mission.Reward,
+                        Start_Base => Nim_Mission.Start_Base,
+                        Finished =>
+                          (if Nim_Mission.Finished = 1 then True else False),
+                        Multiplier => Nim_Mission.Multiplier,
+                        Target => Nim_Mission.Data));
+               when 4 =>
+                  Missions_List.Append
+                    (New_Item =>
+                       (M_Type => PASSENGER, Time => Nim_Mission.Time,
+                        Target_X => Nim_Mission.Target_X,
+                        Target_Y => Nim_Mission.Target_Y,
+                        Reward => Nim_Mission.Reward,
+                        Start_Base => Nim_Mission.Start_Base,
+                        Finished =>
+                          (if Nim_Mission.Finished = 1 then True else False),
+                        Multiplier => Nim_Mission.Multiplier,
+                        Data => Nim_Mission.Data));
+               when others =>
+                  null;
+            end case;
+         end loop Convert_Missions_Loop;
+         return Missions_List;
+      end Set_Missions_List;
    begin
       Sky_Bases(Base_Index).Missions :=
         Set_Missions_List(Base_Index => Base_Index);
