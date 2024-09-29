@@ -22,20 +22,4 @@
 package Utils is
 -- ****
 
-   -- ****f* Utils/Utils.GetRandom
-   -- FUNCTION
-   -- Return random number from Min to Max range. This one can't be formaly
-   -- verified as is depends on random number generator.
-   -- PARAMETERS
-   -- Min - Starting value from which generate random number
-   -- Max - End value from which generate random number
-   -- RESULT
-   -- Random number between Min and Max
-   -- SOURCE
-   function Get_Random(Min, Max: Integer) return Integer with
-      Import => True,
-      Convention => C,
-      External_Name => "getRandom";
-      -- ****
-
 end Utils;
