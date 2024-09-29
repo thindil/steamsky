@@ -216,12 +216,6 @@ package Bases is
 
 -- Temporary code to interact with Nim
 
-   procedure Get_Ada_Base_Location
-     (Base_Index: Bases_Range; X: Map_X_Range; Y: Map_Y_Range) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaBaseLocation";
-
    procedure Set_Base_In_Nim(Base_Index: Bases_Range);
 
    procedure Get_Base_From_Nim(Base_Index: Bases_Range);
