@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2024 Bartek thindil Jasicki
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -19,15 +19,6 @@
 -- SOURCE
 package Statistics.UI is
 -- ****
-
-   -- ****f* SUI/SUI.Show_Statistics
-   -- FUNCTION
-   -- Show the game statistics to the player
-   -- PARAMETERS
-   -- Refresh - If true, refresh the view instead of back to the game map
-   -- SOURCE
-   procedure Show_Statistics(Refresh: Boolean := False);
-   -- ****
 
    -- ****f* SUI/SUI.Add_Commands
    -- FUNCTION

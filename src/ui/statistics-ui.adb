@@ -20,15 +20,6 @@ with Utils.UI;
 
 package body Statistics.UI is
 
-   procedure Show_Statistics(Refresh: Boolean := False) is
-      procedure Show_Ada_Statistics(Refr: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "showAdaStatistics";
-   begin
-      Show_Ada_Statistics(Refr => (if Refresh then 1 else 0));
-   end Show_Statistics;
-
    -- ****o* SUI/SUI.Sort_Crafting_Command
    -- FUNCTION
    -- Sort the list of finished crafting orders
