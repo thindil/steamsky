@@ -258,7 +258,7 @@ package body Bases is
          end loop Convert_Recruits_Loop;
          Get_Ada_Base_Recruits(N_Recruits => Nim_Recruits, B_I => B_Index);
       end Get_Ada_Recruits;
-      procedure Get_Base_Reputation(Base_Index: Bases_Range) is
+      procedure Get_Base_Reputation(B_Index: Bases_Range) is
          procedure Get_Ada_Base_Reputation
            (B_Index, Level, Experience: Integer) with
             Import => True,
@@ -266,10 +266,15 @@ package body Bases is
             External_Name => "getAdaBaseReputation";
       begin
          Get_Ada_Base_Reputation
-           (B_Index => Base_Index,
-            Level => Sky_Bases(Base_Index).Reputation.Level,
-            Experience => Sky_Bases(Base_Index).Reputation.Experience);
+           (B_Index => B_Index,
+            Level => Sky_Bases(B_Index).Reputation.Level,
+            Experience => Sky_Bases(B_Index).Reputation.Experience);
       end Get_Base_Reputation;
+      procedure Get_Ada_Base_Location
+         (B_Index: Bases_Range; X: Map_X_Range; Y: Map_Y_Range) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaBaseLocation";
    begin
       Get_Ada_Base_Name
         (B_Index => Base_Index,
@@ -284,7 +289,7 @@ package body Bases is
          Hour => Sky_Bases(Base_Index).Visited.Hour,
          Minutes => Sky_Bases(Base_Index).Visited.Minutes, Date_Type => 0);
       Get_Ada_Base_Location
-        (Base_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
+        (B_Index => Base_Index, X => Sky_Bases(Base_Index).Sky_X,
          Y => Sky_Bases(Base_Index).Sky_Y);
       Get_Base_Type
         (B_Index => Base_Index, Base_Type => Sky_Bases(Base_Index).Base_Type);
@@ -316,7 +321,7 @@ package body Bases is
          Hour => Sky_Bases(Base_Index).Asked_For_Events.Hour,
          Minutes => Sky_Bases(Base_Index).Asked_For_Events.Minutes,
          Date_Type => 3);
-      Get_Base_Reputation(Base_Index => Base_Index);
+      Get_Base_Reputation(B_Index => Base_Index);
       Get_Ada_Base_Date
         (B_Index => Base_Index,
          Year => Sky_Bases(Base_Index).Missions_Date.Year,
