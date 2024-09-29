@@ -15,11 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Interfaces.C.Strings;
 
 package body Messages is
 
    function Formated_Time(Time: Date_Record := Game_Date) return String is
+      use Interfaces.C.Strings;
 
       function Nim_Formatted_Time
         (Year, Month, Day, Hour, Minutes: Integer) return chars_ptr with
