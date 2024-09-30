@@ -303,7 +303,7 @@ package Game is
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
-   Skills_Amount: SkillsData_Container.Extended_Index := 0;
+   Skills_Amount: SkillsData_Container.Extended_Index := Default_Skills_Amount;
    -- ****
 
    -- ****v* Game/Game.Save_Directory
