@@ -1097,20 +1097,20 @@ proc showCombatUi(newCombat: bool = true) =
       tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "combat.tcl")
       pilotOrder = 2
       engineerOrder = 3
-  #     try:
-  #       addCommand("NextTurn", nextTurnCommand)
-  #       addCommand("ShowCombatUI", showCombatUiCommand)
-  #       addCommand("SetCombatOrder", setCombatOrderCommand)
-  #       addCommand("SetBoardingOrder", setBoardingOrderCommand)
-  #       addCommand("SetCombatParty", setCombatPartyCommand)
-  #       addCommand("SetCombatPosition", setCombatPositionCommand)
-  #       addCommand("ShowCombatInfo", showCombatInfoCommand)
-  #       addCommand("CombatMaxMix", combatMaxMinCommand)
-  #       addCommand("ToggleAllCombat", toggleAllCombatCommand)
-  #       addCommand("SetParty", setPartyCommand)
-  #     except:
-  #       showError(message = "Can't add a Tcl command.")
-  #       return
+      try:
+        addCommand("NextTurn", nextTurnCommand)
+        addCommand("ShowCombatUI", showCombatUiCommand)
+        addCommand("SetCombatOrder", setCombatOrderCommand)
+        addCommand("SetBoardingOrder", setBoardingOrderCommand)
+        addCommand("SetCombatParty", setCombatPartyCommand)
+        addCommand("SetCombatPosition", setCombatPositionCommand)
+        addCommand("ShowCombatInfo", showCombatInfoCommand)
+        addCommand("CombatMaxMin", combatMaxMinCommand)
+        addCommand("ToggleAllCombat", toggleAllCombatCommand)
+        addCommand("SetParty", setPartyCommand)
+      except:
+        showError(message = "Can't add a Tcl command.")
+        return
     else:
       let
         button = combatFrame & ".next"
