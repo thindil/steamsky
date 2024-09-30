@@ -90,18 +90,18 @@ package body Missions is
 
    procedure Set_Missions(Base_Index: Positive) is
       function Set_Missions_List
-        (Base_Index: Natural) return Mission_Container.Vector is
+        (B_Index: Natural) return Mission_Container.Vector is
          --## rule off IMPROPER_INITIALIZATION
          Nim_Missions: Nim_Missions_Array;
          Missions_List: Mission_Container.Vector;
          --## rule on IMPROPER_INITIALIZATION
          procedure Set_Ada_Missions
-           (N_Missions: out Nim_Missions_Array; B_Index: Natural) with
+           (N_Missions: out Nim_Missions_Array; B_I: Natural) with
             Import => True,
             Convention => C,
             External_Name => "setAdaMissions";
       begin
-         Set_Ada_Missions(N_Missions => Nim_Missions, B_Index => Base_Index);
+         Set_Ada_Missions(N_Missions => Nim_Missions, B_I => B_Index);
          Convert_Missions_Loop :
          for Nim_Mission of Nim_Missions loop
             exit Convert_Missions_Loop when Nim_Mission.Time = 0;
@@ -174,7 +174,7 @@ package body Missions is
       end Set_Missions_List;
    begin
       Sky_Bases(Base_Index).Missions :=
-        Set_Missions_List(Base_Index => Base_Index);
+        Set_Missions_List(B_Index => Base_Index);
    end Set_Missions;
 
 end Missions;
