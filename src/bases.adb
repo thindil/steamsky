@@ -260,13 +260,13 @@ package body Bases is
       end Get_Ada_Recruits;
       procedure Get_Base_Reputation(B_Index: Bases_Range) is
          procedure Get_Ada_Base_Reputation
-           (B_Index, Level, Experience: Integer) with
+           (B_I, Level, Experience: Integer) with
             Import => True,
             Convention => C,
             External_Name => "getAdaBaseReputation";
       begin
          Get_Ada_Base_Reputation
-           (B_Index => B_Index,
+           (B_I => B_Index,
             Level => Sky_Bases(B_Index).Reputation.Level,
             Experience => Sky_Bases(B_Index).Reputation.Experience);
       end Get_Base_Reputation;
