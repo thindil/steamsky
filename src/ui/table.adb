@@ -40,6 +40,9 @@ package body Table is
       --## rule off TYPE_INITIAL_VALUES
       type Nim_Headers is array(0 .. 10) of chars_ptr;
       --## rule on TYPE_INITIAL_VALUES
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Width is array(0 .. 10) of Integer;
+      --## rule on TYPE_INITIAL_VALUES
       N_Headers: Nim_Headers;
       Nim_Canvas, Nim_Scrollbar: chars_ptr;
       N_Width: Nim_Width := (others => 0);
