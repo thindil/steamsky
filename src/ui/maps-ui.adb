@@ -20,7 +20,6 @@ with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
-with Crafts.UI;
 with CoreUI;
 with DebugUI;
 with GameOptions;
@@ -94,7 +93,6 @@ package body Maps.UI is
          WaitMenu.Add_Commands;
          Help.UI.Add_Commands;
          Ships.UI.Add_Commands;
-         Crafts.UI.Add_Commands;
          Messages.UI.Add_Commands;
          GameOptions.Add_Commands;
          Trades.UI.Add_Commands;

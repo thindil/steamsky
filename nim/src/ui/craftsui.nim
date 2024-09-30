@@ -879,12 +879,11 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
-    discard
-#    addCommand("ShowCrafting", showCraftingCommand)
-#    addCommand("SortCrafting", sortCraftingCommand)
-#    addCommand("ShowSetRecipe", showSetRecipeCommand)
-#    addCommand("SetCrafting", setCraftingCommand)
-#    addCommand("ShowRecipeInfo", showRecipeInfoCommand)
+    addCommand("ShowCrafting", showCraftingCommand)
+    addCommand("SortCrafting", sortCraftingCommand)
+    addCommand("ShowSetRecipe", showSetRecipeCommand)
+    addCommand("SetCrafting", setCraftingCommand)
+    addCommand("ShowRecipeInfo", showRecipeInfoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
