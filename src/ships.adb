@@ -487,6 +487,11 @@ package body Ships is
            (Ship_Data => Nim_Ship,
             Is_Player_Ship => (if Ada_Ship = Player_Ship then 1 else 0));
       end Get_Ada_Ship;
+      procedure Get_Ada_Ship_Cargo
+        (Cargo: Nim_Inventory_Array; Get_Player_Ship: Natural := 1) with
+         Import => True,
+         Convention => C,
+         External_Name => "getAdaShipCargo";
    begin
       Get_Ada_Map_Cell
         (X => Ship.Sky_X, Y => Ship.Sky_Y, Base_Index => Map_Cell.Base_Index,
@@ -533,6 +538,11 @@ package body Ships is
          Ada_Ship.Home_Base := Nim_Ship.Home_Base;
          --## rule on IMPROPER_INITIALIZATION
       end Set_Ada_Ship;
+      procedure Set_Ada_Ship_Cargo
+        (Cargo: out Nim_Inventory_Array; Get_Player_Ship: Natural := 1) with
+         Import => True,
+         Convention => C,
+         External_Name => "setAdaShipCargo";
    begin
       Set_Ada_Ship_Cargo
         (Cargo => Nim_Cargo,

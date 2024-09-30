@@ -315,6 +315,7 @@ package Ships is
    -- ****
    --## rule on REDUCEABLE_SCOPE
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****s* Ships/Ships.Proto_Ship_Data
    -- FUNCTION
    -- Data structure for ship prototypes
@@ -349,13 +350,7 @@ package Ships is
       Known_Recipes: TinyString_Formal_Container.Vector (Capacity => 16);
    end record;
    -- ****
-
-   -- ****d* Ships/Ships.Empty_Proto_Ship
-   -- FUNCTION
-   -- Empty record for ships prototypes
-   -- SOURCE
-   Empty_Proto_Ship: constant Proto_Ship_Data := (others => <>);
-   -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****v* Ships/Ships.Player_Ship
    -- FUNCTION
@@ -377,27 +372,6 @@ package Ships is
       -- ****
 
 -- Temporary code to interact with Nim
-
-   procedure Get_Ada_Crew
-     (Ship_Crew: Crew_Container.Vector := Player_Ship.Crew);
-
-   procedure Set_Ada_Crew(Ship: in out Ship_Record);
-
-   procedure Get_Ada_Ship_Cargo
-     (Cargo: Nim_Inventory_Array; Get_Player_Ship: Natural := 1) with
-      Import => True,
-      Convention => C,
-      External_Name => "getAdaShipCargo";
-
-   procedure Set_Ada_Ship_Cargo
-     (Cargo: out Nim_Inventory_Array; Get_Player_Ship: Natural := 1) with
-      Import => True,
-      Convention => C,
-      External_Name => "setAdaShipCargo";
-
-   procedure Get_Ada_Modules(Ship: Ship_Record := Player_Ship);
-
-   procedure Set_Ada_Modules(Ship: in out Ship_Record);
 
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship);
 
