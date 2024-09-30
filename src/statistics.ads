@@ -22,13 +22,4 @@
 package Statistics is
 -- ****
 
-      -- ****f* Statistics/Statistics.Get_Game_Points
-      -- FUNCTION
-      -- Get amount of gained points multiplied by difficulty bonus
-      -- RESULT
-      -- Amount of gained points by player in this game
-      -- SOURCE
-   function Get_Game_Points return Natural;
-      -- ****
-
 end Statistics;
