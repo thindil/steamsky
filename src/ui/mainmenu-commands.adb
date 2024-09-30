@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions;
-with Combat.UI;
 with Dialogs;
 with Game;
 with Game.SaveLoad;
@@ -360,7 +359,6 @@ package body MainMenu.Commands is
          Ada_Command => Show_Load_Game_Menu_Command'Access);
       Add_Command
         (Name => "SortSaves", Ada_Command => Sort_Saves_Command'Access);
-      Combat.UI.Add_Combat_Commands;
    end Add_Commands;
 
 end MainMenu.Commands;
