@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New icon for expand info's section. Author: Delapouite
+- New icons for expand and contracts info's section. Author: Delapouite
   (https://game-icons.net), license CC BY 3.0
 
 ### Changed
