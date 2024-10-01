@@ -249,13 +249,16 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   mouseYPosition = currentYMouse
   return tclOk
 
-proc addCommands*() =
-  # addCommand("CloseDialog", closeDialogCommand)
-  # addCommand("UpdateDialog", updateDialogCommand)
-  # addCommand("GetString", getStringCommand)
-  # addCommand("SetMousePosition", setMousePositionCommand)
-  # addCommand("MoveDialog", moveDialogCommand)
-  discard
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+  ## Adds Tcl commands related to dialogs
+  try:
+    addCommand("CloseDialog", closeDialogCommand)
+    addCommand("UpdateDialog", updateDialogCommand)
+    addCommand("GetString", getStringCommand)
+    addCommand("SetMousePosition", setMousePositionCommand)
+    addCommand("MoveDialog", moveDialogCommand)
+  except:
+    showError(message = "Can't add a Tcl command.")
 
 # Temporary code for interfacing with Ada
 

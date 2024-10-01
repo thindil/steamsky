@@ -20,22 +20,15 @@
 package Dialogs is
 -- ****
 
-   -- ****f* Dialogs/Dialogs.Add_Commands
+   -- ****f* Dialogs/Dialogs.Show_Message
    -- FUNCTION
-   -- Add Tcl commands related to dialogs
+   -- Show the selected message to a player
+   -- PARAMETERS
+   -- Text         - Text of message to show
+   -- Parent_Frame - The parent frame of the message dialog. Default is
+   --                the game frame. Can be empty
+   -- Title        - The text show in the dialog header.
    -- SOURCE
-   procedure Add_Commands;
-   -- ****
-
-      -- ****f* Dialogs/Dialogs.Show_Message
-      -- FUNCTION
-      -- Show the selected message to a player
-      -- PARAMETERS
-      -- Text         - Text of message to show
-      -- Parent_Frame - The parent frame of the message dialog. Default is
-      --                the game frame. Can be empty
-      -- Title        - The text show in the dialog header.
-      -- SOURCE
    procedure Show_Message
      (Text: String; Parent_Frame: String := ".gameframe"; Title: String) with
       Pre => Text'Length > 0 and Parent_Frame'Length > 0;
