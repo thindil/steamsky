@@ -494,10 +494,4 @@ package Game is
       SkillsData_Container.Length(Container => Skills_List);
       -- ****
 
--- Temporary code to interact with Nim
-
-   procedure Get_Game_Date;
-
-   procedure Set_Game_Date;
-
 end Game;

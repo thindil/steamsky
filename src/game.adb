@@ -32,28 +32,4 @@ package body Game is
       return Find_Ada_Skill_Index(S_Name => New_String(Str => Skill_Name));
    end Find_Skill_Index;
 
-   procedure Get_Game_Date is
-      procedure Get_Ada_Game_Date
-        (Year, Month, Day, Hour, Minutes: Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "getAdaGameDate";
-   begin
-      Get_Ada_Game_Date
-        (Year => Game_Date.Year, Month => Game_Date.Month,
-         Day => Game_Date.Day, Hour => Game_Date.Hour,
-         Minutes => Game_Date.Minutes);
-   end Get_Game_Date;
-
-   procedure Set_Game_Date is
-      procedure Set_Ada_Game_Date(Year, Month, Day, Hour, M: out Integer) with
-         Import => True,
-         Convention => C,
-         External_Name => "setAdaGameDate";
-   begin
-      Set_Ada_Game_Date
-        (Year => Game_Date.Year, Month => Game_Date.Month,
-         Day => Game_Date.Day, Hour => Game_Date.Hour, M => Game_Date.Minutes);
-   end Set_Game_Date;
-
 end Game;
