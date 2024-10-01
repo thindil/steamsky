@@ -41,12 +41,12 @@ proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
     if getRandom(min = 1, max = 100) < 16:
       result = basesSyllablesPreList[getRandom(min = 0, max = (
           basesSyllablesPreList.len() - 1))] & " "
-    result = result & basesSyllablesStartList[getRandom(min = 0, max = (
+    result &= basesSyllablesStartList[getRandom(min = 0, max = (
         basesSyllablesStartList.len - 1))]
-    result = result & basesSyllablesEndList[getRandom(min = 0, max = (
+    result &= basesSyllablesEndList[getRandom(min = 0, max = (
         basesSyllablesEndList.len - 1))]
     if getRandom(min = 1, max = 100) < 16:
-      result = result & " " & basesSyllablesPostList[getRandom(min = 0, max = (
+      result &= " " & basesSyllablesPostList[getRandom(min = 0, max = (
           basesSyllablesPostList.len - 1))]
 
 proc countPrice*(price: var Natural; traderIndex: int;
@@ -68,14 +68,14 @@ proc countPrice*(price: var Natural; traderIndex: int;
   if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
     case skyBases[skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex].reputation.level
-    of -24 .. -1:
-      bonus = bonus - (price.float * 0.05).int
-    of 26 .. 50:
-      bonus = bonus + (price.float * 0.05).int
-    of 51 .. 75:
-      bonus = bonus + (price.float * 0.1).int
-    of 76 .. 100:
-      bonus = bonus + (price.float * 0.15).int
+    of -24.. -1:
+      bonus -= (price.float * 0.05).int
+    of 26..50:
+      bonus += (price.float * 0.05).int
+    of 51..75:
+      bonus += (price.float * 0.1).int
+    of 76..100:
+      bonus += (price.float * 0.15).int
     else:
       discard
   if bonus < 0:
@@ -83,9 +83,9 @@ proc countPrice*(price: var Natural; traderIndex: int;
   if reduce:
     if bonus >= price:
       bonus = price - 1
-    price = price - bonus
+    price -= bonus
   else:
-    price = price + bonus
+    price += bonus
 
 proc updatePopulation*() {.sideEffect, raises: [], tags: [], contractual.} =
   ## Update the base population if needed
@@ -99,7 +99,7 @@ proc updatePopulation*() {.sideEffect, raises: [], tags: [], contractual.} =
         min = -10, max = -1) else: getRandom(min = 1, max = 10))
     if skyBases[baseIndex].population + populationDiff < 0:
       populationDiff = -(skyBases[baseIndex].population)
-    skyBases[baseIndex].population = skyBases[baseIndex].population + populationDiff
+    skyBases[baseIndex].population += populationDiff
     if skyBases[baseIndex].population == 0:
       skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
   else:
@@ -139,9 +139,9 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
       return
     inventory.add(y = itemIndex)
     equipment[equipIndex] = inventory.high
-    price = price + getPrice(baseType = skyBases[baseIndex].baseType,
+    price += getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = itemIndex)
-    payment = payment + (getPrice(baseType = skyBases[baseIndex].baseType,
+    payment += (getPrice(baseType = skyBases[baseIndex].baseType,
         itemIndex = itemIndex) / 10).int
 
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30 or
@@ -150,7 +150,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
   var maxRecruits: Positive = (if skyBases[baseIndex].population <
       150: 5 elif skyBases[baseIndex].population < 300: 10 else: 15)
   if "barracks" in basesTypesList[skyBases[baseIndex].baseType].flags:
-    maxRecruits = maxRecruits * 2
+    maxRecruits *= 2
   if maxRecruits > (skyBases[baseIndex].population / 10).int:
     maxRecruits = (skyBases[baseIndex].population / 10).int + 1
   let recruitsAmount: Positive = getRandom(min = 1, max = maxRecruits)
@@ -161,7 +161,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
     gender: char = 'M'
   if maxSkillAmount < 5:
     maxSkillAmount = 5
-  for i in 1 .. recruitsAmount:
+  for i in 1..recruitsAmount:
     skills = @[]
     price = 0
     inventory = @[]
@@ -188,7 +188,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
       maxSkillLevel = 20
     if getRandom(min = 1, max = 100) > 95:
       maxSkillLevel = getRandom(min = maxSkillLevel, max = 100)
-    for j in 1 .. localSkillAmount:
+    for j in 1..localSkillAmount:
       let
         skillNumber: Natural = (if j > 1: getRandom(min = 1,
             max = skillsList.len) else: faction.weaponSkill)
@@ -197,7 +197,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
         highestLevel = skillLevel
         highestSkill = skillNumber
       var skillIndex: int = -1
-      for index, skill in skills.pairs:
+      for index, skill in skills:
         if skill.index == skillNumber:
           skillIndex = (if skills[index].level < skillLevel: index else: -2)
           break
@@ -206,15 +206,15 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
             experience: 0))
       elif skillIndex > -1:
         skills[skillIndex] = SkillInfo(index: skillNumber, level: skillLevel, experience: 0)
-    for j in 1 .. attributesList.len:
+    for j in 1..attributesList.len:
       attributes.add(y = MobAttributeRecord(level: getRandom(min = 3, max = (
           maxSkillLevel / 3).int), experience: 0))
-    for skill in skills.items:
-      price = price + skill.level
-      payment = payment + skill.level
-    for attribute in attributes.items:
-      price = price + (attribute.level * 2)
-      payment = payment + (attribute.level * 2)
+    for skill in skills:
+      price += skill.level
+      payment += skill.level
+    for attribute in attributes:
+      price += (attribute.level * 2)
+      payment += (attribute.level * 2)
     addInventory(itemsIndexes = weaponsList, equipIndex = weapon)
     addInventory(itemsIndexes = shieldsList, equipIndex = shield)
     addInventory(itemsIndexes = headArmorsList, equipIndex = helmet)
@@ -223,7 +223,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
     addInventory(itemsIndexes = legsArmorsList, equipIndex = legs)
     for recipe in recipesList.values:
       if highestSkill == recipe.skill:
-        for index, item in itemsList.pairs:
+        for index, item in itemsList:
           if item.itemType == recipe.tool:
             tempToolsList.add(y = index)
         addInventory(itemsIndexes = tempToolsList, equipIndex = tool)
@@ -257,15 +257,15 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
   var newPoints: int = skyBases[baseIndex].reputation.experience + (
       points.float * newGameSettings.reputationBonus).int
   if baseIndex == playerShip.homeBase:
-    newPoints = newPoints + points
+    newPoints += points
   while newPoints < 0:
     skyBases[baseIndex].reputation.level.dec
-    newPoints = newPoints + abs(x = skyBases[baseIndex].reputation.level * 5)
+    newPoints += abs(x = skyBases[baseIndex].reputation.level * 5)
     if newPoints >= 0:
       skyBases[baseIndex].reputation.experience = newPoints
       return
   while newPoints > abs(x = skyBases[baseIndex].reputation.level * 5):
-    newPoints = newPoints - abs(x = skyBases[baseIndex].reputation.level * 5)
+    newPoints -= abs(x = skyBases[baseIndex].reputation.level * 5)
     skyBases[baseIndex].reputation.level.inc
   skyBases[baseIndex].reputation.experience = newPoints
   if skyBases[baseIndex].reputation.level == 100:
@@ -278,7 +278,7 @@ proc updatePrices*() {.sideEffect, raises: [], tags: [], contractual.} =
     return
   var chance: Positive = (if skyBases[baseIndex].population <
       150: 1 elif skyBases[baseIndex].population < 300: 2 else: 5)
-  chance = chance + (daysDifference(dateToCompare = skyBases[
+  chance += (daysDifference(dateToCompare = skyBases[
       baseIndex].visited) / 10).int
   if getRandom(min = 1, max = 100) > chance:
     return
@@ -392,9 +392,9 @@ proc adaRecruitToNim(adaRecruit: AdaRecruitData): RecruitData {.raises: [],
       break
     result.skills.add(y = SkillInfo(index: skill[0], level: skill[1],
         experience: skill[2]))
-  for index, item in adaRecruit.equipment.pairs:
+  for index, item in adaRecruit.equipment:
     result.equipment[index.EquipmentLocations] = item - 1
-  for item in adaRecruit.inventory.items:
+  for item in adaRecruit.inventory:
     if item == 0:
       break
     result.inventory.add(y = item)
@@ -405,12 +405,12 @@ proc adaRecruitFromNim(recruit: RecruitData): AdaRecruitData {.raises: [],
   result = AdaRecruitData()
   for attribute in result.attributes.mitems:
     attribute = [0.cint, 0.cint]
-  for index, attribute in recruit.attributes.pairs:
+  for index, attribute in recruit.attributes:
     result.attributes[index + 1] = [attribute.level.cint,
         attribute.experience.cint]
   for skill in result.skills.mitems:
     skill = [0.cint, 0.cint, 0.cint]
-  for index, skill in recruit.skills.pairs:
+  for index, skill in recruit.skills:
     result.skills[index + 1] = [skill.index.cint, skill.level.cint,
         skill.experience.cint]
   result.name = recruit.name.cstring
