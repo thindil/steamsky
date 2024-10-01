@@ -95,13 +95,4 @@ package Messages is
       Post => Formated_Time'Result'Length > 0;
       -- ****
 
-      -- ****f* Messages/Messages.Get_Last_Message_Index
-      -- FUNCTION
-      -- Get last message index
-      -- RESULT
-      -- List index of the last message
-      -- SOURCE
-   function Get_Last_Message_Index return Natural;
-   -- ****
-
 end Messages;

@@ -36,13 +36,4 @@ package body Messages is
                 Hour => Time.Hour, Minutes => Time.Minutes));
    end Formated_Time;
 
-   function Get_Last_Message_Index return Natural is
-      function Nim_Get_Last_Message_Index return Integer with
-         Import => True,
-         Convention => C,
-         External_Name => "getLastMessageIndex";
-   begin
-      return Nim_Get_Last_Message_Index + 1;
-   end Get_Last_Message_Index;
-
 end Messages;
