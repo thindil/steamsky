@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Dialogs;
 with Goals.UI;
 with MainMenu.Commands;
 with Table;
@@ -28,7 +27,6 @@ package body MainMenu is
          External_Name => "createAdaMainMenu";
    begin
       MainMenu.Commands.Add_Commands;
-      Dialogs.Add_Commands;
       Utils.UI.Add_Commands;
       Goals.UI.Add_Commands;
       Table.Add_Commands;
