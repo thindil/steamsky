@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, tables]
+import std/[os, strutils, tables]
 import ../[basestypes, events, game, gamesaveload, items, maps, shipscargo, tk, types]
 import errordialog, mapsui
 
@@ -793,27 +793,30 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't delete event.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
-proc showDebugUi*() {.sideEffect, raises: [], tags: [], exportc.} =
+proc showDebugUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   ## Show debug ui to the player
-#  tclEvalFile(fileName = dataDirectory & DirSep & "debug.tcl")
-#  addCommand("Refresh", refreshCommand)
-#  addCommand("RefreshModule", refreshModuleCommand)
-#  addCommand("RefreshMember", refreshMemberCommand)
-#  addCommand("RefreshCargo", refreshCargoCommand)
-#  addCommand("RefreshEvents", refreshEventsCommand)
-#  addCommand("RefreshBase", refreshBaseCommand)
-#  addCommand("DebugSaveGame", debugSaveGameCommand)
-#  addCommand("DebugMoveShip", debugMoveShipCommand)
-#  addCommand("DebugUpdateModule", debugUpdateModuleCommand)
-#  addCommand("DebugAddSkill", debugAddSkillCommand)
-#  addCommand("DebugUpdateMember", debugUpdateMemberCommand)
-#  addCommand("DebugAddItem", debugAddItemCommand)
-#  addCommand("DebugUpdateItem", debugUpdateItemCommand)
-#  addCommand("DebugUpdateBase", debugUpdateBaseCommand)
-#  addCommand("DebugAddShip", debugAddShipCommand)
-#  addCommand("ToggleItemEntry", toggleItemEntryCommand)
-#  addCommand("DebugAddEvent", debugAddEventCommand)
-#  addCommand("DebugDeleteEvent", debugDeleteEventCommand)
+  tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "debug.tcl")
+  try:
+    addCommand("Refresh", refreshCommand)
+    addCommand("RefreshModule", refreshModuleCommand)
+    addCommand("RefreshMember", refreshMemberCommand)
+    addCommand("RefreshCargo", refreshCargoCommand)
+    addCommand("RefreshEvents", refreshEventsCommand)
+    addCommand("RefreshBase", refreshBaseCommand)
+    addCommand("DebugSaveGame", debugSaveGameCommand)
+    addCommand("DebugMoveShip", debugMoveShipCommand)
+    addCommand("DebugUpdateModule", debugUpdateModuleCommand)
+    addCommand("DebugAddSkill", debugAddSkillCommand)
+    addCommand("DebugUpdateMember", debugUpdateMemberCommand)
+    addCommand("DebugAddItem", debugAddItemCommand)
+    addCommand("DebugUpdateItem", debugUpdateItemCommand)
+    addCommand("DebugUpdateBase", debugUpdateBaseCommand)
+    addCommand("DebugAddShip", debugAddShipCommand)
+    addCommand("ToggleItemEntry", toggleItemEntryCommand)
+    addCommand("DebugAddEvent", debugAddEventCommand)
+    addCommand("DebugDeleteEvent", debugDeleteEventCommand)
+  except:
+    showError(message = "Can't add a Tcl command.")
   var valuesList = ""
   for baseType in basesTypesList.values:
     valuesList.add(y = " {" & baseType.name & "}")
