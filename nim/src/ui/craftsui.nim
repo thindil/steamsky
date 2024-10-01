@@ -19,7 +19,7 @@ import std/[algorithm, math, os, strutils, tables]
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, updateheader, utilsui2
 
-proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
+proc checkTool(toolNeeded: string): bool {.raises: [], tags: [].} =
   ##  Check if the player has needed tool for the crafting recipe
   ##
   ##  * toolNeeded - The type of tool needed for the recipe
@@ -37,7 +37,7 @@ proc checkTool(toolNeeded: string): bool {.sideEffect, raises: [], tags: [].} =
           break
 
 proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var bool) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    hasMaterials: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Check if the selected recipe can be crafted (has all requirements meet)
   ##
   ## * recipe       - The crafting recipe to check
@@ -78,7 +78,7 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     canCraft = true
 
 proc checkStudyPrerequisities(canCraft, hasTool,
-    hasWorkplace: var bool) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    hasWorkplace: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Check if the study and decontruct recipes can be crafted
   ##
   ## * canCraft      - If recipe can be crafter then it will be True, otherwise
@@ -111,8 +111,8 @@ var
   recipesTable: TableWidget
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        RootEffect].} =
   ## Show information about available crafting recipes
   ##
   ## * clientData - the additional data for the Tcl command
@@ -320,8 +320,8 @@ const defaultRecipesSortOrder = none
 var recipesSortOrder = defaultRecipesSortOrder
 
 proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Sort the list of crafting recipes
   ##
   ## * clientData - the additional data for the Tcl command
@@ -456,7 +456,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCrafting", "1"].allocCStringArray)
 
 proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show dialog to set the selected recipe as crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -604,8 +604,8 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Set the selected recipe as a crafting order in the selected workshop
   ##
   ## * clientData - the additional data for the Tcl command
@@ -673,7 +673,7 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show information about the selected recipe
   ##
   ## * clientData - the additional data for the Tcl command
@@ -876,7 +876,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = recipeDialog, relativeX = 0.2, relativeY = 0.1)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowCrafting", showCraftingCommand)
@@ -889,13 +889,13 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
 
 # Temporary code for interfacing with Ada
 
-proc checkAdaTool(toolNeeded: cstring): int {.sideEffect, raises: [], tags: [], exportc.} =
+proc checkAdaTool(toolNeeded: cstring): int {.raises: [], tags: [], exportc.} =
   if checkTool(toolNeeded = $toolNeeded):
     return 1
   return 0
 
 proc isAdaCraftable(adaRecipe: AdaCraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var cint) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    hasMaterials: var cint) {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   var
     materials: seq[string]
     amounts: seq[Positive]
@@ -919,7 +919,7 @@ proc isAdaCraftable(adaRecipe: AdaCraftData; canCraft, hasWorkplace, hasTool,
   hasMaterials = (if hMaterials: 1 else: 0)
 
 proc checkAdaStudyPrerequisities(canCraft, hasTool,
-    hasWorkplace: var cint) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    hasWorkplace: var cint) {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   var cCraft, hTool, hWorkplace: bool = false
   try:
     checkStudyPrerequisities(canCraft = cCraft, hasTool = hTool,
