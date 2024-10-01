@@ -21,11 +21,9 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with DebugUI;
 with GameOptions;
 with Help.UI;
 with Knowledge;
-with Log;
 with Messages;
 with Messages.UI;
 with Missions.UI;
@@ -69,8 +67,6 @@ package body Maps.UI is
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Winfo;
       use CoreUI;
-      use DebugUI;
-      use Log;
       use Maps.UI.Commands;
 
       Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
@@ -99,9 +95,6 @@ package body Maps.UI is
          Knowledge.Add_Commands;
          Missions.UI.Add_Commands;
          Statistics.UI.Add_Commands;
-         if Log.Debug_Mode = Log.MENU then
-            Show_Debug_Ui;
-         end if;
       end if;
       Create_Ada_Game_Ui;
    end Create_Game_Ui;

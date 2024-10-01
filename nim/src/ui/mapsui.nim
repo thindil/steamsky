@@ -755,8 +755,8 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = "bind " & mapView & " <Button-4> {ZoomMap raise}")
     tclEval(script = "bind " & mapView & " <Button-5> {ZoomMap lower}")
     setKeys()
-#    if debugMode == menu:
-#      showDebugUi()
+    if debugMode == menu:
+      showDebugUi()
   else:
     tclEval(script = "pack " & gameFrame & " -fill both -expand true")
   tclSetVar(varName = "refreshmap", newValue = "1")
