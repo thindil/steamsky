@@ -29,7 +29,7 @@ var timerId*: string = "" ## Id of the timer for auto close command
 
 proc createDialog*(name, title: string; titleWidth: Positive = 275;
     columns: Positive = 1;
-    parentName: string = ".gameframe"): string {.sideEffect, raises: [], tags: [].} =
+    parentName: string = ".gameframe"): string {.raises: [], tags: [].} =
   ## Create a new dialog with the selected title
   ##
   ## * name       - the Tk path of the new dialog
@@ -65,7 +65,7 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
 
 proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
     row: Natural = 0; column: Natural = 0; icon: string = "exiticon";
-    color: string = "") {.sideEffect, raises: [], tags: [].} =
+    color: string = "") {.raises: [], tags: [].} =
   ## Add a close button to the selected dialog and set keyboard bindings for it
   ##
   ## * name       - the Tk path (name) for the button
@@ -92,7 +92,7 @@ proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
 
 proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
     withTimer: bool = false; relativeX: float = 0.3;
-    relativeY: float = 0.3) {.sideEffect, raises: [], tags: [].} =
+    relativeY: float = 0.3) {.raises: [], tags: [].} =
   ## Show the selected dialog to the player
   ##
   ## * dialog      - the Tk path (name) of the dialog to show
@@ -110,7 +110,7 @@ proc showDialog*(dialog: string; parentFrame: string = ".gameframe";
         if parentFrame == ".gameframe": "" else: " " & parentFrame))
 
 proc showMessage*(text: string; parentFrame: string = ".gameframe";
-    title: string) {.sideEffect, raises: [], tags: [].} =
+    title: string) {.raises: [], tags: [].} =
   ## Show the dialog with the selected message to the player
   ##
   ## * text        - the text to of the message to show
@@ -172,7 +172,7 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
 
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
-    button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [],
+    button2: ButtonSettings = emptyButtonSettings) {.raises: [],
         tags: [WriteIOEffect, TimeEffect].} =
   ## Show the dialog with the selected text to the player
   ##
@@ -264,7 +264,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   showDialog(dialog = infoDialog)
 
 proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
-    maxAmount: Natural = 0; cost: Natural = 0) {.sideEffect, raises: [], tags: [].} =
+    maxAmount: Natural = 0; cost: Natural = 0) {.raises: [], tags: [].} =
   ## Show the dialog for manipulate items amount in cargo (like selling,
   ## dropping, etc).
   ##

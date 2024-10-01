@@ -20,7 +20,7 @@ import ../tk
 import dialogs, errordialog
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Close the selected dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -57,8 +57,8 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    WriteIOEffect, TimeEffect].} =
   ## Update countdown timer on the selected dialog. If timer reach 0, close
   ## dialog
   ##
@@ -91,7 +91,7 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Get string value from the player, like new ship or module name
   ##
   ## * clientData - the additional data for the Tcl command
@@ -138,7 +138,7 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
 var mouseXPosition, mouseYPosition = 0
 
 proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Set the mouse position
   ##
   ## * clientData - the additional data for the Tcl command
@@ -167,8 +167,8 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        WriteIOEffect, TimeEffect].} =
   ## Move the selected dialog around
   ##
   ## * clientData - the additional data for the Tcl command
@@ -229,7 +229,7 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   if mouseYPosition < currentYMouse and dialogY + dialogHeight + 5 > mainWindowHeight:
     return tclOk
 
-  proc getCoordinate(name: string): int {.sideEffect, raises: [], tags: [
+  proc getCoordinate(name: string): int {.raises: [], tags: [
       WriteIOEffect, TimeEffect].} =
     let value = tclEval2(script = "lindex [place configure " & dialog & " -" &
         name & "] 4")
