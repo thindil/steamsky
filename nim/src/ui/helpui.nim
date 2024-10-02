@@ -135,9 +135,9 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
   ## Adds Tcl commands related to the help system
   try:
     discard
-#    addCommand("ShowTopic", showTopicCommand)
-#    addCommand("CloseHelp", closeHelpCommand)
-#    addCommand("ShowHelp", showHelpCommand)
+    addCommand("ShowTopic", showTopicCommand)
+    addCommand("CloseHelp", closeHelpCommand)
+    addCommand("ShowHelp", showHelpCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 

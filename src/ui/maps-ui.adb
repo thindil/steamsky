@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with Help.UI;
 with Knowledge;
 with Messages;
 with Messages.UI;
@@ -86,7 +85,6 @@ package body Maps.UI is
          Close_Button := Get_Widget(pathName => Game_Header & ".closebutton");
          OrdersMenu.Add_Commands;
          WaitMenu.Add_Commands;
-         Help.UI.Add_Commands;
          Ships.UI.Add_Commands;
          Messages.UI.Add_Commands;
          Trades.UI.Add_Commands;
