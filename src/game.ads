@@ -63,14 +63,6 @@ package Game is
    Game_Version: constant String := "Version: 10.4";
    -- ****
 
-   -- ****t* Game/Game.Positive_Container
-   -- FUNCTION
-   -- Used to store Positive values as list
-   -- SOURCE
-   package Positive_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Positive);
-   -- ****
-
    -- ****t* Game/Game.Positive_Formal_Container
    -- FUNCTION
    -- Used to store Positive values as list
@@ -122,17 +114,6 @@ package Game is
    -- 6.5 - Added
    -- SOURCE
    package Tiny_String is new Generic_Bounded_Length(Max => 64);
-   -- ****
-
-   -- ****t* Game/Game.TinyString_Formal_Container
-   -- FUNCTION
-   -- Used to store Tiny_String values as list
-   -- HISTORY
-   -- 7.1 - Added
-   -- SOURCE
-   package TinyString_Formal_Container is new Formal_Vectors
-     (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String,
-      "=" => Tiny_String."=");
    -- ****
 
    -- ****s* Game/Game.Attribute_Record
