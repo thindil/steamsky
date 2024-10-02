@@ -638,12 +638,11 @@ proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
-    discard
-#    addCommand("ShowOptionsTab", showOptionsTabCommand)
-#    addCommand("ShowOptions", showOptionsCommand)
-#    addCommand("SetFonts", setFontsCommand)
-#    addCommand("SetDefaultFonts", setDefaultFontsCommand)
-#    addCommand("CloseOptions", closeOptionsCommand)
-#    addCommand("ResetKeys", resetKeysCommand)
+    addCommand("ShowOptionsTab", showOptionsTabCommand)
+    addCommand("ShowOptions", showOptionsCommand)
+    addCommand("SetFonts", setFontsCommand)
+    addCommand("SetDefaultFonts", setDefaultFontsCommand)
+    addCommand("CloseOptions", closeOptionsCommand)
+    addCommand("ResetKeys", resetKeysCommand)
   except:
     showError(message = "Can't add a Tcl command.")

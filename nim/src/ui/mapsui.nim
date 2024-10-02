@@ -735,7 +735,7 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
 #    shipsui.addCommands()
     craftsui.addCommands()
 #    messagesui.addCommands()
-#    gameoptions.addCommands()
+    gameoptions.addCommands()
 #    tradesui.addCommands()
     basesschoolui.addCommands()
     basesrecruitui.addCommands()

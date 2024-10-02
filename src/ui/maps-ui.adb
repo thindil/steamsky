@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with GameOptions;
 with Help.UI;
 with Knowledge;
 with Messages;
@@ -90,7 +89,6 @@ package body Maps.UI is
          Help.UI.Add_Commands;
          Ships.UI.Add_Commands;
          Messages.UI.Add_Commands;
-         GameOptions.Add_Commands;
          Trades.UI.Add_Commands;
          Knowledge.Add_Commands;
          Missions.UI.Add_Commands;
