@@ -100,7 +100,7 @@ package body Ships is
          Import => True,
          Convention => C,
          External_Name => "getAdaShipCargo";
-      procedure Get_Ada_Modules(Ship: Ship_Record := Player_Ship) is
+      procedure Get_Ada_Modules(S: Ship_Record := Player_Ship) is
          use Tiny_String;
 
          Nim_Modules: Nim_Modules_Array :=
@@ -118,7 +118,7 @@ package body Ships is
             External_Name => "getAdaShipModules";
       begin
          Convert_Modules_Loop :
-         for Module of Ship.Modules loop
+         for Module of S.Modules loop
             Tmp_Owners := (others => 0);
             Index2 := 1;
             Convert_Module_Owners_Loop :
@@ -179,7 +179,7 @@ package body Ships is
          end loop Convert_Modules_Loop;
          Get_Ada_Ship_Modules
            (N_Modules => Nim_Modules,
-            Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+            Is_Player_Ship => (if S = Player_Ship then 1 else 0));
       end Get_Ada_Modules;
       procedure Get_Ada_Crew
         (Ship_Crew: Crew_Container.Vector := Player_Ship.Crew) is
@@ -227,7 +227,7 @@ package body Ships is
          Event_Index => Map_Cell.Event_Index,
          Mission_Index => Map_Cell.Mission_Index);
       Get_Ada_Ship(Ada_Ship => Ship);
-      Get_Ada_Modules(Ship => Ship);
+      Get_Ada_Modules(S => Ship);
       Get_Ada_Ship_Cargo
         (Cargo => Nim_Cargo,
          Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
@@ -272,7 +272,7 @@ package body Ships is
          Import => True,
          Convention => C,
          External_Name => "setAdaShipCargo";
-      procedure Set_Ada_Modules(Ship: in out Ship_Record) is
+      procedure Set_Ada_Modules(S: in out Ship_Record) is
          use Interfaces.C;
 
          Nim_Modules: Nim_Modules_Array :=
@@ -286,13 +286,13 @@ package body Ships is
       begin
          Set_Ada_Ship_Modules
            (N_Modules => Nim_Modules,
-            Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+            Is_Player_Ship => (if S = Player_Ship then 1 else 0));
          Count_Modules_Loop :
          for Module of Nim_Modules loop
             exit Count_Modules_Loop when Strlen(Item => Module.Name) = 0;
             Modules_Amount := Modules_Amount + 1;
          end loop Count_Modules_Loop;
-         Ship.Modules.Clear;
+         S.Modules.Clear;
          Convert_Modules_Loop :
          for Module of Nim_Modules loop
             exit Convert_Modules_Loop when Strlen(Item => Module.Name) = 0;
@@ -515,11 +515,11 @@ package body Ships is
                   when others =>
                      null;
                end case;
-               Ship.Modules.Append(New_Item => Temp_Module);
+               S.Modules.Append(New_Item => Temp_Module);
             end Convert_Module_Block;
          end loop Convert_Modules_Loop;
       end Set_Ada_Modules;
-      procedure Set_Ada_Crew(Ship: in out Ship_Record) is
+      procedure Set_Ada_Crew(S: in out Ship_Record) is
          use Interfaces.C;
       --## rule off TYPE_INITIAL_VALUES
          type Nim_Crew_Array is array(1 .. 128) of Nim_Member_Data;
@@ -546,15 +546,15 @@ package body Ships is
       --## rule off IMPROPER_INITIALIZATION
          Set_Ada_Ship_Crew
            (N_Crew => Nim_Crew,
-            Is_Player_Ship => (if Ship = Player_Ship then 1 else 0));
+            Is_Player_Ship => (if S = Player_Ship then 1 else 0));
       --## rule on IMPROPER_INITIALIZATION
          Count_Crew_Loop :
          for Member of Nim_Crew loop
             exit Count_Crew_Loop when Strlen(Item => Member.Name) = 0;
             Crew_Amount := Crew_Amount + 1;
          end loop Count_Crew_Loop;
-         if Crew_Amount /= Natural(Ship.Crew.Length) then
-            Ship.Crew.Clear;
+         if Crew_Amount /= Natural(S.Crew.Length) then
+            S.Crew.Clear;
             Add_Member := True;
          end if;
          Convert_Crew_Loop :
@@ -569,19 +569,19 @@ package body Ships is
             begin
                Member_From_Nim(Member => Member, Ada_Member => Temp_Member);
                if Add_Member then
-                  Ship.Crew.Append(New_Item => Temp_Member);
+                  S.Crew.Append(New_Item => Temp_Member);
                else
-                  Ship.Crew(Index) := Temp_Member;
+                  S.Crew(Index) := Temp_Member;
                   Index := Index + 1;
                end if;
             end Convert_Member_Block;
          end loop Convert_Crew_Loop;
          Set_Ada_Crew_Loop :
-         for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
+         for I in S.Crew.First_Index .. S.Crew.Last_Index loop
             Set_Ada_Crew_Inventory
               (Inventory => Nim_Inventory, Member_Index => I,
-               Get_Player_Ship => (if Ship = Player_Ship then 1 else 0));
-            Ship.Crew(I).Inventory :=
+               Get_Player_Ship => (if S = Player_Ship then 1 else 0));
+            S.Crew(I).Inventory :=
               Inventory_From_Nim(Inventory => Nim_Inventory, Size => 32);
          end loop Set_Ada_Crew_Loop;
       end Set_Ada_Crew;
@@ -592,8 +592,8 @@ package body Ships is
       Inventory_Container.Assign
         (Target => Ship.Cargo,
          Source => Inventory_From_Nim(Inventory => Nim_Cargo, Size => 128));
-      Set_Ada_Crew(Ship => Ship);
-      Set_Ada_Modules(Ship => Ship);
+      Set_Ada_Crew(S => Ship);
+      Set_Ada_Modules(S => Ship);
       Set_Ada_Ship(Ada_Ship => Ship);
    end Get_Ship_From_Nim;
 
