@@ -20,8 +20,8 @@ import ../[config, game, goals, tk, utils]
 import errordialog
 
 proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    WriteIOEffect, TimeEffect].} =
   ## Show goals UI to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -59,8 +59,8 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        WriteIOEffect, TimeEffect].} =
   ## Set selected goal as a current goal
   ##
   ## * clientData - the additional data for the Tcl command
@@ -106,7 +106,7 @@ proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = ".goalsdialog.closebutton invoke")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
+proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     TimeEffect].} =
   ## Adds Tcl commands related to the goals UI
   try:
