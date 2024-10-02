@@ -110,8 +110,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
     TimeEffect].} =
   ## Adds Tcl commands related to the goals UI
   try:
-    discard
-#    addCommand("ShowGoals", showGoalsCommand)
-#    addCommand("SetGoal", setGoalCommand)
+    addCommand("ShowGoals", showGoalsCommand)
+    addCommand("SetGoal", setGoalCommand)
   except:
     showError(message = "Can't add a Tcl command.")
