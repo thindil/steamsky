@@ -20,7 +20,6 @@ with Ada.Containers.Indefinite_Vectors;
 with Crew; use Crew;
 with Game; use Game;
 with Items; use Items;
-with Mobs; use Mobs;
 
 -- ****h* Ships/Ships
 -- FUNCTION
@@ -257,39 +256,6 @@ package Ships is
    end record;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
-
-   -- ****s* Ships/Ships.Proto_Member_Data
-   -- FUNCTION
-   -- Data structure for proto crew info
-   -- PARAMETERS
-   -- Proto_Index - Index of proto mob which will be used as crew member
-   -- Min_Amount  - Mininum amount of that mob in crew
-   -- Max_Amount  - Maximum amount of that mob in crew. If 0 then MinAmount
-   --               will be amount
-   -- SOURCE
-   type Proto_Member_Data is record
-      Proto_Index: Proto_Mobs_Amount_Range;
-      Min_Amount: Positive := 1;
-      Max_Amount: Natural := 0;
-   end record;
-   -- ****
-
-   --## rule off REDUCEABLE_SCOPE
-   -- ****d* Ships/Ships.Empty_Proto_Member
-   -- FUNCTION
-   -- Empty record for proto crew info
-   -- SOURCE
-   Empty_Proto_Member: constant Proto_Member_Data := (others => <>);
-   -- ****
-   --## rule on REDUCEABLE_SCOPE
-
-   -- ****t* Ships/Ships.Proto_Crew_Container
-   -- FUNCTION
-   -- Used to store crew info in ships prototypes
-   -- SOURCE
-   package Proto_Crew_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Proto_Member_Data);
-   -- ****
 
    -- ****s* Ships/Ships.Ship_Bonus_Data
    -- FUNCTION
