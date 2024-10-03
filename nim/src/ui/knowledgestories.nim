@@ -173,9 +173,8 @@ proc setStoryCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the list of known stories
   try:
-    discard
-#    addCommand("ShowStory", showStoryCommand)
-#    addCommand("ShowStoryLocation", showStoryLocationCommand)
-#    addCommand("SetStory", setStoryCommand)
+    addCommand("ShowStory", showStoryCommand)
+    addCommand("ShowStoryLocation", showStoryLocationCommand)
+    addCommand("SetStory", setStoryCommand)
   except:
     showError(message = "Can't add a Tcl command.")

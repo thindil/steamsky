@@ -16,7 +16,6 @@
 with Interfaces.C;
 with CArgv;
 with Tcl;
-with Knowledge.Stories;
 with Utils.UI;
 
 package body Knowledge is
@@ -73,7 +72,6 @@ package body Knowledge is
       Add_Command
         (Name => "KnowledgeMaxMin",
          Ada_Command => Knowledge_Max_Min_Command'Access);
-      Knowledge.Stories.Add_Knowledge_Stories_Commands;
    end Add_Commands;
 
 end Knowledge;
