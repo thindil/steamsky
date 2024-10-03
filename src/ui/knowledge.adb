@@ -16,7 +16,6 @@
 with Interfaces.C;
 with CArgv;
 with Tcl;
-with Knowledge.Events;
 with Knowledge.Missions;
 with Knowledge.Stories;
 with Utils.UI;
@@ -75,7 +74,6 @@ package body Knowledge is
       Add_Command
         (Name => "KnowledgeMaxMin",
          Ada_Command => Knowledge_Max_Min_Command'Access);
-      Knowledge.Events.Add_Knowledge_Events_Commands;
       Knowledge.Missions.Add_Knowledge_Missions_Commands;
       Knowledge.Stories.Add_Knowledge_Stories_Commands;
    end Add_Commands;

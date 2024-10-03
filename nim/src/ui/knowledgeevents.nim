@@ -376,10 +376,9 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the known events UI
   try:
-    discard
-#    addCommand("ShowEventInfo", showEventInfoCommand)
-#    addCommand("ShowEvents", showEventsCommand)
-#    addCommand("SortEvents", sortEventsCommand)
+    addCommand("ShowEventInfo", showEventInfoCommand)
+    addCommand("ShowEvents", showEventsCommand)
+    addCommand("SortEvents", sortEventsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
