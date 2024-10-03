@@ -20,7 +20,7 @@ import ../[config, game, maps, missions, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show the menu with available the selected mission options
   ##
   ## * clientData - the additional data for the Tcl command
@@ -83,7 +83,7 @@ var
   missionsTable: TableWidget
   missionsIndexes: seq[Natural]
 
-proc updateMissionsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
+proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} =
   ## Update and show list of accepted missions
   ##
   ## * page     - the current page of the missions' list to show
@@ -203,8 +203,8 @@ proc updateMissionsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Ro
   tclEval(script = missionsCanvas & " yview moveto 0.0")
 
 proc showMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show the list of known missions to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -237,8 +237,8 @@ const defaultMissionsSortOrder: MissionsSortOrders = none
 var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Sort the accepted missions list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -387,7 +387,7 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMissionsList()
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
     addCommand("ShowMissionMenu", showMissionsMenuCommand)
@@ -398,7 +398,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
 
 # Temporary code for interfacing with Ada
 
-proc updateAdaMissionsList(page: cint) {.sideEffect, raises: [],
+proc updateAdaMissionsList(page: cint) {.raises: [],
     tags: [RootEffect], exportc.} =
   try:
     updateMissionsList(page = page.Positive)
