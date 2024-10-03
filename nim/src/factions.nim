@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Bartek thindil Jasicki
+# Copyright 2022-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -14,6 +14,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+## Provides code related to the in-game factions, like loading them from
+## files, getting their reputation, checking do they are friendly or
+## getting a random faction.
 
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
@@ -337,6 +341,7 @@ proc getRandomFaction*(): string {.sideEffect, raises: [], tags: [],
 
 type
   AdaFactionData* = object
+    ## Temporary C binding
     name: cstring
     memberName: cstring
     pluralMemberName: cstring
@@ -350,6 +355,7 @@ type
     weaponSkill: cint
 
   AdaCareerData* = object
+    ## Temporary C binding
     shipIndex: cint
     playerIndex: cstring
     description: cstring
@@ -357,6 +363,7 @@ type
 
 proc getAdaFactionIndex(index: cint): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   var factionNumber: Positive = 1
   for factionIndex in factionsList.keys:
     if index == factionNumber:
@@ -366,6 +373,7 @@ proc getAdaFactionIndex(index: cint): cstring {.raises: [], tags: [], exportc,
 proc getAdaFaction(index: cstring; numericIndex: cint;
     adaFaction: var AdaFactionData) {.sideEffect, raises: [], tags: [], exportc,
         contractual.} =
+  ## Temporary C binding
   adaFaction = AdaFactionData(name: "".cstring, memberName: "".cstring,
       pluralMemberName: "".cstring, spawnChance: 0, population: [1: 0.cint,
           2: 0.cint], namesType: 0, description: "".cstring,
@@ -395,6 +403,7 @@ proc getAdaFaction(index: cstring; numericIndex: cint;
 proc getAdaFactionData(factionIndex: cstring; index: cint;
     adaDataType: cstring): cstring {.sideEffect, raises: [], tags: [], exportc,
         contractual.} =
+  ## Temporary C binding
   try:
     let dataList = case $adaDataType
       of "foodType":
@@ -414,6 +423,7 @@ proc getAdaFactionData(factionIndex: cstring; index: cint;
 proc getAdaFactionRelation(factionIndex: cstring; index: cint;
     relation: var array[3, cint]): cstring {.sideEffect, raises: [], tags: [],
         exportc, contractual.} =
+  ## Temporary C binding
   relation = [0.cint, 0.cint, 0.cint]
   try:
     if index > factionsList[$factionIndex].relations.len():
@@ -433,6 +443,7 @@ proc getAdaFactionRelation(factionIndex: cstring; index: cint;
 proc getAdaFactionCareer(factionIndex: cstring; index: cint;
     career: var AdaCareerData): cstring {.sideEffect, raises: [], tags: [],
         exportc, contractual.} =
+  ## Temporary C binding
   career = AdaCareerData(shipIndex: 1, playerIndex: "".cstring,
       description: "".cstring, name: "".cstring)
   try:
@@ -454,6 +465,7 @@ proc getAdaFactionCareer(factionIndex: cstring; index: cint;
 proc getAdaFactionBase(factionIndex: cstring; index: cint;
     baseIndex: var cint): cstring {.sideEffect, raises: [], tags: [], exportc,
         contractual.} =
+  ## Temporary C binding
   baseIndex = 0
   try:
     if index > factionsList[$factionIndex].basesTypes.len():
@@ -470,6 +482,7 @@ proc getAdaFactionBase(factionIndex: cstring; index: cint;
 
 proc getAdaReputation(sourceFaction, targetFaction: cstring): cint {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return getReputation(sourceFaction = $sourceFaction,
         targetFaction = $targetFaction).cint
@@ -478,6 +491,7 @@ proc getAdaReputation(sourceFaction, targetFaction: cstring): cint {.raises: [],
 
 proc isAdaFriendly(sourceFaction, targetFaction: cstring): cint {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     return isFriendly(sourceFaction = $sourceFaction,
         targetFaction = $targetFaction).ord.cint
@@ -486,8 +500,10 @@ proc isAdaFriendly(sourceFaction, targetFaction: cstring): cint {.raises: [],
 
 proc getAdaRandomFaction(): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return getRandomFaction().cstring
 
 proc getAdaFactionsAmount(): cint {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   return factionsList.len.cint
