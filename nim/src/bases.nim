@@ -276,7 +276,7 @@ proc updatePrices*() {.sideEffect, raises: [], tags: [], contractual.} =
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
     return
-  var chance: Positive = (if skyBases[baseIndex].population <
+  var chance: Natural = (if skyBases[baseIndex].population <
       150: 1 elif skyBases[baseIndex].population < 300: 2 else: 5)
   chance += (daysDifference(dateToCompare = skyBases[
       baseIndex].visited) / 10).int
