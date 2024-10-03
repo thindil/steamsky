@@ -20,7 +20,7 @@ import ../[config, game, maps, tk, types]
 import coreui, dialogs, errordialog, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show information about the selected event
   ##
   ## * clientData - the additional data for the Tcl command
@@ -74,7 +74,7 @@ var
   eventsTable: TableWidget
   eventsIndexes: seq[Natural]
 
-proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [RootEffect].} =
+proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} =
   ## Update and show list of known events
   ##
   ## * page     - the current page of the events' list to show
@@ -224,8 +224,8 @@ proc updateEventsList*(page: Positive = 1) {.sideEffect, raises: [], tags: [Root
   tclEval(script = eventsCanvas & " yview moveto 0.0")
 
 proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show the list of known events to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -257,8 +257,8 @@ const defaultEventsSortOrder: EventsSortOrders = none
 var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
 
 proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show the list of known events to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -373,7 +373,7 @@ proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   updateEventsList()
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the known events UI
   try:
     addCommand("ShowEventInfo", showEventInfoCommand)
@@ -384,7 +384,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
 
 # Temporary code for interfacing with Ada
 
-proc updateAdaEventsList(page: cint) {.sideEffect, raises: [],
+proc updateAdaEventsList(page: cint) {.raises: [],
     tags: [RootEffect], exportc.} =
   try:
     updateEventsList(page = page.Positive)
