@@ -378,7 +378,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   try:
     addCommand("ShowEventInfo", showEventInfoCommand)
     addCommand("ShowEvents", showEventsCommand)
-    addCommand("SortEvents", sortEventsCommand)
+    addCommand("SortKnownEvents", sortEventsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
