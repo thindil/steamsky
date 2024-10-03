@@ -1155,6 +1155,8 @@ story.
   of drinks. Optional.
 * Key `ExpandIcon`: Path to the SVG image which will be used to expand an
   section of information, for example in the ship info screen. Optional.
+* Key `ContractIcon`: Path to the SVG image which will be used to contract an
+  section of information, for example in the ship info screen. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
