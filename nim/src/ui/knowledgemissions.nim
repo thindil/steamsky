@@ -390,10 +390,9 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
-    discard
-#    addCommand("ShowMissionMenu", showMissionsMenuCommand)
-#    addCommand("ShowMissions", showMissionsCommand)
-#    addCommand("SortMissions", sortMissionsCommand)
+    addCommand("ShowMissionMenu", showMissionsMenuCommand)
+    addCommand("ShowMissions", showMissionsCommand)
+    addCommand("SortMissions", sortMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
