@@ -19,7 +19,7 @@ import std/[algorithm, strutils, tables]
 import ../[basestypes, config, game, maps, messages, tk, types, utils]
 import coreui, dialogs, errordialog, table
 
-proc getReputationText(reputationLevel: int): string {.sideEffect, raises: [],
+proc getReputationText(reputationLevel: int): string {.raises: [],
     tags: [].} =
   ## Get the name of the reputation level in the selected base
   ##
@@ -52,7 +52,7 @@ var
   basesTable: TableWidget
   basesIndexes: seq[Positive]
 
-proc updateBasesList*(baseName: string = "", page: Positive = 1) {.sideEffect,
+proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
     raises: [], tags: [RootEffect].} =
   ## Update and show list of known bases
   ##
@@ -188,8 +188,8 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.sideEffect,
       script = basesCanvas & " bbox all") & "]")
 
 proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show the list of known bases to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -218,7 +218,7 @@ proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show information about the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -372,8 +372,8 @@ const defaultBasesSortOrder: BasesSortOrders = none
 var basesSortOrder: BasesSortOrders = defaultBasesSortOrder
 
 proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Sort the list of known bases
   ##
   ## * clientData - the additional data for the Tcl command
@@ -546,7 +546,7 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   updateBasesList(baseName = $argv[1])
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowBases", showBasesCommand)
@@ -557,11 +557,11 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
 
 # Temporary code for interfacing with Ada
 
-proc getAdaReputationText(reputationLevel: cint): cstring {.sideEffect,
+proc getAdaReputationText(reputationLevel: cint): cstring {.
     raises: [], tags: [], exportc.} =
   return getReputationText(reputationLevel = reputationLevel).cstring
 
-proc updateAdaBasesList(baseName: cstring; page: cint) {.sideEffect, raises: [],
+proc updateAdaBasesList(baseName: cstring; page: cint) {.raises: [],
     tags: [RootEffect], exportc.} =
   try:
     updateBasesList(baseName = $baseName, page = page.Positive)
