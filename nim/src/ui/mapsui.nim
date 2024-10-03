@@ -742,7 +742,7 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     basesui.addCommands()
     basesshipyardui.addCommands()
     baseslootui.addCommands()
-#    knowledge.addCommands()
+    knowledge.addCommands()
 #    missionsui.addCommands()
 #    statisticsui.addCommands()
     let messagesFrame = paned & ".controls.messages"
