@@ -31,7 +31,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let factionsXml = try:
+    let factionsXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -41,9 +41,9 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       if factionNode.kind != xnElement:
         continue
       let
-        factionIndex = factionNode.attr(name = "index")
+        factionIndex: string = factionNode.attr(name = "index")
         factionAction: DataAction = try:
-            parseEnum[DataAction](factionNode.attr(
+            parseEnum[DataAction](s = factionNode.attr(
                 name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
@@ -67,7 +67,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             FactionData()
         else:
           FactionData()
-      var attribute = factionNode.attr(name = "name")
+      var attribute: string = factionNode.attr(name = "name")
       if attribute.len() > 0:
         faction.name = attribute
       attribute = factionNode.attr(name = "membername")
@@ -115,7 +115,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       attribute = factionNode.attr(name = "namestype")
       if attribute.len() > 0:
         faction.namesType = try:
-            parseEnum[NamesTypes](attribute.toLowerAscii)
+            parseEnum[NamesTypes](s = attribute.toLowerAscii)
           except ValueError:
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $factionAction & " faction '" &
@@ -124,7 +124,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         faction.namesType = normal
       attribute = factionNode.attr(name = "healingtools")
       if attribute.len() > 0:
-        let itemIndex = findProtoItem(itemType = attribute)
+        let itemIndex: Natural = findProtoItem(itemType = attribute)
         if itemIndex == 0:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $factionAction & " faction '" &
@@ -133,7 +133,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         faction.healingTools = attribute
       attribute = factionNode.attr(name = "healingskill")
       if attribute.len() > 0:
-        let skillIndex = findSkillIndex(skillName = attribute)
+        let skillIndex: Natural = findSkillIndex(skillName = attribute)
         if skillIndex == 0:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $factionAction & " faction '" &
@@ -143,14 +143,14 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       attribute = factionNode.attr(name = "baseicon")
       if attribute.len() > 0:
         try:
-          faction.baseIcon = fromHex[Natural]("0x" & attribute)
+          faction.baseIcon = fromHex[Natural](s = "0x" & attribute)
         except ValueError:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $factionAction & " faction '" &
               factionIndex & "', invalid value for base icon.")
       attribute = factionNode.attr(name = "weaponskill")
       if attribute.len() > 0:
-        let skillIndex = findSkillIndex(skillName = attribute)
+        let skillIndex: Natural = findSkillIndex(skillName = attribute)
         if skillIndex == 0:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $factionAction & " faction '" &
@@ -162,8 +162,8 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
           continue
         case childNode.tag
         of "relation":
-          let relationIndex = childNode.attr(name = "faction")
-          var relation: RelationsData
+          let relationIndex: string = childNode.attr(name = "faction")
+          var relation: RelationsData = RelationsData()
           attribute = childNode.attr(name = "reputation")
           if attribute.len() > 0:
             try:
@@ -195,9 +195,9 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         of "description":
           faction.description = childNode.innerText()
         of "foodtype":
-          let foodType = childNode.attr(name = "name")
+          let foodType: string = childNode.attr(name = "name")
           if childNode.attr(name = "action") == "remove":
-            for index, food in faction.foodTypes.pairs:
+            for index, food in faction.foodTypes:
               if food == foodType:
                 faction.foodTypes.delete(i = index)
                 break
@@ -209,9 +209,9 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   "', no items with type '" & foodType & "'.")
             faction.foodTypes.add(y = foodType)
         of "drinktype":
-          let drinkType = childNode.attr(name = "name")
+          let drinkType: string = childNode.attr(name = "name")
           if childNode.attr(name = "action") == "remove":
-            for index, drink in faction.drinksTypes.pairs:
+            for index, drink in faction.drinksTypes:
               if drink == drinkType:
                 faction.drinksTypes.delete(i = index)
                 break
@@ -223,7 +223,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   "', no items with type '" & drinkType & "'.")
             faction.drinksTypes.add(y = drinkType)
         of "career":
-          let careerIndex = childNode.attr(name = "index")
+          let careerIndex: string = childNode.attr(name = "index")
           if childNode.attr(name = "action") == "remove":
             {.warning[ProveInit]: off.}
             {.warning[UnsafeDefault]: off.}
@@ -231,7 +231,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             {.warning[UnsafeDefault]: on.}
             {.warning[ProveInit]: on.}
           else:
-            var career = CareerData(shipIndex: 1)
+            var career: CareerData = CareerData(shipIndex: 1)
             attribute = childNode.attr(name = "shipindex")
             if attribute.len() > 0:
               try:
@@ -257,7 +257,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             career.description = childNode.innerText
             faction.careers[careerIndex] = career
         of "basetype":
-          let baseIndex = childNode.attr(name = "index")
+          let baseIndex: string = childNode.attr(name = "index")
           if childNode.attr(name = "action") == "remove":
             {.warning[ProveInit]: off.}
             {.warning[UnsafeDefault]: off.}
@@ -273,9 +273,9 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
                   message = "Can't " & $factionAction & " faction '" &
                   factionIndex & "', invalid value for base spawn chance.")
         of "flag":
-          let factionFlag = childNode.attr(name = "name")
+          let factionFlag: string = childNode.attr(name = "name")
           if childNode.attr(name = "action") == "remove":
-            for index, flag in faction.foodTypes.pairs:
+            for index, flag in faction.foodTypes:
               if flag == factionFlag:
                 faction.flags.delete(i = index)
                 break
@@ -330,8 +330,8 @@ proc getRandomFaction*(): string {.sideEffect, raises: [], tags: [],
   ## Get the index of the random faction
   ##
   ## Returns the index of the random faction
-  let factionIndex = getRandom(min = 1, max = factionsList.len)
-  var currentIndex = 1
+  let factionIndex: Positive = getRandom(min = 1, max = factionsList.len)
+  var currentIndex: Positive = 1
   for key in factionsList.keys:
     if currentIndex == factionIndex:
       return key
@@ -380,9 +380,9 @@ proc getAdaFaction(index: cstring; numericIndex: cint;
           healingTools: "".cstring, healingSkill: 0, baseIcon: 0,
           weaponSkill: 0)
   try:
-    var faction: FactionData
+    var faction: FactionData = FactionData()
     if numericIndex > 0:
-      faction = factionsList[$getAdaFactionIndex(numericIndex)]
+      faction = factionsList[$getAdaFactionIndex(index = numericIndex)]
     else:
       faction = factionsList[$index]
     adaFaction.name = faction.name.cstring
@@ -405,7 +405,7 @@ proc getAdaFactionData(factionIndex: cstring; index: cint;
         contractual.} =
   ## Temporary C binding
   try:
-    let dataList = case $adaDataType
+    let dataList: seq[string] = case $adaDataType
       of "foodType":
         factionsList[$factionIndex].foodTypes
       of "drinkType":
@@ -428,9 +428,9 @@ proc getAdaFactionRelation(factionIndex: cstring; index: cint;
   try:
     if index > factionsList[$factionIndex].relations.len():
       return ""
-    var currIndex = 0
+    var currIndex: Natural = 0
     for relIndex, factionRelation in factionsList[
-        $factionIndex].relations.pairs:
+        $factionIndex].relations:
       currIndex.inc()
       if currIndex < index:
         continue
@@ -449,8 +449,8 @@ proc getAdaFactionCareer(factionIndex: cstring; index: cint;
   try:
     if index > factionsList[$factionIndex].careers.len():
       return ""
-    var currIndex = 0
-    for carIndex, factionCareer in factionsList[$factionIndex].careers.pairs:
+    var currIndex: Natural = 0
+    for carIndex, factionCareer in factionsList[$factionIndex].careers:
       currIndex.inc()
       if currIndex < index:
         continue
@@ -470,8 +470,8 @@ proc getAdaFactionBase(factionIndex: cstring; index: cint;
   try:
     if index > factionsList[$factionIndex].basesTypes.len():
       return ""
-    var currIndex = 0
-    for bIndex, factionBase in factionsList[$factionIndex].basesTypes.pairs:
+    var currIndex: Natural = 0
+    for bIndex, factionBase in factionsList[$factionIndex].basesTypes:
       currIndex.inc()
       if currIndex < index:
         continue
