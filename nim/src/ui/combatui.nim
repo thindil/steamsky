@@ -999,7 +999,7 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = "grid configure " & frameName & " -columnspan 2 -rowspan 2 -row 0 -column 0")
       else:
         tclEval(script = "grid remove " & frameName)
-    tclEval(script = button & " configure -image movemapdownicon -command {CombatMaxMin " &
+    tclEval(script = button & " configure -image contracticon -command {CombatMaxMin " &
         $argv[1] & " hide " & $argv[3] & "}")
   else:
     for frameInfo in frames:

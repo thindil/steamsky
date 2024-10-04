@@ -70,7 +70,7 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = "grid configure " & frame & " -columnspan 2 -rowspan 2 -row 0 -column 0")
       else:
         tclEval(script = "grid remove " & frame)
-    tclEval(script = button & " configure -image movemapdownicon -command {ShipMaxMin " &
+    tclEval(script = button & " configure -image contracticon -command {ShipMaxMin " &
         $argv[1] & " hide}")
   else:
     for frameInfo in frames:
