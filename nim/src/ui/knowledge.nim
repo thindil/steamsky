@@ -21,7 +21,7 @@ import coreui, errordialog, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
 proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect].} =
   ## Show information about known by player things
   ##
   ## * clientData - the additional data for the Tcl command
@@ -124,7 +124,7 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Maximize or minimize the selected section of knowledge info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -169,7 +169,7 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     knowledgebases.addCommands()
