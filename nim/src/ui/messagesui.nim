@@ -20,7 +20,7 @@ import ../[config, game, messages, tk, types]
 import coreui, dialogs, errordialog, utilsui2
 
 proc showMessage(message: MessageData; messageView: string;
-    messagesType: MessageType) {.sideEffect, raises: [], tags: [].} =
+    messagesType: MessageType) {.raises: [], tags: [].} =
   ## Show the selected message to a player
   ##
   ## * message      - the message to show
@@ -33,7 +33,7 @@ proc showMessage(message: MessageData; messageView: string;
   tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
 
 proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show the list of last messages to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -93,7 +93,7 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show only messages of the selected type
   ##
   ## * clientData - the additional data for the Tcl command
@@ -111,7 +111,7 @@ proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
       " current")].allocCStringArray)
 
 proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Delete all messages
   ##
   ## * clientData - the additional data for the Tcl command
@@ -128,7 +128,7 @@ proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show only this messages which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command
@@ -180,7 +180,7 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowLastMessages", showLastMessagesCommand)
@@ -193,7 +193,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
 # Temporary code for interfacing with Ada
 
 proc showAdaMessageUI(message, messageView: cstring; color, mType,
-    messagesType: cint) {.sideEffect, raises: [], tags: [], exportc.} =
+    messagesType: cint) {.raises: [], tags: [], exportc.} =
   let message = MessageData(message: $message, color: color.MessageColor,
       kind: mType.MessageType)
   showMessage(message = message, messageView = $messageView,
