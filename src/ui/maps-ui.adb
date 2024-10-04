@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with Knowledge;
 with Messages;
 with Messages.UI;
 with Missions.UI;
@@ -88,7 +87,6 @@ package body Maps.UI is
          Ships.UI.Add_Commands;
          Messages.UI.Add_Commands;
          Trades.UI.Add_Commands;
-         Knowledge.Add_Commands;
          Missions.UI.Add_Commands;
          Statistics.UI.Add_Commands;
       end if;
