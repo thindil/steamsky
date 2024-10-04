@@ -679,12 +679,11 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the list of available missions
   try:
-    discard
-#    addCommand("ShowBaseMissions", showBaseMissionsCommand)
-#    addCommand("MissionMoreInfo", missionMoreInfoCommand)
-#    addCommand("AcceptMission", acceptMissionCommand)
-#    addCommand("UpdateMissionReward", updateMissionRewardCommand)
-#    addCommand("SortAvailableMissions", sortAvailableMissionsCommand)
+    addCommand("ShowBaseMissions", showBaseMissionsCommand)
+    addCommand("MissionMoreInfo", missionMoreInfoCommand)
+    addCommand("AcceptMission", acceptMissionCommand)
+    addCommand("UpdateMissionReward", updateMissionRewardCommand)
+    addCommand("SortAvailableMissions", sortAvailableMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 

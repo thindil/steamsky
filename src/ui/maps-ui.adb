@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with Missions.UI;
 with OrdersMenu;
 with Ships;
 with Ships.UI;
@@ -84,7 +83,6 @@ package body Maps.UI is
          WaitMenu.Add_Commands;
          Ships.UI.Add_Commands;
          Trades.UI.Add_Commands;
-         Missions.UI.Add_Commands;
          Statistics.UI.Add_Commands;
       end if;
       Create_Ada_Game_Ui;

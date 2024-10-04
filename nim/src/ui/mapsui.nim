@@ -743,7 +743,7 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
     basesshipyardui.addCommands()
     baseslootui.addCommands()
     knowledge.addCommands()
-#    missionsui.addCommands()
+    missionsui.addCommands()
 #    statisticsui.addCommands()
     let messagesFrame = paned & ".controls.messages"
     tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeLastMessages}")
