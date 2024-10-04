@@ -350,7 +350,7 @@ let
       fuelIcon: defaultThemeIconPath & "fuel.svg",
       drinksIcon: defaultThemeIconPath & "drinks.svg",
       expandIcon: defaultThemeIconPath & "expand.svg",
-      contractIcon: defaultThemeIconPath & "contract.svg")
+      contractIcon: defaultThemeIconPath & "contract2.svg")
     ## The default game'st theme
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
