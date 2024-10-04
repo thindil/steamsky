@@ -183,11 +183,10 @@ proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
-    discard
-#    addCommand("ShowLastMessages", showLastMessagesCommand)
-#    addCommand("SelectMessages", selectMessagesCommand)
-#    addCommand("DeleteMessages", deleteMessagesCommand)
-#    addCommand("SearchMessages", searchMessagesCommand)
+    addCommand("ShowLastMessages", showLastMessagesCommand)
+    addCommand("SelectMessages", selectMessagesCommand)
+    addCommand("DeleteMessages", deleteMessagesCommand)
+    addCommand("SearchMessages", searchMessagesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 

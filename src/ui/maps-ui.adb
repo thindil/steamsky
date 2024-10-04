@@ -21,8 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with Messages;
-with Messages.UI;
 with Missions.UI;
 with OrdersMenu;
 with Ships;
@@ -85,7 +83,6 @@ package body Maps.UI is
          OrdersMenu.Add_Commands;
          WaitMenu.Add_Commands;
          Ships.UI.Add_Commands;
-         Messages.UI.Add_Commands;
          Trades.UI.Add_Commands;
          Missions.UI.Add_Commands;
          Statistics.UI.Add_Commands;
