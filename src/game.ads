@@ -49,13 +49,6 @@ package Game is
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
-   -- ****v* Game/Game.Game_Date
-   -- FUNCTION
-   -- Current in game date
-   -- SOURCE
-   Game_Date: Date_Record;
-   -- ****
-
    -- ****d* Game/Game.Game_Version
    -- FUNCTION
    -- Current the game version
