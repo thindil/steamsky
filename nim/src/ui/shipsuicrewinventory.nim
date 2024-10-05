@@ -28,8 +28,8 @@ var
     ## The list of indexes of items in the crew member's inventory
 
 proc updateInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Update inventory list of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -116,8 +116,8 @@ proc resetSelection() =
       tclUnsetVar(varName = "invindex" & $(index + 1))
 
 proc showMemberInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        RootEffect].} =
   ## Show inventory of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -243,8 +243,8 @@ const defaultInventorySortOrder: InventorySortOrders = none
 var inventorySortOrder = defaultInventorySortOrder
 
 proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        RootEffect].} =
   ## Sort the selected crew member inventory
   ##
   ## * clientData - the additional data for the Tcl command
@@ -409,8 +409,8 @@ proc sortCrewInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["UpdateInventory", ($memberIndex)].allocCStringArray)
 
 proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Set if item is used by a crew member or not
   ##
   ## * clientData - the additional data for the Tcl command
@@ -474,7 +474,7 @@ proc setUseItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
 proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show UI to move the selected item to the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -529,8 +529,8 @@ proc showMoveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        RootEffect].} =
   ## Select or deselect all items in the crew member inventory
   ##
   ## * clientData - the additional data for the Tcl command
@@ -552,7 +552,7 @@ proc toggleAllInventoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCrewInventoryCommand(clientData = clientData, interp = interp,
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
-proc moveItem(itemIndex: Natural; amount: Positive) {.sideEffect, raises: [],
+proc moveItem(itemIndex: Natural; amount: Positive) {.raises: [],
     tags: [RootEffect].} =
   ## Move the selected item to the player's ship's cargo
   ##
@@ -597,8 +597,8 @@ proc moveItem(itemIndex: Natural; amount: Positive) {.sideEffect, raises: [],
   tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
 
 proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Move the selected item to the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -632,8 +632,8 @@ proc moveItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
 proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Move the selected items to the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -658,8 +658,8 @@ proc moveItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
 proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Equip or unequip the selected items
   ##
   ## * clientData - the additional data for the Tcl command
@@ -688,7 +688,7 @@ proc toggleInventoryItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 2, argv = @["SortCrewInventory", "-1"].allocCStringArray)
 
 proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Select or deselect the selected item in the inventory
   ##
   ## * clientData - the additional data for the Tcl command
@@ -714,7 +714,7 @@ proc toggleInventoryItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show detailed information about the selected item in crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -790,7 +790,7 @@ proc showInventoryItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Validate amount of the item to move
   ##
   ## * clientData - the additional data for the Tcl command
@@ -822,7 +822,7 @@ proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     tclSetResult(value = "0")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowMemberInventory", showMemberInventoryCommand)
@@ -842,7 +842,7 @@ proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].
 
 # Temporary code for interfacing with Ada
 
-proc moveAdaItem(itemIndex, amount: cint) {.sideEffect, raises: [], tags: [
+proc moveAdaItem(itemIndex, amount: cint) {.raises: [], tags: [
     RootEffect], exportc.} =
   try:
     moveItem(itemIndex = itemIndex - 1, amount = amount)
