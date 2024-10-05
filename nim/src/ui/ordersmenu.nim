@@ -554,19 +554,18 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the orders menu
   try:
-    discard
-#    addCommand("ShowOrders", showOrdersCommand)
-#    addCommand("Docking", dockingCommand)
-#    addCommand("AskForBases", askForBasesCommand)
-#    addCommand("AskForEvents", askForEventsCommand)
-#    addCommand("Attack", attackCommand)
-#    addCommand("Pray", prayCommand)
-#    addCommand("SetAsHome", setAsHomeCommand)
-#    addCommand("ShowTrader", showTraderCommand)
-#    addCommand("StartMission", startMissionCommand)
-#    addCommand("CompleteMission", completeMissionCommand)
-#    addCommand("ExecuteStory", executeStoryCommand)
-#    addCommand("DeliverMedicines", deliverMedicinesCommand)
+    addCommand("ShowOrders", showOrdersCommand)
+    addCommand("Docking", dockingCommand)
+    addCommand("AskForBases", askForBasesCommand)
+    addCommand("AskForEvents", askForEventsCommand)
+    addCommand("Attack", attackCommand)
+    addCommand("Pray", prayCommand)
+    addCommand("SetAsHome", setAsHomeCommand)
+    addCommand("ShowTrader", showTraderCommand)
+    addCommand("StartMission", startMissionCommand)
+    addCommand("CompleteMission", completeMissionCommand)
+    addCommand("ExecuteStory", executeStoryCommand)
+    addCommand("DeliverMedicines", deliverMedicinesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 

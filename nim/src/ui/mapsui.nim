@@ -729,7 +729,7 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
 #    mapsuicommands.addCommands()
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "game.tcl")
     setTheme()
-#    ordersmenu.addCommands()
+    ordersmenu.addCommands()
 #    waitmenu.addCommands()
     helpui.addCommands()
 #    shipsui.addCommands()
