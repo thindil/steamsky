@@ -27,8 +27,8 @@ var
     ## The list of indexes of the items in the cargo
 
 proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show the cargo of the player ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -142,8 +142,8 @@ const defaultCargoSortOrder = none
 var cargoSortOrder = defaultCargoSortOrder
 
 proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Sort the player's ship's cargo list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -272,7 +272,7 @@ proc sortCargoCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCargo"].allocCStringArray)
 
 proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show UI to give the selected item from the ship cargo to the selected
   ## crew member
   ##
@@ -345,8 +345,8 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Give selected amount of the selected item from the ship's cargo to the
   ## selected crew member
   ##
@@ -404,7 +404,7 @@ proc giveItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show UI to drop the selected item from the ship cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -427,8 +427,8 @@ proc showDropItemCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Drop selected amount of the selected item from the ship's cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -481,7 +481,7 @@ proc dropItemCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["SortShipCargo", "-1"].allocCStringArray)
 
 proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Drop selected amount of the selected item from the ship's cargo
   ##
   ## * clientData - the additional data for the Tcl command
@@ -510,7 +510,7 @@ proc showCargoItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Update max give amount after selecting the crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -553,7 +553,7 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       "):} -command {" & amountBox & " set " & $maxAmount & ";" & amountBox & " validate}")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowCargo", showCargoCommand)
