@@ -825,19 +825,18 @@ proc validateMoveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
-    discard
-#    addCommand("ShowMemberInventory", showMemberInventoryCommand)
-#    addCommand("SortCrewInventory", sortCrewInventoryCommand)
-#    addCommand("ShowMoveItem", showMoveItemCommand)
-#    addCommand("ToggleAllInventory", toggleAllInventoryCommand)
-#    addCommand("SetUseItem", setUseItemCommand)
-#    addCommand("UpdateInventory", updateInventoryCommand)
-#    addCommand("MoveItem", moveItemCommand)
-#    addCommand("MoveItems", moveItemsCommand)
-#    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
-#    addCommand("ToggleInventoryItem", toggleInventoryItemCommand)
-#    addCommand("ShowInventoryItemInfo", showInventoryItemInfoCommand)
-#    addCommand("ValidateMoveAmount", validateMoveAmountCommand)
+    addCommand("ShowMemberInventory", showMemberInventoryCommand)
+    addCommand("SortCrewInventory", sortCrewInventoryCommand)
+    addCommand("ShowMoveItem", showMoveItemCommand)
+    addCommand("ToggleAllInventory", toggleAllInventoryCommand)
+    addCommand("SetUseItem", setUseItemCommand)
+    addCommand("UpdateInventory", updateInventoryCommand)
+    addCommand("MoveItem", moveItemCommand)
+    addCommand("MoveItems", moveItemsCommand)
+    addCommand("ToggleInventoryItems", toggleInventoryItemsCommand)
+    addCommand("ToggleInventoryItem", toggleInventoryItemCommand)
+    addCommand("ShowInventoryItemInfo", showInventoryItemInfoCommand)
+    addCommand("ValidateMoveAmount", validateMoveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 

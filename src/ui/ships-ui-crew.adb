@@ -17,7 +17,6 @@ with Interfaces.C;
 with CArgv;
 with Tcl;
 with Utils.UI;
-with Ships.UI.Crew.Inventory;
 
 package body Ships.UI.Crew is
 
@@ -171,7 +170,6 @@ package body Ships.UI.Crew is
         (Name => "ToggleAllCrew",
          Ada_Command => Toggle_All_Crew_Command'Access);
       Add_Ada_Commands;
-      Ships.UI.Crew.Inventory.Add_Inventory_Commands;
    end Add_Crew_Commands;
 
 end Ships.UI.Crew;
