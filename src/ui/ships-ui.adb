@@ -17,7 +17,6 @@ with Interfaces.C;
 with CArgv;
 with Tcl;
 with Ships.UI.Crew;
-with Ships.UI.Cargo;
 with Ships.UI.Modules;
 with Utils.UI;
 
@@ -59,7 +58,6 @@ package body Ships.UI is
         (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
       Add_Ada_Commands;
       Ships.UI.Crew.Add_Crew_Commands;
-      Ships.UI.Cargo.Add_Cargo_Commands;
       Ships.UI.Modules.Add_Modules_Commands;
    end Add_Commands;
 

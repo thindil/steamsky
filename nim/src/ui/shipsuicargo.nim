@@ -556,14 +556,13 @@ proc updateMaxGiveAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
-    discard
-#    addCommand("ShowCargo", showCargoCommand)
-#    addCommand("SortShipCargo", sortCargoCommand)
-#    addCommand("ShowGiveItem", showGiveItemCommand)
-#    addCommand("GiveItem", giveItemCommand)
-#    addCommand("ShowDropItem", showDropItemCommand)
-#    addCommand("DropItem", dropItemCommand)
-#    addCommand("ShowCargoItemInfo", showCargoItemInfoCommand)
-#    addCommand("updateMaxGiveAmount", updateMaxGiveAmountCommand)
+    addCommand("ShowCargo", showCargoCommand)
+    addCommand("SortShipCargo", sortCargoCommand)
+    addCommand("ShowGiveItem", showGiveItemCommand)
+    addCommand("GiveItem", giveItemCommand)
+    addCommand("ShowDropItem", showDropItemCommand)
+    addCommand("DropItem", dropItemCommand)
+    addCommand("ShowCargoItemInfo", showCargoItemInfoCommand)
+    addCommand("updateMaxGiveAmount", updateMaxGiveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
