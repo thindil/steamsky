@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import ../[game, tk]
-import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules
+import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
@@ -85,15 +85,16 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
+    TimeEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     shipsuimodules.addCommands()
     shipsuicrew.addCommands()
     shipsuicargo.addCommands()
-#    addCommand("ShowShipInfo", showShipInfoCommand)
-#    addCommand("SetShipName", setShipNameCommand)
-#    addCommand("ShipMaxMin", shipMaxMinCommand)
+    addCommand("ShowShipInfo", showShipInfoCommand)
+    addCommand("SetShipName", setShipNameCommand)
+    addCommand("ShipMaxMin", shipMaxMinCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
