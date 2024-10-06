@@ -25,7 +25,7 @@ var
   modulesIndexes*: seq[Natural]
     ## The list of indexes of the installed modules
 
-proc getModuleInfo*(moduleIndex: Natural): string {.sideEffect, raises: [],
+proc getModuleInfo*(moduleIndex: Natural): string {.raises: [],
     tags: [].} =
   ## Get the additional information about the module
   ##
@@ -96,7 +96,7 @@ proc getModuleInfo*(moduleIndex: Natural): string {.sideEffect, raises: [],
   else:
     discard
 
-proc updateModulesInfo*(page: Positive = 1) {.sideEffect, raises: [],
+proc updateModulesInfo*(page: Positive = 1) {.raises: [],
     tags: [RootEffect].} =
   ## Update the list of the player's ship's installed modules
   ##
