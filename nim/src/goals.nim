@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,92 +16,96 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables, xmlparser, xmltree]
+import contracts
 import game, log, messages, statistics, types, utils
 
 var currentGoal* = GoalData(multiplier: 1) ## The player's current goal
 
 proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
-    tags: [WriteIOEffect, ReadIOEffect, RootEffect].} =
+    tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the goals data from the file
   ##
   ## * fileName - the name of the file to load
-  let goalsXml = try:
-      loadXml(path = fileName)
-    except XmlError, ValueError, IOError, OSError, Exception:
-      raise newException(exceptn = DataLoadingError,
-          message = "Can't load goals data file. Reason: " &
-          getCurrentExceptionMsg())
-  for goalNode in goalsXml:
-    if goalNode.kind != xnElement:
-      continue
-    let
-      goalIndex: Natural = try:
-          goalNode.attr(name = "index").parseInt()
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-              message = "Can't add goal '" & goalNode.attr(name = "index") & "', invalid index.")
-      goalAction: DataAction = try:
-          parseEnum[DataAction](goalNode.attr(name = "action").toLowerAscii)
-        except ValueError:
-          DataAction.add
-    if goalAction in [update, remove]:
-      if goalIndex > goalsList.len():
+  require:
+    fileName.len > 0
+  body:
+    let goalsXml = try:
+        loadXml(path = fileName)
+      except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $goalAction & " goal '" & $goalIndex & "', there is no goal with that index.")
-    elif goalIndex < goalsList.len():
-      raise newException(exceptn = DataLoadingError,
-          message = "Can't add goal '" & $goalIndex & "', there is an goal with that index.")
-    if goalAction == DataAction.remove:
-      {.warning[ProveInit]: off.}
-      {.warning[UnsafeDefault]: off.}
-      goalsList.del(key = goalIndex)
-      {.warning[ProveInit]: on.}
-      {.warning[UnsafeDefault]: on.}
-      logMessage(message = "Goal removed: '" & $goalIndex & "'",
-          debugType = everything)
-      continue
-    var goal: GoalData = if goalAction == DataAction.update:
-        try:
-          goalsList[goalIndex]
-        except ValueError:
+            message = "Can't load goals data file. Reason: " &
+            getCurrentExceptionMsg())
+    for goalNode in goalsXml:
+      if goalNode.kind != xnElement:
+        continue
+      let
+        goalIndex: Natural = try:
+            goalNode.attr(name = "index").parseInt()
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't add goal '" & goalNode.attr(name = "index") & "', invalid index.")
+        goalAction: DataAction = try:
+            parseEnum[DataAction](goalNode.attr(name = "action").toLowerAscii)
+          except ValueError:
+            DataAction.add
+      if goalAction in [update, remove]:
+        if goalIndex > goalsList.len():
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $goalAction & " goal '" & $goalIndex & "', there is no goal with that index.")
+      elif goalIndex < goalsList.len():
+        raise newException(exceptn = DataLoadingError,
+            message = "Can't add goal '" & $goalIndex & "', there is an goal with that index.")
+      if goalAction == DataAction.remove:
+        {.warning[ProveInit]: off.}
+        {.warning[UnsafeDefault]: off.}
+        goalsList.del(key = goalIndex)
+        {.warning[ProveInit]: on.}
+        {.warning[UnsafeDefault]: on.}
+        logMessage(message = "Goal removed: '" & $goalIndex & "'",
+            debugType = everything)
+        continue
+      var goal: GoalData = if goalAction == DataAction.update:
+          try:
+            goalsList[goalIndex]
+          except ValueError:
+            GoalData(multiplier: 1)
+        else:
           GoalData(multiplier: 1)
+      goal.index = $goalIndex
+      var attribute = goalNode.attr(name = "type")
+      if attribute.len() > 0:
+        goal.goalType = try:
+            parseEnum[GoalTypes](attribute.toLowerAscii)
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid type of goal.")
+      attribute = goalNode.attr(name = "amount")
+      if attribute.len() > 0:
+        goal.amount = try:
+            attribute.parseInt()
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for amount.")
+      attribute = goalNode.attr(name = "target")
+      if attribute.len() > 0:
+        goal.targetIndex = attribute
+      attribute = goalNode.attr(name = "multiplier")
+      if attribute.len() > 0:
+        goal.multiplier = try:
+            attribute.parseInt()
+          except ValueError:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for multiplier.")
+      if goalAction == DataAction.add:
+        logMessage(message = "Goal added: '" & $goalIndex & "'",
+            debugType = everything)
       else:
-        GoalData(multiplier: 1)
-    goal.index = $goalIndex
-    var attribute = goalNode.attr(name = "type")
-    if attribute.len() > 0:
-      goal.goalType = try:
-          parseEnum[GoalTypes](attribute.toLowerAscii)
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-            message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid type of goal.")
-    attribute = goalNode.attr(name = "amount")
-    if attribute.len() > 0:
-      goal.amount = try:
-          attribute.parseInt()
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for amount.")
-    attribute = goalNode.attr(name = "target")
-    if attribute.len() > 0:
-      goal.targetIndex = attribute
-    attribute = goalNode.attr(name = "multiplier")
-    if attribute.len() > 0:
-      goal.multiplier = try:
-          attribute.parseInt()
-        except ValueError:
-          raise newException(exceptn = DataLoadingError,
-              message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for multiplier.")
-    if goalAction == DataAction.add:
-      logMessage(message = "Goal added: '" & $goalIndex & "'",
-          debugType = everything)
-    else:
-      logMessage(message = "Goal updated: '" & $goalIndex & "'",
-          debugType = everything)
-    goalsList[goalIndex] = goal
+        logMessage(message = "Goal updated: '" & $goalIndex & "'",
+            debugType = everything)
+      goalsList[goalIndex] = goal
 
 proc updateGoal*(goalType: GoalTypes; targetIndex: string;
-    amount: Positive = 1) {.sideEffect, raises: [], tags: [].} =
+    amount: Positive = 1) {.sideEffect, raises: [], tags: [], contractual.} =
   ## Update the player's current goal. If the goal is finished, select randomly
   ## a new one
   ##
@@ -124,19 +128,21 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
       except KeyError:
         discard
 
-proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [].} =
+proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [], contractual.} =
   ## Reset the player's current goal
   currentGoal = GoalData(index: "", goalType: random, amount: 0,
       targetIndex: "", multiplier: 1)
 
-proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [].} =
+proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [],
+    contractual.} =
   ## Get information about the selected goal. If index doesn't exist in the
   ## list of goals, get information about the current goal of the player.
   ##
   ## * index - the index of the goal which description will be get
   ##
   ## Returns the string with information about the selected goal
-  let goal = (if index > 0 and goalsList.hasKey(index): goalsList[index] else: currentGoal)
+  let goal = (if index > 0 and goalsList.hasKey(index): goalsList[
+      index] else: currentGoal)
   case goal.goalType
   of reputation:
     result = "Gain max reputation in "
@@ -187,15 +193,25 @@ proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [].} 
     name, memberName, pluralMemberName
 
   proc getFactionName(factionIndex: string;
-      factionType: FactionNameType): string =
-    let faction = factionsList[factionIndex]
-    case factionType
-    of name:
-      return faction.name
-    of memberName:
-      return faction.memberName
-    of pluralMemberName:
-      return faction.pluralMemberName
+      factionType: FactionNameType): string {.raises: [KeyError], tags: [],
+      contractual.} =
+    ## Get the name of the faction or its member's names (singular or plural)
+    ##
+    ## * factionIndex - the index of the faction which a name will be get
+    ## * factionType  - the type of the name to get
+    ##
+    ## Returns a name related to the faction, depends on factionType argument.
+    require:
+      factionsList.hasKey(key = factionIndex)
+    body:
+      let faction = factionsList[factionIndex]
+      case factionType
+      of name:
+        return faction.name
+      of memberName:
+        return faction.memberName
+      of pluralMemberName:
+        return faction.pluralMemberName
 
   if goal.targetIndex.len > 0:
     var insertPosition = result.len - 4
@@ -262,14 +278,15 @@ type
     multiplier: cint
 
 proc loadAdaGoals(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
-    WriteIOEffect, ReadIOEffect, RootEffect], exportc.} =
+    WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
   try:
     loadGoals(fileName = $fileName)
     return "".cstring
   except DataLoadingError:
     return getCurrentExceptionMsg().cstring
 
-proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [], exportc.} =
+proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [],
+    exportc, contractual.} =
   adaGoal = AdaGoalData(index: "".cstring, goalType: -1, amount: -1,
       targetIndex: "".cstring, multiplier: 0)
   let goal = try:
@@ -283,34 +300,38 @@ proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [], e
   adaGoal.multiplier = goal.multiplier.cint
 
 proc updateAdaGoal(goalType: cint; targetIndex: cstring;
-    amount: cint) {.raises: [], tags: [], exportc.} =
+    amount: cint) {.raises: [], tags: [], exportc, contractual.} =
   updateGoal(goalType = goalType.GoalTypes, targetIndex = $targetIndex,
       amount = amount.Positive)
 
-proc getAdaCurrentGoal(goal: AdaGoalData) {.raises: [], tags: [], exportc.} =
+proc getAdaCurrentGoal(goal: AdaGoalData) {.raises: [], tags: [], exportc,
+    contractual.} =
   currentGoal = GoalData(index: $goal.index, goalType: goal.goalType.GoalTypes,
       amount: goal.amount.Natural, targetIndex: $goal.targetIndex,
       multiplier: goal.multiplier.Positive)
 
-proc setAdaCurrentGoal(goal: var AdaGoalData) {.raises: [], tags: [], exportc.} =
+proc setAdaCurrentGoal(goal: var AdaGoalData) {.raises: [], tags: [], exportc,
+    contractual.} =
   goal = AdaGoalData(index: currentGoal.index.cstring,
       goalType: currentGoal.goalType.ord.cint, amount: currentGoal.amount.cint,
       targetIndex: currentGoal.targetIndex.cstring,
       multiplier: currentGoal.multiplier.cint)
 
-proc clearAdaCurrentGoal() {.raises: [], tags: [], exportc.} =
+proc clearAdaCurrentGoal() {.raises: [], tags: [], exportc, contractual.} =
   clearCurrentGoal()
 
-proc goalAdaText(index: cint): cstring {.raises: [], tags: [], exportc.} =
+proc goalAdaText(index: cint): cstring {.raises: [], tags: [], exportc,
+    contractual.} =
   try:
     return goalText(index = index).cstring
   except KeyError:
     return ""
 
-proc getAdaGoalsAmount(): cint {.raises: [], tags: [], exportc.} =
+proc getAdaGoalsAmount(): cint {.raises: [], tags: [], exportc, contractual.} =
   return goalsList.len.cint
 
-proc setAdaCurrentGoal2(index: cint) {.raises: [], tags: [], exportc.} =
+proc setAdaCurrentGoal2(index: cint) {.raises: [], tags: [], exportc,
+    contractual.} =
   for goal in goalsList.values:
     if goal.index == $index:
       currentGoal = goal
