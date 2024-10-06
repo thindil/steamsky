@@ -218,6 +218,4 @@ package Bases is
 
    procedure Set_Base_In_Nim(Base_Index: Bases_Range);
 
-   procedure Get_Base_From_Nim(Base_Index: Bases_Range);
-
 end Bases;
