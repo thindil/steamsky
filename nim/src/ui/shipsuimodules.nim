@@ -1340,22 +1340,21 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
-    discard
-#    addCommand("ShowModuleInfo", showModuleInfoCommand)
-#    addCommand("SetUpgrade", setUpgradeCommand)
-#    addCommand("AssignModule", assignModuleCommand)
-#    addCommand("DisableEngine", disableEngineCommand)
-#    addCommand("StopUpgrading", stopUpgradingCommand)
-#    addCommand("SetRepair", setRepairCommand)
-#    addCommand("ResetDestination", resetDestinationCommand)
-#    addCommand("UpdateAssignCrew", updateAssignCrewCommand)
-#    addCommand("ShowAssignCrew", showAssignCrewCommand)
-#    addCommand("ShowAssignSkill", showAssignSkillCommand)
-#    addCommand("CancelOrder", cancelOrderCommand)
-#    addCommand("GetActiveButton", getActiveButtonCommand)
-#    addCommand("ShowModules", showModulesCommand)
-#    addCommand("SortShipModules", sortShipModulesCommand)
-#    addCommand("ShowAssignAmmo", showAssignAmmoCommand)
+    addCommand("ShowModuleInfo", showModuleInfoCommand)
+    addCommand("SetUpgrade", setUpgradeCommand)
+    addCommand("AssignModule", assignModuleCommand)
+    addCommand("DisableEngine", disableEngineCommand)
+    addCommand("StopUpgrading", stopUpgradingCommand)
+    addCommand("SetRepair", setRepairCommand)
+    addCommand("ResetDestination", resetDestinationCommand)
+    addCommand("UpdateAssignCrew", updateAssignCrewCommand)
+    addCommand("ShowAssignCrew", showAssignCrewCommand)
+    addCommand("ShowAssignSkill", showAssignSkillCommand)
+    addCommand("CancelOrder", cancelOrderCommand)
+    addCommand("GetActiveButton", getActiveButtonCommand)
+    addCommand("ShowModules", showModulesCommand)
+    addCommand("SortShipModules", sortShipModulesCommand)
+    addCommand("ShowAssignAmmo", showAssignAmmoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
