@@ -19,7 +19,7 @@ import ../[game, tk]
 import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Change name of the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -40,7 +40,7 @@ proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Maximize or minimize the selected section of the player's ship info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -85,7 +85,7 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
+proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     TimeEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:

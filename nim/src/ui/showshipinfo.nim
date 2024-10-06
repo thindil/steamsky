@@ -20,8 +20,8 @@ import ../[config, game, maps, ships, tk]
 import coreui, errordialog, shipsuicrew, utilsui2, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        RootEffect].} =
   ## Show information about the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
