@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Use the new icon for expand and contract infos' sections on various screens
 
+### Fixed
+- Setting the game's difficulty level when starting the game
+
 ## [10.3] - 2024-09-22
 
 ### Added
