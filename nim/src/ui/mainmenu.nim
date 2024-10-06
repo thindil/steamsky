@@ -160,7 +160,7 @@ proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
   tclEval(script = "SetPoints")
   tclEval(script = comboBox & " current " & $(
       newGameSettings.difficultyLevel.ord))
-  tclEval(script = "event generate " & comboBox & " <<ComboboxSelected")
+  tclEval(script = "event generate " & comboBox & " <<ComboboxSelected>>")
   var button = ".newgamemenu.canvas.player.randomplayer"
   tclEval(script = button & " configure -image randomicon")
   button = ".newgamemenu.canvas.player.randomship"
