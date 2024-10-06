@@ -629,12 +629,11 @@ proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the list of available missions
   try:
-    discard
-#    addCommand("SortFinishedCrafting", sortFinishedCraftingCommand)
-#    addCommand("SortFinishedMissions", sortFinishedMissionsCommand)
-#    addCommand("SortFinishedGoals", sortFinishedGoalsCommand)
-#    addCommand("SortDestroyedShips", sortDestroyedCommand)
-#    addCommand("SortKilledMobs", sortKilledCommand)
+    addCommand("SortFinishedCrafting", sortFinishedCraftingCommand)
+    addCommand("SortFinishedMissions", sortFinishedMissionsCommand)
+    addCommand("SortFinishedGoals", sortFinishedGoalsCommand)
+    addCommand("SortDestroyedShips", sortDestroyedCommand)
+    addCommand("SortKilledMobs", sortKilledCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
