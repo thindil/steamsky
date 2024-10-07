@@ -726,7 +726,7 @@ proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
         mapAccelerators[30] = "Control-End"
         mapAccelerators[31] = "Control-Down"
         mapAccelerators[32] = "Control-Next"
-#    mapsuicommands.addCommands()
+    mapsuicommands.addCommands()
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "game.tcl")
     setTheme()
     ordersmenu.addCommands()

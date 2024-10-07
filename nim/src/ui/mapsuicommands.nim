@@ -439,29 +439,31 @@ proc setShipSpeedCommand(clientData: cint; interp: PInterp; argc: cint;
     showMessage(text = message, title = "Changing the ship's speed.")
   return tclOk
 
-proc addCommands*() =
-  discard
-#  addCommand("HideMapButtons", hideMapButtonsCommand)
-#  addCommand("ShowMapButtons", showMapButtonsCommand)
-#  addCommand("MoveMapButtons", moveMapButtonsCommand)
-#  addCommand("MoveMapInfo", moveMapInfoCommand)
-#  addCommand("DrawMap", drawMapCommand)
-#  addCommand("ZoomMap", zoomMapCommand)
-#  addCommand("UpdateMapInfo", updateMapInfoCommand)
-#  addCommand("ShowDestinationMenu", showDestinationMenuCommand)
-#  addCommand("SetDestination", setShipDestinationCommand)
-#  addCommand("MoveMap", moveMapCommand)
-#  addCommand("MoveShip", moveShipCommand)
-#  addCommand("QuitGame", quitGameCommand)
-#  addCommand("ResignGame", resignGameCommand)
-#  addCommand("ShowStats", showStatsCommand)
-#  addCommand("ShowSkyMap", showSkyMapCommand)
-#  addCommand("MoveCursor", moveMouseCommand)
-#  addCommand("ToggleFullScreen", toggleFullScreenCommand)
-#  addCommand("ResizeLastMessages", resizeLastMessagesCommand)
-#  addCommand("ShowGameMenu", showGameMenuCommand)
-#  addCommand("InvokeMenu", invokeMenuCommand)
-#  addCommand("SetShipSpeed", setShipSpeedCommand)
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+  try:
+    addCommand("HideMapButtons", hideMapButtonsCommand)
+    addCommand("ShowMapButtons", showMapButtonsCommand)
+    addCommand("MoveMapButtons", moveMapButtonsCommand)
+    addCommand("MoveMapInfo", moveMapInfoCommand)
+    addCommand("DrawMap", drawMapCommand)
+    addCommand("ZoomMap", zoomMapCommand)
+    addCommand("UpdateMapInfo", updateMapInfoCommand)
+    addCommand("ShowDestinationMenu", showDestinationMenuCommand)
+    addCommand("SetDestination", setShipDestinationCommand)
+    addCommand("MoveMap", moveMapCommand)
+    addCommand("MoveShip", moveShipCommand)
+    addCommand("QuitGame", quitGameCommand)
+    addCommand("ResignGame", resignGameCommand)
+    addCommand("ShowStats", showStatsCommand)
+    addCommand("ShowSkyMap", showSkyMapCommand)
+    addCommand("MoveCursor", moveMouseCommand)
+    addCommand("ToggleFullScreen", toggleFullScreenCommand)
+    addCommand("ResizeLastMessages", resizeLastMessagesCommand)
+    addCommand("ShowGameMenu", showGameMenuCommand)
+    addCommand("InvokeMenu", invokeMenuCommand)
+    addCommand("SetShipSpeed", setShipSpeedCommand)
+  except:
+    showError(message = "Can't add a Tcl command.")
 
 import std/tables
 import mapsui, themes

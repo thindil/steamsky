@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with Maps.UI.Commands;
 
 package body Maps.UI is
 
@@ -54,7 +53,6 @@ package body Maps.UI is
       use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
       use Tcl.Tk.Ada.Winfo;
       use CoreUI;
-      use Maps.UI.Commands;
 
       Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
       Paned: constant Ttk_PanedWindow :=
@@ -68,7 +66,6 @@ package body Maps.UI is
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
       if Winfo_Get(Widgt => Get_Map_View, Info => "exists") = "0" then
-         Add_Maps_Commands;
          Main_Paned := Paned;
          Game_Header := Header;
          Close_Button := Get_Widget(pathName => Game_Header & ".closebutton");
