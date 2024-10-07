@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Trades; use Trades;
+with Trades;
 
 package body Bases is
 
@@ -130,18 +130,19 @@ package body Bases is
       Ada_Recruit.Home_Base := Recruit.Home_Base;
    end Recruit_From_Nim;
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Base_Cargo is record
-      Proto_Index: Natural;
-      Amount: Natural;
-      Durability: Items_Durability;
-      Price: Natural := 0;
-   end record;
-   type Nim_Cargo_Array is array(0 .. 127) of Nim_Base_Cargo;
-   --## rule on TYPE_INITIAL_VALUES
-
    procedure Set_Base_In_Nim(Base_Index: Bases_Range) is
       procedure Get_Base_Cargo(B_I: Natural) is
+         use Trades;
+
+         --## rule off TYPE_INITIAL_VALUES
+         type Nim_Base_Cargo is record
+            Proto_Index: Natural;
+            Amount: Natural;
+            Durability: Items_Durability;
+            Price: Natural := 0;
+         end record;
+         type Nim_Cargo_Array is array(0 .. 127) of Nim_Base_Cargo;
+         --## rule on TYPE_INITIAL_VALUES
          procedure Get_Ada_Base_Cargo
            (B_Index: Integer; Cargo: Nim_Cargo_Array) with
             Import => True,
@@ -266,12 +267,11 @@ package body Bases is
             External_Name => "getAdaBaseReputation";
       begin
          Get_Ada_Base_Reputation
-           (B_I => B_Index,
-            Level => Sky_Bases(B_Index).Reputation.Level,
+           (B_I => B_Index, Level => Sky_Bases(B_Index).Reputation.Level,
             Experience => Sky_Bases(B_Index).Reputation.Experience);
       end Get_Base_Reputation;
       procedure Get_Ada_Base_Location
-         (B_Index: Bases_Range; X: Map_X_Range; Y: Map_Y_Range) with
+        (B_Index: Bases_Range; X: Map_X_Range; Y: Map_Y_Range) with
          Import => True,
          Convention => C,
          External_Name => "getAdaBaseLocation";
