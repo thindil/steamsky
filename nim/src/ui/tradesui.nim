@@ -33,8 +33,8 @@ var
   itemsIndexes: seq[int]
 
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show information about trading
   ##
   ## * clientData - the additional data for the Tcl command
@@ -396,8 +396,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Sort the trading list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -634,8 +634,8 @@ proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
 var itemIndex = -1
 
 proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect].} =
   ## Buy or sell the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -715,7 +715,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -927,7 +927,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show dialog to enter amount of items to sell or buy
   ##
   ## * clientData - the additional data for the Tcl command
@@ -971,8 +971,8 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect].} =
   ## Show only this items which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command
@@ -995,7 +995,7 @@ proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowTrade", tclEval2(script = typeBox & " get"),
           searchText].allocCStringArray)
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowTrade", showTradeCommand)
