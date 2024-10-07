@@ -998,13 +998,12 @@ proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
-    discard
-#    addCommand("ShowTrade", showTradeCommand)
-#    addCommand("SortTradeItems", sortTradeItemsCommand)
-#    addCommand("TradeItem", tradeItemCommand)
-#    addCommand("ShowTradeItemInfo", showTradeItemInfoCommand)
-#    addCommand("TradeAmount", tradeAmountCommand)
-#    addCommand("SearchTrade", searchTradeCommand)
+    addCommand("ShowTrade", showTradeCommand)
+    addCommand("SortTradeItems", sortTradeItemsCommand)
+    addCommand("TradeItem", tradeItemCommand)
+    addCommand("ShowTradeItemInfo", showTradeItemInfoCommand)
+    addCommand("TradeAmount", tradeAmountCommand)
+    addCommand("SearchTrade", searchTradeCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
