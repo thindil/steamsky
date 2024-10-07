@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the player's in-game goals, like loading them
+## from files, clearing, updating or getting their text.
+
 import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, messages, statistics, types, utils
@@ -279,6 +282,7 @@ type
 
 proc loadAdaGoals(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
+  ## Temporary C binding
   try:
     loadGoals(fileName = $fileName)
     return "".cstring
@@ -287,6 +291,7 @@ proc loadAdaGoals(fileName: cstring): cstring {.sideEffect, raises: [], tags: [
 
 proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [],
     exportc, contractual.} =
+  ## Temporary C binding
   adaGoal = AdaGoalData(index: "".cstring, goalType: -1, amount: -1,
       targetIndex: "".cstring, multiplier: 0)
   let goal = try:
@@ -301,37 +306,44 @@ proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [],
 
 proc updateAdaGoal(goalType: cint; targetIndex: cstring;
     amount: cint) {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   updateGoal(goalType = goalType.GoalTypes, targetIndex = $targetIndex,
       amount = amount.Positive)
 
 proc getAdaCurrentGoal(goal: AdaGoalData) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   currentGoal = GoalData(index: $goal.index, goalType: goal.goalType.GoalTypes,
       amount: goal.amount.Natural, targetIndex: $goal.targetIndex,
       multiplier: goal.multiplier.Positive)
 
 proc setAdaCurrentGoal(goal: var AdaGoalData) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   goal = AdaGoalData(index: currentGoal.index.cstring,
       goalType: currentGoal.goalType.ord.cint, amount: currentGoal.amount.cint,
       targetIndex: currentGoal.targetIndex.cstring,
       multiplier: currentGoal.multiplier.cint)
 
 proc clearAdaCurrentGoal() {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   clearCurrentGoal()
 
 proc goalAdaText(index: cint): cstring {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     return goalText(index = index).cstring
   except KeyError:
     return ""
 
 proc getAdaGoalsAmount(): cint {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   return goalsList.len.cint
 
 proc setAdaCurrentGoal2(index: cint) {.raises: [], tags: [], exportc,
     contractual.} =
+  ## Temporary C binding
   for goal in goalsList.values:
     if goal.index == $index:
       currentGoal = goal
