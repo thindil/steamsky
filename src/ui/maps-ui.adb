@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo;
 with CoreUI;
-with WaitMenu;
 with Maps.UI.Commands;
 
 package body Maps.UI is
@@ -73,7 +72,6 @@ package body Maps.UI is
          Main_Paned := Paned;
          Game_Header := Header;
          Close_Button := Get_Widget(pathName => Game_Header & ".closebutton");
-         WaitMenu.Add_Commands;
       end if;
       Create_Ada_Game_Ui;
    end Create_Game_Ui;
