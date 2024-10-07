@@ -114,5 +114,4 @@ package Missions is
 -- Temporary code to interact with Nim
 
    procedure Get_Missions(Base_Index: Positive);
-   procedure Set_Missions(Base_Index: Positive);
 end Missions;
