@@ -20,7 +20,7 @@ import ../[crew2, game, game2, shipsmovement, tk, types]
 import coreui, dialogs, errordialog, updateheader, utilsui2
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Show the available wait orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -112,8 +112,8 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], exportc.}
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        WriteIOEffect, TimeEffect, RootEffect].}
   ## Wait the selected amount of time
   ##
   ## * clientData - the additional data for the Tcl command
@@ -126,7 +126,7 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Wait
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowWait", showWaitCommand)
