@@ -22,7 +22,7 @@ import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, messages, statistics, types, utils
 
-var currentGoal* = GoalData(multiplier: 1) ## The player's current goal
+var currentGoal*: GoalData = GoalData(multiplier: 1) ## The player's current goal
 
 proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
@@ -32,7 +32,7 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
   require:
     fileName.len > 0
   body:
-    let goalsXml = try:
+    let goalsXml: XmlNode = try:
         loadXml(path = fileName)
       except XmlError, ValueError, IOError, OSError, Exception:
         raise newException(exceptn = DataLoadingError,
@@ -48,7 +48,8 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError,
                 message = "Can't add goal '" & goalNode.attr(name = "index") & "', invalid index.")
         goalAction: DataAction = try:
-            parseEnum[DataAction](goalNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = goalNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if goalAction in [update, remove]:
@@ -75,10 +76,10 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         else:
           GoalData(multiplier: 1)
       goal.index = $goalIndex
-      var attribute = goalNode.attr(name = "type")
+      var attribute: string = goalNode.attr(name = "type")
       if attribute.len() > 0:
         goal.goalType = try:
-            parseEnum[GoalTypes](attribute.toLowerAscii)
+            parseEnum[GoalTypes](s = attribute.toLowerAscii)
           except ValueError:
             raise newException(exceptn = DataLoadingError,
               message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid type of goal.")
@@ -144,7 +145,7 @@ proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [],
   ## * index - the index of the goal which description will be get
   ##
   ## Returns the string with information about the selected goal
-  let goal = (if index > 0 and goalsList.hasKey(index): goalsList[
+  let goal: GoalData = (if index > 0 and goalsList.hasKey(key = index): goalsList[
       index] else: currentGoal)
   case goal.goalType
   of reputation:
@@ -163,32 +164,32 @@ proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [],
     result = "Kill "
   of random:
     discard
-  result = result & $goal.amount
+  result &= $goal.amount
   case goal.goalType
   of reputation, visit:
-    result = result & " base"
+    result &= " base"
   of GoalTypes.destroy:
-    result = result & " ship"
+    result &= " ship"
   of discover:
-    result = result & " field"
+    result &= " field"
   of GoalTypes.craft:
-    result = result & " item"
+    result &= " item"
   of mission:
-    result = result & " mission"
+    result &= " mission"
   of kill:
-    result = result & " enem"
+    result &= " enem"
   of random:
     discard
   if goal.goalType notin {random, kill} and goal.amount > 1:
-    result = result & "s"
+    result &= "s"
   case goal.goalType
   of discover:
-    result = result & " of map"
+    result &= " of map"
   of kill:
     if goal.amount > 1:
-      result = result & "ies in melee combat"
+      result &= "ies in melee combat"
     else:
-      result = result & "y in melee combat"
+      result &= "y in melee combat"
   else:
     discard
 
@@ -207,7 +208,7 @@ proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [],
     require:
       factionsList.hasKey(key = factionIndex)
     body:
-      let faction = factionsList[factionIndex]
+      let faction: FactionData = factionsList[factionIndex]
       case factionType
       of name:
         return faction.name
@@ -217,56 +218,58 @@ proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [],
         return faction.pluralMemberName
 
   if goal.targetIndex.len > 0:
-    var insertPosition = result.len - 4
+    var insertPosition: int = result.len - 4
     if goal.amount > 1:
       insertPosition.dec
     case goal.goalType
     of reputation, visit:
-      result.insert(getFactionName(goal.targetIndex, name) & " ", insertPosition)
+      result.insert(item = getFactionName(factionIndex = goal.targetIndex,
+          factionType = name) & " ", i = insertPosition)
     of GoalTypes.destroy:
-      var added = false
+      var added: bool = false
       for index, ship in protoShipsList:
-        let shipIndex = try: goal.targetIndex.parseInt except ValueError: -1
+        let shipIndex: int = try: goal.targetIndex.parseInt except ValueError: -1
         if index == shipIndex:
           result = result & ": " & ship.name
           added = true
           break
       if not added:
-        result.insert(getFactionName(goal.targetIndex, name) & " ", insertPosition)
+        result.insert(item = getFactionName(factionIndex = goal.targetIndex,
+            factionType = name) & " ", i = insertPosition)
     of GoalTypes.craft:
       if recipesList[goal.targetIndex].resultIndex > 0:
-        result = result & ": " & itemsList[recipesList[
+        result &= ": " & itemsList[recipesList[
             goal.targetIndex].resultIndex].name
       else:
-        result = result & ": " & goal.targetIndex
+        result &= ": " & goal.targetIndex
     of mission:
       try:
-        let missionType = parseEnum[MissionsTypes](
-            goal.targetIndex.toLowerAscii)
+        let missionType: MissionsTypes = parseEnum[MissionsTypes](
+            s = goal.targetIndex.toLowerAscii)
         case missionType
         of deliver:
-          result = result & ": Deliver items to bases"
+          result &= ": Deliver items to bases"
         of patrol:
-          result = result & ": Patrol areas"
+          result &= ": Patrol areas"
         of destroy:
-          result = result & ": Destroy ships"
+          result &= ": Destroy ships"
         of explore:
-          result = result & ": Explore areas"
+          result &= ": Explore areas"
         of passenger:
-          result = result & ": Transport passengers to bases"
+          result &= ": Transport passengers to bases"
       except ValueError:
         discard
     of kill:
       insertPosition = result.len - 21
       if goal.amount > 1:
-        insertPosition = insertPosition - 2
-      var stopPosition = insertPosition + 6
+        insertPosition -= 2
+      var stopPosition: int = insertPosition + 6
       if goal.amount > 1:
-        result[insertPosition .. stopPosition] = getFactionName(
-            goal.targetIndex, pluralMemberName)
+        result[insertPosition..stopPosition] = getFactionName(
+            factionIndex = goal.targetIndex, factionType = pluralMemberName)
       else:
-        result[insertPosition .. stopPosition] = getFactionName(
-            goal.targetIndex, memberName)
+        result[insertPosition..stopPosition] = getFactionName(
+            factionIndex = goal.targetIndex, factionType = memberName)
     of random, discover:
       discard
 
@@ -294,7 +297,7 @@ proc getAdaGoal(index: cint; adaGoal: var AdaGoalData) {.raises: [], tags: [],
   ## Temporary C binding
   adaGoal = AdaGoalData(index: "".cstring, goalType: -1, amount: -1,
       targetIndex: "".cstring, multiplier: 0)
-  let goal = try:
+  let goal: GoalData = try:
       goalsList[index]
     except KeyError:
       return
