@@ -46,14 +46,6 @@ package MainMenu.Commands is
       Import => True,
       Convention => C,
       External_Name => "openLinkCommand";
-
       -- ****
-
-      -- ****f* MCommands/MCommands.Add_Commands
-      -- FUNCTION
-      -- Add Tcl commands related to main menu to the game
-      -- SOURCE
-   procedure Add_Commands;
-   -- ****
 
 end MainMenu.Commands;
