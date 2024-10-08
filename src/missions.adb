@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Interfaces.C.Strings;
-with Bases; use Bases;
+with Bases;
 
 package body Missions is
 
@@ -32,8 +32,6 @@ package body Missions is
       M_Type: Natural;
       Data: Natural;
    end record;
-
-   type Nim_Missions_Array is array(0 .. 49) of Nim_Mission_Data;
    --## rule on TYPE_INITIAL_VALUES
 
    function Get_Mission_Type(M_Type: Missions_Types) return String is
@@ -49,6 +47,11 @@ package body Missions is
    end Get_Mission_Type;
 
    procedure Get_Missions(Base_Index: Positive) is
+      use Bases;
+
+      --## rule off TYPE_INITIAL_VALUES
+      type Nim_Missions_Array is array(0 .. 49) of Nim_Mission_Data;
+      --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
       Nim_Missions: Nim_Missions_Array;
       Missions_List: constant Mission_Container.Vector :=
