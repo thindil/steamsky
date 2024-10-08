@@ -455,21 +455,24 @@ proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid remove " & closeButton)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
+    TimeEffect].} =
   ## Add Tcl commands related to the various UI elements
-  discard
-#  addCommand("ResizeCanvas", resizeCanvasCommand)
-#  addCommand("CheckAmount", checkAmountCommand)
-#  addCommand("ValidateAmount", validateAmountCommand)
-#  addCommand("SetTextVariable", setTextVariableCommand)
-#  addCommand("ShowOnMap", showOnMapCommand)
-#  addCommand("ProcessQuestion", processQuestionCommand)
-#  addCommand("SetScrollbarBindings", setScrollbarBindingsCommand)
-#  addCommand("SetDestination2", setDestination2Command)
+  try:
+    addCommand("ResizeCanvas", resizeCanvasCommand)
+    addCommand("CheckAmount", checkAmountCommand)
+    addCommand("ValidateAmount", validateAmountCommand)
+    addCommand("SetTextVariable", setTextVariableCommand)
+    addCommand("ShowOnMap", showOnMapCommand)
+    addCommand("ProcessQuestion", processQuestionCommand)
+    addCommand("SetScrollbarBindings", setScrollbarBindingsCommand)
+    addCommand("SetDestination2", setDestination2Command)
+  except:
+    showError(message = "Can't add a Tcl command.")
 
 # Temporary code for interfacing with Ada
 
-proc addAdaUtilsCommands() {.raises: [], tags: [], exportc.} =
+proc addAdaUtilsCommands() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
   try:
     addCommands()
   except:
