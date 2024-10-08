@@ -42,11 +42,4 @@ package Utils.UI is
       Pre => Name'Length > 0;
       -- ****
 
-      -- ****f* UUI/UUI.Add_Commands
-      -- FUNCTION
-      -- Add various, UI related Tcl commands
-      -- SOURCE
-   procedure Add_Commands;
-   -- ****
-
 end Utils.UI;
