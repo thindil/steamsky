@@ -304,6 +304,4 @@ package Ships is
 
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship);
 
-   procedure Get_Ship_From_Nim(Ship: in out Ship_Record);
-
 end Ships;
