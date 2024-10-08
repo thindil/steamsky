@@ -137,6 +137,7 @@ type ThemeRecord* = object
   ## * drinksIcon          - Icon used for show info about amount of drinks
   ## * expandIcon          - Icon used for expanding info sections
   ## * contractIcon        - Icon used for contracting info sections
+  ## * moreOptionsIcon     - Icon used for show more options in info sections
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -248,6 +249,7 @@ type ThemeRecord* = object
   drinksIcon*: string
   expandIcon*: string
   contractIcon*: string
+  moreOptionsIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -350,7 +352,8 @@ let
       fuelIcon: defaultThemeIconPath & "fuel.svg",
       drinksIcon: defaultThemeIconPath & "drinks.svg",
       expandIcon: defaultThemeIconPath & "expand.svg",
-      contractIcon: defaultThemeIconPath & "contract2.svg")
+      contractIcon: defaultThemeIconPath & "contract2.svg",
+      moreOptionsIcon: defaultThemeIconPath & "moreoptions.svg")
     ## The default game'st theme
 
 proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
@@ -600,6 +603,8 @@ proc loadThemes*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
                 theme.expandIcon = entry.value.unixToNativePath
               of "ContractIcon":
                 theme.contractIcon = entry.value.unixToNativePath
+              of "MoreOptionsIcon":
+                theme.moreOptionsIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -644,7 +649,7 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffe
       "moveicon", "give2icon", "drop2icon", "edit2icon", "show2icon",
       "negotiate2icon", "craft2icon", "study2icon", "deconstruct2icon",
       "giveorder2icon", "foodicon", "fuelicon", "drinksicon", "expandicon",
-      "contracticon"]
+      "contracticon", "moreoptionsicon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -679,7 +684,8 @@ proc loadThemeImages*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffe
         theme.negotiateColoredIcon, theme.craftColoredIcon,
         theme.studyColoredIcon, theme.deconstructColoredIcon,
         theme.giveOrderColoredIcon, theme.foodIcon, theme.fuelIcon,
-        theme.drinksIcon, theme.expandIcon, theme.contractIcon]
+        theme.drinksIcon, theme.expandIcon, theme.contractIcon,
+        theme.moreOptionsIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
@@ -967,6 +973,8 @@ proc getAdaIcon(name: cstring): cstring {.raises: [], tags: [WriteIOEffect, Time
     return theme.expandIcon.cstring
   of "contractIcon":
     return theme.contractIcon.cstring
+  of "moreOptionsIcon":
+    return theme.moreOptionsIcon.cstring
   else:
     showError(message = "Unknown theme setting: " & $name)
     return "".cstring
