@@ -21,7 +21,7 @@ import ../[basestypes, config, game, game2, gamesaveload, goals, halloffame,
 import coreui, dialogs, errordialog, showmainmenu, table, utilsui2
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
+    argv: cstringArray): TclResults {.raises: [], tags: [
         ReadIOEffect, ExecIOEffect, RootEffect], exportc.} =
   ## Open the selected link in a proper program
   ##
@@ -51,8 +51,8 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect].} =
   ## Show the selected file content
   ##
   ## * clientData - the additional data for the Tcl command
@@ -87,8 +87,8 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
 var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadIOEffect, ReadDirEffect, WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    ReadIOEffect, ReadDirEffect, WriteIOEffect, TimeEffect].} =
   ## Show the list of changes in the game, all or just recent, since the last
   ## release
   ##
@@ -133,7 +133,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Show the hall of fame screen
   ##
   ## * clientData - the additional data for the Tcl command
@@ -155,7 +155,7 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Delete a saved game file
   ##
   ## * clientData - the additional data for the Tcl command
@@ -174,8 +174,8 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        WriteIOEffect, TimeEffect].} =
   ## Set faction destription and available bases and careers
   ##
   ## * clientData - the additional data for the Tcl command
@@ -255,7 +255,7 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Set career description
   ##
   ## * clientData - the additional data for the Tcl command
@@ -290,7 +290,7 @@ proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Set starting base description
   ##
   ## * clientData - the additional data for the Tcl command
@@ -319,7 +319,7 @@ proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Generate random player or ship name
   ##
   ## * clientData - the additional data for the Tcl command
@@ -355,8 +355,8 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadIOEffect, WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    ReadIOEffect, WriteIOEffect, TimeEffect].} =
   ## Set all parameters and start a new game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -467,7 +467,7 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Show available options for the selected saved game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -503,8 +503,8 @@ proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        RootEffect].} =
   ## Clear the main game window and show main menu
   ##
   ## * clientData - the additional data for the Tcl command
@@ -526,8 +526,8 @@ proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect].} =
   ## Load the selected save file and start the game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -560,8 +560,8 @@ var
   saveSortOrder = timeDesc
 
 proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    ReadDirEffect, RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    ReadDirEffect, RootEffect].} =
   ## Show the list of available saved games
   ##
   ## * clientData - the additional data for the Tcl command
@@ -662,8 +662,8 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect].} =
   ## Sort the saved games list
   ##
   ## * clientData - the additional data for the Tcl command
