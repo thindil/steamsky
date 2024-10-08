@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with MainMenu.Commands;
-with Table;
 with Utils.UI;
 
 package body MainMenu is
@@ -27,7 +26,6 @@ package body MainMenu is
    begin
       MainMenu.Commands.Add_Commands;
       Utils.UI.Add_Commands;
-      Table.Add_Commands;
       Create_Ada_Main_Menu;
       Show_Main_Menu;
    end Create_Main_Menu;

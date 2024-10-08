@@ -296,7 +296,8 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
 
 proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     tooltip, command: string; column: Positive; newRow: bool = false;
-    invertColors: bool = false) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    invertColors: bool = false) {.sideEffect, raises: [], tags: [WriteIOEffect,
+        TimeEffect].} =
   ## Add a progressbar item to the selected TableWidget
   ##
   ## * table         - the TableWidget to which the progressbar will be added
@@ -398,7 +399,8 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
 
 proc addCheckButton*(table: var TableWidget; tooltip, command: string;
     checked: bool; column: Positive; newRow: bool = false;
-    emptyUnchecked: bool = false) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    emptyUnchecked: bool = false) {.sideEffect, raises: [], tags: [
+        WriteIOEffect, TimeEffect].} =
   ## Add checkbutton item to the selected TableWidget
   ##
   ## * table          - the TableWidget to which the checkbutton will be added
@@ -625,18 +627,21 @@ proc toggleCheckedButton*(table: TableWidget; row,
     tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
         $column & " -image checkbox-checked")
 
-proc addCommands*() {.sideEffect, raises: [], tags: [].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Add Tcl commands related to the TableWidget
-#  addCommand("UpdateCurrentRow", updateCurrentRowCommand)
-#  addCommand("ExecuteCurrentRow", executeCurrentRowCommand)
-#  addCommand("HideCurrentRow", hideCurrentRowCommand)
-  discard
+  try:
+    addCommand("UpdateCurrentRow", updateCurrentRowCommand)
+    addCommand("ExecuteCurrentRow", executeCurrentRowCommand)
+    addCommand("HideCurrentRow", hideCurrentRowCommand)
+  except:
+    showError(message = "Can't add a Tcl command.")
 
 # Temporary code for interfacing with Ada
 
 proc createAdaTable(parent: cstring; headers: array[10, cstring]; scrollbar,
     command, tooltipText: cstring; adaCanvas, adaScrollbar: var cstring;
-    height: var cint; adaWidth: var array[10, cint]) {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+    height: var cint; adaWidth: var array[10, cint]) {.raises: [], tags: [
+        WriteIOEffect, TimeEffect], exportc.} =
   var nimHeaders: HeadersList = @[]
   for index, header in headers:
     if header.len > 0 or index == 0:
@@ -746,7 +751,7 @@ proc updateAdaHeadersCommand(canvas, command: cstring; columnsWidth: array[10,
     newTable.columnsWidth.add(width)
   updateHeadersCommand(newTable, $command)
 
-proc addAdaTableCommands() {.raises: [], tags: [], exportc.} =
+proc addAdaTableCommands() {.raises: [], tags: [TimeEffect, WriteIOEffect], exportc.} =
   try:
     addCommands()
   except:
