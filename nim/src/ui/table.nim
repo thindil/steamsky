@@ -129,7 +129,7 @@ proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
   tclEval(script = "bind " & result.canvas & " <Leave> {HideCurrentRow " &
       result.canvas & "}")
 
-proc clearTable*(table: var TableWidget) {.sideEffect, raises: [], tags: [].} =
+proc clearTable*(table: var TableWidget) {.raises: [], tags: [].} =
   ## Clear the data from the selected table
   ##
   ## * table - the TableWidget which data will be cleared
@@ -168,7 +168,7 @@ proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
         if gameSettings.rightButton: "3" else: "1") & "> {" & command & "}")
 
 proc addBackground(table: TableWidget; newRow: bool;
-    command: string): string {.sideEffect, raises: [], tags: [].} =
+    command: string): string {.raises: [], tags: [].} =
   ## Add the proper color to the item in the table and return the name of the
   ## used color
   ##
@@ -296,7 +296,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
 
 proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     tooltip, command: string; column: Positive; newRow: bool = false;
-    invertColors: bool = false) {.sideEffect, raises: [], tags: [WriteIOEffect,
+    invertColors: bool = false) {.raises: [], tags: [WriteIOEffect,
         TimeEffect].} =
   ## Add a progressbar item to the selected TableWidget
   ##
@@ -370,7 +370,7 @@ proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     table.row.inc
 
 proc addPagination*(table: TableWidget; previousCommand: string = "";
-    nextCommand: string = "") {.sideEffect, raises: [], tags: [].} =
+    nextCommand: string = "") {.raises: [], tags: [].} =
   ## Add pagination buttons to the bottom of the selected TableWidget
   ##
   ## * table           - the TableWidget to which the buttons will be added
@@ -399,7 +399,7 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
 
 proc addCheckButton*(table: var TableWidget; tooltip, command: string;
     checked: bool; column: Positive; newRow: bool = false;
-    emptyUnchecked: bool = false) {.sideEffect, raises: [], tags: [
+    emptyUnchecked: bool = false) {.raises: [], tags: [
         WriteIOEffect, TimeEffect].} =
   ## Add checkbutton item to the selected TableWidget
   ##
@@ -464,7 +464,7 @@ proc addCheckButton*(table: var TableWidget; tooltip, command: string;
     table.row.inc
 
 proc getColumnNumber*(table: TableWidget;
-    xPosition: Natural): Positive {.sideEffect, raises: [], tags: [].} =
+    xPosition: Natural): Positive {.raises: [], tags: [].} =
   ## Get the number of the column in the selected TableWidget according to
   ## the position in X axis
   ##
@@ -511,7 +511,7 @@ proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
       tclEval(script = table.canvas & " bind headerback" & $(i + 1) & " <Button-1> {}")
 
 proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Update the Tcl variable currentrow and show the currently selected row in
   ## the table
   ##
@@ -554,7 +554,7 @@ proc updateCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Excecut the Tcl command associated with the current row in the selected
   ## TableWidget
   ##
@@ -574,7 +574,7 @@ proc executeCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
       if gameSettings.rightButton: "3" else: "1") & ">")
 
 proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Set the normal background for the current row in the selected TableWidget
   ##
   ## * clientData - the additional data for the Tcl command
@@ -614,7 +614,7 @@ proc isChecked*(table: TableWidget; row, column: Natural): bool {.sideEffect,
   return false
 
 proc toggleCheckedButton*(table: TableWidget; row,
-    column: Natural) {.sideEffect, raises: [], tags: [].} =
+    column: Natural) {.raises: [], tags: [].} =
   ## Change the state of the selected checkbutton in the selected TableWidget
   ##
   ## * table  - the TableWidget in which the checkbox will be toggled
