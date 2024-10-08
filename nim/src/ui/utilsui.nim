@@ -22,7 +22,7 @@ import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew,
     shipsuimodules2, showmainmenu, statisticsui, updateheader, utilsui2
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Resize the selected canvas
   ##
   ## * clientData - the additional data for the Tcl command
@@ -47,7 +47,7 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Check the amount of the item, if it is not below low level of warning or
   ## if the entered amount is a proper number
   ##
@@ -142,7 +142,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Validate amount of the item when the spinbox button to increase or
   ## decrease the amount was pressed
   ##
@@ -165,8 +165,8 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       newArgv.allocCStringArray)
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        RootEffect].} =
   ## Set the player's ship, module or crew member's name in Nim and Tcl
   ##
   ## * clientData - the additional data for the Tcl command
@@ -209,8 +209,8 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        WriteIOEffect, TimeEffect].} =
   ## Show the selected point on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -237,8 +237,8 @@ proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+        WriteIOEffect, TimeEffect, RootEffect].} =
   ## Process question from dialog when the player answer Yes there
   ##
   ## * clientData - the additional data for the Tcl command
@@ -388,7 +388,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
   ## Assign scrolling events with mouse wheel to the selected vertical
   ## scrollbar from the selected widget
   ##
@@ -419,8 +419,8 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.sideEffect, raises: [], tags: [
-    WriteIOEffect, TimeEffect], exportc.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    WriteIOEffect, TimeEffect].} =
   ## Set the selected map point as the player's ship destination
   ##
   ## * clientData - the additional data for the Tcl command
@@ -455,7 +455,7 @@ proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid remove " & closeButton)
   return tclOk
 
-proc addCommands*() {.sideEffect, raises: [], tags: [WriteIOEffect,
+proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     TimeEffect].} =
   ## Add Tcl commands related to the various UI elements
   try:
@@ -479,5 +479,5 @@ proc addAdaUtilsCommands() {.raises: [], tags: [WriteIOEffect, TimeEffect], expo
     echo getCurrentExceptionMsg()
 
 proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
-    gcsafe, sideEffect, raises: [], tags: [].} =
+    gcsafe, raises: [], tags: [].} =
   deleteWidgets(startIndex, endIndex, $frame)
