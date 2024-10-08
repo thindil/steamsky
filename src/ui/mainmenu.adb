@@ -13,8 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with MainMenu.Commands;
-
 package body MainMenu is
 
    procedure Create_Main_Menu is
@@ -23,7 +21,6 @@ package body MainMenu is
          Import => True,
          External_Name => "createAdaMainMenu";
    begin
-      MainMenu.Commands.Add_Commands;
       Create_Ada_Main_Menu;
       Show_Main_Menu;
    end Create_Main_Menu;

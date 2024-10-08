@@ -701,20 +701,22 @@ proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
   return showLoadGameCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
 
-proc addCommands*() =
-  discard
-#  addCommand("OpenLink", openLinkCommand)
-#  addCommand("ShowFile", showFileCommand)
-#  addCommand("ShowNews", showNewsCommand)
-#  addCommand("ShowHallOfFame", showHallOfFameCommand)
-#  addCommand("DeleteGame", deleteGameCommand)
-#  addCommand("SetFaction", setFactionCommand)
-#  addCommand("SetCareer", setCareerCommand)
-#  addCommand("SetBase", setBaseCommand)
-#  addCommand("RandomName", randomNameCommand)
-#  addCommand("NewGame", newGameCommand)
-#  addCommand("ShowLoadGameMenu", showLoadGameMenuCommand)
-#  addCommand("ShowMainMenu", showMainMenuCommand)
-#  addCommand("LoadGame", loadGameCommand)
-#  addCommand("ShowLoadGame", showLoadGameCommand)
-#  addCommand("SortSaves", sortSavesCommand)
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+  try:
+    addCommand("OpenLink", openLinkCommand)
+    addCommand("ShowFile", showFileCommand)
+    addCommand("ShowNews", showNewsCommand)
+    addCommand("ShowHallOfFame", showHallOfFameCommand)
+    addCommand("DeleteGame", deleteGameCommand)
+    addCommand("SetFaction", setFactionCommand)
+    addCommand("SetCareer", setCareerCommand)
+    addCommand("SetBase", setBaseCommand)
+    addCommand("RandomName", randomNameCommand)
+    addCommand("NewGame", newGameCommand)
+    addCommand("ShowLoadGameMenu", showLoadGameMenuCommand)
+    addCommand("ShowMainMenu", showMainMenuCommand)
+    addCommand("LoadGame", loadGameCommand)
+    addCommand("ShowLoadGame", showLoadGameCommand)
+    addCommand("SortSaves", sortSavesCommand)
+  except:
+    showError(message = "Can't add a Tcl command.")
