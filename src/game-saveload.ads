@@ -22,13 +22,6 @@
 package Game.SaveLoad is
 -- ****
 
-   -- ****e* GSaveLoad/GSaveLoad.Save_Game_Invalid_Data
-   -- FUNCTION
-   -- Raised when invalid data found in savegame
-   -- SOURCE
-   Save_Game_Invalid_Data: exception;
-   -- ****
-
    -- ****f* GSaveLoad/GSaveLoad.Save_Game
    -- FUNCTION
    -- Save game to file
