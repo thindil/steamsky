@@ -1157,6 +1157,9 @@ story.
   section of information, for example in the ship info screen. Optional.
 * Key `ContractIcon`: Path to the SVG image which will be used to contract an
   section of information, for example in the ship info screen. Optional.
+* Key `MoreOptionsIcon`: Path to the SVG image which will be used to show or hide
+  section of options in information, for example UI to search for crew members.
+  Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
