@@ -13,13 +13,14 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Tcl; use Tcl;
+with Tcl;
 with Tcl.Tk.Ada;
 
 package body Utils.UI is
 
    procedure Add_Command
      (Name: String; Ada_Command: not null CreateCommands.Tcl_CmdProc) is
+      use Tcl;
       use Tcl.Ada;
       use Tcl.Tk.Ada;
 
