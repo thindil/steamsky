@@ -204,8 +204,4 @@ package Items is
    function Inventory_To_Nim
      (Inventory: Inventory_Container.Vector) return Nim_Inventory_Array;
 
-   function Inventory_From_Nim
-     (Inventory: Nim_Inventory_Array; Size: Positive)
-      return Inventory_Container.Vector;
-
 end Items;

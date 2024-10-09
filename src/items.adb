@@ -118,26 +118,4 @@ package body Items is
       return Nim_Inventory;
    end Inventory_To_Nim;
 
-   function Inventory_From_Nim
-     (Inventory: Nim_Inventory_Array; Size: Positive)
-      return Inventory_Container.Vector is
-      use Tiny_String;
-
-      --## rule off IMPROPER_INITIALIZATION
-      Ada_Inventory: Inventory_Container.Vector (Capacity => Count_Type(Size));
-      --## rule on IMPROPER_INITIALIZATION
-   begin
-      Fill_Ada_Inventory_Loop :
-      for Item of Inventory loop
-         exit Fill_Ada_Inventory_Loop when Item.Proto_Index = 0;
-         Inventory_Container.Append
-           (Container => Ada_Inventory,
-            New_Item =>
-              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
-               Name => To_Bounded_String(Source => Value(Item => Item.Name)),
-               Durability => Item.Durability, Price => Item.Price));
-      end loop Fill_Ada_Inventory_Loop;
-      return Ada_Inventory;
-   end Inventory_From_Nim;
-
 end Items;
