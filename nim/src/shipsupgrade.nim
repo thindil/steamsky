@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,13 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import config, crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 type ShipUpgradeError* = object of CatchableError
   ## Raised when there is some problems with starting the ship upgrade
 
 proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
-    Exception], tags: [RootEffect].} =
+    Exception], tags: [RootEffect], contractual.} =
   ## Upgrade the currently selected module in the player ship
   ##
   ## * minutes - the amount of in-game minutes which passed
@@ -30,7 +31,8 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
   var upgradeMaterial, upgradeTools, workerIndex = -1
   var upgradedModule: ModuleData
 
-  proc findMatsAndTools() {.sideEffect, raises: [KeyError, Exception], tags: [RootEffect].} =
+  proc findMatsAndTools() {.sideEffect, raises: [KeyError, Exception], tags: [
+      RootEffect], contractual.} =
     ## Find necessary materials and tools for the upgrade
     upgradeTools = findTools(memberIndex = workerIndex, itemType = repairTools,
         order = upgrading)
@@ -38,18 +40,22 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
         itemType = modulesList[upgradedModule.protoIndex].repairMaterial)
 
   proc maxUpgradeReached(messageText: string) {.sideEffect, raises: [KeyError,
-      Exception], tags: [RootEffect].} =
+      Exception], tags: [RootEffect], contractual.} =
     ## Show message about reaching the maximum allowed level of upgrades and
     ## clear the player's ship upgrades settings.
     ##
     ## * messageText - the message which will be shown to the player
-    addMessage(message = messageText & upgradedModule.name & ".",
-        mtype = orderMessage, color = yellow)
-    upgradedModule.upgradeProgress = 0
-    upgradedModule.upgradeAction = ShipUpgrade.none
-    playerShip.modules[playerShip.upgradeModule] = upgradedModule
-    playerShip.upgradeModule = -1
-    giveOrders(ship = playerShip, memberIndex = workerIndex, givenOrder = rest)
+    require:
+      messageText.len > 0
+    body:
+      addMessage(message = messageText & upgradedModule.name & ".",
+          mtype = orderMessage, color = yellow)
+      upgradedModule.upgradeProgress = 0
+      upgradedModule.upgradeAction = ShipUpgrade.none
+      playerShip.modules[playerShip.upgradeModule] = upgradedModule
+      playerShip.upgradeModule = -1
+      giveOrders(ship = playerShip, memberIndex = workerIndex,
+          givenOrder = rest)
 
   if playerShip.upgradeModule == -1:
     return
@@ -240,7 +246,7 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
   playerShip.modules[playerShip.upgradeModule] = upgradedModule
 
 proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
-    raises: [ShipUpgradeError, KeyError], tags: [].} =
+    raises: [ShipUpgradeError, KeyError], tags: [], contractual.} =
   ## Set the module's upgrade of the player's ship
   ##
   ## * moduleIndex - the index of the module to upgrade
@@ -361,14 +367,15 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
 
 # Temporary code for interfacing with Ada
 
-proc upgradeAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc.} =
+proc upgradeAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
+    contractual.} =
   try:
     upgradeShip(minutes = minutes)
   except KeyError, Exception:
     discard
 
 proc startAdaUpgrading(moduleIndex, upgradeType: cint): cstring {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   try:
     startUpgrading(moduleIndex = moduleIndex - 1, upgradeType = upgradeType)
   except:
