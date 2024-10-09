@@ -45,22 +45,6 @@ package body Ships is
       Data: Module_Data_Array;
       Data_2: chars_ptr;
    end record;
-   type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
-   --## rule on TYPE_INITIAL_VALUES
-
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Ship_Data is record
-      Name: chars_ptr;
-      Sky_X: Integer;
-      Sky_Y: Integer;
-      Speed: Integer;
-      Upgrade_Module: Integer;
-      Destination_X: Integer;
-      Destination_Y: Integer;
-      Repair_Module: Integer;
-      Description: chars_ptr;
-      Home_Base: Integer;
-   end record;
    --## rule on TYPE_INITIAL_VALUES
 
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship) is
@@ -70,6 +54,20 @@ package body Ships is
         Inventory_To_Nim(Inventory => Ship.Cargo);
       Map_Cell: constant Sky_Cell := Sky_Map(Ship.Sky_X, Ship.Sky_Y);
       procedure Get_Ada_Ship(Ada_Ship: Ship_Record := Player_Ship) is
+         --## rule off TYPE_INITIAL_VALUES
+         type Nim_Ship_Data is record
+            Name: chars_ptr;
+            Sky_X: Integer;
+            Sky_Y: Integer;
+            Speed: Integer;
+            Upgrade_Module: Integer;
+            Destination_X: Integer;
+            Destination_Y: Integer;
+            Repair_Module: Integer;
+            Description: chars_ptr;
+            Home_Base: Integer;
+         end record;
+         --## rule on TYPE_INITIAL_VALUES
          Nim_Ship: constant Nim_Ship_Data :=
            (Name =>
               New_String
@@ -103,6 +101,9 @@ package body Ships is
       procedure Get_Ada_Modules(S: Ship_Record := Player_Ship) is
          use Tiny_String;
 
+         --## rule off TYPE_INITIAL_VALUES
+         type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
+         --## rule on TYPE_INITIAL_VALUES
          Nim_Modules: Nim_Modules_Array :=
            (others => Nim_Module_Data'(others => <>));
          Index, Index2: Positive := 1;
