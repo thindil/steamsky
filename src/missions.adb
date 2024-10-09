@@ -20,20 +20,6 @@ with Bases;
 
 package body Missions is
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Nim_Mission_Data is record
-      Time: Natural;
-      Target_X: Natural;
-      Target_Y: Natural;
-      Reward: Natural;
-      Start_Base: Natural;
-      Finished: Natural;
-      Multiplier: Reward_Multiplier := 0.0;
-      M_Type: Natural;
-      Data: Natural;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    function Get_Mission_Type(M_Type: Missions_Types) return String is
       use Interfaces.C.Strings;
 
@@ -50,6 +36,17 @@ package body Missions is
       use Bases;
 
       --## rule off TYPE_INITIAL_VALUES
+      type Nim_Mission_Data is record
+         Time: Natural;
+         Target_X: Natural;
+         Target_Y: Natural;
+         Reward: Natural;
+         Start_Base: Natural;
+         Finished: Natural;
+         Multiplier: Reward_Multiplier := 0.0;
+         M_Type: Natural;
+         Data: Natural;
+      end record;
       type Nim_Missions_Array is array(0 .. 49) of Nim_Mission_Data;
       --## rule on TYPE_INITIAL_VALUES
       --## rule off IMPROPER_INITIALIZATION
