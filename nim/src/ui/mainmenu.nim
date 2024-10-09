@@ -15,38 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
-import ../[basestypes, careers, config, events, game, game2, tk]
-import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu, table,
-    themes, utilsui, utilsui2
-
-proc startGame() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
-    ReadIOEffect, RootEffect], exportc.} =
-  ##  Start the game
-  let mainWindow = "."
-  var x: int = try:
-      ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
-        gameSettings.windowWidth) / 2).int
-    except:
-      showError(message = "Can't get window X position")
-      return
-  if x < 0:
-    x = 0
-  var y: int = try:
-      ((tclEval2(script = "winfo vrootheight " & mainWindow).parseInt -
-        gameSettings.windowHeight) / 2).int
-    except:
-      showError(message = "Can't get window Y position")
-      return
-  if y < 0:
-    y = 0
-  tclEval(script = "wm geometry . " & $gameSettings.windowWidth & "x" &
-      $gameSettings.windowHeight & "+" & $x & "+" & $y)
-  try:
-    generateTraders()
-  except:
-    showError(message = "Can't generate traders")
-  #createGameUi()
+import std/[os, tables]
+import ../[basestypes, careers, config, game, game2, tk]
+import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu,
+    table, themes, utilsui, utilsui2
 
 proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
     WriteIOEffect, TimeEffect, RootEffect].} =
@@ -169,7 +141,7 @@ proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
   tclEval(script = button & " configure -image maleicon")
   button = ".newgamemenu.canvas.player.gender.female"
   tclEval(script = button & " configure -image femaleicon")
-  # showMainMenu()
+  showMainMenu()
 
 # Temporary code for interfacing with Ada
 

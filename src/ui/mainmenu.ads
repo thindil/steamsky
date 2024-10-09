@@ -24,17 +24,10 @@ package MainMenu is
    -- FUNCTION
    -- Create main menu UI
    -- SOURCE
-   procedure Create_Main_Menu;
-   -- ****
-
-   -- ****f* MainMenu/MainMenu.Show_Main_Menu
-   -- FUNCTION
-   -- Show main menu to a player
-   -- SOURCE
-   procedure Show_Main_Menu with
+   procedure Create_Main_Menu with
       Convention => C,
       Import => True,
-      External_Name => "showAdaMainMenu";
+      External_Name => "createAdaMainMenu";
    -- ****
 
 end MainMenu;
