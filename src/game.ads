@@ -271,15 +271,6 @@ package Game is
      (Capacity => Default_Skills_Amount);
    -- ****
 
-   -- ****v* Game/Game.Skills_Amount
-   -- FUNCTION
-   -- The amount of skills in the game
-   -- HISTORY
-   -- 6.6 - Added
-   -- SOURCE
-   Skills_Amount: SkillsData_Container.Extended_Index := Default_Skills_Amount;
-   -- ****
-
    -- ****v* Game/Game.Save_Directory
    -- FUNCTION
    -- Path to directory where are savegame and logs
