@@ -22,13 +22,6 @@ import std/logging
 import contracts
 import game
 
-# Workaround bug in loggind.nim in Nim 1.6.14
-when defined(debug) or defined(release):
-  {.emit:"""
-    int cmdCount;
-    const char* cmdLine[0];
-  """.}
-
 type DebugTypes* = enum
   ## What kind of debug messages log. None, everything, only combat or start
   ## the game with debug menu
