@@ -232,6 +232,10 @@ proc tclEvalFile*(fileName: string) {.raises: [], tags: [], contractual.} =
       ## Nim binding to Tcl Tcl_EvalFile C API
   tclEvalFile(interp = getInterp(), fileName = fileName.cstring)
 
+proc mainLoop*() {.cdecl, dynlib: tkDllName, importc: "Tk_MainLoop", raises: [],
+    tags: [], contractual.}
+  ## Loop for events until all windows are closed
+
 proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
     AddingCommandError], tags: [], contractual.} =
   ## Add the selected Nim procedure as a Tcl command.
