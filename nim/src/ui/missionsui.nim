@@ -253,8 +253,11 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "missions.tcl")
     tclEval(script = "bind " & missionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
-    # addCommand("ShowMission", showMissionCommand)
-    # addCommand("SetMission", setMissionCommand)
+    try:
+      addCommand("ShowMission", showMissionCommand)
+      addCommand("SetMission", setMissionCommand)
+    except:
+      return showError(message = "Can't add Tcl commands.")
     missionsTable = createTable(parent = missionsCanvas & ".missions",
         headers = @["Name", "Distance", "Coordinates", "Details", "Time limit",
         "Base reward"], scrollbar = mainPaned & ".missionsframe.scrolly",
