@@ -611,5 +611,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("BaseAction", baseActionCommand)
     addCommand("SearchRecipes", searchRecipesCommand)
     addCommand("ShowBaseMenu", showBaseMenuCommand)
+    addCommand("SortBaseItems", sortBaseItemsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
