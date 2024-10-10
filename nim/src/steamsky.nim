@@ -20,15 +20,13 @@
 
 import std/[os, parseopt, strutils]
 import contracts
-import game, log, tk
-# Temporary imports
-import ui/[mainmenu, shipsuimodules, utilsui]
+import config, halloffame, game, log, tk
+import ui/[mainmenu, themes]
 
-proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
-    OSError, ValueError], tags: [ReadIOEffect, RootEffect], contractual.} =
+proc steamsky(params: cstring) {.exportc, raises: [TclError, IOError,
+    OSError, ValueError, DataLoadingError], tags: [ReadIOEffect, RootEffect],
+        contractual.} =
   ## The main procedure of the game.
-  ##
-  ## Returns the pointer to the newly created Tcl interpreter
 
   # Get the command line params if any
   if params.len() > 0:
@@ -49,31 +47,45 @@ proc steamsky(params: cstring): PInterp {.exportc, raises: [TclError, IOError,
 
   # Create the game directories
   createDir(dir = saveDirectory)
+  createDir(dir = modsDirectory)
+  createDir(dir = themesDirectory)
 
   # Start logging
   startLogging()
 
-  # Load the game configuration. TODO: temporary disabled, enable it again
-  # when will be needed
-  # loadConfig()
+  # Load the game configuration.
+  loadConfig()
+
+  # Load the hall of fame
+  loadHallOfFame()
+
+  # Load the game's themes
+  loadThemes()
 
   # Create Tcl interpreter
-  result = tclCreateInterp()
+  let res: PInterp = tclCreateInterp()
   # If creation failed, report error and quit
-  if result == nil:
+  if res == nil:
     raise newException(exceptn = TclError,
         message = "Can't create Tcl interpreter.")
   # Initialize Tcl. Quit if failed
-  if tclInit(interp = result) == tclError:
+  if tclInit(interp = res) == tclError:
     raise newException(exceptn = TclError,
         message = "Can't initialize Tcl interpreter.")
   # Initialize Tk. Quit if failed
-  if tkInit(interp = result) == tclError:
+  if tkInit(interp = res) == tclError:
     raise newException(exceptn = TclError, message = "Can't initialize Tk.")
-  setInterp(interp = result)
+  setInterp(interp = res)
 
   # Initialize needed packages
   for package in ["tooltip", "tksvg", "autoscroll"]:
-    if result.tclEval(script = "package require " & package) == tclError:
+    if res.tclEval(script = "package require " & package) == tclError:
       raise newException(exceptn = TclError, message = "Can't initialize " &
           package & " package.")
+
+  # Create and show the main game menu
+  createMainMenu()
+
+  # Loop inside Tk, waiting for commands to execute. When there are no windows
+  # left, mainLoop returns and we exit.
+  mainLoop()
