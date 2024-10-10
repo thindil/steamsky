@@ -1,4 +1,4 @@
---    Copyright 2016-2022 Bartek thindil Jasicki
+--    Copyright 2016-2024 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,27 +18,14 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Directories; use Ada.Directories;
-with Ada.Environment_Variables;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
-with Tcl; use Tcl;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Config; use Config;
-with ErrorDialog; use ErrorDialog;
 with Game; use Game;
-with HallOfFame; use HallOfFame;
-with Log; use Log;
-with MainMenu; use MainMenu;
-with Themes; use Themes;
 
 procedure Steamsky is
 
-   Argc: CArgv.CNatural := 0;
-   Argv: CArgv.Chars_Ptr_Ptr;
-   Interp: Tcl.Tcl_Interp := Null_Interp;
    Parameters: Unbounded_String := Null_Unbounded_String;
 
    function Update_Path
@@ -67,7 +54,7 @@ procedure Steamsky is
       Convention => C,
       External_Name => "NimMain";
 
-   function Steam_Sky(Params: chars_ptr) return Tcl.Tcl_Interp with
+   procedure Steam_Sky(Params: chars_ptr) with
       Import => True,
       Convention => C,
       External_Name => "steamsky";
@@ -79,18 +66,7 @@ begin
    for I in 1 .. Argument_Count loop
       if Argument(Number => I)'Length > 8 then
          Append(Source => Parameters, New_Item => Argument(Number => I) & " ");
-         if Argument(Number => I)(1 .. 8) = "--debug=" then
-            Set_Debug_Mode_Loop :
-            for J in Debug_Types loop
-               if To_Upper
-                   (Item =>
-                      Argument(Number => I)(9 .. Argument(Number => I)'Last)) =
-                 Debug_Types'Image(J) then
-                  Debug_Mode := J;
-                  exit Set_Debug_Mode_Loop;
-               end if;
-            end loop Set_Debug_Mode_Loop;
-         elsif Argument(Number => I)(1 .. 8) = "--datadi" then
+         if Argument(Number => I)(1 .. 8) = "--datadi" then
             Data_Directory :=
               To_Unbounded_String
                 (Source =>
@@ -139,48 +115,6 @@ begin
       end if;
    end loop Command_Line_Loop;
 
-   Create_Path(New_Directory => To_String(Source => Mods_Directory));
-   Create_Path(New_Directory => To_String(Source => Themes_Directory));
+   Steam_Sky(Params => New_String(Str => To_String(Source => Parameters)));
 
-   Load_Config;
-   Load_Hall_Of_Fame;
-   Load_Themes;
-
-   -- Start Tk
-
-   Ada.Environment_Variables.Set
-     (Name => "TCL_LIBRARY",
-      Value =>
-        Current_Directory & Dir_Separator & "libs" & Dir_Separator & "tcl8.6");
-
-   --  Get command-line arguments and put them into C-style "argv"
-   --------------------------------------------------------------
-   CArgv.Create(Argc => Argc, Argv => Argv);
-
-   --  Tcl needs to know the path name of the executable
-   --  otherwise Tcl.Tcl_Init below will fail.
-   ----------------------------------------------------
-   Tcl.Tcl_FindExecutable(argv0 => Argv.all);
-
-   --  Create one Tcl interpreter
-   -----------------------------
-   Interp :=
-     Steam_Sky(Params => New_String(Str => To_String(Source => Parameters)));
-
-   --  Set the Tk context so that we may use shortcut Tk
-   --  calls that require reference to the interpreter.
-   ----------------------------------------------------
-   Set_Context(Interp => Interp);
-
-   -- Create and show the main game menu
-   Create_Main_Menu;
-
-   --  Loop inside Tk, waiting for commands to execute.
-   --  When there are no windows left, Tcl.Tk.Tk_MainLoop returns and we exit.
-   --------------------------------------------------------------------------
-   Tcl.Tk.Tk_MainLoop;
-
-exception
-   when An_Exception : others =>
-      Save_Exception(An_Exception => An_Exception);
 end Steamsky;
