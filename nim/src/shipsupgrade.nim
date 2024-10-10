@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to upgrading the player's ship, like setting the
+## upgrade and the upgrading process itself.
+
 import std/tables
 import contracts
 import config, crewinventory, game, items, messages, shipscargo, shipscrew, types
@@ -369,6 +372,7 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
 
 proc upgradeAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
     contractual.} =
+  ## Temporary C binding
   try:
     upgradeShip(minutes = minutes)
   except KeyError, Exception:
@@ -376,6 +380,7 @@ proc upgradeAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
 
 proc startAdaUpgrading(moduleIndex, upgradeType: cint): cstring {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     startUpgrading(moduleIndex = moduleIndex - 1, upgradeType = upgradeType)
   except:
