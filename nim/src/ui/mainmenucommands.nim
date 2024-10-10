@@ -572,7 +572,7 @@ proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
   saveName = $argv[1]
   try:
     loadGame()
-    #startGame()
+    startGame()
   except:
     showMainMenu()
     showMessage(text = "Can't load this game. Reason: " &
