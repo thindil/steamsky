@@ -23,8 +23,7 @@ import contracts
 import config, halloffame, game, log, tk
 import ui/[mainmenu, themes]
 
-proc steamsky() {.exportc, raises: [TclError, IOError, OSError, ValueError,
-    DataLoadingError], tags: [ReadIOEffect, RootEffect], contractual.} =
+proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
 
   # Get the command line params if any
@@ -53,12 +52,19 @@ proc steamsky() {.exportc, raises: [TclError, IOError, OSError, ValueError,
       themesDirectory = val & DirSep
       normalizePath(path = themesDirectory)
     of "debug":
-      debugMode = parseEnum[DebugTypes](s = val)
-
+      try:
+        debugMode = parseEnum[DebugTypes](s = val)
+      except:
+        echo "Invalid debug value: " & val
+        return
   # Create the game directories
-  createDir(dir = saveDirectory)
-  createDir(dir = modsDirectory)
-  createDir(dir = themesDirectory)
+  try:
+    createDir(dir = saveDirectory)
+    createDir(dir = modsDirectory)
+    createDir(dir = themesDirectory)
+  except:
+    echo "Can't create directories"
+    return
 
   # Start logging
   startLogging()
@@ -67,7 +73,11 @@ proc steamsky() {.exportc, raises: [TclError, IOError, OSError, ValueError,
   loadConfig()
 
   # Load the hall of fame
-  loadHallOfFame()
+  try:
+    loadHallOfFame()
+  except:
+    echo "Can't load hall of fame"
+    return
 
   # Load the game's themes
   loadThemes()
@@ -76,22 +86,23 @@ proc steamsky() {.exportc, raises: [TclError, IOError, OSError, ValueError,
   let res: PInterp = tclCreateInterp()
   # If creation failed, report error and quit
   if res == nil:
-    raise newException(exceptn = TclError,
-        message = "Can't create Tcl interpreter.")
+    echo "Can't create Tcl interpreter."
+    return
   # Initialize Tcl. Quit if failed
   if tclInit(interp = res) == tclError:
-    raise newException(exceptn = TclError,
-        message = "Can't initialize Tcl interpreter.")
+    echo "Can't initialize Tcl interpreter."
+    return
   # Initialize Tk. Quit if failed
   if tkInit(interp = res) == tclError:
-    raise newException(exceptn = TclError, message = "Can't initialize Tk.")
+    echo "Can't initialize Tk."
+    return
   setInterp(interp = res)
 
   # Initialize needed packages
   for package in ["tooltip", "tksvg", "autoscroll"]:
     if res.tclEval(script = "package require " & package) == tclError:
-      raise newException(exceptn = TclError, message = "Can't initialize " &
-          package & " package.")
+      echo "Can't initalize " & package & " package."
+      return
 
   # Create and show the main game menu
   createMainMenu()
@@ -99,3 +110,6 @@ proc steamsky() {.exportc, raises: [TclError, IOError, OSError, ValueError,
   # Loop inside Tk, waiting for commands to execute. When there are no windows
   # left, mainLoop returns and we exit.
   mainLoop()
+
+# Run the game
+steamsky()
