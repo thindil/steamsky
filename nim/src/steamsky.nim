@@ -23,27 +23,37 @@ import contracts
 import config, halloffame, game, log, tk
 import ui/[mainmenu, themes]
 
-proc steamsky(params: cstring) {.exportc, raises: [TclError, IOError,
-    OSError, ValueError, DataLoadingError], tags: [ReadIOEffect, RootEffect],
-        contractual.} =
+proc steamsky() {.exportc, raises: [TclError, IOError, OSError, ValueError,
+    DataLoadingError], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
 
   # Get the command line params if any
-  if params.len() > 0:
-    var gameParams: OptParser = initOptParser(cmdLine = $params)
-    for kind, key, val in gameParams.getopt():
-      case key
-      of "savedir":
-        saveDirectory = val & DirSep
-        normalizePath(path = saveDirectory)
-      of "modsdir":
-        modsDirectory = val & DirSep
-        normalizePath(path = modsDirectory)
-      of "datadir":
-        dataDirectory = val & DirSep
-        normalizePath(path = dataDirectory)
-      of "debug":
-        debugMode = parseEnum[DebugTypes](s = val)
+  var gameParams = initOptParser()
+  for kind, key, val in gameParams.getopt():
+    case key
+    of "savedir":
+      saveDirectory = val & DirSep
+      normalizePath(path = saveDirectory)
+    of "modsdir":
+      modsDirectory = val & DirSep
+      normalizePath(path = modsDirectory)
+    of "datadir":
+      dataDirectory = val & DirSep
+      normalizePath(path = dataDirectory)
+      if not dirExists(dir = dataDirectory):
+        echo "Directory " & dataDirectory & " does not exists. You must use an existing directory as Data directory"
+        return
+    of "docdir":
+      docDirectory = val & DirSep
+      normalizePath(path = docDirectory)
+      if not dirExists(dir = docDirectory):
+        echo "Directory " & docDirectory & " does not exists. You must use an existing directory as Documentation directory"
+        return
+    of "themesdir":
+      themesDirectory = val & DirSep
+      normalizePath(path = themesDirectory)
+    of "debug":
+      debugMode = parseEnum[DebugTypes](s = val)
 
   # Create the game directories
   createDir(dir = saveDirectory)
