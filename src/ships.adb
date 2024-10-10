@@ -29,24 +29,6 @@ package body Ships is
       return Value(Item => Get_Cabin_Quality_Nim(Q => Quality));
    end Get_Cabin_Quality;
 
-   --## rule off TYPE_INITIAL_VALUES
-   type Owners_Array is array(1 .. 10) of Integer;
-   type Module_Data_Array is array(1 .. 3) of Integer;
-   type Nim_Module_Data is record
-      Name: chars_ptr;
-      Proto_Index: Integer;
-      Weight: Integer;
-      Durability: Integer;
-      Max_Durability: Integer;
-      Owner: Owners_Array := (others => 0);
-      Upgrade_Progress: Integer;
-      Upgrade_Action: Integer;
-      M_Type: Integer := -1;
-      Data: Module_Data_Array;
-      Data_2: chars_ptr;
-   end record;
-   --## rule on TYPE_INITIAL_VALUES
-
    procedure Set_Ship_In_Nim(Ship: Ship_Record := Player_Ship) is
       use Maps;
 
@@ -102,6 +84,21 @@ package body Ships is
          use Tiny_String;
 
          --## rule off TYPE_INITIAL_VALUES
+         type Owners_Array is array(1 .. 10) of Integer;
+         type Module_Data_Array is array(1 .. 3) of Integer;
+         type Nim_Module_Data is record
+            Name: chars_ptr;
+            Proto_Index: Integer;
+            Weight: Integer;
+            Durability: Integer;
+            Max_Durability: Integer;
+            Owner: Owners_Array := (others => 0);
+            Upgrade_Progress: Integer;
+            Upgrade_Action: Integer;
+            M_Type: Integer := -1;
+            Data: Module_Data_Array;
+            Data_2: chars_ptr;
+         end record;
          type Nim_Modules_Array is array(1 .. 75) of Nim_Module_Data;
          --## rule on TYPE_INITIAL_VALUES
          Nim_Modules: Nim_Modules_Array :=
