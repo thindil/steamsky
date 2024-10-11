@@ -62,7 +62,7 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         row: 0), FrameInfo(name: "modules", column: 0, row: 1), FrameInfo(
         name: "crew", column: 1, row: 0), FrameInfo(name: "cargo", column: 1, row: 1)]
     shipFrame = mainPaned & ".shipinfoframe"
-    button = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin"
+    button = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.maxmin"
   if argv[2] == "show":
     for frameInfo in frames:
       let frame = shipFrame & "." & frameInfo.name

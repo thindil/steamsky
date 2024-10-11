@@ -30,10 +30,11 @@ ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 SetScrollbarBindings $shipcanvas.frame $shipinfoframe.general.scrolly
 # Minimize/maximize button
-grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton \
+grid [ttk::frame $shipcanvas.frame.maxmin] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin.maxmin -style Small.TButton \
    -image expandicon -command {ShipMaxMin general show}] -sticky w \
    -padx 5
-tooltip::tooltip $shipcanvas.frame.maxmin \
+tooltip::tooltip $shipcanvas.frame.maxmin.maxmin \
    {Maximize/minimize the ship general info}
 # Ship name
 grid [ttk::label $shipcanvas.frame.namelbl -text {Name:}] -sticky w -padx 5
@@ -137,10 +138,11 @@ ttk::frame $shipcanvas.frame
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 SetScrollbarBindings $shipcanvas.frame $shipinfoframe.modules.scrolly
-grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton \
+grid [ttk::frame $shipcanvas.frame.maxmin] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin.maxmin -style Small.TButton \
    -image expandicon -command {ShipMaxMin modules show}] -sticky w \
    -padx 5
-tooltip::tooltip $shipcanvas.frame.maxmin \
+tooltip::tooltip $shipcanvas.frame.maxmin.maxmin \
    {Maximize/minimize the ship modules info}
 ::autoscroll::autoscroll $shipinfoframe.modules.scrolly
 ::autoscroll::autoscroll $shipinfoframe.modules.scrollx
@@ -159,15 +161,15 @@ SetScrollbarBindings $shipcanvas $shipinfoframe.crew.scrolly
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 SetScrollbarBindings $shipcanvas.frame $shipinfoframe.crew.scrolly
-grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton \
-   -image expandicon -command {ShipMaxMin crew show}] -sticky w \
-   -padx 5
-tooltip::tooltip $shipcanvas.frame.maxmin \
+grid [ttk::frame $shipcanvas.frame.maxmin] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin.maxmin -style Small.TButton \
+   -image expandicon -command {ShipMaxMin crew show}] -padx 5
+tooltip::tooltip $shipcanvas.frame.maxmin.maxmin \
    {Maximize/minimize the ship crew info}
-grid [ttk::button $shipcanvas.frame.more -style Small.TButton \
+grid [ttk::button $shipcanvas.frame.maxmin.more -style Small.TButton \
    -image moreoptionsicon -command {ShipMaxMin crew show}] -sticky w \
    -row 0 -column 1
-tooltip::tooltip $shipcanvas.frame.more \
+tooltip::tooltip $shipcanvas.frame.maxmin.more \
    {Show/Hide additional options related to managing the crew}
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.crew.scrolly
@@ -187,10 +189,11 @@ SetScrollbarBindings $shipcanvas $shipinfoframe.cargo.scrolly
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 SetScrollbarBindings $shipcanvas.frame $shipinfoframe.cargo.scrolly
-grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton \
+grid [ttk::frame $shipcanvas.frame.maxmin] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin.maxmin -style Small.TButton \
    -image expandicon -command {ShipMaxMin cargo show}] -sticky w \
    -padx 5
-tooltip::tooltip $shipcanvas.frame.maxmin \
+tooltip::tooltip $shipcanvas.frame.maxmin.maxmin \
    {Maximize/minimize the ship cargo info}
 grid [ttk::frame $shipcanvas.frame.freeframe] -sticky w -padx 5
 grid [ttk::label $shipcanvas.frame.freeframe.freespace -text {Free cargo space:}] -padx 5
