@@ -27,7 +27,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
 
   # Get the command line params if any
-  var gameParams = initOptParser()
+  var gameParams: OptParser = initOptParser()
   for kind, key, val in gameParams.getopt():
     case key
     of "savedir":
