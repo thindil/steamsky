@@ -5,11 +5,11 @@ include ../src/bases
 suite "Unit tests for bases module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadBasesTypes("../bin/data/bases.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadBasesTypes("bin/data/bases.dat")
   checkpoint "Setting the tests."
   playerShip.skyX = 1
   playerShip.skyY = 1

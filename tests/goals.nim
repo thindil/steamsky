@@ -4,7 +4,7 @@ include ../src/goals
 suite "Unit tests for goals module":
 
   checkpoint "Loading the game data."
-  loadGoals("../bin/data/goals.dat")
+  loadGoals("bin/data/goals.dat")
 
   currentGoal = goalsList[2]
 

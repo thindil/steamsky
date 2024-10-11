@@ -4,14 +4,14 @@ import unittest2
 suite "Unit tests for events module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadModules("../bin/data/shipmodules.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadRecipes("../bin/data/recipes.dat")
-  loadMobs("../bin/data/mobs.dat")
-  loadShips("../bin/data/ships.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadModules("bin/data/shipmodules.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadRecipes("bin/data/recipes.dat")
+  loadMobs("bin/data/mobs.dat")
+  loadShips("bin/data/ships.dat")
 
   playerShip.skyX = 1
   playerShip.skyY = 1

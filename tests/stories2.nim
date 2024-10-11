@@ -5,11 +5,11 @@ include ../src/stories2
 suite "Unit tests for stories2 module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadStories("../bin/data/stories.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadStories("bin/data/stories.dat")
 
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],

@@ -5,14 +5,14 @@ import unittest2
 suite "Unit tests for ships2 module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadModules("../bin/data/shipmodules.dat")
-  loadRecipes("../bin/data/recipes.dat")
-  loadMobs("../bin/data/mobs.dat")
-  loadShips("../bin/data/ships.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadModules("bin/data/shipmodules.dat")
+  loadRecipes("bin/data/recipes.dat")
+  loadMobs("bin/data/mobs.dat")
+  loadShips("bin/data/ships.dat")
 
   test "Damaging a module.":
     playerShip.modules = @[]

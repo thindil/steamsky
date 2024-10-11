@@ -5,15 +5,15 @@ include ../src/shipsmovement
 suite "Unit tests for shipsmovement module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadBasesTypes("../bin/data/bases.dat")
-  loadModules("../bin/data/shipmodules.dat")
-  loadRecipes("../bin/data/recipes.dat")
-  loadMobs("../bin/data/mobs.dat")
-  loadShips("../bin/data/ships.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadBasesTypes("bin/data/bases.dat")
+  loadModules("bin/data/shipmodules.dat")
+  loadRecipes("bin/data/recipes.dat")
+  loadMobs("bin/data/mobs.dat")
+  loadShips("bin/data/ships.dat")
 
   playerShip.modules = @[]
   playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,

@@ -5,11 +5,11 @@ include ../src/shipsupgrade
 suite "Unit tests for shipsupgrade module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadModules("../bin/data/shipmodules.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadModules("bin/data/shipmodules.dat")
 
   playerShip.modules = @[]
   playerShip.modules.add(ModuleData(mType: ModuleType2.engine, protoIndex: 3,
