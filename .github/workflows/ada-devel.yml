@@ -15,22 +15,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Run AdaControl - all checks
-      run: |
-         cd nim
-         nim debug
-         cd ..
-         mkdir obj
-         cd obj
-         adactl -f ../others/adacontrol/rules.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv-chelper-unicode-sax-dom-input_sources
-         cd ..
+    - name: Debug build
+      run: nimble debug -y
+
+    - name: Install nimalyzer
+      run: nimble install -y nimalyzer
+
+    - name: Check with Nimalyzer
+      run: nimalyzer tools/nimalyzer.cfg
 
     - name: Upload the log
       uses: actions/upload-artifact@v4
       if: failure()
       with:
-         name: adacontrol.log
-         path: adacontrol.log
+         name: nimalyzer.log
+         path: nimalyzer.log
 
     - name: Run the tests
       run: others/tests.nims 30
@@ -49,7 +48,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build the program
-      run: others/build.nims x86_64-linux-gnu
+      run: nimble release -y
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
@@ -74,7 +73,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build the program
-      run: others/build.nims x86_64-windows
+      run: nimble releasewindows -y
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-windows.tar -C release steamsky-windows
