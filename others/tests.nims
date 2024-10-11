@@ -2,14 +2,13 @@
 
 import std/strutils
 
-if not fileExists("steamsky.gpr"):
-  echo "This script must be run in the directory where steamsky.gpr file is"
+if not fileExists("steamsky.nimble"):
+  echo "This script must be run in the directory where steamsky.nimble file is"
   quit QuitFailure
 
 # Run Nim tests
-withDir "nim":
-  for i in 1..parseInt(paramStr(paramCount())):
-    echo i
-    for file in listFiles("tests"):
-      if file.endsWith("nim"):
-        exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r " & file & " -v"
+for i in 1..parseInt(paramStr(paramCount())):
+  echo i
+  for file in listFiles("tests"):
+    if file.endsWith("nim"):
+      exec "nim c --verbosity:0 --NimblePath:/root/.nimble/pkgs2 -r " & file & " -v"
