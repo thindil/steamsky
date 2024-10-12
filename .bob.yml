@@ -1,36 +1,9 @@
 version: 2.0
 - command:
-   name: debug
-   execute:
-      - gprbuild -P steamsky.gpr
-   description: Build Steam Sky in debug mode
-- command:
    name: release
    execute:
       - nim others/build.nims x86_64-linux-gnu
    description: Build Steam Sky in release mode
-- command:
-   name: analyze
-   execute:
-      - gprbuild -P steamsky.gpr -XMode=analyze
-   description: Build Steam Sky in analyze mode
-- command:
-   name: clean
-   execute:
-      - gprclean -P steamsky.gpr
-   description: Clean all compilation files
-- command:
-   name: docs
-   execute:
-      - tclsh others/generatedocs.tcl
-   description: Generate code documentation
-- command:
-   name: gprof
-   execute:
-      - gprof bin/steamsky gmon.out
-   description: Generate gprof report
-   flags:
-      - unixonly
 - command:
    name: windows
    execute:
@@ -39,35 +12,8 @@ version: 2.0
    flags:
       - unixonly
 - command:
-   name: pretty
-   execute:
-      - gnatpp -P steamsky.gpr
-   description: Pretty print Steam Sky source code
-- command:
    name: push
    execute:
       - fossil push
       - fossil git export --force
    description: Update remote Fossil repository and its Git mirror
-- command:
-   name: check
-   execute:
-      - others/adacontrol/check.tcl $1
-   description: Run AdaControl to check correctness of the code, required parameter is the name of file with AdaControl rules to use
-   flags:
-      - unixonly
-- command:
-   name: checkall
-   execute:
-      - bob debug
-      - bob check
-   description: Run all the project tests
-   flags:
-      - unixonly
-- command:
-   name: checkfile
-   execute:
-      - others/adacontrol/check.tcl $1 $2
-   description: Run AdaControl to check correctness of the selected file. Required arguments are the name of file with AdaControl rules to use and the relative path to the file which will be check
-   flags:
-      - unixonly
