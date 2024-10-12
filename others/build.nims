@@ -3,8 +3,8 @@
 import std/[distros, os]
 
 # Check if the script was started from the proper location (root directory)
-if not fileExists("steamsky.gpr"):
-  echo "This script must be run in the directory where steamsky.gpr file is"
+if not fileExists("steamsky.nimble"):
+  echo "This script must be run in the directory where steamsky.nimble file is"
   quit QuitFailure
 
 # Set the target for the compilation. If no arguments, use system default
@@ -23,21 +23,11 @@ if target notin ["x86_64-linux-gnu", "x86_64-windows"]:
   quit QuitFailure
 
 # Clean and compile the game
-rmDir("nim" & DirSep & "obj")
-mkDir("nim" & DirSep & "obj")
-try:
-  exec "gprclean -P steamsky.gpr --target=" & target
-except:
-  discard
-withDir("nim"):
-  if target == "x86_64-linux-gnu":
-    exec "nim release"
-  else:
-    exec "nim windows"
+rmDir(nimCacheDir().parentDir() & DirSep & "build_r")
 if target == "x86_64-linux-gnu":
-  exec "gprbuild -p -P steamsky.gpr -XMode=release -XOS=Unix --target=" & target
+  exec "nimble release -y"
 else:
-  exec "gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=" & target & " -largs -L/opt/lib"
+  exec "nimble releasewindows -y"
 let dirName =
   if target == "x86_64-linux-gnu":
     "release" & DirSep & "steamsky-linux" & DirSep
