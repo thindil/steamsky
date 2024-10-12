@@ -5,7 +5,7 @@ suite "Unit tests for halloffame module":
   for entry in hallOfFameArray.mitems:
     entry = HallOfFameData(name: "", points: 0, deathReason: "")
   gameStats.points = 100
-  saveDirectory = "."
+  saveDirectory = "tests/"
 
   test "Updating Hall of Fame.":
     updateHallOfFame("TestPlayer", "TestDeath")
