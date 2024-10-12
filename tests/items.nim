@@ -5,10 +5,10 @@ import unittest2
 suite "Unit tests for items module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
   playerShip.modules = @[]
   playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7))
   playerShip.cargo = @[]

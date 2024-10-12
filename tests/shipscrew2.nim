@@ -5,10 +5,10 @@ include ../src/shipscrew2
 suite "Unit tests for shipscrew2 module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
 
   playerShip.skyX = 1
   playerShip.skyY = 1

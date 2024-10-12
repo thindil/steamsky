@@ -4,16 +4,16 @@ include ../src/game2
 suite "Unit tests for game2 module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadBasesTypes("../bin/data/bases.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadModules("../bin/data/shipmodules.dat")
-  loadRecipes("../bin/data/recipes.dat")
-  loadMobs("../bin/data/mobs.dat")
-  loadShips("../bin/data/ships.dat")
-  loadGoals("../bin/data/goals.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadBasesTypes("bin/data/bases.dat")
+  loadFactions("bin/data/factions.dat")
+  loadModules("bin/data/shipmodules.dat")
+  loadRecipes("bin/data/recipes.dat")
+  loadMobs("bin/data/mobs.dat")
+  loadShips("bin/data/ships.dat")
+  loadGoals("bin/data/goals.dat")
 
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   playerShip.modules = @[]
@@ -32,7 +32,7 @@ suite "Unit tests for game2 module":
 
   test "Ending the game.":
     let oldSaveDir = saveDirectory
-    saveDirectory = "."
+    saveDirectory = "tests/"
     addMessage("Test message", otherMessage)
     endGame(false)
     saveDirectory = oldSaveDir
@@ -41,7 +41,7 @@ suite "Unit tests for game2 module":
 
   test "Starting a new game.":
     let oldSaveDir = saveDirectory
-    saveDirectory = "."
+    saveDirectory = "tests/"
     newGame()
     saveDirectory = oldSaveDir
     check:

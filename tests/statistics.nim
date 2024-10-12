@@ -5,15 +5,15 @@ import unittest2
 suite "Unit tests for statistics module":
 
   checkpoint "Loading the game data."
-  loadGoals("../bin/data/goals.dat")
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadModules("../bin/data/shipmodules.dat")
-  loadRecipes("../bin/data/recipes.dat")
-  loadMobs("../bin/data/mobs.dat")
-  loadShips("../bin/data/ships.dat")
+  loadGoals("bin/data/goals.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadModules("bin/data/shipmodules.dat")
+  loadRecipes("bin/data/recipes.dat")
+  loadMobs("bin/data/mobs.dat")
+  loadShips("bin/data/ships.dat")
 
   test "Updating an crafting orders goals' list.":
     gameStats.craftingOrders = @[]

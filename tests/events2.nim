@@ -5,15 +5,15 @@ include ../src/events2
 suite "Unit tests for events2 module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadBasesTypes("../bin/data/bases.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadModules("../bin/data/shipmodules.dat")
-  loadRecipes("../bin/data/recipes.dat")
-  loadMobs("../bin/data/mobs.dat")
-  loadShips("../bin/data/ships.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadBasesTypes("bin/data/bases.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadModules("bin/data/shipmodules.dat")
+  loadRecipes("bin/data/recipes.dat")
+  loadMobs("bin/data/mobs.dat")
+  loadShips("bin/data/ships.dat")
 
   playerShip.skyX = 1
   playerShip.skyY = 1

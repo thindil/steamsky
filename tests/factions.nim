@@ -4,10 +4,10 @@ include ../src/factions
 suite "Unit tests for factions module":
 
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
 
   test "Gaining reputation in the same faction.":
     check:

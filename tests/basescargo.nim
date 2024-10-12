@@ -5,11 +5,11 @@ include ../src/basescargo
 suite "Unit tests for basescargo module.":
   checkpoint "Loading the game data."
 
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadBasesTypes("../bin/data/bases.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadBasesTypes("bin/data/bases.dat")
 
   skyBases[1].reputation = ReputationData(level: 1, experience: 1)
   playerShip.skyX = 1

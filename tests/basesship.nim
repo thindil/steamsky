@@ -4,12 +4,12 @@ include ../src/basesship
 
 suite "Unit tests for basesship module":
   checkpoint "Loading the game data."
-  loadData("../bin/data/game.dat")
-  loadItems("../bin/data/items.dat")
-  loadCareers("../bin/data/careers.dat")
-  loadFactions("../bin/data/factions.dat")
-  loadBasesTypes("../bin/data/bases.dat")
-  loadModules("../bin/data/shipmodules.dat")
+  loadData("bin/data/game.dat")
+  loadItems("bin/data/items.dat")
+  loadCareers("bin/data/careers.dat")
+  loadFactions("bin/data/factions.dat")
+  loadBasesTypes("bin/data/bases.dat")
+  loadModules("bin/data/shipmodules.dat")
 
   skyBases[1].reputation = ReputationData(level: 1, experience: 1)
   playerShip.skyX = 1
