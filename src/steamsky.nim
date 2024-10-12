@@ -26,6 +26,11 @@ import ui/[mainmenu, themes]
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
 
+  try:
+    setCurrentDir(getAppDir())
+  except:
+    echo "Can't set the current directory for the game."
+    return
   # Get the command line params if any
   var gameParams: OptParser = initOptParser()
   for kind, key, val in gameParams.getopt():
