@@ -167,7 +167,7 @@ grid [ttk::button $shipcanvas.frame.maxmin.maxmin -style Small.TButton \
 tooltip::tooltip $shipcanvas.frame.maxmin.maxmin \
    {Maximize/minimize the ship crew info}
 grid [ttk::button $shipcanvas.frame.maxmin.more -style Small.TButton \
-   -image moreoptionsicon -command {ShipMaxMin crew show}] -sticky w \
+   -image moreoptionsicon -command {ShipMore crew show}] -sticky w \
    -row 0 -column 1
 tooltip::tooltip $shipcanvas.frame.maxmin.more \
    {Show/Hide additional options related to managing the crew}

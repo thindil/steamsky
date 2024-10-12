@@ -85,6 +85,33 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
+proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+  ## Maximize or minimize the selected part in the player's ship info
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShipMore framename show/hide
+  ## Framename is name of the frame in which the part will be shown or hidden.
+  ## If the second argument is set to show, show the part, otherwise hide it.
+  let
+    shipFrame = mainPaned & ".shipinfoframe"
+    button = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
+  echo argv[2]
+  if argv[2] == "show":
+    tclEval(script = button & " configure -command {ShipMore " &
+        $argv[1] & " hide}")
+  else:
+    tclEval(script = button & " configure -command {ShipMore " &
+        $argv[1] & " show}")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     TimeEffect].} =
   ## Adds Tcl commands related to the wait menu
@@ -95,6 +122,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     addCommand("ShowShipInfo", showShipInfoCommand)
     addCommand("SetShipName", setShipNameCommand)
     addCommand("ShipMaxMin", shipMaxMinCommand)
+    addCommand("ShipMore", shipMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
