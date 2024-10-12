@@ -19,7 +19,7 @@
 ## upgrade and the upgrading process itself.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import config, crewinventory, game, items, messages, shipscargo, shipscrew, types
 
 type ShipUpgradeError* = object of CatchableError
@@ -31,8 +31,10 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
   ##
   ## * minutes - the amount of in-game minutes which passed
 
-  var upgradeMaterial, upgradeTools, workerIndex = -1
+  var upgradeMaterial, upgradeTools, workerIndex: int = -1
+  {.ruleOff: "varDeclared".}
   var upgradedModule: ModuleData
+  {.ruleOn: "varDeclared".}
 
   proc findMatsAndTools() {.sideEffect, raises: [KeyError, Exception], tags: [
       RootEffect], contractual.} =
@@ -68,13 +70,13 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
   upgradedModule = playerShip.modules[playerShip.upgradeModule]
   var
     currentMinutes: int = minutes
-    orderTime = playerShip.crew[workerIndex].orderTime
+    orderTime: int = playerShip.crew[workerIndex].orderTime
   if upgradedModule.durability == 0:
     addMessage(message = playerShip.crew[workerIndex].name &
         " stops upgrading " & upgradedModule.name & " because it's destroyed.",
         mType = orderMessage, color = red)
     giveOrders(ship = playerShip, memberIndex = workerIndex, givenOrder = rest)
-  var times = 0
+  var times: Natural = 0
   while currentMinutes > 0:
     if currentMinutes >= orderTime:
       currentMinutes = currentMinutes - orderTime
@@ -86,11 +88,11 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
   playerShip.crew[workerIndex].orderTime = orderTime
   if times == 0:
     return
-  var upgradePoints = ((getSkillLevel(member = playerShip.crew[workerIndex],
+  var upgradePoints: int = ((getSkillLevel(member = playerShip.crew[workerIndex],
       skillIndex = modulesList[upgradedModule.protoIndex].repairSkill) /
       10).int * times) + times
   while upgradePoints > 0 and upgradedModule.upgradeProgress > 0:
-    var resultAmount = upgradePoints
+    var resultAmount: Natural = upgradePoints
     if resultAmount > upgradedModule.upgradeProgress:
       resultAmount = upgradedModule.upgradeProgress
     findMatsAndTools()
@@ -106,7 +108,7 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
       giveOrders(ship = playerShip, memberIndex = workerIndex,
           givenOrder = rest)
       break
-    var materialCost = 0
+    var materialCost: Natural = 0
     case upgradedModule.upgradeAction
     of maxValue:
       case upgradedModule.mType
@@ -150,7 +152,7 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
         upgradedModule.protoIndex].repairSkill), memberIndex = workerIndex,
         ship = playerShip)
     findMatsAndTools()
-    var upgradeProgress = upgradedModule.upgradeProgress - resultAmount
+    var upgradeProgress: int = upgradedModule.upgradeProgress - resultAmount
     upgradePoints = upgradePoints - resultAmount
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
         upgradeMaterial].protoIndex, amount = -(materialCost))
@@ -259,10 +261,10 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
       message = "You can't upgrade " & playerShip.modules[moduleIndex].name & " because it's destroyed.")
   var
     upgradeAction: ShipUpgrade = none
-    upgradeProgress = 0
+    upgradeProgress: int = 0
   case upgradeType
   of 1:
-    let maxValue = (modulesList[playerShip.modules[
+    let maxValue: Natural = (modulesList[playerShip.modules[
         moduleIndex].protoIndex].durability.float * 1.5).Natural
     if playerShip.modules[moduleIndex].maxDurability == maxValue:
       raise newException(exceptn = ShipUpgradeError,
@@ -273,7 +275,7 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
         moduleIndex].protoIndex].durability.float *
         newGameSettings.upgradeCostBonus).Natural
   of 2:
-    let maxValue = (modulesList[playerShip.modules[
+    let maxValue: Natural = (modulesList[playerShip.modules[
         moduleIndex].protoIndex].maxValue.float * 1.5).Natural
     case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
     of engine:
@@ -293,7 +295,7 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
           moduleIndex].protoIndex].maxValue.float *
           newGameSettings.upgradeCostBonus).Natural
     of gun, batteringRam:
-      let damage = if playerShip.modules[moduleIndex].mType ==
+      let damage: Natural = if playerShip.modules[moduleIndex].mType ==
           ModuleType2.gun: playerShip.modules[moduleIndex].damage
           else:
             playerShip.modules[moduleIndex].damage2
@@ -327,7 +329,7 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
   of 3:
     case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
     of engine:
-      var maxValue = (modulesList[playerShip.modules[
+      var maxValue: Natural = (modulesList[playerShip.modules[
           moduleIndex].protoIndex].value.float / 2.0).Natural
       if maxValue < 1:
         maxValue = 1
@@ -349,7 +351,7 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
     upgradeAction = playerShip.modules[moduleIndex].upgradeAction
   else:
     return
-  let materialIndex = findItem(inventory = playerShip.cargo,
+  let materialIndex: int = findItem(inventory = playerShip.cargo,
       itemType = modulesList[playerShip.modules[
       moduleIndex].protoIndex].repairMaterial)
   if materialIndex == -1:
