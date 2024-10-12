@@ -819,14 +819,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("ValidateNegotiate", validateNegotiateCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc getAdaHighestAttribute(baseIndex, memberIndex: cint): cstring {.exportc.} =
-  return getHighestAttribute(baseIndex = baseIndex, memberIndex = memberIndex - 1).cstring
-
-proc getAdaHighestRecSkill(baseIndex, memberIndex: cint): cstring {.exportc.} =
-  return getHighestSkill(baseIndex = baseIndex, memberIndex = memberIndex - 1).cstring
-
-proc getAdaRecruitIndex(): cint {.exportc.} =
-  return recruitIndex.cint + 1

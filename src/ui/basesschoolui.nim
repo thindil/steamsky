@@ -274,11 +274,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("UpdateSchoolSelectedCost", updateSchoolSelectedCostCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc getAdaMemberIndex(): cint {.raises: [], tags: [].} =
-  return getMemberIndex().cint + 1
-
-proc getAdaSkillIndex(): cint {.raises: [], tags: [].} =
-  return getSkillIndex().cint

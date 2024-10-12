@@ -1474,12 +1474,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("CompareModules", compareModulesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc setAdaModuleInfo(installing: cint; row: var cint;
-    newInfo, mIndex: cint) {.exportc.} =
-  moduleIndex = mIndex
-  var newRow = row.Positive
-  setModuleInfo(installing = installing == 1, row = newRow, newInfo = newInfo == 1)
-  row = newRow.cint

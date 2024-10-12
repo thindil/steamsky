@@ -1133,27 +1133,3 @@ proc showCombatUi(newCombat: bool = true) =
     updateCombatUi()
     showCombatFrame(frameName = ".combat")
   showScreen(newScreenName = "combatframe")
-
-# Temporary code for interfacing with Ada
-
-proc updateCombatAdaMessages() {.raises: [], tags: [], exportc.} =
-  updateCombatMessages()
-
-proc updateAdaCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
-  updateCombatUi()
-
-proc showAdaCombatFrame(frameName: cstring) {.raises: [], tags: [], exportc.} =
-  showCombatFrame($frameName)
-
-proc updateAdaBoardingUi() {.raises: [], tags: [], exportc.} =
-  try:
-    updateBoardingUi()
-  except:
-    echo getCurrentExceptionMsg()
-    echo getStackTrace(getCurrentException())
-
-proc showAdaCombatUi(newCombat: cint) {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    showCombatUi(newCombat = newCombat == 1)
-  except:
-    discard

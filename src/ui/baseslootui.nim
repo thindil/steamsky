@@ -647,8 +647,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("SortLootItems", sortLootItemsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc getLootItemIndex(iIndex: cint) {.exportc.} =
-  itemIndex = iIndex
