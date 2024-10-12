@@ -16,10 +16,14 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Debug build
-      run: nimble debug -y
+      run: |
+        git config --global --add safe.directory /__w/steamsky/steamsky
+        nimble debug -y
 
     - name: Install nimalyzer
-      run: nimble install -y nimalyzer
+      run: |
+        git config --global --add safe.directory /__w/steamsky/steamsky
+        nimble install -y nimalyzer
 
     - name: Check with Nimalyzer
       run: nimalyzer tools/nimalyzer.cfg
@@ -48,7 +52,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build the program
-      run: nimble release -y
+      run: |
+        git config --global --add safe.directory /__w/steamsky/steamsky
+        nimble release -y
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
@@ -73,7 +79,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build the program
-      run: nimble releasewindows -y
+      run: |
+        git config --global --add safe.directory /__w/steamsky/steamsky
+        nimble releasewindows -y
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-windows.tar -C release steamsky-windows
