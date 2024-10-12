@@ -95,18 +95,18 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     return
   # Initialize Tcl. Quit if failed
   if tclInit(interp = res) == tclError:
-    echo "Can't initialize Tcl interpreter."
+    echo "Can't initialize Tcl interpreter. Reason: ", tclGetResult2(interp = res)
     return
   # Initialize Tk. Quit if failed
   if tkInit(interp = res) == tclError:
-    echo "Can't initialize Tk."
+    echo "Can't initialize Tk. Reason: ", tclGetResult2(interp = res)
     return
   setInterp(interp = res)
 
   # Initialize needed packages
   for package in ["tooltip", "tksvg", "autoscroll"]:
     if res.tclEval(script = "package require " & package) == tclError:
-      echo "Can't initalize " & package & " package."
+      echo "Can't initalize " & package & " package. Reason: ", tclGetResult2(interp = res)
       return
 
   # Create and show the main game menu
