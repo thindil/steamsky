@@ -34,7 +34,7 @@ var itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
 
 proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show information about looting
   ##
   ## * clientData - the additional data for the Tcl command
@@ -232,7 +232,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
 var itemIndex = -1
 
 proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -350,7 +350,7 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Take or drop the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -444,7 +444,7 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show dialog to enter amount of items to drop or take
   ##
   ## * clientData - the additional data for the Tcl command
@@ -483,7 +483,7 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Sort the looting list
   ##
   ## * clientData - the additional data for the Tcl command

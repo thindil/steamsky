@@ -112,7 +112,7 @@ var
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Show information about available crafting recipes
   ##
   ## * clientData - the additional data for the Tcl command
@@ -321,7 +321,7 @@ var recipesSortOrder = defaultRecipesSortOrder
 
 proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Sort the list of crafting recipes
   ##
   ## * clientData - the additional data for the Tcl command
@@ -456,7 +456,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCrafting", "1"].allocCStringArray)
 
 proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show dialog to set the selected recipe as crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -605,7 +605,7 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Set the selected recipe as a crafting order in the selected workshop
   ##
   ## * clientData - the additional data for the Tcl command
@@ -673,7 +673,7 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected recipe
   ##
   ## * clientData - the additional data for the Tcl command

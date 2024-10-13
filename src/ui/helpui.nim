@@ -20,7 +20,7 @@ import ../[basestypes, config, game, help, items, tk]
 import dialogs, errordialog, themes
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].}
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.}
   ## Show the content of the selected topic help
   ##
   ## * clientData - the additional data for the Tcl command
@@ -34,7 +34,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowTopic
 
 proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Destroy the help window and save the sash position to the game
   ## configuration
   ##
@@ -59,7 +59,7 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the help window to the player
   ##
   ## * clientData - the additional data for the Tcl command

@@ -20,7 +20,7 @@ import ../[config, game, tk, types]
 import coreui, combatui, errordialog, mapsui, themes, utilsui2
 
 proc showOptionsTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Show the selected options tab
   ##
   ## * clientData - the additional data for the Tcl command
@@ -129,7 +129,7 @@ var accels: array[53, AccelData] = [AccelData(shortcut: menuAccelerators[1],
     configName: "ResizeFourth")]
 
 proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the selected options tab
   ##
   ## * clientData - the additional data for the Tcl command
@@ -259,7 +259,7 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = argc, argv = argv)
 
 proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Set the selected font
   ##
   ## * clientData - the additional data for the Tcl command
@@ -289,7 +289,7 @@ proc setFontsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Set the default values for fonts
   ##
   ## * clientData - the additional data for the Tcl command
@@ -314,7 +314,7 @@ proc setDefaultFontsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect].} =
+    WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Save all options and back to the map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -503,7 +503,7 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc resetKeysCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Reset the selected group of keys to their default values
   ##
   ## * clientData - the additional data for the Tcl command

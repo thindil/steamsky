@@ -26,7 +26,7 @@ var
 
 proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show the selected base shipyard
   ##
   ## * clientData - the additional data for the Tcl command
@@ -934,7 +934,7 @@ proc setModuleInfo(installing: bool; row: var Positive;
       return
 
 proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected module to install
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1082,7 +1082,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Install or remove the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1128,7 +1128,7 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected module to remove
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1236,7 +1236,7 @@ proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showShipyardTabCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show the install or remove modules options in shipyard
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1282,7 +1282,7 @@ var modulesSortOrder = defaultModulesSortOrder
 
 proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Sort the ship modules lists
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1446,7 +1446,7 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowShipyard", $argv[2], $argv[3]].allocCStringArray)
 
 proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the comparison between the selected modules in install info
   ##
   ## * clientData - the additional data for the Tcl command

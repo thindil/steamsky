@@ -26,7 +26,7 @@ var
 
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Show the selected base action
   ##
   ## * clientData - the additional data for the Tcl command
@@ -298,7 +298,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show the selected base action
   ##
   ## * clientData - the additional data for the Tcl command
@@ -334,7 +334,7 @@ proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show only this recipes which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command
@@ -354,7 +354,7 @@ proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowBaseUI", "recipes", searchText].allocCStringArray)
 
 proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show menu with options for the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -436,7 +436,7 @@ var baseSortOrder: BaseSortOrders = defaultBaseSortOrder
 
 proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   let column = try:
         getColumnNumber(
             table = baseTable, xPosition = ($argv[2]).parseInt)
