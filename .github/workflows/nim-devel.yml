@@ -20,11 +20,6 @@ jobs:
         git config --global --add safe.directory /__w/steamsky/steamsky
         nimble debug -y
 
-    - name: Install nimalyzer
-      run: |
-        git config --global --add safe.directory /__w/steamsky/steamsky
-        nimble install -y nimalyzer
-
     - name: Check with Nimalyzer
       run: nimalyzer tools/nimalyzer.cfg
 
@@ -54,7 +49,7 @@ jobs:
     - name: Build the program
       run: |
         git config --global --add safe.directory /__w/steamsky/steamsky
-        nimble release -y
+        others/build.nims x86_64-linux-gnu
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
@@ -81,7 +76,7 @@ jobs:
     - name: Build the program
       run: |
         git config --global --add safe.directory /__w/steamsky/steamsky
-        nimble releasewindows -y
+        others/build.nims x86_64-windows
 
     - name: Compress the artifact
       run: tar -cf steamsky-development-windows.tar -C release steamsky-windows
