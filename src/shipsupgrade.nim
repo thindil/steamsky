@@ -79,17 +79,17 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
   var times: Natural = 0
   while currentMinutes > 0:
     if currentMinutes >= orderTime:
-      currentMinutes = currentMinutes - orderTime
+      currentMinutes -= orderTime
       times.inc
       orderTime = 15
     else:
-      orderTime = orderTime - currentMinutes
+      orderTime -= currentMinutes
       currentMinutes = 0
   playerShip.crew[workerIndex].orderTime = orderTime
   if times == 0:
     return
-  var upgradePoints: int = ((getSkillLevel(member = playerShip.crew[workerIndex],
-      skillIndex = modulesList[upgradedModule.protoIndex].repairSkill) /
+  var upgradePoints: int = ((getSkillLevel(member = playerShip.crew[
+      workerIndex], skillIndex = modulesList[upgradedModule.protoIndex].repairSkill) /
       10).int * times) + times
   while upgradePoints > 0 and upgradedModule.upgradeProgress > 0:
     var resultAmount: Natural = upgradePoints
@@ -153,7 +153,7 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
         ship = playerShip)
     findMatsAndTools()
     var upgradeProgress: int = upgradedModule.upgradeProgress - resultAmount
-    upgradePoints = upgradePoints - resultAmount
+    upgradePoints -= resultAmount
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
         upgradeMaterial].protoIndex, amount = -(materialCost))
     if upgradeProgress == 0:
@@ -165,13 +165,13 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
       case upgradedModule.upgradeAction
       of durability:
         if (modulesList[upgradedModule.protoIndex].durability / 20).int > 0:
-          upgradedModule.maxDurability = upgradedModule.maxDurability + (
-              modulesList[upgradedModule.protoIndex].durability / 20).int
-          upgradedModule.weight = upgradedModule.weight + (weightGain * (
-              modulesList[upgradedModule.protoIndex].durability / 20).int)
+          upgradedModule.maxDurability += (modulesList[
+              upgradedModule.protoIndex].durability / 20).int
+          upgradedModule.weight += (weightGain * (modulesList[
+              upgradedModule.protoIndex].durability / 20).int)
         else:
           upgradedModule.maxDurability.inc
-          upgradedModule.weight = upgradedModule.weight + weightGain
+          upgradedModule.weight += weightGain
         addMessage(message = playerShip.crew[workerIndex].name &
             " has upgraded the durability of " & upgradedModule.name & ".",
             mType = orderMessage, color = green)
@@ -186,36 +186,31 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
       of maxValue:
         case upgradedModule.mType
         of ModuleType2.hull:
-          weightGain = weightGain * 10
+          weightGain *= 10
           upgradedModule.maxModules.inc
           upgradeValue = upgradedModule.maxModules
         of ModuleType2.engine:
           weightGain = (modulesList[upgradedModule.protoIndex].maxValue / 40).int
-          upgradedModule.power = upgradedModule.power + (modulesList[
-              upgradedModule.protoIndex].maxValue / 20).int
+          upgradedModule.power += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
           upgradeValue = upgradedModule.power
         of ModuleType2.cabin:
-          upgradedModule.quality = upgradedModule.quality + (modulesList[
-              upgradedModule.protoIndex].maxValue / 20).int
+          upgradedModule.quality += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
           upgradeValue = upgradedModule.quality
         of ModuleType2.gun:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.damage = upgradedModule.damage + (modulesList[
-                upgradedModule.protoIndex].maxValue / 20).int
+            upgradedModule.damage += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
           else:
             upgradedModule.damage.inc
           upgradeValue = upgradedModule.damage
         of ModuleType2.batteringRam:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.damage2 = upgradedModule.damage2 + (modulesList[
-                upgradedModule.protoIndex].maxValue / 20).int
+            upgradedModule.damage2 += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
           else:
             upgradedModule.damage2.inc
           upgradeValue = upgradedModule.damage2
         of ModuleType2.harpoonGun:
           if (modulesList[upgradedModule.protoIndex].maxValue / 20).int > 0:
-            upgradedModule.duration = upgradedModule.duration + (modulesList[
-                upgradedModule.protoIndex].maxValue / 20).int
+            upgradedModule.duration += (modulesList[upgradedModule.protoIndex].maxValue / 20).int
           else:
             upgradedModule.duration.inc
           upgradeValue = upgradedModule.duration
@@ -223,10 +218,10 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
           discard
       of value:
         if upgradedModule.mType == ModuleType2.engine:
-          weightGain = weightGain * 10
+          weightGain *= 10
           upgradedModule.fuelUsage.dec
           upgradeValue = upgradedModule.fuelUsage
-        upgradedModule.weight = upgradedModule.weight + weightGain
+        upgradedModule.weight += weightGain
         addMessage(message = playerShip.crew[workerIndex].name &
             " has upgraded " & upgradedModule.name & ".", mType = orderMessage, color = green)
         localMaxValue = (modulesList[upgradedModule.protoIndex].value.float / 2.0).int
@@ -235,15 +230,12 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
         if upgradeValue == localMaxValue:
           maxUpgradeReached(messageText = "You've reached the maximum upgrade for ")
           return
-        case modulesList[upgradedModule.protoIndex].mType
-        of ModuleType.engine:
+        if modulesList[upgradedModule.protoIndex].mType == ModuleType.engine:
           upgradedModule.upgradeProgress = ((modulesList[
               upgradedModule.protoIndex].value * 20).float *
               newGameSettings.upgradeCostBonus).int
           if upgradedModule.upgradeProgress == 0:
             upgradedModule.upgradeProgress = 1
-        else:
-          discard
       else:
         discard
     else:
