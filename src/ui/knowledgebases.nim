@@ -554,17 +554,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("SortKnownBases", sortBasesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc getAdaReputationText(reputationLevel: cint): cstring {.
-    raises: [], tags: [], exportc.} =
-  return getReputationText(reputationLevel = reputationLevel).cstring
-
-proc updateAdaBasesList(baseName: cstring; page: cint) {.raises: [],
-    tags: [RootEffect], exportc.} =
-  try:
-    updateBasesList(baseName = $baseName, page = page.Positive)
-  except:
-    echo getCurrentExceptionMsg()
-    echo getStackTrace(getCurrentException())

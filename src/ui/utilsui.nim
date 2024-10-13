@@ -388,7 +388,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Assign scrolling events with mouse wheel to the selected vertical
   ## scrollbar from the selected widget
   ##

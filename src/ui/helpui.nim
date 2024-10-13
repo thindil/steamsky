@@ -134,7 +134,6 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the help system
   try:
-    discard
     addCommand("ShowTopic", showTopicCommand)
     addCommand("CloseHelp", closeHelpCommand)
     addCommand("ShowHelp", showHelpCommand)
@@ -247,11 +246,3 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     oldIndex = endIndex + 2
   tclEval(script = helpView & " configure -state disabled")
   return tclOk
-
-# Temporary code for interfacing with Ada
-
-proc addAdaHelpCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()

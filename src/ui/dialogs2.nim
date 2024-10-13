@@ -259,12 +259,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("MoveDialog", moveDialogCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc addAdaDialogsCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()
-
