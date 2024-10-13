@@ -19,7 +19,7 @@ import ../[game, tk]
 import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Change name of the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -40,7 +40,7 @@ proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Maximize or minimize the selected section of the player's ship info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -86,7 +86,7 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Maximize or minimize the selected part in the player's ship info
   ##
   ## * clientData - the additional data for the Tcl command

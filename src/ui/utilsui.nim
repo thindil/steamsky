@@ -22,7 +22,7 @@ import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew,
     shipsuimodules2, showmainmenu, statisticsui, updateheader, utilsui2
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Resize the selected canvas
   ##
   ## * clientData - the additional data for the Tcl command
@@ -47,7 +47,7 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Check the amount of the item, if it is not below low level of warning or
   ## if the entered amount is a proper number
   ##
@@ -142,7 +142,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Validate amount of the item when the spinbox button to increase or
   ## decrease the amount was pressed
   ##
@@ -166,7 +166,7 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Set the player's ship, module or crew member's name in Nim and Tcl
   ##
   ## * clientData - the additional data for the Tcl command
@@ -210,7 +210,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect].} =
+        WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the selected point on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -238,7 +238,7 @@ proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect].} =
+        WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Process question from dialog when the player answer Yes there
   ##
   ## * clientData - the additional data for the Tcl command
@@ -420,7 +420,7 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect].} =
+    WriteIOEffect, TimeEffect], cdecl.} =
   ## Set the selected map point as the player's ship destination
   ##
   ## * clientData - the additional data for the Tcl command

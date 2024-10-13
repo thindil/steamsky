@@ -21,7 +21,7 @@ import ../[game, config, crafts, crewinventory, items, messages, missions,
 import dialogs, errordialog, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected module and set option for it
   ##
   ## * clientData - the additional data for the Tcl command
@@ -837,7 +837,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Set the selected upgrade for the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -854,7 +854,7 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Assign member, ammo or skill to module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -873,7 +873,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Enable or disable selected engine
   ##
   ## * clientData - the additional data for the Tcl command
@@ -889,7 +889,7 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Stop the current ship upgrade
   ##
   ## * clientData - the additional data for the Tcl command
@@ -904,7 +904,7 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Set or remove the repair priority from the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -922,7 +922,7 @@ proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Reset the current destination point for the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -937,7 +937,7 @@ proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Update assign the crew member UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1006,7 +1006,7 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Show assign the crew member UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1109,7 +1109,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Show assign the skill UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1183,7 +1183,7 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Cancel the current crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1222,7 +1222,7 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Get the next active button in assing crew dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1253,7 +1253,7 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Show the list of the player's ship modules to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1270,7 +1270,7 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].}
+        RootEffect], cdecl.}
   ## Sort the player's ship's modules list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1286,7 +1286,7 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect].} =
+        RootEffect], cdecl.} =
   ## Show the list of available ammo for the selected gun
   ##
   ## * clientData - the additional data for the Tcl command

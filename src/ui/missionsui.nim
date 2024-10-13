@@ -23,7 +23,7 @@ import coreui, dialogs, errordialog, mapsui, table, utilsui2
 var baseIndex = 0
 
 proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show mission on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -193,7 +193,7 @@ proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
         nextCommand = "ShowBaseMissions " & $(page + 1))
 
 proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
   ## Accept the mission in a base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -232,7 +232,7 @@ proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
   ## Show the list of available missions in the base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -290,7 +290,7 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show more info about the selected mission
   ##
   ## * clientData - the additional data for the Tcl command
@@ -422,7 +422,7 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Accept the mission in a base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -493,7 +493,7 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Update the information about the selected mission reward
   ##
   ## * clientData - the additional data for the Tcl command
@@ -531,7 +531,7 @@ const defaultMissionsSortOrder: MissionsSortOrders = none
 var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
   ## Sort the list of available missions
   ##
   ## * clientData - the additional data for the Tcl command

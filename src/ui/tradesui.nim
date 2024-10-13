@@ -34,7 +34,7 @@ var
 
 proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show information about trading
   ##
   ## * clientData - the additional data for the Tcl command
@@ -397,7 +397,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc sortTradeItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Sort the trading list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -635,7 +635,7 @@ var itemIndex = -1
 
 proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect].} =
+    WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Buy or sell the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -715,7 +715,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -927,7 +927,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show dialog to enter amount of items to sell or buy
   ##
   ## * clientData - the additional data for the Tcl command
@@ -972,7 +972,7 @@ proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show only this items which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command
