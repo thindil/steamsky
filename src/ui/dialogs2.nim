@@ -20,7 +20,7 @@ import ../tk
 import dialogs, errordialog
 
 proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Close the selected dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -58,7 +58,7 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect].} =
+    WriteIOEffect, TimeEffect], cdecl.} =
   ## Update countdown timer on the selected dialog. If timer reach 0, close
   ## dialog
   ##
@@ -91,7 +91,7 @@ proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Get string value from the player, like new ship or module name
   ##
   ## * clientData - the additional data for the Tcl command
@@ -138,7 +138,7 @@ proc getStringCommand(clientData: cint; interp: PInterp; argc: cint;
 var mouseXPosition, mouseYPosition = 0
 
 proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Set the mouse position
   ##
   ## * clientData - the additional data for the Tcl command
@@ -168,7 +168,7 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect].} =
+        WriteIOEffect, TimeEffect], cdecl.} =
   ## Move the selected dialog around
   ##
   ## * clientData - the additional data for the Tcl command

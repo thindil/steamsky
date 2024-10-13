@@ -21,7 +21,7 @@ import errordialog
 
 proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect].} =
+    WriteIOEffect, TimeEffect], cdecl.} =
   ## Show goals UI to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -60,7 +60,7 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect].} =
+        WriteIOEffect, TimeEffect], cdecl.} =
   ## Set selected goal as a current goal
   ##
   ## * clientData - the additional data for the Tcl command
