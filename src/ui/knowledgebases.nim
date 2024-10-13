@@ -189,7 +189,7 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
 
 proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show the list of known bases to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -218,7 +218,7 @@ proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -373,7 +373,7 @@ var basesSortOrder: BasesSortOrders = defaultBasesSortOrder
 
 proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Sort the list of known bases
   ##
   ## * clientData - the additional data for the Tcl command

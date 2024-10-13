@@ -21,7 +21,7 @@ import coreui, errordialog, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
 proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
   ## Show information about known by player things
   ##
   ## * clientData - the additional data for the Tcl command
@@ -124,7 +124,7 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Maximize or minimize the selected section of knowledge info
   ##
   ## * clientData - the additional data for the Tcl command

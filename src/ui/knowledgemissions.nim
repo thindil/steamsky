@@ -20,7 +20,7 @@ import ../[config, game, maps, missions, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the menu with available the selected mission options
   ##
   ## * clientData - the additional data for the Tcl command
@@ -204,7 +204,7 @@ proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} 
 
 proc showMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show the list of known missions to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -238,7 +238,7 @@ var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Sort the accepted missions list
   ##
   ## * clientData - the additional data for the Tcl command

@@ -20,7 +20,7 @@ import ../[config, game, maps, tk, types]
 import coreui, dialogs, errordialog, table
 
 proc showEventInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show information about the selected event
   ##
   ## * clientData - the additional data for the Tcl command
@@ -225,7 +225,7 @@ proc updateEventsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} =
 
 proc showEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show the list of known events to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -258,7 +258,7 @@ var eventsSortOrder: EventsSortOrders = defaultEventsSortOrder
 
 proc sortEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect].} =
+    RootEffect], cdecl.} =
   ## Show the list of known events to the player
   ##
   ## * clientData - the additional data for the Tcl command

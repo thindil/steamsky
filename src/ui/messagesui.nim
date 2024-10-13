@@ -20,7 +20,7 @@ import ../[config, game, messages, tk, types]
 import coreui, dialogs, errordialog, utilsui2
 
 proc showMessage(message: MessageData; messageView: string;
-    messagesType: MessageType) {.raises: [], tags: [].} =
+    messagesType: MessageType) {.raises: [], tags: [], cdecl.} =
   ## Show the selected message to a player
   ##
   ## * message      - the message to show
@@ -33,7 +33,7 @@ proc showMessage(message: MessageData; messageView: string;
   tclEval(script = messageView & " insert end {" & message.message & "\n}" & messageTag)
 
 proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the list of last messages to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -93,7 +93,7 @@ proc showLastMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show only messages of the selected type
   ##
   ## * clientData - the additional data for the Tcl command
@@ -111,7 +111,7 @@ proc selectMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
       " current")].allocCStringArray)
 
 proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
   ## Delete all messages
   ##
   ## * clientData - the additional data for the Tcl command
@@ -128,7 +128,7 @@ proc deleteMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc searchMessagesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show only this messages which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command

@@ -20,7 +20,7 @@ import ../[game, stories, tk]
 import coreui, errordialog
 
 proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the current story information
   ##
   ## * clientData - the additional data for the Tcl command
@@ -131,7 +131,7 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Show the current story event on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -151,7 +151,7 @@ proc showStoryLocationCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setStoryCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
   ## Set the current story event as the player's ship destination
   ##
   ## * clientData - the additional data for the Tcl command
