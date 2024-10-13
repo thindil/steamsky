@@ -62,7 +62,7 @@ type
     ## initialization, etc.
 
   TclCmdProc* = proc (clientData: cint; interp: PInterp; argc: cint;
-      argv: cstringArray): TclResults
+      argv: cstringArray): TclResults {.cdecl.}
     ## Procedure which will be executed as Tcl command
     ##
     ## * clientData - the additional data passed to the procedure
