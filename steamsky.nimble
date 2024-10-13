@@ -31,6 +31,10 @@ task release, "builds the project in release mode":
 task releasewindows, "builds the project in release mode for Windows 64-bit on Linux":
   exec "nim c -d:mingw --app:gui --os:windows --cpu:amd64 --amd64.windows.gcc.exe:x86_64-w64-mingw32-gcc --amd64.windows.gcc.linkerexe=x86_64-w64-mingw32-gcc -d:release --passc:-flto --passl:-s --passl:-mwindows --outdir:" & binDir & " " & srcDir & DirSep & "steamsky.nim"
 
+task fullrelease, "builds the project in release mode for all supported platforms":
+  exec "others/build.nims x86_64-linux-gnu"
+  exec "others/build.nims x86_64-windows"
+
 task debugwindows, "builds the project in debug mode for Windows 64-bit on Linux":
   exec "nim c -d:mingw --app:gui --os:windows --cpu:amd64 --amd64.windows.gcc.exe:x86_64-w64-mingw32-gcc --amd64.windows.gcc.linkerexe=x86_64-w64-mingw32-gcc -d:debug --passl:-mwindows --outdir:" & binDir & " " & srcDir & DirSep & "steamsky.nim"
 
