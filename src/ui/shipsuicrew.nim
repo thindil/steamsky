@@ -127,7 +127,6 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
     else:
       tclEval(script = "grid " & button & " -row 0 -column 2")
   updateTooltips()
-  # tclEval(script = "grid " & buttonsFrame & " -sticky w")
   buttonsFrame = crewInfoFrame & ".selectskill"
   tclEval(script = "ttk::frame " & buttonsFrame)
   ordersLabel = buttonsFrame & ".label"
@@ -152,12 +151,12 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
   tclEval(script = "ttk::button " & button & " -image unselectallicon -command {ToggleAllCrew unselect} -style Small.TButton")
   tclEval(script = "tooltip::tooltip " & button & " \"Unselect all crew members.\"")
   tclEval(script = "grid " & button & " -sticky w -row 1 -column 1")
-  # tclEval(script = "grid " & buttonsFrame & " -sticky w")
   crewTable = createTable(parent = crewInfoFrame, headers = @["", "Name",
       "Order", "Skill", "Health", "Fatigue", "Thirst", "Hunger", "Morale"],
       scrollbar = ".gameframe.paned.shipinfoframe.crew.scrolly",
       command = "SortShipCrew",
       tooltipText = "Press mouse button to sort the crew.")
+  tclEval(script = "grid configure " & crewTable.canvas & " -row 3")
   if crewIndexes.len != playerShip.crew.len:
     crewIndexes = @[]
     for i in playerShip.crew.low .. playerShip.crew.high:

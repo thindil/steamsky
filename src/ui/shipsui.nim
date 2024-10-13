@@ -103,7 +103,13 @@ proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     shipFrame = mainPaned & ".shipinfoframe"
     button = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
-  echo argv[2]
+  if argv[1] == "crew":
+    if argv[2] == "show":
+      tclEval(script = "grid " & shipFrame & ".crew.canvas.frame.ordersbuttons -sticky w -row 1")
+      tclEval(script = "grid " & shipFrame & ".crew.canvas.frame.selectskill -sticky w -row 2")
+    else:
+      tclEval(script = "grid remove " & shipFrame & ".crew.canvas.frame.ordersbuttons")
+      tclEval(script = "grid remove " & shipFrame & ".crew.canvas.frame.selectskill")
   if argv[2] == "show":
     tclEval(script = button & " configure -command {ShipMore " &
         $argv[1] & " hide}")
