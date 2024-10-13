@@ -395,13 +395,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("SortAccepted_Missions", sortMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc updateAdaMissionsList(page: cint) {.raises: [],
-    tags: [RootEffect], exportc.} =
-  try:
-    updateMissionsList(page = page.Positive)
-  except:
-    echo getCurrentExceptionMsg()
-    echo getStackTrace(getCurrentException())

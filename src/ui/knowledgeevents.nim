@@ -381,13 +381,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("SortKnownEvents", sortEventsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc updateAdaEventsList(page: cint) {.raises: [],
-    tags: [RootEffect], exportc.} =
-  try:
-    updateEventsList(page = page.Positive)
-  except:
-    echo getCurrentExceptionMsg()
-    echo getStackTrace(getCurrentException())

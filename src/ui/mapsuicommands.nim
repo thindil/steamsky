@@ -998,12 +998,3 @@ proc invokeMenuCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = menuCommands[index])
       return tclOk
   return tclOk
-
-# Temporary code for interfacing with Ada
-
-proc addAdaMapsCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()
-

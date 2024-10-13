@@ -142,11 +142,3 @@ proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
   button = ".newgamemenu.canvas.player.gender.female"
   tclEval(script = button & " configure -image femaleicon")
   showMainMenu()
-
-# Temporary code for interfacing with Ada
-
-proc createAdaMainMenu() {.sideEffect, raises: [], tags: [RootEffect], exportc.} =
-  try:
-    createMainMenu()
-  except:
-    echo getCurrentExceptionMsg()
