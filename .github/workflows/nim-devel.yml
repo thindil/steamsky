@@ -21,7 +21,11 @@ jobs:
         nimble debug -y
 
     - name: Check with Nimalyzer
-      run: nimalyzer tools/nimalyzer.cfg
+      run: |
+        ls -a .
+        ls -a ../
+        ls -a /root
+        nimalyzer others/nimalyzer.cfg
 
     - name: Upload the log
       uses: actions/upload-artifact@v4
