@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Updated the look of the player's ship's crew info section in the ship's info
   screen
 - Updated README.md
+- Updated contributing guide
 
 ### Fixed
 - Setting the game's difficulty level when starting the game
