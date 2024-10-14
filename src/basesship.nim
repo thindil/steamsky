@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,10 +16,11 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import bases, basescargo, basestypes, config, crewinventory, game, items, maps,
     messages, shipscargo, shipscrew, types
 
-proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
+proc payForDock*() {.sideEffect, raises: [KeyError], tags: [], contractual.} =
   ## Pay daily fee for docking, if the player doesn't have enough money for
   ## pay, reduce the player's reputation in the base
   let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -52,7 +53,7 @@ proc payForDock*() {.sideEffect, raises: [KeyError], tags: [].} =
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
 
 proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
-    raises: [KeyError], tags: [].} =
+    raises: [KeyError], tags: [], contractual.} =
   ## Count the repair cost and time required for the player's ship in the base
   ##
   ## * cost        - the cost of repair action
@@ -95,14 +96,14 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
 
 # Temporary code for interfacing with Ada
 
-proc payAdaForDock() {.raises: [], tags: [], exportc.} =
+proc payAdaForDock() {.raises: [], tags: [], exportc, contractual.} =
   try:
     payForDock()
   except KeyError:
     discard
 
 proc repairAdaCost(cost, time: var cint; moduleIndex: cint) {.raises: [],
-    tags: [], exportc.} =
+    tags: [], exportc, contractual.} =
   try:
     var
       nimCost = cost.Natural
