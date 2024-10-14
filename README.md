@@ -22,8 +22,24 @@ There are currently 2 versions of the game:
 
 ## Build game from sources
 
-At this moment the only supported way to build the game is to use Docker images.
-Later the normal way will back.
+### Nimble way
+
+First, you will need to install [Nim](https://nim-lang.org/) programming
+language. It is recommended to use instructions from the download page.
+Linux packages are usually outdated and may not work.
+Perhaps the easiest way to build the game is to use [nimble](https://github.com/nim-lang/nimble)
+tool. It will install all needed Nim packages. Additionally, you will need
+to install *Tcl* and *Tk* development version of packages. On Windows, you can
+use [MagicSplat](https://www.magicsplat.com/tcl-installer/index.html)
+installer, on Debian-based distributions, it will be `apd-get install tcl-dev tk-dev`.
+Additional libraries, needed for running the game are listed in the section
+**Libraries needed to run the game** of the README.md.
+
+When you have all dependencies installed, in the main directory, where this
+file is, type: `nimble release -y` for build the release version of the
+game, or `nimble debug -y` to build the debug version of the game.
+
+You can also use the script *others/build.nims*
 
 ### Docker way
 
