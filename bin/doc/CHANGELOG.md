@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated modding guide
 - Use the new icon for expand and contract infos' sections on various screens
+- Updated the look of the player's ship's crew info section in the ship's info
+  screen
 
 ### Fixed
 - Setting the game's difficulty level when starting the game
