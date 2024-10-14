@@ -31,7 +31,7 @@ Perhaps the easiest way to build the game is to use [nimble](https://github.com/
 tool. It will install all needed Nim packages. Additionally, you will need
 to install *Tcl* and *Tk* development version of packages. On Windows, you can
 use [MagicSplat](https://www.magicsplat.com/tcl-installer/index.html)
-installer, on Debian-based distributions, it will be `apd-get install tcl-dev tk-dev`.
+installer, on Debian-based distributions, it will be `apt-get install tcl-dev tk-dev`.
 Additional libraries, needed for running the game are listed in the section
 **Libraries needed to run the game** of the README.md.
 
@@ -39,7 +39,10 @@ When you have all dependencies installed, in the main directory, where this
 file is, type: `nimble release -y` for build the release version of the
 game, or `nimble debug -y` to build the debug version of the game.
 
-You can also use the script *others/build.nims*
+You can also use the script `build.nims` from `others`. In the main directory,
+where this file is, type `others/build.nims` on Linux or `nim others\build.nims`
+on Windows. It will build the game and put all needed files (except libraries)
+to directory *release* in the project root directory (where this file is).
 
 ### Docker way
 
@@ -57,7 +60,7 @@ To build the game for Windows 64-bit, download `buildwin64` image and type in co
 `docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.tcl x86_64-linux-gnu"`
 
 It will build the game and put all needed files (except libraries) to directory
-*release* in the project root directory (where file steamsky.gpr is).
+*release* in the project root directory (where this file is).
 
 ### Build unit tests
 
@@ -72,11 +75,9 @@ thus all its runtime options can be used to run the tests.
 
 ## Generating code documentation
 
-To generate (or regenerate) code documentation, you need [ROBODoc](https://rfsber.home.xs4all.nl/Robo/).
-If you have it, in main program directory (where this file is) enter terminal
-command: `others/generatedocs.tcl`. For more information about this script,
-please look [here](https://github.com/thindil/roboada#generatedocspy). This
-version of script have set all default settings for Steam Sky code.
+To generate (or regenerate) code documentation, you can use the default *nimble*
+task, `nimble doc [filename]`. It will generate the HTML code documentation
+of the selected file.
 
 ## Running Steam Sky
 
@@ -160,9 +161,6 @@ see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 ## Licenses
 The game is available under the GPLv3 license.
 
-The Tashy library distributed with the game is under GPLv2 license with the
-linking exception.
-
 Tcl/Tk, Tklib, Tksvg and Extrafont libraries distributed with the game are
 under BSD-like license.
 
@@ -175,7 +173,6 @@ The Licensing for the fonts distributed with the game is as follows:
 
 All images used by the game are from https://game-icons.net, distributed under
 CC-BY-3.0 license.
-
 
 The changelog and a copy of the GPLv3 license can be found in the [doc](bin/doc) directory.
 
