@@ -84,6 +84,7 @@ proc showCargoCommand(clientData: cint; interp: PInterp; argc: cint;
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
     typeBox = cargoInfoFrame & ".selecttype.combo"
     itemsType = tclEval2(script = typeBox & " get")
+  tclEval(script = "grid configure " & cargoTable.canvas & " -row 3")
   var currentRow = 1
   for index in cargoIndexes:
     if currentRow < startRow:

@@ -110,6 +110,11 @@ proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       tclEval(script = "grid remove " & shipFrame & ".crew.canvas.frame.ordersbuttons")
       tclEval(script = "grid remove " & shipFrame & ".crew.canvas.frame.selectskill")
+  elif argv[1] == "cargo":
+    if argv[2] == "show":
+      tclEval(script = "grid " & shipFrame & ".cargo.canvas.frame.selecttype -sticky w -row 2")
+    else:
+      tclEval(script = "grid remove " & shipFrame & ".cargo.canvas.frame.selecttype")
   if argv[2] == "show":
     tclEval(script = button & " configure -command {ShipMore " &
         $argv[1] & " hide}")
@@ -131,11 +136,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     addCommand("ShipMore", shipMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc addAdaShipsCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()
