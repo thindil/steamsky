@@ -77,7 +77,9 @@ thus all its runtime options can be used to run the tests.
 
 To generate (or regenerate) code documentation, you can use the default *nimble*
 task, `nimble doc [filename]`. It will generate the HTML code documentation
-of the selected file.
+of the selected file. To build the code documenation for the whole project,
+type in console: `nimble docs -y`, in the main directory, where the file is.
+It will generate the code documenation in the *htmldoc* directory.
 
 ## Running Steam Sky
 
