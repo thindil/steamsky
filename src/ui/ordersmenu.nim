@@ -791,12 +791,3 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMessages()
   showSkyMap()
   return tclOk
-
-# Temporary code for interfacing with Ada
-
-proc addAdaOrdersMenuCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()
-

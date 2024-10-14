@@ -189,12 +189,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("SearchMessages", searchMessagesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc showAdaMessageUI(message, messageView: cstring; color, mType,
-    messagesType: cint) {.raises: [], tags: [], exportc.} =
-  let message = MessageData(message: $message, color: color.MessageColor,
-      kind: mType.MessageType)
-  showMessage(message = message, messageView = $messageView,
-      messagesType = messagesType.MessageType)
