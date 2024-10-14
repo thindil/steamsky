@@ -41,3 +41,6 @@ task debugwindows, "builds the project in debug mode for Windows 64-bit on Linux
 task analyze, "builds the project in analyze mode (release with nimprofiler support)":
   exec "nim c -d:release --profiler:on --stackTrace:on --passc:-flto --passl:-s --outdir:" & binDir & " " &
       srcDir & DirSep & "steamsky.nim"
+
+task docs, "builds the project's documentation":
+  exec "nim doc --project --outdir:htmldocs src" & DirSep & "steamsky.nim"
