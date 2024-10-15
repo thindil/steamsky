@@ -485,37 +485,3 @@ proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
     # Add the welcoming message
     addMessage(message = "Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
         mType = otherMessage)
-
-# Temporary code for interfacing with Ada
-
-proc updateAdaGame(minutes, inCombat: cint) {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    updateGame(minutes = minutes, inCombat = inCombat == 1)
-  except ValueError, IOError, Exception:
-    discard
-
-proc loadAdaGameData(): cstring {.raises: [], tags: [WriteIOEffect, RootEffect],
-    exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    return loadGameData().cstring
-  except DataLoadingError, KeyError, OSError:
-    return getCurrentExceptionMsg().cstring
-
-proc endAdaGame(save: cint) {.raises: [], tags: [WriteIOEffect, RootEffect],
-    exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    endGame(save = (if save == 1: true else: false))
-  except KeyError, OSError, IOError:
-    discard
-
-proc newAdaGame() {.raises: [], tags: [WriteIOEffect, ReadIOEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    newGame()
-  except ValueError, OSError, IOError, Exception:
-    discard

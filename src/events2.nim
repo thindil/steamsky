@@ -222,16 +222,3 @@ proc checkForEvent*(): bool {.sideEffect, raises: [ValueError, IOError,
             mType = otherMessage, color = red)
       skyMap[playerShip.skyX][playerShip.skyY].eventIndex = eventsList.high
       return false
-
-# Temporary code for interfacing with Ada
-
-proc checkAdaForEvent(): cint {.raises: [], tags: [WriteIOEffect, RootEffect],
-    exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    if checkForEvent():
-      return 1
-  except ValueError, IOError, Exception:
-    return 0
-  return 0
-

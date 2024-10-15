@@ -434,39 +434,3 @@ proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
   if renameSave:
     if fileExists(filename = oldSaveName):
       moveFile(source = oldSaveName, dest = saveName)
-
-# Temporary code for interfacing with Ada
-
-proc getAdaSaveName(name: cstring) {.raises: [], tags: [], exportc,
-    contractual.} =
-  ## Temporary C binding
-  saveName = $name
-
-proc setAdaSaveName(name: var cstring) {.raises: [], tags: [], exportc,
-    contractual.} =
-  ## Temporary C binding
-  name = saveName.cstring
-
-proc saveAdaGame(prettyPrint: cint) {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    saveGame(prettyPrint = prettyPrint == 1)
-  except KeyError, IOError:
-    discard
-
-proc loadAdaGame() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    loadGame()
-  except XmlError, ValueError, IOError, OSError, Exception:
-    discard
-
-proc generateAdaSaveName(renameSave: cint) {.raises: [], tags: [WriteIOEffect,
-    ReadIOEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    generateSaveName(renameSave = renameSave == 1)
-  except OSError, IOError, Exception:
-    discard
