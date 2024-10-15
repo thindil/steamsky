@@ -469,15 +469,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     addCommand("SetDestination2", setDestination2Command)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc addAdaUtilsCommands() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()
-
-proc deleteAdaWidgets*(startIndex, endIndex: cint; frame: cstring) {.exportc,
-    gcsafe, raises: [], tags: [].} =
-  deleteWidgets(startIndex, endIndex, $frame)

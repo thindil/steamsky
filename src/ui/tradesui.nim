@@ -1006,8 +1006,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("SearchTrade", searchTradeCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc getTradeItemIndex(iIndex: cint) {.exportc.} =
-  itemIndex = iIndex

@@ -206,11 +206,3 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   let dialogCloseButton = ".gameframe.wait.close"
   tclEval(script = dialogCloseButton & " invoke")
   return tclOk
-
-# Temporary code for interfacing with Ada
-
-proc addAdaWaitCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()
