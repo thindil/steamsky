@@ -95,35 +95,3 @@ proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
       entries.add(y = element)
     let xmlTree: XmlNode = newXmlTree(tag = "halloffame", children = entries)
     writeFile(filename = saveDirectory & "halloffame.dat", content = xmlHeader & $xmlTree)
-
-# Temporary code for interfacing with Ada
-
-type
-  AdaHallOfFameData = object
-    name: cstring
-    points: cint
-    deathReason: cstring
-
-proc loadAdaHallOfFame(): cstring {.sideEffect, raises: [], tags: [
-    WriteIOEffect, ReadIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    loadHallOfFame()
-    return "".cstring
-  except DataLoadingError:
-    return getCurrentExceptionMsg().cstring
-
-proc getAdaHofEntry(index: cint; entry: var AdaHallOfFameData) {.sideEffect,
-    raises: [], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  entry = AdaHallOfFameData(name: hallOfFameArray[index].name.cstring,
-      points: hallOfFameArray[index].points.cint, deathReason: hallOfFameArray[
-      index].deathReason.cstring)
-
-proc updateAdaHallOfFame(playerName, deathReason: cstring) {.sideEffect,
-    raises: [], tags: [WriteIOEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    updateHallOfFame(playerName = $playerName, deathReason = $deathReason)
-  except IOError:
-    discard

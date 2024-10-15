@@ -139,33 +139,3 @@ proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
     helpList[helpTitle] = helpEntry
     logMessage(message = "Help added: '" & helpTitle & "'",
         debugType = everything)
-
-# Temporary code for interfacing with Ada
-
-proc getAdaHelp(index: cint; helpIndex, title, text: var cstring) {.raises: [],
-    tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  helpIndex = ""
-  title = ""
-  text = ""
-  if index > helpList.len:
-    return
-  var i: Natural = 0
-  for htitle, help in helpList:
-    if i < index:
-      i.inc
-      continue
-    title = htitle.cstring
-    helpIndex = help.index.cstring
-    text = help.text.cstring
-    break
-
-proc getAdaHelp2(title: cstring; index, text: var cstring) {.raises: [],
-    tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    index = helpList[$title].index.cstring
-    text = helpList[$title].text.cstring
-  except KeyError:
-    index = ""
-    text = ""

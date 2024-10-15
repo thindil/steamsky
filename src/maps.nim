@@ -79,27 +79,3 @@ proc countDistance*(destinationX: MapXRange;
       diffX: float = ((playerShip.skyX - destinationX).abs).float
       diffY: float = ((playerShip.skyY - destinationY).abs).float
     return (sqrt(x = (diffX^2) + (diffY^2))).floor.Natural
-
-
-# Temporary code for interfacing with Ada
-
-proc getAdaMapCell(x, y, baseIndex, visited, eventIndex,
-    missionIndex: cint) {.raises: [], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  skyMap[x][y] = SkyCell(baseIndex: baseIndex, visited: (if visited ==
-      1: true else: false), eventIndex: eventIndex - 1,
-      missionIndex: missionIndex - 1)
-
-proc setAdaMapCell(x, y: cint; baseIndex, visited, eventIndex,
-    missionIndex: var cint) {.raises: [], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  baseIndex = skyMap[x][y].baseIndex
-  visited = skyMap[x][y].visited.ord.cint
-  eventIndex = skyMap[x][y].eventIndex.cint + 1
-  missionIndex = skyMap[x][y].missionIndex.cint + 1
-
-proc countAdaDistance(destinationX, destinationY: cint): cint {.raises: [],
-    tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  return countDistance(destinationX = destinationX,
-      destinationY = destinationY).cint
