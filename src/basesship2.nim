@@ -349,24 +349,3 @@ proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
       for module in playerShip.modules.mitems:
         if module.mType == ModuleType2.turret and module.gunIndex > shipModuleIndex:
           module.gunIndex.dec
-
-# Temporary code for interfacing with Ada
-
-proc repairAdaShip2(moduleIndex: cint): cstring {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    repairShip(moduleIndex = moduleIndex - 1)
-    return "".cstring
-  except Exception as e:
-    return ($e.name & " " & e.msg).cstring
-
-proc upgradeAdaShip2(install, moduleIndex: cint): cstring {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    upgradeShip(install = install == 1, moduleIndex = (if install ==
-        1: moduleIndex else: moduleIndex - 1))
-    return "".cstring
-  except Exception as e:
-    return ($e.name & " " & e.msg).cstring

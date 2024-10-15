@@ -96,25 +96,3 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
     cost = 1
   if time == 0:
     time = 1
-
-# Temporary code for interfacing with Ada
-
-proc payAdaForDock() {.raises: [], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    payForDock()
-  except KeyError:
-    discard
-
-proc repairAdaCost(cost, time: var cint; moduleIndex: cint) {.raises: [],
-    tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    var
-      nimCost = cost.Natural
-      nimTime = time.Natural
-    repairCost(cost = nimCost, time = nimTime, moduleIndex = moduleIndex - 1)
-    cost = nimCost.cint
-    time = nimTime.cint
-  except KeyError:
-    discard

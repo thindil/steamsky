@@ -163,26 +163,3 @@ proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
         baseIndex].cargo[itemIndex].protoIndex) and itemIndex > 0:
       skyBases[baseIndex].cargo.delete(i = itemIndex)
   {.ruleOn: "assignments".}
-
-# Temporary code for interfacing with Ada
-
-proc generateAdaCargo() {.raises: [], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    generateCargo()
-  except KeyError:
-    discard
-
-proc findAdaBaseCargo(protoIndex, durability: cint): cint {.raises: [], tags: [
-    ], exportc, contractual.} =
-  ## Temporary C binding
-  return findBaseCargo(protoIndex = protoIndex, durability = durability).cint + 1
-
-proc updateAdaBaseCargo(protoIndex, amount, durability,
-    cargoIndex: cint) {.raises: [], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    updateBaseCargo(protoIndex = protoIndex, amount = amount,
-        durability = durability, cargoIndex = cargoIndex - 1)
-  except KeyError:
-    discard

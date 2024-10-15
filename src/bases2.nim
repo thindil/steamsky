@@ -236,22 +236,3 @@ proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
           base.known = true
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   updateGame(minutes = 30)
-
-# Temporary code for interfacing with Ada
-
-proc askAdaForEvents() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    askForEvents()
-  except KeyError, IOError, Exception:
-    discard
-
-proc askAdaForBases() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    askForBases()
-  except KeyError, IOError, Exception:
-    discard
-
