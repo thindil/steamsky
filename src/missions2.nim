@@ -215,35 +215,3 @@ proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   gameStats.acceptedMissions.inc
   updateGame(minutes = 5)
-
-# Temporary code for interfacing with Ada
-
-proc finishAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    finishMission(missionIndex = (missionIndex - 1).Natural)
-  except MissionFinishingError:
-    return getCurrentExceptionMsg().cstring
-  except KeyError, IOError, Exception:
-    discard
-  return ""
-
-proc autoAdaFinishMissions(): cstring {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    return autoFinishMissions().cstring
-  except KeyError, IOError, Exception:
-    return ""
-
-proc acceptAdaMission(missionIndex: cint): cstring {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    acceptMission(missionIndex = missionIndex - 1)
-    return "".cstring
-  except MissionAcceptingError:
-    return getCurrentExceptionMsg().cstring
-  except KeyError, IOError, Exception:
-    return "".cstring
