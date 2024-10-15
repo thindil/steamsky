@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the sky bases and the player's ship's inteactions,
+## like paying for docking and repairinig the ship.
+
 import std/tables
 import contracts
 import bases, basescargo, basestypes, config, crewinventory, game, items, maps,
@@ -97,6 +100,7 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
 # Temporary code for interfacing with Ada
 
 proc payAdaForDock() {.raises: [], tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     payForDock()
   except KeyError:
@@ -104,6 +108,7 @@ proc payAdaForDock() {.raises: [], tags: [], exportc, contractual.} =
 
 proc repairAdaCost(cost, time: var cint; moduleIndex: cint) {.raises: [],
     tags: [], exportc, contractual.} =
+  ## Temporary C binding
   try:
     var
       nimCost = cost.Natural
