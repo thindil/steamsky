@@ -143,13 +143,3 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
       for index, member in playerShip.crew.mpairs:
         if member.order == repair:
           giveOrders(ship = playerShip, memberIndex = index, givenOrder = rest)
-
-# Temporary code for interfacing with Ada
-
-proc repairAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    repairShip(minutes = minutes)
-  except KeyError, Exception:
-    discard

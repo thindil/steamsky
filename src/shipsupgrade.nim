@@ -361,22 +361,3 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
     playerShip.modules[moduleIndex].upgradeAction = upgradeAction
   addMessage(message = "You set the " & playerShip.modules[moduleIndex].name &
       " to upgrade.", mType = orderMessage)
-
-# Temporary code for interfacing with Ada
-
-proc upgradeAdaShip(minutes: cint) {.raises: [], tags: [RootEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    upgradeShip(minutes = minutes)
-  except KeyError, Exception:
-    discard
-
-proc startAdaUpgrading(moduleIndex, upgradeType: cint): cstring {.raises: [],
-    tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    startUpgrading(moduleIndex = moduleIndex - 1, upgradeType = upgradeType)
-  except:
-    return getCurrentExceptionMsg().cstring
-  return ""
