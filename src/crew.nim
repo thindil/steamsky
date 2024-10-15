@@ -680,37 +680,3 @@ proc updateCrew*(minutes: Positive; tiredPoints: Natural;
           thirstLevel = thirstLevel, memberIndex = i, orderTime = orderTime,
           minutes = minutes, inCombat = inCombat)
       i.inc
-
-# Temporary code for interfacing with Ada
-
-proc dailyAdaPayment() {.raises: [], tags: [RootEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    dailyPayment()
-  except KeyError, Exception:
-    discard
-
-proc getAdaAttributeLevelName(attributeLevel: cint): cstring {.raises: [],
-    tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  return getAttributeLevelName(attributeLevel = attributeLevel.Positive).cstring
-
-proc getAdaSkillLevelName(skillLevel: cint): cstring {.raises: [], tags: [],
-    exportc, contractual.} =
-  ## Temporary C binding
-  return getSkillLevelName(skillLevel = skillLevel.Natural).cstring
-
-proc findAdaCabin(memberIndex: cint): cint {.raises: [], tags: [], exportc,
-    contractual.} =
-  ## Temporary C binding
-  return findCabin(memberIndex = memberIndex - 1).cint + 1
-
-proc updateAdaCrew(minutes, tiredPoints, inCombat: cint) {.raises: [], tags: [
-    WriteIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    updateCrew(minutes = minutes, tiredPoints = tiredPoints,
-        inCombat = inCombat == 1)
-  except KeyError, IOError, Exception:
-    discard

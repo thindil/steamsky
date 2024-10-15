@@ -48,13 +48,3 @@ proc waitForRest*() {.sideEffect, raises: [KeyError, IOError, Exception],
   if timeNeeded > 0:
     updateGame(minutes = timeNeeded)
     waitInPlace(minutes = timeNeeded)
-
-# Temporary code for interfacing with Ada
-
-proc waitAdaForRest() {.raises: [], tags: [WriteIOEffect, RootEffect], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    waitForRest()
-  except KeyError, IOError, Exception:
-    discard
