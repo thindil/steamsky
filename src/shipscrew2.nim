@@ -158,38 +158,3 @@ proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
                 result = "Training " & skillsList[module.trainedSkill].name &
                     " in " & module.name
                 break findTrainingRoom
-
-# Temporary code for interfacing with Ada
-
-proc deleteAdaMember(memberIndex, inPlayerShip: cint) {.raises: [], tags: [],
-    exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    if inPlayerShip == 1:
-      deleteMember(memberIndex = memberIndex - 1, ship = playerShip)
-    else:
-      deleteMember(memberIndex = memberIndex - 1, ship = npcShip)
-  except KeyError:
-    discard
-
-proc deathAda(memberIndex: cint; reason: cstring; inPlayerShip,
-    createBody: cint) {.raises: [], tags: [WriteIOEffect], exportc,
-        contractual.} =
-  ## Temporary C binding
-  try:
-    if inPlayerShip == 1:
-      death(memberIndex = memberIndex - 1, reason = $reason, ship = playerShip,
-          createBody = (if createBody == 1: true else: false))
-    else:
-      death(memberIndex = memberIndex - 1, reason = $reason, ship = npcShip,
-          createBody = (if createBody == 1: true else: false))
-  except IOError, KeyError:
-    discard
-
-proc getAdaCurrentOrder(memberIndex: cint): cstring {.raises: [], tags: [],
-    exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    return getCurrentOrder(memberIndex = memberIndex - 1).cstring
-  except ValueError:
-    return ""

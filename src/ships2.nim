@@ -87,20 +87,3 @@ proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
           shipsSyllablesMiddleList.len - 1))]
     result &= shipsSyllablesEndList[getRandom(min = 0, max = (
         shipsSyllablesEndList.len - 1))]
-
-# Temporary code for interfacing with Ada
-
-proc countAdaCombatValue(): cint {.raises: [], tags: [], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    return countCombatValue().cint
-  except KeyError:
-    return 0
-
-proc generateAdaShipName(factionIndex: cstring): cstring {.sideEffect, raises: [
-    ], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  return generateShipName(factionIndex = $factionIndex).cstring
-
-
