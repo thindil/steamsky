@@ -1628,11 +1628,3 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     modulesIndexes.add(y = module.id)
   updateModulesInfo()
   return tclOk
-
-# Temporary code for interfacing with Ada
-
-proc addAdaModulesCommands() {.raises: [], tags: [RootEffect], exportc.} =
-  try:
-    addCommands()
-  except:
-    echo getCurrentExceptionMsg()

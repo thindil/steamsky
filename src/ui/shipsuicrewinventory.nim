@@ -839,12 +839,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("ValidateMoveAmount", validateMoveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc moveAdaItem(itemIndex, amount: cint) {.raises: [], tags: [
-    RootEffect], exportc.} =
-  try:
-    moveItem(itemIndex = itemIndex - 1, amount = amount)
-  except:
-    echo getCurrentExceptionMsg()

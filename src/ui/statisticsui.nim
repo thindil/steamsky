@@ -636,17 +636,3 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("SortKilledMobs", sortKilledCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-
-# Temporary code for interfacing with Ada
-
-proc showAdaStatistics(refresh: cint) {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
-  try:
-    showStatistics(refresh = refresh == 1)
-  except:
-    echo getCurrentExceptionMsg()
-
-proc setAdaSortingOrder(sortingOrder: var cint; column: cint) {.raises: [],
-    tags: [], exportc.} =
-  var sortOrder = sortingOrder.ListSortOrders
-  setSortingOrder(sortingOrder = sortOrder, column = column.Positive)
-  sortingOrder = sortOrder.ord.cint

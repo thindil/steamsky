@@ -96,12 +96,3 @@ proc showMainMenu*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
           saveDirectory &
           "\" which is set as directory for saved games. Please select different directory.",
           parentFrame = ".", title = "Can't save the game")
-
-# Temporary code for interfacing with Ada
-
-proc showAdaMainMenu() {.sideEffect, raises: [], tags: [WriteDirEffect,
-    ReadDirEffect, TimeEffect, WriteIOEffect], exportc.} =
-  try:
-    showMainMenu()
-  except:
-    echo getCurrentExceptionMsg()

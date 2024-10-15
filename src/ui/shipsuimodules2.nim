@@ -151,22 +151,3 @@ proc updateModulesInfo*(page: Positive = 1) {.raises: [],
         script = shipCanvas & " bbox all") & "]")
     tclEval(script = shipCanvas & " xview moveto 0.0")
     tclEval(script = shipCanvas & " yview moveto 0.0")
-
-# Temporary code for interfacing with Ada
-
-proc getAdaModuleInfo(moduleIndex: cint): cstring {.raises: [], tags: [], exportc.} =
-  return getModuleInfo(moduleIndex - 1).cstring
-
-proc updateAdaModulesInfo(page: cint; mIndexes: array[50, cint];
-    columnsWidth: var array[10, cint]) {.raises: [], tags: [RootEffect], exportc.} =
-  modulesIndexes = @[]
-  for index in mIndexes:
-    if index == 0:
-      break
-    modulesIndexes.add(index - 1)
-  try:
-    updateModulesInfo(page)
-  except:
-    discard
-  for index, width in modulesTable.columnsWidth:
-    columnsWidth[index] = width.cint
