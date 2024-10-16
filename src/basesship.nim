@@ -26,10 +26,10 @@ import bases, basescargo, basestypes, config, crewinventory, game, items, maps,
 proc payForDock*() {.sideEffect, raises: [KeyError], tags: [], contractual.} =
   ## Pay daily fee for docking, if the player doesn't have enough money for
   ## pay, reduce the player's reputation in the base
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:
     return
-  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   if moneyIndex2 == -1:
     gainRep(baseIndex = baseIndex, points = -10)
@@ -37,14 +37,14 @@ proc payForDock*() {.sideEffect, raises: [KeyError], tags: [], contractual.} =
         " for pay for docking!", mType = otherMessage, color = red)
     return
   var dockingCost: Natural = 0
-  for module in playerShip.modules.items:
+  for module in playerShip.modules:
     if module.mType == ModuleType2.hull:
       dockingCost = module.maxModules
       break
   dockingCost = (dockingCost.float * newGameSettings.pricesBonus).Natural
   if dockingCost == 0:
     dockingCost = 1
-  let traderIndex = findMember(order = talk)
+  let traderIndex: int = findMember(order = talk)
   countPrice(price = dockingCost, traderIndex = traderIndex)
   if dockingCost > playerShip.cargo[moneyIndex2].amount:
     dockingCost = playerShip.cargo[moneyIndex].amount
@@ -66,8 +66,8 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
   ##                 modules in normal speed, -3 repais all damaged modules fast
   ##
   ## Returns the modified parameters cost and time
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  var protoIndex: int
+  let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var protoIndex: int = -1
   if moduleIndex > -1:
     time = playerShip.modules[moduleIndex].maxDurability - playerShip.modules[
         moduleIndex].durability
@@ -81,13 +81,13 @@ proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
         time = time + module.maxDurability - module.durability
         protoIndex = findProtoItem(itemType = modulesList[
             module.protoIndex].repairMaterial)
-        cost = cost + ((module.maxDurability - module.durability) * getPrice(
+        cost += ((module.maxDurability - module.durability) * getPrice(
             baseType = skyBases[baseIndex].baseType, itemIndex = protoIndex))
     if moduleIndex == -2:
-      cost = cost * 2
+      cost *= 2
       time = (time / 2).Natural
     elif moduleIndex == -3:
-      cost = cost * 4
+      cost *= 4
       time = (time / 4).Natural
   if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
     cost = (cost / 2).Natural
