@@ -26,16 +26,15 @@ import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
     shipsupgrade, statistics, stories, types, utils
 
-proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
-    raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
-    RootEffect], contractual.} =
+proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
+    IOError, Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Update the game (player ship, bases, crafting, etc)
   ##
   ## * minutes  - the amount of in-game minutes which passes
   ## * inCombat - if true, the player is in combat
   var needCleaning, needSaveGame: bool = false
 
-  proc updateDay() {.sideEffect, raises: [CrewOrderError, KeyError,
+  proc updateDay() {.raises: [CrewOrderError, KeyError,
       CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
     ## Update the in-game day, check if the player's ship need cleaning, pay
     ## for docks and to the crew member and check if the game has to be saved
@@ -106,7 +105,7 @@ proc updateGame*(minutes: Positive; inCombat: bool = false) {.sideEffect,
   updateEvents(minutes = minutes)
   updateMissions(minutes = minutes)
 
-proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
+proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
     OSError], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Load the game's data from files
   ##
@@ -117,9 +116,9 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
     return
 
   {.hint[XCannotRaiseY]: off.}
-  proc loadSelectedData(dataName, fileName: string): string {.sideEffect,
-      raises: [DataLoadingError, KeyError, OSError], tags: [WriteIOEffect,
-      RootEffect], contractual.} =
+  proc loadSelectedData(dataName, fileName: string): string {.raises: [
+      DataLoadingError, KeyError, OSError], tags: [WriteIOEffect, RootEffect],
+      contractual.} =
     ## Load the selected game's data from the file
     ##
     ## * dataName - the name of the data to load
@@ -132,7 +131,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
       fileName.len > 0
     body:
       var localFileName: string = ""
-      proc loadDataFile(localDataName: string): string {.sideEffect, raises: [
+      proc loadDataFile(localDataName: string): string {.raises: [
           DataLoadingError, KeyError], tags: [WriteIOEffect, RootEffect],
               contractual.} =
         ## Load the data from the selected file
@@ -222,7 +221,7 @@ proc loadGameData*(): string {.sideEffect, raises: [DataLoadingError, KeyError,
       return
   setToolsList()
 
-proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
+proc endGame*(save: bool) {.raises: [KeyError, IOError, OSError],
     tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Save or not the game and clear the temporary data
   ##
@@ -240,7 +239,7 @@ proc endGame*(save: bool) {.sideEffect, raises: [KeyError, IOError, OSError],
   acceptedMissions = @[]
 
 proc createPlayerShip(randomBase: Positive;
-    playerFaction: FactionData) {.sideEffect, raises: [ValueError], tags: [],
+    playerFaction: FactionData) {.raises: [ValueError], tags: [],
     contractual.} =
   ## Create the player's ship and add the player's character to it
   ##
@@ -293,7 +292,7 @@ proc createPlayerShip(randomBase: Positive;
             cabinAssigned = true
             break
 
-proc setGameStats(): FactionData {.sideEffect, raises: [KeyError], tags: [],
+proc setGameStats(): FactionData {.raises: [KeyError], tags: [],
     contractual.} =
   ## Set the game statistics and the player's faction, needed for starting
   ## a new game
@@ -320,7 +319,7 @@ proc setGameStats(): FactionData {.sideEffect, raises: [KeyError], tags: [],
           break
         index.inc
 
-proc newGame*() {.sideEffect, raises: [OSError, KeyError, IOError, ValueError,
+proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect], contractual.} =
   ## Start a new game, save configuration, create bases, fill the map, create
   ## the player's ship and put it on the map

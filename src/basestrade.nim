@@ -29,8 +29,8 @@ type
   CantHealError* = object of CatchableError
     ## Raised when the selected player's ship's crew member can't be healed
 
-proc checkMoney(price: Positive; message: string = ""): int {.sideEffect,
-    raises: [NoMoneyError, NotEnoughMoneyError], tags: [], contractual.} =
+proc checkMoney(price: Positive; message: string = ""): int {.raises: [
+    NoMoneyError, NotEnoughMoneyError], tags: [], contractual.} =
   ## Check if there is enough money on the player's ship
   ##
   ## * price   - the amount of money to compare
@@ -45,7 +45,7 @@ proc checkMoney(price: Positive; message: string = ""): int {.sideEffect,
       raise newException(exceptn = NotEnoughMoneyError, message = message)
 
 proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
-    tradePayment: Natural; contractLength: int) {.sideEffect, raises: [
+    tradePayment: Natural; contractLength: int) {.raises: [
     NoTraderError, NoMoneyError, NotEnoughMoneyError, KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Hire the selected recruit in the current base
@@ -75,8 +75,9 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
       morale = 50 + skyBases[baseIndex].reputation.level
       if morale > 100:
         morale = 100
-    playerShip.crew.add(y = MemberData(name: recruit.name, gender: recruit.gender,
-        health: 100, tired: 0, skills: recruit.skills, hunger: 0, thirst: 0,
+    playerShip.crew.add(y = MemberData(name: recruit.name,
+        gender: recruit.gender, health: 100, tired: 0, skills: recruit.skills,
+        hunger: 0, thirst: 0,
         order: rest, previousOrder: rest, orderTime: 15,
         attributes: recruit.attributes, inventory: inventory,
         equipment: recruit.equipment, payment: [1: dailyPayment,
@@ -93,7 +94,7 @@ proc hireRecruit*(recruitIndex: Natural; cost: Positive; dailyPayment,
     skyBases[baseIndex].population.dec
     updateGame(minutes = 5)
 
-proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
+proc buyRecipe*(recipeIndex: string) {.raises: [CantBuyError,
     AlreadyKnownError, NoTraderError, KeyError, NotEnoughMoneyError,
     NoMoneyError, IOError, Exception], tags: [WriteIOEffect, RootEffect],
         contractual.} =
@@ -137,8 +138,8 @@ proc buyRecipe*(recipeIndex: string) {.sideEffect, raises: [CantBuyError,
     gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = 5)
 
-proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc healCost*(cost, time: var Natural; memberIndex: int) {.raises: [KeyError],
+    tags: [], contractual.} =
   ## Count the cost and time needed by the healing wounded crew members action
   ## in the base
   ##
@@ -168,13 +169,14 @@ proc healCost*(cost, time: var Natural; memberIndex: int) {.sideEffect,
     countPrice(price = cost, traderIndex = findMember(order = talk))
     if time == 0:
       time = 1
-    let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    let baseIndex: BasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     if "temple" in factionsList[skyBases[baseIndex].owner].flags:
       cost = (cost / 2).Natural
       if cost == 0:
         cost = 1
 
-proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
+proc healWounded*(memberIndex: int) {.raises: [CantHealError,
     NoTraderError, KeyError, NotEnoughMoneyError, IOError, NoMoneyError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Heal the player's ship crew's wounded members in bases
@@ -210,12 +212,13 @@ proc healWounded*(memberIndex: int) {.sideEffect, raises: [CantHealError,
     updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -cost)
     updateBaseCargo(protoIndex = moneyIndex, amount = cost)
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
-    let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    let baseIndex: BasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     gainRep(baseIndex = baseIndex, points = 1)
     updateGame(minutes = time)
 
-proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc trainCost*(memberIndex, skillIndex: Natural): Natural {.raises: [KeyError],
+    tags: [], contractual.} =
   ## Count the cost needed to train the selected skill of the selected
   ## player's ship's crew's member.
   ##
@@ -240,7 +243,7 @@ proc trainCost*(memberIndex, skillIndex: Natural): Natural {.sideEffect,
     countPrice(price = result, traderIndex = findMember(order = talk))
 
 proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
-    isAmount: bool = true) {.sideEffect, raises: [KeyError, IOError, Exception],
+    isAmount: bool = true) {.raises: [KeyError, IOError, Exception],
     tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Train the selected skill of the selected player's ship's crew member in
   ## the base
@@ -257,13 +260,15 @@ proc trainSkill*(memberIndex: Natural; skillIndex, amount: Positive;
   body:
     giveOrders(ship = playerShip, memberIndex = memberIndex, givenOrder = rest,
         moduleIndex = 0, checkPriorities = false)
-    let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    let baseIndex: BasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     var
       maxAmount: int = amount
       sessions, overallCost: Natural = 0
     while maxAmount > 0:
       let
-        cost: Natural = trainCost(memberIndex = memberIndex, skillIndex = skillIndex)
+        cost: Natural = trainCost(memberIndex = memberIndex,
+            skillIndex = skillIndex)
         moneyIndex2: int = findItem(inventory = playerShip.cargo,
             protoIndex = moneyIndex)
       if cost == 0 or playerShip.cargo[moneyIndex2].amount < cost or (

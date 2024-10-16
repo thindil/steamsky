@@ -38,7 +38,7 @@ var
   toolsList*: seq[string] = @[]
     ## The list of all tools prototypes indexes
 
-proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadItems*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the items data from the file
   ##
@@ -165,7 +165,7 @@ proc loadItems*(fileName: string) {.sideEffect, raises: [DataLoadingError],
         legsArmorsList.add(y = itemIndex)
       {.ruleOn: "ifstatements".}
 
-proc findProtoItem*(itemType: string): Natural {.sideEffect, raises: [], tags: [
+proc findProtoItem*(itemType: string): Natural {.raises: [], tags: [
     ], contractual.} =
   ## Get the index of prototype of the selected item type
   ##
@@ -211,7 +211,7 @@ func getItemDamage*(itemDurability: ItemsDurability; toLower: bool = false;
     result = toLowerAscii(s = result)
 
 proc getItemName*(item: InventoryData; damageInfo: bool = true;
-    toLower: bool = true): string {.sideEffect, raises: [], tags: [],
+    toLower: bool = true): string {.raises: [], tags: [],
         contractual.} =
   ## Get the name of the selected item with optional info about the item's
   ## damage
@@ -233,7 +233,7 @@ proc getItemName*(item: InventoryData; damageInfo: bool = true;
     result = result & " (" & getItemDamage(itemDurability = item.durability,
         toLower = toLower) & ")"
 
-proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
+proc getItemChanceToDamage*(itemData: Natural): string {.raises: [],
     tags: [], contractual.} =
   ## Get the string with textual information about the item's chance for take
   ## damage during usage
@@ -260,7 +260,7 @@ proc getItemChanceToDamage*(itemData: Natural): string {.sideEffect, raises: [],
   else:
     return "Very high"
 
-proc setToolsList*() {.sideEffect, raises: [], tags: [], contractual.} =
+proc setToolsList*() {.raises: [], tags: [], contractual.} =
   ## Set the list of all available tools in the game
   ensure:
     toolsList.len > 0
@@ -278,7 +278,7 @@ proc setToolsList*() {.sideEffect, raises: [], tags: [], contractual.} =
         toolsList.add(y = skill.tool)
 
 proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
-    toolQuality: Positive = 100): int {.sideEffect, raises: [KeyError,
+    toolQuality: Positive = 100): int {.raises: [KeyError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
     contractual.} =
   ## Search for specified tools in the crew member and the ship cargo
@@ -352,7 +352,7 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
 
 proc getRandomItem*(itemsIndexes: seq[Positive]; equipIndex: EquipmentLocations;
     highestLevel, weaponSkillLevel: Positive;
-    factionIndex: string): Natural {.sideEffect, raises: [], tags: [],
+    factionIndex: string): Natural {.raises: [], tags: [],
         contractual.} =
   ## Get the random index of the item of the selected type
   ##

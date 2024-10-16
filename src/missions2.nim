@@ -31,7 +31,7 @@ type
   MissionAcceptingError* = object of CatchableError
     ## Raised when there is a problem with accepting a mission in a base
 
-proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
+proc finishMission*(missionIndex: Natural) {.raises: [
     MissionFinishingError, KeyError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
   ## Finish the selected accepted mission
@@ -71,7 +71,7 @@ proc finishMission*(missionIndex: Natural) {.sideEffect, raises: [
     updateFinishedMissions(mType = $acceptedMissions[missionIndex].mType)
     deleteMission(missionIndex = missionIndex, failed = false)
 
-proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
+proc autoFinishMissions*(): string {.raises: [KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Finish all possible missions if the player's ship is on the base.
   ##
@@ -99,7 +99,7 @@ proc autoFinishMissions*(): string {.sideEffect, raises: [KeyError, IOError,
         return getCurrentExceptionMsg()
     i.inc
 
-proc acceptMission*(missionIndex: Natural) {.sideEffect, raises: [
+proc acceptMission*(missionIndex: Natural) {.raises: [
     MissionAcceptingError, KeyError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
   ## Accept the selected mission from the base

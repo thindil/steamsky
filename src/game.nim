@@ -215,7 +215,7 @@ var skyBases*: array[BasesRange, BaseRecord]
   ## The list of all bases in the game
 {.push ruleOn: "varDeclared".}
 
-proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
+proc findSkillIndex*(skillName: string): Natural {.raises: [],
     tags: [], contractual.} =
   ## Get the index of the selected skill
   ##
@@ -227,7 +227,7 @@ proc findSkillIndex*(skillName: string): Natural {.sideEffect, raises: [],
       return key
   return 0
 
-proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadData*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game data
   ##
@@ -236,8 +236,7 @@ proc loadData*(fileName: string) {.sideEffect, raises: [DataLoadingError],
     fileName.len > 0
   body:
 
-    proc findAttributeIndex(attributeName: string): int {.sideEffect,
-        raises: [], tags: [], contractual.} =
+    proc findAttributeIndex(attributeName: string): int {.raises: [], tags: [], contractual.} =
       ## Find the index of the selected attribute
       ##
       ## * attributeName - the name of the attribute which index will be looking
