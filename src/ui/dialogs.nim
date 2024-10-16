@@ -130,8 +130,7 @@ proc showMessage*(text: string; parentFrame: string = ".gameframe";
   showDialog(dialog = messageDialog, parentFrame = parentFrame,
       withTimer = true)
 
-proc showQuestion*(question, res: string; inGame: bool = true) {.sideEffect,
-    raises: [], tags: {}.} =
+proc showQuestion*(question, res: string; inGame: bool = true) {.raises: [], tags: {}.} =
   ## Show the dialog with the selected question to the player
   ##
   ## * question - the question to show to the player

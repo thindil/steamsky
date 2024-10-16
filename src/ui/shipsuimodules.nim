@@ -58,8 +58,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
       columnSpan: Natural = 0; wrapLength: Natural = 0;
-      countHeight: bool = false; secondary: bool = false) {.sideEffect,
-          raises: [], tags: [WriteIOEffect, TimeEffect].} =
+      countHeight: bool = false; secondary: bool = false) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     label = name
     tclEval(script = "ttk::label " & label & " -text {" & labelText &
         "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (

@@ -37,8 +37,7 @@ type
   HeadersList* = seq[string] ## The list of titles for a table's headers
 
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
-    command: string = ""; tooltipText: string = ""): TableWidget {.sideEffect,
-    raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    command: string = ""; tooltipText: string = ""): TableWidget {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Create a new table and columns' headers for it
   ##
   ## * parent      - the Tcl path to the parent widget for the table
@@ -148,8 +147,7 @@ proc clearTable*(table: var TableWidget) {.raises: [], tags: [].} =
       tclEval(script = table.canvas & " delete progressbar" & $row & "bar" & $column)
   table.row = 1
 
-proc addBindings(canvas, itemId, row, command, color: string) {.sideEffect,
-    raises: [], tags: [].} =
+proc addBindings(canvas, itemId, row, command, color: string) {.raises: [], tags: [].} =
   ## Add Tcl events to the selected element of the TableWidget
   ##
   ## * canvas  - Tk canvas in which the events will be added
@@ -193,8 +191,7 @@ proc addBackground(table: TableWidget; newRow: bool;
       row = $table.row, command = command, color = result)
 
 proc addButton*(table: var TableWidget; text, tooltip, command: string;
-    column: Positive; newRow: bool = false; color: string = "") {.sideEffect,
-    raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    column: Positive; newRow: bool = false; color: string = "") {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Add a button item to the selected TableWidget
   ##
   ## * table   - the TableWidget to which the button will be added
@@ -237,8 +234,7 @@ proc addButton*(table: var TableWidget; text, tooltip, command: string;
   if newRow:
     table.row.inc
 
-proc updateTable*(table: TableWidget; grabFocus: bool = true) {.sideEffect,
-    raises: [], tags: [RootEffect].} =
+proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [], tags: [RootEffect].} =
   ## Update the size and coordinates of all elements in the selected TableWidget
   ##
   ## * table     - the TableWidget in which the elements will be resized and
@@ -479,8 +475,7 @@ proc getColumnNumber*(table: TableWidget;
     position = position - width - 20
   return 1
 
-proc updateHeadersCommand*(table: TableWidget; command: string) {.sideEffect,
-    raises: [], tags: [].} =
+proc updateHeadersCommand*(table: TableWidget; command: string) {.raises: [], tags: [].} =
   ## Update the selected TableWidget headers' Tcl command executed when the
   ## player clicks on a header
   ##
@@ -599,8 +594,7 @@ proc hideCurrentRowCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return tclError
 
-proc isChecked*(table: TableWidget; row, column: Natural): bool {.sideEffect,
-    raises: [], tags: [].} =
+proc isChecked*(table: TableWidget; row, column: Natural): bool {.raises: [], tags: [].} =
   ## Check if the selected checkbutton in the TableWidget is checked or not
   ##
   ## * table  - the TableWidget in which the checkbox will be checked

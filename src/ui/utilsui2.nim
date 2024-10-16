@@ -21,7 +21,7 @@ import coreui, dialogs, errordialog
 
 type TravelArray* = array[1..2, Natural]
 
-proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
+proc showScreen*(newScreenName: string) {.raises: [], tags: [].} =
   ## Clear the old screen and show the selected to the player
   ##
   ## * newScreenName - the Tcl name of the screen which will be show
@@ -67,7 +67,7 @@ proc showScreen*(newScreenName: string) {.sideEffect, raises: [], tags: [].} =
     if tclEval(script = "grid remove " & paned) == tclError:
       return
 
-proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
+proc updateMessages*() {.raises: [], tags: [].} =
   ## Update the list of in-game messages, delete old ones and show the
   ## newest to the player
   let messagesView = mainPaned & ".controls.messages.view"
@@ -102,7 +102,7 @@ proc updateMessages*() {.sideEffect, raises: [], tags: [].} =
   tclEval(script = messagesView & " configure -state disable")
 
 proc getSkillMarks*(skillIndex: Positive;
-    memberIndex: Natural): string {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Get the marks with information about the skill level for the selected
   ## skill for the selected crew member
   ##
@@ -129,8 +129,7 @@ proc getSkillMarks*(skillIndex: Positive;
   if memberIndex == crewIndex:
     result = result & "+"
 
-proc travelInfo*(distance: Natural): TravelArray {.sideEffect,
-    raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
   ## * Distance - Distance in map fields to destination point
@@ -192,7 +191,7 @@ proc travelInfo*(distance: Natural): TravelArray {.sideEffect,
   result[1] = minutesDiff + (rests * restTime)
   result[2] = abs(distance * countFuelNeeded()) + (rests * (restTime / 10).int)
 
-proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [
+proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
     ], tags: [].} =
   ## Convert the game minutes to the game time in days, hours, etc
   ##
@@ -252,7 +251,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.sideEffect, raises: [
 
 proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
-    button2: ButtonSettings = emptyButtonSettings) {.sideEffect, raises: [
+    button2: ButtonSettings = emptyButtonSettings) {.raises: [
     KeyError], tags: [WriteIOEffect, TimeEffect].} =
   ## Show info about selected item in ship cargo or crew member inventory
   ##
@@ -325,7 +324,7 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
         item = playerShip.cargo[itemIndex], damageInfo = false,
         toLower = false)), button1 = button1, button2 = button2)
 
-proc setFonts*(newSize: Positive; fontType: FontTypes) {.sideEffect, raises: [],
+proc setFonts*(newSize: Positive; fontType: FontTypes) {.raises: [],
     tags: [].} =
   ##  Set all the game fonts to the selected size
   ##

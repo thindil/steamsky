@@ -20,7 +20,7 @@ import ../[basestypes, careers, config, game, game2, tk]
 import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu,
     table, themes, utilsui, utilsui2
 
-proc createMainMenu*() {.sideEffect, raises: [], tags: [ReadDirEffect,
+proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
     WriteIOEffect, TimeEffect, RootEffect].} =
   ## Create the main menu UI
   let
