@@ -21,7 +21,7 @@
 import contracts
 import crew, game, game2, types, shipsmovement
 
-proc waitForRest*() {.sideEffect, raises: [KeyError, IOError, Exception],
+proc waitForRest*() {.raises: [KeyError, IOError, Exception],
     tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Wait until the whole player's ship crew is rested
   var timeNeeded: Natural = 0

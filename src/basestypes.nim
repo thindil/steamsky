@@ -49,7 +49,7 @@ var basesTypesList*: Table[string, BaseTypeData] = initTable[string,
     BaseTypeData]()
   ## The list of all available bases types in the game
 
-proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load available bases types from the data file
   ##
@@ -191,8 +191,7 @@ proc loadBasesTypes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       basesTypesList[baseTypeIndex] = baseType
 
-proc getPrice*(baseType: string; itemIndex: Positive): Natural {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc getPrice*(baseType: string; itemIndex: Positive): Natural {.raises: [KeyError], tags: [], contractual.} =
   ## Get the price of the selected item in the selected type of bases
   ##
   ## * baseType  - the type of base from which the price will be taken
@@ -212,7 +211,7 @@ proc getPrice*(baseType: string; itemIndex: Positive): Natural {.sideEffect,
     return itemsList[itemIndex].price
 
 proc isBuyable*(baseType: string; itemIndex: Positive; checkFlag: bool = true;
-    baseIndex: ExtendedBasesRange = 0): bool {.sideEffect, raises: [KeyError],
+    baseIndex: ExtendedBasesRange = 0): bool {.raises: [KeyError],
     tags: [], contractual.} =
   ## Check if the selected item is buyable in the selected bases type
   ##

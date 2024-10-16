@@ -23,14 +23,14 @@ import std/tables
 import contracts
 import game, types, utils
 
-proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [],
+proc countCombatValue*(): Natural {.raises: [KeyError], tags: [],
     contractual.} =
   ## Count the combat value of the player's ship based on its modules,
   ## weapons and ammunition.
   ##
   ## Returns the combat value of the player's ship.
   proc countAmmoValue(itemTypeIndex: Natural;
-      multiple: Positive): Natural {.sideEffect, raises: [KeyError], tags: [],
+      multiple: Positive): Natural {.raises: [KeyError], tags: [],
       contractual.} =
     ## Count the combat value of the ammunition on the player's ship.
     ##
@@ -62,7 +62,7 @@ proc countCombatValue*(): Natural {.sideEffect, raises: [KeyError], tags: [],
     else:
       discard
 
-proc generateShipName*(factionIndex: string): string {.sideEffect, raises: [],
+proc generateShipName*(factionIndex: string): string {.raises: [],
     tags: [], contractual.} =
   ## Generate the name for the ship, based on its owner's faction. Based
   ## on libtcod names generator

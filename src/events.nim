@@ -28,7 +28,7 @@ var
   traders*: seq[Positive] = @[]
     ## The list of all traders' ships
 
-proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
+proc getPlayerShips(playerShips: var seq[Positive]) {.raises: [],
     tags: [], contractual.} =
   ## Get the list of all prototype's ships which are available only for the
   ## player
@@ -44,7 +44,7 @@ proc getPlayerShips(playerShips: var seq[Positive]) {.sideEffect, raises: [],
         playerShips.add(y = career.shipIndex)
 
 proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
-    withTraders: bool = true) {.sideEffect, raises: [KeyError], tags: [],
+    withTraders: bool = true) {.raises: [KeyError], tags: [],
         contractual.} =
   ## Create a list of enemy's ships
   ##
@@ -70,7 +70,7 @@ proc generateEnemies*(enemies: var seq[Positive]; owner: string = "Any";
           withTraders or tradersName notin ship.name):
         enemies.add(y = index)
 
-proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
+proc deleteEvent*(eventIndex: Natural) {.raises: [],
     tags: [], contractual.} =
   ## Delete the selected event and update the map information
   ##
@@ -84,7 +84,7 @@ proc deleteEvent*(eventIndex: Natural) {.sideEffect, raises: [],
     for index, event in eventsList:
       skyMap[event.skyX][event.skyY].eventIndex = index
 
-proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [],
+proc updateEvents*(minutes: Positive) {.raises: [], tags: [],
     contractual.} =
   ## Update timer for all known events, delete events if the timers passed
   ##
@@ -113,7 +113,7 @@ proc updateEvents*(minutes: Positive) {.sideEffect, raises: [], tags: [],
     for index, event in eventsList:
       skyMap[event.skyX][event.skyY].eventIndex = index
 
-proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
+proc recoverBase*(baseIndex: BasesRange) {.raises: [KeyError],
     tags: [], contractual.} =
   ## Set a new owner, population and reset dates for the abandoned base
   ##
@@ -139,7 +139,7 @@ proc recoverBase*(baseIndex: BasesRange) {.sideEffect, raises: [KeyError],
   addMessage(message = "Base " & skyBases[baseIndex].name & " has a new owner.",
       mType = otherMessage, color = cyan)
 
-proc generateTraders*() {.sideEffect, raises: [KeyError], tags: [],
+proc generateTraders*() {.raises: [KeyError], tags: [],
     contractual.} =
   ## Create the list of traders' ships needed for events
   for index, ship in protoShipsList:

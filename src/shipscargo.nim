@@ -24,7 +24,7 @@ import config, game, types
 
 proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability; cargoIndex: int = -1;
-    price: Natural = 0) {.sideEffect, raises: [], tags: [], contractual.} =
+    price: Natural = 0) {.raises: [], tags: [], contractual.} =
   ## Updated the selected ship cargo, add or remove items to it
   ##
   ## * ship       - The ship which cargo will be updated
@@ -69,8 +69,7 @@ proc updateCargo*(ship: var ShipRecord; protoIndex: Natural = 0; amount: int;
     ship.cargo[itemIndex].amount = newAmount
     ship.cargo[itemIndex].price = price
 
-proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.raises: [KeyError], tags: [], contractual.} =
   ## Get the amount of free space in the selected ship's cargo
   ##
   ## * amount - the amount of space which will be taken or add from the current cargo
@@ -86,7 +85,7 @@ proc freeCargo*(amount: int; ship: ShipRecord = playerShip): int {.sideEffect,
     result -= (itemsList[item.protoIndex].weight * item.amount)
   result += amount
 
-proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
+proc getItemAmount*(itemType: string): Natural {.raises: [KeyError],
     tags: [], contractual.} =
   ## Get the amount of items of the selected type in the player's ship's cargo
   ##
@@ -102,7 +101,7 @@ proc getItemAmount*(itemType: string): Natural {.sideEffect, raises: [KeyError],
       if itemsList[item.protoIndex].itemType == itemType:
         result += item.amount
 
-proc getItemsAmount*(iType: string): Natural {.sideEffect, raises: [KeyError],
+proc getItemsAmount*(iType: string): Natural {.raises: [KeyError],
     tags: [], contractual.} =
   ## Get the amount of selected consumable items in the player's ship's cargo
   ##
