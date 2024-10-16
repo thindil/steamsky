@@ -36,7 +36,7 @@ var
   fullScreenAccel* = "Control-f"        ## Keyboard shortcut for toggle full screen
   defaultFontSizes*: array[3, Positive] ## The default sizes of fonts
 
-proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
+proc updateMoveButtons*() {.raises: [], tags: [].} =
   ## Update the player's ship movement buttons, depending on the state of the
   ## ship
   let
@@ -96,7 +96,7 @@ proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     showError(message = "Can't get the end text of the current story. Result: " &
         tclGetResult2())
 
-proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show the sky map, draw the map, update the header, etc
   ##
   ## * clear - if true, remove the old subwindow and replace it with the one
@@ -130,7 +130,7 @@ proc showSkyMap*(clear: bool = false) {.sideEffect, raises: [], tags: [WriteIOEf
             res = "showstats")
     currentStory.showText = true
 
-proc drawMap*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Draw the map on the screen
   var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
@@ -296,7 +296,7 @@ proc drawMap*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
   tclEval(script = mapView & " configure -state disable")
 
 proc updateMapInfo*(x: Positive = playerShip.skyX;
-    y: Positive = playerShip.skyY) {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    y: Positive = playerShip.skyY) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Update frame with information about the map cell on which the player
   ## currently points.
   ##
@@ -518,7 +518,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-proc setKeys*() {.sideEffect, raises: [], tags: [].} =
+proc setKeys*() {.raises: [], tags: [].} =
   ## Set the keyboard shortcuts for the map
   const tclCommandsArray: array[37, string] = [
     "{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader &

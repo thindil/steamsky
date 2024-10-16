@@ -22,7 +22,7 @@ import coreui
 
 proc createDialog(name, title: string; titleWidth: Positive = 275;
     columns: Positive = 1;
-    parentName: string = ".gameframe"): string {.sideEffect, raises: [], tags: [].} =
+    parentName: string = ".gameframe"): string {.raises: [], tags: [].} =
   ## Create a new dialog with the selected title
   ##
   ## * name       - the Tk path of the new dialog
@@ -55,7 +55,7 @@ proc createDialog(name, title: string; titleWidth: Positive = 275;
 
 proc addCloseButton(name, text, command: string; columnSpan: Positive = 1;
     row: Natural = 0; column: Natural = 0; icon: string = "exiticon";
-    color: string = "") {.sideEffect, raises: [], tags: [].} =
+    color: string = "") {.raises: [], tags: [].} =
   ## Add a close button to the selected dialog and set keyboard bindings for it
   ##
   ## * name       - the Tk path (name) for the button
@@ -81,7 +81,7 @@ proc addCloseButton(name, text, command: string; columnSpan: Positive = 1;
   tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
 
 proc showDialog(dialog: string; parentFrame: string = ".gameframe";
-    relativeX: float = 0.3; relativeY: float = 0.3) {.sideEffect, raises: [],
+    relativeX: float = 0.3; relativeY: float = 0.3) {.raises: [],
         tags: [].} =
   ## Show the selected dialog to the player
   ##
@@ -96,7 +96,7 @@ proc showDialog(dialog: string; parentFrame: string = ".gameframe";
   tclEval(script = "raise " & dialog)
 
 proc showError*(message: string; e: ref Exception = getCurrentException(
-    )): TclResults {.discardable, sideEffect, raises: [], tags: [WriteIOEffect,
+    )): TclResults {.discardable, raises: [], tags: [WriteIOEffect,
         TimeEffect], contractual.} =
   ## Show the error dialog with the message containing technical details about the issue
   ##

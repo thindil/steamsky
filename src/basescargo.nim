@@ -22,7 +22,7 @@ import std/tables
 import contracts, nimalyzer
 import basestypes, game, maps, types, utils
 
-proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
+proc generateCargo*() {.raises: [KeyError], tags: [],
     contractual.} =
   ## Generate the cargo in the selected sky base if needed
   let
@@ -67,7 +67,7 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
             itemIndex.inc
     else:
 
-      proc getMaxAmount(amount: Positive): Natural {.sideEffect, raises: [],
+      proc getMaxAmount(amount: Positive): Natural {.raises: [],
           tags: [], contractual.} =
         ## Get the max amount from the selected amount of items
         ##
@@ -89,8 +89,7 @@ proc generateCargo*() {.sideEffect, raises: [KeyError], tags: [],
               max = getMaxAmount(amount = item.amount)))
 
 proc findBaseCargo*(protoIndex: Natural;
-    durability: ItemsDurability = ItemsDurability.high): int {.sideEffect,
-    raises: [], tags: [], contractual.} =
+    durability: ItemsDurability = ItemsDurability.high): int {.raises: [], tags: [], contractual.} =
   ## Find the selected item in the currently visited base's cargo
   ##
   ## * protoIndex - the index of the prototype to search
@@ -102,7 +101,7 @@ proc findBaseCargo*(protoIndex: Natural;
   let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex
 
-  proc findCargo(localBaseCargo: seq[BaseCargo]): int {.sideEffect, raises: [],
+  proc findCargo(localBaseCargo: seq[BaseCargo]): int {.raises: [],
       tags: [], contractual.} =
     ## Find the index of the item in the base's cargo
     ##
@@ -125,7 +124,7 @@ proc findBaseCargo*(protoIndex: Natural;
 
 proc updateBaseCargo*(protoIndex: Natural = 0; amount: int;
     durability: ItemsDurability = defaultItemDurability;
-    cargoIndex: int = -1) {.sideEffect, raises: [KeyError], tags: [],
+    cargoIndex: int = -1) {.raises: [KeyError], tags: [],
         contractual.} =
   ## Update the selected item amount in the cargo of the base where the player
   ## is

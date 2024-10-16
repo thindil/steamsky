@@ -38,8 +38,7 @@ type SkyCell* = object
 var skyMap*: array[MapXRange, array[MapYRange, SkyCell]] ## The list of all map's cells
 {.push ruleOn: "varDeclared".}
 
-proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.sideEffect,
-    raises: [], tags: [], contractual.} =
+proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.raises: [], tags: [], contractual.} =
   ## Normalize (fix to be in range of) the map's coordinates
   ##
   ## * coord   - The coordinate which will be normalized
@@ -65,7 +64,7 @@ proc normalizeCoord*(coord: var int; isXAxis: bool = true) {.sideEffect,
         coord = MapYRange.high
 
 proc countDistance*(destinationX: MapXRange;
-    destinationY: MapYRange): Natural {.sideEffect, raises: [], tags: [],
+    destinationY: MapYRange): Natural {.raises: [], tags: [],
     contractual.} =
   ## Count the distance between the player's ship and the point on the map
   ##
