@@ -29,20 +29,6 @@ type DebugTypes* = enum
 
 var debugMode*: DebugTypes = none ## The debug mode of the game.
 
-proc logMessage(message: cstring; debugType: cint) {.exportc, sideEffect,
-    raises: [], tags: [RootEffect], contractual.} =
-  ## Write the selected message to the log file, C version
-  ##
-  ## * message   - The message which will be written to the file
-  ## * debugType - The type of message which will be written. If different
-  ##               than the game debug mode (except everything), don't write it
-  if debugType != debugMode.cint and debugMode != everything:
-    return
-  try:
-    log(level = lvlError, args = $message)
-  except Exception:
-    echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
-
 proc logMessage*(message: string; debugType: DebugTypes) {.sideEffect, raises: [],
     tags: [RootEffect], contractual.} =
   ## Write the selected message to the log file, Nim version
@@ -50,7 +36,12 @@ proc logMessage*(message: string; debugType: DebugTypes) {.sideEffect, raises: [
   ## * message   - The message which will be written to the file
   ## * debugType - The type of message which will be written. If different
   ##               than the game debug mode (except everything), don't write it
-  logMessage(message = message.cstring, debugType = debugType.ord.cint)
+  if debugType != debugMode and debugMode != everything:
+    return
+  try:
+    log(level = lvlError, args = $message)
+  except Exception:
+    echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
 
 proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
   ## Start logging the game. Set the logger.

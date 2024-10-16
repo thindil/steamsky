@@ -61,12 +61,11 @@ proc addMessage*(message: string; mType: MessageType;
     messagesList.add(y = MessageData(message: "[" & formattedTime(
         time = gameDate) & "] " & message, kind: mType, color: color))
 
-proc getLastMessageIndex*(): cint {.raises: [], tags: [], exportc,
-    contractual.} =
+proc getLastMessageIndex*(): int {.raises: [], tags: [], contractual.} =
   ## Get the index of the last message in the messagesList
   ##
   ## Returns the index of the last message in the messagesList
-  return (messagesList.len() - 1).cint
+  return (messagesList.len() - 1)
 
 proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.raises: [
     ], tags: [], contractual.} =
@@ -112,7 +111,7 @@ proc getMessage*(messageIndex: int; kind: MessageType = default): MessageData {.
     if index == messageIndex:
       return message
 
-proc clearMessages*() {.raises: [], tags: [], exportc, contractual.} =
+proc clearMessages*() {.raises: [], tags: [], contractual.} =
   ## Remove all the in-game messages
   messagesList = @[]
 

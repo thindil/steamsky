@@ -354,8 +354,8 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
       factionIndex = factionIndex))
   return tclOk
 
-proc startGame*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect,
-    ReadIOEffect, RootEffect], exportc.} =
+proc startGame*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    ReadIOEffect, RootEffect].} =
   ##  Start the game
   let mainWindow = "."
   var x: int = try:

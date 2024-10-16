@@ -84,7 +84,7 @@ proc updateMoveButtons*() {.sideEffect, raises: [], tags: [].} =
   else:
     tclEval(script = "grid " & button)
 
-proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Finish the current player's story. Give experience and ask about
   ## finishing the game
   gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
@@ -562,7 +562,7 @@ import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
     craftsui, debugui, gameoptions, helpui, knowledge, mapsuicommands,
     messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
 
-proc createGameUi*() {.sideEffect, raises: [], tags: [WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect], exportc.} =
+proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect].} =
   ## Create the game UI and show sky map to the player
   let
     gameFrame = ".gameframe"

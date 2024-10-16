@@ -793,7 +793,7 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't delete event.")
   return refreshCommand(clientData = clientData, interp = interp, argc = argc, argv = argv)
 
-proc showDebugUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect], exportc.} =
+proc showDebugUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Show debug ui to the player
   tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "debug.tcl")
   try:
