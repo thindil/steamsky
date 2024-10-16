@@ -10,8 +10,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated modding guide
 - Use the new icon for expand and contract infos' sections on various screens
-- Updated the look of the player's ship's crew info section in the ship's info
-  screen
+- Updated the look of the player's ship's crew and cargo info sections in the
+  ship's info screen
 - Updated README.md
 - Updated contributing guide
 
