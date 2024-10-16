@@ -244,31 +244,3 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
   if baseIndex == 0 and eventIndex > -1:
     eventsList[eventIndex].time += 5
   updateGame(minutes = 5)
-
-# Temporary code for interfacing with Ada
-
-proc generateAdaTraderCargo(protoIndex: cint) {.raises: [], tags: [], exportc,
-    contractual.} =
-  ## Temporary C binding
-  try:
-    generateTraderCargo(protoIndex = protoIndex)
-  except KeyError:
-    discard
-
-proc sellAdaItems(itemIndex: cint; amount: cstring): cstring {.raises: [],
-    tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    sellItems(itemIndex = itemIndex.Natural - 1, amount = $amount)
-    return "".cstring
-  except Exception as e:
-    return ($e.name & " " & e.msg).cstring
-
-proc buyAdaItems(baseItemIndex: cint; amount: cstring): cstring {.raises: [],
-    tags: [WriteIOEffect, RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    buyItems(baseItemIndex = baseItemIndex.Natural - 1, amount = $amount)
-    return "".cstring
-  except Exception as e:
-    return ($e.name & " " & e.msg).cstring

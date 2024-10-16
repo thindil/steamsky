@@ -120,13 +120,3 @@ proc progressStory*(nextStep: bool = false): bool {.sideEffect, raises: [
     of stories.any:
       discard
   return true
-
-# Temporary code for interfacing with Ada
-
-proc progressAdaStory(nextStep: cint): cint {.raises: [], tags: [WriteIOEffect,
-    RootEffect], exportc, contractual.} =
-  ## Temporary C binding
-  try:
-    return progressStory(nextStep = nextStep == 1).cint
-  except ValueError, IOError, Exception:
-    return 0

@@ -44,22 +44,6 @@ proc generateRoboticName*(): string {.sideEffect, raises: [],
     for i in 1..numbersAmount:
       result.add(y = $rand(max = 9))
 
-proc getRandom(min, max: cint): cint {.exportc, gcsafe, sideEffect, raises: [],
-    tags: [], contractual.} =
-  ## Get the random value from the selected range
-  ##
-  ## * min - The minimal value from which the value will be taken
-  ## * max - The maximal value from which the value will be taken
-  ##
-  ## Returns the random value from min and max range
-  require:
-    min <= max
-  ensure:
-    result in min..max
-  body:
-    randomize()
-    return rand(x = min..max)
-
 proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
     tags: [], contractual.} =
   ## Get the random value from the selected range
@@ -90,12 +74,3 @@ proc daysDifference*(dateToCompare: DateRecord;
   return (currentDate.day.cint + (30 * currentDate.month.cint) + (
       currentDate.year.cint * 360)) - (dateToCompare.day.cint + (30 *
       dateToCompare.month.cint) + (dateToCompare.year.cint * 360))
-
-# Temporary code for interfacing with Ada
-
-proc daysAdaDifference(y, m, d, h, mi, yc, mc, dc, hc,
-    mic: cint): cint {.raises: [], tags: [], exportc, contractual.} =
-  ## Temporary C binding
-  return daysDifference(dateToCompare = DateRecord(year: y, month: m, day: d,
-      hour: h, minutes: m), currentDate = DateRecord(year: yc, month: mc,
-      day: dc, hour: hc, minutes: mic))
