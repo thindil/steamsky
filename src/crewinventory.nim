@@ -25,7 +25,7 @@ import game, shipscargo, types, utils
 proc findItem*(inventory: seq[InventoryData];
     protoIndex: Natural = 0; itemType: string = "";
     durability: ItemsDurability = ItemsDurability.high;
-    quality: Positive = 100): int {.sideEffect, raises: [], tags: [],
+    quality: Positive = 100): int {.raises: [], tags: [],
         contractual.} =
   ## Find the index of the selected item in the selected inventory
   ##
@@ -80,7 +80,7 @@ proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
         discard
     result += amount
 
-proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
+proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.raises: [
     ], tags: [], contractual.} =
   ## Check if the item is currently used by the selected crew member in the
   ## player ship crew.
@@ -94,7 +94,7 @@ proc itemIsUsed*(memberIndex, itemIndex: Natural): bool {.sideEffect, raises: [
   body:
     return itemIndex in playerShip.crew[memberIndex].equipment
 
-proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
+proc takeOffItem*(memberIndex, itemIndex: Natural) {.raises: [],
     tags: [], contractual.} =
   ## Stop using the selected item by the selected the player's ship crew
   ## member.
@@ -112,7 +112,7 @@ proc takeOffItem*(memberIndex, itemIndex: Natural) {.sideEffect, raises: [],
 proc updateInventory*(memberIndex: Natural; amount: int;
     protoIndex: Natural = 0; durability: ItemsDurability = 0;
     inventoryIndex: int = -1; price: Natural = 0;
-    ship: var ShipRecord) {.sideEffect, raises: [CrewNoSpaceError, KeyError],
+    ship: var ShipRecord) {.raises: [CrewNoSpaceError, KeyError],
     tags: [], contractual.} =
   ## Update the inventory of the selected crew member.
   ##
@@ -170,7 +170,7 @@ proc updateInventory*(memberIndex: Natural; amount: int;
 
 proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     skillLevel: Natural = 0; memberIndex: int = -1;
-    ship: var ShipRecord) {.sideEffect, raises: [KeyError, CrewNoSpaceError],
+    ship: var ShipRecord) {.raises: [KeyError, CrewNoSpaceError],
     tags: [], contractual.} =
   ## Check if item in the inventory was damaged, if yes, update inventory and
   ## the ship cargo
@@ -227,7 +227,7 @@ proc damageItem*(inventory: var seq[InventoryData]; itemIndex: Natural;
     i.inc
 
 proc getTrainingToolQuality*(memberIndex: Natural;
-    skillIndex: Positive): Positive {.sideEffect, raises: [KeyError], tags: [],
+    skillIndex: Positive): Positive {.raises: [KeyError], tags: [],
         contractual.} =
   ## Get the required tools quality for the selected skill
   ##

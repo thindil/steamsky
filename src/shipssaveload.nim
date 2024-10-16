@@ -22,7 +22,7 @@ import std/[strutils, tables, xmltree]
 import contracts
 import game, types
 
-proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
+proc savePlayerShip*(saveData: var XmlNode) {.raises: [], tags: [],
     contractual.} =
   ## Save the player's ship data from the current game into a file
   ##
@@ -175,7 +175,7 @@ proc savePlayerShip*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
     shipTree.add(son = memberTree)
   saveData.add(son = shipTree)
 
-proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
+proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
     tags: [], contractual.} =
   ## Load the player's ship data from the file
   ##

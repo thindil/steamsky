@@ -59,7 +59,7 @@ type
 var gameStats*: GameStatsData = GameStatsData(basesVisited: 1, mapVisited: 1,
     distanceTraveled: 0, acceptedMissions: 0, points: 0) ## The player's game's statistics
 
-proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [],
+proc updateCraftingOrders*(index: string) {.raises: [], tags: [],
     contractual.} =
   ## Update the list of finished crafting orders in the game statistics
   ##
@@ -77,7 +77,7 @@ proc updateCraftingOrders*(index: string) {.sideEffect, raises: [], tags: [],
       gameStats.craftingOrders.add(y = StatisticsData(index: index, amount: 1))
     gameStats.points += 5
 
-proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [],
+proc updateFinishedGoals*(index: string) {.raises: [], tags: [],
     contractual.} =
   ## Update the list of finished goals in the game statistics
   ##
@@ -100,7 +100,7 @@ proc updateFinishedGoals*(index: string) {.sideEffect, raises: [], tags: [],
         if goal.index == index:
           gameStats.finishedGoals.add(y = StatisticsData(index: goal.index, amount: 1))
 
-proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [],
+proc getGamePoints*(): Natural {.raises: [], tags: [],
     contractual.} =
   ## Get the real amount of the player's game's points, multiplied or divided
   ## by the game's difficulty settings
@@ -127,7 +127,7 @@ proc getGamePoints*(): Natural {.sideEffect, raises: [], tags: [],
     pointsBonus = 0.01
   return (gameStats.points.float * pointsBonus).Natural
 
-proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [],
+proc updateFinishedMissions*(mType: string) {.raises: [], tags: [],
     contractual.} =
   ## Update the list of finished missions in the game statistics
   ##
@@ -145,7 +145,7 @@ proc updateFinishedMissions*(mType: string) {.sideEffect, raises: [], tags: [],
       gameStats.finishedMissions.add(y = StatisticsData(index: mType, amount: 1))
     gameStats.points += 50
 
-proc clearGameStats*() {.sideEffect, raises: [], tags: [], contractual.} =
+proc clearGameStats*() {.raises: [], tags: [], contractual.} =
   ## Reset the game statistics
   ensure:
     gameStats.points == 0
@@ -161,8 +161,7 @@ proc clearGameStats*() {.sideEffect, raises: [], tags: [], contractual.} =
     gameStats.killedMobs = @[]
     gameStats.points = 0
 
-proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
-    raises: [], tags: [], contractual.} =
+proc updateKilledMobs*(mob: MemberData; factionName: string) {.raises: [], tags: [], contractual.} =
   ## Update the list of killed mobs in the game statistics
   ##
   ## * mob         - the killed mobile data, needed to count the gained points
@@ -184,7 +183,7 @@ proc updateKilledMobs*(mob: MemberData; factionName: string) {.sideEffect,
       gameStats.killedMobs.add(y = StatisticsData(
           index: factionName.capitalizeAscii, amount: 1))
 
-proc updateDestroyedShips*(shipName: string) {.sideEffect, raises: [], tags: [],
+proc updateDestroyedShips*(shipName: string) {.raises: [], tags: [],
     contractual.} =
   ## Update the list of destroyed ships in the game statistics
   ##

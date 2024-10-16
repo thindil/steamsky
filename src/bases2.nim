@@ -23,7 +23,7 @@ import contracts
 import bases, basestypes, factions, events, game, game2, maps, messages, ships2,
     shipscrew, types, utils
 
-proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
+proc askForEvents*() {.raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known events in a base or a friendly ship. Generates new
   ## events
@@ -151,7 +151,7 @@ proc askForEvents*() {.sideEffect, raises: [KeyError, Exception], tags: [
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
   updateGame(minutes = 30)
 
-proc askForBases*() {.sideEffect, raises: [KeyError, Exception], tags: [
+proc askForBases*() {.raises: [KeyError, Exception], tags: [
     WriteIOEffect, RootEffect], contractual.} =
   ## Ask for known bases in a base or a friendly ship.
   let traderIndex: int = findMember(order = talk)

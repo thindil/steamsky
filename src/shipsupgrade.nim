@@ -25,7 +25,7 @@ import config, crewinventory, game, items, messages, shipscargo, shipscrew, type
 type ShipUpgradeError* = object of CatchableError
   ## Raised when there is some problems with starting the ship upgrade
 
-proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
+proc upgradeShip*(minutes: Positive) {.raises: [KeyError,
     Exception], tags: [RootEffect], contractual.} =
   ## Upgrade the currently selected module in the player ship
   ##
@@ -36,7 +36,7 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
   var upgradedModule: ModuleData
   {.ruleOn: "varDeclared".}
 
-  proc findMatsAndTools() {.sideEffect, raises: [KeyError, Exception], tags: [
+  proc findMatsAndTools() {.raises: [KeyError, Exception], tags: [
       RootEffect], contractual.} =
     ## Find necessary materials and tools for the upgrade
     upgradeTools = findTools(memberIndex = workerIndex, itemType = repairTools,
@@ -44,7 +44,7 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
     upgradeMaterial = findItem(inventory = playerShip.cargo,
         itemType = modulesList[upgradedModule.protoIndex].repairMaterial)
 
-  proc maxUpgradeReached(messageText: string) {.sideEffect, raises: [KeyError,
+  proc maxUpgradeReached(messageText: string) {.raises: [KeyError,
       Exception], tags: [RootEffect], contractual.} =
     ## Show message about reaching the maximum allowed level of upgrades and
     ## clear the player's ship upgrades settings.
@@ -242,8 +242,7 @@ proc upgradeShip*(minutes: Positive) {.sideEffect, raises: [KeyError,
       upgradedModule.upgradeProgress = upgradeProgress
   playerShip.modules[playerShip.upgradeModule] = upgradedModule
 
-proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
-    raises: [ShipUpgradeError, KeyError], tags: [], contractual.} =
+proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.raises: [ShipUpgradeError, KeyError], tags: [], contractual.} =
   ## Set the module's upgrade of the player's ship
   ##
   ## * moduleIndex - the index of the module to upgrade

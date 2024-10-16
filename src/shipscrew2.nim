@@ -57,7 +57,7 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
           owner.dec
 
 proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
-    createBody: bool = true) {.sideEffect, raises: [KeyError, IOError], tags: [
+    createBody: bool = true) {.raises: [KeyError, IOError], tags: [
     WriteIOEffect], contractual.} =
   ## Handle the death of a crew member in ships
   ##
@@ -92,7 +92,7 @@ proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
       updateMorale(ship = ship, memberIndex = index, value = getRandom(
           min = -25, max = -10))
 
-proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
+proc getCurrentOrder*(memberIndex: Natural): string {.raises: [
     ValueError], tags: [], contractual.} =
   ## Get the full information about the order of the selected crew member
   ##
@@ -103,7 +103,7 @@ proc getCurrentOrder*(memberIndex: Natural): string {.sideEffect, raises: [
   require:
     memberIndex < playerShip.crew.len
   body:
-    proc getModuleName(mType: ModuleType2): string {.sideEffect, raises: [],
+    proc getModuleName(mType: ModuleType2): string {.raises: [],
         tags: [], contractual.} =
       ## Get the name of the selected module
       ##
