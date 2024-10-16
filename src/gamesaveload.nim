@@ -29,7 +29,7 @@ type SaveGameInvalidData* = object of CatchableError
 
 var saveName*: string = "" ## The full path to the game save file with file name
 
-proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
+proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
     IOError], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Save the game data to the file.
   ##
@@ -120,7 +120,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
       "points": $gameStats.points}.toXmlAttributes
 
   proc saveStatistics(stats: seq[StatisticsData],
-      statName: string) {.sideEffect, raises: [], tags: [], contractual.} =
+      statName: string) {.raises: [], tags: [], contractual.} =
     ## Save the selected game's statistic to the file
     ##
     ## * stats    - the game's statistics
@@ -232,7 +232,7 @@ proc saveGame*(prettyPrint: bool = false) {.sideEffect, raises: [KeyError,
   logMessage(message = "Finished saving game in file " & saveName & ".",
       debugType = everything)
 
-proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
+proc loadGame*() {.raises: [IOError, OSError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game from a file
   let savedGame: XmlNode = loadXml(path = saveName)
@@ -419,7 +419,7 @@ proc loadGame*() {.sideEffect, raises: [IOError, OSError, ValueError,
   logMessage(message = "done", debugType = everything)
   logMessage(message = "Finished loading the game.", debugType = everything)
 
-proc generateSaveName*(renameSave: bool = false) {.sideEffect, raises: [OSError,
+proc generateSaveName*(renameSave: bool = false) {.raises: [OSError,
     IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect],
         contractual.} =
   ## Generate an unique name for the save game file

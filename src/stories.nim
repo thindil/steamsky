@@ -129,7 +129,7 @@ var
     ## The list of finished stories
 
 proc loadStep(step: XmlNode; story: var StoryData; storyIndex, startStep,
-    finalStep: string; storyAction: DataAction) {.sideEffect, raises: [
+    finalStep: string; storyAction: DataAction) {.raises: [
     DataLoadingError], tags: [], contractual.} =
   ## Load the single story's step from a file
   ##
@@ -233,7 +233,7 @@ proc loadStep(step: XmlNode; story: var StoryData; storyIndex, startStep,
       else:
         story.steps[stepIndex] = tempStep
 
-proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadStories*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the stories data from the file
   ##
@@ -364,7 +364,7 @@ proc loadStories*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       storiesList[storyIndex] = story
 
-proc selectBase*(value: string): string {.sideEffect, raises: [], tags: [],
+proc selectBase*(value: string): string {.raises: [], tags: [],
     contractual.} =
   ## Selecte the name of a base for a story
   ##
@@ -399,7 +399,7 @@ proc getStepData*(finishData: seq[StepFinishData];
       if data.name == name:
         return data.value
 
-proc selectLocation*(step: seq[StepFinishData]): string {.sideEffect, raises: [
+proc selectLocation*(step: seq[StepFinishData]): string {.raises: [
     ValueError], tags: [], contractual.} =
   ## Get the location on the sky map for the story's step
   ##
@@ -429,7 +429,7 @@ proc selectLocation*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     result = result & value & ";"
   playerShip.destinationY = locationY
 
-proc selectEnemy*(step: seq[StepFinishData]): string {.sideEffect, raises: [
+proc selectEnemy*(step: seq[StepFinishData]): string {.raises: [
     ValueError], tags: [], contractual.} =
   ## Get the enemy ship for the selected story's step
   ##
@@ -449,7 +449,7 @@ proc selectEnemy*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     generateEnemies(enemies = enemies, owner = value)
     return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
-proc selectLoot*(step: seq[StepFinishData]): string {.sideEffect, raises: [
+proc selectLoot*(step: seq[StepFinishData]): string {.raises: [
     KeyError], tags: [], contractual.} =
   ## Get the information about the item looted in this step of a story.
   ##
@@ -469,8 +469,7 @@ proc selectLoot*(step: seq[StepFinishData]): string {.sideEffect, raises: [
     generateEnemies(enemies = enemies, owner = value)
     return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
-proc startStory*(factionName: string; condition: StartConditionType) {.sideEffect,
-    raises: [ValueError], tags: [], contractual.} =
+proc startStory*(factionName: string; condition: StartConditionType) {.raises: [ValueError], tags: [], contractual.} =
   ## If possible, start a story
   ##
   ## * factionName - the name of faction which is needed to start the story
@@ -519,7 +518,7 @@ proc startStory*(factionName: string; condition: StartConditionType) {.sideEffec
             stepsAmount: currentStory.maxSteps, stepsTexts: @[]))
         return
 
-proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [],
+proc getCurrentStoryText*(): string {.raises: [KeyError], tags: [],
     contractual.} =
   ## Get the text of the current step in the player's current story
   ##
@@ -536,12 +535,12 @@ proc getCurrentStoryText*(): string {.sideEffect, raises: [KeyError], tags: [],
     if text.condition == currentStory.finishedStep:
       return text.text
 
-proc clearCurrentStory*() {.sideEffect, raises: [], tags: [], contractual.} =
+proc clearCurrentStory*() {.raises: [], tags: [], contractual.} =
   ## Reset the player's current story
   currentStory = CurrentStoryData()
 
 proc getStoryLocation*(): tuple[storyX: MapXRange;
-    storyY: MapYRange] {.sideEffect, raises: [ValueError], tags: [],
+    storyY: MapYRange] {.raises: [ValueError], tags: [],
         contractual.} =
   ## Get the target's location of the current player's story
   ##

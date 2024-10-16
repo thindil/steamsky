@@ -22,7 +22,7 @@ import std/[strutils, tables, xmlparser, xmltree]
 import contracts
 import game, items, log, types
 
-proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadModules*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load available prototypes of ship's modules from the data file
   ##
@@ -199,7 +199,7 @@ proc loadModules*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       modulesList[moduleIndex] = module
 
-proc getModuleType*(moduleIndex: Positive): string {.sideEffect, raises: [
+proc getModuleType*(moduleIndex: Positive): string {.raises: [
     KeyError], tags: [], contractual.} =
   ## Get the type of the selected module from its name as enumeration
   ##

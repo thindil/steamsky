@@ -25,8 +25,7 @@ import bases, config, events, game, maps, messages, shipscrew, shipscargo,
 
 var acceptedMissions*: seq[MissionData] = @[] ## The list of accepted missions by the player
 
-proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [KeyError], tags: [], contractual.} =
   ## Delete the selected accepted mission, update the player's repuration in
   ## connected bases and update the sky map
   ##
@@ -109,7 +108,7 @@ proc deleteMission*(missionIndex: Natural; failed: bool = true) {.sideEffect,
       else:
         skyMap[aMission.targetX][aMission.targetY].missionIndex = index
 
-proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
+proc generateMissions*() {.raises: [KeyError], tags: [],
     contractual.} =
   ## Generate available missions in the selected base if needed
   let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
@@ -245,7 +244,7 @@ proc generateMissions*() {.sideEffect, raises: [KeyError], tags: [],
     skyBases[baseIndex].missions.add(y = mission)
   skyBases[baseIndex].missionsDate = gameDate
 
-proc updateMissions*(minutes: Positive) {.sideEffect, raises: [KeyError],
+proc updateMissions*(minutes: Positive) {.raises: [KeyError],
     tags: [], contractual.} =
   ## Update accepted missions timers and delete expired ones.
   ##
@@ -278,7 +277,7 @@ func getMissionType*(mType: MissionsTypes): string {.raises: [], tags: [],
   of passenger:
     return "Transport passenger to base"
 
-proc updateMission*(missionIndex: Natural) {.sideEffect, raises: [KeyError],
+proc updateMission*(missionIndex: Natural) {.raises: [KeyError],
     tags: [], contractual.} =
   ## Update the status of the selected mission
   ##
