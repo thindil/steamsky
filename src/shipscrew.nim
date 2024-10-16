@@ -22,8 +22,8 @@ import std/[strutils, tables]
 import contracts
 import careers, config, crewinventory, game, maps, messages, shipscargo, types, utils
 
-proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffect,
-    raises: [], tags: [], contractual.} =
+proc generateMemberName*(gender: char; factionIndex: string): string {.raises: [
+    ], tags: [], contractual.} =
   ## Generate the name for the mob, based on his/her faction. Based on
   ## libtcod names generator
   ##
@@ -69,8 +69,8 @@ proc generateMemberName*(gender: char; factionIndex: string): string {.sideEffec
     result &= femalesSyllablesEndList[getRandom(min = 0, max = (
         femalesSyllablesEndList.len - 1))]
 
-proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Get the real level of the selected skill of the selected crew member.
   ##
   ## * member     - the member which skill will be get
@@ -109,7 +109,7 @@ proc getSkillLevel*(member: MemberData; skillIndex: Positive): int {.sideEffect,
         return
 
 proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
-    value: int) {.sideEffect, raises: [KeyError], tags: [], contractual.} =
+    value: int) {.raises: [KeyError], tags: [], contractual.} =
   ## Update the morale of the selected crew member in the selected ship
   ##
   ## * ship        - the ship in which the crew member's morale will be changed
@@ -161,9 +161,10 @@ proc updateMorale*(ship: var ShipRecord; memberIndex: Natural;
       newLoyalty = 0
     ship.crew[memberIndex].loyalty = newLoyalty
 
-proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
-    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
-    RootEffect], contractual.}
+proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.raises: [
+    CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
+
+RootEffect], contractual.}
   ## Update the orders of the crew of the selected ship, based on the crew
   ## members orders' priorities
   ##
@@ -175,7 +176,7 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
 
 proc checkModule(moduleIndex2: int; ship: var ShipRecord;
     givenOrder: CrewOrders; memberName: string;
-    memberIndex: Natural) {.sideEffect, raises: [CrewOrderError], tags: [],
+    memberIndex: Natural) {.raises: [CrewOrderError], tags: [],
     contractual.} =
   ## Check the module for given order. If the module cannot be used, raise
   ## CrewOrderError exception.
@@ -219,9 +220,8 @@ proc checkModule(moduleIndex2: int; ship: var ShipRecord;
 
 proc checkTools(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int;
-        memberName: string): bool {.sideEffect,
-    raises: [KeyError, CrewNoSpaceError, CrewOrderError], tags: [],
-    contractual.} =
+    memberName: string): bool {.raises: [KeyError, CrewNoSpaceError,
+    CrewOrderError], tags: [], contractual.} =
   ## Check the tools for the given order. If there no needed tools available,
   ## raise CrewOrderError.
   ##
@@ -297,7 +297,7 @@ proc checkTools(ship: var ShipRecord; memberIndex: Natural;
 
 proc showOrderMessage(givenOrder: CrewOrders; memberName: string;
     ship: var ShipRecord; memberIndex: Natural; moduleIndex,
-    moduleIndex2: int) {.sideEffect, raises: [], tags: [], contractual.} =
+    moduleIndex2: int) {.raises: [], tags: [], contractual.} =
   ## Show message about changed the crew member's order
   ##
   ## * givenOrder  - the given order for the crew member
@@ -370,8 +370,8 @@ proc showOrderMessage(givenOrder: CrewOrders; memberName: string;
             ship.modules[moduleIndex2].owner[index] = memberIndex
             break
 
-proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.sideEffect,
-    raises: [KeyError, CrewNoSpaceError], tags: [], contractual.} =
+proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.raises: [
+    KeyError, CrewNoSpaceError], tags: [], contractual.} =
   ## Give the rest order to the selected crew member
   ##
   ## * ship        - the ship in which the crew member will have given order
@@ -392,7 +392,7 @@ proc giveRestOrder(ship: var ShipRecord; memberIndex: Natural) {.sideEffect,
 
 proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
     givenOrder: CrewOrders; moduleIndex: int = -1;
-    checkPriorities: bool = true) {.sideEffect, raises: [CrewOrderError,
+    checkPriorities: bool = true) {.raises: [CrewOrderError,
     KeyError, CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
   ## Give the selected order to the selected crew member and update orders of
   ## the whole crew if needed
@@ -493,7 +493,7 @@ proc giveOrders*(ship: var ShipRecord; memberIndex: Natural;
       updateOrders(ship = ship)
 
 proc updatePosition(ship: var ShipRecord; order: CrewOrders;
-    maxPriority: bool = true): bool {.sideEffect, raises: [CrewOrderError,
+    maxPriority: bool = true): bool {.raises: [CrewOrderError,
     KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
         contractual.} =
   ## Change the crew member for the selected order
@@ -571,7 +571,7 @@ proc updatePosition(ship: var ShipRecord; order: CrewOrders;
 
 proc setOrdersConditions(havePilot, haveEngineer, haveUpgrade, haveTrader,
     canHeal, needGunners, needCrafters, needClean, needRepairs,
-    needTrader: var bool; ship: ShipRecord) {.sideEffect, raises: [KeyError],
+    needTrader: var bool; ship: ShipRecord) {.raises: [KeyError],
     tags: [], contractual.} =
   ## Set various conditions needed for update orders in the ship
   ##
@@ -636,7 +636,7 @@ proc setOrdersConditions(havePilot, haveEngineer, haveUpgrade, haveTrader,
 
 proc updateCrewOrders(havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal,
     needGunners, needCrafters, needClean, needRepairs, needTrader: bool;
-    ship: var ShipRecord; maxPriority: bool = true) {.sideEffect, raises: [
+    ship: var ShipRecord; maxPriority: bool = true) {.raises: [
     KeyError, CrewOrderError, CrewNoSpaceError, Exception], tags: [RootEffect],
     contractual.} =
   ## Update the orders of the crew of the selected ship
@@ -691,9 +691,9 @@ proc updateCrewOrders(havePilot, haveEngineer, haveUpgrade, haveTrader, canHeal,
   if updatePosition(ship = ship, order = defend, maxPriority = maxPriority):
     updateOrders(ship = ship)
 
-proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
-    raises: [CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [
-    RootEffect], contractual.} =
+proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.raises: [
+    CrewOrderError, KeyError, CrewNoSpaceError, Exception], tags: [RootEffect],
+    contractual.} =
   ## Update the orders of the crew of the selected ship, based on the crew
   ## members orders' priorities
   ##
@@ -734,7 +734,7 @@ proc updateOrders*(ship: var ShipRecord; combat: bool = false) {.sideEffect,
     updateOrders(ship = ship)
 
 proc findMember*(order: CrewOrders; shipCrew: seq[
-    MemberData] = playerShip.crew): int {.sideEffect, raises: [], tags: [],
+    MemberData] = playerShip.crew): int {.raises: [], tags: [],
     contractual.} =
   ## Find the first member of the selected crew with the selected order
   ##
@@ -749,7 +749,7 @@ proc findMember*(order: CrewOrders; shipCrew: seq[
   return -1
 
 proc gainExp*(amount: Natural; skillNumber: Positive;
-    crewIndex: Natural) {.sideEffect, raises: [], tags: [], contractual.} =
+    crewIndex: Natural) {.raises: [], tags: [], contractual.} =
   ## Raise the crew member experience in the selected skill and associated
   ## attribute
   ##
@@ -770,7 +770,7 @@ proc gainExp*(amount: Natural; skillNumber: Positive;
       skillExp, newAmount, skillLevel: int = 0
       skillIndex: int = -1
 
-    proc gainExpInAttribute(attribute: Natural) {.sideEffect, raises: [],
+    proc gainExpInAttribute(attribute: Natural) {.raises: [],
         tags: [], contractual.} =
       ## Raise the crew member experience in the attribute associated with the
       ## skill

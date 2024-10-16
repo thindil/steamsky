@@ -82,8 +82,7 @@ proc getHighestSkill(memberIndex: Natural): string {.raises: [],
     showError(message = "Can't thge the highest skill. Index: " & $highestIndex )
     return "Unknown"
 
-proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.sideEffect,
-    raises: [], tags: [RootEffect].} =
+proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [], tags: [RootEffect].} =
   ## Update the list of the player's ship's crew members
   ##
   ## * page  - the current page of the list to show

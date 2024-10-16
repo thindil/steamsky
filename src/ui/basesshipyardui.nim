@@ -1015,8 +1015,7 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text Install -image buyicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule install}")
 
-  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.sideEffect,
-      raises: [KeyError], tags: [].} =
+  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.raises: [KeyError], tags: [].} =
     var
       maxSize, usedSpace, allSpace = 0
       freeTurretIndex = -1

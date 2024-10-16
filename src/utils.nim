@@ -22,7 +22,7 @@ import std/random
 import contracts
 import game, types
 
-proc generateRoboticName*(): string {.sideEffect, raises: [],
+proc generateRoboticName*(): string {.raises: [],
     tags: [], contractual.} =
   ## Generate robotic type name for bases, mobs, ships, etc
   ##
@@ -44,7 +44,7 @@ proc generateRoboticName*(): string {.sideEffect, raises: [],
     for i in 1..numbersAmount:
       result.add(y = $rand(max = 9))
 
-proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
+proc getRandom*(min, max: int): int {.gcsafe, raises: [],
     tags: [], contractual.} =
   ## Get the random value from the selected range
   ##
@@ -61,7 +61,7 @@ proc getRandom*(min, max: int): int {.gcsafe, sideEffect, raises: [],
     return rand(x = min..max)
 
 proc daysDifference*(dateToCompare: DateRecord;
-    currentDate: DateRecord = gameDate): cint {.gcsafe, sideEffect, raises: [],
+    currentDate: DateRecord = gameDate): cint {.gcsafe, raises: [],
     tags: [], contractual.} =
   ## Get the difference in days between two dates, mostly with the current
   ## date in the game
