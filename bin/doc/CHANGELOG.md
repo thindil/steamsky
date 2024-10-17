@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Setting the game's difficulty level when starting the game
+- Showing the amount of available ammunition for guns in combat
 
 ## [10.3] - 2024-09-22
 
