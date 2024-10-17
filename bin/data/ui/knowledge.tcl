@@ -29,11 +29,17 @@ SetScrollbarBindings $knowledgecanvas $knowledgeframe.bases.scrolly
 ttk::frame $knowledgecanvas.frame
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.bases.scrolly
 # Minimize/maximize button
-grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
+grid [ttk::frame $knowledgecanvas.frame.maxmin] -sticky w
+grid [ttk::button $knowledgecanvas.frame.maxmin.maxmin -style Small.TButton \
    -image expandicon -command {KnowledgeMaxMin bases show}] -sticky w \
    -padx 5
-tooltip::tooltip $knowledgecanvas.frame.maxmin \
+tooltip::tooltip $knowledgecanvas.frame.maxmin.maxmin \
    {Maximize/minimize the list of known bases}
+grid [ttk::button $knowledgecanvas.frame.maxmin.more -style Small.TButton \
+   -image moreoptionsicon -command {ShipMore cargo show}] -sticky w \
+   -row 0 -column 1
+tooltip::tooltip $knowledgecanvas.frame.maxmin.more \
+   {Show/Hide additional options related to managing the cargo}
 # List of bases options
 grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w \
    -padx 5
@@ -95,10 +101,11 @@ ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.missions.scrolly
 # Minimize/maximize button
-grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
+grid [ttk::frame $knowledgecanvas.frame.maxmin] -sticky w
+grid [ttk::button $knowledgecanvas.frame.maxmin.maxmin -style Small.TButton \
    -image expandicon -command {KnowledgeMaxMin missions show}] \
    -sticky w -padx 5
-tooltip::tooltip $knowledgecanvas.frame.maxmin \
+tooltip::tooltip $knowledgecanvas.frame.maxmin.maxmin \
    {Maximize/minimize the list of accepted missions}
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.missions.scrolly
@@ -119,10 +126,11 @@ ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.events.scrolly
 # Minimize/maximize button
-grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
+grid [ttk::frame $knowledgecanvas.frame.maxmin] -sticky w
+grid [ttk::button $knowledgecanvas.frame.maxmin.maxmin -style Small.TButton \
    -image expandicon -command {KnowledgeMaxMin events show}] \
    -sticky w -padx 5
-tooltip::tooltip $knowledgecanvas.frame.maxmin \
+tooltip::tooltip $knowledgecanvas.frame.maxmin.maxmin \
    {Maximize/minimize the list of known events}
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.events.scrolly
@@ -143,10 +151,11 @@ ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.stories.scrolly
 # Minimize/maximize button
-grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
+grid [ttk::frame $knowledgecanvas.frame.maxmin] -sticky w
+grid [ttk::button $knowledgecanvas.frame.maxmin.maxmin -style Small.TButton \
    -image expandicon -command {KnowledgeMaxMin stories show}] \
    -sticky w -padx 5
-tooltip::tooltip $knowledgecanvas.frame.maxmin \
+tooltip::tooltip $knowledgecanvas.frame.maxmin.maxmin \
    {Maximize/minimize the list of known stories}
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.stories.scrolly

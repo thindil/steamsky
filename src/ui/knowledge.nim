@@ -60,13 +60,13 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "knowledge")
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
-      knowledgeCanvas & ".frame.maxmin}")
+      knowledgeCanvas & ".frame.maxmin.maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[2] & "> {InvokeButton " &
-      knowledgeFrame & ".missions.canvas.frame.maxmin}")
+      knowledgeFrame & ".missions.canvas.frame.maxmin.maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[1] & "> {InvokeButton " &
-      knowledgeFrame & ".events.canvas.frame.maxmin}")
+      knowledgeFrame & ".events.canvas.frame.maxmin.maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[3] & "> {InvokeButton " &
-      knowledgeFrame & ".stories.canvas.frame.maxmin}")
+      knowledgeFrame & ".stories.canvas.frame.maxmin.maxmin}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   # Setting bases list
   updateBasesList()
@@ -146,7 +146,7 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
       name: "events", column: 1, row: 0), FrameInfo(name: "stories", column: 1, row: 1)]
   let
     frameName = mainPaned & ".knowledgeframe"
-    button = frameName & "." & $argv[1] & ".canvas.frame.maxmin"
+    button = frameName & "." & $argv[1] & ".canvas.frame.maxmin.maxmin"
   if argv[2] == "show":
     for frameInfo in frames:
       let frame = frameName & "." & frameInfo.name
