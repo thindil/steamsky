@@ -160,7 +160,7 @@ proc updateCombatUi() {.sideEffect, raises: [], tags: [].} =
       for itemIndex, item in itemsList:
         try:
           if item.itemType == itemsTypesList[modulesList[playerShip.modules[gun[
-              1]].protoIndex].value]:
+              1]].protoIndex].value - 1]:
             let ammoIndex = findItem(inventory = playerShip.cargo,
                 protoIndex = itemIndex)
             if ammoIndex > -1:
