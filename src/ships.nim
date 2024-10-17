@@ -57,7 +57,7 @@ proc getCabinQuality*(quality: Natural): string {.raises: [], tags: [],
       return "Palace room"
 
 proc loadShipModules(shipNode: XmlNode; shipAction: DataAction;
-    shipIndex: Natural; ship: var ProtoShipData) {.sideEffect, raises: [
+    shipIndex: Natural; ship: var ProtoShipData) {.raises: [
     DataLoadingError], tags: [], contractual.} =
   ## Load the prototype's ship's modules from a file
   ##
@@ -97,7 +97,7 @@ proc loadShipModules(shipNode: XmlNode; shipAction: DataAction;
             break
 
 proc loadShipCargo(shipNode: XmlNode; shipAction: DataAction;
-    shipIndex: Natural; ship: var ProtoShipData) {.sideEffect, raises: [
+    shipIndex: Natural; ship: var ProtoShipData) {.raises: [
     DataLoadingError], tags: [], contractual.} =
   ## Load the prototype's ship's cargo from a file
   ##
@@ -173,7 +173,7 @@ proc loadShipCargo(shipNode: XmlNode; shipAction: DataAction;
           cargoIndex.inc
 
 proc loadShipCrew(shipNode: XmlNode; shipAction: DataAction;
-    shipIndex: Natural; ship: var ProtoShipData) {.sideEffect, raises: [
+    shipIndex: Natural; ship: var ProtoShipData) {.raises: [
     DataLoadingError], tags: [], contractual.} =
   ## Load the prototype's ship's crew from a file
   ##
@@ -246,7 +246,7 @@ proc loadShipCrew(shipNode: XmlNode; shipAction: DataAction;
             break
           crewIndex.inc
 
-proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadShips*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the ships data from the file
   ##
@@ -434,8 +434,8 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       for description in shipNode.findAll(tag = "description"):
         ship.description = description.innerText()
 
-      proc countAmmoValue(itemTypeIndex, multiple: Positive) {.sideEffect,
-          raises: [KeyError], tags: [], contractual.} =
+      proc countAmmoValue(itemTypeIndex, multiple: Positive) {.raises: [
+          KeyError], tags: [], contractual.} =
         ## Add the combat value of the selected ammunition to the ship's combat
         ## value
         ##
@@ -477,7 +477,7 @@ proc loadShips*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       protoShipsList[shipIndex] = ship
 
 proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;
-    deathReason: string) {.sideEffect, raises: [KeyError, IOError], tags: [
+    deathReason: string) {.raises: [KeyError, IOError], tags: [
     WriteIOEffect], contractual.} =
   ## Damage the selected module, kill its owner if the module was destroyed
   ##
@@ -493,8 +493,8 @@ proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;
     deathReason.len > 0
   body:
 
-    proc removeGun(moduleIndex2: Natural; ship: var ShipRecord) {.sideEffect,
-        raises: [KeyError, IOError], tags: [WriteIOEffect], contractual.} =
+    proc removeGun(moduleIndex2: Natural; ship: var ShipRecord) {.raises: [
+        KeyError, IOError], tags: [WriteIOEffect], contractual.} =
       ## Remove a gun from the ship and kill a gunner in it.
       ##
       ## * moduleIndex2 - the index of the gun to remove
@@ -536,7 +536,7 @@ proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;
             death(memberIndex = ship.modules[moduleIndex].owner[0],
                 reason = deathReason, ship = ship)
 
-proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
+proc countShipWeight*(ship: ShipRecord): Natural {.raises: [
     KeyError], tags: [], contractual.} =
   ## Count the weight of the ship, its modules and cargo
   ##
@@ -549,7 +549,7 @@ proc countShipWeight*(ship: ShipRecord): Natural {.sideEffect, raises: [
     result += (item.amount * itemsList[item.protoIndex].weight)
 
 proc addModulesToShip(randomUpgrades: bool; protoShip: ProtoShipData;
-    ship: var ShipRecord) {.sideEffect, raises: [KeyError], tags: [],
+    ship: var ShipRecord) {.raises: [KeyError], tags: [],
     contractual.} =
   ## Add modules to the currently created ship
   ##
@@ -686,8 +686,8 @@ proc addModulesToShip(randomUpgrades: bool; protoShip: ProtoShipData;
         discard
 
 proc createShip*(protoIndex: Positive; name: string; x: MapXRange; y: MapYRange;
-    speed: ShipSpeed; randomUpgrades: bool = true): ShipRecord {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+    speed: ShipSpeed; randomUpgrades: bool = true): ShipRecord {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Create a new ship from the selected prototype
   ##
   ## * protoIndex     - the index of the ships' prototype used as base for the new

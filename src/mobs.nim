@@ -86,7 +86,7 @@ proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord; mobAction: DataAction
       of DataAction.remove:
         mob.skills.delete(i = skillIndex)
 
-proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the Mobs data from the file
   ##
@@ -272,8 +272,7 @@ proc loadMobs*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       protoMobsList[mobIndex] = mob
 
-proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises: [KeyError], tags: [], contractual.} =
   ## Generate random mob from the selected prototype and the faction.
   ##
   ## * mobIndex     - the index of the prototype of the mob from which the new

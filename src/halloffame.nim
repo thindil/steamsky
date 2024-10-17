@@ -37,7 +37,7 @@ type
 var hallOfFameArray*: array[1..10, HallOfFameData] ## The list of entries in the game's hall of fame
 {.push ruleOn: "varDeclared".}
 
-proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
+proc loadHallOfFame*() {.raises: [DataLoadingError], tags: [
     WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game's hall of fame data from file
   if hallOfFameArray[1].name.len > 0:
@@ -61,7 +61,7 @@ proc loadHallOfFame*() {.sideEffect, raises: [DataLoadingError], tags: [
     hallOfFameArray[index].deathReason = hofNode.attr(name = "Death_Reason")
     index.inc
 
-proc updateHallOfFame*(playerName, deathReason: string) {.sideEffect, raises: [
+proc updateHallOfFame*(playerName, deathReason: string) {.raises: [
     IOError], tags: [WriteIOEffect], contractual.} =
   ## Update the game's hall of fame list with the new entry. If needed, remove
   ## old one to replace it with the new. If new is too low in points, don't

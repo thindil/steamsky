@@ -23,7 +23,7 @@ import contracts
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
     messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
-proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
+proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError],
     tags: [WriteIOEffect], contractual.} =
   ## Count the fuel usage when the player waits in the open space
   ##
@@ -51,7 +51,7 @@ proc waitInPlace*(minutes: Positive) {.sideEffect, raises: [KeyError, IOError],
   updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
       fuelIndex].protoIndex, amount = fuelNeeded)
 
-proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [],
+proc haveOrderRequirements(): string {.raises: [KeyError], tags: [],
     contractual.} =
   ## Check if all requirements for the ship's moving orders are valid
   ##
@@ -87,8 +87,7 @@ proc haveOrderRequirements(): string {.sideEffect, raises: [KeyError], tags: [],
     return "You don't have an engineer on duty."
   return ""
 
-proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
-    raises: [KeyError, ValueError], tags: [], contractual.} =
+proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [KeyError, ValueError], tags: [], contractual.} =
   ## Count the real speed of the ship in meters per minute
   ##
   ## * ship     - the ship which speed will be count
@@ -135,8 +134,7 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
     return 0
   result = (result / 60).Natural
 
-proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
-    raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
+proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
   ## Dock, undock or escape the player's ship from the currently visited base
   ##
@@ -248,7 +246,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
         addMessage(message = "Ship undocked from base " & skyBases[
             baseIndex].name & ".", mType = orderMessage)
 
-proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [], contractual.} =
+proc countFuelNeeded*(): int {.raises: [], tags: [], contractual.} =
   ## Count the amount of needed fuel to travel by one map cell by the player's
   ## ship
   ##
@@ -269,7 +267,7 @@ proc countFuelNeeded*(): int {.sideEffect, raises: [], tags: [], contractual.} =
       else:
         discard
 
-proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
+proc changeShipSpeed*(speedValue: ShipSpeed): string {.raises: [
     KeyError], tags: [], contractual.} =
   ## Change the player's ship's speed
   ##
@@ -291,7 +289,7 @@ proc changeShipSpeed*(speedValue: ShipSpeed): string {.sideEffect, raises: [
   playerShip.speed = speedValue
   return ""
 
-proc moveShip*(x, y: int; message: var string): Natural {.sideEffect, raises: [
+proc moveShip*(x, y: int; message: var string): Natural {.raises: [
     KeyError, ValueError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
   ## Move the player's ship on the map

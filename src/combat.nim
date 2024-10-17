@@ -48,8 +48,8 @@ var
   turnNumber: Natural = 0
     ## The number of the combat's turn
 
-proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffect,
-    raises: [KeyError, ValueError], tags: [RootEffect], contractual.} =
+proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: [
+    KeyError, ValueError], tags: [RootEffect], contractual.} =
   ## Generate the enemy and start the ship to ship combat if enemy spotted
   ## the player first
   ##
@@ -206,7 +206,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.sideEffe
       debugType = DebugTypes.combat)
   return true
 
-proc finishCombat() {.sideEffect, raises: [KeyError, ValueError, CrewOrderError,
+proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
     CrewNoSpaceError, IOError, Exception], tags: [RootEffect], contractual.} =
   ## Finish the combat when the player wins, count loot and show information
   ## about it. Also update statistics plus the current goal.
@@ -310,7 +310,7 @@ proc finishCombat() {.sideEffect, raises: [KeyError, ValueError, CrewOrderError,
 
 proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
     hitLocation: EquipmentLocations): tuple [damage, hitChance,
-    attackSkill: int] {.sideEffect, raises: [KeyError], tags: [], contractual.} =
+    attackSkill: int] {.raises: [KeyError], tags: [], contractual.} =
   ## Count damage, hit chance and skill used by attacker for melee combat
   ##
   ## * attacker      - the crew member who was attacking
@@ -385,7 +385,7 @@ proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
       result.damage *= 2
 
 proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
-    playerAttack2: bool; orderIndex: var int): bool {.sideEffect, raises: [
+    playerAttack2: bool; orderIndex: var int): bool {.raises: [
     KeyError, CrewNoSpaceError, IOError], tags: [WriteIOEffect], contractual.} =
   ## The attack of the selected crew member on its target
   ##
@@ -500,7 +500,7 @@ proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
   return true
 
 proc meleeCombat(attackers, defenders: var seq[MemberData];
-    playerAttack: bool) {.sideEffect, raises: [KeyError, IOError,
+    playerAttack: bool) {.raises: [KeyError, IOError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
   ## Melee combat between the player's ship crew member and the enemy's ship's
@@ -603,8 +603,8 @@ proc meleeCombat(attackers, defenders: var seq[MemberData];
     if findMember(order = boarding) == -1:
       updateOrders(ship = game.enemy.ship)
 
-proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): int {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): int {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Find the module in the enemy's ship
   ##
   ## * mType     - the type of the module to find
@@ -617,8 +617,8 @@ proc findEnemyModule(mType: ModuleType; enemyShip: ShipRecord): int {.sideEffect
       return index
   return -1
 
-proc findHitWeapon(enemyShip: ShipRecord; hitLocation: var int) {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc findHitWeapon(enemyShip: ShipRecord; hitLocation: var int) {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Find the weapon which was hit by the attack
   ##
   ## * enemyShip   - the ship which was attacked
@@ -630,8 +630,8 @@ proc findHitWeapon(enemyShip: ShipRecord; hitLocation: var int) {.sideEffect,
       hitLocation = index
       return
 
-proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
-    raises: [], tags: [], contractual.} =
+proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.raises: [],
+    tags: [], contractual.} =
   ## Remove the gun from the player's ship's list of guns
   ##
   ## * moduleIndex - the index of the module to remove
@@ -643,8 +643,8 @@ proc removeGun(moduleIndex: Natural; enemyShip: ShipRecord) {.sideEffect,
         break
 
 proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
-    hitLocation: var int; ship, enemyShip: ShipRecord): bool {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+    hitLocation: var int; ship, enemyShip: ShipRecord): bool {.raises: [
+        KeyError], tags: [], contractual.} =
   ## Count location in which the enemy's ship was hit.
   ##
   ## * gunnerIndex - the index of the crew member who is shooting
@@ -696,7 +696,7 @@ proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
 
 proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     gunnerIndex, shoots, gunnerOrder, speedBonus, ammoIndex: int;
-    module: ModuleData; hitLocation: var int): bool {.sideEffect, raises: [
+    module: ModuleData; hitLocation: var int): bool {.raises: [
     KeyError, IOError], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Shoot to the enemy ship
   ##
@@ -833,7 +833,7 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
       return true
 
 proc prepareEnemyGun(mIndex, gunnerIndex: int; shoots: var int;
-    ship: ShipRecord) {.sideEffect, raises: [KeyError], tags: [],
+    ship: ShipRecord) {.raises: [KeyError], tags: [],
     contractual.} =
   ## Count amount of shoots of the enemy's ship.
   ##
@@ -862,8 +862,8 @@ proc prepareEnemyGun(mIndex, gunnerIndex: int; shoots: var int;
 
 proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
     ammoIndex, evadeBonus: var int; module: var ModuleData; ship,
-    enemyShip: ShipRecord; mIndex, accuracyBonus, ammoIndex2: int) {.sideEffect,
-    raises: [KeyError], tags: [RootEffect], contractual.} =
+    enemyShip: ShipRecord; mIndex, accuracyBonus, ammoIndex2: int) {.raises: [
+    KeyError], tags: [RootEffect], contractual.} =
   ## Count all needed data for shooting from the selected gun or harpoon gun
   ##
   ## * gunnerIndex          - the index of the gunner who is using the gun
@@ -978,7 +978,7 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
       discard
 
 proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
-    speedBonus: int) {.sideEffect, raises: [KeyError, IOError], tags: [
+    speedBonus: int) {.raises: [KeyError, IOError], tags: [
     RootEffect], contractual.} =
   ## Made one attack of one of the ships in the combat
   ##
@@ -1037,7 +1037,7 @@ proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
           break attackLoop
 
 proc changeEnemySpeed(enemyPilotOrder: var Natural;
-    damageRange: Natural) {.sideEffect, raises: [], tags: [], contractual.} =
+    damageRange: Natural) {.raises: [], tags: [], contractual.} =
   ## Change the enemy's ship's speed depending on the enemy's AI
   ##
   ## * enemyPilotOrder - the order of the enemy's ship's pilot
@@ -1077,7 +1077,7 @@ proc changeEnemySpeed(enemyPilotOrder: var Natural;
     discard
 
 proc countDamageRange(damageRange: var Natural;
-    ammoIndex2: var int) {.sideEffect, raises: [KeyError], tags: [],
+    ammoIndex2: var int) {.raises: [KeyError], tags: [],
     contractual.} =
   ## Count the distance between the ships in which the enemy can attack the
   ## player's ship
@@ -1125,7 +1125,7 @@ proc countDamageRange(damageRange: var Natural;
     game.enemy.combatAi = coward
 
 proc countBonuses(pilotIndex, engineerIndex: int; accuracyBonus, evadeBonus,
-    speedBonus: var int) {.sideEffect, raises: [KeyError, ValueError], tags: [],
+    speedBonus: var int) {.raises: [KeyError, ValueError], tags: [],
     contractual.} =
   ## Count the bonuses or maluses for the player's ship used in calculating the
   ## chance for hit an enemy's ship and evade its attacks
@@ -1175,7 +1175,7 @@ proc countBonuses(pilotIndex, engineerIndex: int; accuracyBonus, evadeBonus,
   accuracyBonus += speedBonus
   evadeBonus -= speedBonus
 
-proc combatTurn*() {.sideEffect, raises: [KeyError, IOError, ValueError,
+proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
     CrewNoSpaceError, CrewOrderError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
   ## One turn in the combat, between the ships and the crew members if there
