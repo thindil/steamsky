@@ -27,7 +27,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
 
   try:
-    setCurrentDir(getAppDir())
+    setCurrentDir(newDir = getAppDir())
   except:
     echo "Can't set the current directory for the game."
     return
