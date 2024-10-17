@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[algorithm, os, strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[bases, basesship, basesship2, basestrade, basestypes, config,
     crewinventory, game, maps, shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
@@ -44,7 +44,32 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   var baseFrame = mainPaned & ".baseframe"
   let baseCanvas = baseFrame & ".canvas"
   if tclEval2(script = "winfo exists " & baseCanvas) == "0":
-    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "base.tcl")
+    tclEval(script = """
+      ttk::frame .gameframe.paned.baseframe
+      set basecanvas [canvas .gameframe.paned.baseframe.canvas \
+         -yscrollcommand [list .gameframe.paned.baseframe.scrolly set] \
+         -xscrollcommand [list .gameframe.paned.baseframe.scrollx set]]
+      pack [ttk::scrollbar .gameframe.paned.baseframe.scrolly -orient vertical \
+         -command [list $basecanvas yview]] -side right -fill y -pady 5
+      pack $basecanvas -side top -fill both -pady 5
+      pack [ttk::scrollbar .gameframe.paned.baseframe.scrollx -orient horizontal \
+         -command [list $basecanvas xview]] -fill x
+      SetScrollbarBindings $basecanvas .gameframe.paned.baseframe.scrolly
+      ::autoscroll::autoscroll .gameframe.paned.baseframe.scrolly
+      ::autoscroll::autoscroll .gameframe.paned.baseframe.scrollx
+      set baseframe [ttk::frame $basecanvas.base]
+      SetScrollbarBindings $baseframe .gameframe.paned.baseframe.scrolly
+      grid [ttk::frame $baseframe.searchframe] -sticky w -padx 5 -pady 5
+      grid [ttk::label $baseframe.searchframe.searchlabel -text {Name:}] -padx {0 5}
+      tooltip::tooltip $baseframe.searchframe.searchlabel "Search for the selected recipe."
+      grid [ttk::entry $baseframe.searchframe.search -validate key \
+         -validatecommand {SearchRecipes %P}] -row 0 -column 1
+      tooltip::tooltip $baseframe.searchframe.search "Search for the selected recipe."
+      grid [ttk::frame $baseframe.moneyframe] -sticky w -padx 5
+      grid [ttk::label $baseframe.moneyframe.lblmoney] -sticky w
+      grid [ttk::label $baseframe.moneyframe.lblmoney2 -style Golden.TLabel] -sticky w \
+         -column 1 -row 0
+    """)
     tclEval(script = "bind " & baseFrame & " <Configure> {ResizeCanvas %W.canvas %h}")
   elif tclEval2(script = "winfo ismapped " & baseCanvas) == "1" and argc == 1:
     tclEval(script = "grid remove " & closeButton)
