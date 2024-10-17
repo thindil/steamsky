@@ -44,8 +44,7 @@ proc generateRoboticName*(): string {.raises: [],
     for i in 1..numbersAmount:
       result.add(y = $rand(max = 9))
 
-proc getRandom*(min, max: int): int {.gcsafe, raises: [],
-    tags: [], contractual.} =
+proc getRandom*(min, max: int): int {.raises: [], tags: [], contractual.} =
   ## Get the random value from the selected range
   ##
   ## * min - The minimal value from which the value will be taken
@@ -61,7 +60,7 @@ proc getRandom*(min, max: int): int {.gcsafe, raises: [],
     return rand(x = min..max)
 
 proc daysDifference*(dateToCompare: DateRecord;
-    currentDate: DateRecord = gameDate): cint {.gcsafe, raises: [],
+    currentDate: DateRecord = gameDate): cint {.raises: [],
     tags: [], contractual.} =
   ## Get the difference in days between two dates, mostly with the current
   ## date in the game

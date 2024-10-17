@@ -33,7 +33,7 @@ type
 var careersList*: Table[string, CareerData] = initTable[string, CareerData]()
   ## The list of available player's careers in the game
 
-proc loadCareers*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadCareers*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the player's careers' data from the file
   ##

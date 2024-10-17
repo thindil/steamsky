@@ -84,15 +84,13 @@ type
 var currentTclInterp: PInterp = nil
   ## Stores the current Tcl interpreter
 
-proc setInterp*(interp: PInterp) {.gcsafe, raises: [], tags: [],
-    contractual.} =
+proc setInterp*(interp: PInterp) {.raises: [], tags: [], contractual.} =
   ## Set the current Tcl interpreter.
   ##
   ## * interp - The Tcl interpreter which will be set as the current
   currentTclInterp = interp
 
-proc getInterp*(): PInterp {.gcsafe, raises: [], tags: [],
-    contractual.} =
+proc getInterp*(): PInterp {.raises: [], tags: [], contractual.} =
   ## Get the current Tcl interpreter
   ##
   ## Returns the Tcl interpreter set as the current

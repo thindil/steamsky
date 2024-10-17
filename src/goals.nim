@@ -24,7 +24,7 @@ import game, log, messages, statistics, types, utils
 
 var currentGoal*: GoalData = GoalData(multiplier: 1) ## The player's current goal
 
-proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadGoals*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the goals data from the file
   ##
@@ -109,7 +109,7 @@ proc loadGoals*(fileName: string) {.sideEffect, raises: [DataLoadingError],
       goalsList[goalIndex] = goal
 
 proc updateGoal*(goalType: GoalTypes; targetIndex: string;
-    amount: Positive = 1) {.sideEffect, raises: [], tags: [], contractual.} =
+    amount: Positive = 1) {.raises: [], tags: [], contractual.} =
   ## Update the player's current goal. If the goal is finished, select randomly
   ## a new one
   ##
@@ -132,12 +132,12 @@ proc updateGoal*(goalType: GoalTypes; targetIndex: string;
       except KeyError:
         discard
 
-proc clearCurrentGoal*() {.sideEffect, raises: [], tags: [], contractual.} =
+proc clearCurrentGoal*() {.raises: [], tags: [], contractual.} =
   ## Reset the player's current goal
   currentGoal = GoalData(index: "", goalType: random, amount: 0,
       targetIndex: "", multiplier: 1)
 
-proc goalText*(index: int): string {.sideEffect, raises: [KeyError], tags: [],
+proc goalText*(index: int): string {.raises: [KeyError], tags: [],
     contractual.} =
   ## Get information about the selected goal. If index doesn't exist in the
   ## list of goals, get information about the current goal of the player.
