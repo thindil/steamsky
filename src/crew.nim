@@ -24,7 +24,7 @@ import contracts
 import config, crewinventory, game, items, maps, messages, utils,
     shipscargo, shipscrew, shipscrew2, types
 
-proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [
+proc dailyPayment*() {.raises: [KeyError, Exception], tags: [
     RootEffect], contractual.} =
   ## Pay daily payments to the player's ship crew members and update the lenght
   ## of their contracts
@@ -78,8 +78,8 @@ proc dailyPayment*() {.sideEffect, raises: [KeyError, Exception], tags: [
               givenOrder = rest)
     memberIndex.inc
 
-proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
-    raises: [], tags: [], contractual.} =
+proc getAttributeLevelName*(attributeLevel: Positive): string {.raises: [],
+    tags: [], contractual.} =
   ## Get the attribute level name for the selected attribute or its numerical
   ## value if the player set it in the configuration.
   ##
@@ -109,7 +109,7 @@ proc getAttributeLevelName*(attributeLevel: Positive): string {.sideEffect,
     else:
       return "Outstanding"
 
-proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [
+proc getSkillLevelName*(skillLevel: SkillRange): string {.raises: [
     ], tags: [], contractual.} =
   ## Get the skill level name for the selected skill or its numerical
   ## value if the player set it in the configuration.
@@ -148,7 +148,7 @@ proc getSkillLevelName*(skillLevel: SkillRange): string {.sideEffect, raises: [
     else:
       return "Ultimate"
 
-proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [],
+proc findCabin*(memberIndex: Natural): int {.raises: [], tags: [],
     contractual.} =
   ## Find index of cabin which belongs to the selected crew member
   ##
@@ -168,7 +168,7 @@ proc findCabin*(memberIndex: Natural): int {.sideEffect, raises: [], tags: [],
     return -1
 
 proc memberRest(memberIndex: Natural; tiredLevel, healthLevel: var int;
-    times: int) {.sideEffect, raises: [KeyError], tags: [], contractual.} =
+    times: int) {.raises: [KeyError], tags: [], contractual.} =
   ## Count the effect of the rest on the selected player's ship's crew member
   ##
   ## * memberIndex - the index of the crew member which rests
@@ -208,7 +208,7 @@ proc memberRest(memberIndex: Natural; tiredLevel, healthLevel: var int;
       if playerShip.crew[memberIndex].morale[1] > 50:
         playerShip.crew[memberIndex].morale = [1: 50.Natural, 2: 0]
 
-proc memberHeal(memberIndex: Natural; times: int) {.sideEffect, raises: [
+proc memberHeal(memberIndex: Natural; times: int) {.raises: [
     KeyError, CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
     contractual.} =
   ## Execute heal wounded crew members order for the selected crew member
@@ -304,7 +304,7 @@ proc memberHeal(memberIndex: Natural; times: int) {.sideEffect, raises: [
       giveOrders(ship = playerShip, memberIndex = memberIndex,
           givenOrder = rest)
 
-proc memberClean(memberIndex: Natural; times: int) {.sideEffect, raises: [
+proc memberClean(memberIndex: Natural; times: int) {.raises: [
     KeyError, CrewNoSpaceError, CrewOrderError, Exception], tags: [RootEffect],
     contractual.} =
   ## Execute clean the ship order for the selected crew member
@@ -401,8 +401,8 @@ proc consume(itemType: string; memberIndex: Natural): Natural {.raises: [
     return consumeValue
   return 0
 
-proc memberSendRest(member: var MemberData; memberIndex: int) {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc memberSendRest(member: var MemberData; memberIndex: int) {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Send the selected member on rest or back to work if they are rested
   ##
   ## * member      - the crew member to send to rest
@@ -547,7 +547,7 @@ proc updateMember(member: var MemberData; tiredLevel, healthLevel, hungerLevel,
       member.contractLength = 0
 
 proc updateCrew*(minutes: Positive; tiredPoints: Natural;
-    inCombat: bool = false) {.sideEffect, raises: [KeyError, IOError,
+    inCombat: bool = false) {.raises: [KeyError, IOError,
     Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Update the player's ship crew
   ##

@@ -187,7 +187,7 @@ var
   newGameSettings*: NewGameRecord = defaultNewGameSettings ## The settings for new game
   gameSettings*: GameSettingsRecord = defaultGameSettings ## The general settings for the game
 
-proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
+proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Load the game and new game settings from the file
   let fileName: string = saveDirectory & "game.cfg"
   var configFile: FileStream = newFileStream(filename = fileName, mode = fmRead)
@@ -201,7 +201,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
         getCurrentExceptionMsg()
     return
 
-  proc parseAdaFloat(value: string): cfloat {.sideEffect, raises: [ValueError],
+  proc parseAdaFloat(value: string): cfloat {.raises: [ValueError],
       tags: [], contractual.} =
     ## Temporary function, for backward compatibility with Ada code
     require:
@@ -211,7 +211,7 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
       newValue.removeSuffix(c = 'E')
       return newValue.parseFloat().cfloat
 
-  proc parseAdaBool(value: string): bool {.sideEffect, raises: [], tags: [],
+  proc parseAdaBool(value: string): bool {.raises: [], tags: [],
       contractual.} =
     ## Temporary function, for backward compatibility with Ada code
     require:
@@ -340,12 +340,12 @@ proc loadConfig*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
     echo "Can't close configuration file parser. Reason: " &
         getCurrentExceptionMsg()
 
-proc saveConfig*() {.sideEffect, raises: [KeyError, IOError, OSError], tags: [
+proc saveConfig*() {.raises: [KeyError, IOError, OSError], tags: [
     WriteIOEffect], contractual.} =
   ## Save the new game and the game itself configuration to the file
   var config: Config = newConfig()
 
-  proc saveAdaBoolean(value: bool, name: string) {.sideEffect, raises: [
+  proc saveAdaBoolean(value: bool, name: string) {.raises: [
       KeyError], tags: [], contractual.} =
     ## Temporary function, for backward compatibility with Ada code
     require:

@@ -60,8 +60,7 @@ proc findItem*(inventory: seq[InventoryData];
     except KeyError:
       discard
 
-proc freeInventory*(memberIndex: Natural; amount: int): int {.sideEffect,
-    raises: [], tags: [], contractual.} =
+proc freeInventory*(memberIndex: Natural; amount: int): int {.raises: [], tags: [], contractual.} =
   ## Get the amount of free space in the selected player ship's crew member's
   ## inventory.
   ##

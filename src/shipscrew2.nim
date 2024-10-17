@@ -23,8 +23,7 @@ import std/tables
 import contracts
 import crafts, game, halloffame, messages, missions, shipscrew, types, utils
 
-proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [KeyError], tags: [], contractual.} =
   ## Delete the selected member from the selected ship crew list, update
   ## the ship modules with the new crew list and delete accepted missions
   ## if neccessary.

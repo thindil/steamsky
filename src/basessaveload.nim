@@ -22,7 +22,7 @@ import std/[strutils, xmltree]
 import contracts
 import game, maps, types
 
-proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
+proc saveBases*(saveData: var XmlNode) {.raises: [], tags: [],
     contractual.} =
   ## Save the bases from the current game into a file
   ##
@@ -128,7 +128,7 @@ proc saveBases*(saveData: var XmlNode) {.sideEffect, raises: [], tags: [],
         baseTree.add(son = itemElement)
       saveData.add(son = baseTree)
 
-proc loadBases*(saveData: XmlNode) {.sideEffect, raises: [ValueError], tags: [],
+proc loadBases*(saveData: XmlNode) {.raises: [ValueError], tags: [],
     contractual.} =
   ## Load the bases from the file into the game
   ##

@@ -33,7 +33,7 @@ type
   CraftingNoToolsError* = object of CatchableError
     ## Used to mark problems during crafting with lack of proper crafting tools
 
-proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadRecipes*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the crafting recipes data from the file
   ##
@@ -178,7 +178,7 @@ proc loadRecipes*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       recipesList[recipeIndex] = recipe
 
-proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
+proc setRecipeData*(recipeIndex: string): CraftData {.raises: [
     KeyError, ValueError], tags: [], contractual.} =
   ## Set the crafting data for the selected recipe
   ##
@@ -225,7 +225,7 @@ proc setRecipeData*(recipeIndex: string): CraftData {.sideEffect, raises: [
       return
     return recipesList[recipeIndex]
 
-proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
+proc checkRecipe*(recipeIndex: string): Positive {.raises: [
     ValueError, CraftingNoWorkshopError, CraftingNoMaterialsError,
     CraftingNoToolsError, TradeNoFreeCargoError], tags: [], contractual.} =
   ## Check if player have all requirements for the selected recipe
@@ -303,7 +303,7 @@ proc checkRecipe*(recipeIndex: string): Positive {.sideEffect, raises: [
         raise newException(exceptn = TradeNoFreeCargoError, message = "")
 
 proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
-    crafterIndex: int) {.sideEffect, raises: [KeyError, CrewNoSpaceError,
+    crafterIndex: int) {.raises: [KeyError, CrewNoSpaceError,
     Exception], tags: [RootEffect], contractual.} =
   ## Reset the crafting order for the crafter and for the ship's module
   ##
@@ -336,7 +336,7 @@ proc resetOrder(module: var ModuleData; moduleOwner, toolIndex,
     module.craftingAmount = 0
 
 proc getMaterialIndexes(module: ModuleData; recipe: CraftData): seq[
-    Positive] {.sideEffect, raises: [KeyError, ValueError], tags: [],
+    Positive] {.raises: [KeyError, ValueError], tags: [],
     contractual.} =
   ## Find indexes of materials needed to execute the selected crafting order
   ##
@@ -360,8 +360,8 @@ proc getMaterialIndexes(module: ModuleData; recipe: CraftData): seq[
           break
 
 proc crafterGainExp(recipe: CraftData; workTime: var int;
-    module: var ModuleData; owner, toolIndex, crafterIndex: int) {.sideEffect,
-    raises: [KeyError, Exception], tags: [RootEffect], contractual.} =
+    module: var ModuleData; owner, toolIndex, crafterIndex: int) {.raises: [
+        KeyError, Exception], tags: [RootEffect], contractual.} =
   ## Count and update experience gained by the crafter in the crafting skill
   ##
   ## * recipe       - the executed crafting recipe
@@ -384,7 +384,7 @@ proc crafterGainExp(recipe: CraftData; workTime: var int;
         toolIndex = toolIndex, crafterIndex = crafterIndex)
 
 proc finishCrafting(recipe: CraftData; module: ModuleData; crafterIndex: int;
-    craftedAmount: Natural) {.sideEffect, raises: [KeyError], tags: [],
+    craftedAmount: Natural) {.raises: [KeyError], tags: [],
     contractual.} =
   ## Show the summary message about crafting and update the current player's
   ## goal if needed
@@ -422,7 +422,7 @@ proc finishCrafting(recipe: CraftData; module: ModuleData; crafterIndex: int;
 
 proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
     recipeName: string; module: var ModuleData; owner, toolIndex,
-    crafterIndex: int): bool {.sideEffect, raises: [KeyError, Exception],
+    crafterIndex: int): bool {.raises: [KeyError, Exception],
     tags: [RootEffect], contractual.} =
   ## Craft or deconstruct the selected item
   ##
@@ -459,7 +459,7 @@ proc craftItem(amount: var int; recipe: CraftData; resultAmount: Natural;
 proc checkMaterials(materialIndexes: seq[Positive]; recipe: CraftData;
     recipeName: string; module: var ModuleData; owner, crafterIndex: int;
     craftedAmount: var Natural; resultAmount: Natural;
-    toolIndex: var int): bool {.sideEffect, raises: [KeyError, Exception],
+    toolIndex: var int): bool {.raises: [KeyError, Exception],
     tags: [RootEffect], contractual.} =
   ## Check do the player has enought materials for crafting and set the amount
   ## of crafted items
@@ -515,7 +515,7 @@ proc checkMaterials(materialIndexes: seq[Positive]; recipe: CraftData;
           break
       cargoIndex.inc
 
-proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
+proc manufacturing*(minutes: Positive) {.raises: [ValueError,
     Exception], tags: [RootEffect], contractual.} =
   ## Execute the currently set crafting orders in the player's ship
   ##
@@ -635,7 +635,7 @@ proc manufacturing*(minutes: Positive) {.sideEffect, raises: [ValueError,
             owner = owner, toolIndex = toolIndex, crafterIndex = crafterIndex)
 
 proc setRecipe*(workshop: Natural; amount: Positive;
-    recipeIndex: string) {.sideEffect, raises: [ValueError, CrewOrderError,
+    recipeIndex: string) {.raises: [ValueError, CrewOrderError,
     CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
   ## Set the selected crafting recipe for the selected workshop in the player's
   ## ship
@@ -676,7 +676,7 @@ proc setRecipe*(workshop: Natural; amount: Positive;
         mType = orderMessage)
     updateOrders(ship = playerShip)
 
-proc getWorkshopRecipeName*(workshop: Natural): string {.sideEffect, raises: [
+proc getWorkshopRecipeName*(workshop: Natural): string {.raises: [
     KeyError, ValueError], tags: [], contractual.} =
   ## Get the name of the recipe set as working order for the selected workshop
   ##
