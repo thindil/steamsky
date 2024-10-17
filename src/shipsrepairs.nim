@@ -22,7 +22,7 @@ import std/tables
 import contracts
 import crewinventory, game, items, messages, shipscargo, shipscrew, types
 
-proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
+proc repairShip*(minutes: Positive) {.raises: [KeyError, Exception],
     tags: [RootEffect], contractual.} =
   ## Repair the players's ship
   ##
@@ -34,7 +34,7 @@ proc repairShip*(minutes: Positive) {.sideEffect, raises: [KeyError, Exception],
       repairStopped: bool = false
       repairNeeded: bool = true
 
-    proc repairModule(moduleIndex: Natural) {.sideEffect, raises: [KeyError,
+    proc repairModule(moduleIndex: Natural) {.raises: [KeyError,
         Exception], tags: [RootEffect], contractual.} =
       ## Repair the selected module in the player's ship
       ##

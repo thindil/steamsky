@@ -161,7 +161,7 @@ proc loadFactionData(factionNode: XmlNode; factionAction: DataAction;
         else:
           faction.flags.add(y = factionFlag)
 
-proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
+proc loadFactions*(fileName: string) {.raises: [DataLoadingError],
     tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load available factions from the data file
   ##
@@ -308,8 +308,7 @@ proc loadFactions*(fileName: string) {.sideEffect, raises: [DataLoadingError],
             debugType = everything)
       factionsList[factionIndex] = faction
 
-proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc getReputation*(sourceFaction, targetFaction: string): int {.raises: [KeyError], tags: [], contractual.} =
   ## Get the reputation level between the two factions
   ##
   ## * sourceFaction - the faction which repuration level will be get
@@ -327,8 +326,7 @@ proc getReputation*(sourceFaction, targetFaction: string): int {.sideEffect,
         targetFaction].reputation.min, max = factionsList[
         sourceFaction].relations[targetFaction].reputation.max)
 
-proc isFriendly*(sourceFaction, targetFaction: string): bool {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc isFriendly*(sourceFaction, targetFaction: string): bool {.raises: [KeyError], tags: [], contractual.} =
   ## Check if the selected factions are friendly towards self
   ##
   ## * sourceFaction - the faction which will be checked for friendliness
@@ -341,7 +339,7 @@ proc isFriendly*(sourceFaction, targetFaction: string): bool {.sideEffect,
   body:
     return factionsList[sourceFaction].relations[targetFaction].friendly
 
-proc getRandomFaction*(): string {.sideEffect, raises: [], tags: [],
+proc getRandomFaction*(): string {.raises: [], tags: [],
     contractual.} =
   ## Get the index of the random faction
   ##

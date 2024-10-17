@@ -29,7 +29,7 @@ type DebugTypes* = enum
 
 var debugMode*: DebugTypes = none ## The debug mode of the game.
 
-proc logMessage*(message: string; debugType: DebugTypes) {.sideEffect, raises: [],
+proc logMessage*(message: string; debugType: DebugTypes) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Write the selected message to the log file, Nim version
   ##
@@ -43,7 +43,7 @@ proc logMessage*(message: string; debugType: DebugTypes) {.sideEffect, raises: [
   except Exception:
     echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
 
-proc startLogging*() {.sideEffect, raises: [], tags: [RootEffect], contractual.} =
+proc startLogging*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Start logging the game. Set the logger.
   if debugMode == none:
     return

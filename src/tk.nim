@@ -84,14 +84,14 @@ type
 var currentTclInterp: PInterp = nil
   ## Stores the current Tcl interpreter
 
-proc setInterp*(interp: PInterp) {.gcsafe, sideEffect, raises: [], tags: [],
+proc setInterp*(interp: PInterp) {.gcsafe, raises: [], tags: [],
     contractual.} =
   ## Set the current Tcl interpreter.
   ##
   ## * interp - The Tcl interpreter which will be set as the current
   currentTclInterp = interp
 
-proc getInterp*(): PInterp {.gcsafe, sideEffect, raises: [], tags: [],
+proc getInterp*(): PInterp {.gcsafe, raises: [], tags: [],
     contractual.} =
   ## Get the current Tcl interpreter
   ##
@@ -236,7 +236,7 @@ proc mainLoop*() {.cdecl, dynlib: tkDllName, importc: "Tk_MainLoop", raises: [],
     tags: [], contractual.}
   ## Loop for events until all windows are closed
 
-proc addCommand*(name: string; nimProc: TclCmdProc) {.sideEffect, raises: [
+proc addCommand*(name: string; nimProc: TclCmdProc) {.raises: [
     AddingCommandError], tags: [], contractual.} =
   ## Add the selected Nim procedure as a Tcl command.
   ##

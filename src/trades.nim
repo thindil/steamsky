@@ -23,7 +23,7 @@ import contracts
 import bases, basescargo, basestypes, crewinventory, game, game2, maps,
     messages, ships, shipscargo, shipscrew, types, utils
 
-proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
+proc generateTraderCargo*(protoIndex: Positive) {.raises: [
     KeyError], tags: [], contractual.} =
   ## Generate the list of items for trade.
   ##
@@ -73,7 +73,7 @@ proc generateTraderCargo*(protoIndex: Positive) {.sideEffect, raises: [
           cargoAmount = 1
       cargoAmount.dec
 
-proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
+proc sellItems*(itemIndex: Natural; amount: string) {.raises: [
     NoTraderError, NoFreeCargoError, NoMoneyInBaseError, KeyError, ValueError,
     IOError, Exception], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Sell the selected item from the player's ship cargo to the trader
@@ -179,7 +179,7 @@ proc sellItems*(itemIndex: Natural; amount: string) {.sideEffect, raises: [
       eventsList[eventIndex].time += 5
     updateGame(minutes = 5)
 
-proc buyItems*(baseItemIndex: Natural; amount: string) {.sideEffect, raises: [
+proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     NoTraderError, NoFreeCargoError, NoMoneyError, NotEnoughMoneyError,
     KeyError, ValueError, IOError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
