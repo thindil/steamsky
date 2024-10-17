@@ -23,7 +23,7 @@ import contracts
 import bases, basescargo, basestypes, config, crewinventory, game, items, maps,
     messages, shipscargo, shipscrew, types
 
-proc payForDock*() {.sideEffect, raises: [KeyError], tags: [], contractual.} =
+proc payForDock*() {.raises: [KeyError], tags: [], contractual.} =
   ## Pay daily fee for docking, if the player doesn't have enough money for
   ## pay, reduce the player's reputation in the base
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -55,8 +55,7 @@ proc payForDock*() {.sideEffect, raises: [KeyError], tags: [], contractual.} =
   if traderIndex > -1:
     gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
 
-proc repairCost*(cost, time: var Natural; moduleIndex: int) {.sideEffect,
-    raises: [KeyError], tags: [], contractual.} =
+proc repairCost*(cost, time: var Natural; moduleIndex: int) {.raises: [KeyError], tags: [], contractual.} =
   ## Count the repair cost and time required for the player's ship in the base
   ##
   ## * cost        - the cost of repair action

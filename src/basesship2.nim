@@ -35,7 +35,7 @@ type
     ## Raised when there is a problem with removing a modue from the player's
     ## ship
 
-proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
+proc repairShip*(moduleIndex: int) {.raises: [NothingToRepairError,
     NotEnoughMoneyError, KeyError, Exception], tags: [WriteIOEffect,
     RootEffect], contractual.} =
   ## Repair the selected module or the whole player's ship in bases
@@ -79,7 +79,7 @@ proc repairShip*(moduleIndex: int) {.sideEffect, raises: [NothingToRepairError,
 
 proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
     modulesAmount, freeTurretIndex: var int; baseIndex: ExtendedBasesRange;
-    price: var Natural) {.sideEffect, raises: [KeyError, NotEnoughMoneyError,
+    price: var Natural) {.raises: [KeyError, NotEnoughMoneyError,
     UniqueModuleError, InstallationError, IOError, Exception], tags: [
     WriteIOEffect, RootEffect], contractual.} =
   ## Install the selected module on the player's ship
@@ -244,7 +244,7 @@ proc installModule(moduleIndex, traderIndex, moneyIndex2, hullIndex: int;
         " on your ship for " & $price & " " & moneyName & ".",
         mType = tradeMessage)
 
-proc upgradeShip*(install: bool; moduleIndex: Natural) {.sideEffect, raises: [
+proc upgradeShip*(install: bool; moduleIndex: Natural) {.raises: [
     NoMoneyError, KeyError, NotEnoughMoneyError, UniqueModuleError,
     InstallationError, IOError, RemovingError, NoFreeCargoError,
     NoMoneyInBaseError, CrewOrderError, CrewNoSpaceError, Exception], tags: [

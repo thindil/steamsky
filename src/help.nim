@@ -28,7 +28,7 @@ type HelpData = object
 var helpList*: OrderedTable[string, HelpData] = initOrderedTable[string,
     HelpData]() ## The whole in-game help
 
-proc loadHelp*(fileName: string) {.sideEffect, raises: [DataLoadingError,
+proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
     KeyError], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the help data from the file
   ##

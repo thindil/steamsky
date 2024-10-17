@@ -22,7 +22,7 @@ import std/tables
 import contracts
 import basestypes, config, factions, game, goals, items, maps, shipscrew, types, utils
 
-proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
+proc generateBaseName*(factionIndex: string): string {.raises: [],
     tags: [], contractual.} =
   ## Generate the name for the sky base, based on its owner's faction. Based
   ## on libtcod names generator
@@ -50,7 +50,7 @@ proc generateBaseName*(factionIndex: string): string {.sideEffect, raises: [],
           basesSyllablesPostList.len - 1))]
 
 proc countPrice*(price: var Natural; traderIndex: int;
-    reduce: bool = true) {.sideEffect, raises: [KeyError], tags: [],
+    reduce: bool = true) {.raises: [KeyError], tags: [],
         contractual.} =
   ## Count the price of the action, like selling, buying, docking in a base
   ##
@@ -87,7 +87,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
   else:
     price += bonus
 
-proc updatePopulation*() {.sideEffect, raises: [], tags: [], contractual.} =
+proc updatePopulation*() {.raises: [], tags: [], contractual.} =
   ## Update the base population if needed
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if daysDifference(dateToCompare = skyBases[baseIndex].recruitDate) < 30:
@@ -108,7 +108,7 @@ proc updatePopulation*() {.sideEffect, raises: [], tags: [], contractual.} =
     skyBases[baseIndex].population = getRandom(min = 5, max = 10)
     skyBases[baseIndex].owner = getRandomFaction()
 
-proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
+proc generateRecruits*() {.raises: [KeyError], tags: [],
     contractual.} =
   ## Generate available recruits in the base if needed
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
@@ -244,7 +244,7 @@ proc generateRecruits*() {.sideEffect, raises: [KeyError], tags: [],
   skyBases[baseIndex].recruitDate = gameDate
   skyBases[baseIndex].recruits = baseRecruits
 
-proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
+proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [],
     tags: [], contractual.} =
   ## Change the player reputation in the selected sky base
   ##
@@ -271,7 +271,7 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.sideEffect, raises: [],
   if skyBases[baseIndex].reputation.level == 100:
     updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
 
-proc updatePrices*() {.sideEffect, raises: [], tags: [], contractual.} =
+proc updatePrices*() {.raises: [], tags: [], contractual.} =
   ## Random changes to the items' prices in the selected base
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if skyBases[baseIndex].population == 0:

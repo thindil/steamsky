@@ -44,8 +44,7 @@ proc formattedTime*(time: DateRecord = gameDate): string {.raises: [], tags: [],
   result.add(y = $time.minutes)
 
 proc addMessage*(message: string; mType: MessageType;
-    color: MessageColor = white) {.sideEffect, raises: [], tags: [],
-        contractual.} =
+    color: MessageColor = white) {.raises: [], tags: [], contractual.} =
   ## Add the message to the messages list. Delete the oldest message if the
   ## adding will reach the max limit of messages. Same as above, but uses
   ## the standard types instead of compatible string or int.
