@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[algorithm, math, os, strutils, tables]
+import std/[algorithm, math, strutils, tables]
 import ../[config, crafts, crewinventory, game, items, shipmodules, shipscrew, tk, types]
 import coreui, dialogs, errordialog, table, updateheader, utilsui2
 
@@ -130,7 +130,38 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   var craftsFrame = mainPaned & ".craftframe"
   let craftsCanvas = craftsFrame & ".canvas"
   if tclEval2(script = "winfo exists " & craftsCanvas) == "0":
-    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "crafts.tcl")
+    tclEval(script = """
+      ttk::frame .gameframe.paned.craftframe
+      set craftcanvas [canvas .gameframe.paned.craftframe.canvas \
+         -yscrollcommand [list .gameframe.paned.craftframe.scrolly set] \
+         -xscrollcommand [list .gameframe.paned.craftframe.scrollx set]]
+      pack [ttk::scrollbar .gameframe.paned.craftframe.scrolly -orient vertical \
+         -command [list $craftcanvas yview]] -side right -fill y
+      pack $craftcanvas -side top -fill both
+      pack [ttk::scrollbar .gameframe.paned.craftframe.scrollx -orient horizontal \
+         -command [list $craftcanvas xview]] -fill x
+      ::autoscroll::autoscroll .gameframe.paned.craftframe.scrolly
+      ::autoscroll::autoscroll .gameframe.paned.craftframe.scrollx
+      set craftframe [ttk::frame $craftcanvas.craft]
+      grid [ttk::frame $craftframe.sframe] -sticky w
+      grid [ttk::label $craftframe.sframe.searchlabel -text {Name:}]
+      tooltip::tooltip $craftframe.sframe.searchlabel \
+         {Search for the selected recipe.}
+      grid [ttk::entry $craftframe.sframe.search -validate key \
+         -validatecommand {ShowCrafting 1 %P} -width 30] -sticky w -row 0 -column 1
+      tooltip::tooltip $craftframe.sframe.search {Search for the selected recipe.}
+      grid [ttk::label $craftframe.sframe.showlabel -text {Show:}]
+      tooltip::tooltip $craftframe.sframe.showlabel \
+         {Show only the selected type of recipes.}
+      grid [ttk::combobox $craftframe.sframe.show \
+         -values [list {All} {Craftable only} {Non-craftable only}] -width 15 -state readonly] \
+         -sticky w -row 1 -column 1
+      tooltip::tooltip $craftframe.sframe.show {Show only the selected type of recipes.}
+      $craftframe.sframe.show current 0
+      bind $craftframe.sframe.show <<ComboboxSelected>> {ShowCrafting 1}
+      SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
+      SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
+    """)
     tclEval(script = "bind " & craftsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
   elif tclEval2(script = "winfo ismapped " & craftsCanvas) == "1" and argc == 1:
     tclEval(script = "InvokeButton " & closeButton)
