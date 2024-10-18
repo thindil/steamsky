@@ -16,13 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, sequtils, strutils]
+import contracts
 import ../[config, game, tk]
 import errordialog, dialogs
 
 var dataError*: string
 
 proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    ReadDirEffect, WriteDirEffect].} =
+    ReadDirEffect, WriteDirEffect], contractual.} =
   ## Show the main menu to the player
   let mainWindow = "."
   var
