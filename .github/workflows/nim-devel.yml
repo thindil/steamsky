@@ -76,7 +76,8 @@ jobs:
     - name: Build the program
       run: |
         git config --global --add safe.directory /__w/steamsky/steamsky
-        apt-get install -y gcc-10
+        apt-get update
+        apt-get install -y gcc
         others/build.nims x86_64-windows
 
     - name: Compress the artifact
