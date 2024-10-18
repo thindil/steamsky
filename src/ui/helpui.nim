@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[os, strutils, tables]
+import std/[strutils, tables]
 import ../[basestypes, config, game, help, items, tk]
 import dialogs, errordialog, themes
 
@@ -76,7 +76,34 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo exists " & helpWindow) == "1":
     return closeHelpCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
-  tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "help.tcl")
+  tclEval(script = """
+      toplevel .help
+      wm title .help {Steam Sky - Help}
+      wm transient .help .
+      grid [ttk::panedwindow .help.paned] -sticky nwes
+      grid columnconfigure .help .help.paned -weight 1
+      grid rowconfigure .help .help.paned -weight 1
+      .help.paned add [ttk::frame .help.paned.topics]
+      pack [ttk::scrollbar .help.paned.topics.scroll -orient vertical \
+         -command [list .help.paned.topics.view yview]] -side right -fill y
+      pack [ttk::treeview .help.paned.topics.view -show tree \
+         -yscrollcommand [list .help.paned.topics.scroll set] -style Help.Treeview] \
+         -side top -fill both
+      tooltip::tooltip .help.paned.topics.view \
+         {Click on the help topic to see it content}
+      .help.paned add [ttk::frame .help.paned.content]
+      pack [ttk::scrollbar .help.paned.content.scroll -orient vertical \
+         -command [list .help.paned.content.view yview]] -side right -fill y
+      set helpview [text .help.paned.content.view -wrap word \
+         -yscrollcommand [list .help.paned.content.scroll set] -font HelpFont \
+         -width 70]
+      pack $helpview -side top -fill both -padx {10 0}
+      bind .help <Escape> {CloseHelp}
+      bind .help.paned.content <Configure> {
+         $helpview configure -height [expr [winfo height .help.paned.content] / \
+            [font metrics HelpFont -linespace]]
+      }
+  """)
   let
     paned = helpWindow & ".paned"
     helpView = paned & ".content.view"
