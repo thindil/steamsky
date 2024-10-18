@@ -90,6 +90,7 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
   let basesOwner = tclEval2(script = comboBox & " get")
   rows = 0
   let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  tclEval(script = "grid configure " & basesTable.canvas & " -row 2")
   var currentRow = 1
   for index in basesIndexes:
     if not skyBases[index].known:

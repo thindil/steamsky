@@ -36,13 +36,12 @@ grid [ttk::button $knowledgecanvas.frame.maxmin.maxmin -style Small.TButton \
 tooltip::tooltip $knowledgecanvas.frame.maxmin.maxmin \
    {Maximize/minimize the list of known bases}
 grid [ttk::button $knowledgecanvas.frame.maxmin.more -style Small.TButton \
-   -image moreoptionsicon -command {ShipMore cargo show}] -sticky w \
+   -image moreoptionsicon -command {KnowledgeMore bases show}] -sticky w \
    -row 0 -column 1
 tooltip::tooltip $knowledgecanvas.frame.maxmin.more \
-   {Show/Hide additional options related to managing the cargo}
+   {Show/Hide additional options related to managing the list of known bases}
 # List of bases options
-grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w \
-   -padx 5
+ttk::frame $knowledgecanvas.frame.options
 SetScrollbarBindings $knowledgecanvas.frame.options \
    $knowledgeframe.bases.scrolly
 grid [ttk::label $knowledgecanvas.frame.options.typeslbl -text {Type:}]

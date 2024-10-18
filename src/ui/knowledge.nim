@@ -169,6 +169,37 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
+proc knowledgeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+  ## Maximize or minimize the selected part in the knowledge info
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShipMore framename show/hide
+  ## Framename is name of the frame in which the part will be shown or hidden.
+  ## If the second argument is set to show, show the part, otherwise hide it.
+  let
+    knowledgeFrame = mainPaned & ".knowledgeframe"
+    button = knowledgeFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
+  if argv[1] == "bases":
+    if argv[2] == "show":
+      tclEval(script = "grid " & knowledgeFrame & ".bases.canvas.frame.options -columnspan 6 -sticky w -padx 5 -row 1")
+    else:
+      tclEval(script = "grid remove " & knowledgeFrame & ".bases.canvas.frame.options")
+  if argv[2] == "show":
+    tclEval(script = button & " configure -command {KnowledgeMore " &
+        $argv[1] & " hide}")
+  else:
+    tclEval(script = button & " configure -command {KnowledgeMore " &
+        $argv[1] & " show}")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -178,5 +209,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     knowledgestories.addCommands()
     addCommand("ShowKnowledge", showKnowledgeCommand)
     addCommand("KnowledgeMaxMin", knowledgeMaxMinCommand)
+    addCommand("KnowledgeMore", knowledgeMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
