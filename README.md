@@ -53,11 +53,11 @@ and compiler needed to build the game.
 
 To build the game for Linux, download `build` image and type in console:
 
-`docker run --rm -v [path to source code]:/app ghcr.io/thindil/build /bin/bash -c "cd /app && others/build.tcl"`
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/build /bin/bash -c "cd /app && others/build.nims"`
 
 To build the game for Windows 64-bit, download `buildwin64` image and type in console:
 
-`docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.tcl x86_64-linux-gnu"`
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/buildwin64 /bin/bash -c "cd /app && others/build.nims x86_64-windows"`
 
 It will build the game and put all needed files (except libraries) to directory
 *release* in the project root directory (where this file is).
