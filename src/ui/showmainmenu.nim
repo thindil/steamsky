@@ -15,12 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to showing the main menu of the game. Split
+## from mainmenu module to avoid circular dependencies.
+
 import std/[os, sequtils, strutils]
 import contracts
 import ../[config, game, tk]
 import errordialog, dialogs
 
-var dataError*: string
+var dataError*: string ## The additional information for an error when it happened.
 
 proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     ReadDirEffect, WriteDirEffect], contractual.} =
