@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[algorithm, os, strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[basescargo, config, crewinventory, game, items, maps, messages,
     shipscargo, tk, types]
 import coreui, dialogs, errordialog, dialogs2, mapsui, table, updateheader, utilsui2
@@ -50,7 +50,39 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   let lootCanvas = lootFrame & ".canvas"
   var label = lootCanvas & ".loot.options.typelabel"
   if tclEval2(script = "winfo exists " & label) == "0":
-    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "loot.tcl")
+    tclEval(script = """
+      ttk::frame .gameframe.paned.lootframe
+      set lootcanvas [canvas .gameframe.paned.lootframe.canvas \
+         -yscrollcommand [list .gameframe.paned.lootframe.scrolly set] \
+         -xscrollcommand [list .gameframe.paned.lootframe.scrollx set]]
+      pack [ttk::scrollbar .gameframe.paned.lootframe.scrolly -orient vertical \
+         -command [list $lootcanvas yview]] -side right -fill y
+      pack $lootcanvas -side top -fill both
+      SetScrollbarBindings $lootcanvas .gameframe.paned.lootframe.scrolly
+      pack [ttk::scrollbar .gameframe.paned.lootframe.scrollx -orient horizontal \
+         -command [list $lootcanvas xview]] -fill x
+      ::autoscroll::autoscroll .gameframe.paned.lootframe.scrolly
+      ::autoscroll::autoscroll .gameframe.paned.lootframe.scrollx
+      set lootframe [ttk::frame $lootcanvas.loot]
+      SetScrollbarBindings $lootframe .gameframe.paned.lootframe.scrolly
+      # Type of items to show
+      grid [ttk::frame $lootframe.options] -sticky w -padx 5 -pady 5
+      SetScrollbarBindings $lootframe.options .gameframe.paned.lootframe.scrolly
+      grid [ttk::label $lootframe.options.typelabel -text {Type:}]
+      SetScrollbarBindings $lootframe.options.typelabel \
+         .gameframe.paned.lootframe.scrolly
+      grid [ttk::combobox $lootframe.options.type -state readonly] -column 1 -row 0
+      bind $lootframe.options.type <<ComboboxSelected>> \
+         {ShowLoot [$lootframe.options.type get]}
+      grid [ttk::frame $lootframe.options.info] -sticky nw \
+         -columnspan 2
+      grid [ttk::label $lootframe.options.info.playerinfo -wraplength 300 \
+         -text {Free cargo space: }]
+      grid [ttk::label $lootframe.options.info.playerinfo2 -wraplength 300 \
+         -style Golden.TLabel] -row 0 -column 1
+      SetScrollbarBindings $lootframe.options.info \
+         .gameframe.paned.tradeframe.scrolly
+    """)
     tclEval(script = "bind " & lootFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     lootFrame = lootCanvas & ".loot"
     lootTable = createTable(parent = lootFrame, headers = @["Name", "Type",
