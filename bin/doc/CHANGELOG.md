@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Use the new icon for expand and contract infos' sections on various screens
 - Updated the look of the player's ship's crew and cargo info sections in the
   ship's info screen
+- Updated the look of the list of known bases in the knowledge screen
 - Updated README.md
 - Updated contributing guide
 
