@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.4] - 2024-10-20
 
 ### Added
 - New icons for expand, contracts and more options in info's sections. Author:
