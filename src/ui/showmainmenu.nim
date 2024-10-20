@@ -23,12 +23,12 @@ import contracts
 import ../[config, game, tk]
 import errordialog, dialogs
 
-var dataError*: string ## The additional information for an error when it happened.
+var dataError*: string = "" ## The additional information for an error when it happened.
 
 proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     ReadDirEffect, WriteDirEffect], contractual.} =
   ## Show the main menu to the player
-  let mainWindow = "."
+  const mainWindow: string = "."
   var
     x: int = try:
         ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt - 600) / 2).int
@@ -52,12 +52,12 @@ proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = "wm state " & mainWindow & " normal")
   tclEval(script = "wm title " & mainWindow & " {Steam Sky - Main Menu}")
   tclEval(script = "wm geometry " & mainWindow & " 600x400+" & $x & "+" & $y)
-  let gameFrame = ".gameframe"
+  const gameFrame: string = ".gameframe"
   if tclEval2(script = "winfo exists " & gameFrame) == "1":
     tclEval(script = "pack forget " & gameFrame)
-  let mainMenuFrame = ".mainmenu"
+  const mainMenuFrame: string = ".mainmenu"
   tclEval(script = "pack " & mainMenuFrame & " -fill both -expand true")
-  var button = ".mainmenu.loadgame"
+  var button: string = ".mainmenu.loadgame"
   try:
     if walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0:
       tclEval(script = "pack " & button & " -after .mainmenu.newgame")
