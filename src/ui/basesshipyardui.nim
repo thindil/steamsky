@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[algorithm, os, strutils, tables]
+import std/[algorithm, strutils, tables]
 import ../[bases, basesship2, config, crewinventory, game, maps, shipscrew,
     shipmodules, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
@@ -46,7 +46,69 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
     shipyardCanvas = shipyardFrame & ".canvas"
     moduleTypeBox = shipyardCanvas & ".shipyard.install.options.modules"
   if tclEval2(script = "winfo exists " & shipyardCanvas) == "0":
-    tclEvalFile(fileName = dataDirectory & "ui" & DirSep & "shipyard.tcl")
+    tclEval(script = """
+      ttk::frame .gameframe.paned.shipyardframe
+      set shipyardcanvas [canvas .gameframe.paned.shipyardframe.canvas \
+         -yscrollcommand [list .gameframe.paned.shipyardframe.scrolly set] \
+         -xscrollcommand [list .gameframe.paned.shipyardframe.scrollx set]]
+      pack [ttk::scrollbar .gameframe.paned.shipyardframe.scrolly -orient vertical \
+         -command [list $shipyardcanvas yview]] -side right -fill y
+      pack $shipyardcanvas -side top -fill both
+      SetScrollbarBindings $shipyardcanvas .gameframe.paned.shipyardframe.scrolly
+      pack [ttk::scrollbar .gameframe.paned.shipyardframe.scrollx -orient horizontal \
+         -command [list $shipyardcanvas xview]] -fill x
+      ::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrolly
+      ::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrollx
+      set shipyardframe [ttk::frame $shipyardcanvas.shipyard]
+      SetScrollbarBindings $shipyardframe .gameframe.paned.shipyardframe.scrolly
+      set newtab install
+      grid [ttk::frame $shipyardframe.tabs] -pady 5
+      grid [ttk::radiobutton $shipyardframe.tabs.install -text {Install modules} \
+         -state selected -style Radio.Toolbutton -value install -variable newtab \
+         -command ShowShipyardTab] -padx 5
+      grid [ttk::radiobutton $shipyardframe.tabs.remove -text {Remove modules} \
+         -style Radio.Toolbutton -value remove -variable newtab \
+         -command ShowShipyardTab] -row 0 -column 1 -padx 5
+      grid [ttk::frame $shipyardframe.moneyinfo] -sticky w
+      grid [ttk::label $shipyardframe.moneyinfo.lblmoney -wraplength 500] -sticky w
+      grid [ttk::label $shipyardframe.moneyinfo.lblmoney2 -wraplength 500 \
+         -style Golden.TLabel] -sticky w -column 1 -row 0
+      grid [ttk::frame $shipyardframe.modulesinfo] -sticky w
+      grid [ttk::label $shipyardframe.modulesinfo.lblmodules -wraplength 500 \
+         -text {You have used }] -sticky w
+      grid [ttk::label $shipyardframe.modulesinfo.lblmodules2 -wraplength 500 \
+         -style Golden.TLabel] -sticky w -column 1 -row 0
+      grid [ttk::label $shipyardframe.modulesinfo.lblmodules3 -wraplength 500 \
+         -text { modules space from max }] -sticky w -column 2 -row 0
+      grid [ttk::label $shipyardframe.modulesinfo.lblmodules4 -wraplength 500 \
+         -style Golden.TLabel] -sticky w -column 3 -row 0
+      grid [ttk::label $shipyardframe.modulesinfo.lblmodules5 -wraplength 500 \
+         -text { allowed.}] -sticky w -column 4 -row 0
+      # Install modules
+      set sinstall [ttk::frame $shipyardframe.install]
+      SetScrollbarBindings $sinstall .gameframe.paned.shipyardframe.scrolly
+      grid [ttk::frame $sinstall.options] -sticky we -pady {0 5}
+      SetScrollbarBindings $sinstall.options .gameframe.paned.shipyardframe.scrolly
+      grid [ttk::label $sinstall.options.label -text "Show modules:"]
+      SetScrollbarBindings $sinstall.options.label \
+         .gameframe.paned.shipyardframe.scrolly
+      grid [ttk::combobox $sinstall.options.modules -state readonly \
+         -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} \
+         {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} \
+         {Water collectors} {Workshops} {Greenhouses} {Medical rooms} {Harpoon guns} \
+         {Training rooms}]] -row 0 -column 1 -padx {0 5}
+      $sinstall.options.modules current 0
+      bind $sinstall.options.modules <<ComboboxSelected>> {
+         ShowShipyard [$sinstall.options.modules current] \
+            [$sinstall.options.search get]
+      }
+      grid [ttk::entry $sinstall.options.search -validate key \
+         -validatecommand {ShowShipyard [$sinstall.options.modules current] %P}] \
+         -row 0 -column 2
+      # Remove modules
+      set sremove [ttk::frame $shipyardframe.remove]
+      SetScrollbarBindings $sremove .gameframe.paned.shipyardframe.scrolly
+    """)
     tclEval(script = "bind " & shipyardFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     shipyardFrame = shipyardCanvas & ".shipyard.install"
     installTable = createTable(parent = shipyardFrame, headers = @["Name",
