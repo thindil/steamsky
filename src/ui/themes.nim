@@ -734,3 +734,4 @@ proc setTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   tclEval(script = mainPaned & ".mapframe.buttons.wait configure -image menuicon")
   tclEval(script = gameHeader & ".menubutton configure -image menuicon")
   tclEval(script = gameHeader & ".closebutton configure -image exiticon")
+  tclEval(script = gameHeader & ".morebutton configure -image moreoptionsicon")

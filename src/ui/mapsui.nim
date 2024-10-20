@@ -738,21 +738,24 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, ReadIOEffec
       ttk::button .gameframe.header.closebutton -style Small.TButton \
          -command {ShowSkyMap}
       tooltip::tooltip .gameframe.header.closebutton {Back to the game map [Escape key]}
-      grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
+      ttk::button .gameframe.header.morebutton -style Small.TButton \
+         -command {ShowMore}
+      tooltip::tooltip .gameframe.header.morebutton {Show more options}
+      grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 3
       tooltip::tooltip .gameframe.header.time {The game time}
       grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
-      grid [ttk::label .gameframe.header.fuel] -row 0 -column 3 -padx 3
-      grid [ttk::label .gameframe.header.food] -row 0 -column 4 -padx 3
-      grid [ttk::label .gameframe.header.drinks] -row 0 -column 5 -padx 3
-      grid [ttk::label .gameframe.header.overloaded] -row 0 -column 6 -padx 3
-      grid [ttk::label .gameframe.header.pilot] -row 0 -column 7 -padx 3
-      grid [ttk::label .gameframe.header.engineer] -row 0 -column 8 -padx 3
-      grid [ttk::label .gameframe.header.gunner] -row 0 -column 9 -padx 3
-      grid [ttk::label .gameframe.header.talk] -row 0 -column 10 -padx 3
-      grid [ttk::label .gameframe.header.repairs] -row 0 -column 11 -padx 3
-      grid [ttk::label .gameframe.header.upgrade] -row 0 -column 12 -padx 3
-      grid [ttk::label .gameframe.header.clean] -row 0 -column 13 -padx 3
-      grid [ttk::label .gameframe.header.crafting] -row 0 -column 14 -padx 3
+      grid [ttk::label .gameframe.header.fuel] -row 0 -column 4 -padx 3
+      grid [ttk::label .gameframe.header.food] -row 0 -column 5 -padx 3
+      grid [ttk::label .gameframe.header.drinks] -row 0 -column 6 -padx 3
+      grid [ttk::label .gameframe.header.overloaded] -row 0 -column 7 -padx 3
+      grid [ttk::label .gameframe.header.pilot] -row 0 -column 8 -padx 3
+      grid [ttk::label .gameframe.header.engineer] -row 0 -column 9 -padx 3
+      grid [ttk::label .gameframe.header.gunner] -row 0 -column 10 -padx 3
+      grid [ttk::label .gameframe.header.talk] -row 0 -column 11 -padx 3
+      grid [ttk::label .gameframe.header.repairs] -row 0 -column 12 -padx 3
+      grid [ttk::label .gameframe.header.upgrade] -row 0 -column 13 -padx 3
+      grid [ttk::label .gameframe.header.clean] -row 0 -column 14 -padx 3
+      grid [ttk::label .gameframe.header.crafting] -row 0 -column 15 -padx 3
       grid .gameframe.header -sticky we -padx 5 -pady {5 0}
       ttk::panedwindow .gameframe.paned
       # Game map
