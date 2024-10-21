@@ -48,9 +48,14 @@ proc startLogging*() {.raises: [], tags: [RootEffect], contractual.} =
   if debugMode == none:
     return
   try:
-    let logger: FileLogger = newFileLogger(filename = saveDirectory &
-        "debug.log", fmtStr = "[$datetime] - $levelname: ")
-    addHandler(handler = logger)
+    let
+      fileLogger: FileLogger = newFileLogger(filename = saveDirectory &
+          "debug.log", fmtStr = "[$datetime] - $levelname: ",
+          flushThreshold = lvlAll)
+      consoleLogger: ConsoleLogger = newConsoleLogger(
+          fmtStr = "[$datetime] - $levelname: ", flushThreshold = lvlAll)
+    addHandler(handler = fileLogger)
+    addHandler(handler = consoleLogger)
     log(level = lvlError, args = "Starting game in debug mode.")
   except IOError, Exception:
     echo ("Can't start log for the game, reason: " & getCurrentExceptionMsg())
