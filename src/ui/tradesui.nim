@@ -124,6 +124,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   elif tclEval2(script = "winfo ismapped " & label) == "1" and argc == 1:
     itemsSortOrder = defaultItemsSortOrder
     tclEval(script = "grid remove " & closeButton)
+    tclEval(script = "grid remove " & gameHeader & ".morebutton")
     tclEval(script = closeButton & " configure -command ShowSkyMap")
     if baseIndex == 0 and eventIndex > -1:
       deleteEvent(eventIndex = eventIndex)
@@ -134,6 +135,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   if argc < 3:
     tclEval(script = searchEntry & " delete 0 end")
   tclEval(script = closeButton & " configure -command {ShowSkyMap ShowTrade}")
+  tclEval(script = gameHeader & ".morebutton configure -command {TradeMore show}")
   tradeFrame = tradeCanvas & ".trade"
   let comboBox = tradeFrame & ".options.type"
   clearTable(table = tradeTable)
@@ -439,6 +441,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       tradeInfo = $traderCargo[0].amount & " " & moneyName
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
   tclEval(script = tradeCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
       script = mainPaned & " cget -width"))

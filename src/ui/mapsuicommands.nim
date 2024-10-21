@@ -913,6 +913,7 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   if argc == 1:
     tclEval(script = "grid remove " & closeButton)
+    tclEval(script = "grid remove " & gameHeader & ".morebutton")
     showSkyMap(clear = true)
   else:
     tclEval(script = $argv[1])
