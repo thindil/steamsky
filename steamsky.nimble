@@ -44,3 +44,7 @@ task analyze, "builds the project in analyze mode (release with nimprofiler supp
 
 task docs, "builds the project's documentation":
   exec "nim doc --project --outdir:htmldocs src" & DirSep & "steamsky.nim"
+
+task newdebug, "builds the new game UI in debug mode (temporary task)":
+  exec "nim c -d:debug --app:gui --styleCheck:hint --spellSuggest:auto --errorMax:0 --outdir:" &
+      binDir & " " & srcDir & DirSep & "newsteamsky.nim"
