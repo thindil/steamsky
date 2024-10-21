@@ -22,40 +22,40 @@ import std/logging
 import contracts
 import game
 
-type DebugTypes* = enum
-  ## What kind of debug messages log. None, everything, only combat or start
-  ## the game with debug menu
-  none, everything, combat, menu
+type DebugLevels* = enum
+  ## What level of debug messages to log. The firsts levels are the same as
+  ## Level from logging, the last is like lvlNone with showing the debug
+  ## menu.
+  all, debug, info, notice, warn, error, fatal, none, menu
 
-var debugMode*: DebugTypes = none ## The debug mode of the game.
+var debugMode*: DebugLevels = none ## The debug mode of the game.
 
-proc logMessage*(message: string; debugType: DebugTypes) {.raises: [],
+proc logMessage*(message: string; messageLevel: Level = lvlDebug) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Write the selected message to the log file, Nim version
   ##
-  ## * message   - The message which will be written to the file
-  ## * debugType - The type of message which will be written. If different
-  ##               than the game debug mode (except everything), don't write it
-  if debugType != debugMode and debugMode != everything:
-    return
+  ## * message      - The message which will be written to the file
+  ## * messageLevel - The logging level of the message. Default value is lvlDebug
   try:
-    log(level = lvlError, args = $message)
+    log(level = messageLevel, args = $message)
   except Exception:
     echo ("Can't write log message, reason: " & getCurrentExceptionMsg())
 
 proc startLogging*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Start logging the game. Set the logger.
-  if debugMode == none:
+  # We want only the menu, don't set the loggers.
+  if debugMode == menu:
     return
   try:
     let
       fileLogger: FileLogger = newFileLogger(filename = saveDirectory &
-          "debug.log", fmtStr = "[$datetime] - $levelname: ",
-          flushThreshold = lvlAll)
+          "debug.log", levelThreshold = debugMode.ord.Level,
+          fmtStr = "[$datetime] - $levelname: ", flushThreshold = lvlAll)
       consoleLogger: ConsoleLogger = newConsoleLogger(
+          levelThreshold = debugMode.ord.Level,
           fmtStr = "[$datetime] - $levelname: ", flushThreshold = lvlAll)
     addHandler(handler = fileLogger)
     addHandler(handler = consoleLogger)
-    log(level = lvlError, args = "Starting game in debug mode.")
+    log(level = lvlAll, args = "Starting game in debug mode.")
   except IOError, Exception:
     echo ("Can't start log for the game, reason: " & getCurrentExceptionMsg())
