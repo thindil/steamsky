@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
+import contracts
 import ../[basestypes, config, game, log, maps, missions, statistics, stories, tk, types]
 import coreui, dialogs, errordialog, themes, updateheader, utilsui2
 
@@ -36,7 +37,7 @@ var
   fullScreenAccel* = "Control-f"        ## Keyboard shortcut for toggle full screen
   defaultFontSizes*: array[3, Positive] ## The default sizes of fonts
 
-proc updateMoveButtons*() {.raises: [], tags: [].} =
+proc updateMoveButtons*() {.raises: [], tags: [], contractual.} =
   ## Update the player's ship movement buttons, depending on the state of the
   ## ship
   let
@@ -84,7 +85,8 @@ proc updateMoveButtons*() {.raises: [], tags: [].} =
   else:
     tclEval(script = "grid " & button)
 
-proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect],
+    contractual.} =
   ## Finish the current player's story. Give experience and ask about
   ## finishing the game
   gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
@@ -96,7 +98,8 @@ proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     showError(message = "Can't get the end text of the current story. Result: " &
         tclGetResult2())
 
-proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
+    TimeEffect], contractual.} =
   ## Show the sky map, draw the map, update the header, etc
   ##
   ## * clear - if true, remove the old subwindow and replace it with the one
@@ -130,7 +133,7 @@ proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect, TimeEf
             res = "showstats")
     currentStory.showText = true
 
-proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect], contractual.} =
   ## Draw the map on the screen
   var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
@@ -296,7 +299,8 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   tclEval(script = mapView & " configure -state disable")
 
 proc updateMapInfo*(x: Positive = playerShip.skyX;
-    y: Positive = playerShip.skyY) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    y: Positive = playerShip.skyY) {.raises: [], tags: [WriteIOEffect,
+        TimeEffect], contractual.} =
   ## Update frame with information about the map cell on which the player
   ## currently points.
   ##
@@ -307,7 +311,8 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " delete 1.0 end")
   var width = 1
 
-  proc insertText(newText: string; tagName: string = "") =
+  proc insertText(newText: string; tagName: string = "") {.raises: [], tags: [],
+      contractual.} =
     if newText.len > width:
       width = newText.len
     if width > 21:
@@ -518,7 +523,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   tclEval(script = mapInfo & " configure -state disabled -width " & $width &
       " -height " & tclEval2(script = mapInfo & " count -displaylines 0.0 end"))
 
-proc setKeys*() {.raises: [], tags: [].} =
+proc setKeys*() {.raises: [], tags: [], contractual.} =
   ## Set the keyboard shortcuts for the map
   const tclCommandsArray: array[37, string] = [
     "{if {[winfo class [focus]] != {TEntry} && [tk busy status " & gameHeader &
@@ -562,7 +567,8 @@ import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
     craftsui, debugui, gameoptions, helpui, knowledge, mapsuicommands,
     messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
 
-proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect].} =
+proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    ReadIOEffect, RootEffect], contractual.} =
   ## Create the game UI and show sky map to the player
   let
     gameFrame = ".gameframe"
