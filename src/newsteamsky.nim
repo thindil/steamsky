@@ -57,7 +57,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       normalizePath(path = themesDirectory)
     of "debug":
       try:
-        debugMode = parseEnum[DebugTypes](s = val)
+        debugMode = parseEnum[DebugLevels](s = val)
       except:
         echo "Invalid debug value: " & val
         return

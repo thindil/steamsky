@@ -193,8 +193,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           mType = otherMessage)
     else:
       if realSpeed(ship = playerShip) < realSpeed(ship = game.enemy.ship):
-        logMessage(message = "You were attacked by " & game.enemy.ship.name,
-            debugType = DebugTypes.combat)
+        logMessage(message = "You were attacked by " & game.enemy.ship.name)
         addMessage(message = game.enemy.ship.name & " intercepted you.",
             mType = combatMessage)
         return true
@@ -202,8 +201,7 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           mType = otherMessage)
     return false
   turnNumber = 0
-  logMessage(message = "Started combat with " & game.enemy.ship.name,
-      debugType = DebugTypes.combat)
+  logMessage(message = "Started combat with " & game.enemy.ship.name)
   return true
 
 proc finishCombat() {.raises: [KeyError, ValueError, CrewOrderError,
@@ -725,12 +723,10 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
   if hitChance < -48:
     hitChance = -48
   logMessage(message = "Player accuracy: " & $currentAccuracyBonus &
-      " Player evasion: " & $evadeBonus, debugType = DebugTypes.combat)
+      " Player evasion: " & $evadeBonus)
   logMessage(message = "Enemy evasion: " & $game.enemy.evasion &
-      " Enemy accuracy: " & $game.enemy.accuracy,
-      debugType = DebugTypes.combat)
-  logMessage(message = "Chance to hit: " & $hitChance,
-      debugType = DebugTypes.combat)
+      " Enemy accuracy: " & $game.enemy.accuracy)
+  logMessage(message = "Chance to hit: " & $hitChance)
   let enemyNameOwner: string = enemyName & " (" & factionName & ")"
   for shoot in 1..shoots:
     var shootMessage: string = ""
@@ -884,8 +880,7 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
   ## Returns modified parameters gunnerIndex, shoots, gunnerOrder,
   ## currentAccuracyBonus, ammoIndex, evadeBonus and module
   gunnerIndex = module.owner[0]
-  logMessage(message = "Gunner index: " & $gunnerIndex & ".",
-      debugType = DebugTypes.combat)
+  logMessage(message = "Gunner index: " & $gunnerIndex & ".")
   if ship.crew == playerShip.crew:
     if gunnerIndex > -1:
       for gun in guns.mitems:
@@ -896,7 +891,7 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
             if gunnerOrder != 3:
               shoots = (shoots.float / 2.0).ceil.int
             logMessage(message = "Player shoots (no cooldown): " &
-                $shoots, debugType = DebugTypes.combat)
+                $shoots)
           elif gun[3] < 0:
             shoots = 0
             gun[3].inc
@@ -909,9 +904,8 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
                   modulesList[playerShip.modules[gun[
                       1]].protoIndex].speed - 1
             logMessage(message = "Player shoots (after cooldown): " &
-                $shoots, debugType = DebugTypes.combat)
-      logMessage(message = "Shoots test3: " & $shoots,
-          debugType = DebugTypes.combat)
+                $shoots)
+      logMessage(message = "Shoots test3: " & $shoots)
       if ship.crew[gunnerIndex].order != gunner:
         gunnerOrder = 1
       case gunnerOrder
@@ -993,9 +987,9 @@ proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
   var hitLocation: int = -1
 
   if ship.crew == playerShip.crew:
-    logMessage(message = "Player's round", debugType = DebugTypes.combat)
+    logMessage(message = "Player's round")
   else:
-    logMessage(message = "Enemy's round.", debugType = DebugTypes.combat)
+    logMessage(message = "Enemy's round.")
   block attackLoop:
     for mIndex, module in ship.modules.mpairs:
       if module.durability == 0 or module.mType notin {ModuleType2.gun,
@@ -1025,8 +1019,7 @@ proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
         else:
           shoots = (if module.coolingDown: 0 else: 1)
         module.coolingDown = not module.coolingDown
-      logMessage(message = "Shoots: " & $shoots,
-          debugType = DebugTypes.combat)
+      logMessage(message = "Shoots: " & $shoots)
       if shoots > 0:
         if shooting(ship = ship, enemyShip = enemyShip,
             currentAccuracyBonus = currentAccuracyBonus,
@@ -1277,17 +1270,16 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
   of 0 .. 999:
     accuracyBonus += 20
     evadeBonus -= 10
-    logMessage(message = "Distance: short or close",
-        debugType = DebugTypes.combat)
+    logMessage(message = "Distance: short or close")
   of 1_000 .. 4_999:
     accuracyBonus += 10
-    logMessage(message = "Distance: medium", debugType = DebugTypes.combat)
+    logMessage(message = "Distance: medium")
   of 5_000 .. 9_999:
     discard
   of 10_000 .. 14_999:
     accuracyBonus -= 10
     evadeBonus += 10
-    logMessage(message = "Distance: long", debugType = DebugTypes.combat)
+    logMessage(message = "Distance: long")
   else:
     if pilotOrder == 4:
       addMessage(message = "You escaped the " & enemyName & ".",
