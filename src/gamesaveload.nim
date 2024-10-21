@@ -35,12 +35,10 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
   ##
   ## * prettyPrint - if true, format properly XML before save, default is false,
   ##                 for reduce size of the file
-  logMessage(message = "Start saving game in file " & saveName & ".",
-      debugType = everything)
+  logMessage(message = "Start saving game in file " & saveName & ".")
   var saveTree: XmlNode = newXmlTree(tag = "save", children = [], attributes = {
       "version": $saveVersion}.toXmlAttributes)
-  logMessage(message = "Saving game difficulty settings...",
-      debugType = everything)
+  logMessage(message = "Saving game difficulty settings...")
   let difficulties: array[8, tuple[key: string, val: BonusType]] = [(
       "enemydamagebonus", newGameSettings.enemyDamageBonus), (
       "playerdamagebonus", newGameSettings.playerDamageBonus), (
@@ -57,35 +55,35 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
     attrs.add(y = (difficulty[0], $difficulty[1]))
   diffElement.attrs = attrs.toXmlAttributes
   saveTree.add(son = diffElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving game time...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving game time...")
   var dateElement: XmlNode = newElement(tag = "gamedate")
   dateElement.attrs = {"year": $gameDate.year, "month": $gameDate.month,
       "day": $gameDate.day, "hour": $gameDate.hour,
       "minutes": $gameDate.minutes}.toXmlAttributes
   saveTree.add(son = dateElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving map...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving map...")
   for x in MapXRange.low..MapXRange.high:
     for y in MapYRange.low..MapYRange.high:
       if skyMap[x][y].visited:
         var fieldElement: XmlNode = newElement(tag = "field")
         fieldElement.attrs = {"x": $x, "y": $y}.toXmlAttributes
         saveTree.add(son = fieldElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving bases...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving bases...")
   saveBases(saveData = saveTree)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving player ship...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving player ship...")
   savePlayerShip(saveData = saveTree)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving known recipes...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving known recipes...")
   for recipe in knownRecipes:
     var recipeElement: XmlNode = newElement(tag = "recipe")
     recipeElement.attrs = {"index": recipe}.toXmlAttributes
     saveTree.add(son = recipeElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving messages...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving messages...")
   let messagesToSave: Natural = (if gameSettings.savedMessages > messagesAmount(): messagesAmount() else: gameSettings.savedMessages)
   for i in (messagesAmount() - messagesToSave + 1)..messagesAmount():
     let message: MessageData = getMessage(messageIndex = i)
@@ -94,8 +92,8 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
         "color": $message.color}.toXmlAttributes
     messageElement.add(son = newText(text = $message.message))
     saveTree.add(son = messageElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving events...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving events...")
   for event in eventsList:
     var
       eventElement: XmlNode = newElement(tag = "event")
@@ -110,8 +108,8 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
     eventElement.attrs = {"data": eventData, "type": $event.eType.ord,
         "x": $event.skyX, "y": $event.skyY, "time": $event.time}.toXmlAttributes
     saveTree.add(son = eventElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving game statistics...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving game statistics...")
   var statsElement: XmlNode = newElement(tag = "statistics")
   statsElement.attrs = {"visitedbases": $gameStats.basesVisited,
       "mapdiscovered": $gameStats.mapVisited,
@@ -141,17 +139,17 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
   saveStatistics(stats = gameStats.finishedGoals, statName = "finishedgoals")
   saveStatistics(stats = gameStats.killedMobs, statName = "killedmobs")
   saveTree.add(son = statsElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving current goal...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving current goal...")
   var goalElement: XmlNode = newElement(tag = "currentgoal")
   goalElement.attrs = {"index": $currentGoal.index,
       "type": $currentGoal.goalType.ord, "amount": $currentGoal.amount,
       "target": currentGoal.targetIndex,
       "multiplier": $currentGoal.multiplier}.toXmlAttributes
   saveTree.add(son = goalElement)
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   if currentStory.index.len > 0:
-    logMessage(message = "Saving current story...", debugType = everything)
+    logMessage(message = "Saving current story...")
     var
       storyElement: XmlNode = newElement(tag = "currentstory")
       attrs2: seq[tuple[key, val: string]] = @[]
@@ -174,8 +172,8 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
     attrs2.add(y = ("finishedstep", $currentStory.finishedStep.ord))
     storyElement.attrs = attrs2.toXmlAttributes
     saveTree.add(son = storyElement)
-    logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving finished stories...", debugType = everything)
+    logMessage(message = "done")
+  logMessage(message = "Saving finished stories...")
   for finishedStory in finishedStories:
     var
       storyNode: XmlNode = newXmlTree(tag = "finishedstory", children = [],
@@ -187,8 +185,8 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
       textElement.add(son = newText(text = text))
       storyNode.add(son = textElement)
     saveTree.add(son = storyNode)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving accepted missions...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving accepted missions...")
   for mission in acceptedMissions:
     var
       missionElement: XmlNode = newElement(tag = "acceptedmission")
@@ -216,12 +214,12 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
       attrs2.add(y = ("multiplier", $mission.multiplier))
     missionElement.attrs = attrs2.toXmlAttributes()
     saveTree.add(son = missionElement)
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Saving player career...", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Saving player career...")
   var careerElement: XmlNode = newElement(tag = "playercareer")
   careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
   saveTree.add(son = careerElement)
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   var saveText: string = $saveTree
   if not prettyPrint:
     var lines: seq[string] = saveText.splitLines
@@ -229,22 +227,19 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
       line = line.strip
     saveText = lines.join
   writeFile(filename = saveName, content = saveText)
-  logMessage(message = "Finished saving game in file " & saveName & ".",
-      debugType = everything)
+  logMessage(message = "Finished saving game in file " & saveName & ".")
 
 proc loadGame*() {.raises: [IOError, OSError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load the game from a file
   let savedGame: XmlNode = loadXml(path = saveName)
-  logMessage(message = "Start loading game from file " & saveName & ".",
-      debugType = everything)
+  logMessage(message = "Start loading game from file " & saveName & ".")
   # Check the same game compatybility
   if savedGame.attr(name = "version").parseInt > saveVersion:
     raise newException(exceptn = DataLoadingError,
         message = "This save is incompatible with this version of the game.")
   # Load the game difficulty settings
-  logMessage(message = "Loading the game difficulty settings...",
-      debugType = everything)
+  logMessage(message = "Loading the game difficulty settings...")
   var diffNode: XmlNode = savedGame.child(name = "difficulty")
   newGameSettings.enemyDamageBonus = diffNode.attr(name =
     "enemydamagebonus").parseFloat
@@ -261,18 +256,18 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   newGameSettings.upgradeCostBonus = diffNode.attr(name =
     "upgradecostbonus").parseFloat
   newGameSettings.pricesBonus = diffNode.attr(name = "pricesbonus").parseFloat
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load the game date
-  logMessage(message = "Loading the game time...", debugType = everything)
+  logMessage(message = "Loading the game time...")
   var dateNode: XmlNode = savedGame.child(name = "gamedate")
   gameDate.year = dateNode.attr(name = "year").parseInt
   gameDate.month = dateNode.attr(name = "month").parseInt
   gameDate.day = dateNode.attr(name = "day").parseInt
   gameDate.hour = dateNode.attr(name = "hour").parseInt
   gameDate.minutes = dateNode.attr(name = "minutes").parseInt
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load the sky map
-  logMessage(message = "Loading the map...", debugType = everything)
+  logMessage(message = "Loading the map...")
   for x in 1..1_024:
     for y in 1..1_024:
       skyMap[x][y].missionIndex = -1
@@ -284,29 +279,29 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
       x: MapXRange = field.attr(name = "x").parseInt
       y: MapYRange = field.attr(name = "y").parseInt
     skyMap[x][y].visited = true
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load sky bases
-  logMessage(message = "Loading bases...", debugType = everything)
+  logMessage(message = "Loading bases...")
   loadBases(saveData = savedGame)
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load the player's ship
-  logMessage(message = "Loading the player's ship...", debugType = everything)
+  logMessage(message = "Loading the player's ship...")
   loadPlayerShip(saveData = savedGame)
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load known recipes
-  logMessage(message = "Loading known recipes...", debugType = everything)
+  logMessage(message = "Loading known recipes...")
   for recipe in savedGame.findAll(tag = "recipe"):
     knownRecipes.add(y = recipe.attr(name = "index"))
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load messages
-  logMessage(message = "Loading messages...", debugType = everything)
+  logMessage(message = "Loading messages...")
   for message in savedGame.findAll(tag = "message"):
     restoreMessage(message = message.innerText, kind = parseEnum[MessageType](
         s = message.attr(name = "type")), color = parseEnum[MessageColor](
         s = message.attr(name = "color")))
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load events
-  logMessage(message = "Loading events...", debugType = everything)
+  logMessage(message = "Loading events...")
   for index, savedEvent in savedGame.findAll(tag = "event"):
     var event: EventData = EventData(skyX: savedEvent.attr(name = "x").parseInt,
         skyY: savedEvent.attr(name = "y").parseInt, time: savedEvent.attr(
@@ -321,11 +316,11 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
         event.data = savedEvent.attr(name = "data").parseInt
     eventsList.add(y = event)
     skyMap[event.skyX][event.skyY].eventIndex = index
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load the current story
   let storyNode: XmlNode = savedGame.child(name = "currentstory")
   if storyNode != nil:
-    logMessage(message = "Loading the current story...", debugType = everything)
+    logMessage(message = "Loading the current story...")
     currentStory.index = storyNode.attr(name = "index")
     currentStory.step = storyNode.attr(name = "step").parseInt
     case storyNode.attr(name = "currentstep")
@@ -342,9 +337,9 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
     currentStory.showText = storyNode.attr(name = "showtext") == "Y"
     currentStory.finishedStep = storyNode.attr(name =
       "finishedstep").parseInt.StepConditionType
-    logMessage(message = "done", debugType = everything)
+    logMessage(message = "done")
   # Load finished stories data
-  logMessage(message = "Loading finished stories...", debugType = everything)
+  logMessage(message = "Loading finished stories...")
   for savedStory in savedGame.findAll(tag = "finishedstory"):
     var story: FinishedStoryData = FinishedStoryData()
     story.index = savedStory.attr(name = "index")
@@ -352,9 +347,9 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
     for text in savedStory:
       story.stepsTexts.add(y = text.innerText)
     finishedStories.add(y = story)
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load accepted missions
-  logMessage(message = "Loading accepted missions...", debugType = everything)
+  logMessage(message = "Loading accepted missions...")
   for index, mission in savedGame.findAll(tag = "acceptedmission"):
     var tmpMission: MissionData = MissionData(mtype: mission.attr(name =
       "type").parseInt.MissionsTypes, time: mission.attr(
@@ -378,9 +373,9 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
       tmpMission.multiplier = multiplier.parseFloat
     acceptedMissions.add(y = tmpMission)
     skyMap[tmpMission.targetX][tmpMission.targetY].missionIndex = index
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load game statistics
-  logMessage(message = "Loading game statistics...", debugType = everything)
+  logMessage(message = "Loading game statistics...")
   for stat in savedGame.findAll(tag = "statistics"):
     gameStats.basesVisited = stat.attr(name = "visitedbases").parseInt
     gameStats.mapVisited = stat.attr(name = "mapdiscovered").parseInt
@@ -402,22 +397,22 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   for item in savedGame.findAll(tag = "killedmobs"):
     gameStats.killedMobs.add(y = StatisticsData(index: item.attr(
         name = "index"), amount: item.attr(name = "amount").parseInt))
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load the player's current goal
-  logMessage(message = "Loading game current goal...", debugType = everything)
+  logMessage(message = "Loading game current goal...")
   var goalNode: XmlNode = savedGame.child(name = "currentgoal")
   currentGoal = GoalData(index: goalNode.attr(name = "index"),
       goalType: goalNode.attr(name =
     "type").parseInt.GoalTypes, amount: goalNode.attr(name = "amount").parseInt,
     targetIndex: goalNode.attr(name = "target"), multiplier: goalNode.attr(name =
     "multiplier").parseInt)
-  logMessage(message = "done", debugType = everything)
+  logMessage(message = "done")
   # Load the player's career
-  logMessage(message = "Loading the player's career...", debugType = everything)
+  logMessage(message = "Loading the player's career...")
   let careerNode: XmlNode = savedGame.child(name = "playercareer")
   playerCareer = careerNode.attr(name = "index")
-  logMessage(message = "done", debugType = everything)
-  logMessage(message = "Finished loading the game.", debugType = everything)
+  logMessage(message = "done")
+  logMessage(message = "Finished loading the game.")
 
 proc generateSaveName*(renameSave: bool = false) {.raises: [OSError,
     IOError, Exception], tags: [ReadDirEffect, WriteIOEffect, ReadIOEffect],

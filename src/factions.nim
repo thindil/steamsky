@@ -195,8 +195,7 @@ proc loadFactions*(fileName: string) {.raises: [DataLoadingError],
             message = "Can't add faction '" & factionIndex & "', there is a faction with that index.")
       if factionAction == DataAction.remove:
         factionsList.del(key = factionIndex)
-        logMessage(message = "Faction removed: '" & factionIndex & "'",
-            debugType = everything)
+        logMessage(message = "Faction removed: '" & factionIndex & "'")
         continue
       var faction: FactionData = if factionAction == DataAction.update:
           try:
@@ -301,11 +300,9 @@ proc loadFactions*(fileName: string) {.raises: [DataLoadingError],
         if faction.basesTypes.len() == 0:
           for key in basesTypesList.keys:
             faction.basesTypes[key] = 20
-        logMessage(message = "Faction added: '" & factionIndex & "'",
-            debugType = everything)
+        logMessage(message = "Faction added: '" & factionIndex & "'")
       else:
-        logMessage(message = "Faction updated: '" & factionIndex & "'",
-            debugType = everything)
+        logMessage(message = "Faction updated: '" & factionIndex & "'")
       factionsList[factionIndex] = faction
 
 proc getReputation*(sourceFaction, targetFaction: string): int {.raises: [KeyError], tags: [], contractual.} =

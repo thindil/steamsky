@@ -287,8 +287,7 @@ proc loadShips*(fileName: string) {.raises: [DataLoadingError],
         protoShipsList.del(key = shipIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Ship removed: '" & $shipIndex & "'",
-            debugType = everything)
+        logMessage(message = "Ship removed: '" & $shipIndex & "'")
         continue
       var ship: ProtoShipData = if shipAction == DataAction.update:
           try:
@@ -469,11 +468,9 @@ proc loadShips*(fileName: string) {.raises: [DataLoadingError],
                 "', invalid index for module during counting the ship's combat value.")
       ship.combatValue.dec
       if shipAction == DataAction.add:
-        logMessage(message = "Ship added: '" & $shipIndex & "'",
-            debugType = everything)
+        logMessage(message = "Ship added: '" & $shipIndex & "'")
       else:
-        logMessage(message = "Ship updated: '" & $shipIndex & "'",
-            debugType = everything)
+        logMessage(message = "Ship updated: '" & $shipIndex & "'")
       protoShipsList[shipIndex] = ship
 
 proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;

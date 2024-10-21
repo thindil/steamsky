@@ -64,8 +64,7 @@ proc loadModules*(fileName: string) {.raises: [DataLoadingError],
         modulesList.del(key = moduleIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "module removed: '" & $moduleIndex & "'",
-            debugType = everything)
+        logMessage(message = "module removed: '" & $moduleIndex & "'")
         continue
       var module: BaseModuleData = if moduleAction == DataAction.update:
           try:
@@ -192,11 +191,9 @@ proc loadModules*(fileName: string) {.raises: [DataLoadingError],
       if attribute.len() > 0:
         module.description = attribute
       if moduleAction == DataAction.add:
-        logMessage(message = "Module added: '" & $moduleIndex & "'",
-            debugType = everything)
+        logMessage(message = "Module added: '" & $moduleIndex & "'")
       else:
-        logMessage(message = "Module updated: '" & $moduleIndex & "'",
-            debugType = everything)
+        logMessage(message = "Module updated: '" & $moduleIndex & "'")
       modulesList[moduleIndex] = module
 
 proc getModuleType*(moduleIndex: Positive): string {.raises: [

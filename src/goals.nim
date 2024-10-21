@@ -65,8 +65,7 @@ proc loadGoals*(fileName: string) {.raises: [DataLoadingError],
         goalsList.del(key = goalIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Goal removed: '" & $goalIndex & "'",
-            debugType = everything)
+        logMessage(message = "Goal removed: '" & $goalIndex & "'")
         continue
       var goal: GoalData = if goalAction == DataAction.update:
           try:
@@ -101,11 +100,9 @@ proc loadGoals*(fileName: string) {.raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for multiplier.")
       if goalAction == DataAction.add:
-        logMessage(message = "Goal added: '" & $goalIndex & "'",
-            debugType = everything)
+        logMessage(message = "Goal added: '" & $goalIndex & "'")
       else:
-        logMessage(message = "Goal updated: '" & $goalIndex & "'",
-            debugType = everything)
+        logMessage(message = "Goal updated: '" & $goalIndex & "'")
       goalsList[goalIndex] = goal
 
 proc updateGoal*(goalType: GoalTypes; targetIndex: string;

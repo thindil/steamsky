@@ -134,8 +134,7 @@ proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
         protoMobsList.del(key = mobIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Mob removed: '" & $mobIndex & "'",
-            debugType = everything)
+        logMessage(message = "Mob removed: '" & $mobIndex & "'")
         continue
       var mob: ProtoMobRecord = if mobAction == DataAction.update:
           try:
@@ -265,11 +264,9 @@ proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
                     "', invalid equipment index '" & item.attr(name = "index") & "'.")
             break
       if mobAction == DataAction.add:
-        logMessage(message = "Mob added: '" & $mobIndex & "'",
-            debugType = everything)
+        logMessage(message = "Mob added: '" & $mobIndex & "'")
       else:
-        logMessage(message = "Mob updated: '" & $mobIndex & "'",
-            debugType = everything)
+        logMessage(message = "Mob updated: '" & $mobIndex & "'")
       protoMobsList[mobIndex] = mob
 
 proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises: [KeyError], tags: [], contractual.} =

@@ -152,7 +152,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
           dataType = dataXml.tag
           if dataType == localDataName or localDataName.len == 0:
             logMessage(message = "Loading " & dataType & " file: " &
-                localFileName, debugType = everything)
+                localFileName)
             case dataType
             of "factions":
               loadFactions(fileName = localFileName)

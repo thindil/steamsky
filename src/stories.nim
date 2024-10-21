@@ -270,8 +270,7 @@ proc loadStories*(fileName: string) {.raises: [DataLoadingError],
         storiesList.del(key = storyIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "story removed: '" & $storyIndex & "'",
-            debugType = everything)
+        logMessage(message = "story removed: '" & $storyIndex & "'")
         continue
       var story: StoryData = if storyAction == DataAction.update:
           try:
@@ -357,11 +356,9 @@ proc loadStories*(fileName: string) {.raises: [DataLoadingError],
       if endText.len > 0:
         story.endText = endText
       if storyAction == DataAction.add:
-        logMessage(message = "Story added: '" & $storyIndex & "'",
-            debugType = everything)
+        logMessage(message = "Story added: '" & $storyIndex & "'")
       else:
-        logMessage(message = "Story updated: '" & $storyIndex & "'",
-            debugType = everything)
+        logMessage(message = "Story updated: '" & $storyIndex & "'")
       storiesList[storyIndex] = story
 
 proc selectBase*(value: string): string {.raises: [], tags: [],

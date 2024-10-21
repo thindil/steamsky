@@ -87,8 +87,7 @@ proc loadItems*(fileName: string) {.raises: [DataLoadingError],
         itemsList.del(key = itemIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Item removed: '" & $itemIndex & "'",
-            debugType = everything)
+        logMessage(message = "Item removed: '" & $itemIndex & "'")
         continue
       var item: ObjectData = if itemAction == DataAction.update:
           try:
@@ -142,11 +141,9 @@ proc loadItems*(fileName: string) {.raises: [DataLoadingError],
       if attribute.len() > 0:
         item.description = attribute
       if itemAction == DataAction.add:
-        logMessage(message = "Item added: '" & $itemIndex & "'",
-            debugType = everything)
+        logMessage(message = "Item added: '" & $itemIndex & "'")
       else:
-        logMessage(message = "Item updated: '" & $itemIndex & "'",
-            debugType = everything)
+        logMessage(message = "Item updated: '" & $itemIndex & "'")
       itemsList[itemIndex] = item
       if itemIndex == moneyIndex:
         moneyName = item.name

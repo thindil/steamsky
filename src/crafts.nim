@@ -70,8 +70,7 @@ proc loadRecipes*(fileName: string) {.raises: [DataLoadingError],
         recipesList.del(key = recipeIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Recipe removed: '" & $recipeIndex & "'",
-            debugType = everything)
+        logMessage(message = "Recipe removed: '" & $recipeIndex & "'")
         continue
       var recipe: CraftData = if recipeAction == DataAction.update:
           try:
@@ -171,11 +170,9 @@ proc loadRecipes*(fileName: string) {.raises: [DataLoadingError],
       else:
         recipe.toolQuality = 100
       if recipeAction == DataAction.add:
-        logMessage(message = "Recipe added: '" & $recipeIndex & "'",
-            debugType = everything)
+        logMessage(message = "Recipe added: '" & $recipeIndex & "'")
       else:
-        logMessage(message = "Recipe updated: '" & $recipeIndex & "'",
-            debugType = everything)
+        logMessage(message = "Recipe updated: '" & $recipeIndex & "'")
       recipesList[recipeIndex] = recipe
 
 proc setRecipeData*(recipeIndex: string): CraftData {.raises: [
