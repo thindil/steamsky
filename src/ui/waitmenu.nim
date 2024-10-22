@@ -16,11 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/strutils
+import contracts, nimalyzer
 import ../[crew2, game, game2, shipsmovement, tk, types]
 import coreui, dialogs, errordialog, updateheader, utilsui2
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
   ## Show the available wait orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -39,7 +40,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   waitDialog = createDialog(name = ".gameframe.wait", title = "Wait in place", columns = 3)
 
-  proc addButton(time: Positive) =
+  proc addButton(time: Positive) {.raises: [], tags: [], contractual.} =
     let button = waitDialog & ".wait" & $time
     tclEval(script = "ttk::button " & button & " -text {Wait " & $time &
         " minute" & (if time > 1: "s" else: "") & "} -command {Wait " & $time & "}")
@@ -113,7 +114,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.}
   ## Wait the selected amount of time
   ##
   ## * clientData - the additional data for the Tcl command
@@ -126,7 +127,7 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Wait
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect], contractual.} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowWait", showWaitCommand)
@@ -137,7 +138,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
 import mapsui
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults =
+    argv: cstringArray): TclResults {.ruleOff: "hasPragma"} =
   try:
     if argv[1] == "1":
       updateGame(minutes = 1)
