@@ -1163,19 +1163,15 @@ story.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
-game create file *debug.log* in *data* directory. To start game in debug mode
-run it with parameter --debug=[debugtype]. Example:
+game create file *debug.log* in the game's *data* directory and print the messages
+to the console. To start game in debug mode run it with parameter
+`--debug=[debugLevel]`. Example:
 
-`./steamsky --debug=everything`
+`./steamsky --debug=all`
 
-At this moment available are three types of debug:
+The levels for debugging are almost identical to the Nim Level enumeration:
+all, debug, info, notice, warn, error, fatal, none and menu
 
-* Option 'everything' means to log each debug message to a file. At this moment
-  this means information about loading game data (ships/recipes/items/modules)
-  and also some combat data. This option may be useful to check that the data
-  of new/added items, etc is correct. Additionally, its spawns debug menu for
-  modifying the game data.
-* Option 'combat' means to log debug messages only from combat.
-* Option 'menu' spawns only debug menu after starting the game for modifying the
-  data.
+The last option doesn't create the log file but creates the debug menu instead,
+for modifying the game's data.
 
