@@ -19,7 +19,7 @@
 ## initialize graphic and start the game.
 
 import std/[os, parseopt, strutils]
-import contracts
+import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, log
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -82,6 +82,14 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   except:
     echo "Can't load hall of fame"
     return
+
+  const
+    windowName = "Steam Sky " & gameVersion
+    windowWidth: cint = 800
+    windowHeight: cint = 600
+
+  # Initialize SDL and create the main window of the game
+  nuklearInit(windowWidth, windowHeight, windowName)
 
 # Run the game
 steamsky()
