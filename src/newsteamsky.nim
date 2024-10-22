@@ -84,12 +84,13 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     return
 
   const
-    windowName = "Steam Sky " & gameVersion
+    windowName: string = "Steam Sky " & gameVersion
     windowWidth: cint = 800
     windowHeight: cint = 600
 
   # Initialize SDL and create the main window of the game
-  nuklearInit(windowWidth, windowHeight, windowName)
+  nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
+      name = windowName)
 
 # Run the game
 steamsky()
