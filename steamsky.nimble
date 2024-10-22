@@ -47,4 +47,4 @@ task docs, "builds the project's documentation":
 
 task newdebug, "builds the new game UI in debug mode (temporary task)":
   exec "nim c -d:debug --app:gui --styleCheck:hint --spellSuggest:auto --errorMax:0 --outdir:" &
-      binDir & " " & srcDir & DirSep & "newsteamsky.nim"
+      binDir & " --passl:\"-I/usr/include -I/usr/include/SDL2 -L/usr/lib -lm -lSDL2\" --passc:-Isrc/newui/nuklear " & srcDir & DirSep & "newsteamsky.nim"
