@@ -71,7 +71,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       set tradeframe [ttk::frame $tradecanvas.trade]
       SetScrollbarBindings $tradeframe .gameframe.paned.tradeframe.scrolly
       # Type of items to show
-      grid [ttk::frame $tradeframe.options] -sticky w
+      ttk::frame $tradeframe.options
       SetScrollbarBindings $tradeframe.options .gameframe.paned.tradeframe.scrolly
       grid [ttk::label $tradeframe.options.typelabel -text {Type:}]
       SetScrollbarBindings $tradeframe.options.typelabel \
@@ -121,6 +121,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
         scrollbar = mainPaned & ".tradeframe.scrolly",
         command = "SortTradeItems",
         tooltipTExt = "Press mouse button to sort the items.")
+    tclEval(script = "grid configure " & tradeTable.canvas & " -row 1")
   elif tclEval2(script = "winfo ismapped " & label) == "1" and argc == 1:
     itemsSortOrder = defaultItemsSortOrder
     tclEval(script = "grid remove " & closeButton)
@@ -1056,6 +1057,31 @@ proc searchTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowTrade", tclEval2(script = typeBox & " get"),
           searchText].allocCStringArray)
 
+proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+  ## Maximize or minimize the options for the list of items to trade
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## TradeMore show/hide
+  ## If th argument is set to show, show the options, otherwise hide them.
+  let
+    tradeFrame = mainPaned & ".tradeframe"
+    button = gameHeader & ".morebutton"
+  if argv[1] == "show":
+    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options -sticky w -row 0")
+    tclEval(script = button & " configure -command {TradeMore hide}")
+  else:
+    tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options")
+    tclEval(script = button & " configure -command {TradeMore show}")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -1065,5 +1091,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("ShowTradeItemInfo", showTradeItemInfoCommand)
     addCommand("TradeAmount", tradeAmountCommand)
     addCommand("SearchTrade", searchTradeCommand)
+    addCommand("TradeMore", tradeMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
