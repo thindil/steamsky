@@ -93,11 +93,13 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
       name = windowName)
 
+  # The main game loop
   while true:
     let started = cpuTime()
     # Input
     if nuklearInput():
       break
+
     # GUI
 
     # Draw
