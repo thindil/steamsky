@@ -71,17 +71,17 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       set tradeframe [ttk::frame $tradecanvas.trade]
       SetScrollbarBindings $tradeframe .gameframe.paned.tradeframe.scrolly
       # Type of items to show
-      ttk::frame $tradeframe.options
+      grid [ttk::frame $tradeframe.options] -sticky w
       SetScrollbarBindings $tradeframe.options .gameframe.paned.tradeframe.scrolly
-      grid [ttk::label $tradeframe.options.typelabel -text {Type:}]
+      ttk::label $tradeframe.options.typelabel -text {Type:}
       SetScrollbarBindings $tradeframe.options.typelabel \
          .gameframe.paned.tradeframe.scrolly
-      grid [ttk::combobox $tradeframe.options.type -state readonly] -column 1 -row 0
+      ttk::combobox $tradeframe.options.type -state readonly
       bind $tradeframe.options.type <<ComboboxSelected>> \
          {ShowTrade [$tradeframe.options.type get]}
-      grid [ttk::entry $tradeframe.options.search -validate key \
-         -validatecommand {SearchTrade %P}] -column 2 -row 0
-      grid [ttk::frame $tradeframe.options.playerinfo] -sticky nw -columnspan 2
+      ttk::entry $tradeframe.options.search -validate key \
+         -validatecommand {SearchTrade %P}
+      grid [ttk::frame $tradeframe.options.playerinfo] -sticky nw -columnspan 2 -row 1
       SetScrollbarBindings $tradeframe.options.playerinfo \
          .gameframe.paned.tradeframe.scrolly
       grid [ttk::label $tradeframe.options.playerinfo.moneyinfo -wraplength 300] \
@@ -1075,10 +1075,14 @@ proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
     tradeFrame = mainPaned & ".tradeframe"
     button = gameHeader & ".morebutton"
   if argv[1] == "show":
-    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options -sticky w -row 0")
+    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.typelabel -sticky w -row 0")
+    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.type -row 0 -column 1")
+    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.search -row 0 -column 2")
     tclEval(script = button & " configure -command {TradeMore hide}")
   else:
-    tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options")
+    tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options.typelabel")
+    tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options.type")
+    tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options.search")
     tclEval(script = button & " configure -command {TradeMore show}")
   return tclOk
 
