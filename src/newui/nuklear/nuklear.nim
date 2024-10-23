@@ -74,7 +74,7 @@ type
     ## The types of charts
     lines, column, chartMax
   nk_bool* = enum
-    nk_false, nk_true
+    nkFalse, nkTrue
   nk_modify* = enum
     NK_FIXED, NK_MODIFIABLE
   CollapseStates* = enum
@@ -171,7 +171,7 @@ using ctx: PContext
 # -------------------
 proc new_nk_rect*(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl.}
 proc new_nk_vec2*(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl.}
-proc new_nk_font_config*(pixel_height: cfloat): nk_font_config {.importc: "nk_font_config", nodecl.}
+proc new_nk_font_config*(pixelHeight: cfloat): nk_font_config {.importc: "nk_font_config", nodecl.}
 
 # -----
 # Input
@@ -195,12 +195,12 @@ proc nk_labelf(ctx; flags: nk_flags; fmt: cstring) {.importc,
 # -------
 proc nk_layout_row_end(ctx) {.importc, cdecl.}
 proc nk_layout_row_begin(ctx; fmt: nk_layout_format;
-    row_height: cfloat; cols: cint) {.importc, cdecl.}
+    rowHeight: cfloat; cols: cint) {.importc, cdecl.}
 proc nk_layout_row_push(ctx; width: cfloat) {.importc, cdecl.}
 proc nk_layout_row(ctx; fmt: nk_layout_format; height: cfloat;
     cols: cint; ratio: pointer) {.importc, nodecl.}
 proc nk_layout_space_begin(ctx; fmt: nk_layout_format;
-    height: cfloat; widget_count: cint) {.importc, cdecl.}
+    height: cfloat; widgetCount: cint) {.importc, cdecl.}
 proc nk_layout_space_end(ctx) {.importc, cdecl.}
 proc nk_layout_row_template_begin(ctx; height: cfloat) {.importc, cdecl.}
 proc nk_layout_row_template_end(ctx) {.importc, cdecl.}
@@ -419,7 +419,7 @@ type
 # ----------
 converter toBool*(x: nk_bool): bool =
   ## Converts Nuklear nk_bool enum to Nim bool
-  x == nk_true
+  x == nkTrue
 converter toNkFlags*(x: nk_text_alignment): nk_flags =
   ## Converts Nuklear nk_text_alignment enum to Nuklear nk_flags type
   x.ord.cint
@@ -658,7 +658,7 @@ template treeElement*(eType: TreeType; title: string; state: CollapseStates;
   ## * index   - the index of the element. Must be unique
   ## * content - the content of the element
   var sel: nk_bool = selected.nk_bool
-  if nktree_element_push_hashed(ctx, eType, title.cstring, state, sel, (
+  if nk_tree_element_push_hashed(ctx, eType, title.cstring, state, sel, (
       $hash(index)).cstring, 12, index.cint):
     content
     nk_tree_element_pop(ctx)
@@ -816,7 +816,7 @@ proc setLayoutRowStatic*(height: float; width, cols: int) =
   ## * height - the height in pixels of each row
   ## * width  - the width in pixels of each column
   ## * cols   - the amount of columns in each row
-  proc nk_layout_row_static(ctx; height: cfloat; item_width,
+  proc nk_layout_row_static(ctx; height: cfloat; itemWidth,
       cols: cint) {.importc, cdecl.}
   nk_layout_row_static(ctx, height.cfloat, width.cint, cols.cint)
 
@@ -926,7 +926,7 @@ proc rowTemplateVariable*(minWidth: float) =
   ## requirement for minumum width for the widget
   ##
   ## * minWidth - the minimum width in pixels for the widgets in the column
-  proc nk_layout_row_template_push_variable(ctx; min_width: cfloat) {.importc, nodecl.}
+  proc nk_layout_row_template_push_variable(ctx; minWidth: cfloat) {.importc, nodecl.}
   nk_layout_row_template_push_variable(ctx, minWidth.cfloat)
 
 proc rowTemplateStatic*(width: float) =
@@ -1006,7 +1006,7 @@ proc slider*(min: int; val: var int; max, step: int): bool {.discardable.} =
       step: cint): nk_bool {.importc, nodecl.}
   var newVal = val.cint
   result = nk_slider_int(ctx = ctx, min = min.cint, val = newVal,
-      max = max.cint, step = step.cint) == nk_true
+      max = max.cint, step = step.cint) == nkTrue
   val = newVal
 
 proc slider*(min: float; val: var float; max,
@@ -1022,10 +1022,10 @@ proc slider*(min: float; val: var float; max,
   ## Returns true if the current value was modified, otherwise false. Also
   ## the modified parameter val
   proc nk_slider_float(ctx; min: cfloat; val: var cfloat; max,
-    value_step: cfloat): nk_bool {.importc, nodecl.}
+    valueStep: cfloat): nk_bool {.importc, nodecl.}
   var newVal = val.cfloat
   result = nk_slider_float(ctx = ctx, min = min.cfloat, val = newVal,
-      max = max.cfloat, value_step = step.cfloat) == nk_true
+      max = max.cfloat, value_step = step.cfloat) == nkTrue
   val = newVal
 
 # ----------
@@ -1049,7 +1049,7 @@ proc property*(name: string; min: int; val: var int; max, step: int;
   ##
   ## Returns the modified parameter val
   proc nk_property_int(ctx; name: cstring; min: cint; val: var cint; max,
-      step: cint; inc_per_pixel: cfloat) {.importc, nodecl.}
+      step: cint; incPerPixel: cfloat) {.importc, nodecl.}
   var newVal = val.cint
   nk_property_int(ctx, name.cstring, min.cint, newVal, max.cint, step.cint,
       incPerPixel.cfloat)
@@ -1072,7 +1072,7 @@ proc property*(name: string; min: float; val: var float; max, step: float;
   ##
   ## Returns the modified parameter val
   proc nk_property_float(ctx; name: cstring; min: cfloat;
-      val: var cfloat; max, step, inc_per_pixel: cfloat) {.importc, nodecl.}
+      val: var cfloat; max, step, incPerPixel: cfloat) {.importc, nodecl.}
   var newVal = val.cfloat
   nk_property_float(ctx, name.cstring, min.cfloat, newVal, max.cfloat,
       step.cfloat, incPerPixel.cfloat)
@@ -1094,7 +1094,7 @@ proc property2*(name: string; min, val, max, step, incPerPixel: float): float =
   ##
   ## Returns the new value of the property
   proc nk_propertyf(ctx; name: cstring; min, val, max, step,
-      inc_per_pixel: cfloat): cfloat {.importc, nodecl.}
+      incPerPixel: cfloat): cfloat {.importc, nodecl.}
   return nk_propertyf(ctx, name.cstring, min.cfloat, val.cfloat, max.cfloat,
       step.cfloat, incPerPixel.cfloat).float
 
@@ -1115,7 +1115,7 @@ proc property2*(name: string; min, val, max, step: int;
   ##
   ## Returns the new value of the property
   proc nk_propertyi(ctx; name: cstring; min, val, max, step: cint;
-      inc_per_pixel: cfloat): cint {.importc, nodecl.}
+      incPerPixel: cfloat): cint {.importc, nodecl.}
   return nk_propertyi(ctx, name.cstring, min.cint, val.cint, max.cint,
       step.cint, incPerPixel.cfloat).int
 
@@ -1258,7 +1258,7 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
   ##
   ## Returns the index of the currently selected valu on the combo's list
   proc nk_combo(ctx; items: pointer; count,
-      selected, item_height: cint; size: nk_vec2): cint {.importc, nodecl.}
+      selected, itemHeight: cint; size: nk_vec2): cint {.importc, nodecl.}
   var optionsList: seq[cstring]
   for i in 0 .. amount:
     optionsList.add(items[i].cstring)
@@ -1373,7 +1373,7 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF =
 # Charts
 # ------
 proc createColorChart(ctx; ctype: ChartType; color,
-    higlight: NimColor; count: cint; min_value, max_value: cfloat): bool =
+    higlight: NimColor; count: cint; minValue, maxValue: cfloat): bool =
   ## Create a colored chart, internal use only, temporary code
   ##
   ## * ctx       - the Nuklear context
@@ -1387,12 +1387,11 @@ proc createColorChart(ctx; ctype: ChartType; color,
   ##
   ## Returns true if the chart was succesfully created otherwise false
   proc nk_chart_begin_colored(ctx; ctype: ChartType; color,
-      higlight: nk_color; count: cint; min_value,
-      max_value: cfloat): nk_bool {.importc, nodecl.}
+      higlight: nk_color; count: cint; minValue,
+      maxValue: cfloat): nk_bool {.importc, nodecl.}
   return nk_chart_begin_colored(ctx, ctype, nk_rgb(color.r.cint, color.g.cint,
       color.b.cint), nk_rgb(higlight.r.cint, higlight.g.cint, higlight.b.cint),
-          count, min_value,
-    max_value)
+          count, minValue, maxValue)
 
 template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
     minValue, maxValue: float; content: untyped) =
@@ -1411,7 +1410,7 @@ template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
     nk_chart_end(ctx)
 
 proc addColorChartSlot*(ctype: ChartType; color,
-    higlight: NimColor; count: cint; min_value, max_value: cfloat) =
+    higlight: NimColor; count: cint; minValue, maxValue: cfloat) =
   ## Add another chart to the existing one
   ##
   ## * ctype     - the type of the chart
@@ -1422,10 +1421,10 @@ proc addColorChartSlot*(ctype: ChartType; color,
   ## * min_value - the minimal value of the chart
   ## * max_value - the maximum value of the chart
   proc nk_chart_add_slot_colored(ctx; ctype: ChartType; color,
-      higlight: nk_color; count: cint; min_value, max_value: cfloat) {.importc, nodecl.}
+      higlight: nk_color; count: cint; minValue, maxValue: cfloat) {.importc, nodecl.}
   nk_chart_add_slot_colored(ctx, ctype, nk_rgb(color.r.cint, color.g.cint,
       color.b.cint), nk_rgb(higlight.r.cint, higlight.g.cint, higlight.b.cint),
-          count, min_value, max_value)
+          count, minValue, maxValue)
 
 template chart*(cType: ChartType; num: int; min, max: float; content: untyped) =
   ## Create a chart of the selected type
@@ -1462,7 +1461,7 @@ proc addChartSlot*(ctype: ChartType; count: int; minValue, maxValue: float) =
   ## * min_value - the minimal value of the chart
   ## * max_value - the maximum value of the chart
   proc nk_chart_add_slot(ctx; ctype: ChartType; count: cint;
-      min_value, max_value: cfloat) {.importc, nodecl.}
+      minValue, maxValue: cfloat) {.importc, nodecl.}
   nk_chart_add_slot(ctx, ctype, count.cint, minValue.cfloat, maxValue.cfloat)
 
 proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable.} =
@@ -1485,7 +1484,7 @@ proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable.} =
 # Contextual
 # ----------
 proc createContextual(ctx; flags: nk_flags; x, y: cfloat;
-    trigger_bounds: NimRect): bool =
+    triggerBounds: NimRect): bool =
   ## Create a contextual menu, internal use only, temporary code
   ##
   ## * ctx            - the Nuklear context
@@ -1498,10 +1497,10 @@ proc createContextual(ctx; flags: nk_flags; x, y: cfloat;
   ## Return true if the contextual menu was created successfully, otherwise
   ## false
   proc nk_contextual_begin(ctx; flags: nk_flags; size: nk_vec2;
-      trigger_bounds: nk_rect): nk_bool {.importc, nodecl.}
+      triggerBounds: nk_rect): nk_bool {.importc, nodecl.}
   return nk_contextual_begin(ctx, flags, new_nk_vec2(x, y), new_nk_rect(
-      trigger_bounds.x, trigger_bounds.y, trigger_bounds.w,
-      trigger_bounds.h))
+      triggerBounds.x, triggerBounds.y, triggerBounds.w,
+      triggerBounds.h))
 
 template contextualMenu*(flags: set[WindowFlags]; x, y;
     triggerBounds: NimRect; content: untyped) =
@@ -1657,7 +1656,7 @@ proc selectableLabel*(str: string; value: var bool;
   proc nk_selectable_label(ctx; str: cstring; align: nk_flags;
       value: var nk_bool): nk_bool {.importc, nodecl.}
   var newValue = value.nk_bool
-  result = nk_selectable_label(ctx, str.cstring, align.nk_flags, newValue) == nk_true
+  result = nk_selectable_label(ctx, str.cstring, align.nk_flags, newValue) == nkTrue
   discard $newValue
   value = newValue
 
@@ -1677,7 +1676,7 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
     title: cstring; align: nk_flags; value: var nk_bool): nk_bool {.importc, nodecl.}
   var newValue = value.nk_bool
   result = nk_selectable_symbol_label(ctx, sym, title.cstring, align.nk_flags,
-      newValue) == nk_true
+      newValue) == nkTrue
   discard $newValue
   value = newValue
 
@@ -1709,7 +1708,7 @@ proc checkBox*(label: string; checked: var bool): bool {.discardable.} =
       active: var cint): nk_bool {.importc, nodecl.}
   var active: cint = (if checked: 1 else: 0)
   result = nk_checkbox_label(ctx = ctx, text = label.cstring,
-      active = active) == nk_true
+      active = active) == nkTrue
   checked = active == 1
 
 proc option*(label: string; selected: bool): bool =
@@ -1721,7 +1720,7 @@ proc option*(label: string; selected: bool): bool =
   ## Returns true if the option is selected, otherwise false
   proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc, nodecl.}
   var active: cint = (if selected: 1 else: 0)
-  return nk_option_label(ctx = ctx, name = label.cstring, active = active) == nk_true
+  return nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
 
 proc progressBar*(value: var int; maxValue: int;
     modifyable: bool = true): bool {.discardable.} =
@@ -1735,5 +1734,5 @@ proc progressBar*(value: var int; maxValue: int;
   proc nk_progress(ctx; cur: var nk_size; max: nk_size;
       modifyable: nk_bool): nk_bool {.importc, nodecl.}
   return nk_progress(ctx = ctx, cur = value, max = maxValue,
-      modifyable = modifyable.nk_bool) == nk_true
+      modifyable = modifyable.nk_bool) == nkTrue
 

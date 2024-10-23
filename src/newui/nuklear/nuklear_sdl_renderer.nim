@@ -129,7 +129,7 @@ proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
     atlas: ptr nk_font_atlas
     config = new_nk_font_config(0)
   nk_sdl_font_stash_begin(atlas.unsafeAddr)
-  var font = nk_font_atlas_add_default(atlas, 13 * font_scale,
+  var font = nk_font_atlas_add_default(atlas, 13 * fontScale,
       config.unsafeAddr)
   nk_sdl_font_stash_end()
   nk_style_set_font(getContext(), font.handle.unsafeAddr)
