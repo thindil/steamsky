@@ -21,6 +21,7 @@
 import std/[os, parseopt, strutils, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, log
+import newui/[coreui, mainmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -85,8 +86,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   const
     windowName: string = "Steam Sky"
-    windowWidth: cint = 600
-    windowHeight: cint = 400
     dtime: float = 20.0
 
   # Initialize SDL and create the main window of the game
@@ -94,21 +93,25 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       name = windowName)
 
   # The main game loop
+  var state: GameState = mainMenu
   while true:
-    let started = cpuTime()
+    let started: float = cpuTime()
     # Input
     if nuklearInput():
       break
 
     # GUI
+    case state
+    of mainMenu:
+      showMainMenu(state = state)
 
     # Draw
     nuklearDraw()
 
     # Timing
-    let dt = cpuTime() - started
+    let dt: float = cpuTime() - started
     if (dt < dtime):
-      sleep((dtime - dt).int)
+      sleep(milsecs = (dtime - dt).int)
 
   nuklearClose()
 
