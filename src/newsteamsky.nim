@@ -18,7 +18,7 @@
 ## The main game module. Read the game configuration, command line arguments,
 ## initialize graphic and start the game.
 
-import std/[os, parseopt, strutils]
+import std/[os, parseopt, strutils, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, log
 
@@ -84,13 +84,31 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     return
 
   const
-    windowName: string = "Steam Sky " & gameVersion
-    windowWidth: cint = 800
-    windowHeight: cint = 600
+    windowName: string = "Steam Sky"
+    windowWidth: cint = 600
+    windowHeight: cint = 400
+    dtime: float = 20.0
 
   # Initialize SDL and create the main window of the game
   nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
       name = windowName)
+
+  while true:
+    let started = cpuTime()
+    # Input
+    if nuklearInput():
+      break
+    # GUI
+
+    # Draw
+    nuklearDraw()
+
+    # Timing
+    let dt = cpuTime() - started
+    if (dt < dtime):
+      sleep((dtime - dt).int)
+
+  nuklearClose()
 
 # Run the game
 steamsky()
