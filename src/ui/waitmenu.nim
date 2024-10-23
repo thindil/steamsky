@@ -21,7 +21,8 @@ import ../[crew2, game, game2, shipsmovement, tk, types]
 import coreui, dialogs, errordialog, updateheader, utilsui2
 
 proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual,
+    ruleOff: "params".} =
   ## Show the available wait orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -127,7 +128,8 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Wait
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect], contractual.} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect],
+    contractual.} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowWait", showWaitCommand)
@@ -138,7 +140,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect], contractual
 import mapsui
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.ruleOff: "hasPragma"} =
+    argv: cstringArray): TclResults {.ruleOff: "hasPragma".} =
   try:
     if argv[1] == "1":
       updateGame(minutes = 1)
