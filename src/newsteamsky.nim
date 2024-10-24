@@ -104,6 +104,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     case state
     of mainMenu:
       showMainMenu(state = state)
+    of quitGame:
+      break
 
     # Draw
     nuklearDraw()

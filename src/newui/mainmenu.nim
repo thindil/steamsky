@@ -27,9 +27,12 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  state = mainMenu
   window(name = "MainMenu", x = 0, y = 0, w = windowWidth.float,
       h = windowHeight.float, {windowNoFlags}):
     setLayoutRowStatic(30.0, 80, 1)
     labelButton("New game"):
       echo "button pressed"
+    labelButton("Quit"):
+      state = quitGame
+      return
+  state = mainMenu
