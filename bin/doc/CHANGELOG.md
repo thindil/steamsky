@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- **BREAKING**: Redesigned how the technical logging works. This changes the
+  game's command line parameters, which made incompatible with the previous
+  versions of the game. But most people should'nt notice it.
 
 ## [10.4] - 2024-10-20
 
