@@ -15,9 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various types and variables for the game's UI, like the game's
+## state, the main window width and height, etc
+
 type GameState* = enum
+  ## Used to determine the current game's state.
   mainMenu
 
-const
-  windowWidth*: cint = 600
-  windowHeight*: cint = 400
+var
+  windowWidth*: cint = 600 ## The width of the game's main window
+  windowHeight*: cint = 400 ## the height of the game's main window
