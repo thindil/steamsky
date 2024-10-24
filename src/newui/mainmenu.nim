@@ -15,7 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's main menu, like showing the
+## menu, and selecting its various sections
+
+import contracts
 import coreui
 
-proc showMainMenu*(state: var GameState) =
+proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
+  ## Show the game's main menu and set the game's state
+  ##
+  ## * state - the current game's state
+  ##
+  ## Returns the modified parameter state.
   state = mainMenu
