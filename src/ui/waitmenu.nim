@@ -132,8 +132,8 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect],
     contractual.} =
   ## Adds Tcl commands related to the wait menu
   try:
-    addCommand("ShowWait", showWaitCommand)
-    addCommand("Wait", waitCommand)
+    addCommand(name = "ShowWait", nimProc = showWaitCommand)
+    addCommand(name = "Wait", nimProc = waitCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
