@@ -18,7 +18,7 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 import coreui
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
@@ -28,3 +28,8 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ##
   ## Returns the modified parameter state.
   state = mainMenu
+  window(name = "MainMenu", x = 0, y = 0, w = windowWidth.float,
+      h = windowHeight.float, {windowNoFlags}):
+    setLayoutRowStatic(30.0, 80, 1)
+    labelButton("New game"):
+      echo "button pressed"
