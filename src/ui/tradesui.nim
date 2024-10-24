@@ -79,8 +79,10 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
       ttk::combobox $tradeframe.options.type -state readonly
       bind $tradeframe.options.type <<ComboboxSelected>> \
          {ShowTrade [$tradeframe.options.type get]}
+      tooltip::tooltip $tradeframe.options.type {Show only items of the selected type}
       ttk::entry $tradeframe.options.search -validate key \
          -validatecommand {SearchTrade %P}
+      tooltip::tooltip $tradeframe.options.search {Enter a name of an item which you looking for}
       grid [ttk::frame $tradeframe.options.playerinfo] -sticky nw -columnspan 2 -row 1
       SetScrollbarBindings $tradeframe.options.playerinfo \
          .gameframe.paned.tradeframe.scrolly
