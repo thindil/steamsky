@@ -97,15 +97,14 @@ var
   win: WindowPtr        ## The main X window of the program
   renderer: RendererPtr ## The SDL renderer
 
-proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
-    font: cstring = ""): PContext {.discardable.} =
+proc nuklearInit*(windowWidth, windowHeight: cint;
+    name: cstring = ""): PContext {.discardable.} =
   ## Initialize Nuklear library, create the main program's window with the
   ## selected parameters.
   ##
   ## * windowWidth  - the default main window width
   ## * windowHeight - the default main window height
   ## * name         - the title of the main window
-  ## * font         - the name of the font used in UI. Default value is "".
   SDL_SetHint("SDL_HINT_VIDEO_HIGHDPI_DISABLED", "0")
   discard SDL_Init(SDL_INIT_VIDEO)
   win = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
