@@ -310,6 +310,8 @@ proc nk_group_end(ctx) {.importc, cdecl.}
 # -----
 proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
     config: ptr nk_font_config): ptr nk_font {.importc, nodecl.}
+proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
+    height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc, nodecl.}
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
