@@ -97,8 +97,8 @@ var
   win: WindowPtr        ## The main X window of the program
   renderer: RendererPtr ## The SDL renderer
 
-proc nuklearInit*(windowWidth, windowHeight: cint;
-    name: cstring = ""; fontPath: cstring = ""): PContext {.discardable.} =
+proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
+    fontPath: cstring = ""; fontSize: cint = 14): PContext {.discardable.} =
   ## Initialize Nuklear library, create the main program's window with the
   ## selected parameters.
   ##
@@ -107,6 +107,7 @@ proc nuklearInit*(windowWidth, windowHeight: cint;
   ## * name         - the title of the main window
   ## * fontPath     - the full path to the default UI font. If empty, use the
   ##                  default system font. Default value is empty.
+  ## * fontSize     - the size of the font used in the UI. Default values is 14.
   SDL_SetHint("SDL_HINT_VIDEO_HIGHDPI_DISABLED", "0")
   discard SDL_Init(SDL_INIT_VIDEO)
   win = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -132,11 +133,11 @@ proc nuklearInit*(windowWidth, windowHeight: cint;
     font: ptr nk_font
   nk_sdl_font_stash_begin(atlas.unsafeAddr)
   if fontPath.len == 0:
-    font = nk_font_atlas_add_default(atlas, 24 * fontScale,
+    font = nk_font_atlas_add_default(atlas, fontSize.cfloat * fontScale,
         config.unsafeAddr)
   else:
-    font = nk_font_atlas_add_from_file(atlas, fontPath, 24 * fontScale,
-        config.unsafeAddr)
+    font = nk_font_atlas_add_from_file(atlas, fontPath, fontSize.cfloat *
+        fontScale, config.unsafeAddr)
   nk_sdl_font_stash_end()
   nk_style_set_font(getContext(), font.handle.unsafeAddr)
   return getContext()
