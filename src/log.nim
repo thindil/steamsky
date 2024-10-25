@@ -44,7 +44,7 @@ proc logMessage*(message: string; messageLevel: Level = lvlDebug) {.raises: [],
 proc startLogging*() {.raises: [], tags: [RootEffect], contractual.} =
   ## Start logging the game. Set the logger.
   # We want only the menu, don't set the loggers.
-  if debugMode == menu:
+  if debugMode in {menu, none}:
     return
   try:
     let
