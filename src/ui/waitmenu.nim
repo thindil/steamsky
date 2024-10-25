@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the wait menu, like showing it and executing
+## a wait command.
+
 import std/strutils
 import contracts, nimalyzer
 import ../[crew2, game, game2, shipsmovement, tk, types]
@@ -42,6 +45,9 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   waitDialog = createDialog(name = ".gameframe.wait", title = "Wait in place", columns = 3)
 
   proc addButton(time: Positive) {.raises: [], tags: [], contractual.} =
+    ## Add a button to the menu
+    ##
+    ## * time - the amount of minutes to wait after pressing the button
     let button = waitDialog & ".wait" & $time
     tclEval(script = "ttk::button " & button & " -text {Wait " & $time &
         " minute" & (if time > 1: "s" else: "") & "} -command {Wait " & $time & "}")
@@ -140,7 +146,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect],
 import mapsui
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.ruleOff: "hasPragma".} =
+    argv: cstringArray): TclResults {.ruleOff: "hasPragma", ruleOff: "hasdoc".} =
   try:
     if argv[1] == "1":
       updateGame(minutes = 1)
