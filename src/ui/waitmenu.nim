@@ -37,9 +37,9 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowWait
-  var waitDialog = ".gameframe.wait"
+  var waitDialog: string = ".gameframe.wait"
   if tclEval2(script = "winfo exists " & waitDialog) == "1":
-    let button = waitDialog & ".close"
+    let button: string = waitDialog & ".close"
     tclEval(script = button & " invoke")
     return tclOk
   waitDialog = createDialog(name = ".gameframe.wait", title = "Wait in place", columns = 3)
@@ -48,7 +48,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
     ## Add a button to the menu
     ##
     ## * time - the amount of minutes to wait after pressing the button
-    let button = waitDialog & ".wait" & $time
+    let button: string = waitDialog & ".wait" & $time
     tclEval(script = "ttk::button " & button & " -text {Wait " & $time &
         " minute" & (if time > 1: "s" else: "") & "} -command {Wait " & $time & "}")
     tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5" & (
@@ -62,7 +62,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   addButton(time = 10)
   addButton(time = 15)
   addButton(time = 30)
-  var button = waitDialog & ".wait1h"
+  var button: string = waitDialog & ".wait1h"
   tclEval(script = "ttk::button " & button & " -text {Wait 1 hour} -command {Wait 60}")
   tclEval(script = "grid " & button & " -sticky we -columnspan 3 -padx 5")
   tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for 1 hour\"")
@@ -72,7 +72,7 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & button & " -padx {5 0}")
   tclEval(script = "bind " & button & " <Escape> {CloseDialog " & waitDialog & ";break}")
   tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of minutes:\nfrom 1 to 1440 (the whole day)\"")
-  let amountBox = waitDialog & ".amount"
+  let amountBox: string = waitDialog & ".amount"
   tclEval(script = "ttk::spinbox " & amountBox &
       " -from 1 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P " &
       button & "} -textvariable customwaittime")
@@ -81,11 +81,11 @@ proc showWaitCommand*(clientData: cint; interp: PInterp; argc: cint;
   if tclGetVar(varName = "customwaittime").len == 0:
     tclEval(script = amountBox & " set 1")
   tclEval(script = "tooltip::tooltip " & button & " \"Wait in place for the selected amount of time:\nfrom 1 to 1440\"")
-  let amountCombo = waitDialog & ".mins"
+  let amountCombo: string = waitDialog & ".mins"
   tclEval(script = "ttk::combobox " & amountCombo & " -state readonly -values [list minutes hours days] -width 8")
   tclEval(script = amountCombo & " current 0")
   tclEval(script = "grid " & amountCombo & " -row 7 -column 2 -padx {0 5}")
-  var needRest, needHealing = false
+  var needRest, needHealing: bool = false
   for index, member in playerShip.crew:
     if member.tired > 0 and member.order == rest:
       needRest = true
@@ -146,32 +146,34 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect],
 import mapsui
 
 proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.ruleOff: "hasPragma", ruleOff: "hasdoc".} =
+    argv: cstringArray): TclResults {.ruleOff: "hasPragma",
+    ruleOff: "hasdoc".} =
   try:
-    if argv[1] == "1":
+    case argv[1]
+    of "1":
       updateGame(minutes = 1)
       waitInPlace(minutes = 1)
-    elif argv[1] == "5":
+    of "5":
       updateGame(minutes = 5)
       waitInPlace(minutes = 5)
-    elif argv[1] == "10":
+    of "10":
       updateGame(minutes = 10)
       waitInPlace(minutes = 10)
-    elif argv[1] == "15":
+    of "15":
       updateGame(minutes = 15)
       waitInPlace(minutes = 15)
-    elif argv[1] == "30":
+    of "30":
       updateGame(minutes = 30)
       waitInPlace(minutes = 30)
-    elif argv[1] == "60":
+    of "60":
       updateGame(minutes = 60)
       waitInPlace(minutes = 60)
-    elif argv[1] == "rest":
+    of "rest":
       waitForRest()
-    elif argv[1] == "heal":
-      var timeNeeded = 0
+    of "heal":
+      var timeNeeded: Natural = 0
       for index, member in playerShip.crew:
-        if member.health in 1 .. 99 and member.order == rest:
+        if member.health in 1..99 and member.order == rest:
           block checkModules:
             for module in playerShip.modules:
               if module.mType == ModuleType2.cabin:
@@ -184,24 +186,26 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
         return tclOk
       updateGame(minutes = timeNeeded)
       waitInPlace(minutes = timeNeeded)
-    elif argv[1] == "amount":
-      let amountBox = ".gameframe.wait.amount"
-      var timeNeeded = try:
+    of "amount":
+      const amountBox: string = ".gameframe.wait.amount"
+      var timeNeeded: Natural = try:
           tclEval2(script = amountBox & " get").parseInt
         except:
           return showError(message = "Can't get type of time to wait.")
-      let amountCombo = ".gameframe.wait.mins"
+      const amountCombo: string = ".gameframe.wait.mins"
       if tclEval2(script = amountCombo & " current") == "1":
-        timeNeeded = timeNeeded * 60
+        timeNeeded *= 60
       elif tclEval2(script = amountCombo & " current") == "2":
-        timeNeeded = timeNeeded * 1_440
+        timeNeeded *= 1_440
       updateGame(minutes = timeNeeded)
       waitInPlace(minutes = timeNeeded)
+    else:
+      discard
   except:
     return showError(message = "Can't wait selected amount of time.")
   updateHeader()
   updateMessages()
-  var currentFrame = mainPaned & ".shipinfoframe"
+  var currentFrame: string = mainPaned & ".shipinfoframe"
   if tclEval2(script = "winfo exists " & currentFrame) == "1" and tclEval2(
       script = "winfo ismapped " & currentFrame) == "1":
     tclEval(script = "ShowShipInfo 1")
@@ -212,6 +216,6 @@ proc waitCommand*(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "ShowKnowledge 1")
     else:
       drawMap()
-  let dialogCloseButton = ".gameframe.wait.close"
+  const dialogCloseButton: string = ".gameframe.wait.close"
   tclEval(script = dialogCloseButton & " invoke")
   return tclOk
