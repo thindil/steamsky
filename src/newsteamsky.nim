@@ -91,7 +91,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   # Initialize SDL and create the main window of the game
   nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
       name = windowName, fontPath = (dataDirectory & "ui" & DirSep & "fonts" &
-          DirSep & "Amarante-Regular.ttf").cstring)
+      DirSep & "Amarante-Regular.ttf").cstring,
+      fontSize = gameSettings.interfaceFontSize.cint + 10)
 
   # The main game loop
   var state: GameState = mainMenu
@@ -102,12 +103,12 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       break
 
     # GUI
-    case state
-    of mainMenu:
+    if state == GameState.mainMenu:
       # Show the main game menu
       showMainMenu(state = state)
-    of quitGame:
-      # Quit from the game
+
+    # Quit from the game
+    if state == quitGame:
       break
 
     # Draw
