@@ -124,12 +124,14 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   elif tclEval2(script = "winfo ismapped " & shipyardCanvas) == "1":
     if argc == 1:
       tclEval(script = "grid remove " & closeButton)
+      tclEval(script = "grid remove " & gameHeader & ".morebutton")
       showSkyMap(clear = true)
       return tclOk
     tclEval(script = moduleTypeBox & " current " & $argv[1])
   elif tclEval2(script = "winfo ismapped " & shipyardCanvas) == "0" and argc == 1:
     tclEval(script = moduleTypeBox & " current 0")
   tclSetVar(varName = "gamestate", newValue = "repair")
+  tclEval(script = gameHeader & ".morebutton configure -command {ShipyardMore show}")
   var
     maxSize, allSpace = 1
     usedSpace = 0
@@ -333,6 +335,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       1: "" else: "ShowShipyard " & arguments & " " & $(page + 1)))
   updateTable(table = removeTable)
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
+  tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
   tclEval(script = shipyardCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
       script = mainPaned & " cget -width"))
