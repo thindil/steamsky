@@ -95,6 +95,8 @@ namespace eval ttk::theme::steamsky {
       }
 
    LoadImages [file dirname [info script]] 22
+   image create photo logo -file [file normalize [file join [file dirname \
+      [info script]] images logo.svg]] -format "svg -scaletoheight 100"
 
    #
    # Create theme
