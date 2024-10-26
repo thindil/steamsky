@@ -17,7 +17,7 @@
 
 ## Provides code related to the player's careers, like loading them from files.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log
 
@@ -53,7 +53,8 @@ proc loadCareers*(fileName: string) {.raises: [DataLoadingError],
       let
         careerIndex: string = careerNode.attr(name = "index")
         careerAction: DataAction = try:
-            parseEnum[DataAction](s = careerNode.attr(name = "action").toLowerAscii)
+            parseEnum[DataAction](s = careerNode.attr(
+                name = "action").toLowerAscii)
           except ValueError:
             DataAction.add
       if careerAction in [update, remove]:
@@ -65,7 +66,8 @@ proc loadCareers*(fileName: string) {.raises: [DataLoadingError],
             message = "Can't add career '" & careerIndex & "', there is a career with that index.")
       if careerAction == DataAction.remove:
         careersList.del(key = careerIndex)
-        logMessage(message = "Career removed: '" & careerIndex & "'")
+        logMessage(message = "Career removed: '" & careerIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var career: CareerData = if careerAction == DataAction.update:
           try:
@@ -94,7 +96,9 @@ proc loadCareers*(fileName: string) {.raises: [DataLoadingError],
                 "', no skill with name '" & skillName & "'.")
           career.skills.add(y = skillName)
       if careerAction == DataAction.add:
-        logMessage(message = "Career added: '" & careerIndex & "'")
+        logMessage(message = "Career added: '" & careerIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Career updated: '" & careerIndex & "'")
+        logMessage(message = "Career updated: '" & careerIndex & "'",
+            messageLevel = lvlInfo)
       careersList[careerIndex] = career

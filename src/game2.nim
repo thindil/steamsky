@@ -19,7 +19,7 @@
 ## finishing the game or load the game's data. Split from game module to
 ## avoid circular dependencies.
 
-import std/[os, strutils, tables, xmlparser, xmltree]
+import std/[logging, os, strutils, tables, xmlparser, xmltree]
 import contracts
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
@@ -152,7 +152,7 @@ proc loadGameData*(): string {.raises: [DataLoadingError, KeyError,
           dataType = dataXml.tag
           if dataType == localDataName or localDataName.len == 0:
             logMessage(message = "Loading " & dataType & " file: " &
-                localFileName)
+                localFileName, messageLevel = lvlInfo)
             case dataType
             of "factions":
               loadFactions(fileName = localFileName)

@@ -17,7 +17,7 @@
 
 ## Provides code related to in-game help system, like load it from files.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import basestypes, careers, game, log, types
 
@@ -64,7 +64,8 @@ proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
             message = "Can't add help '" & $helpTitle & "', there is an help with that title.")
       if helpAction == DataAction.remove:
         helpList.del(key = helpTitle)
-        logMessage(message = "Help removed: '" & $helpTitle & "'")
+        logMessage(message = "Help removed: '" & $helpTitle & "'",
+            messageLevel = lvlInfo)
         continue
       helpEntry = if helpAction == DataAction.update:
           try:
@@ -77,9 +78,11 @@ proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
       if text.len() > 0:
         helpEntry.text = text
       if helpAction == DataAction.add:
-        logMessage(message = "Help added: '" & helpTitle & "'")
+        logMessage(message = "Help added: '" & helpTitle & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Help updated: '" & helpTitle & "'")
+        logMessage(message = "Help updated: '" & helpTitle & "'",
+            messageLevel = lvlInfo)
       helpList[helpTitle] = helpEntry
     # Add help page about available statistics and attributes
     helpEntry.index = "stats"
@@ -100,7 +103,8 @@ proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
           break
       helpEntry.text.add(y = "    " & skill.description & "\n\n")
     helpList[helpTitle] = helpEntry
-    logMessage(message = "Help added: '" & helpTitle & "'")
+    logMessage(message = "Help added: '" & helpTitle & "'",
+        messageLevel = lvlInfo)
     # Add help page about available careers and factions
     helpEntry.index = "factions"
     helpTitle = $(helpList.len + 1) & ". Factions and careers"
@@ -123,7 +127,8 @@ proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
           helpEntry.text.add(y = "        " & skill & "\n")
       helpEntry.text.add(y = "\n")
     helpList[helpTitle] = helpEntry
-    logMessage(message = "Help added: '" & helpTitle & "'")
+    logMessage(message = "Help added: '" & helpTitle & "'",
+        messageLevel = lvlInfo)
     # Add help page about available bases types
     helpEntry.index = "basestypes"
     helpTitle = $(helpList.len + 1) & ". Bases Types"
@@ -132,4 +137,5 @@ proc loadHelp*(fileName: string) {.raises: [DataLoadingError,
       helpEntry.text.add(y = "{b}" & baseType.name & "{/b}\n    " &
           baseType.description & "\n\n")
     helpList[helpTitle] = helpEntry
-    logMessage(message = "Help added: '" & helpTitle & "'")
+    logMessage(message = "Help added: '" & helpTitle & "'",
+        messageLevel = lvlInfo)

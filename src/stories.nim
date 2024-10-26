@@ -18,7 +18,7 @@
 ## Provides code related to the game's stories, like reading them from a file,
 ## setting the current story, progressing, etc.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import events, game, log, maps, shipscargo, types, utils
 
@@ -270,7 +270,8 @@ proc loadStories*(fileName: string) {.raises: [DataLoadingError],
         storiesList.del(key = storyIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "story removed: '" & $storyIndex & "'")
+        logMessage(message = "story removed: '" & $storyIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var story: StoryData = if storyAction == DataAction.update:
           try:
@@ -356,9 +357,11 @@ proc loadStories*(fileName: string) {.raises: [DataLoadingError],
       if endText.len > 0:
         story.endText = endText
       if storyAction == DataAction.add:
-        logMessage(message = "Story added: '" & $storyIndex & "'")
+        logMessage(message = "Story added: '" & $storyIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Story updated: '" & $storyIndex & "'")
+        logMessage(message = "Story updated: '" & $storyIndex & "'",
+            messageLevel = lvlInfo)
       storiesList[storyIndex] = story
 
 proc selectBase*(value: string): string {.raises: [], tags: [],
@@ -466,7 +469,8 @@ proc selectLoot*(step: seq[StepFinishData]): string {.raises: [
     generateEnemies(enemies = enemies, owner = value)
     return result & $enemies[getRandom(min = enemies.low, max = enemies.high)]
 
-proc startStory*(factionName: string; condition: StartConditionType) {.raises: [ValueError], tags: [], contractual.} =
+proc startStory*(factionName: string; condition: StartConditionType) {.raises: [
+    ValueError], tags: [], contractual.} =
   ## If possible, start a story
   ##
   ## * factionName - the name of faction which is needed to start the story

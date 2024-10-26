@@ -18,7 +18,7 @@
 ## Provides code related to sky bases types like loading them from file,
 ## getting price, checking do an item is buyable.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, types
 
@@ -83,7 +83,8 @@ proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
             message = "Can't add base type '" & baseTypeIndex & "', there is a base type with that index.")
       if baseTypeAction == DataAction.remove:
         basesTypesList.del(key = baseTypeIndex)
-        logMessage(message = "Base type removed: '" & baseTypeIndex & "'")
+        logMessage(message = "Base type removed: '" & baseTypeIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var baseType: BaseTypeData = if baseTypeAction == DataAction.update:
           try:
@@ -183,12 +184,15 @@ proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
           else:
             baseType.flags.add(y = flagName)
       if baseTypeAction == DataAction.add:
-        logMessage(message = "Base type added: '" & baseTypeIndex & "'")
+        logMessage(message = "Base type added: '" & baseTypeIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Base type updated: '" & baseTypeIndex & "'")
+        logMessage(message = "Base type updated: '" & baseTypeIndex & "'",
+            messageLevel = lvlInfo)
       basesTypesList[baseTypeIndex] = baseType
 
-proc getPrice*(baseType: string; itemIndex: Positive): Natural {.raises: [KeyError], tags: [], contractual.} =
+proc getPrice*(baseType: string; itemIndex: Positive): Natural {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Get the price of the selected item in the selected type of bases
   ##
   ## * baseType  - the type of base from which the price will be taken

@@ -18,7 +18,7 @@
 ## Provides code related to combat with NPC enemies, like combat between
 ## the player's ship and NPC's ship or combat between ships' crews.
 
-import std/[math, strutils, tables]
+import std/[logging, math, strutils, tables]
 import contracts
 import bases, crewinventory, config, game, game2, goals, events, log, maps,
     messages, missions, ships, ships2, shipscargo, shipscrew, shipscrew2,
@@ -193,7 +193,8 @@ proc startCombat*(enemyIndex: Positive; newCombat: bool = true): bool {.raises: 
           mType = otherMessage)
     else:
       if realSpeed(ship = playerShip) < realSpeed(ship = game.enemy.ship):
-        logMessage(message = "You were attacked by " & game.enemy.ship.name)
+        logMessage(message = "You were attacked by " & game.enemy.ship.name,
+            messageLevel = lvlDebug)
         addMessage(message = game.enemy.ship.name & " intercepted you.",
             mType = combatMessage)
         return true
@@ -723,10 +724,10 @@ proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
   if hitChance < -48:
     hitChance = -48
   logMessage(message = "Player accuracy: " & $currentAccuracyBonus &
-      " Player evasion: " & $evadeBonus)
+      " Player evasion: " & $evadeBonus, messageLevel = lvlDebug)
   logMessage(message = "Enemy evasion: " & $game.enemy.evasion &
-      " Enemy accuracy: " & $game.enemy.accuracy)
-  logMessage(message = "Chance to hit: " & $hitChance)
+      " Enemy accuracy: " & $game.enemy.accuracy, messageLevel = lvlDebug)
+  logMessage(message = "Chance to hit: " & $hitChance, messageLevel = lvlDebug)
   let enemyNameOwner: string = enemyName & " (" & factionName & ")"
   for shoot in 1..shoots:
     var shootMessage: string = ""
@@ -880,7 +881,8 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
   ## Returns modified parameters gunnerIndex, shoots, gunnerOrder,
   ## currentAccuracyBonus, ammoIndex, evadeBonus and module
   gunnerIndex = module.owner[0]
-  logMessage(message = "Gunner index: " & $gunnerIndex & ".")
+  logMessage(message = "Gunner index: " & $gunnerIndex & ".",
+      messageLevel = lvlDebug)
   if ship.crew == playerShip.crew:
     if gunnerIndex > -1:
       for gun in guns.mitems:
@@ -891,7 +893,7 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
             if gunnerOrder != 3:
               shoots = (shoots.float / 2.0).ceil.int
             logMessage(message = "Player shoots (no cooldown): " &
-                $shoots)
+                $shoots, messageLevel = lvlDebug)
           elif gun[3] < 0:
             shoots = 0
             gun[3].inc
@@ -904,8 +906,8 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
                   modulesList[playerShip.modules[gun[
                       1]].protoIndex].speed - 1
             logMessage(message = "Player shoots (after cooldown): " &
-                $shoots)
-      logMessage(message = "Shoots test3: " & $shoots)
+                $shoots, messageLevel = lvlDebug)
+      logMessage(message = "Shoots test3: " & $shoots, messageLevel = lvlDebug)
       if ship.crew[gunnerIndex].order != gunner:
         gunnerOrder = 1
       case gunnerOrder
@@ -987,9 +989,9 @@ proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
   var hitLocation: int = -1
 
   if ship.crew == playerShip.crew:
-    logMessage(message = "Player's round")
+    logMessage(message = "Player's round", messageLevel = lvlDebug)
   else:
-    logMessage(message = "Enemy's round.")
+    logMessage(message = "Enemy's round.", messageLevel = lvlDebug)
   block attackLoop:
     for mIndex, module in ship.modules.mpairs:
       if module.durability == 0 or module.mType notin {ModuleType2.gun,
@@ -1019,7 +1021,7 @@ proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
         else:
           shoots = (if module.coolingDown: 0 else: 1)
         module.coolingDown = not module.coolingDown
-      logMessage(message = "Shoots: " & $shoots)
+      logMessage(message = "Shoots: " & $shoots, messageLevel = lvlDebug)
       if shoots > 0:
         if shooting(ship = ship, enemyShip = enemyShip,
             currentAccuracyBonus = currentAccuracyBonus,
@@ -1270,16 +1272,16 @@ proc combatTurn*() {.raises: [KeyError, IOError, ValueError,
   of 0 .. 999:
     accuracyBonus += 20
     evadeBonus -= 10
-    logMessage(message = "Distance: short or close")
+    logMessage(message = "Distance: short or close", messageLevel = lvlDebug)
   of 1_000 .. 4_999:
     accuracyBonus += 10
-    logMessage(message = "Distance: medium")
+    logMessage(message = "Distance: medium", messageLevel = lvlDebug)
   of 5_000 .. 9_999:
     discard
   of 10_000 .. 14_999:
     accuracyBonus -= 10
     evadeBonus += 10
-    logMessage(message = "Distance: long")
+    logMessage(message = "Distance: long", messageLevel = lvlDebug)
   else:
     if pilotOrder == 4:
       addMessage(message = "You escaped the " & enemyName & ".",

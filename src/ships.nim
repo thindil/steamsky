@@ -19,7 +19,7 @@
 ## the ships' prototypes from a file, damagin a module in a ship, creating
 ## a new ship, etc.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, maps, mobs, shipscrew2, types, utils
 
@@ -287,7 +287,8 @@ proc loadShips*(fileName: string) {.raises: [DataLoadingError],
         protoShipsList.del(key = shipIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Ship removed: '" & $shipIndex & "'")
+        logMessage(message = "Ship removed: '" & $shipIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var ship: ProtoShipData = if shipAction == DataAction.update:
           try:
@@ -468,9 +469,11 @@ proc loadShips*(fileName: string) {.raises: [DataLoadingError],
                 "', invalid index for module during counting the ship's combat value.")
       ship.combatValue.dec
       if shipAction == DataAction.add:
-        logMessage(message = "Ship added: '" & $shipIndex & "'")
+        logMessage(message = "Ship added: '" & $shipIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Ship updated: '" & $shipIndex & "'")
+        logMessage(message = "Ship updated: '" & $shipIndex & "'",
+            messageLevel = lvlInfo)
       protoShipsList[shipIndex] = ship
 
 proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;

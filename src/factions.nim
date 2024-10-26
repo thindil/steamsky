@@ -19,7 +19,7 @@
 ## files, getting their reputation, checking do they are friendly or
 ## getting a random faction.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import basestypes, careers, game, items, log, types, utils
 
@@ -195,7 +195,8 @@ proc loadFactions*(fileName: string) {.raises: [DataLoadingError],
             message = "Can't add faction '" & factionIndex & "', there is a faction with that index.")
       if factionAction == DataAction.remove:
         factionsList.del(key = factionIndex)
-        logMessage(message = "Faction removed: '" & factionIndex & "'")
+        logMessage(message = "Faction removed: '" & factionIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var faction: FactionData = if factionAction == DataAction.update:
           try:
@@ -300,12 +301,15 @@ proc loadFactions*(fileName: string) {.raises: [DataLoadingError],
         if faction.basesTypes.len() == 0:
           for key in basesTypesList.keys:
             faction.basesTypes[key] = 20
-        logMessage(message = "Faction added: '" & factionIndex & "'")
+        logMessage(message = "Faction added: '" & factionIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Faction updated: '" & factionIndex & "'")
+        logMessage(message = "Faction updated: '" & factionIndex & "'",
+            messageLevel = lvlInfo)
       factionsList[factionIndex] = faction
 
-proc getReputation*(sourceFaction, targetFaction: string): int {.raises: [KeyError], tags: [], contractual.} =
+proc getReputation*(sourceFaction, targetFaction: string): int {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Get the reputation level between the two factions
   ##
   ## * sourceFaction - the faction which repuration level will be get
@@ -323,7 +327,8 @@ proc getReputation*(sourceFaction, targetFaction: string): int {.raises: [KeyErr
         targetFaction].reputation.min, max = factionsList[
         sourceFaction].relations[targetFaction].reputation.max)
 
-proc isFriendly*(sourceFaction, targetFaction: string): bool {.raises: [KeyError], tags: [], contractual.} =
+proc isFriendly*(sourceFaction, targetFaction: string): bool {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Check if the selected factions are friendly towards self
   ##
   ## * sourceFaction - the faction which will be checked for friendliness

@@ -18,12 +18,13 @@
 ## Provides code related to the game's mobs, like loading them from files and
 ## generating random one.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import factions, game, items, log, shipscrew, types, utils
 
-proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord; mobAction: DataAction;
-    mobIndex: Natural) {.raises: [DataLoadingError], tags: [], contractual.} =
+proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord;
+    mobAction: DataAction;mobIndex: Natural) {.raises: [DataLoadingError],
+        tags: [], contractual.} =
   ## Load skills of the selected mobile's prototype
   ##
   ## * mobNode   - the XML node with data about the mobile's prototype
@@ -134,7 +135,8 @@ proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
         protoMobsList.del(key = mobIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Mob removed: '" & $mobIndex & "'")
+        logMessage(message = "Mob removed: '" & $mobIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var mob: ProtoMobRecord = if mobAction == DataAction.update:
           try:
@@ -143,7 +145,8 @@ proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
             ProtoMobRecord()
         else:
           ProtoMobRecord()
-      loadSkills(mobNode = mobNode, mob = mob, mobAction = mobAction, mobIndex = mobIndex)
+      loadSkills(mobNode = mobNode, mob = mob, mobAction = mobAction,
+          mobIndex = mobIndex)
       let attributes: seq[XmlNode] = mobNode.findAll(tag = "attribute")
       for i in attributes.low..attributes.high:
         let attrLevel: Natural = try:
@@ -264,12 +267,15 @@ proc loadMobs*(fileName: string) {.raises: [DataLoadingError],
                     "', invalid equipment index '" & item.attr(name = "index") & "'.")
             break
       if mobAction == DataAction.add:
-        logMessage(message = "Mob added: '" & $mobIndex & "'")
+        logMessage(message = "Mob added: '" & $mobIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Mob updated: '" & $mobIndex & "'")
+        logMessage(message = "Mob updated: '" & $mobIndex & "'",
+            messageLevel = lvlInfo)
       protoMobsList[mobIndex] = mob
 
-proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises: [KeyError], tags: [], contractual.} =
+proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises: [
+    KeyError], tags: [], contractual.} =
   ## Generate random mob from the selected prototype and the faction.
   ##
   ## * mobIndex     - the index of the prototype of the mob from which the new

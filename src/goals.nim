@@ -18,7 +18,7 @@
 ## Provides code related to the player's in-game goals, like loading them
 ## from files, clearing, updating or getting their text.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, messages, statistics, types, utils
 
@@ -65,7 +65,8 @@ proc loadGoals*(fileName: string) {.raises: [DataLoadingError],
         goalsList.del(key = goalIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Goal removed: '" & $goalIndex & "'")
+        logMessage(message = "Goal removed: '" & $goalIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var goal: GoalData = if goalAction == DataAction.update:
           try:
@@ -100,9 +101,11 @@ proc loadGoals*(fileName: string) {.raises: [DataLoadingError],
             raise newException(exceptn = DataLoadingError,
                 message = "Can't " & $goalAction & " goal '" & $goalIndex & "', invalid value for multiplier.")
       if goalAction == DataAction.add:
-        logMessage(message = "Goal added: '" & $goalIndex & "'")
+        logMessage(message = "Goal added: '" & $goalIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Goal updated: '" & $goalIndex & "'")
+        logMessage(message = "Goal updated: '" & $goalIndex & "'",
+            messageLevel = lvlInfo)
       goalsList[goalIndex] = goal
 
 proc updateGoal*(goalType: GoalTypes; targetIndex: string;
@@ -142,8 +145,8 @@ proc goalText*(index: int): string {.raises: [KeyError], tags: [],
   ## * index - the index of the goal which description will be get
   ##
   ## Returns the string with information about the selected goal
-  let goal: GoalData = (if index > 0 and goalsList.hasKey(key = index): goalsList[
-      index] else: currentGoal)
+  let goal: GoalData = (if index > 0 and goalsList.hasKey(
+      key = index): goalsList[index] else: currentGoal)
   case goal.goalType
   of reputation:
     result = "Gain max reputation in "

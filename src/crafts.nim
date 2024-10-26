@@ -18,7 +18,7 @@
 ## Provides code related to crafting items in the player's ship, like setting
 ## a crafting recipe in a workshop, or checking a recipe's dependecies.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import crewinventory, game, goals, items, log, messages, shipscargo, shipscrew,
     statistics, types
@@ -70,7 +70,8 @@ proc loadRecipes*(fileName: string) {.raises: [DataLoadingError],
         recipesList.del(key = recipeIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Recipe removed: '" & $recipeIndex & "'")
+        logMessage(message = "Recipe removed: '" & $recipeIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var recipe: CraftData = if recipeAction == DataAction.update:
           try:
@@ -170,9 +171,11 @@ proc loadRecipes*(fileName: string) {.raises: [DataLoadingError],
       else:
         recipe.toolQuality = 100
       if recipeAction == DataAction.add:
-        logMessage(message = "Recipe added: '" & $recipeIndex & "'")
+        logMessage(message = "Recipe added: '" & $recipeIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Recipe updated: '" & $recipeIndex & "'")
+        logMessage(message = "Recipe updated: '" & $recipeIndex & "'",
+            messageLevel = lvlInfo)
       recipesList[recipeIndex] = recipe
 
 proc setRecipeData*(recipeIndex: string): CraftData {.raises: [

@@ -18,7 +18,7 @@
 ## Provides code related items used by the player and NPC's, like loading
 ## them from files, getting random item, etc.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts, nimalyzer
 import config, crewinventory, game, log, messages, shipscargo, shipscrew, types, utils
 
@@ -87,7 +87,8 @@ proc loadItems*(fileName: string) {.raises: [DataLoadingError],
         itemsList.del(key = itemIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "Item removed: '" & $itemIndex & "'")
+        logMessage(message = "Item removed: '" & $itemIndex & "'",
+            messageLevel = lvlInfo)
         continue
       var item: ObjectData = if itemAction == DataAction.update:
           try:
@@ -141,9 +142,11 @@ proc loadItems*(fileName: string) {.raises: [DataLoadingError],
       if attribute.len() > 0:
         item.description = attribute
       if itemAction == DataAction.add:
-        logMessage(message = "Item added: '" & $itemIndex & "'")
+        logMessage(message = "Item added: '" & $itemIndex & "'",
+            messageLevel = lvlInfo)
       else:
-        logMessage(message = "Item updated: '" & $itemIndex & "'")
+        logMessage(message = "Item updated: '" & $itemIndex & "'",
+            messageLevel = lvlInfo)
       itemsList[itemIndex] = item
       if itemIndex == moneyIndex:
         moneyName = item.name
@@ -295,7 +298,8 @@ proc findTools*(memberIndex: Natural; itemType: string; order: CrewOrders;
   body:
     result = playerShip.crew[memberIndex].equipment[tool]
     if result > -1:
-      let protoIndex: Natural = playerShip.crew[memberIndex].inventory[result].protoIndex
+      let protoIndex: Natural = playerShip.crew[memberIndex].inventory[
+          result].protoIndex
       if itemsList[protoIndex].itemType != itemType or itemsList[
           protoIndex].value[1] < toolQuality:
         updateCargo(ship = playerShip, protoIndex = protoIndex, amount = 1,

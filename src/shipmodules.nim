@@ -18,7 +18,7 @@
 ## Provides code related to the ships' modules like reading them from files and
 ## getting their types.
 
-import std/[strutils, tables, xmlparser, xmltree]
+import std/[logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, items, log, types
 
@@ -64,7 +64,7 @@ proc loadModules*(fileName: string) {.raises: [DataLoadingError],
         modulesList.del(key = moduleIndex)
         {.warning[ProveInit]: on.}
         {.warning[UnsafeDefault]: on.}
-        logMessage(message = "module removed: '" & $moduleIndex & "'")
+        logMessage(message = "module removed: '" & $moduleIndex & "'", messageLevel = lvlInfo)
         continue
       var module: BaseModuleData = if moduleAction == DataAction.update:
           try:
@@ -191,9 +191,9 @@ proc loadModules*(fileName: string) {.raises: [DataLoadingError],
       if attribute.len() > 0:
         module.description = attribute
       if moduleAction == DataAction.add:
-        logMessage(message = "Module added: '" & $moduleIndex & "'")
+        logMessage(message = "Module added: '" & $moduleIndex & "'", messageLevel = lvlInfo)
       else:
-        logMessage(message = "Module updated: '" & $moduleIndex & "'")
+        logMessage(message = "Module updated: '" & $moduleIndex & "'", messageLevel = lvlInfo)
       modulesList[moduleIndex] = module
 
 proc getModuleType*(moduleIndex: Positive): string {.raises: [
