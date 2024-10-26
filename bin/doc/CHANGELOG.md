@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Image of the game's logo
+
 ### Changed
 - Updated modding guide
 - **BREAKING**: Redesigned how the technical logging works. This changes the
