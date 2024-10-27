@@ -16,8 +16,8 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, os, osproc, strutils, tables, times]
-import ../[basestypes, config, events, game, game2, gamesaveload, goals, halloffame,
-    ships2, shipscrew, tk, utils]
+import ../[basestypes, config, events, game, game2, gamesaveload, goals,
+    halloffame, ships2, shipscrew, tk, utils]
 import coreui, dialogs, errordialog, mapsui, showmainmenu, table, utilsui2
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
@@ -52,7 +52,7 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect], cdecl.} =
+    ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show the selected file content
   ##
   ## * clientData - the additional data for the Tcl command
@@ -88,7 +88,7 @@ var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    ReadIOEffect, ReadDirEffect, WriteIOEffect, TimeEffect], cdecl.} =
+    ReadIOEffect, ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show the list of changes in the game, all or just recent, since the last
   ## release
   ##
@@ -175,7 +175,7 @@ proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Set faction destription and available bases and careers
   ##
   ## * clientData - the additional data for the Tcl command
@@ -354,7 +354,7 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
       factionIndex = factionIndex))
   return tclOk
 
-proc startGame*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+proc startGame*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadIOEffect, RootEffect].} =
   ##  Start the game
   let mainWindow = "."
@@ -384,7 +384,7 @@ proc startGame*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
 
 proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
   ## Set all parameters and start a new game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -555,7 +555,7 @@ proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, ReadIOEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect, ReadIOEffect, RootEffect], cdecl.} =
   ## Load the selected save file and start the game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -691,7 +691,7 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
   ## Sort the saved games list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -729,7 +729,8 @@ proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
   return showLoadGameCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   try:
     addCommand("OpenLink", openLinkCommand)
     addCommand("ShowFile", showFileCommand)

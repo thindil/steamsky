@@ -124,7 +124,7 @@ proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect,
-    TimeEffect].} =
+    TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     shipsuimodules.addCommands()

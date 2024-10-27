@@ -264,7 +264,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
 var itemIndex = -1
 
 proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -476,7 +476,7 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show dialog to enter amount of items to drop or take
   ##
   ## * clientData - the additional data for the Tcl command
@@ -669,7 +669,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   return showLootCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowLoot", "All"].allocCStringArray)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowLoot", showLootCommand)

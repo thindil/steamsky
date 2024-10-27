@@ -37,7 +37,7 @@ proc checkTool(toolNeeded: string): bool {.raises: [], tags: [].} =
           break
 
 proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    hasMaterials: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Check if the selected recipe can be crafted (has all requirements meet)
   ##
   ## * recipe       - The crafting recipe to check
@@ -78,7 +78,7 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     canCraft = true
 
 proc checkStudyPrerequisities(canCraft, hasTool,
-    hasWorkplace: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    hasWorkplace: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Check if the study and decontruct recipes can be crafted
   ##
   ## * canCraft      - If recipe can be crafter then it will be True, otherwise
@@ -487,7 +487,7 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCrafting", "1"].allocCStringArray)
 
 proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show dialog to set the selected recipe as crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -704,7 +704,7 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected recipe
   ##
   ## * clientData - the additional data for the Tcl command
@@ -907,7 +907,7 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = recipeDialog, relativeX = 0.2, relativeY = 0.1)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowCrafting", showCraftingCommand)

@@ -37,7 +37,7 @@ type
   HeadersList* = seq[string] ## The list of titles for a table's headers
 
 proc createTable*(parent: string; headers: HeadersList; scrollbar: string = ".";
-    command: string = ""; tooltipText: string = ""): TableWidget {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    command: string = ""; tooltipText: string = ""): TableWidget {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Create a new table and columns' headers for it
   ##
   ## * parent      - the Tcl path to the parent widget for the table
@@ -191,7 +191,7 @@ proc addBackground(table: TableWidget; newRow: bool;
       row = $table.row, command = command, color = result)
 
 proc addButton*(table: var TableWidget; text, tooltip, command: string;
-    column: Positive; newRow: bool = false; color: string = "") {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    column: Positive; newRow: bool = false; color: string = "") {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Add a button item to the selected TableWidget
   ##
   ## * table   - the TableWidget to which the button will be added
@@ -293,7 +293,7 @@ proc updateTable*(table: TableWidget; grabFocus: bool = true) {.raises: [], tags
 proc addProgressbar*(table: var TableWidget; value: Natural; maxValue: Positive;
     tooltip, command: string; column: Positive; newRow: bool = false;
     invertColors: bool = false) {.raises: [], tags: [WriteIOEffect,
-        TimeEffect].} =
+        TimeEffect, RootEffect].} =
   ## Add a progressbar item to the selected TableWidget
   ##
   ## * table         - the TableWidget to which the progressbar will be added
@@ -396,7 +396,7 @@ proc addPagination*(table: TableWidget; previousCommand: string = "";
 proc addCheckButton*(table: var TableWidget; tooltip, command: string;
     checked: bool; column: Positive; newRow: bool = false;
     emptyUnchecked: bool = false) {.raises: [], tags: [
-        WriteIOEffect, TimeEffect].} =
+        WriteIOEffect, TimeEffect, RootEffect].} =
   ## Add checkbutton item to the selected TableWidget
   ##
   ## * table          - the TableWidget to which the checkbutton will be added
@@ -621,7 +621,7 @@ proc toggleCheckedButton*(table: TableWidget; row,
     tclEval(script = table.canvas & " itemconfigure row" & $row & "col" &
         $column & " -image checkbox-checked")
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Add Tcl commands related to the TableWidget
   try:
     addCommand("UpdateCurrentRow", updateCurrentRowCommand)

@@ -58,7 +58,7 @@ proc closeDialogCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Update countdown timer on the selected dialog. If timer reach 0, close
   ## dialog
   ##
@@ -168,7 +168,7 @@ proc setMousePositionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Move the selected dialog around
   ##
   ## * clientData - the additional data for the Tcl command
@@ -230,7 +230,7 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
 
   proc getCoordinate(name: string): int {.raises: [], tags: [
-      WriteIOEffect, TimeEffect].} =
+      WriteIOEffect, TimeEffect, RootEffect].} =
     let value = tclEval2(script = "lindex [place configure " & dialog & " -" &
         name & "] 4")
     if value.len == 0:
@@ -249,7 +249,7 @@ proc moveDialogCommand(clientData: cint; interp: PInterp; argc: cint;
   mouseYPosition = currentYMouse
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to dialogs
   try:
     addCommand("CloseDialog", closeDialogCommand)

@@ -34,7 +34,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowTopic
 
 proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Destroy the help window and save the sash position to the game
   ## configuration
   ##
@@ -59,7 +59,7 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show the help window to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -158,7 +158,7 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = topicsView & " see " & topicIndex)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the help system
   try:
     addCommand("ShowTopic", showTopicCommand)

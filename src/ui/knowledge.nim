@@ -353,7 +353,7 @@ proc knowledgeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     knowledgebases.addCommands()

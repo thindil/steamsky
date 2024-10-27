@@ -172,7 +172,7 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.raises: [], tag
 proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings) {.raises: [],
-        tags: [WriteIOEffect, TimeEffect].} =
+        tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Show the dialog with the selected text to the player
   ##
   ## * text       - the text to show in the dialog. Can use special tags for colors,

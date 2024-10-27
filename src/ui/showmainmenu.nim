@@ -25,7 +25,7 @@ import errordialog, dialogs
 
 var dataError*: string = "" ## The additional information for an error when it happened.
 
-proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+proc showMainMenu*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadDirEffect, WriteDirEffect], contractual.} =
   ## Show the main menu to the player
   const mainWindow: string = "."

@@ -85,7 +85,7 @@ proc updateMoveButtons*() {.raises: [], tags: [], contractual.} =
   else:
     tclEval(script = "grid " & button)
 
-proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect],
+proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Finish the current player's story. Give experience and ask about
   ## finishing the game
@@ -99,7 +99,7 @@ proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect],
         tclGetResult2())
 
 proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
-    TimeEffect], contractual.} =
+    TimeEffect, RootEffect], contractual.} =
   ## Show the sky map, draw the map, update the header, etc
   ##
   ## * clear - if true, remove the old subwindow and replace it with the one
@@ -133,7 +133,7 @@ proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
             res = "showstats")
     currentStory.showText = true
 
-proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect], contractual.} =
+proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Draw the map on the screen
   var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
@@ -300,7 +300,7 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect], contractual.} =
 
 proc updateMapInfo*(x: Positive = playerShip.skyX;
     y: Positive = playerShip.skyY) {.raises: [], tags: [WriteIOEffect,
-        TimeEffect], contractual.} =
+        TimeEffect, RootEffect], contractual.} =
   ## Update frame with information about the map cell on which the player
   ## currently points.
   ##
@@ -567,7 +567,7 @@ import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
     craftsui, debugui, gameoptions, helpui, knowledge, mapsuicommands,
     messagesui, missionsui, ordersmenu, shipsui, statisticsui, tradesui, waitmenu
 
-proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadIOEffect, RootEffect], contractual.} =
   ## Create the game UI and show sky map to the player
   let

@@ -356,7 +356,7 @@ let
       moreOptionsIcon: defaultThemeIconPath & "moreoptions.svg")
     ## The default game'st theme
 
-proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadDirEffect, ReadIOEffect, RootEffect].} =
   ## Load all data of the game themes
   var theme = defaultTheme
@@ -627,7 +627,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
 
-proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Load all images of the current game theme
   const imagesNames = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
@@ -694,7 +694,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
       "::LoadImages {" & theme.fileName.parentDir & "} " & $(
       gameSettings.interfaceFontSize + 8))
 
-proc setTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc setTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Set images and buttons for the current game theme
   loadThemeImages()
   tclEval(script = gameHeader & ".fuel configure -image fuelicon")

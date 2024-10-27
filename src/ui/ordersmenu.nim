@@ -22,7 +22,7 @@ import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
 import combatui, coreui, dialogs, dialogs2, errordialog, updateheader, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show available the player's ship's orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -368,7 +368,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Dock or undock from the sky base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -385,7 +385,7 @@ proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Ask for bases in the currently docked base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -400,7 +400,7 @@ proc askForBasesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Ask for events in the currently docked base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -432,7 +432,7 @@ proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Pray in the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -446,7 +446,7 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Pray
 
 proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Set the selected base as the home base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -469,7 +469,7 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Generate cargo for the trader and show the trading UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -491,7 +491,7 @@ proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Start the selected mission
   ##
   ## * clientData - the additional data for the Tcl command
@@ -506,7 +506,7 @@ proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Complete the selected mission in the base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -521,7 +521,7 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Execute the current step in the current story
   ##
   ## * clientData - the additional data for the Tcl command
@@ -536,7 +536,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.}
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.}
   ## Deliver medicines to the base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -551,7 +551,7 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## If argument type is free, deliver medicines for free, otherwise deliver
   ## medicines for a price
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the orders menu
   try:
     addCommand("ShowOrders", showOrdersCommand)

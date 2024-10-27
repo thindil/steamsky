@@ -102,7 +102,7 @@ proc updateMessages*() {.raises: [], tags: [].} =
   tclEval(script = messagesView & " configure -state disable")
 
 proc getSkillMarks*(skillIndex: Positive;
-    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Get the marks with information about the skill level for the selected
   ## skill for the selected crew member
   ##
@@ -129,7 +129,7 @@ proc getSkillMarks*(skillIndex: Positive;
   if memberIndex == crewIndex:
     result = result & "+"
 
-proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
   ## * Distance - Distance in map fields to destination point
@@ -252,7 +252,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
 proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings) {.raises: [
-    KeyError], tags: [WriteIOEffect, TimeEffect].} =
+    KeyError], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Show info about selected item in ship cargo or crew member inventory
   ##
   ## * Parent       - The name of the parent widget

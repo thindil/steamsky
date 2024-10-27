@@ -699,7 +699,7 @@ var itemIndex = -1
 
 proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
   ## Buy or sell the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -779,7 +779,7 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -991,7 +991,7 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show dialog to enter amount of items to sell or buy
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1088,7 +1088,7 @@ proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = button & " configure -command {TradeMore show}")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowTrade", showTradeCommand)

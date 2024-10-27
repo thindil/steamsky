@@ -379,7 +379,7 @@ proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowBaseUI", "recipes", searchText].allocCStringArray)
 
 proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show menu with options for the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -629,7 +629,7 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowBaseUI", $argv[1]].allocCStringArray)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowBaseUI", showBaseUiCommand)

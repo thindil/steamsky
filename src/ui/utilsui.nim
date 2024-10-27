@@ -209,8 +209,8 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], cdecl.} =
   ## Show the selected point on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -419,8 +419,8 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], cdecl.} =
   ## Set the selected map point as the player's ship destination
   ##
   ## * clientData - the additional data for the Tcl command
@@ -456,7 +456,7 @@ proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect,
-    TimeEffect].} =
+    TimeEffect, RootEffect].} =
   ## Add Tcl commands related to the various UI elements
   try:
     addCommand("ResizeCanvas", resizeCanvasCommand)

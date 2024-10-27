@@ -61,7 +61,7 @@ proc updateCombatMessages() {.raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Update the combat UI, remove the old elements and add new, depending
   ## on the information to show
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -574,7 +574,7 @@ proc updateBoardingUi() {.raises: [], tags: [].} =
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
   ## Excecute the combat orders and go the next turn
   ##
   ## * clientData - the additional data for the Tcl command
@@ -648,7 +648,7 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Set the combat order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -720,7 +720,7 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Set the boarding order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -748,7 +748,7 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Set the melee combat party (boarding or defenders)
   ##
   ## * clientData - the additional data for the Tcl command
@@ -929,7 +929,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected mob in combat
   ##
   ## * clientData - the additional data for the Tcl command
