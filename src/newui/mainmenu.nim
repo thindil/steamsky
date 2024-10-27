@@ -19,6 +19,7 @@
 ## menu, and selecting its various sections
 
 import contracts, nuklear/nuklear_sdl_renderer
+import ../game
 import coreui
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
@@ -27,8 +28,12 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  window(name = "MainMenu", x = 240, y = 100, w = 140, h = (
-      windowHeight - 20).float, flags = {windowNoFlags}):
+  window(name = "VersionInfo", x = 180, y = 90, w = 250, h = 70, flags = {
+      windowNoFlags}):
+    setLayoutRowDynamic(height = 50, cols = 1)
+    label(str = gameVersion & " development", alignment = centered)
+  window(name = "MainMenu", x = 220, y = 130, w = 150, h = 280, flags = {
+      windowNoFlags}):
     setLayoutRowDynamic(height = 40, cols = 1)
     labelButton(title = "New game"):
       echo "button pressed"
