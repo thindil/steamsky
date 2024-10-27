@@ -60,7 +60,7 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
 
       # Main Menu
       ttk::frame .mainmenu -style Main.TFrame
-      pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}] -pady 2
+      pack [ttk::label .mainmenu.logo -image logo] -pady {15 0}
       pack [ttk::label .mainmenu.version]
       pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
          set newtab difficulty
