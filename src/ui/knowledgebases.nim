@@ -16,11 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[basestypes, config, game, maps, messages, tk, types, utils]
 import coreui, dialogs, errordialog, table
 
 proc getReputationText(reputationLevel: int): string {.raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ## Get the name of the reputation level in the selected base
   ##
   ## * reputationLevel - the numerical level of reputation in a base
@@ -53,7 +54,7 @@ var
   basesIndexes: seq[Positive]
 
 proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
-    raises: [], tags: [RootEffect].} =
+    raises: [], tags: [RootEffect], contractual.} =
   ## Update and show list of known bases
   ##
   ## * baseName - the name of the base to find in the list
@@ -190,7 +191,7 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
 
 proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the list of known bases to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -219,7 +220,8 @@ proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -373,8 +375,8 @@ const defaultBasesSortOrder: BasesSortOrders = none
 var basesSortOrder: BasesSortOrders = defaultBasesSortOrder
 
 proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+    contractual.} =
   ## Sort the list of known bases
   ##
   ## * clientData - the additional data for the Tcl command
@@ -456,7 +458,7 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
         0: "" else: base.owner), baseType: (if base.visited.year ==
         0: "" else: base.baseType), reputation: (if base.visited.year ==
         0: 200 else: base.reputation.level), id: index))
-  proc sortBases(x, y: LocalBaseData): int =
+  proc sortBases(x, y: LocalBaseData): int {.raises: [], tags: [], contractual.} =
     case basesSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -547,7 +549,8 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   updateBasesList(baseName = $argv[1])
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowBases", showBasesCommand)
