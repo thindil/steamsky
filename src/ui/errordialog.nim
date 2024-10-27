@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-import std/[strutils, times]
+import std/[logging, strutils, times]
 import contracts
-import ../[config, game, tk]
+import ../[config, game, log, tk]
 import coreui
 
 proc createDialog(name, title: string; titleWidth: Positive = 275;
@@ -95,9 +95,8 @@ proc showDialog(dialog: string; parentFrame: string = ".gameframe";
       $relativeX & " -rely " & $relativeY)
   tclEval(script = "raise " & dialog)
 
-proc showError*(message: string; e: ref Exception = getCurrentException(
-    )): TclResults {.discardable, raises: [], tags: [WriteIOEffect,
-        TimeEffect], contractual.} =
+proc showError*(message: string; e: ref Exception = getCurrentException()): TclResults {.discardable,
+    raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the error dialog with the message containing technical details about the issue
   ##
   ## * message - the message to show in the error dialog
@@ -110,6 +109,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
     when defined(debug):
       debugInfo.add(y = "\nStack trace:\n" & e.getStackTrace)
   debugInfo.add(y = "\nLast Tcl error: " & tclGetVar(varName = "errorInfo"))
+  logMessage(message = debugInfo, messageLevel = lvlError)
   try:
     let errorLog: File = open(fileName = saveDirectory & "error.log",
         mode = fmAppend)
