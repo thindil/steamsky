@@ -87,7 +87,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       # Install modules
       set sinstall [ttk::frame $shipyardframe.install]
       SetScrollbarBindings $sinstall .gameframe.paned.shipyardframe.scrolly
-      grid [ttk::frame $sinstall.options] -sticky we -pady {0 5}
+      ttk::frame $sinstall.options
       SetScrollbarBindings $sinstall.options .gameframe.paned.shipyardframe.scrolly
       grid [ttk::label $sinstall.options.label -text "Show modules:"]
       SetScrollbarBindings $sinstall.options.label \
@@ -115,6 +115,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
         "Type", "Size", "Materials", "Cost"],
         scrollbar = ".gameframe.paned.shipyardframe.scrolly", command = "",
         tooltipText = "Press mouse button to sort the modules.")
+    tclEval(script = "grid configure " & installTable.canvas & " -row 3")
     shipyardFrame = shipyardCanvas & ".shipyard.remove"
     removeTable = createTable(parent = shipyardFrame, headers = @["Name",
         "Type", "Size", "Materials", "Price"],
@@ -349,7 +350,8 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
 var moduleIndex: Natural = 0
 
 proc setModuleInfo(installing: bool; row: var Positive;
-    newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+    newInfo: bool = true) {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Show information about selected module
   ##
   ## installing - If true, player looking at installing modules list
@@ -999,7 +1001,8 @@ proc setModuleInfo(installing: bool; row: var Positive;
       return
 
 proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected module to install
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1080,7 +1083,8 @@ proc showInstallInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       " -text Install -image buyicon -style Dialoggreen.TButton -command {CloseDialog " &
       moduleDialog & ";ManipulateModule install}")
 
-  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.raises: [KeyError], tags: [].} =
+  proc setInstallButton(eLabel: string; mIndex2, cost2: Natural) {.raises: [
+      KeyError], tags: [].} =
     var
       maxSize, usedSpace, allSpace = 0
       freeTurretIndex = -1
@@ -1192,7 +1196,8 @@ proc manipulateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRemoveInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected module to remove
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1510,7 +1515,8 @@ proc sortShipyardModulesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowShipyard", $argv[2], $argv[3]].allocCStringArray)
 
 proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect], cdecl.} =
   ## Show the comparison between the selected modules in install info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1526,7 +1532,33 @@ proc compareModulesCommand(clientData: cint; interp: PInterp; argc: cint;
   setModuleInfo(installing = true, row = row, newInfo = false)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
+proc shipyardMoreCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+  ## Maximize or minimize the options for the list of ships's modules.
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShipyardMore show/hide
+  ## If th argument is set to show, show the options, otherwise hide them.
+  let
+    shipyardFrame = mainPaned & ".shipyardframe"
+    button = gameHeader & ".morebutton"
+  if argv[1] == "show":
+    tclEval(script = "grid " & shipyardFrame & ".canvas.shipyard.install.options -sticky we -pady {0 5} -row 2")
+    tclEval(script = button & " configure -command {ShipyardMore hide}")
+  else:
+    tclEval(script = "grid remove " & shipyardFrame & ".canvas.shipyard.install.options")
+    tclEval(script = button & " configure -command {ShipyardMore show}")
+  return tclOk
+
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowShipyard", showShipyardCommand)
@@ -1536,5 +1568,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect].} =
     addCommand("ShowShipyardTab", showShipyardTabCommand)
     addCommand("SortShipyardModules", sortShipyardModulesCommand)
     addCommand("CompareModules", compareModulesCommand)
+    addCommand("ShipyardMore", shipyardMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
