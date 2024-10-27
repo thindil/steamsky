@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.0.4] - 2024-10-27
 
 ### Fixed
 - Showing the amount of available ammunition for guns in combat
