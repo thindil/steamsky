@@ -166,10 +166,11 @@ The game is available under the GPLv3 license.
 Tcl/Tk, Tklib, Tksvg and Extrafont libraries distributed with the game are
 under BSD-like license.
 
+Nuklear GUI library, used in the new UI is under MIT license.
+
 The Licensing for the fonts distributed with the game is as follows:
 
 * Font Amarante is under SIL Open Font License: https://fonts.google.com/specimen/Amarante
-* Font Rye is under Open Font License: https://fonts.google.com/specimen/Rye
 * Font Hack Nerd Font is under MiT license: https://nerdfonts.com/
 * Font Roboto is under Apache v2.0 license: https://fonts.google.com/specimen/Roboto
 
