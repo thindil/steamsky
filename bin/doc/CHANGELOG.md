@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
   versions of the game. But most people should'nt notice it.
 - Updated the look of the trade's screen and the game's main menu
 
+### Removed
+- The Rye font as the game's logo was replaced by an image
+
 ## [10.4] - 2024-10-20
 
 ### Added
