@@ -102,9 +102,11 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
          ShowShipyard [$sinstall.options.modules current] \
             [$sinstall.options.search get]
       }
+      tooltip::tooltip $sinstall.options.modules {Show only modules of the selected type}
       grid [ttk::entry $sinstall.options.search -validate key \
          -validatecommand {ShowShipyard [$sinstall.options.modules current] %P}] \
          -row 0 -column 2
+      tooltip::tooltip $sinstall.options.search {Enter a name of a module which you looking for}
       # Remove modules
       set sremove [ttk::frame $shipyardframe.remove]
       SetScrollbarBindings $sremove .gameframe.paned.shipyardframe.scrolly
