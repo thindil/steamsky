@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[basestypes, config, game, maps, messages, tk, types, utils]
 import coreui, dialogs, errordialog, table
 
@@ -191,7 +191,7 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
 
 proc showBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl, contractual.} =
+    RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show the list of known bases to a player
   ##
   ## * clientData - the additional data for the Tcl command
