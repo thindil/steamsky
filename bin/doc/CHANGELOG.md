@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   game's command line parameters, which made incompatible with the previous
   versions of the game. But most people should'nt notice it.
 - Updated the look of the trade's screen and the game's main menu
+- Updated README.md
 
 ### Removed
 - The Rye font as the game's logo was replaced by an image
