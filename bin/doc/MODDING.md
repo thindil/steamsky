@@ -1172,6 +1172,14 @@ to the console. To start game in debug mode run it with parameter
 The levels for debugging are almost identical to the Nim Level enumeration:
 all, debug, info, notice, warn, error, fatal, none and menu
 
+* info level shows information about loaded the game's resources like enemies,
+  ships, bases types, etc
+* debug level adds information about some the game's mechanics, especially
+  related to combat.
+* error level adds information about errors which happened in the game, same
+  as normal error reporting.
+* menu level just show the game's debug menu, without logging anything.
+
 The last option doesn't create the log file but creates the debug menu instead,
 for modifying the game's data.
 
