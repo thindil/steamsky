@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
 - **BREAKING**: Redesigned how the technical logging works. This changes the
   game's command line parameters, which made incompatible with the previous
   versions of the game. But most people should'nt notice it.
-- Updated the look of the trade's screen and the game's main menu
+- Updated the look of the trade's screen, the game's main menu and the
+  shipyard's screen
 - Updated README.md
 
 ### Removed
