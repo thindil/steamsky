@@ -160,6 +160,7 @@ type
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
   PContext* = ptr nk_context
+  nk_image* {.importc, nodecl.} = object
 
 # ---------------------
 # Procedures parameters

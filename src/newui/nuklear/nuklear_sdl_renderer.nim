@@ -181,3 +181,6 @@ proc nuklearClose*() =
   SDL_DestroyWindow(win)
   IMG_Quit()
   SDL_Quit()
+
+proc nuklearLoadImage*(fileName: cstring): nk_image =
+  discard
