@@ -182,5 +182,5 @@ proc nuklearClose*() =
   IMG_Quit()
   SDL_Quit()
 
-proc nuklearLoadImage*(fileName: cstring): nk_image =
-  discard
+proc nuklearLoadImage*(filePath: cstring): nk_image =
+  return nk_image_ptr(iPtr = IMG_Load(file = filePath))

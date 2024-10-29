@@ -314,6 +314,12 @@ proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
 proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
     height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc, nodecl.}
 
+# ------
+# Images
+# ------
+proc nk_image_id*(id: cint): nk_image {.importc, nodecl.}
+proc nk_image_ptr*(iPtr: pointer): nk_image {.importc, nodecl.}
+
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
 # ------------------------------------------------------------------
