@@ -92,7 +92,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
       name = windowName, fontPath = (dataDirectory & "ui" & DirSep & "fonts" &
       DirSep & "Amarante-Regular.ttf").cstring,
-      fontSize = gameSettings.interfaceFontSize.cint + 10)
+      fontSize = gameSettings.interfaceFontSize.cint + 10, iconPath = (
+      dataDirectory & "ui" & DirSep & "images" & DirSep & "icon.png").cstring)
 
   # The main game loop
   var state: GameState = mainMenu
