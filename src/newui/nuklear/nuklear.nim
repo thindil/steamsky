@@ -160,7 +160,7 @@ type
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
   PContext* = ptr nk_context
-  nk_image* {.importc, nodecl.} = object
+  nk_image* {.importc: "struct nk_image", nodecl.} = object
 
 # ---------------------
 # Procedures parameters
@@ -319,6 +319,7 @@ proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
 # ------
 proc nk_image_id*(id: cint): nk_image {.importc, nodecl.}
 proc nk_image_ptr*(iPtr: pointer): nk_image {.importc, nodecl.}
+proc nk_new_image*(ctx; img: nk_image) {.importc: "nk_image", nodecl.}
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
