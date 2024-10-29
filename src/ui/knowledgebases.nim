@@ -65,7 +65,7 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
     basesCanvas = mainPaned & ".knowledgeframe.bases.canvas"
     basesFrame = basesCanvas & ".frame"
   var rows = try:
-      tclEval2(script = "grid size " & basesFrame).split(" ")[1].parseInt
+      tclEval2(script = "grid size " & basesFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
@@ -458,7 +458,8 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
         0: "" else: base.owner), baseType: (if base.visited.year ==
         0: "" else: base.baseType), reputation: (if base.visited.year ==
         0: 200 else: base.reputation.level), id: index))
-  proc sortBases(x, y: LocalBaseData): int {.raises: [], tags: [], contractual.} =
+  proc sortBases(x, y: LocalBaseData): int {.raises: [], tags: [],
+      contractual.} =
     case basesSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -553,8 +554,8 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
-    addCommand("ShowBases", showBasesCommand)
-    addCommand("ShowBaseInfo", showBaseInfoCommand)
-    addCommand("SortKnownBases", sortBasesCommand)
+    addCommand(name = "ShowBases", nimProc = showBasesCommand)
+    addCommand(name = "ShowBaseInfo", nimProc = showBaseInfoCommand)
+    addCommand(name = "SortKnownBases", nimProc = sortBasesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
