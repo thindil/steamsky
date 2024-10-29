@@ -94,8 +94,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       DirSep & "Amarante-Regular.ttf").cstring,
       fontSize = gameSettings.interfaceFontSize.cint + 10, iconPath = (
       dataDirectory & "ui" & DirSep & "images" & DirSep & "icon.png").cstring)
-  let logo: nk_image = nuklearLoadImage(filePath = (dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg").cstring)
-  echo logo
+  setMainMenu()
 
   # The main game loop
   var state: GameState = mainMenu

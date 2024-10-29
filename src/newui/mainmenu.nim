@@ -18,9 +18,16 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
+import std/os
 import contracts, nuklear/nuklear_sdl_renderer
 import ../game
 import coreui
+
+var logo: nk_image
+
+proc setMainMenu*(loadLogo: bool = true) =
+  if loadLogo:
+    logo = nuklearLoadImage(filePath = (dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg").cstring)
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Show the game's main menu and set the game's state

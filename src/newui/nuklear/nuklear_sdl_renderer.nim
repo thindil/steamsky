@@ -183,4 +183,9 @@ proc nuklearClose*() =
   SDL_Quit()
 
 proc nuklearLoadImage*(filePath: cstring): nk_image =
+  ## Load the selected image from a file
+  ##
+  ## * filePath - the full path to the file from which the image will be loaded
+  ##
+  ## Returns the nk_image structure
   return nk_image_ptr(iPtr = IMG_Load(file = filePath))
