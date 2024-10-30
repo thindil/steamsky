@@ -23,11 +23,15 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../game
 import coreui
 
-var logo: nk_image
+var logo: PImage = nil
 
-proc setMainMenu*(loadLogo: bool = true) =
+proc setMainMenu*(loadLogo: bool = true) {.raises: [], tags: [], contractual.} =
+  ## Set the main menu, load logo if needed and set the menu's buttons
+  ##
+  ## * loadLogo - if true, load the game's logo from the file
   if loadLogo:
-    logo = nuklearLoadImage(filePath = (dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg").cstring)
+    logo = nuklearLoadSVGImage(filePath = (dataDirectory & "ui" & DirSep &
+        "images" & DirSep & "logo.svg").cstring, width = 0, height = 110)
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Show the game's main menu and set the game's state
@@ -35,6 +39,9 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
+  window(name = "Logo", x = 50, y = 0, w = 500, h = 110, flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 90, cols = 1)
+    image(image = logo)
   window(name = "VersionInfo", x = 180, y = 90, w = 250, h = 70, flags = {
       windowNoFlags}):
     setLayoutRowDynamic(height = 50, cols = 1)
