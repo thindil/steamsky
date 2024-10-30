@@ -113,9 +113,9 @@ var
   win: WindowPtr        ## The main X window of the program
   renderer: RendererPtr ## The SDL renderer
 
-proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
-    fontPath: cstring = ""; fontSize: cint = 14;
-        iconPath: cstring = ""): PContext {.discardable.} =
+proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
+    fontPath: string = ""; fontSize: int = 14;
+    iconPath: string = ""): PContext {.discardable.} =
   ## Initialize Nuklear library, create the main program's window with the
   ## selected parameters.
   ##
@@ -129,8 +129,9 @@ proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
   SDL_SetHint("SDL_HINT_VIDEO_HIGHDPI_DISABLED", "0")
   discard SDL_Init(SDL_INIT_VIDEO)
   discard IMG_Init(IMG_INIT_PNG)
-  win = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-      windowWidth, windowHeight, SDL_WINDOW_SHOWN or SDL_WINDOW_ALLOW_HIGHDPI)
+  win = SDL_CreateWindow(name.cstring, SDL_WINDOWPOS_CENTERED,
+      SDL_WINDOWPOS_CENTERED, windowWidth.cint, windowHeight.cint,
+          SDL_WINDOW_SHOWN or SDL_WINDOW_ALLOW_HIGHDPI)
   if win == nil:
     SDL_Log("Error SDL_CreateWindow %s", SDL_GetError())
     quit QuitFailure
@@ -142,7 +143,7 @@ proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
   SDL_GetRendererOutputSize(renderer, renderW, renderH)
   SDL_GetWindowSize(win, windowW, windowH)
   if iconPath.len > 0:
-    SDL_SetWindowIcon(win, IMG_Load(file = iconPath))
+    SDL_SetWindowIcon(win, IMG_Load(file = iconPath.cstring))
   let scaleX: cfloat = renderW.cfloat / windowW.cfloat
   let scaleY: cfloat = renderH.cfloat / windowH.cfloat
   SDL_RenderSetScale(renderer, scaleX, scaleY)
@@ -157,8 +158,8 @@ proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
     font = nk_font_atlas_add_default(atlas, fontSize.cfloat * fontScale,
         config.unsafeAddr)
   else:
-    font = nk_font_atlas_add_from_file(atlas, fontPath, fontSize.cfloat *
-        fontScale, config.unsafeAddr)
+    font = nk_font_atlas_add_from_file(atlas, fontPath.cstring,
+        fontSize.cfloat * fontScale, config.unsafeAddr)
   nk_sdl_font_stash_end()
   nk_style_set_font(getContext(), font.handle.unsafeAddr)
   return getContext()
@@ -192,14 +193,15 @@ proc nuklearClose*() =
   IMG_Quit()
   SDL_Quit()
 
-proc nuklearLoadSVGImage*(filePath: cstring; width, height: cint): PImage =
+proc nuklearLoadSVGImage*(filePath: string; width, height: int): PImage =
   ## Load the selected SVG image from a file
   ##
   ## * filePath - the full path to the file from which the image will be loaded
   ##
   ## Returns the nk_image structure
-  let img: RWPtr = SDL_RWFromFile(file = filePath, mode = "r")
-  let surface: SurfacePtr = IMG_LoadSizedSVG_RW(src = img, width = width, height = height)
+  let img: RWPtr = SDL_RWFromFile(file = filePath.cstring, mode = "r")
+  let surface: SurfacePtr = IMG_LoadSizedSVG_RW(src = img, width = width.cint,
+      height = height.cint)
   let image: TexturePtr = SDL_CreateTextureFromSurface(renderer = renderer,
       surface = surface)
   SDL_FreeSurface(surface = surface)
