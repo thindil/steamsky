@@ -23,5 +23,5 @@ type GameState* = enum
   mainMenu, quitGame
 
 var
-  windowWidth*: cint = 600 ## The width of the game's main window
-  windowHeight*: cint = 400 ## the height of the game's main window
+  windowWidth*: Positive = 600 ## The width of the game's main window
+  windowHeight*: Positive = 400 ## the height of the game's main window

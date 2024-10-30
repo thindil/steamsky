@@ -30,8 +30,8 @@ proc setMainMenu*(loadLogo: bool = true) {.raises: [], tags: [], contractual.} =
   ##
   ## * loadLogo - if true, load the game's logo from the file
   if loadLogo:
-    logo = nuklearLoadSVGImage(filePath = (dataDirectory & "ui" & DirSep &
-        "images" & DirSep & "logo.svg").cstring, width = 0, height = 110)
+    logo = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
+        "images" & DirSep & "logo.svg", width = 0, height = 110)
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Show the game's main menu and set the game's state

@@ -90,10 +90,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # Initialize SDL and create the main window of the game
   nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
-      name = windowName, fontPath = (dataDirectory & "ui" & DirSep & "fonts" &
-      DirSep & "Amarante-Regular.ttf").cstring,
-      fontSize = gameSettings.interfaceFontSize.cint + 10, iconPath = (
-      dataDirectory & "ui" & DirSep & "images" & DirSep & "icon.png").cstring)
+      name = windowName, fontPath = dataDirectory & "ui" & DirSep & "fonts" &
+      DirSep & "Amarante-Regular.ttf",
+      fontSize = gameSettings.interfaceFontSize + 10, iconPath = dataDirectory &
+      "ui" & DirSep & "images" & DirSep & "icon.png")
   setMainMenu()
 
   # The main game loop
