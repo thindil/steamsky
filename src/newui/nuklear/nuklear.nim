@@ -1748,6 +1748,9 @@ proc progressBar*(value: var int; maxValue: int;
 # Images
 # ------
 proc image*(image: PImage) =
+  ## Draw an image
+  ##
+  ## * image - pointer to the image which will be drawn
   proc nk_new_image(ctx; img: nk_image) {.importc: "nk_image", nodecl.}
   proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl.}
   nk_new_image(ctx = ctx, img = nk_image_ptr(iPtr = image))
