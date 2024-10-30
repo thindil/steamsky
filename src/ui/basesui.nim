@@ -73,6 +73,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & baseFrame & " <Configure> {ResizeCanvas %W.canvas %h}")
   elif tclEval2(script = "winfo ismapped " & baseCanvas) == "1" and argc == 1:
     tclEval(script = "grid remove " & closeButton)
+    tclEval(script = "grid remove " & gameHeader & ".morebutton")
     showSkyMap(clear = true)
     return tclOk
   baseFrame = baseCanvas & ".base"
@@ -83,6 +84,8 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     searchEntry = searchFrame & ".search"
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if argv[1] == "recipes":
+    tclEval(script = gameHeader & ".morebutton configure -command {RecipesMore show}")
+    tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
     tclEval(script = "grid " & searchFrame)
     if argc != 3:
       tclEval(script = searchEntry & " configure -validatecommand {}")
