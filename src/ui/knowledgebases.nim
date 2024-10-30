@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the list of known bases, like showing it,
+## sorting or showing them on the map.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[basestypes, config, game, maps, messages, tk, types, utils]
@@ -460,6 +463,14 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
         0: 200 else: base.reputation.level), id: index))
   proc sortBases(x, y: LocalBaseData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two bases and return which should go first, based on the sort
+    ## order of the bases
+    ##
+    ## * x - the first base to compare
+    ## * y - the second base to compare
+    ##
+    ## Returns 1 if the first base should go first, -1 if the second base
+    ## should go first.
     case basesSortOrder
     of nameAsc:
       if x.name < y.name:
