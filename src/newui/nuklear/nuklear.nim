@@ -48,6 +48,7 @@ type
   nk_size* = clong
   nk_byte* = uint8
   nk_rune* = cuint
+  nk_ushort* = cushort
 
 # ------------
 # Enumerations
@@ -116,8 +117,8 @@ type
     r*, g*, b*, a*: nk_byte
   nk_colorf* {.importc: "struct nk_colorf", nodecl.} = object
     r*, g*, b*, a*: cfloat
-  nk_vec2* {.importc: "struct nk_vec2", nodecl.} = object
-    x*, y*: cfloat
+  nk_vec2 {.importc: "struct nk_vec2", nodecl.} = object
+    x, y: cfloat
   nk_style_item_data* {.importc, nodecl.} = object
   nk_style_item* {.importc: "struct nk_style_item", nodecl.} = object
   nk_style_window_header* {.importc, nodecl.} = object
@@ -152,15 +153,19 @@ type
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     style*: nk_style
     input*: nk_input
-  nk_rect* {.importc: "struct nk_rect", nodecl.} = object
-    x*, y*, w*, h*: cfloat
+  nk_rect {.importc: "struct nk_rect", nodecl.} = object
+    x, y, w, h: cfloat
   nk_text_edit* = object
   nk_font* {.importc: "struct nk_font", nodecl.} = object
     handle*: nk_user_font
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
   PContext* = ptr nk_context
-  nk_image* {.importc: "struct nk_image", nodecl.} = object
+  nk_image {.importc: "struct nk_image", nodecl.} = object
+    handle: nk_handle
+    w,h: nk_ushort
+    region: array[4, nk_ushort]
+  PImage* = pointer
 
 # ---------------------
 # Procedures parameters
@@ -170,8 +175,8 @@ using ctx: PContext
 # -------------------
 # Creating structures
 # -------------------
-proc new_nk_rect*(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl.}
-proc new_nk_vec2*(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl.}
+proc new_nk_rect(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl.}
+proc new_nk_vec2(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl.}
 proc new_nk_font_config*(pixelHeight: cfloat): nk_font_config {.importc: "nk_font_config", nodecl.}
 
 # -----
@@ -313,13 +318,6 @@ proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
     config: ptr nk_font_config): ptr nk_font {.importc, nodecl.}
 proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
     height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc, nodecl.}
-
-# ------
-# Images
-# ------
-proc nk_image_id*(id: cint): nk_image {.importc, nodecl.}
-proc nk_image_ptr*(iPtr: pointer): nk_image {.importc, nodecl.}
-proc nk_new_image*(ctx; img: nk_image) {.importc: "nk_image", nodecl.}
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
@@ -1746,3 +1744,10 @@ proc progressBar*(value: var int; maxValue: int;
   return nk_progress(ctx = ctx, cur = value, max = maxValue,
       modifyable = modifyable.nk_bool) == nkTrue
 
+# ------
+# Images
+# ------
+proc image*(image: PImage) =
+  proc nk_new_image(ctx; img: nk_image) {.importc: "nk_image", nodecl.}
+  proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl.}
+  nk_new_image(ctx = ctx, img = nk_image_ptr(iPtr = image))

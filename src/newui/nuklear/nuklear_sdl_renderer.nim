@@ -58,9 +58,13 @@ type
   SDL_Window {.importc, nodecl.} = object
   SDL_Renderer {.importc, nodecl.} = object
   SDL_Surface {.importc, nodecl.} = object
+  SDL_Texture {.importc, nodecl.} = object
+  SDL_RWops {.importc, nodecl.} = object
   WindowPtr = ptr SDL_Window
   RendererPtr = ptr SDL_Renderer
   SurfacePtr = ptr SDL_Surface
+  TexturePtr = ptr SDL_Texture
+  RWPtr = ptr SDL_RWops
   SDL_Event {.importc, nodecl.} = object
     `type`: cuint
 
@@ -84,9 +88,14 @@ proc SDL_RenderPresent(renderer: RendererPtr) {.importc, nodecl.}
 proc SDL_DestroyRenderer(renderer: RendererPtr) {.importc, nodecl.}
 proc SDL_DestroyWindow(window: WindowPtr) {.importc, nodecl.}
 proc SDL_Quit() {.importc, nodecl.}
-proc SDL_SetWindowIcon(window: WindowPtr, icon: SurfacePtr) {.importc, nodecl.}
+proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl.}
+proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
+    surface: SurfacePtr): TexturePtr {.importc, nodecl.}
+proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl.}
+proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
+proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
 proc IMG_Quit() {.importc, nodecl.}
 
 # Nuklear SDL2 backend bindings
@@ -105,7 +114,8 @@ var
   renderer: RendererPtr ## The SDL renderer
 
 proc nuklearInit*(windowWidth, windowHeight: cint; name: cstring = "";
-    fontPath: cstring = ""; fontSize: cint = 14; iconPath: cstring = ""): PContext {.discardable.} =
+    fontPath: cstring = ""; fontSize: cint = 14;
+        iconPath: cstring = ""): PContext {.discardable.} =
   ## Initialize Nuklear library, create the main program's window with the
   ## selected parameters.
   ##
@@ -182,10 +192,15 @@ proc nuklearClose*() =
   IMG_Quit()
   SDL_Quit()
 
-proc nuklearLoadImage*(filePath: cstring): nk_image =
-  ## Load the selected image from a file
+proc nuklearLoadSVGImage*(filePath: cstring; width, height: cint): PImage =
+  ## Load the selected SVG image from a file
   ##
   ## * filePath - the full path to the file from which the image will be loaded
   ##
   ## Returns the nk_image structure
-  return nk_image_ptr(iPtr = IMG_Load(file = filePath))
+  let img: RWPtr = SDL_RWFromFile(file = filePath, mode = "r")
+  let surface: SurfacePtr = IMG_LoadSizedSVG_RW(src = img, width = width, height = height)
+  let image: TexturePtr = SDL_CreateTextureFromSurface(renderer = renderer,
+      surface = surface)
+  SDL_FreeSurface(surface = surface)
+  return image
