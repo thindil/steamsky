@@ -18,20 +18,25 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import std/os
+import std/[os, sequtils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../game
 import coreui
 
-var logo: PImage = nil
+var
+  logo: PImage = nil
+  showLoadButton, showHoFButton: bool = false
 
-proc setMainMenu*(loadLogo: bool = true) {.raises: [], tags: [], contractual.} =
+proc setMainMenu*(loadLogo: bool = true) {.raises: [NuklearException], tags: [
+    ReadDirEffect], contractual.} =
   ## Set the main menu, load logo if needed and set the menu's buttons
   ##
   ## * loadLogo - if true, load the game's logo from the file
   if loadLogo:
     logo = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
         "images" & DirSep & "logo.svg", width = 0, height = 110)
+  showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
+  showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Show the game's main menu and set the game's state
@@ -39,7 +44,8 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  window(name = "Logo", x = 50, y = 0, w = 500, h = 110, flags = {windowNoFlags}):
+  window(name = "Logo", x = 50, y = 0, w = 500, h = 110, flags = {
+      windowNoFlags}):
     setLayoutRowDynamic(height = 90, cols = 1)
     image(image = logo)
   window(name = "VersionInfo", x = 180, y = 90, w = 250, h = 70, flags = {
@@ -51,10 +57,12 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
     setLayoutRowDynamic(height = 40, cols = 1)
     labelButton(title = "New game"):
       echo "button pressed"
-    labelButton(title = "Load game"):
-      echo "button pressed"
-    labelButton(title = "Hall of Fame"):
-      echo "button pressed"
+    if showLoadButton:
+      labelButton(title = "Load game"):
+        echo "button pressed"
+    if showHoFButton:
+      labelButton(title = "Hall of Fame"):
+        echo "button pressed"
     labelButton(title = "News"):
       echo "button pressed"
     labelButton(title = "About"):
