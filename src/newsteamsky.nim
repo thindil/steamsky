@@ -94,7 +94,11 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       DirSep & "Amarante-Regular.ttf",
       fontSize = gameSettings.interfaceFontSize + 10, iconPath = dataDirectory &
       "ui" & DirSep & "images" & DirSep & "icon.png")
-  setMainMenu()
+  try:
+    setMainMenu()
+  except NuklearException:
+    echo getCurrentExceptionMsg()
+    return
 
   # The main game loop
   var state: GameState = mainMenu
