@@ -38,6 +38,22 @@ proc setMainMenu*(loadLogo: bool = true) {.raises: [NuklearException], tags: [
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
+proc showNews*(state: var GameState) {.raises: [], tags: [], contractual.} =
+  ## Show the game's latest changes
+  ## * state - the current game's state
+  ##
+  ## Returns the modified parameter state.
+  window(name = "News", x = 0, y = 0, w = windowWidth.float, h = (windowHeight -
+      50).float, flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = (windowHeight - 40).float, cols = 1)
+    label(str = "here")
+  window(name = "Buttons", x = 0, y = (windowHeight - 40).float,
+      w = windowWidth.float, h = 40, flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 40, cols = 2)
+    labelButton(title = "Test"):
+      echo "button pressed"
+  state = news
+
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Show the game's main menu and set the game's state
   ##
@@ -64,7 +80,8 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       labelButton(title = "Hall of Fame"):
         echo "button pressed"
     labelButton(title = "News"):
-      echo "button pressed"
+      state = news
+      return
     labelButton(title = "About"):
       echo "button pressed"
     labelButton(title = "Quit"):

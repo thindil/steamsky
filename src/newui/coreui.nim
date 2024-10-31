@@ -20,7 +20,7 @@
 
 type GameState* = enum
   ## Used to determine the current game's state.
-  mainMenu, quitGame
+  mainMenu, quitGame, news
 
 var
   windowWidth*: Positive = 600 ## The width of the game's main window

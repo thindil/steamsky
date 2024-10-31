@@ -109,12 +109,15 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       break
 
     # GUI
-    if state == GameState.mainMenu:
+    case state
+    of GameState.mainMenu:
       # Show the main game menu
       showMainMenu(state = state)
-
-    # Quit from the game
-    if state == quitGame:
+    of news:
+      # Show the game's latests changes
+      showNews(state = state)
+    of quitGame:
+      # Quit from the game
       break
 
     # Draw
