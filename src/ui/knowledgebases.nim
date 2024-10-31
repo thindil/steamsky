@@ -52,9 +52,11 @@ proc getReputationText(reputationLevel: int): string {.raises: [],
   else:
     return ""
 
+{.push ruleOff:"varDeclared".}
 var
   basesTable: TableWidget
-  basesIndexes: seq[Positive]
+  basesIndexes: seq[Positive] = @[]
+{.pop ruleOn:"varDeclared".}
 
 proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
     raises: [], tags: [RootEffect], contractual.} =
@@ -65,9 +67,9 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
   if basesTable.row > 1:
     clearTable(table = basesTable)
   let
-    basesCanvas = mainPaned & ".knowledgeframe.bases.canvas"
-    basesFrame = basesCanvas & ".frame"
-  var rows = try:
+    basesCanvas: string = mainPaned & ".knowledgeframe.bases.canvas"
+    basesFrame: string = basesCanvas & ".frame"
+  var rows: Natural = try:
       tclEval2(script = "grid size " & basesFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
@@ -81,21 +83,21 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
   if basesIndexes.len == 0:
     for index, _ in skyBases:
       basesIndexes.add(y = index)
-  let searchEntry = basesFrame & ".options.search"
+  let searchEntry: string = basesFrame & ".options.search"
   if baseName.len == 0:
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
     tclEval(script = searchEntry & " configure -validatecommand {ShowBases %P}")
-  var comboBox = basesFrame & ".options.types"
-  let basesType = tclEval2(script = comboBox & " get")
+  var comboBox: string = basesFrame & ".options.types"
+  let basesType: string = tclEval2(script = comboBox & " get")
   comboBox = basesFrame & ".options.status"
-  let basesStatus = tclEval2(script = comboBox & " get")
+  let basesStatus: string = tclEval2(script = comboBox & " get")
   comboBox = basesFrame & ".options.owner"
-  let basesOwner = tclEval2(script = comboBox & " get")
+  let basesOwner: string = tclEval2(script = comboBox & " get")
   rows = 0
-  let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  let startRow: Natural = ((page - 1) * gameSettings.listsLimit) + 1
   tclEval(script = "grid configure " & basesTable.canvas & " -row 2")
-  var currentRow = 1
+  var currentRow: Positive = 1
   for index in basesIndexes:
     if not skyBases[index].known:
       continue
@@ -112,7 +114,7 @@ proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
     if currentRow < startRow:
       currentRow.inc
       continue
-    var color = (if skyBases[index].visited.year > 0: "green3" else: "")
+    var color: string = (if skyBases[index].visited.year > 0: "green3" else: "")
     if skyBases[index].skyX == playerShip.destinationX and skyBases[
         index].skyY == playerShip.destinationY:
       color = "yellow"
@@ -238,13 +240,13 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowBaseInfo baseindex
   ## BaseIndex is the index of the base to show
   let
-    baseIndex = try:
+    baseIndex: BasesRange = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the base's index.")
-    baseDialog = createDialog(name = ".basedialog", title = skyBases[
+    baseDialog: string = createDialog(name = ".basedialog", title = skyBases[
         baseIndex].name, columns = 3)
-    baseLabel = baseDialog & ".info"
+    baseLabel: string = baseDialog & ".info"
   tclEval(script = "text " & baseLabel & " -wrap char -height 5 -width 30")
   tclEval(script = baseLabel & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
@@ -266,7 +268,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = baseLabel & " insert end {\nLast visited: }")
     tclEval(script = baseLabel & " insert end {" & formattedTime(
         time = skyBases[baseIndex].visited) & "} [list gold]")
-    var timeDiff = 0
+    var timeDiff: int = 0
     if skyBases[baseIndex].population > 0 and skyBases[
         baseIndex].reputation.level > -25:
       timeDiff = 30 - daysDifference(dateToCompare = skyBases[
@@ -305,17 +307,17 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = baseLabel & " insert end {\nYou can't take missions at this base.} [list red]")
 
     proc setReputationText(reputationText: string) =
-      let reputationLabel = baseDialog & ".reputationlabel"
+      let reputationLabel: string = baseDialog & ".reputationlabel"
       tclEval(script = "ttk::label " & reputationLabel)
       if skyBases[baseIndex].reputation.level == 0:
         tclEval(script = reputationLabel & " configure -text {Reputation: Unknown}")
       else:
         tclEval(script = reputationLabel & " configure -text {Reputation:}")
-        let reputationBar = baseDialog & ".reputation"
+        let reputationBar: string = baseDialog & ".reputation"
         tclEval(script = "ttk::frame " & reputationBar & " -width 204 -height 24 -style ProgressBar.TFrame")
         tclEval(script = "grid " & reputationBar & " -row 2 -column 1 -padx 5 -columnspan 2")
         tclEval(script = "grid propagate " & reputationBar & " off")
-        let reputationProgress = reputationBar & ".reputation"
+        let reputationProgress: string = reputationBar & ".reputation"
         tclEval(script = "ttk::frame " & reputationProgress &
             " -height 18 -width " & $(skyBases[baseIndex].reputation.level.abs))
         if skyBases[baseIndex].reputation.level > 0:
@@ -343,7 +345,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return showError(message = "Can't configure text field.")
   tclEval(script = "grid " & baseLabel & " -row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w")
-  var baseButton = baseDialog & ".destination"
+  var baseButton: string = baseDialog & ".destination"
   tclEval(script = "ttk::button " & baseButton &
       " -text Target -image destinationicon -command {CloseDialog " &
       baseDialog & ";SetDestination2 " & $skyBases[baseIndex].skyX & " " &
@@ -392,7 +394,7 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortKnownBases x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         getColumnNumber(table = basesTable, xPosition = ($argv[2]).parseInt)
       except:
         return showError(message = "Can't get the column number.")
@@ -475,83 +477,67 @@ proc sortBasesCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of distanceAsc:
       if x.distance < y.distance:
         return 1
-      else:
-        return -1
+      return -1
     of distanceDesc:
       if x.distance > y.distance:
         return 1
-      else:
-        return -1
+      return -1
     of coordAsc:
       if x.coords < y.coords:
         return 1
-      else:
-        return -1
+      return -1
     of coordDesc:
       if x.coords > y.coords:
         return 1
-      else:
-        return -1
+      return -1
     of populationAsc:
       if x.population < y.population:
         return 1
-      else:
-        return -1
+      return -1
     of populationDesc:
       if x.population > y.population:
         return 1
-      else:
-        return -1
+      return -1
     of sizeAsc:
       if x.size < y.size:
         return 1
-      else:
-        return -1
+      return -1
     of sizeDesc:
       if x.size > y.size:
         return 1
-      else:
-        return -1
+      return -1
     of ownerAsc:
       if x.owner < y.owner:
         return 1
-      else:
-        return -1
+      return -1
     of ownerDesc:
       if x.owner > y.owner:
         return 1
-      else:
-        return -1
+      return -1
     of typeAsc:
       if x.baseType < y.baseType:
         return 1
-      else:
-        return -1
+      return -1
     of typeDesc:
       if x.baseType > y.baseType:
         return 1
-      else:
-        return -1
+      return -1
     of reputationAsc:
       if x.reputation < y.reputation:
         return 1
-      else:
-        return -1
+      return -1
     of reputationDesc:
       if x.reputation > y.reputation:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
   localBases.sort(cmp = sortBases)
