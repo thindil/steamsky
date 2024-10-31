@@ -27,12 +27,10 @@ var
   logo: PImage = nil
   showLoadButton, showHoFButton: bool = false
 
-proc setMainMenu*(loadLogo: bool = true) {.raises: [NuklearException], tags: [
+proc setMainMenu*() {.raises: [NuklearException], tags: [
     ReadDirEffect], contractual.} =
   ## Set the main menu, load logo if needed and set the menu's buttons
-  ##
-  ## * loadLogo - if true, load the game's logo from the file
-  if loadLogo:
+  if logo == nil:
     logo = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
         "images" & DirSep & "logo.svg", width = 0, height = 110)
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
