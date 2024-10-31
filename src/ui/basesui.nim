@@ -59,13 +59,13 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       ::autoscroll::autoscroll .gameframe.paned.baseframe.scrollx
       set baseframe [ttk::frame $basecanvas.base]
       SetScrollbarBindings $baseframe .gameframe.paned.baseframe.scrolly
-      grid [ttk::frame $baseframe.searchframe] -sticky w -padx 5 -pady 5
+      ttk::frame $baseframe.searchframe
       grid [ttk::label $baseframe.searchframe.searchlabel -text {Name:}] -padx {0 5}
       tooltip::tooltip $baseframe.searchframe.searchlabel "Search for the selected recipe."
       grid [ttk::entry $baseframe.searchframe.search -validate key \
          -validatecommand {SearchRecipes %P}] -row 0 -column 1
       tooltip::tooltip $baseframe.searchframe.search "Search for the selected recipe."
-      grid [ttk::frame $baseframe.moneyframe] -sticky w -padx 5
+      grid [ttk::frame $baseframe.moneyframe] -sticky w -padx 5 -row 1
       grid [ttk::label $baseframe.moneyframe.lblmoney] -sticky w
       grid [ttk::label $baseframe.moneyframe.lblmoney2 -style Golden.TLabel] -sticky w \
          -column 1 -row 0
@@ -86,7 +86,6 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   if argv[1] == "recipes":
     tclEval(script = gameHeader & ".morebutton configure -command {RecipesMore show}")
     tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
-    tclEval(script = "grid " & searchFrame)
     if argc != 3:
       tclEval(script = searchEntry & " configure -validatecommand {}")
       tclEval(script = searchEntry & " delete 0 end")
@@ -100,7 +99,6 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       for index in recipesList.keys:
         itemsIndexes.add(y = index)
   else:
-    tclEval(script = "grid remove " & searchFrame)
     baseTable = createTable(parent = baseFrame, headers = @["Action", "Cost",
         "Time"], scrollbar = mainPaned & ".baseframe.scrolly",
         command = "SortBaseItems " & $argv[1],
@@ -119,6 +117,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
           149: "-1" else: "-3"))
       itemsIndexes.add(y = (if skyBases[baseIndex].population >
           299: "-2" else: "-3"))
+  tclEval(script = "grid configure " & baseTable.canvas & " -row 2")
   let
     moneyIndex2 = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
@@ -632,6 +631,31 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowBaseUI", $argv[1]].allocCStringArray)
 
+proc recipesMoreCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+  ## Maximize or minimize the search frame for looking for recipes
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## RecipesMore show/hide
+  ## If th argument is set to show, show the frame, otherwise hide it.
+  let
+    searchFrame = mainPaned & ".baseframe.canvas.base.searchframe"
+    button = gameHeader & ".morebutton"
+  if argv[1] == "show":
+    tclEval(script = "grid " & searchFrame & " -sticky w -padx 5 -pady 5 -row 0")
+    tclEval(script = button & " configure -command {RecipesMore hide}")
+  else:
+    tclEval(script = "grid remove " & searchFrame)
+    tclEval(script = button & " configure -command {RecipesMore show}")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
@@ -640,5 +664,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].
     addCommand("SearchRecipes", searchRecipesCommand)
     addCommand("ShowBaseMenu", showBaseMenuCommand)
     addCommand("SortBaseItems", sortBaseItemsCommand)
+    addCommand("RecipesMore", recipesMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
