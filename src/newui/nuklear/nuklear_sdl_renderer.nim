@@ -200,9 +200,15 @@ proc nuklearLoadSVGImage*(filePath: string; width, height: int): PImage =
   ##
   ## Returns the nk_image structure
   let img: RWPtr = SDL_RWFromFile(file = filePath.cstring, mode = "r")
+  if img == nil:
+    raise newException(NuklearException, $(SDL_GetError()))
   let surface: SurfacePtr = IMG_LoadSizedSVG_RW(src = img, width = width.cint,
       height = height.cint)
+  if surface == nil:
+    raise newException(NuklearException, $(SDL_GetError()))
   let image: TexturePtr = SDL_CreateTextureFromSurface(renderer = renderer,
       surface = surface)
+  if image == nil:
+    raise newException(NuklearException, $(SDL_GetError()))
   SDL_FreeSurface(surface = surface)
   return image
