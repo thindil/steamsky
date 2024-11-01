@@ -21,7 +21,7 @@
 import std/[os, sequtils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../game
-import coreui
+import coreui, utilsui
 
 var
   logo: PImage = nil
@@ -65,15 +65,10 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       w: float = 150
       h: float = 40
     row(x = x, y = 0, w = w, h = h):
-      var bounds: NimRect = getWidgetBounds()
+      let bounds: NimRect = getWidgetBounds()
       labelButton(title = "New game"):
         echo "button pressed"
-      if isMouseHovering(bounds):
-        tooltipTime -= dtime
-        if tooltipTime <= 0.0:
-          tooltip("Set and start a new game")
-      else:
-        tooltipTime = tooltipDelay
+      bounds.showTooltip(text = "Set and start a new game")
     var y: float = h;
     if showLoadButton:
       row(x = x, y = y, w = w, h = h):

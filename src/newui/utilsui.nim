@@ -15,16 +15,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-## Provides various types and variables for the game's UI, like the game's
-## state, the main window width and height, etc
+## Provides code related to the game's UI, like tooltips
 
-type GameState* = enum
-  ## Used to determine the current game's state.
-  mainMenu, quitGame, news
+import contracts, nuklear/nuklear_sdl_renderer
+import coreui
 
 const
-    dtime*: float = 40.0 ## The length in miliseconds of one game's frame
+  tooltipDelay: float = 1000.0
+    ## For how long the player hovers the mouse over UI element before a
+    ## tooltip will be shown
 
 var
-  windowWidth*: Positive = 600 ## The width of the game's main window
-  windowHeight*: Positive = 400 ## The height of the game's main window
+  tooltipTime: float = tooltipDelay ## How long left to show a tooltip
+
+proc showTooltip*(bounds: NimRect; text: string) {.raises: [], tags: [],
+    contractual.} =
+  if isMouseHovering(bounds):
+    tooltipTime -= dtime
+    if tooltipTime <= 0.0:
+      tooltip("Set and start a new game")
+  else:
+    tooltipTime = tooltipDelay
