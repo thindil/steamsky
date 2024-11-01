@@ -41,15 +41,11 @@ proc showNews*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  window(name = "News", x = 0, y = 0, w = windowWidth.float, h = (windowHeight -
-      50).float, flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = (windowHeight - 40).float, cols = 1)
-    label(str = "here")
-  window(name = "Buttons", x = 0, y = (windowHeight - 40).float,
-      w = windowWidth.float, h = 40, flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 40, cols = 2)
-    labelButton(title = "Test"):
-      echo "button pressed"
+  setLayoutRowDynamic(height = (windowHeight - 40).float, cols = 1)
+  label(str = "here")
+  setLayoutRowDynamic(height = 40, cols = 2)
+  labelButton(title = "Test"):
+    echo "button pressed"
   state = news
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
@@ -58,31 +54,42 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  window(name = "Logo", x = 50, y = 0, w = 500, h = 110, flags = {
-      windowNoFlags}):
-    setLayoutRowDynamic(height = 90, cols = 1)
-    image(image = logo)
-  window(name = "VersionInfo", x = 180, y = 90, w = 250, h = 70, flags = {
-      windowNoFlags}):
-    setLayoutRowDynamic(height = 50, cols = 1)
-    label(str = gameVersion & " development", alignment = centered)
-  window(name = "MainMenu", x = 220, y = 130, w = 150, h = 280, flags = {
-      windowNoFlags}):
-    setLayoutRowDynamic(height = 40, cols = 1)
-    labelButton(title = "New game"):
-      echo "button pressed"
+  layoutSpaceStatic(height = 90, widgetsCount = 1):
+    row(x = 50, y = 0, w = 500, h = 90):
+      image(image = logo)
+  setLayoutRowDynamic(height = 40, cols = 1)
+  label(str = gameVersion & " development", alignment = centered)
+  layoutSpaceStatic(height = 240, widgetsCount = 6):
+    const
+      x: float = 225
+      w: float = 150
+      h: float = 40
+    row(x = x, y = 0, w = w, h = h):
+      labelButton(title = "New game"):
+        echo "button pressed"
+    var y: float = h;
     if showLoadButton:
-      labelButton(title = "Load game"):
-        echo "button pressed"
+      row(x = x, y = y, w = w, h = h):
+        y += h
+        labelButton(title = "Load game"):
+          echo "button pressed"
     if showHoFButton:
-      labelButton(title = "Hall of Fame"):
+      row(x = x, y = y, w = w, h = h):
+        y += h
+        labelButton(title = "Hall of Fame"):
+          echo "button pressed"
+    row(x = x, y = y, w = w, h = h):
+      y += h
+      labelButton(title = "News"):
+        state = news
+        return
+    row(x = x, y = y, w = w, h = h):
+      y += h
+      labelButton(title = "About"):
         echo "button pressed"
-    labelButton(title = "News"):
-      state = news
-      return
-    labelButton(title = "About"):
-      echo "button pressed"
-    labelButton(title = "Quit"):
-      state = quitGame
-      return
+    row(x = x, y = y, w = w, h = h):
+      y += h
+      labelButton(title = "Quit"):
+        state = quitGame
+        return
   state = mainMenu
