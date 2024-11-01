@@ -145,7 +145,7 @@ type
     font*: ptr nk_user_font
   nk_mouse* {.importc, nodecl.} = object
     delta*: nk_vec2
-  nk_input* {.importc, nodecl.} = object
+  nk_input* {.importc: "struct nk_input", nodecl.} = object
     mouse*: nk_mouse
   nk_buffer* {.importc, nodecl.} = object
   nk_context* {.importc: "struct nk_context", nodecl.} = object
