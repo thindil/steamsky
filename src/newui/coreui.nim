@@ -22,6 +22,14 @@ type GameState* = enum
   ## Used to determine the current game's state.
   mainMenu, quitGame, news
 
+const
+  tooltipDelay*: float = 1000.0
+    ## For how long the player hovers the mouse over UI element before a
+    ## tooltip will be shown
+  dtime*: float = 40.0
+    ## The length in miliseconds of one game's frame
+
 var
   windowWidth*: Positive = 600 ## The width of the game's main window
-  windowHeight*: Positive = 400 ## the height of the game's main window
+  windowHeight*: Positive = 400 ## The height of the game's main window
+  tooltipTime*: float = tooltipDelay ## How long left to show a tooltip

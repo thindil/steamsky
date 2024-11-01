@@ -69,7 +69,11 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       labelButton(title = "New game"):
         echo "button pressed"
       if isMouseHovering(bounds):
-        tooltip("This is a tooltip")
+        tooltipTime -= dtime
+        if tooltipTime <= 0.0:
+          tooltip("Set and start a new game")
+      else:
+        tooltipTime = tooltipDelay
     var y: float = h;
     if showLoadButton:
       row(x = x, y = y, w = w, h = h):

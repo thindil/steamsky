@@ -84,9 +84,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     echo "Can't load hall of fame"
     return
 
-  const
-    windowName: string = "Steam Sky"
-    dtime: float = 40.0
+  const windowName: string = "Steam Sky"
 
   # Initialize SDL and create the main window of the game
   nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
