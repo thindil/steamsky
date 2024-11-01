@@ -65,8 +65,11 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       w: float = 150
       h: float = 40
     row(x = x, y = 0, w = w, h = h):
+      var bounds: NimRect = getWidgetBounds()
       labelButton(title = "New game"):
         echo "button pressed"
+      if isMouseHovering(bounds):
+        tooltip("This is a tooltip")
     var y: float = h;
     if showLoadButton:
       row(x = x, y = y, w = w, h = h):
