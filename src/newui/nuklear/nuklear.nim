@@ -24,8 +24,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import std/[hashes, macros]
-import nk_types, nk_context
-export nk_types, nk_context
+import nk_types, nk_context, nk_tooltip
+export nk_types, nk_context, nk_tooltip
 
 ## Provides code for Nuklear binding
 
@@ -165,11 +165,6 @@ proc nk_filter_ascii*(box: ptr nk_text_edit;
 proc nk_contextual_end(ctx) {.importc, cdecl.}
 proc nk_contextual_item_label(ctx; label: cstring;
     align: nk_flags): nk_bool {.importc, cdecl.}
-
-# --------
-# Tooltips
-# --------
-proc nk_tooltipf(ctx; fmt: cstring) {.importc, nodecl, varargs.}
 
 # ------
 # Groups
@@ -1288,24 +1283,6 @@ template contextualItemLabel*(label: string; align: TextAlignment;
   ## * onPressCode - the Nim code to execute when the label was pressed
   if nk_contextual_item_label(ctx, label.cstring, align.nk_flags):
     onPressCode
-
-# --------
-# Tooltips
-# --------
-
-macro fmtTooltip*(args: varargs[untyped]): untyped =
-  ## Draw a tooltip formatted in the same way like the C function printf
-  ##
-  ## * args      - the tooltip's text and its arguments to draw
-  result = quote do:
-    nk_tooltipf(ctx, `args`)
-
-proc tooltip*(text: string) {.raises: [], tags: [].} =
-  ## Draw a tooltip with the selected text
-  ##
-  ## * text - the text to show on the tooltip window
-  proc nk_tooltip(ctx; text: cstring) {.importc, nodecl.}
-  nk_tooltip(ctx, text.cstring)
 
 # ------
 # Groups

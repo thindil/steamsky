@@ -17,7 +17,33 @@
 
 ## Provides code related to the game's UI, like tooltips
 
+import std/macros
 import contracts
+import nk_context
+
+# ---------------------
+# Procedures parameters
+# ---------------------
+using ctx: PContext
+
+# --------
+# Tooltips
+# --------
+proc nk_tooltipf(ctx; fmt: cstring) {.importc, nodecl, varargs.}
+
+macro fmtTooltip*(args: varargs[untyped]): untyped =
+  ## Draw a tooltip formatted in the same way like the C function printf
+  ##
+  ## * args      - the tooltip's text and its arguments to draw
+  result = quote do:
+    nk_tooltipf(ctx, `args`)
+
+proc tooltip*(text: string) {.raises: [], tags: [].} =
+  ## Draw a tooltip with the selected text
+  ##
+  ## * text - the text to show on the tooltip window
+  proc nk_tooltip(ctx; text: cstring) {.importc, nodecl.}
+  nk_tooltip(ctx, text.cstring)
 
 var
   tooltipDelay: float = 1000.0
@@ -31,4 +57,4 @@ proc showTooltip*(text: string) {.raises: [], tags: [],
   ##
   ## * text   - the text to show
 #  if isMouseHovering(rect = bounds):
-      tooltip(text = text)
+  tooltip(text = text)
