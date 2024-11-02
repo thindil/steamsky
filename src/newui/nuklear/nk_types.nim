@@ -24,6 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Provides types from nuklear library
+import nimalyzer
 
 # ---------
 # Constants
@@ -170,6 +171,7 @@ type
 # -----
 # Types
 # -----
+{.push ruleOff: "namedParams".}
 type
   NimColor* = object
     ## Used to store information about the selected color. Usually later
@@ -265,6 +267,7 @@ type
   ButtonBehavior* = enum
     ## The types of buttons behavior
     default, repeater
+{.pop ruleOn: "namedParams".}
 
 # ----------
 # Converters
