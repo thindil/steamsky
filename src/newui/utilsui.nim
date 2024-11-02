@@ -18,21 +18,20 @@
 ## Provides code related to the game's UI, like tooltips
 
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui
+# import coreui
 
-const
-  tooltipDelay: float = 1000.0
-    ## For how long the player hovers the mouse over UI element before a
-    ## tooltip will be shown
+#const tooltipDelay: float = 1000.0
+#  ## For how long the player hovers the mouse over UI element before a
+#  ## tooltip will be shown
 
-var
-  tooltipTime: float = tooltipDelay ## How long left to show a tooltip
+#var tooltipTime: float = tooltipDelay ## How long left to show a tooltip
 
 proc showTooltip*(bounds: NimRect; text: string) {.raises: [], tags: [],
     contractual.} =
-  if isMouseHovering(bounds):
-    tooltipTime -= dtime
-    if tooltipTime <= 0.0:
-      tooltip("Set and start a new game")
-  else:
-    tooltipTime = tooltipDelay
+  ## Show the selected tooltip if the player hovers they mouse over the
+  ## selected widget
+  ##
+  ## * bounds - the rectangle with coordinates of the widget
+  ## * text   - the text to show
+  if isMouseHovering(rect = bounds):
+      tooltip(text = text)

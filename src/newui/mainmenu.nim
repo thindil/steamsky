@@ -59,13 +59,14 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       image(image = logo)
   setLayoutRowDynamic(height = 40, cols = 1)
   label(str = gameVersion & " development", alignment = centered)
+  var bounds: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
   layoutSpaceStatic(height = 240, widgetsCount = 6):
     const
       x: float = 225
       w: float = 150
       h: float = 40
     row(x = x, y = 0, w = w, h = h):
-      let bounds: NimRect = getWidgetBounds()
+      bounds = getWidgetBounds()
       labelButton(title = "New game"):
         echo "button pressed"
       bounds.showTooltip(text = "Set and start a new game")
@@ -73,25 +74,35 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
     if showLoadButton:
       row(x = x, y = y, w = w, h = h):
         y += h
+        bounds = getWidgetBounds()
         labelButton(title = "Load game"):
           echo "button pressed"
+        bounds.showTooltip(text = "Load one of the previously saved games")
     if showHoFButton:
       row(x = x, y = y, w = w, h = h):
         y += h
+        bounds = getWidgetBounds()
         labelButton(title = "Hall of Fame"):
           echo "button pressed"
+        bounds.showTooltip(text = "Show your previous the bests scores in the game")
     row(x = x, y = y, w = w, h = h):
       y += h
+      bounds = getWidgetBounds()
       labelButton(title = "News"):
         state = news
         return
+      bounds.showTooltip(text = "The list of changes to the game")
     row(x = x, y = y, w = w, h = h):
       y += h
+      bounds = getWidgetBounds()
       labelButton(title = "About"):
         echo "button pressed"
+      bounds.showTooltip(text = "General information about the game")
     row(x = x, y = y, w = w, h = h):
       y += h
+      bounds = getWidgetBounds()
       labelButton(title = "Quit"):
         state = quitGame
         return
+      bounds.showTooltip(text = "Quit from the game")
   state = mainMenu
