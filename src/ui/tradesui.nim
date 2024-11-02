@@ -53,7 +53,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
     tradeCanvas = tradeFrame & ".canvas"
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-  var label = tradeCanvas & ".trade.options.typelabel"
+  var label = tradeCanvas & ".trade.options.playerinfo.moneyinfo"
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.tradeframe
