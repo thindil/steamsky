@@ -24,17 +24,15 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import std/[hashes, macros]
-import nk_types
-export nk_types
+import nk_types, nk_context
+export nk_types, nk_context
 
 ## Provides code for Nuklear binding
 
 # -------
 # Objects
 # -------
-type
-  PContext* = ptr nk_context
-  PImage* = pointer
+type PImage* = pointer
 
 # ---------------------
 # Procedures parameters
@@ -193,26 +191,9 @@ proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl.}
 # High level bindings. The new version of the binding
 # ------------------------------------------------------------------
 
-# ---------
-# Variables
-# ---------
-var ctx: PContext ## Pointer to the Nuklear context
-
 # -------
 # General
 # -------
-proc setContext*(context: PContext) {.raises: [], tags: [].} =
-  ## Set the Nuklear lib context
-  ##
-  ## * context - the pointer to the Nuklear context
-  ctx = context
-
-proc getContext*(): PContext {.raises: [], tags: [].} =
-  ## Get the Nuklear lib context, temporary code
-  ##
-  ## Returns the pointer to the Nuklear context
-  return ctx
-
 proc charArrayToString(charArray: openArray[char];
     length: int): string {.raises: [], tags: [].} =
   ## Convert a characters' array to Nim string, internal use only, temporary
