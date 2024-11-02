@@ -21,7 +21,7 @@
 import std/[os, sequtils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../game
-import coreui, utilsui
+import coreui
 
 var
   logo: PImage = nil
@@ -69,7 +69,7 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       bounds = getWidgetBounds()
       labelButton(title = "New game"):
         echo "button pressed"
-      bounds.showTooltip(text = "Set and start a new game")
+      showTooltip(text = "Set and start a new game")
     var y: float = h;
     if showLoadButton:
       row(x = x, y = y, w = w, h = h):
@@ -77,32 +77,32 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
         bounds = getWidgetBounds()
         labelButton(title = "Load game"):
           echo "button pressed"
-        bounds.showTooltip(text = "Load one of the previously saved games")
+        showTooltip(text = "Load one of the previously saved games")
     if showHoFButton:
       row(x = x, y = y, w = w, h = h):
         y += h
         bounds = getWidgetBounds()
         labelButton(title = "Hall of Fame"):
           echo "button pressed"
-        bounds.showTooltip(text = "Show your previous the bests scores in the game")
+        showTooltip(text = "Show your previous the bests scores in the game")
     row(x = x, y = y, w = w, h = h):
       y += h
       bounds = getWidgetBounds()
       labelButton(title = "News"):
         state = news
         return
-      bounds.showTooltip(text = "The list of changes to the game")
+      showTooltip(text = "The list of changes to the game")
     row(x = x, y = y, w = w, h = h):
       y += h
       bounds = getWidgetBounds()
       labelButton(title = "About"):
         echo "button pressed"
-      bounds.showTooltip(text = "General information about the game")
+      showTooltip(text = "General information about the game")
     row(x = x, y = y, w = w, h = h):
       y += h
       bounds = getWidgetBounds()
       labelButton(title = "Quit"):
         state = quitGame
         return
-      bounds.showTooltip(text = "Quit from the game")
+      showTooltip(text = "Quit from the game")
   state = mainMenu
