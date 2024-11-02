@@ -23,7 +23,8 @@ import coreui, dialogs, errordialog, mapsui, table, utilsui2
 var baseIndex = 0
 
 proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+       TimeEffect, RootEffect], cdecl.} =
   ## Show mission on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -71,7 +72,8 @@ var
   missionsTable: TableWidget
   missionsIndexes: seq[Natural]
 
-proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect].} =
   ## Refresh the list of available missions
   ##
   ## * page - The current page of the list to show. Default value is 1.
@@ -119,7 +121,9 @@ proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
     addButton(table = missionsTable, text = getMissionType(
         mType = mission.mType), tooltip = "Show more info about the mission",
         command = "MissionMoreInfo " & $(index + 1), column = 1, color = (
-        if canAccept: "" elif cabinTaken: "yellow" else: "red"))
+        if canAccept: "" elif cabinTaken: "yellow" else: tclGetVar(
+        varName = "ttk::theme::" & gameSettings.interfaceTheme &
+        "::colors(-red)")))
     canAccept = true
     cabinTaken = false
     case mission.mType
@@ -322,7 +326,8 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+       TimeEffect, RootEffect], cdecl.} =
   ## Show more info about the selected mission
   ##
   ## * clientData - the additional data for the Tcl command
@@ -454,7 +459,8 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+       TimeEffect, RootEffect], cdecl.} =
   ## Accept the mission in a base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -525,7 +531,8 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+       TimeEffect, RootEffect], cdecl.} =
   ## Update the information about the selected mission reward
   ##
   ## * clientData - the additional data for the Tcl command
@@ -711,7 +718,8 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   updateTable(table = missionsTable)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Adds Tcl commands related to the list of available missions
   try:
     addCommand("ShowBaseMissions", showBaseMissionsCommand)
