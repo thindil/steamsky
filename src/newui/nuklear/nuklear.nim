@@ -24,8 +24,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import std/[hashes, macros]
-import nk_types, nk_context, nk_tooltip
-export nk_types, nk_context, nk_tooltip
+import contracts
+import nk_types, nk_context, nk_tooltip, nk_widget
+export nk_types, nk_context, nk_tooltip, nk_widget
 
 ## Provides code for Nuklear binding
 
@@ -217,6 +218,15 @@ proc stringToCharArray(str: string; length: int): tuple[charArray: seq[char];
       result.charArray.add('\0')
   result.length = str.len.cint
 
+proc getWidgetBounds*(): NimRect {.raises: [], tags: [].} =
+  ## Get the rectable with the current Nuklear widget coordinates
+  ##
+  ## Returns a rectangle with the current Nuklear widget coordinates
+  ## converted to NimRect
+  proc nk_widget_bounds(ctx): nk_rect {.importc, nodecl.}
+  let rect = nk_widget_bounds(ctx)
+  return NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
+
 proc createWin(name: cstring; x, y, w, h: cfloat;
     flags: nk_flags): bool {.raises: [], tags: [].} =
   ## Create a new Nuklear window/widget, internal use only, temporary code
@@ -247,15 +257,6 @@ template window*(name: string; x, y, w, h: float; flags: set[WindowFlags];
   if createWin(name.cstring, x, y, w, h, winSetToInt(flags)):
     content
   nk_end(ctx)
-
-proc getWidgetBounds*(): NimRect {.raises: [], tags: [].} =
-  ## Get the rectable with the current Nuklear widget coordinates
-  ##
-  ## Returns a rectangle with the current Nuklear widget coordinates
-  ## converted to NimRect
-  proc nk_widget_bounds(ctx): nk_rect {.importc, nodecl.}
-  let rect = nk_widget_bounds(ctx)
-  return NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
 
 proc getTextWidth*(text: string): float =
   ## Get the width in pixels of the selected text in the current font
@@ -1421,63 +1422,6 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
   discard $newValue
   value = newValue
 
-# -------
-# Widgets
-# -------
-proc colorPicker*(color: NimColorF;
-    format: colorFormat): NimColorF {.raises: [], tags: [].} =
-  ## Create the color picker widget
-  ##
-  ## * color  - the starting color for the widget
-  ## * format - the color format for the widget
-  ##
-  ## Returns Nim color selected by the user in the widget
-  proc nk_color_picker(ctx; color: nk_colorf;
-      fmt: colorFormat): nk_colorf {.importc, nodecl.}
-  let newColor = nk_color_picker(ctx, nk_colorf(r: color.r, g: color.g,
-      b: color.b, a: color.a), format)
-  result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
-
-proc checkBox*(label: string; checked: var bool): bool {.discardable, raises: [
-    ], tags: [].} =
-  ## Create a Nuklear checkbox widget
-  ##
-  ## * label   - the text to show with the checkbox
-  ## * checked - the state of the checkbox, if true, the checkbox is checked
-  ##
-  ## Returns true if the state of the checkbox was changed, otherwise false.
-  proc nk_checkbox_label(ctx; text: cstring;
-      active: var cint): nk_bool {.importc, nodecl.}
-  var active: cint = (if checked: 1 else: 0)
-  result = nk_checkbox_label(ctx = ctx, text = label.cstring,
-      active = active) == nkTrue
-  checked = active == 1
-
-proc option*(label: string; selected: bool): bool {.raises: [], tags: [].} =
-  ## Create a Nuklear option (radio) widget
-  ##
-  ## * label    - the text show with the option
-  ## * selected - the state of the option, if true the option is selected
-  ##
-  ## Returns true if the option is selected, otherwise false
-  proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc, nodecl.}
-  var active: cint = (if selected: 1 else: 0)
-  return nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
-
-proc progressBar*(value: var int; maxValue: int;
-    modifyable: bool = true): bool {.discardable, raises: [], tags: [].} =
-  ## Create a Nuklear progress bar widget
-  ##
-  ## * value      - the current value of the progress bar
-  ## * maxValue   - the maximum value of the progress bar
-  ## * modifyable - if true, the user can modify the value of the progress bar
-  ##
-  ## Returns true if the value parameter was changed, otherwise false
-  proc nk_progress(ctx; cur: var nk_size; max: nk_size;
-      modifyable: nk_bool): nk_bool {.importc, nodecl.}
-  return nk_progress(ctx = ctx, cur = value, max = maxValue,
-      modifyable = modifyable.nk_bool) == nkTrue
-
 # ------
 # Images
 # ------
@@ -1488,3 +1432,21 @@ proc image*(image: PImage) {.raises: [], tags: [].} =
   proc nk_new_image(ctx; img: nk_image) {.importc: "nk_image", nodecl.}
   proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl.}
   nk_new_image(ctx = ctx, img = nk_image_ptr(iPtr = image))
+
+# ------
+# Tooltips
+# ------
+proc showTooltips*() {.raises: [], tags: [], contractual.} =
+  ## Check if the mouse is in any of tooltips related widgets bounds. If yes,
+  ## update the timer and if delay reached 0, show the selected tooltip. The best
+  ## place to call it is at the end of the Nuklear window declaration.
+  ## Temporary here due to problems with importing nk_rect.
+  var inBounds: bool = false
+  for tp in tooltips:
+    if isMouseHovering(rect = tp.bounds):
+      inBounds = true
+      delay -= frameDelay
+      if delay <= 0:
+        tooltip(text = tp.text)
+  if not inBounds:
+    delay = tooltipDelay
