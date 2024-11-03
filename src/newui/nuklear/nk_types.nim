@@ -31,33 +31,49 @@ import nimalyzer
 # ---------
 const
   nkWindowBorder*: cint = 1 shl 0
+    ## A window has border
   nkWindowMoveable*: cint = 1 shl 1
+    ## A window is moveable
   nkWindowScalable*: cint = 1 shl 2
+    ## A window can be resized
   nkWindowCloseable*: cint = 1 shl 3
+    ## A window can be closed
   nkWindowMinimizable*: cint = 1 shl 4
+    ## A window can be minimized
   nkWindowNoScrollbar*: cint = 1 shl 5
+    ## A window has a scrollbar
   nkWindowScaleLeft*: cint = 1 shl 9
+    ## The resize grip for a window is at bottom left corner
   nkWindowTitle*: cint = 1 shl 6
+    ## A window has title bar
 
 # ------------
 # Simple types
 # ------------
 type
   nk_flags* = cint
+    ## Internal Nuklear type
   nk_size* = clong
+    ## Internal Nuklear type
   nk_byte* = uint8
+    ## Internal Nuklear type
   nk_rune* = cuint
+    ## Internal Nuklear type
   nk_ushort* = cushort
+    ## Internal Nuklear type
 
 # ------------
 # Enumerations
 # ------------
 type
   nk_style_header_align* = enum
+    ## Internal Nuklear type
     NK_HEADER_LEFT, NK_HEADER_RIGHT
   nk_layout_format* = enum
+    ## Internal Nuklear type
     NK_DYNAMIC, NK_STATIC
   nk_text_align* = enum
+    ## Internal Nuklear type
     NK_TEXT_ALIGN_LEFT = 0x01,
     NK_TEXT_ALIGN_CENTERED = 0x02,
     NK_TEXT_ALIGN_RIGHT = 0x04,
@@ -65,35 +81,45 @@ type
     NK_TEXT_ALIGN_MIDDLE = 0x10,
     NK_TEXT_ALIGN_BOTTOM = 0x20
   nk_text_alignment* = enum
+    ## Internal Nuklear type
     NK_TEXT_LEFT = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_LEFT.int,
     NK_TEXT_CENTERED = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_CENTERED.int,
     NK_TEXT_RIGHT = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_RIGHT.int
   TreeType* = enum
+    ## The types of tree widget
     node, tab
   ChartType* = enum
     ## The types of charts
     lines, column, chartMax
   nk_bool* = enum
+    ## Internal Nuklear type
     nkFalse, nkTrue
   nk_modify* = enum
+    ## Internal Nuklear type
     NK_FIXED, NK_MODIFIABLE
   CollapseStates* = enum
     ## The states of a tree's content
     minimized, maximized
   SymbolType* = enum
+    ## The types of symbolic icons
     none, x, underscore, circleSolid, circleOutline, rectSolid, rectOutline,
       triangleUp, triangleDown, triangleLeft, triangleRight, plus, minus, max
   nk_style_item_type* = enum
+    ## Internal Nuklear type
     NK_STYLE_ITEM_COLOR, NK_STYLE_ITEM_IMAGE
   colorFormat* = enum
+    ## Colors formats
     rgb, rgba
   ChartEvent* = enum
+    ## Events of charts
     none,
     hovering = 0x01,
     clicked = 0x02
   Buttons* = enum
+    ## Types of buttoons
     left, middle, right, double, max
   nk_style_colors* = enum
+    ## Internal Nuklear type
     NK_COLOR_TEXT, NK_COLOR_WINDOW, NK_COLOR_HEADER, NK_COLOR_BORDER,
     NK_COLOR_BUTTON, NK_COLOR_BUTTON_HOVER, NK_COLOR_BUTTON_ACTIVE,
     NK_COLOR_TOGGLE, NK_COLOR_TOGGLE_HOVER, NK_COLOR_TOGGLE_CURSOR,
@@ -106,6 +132,7 @@ type
     NK_COLOR_SCROLLBAR_CURSOR_HOVER, NK_COLOR_SCROLLBAR_CURSOR_ACTIVE,
     NK_COLOR_TAB_HEADER, NK_COLOR_COUNT
   nk_anti_aliasing* = enum
+    ## Internal Nuklear type
     NK_ANTI_ALIASING_OFF, NK_ANTI_ALIASING_ON
 
 # -------
@@ -113,53 +140,75 @@ type
 # -------
 type
   nk_color* {.importc: "struct nk_color", nodecl.} = object
+    ## Internal Nuklear type
     r*, g*, b*, a*: nk_byte
   nk_colorf* {.importc: "struct nk_colorf", nodecl.} = object
+    ## Internal Nuklear type
     r*, g*, b*, a*: cfloat
   nk_vec2* {.importc: "struct nk_vec2", nodecl.} = object
+    ## Internal Nuklear type
     x*, y*: cfloat
   nk_style_item_data* {.importc, nodecl.} = object
+    ## Internal Nuklear type
   nk_style_item* {.importc: "struct nk_style_item", nodecl.} = object
+    ## Internal Nuklear type
   nk_style_window_header* {.importc, nodecl.} = object
+    ## Internal Nuklear type
     align*: nk_style_header_align
   nk_style_window* {.importc, nodecl.} = object
+    ## Internal Nuklear type
     header*: nk_style_window_header
     spacing*: nk_vec2
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
+    ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
     border_color*, text_background*, text_normal*, text_hover*,
       text_active*: nk_color
     rounding*: cfloat
     padding*: nk_vec2
   nk_handle* {.bycopy, union.} = object
+    ## Internal Nuklear type
     `ptr`*: pointer
     id*: cint
   nk_text_width_f* = proc (arg1: nk_handle; h: cfloat; arg3: cstring;
       len: cint): cfloat {.cdecl.}
+    ## Internal Nuklear type
   nk_user_font* {.importc: "struct nk_user_font", nodecl.} = object
+    ## Internal Nuklear type
     userdata*: nk_handle
     height*: cfloat
     width*: nk_text_width_f
   nk_style* {.importc, nodecl.} = object
+    ## Internal Nuklear type
     window*: nk_style_window
     button*: nk_style_button
     font*: ptr nk_user_font
   nk_mouse* {.importc, nodecl.} = object
+    ## Internal Nuklear type
     delta*: nk_vec2
   nk_input* {.importc: "struct nk_input", nodecl.} = object
+    ## Internal Nuklear type
     mouse*: nk_mouse
   nk_buffer* {.importc, nodecl.} = object
+    ## Internal Nuklear type
   nk_context* {.importc: "struct nk_context", nodecl.} = object
+    ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
   nk_rect* {.importc: "struct nk_rect", nodecl.} = object
+    ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
   nk_text_edit* = object
+    ## Internal Nuklear type
   nk_font* {.importc: "struct nk_font", nodecl.} = object
+    ## Internal Nuklear type
     handle*: nk_user_font
   nk_font_atlas* {.importc: "struct nk_font_atlas", nodecl.} = object
+    ## Internal Nuklear type
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
+    ## Internal Nuklear type
   nk_image* {.importc: "struct nk_image", nodecl.} = object
+    ## Internal Nuklear type
     handle: nk_handle
     w, h: nk_ushort
     region: array[4, nk_ushort]
