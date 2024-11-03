@@ -41,12 +41,18 @@ proc showNews*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  setLayoutRowDynamic(height = (windowHeight - 40).float, cols = 1)
+  resetTooltips()
+  setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
   label(str = "here")
   setLayoutRowDynamic(height = 40, cols = 2)
-  labelButton(title = "Test"):
+  addTooltip(bounds = getWidgetBounds(), text = "Show all changes to the game since previous big stable version")
+  labelButton(title = "Show all changes"):
     echo "button pressed"
-  state = news
+  addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+  labelButton(title = "Back to menu"):
+    state = mainMenu
+    return
+  showTooltips()
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Show the game's main menu and set the game's state
@@ -100,4 +106,3 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
         state = quitGame
         return
   showTooltips()
-  state = mainMenu
