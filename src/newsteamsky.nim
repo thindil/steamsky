@@ -100,6 +100,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   var state: GameState = mainMenu
+  setTooltips(tDelay = 1_000, fDelay = dtime)
   while true:
     let started: float = cpuTime()
     # Input

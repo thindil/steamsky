@@ -54,55 +54,50 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
+  resetTooltips()
   layoutSpaceStatic(height = 90, widgetsCount = 1):
     row(x = 50, y = 0, w = 500, h = 90):
       image(image = logo)
   setLayoutRowDynamic(height = 40, cols = 1)
   label(str = gameVersion & " development", alignment = centered)
-  var bounds: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
   layoutSpaceStatic(height = 240, widgetsCount = 6):
     const
       x: float = 225
       w: float = 150
       h: float = 40
     row(x = x, y = 0, w = w, h = h):
-      bounds = getWidgetBounds()
+      addTooltip(bounds = getWidgetBounds(), text = "Set and start a new game")
       labelButton(title = "New game"):
         echo "button pressed"
-      showTooltip(text = "Set and start a new game")
     var y: float = h;
     if showLoadButton:
       row(x = x, y = y, w = w, h = h):
         y += h
-        bounds = getWidgetBounds()
+        addTooltip(bounds = getWidgetBounds(), text = "Load one of the previously saved games")
         labelButton(title = "Load game"):
           echo "button pressed"
-        showTooltip(text = "Load one of the previously saved games")
     if showHoFButton:
       row(x = x, y = y, w = w, h = h):
         y += h
-        bounds = getWidgetBounds()
+        addTooltip(bounds = getWidgetBounds(), text = "Show your previous the bests scores in the game")
         labelButton(title = "Hall of Fame"):
           echo "button pressed"
-        showTooltip(text = "Show your previous the bests scores in the game")
     row(x = x, y = y, w = w, h = h):
       y += h
-      bounds = getWidgetBounds()
+      addTooltip(bounds = getWidgetBounds(), text = "The list of changes to the game")
       labelButton(title = "News"):
         state = news
         return
-      showTooltip(text = "The list of changes to the game")
     row(x = x, y = y, w = w, h = h):
       y += h
-      bounds = getWidgetBounds()
+      addTooltip(bounds = getWidgetBounds(), text = "General information about the game")
       labelButton(title = "About"):
         echo "button pressed"
-      showTooltip(text = "General information about the game")
     row(x = x, y = y, w = w, h = h):
       y += h
-      bounds = getWidgetBounds()
+      addTooltip(bounds = getWidgetBounds(), text = "Quit from the game")
       labelButton(title = "Quit"):
         state = quitGame
         return
-      showTooltip(text = "Quit from the game")
+  showTooltips()
   state = mainMenu
