@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
   game's command line parameters, which made incompatible with the previous
   versions of the game. But most people should'nt notice it.
 - Updated the look of the trade's screen, the game's main menu, the
-  shipyard's screen and the buying recipes' screen
+  shipyard's screen, the buying recipes' screen and the available missions
+  screen
 - Updated README.md
 
 ### Removed
