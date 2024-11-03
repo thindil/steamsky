@@ -44,14 +44,16 @@ proc showNews*(state: var GameState) {.raises: [], tags: [], contractual.} =
   resetTooltips()
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
   label(str = "here")
-  setLayoutRowDynamic(height = 40, cols = 2)
-  addTooltip(bounds = getWidgetBounds(), text = "Show all changes to the game since previous big stable version")
-  labelButton(title = "Show all changes"):
-    echo "button pressed"
-  addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
-  labelButton(title = "Back to menu"):
-    state = mainMenu
-    return
+  layoutSpaceStatic(height = 40, widgetsCount = 2):
+    row(x = (windowWidth - 350).float, y = 0, w = 175, h = 40):
+      addTooltip(bounds = getWidgetBounds(), text = "Show all changes to the game since previous big stable version")
+      labelButton(title = "Show all changes"):
+        echo "button pressed"
+    row(x = (windowWidth - 175).float, y = 0, w = 175, h = 40):
+      addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+        return
   showTooltips()
 
 proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
