@@ -19,16 +19,13 @@
 
 import std/macros
 import contracts
-import nk_context
+import nk_context, nk_types
 
 # ---------------------
 # Procedures parameters
 # ---------------------
 using ctx: PContext
 
-# --------
-# Tooltips
-# --------
 proc nk_tooltipf(ctx; fmt: cstring) {.importc, nodecl, varargs.}
 
 macro fmtTooltip*(args: varargs[untyped]): untyped =
@@ -45,16 +42,40 @@ proc tooltip*(text: string) {.raises: [], tags: [].} =
   proc nk_tooltip(ctx; text: cstring) {.importc, nodecl.}
   nk_tooltip(ctx, text.cstring)
 
+type
+  TooltipData = object
+    bounds*: NimRect
+    text*: string
+
 var
-  tooltipDelay: float = 1000.0
+  tooltipDelay*: float = 1000.0
     ## For how long the player hovers the mouse over UI element before a
     ## tooltip will be shown
+  frameDelay*: float = 0.0
+    ## The length of UI frames. Used to count when to show a tooltip
+  tooltips*: seq[TooltipData] = @[]
+    ## The list of tooltips available in the window
+  delay*: float = tooltipDelay
+   ## The current delay before show a tooltip, when reached 0, show a tooltip
 
-proc showTooltip*(text: string) {.raises: [], tags: [],
-    contractual.} =
-  ## Show the selected tooltip if the player hovers they mouse over the
-  ## selected widget
+proc setTooltips*(tDelay, fDelay: float) {.raises: [], tags: [], contractual.} =
+  ## Set the tooltips configuration
   ##
-  ## * text   - the text to show
-#  if isMouseHovering(rect = bounds):
-  tooltip(text = text)
+  ## * tDelay - the delay before show a tooltip to the user
+  ## * fDelay - the length of UI frame.
+  tooltipDelay = tDelay
+  frameDelay = fDelay
+
+proc resetTooltips*() {.raises: [], tags: [], contractual.} =
+  ## Reset the list of tooltips available in the window. Should be called
+  ## at the begining of a Nuklear window declaration.
+  tooltips = @[]
+
+proc addTooltip*(bounds: NimRect; text: string) {.raises: [], tags: [], contractual.} =
+  ## Add a tooltip to the list of tooltips. The procedure should be called
+  ## before the widget declaration, because it also needs bounds in which the
+  ## mouse will be check.
+  ##
+  ## * bounds - the area in which the widget with the tooltip is
+  ## * text   - the text which will be show as the tooltip
+  tooltips.add(y = TooltipData(bounds: bounds, text: text))
