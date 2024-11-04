@@ -36,27 +36,44 @@ proc setMainMenu*() {.raises: [NuklearException], tags: [
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
-proc showNews*(state: var GameState) {.raises: [], tags: [], contractual.} =
+proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
+    ReadIOEffect], contractual.} =
   ## Show the game's latest changes
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
   if gameSettings.showTooltips:
     resetTooltips()
-  setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
-  label(str = "here")
+  setLayoutRowDynamic(height = 30, cols = 1)
+  if fileExists(filename = docDirectory & "CHANGELOG.md"):
+    try:
+      var index = 0
+      for line in lines(docDirectory & "CHANGELOG.md"):
+        index.inc
+        if index < 6:
+          continue
+        if state == news and line.len > 1 and line[0 .. 2] == "## ":
+          break
+        wrapLabel(str = line)
+    except:
+      discard
+  else:
+    wrapLabel(str ="Can't find file to load. Did 'CHANGELOG.md' file is in '" &
+        docDirectory & "' directory?")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     if state == news:
       row(x = (windowWidth - 310).float, y = 0, w = 155, h = 40):
         if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Show all changes to the game since previous big stable version")
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Show all changes to the game since previous big stable version")
         labelButton(title = "Show all changes"):
           state = allNews
           return
     else:
       row(x = (windowWidth - 405).float, y = 0, w = 250, h = 40):
         if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Show only changes to the game since previous relese")
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Show only changes to the game since previous relese")
         labelButton(title = "Show only newest changes"):
           state = news
           return
@@ -89,7 +106,8 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       h: float = 40
     row(x = x, y = 0, w = w, h = h):
       if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Set and start a new game")
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Set and start a new game")
       labelButton(title = "New game"):
         echo "button pressed"
     var y: float = h;
@@ -97,27 +115,31 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       row(x = x, y = y, w = w, h = h):
         y += h
         if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Load one of the previously saved games")
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Load one of the previously saved games")
         labelButton(title = "Load game"):
           echo "button pressed"
     if showHoFButton:
       row(x = x, y = y, w = w, h = h):
         y += h
         if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Show your previous the bests scores in the game")
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Show your previous the bests scores in the game")
         labelButton(title = "Hall of Fame"):
           echo "button pressed"
     row(x = x, y = y, w = w, h = h):
       y += h
       if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "The list of changes to the game")
+        addTooltip(bounds = getWidgetBounds(),
+            text = "The list of changes to the game")
       labelButton(title = "News"):
         state = news
         return
     row(x = x, y = y, w = w, h = h):
       y += h
       if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "General information about the game")
+        addTooltip(bounds = getWidgetBounds(),
+            text = "General information about the game")
       labelButton(title = "About"):
         echo "button pressed"
     row(x = x, y = y, w = w, h = h):
