@@ -114,7 +114,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       of GameState.mainMenu:
         # Show the main game menu
         showMainMenu(state = state)
-      of news:
+      of news, allNews:
         # Show the game's latests changes
         showNews(state = state)
       else:
