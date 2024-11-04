@@ -209,9 +209,9 @@ type
     ## Internal Nuklear type
   nk_image* {.importc: "struct nk_image", nodecl.} = object
     ## Internal Nuklear type
-    handle: nk_handle
-    w, h: nk_ushort
-    region: array[4, nk_ushort]
+    handle*: nk_handle
+    w*, h*: nk_ushort
+    region*: array[4, nk_ushort]
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
