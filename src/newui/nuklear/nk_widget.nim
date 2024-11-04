@@ -23,6 +23,7 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import contracts
 import nk_context, nk_types
 
 # ---------------------
@@ -31,7 +32,7 @@ import nk_context, nk_types
 using ctx: PContext
 
 proc colorPicker*(color: NimColorF;
-    format: colorFormat): NimColorF {.raises: [], tags: [].} =
+    format: colorFormat): NimColorF {.raises: [], tags: [], contractual.} =
   ## Create the color picker widget
   ##
   ## * color  - the starting color for the widget
@@ -39,13 +40,13 @@ proc colorPicker*(color: NimColorF;
   ##
   ## Returns Nim color selected by the user in the widget
   proc nk_color_picker(ctx; color: nk_colorf;
-      fmt: colorFormat): nk_colorf {.importc, nodecl.}
+      fmt: colorFormat): nk_colorf {.importc, nodecl, raises: [], tags: [], contractual.}
   let newColor = nk_color_picker(ctx, nk_colorf(r: color.r, g: color.g,
       b: color.b, a: color.a), format)
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
 proc checkBox*(label: string; checked: var bool): bool {.discardable, raises: [
-    ], tags: [].} =
+    ], tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
   ##
   ## * label   - the text to show with the checkbox
@@ -53,25 +54,28 @@ proc checkBox*(label: string; checked: var bool): bool {.discardable, raises: [
   ##
   ## Returns true if the state of the checkbox was changed, otherwise false.
   proc nk_checkbox_label(ctx; text: cstring;
-      active: var cint): nk_bool {.importc, nodecl.}
+      active: var cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   var active: cint = (if checked: 1 else: 0)
   result = nk_checkbox_label(ctx = ctx, text = label.cstring,
       active = active) == nkTrue
   checked = active == 1
 
-proc option*(label: string; selected: bool): bool {.raises: [], tags: [].} =
+proc option*(label: string; selected: bool): bool {.raises: [], tags: [],
+    contractual.} =
   ## Create a Nuklear option (radio) widget
   ##
   ## * label    - the text show with the option
   ## * selected - the state of the option, if true the option is selected
   ##
   ## Returns true if the option is selected, otherwise false
-  proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc, nodecl.}
+  proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
   var active: cint = (if selected: 1 else: 0)
   return nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
 
 proc progressBar*(value: var int; maxValue: int;
-    modifyable: bool = true): bool {.discardable, raises: [], tags: [].} =
+    modifyable: bool = true): bool {.discardable, raises: [], tags: [],
+        contractual.} =
   ## Create a Nuklear progress bar widget
   ##
   ## * value      - the current value of the progress bar
@@ -80,7 +84,7 @@ proc progressBar*(value: var int; maxValue: int;
   ##
   ## Returns true if the value parameter was changed, otherwise false
   proc nk_progress(ctx; cur: var nk_size; max: nk_size;
-      modifyable: nk_bool): nk_bool {.importc, nodecl.}
+      modifyable: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_progress(ctx = ctx, cur = value, max = maxValue,
       modifyable = modifyable.nk_bool) == nkTrue
 
