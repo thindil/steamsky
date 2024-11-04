@@ -1433,9 +1433,9 @@ proc image*(image: PImage) {.raises: [], tags: [].} =
   proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl.}
   nk_new_image(ctx = ctx, img = nk_image_ptr(iPtr = image))
 
-# ------
+# --------
 # Tooltips
-# ------
+# --------
 proc showTooltips*() {.raises: [], tags: [], contractual.} =
   ## Check if the mouse is in any of tooltips related widgets bounds. If yes,
   ## update the timer and if delay reached 0, show the selected tooltip. The best
@@ -1450,3 +1450,21 @@ proc showTooltips*() {.raises: [], tags: [], contractual.} =
         tooltip(text = tp.text)
   if not inBounds:
     delay = tooltipDelay
+
+# -------
+# Widgets
+# -------
+proc colorPicker*(color: NimColorF;
+    format: colorFormat): NimColorF {.raises: [], tags: [], contractual.} =
+  ## Create the color picker widget. Temporary here due to problems with importing nk_colorf.
+  ##
+  ## * color  - the starting color for the widget
+  ## * format - the color format for the widget
+  ##
+  ## Returns Nim color selected by the user in the widget
+  proc nk_color_picker(ctx; color: nk_colorf;
+      fmt: colorFormat): nk_colorf {.importc, nodecl, raises: [], tags: [], contractual.}
+  let newColor = nk_color_picker(ctx, nk_colorf(r: color.r, g: color.g,
+      b: color.b, a: color.a), format)
+  result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
+

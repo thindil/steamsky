@@ -31,20 +31,6 @@ import nk_context, nk_types
 # ---------------------
 using ctx: PContext
 
-proc colorPicker*(color: NimColorF;
-    format: colorFormat): NimColorF {.raises: [], tags: [], contractual.} =
-  ## Create the color picker widget
-  ##
-  ## * color  - the starting color for the widget
-  ## * format - the color format for the widget
-  ##
-  ## Returns Nim color selected by the user in the widget
-  proc nk_color_picker(ctx; color: nk_colorf;
-      fmt: colorFormat): nk_colorf {.importc, nodecl, raises: [], tags: [], contractual.}
-  let newColor = nk_color_picker(ctx, nk_colorf(r: color.r, g: color.g,
-      b: color.b, a: color.a), format)
-  result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
-
 proc checkBox*(label: string; checked: var bool): bool {.discardable, raises: [
     ], tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
