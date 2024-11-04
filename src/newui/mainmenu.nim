@@ -44,7 +44,8 @@ proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
   ## Returns the modified parameter state.
   if gameSettings.showTooltips:
     resetTooltips()
-  setLayoutRowDynamic(height = 30, cols = 1)
+  setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
+  var newsText: string = ""
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
     try:
       var index = 0
@@ -54,9 +55,10 @@ proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
           continue
         if state == news and line.len > 1 and line[0 .. 2] == "## ":
           break
-        wrapLabel(str = line)
+        newsText.add(y = line & '\n')
     except:
       discard
+    editString(text = newsText, maxLen = newsText.len, editType = editor)
   else:
     wrapLabel(str ="Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?")
