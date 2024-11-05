@@ -48,8 +48,8 @@ proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
   var newsText: string = ""
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
     try:
-      var index = 0
-      for line in lines(docDirectory & "CHANGELOG.md"):
+      var index: Natural = 0
+      for line in lines(filename = docDirectory & "CHANGELOG.md"):
         index.inc
         if index < 6:
           continue
@@ -58,9 +58,10 @@ proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
         newsText.add(y = line & '\n')
     except:
       discard
-    editString(text = newsText, maxLen = newsText.len, editType = editor)
+    editString(text = newsText, maxLen = newsText.len, editType = editor,
+        flags = {noCursor})
   else:
-    wrapLabel(str ="Can't find file to load. Did 'CHANGELOG.md' file is in '" &
+    wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     if state == news:
