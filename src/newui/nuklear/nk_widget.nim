@@ -23,6 +23,8 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## Provides some widgets from nuklear library
+
 import contracts
 import nk_context, nk_types
 
@@ -41,6 +43,7 @@ proc checkBox*(label: string; checked: var bool): bool {.discardable, raises: [
   ## Returns true if the state of the checkbox was changed, otherwise false.
   proc nk_checkbox_label(ctx; text: cstring;
       active: var cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
   var active: cint = (if checked: 1 else: 0)
   result = nk_checkbox_label(ctx = ctx, text = label.cstring,
       active = active) == nkTrue
@@ -56,6 +59,7 @@ proc option*(label: string; selected: bool): bool {.raises: [], tags: [],
   ## Returns true if the option is selected, otherwise false
   proc nk_option_label(ctx; name: cstring; active: cint): nk_bool {.importc,
       nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
   var active: cint = (if selected: 1 else: 0)
   return nk_option_label(ctx = ctx, name = label.cstring, active = active) == nkTrue
 
@@ -71,6 +75,7 @@ proc progressBar*(value: var int; maxValue: int;
   ## Returns true if the value parameter was changed, otherwise false
   proc nk_progress(ctx; cur: var nk_size; max: nk_size;
       modifyable: nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Nuklear C binding
   return nk_progress(ctx = ctx, cur = value, max = maxValue,
       modifyable = modifyable.nk_bool) == nkTrue
 
