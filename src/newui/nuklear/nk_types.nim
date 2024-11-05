@@ -240,7 +240,7 @@ type
     x*, y*: cfloat
   ButtonStyle* = object
     ## Used to store information about a button's style.
-    border_color*: NimColor
+    borderColor*: NimColor
   ButtonStyleTypes* = enum
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,

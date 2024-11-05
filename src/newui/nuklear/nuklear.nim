@@ -121,6 +121,8 @@ proc nk_button_label(ctx; title: cstring): nk_bool {.importc, cdecl.}
 proc nk_button_symbol(ctx; symbol: SymbolType): nk_bool {.importc, cdecl.}
 proc nk_button_symbol_label(ctx; symbol: SymbolType;
     label: cstring; align: nk_flags): nk_bool {.importc, cdecl.}
+proc nk_button_label_styled(ctx; style: var nk_style_button;
+    title: cstring): nk_bool {.importc, cdecl.}
 
 # -----
 # Style
@@ -510,6 +512,20 @@ template symbolLabelButton*(symbol: SymbolType; label: string;
   ## * align       - the alignment of the button's label
   ## * onPressCode - the Nim code to execute when the button was pressed
   if nk_button_symbol_label(ctx, symbol, label.cstring, align.nk_flags):
+    onPressCode
+
+template labelButtonStyled*(title: string; style: ButtonStyle;
+    onPressCode: untyped) =
+  ## Draw the button with the selected text on it and unique style of the
+  ## button. Execute the selected code on pressing it.
+  ##
+  ## * title       - the text to shown on the button
+  ## * style       - the style used to draw the button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  var buttonStyle: nk_style_button = ctx.style.button
+  buttonStyle.border_color = nk_rgb(style.borderColor.r, style.borderColor.g,
+      style.borderColor.b)
+  if nk_button_label_styled(ctx, buttonStyle, title.cstring):
     onPressCode
 
 # -------
