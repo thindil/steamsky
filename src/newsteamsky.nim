@@ -117,6 +117,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       of news, allNews:
         # Show the game's latests changes
         showNews(state = state)
+      of about:
+        # Show the general information about the game
+        showAbout(state = state)
       else:
         discard
 
