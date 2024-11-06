@@ -21,14 +21,19 @@
 import std/[logging, strutils, times]
 import contracts
 import ../[game, log]
+import coreui
 
-proc showError*(message: string; e: ref Exception = getCurrentException()) {.raises: [],
+var debugInfo: string
+
+proc setError*(message: string; e: ref Exception = getCurrentException()): GameDialog {.raises: [],
     tags: [TimeEffect, WriteIOEffect, RootEffect], contractual.} =
-  ## Show the error dialog with the message containing technical details about the issue
+  ## Set the information about the error which occured in the game
   ##
   ## * message - the message to show in the error dialog
   ## * e       - the exception which happened. Default value is the current exception
-  var debugInfo: string = $now() & '\n' & gameVersion & '\n' & message
+  ##
+  ## This procedure always returns errorDialog
+  debugInfo = $now() & '\n' & gameVersion & '\n' & message
   if e != nil:
     debugInfo.add(y = " Reason: " & getCurrentExceptionMsg())
     when defined(debug):
@@ -42,3 +47,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException()) {.rai
   except:
     debugInfo.add(y = "Can't save error to file. Reason: " &
         getCurrentExceptionMsg())
+  result = errorDialog
+
+proc showError*(dialog: var GameDialog) =
+  discard
