@@ -241,6 +241,8 @@ type
   ButtonStyle* = object
     ## Used to store information about a button's style.
     borderColor*: NimColor
+    rounding*: float
+    padding*: NimVec2
   ButtonStyleTypes* = enum
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,

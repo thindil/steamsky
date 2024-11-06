@@ -521,6 +521,8 @@ proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
   var buttonStyle: nk_style_button = ctx.style.button
   buttonStyle.border_color = nk_rgb(bStyle.borderColor.r.cint,
       bStyle.borderColor.g.cint, bStyle.borderColor.b.cint)
+  buttonStyle.rounding = bStyle.rounding.cfloat
+  buttonStyle.padding = new_nk_vec2(bStyle.padding.x, bStyle.padding.y)
   proc nk_button_label_styled(ctx; style: var nk_style_button;
       title: cstring): nk_bool {.importc, nodecl.}
   return nk_button_label_styled(ctx, buttonStyle, bTitle)
