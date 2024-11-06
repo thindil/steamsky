@@ -21,7 +21,7 @@
 import std/[os, parseopt, strutils, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, log
-import newui/[coreui, mainmenu]
+import newui/[coreui, errordialog, mainmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -92,14 +92,15 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       DirSep & "Amarante-Regular.ttf",
       fontSize = gameSettings.interfaceFontSize + 10, iconPath = dataDirectory &
       "ui" & DirSep & "images" & DirSep & "icon.png")
-  try:
-    setMainMenu()
-  except NuklearException:
-    echo getCurrentExceptionMsg()
+  var
+    state: GameState = mainMenu
+    dialog: GameDialog = none
+  setMainMenu(dialog = dialog)
+  if dialog != none:
+    echo "Can't set the main menu. More details in error.log"
     return
 
   # The main game loop
-  var state: GameState = mainMenu
   setTooltips(tDelay = 1_000, fDelay = dtime)
   while true:
     let started: float = cpuTime()
@@ -107,7 +108,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     if nuklearInput():
       break
 
-    # GUI
+    # The main window
     window(name = "Main", x = 0, y = 0, w = windowWidth.float,
         h = windowHeight.float, flags = {windowNoScrollbar}):
       case state
@@ -116,16 +117,25 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         showMainMenu(state = state)
       of news, allNews:
         # Show the game's latests changes
-        showNews(state = state)
+        showNews(state = state, dialog = dialog)
       of about:
         # Show the general information about the game
         showAbout(state = state)
       else:
         discard
 
+    # Quit from the game
     if state == quitGame:
-      # Quit from the game
       break
+
+    # Dialogs if needed
+    case dialog
+    of errorDialog:
+      # Show the error dialog
+      showError(dialog = dialog)
+    of none:
+      # No dialog to show
+      discard
 
     # Draw
     nuklearDraw()

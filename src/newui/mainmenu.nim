@@ -21,18 +21,23 @@
 import std/[os, sequtils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
-import coreui
+import coreui, errordialog
 
 var
   logo: PImage = nil
   showLoadButton, showHoFButton: bool = false
 
-proc setMainMenu*() {.raises: [NuklearException], tags: [
-    ReadDirEffect], contractual.} =
+proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
+    ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Set the main menu, load logo if needed and set the menu's buttons
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
   if logo == nil:
-    logo = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
-        "images" & DirSep & "logo.svg", width = 0, height = 110)
+    try:
+      logo = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
+          "images" & DirSep & "logo.svg", width = 0, height = 110)
+    except:
+      dialog = setError(message = "Can't set the game's logo.")
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
@@ -103,29 +108,31 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   if gameSettings.showTooltips:
     showTooltips()
 
-proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
-    ReadIOEffect], contractual.} =
+proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [ReadDirEffect,
+    ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the game's latest changes
-  ## * state - the current game's state
+  ## * state  - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter state.
   if gameSettings.showTooltips:
     resetTooltips()
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
-    group(title = "NewsGroup", flags = {}):
-      try:
-        setLayoutRowDynamic(height = 25, cols = 1)
-        var index: Natural = 0
-        for line in lines(filename = docDirectory & "CHANGELOG.md"):
-          index.inc
-          if index < 6:
-            continue
-          if state == news and line.len > 1 and line[0 .. 2] == "## ":
-            break
-          wrapLabel(str = line)
-      except:
-        discard
+    if dialog == none:
+      group(title = "NewsGroup", flags = {}):
+        try:
+          setLayoutRowDynamic(height = 25, cols = 1)
+          var index: Natural = 0
+          for line in lines(filename = docDirectory & "CHANGELOG.md"):
+            index.inc
+            if index < 6:
+              continue
+            if state == news and line.len > 1 and line[0 .. 2] == "## ":
+              break
+            wrapLabel(str = line)
+        except:
+          dialog = setError(message = "Can't show ChangeLog file.")
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?")
