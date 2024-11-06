@@ -138,6 +138,7 @@ type ThemeRecord* = object
   ## * expandIcon          - Icon used for expanding info sections
   ## * contractIcon        - Icon used for contracting info sections
   ## * moreOptionsIcon     - Icon used for show more options in info sections
+  ## * mapMenuIcon         - Icon used for showing the map's menu
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -250,6 +251,7 @@ type ThemeRecord* = object
   expandIcon*: string
   contractIcon*: string
   moreOptionsIcon*: string
+  mapMenuIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -353,7 +355,8 @@ let
       drinksIcon: defaultThemeIconPath & "drinks.svg",
       expandIcon: defaultThemeIconPath & "expand.svg",
       contractIcon: defaultThemeIconPath & "contract2.svg",
-      moreOptionsIcon: defaultThemeIconPath & "moreoptions.svg")
+      moreOptionsIcon: defaultThemeIconPath & "moreoptions.svg",
+      mapMenuIcon: defaultThemeIconPath & "menu2.svg")
     ## The default game'st theme
 
 proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
@@ -605,6 +608,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.contractIcon = entry.value.unixToNativePath
               of "MoreOptionsIcon":
                 theme.moreOptionsIcon = entry.value.unixToNativePath
+              of "MapMenuIcon":
+                theme.mapMenuIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -649,7 +654,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffe
       "moveicon", "give2icon", "drop2icon", "edit2icon", "show2icon",
       "negotiate2icon", "craft2icon", "study2icon", "deconstruct2icon",
       "giveorder2icon", "foodicon", "fuelicon", "drinksicon", "expandicon",
-      "contracticon", "moreoptionsicon"]
+      "contracticon", "moreoptionsicon", "mapmenuicon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -685,7 +690,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffe
         theme.studyColoredIcon, theme.deconstructColoredIcon,
         theme.giveOrderColoredIcon, theme.foodIcon, theme.fuelIcon,
         theme.drinksIcon, theme.expandIcon, theme.contractIcon,
-        theme.moreOptionsIcon]
+        theme.moreOptionsIcon, theme.mapMenuIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
