@@ -119,10 +119,8 @@ proc nk_tree_element_pop(ctx) {.importc, cdecl.}
 # -------
 proc nk_button_label(ctx; title: cstring): nk_bool {.importc, cdecl.}
 proc nk_button_symbol(ctx; symbol: SymbolType): nk_bool {.importc, cdecl.}
-proc nk_button_symbol_label(ctx; symbol: SymbolType;
-    label: cstring; align: nk_flags): nk_bool {.importc, cdecl.}
-proc nk_button_label_styled(ctx; style: var nk_style_button;
-    title: cstring): nk_bool {.importc, cdecl.}
+proc nk_button_symbol_label(ctx; symbol: SymbolType; label: cstring;
+    align: nk_flags): nk_bool {.importc, cdecl.}
 
 # -----
 # Style
@@ -514,6 +512,19 @@ template symbolLabelButton*(symbol: SymbolType; label: string;
   if nk_button_symbol_label(ctx, symbol, label.cstring, align.nk_flags):
     onPressCode
 
+proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
+    ], tags: [].} =
+  ## Draw a button with the selected style, internal use only, temporary code
+  ##
+  ## * bTitle - the text to shown on the button
+  ## * bStyle - the button's style settings
+  var buttonStyle: nk_style_button = ctx.style.button
+  buttonStyle.border_color = nk_rgb(bStyle.borderColor.r.cint,
+      bStyle.borderColor.g.cint, bStyle.borderColor.b.cint)
+  proc nk_button_label_styled(ctx; style: var nk_style_button;
+      title: cstring): nk_bool {.importc, nodecl.}
+  return nk_button_label_styled(ctx, buttonStyle, bTitle)
+
 template labelButtonStyled*(title: string; style: ButtonStyle;
     onPressCode: untyped) =
   ## Draw the button with the selected text on it and unique style of the
@@ -522,10 +533,7 @@ template labelButtonStyled*(title: string; style: ButtonStyle;
   ## * title       - the text to shown on the button
   ## * style       - the style used to draw the button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  var buttonStyle: nk_style_button = ctx.style.button
-  buttonStyle.border_color = nk_rgb(style.borderColor.r, style.borderColor.g,
-      style.borderColor.b)
-  if nk_button_label_styled(ctx, buttonStyle, title.cstring):
+  if createStyledButton(bTitle = title.cstring, bStyle = style):
     onPressCode
 
 # -------
