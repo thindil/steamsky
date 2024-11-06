@@ -16,14 +16,15 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, os, osproc, strutils, tables, times]
-import contracts
+import contracts, nimalyzer
 import ../[basestypes, config, events, game, game2, gamesaveload, goals,
     halloffame, ships2, shipscrew, tk, utils]
 import coreui, dialogs, errordialog, mapsui, showmainmenu, table, utilsui2
 
 proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-        ReadIOEffect, ExecIOEffect, RootEffect], cdecl, contractual, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [ReadIOEffect,
+    ExecIOEffect, RootEffect], cdecl, contractual, contractual,
+    ruleOff: "params".} =
   ## Open the selected link in a proper program
   ##
   ## * clientData - the additional data for the Tcl command
@@ -53,7 +54,8 @@ proc openLinkCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect], cdecl,
+        contractual.} =
   ## Show the selected file content
   ##
   ## * clientData - the additional data for the Tcl command
@@ -89,7 +91,8 @@ var allNews: bool = false
 
 proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    ReadIOEffect, ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    ReadIOEffect, ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], cdecl,
+        contractual.} =
   ## Show the list of changes in the game, all or just recent, since the last
   ## release
   ##
@@ -134,7 +137,8 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Show the hall of fame screen
   ##
   ## * clientData - the additional data for the Tcl command
@@ -156,7 +160,8 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc deleteGameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Delete a saved game file
   ##
   ## * clientData - the additional data for the Tcl command
@@ -256,7 +261,8 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Set career description
   ##
   ## * clientData - the additional data for the Tcl command
@@ -291,7 +297,8 @@ proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Set starting base description
   ##
   ## * clientData - the additional data for the Tcl command
@@ -320,7 +327,8 @@ proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Generate random player or ship name
   ##
   ## * clientData - the additional data for the Tcl command
@@ -385,7 +393,8 @@ proc startGame*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
 
 proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl, contractual.} =
+    ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl,
+        contractual.} =
   ## Set all parameters and start a new game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -496,7 +505,8 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Show available options for the selected saved game
   ##
   ## * clientData - the additional data for the Tcl command
@@ -512,7 +522,8 @@ proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   let loadMenu = createDialog(name = ".loadfilemenu", title = "Actions",
       parentName = ".")
 
-  proc addButton(name, label, command: string) {.raises: [], tags: [], contractual.} =
+  proc addButton(name, label, command: string) {.raises: [], tags: [],
+      contractual.} =
     let button = loadMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & loadMenu & " .;" & command & "}")
@@ -556,7 +567,8 @@ proc showMainMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc loadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect, ReadIOEffect, RootEffect], cdecl, contractual.} =
+    WriteIOEffect, TimeEffect, RootEffect, ReadIOEffect, RootEffect], cdecl,
+        contractual.} =
   ## Load the selected save file and start the game
   ##
   ## * clientData - the additional data for the Tcl command
