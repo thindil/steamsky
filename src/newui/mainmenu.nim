@@ -113,7 +113,7 @@ proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
     resetTooltips()
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
-    group("NewsGroup", {}):
+    group(title = "NewsGroup", flags = {}):
       try:
         setLayoutRowDynamic(height = 25, cols = 1)
         var index: Natural = 0
@@ -155,7 +155,7 @@ proc showNews*(state: var GameState) {.raises: [], tags: [ReadDirEffect,
   if gameSettings.showTooltips:
     showTooltips()
 
-proc showAbout*(state: var GameState) =
+proc showAbout*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Show the general information about the game
   ## * state - the current game's state
   ##
@@ -163,3 +163,8 @@ proc showAbout*(state: var GameState) =
   setLayoutRowDynamic(height = 30, cols = 1)
   label(str = "Roguelike in the sky with a steampunk theme",
       alignment = centered)
+  saveButtonStyle()
+  setButtonStyle(borderColor, 45, 45, 45)
+  labelButton(title = "Website"):
+    echo "button pressed"
+  restoreButtonStyle()
