@@ -19,14 +19,15 @@
 ## in the game.
 
 import std/[logging, strutils, times]
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 import ../[game, log]
 import coreui
 
-var debugInfo: string
+var debugInfo: string = ""
 
-proc setError*(message: string; e: ref Exception = getCurrentException()): GameDialog {.raises: [],
-    tags: [TimeEffect, WriteIOEffect, RootEffect], contractual.} =
+proc setError*(message: string; e: ref Exception = getCurrentException(
+    )): GameDialog {.raises: [], tags: [TimeEffect, WriteIOEffect, RootEffect],
+        contractual.} =
   ## Set the information about the error which occured in the game
   ##
   ## * message - the message to show in the error dialog
@@ -49,5 +50,16 @@ proc setError*(message: string; e: ref Exception = getCurrentException()): GameD
         getCurrentExceptionMsg())
   result = errorDialog
 
-proc showError*(dialog: var GameDialog) =
-  discard
+proc showError*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Show the error dialog with information about the current in-game error
+  ##
+  ## * dialog - the current in-game dialog to show
+  ##
+  ## Returns parameter dialog
+  window(name = "Error", x = (windowWidth / 6), y = 20, w = (
+      windowWidth.float / 1.5), h = (windowHeight.float / 1.1), flags = {windowBorder,
+      windowMoveable, windowTitle, windowNoScrollbar}):
+    setLayoutRowDynamic(height = 25, cols = 1)
+    for line in debugInfo.split(sep = '\n'):
+      wrapLabel(str = line)
+  dialog = errorDialog
