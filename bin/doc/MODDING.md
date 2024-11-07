@@ -1160,6 +1160,8 @@ story.
 * Key `MoreOptionsIcon`: Path to the SVG image which will be used to show or hide
   section of options in information, for example UI to search for crew members.
   Optional.
+* Key `MapMenuIcon`: Path to the SVG image which will be used on the map's
+  movement menu button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
