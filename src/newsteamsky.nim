@@ -129,13 +129,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       break
 
     # Dialogs if needed
-    case dialog
-    of errorDialog:
+    if dialog == GameDialog.errorDialog:
       # Show the error dialog
       showError(dialog = dialog)
-    of none:
-      # No dialog to show
-      discard
 
     # Draw
     nuklearDraw()
