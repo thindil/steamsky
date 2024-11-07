@@ -75,7 +75,7 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
   let fileName = $argv[1]
   if fileExists(filename = docDirectory & fileName):
     try:
-      for line in lines(docDirectory & fileName):
+      for line in lines(filename = docDirectory & fileName):
         tclEval(script = textView & " insert end {" & line & "\n}")
     except:
       showError(message = "Can't read file '" & fileName & "'.")
@@ -121,7 +121,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
     try:
       var index = 0
-      for line in lines(docDirectory & "CHANGELOG.md"):
+      for line in lines(filename = docDirectory & "CHANGELOG.md"):
         index.inc
         if index < 6:
           continue
@@ -624,19 +624,19 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     playerName, shipName, saveTime, fileName: string
   var saves: seq[SaveRecord]
   try:
-    for file in walkFiles(saveDirectory & "*.sav"):
+    for file in walkFiles(pattern = saveDirectory & "*.sav"):
       let
         (_, name, _) = splitFile(path = file)
-        parts = name.split('_')
+        parts = name.split(sep = '_')
       try:
         if parts.len == 3:
-          saves.add(SaveRecord(playerName: parts[0], shipName: parts[1],
-              saveTime: file.getLastModificationTime.format(
+          saves.add(y = SaveRecord(playerName: parts[0], shipName: parts[1],
+              saveTime: file.getLastModificationTime.format(f =
                   "yyyy-MM-dd hh:mm:ss"),
               fileName: file))
         else:
-          saves.add(SaveRecord(playerName: "Unknown", shipName: "Unknown",
-              saveTime: file.getLastModificationTime.format(
+          saves.add(y = SaveRecord(playerName: "Unknown", shipName: "Unknown",
+              saveTime: file.getLastModificationTime.format(f =
                   "yyyy-MM-dd hh:mm:ss"),
               fileName: file))
       except:
@@ -745,20 +745,20 @@ proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   try:
-    addCommand("OpenLink", openLinkCommand)
-    addCommand("ShowFile", showFileCommand)
-    addCommand("ShowNews", showNewsCommand)
-    addCommand("ShowHallOfFame", showHallOfFameCommand)
-    addCommand("DeleteGame", deleteGameCommand)
-    addCommand("SetFaction", setFactionCommand)
-    addCommand("SetCareer", setCareerCommand)
-    addCommand("SetBase", setBaseCommand)
-    addCommand("RandomName", randomNameCommand)
-    addCommand("NewGame", newGameCommand)
-    addCommand("ShowLoadGameMenu", showLoadGameMenuCommand)
-    addCommand("ShowMainMenu", showMainMenuCommand)
-    addCommand("LoadGame", loadGameCommand)
-    addCommand("ShowLoadGame", showLoadGameCommand)
-    addCommand("SortSaves", sortSavesCommand)
+    addCommand(name = "OpenLink", nimProc = openLinkCommand)
+    addCommand(name = "ShowFile", nimProc = showFileCommand)
+    addCommand(name = "ShowNews", nimProc = showNewsCommand)
+    addCommand(name = "ShowHallOfFame", nimProc = showHallOfFameCommand)
+    addCommand(name = "DeleteGame", nimProc = deleteGameCommand)
+    addCommand(name = "SetFaction", nimProc = setFactionCommand)
+    addCommand(name = "SetCareer", nimProc = setCareerCommand)
+    addCommand(name = "SetBase", nimProc = setBaseCommand)
+    addCommand(name = "RandomName", nimProc = randomNameCommand)
+    addCommand(name = "NewGame", nimProc = newGameCommand)
+    addCommand(name = "ShowLoadGameMenu", nimProc = showLoadGameMenuCommand)
+    addCommand(name = "ShowMainMenu", nimProc = showMainMenuCommand)
+    addCommand(name = "LoadGame", nimProc = loadGameCommand)
+    addCommand(name = "ShowLoadGame", nimProc = showLoadGameCommand)
+    addCommand(name = "SortSaves", nimProc = sortSavesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
