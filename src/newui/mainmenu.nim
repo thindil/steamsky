@@ -18,7 +18,7 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import std/[os, sequtils]
+import std/[os, sequtils, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
 import coreui, errordialog
@@ -26,6 +26,7 @@ import coreui, errordialog
 var
   logo: PImage = nil
   showLoadButton, showHoFButton: bool = false
+  changeLog: string = ""
 
 proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -120,22 +121,25 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
   ## any error happened.
   if gameSettings.showTooltips:
     resetTooltips()
+  if changeLog.len == 0:
+    try:
+      var index: Natural = 0
+      for line in lines(filename = docDirectory & "CHANGELOG.md"):
+        index.inc
+        if index < 6:
+          continue
+        if state == news and line.len > 1 and line[0..2] == "## ":
+          break
+        changeLog.add(y = line & "\n")
+    except:
+      dialog = setError(message = "Can't read ChangeLog file.")
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
     if dialog == none:
       group(title = "NewsGroup", flags = {}):
-        try:
-          setLayoutRowDynamic(height = 25, cols = 1)
-          var index: Natural = 0
-          for line in lines(filename = docDirectory & "CHANGELOG.md"):
-            index.inc
-            if index < 6:
-              continue
-            if state == news and line.len > 1 and line[0..2] == "## ":
-              break
-            wrapLabel(str = line)
-        except:
-          dialog = setError(message = "Can't show ChangeLog file.")
+        setLayoutRowDynamic(height = 25, cols = 1)
+        for line in changeLog.split(sep = '\n'):
+          wrapLabel(str = line)
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?")
@@ -147,6 +151,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
               text = "Show all changes to the game since previous big stable version")
         labelButton(title = "Show all changes"):
           state = allNews
+          changeLog = ""
           return
     else:
       row(x = (windowWidth - 405).float, y = 0, w = 250, h = 40):
@@ -155,12 +160,14 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
               text = "Show only changes to the game since previous relese")
         labelButton(title = "Show only newest changes"):
           state = news
+          changeLog = ""
           return
     row(x = (windowWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
+        changeLog = ""
         return
   if gameSettings.showTooltips:
     showTooltips()
