@@ -709,6 +709,14 @@ proc rowTemplateStatic*(width: float) {.raises: [], tags: [].} =
   proc nk_layout_row_template_push_static(ctx; width: cfloat) {.importc, nodecl.}
   nk_layout_row_template_push_static(ctx, width.cfloat)
 
+proc layoutWidgetBounds*(): NimRect =
+  ## Get the rectangle of the current widget in the layout
+  ##
+  ## Returns NimRect with the data for the current widget
+  proc nk_layout_widget_bounds(ctx): nk_rect {.importc, nodecl.}
+  let rect = nk_layout_widget_bounds(ctx = ctx)
+  result = NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
+
 # -----
 # Menus
 # -----
