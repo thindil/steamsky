@@ -32,6 +32,8 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ## Set the main menu, load logo if needed and set the menu's buttons
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns parameter dialog, modified if any error happened.
   if logo == nil:
     try:
       logo = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
@@ -114,7 +116,8 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
   ## * state  - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter state.
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
   if gameSettings.showTooltips:
     resetTooltips()
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
@@ -128,7 +131,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
             index.inc
             if index < 6:
               continue
-            if state == news and line.len > 1 and line[0 .. 2] == "## ":
+            if state == news and line.len > 1 and line[0..2] == "## ":
               break
             wrapLabel(str = line)
         except:
@@ -171,7 +174,8 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [], contractual.} =
   label(str = "Roguelike in the sky with a steampunk theme",
       alignment = centered)
   saveButtonStyle()
-  setButtonStyle(borderColor, 45, 45, 45)
+  setButtonStyle(field = borderColor, r = 45, g = 45, b = 45)
   labelButton(title = "Website"):
     echo "button pressed"
   restoreButtonStyle()
+  state = about
