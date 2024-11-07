@@ -106,7 +106,7 @@ type
       triangleUp, triangleDown, triangleLeft, triangleRight, plus, minus, max
   nk_style_item_type* = enum
     ## Internal Nuklear type
-    NK_STYLE_ITEM_COLOR, NK_STYLE_ITEM_IMAGE
+    NK_STYLE_ITEM_COLOR, NK_STYLE_ITEM_IMAGE, NK_STYLE_ITEM_NINE_SLICE
   colorFormat* = enum
     ## Colors formats
     rgb, rgba
@@ -148,10 +148,18 @@ type
   nk_vec2* {.importc: "struct nk_vec2", nodecl.} = object
     ## Internal Nuklear type
     x*, y*: cfloat
-  nk_style_item_data* {.importc, nodecl.} = object
+  nk_nine_slice* {.importc: "struct nk_nine_slice", nodecl.} = object
     ## Internal Nuklear type
+    image*: nk_image
+    l*, t*, r*, b*: nk_ushort
+  nk_style_item_data* {.bycopy, union.} = object
+    ## Internal Nuklear type
+    color*: nk_color
+    image*: nk_image
+    slice*: nk_nine_slice
   nk_style_item* {.importc: "struct nk_style_item", nodecl.} = object
     ## Internal Nuklear type
+    `type`*: nk_style_item_type
   nk_style_window_header* {.importc, nodecl.} = object
     ## Internal Nuklear type
     align*: nk_style_header_align
