@@ -95,8 +95,9 @@ proc showDialog(dialog: string; parentFrame: string = ".gameframe";
       $relativeX & " -rely " & $relativeY)
   tclEval(script = "raise " & dialog)
 
-proc showError*(message: string; e: ref Exception = getCurrentException()): TclResults {.discardable,
-    raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc showError*(message: string; e: ref Exception = getCurrentException(
+    )): TclResults {.discardable, raises: [], tags: [WriteIOEffect, TimeEffect,
+        RootEffect], contractual.} =
   ## Show the error dialog with the message containing technical details about the issue
   ##
   ## * message - the message to show in the error dialog
@@ -121,8 +122,8 @@ proc showError*(message: string; e: ref Exception = getCurrentException()): TclR
   let
     parentName = (if tclEval2(script = "winfo exists .gameframe") ==
         "1": ".gameframe" else: ".")
-    errorDialog = createDialog(name = ".errordialog", title = message,
-        parentName = parentName)
+    errorDialog = createDialog(name = ".errordialog",
+        title = "Error!Error!Error!", parentName = parentName)
   var errorLabel = errorDialog & ".general"
   tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:}")
   tclEval(script = "grid " & errorLabel & " -padx 5 -sticky w")
@@ -163,5 +164,6 @@ proc showError*(message: string; e: ref Exception = getCurrentException()): TclR
   tclEval(script = "grid " & errorLabel & " -padx {5 0} -pady {0 5} -sticky w")
   tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -pady {0 5} -row 0 -column 1")
   tclEval(script = "grid " & errorFrame & " -pady {0 5}")
-  showDialog(dialog = errorDialog, relativeX = 0.1, relativeY = 0.05)
+  showDialog(dialog = errorDialog, parentFrame = parentName, relativeX = 0.1,
+      relativeY = 0.05)
   return tclOk
