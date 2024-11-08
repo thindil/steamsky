@@ -21,6 +21,9 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - The Rye font as the game's logo was replaced by an image
 
+### Fixed
+- Showing the error dialog in the game's main menu
+
 ## [10.4] - 2024-10-20
 
 ### Added
