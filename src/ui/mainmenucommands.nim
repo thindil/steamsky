@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the Tcl commands for the main menu like
+## opening links, loading the game, starting a new one, etc.
+
 import std/[algorithm, os, osproc, strutils, tables, times]
 import contracts, nimalyzer
 import ../[basestypes, config, events, game, game2, gamesaveload, goals,
@@ -199,6 +202,10 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
   var label = ""
 
   proc updateInfo(newText: string) {.raises: [], tags: [], contractual.} =
+    ## Update the info section with iformation about the selected faction and
+    ## career
+    ##
+    ## * newText -  the new text to show
     let infoText = ".newgamemenu.info.text"
     tclEval(script = infoText & " configure -state normal")
     tclEval(script = infoText & " delete 1.0 end")
@@ -524,6 +531,11 @@ proc showLoadGameMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addButton(name, label, command: string) {.raises: [], tags: [],
       contractual.} =
+    ## Add a button to the selected saved game menu
+    ##
+    ## * name    - the name of the button
+    ## * label   - the text to display on the button
+    ## * command - the Tcl command to execute when the button is pressed
     let button = loadMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & loadMenu & " .;" & command & "}")
@@ -646,6 +658,12 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     showError(message = "Can't read saved games files")
 
   proc sortSaves(x, y: SaveRecord): int {.raises: [], tags: [], contractual.} =
+    ## Check how to sort the selected saves on the list
+    ##
+    ## * x - the first save to sort
+    ## * y - the second save to sort
+    ##
+    ## Returns 1 if the x save should go first, otherwise -1
     case saveSortOrder
     of playerAsc:
       if x.playerName < y.playerName:
@@ -744,6 +762,7 @@ proc sortSavesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
+  ## Adds Tcl commands related to the main menu
   try:
     addCommand(name = "OpenLink", nimProc = openLinkCommand)
     addCommand(name = "ShowFile", nimProc = showFileCommand)
