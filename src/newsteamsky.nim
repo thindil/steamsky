@@ -88,10 +88,14 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # Initialize SDL and create the main window of the game
   nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
-      name = windowName, fontPath = dataDirectory & "ui" & DirSep & "fonts" &
-      DirSep & "Amarante-Regular.ttf",
-      fontSize = gameSettings.interfaceFontSize + 10, iconPath = dataDirectory &
-      "ui" & DirSep & "images" & DirSep & "icon.png")
+      name = windowName, iconPath = dataDirectory & "ui" & DirSep & "images" &
+      DirSep & "icon.png")
+  # Load the game's fonts
+  fonts.add(y = nuklearLoadFont(font = FontData(path: dataDirectory & "ui" &
+      DirSep & "fonts" & DirSep & "Amarante-Regular.ttf",
+      size: gameSettings.interfaceFontSize + 10)))
+  nuklearSetDefaultFont(defaultFont = fonts[0],
+      fontSize = gameSettings.interfaceFontSize + 10)
   var
     state: GameState = mainMenu
     dialog: GameDialog = none

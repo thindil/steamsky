@@ -18,6 +18,8 @@
 ## Provides various types and variables for the game's UI, like the game's
 ## state, the main window width and height, etc
 
+import nuklear/nuklear_sdl_renderer
+
 type GameState* = enum
   ## Used to determine the current game's state.
   mainMenu, quitGame, news, allNews, about
@@ -32,3 +34,4 @@ const
 var
   windowWidth*: Positive = 600 ## The width of the game's main window
   windowHeight*: Positive = 400 ## The height of the game's main window
+  fonts*: seq[ptr nk_font] = @[] ## The list of fonts used by the game

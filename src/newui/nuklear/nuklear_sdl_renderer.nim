@@ -109,12 +109,18 @@ proc nk_sdl_shutdown() {.importc, nodecl.}
 
 # High level bindings
 
+type
+  FontData* = object
+    ## Used to store data about an application's font
+    path*: string
+    size*: Positive = 14
+
 var
   win: WindowPtr        ## The main X window of the program
   renderer: RendererPtr ## The SDL renderer
+  fontScale: cfloat     ## The scale used to resize a font
 
 proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
-    fontPath: string = ""; fontSize: int = 14;
     iconPath: string = ""): PContext {.discardable.} =
   ## Initialize Nuklear library, create the main program's window with the
   ## selected parameters.
@@ -122,9 +128,6 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   ## * windowWidth  - the default main window width
   ## * windowHeight - the default main window height
   ## * name         - the title of the main window
-  ## * fontPath     - the full path to the default UI font. If empty, use the
-  ##                  default system font. Default value is empty.
-  ## * fontSize     - the size of the font used in the UI. Default values is 14.
   ## * iconPath     - the full path to the window's icon. Default value is empty.
   SDL_SetHint("SDL_HINT_VIDEO_HIGHDPI_DISABLED", "0")
   discard SDL_Init(SDL_INIT_VIDEO)
@@ -147,21 +150,8 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   let scaleX: cfloat = renderW.cfloat / windowW.cfloat
   let scaleY: cfloat = renderH.cfloat / windowH.cfloat
   SDL_RenderSetScale(renderer, scaleX, scaleY)
-  let fontScale = scaleY
+  fontScale = scaleY
   setContext(nk_sdl_init(win, renderer))
-  var
-    atlas: ptr nk_font_atlas
-    config = new_nk_font_config(0)
-    font: ptr nk_font
-  nk_sdl_font_stash_begin(atlas.unsafeAddr)
-  if fontPath.len == 0:
-    font = nk_font_atlas_add_default(atlas, fontSize.cfloat * fontScale,
-        config.unsafeAddr)
-  else:
-    font = nk_font_atlas_add_from_file(atlas, fontPath.cstring,
-        fontSize.cfloat * fontScale, config.unsafeAddr)
-  nk_sdl_font_stash_end()
-  nk_style_set_font(getContext(), font.handle.unsafeAddr)
   return getContext()
 
 proc nuklearInput*(): bool =
@@ -212,3 +202,37 @@ proc nuklearLoadSVGImage*(filePath: string; width, height: int): PImage =
     raise newException(NuklearException, $(SDL_GetError()))
   SDL_FreeSurface(surface = surface)
   return image
+
+proc nuklearLoadFont*(font: FontData): ptr nk_font =
+  ## Load a font from file with the selected size
+  ##
+  ## * font - the font to load. Its path and size
+  ##
+  ## Returns the pointer for the font
+  var
+    atlas: ptr nk_font_atlas
+    config = new_nk_font_config(0)
+  nk_sdl_font_stash_begin(atlas.unsafeAddr)
+  result = nk_font_atlas_add_from_file(atlas, font.path.cstring,
+      font.size.cfloat * fontScale, config.unsafeAddr)
+  nk_sdl_font_stash_end()
+
+proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil; fontSize: int = 14) =
+  ## Set the default font for an application
+  ##
+  ## * defaultFont - the pointer to the nk_font which will be used as default
+  ##                 font. If nil, the default Nuklear font will be used.
+  ## * fontSize    - the size of the font used in the UI. Default values is 14.
+  var
+    atlas: ptr nk_font_atlas
+    config = new_nk_font_config(0)
+    font: ptr nk_font
+  nk_sdl_font_stash_begin(atlas.unsafeAddr)
+  if defaultFont == nil:
+    font = nk_font_atlas_add_default(atlas, fontSize.cfloat * fontScale,
+        config.unsafeAddr)
+  else:
+    font = defaultFont
+  nk_sdl_font_stash_end()
+  nk_style_set_font(getContext(), font.handle.unsafeAddr)
+
