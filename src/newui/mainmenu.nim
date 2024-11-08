@@ -136,10 +136,9 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
     if dialog == none:
-      group(title = "NewsGroup", flags = {}):
-        setLayoutRowDynamic(height = 25, cols = 1)
-        for line in changeLog.split(sep = '\n'):
-          wrapLabel(str = line)
+      group(title = "NewsGroup", flags = {windowNoFlags}):
+        setLayoutRowDynamic(height = (30 * changeLog.countLines).float, cols = 1)
+        wrapLabel(str = changeLog)
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?")
@@ -181,8 +180,12 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [], contractual.} =
   label(str = "Roguelike in the sky with a steampunk theme",
       alignment = centered)
   saveButtonStyle()
-  setButtonStyle(field = borderColor, r = 45, g = 45, b = 45)
-  labelButton(title = "Website"):
-    echo "button pressed"
+  setButtonStyle(field = borderColor, a = 0)
+  layoutSpaceStatic(height = 30, widgetsCount = 2):
+    row(x = 255, y = 0, w = 100, h = 30):
+      labelButton(title = "Website"):
+        echo "button pressed"
+    row(x = 270, y = 0, w = 85, h = 30):
+      label(str = "______")
   restoreButtonStyle()
   state = about
