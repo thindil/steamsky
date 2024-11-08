@@ -709,13 +709,25 @@ proc rowTemplateStatic*(width: float) {.raises: [], tags: [].} =
   proc nk_layout_row_template_push_static(ctx; width: cfloat) {.importc, nodecl.}
   nk_layout_row_template_push_static(ctx, width.cfloat)
 
-proc layoutWidgetBounds*(): NimRect =
+proc layoutWidgetBounds*(): NimRect {.raises: [], tags: [].} =
   ## Get the rectangle of the current widget in the layout
   ##
   ## Returns NimRect with the data for the current widget
   proc nk_layout_widget_bounds(ctx): nk_rect {.importc, nodecl.}
   let rect = nk_layout_widget_bounds(ctx = ctx)
   result = NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
+
+proc layoutSetMinRowHeight*(height: float) {.raises: [], tags: [].} =
+  ## Set the currently used minimum row height. Must contains also paddings size.
+  ##
+  ## * height - the new minimum row height for auto generating the row height
+  proc nk_layout_set_min_row_height(ctx; height: cfloat) {.importc, nodecl.}
+  nk_layout_set_min_row_height(ctx = ctx, height = height.cfloat)
+
+proc lyoutResetMinRowHeight*() {.raises: [], tags: [].} =
+  ## Reset the currently used minimum row height.
+  proc nk_layout_reset_min_row_height(ctx) {.importc, nodecl.}
+  nk_layout_reset_min_row_height(ctx = ctx)
 
 # -----
 # Menus
@@ -922,31 +934,32 @@ proc restoreButtonStyle*() {.raises: [], tags: [].} =
   ##
   ctx.style.button = buttonStyle
 
-proc setButtonStyle*(field: ButtonStyleTypes; r, g, b: cint) {.raises: [],
-    tags: [].} =
+proc setButtonStyle*(field: ButtonStyleTypes; r: cint = 255; g: cint = 255;
+    b: cint = 255; a: cint = 255) {.raises: [], tags: [].} =
   ## Set the color for the selcted field of the Nuklear buttons style
   ##
   ## * field - the style's field which value will be changed
-  ## * r     - the red value for the style color in RGB
-  ## * g     - the green value for the style color in RGB
-  ## * b     - the blue value for the style color in RGB
+  ## * r     - the red value for the style color in RGBA
+  ## * g     - the green value for the style color in RGBA
+  ## * b     - the blue value for the style color in RGBA
+  ## * a     - the alpha value for the style color in RGBA
   case field
   of normal:
-    ctx.style.button.normal = nk_style_item_color(nk_rgb(r, g, b))
+    ctx.style.button.normal = nk_style_item_color(nk_rgba(r, g, b, a))
   of hover:
-    ctx.style.button.hover = nk_style_item_color(nk_rgb(r, g, b))
+    ctx.style.button.hover = nk_style_item_color(nk_rgba(r, g, b, a))
   of active:
-    ctx.style.button.active = nk_style_item_color(nk_rgb(r, g, b))
+    ctx.style.button.active = nk_style_item_color(nk_rgba(r, g, b, a))
   of borderColor:
-    ctx.style.button.border_color = nk_rgb(r, g, b)
+    ctx.style.button.border_color = nk_rgba(r, g, b, a)
   of textBackground:
-    ctx.style.button.text_background = nk_rgb(r, g, b)
+    ctx.style.button.text_background = nk_rgba(r, g, b, a)
   of textNormal:
-    ctx.style.button.text_normal = nk_rgb(r, g, b)
+    ctx.style.button.text_normal = nk_rgba(r, g, b, a)
   of textHover:
-    ctx.style.button.text_hover = nk_rgb(r, g, b)
+    ctx.style.button.text_hover = nk_rgba(r, g, b, a)
   of textActive:
-    ctx.style.button.text_active = nk_rgb(r, g, b)
+    ctx.style.button.text_active = nk_rgba(r, g, b, a)
   else:
     discard
 
