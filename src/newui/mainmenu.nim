@@ -121,21 +121,21 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
   ## any error happened.
   if gameSettings.showTooltips:
     resetTooltips()
-  if changeLog.len == 0:
-    try:
-      var index: Natural = 0
-      for line in lines(filename = docDirectory & "CHANGELOG.md"):
-        index.inc
-        if index < 6:
-          continue
-        if state == news and line.len > 1 and line[0..2] == "## ":
-          break
-        changeLog.add(y = line & "\n")
-    except:
-      dialog = setError(message = "Can't read ChangeLog file.")
+  if changeLog.len == 0 and dialog == none:
+    if fileExists(filename = docDirectory & "CHANGELOG.md"):
+      try:
+        var index: Natural = 0
+        for line in lines(filename = docDirectory & "CHANGELOG.md"):
+          index.inc
+          if index < 6:
+            continue
+          if state == news and line.len > 1 and line[0..2] == "## ":
+            break
+          changeLog.add(y = line & "\n")
+      except:
+        dialog = setError(message = "Can't read ChangeLog file.")
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
-  if fileExists(filename = docDirectory & "CHANGELOG.md"):
-    if dialog == none:
+  if changelog.len > 0:
       group(title = "NewsGroup", flags = {windowNoFlags}):
         setLayoutRowDynamic(height = (30 * changeLog.countLines).float, cols = 1)
         wrapLabel(str = changeLog)
