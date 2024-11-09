@@ -23,7 +23,8 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[game, log]
 import coreui
 
-var debugInfo: string = ""
+var
+  debugInfo, message: string = ""
 
 proc setError*(message: string; e: ref Exception = getCurrentException(
     )): GameDialog {.raises: [], tags: [TimeEffect, WriteIOEffect, RootEffect],
@@ -57,6 +58,7 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ## * dialog - the current in-game dialog to show
   ##
   ## Returns parameter dialog
+  ##
   proc openLink(link: string) {.raises: [], tags: [ReadIOEffect, RootEffect],
       contractual.} =
     ## Open the selected URL in a default system browser. Show message if the
@@ -72,15 +74,16 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
           except:
             ""
       if command.len == 0:
-        echo "Can't open the link. Reason: no program to open it."
+        message = "Reason: no program to open it."
       else:
         try:
           discard execCmd(command = command & " " & link)
         except:
-          echo "Can't open the link"
+          message = "Can't open the link"
   window(name = "Error!Error!Error!", x = 40, y = 20, w = (
-      windowWidth.float / 1.1), h = (windowHeight.float / 1.1), flags = {windowBorder,
-      windowMoveable, windowTitle, windowMinimizable, windowCloseable}):
+      windowWidth.float / 1.1), h = (windowHeight.float / 1.1), flags = {
+          windowBorder, windowMoveable, windowTitle, windowMinimizable,
+          windowCloseable}):
     setLayoutRowDynamic(height = 75, cols = 1)
     wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
     setLayoutRowDynamic(height = 25, cols = 1)
@@ -89,4 +92,12 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       openLink(link = url)
     setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
     wrapLabel(str = debugInfo)
+  if message.len > 0:
+    window(name = "Can't open the link", x = (windowWidth / 3), y = (
+        windowHeight / 3), w = 350, h = 120, flags = {windowBorder,
+        windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
+      setLayoutRowDynamic(height = 25, cols = 1)
+      label(str = message)
+      labelButton(title = "Close"):
+        message = ""
   dialog = errorDialog
