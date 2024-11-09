@@ -90,6 +90,14 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     var url: string = "https://www.laeran.pl.eu.org/repositories/steamsky/ticket"
     labelButton(title = url):
       openLink(link = url)
+    setLayoutRowDynamic(height = 25, cols = 1)
+    label(str = "or if you prefer, on one of the game community options:")
+    url = "https://thindil.itch.io/steam-sky"
+    labelButton(title = url):
+      openLink(link = url)
+    label(str = "and attach (if possible) file with saved game or 'error.log'.")
+    labelButton(title = "Open directory with saved games"):
+      openLink(link = saveDirectory)
     setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
     wrapLabel(str = debugInfo)
   if message.len > 0:
