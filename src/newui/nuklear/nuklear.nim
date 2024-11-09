@@ -286,6 +286,26 @@ proc addSpacing*(cols: int) {.raises: [], tags: [].} =
 # ------
 # Popups
 # ------
+proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
+    x, y, w, h: float): bool {.raises: [], tags: [], contractual.} =
+  ## Try to create a new popup window. Internal use only.
+  ##
+  ## * ctx   - the Nuklear context
+  ## * pType - the type of the popup
+  ## * title - the title of the popup
+  ## * flags - the flags for the popup
+  ## * x     - the X position of the top left corner of the popup
+  ## * y     - the Y position of the top left corner of the popup
+  ## * w     - the width of the popup
+  ## * h     - the height of the popup
+  require:
+    ctx != nil
+    title.len > 0
+    ctx.current != nil
+    ctx.current.layout != nil
+  body:
+    return true
+
 proc createPopup(pType: PopupType; title: cstring;
     flags: nk_flags; x, y, w, h: cfloat): bool {.raises: [], tags: [].} =
   ## Create a new Nuklear popup window, internal use only, temporary code

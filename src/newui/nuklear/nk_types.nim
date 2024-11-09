@@ -199,10 +199,16 @@ type
     mouse*: nk_mouse
   nk_buffer* {.importc, nodecl.} = object
     ## Internal Nuklear type
+  nk_panel* {.importc: "struct nk_paned", nodecl.} = object
+    ## Internal Nuklear type
+  nk_window* {.importc: "struct nk_window", nodecl.} = object
+    ## Internal Nuklear type
+    layout*: ptr nk_panel
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
+    current*: ptr nk_window
   nk_rect* {.importc: "struct nk_rect", nodecl.} = object
     ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
