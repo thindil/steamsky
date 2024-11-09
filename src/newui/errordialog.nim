@@ -57,14 +57,15 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ## * dialog - the current in-game dialog to show
   ##
   ## Returns parameter dialog
-  window(name = "Error!Error!Error!", x = 40, y = 20, w = (
-      windowWidth.float / 1.1), h = (windowHeight.float / 1.1), flags = {windowBorder,
-      windowMoveable, windowTitle, windowNoScrollbar, windowMinimizable,
-      windowCloseable}):
-    setLayoutRowDynamic(height = 75, cols = 1)
-    wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
-    setLayoutRowDynamic(height = 25, cols = 1)
-    labelButton(title = "https://www.laeran.pl.eu.org/repositories/steamsky/ticket"):
+  proc openLink(link: string) {.raises: [], tags: [ReadIOEffect, RootEffect],
+      contractual.} =
+    ## Open the selected URL in a default system browser. Show message if the
+    ## link can't be opened
+    ##
+    ## * link - the URL to open
+    require:
+      link.len > 0
+    body:
       let command: string = try:
             findExe(exe = (if hostOs == "windows": "start" elif hostOs ==
               "macosx": "open" else: "xdg-open"))
@@ -74,9 +75,18 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
         echo "Can't open the link. Reason: no program to open it."
       else:
         try:
-          discard execCmd(command = command & " https://www.laeran.pl.eu.org/repositories/steamsky/ticket")
+          discard execCmd(command = command & " " & link)
         except:
           echo "Can't open the link"
+  window(name = "Error!Error!Error!", x = 40, y = 20, w = (
+      windowWidth.float / 1.1), h = (windowHeight.float / 1.1), flags = {windowBorder,
+      windowMoveable, windowTitle, windowMinimizable, windowCloseable}):
+    setLayoutRowDynamic(height = 75, cols = 1)
+    wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
+    setLayoutRowDynamic(height = 25, cols = 1)
+    var url: string = "https://www.laeran.pl.eu.org/repositories/steamsky/ticket"
+    labelButton(title = url):
+      openLink(link = url)
     setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
     wrapLabel(str = debugInfo)
   dialog = errorDialog
