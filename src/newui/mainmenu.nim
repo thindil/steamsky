@@ -135,7 +135,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
-  if changelog.len > 0:
+  if changeLog.len > 0:
       group(title = "NewsGroup", flags = {windowNoFlags}):
         setLayoutRowDynamic(height = (30 * changeLog.countLines).float, cols = 1)
         wrapLabel(str = changeLog)
