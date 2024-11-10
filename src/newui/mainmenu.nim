@@ -111,8 +111,9 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   if gameSettings.showTooltips:
     showTooltips()
 
-proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [ReadDirEffect,
-    ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect],
+        contractual.} =
   ## Show the game's latest changes
   ## * state  - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
@@ -136,9 +137,9 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
         dialog = setError(message = "Can't read ChangeLog file.")
   setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
   if changeLog.len > 0:
-      group(title = "NewsGroup", flags = {windowNoFlags}):
-        setLayoutRowDynamic(height = (30 * changeLog.countLines).float, cols = 1)
-        wrapLabel(str = changeLog)
+    group(title = "NewsGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = (30 * changeLog.countLines).float, cols = 1)
+      wrapLabel(str = changeLog)
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?")
@@ -171,7 +172,8 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
   if gameSettings.showTooltips:
     showTooltips()
 
-proc showAbout*(state: var GameState) {.raises: [], tags: [], contractual.} =
+proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
+    RootEffect], contractual.} =
   ## Show the general information about the game
   ## * state - the current game's state
   ##
@@ -184,7 +186,7 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [], contractual.} =
   layoutSpaceStatic(height = 30, widgetsCount = 2):
     row(x = 255, y = 0, w = 100, h = 30):
       labelButton(title = "Website"):
-        echo "button pressed"
+        openLink(link = "https://thindil.itch.io/steam-sky")
     row(x = 270, y = 0, w = 85, h = 30):
       label(str = "______")
   restoreButtonStyle()
