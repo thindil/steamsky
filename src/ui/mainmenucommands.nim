@@ -72,7 +72,7 @@ proc showFileCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowFile filename
   ## Filename is the name of the file in the documentation directory which
   ## will be show
-  let textView: string = ".showfilemenu.text"
+  const textView: string = ".showfilemenu.text"
   tclEval(script = textView & " configure -state normal")
   tclEval(script = textView & " delete 1.0 end")
   let fileName: string = $argv[1]
@@ -109,7 +109,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowNews boolean
   ## If boolean is true, show all news, otherwise only recent
-  let allNewsButton: string = ".newsmenu.showall"
+  const allNewsButton: string = ".newsmenu.showall"
   if argv[1] == "false":
     allNews = false
     tclEval(script = allNewsButton & " configure -text {Show all changes} -command {ShowNews true}")
@@ -118,7 +118,7 @@ proc showNewsCommand(clientData: cint; interp: PInterp; argc: cint;
     allNews = true
     tclEval(script = allNewsButton & " configure -text {Show only newest changes} -command {ShowNews false}")
     tclEval(script = "tooltip::tooltip " & allNewsButton & " \"Show only changes to the game since previous relese\"")
-  let textView: string = ".newsmenu.text"
+  const textView: string = ".newsmenu.text"
   tclEval(script = textView & " configure -state normal")
   tclEval(script = textView & " delete 1.0 end")
   if fileExists(filename = docDirectory & "CHANGELOG.md"):
@@ -153,7 +153,7 @@ proc showHallOfFameCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowHallOfFame
-  let hofView: string = ".hofmenu.view"
+  const hofView: string = ".hofmenu.view"
   tclEval(script = hofView & " delete [list [" & hofView & " children {}]]")
   for index, entry in hallOfFameArray:
     if entry.points == 0:
@@ -196,7 +196,7 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetFaction
-  let frameName: string = ".newgamemenu.canvas.player"
+  const frameName: string = ".newgamemenu.canvas.player"
   var comboBox: string = frameName & ".faction"
   let factionName: string = tclEval2(script = comboBox & " get")
   var label: string = ""
@@ -206,7 +206,7 @@ proc setFactionCommand(clientData: cint; interp: PInterp; argc: cint;
     ## career
     ##
     ## * newText -  the new text to show
-    let infoText: string = ".newgamemenu.info.text"
+    const infoText: string = ".newgamemenu.info.text"
     tclEval(script = infoText & " configure -state normal")
     tclEval(script = infoText & " delete 1.0 end")
     tclEval(script = infoText & " insert end {Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.\n\n}")
@@ -281,13 +281,12 @@ proc setCareerCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetCareer
-  let frameName: string = ".newgamemenu.canvas.player"
+  const frameName: string = ".newgamemenu.canvas.player"
   var comboBox: string = frameName & ".faction"
   let factionName: string = tclEval2(script = comboBox & " get")
   comboBox = frameName & ".career"
-  let
-    careerName: string = tclEval2(script = comboBox & " get")
-    infoText: string = ".newgamemenu.info.text"
+  let careerName: string = tclEval2(script = comboBox & " get")
+  const infoText: string = ".newgamemenu.info.text"
   tclEval(script = infoText & " configure -state normal")
   tclEval(script = infoText & " delete 1.0 end")
   tclEval(script = infoText & " insert end {Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.\n\n}")
@@ -317,10 +316,9 @@ proc setBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetBase
-  let
-    comboBox: string = ".newgamemenu.canvas.player.base"
-    baseName: string = tclEval2(script = comboBox & " get")
-    infoText: string = ".newgamemenu.info.text"
+  const comboBox: string = ".newgamemenu.canvas.player.base"
+  let baseName: string = tclEval2(script = comboBox & " get")
+  const infoText: string = ".newgamemenu.info.text"
   tclEval(script = infoText & " configure -state normal")
   tclEval(script = infoText & " delete 1.0 end")
   tclEval(script = infoText & " insert end {Select your starting base type from a list. Your starting base is your home base, where you can gain faster experience. Home base can be changed later. Some types of bases are better starting points than others. More info about each base type can be found after selecting it.\n\n}")
@@ -349,9 +347,8 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
   ## RandomName type
   ## Type is type of name which should be generated. Possible options are
   ## player or ship
-  let
-    comboBox: string = ".newgamemenu.canvas.player.faction"
-    factionName: string = tclEval2(script = comboBox & " get")
+  const comboBox: string = ".newgamemenu.canvas.player.faction"
+  let factionName: string = tclEval2(script = comboBox & " get")
   var factionIndex: string = ""
   for index, faction in factionsList:
     if faction.name == factionName:
@@ -373,7 +370,7 @@ proc randomNameCommand(clientData: cint; interp: PInterp; argc: cint;
 proc startGame*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadIOEffect, RootEffect], contractual.} =
   ##  Start the game
-  let mainWindow: string = "."
+  const mainWindow: string = "."
   var x: int = try:
       ((tclEval2(script = "winfo vrootwidth " & mainWindow).parseInt -
         gameSettings.windowWidth) / 2).int
@@ -414,9 +411,8 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## NewGame
   newGameSettings.playerGender = tclGetVar(varName = "playergender")[0]
-  let
-    playerFrameName: string = ".newgamemenu.canvas.player"
-    goalButton: string = playerFrameName & ".goal"
+  const playerFrameName: string = ".newgamemenu.canvas.player"
+  let goalButton: string = playerFrameName & ".goal"
   if tclEval2(script = goalButton & " cget -text") == "Random":
     clearCurrentGoal()
     currentGoal = try:
@@ -449,7 +445,7 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     if baseType.name == tclEval2(script = comboBox & " get"):
       newGameSettings.startingBase = index
       break
-  let difficultyFrameName: string = ".newgamemenu.canvas.difficulty"
+  const difficultyFrameName: string = ".newgamemenu.canvas.difficulty"
   comboBox = difficultyFrameName & ".difficultylevel"
   newGameSettings.difficultyLevel = try:
       tclEval2(script = comboBox &
@@ -670,33 +666,27 @@ proc showLoadGameCommand(clientData: cint; interp: PInterp; argc: cint;
     of playerAsc:
       if x.playerName < y.playerName:
         return 1
-      else:
-        return -1
+      return -1
     of playerDesc:
       if x.playerName > y.playerName:
         return 1
-      else:
-        return -1
+      return -1
     of shipAsc:
       if x.shipName < y.shipName:
         return 1
-      else:
-        return -1
+      return -1
     of shipDesc:
       if x.shipName > y.shipName:
         return 1
-      else:
-        return -1
+      return -1
     of timeAsc:
       if x.saveTime < y.saveTime:
         return 1
-      else:
-        return -1
+      return -1
     of timeDesc:
       if x.saveTime > y.saveTime:
         return 1
-      else:
-        return -1
+      return -1
   saves.sort(cmp = sortSaves)
   for save in saves:
     addButton(table = loadTable, text = save.playerName,
