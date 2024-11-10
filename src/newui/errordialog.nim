@@ -51,6 +51,28 @@ proc setError*(message: string; e: ref Exception = getCurrentException(
         getCurrentExceptionMsg())
   result = errorDialog
 
+proc openLink*(link: string) {.raises: [], tags: [ReadIOEffect, RootEffect],
+    contractual.} =
+  ## Open the selected URL in a default system browser. Show message if the
+  ## link can't be opened
+  ##
+  ## * link - the URL to open
+  require:
+    link.len > 0
+  body:
+    let command: string = try:
+          findExe(exe = (if hostOs == "windows": "start" elif hostOs ==
+            "macosx": "open" else: "xdg-open"))
+        except:
+          ""
+    if command.len == 0:
+      message = "Reason: no program to open it."
+    else:
+      try:
+        discard execCmd(command = command & " " & link)
+      except:
+        message = "Can't open the link"
+
 proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the error dialog with information about the current in-game error
@@ -59,27 +81,6 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ##
   ## Returns parameter dialog
   ##
-  proc openLink(link: string) {.raises: [], tags: [ReadIOEffect, RootEffect],
-      contractual.} =
-    ## Open the selected URL in a default system browser. Show message if the
-    ## link can't be opened
-    ##
-    ## * link - the URL to open
-    require:
-      link.len > 0
-    body:
-      let command: string = try:
-            findExe(exe = (if hostOs == "windows": "start" elif hostOs ==
-              "macosx": "open" else: "xdg-open"))
-          except:
-            ""
-      if command.len == 0:
-        message = "Reason: no program to open it."
-      else:
-        try:
-          discard execCmd(command = command & " " & link)
-        except:
-          message = "Can't open the link"
   dialog = errorDialog
   window(name = "Error!Error!Error!", x = 40, y = 20, w = (
       windowWidth.float / 1.1), h = (windowHeight.float / 1.1), flags = {
@@ -101,6 +102,7 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     treeTab(title = "Technical details", state = minimized, index = 1):
       setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
       wrapLabel(str = debugInfo)
+    setLayoutRowDynamic(height = 25, cols = 1)
     labelButton(title = "Close"):
       dialog = none
   if message.len > 0:
