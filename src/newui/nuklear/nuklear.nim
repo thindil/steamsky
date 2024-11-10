@@ -276,6 +276,13 @@ proc windowIsHidden*(name: string): bool {.raises: [], tags: [].} =
   proc nk_window_is_hidden(ctx; name: cstring): cint {.importc, nodecl.}
   return nk_window_is_hidden(ctx, name.cstring) > 0
 
+proc windowClose*(name: string) {.raises: [], tags: [].} =
+  ## Closes the window
+  ##
+  ## * name - the name of the window to close
+  proc nk_window_close(ctx; name: cstring) {.importc, nodecl.}
+  nk_window_close(ctx, name.cstring)
+
 proc addSpacing*(cols: int) {.raises: [], tags: [].} =
   ## Add spacing in the selected between the row's boundaries in the row
   ##
