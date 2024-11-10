@@ -73,6 +73,22 @@ proc openLink*(link: string) {.raises: [], tags: [ReadIOEffect, RootEffect],
       except:
         message = "Can't open the link"
 
+proc showLinkError*() {.raises: [], tags: [], contractual.} =
+  ## Show an error related to opening a link if any
+  if message.len == 0:
+    return
+  try:
+    popup(pType = staticPopup, title = "Can't open the link", flags = {
+        windowBorder, windowTitle, windowNoScrollbar, windowMoveable}, x = (
+        windowWidth / 5), y = (windowHeight.float / 4.5), w = 350, h = 120):
+      setLayoutRowDynamic(height = 25, cols = 1)
+      label(str = message)
+      labelButton(title = "Close"):
+        message = ""
+        closePopup()
+  except:
+    echo "Can't create the message popup: ", getCurrentExceptionMsg()
+
 proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the error dialog with information about the current in-game error
@@ -105,15 +121,4 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     setLayoutRowDynamic(height = 25, cols = 1)
     labelButton(title = "Close"):
       dialog = none
-    if message.len > 0:
-      try:
-        popup(pType = staticPopup, title = "Can't open the link", flags = {
-            windowBorder, windowTitle, windowNoScrollbar, windowMoveable}, x = (
-            windowWidth / 5), y = (windowHeight.float / 4.5), w = 350, h = 120):
-          setLayoutRowDynamic(height = 25, cols = 1)
-          label(str = message)
-          labelButton(title = "Close"):
-            message = ""
-            closePopup()
-      except:
-        echo "Can't create the message popup: ", getCurrentExceptionMsg()
+    showLinkError()

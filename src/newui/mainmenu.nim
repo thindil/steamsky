@@ -191,3 +191,4 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       label(str = "______")
   restoreButtonStyle()
   state = about
+  showLinkError()
