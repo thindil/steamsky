@@ -80,10 +80,10 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
           discard execCmd(command = command & " " & link)
         except:
           message = "Can't open the link"
+  dialog = errorDialog
   window(name = "Error!Error!Error!", x = 40, y = 20, w = (
       windowWidth.float / 1.1), h = (windowHeight.float / 1.1), flags = {
-          windowBorder, windowMoveable, windowTitle, windowMinimizable,
-          windowCloseable}):
+          windowBorder, windowMoveable, windowTitle, windowMinimizable}):
     setLayoutRowDynamic(height = 75, cols = 1)
     wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
     setLayoutRowDynamic(height = 25, cols = 1)
@@ -98,8 +98,11 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     label(str = "and attach (if possible) file with saved game or 'error.log'.")
     labelButton(title = "Open directory with saved games"):
       openLink(link = saveDirectory)
-    setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
-    wrapLabel(str = debugInfo)
+    treeTab(title = "Technical details", state = minimized, index = 1):
+      setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
+      wrapLabel(str = debugInfo)
+    labelButton(title = "Close"):
+      dialog = none
   if message.len > 0:
     window(name = "Can't open the link", x = (windowWidth / 3), y = (
         windowHeight / 3), w = 350, h = 120, flags = {windowBorder,
@@ -108,4 +111,3 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       label(str = message)
       labelButton(title = "Close"):
         message = ""
-  dialog = errorDialog
