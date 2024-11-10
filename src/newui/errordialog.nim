@@ -105,11 +105,15 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     setLayoutRowDynamic(height = 25, cols = 1)
     labelButton(title = "Close"):
       dialog = none
-  if message.len > 0:
-    window(name = "Can't open the link", x = (windowWidth / 3), y = (
-        windowHeight / 3), w = 350, h = 120, flags = {windowBorder,
-        windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
-      setLayoutRowDynamic(height = 25, cols = 1)
-      label(str = message)
-      labelButton(title = "Close"):
-        message = ""
+    if message.len > 0:
+      try:
+        popup(pType = staticPopup, title = "Can't open the link", flags = {
+            windowBorder, windowTitle, windowNoScrollbar, windowMoveable}, x = (
+            windowWidth / 5), y = (windowHeight.float / 4.5), w = 350, h = 120):
+          setLayoutRowDynamic(height = 25, cols = 1)
+          label(str = message)
+          labelButton(title = "Close"):
+            message = ""
+            closePopup()
+      except:
+        echo "Can't create the message popup: ", getCurrentExceptionMsg()
