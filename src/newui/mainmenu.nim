@@ -185,7 +185,7 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       alignment = centered)
   saveButtonStyle()
   setButtonStyle(field = borderColor, a = 0)
-  layoutSpaceStatic(height = 30, widgetsCount = 4):
+  layoutSpaceStatic(height = 80, widgetsCount = 4):
     row(x = 255, y = 0, w = 100, h = 30):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -203,6 +203,25 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
     row(x = 160, y = 40, w = 315, h = 30):
       label(str = "__________________________")
   restoreButtonStyle()
+  layoutSpaceStatic(height = 40, widgetsCount = 3):
+    row(x = 75, y = 0, w = 150, h = 30):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Guide how to help with creating the game, report bugs, etc.")
+      labelButton(title = "Get involved"):
+        echo "button pressed"
+    row(x = 230, y = 0, w = 150, h = 30):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Guide how to modify the game")
+      labelButton(title = "Modify game"):
+        echo "button pressed"
+    row(x = 385, y = 0, w = 150, h = 30):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Some technical information about the game")
+      labelButton(title = "README"):
+        echo "button pressed"
   if gameSettings.showTooltips:
     showTooltips()
   showLinkError()
