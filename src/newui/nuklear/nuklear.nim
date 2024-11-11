@@ -311,6 +311,11 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     ctx.current != nil
     ctx.current.layout != nil
   body:
+    if ctx == nil or ctx.current == nil or ctx.current.layout == nil:
+      return false
+    let
+      win: ptr nk_window = ctx.current
+      panel: ptr nk_panel = win.layout
     return true
 
 proc createPopup(pType: PopupType; title: cstring;
