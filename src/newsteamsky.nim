@@ -87,7 +87,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   const windowName: string = "Steam Sky"
 
   # Initialize SDL and create the main window of the game
-  nuklearInit(windowWidth = windowWidth, windowHeight = windowHeight,
+  nuklearInit(windowWidth = menuWidth, windowHeight = menuHeight,
       name = windowName, iconPath = dataDirectory & "ui" & DirSep & "images" &
       DirSep & "icon.png")
   # Load the game's fonts
@@ -99,6 +99,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   var
     state: GameState = mainMenu
     dialog: GameDialog = none
+    windowWidth: float = menuWidth.float
+    windowHeight: float = menuHeight.float
   setMainMenu(dialog = dialog)
   if dialog != none:
     echo "Can't set the main menu. More details in error.log"
@@ -113,8 +115,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       break
 
     # The main window
-    window(name = "Main", x = 0, y = 0, w = windowWidth.float,
-        h = windowHeight.float, flags = {windowNoScrollbar}):
+    window(name = "Main", x = 0, y = 0, w = windowWidth,
+        h = windowHeight, flags = {windowNoScrollbar}):
       case state
       of GameState.mainMenu:
         # Show the main game menu

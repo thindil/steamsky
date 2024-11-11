@@ -79,8 +79,7 @@ proc showLinkError*() {.raises: [], tags: [], contractual.} =
     return
   try:
     popup(pType = staticPopup, title = "Can't open the link", flags = {
-        windowBorder, windowTitle, windowNoScrollbar}, x = (
-        windowWidth / 5), y = (windowHeight.float / 4.5), w = 350, h = 120):
+        windowBorder, windowTitle, windowNoScrollbar}, x = 120, y = 80, w = 350, h = 120):
       setLayoutRowDynamic(height = 25, cols = 1)
       label(str = message)
       labelButton(title = "Close"):
@@ -98,9 +97,8 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ## Returns parameter dialog
   ##
   dialog = errorDialog
-  window(name = "Error!Error!Error!", x = 40, y = 20, w = (
-      windowWidth.float / 1.1), h = (windowHeight.float / 1.1), flags = {
-          windowBorder, windowMoveable, windowTitle, windowMinimizable}):
+  window(name = "Error!Error!Error!", x = 40, y = 20, w = 540, h = 360,
+      flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable}):
     setLayoutRowDynamic(height = 75, cols = 1)
     wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
     setLayoutRowDynamic(height = 25, cols = 1)

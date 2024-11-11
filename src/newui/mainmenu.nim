@@ -27,6 +27,8 @@ var
   logo: PImage = nil
   showLoadButton, showHoFButton: bool = false
   changeLog: string = ""
+  menuWidth*: Positive = 600 ## The width of the game's main window
+  menuHeight*: Positive = 400 ## The height of the game's main window
 
 proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -135,7 +137,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           changeLog.add(y = line & "\n")
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
-  setLayoutRowDynamic(height = (windowHeight - 50).float, cols = 1)
+  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   if changeLog.len > 0:
     group(title = "NewsGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = (30 * changeLog.countLines).float, cols = 1)
@@ -145,7 +147,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         docDirectory & "' directory?")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     if state == news:
-      row(x = (windowWidth - 310).float, y = 0, w = 155, h = 40):
+      row(x = (menuWidth - 310).float, y = 0, w = 155, h = 40):
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Show all changes to the game since previous big stable version")
@@ -154,7 +156,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           changeLog = ""
           return
     else:
-      row(x = (windowWidth - 405).float, y = 0, w = 250, h = 40):
+      row(x = (menuWidth - 405).float, y = 0, w = 250, h = 40):
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Show only changes to the game since previous release")
@@ -162,7 +164,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           state = news
           changeLog = ""
           return
-    row(x = (windowWidth - 150).float, y = 0, w = 140, h = 40):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
