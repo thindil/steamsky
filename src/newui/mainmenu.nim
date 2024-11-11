@@ -224,6 +224,21 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
             text = "Some technical information about the game")
       labelButton(title = "README"):
         echo "button pressed"
+  setLayoutRowDynamic(height = 175, cols = 1)
+  wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
+  layoutSpaceStatic(height = 50, widgetsCount = 2):
+    row(x = (menuWidth - 310).float, y = 0, w = 155, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show full legal text of GNU GPLv3 license")
+      labelButton(title = "Show full license"):
+        echo "button pressed"
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+        return
   if gameSettings.showTooltips:
     showTooltips()
   showLinkError()
