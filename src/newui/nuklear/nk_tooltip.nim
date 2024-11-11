@@ -26,21 +26,23 @@ import nk_context, nk_types
 # ---------------------
 using ctx: PContext
 
-proc nk_tooltipf(ctx; fmt: cstring) {.importc, nodecl, varargs.}
+proc nk_tooltipf(ctx; fmt: cstring) {.importc, nodecl, varargs, raises: [], tags: [], contractual.}
+  ## Internal Nuklear C binding
 
 macro fmtTooltip*(args: varargs[untyped]): untyped =
   ## Draw a tooltip formatted in the same way like the C function printf
   ##
   ## * args      - the tooltip's text and its arguments to draw
   result = quote do:
-    nk_tooltipf(ctx, `args`)
+    nk_tooltipf(ctx = ctx, fmt = `args`)
 
-proc tooltip*(text: string) {.raises: [], tags: [].} =
+proc tooltip*(text: string) {.raises: [], tags: [], contractual.} =
   ## Draw a tooltip with the selected text
   ##
   ## * text - the text to show on the tooltip window
-  proc nk_tooltip(ctx; text: cstring) {.importc, nodecl.}
-  nk_tooltip(ctx, text.cstring)
+  proc nk_tooltip(ctx; text: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Internal Nuklear C binding
+  nk_tooltip(ctx = ctx, text = text.cstring)
 
 type
   TooltipData = object
