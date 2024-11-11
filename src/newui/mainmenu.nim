@@ -157,7 +157,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
       row(x = (windowWidth - 405).float, y = 0, w = 250, h = 40):
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
-              text = "Show only changes to the game since previous relese")
+              text = "Show only changes to the game since previous release")
         labelButton(title = "Show only newest changes"):
           state = news
           changeLog = ""
@@ -178,17 +178,32 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
+  if gameSettings.showTooltips:
+    resetTooltips()
   setLayoutRowDynamic(height = 30, cols = 1)
   label(str = "Roguelike in the sky with a steampunk theme",
       alignment = centered)
   saveButtonStyle()
   setButtonStyle(field = borderColor, a = 0)
-  layoutSpaceStatic(height = 30, widgetsCount = 2):
+  layoutSpaceStatic(height = 30, widgetsCount = 4):
     row(x = 255, y = 0, w = 100, h = 30):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Visit the game website: https://thindil.itch.io/steam-sky")
       labelButton(title = "Website"):
         openLink(link = "https://thindil.itch.io/steam-sky")
     row(x = 270, y = 0, w = 85, h = 30):
       label(str = "______")
+    row(x = 145, y = 40, w = 330, h = 30):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Send a mail to the game creator")
+      labelButton(title = "(c)2016-2024 Bartek thindil Jasicki"):
+        openLink(link = "mailto:thindil@laeran.pl.eu.org")
+    row(x = 160, y = 40, w = 315, h = 30):
+      label(str = "__________________________")
   restoreButtonStyle()
-  state = about
+  if gameSettings.showTooltips:
+    showTooltips()
   showLinkError()
+  state = about
