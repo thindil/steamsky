@@ -79,7 +79,7 @@ proc showLinkError*() {.raises: [], tags: [], contractual.} =
     return
   try:
     popup(pType = staticPopup, title = "Can't open the link", flags = {
-        windowBorder, windowTitle, windowNoScrollbar, windowMoveable}, x = (
+        windowBorder, windowTitle, windowNoScrollbar}, x = (
         windowWidth / 5), y = (windowHeight.float / 4.5), w = 350, h = 120):
       setLayoutRowDynamic(height = 25, cols = 1)
       label(str = message)
