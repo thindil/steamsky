@@ -240,10 +240,34 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
         return
   showLinkError()
 
-proc showFile*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
+proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the selected file content
   ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter state.
-  state = showFile
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  if fileContent.len == 0 and dialog == none:
+    if fileExists(filename = docDirectory & fileName):
+      try:
+        for line in lines(filename = docDirectory & fileName):
+          fileContent.add(y = line & "\n")
+      except:
+        dialog = setError(message = "Can't read '" & fileName & "' file.")
+  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  if fileContent.len > 0:
+    group(title = "FileGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = (30 * fileContent.countLines).float, cols = 1)
+      wrapLabel(str = fileContent)
+  else:
+    wrapLabel(str = "Can't find file to load. Did '" & fileName & "' file is in '" &
+        docDirectory & "' directory?")
+  layoutSpaceStatic(height = 50, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+        fileContent = ""
+        return

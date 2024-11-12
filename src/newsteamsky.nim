@@ -133,7 +133,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         showAbout(state = state)
       of showFile:
         # Show the content of the selected file in the main menu
-        showFile(state = state)
+        showFile(state = state, dialog = dialog)
       else:
         discard
       # Add the tooltips, if enabled
