@@ -26,7 +26,8 @@ import coreui, errordialog
 var
   logo: PImage = nil
   showLoadButton, showHoFButton: bool = false
-  changeLog: string = ""
+  fileContent: string = ""
+  fileName: string = ""
   menuWidth*: Positive = 600 ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
@@ -124,7 +125,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   if gameSettings.showTooltips:
     resetTooltips()
-  if changeLog.len == 0 and dialog == none:
+  if fileContent.len == 0 and dialog == none:
     if fileExists(filename = docDirectory & "CHANGELOG.md"):
       try:
         var index: Natural = 0
@@ -134,14 +135,14 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
             continue
           if state == news and line.len > 1 and line[0..2] == "## ":
             break
-          changeLog.add(y = line & "\n")
+          fileContent.add(y = line & "\n")
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
-  if changeLog.len > 0:
+  if fileContent.len > 0:
     group(title = "NewsGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = (30 * changeLog.countLines).float, cols = 1)
-      wrapLabel(str = changeLog)
+      setLayoutRowDynamic(height = (30 * fileContent.countLines).float, cols = 1)
+      wrapLabel(str = fileContent)
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
         docDirectory & "' directory?")
@@ -153,7 +154,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
               text = "Show all changes to the game since previous big stable version")
         labelButton(title = "Show all changes"):
           state = allNews
-          changeLog = ""
+          fileContent = ""
           return
     else:
       row(x = (menuWidth - 405).float, y = 0, w = 250, h = 40):
@@ -162,14 +163,14 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
               text = "Show only changes to the game since previous release")
         labelButton(title = "Show only newest changes"):
           state = news
-          changeLog = ""
+          fileContent = ""
           return
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
-        changeLog = ""
+        fileContent = ""
         return
   if gameSettings.showTooltips:
     showTooltips()
@@ -211,19 +212,25 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
         addTooltip(bounds = getWidgetBounds(),
             text = "Guide how to help with creating the game, report bugs, etc.")
       labelButton(title = "Get involved"):
-        echo "button pressed"
+        fileName = "CONTRIBUTING.md"
+        state = showFile
+        return
     row(x = 230, y = 0, w = 150, h = 30):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Guide how to modify the game")
       labelButton(title = "Modify game"):
-        echo "button pressed"
+        fileName = "MODDING.md"
+        state = showFile
+        return
     row(x = 385, y = 0, w = 150, h = 30):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Some technical information about the game")
       labelButton(title = "README"):
-        echo "button pressed"
+        fileName = "README.md"
+        state = showFile
+        return
   setLayoutRowDynamic(height = 175, cols = 1)
   wrapLabel(str = "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nSteam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
@@ -232,7 +239,9 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
         addTooltip(bounds = getWidgetBounds(),
             text = "Show full legal text of GNU GPLv3 license")
       labelButton(title = "Show full license"):
-        echo "button pressed"
+        fileName = "COPYING"
+        state = showFile
+        return
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
@@ -242,4 +251,11 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
   if gameSettings.showTooltips:
     showTooltips()
   showLinkError()
-  state = about
+
+proc showFile*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
+    RootEffect], contractual.} =
+  ## Show the selected file content
+  ## * state - the current game's state
+  ##
+  ## Returns the modified parameter state.
+  state = showFile
