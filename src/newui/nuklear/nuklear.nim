@@ -43,145 +43,159 @@ using ctx: PContext
 # -------------------
 # Creating structures
 # -------------------
-proc new_nk_rect(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl.}
-proc new_nk_vec2(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl.}
-proc new_nk_font_config*(pixelHeight: cfloat): nk_font_config {.importc: "nk_font_config", nodecl.}
+proc new_nk_rect(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl,
+    raises: [], tags: [], contractual.}
+proc new_nk_vec2(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl, raises: [],
+    tags: [], contractual.}
+proc new_nk_font_config*(pixelHeight: cfloat): nk_font_config {.importc: "nk_font_config",
+    nodecl, raises: [], tags: [], contractual.}
 
 # -----
 # Input
 # -----
-proc nk_input_begin*(ctx) {.importc, nodecl.}
-proc nk_input_end*(ctx) {.importc, nodecl.}
+proc nk_input_begin*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
 
 # -------
 # General
 # -------
-proc nk_end(ctx) {.importc, cdecl.}
+proc nk_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ----
 # Text
 # ----
 proc nk_labelf(ctx; flags: nk_flags; fmt: cstring) {.importc,
-    varargs, cdecl.}
+    varargs, cdecl, raises: [], tags: [], contractual.}
 
 # -------
 # Layouts
 # -------
-proc nk_layout_row_end(ctx) {.importc, cdecl.}
+proc nk_layout_row_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_layout_row_begin(ctx; fmt: nk_layout_format;
-    rowHeight: cfloat; cols: cint) {.importc, cdecl.}
-proc nk_layout_row_push(ctx; width: cfloat) {.importc, cdecl.}
+    rowHeight: cfloat; cols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_layout_row_push(ctx; width: cfloat) {.importc, cdecl, raises: [],
+    tags: [], contractual.}
 proc nk_layout_row(ctx; fmt: nk_layout_format; height: cfloat;
-    cols: cint; ratio: pointer) {.importc, nodecl.}
+    cols: cint; ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
 proc nk_layout_space_begin(ctx; fmt: nk_layout_format;
-    height: cfloat; widgetCount: cint) {.importc, cdecl.}
-proc nk_layout_space_end(ctx) {.importc, cdecl.}
-proc nk_layout_row_template_begin(ctx; height: cfloat) {.importc, cdecl.}
-proc nk_layout_row_template_end(ctx) {.importc, cdecl.}
+    height: cfloat; widgetCount: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_layout_row_template_begin(ctx; height: cfloat) {.importc, cdecl,
+    raises: [], tags: [], contractual.}
+proc nk_layout_row_template_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # -----
 # Menus
 # -----
-proc nk_menubar_begin(ctx) {.importc, cdecl.}
-proc nk_menubar_end(ctx) {.importc, cdecl.}
-proc nk_menu_end(ctx) {.importc, cdecl.}
+proc nk_menubar_begin(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_menubar_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_menu_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_menu_item_label(ctx; text: cstring;
-    aligmnent: nk_flags): nk_bool {.importc, cdecl.}
+    aligmnent: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ------
 # Charts
 # ------
 proc nk_chart_begin(ctx; ctype: ChartType; num: cint; min,
-    max: cfloat): nk_bool {.importc, cdecl.}
-proc nk_chart_end(ctx) {.importc, cdecl.}
+    max: cfloat): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_chart_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ------
 # Popups
 # ------
-proc nk_popup_end(ctx) {.importc, nodecl.}
+proc nk_popup_end(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
 
 # -----
 # Trees
 # -----
 proc nk_tree_state_push(ctx; ttype: TreeType;
-    title: cstring; state: var CollapseStates): nk_bool {.importc, cdecl.}
-proc nk_tree_pop(ctx) {.importc, cdecl.}
+    title: cstring; state: var CollapseStates): nk_bool {.importc, cdecl,
+        raises: [], tags: [], contractual.}
+proc nk_tree_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_tree_push_hashed(ctx; ttype: TreeType;
     title: cstring; state: CollapseStates; hash: cstring; len,
-    id: cint): nk_bool {.importc, cdecl.}
+    id: cint): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_tree_element_push_hashed(ctx; ttype: TreeType;
     title: cstring; state: CollapseStates; selected: var nk_bool;
-    hash: cstring; len, sed: cint): nk_bool {.importc, cdecl.}
-proc nk_tree_element_pop(ctx) {.importc, cdecl.}
+    hash: cstring; len, sed: cint): nk_bool {.importc, cdecl, raises: [],
+        tags: [], contractual.}
+proc nk_tree_element_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # -------
 # Buttons
 # -------
-proc nk_button_label(ctx; title: cstring): nk_bool {.importc, cdecl.}
-proc nk_button_symbol(ctx; symbol: SymbolType): nk_bool {.importc, cdecl.}
+proc nk_button_label(ctx; title: cstring): nk_bool {.importc, cdecl, raises: [],
+    tags: [], contractual.}
+proc nk_button_symbol(ctx; symbol: SymbolType): nk_bool {.importc, cdecl,
+    raises: [], tags: [], contractual.}
 proc nk_button_symbol_label(ctx; symbol: SymbolType; label: cstring;
-    align: nk_flags): nk_bool {.importc, cdecl.}
+    align: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # -----
 # Style
 # -----
-proc nk_style_item_color(col: nk_color): nk_style_item {.importc, cdecl.}
-proc nk_style_set_font*(ctx; font: ptr nk_user_font) {.importc, nodecl.}
+proc nk_style_item_color(col: nk_color): nk_style_item {.importc, cdecl,
+    raises: [], tags: [], contractual.}
+proc nk_style_set_font*(ctx; font: ptr nk_user_font) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
 
 # ------
 # Combos
 # ------
 proc nk_combo_begin_color(ctx; color: nk_color;
-    size: nk_vec2): nk_bool {.importc, nodecl.}
-proc nk_combo_end(ctx) {.importc, cdecl.}
+    size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+proc nk_combo_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ------
 # Colors
 # ------
-proc nk_rgb*(r, g, b: cint): nk_color {.importc, nodecl.}
-proc nk_rgb_cf*(c: nk_colorf): nk_color {.importc, nodecl.}
-proc nk_rgba*(r, g, b, a: cint): nk_color {.importc, nodecl.}
+proc nk_rgb*(r, g, b: cint): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
+proc nk_rgb_cf*(c: nk_colorf): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
+proc nk_rgba*(r, g, b, a: cint): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
 
 # -------
 # Filters
 # -------
 proc nk_filter_default*(box: ptr nk_text_edit;
-    unicode: nk_rune): nk_bool {.importc, cdecl.}
+    unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_filter_decimal*(box: ptr nk_text_edit;
-    unicode: nk_rune): nk_bool {.importc, cdecl.}
+    unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_filter_float*(box: ptr nk_text_edit;
-    unicode: nk_rune): nk_bool {.importc, cdecl.}
+    unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_filter_hex*(box: ptr nk_text_edit;
-    unicode: nk_rune): nk_bool {.importc, cdecl.}
+    unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_filter_oct*(box: ptr nk_text_edit;
-    unicode: nk_rune): nk_bool {.importc, cdecl.}
+    unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_filter_binary*(box: ptr nk_text_edit;
-    unicode: nk_rune): nk_bool {.importc, cdecl.}
+    unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_filter_ascii*(box: ptr nk_text_edit;
-    unicode: nk_rune): nk_bool {.importc, cdecl.}
+    unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ----------
 # Contextual
 # ----------
-proc nk_contextual_end(ctx) {.importc, cdecl.}
+proc nk_contextual_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_contextual_item_label(ctx; label: cstring;
-    align: nk_flags): nk_bool {.importc, cdecl.}
+    align: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ------
 # Groups
 # ------
 proc nk_group_begin(ctx; title: cstring;
-    flags: nk_flags): nk_bool {.importc, cdecl.}
-proc nk_group_end(ctx) {.importc, cdecl.}
+    flags: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_group_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # -----
 # Fonts
 # -----
 proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
-    config: ptr nk_font_config): ptr nk_font {.importc, nodecl.}
+    config: ptr nk_font_config): ptr nk_font {.importc, nodecl, raises: [],
+        tags: [], contractual.}
 proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
-    height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc, nodecl.}
-proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl.}
+    height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc,
+        nodecl, raises: [], tags: [], contractual.}
+proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl, raises: [],
+    tags: [], contractual.}
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
@@ -191,7 +205,7 @@ proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl.}
 # General
 # -------
 proc charArrayToString(charArray: openArray[char];
-    length: int): string {.raises: [], tags: [].} =
+    length: int): string {.raises: [], tags: [], contractual.} =
   ## Convert a characters' array to Nim string, internal use only, temporary
   ## code
   ##
@@ -203,7 +217,7 @@ proc charArrayToString(charArray: openArray[char];
     result.add(charArray[i])
 
 proc stringToCharArray(str: string; length: int): tuple[charArray: seq[char];
-    length: cint] {.raises: [], tags: [].} =
+    length: cint] {.raises: [], tags: [], contractual.} =
   ## Convert a Nim string to a characters array, internal use only, temporary
   ## code
   ##
@@ -218,25 +232,25 @@ proc stringToCharArray(str: string; length: int): tuple[charArray: seq[char];
       result.charArray.add('\0')
   result.length = str.len.cint
 
-proc getWidgetBounds*(): NimRect {.raises: [], tags: [].} =
+proc getWidgetBounds*(): NimRect {.raises: [], tags: [], contractual.} =
   ## Get the rectable with the current Nuklear widget coordinates
   ##
   ## Returns a rectangle with the current Nuklear widget coordinates
   ## converted to NimRect
-  proc nk_widget_bounds(ctx): nk_rect {.importc, nodecl.}
+  proc nk_widget_bounds(ctx): nk_rect {.importc, nodecl, raises: [], tags: [], contractual.}
   let rect = nk_widget_bounds(ctx)
   return NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
 
 proc createWin(name: cstring; x, y, w, h: cfloat;
-    flags: nk_flags): bool {.raises: [], tags: [].} =
+    flags: nk_flags): bool {.raises: [], tags: [], contractual.} =
   ## Create a new Nuklear window/widget, internal use only, temporary code
   ##
   ## Returns true if window was succesfully created otherwise false.
   proc nk_begin(ctx; title: cstring; bounds: nk_rect;
-      flags: nk_flags): nk_bool {.importc, nodecl.}
+      flags: nk_flags): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_begin(ctx, name, new_nk_rect(x, y, w, h), flags)
 
-proc winSetToInt(flags: set[WindowFlags]): cint {.raises: [], tags: [].} =
+proc winSetToInt(flags: set[WindowFlags]): cint {.raises: [], tags: [], contractual.} =
   result = 0
   {.warning[HoleEnumConv]: off.}
   for flag in flags:
@@ -273,21 +287,23 @@ proc windowIsHidden*(name: string): bool {.raises: [], tags: [].} =
   ## * name - the name of the window to check
   ##
   ## Returns true if the window is hidden, otherwise false
-  proc nk_window_is_hidden(ctx; name: cstring): cint {.importc, nodecl.}
+  proc nk_window_is_hidden(ctx; name: cstring): cint {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   return nk_window_is_hidden(ctx, name.cstring) > 0
 
 proc windowClose*(name: string) {.raises: [], tags: [].} =
   ## Closes the window
   ##
   ## * name - the name of the window to close
-  proc nk_window_close(ctx; name: cstring) {.importc, nodecl.}
+  proc nk_window_close(ctx; name: cstring) {.importc, nodecl, raises: [],
+      tags: [], contractual.}
   nk_window_close(ctx, name.cstring)
 
 proc addSpacing*(cols: int) {.raises: [], tags: [].} =
   ## Add spacing in the selected between the row's boundaries in the row
   ##
   ## * cols - the amount of columns to add as the spacing
-  proc nk_spacing(ctx; cols: cint) {.importc, nodecl.}
+  proc nk_spacing(ctx; cols: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_spacing(ctx, cols.cint)
 
 # ------
@@ -324,7 +340,8 @@ proc createPopup(pType: PopupType; title: cstring;
   ##
   ## Returns true if the popup was successfully created, otherwise false.
   proc nk_popup_begin(ctx; pType: PopupType; title: cstring;
-      flags: nk_flags; rect: nk_rect): nk_bool {.importc, nodecl.}
+      flags: nk_flags; rect: nk_rect): nk_bool {.importc, nodecl, raises: [],
+          tags: [], contractual.}
   return nk_popup_begin(ctx, pType, title, flags, new_nk_rect(
       x, y, w, h))
 
@@ -348,7 +365,7 @@ template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
 
 proc closePopup*() {.raises: [], tags: [].} =
   ## Close the last popup window
-  proc nk_popup_close(ctx) {.importc, nodecl.}
+  proc nk_popup_close(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
   ctx.nk_popup_close()
 
 # -----
@@ -451,7 +468,7 @@ proc colorLabel*(str: string; r, g, b: int;
   ## * b     - the blue value for the text color in RGB
   ## * align - the text aligmnent flags
   proc nk_label_colored(ctx; str: cstring; align: nk_flags;
-      color: nk_color) {.importc, nodecl.}
+      color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_label_colored(ctx, str.cstring, align.nk_flags, nk_rgb(r.cint, g.cint, b.cint))
 
 proc label*(str: string; alignment: TextAlignment = left) {.raises: [], tags: [].} =
@@ -459,7 +476,8 @@ proc label*(str: string; alignment: TextAlignment = left) {.raises: [], tags: []
   ##
   ## * str       - the text to draw
   ## * alignment - the alignment of the text. Default is alignment to the left
-  proc nk_label(ctx; str: cstring; alignment: nk_flags) {.importc, nodecl.}
+  proc nk_label(ctx; str: cstring; alignment: nk_flags) {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   nk_label(ctx, str.cstring, alignment.nk_flags)
 
 proc text*(str: string; len: int = str.len;
@@ -470,7 +488,8 @@ proc text*(str: string; len: int = str.len;
   ## * len       - the lenght of the text to draw. By default it is equal to
   ##               str lenght
   ## * alignment - the alignment of the text. Default is alignment to left
-  proc nk_text(ctx; str: cstring; len: cint; alignment: nk_flags) {.importc, nodecl.}
+  proc nk_text(ctx; str: cstring; len: cint; alignment: nk_flags) {.importc,
+      nodecl, raises: [], tags: [], contractual.}
   nk_text(ctx, str.cstring, len.cint, alignment.nk_flags)
 
 proc wrapLabel*(str: string) {.raises: [], tags: [].} =
@@ -478,7 +497,7 @@ proc wrapLabel*(str: string) {.raises: [], tags: [].} =
   ## container
   ##
   ## * str - the text to draw
-  proc nk_label_wrap(ctx; str: cstring) {.importc, nodecl.}
+  proc nk_label_wrap(ctx; str: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_label_wrap(ctx, str.cstring)
 
 macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
@@ -500,7 +519,8 @@ proc createColorButton(r, g, b: cint): bool {.raises: [], tags: [].} =
   ## * b   - the blue value for the button color in RGB
   ##
   ## Returns true if button was pressed
-  proc nk_button_color(ctx; color: nk_color): nk_bool {.importc, nodecl.}
+  proc nk_button_color(ctx; color: nk_color): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   return nk_button_color(ctx, nk_rgb(r, g, b))
 
 template colorButton*(r, g, b: int; onPressCode: untyped) =
@@ -520,7 +540,8 @@ proc setButtonBehavior*(behavior: ButtonBehavior) {.raises: [], tags: [].} =
   ## Set the behavior of the the next button, when it is clicked
   ##
   ## * behavior - the behavior of a button
-  proc nk_button_set_behavior(ctx; behavior: ButtonBehavior) {.importc, nodecl.}
+  proc nk_button_set_behavior(ctx; behavior: ButtonBehavior) {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   nk_button_set_behavior(ctx, behavior)
 
 template symbolButton*(symbol: SymbolType; onPressCode: untyped) =
@@ -556,7 +577,7 @@ proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
   buttonStyle.rounding = bStyle.rounding.cfloat
   buttonStyle.padding = new_nk_vec2(bStyle.padding.x, bStyle.padding.y)
   proc nk_button_label_styled(ctx; style: var nk_style_button;
-      title: cstring): nk_bool {.importc, nodecl.}
+      title: cstring): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_button_label_styled(ctx, buttonStyle, bTitle)
 
 template labelButtonStyled*(title: string; style: ButtonStyle;
@@ -583,7 +604,8 @@ proc slide*(min, val, max, step: int): int {.raises: [], tags: [].} =
   ##          slider with mouse click
   ##
   ## Returns the new value on the slider
-  proc nk_slide_int(ctx; min, val, max, step: cint): cint {.importc, nodecl.}
+  proc nk_slide_int(ctx; min, val, max, step: cint): cint {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   return nk_slide_int(ctx, min.cint, val.cint, max.cint, step.cint).int
 
 # -------
@@ -597,7 +619,8 @@ proc layoutSpacePush(ctx; x, y, w, h: cfloat) {.raises: [], tags: [].} =
   ## * y   - the amount of pixels or ratio to push the position in Y axis
   ## * w   - the amount of pixels or ratio to push the width
   ## * h   - the amount of pixels or ratio to push the height
-  proc nk_layout_space_push(ctx; rect: nk_rect) {.importc, nodecl.}
+  proc nk_layout_space_push(ctx; rect: nk_rect) {.importc, nodecl, raises: [],
+      tags: [], contractual.}
   nk_layout_space_push(ctx, new_nk_rect(x, y, w, h))
 
 proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [].} =
@@ -607,7 +630,8 @@ proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [].} =
   ##
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
-  proc nk_layout_row_dynamic(ctx; height: cfloat; cols: cint) {.importc, cdecl.}
+  proc nk_layout_row_dynamic(ctx; height: cfloat; cols: cint) {.importc, cdecl,
+      raises: [], tags: [], contractual.}
   nk_layout_row_dynamic(ctx, height.cfloat, cols.cint)
 
 proc setLayoutRowStatic*(height: float; width, cols: int) {.raises: [], tags: [].} =
@@ -619,7 +643,7 @@ proc setLayoutRowStatic*(height: float; width, cols: int) {.raises: [], tags: []
   ## * width  - the width in pixels of each column
   ## * cols   - the amount of columns in each row
   proc nk_layout_row_static(ctx; height: cfloat; itemWidth,
-      cols: cint) {.importc, cdecl.}
+      cols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
   nk_layout_row_static(ctx, height.cfloat, width.cint, cols.cint)
 
 template layoutStatic*(height: float; cols: int; content: untyped) =
@@ -722,7 +746,8 @@ template setRowTemplate*(height: float; settings: untyped) =
 proc rowTemplateDynamic*() {.raises: [], tags: [].} =
   ## Set the selected column's in the row width in the template's row as dynamic,
   ## which means, the widget will resize with its parent.
-  proc nk_layout_row_template_push_dynamic(ctx) {.importc, nodecl.}
+  proc nk_layout_row_template_push_dynamic(ctx) {.importc, nodecl, raises: [],
+      tags: [], contractual.}
   nk_layout_row_template_push_dynamic(ctx)
 
 proc rowTemplateVariable*(minWidth: float) {.raises: [], tags: [].} =
@@ -730,7 +755,8 @@ proc rowTemplateVariable*(minWidth: float) {.raises: [], tags: [].} =
   ## requirement for minumum width for the widget
   ##
   ## * minWidth - the minimum width in pixels for the widgets in the column
-  proc nk_layout_row_template_push_variable(ctx; minWidth: cfloat) {.importc, nodecl.}
+  proc nk_layout_row_template_push_variable(ctx; minWidth: cfloat) {.importc,
+      nodecl, raises: [], tags: [], contractual.}
   nk_layout_row_template_push_variable(ctx, minWidth.cfloat)
 
 proc rowTemplateStatic*(width: float) {.raises: [], tags: [].} =
@@ -738,14 +764,16 @@ proc rowTemplateStatic*(width: float) {.raises: [], tags: [].} =
   ## widgets in the column will not resize
   ##
   ## * width - the width of the column in the row template
-  proc nk_layout_row_template_push_static(ctx; width: cfloat) {.importc, nodecl.}
+  proc nk_layout_row_template_push_static(ctx; width: cfloat) {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   nk_layout_row_template_push_static(ctx, width.cfloat)
 
 proc layoutWidgetBounds*(): NimRect {.raises: [], tags: [].} =
   ## Get the rectangle of the current widget in the layout
   ##
   ## Returns NimRect with the data for the current widget
-  proc nk_layout_widget_bounds(ctx): nk_rect {.importc, nodecl.}
+  proc nk_layout_widget_bounds(ctx): nk_rect {.importc, nodecl, raises: [],
+      tags: [], contractual.}
   let rect = nk_layout_widget_bounds(ctx = ctx)
   result = NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
 
@@ -753,12 +781,14 @@ proc layoutSetMinRowHeight*(height: float) {.raises: [], tags: [].} =
   ## Set the currently used minimum row height. Must contains also paddings size.
   ##
   ## * height - the new minimum row height for auto generating the row height
-  proc nk_layout_set_min_row_height(ctx; height: cfloat) {.importc, nodecl.}
+  proc nk_layout_set_min_row_height(ctx; height: cfloat) {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   nk_layout_set_min_row_height(ctx = ctx, height = height.cfloat)
 
 proc lyoutResetMinRowHeight*() {.raises: [], tags: [].} =
   ## Reset the currently used minimum row height.
-  proc nk_layout_reset_min_row_height(ctx) {.importc, nodecl.}
+  proc nk_layout_reset_min_row_height(ctx) {.importc, nodecl, raises: [],
+      tags: [], contractual.}
   nk_layout_reset_min_row_height(ctx = ctx)
 
 # -----
@@ -786,7 +816,7 @@ proc createMenu(ctx; text: cstring; align: nk_flags; x,
   ##
   ## Returns true if menu were created, otherwise false
   proc nk_menu_begin_label(ctx; text: cstring; align: nk_flags;
-       size: nk_vec2): nk_bool {.importc, nodecl.}
+       size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_menu_begin_label(ctx, text, align, new_nk_vec2(x, y))
 
 template menu*(text: string; align: TextAlignment; x, y: float;
@@ -829,7 +859,7 @@ proc slider*(min: int; val: var int; max, step: int): bool {.discardable,
   ## Returns true if the current value was modified, otherwise false. Also
   ## the modified parameter val
   proc nk_slider_int(ctx; min: cint; val: var cint; max,
-      step: cint): nk_bool {.importc, nodecl.}
+      step: cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   var newVal = val.cint
   result = nk_slider_int(ctx = ctx, min = min.cint, val = newVal,
       max = max.cint, step = step.cint) == nkTrue
@@ -848,7 +878,7 @@ proc slider*(min: float; val: var float; max,
   ## Returns true if the current value was modified, otherwise false. Also
   ## the modified parameter val
   proc nk_slider_float(ctx; min: cfloat; val: var cfloat; max,
-    valueStep: cfloat): nk_bool {.importc, nodecl.}
+    valueStep: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   var newVal = val.cfloat
   result = nk_slider_float(ctx = ctx, min = min.cfloat, val = newVal,
       max = max.cfloat, value_step = step.cfloat) == nkTrue
@@ -875,7 +905,7 @@ proc property*(name: string; min: int; val: var int; max, step: int;
   ##
   ## Returns the modified parameter val
   proc nk_property_int(ctx; name: cstring; min: cint; val: var cint; max,
-      step: cint; incPerPixel: cfloat) {.importc, nodecl.}
+      step: cint; incPerPixel: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
   var newVal = val.cint
   nk_property_int(ctx, name.cstring, min.cint, newVal, max.cint, step.cint,
       incPerPixel.cfloat)
@@ -898,7 +928,8 @@ proc property*(name: string; min: float; val: var float; max, step: float;
   ##
   ## Returns the modified parameter val
   proc nk_property_float(ctx; name: cstring; min: cfloat;
-      val: var cfloat; max, step, incPerPixel: cfloat) {.importc, nodecl.}
+      val: var cfloat; max, step, incPerPixel: cfloat) {.importc, nodecl,
+          raises: [], tags: [], contractual.}
   var newVal = val.cfloat
   nk_property_float(ctx, name.cstring, min.cfloat, newVal, max.cfloat,
       step.cfloat, incPerPixel.cfloat)
@@ -921,7 +952,7 @@ proc property2*(name: string; min, val, max, step,
   ##
   ## Returns the new value of the property
   proc nk_propertyf(ctx; name: cstring; min, val, max, step,
-      incPerPixel: cfloat): cfloat {.importc, nodecl.}
+      incPerPixel: cfloat): cfloat {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_propertyf(ctx, name.cstring, min.cfloat, val.cfloat, max.cfloat,
       step.cfloat, incPerPixel.cfloat).float
 
@@ -942,7 +973,7 @@ proc property2*(name: string; min, val, max, step: int;
   ##
   ## Returns the new value of the property
   proc nk_propertyi(ctx; name: cstring; min, val, max, step: cint;
-      incPerPixel: cfloat): cint {.importc, nodecl.}
+      incPerPixel: cfloat): cint {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_propertyi(ctx, name.cstring, min.cint, val.cint, max.cint,
       step.cint, incPerPixel.cfloat).int
 
@@ -1025,7 +1056,7 @@ proc stylePushVec2*(field: WindowStyleTypes; x,
   ##
   ## Returns true if value was succesfully pushed, otherwise false
   proc nk_style_push_vec2(ctx; dest: var nk_vec2;
-      source: nk_vec2): nk_bool {.importc, nodecl.}
+      source: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   if field == spacing:
     return nk_style_push_vec2(ctx, ctx.style.window.spacing, new_nk_vec2(x,
         y))
@@ -1041,7 +1072,7 @@ proc stylePushFloat*(field: ButtonStyleTypes;
   ##
   ## Returns true if value was succesfully pushed, otherwise false
   proc nk_style_push_float(ctx; dest: var cfloat;
-      source: cfloat): nk_bool {.importc, nodecl.}
+      source: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   case field
   of rounding:
     return nk_style_push_float(ctx, ctx.style.button.rounding, value)
@@ -1052,7 +1083,8 @@ proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [].} =
   ## Set the Nuklear style colors from the table
   ##
   ## * table - the colors table which will be set
-  proc nk_style_from_table(ctx; table: pointer) {.importc, nodecl.}
+  proc nk_style_from_table(ctx; table: pointer) {.importc, nodecl, raises: [],
+      tags: [], contractual.}
   var newTable: array[countColors.ord, nk_color]
   for index, color in table.pairs:
     newTable[index] = nk_rgba(color.r.cint, color.g.cint, color.b.cint, color.a.cint)
@@ -1060,15 +1092,15 @@ proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [].} =
 
 proc defaultStyle*() {.raises: [], tags: [].} =
   ## reset the UI colors to the default Nuklear setting
-  proc nk_style_default(ctx) {.importc, nodecl.}
+  proc nk_style_default(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_style_default(ctx)
 
 proc stylePopFloat*() {.raises: [], tags: [].} =
-  proc nk_style_pop_float(ctx) {.importc, nodecl.}
+  proc nk_style_pop_float(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_style_pop_float(ctx)
 
 proc stylePopVec2*() {.raises: [], tags: [].} =
-  proc nk_style_pop_vec2(ctx) {.importc, nodecl.}
+  proc nk_style_pop_vec2(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_style_pop_vec2(ctx)
 
 # ------
@@ -1088,7 +1120,8 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
   ##
   ## Returns the index of the currently selected valu on the combo's list
   proc nk_combo(ctx; items: pointer; count,
-      selected, itemHeight: cint; size: nk_vec2): cint {.importc, nodecl.}
+      selected, itemHeight: cint; size: nk_vec2): cint {.importc, nodecl,
+          raises: [], tags: [], contractual.}
   var optionsList: seq[cstring]
   for i in 0 .. amount:
     optionsList.add(items[i].cstring)
@@ -1160,7 +1193,7 @@ proc createLabelCombo(ctx; selected: cstring; x, y: cfloat): bool {.raises: [],
   ##
   ## Returns true if combo was successfully created, otherwise false
   proc nk_combo_begin_label(ctx; selected: cstring;
-      size: nk_vec2): nk_bool {.importc, nodecl.}
+      size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_combo_begin_label(ctx, selected, new_nk_vec2(x, y))
 
 template labelCombo*(selected: string; x, y: float; content: untyped) =
@@ -1176,7 +1209,7 @@ template labelCombo*(selected: string; x, y: float; content: untyped) =
 
 proc comboClose*() {.raises: [], tags: [].} =
   ## Stop adding a value to a combo
-  proc nk_combo_close(ctx) {.importc, nodecl.}
+  proc nk_combo_close(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_combo_close(ctx)
 
 # ------
@@ -1190,7 +1223,8 @@ proc colorfToHsva*(hsva: var array[4, float]; color: NimColorF) {.raises: [],
   ## * color - the Nim color to convert
   ##
   ## Returns converted color as hsva argument
-  proc nk_colorf_hsva_fv(hsva: pointer; color: nk_colorf) {.importc, nodecl.}
+  proc nk_colorf_hsva_fv(hsva: pointer; color: nk_colorf) {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   nk_colorf_hsva_fv(hsva.addr, nk_colorf(r: color.r, g: color.g,
       b: color.b, a: color.a))
 proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [].} =
@@ -1199,7 +1233,8 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [].} =
   ## * hsva - the array with HSVA values to convert
   ##
   ## Returns converted hsva parameter to Nim color with float values
-  proc nk_hsva_colorf(h, s, v, a: cfloat): nk_colorf {.importc, nodecl.}
+  proc nk_hsva_colorf(h, s, v, a: cfloat): nk_colorf {.importc, nodecl,
+      raises: [], tags: [], contractual.}
   let newColor = nk_hsva_colorf(hsva[0], hsva[1], hsva[2], hsva[3])
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
@@ -1223,7 +1258,7 @@ proc createColorChart(ctx; ctype: ChartType; color,
   ## Returns true if the chart was succesfully created otherwise false
   proc nk_chart_begin_colored(ctx; ctype: ChartType; color,
       higlight: nk_color; count: cint; minValue,
-      maxValue: cfloat): nk_bool {.importc, nodecl.}
+      maxValue: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_chart_begin_colored(ctx, ctype, nk_rgb(color.r.cint, color.g.cint,
       color.b.cint), nk_rgb(higlight.r.cint, higlight.g.cint, higlight.b.cint),
           count, minValue, maxValue)
@@ -1257,7 +1292,8 @@ proc addColorChartSlot*(ctype: ChartType; color,
   ## * min_value - the minimal value of the chart
   ## * max_value - the maximum value of the chart
   proc nk_chart_add_slot_colored(ctx; ctype: ChartType; color,
-      higlight: nk_color; count: cint; minValue, maxValue: cfloat) {.importc, nodecl.}
+      higlight: nk_color; count: cint; minValue, maxValue: cfloat) {.importc,
+          nodecl, raises: [], tags: [], contractual.}
   nk_chart_add_slot_colored(ctx, ctype, nk_rgb(color.r.cint, color.g.cint,
       color.b.cint), nk_rgb(higlight.r.cint, higlight.g.cint, higlight.b.cint),
           count, minValue, maxValue)
@@ -1280,7 +1316,8 @@ proc chartPush*(value: float): ChartEvent {.discardable, raises: [], tags: [].} 
   ## * value - the value to add
   ##
   ## Returns the mouse event if any happened over the value in the chart
-  proc nk_chart_push(ctx; value: cfloat): nk_flags {.importc, nodecl.}
+  proc nk_chart_push(ctx; value: cfloat): nk_flags {.importc, nodecl, raises: [],
+      tags: [], contractual.}
 
   let res = nk_chart_push(ctx, value.cfloat)
   if (res and clicked.nk_flags) == clicked.nk_flags:
@@ -1298,7 +1335,7 @@ proc addChartSlot*(ctype: ChartType; count: int; minValue,
   ## * min_value - the minimal value of the chart
   ## * max_value - the maximum value of the chart
   proc nk_chart_add_slot(ctx; ctype: ChartType; count: cint;
-      minValue, maxValue: cfloat) {.importc, nodecl.}
+      minValue, maxValue: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
   nk_chart_add_slot(ctx, ctype, count.cint, minValue.cfloat, maxValue.cfloat)
 
 proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable,
@@ -1309,7 +1346,8 @@ proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable,
   ## * slot  - the slot to which the value will be added
   ##
   ## Returns the mouse event if any happened over the value in the chart
-  proc nk_chart_push_slot(ctx; value: cfloat; slot: cint): nk_flags {.importc, nodecl.}
+  proc nk_chart_push_slot(ctx; value: cfloat; slot: cint): nk_flags {.importc,
+      nodecl, raises: [], tags: [], contractual.}
 
   let res = nk_chart_push_slot(ctx, value.cfloat, slot.cint)
   if (res and clicked.nk_flags) == clicked.nk_flags:
@@ -1335,7 +1373,7 @@ proc createContextual(ctx; flags: nk_flags; x, y: cfloat;
   ## Return true if the contextual menu was created successfully, otherwise
   ## false
   proc nk_contextual_begin(ctx; flags: nk_flags; size: nk_vec2;
-      triggerBounds: nk_rect): nk_bool {.importc, nodecl.}
+      triggerBounds: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_contextual_begin(ctx, flags, new_nk_vec2(x, y), new_nk_rect(
       triggerBounds.x, triggerBounds.y, triggerBounds.w,
       triggerBounds.h))
@@ -1391,7 +1429,7 @@ proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [].} =
   ##
   ## Returns true if the mouse is hovering over the rectangle, otherwise false
   proc nk_input_is_mouse_hovering_rect(i: ptr nk_input;
-      rect: nk_rect): nk_bool {.importc, nodecl.}
+      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_input_is_mouse_hovering_rect(ctx.input.addr, new_nk_rect(rect.x,
       rect.y, rect.w, rect.h))
 
@@ -1405,7 +1443,7 @@ proc isMousePrevHovering*(x, y, w, h: float): bool {.raises: [], tags: [].} =
   ##
   ## Returns true if the mouse was hovering over the rectangle, otherwise false
   proc nk_input_is_mouse_prev_hovering_rect(i: ptr nk_input;
-      rect: nk_rect): nk_bool {.importc, nodecl.}
+      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_input_is_mouse_prev_hovering_rect(ctx.input.addr, new_nk_rect(
       x, y, w, h))
 
@@ -1415,7 +1453,8 @@ proc isMouseDown*(id: Buttons): bool {.raises: [], tags: [].} =
   ## * id  - the mouse button which is pressed
   ##
   ## Returns true if the selected mouse button is pressed, otherwise false
-  proc nk_input_is_mouse_down(i: ptr nk_input; id: Buttons): nk_bool {.importc, nodecl.}
+  proc nk_input_is_mouse_down(i: ptr nk_input; id: Buttons): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
   return nk_input_is_mouse_down(ctx.input.addr, id)
 
 proc getMouseDelta*(): NimVec2 {.raises: [], tags: [].} =
@@ -1446,7 +1485,8 @@ proc editString*(text: var string; maxLen: int; editType: EditTypes = simple;
   ## parameter.
 
   proc nk_edit_string(ctx; flags: nk_flags; memory: pointer;
-      len: var cint; max: cint; filter: PluginFilter): nk_flags {.importc, nodecl.}
+      len: var cint; max: cint; filter: PluginFilter): nk_flags {.importc,
+          nodecl, raises: [], tags: [], contractual.}
 
   var
     (cText, length) = stringToCharArray(text, maxLen)
@@ -1475,7 +1515,7 @@ proc selectableLabel*(str: string; value: var bool;
   ## otherwise false. Also returns the value parameter with the
   ## current state of the label
   proc nk_selectable_label(ctx; str: cstring; align: nk_flags;
-      value: var nk_bool): nk_bool {.importc, nodecl.}
+      value: var nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   var newValue = value.nk_bool
   result = nk_selectable_label(ctx, str.cstring, align.nk_flags, newValue) == nkTrue
   discard $newValue
@@ -1494,7 +1534,8 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
   ## otherwise false. Also returns the value parameter with the
   ## current state of the label
   proc nk_selectable_symbol_label(ctx; sym: SymbolType;
-    title: cstring; align: nk_flags; value: var nk_bool): nk_bool {.importc, nodecl.}
+    title: cstring; align: nk_flags; value: var nk_bool): nk_bool {.importc,
+        nodecl, raises: [], tags: [], contractual.}
   var newValue = value.nk_bool
   result = nk_selectable_symbol_label(ctx, sym, title.cstring, align.nk_flags,
       newValue) == nkTrue
@@ -1508,8 +1549,10 @@ proc image*(image: PImage) {.raises: [], tags: [].} =
   ## Draw an image
   ##
   ## * image - pointer to the image which will be drawn
-  proc nk_new_image(ctx; img: nk_image) {.importc: "nk_image", nodecl.}
-  proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl.}
+  proc nk_new_image(ctx; img: nk_image) {.importc: "nk_image", nodecl, raises: [],
+      tags: [], contractual.}
+  proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl, raises: [],
+      tags: [], contractual.}
   nk_new_image(ctx = ctx, img = nk_image_ptr(iPtr = image))
 
 # --------
