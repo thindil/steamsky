@@ -28,6 +28,7 @@ var
   showLoadButton, showHoFButton: bool = false
   fileContent: string = ""
   fileName: string = ""
+  fileLines: Positive = 1
   menuWidth*: Positive = 600 ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
@@ -130,12 +131,13 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if state == news and line.len > 1 and line[0..2] == "## ":
             break
           fileContent.add(y = line & "\n")
+        fileLines = (30 * fileContent.countLines)
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   if fileContent.len > 0:
     group(title = "NewsGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = (30 * fileContent.countLines).float, cols = 1)
+      setLayoutRowDynamic(height = fileLines.float, cols = 1)
       wrapLabel(str = fileContent)
   else:
     wrapLabel(str = "Can't find file to load. Did 'CHANGELOG.md' file is in '" &
@@ -253,12 +255,13 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
       try:
         for line in lines(filename = docDirectory & fileName):
           fileContent.add(y = line & "\n")
+        fileLines = (30 * fileContent.countLines)
       except:
         dialog = setError(message = "Can't read '" & fileName & "' file.")
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   if fileContent.len > 0:
     group(title = "FileGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = (30 * fileContent.countLines).float, cols = 1)
+      setLayoutRowDynamic(height = fileLines.float, cols = 1)
       wrapLabel(str = fileContent)
   else:
     wrapLabel(str = "Can't find file to load. Did '" & fileName & "' file is in '" &
