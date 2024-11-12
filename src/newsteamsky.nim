@@ -114,6 +114,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     if nuklearInput():
       break
 
+    # Reset the UI tooltips if enabled
+    if gameSettings.showTooltips:
+      resetTooltips()
+
     # The main window
     window(name = "Main", x = 0, y = 0, w = windowWidth,
         h = windowHeight, flags = {windowNoScrollbar}):
@@ -132,6 +136,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         showFile(state = state)
       else:
         discard
+      # Add the tooltips, if enabled
+      if gameSettings.showTooltips:
+        showTooltips()
 
     # Quit from the game
     if state == quitGame:

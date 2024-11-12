@@ -53,8 +53,6 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  if gameSettings.showTooltips:
-    resetTooltips()
   layoutSpaceStatic(height = 90, widgetsCount = 1):
     row(x = 50, y = 0, w = 500, h = 90):
       image(image = logo)
@@ -111,8 +109,6 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
       labelButton(title = "Quit"):
         state = quitGame
         return
-  if gameSettings.showTooltips:
-    showTooltips()
 
 proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect],
@@ -123,8 +119,6 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  if gameSettings.showTooltips:
-    resetTooltips()
   if fileContent.len == 0 and dialog == none:
     if fileExists(filename = docDirectory & "CHANGELOG.md"):
       try:
@@ -172,8 +166,6 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         fileContent = ""
         return
-  if gameSettings.showTooltips:
-    showTooltips()
 
 proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
@@ -181,8 +173,6 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  if gameSettings.showTooltips:
-    resetTooltips()
   setLayoutRowDynamic(height = 30, cols = 1)
   label(str = "Roguelike in the sky with a steampunk theme",
       alignment = centered)
@@ -248,8 +238,6 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
-  if gameSettings.showTooltips:
-    showTooltips()
   showLinkError()
 
 proc showFile*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
