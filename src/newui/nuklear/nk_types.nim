@@ -199,8 +199,25 @@ type
     mouse*: nk_mouse
   nk_buffer* {.importc, nodecl.} = object
     ## Internal Nuklear type
+  PanelType* {.size: sizeof(cint).} = enum
+    ## The types of panels
+    panelNone = 0,
+    panelWindow = 1 shl 0,
+    panelGroup = 1 shl 1,
+    panelPopup = 1 shl 2,
+    panelContextual = 1 shl 4,
+    panelCombo = 1 shl 5,
+    panelMenu = 1 shl 6,
+    panelTooltip = 1 shl 7
+  PanelSet* {.size: sizeof(cint).} = enum
+    ## The setting of panels
+    panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
+        panelTooltip.int,
+    panelSetPopup = panelSetNonBlock.int or panelPopup.int,
+    panelSetSub = panelSetPopup.int or panelGroup.int
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
+    `type`*: PanelSet
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
     layout*: ptr nk_panel
@@ -335,22 +352,6 @@ type
   ButtonBehavior* = enum
     ## The types of buttons behavior
     default, repeater
-  PanelType* {.size: sizeof(cint).} = enum
-    ## The types of panels
-    panelNone = 0,
-    panelWindow = 1 shl 0,
-    panelGroup = 1 shl 1,
-    panelPopup = 1 shl 2,
-    panelContextual = 1 shl 4,
-    panelCombo = 1 shl 5,
-    panelMenu = 1 shl 6,
-    panelTooltip = 1 shl 7
-  PanelSet* {.size: sizeof(cint).} = enum
-    ## The setting of panels
-    panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
-        panelTooltip.int,
-    panelSetPopup = panelSetNonBlock.int or panelPopup.int,
-    panelSetSub = panelSetPopup.int or panelGroup.int
 {.pop ruleOn: "namedParams".}
 
 # ----------
