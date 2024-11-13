@@ -20,7 +20,7 @@
 
 import std/[math, os, sequtils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game]
+import ../[config, game, halloffame]
 import coreui, errordialog
 
 var
@@ -294,4 +294,12 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
+  setLayoutRowDynamic(height = 25, cols = 4)
+  colorLabel(str = "Position", r = 255, g = 255, b = 0, align = centered)
+  colorLabel(str = "Name", r = 255, g = 255, b = 0, align = centered)
+  colorLabel(str = "Points", r = 255, g = 255, b = 0, align = centered)
+  colorLabel(str = "Died from", r = 255, g = 255, b = 0, align = centered)
+  for index, entry in hallOfFameArray:
+    if entry.points == 0:
+      break
   state = hallOfFame
