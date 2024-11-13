@@ -18,7 +18,7 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import std/[os, sequtils, strutils]
+import std/[math, os, sequtils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
 import coreui, errordialog
@@ -125,6 +125,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if fileExists(filename = docDirectory & "CHANGELOG.md"):
       try:
         var index: Natural = 0
+        fileLines = 1
         for line in lines(filename = docDirectory & "CHANGELOG.md"):
           index.inc
           if index < 6:
@@ -132,7 +133,11 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if state == news and line.len > 1 and line[0..2] == "## ":
             break
           fileContent.add(y = line & "\n")
-        fileLines = (30 * fileContent.countLines)
+          var needLines = ceil(getTextWidth(text = line) / menuWidth.float)
+          if needLines < 1.0:
+            needLines = 1.0
+          fileLines += needLines.int
+        fileLines *= 25
       except:
         dialog = setError(message = "Can't read ChangeLog file.")
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
@@ -254,9 +259,16 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if fileContent.len == 0 and dialog == none:
     if fileExists(filename = docDirectory & fileName):
       try:
+        fileLines = 1
+        if fileName == "CONTRIBUTING.md":
+          fileLines = 6
         for line in lines(filename = docDirectory & fileName):
           fileContent.add(y = line & "\n")
-        fileLines = (30 * fileContent.countLines)
+          var needLines = ceil(getTextWidth(text = line) / menuWidth.float)
+          if needLines < 1.0:
+            needLines = 1.0
+          fileLines += needLines.int
+        fileLines *= 25
       except:
         dialog = setError(message = "Can't read '" & fileName & "' file.")
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
