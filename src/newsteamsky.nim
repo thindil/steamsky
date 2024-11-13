@@ -134,6 +134,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       of showFile:
         # Show the content of the selected file in the main menu
         showFile(state = state, dialog = dialog)
+      of hallOfFame:
+        # Show the game's hall of fame
+        showHallOfFame(state = state)
       else:
         discard
       # Add the tooltips, if enabled
