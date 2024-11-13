@@ -294,12 +294,24 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
-  setLayoutRowDynamic(height = 25, cols = 4)
-  colorLabel(str = "Position", r = 255, g = 255, b = 0, align = centered)
-  colorLabel(str = "Name", r = 255, g = 255, b = 0, align = centered)
-  colorLabel(str = "Points", r = 255, g = 255, b = 0, align = centered)
-  colorLabel(str = "Died from", r = 255, g = 255, b = 0, align = centered)
-  for index, entry in hallOfFameArray:
-    if entry.points == 0:
-      break
-  state = hallOfFame
+  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  group(title = "HofGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 25, cols = 4)
+    colorLabel(str = "Position", r = 255, g = 255, b = 0, align = centered)
+    colorLabel(str = "Name", r = 255, g = 255, b = 0, align = centered)
+    colorLabel(str = "Points", r = 255, g = 255, b = 0, align = centered)
+    colorLabel(str = "Died from", r = 255, g = 255, b = 0, align = centered)
+    for index, entry in hallOfFameArray:
+      if entry.points == 0:
+        break
+      label(str = $index, alignment = centered)
+      label(str = entry.name, alignment = centered)
+      label(str = $entry.points, alignment = centered)
+      label(str = entry.deathReason, alignment = centered)
+  layoutSpaceStatic(height = 50, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+        return
