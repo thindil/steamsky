@@ -29,7 +29,7 @@ var
   fileContent: string = ""
   fileName: string = ""
   fileLines: Positive = 1
-  menuWidth*: Positive = 600 ## The width of the game's main window
+  menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
 proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
@@ -86,7 +86,8 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
           addTooltip(bounds = getWidgetBounds(),
               text = "Show your previous the bests scores in the game")
         labelButton(title = "Hall of Fame"):
-          echo "button pressed"
+          state = hallOfFame
+          return
     row(x = x, y = y, w = w, h = h):
       y += h
       if gameSettings.showTooltips:
@@ -242,8 +243,8 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
         return
   showLinkError()
 
-proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
-    RootEffect], contractual.} =
+proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the selected file content
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
@@ -264,8 +265,8 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
       setLayoutRowDynamic(height = fileLines.float, cols = 1)
       wrapLabel(str = fileContent)
   else:
-    wrapLabel(str = "Can't find file to load. Did '" & fileName & "' file is in '" &
-        docDirectory & "' directory?")
+    wrapLabel(str = "Can't find file to load. Did '" & fileName &
+        "' file is in '" & docDirectory & "' directory?")
   layoutSpaceStatic(height = 50, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
@@ -274,3 +275,11 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
         state = mainMenu
         fileContent = ""
         return
+
+proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
+    RootEffect], contractual.} =
+  ## Show the game's hall of fame
+  ## * state - the current game's state
+  ##
+  ## Returns the modified parameter state.
+  state = hallOfFame
