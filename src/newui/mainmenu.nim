@@ -134,7 +134,8 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if state == news and line.len > 1 and line[0..2] == "## ":
             break
           fileContent.add(y = line & "\n")
-          var needLines: float = ceil(x = getTextWidth(text = line) / menuWidth.float)
+          var needLines: float = ceil(x = getTextWidth(text = line) /
+              menuWidth.float)
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
@@ -265,7 +266,8 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
           fileLines = 6
         for line in lines(filename = docDirectory & fileName):
           fileContent.add(y = line & "\n")
-          var needLines: float = ceil(x = getTextWidth(text = line) / menuWidth.float)
+          var needLines: float = ceil(x = getTextWidth(text = line) /
+              menuWidth.float)
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
@@ -289,7 +291,8 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileContent = ""
         return
 
-proc showBackButton(state: var GameState) =
+proc showBackButton(state: var GameState) {.raises: [], tags: [],
+    contractual.} =
   ## Show the back to main menu button
   ## * state - the current game's state
   ##
@@ -329,8 +332,8 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       labelButton(title = "Back to menu"):
         state = mainMenu
 
-proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
-    RootEffect], contractual.} =
+proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the list of saved games
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
@@ -357,7 +360,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], t
           echo "button pressed"
         labelButton(title = parts[1]):
           echo "button pressed"
-        labelButton(title = file.getLastModificationTime.format(f = "yyyy-MM-dd hh:mm:ss")):
+        labelButton(title = file.getLastModificationTime.format(
+            f = "yyyy-MM-dd hh:mm:ss")):
           echo "button pressed"
       except:
         dialog = setError(message = "Can't add information about the save file.")
