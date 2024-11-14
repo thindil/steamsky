@@ -317,11 +317,36 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
         state = mainMenu
         return
 
-proc showLoadGame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
+proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the list of saved games
   ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter state.
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
   state = loadGame
+  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  group(title = "LoadGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 25, cols = 3)
+    labelButton(title = "Player name"):
+      echo "button pressed"
+    labelButton(title = "Ship name"):
+      echo "button pressed"
+    labelButton(title = "Last saved"):
+      echo "button pressed"
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    for file in walkFiles(pattern = saveDirectory & "*.sav"):
+      let
+        (_, name, _) = splitFile(path = file)
+        parts = name.split(sep = '_')
+      try:
+        labelButton(title = parts[0])
+        labelButton(title = parts[1])
+        labelButton(title = file.getLastModificationTime.format(f = "yyyy-MM-dd hh:mm:ss"))
+              fileName: file))
+      except:
+        dialog = setError(message = "Can't add information about the save file.")
+    restoreButtonStyle()
 
