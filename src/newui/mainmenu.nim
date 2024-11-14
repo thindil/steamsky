@@ -289,6 +289,18 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileContent = ""
         return
 
+proc showBackButton(state: var GameState) =
+  ## Show the back to main menu button
+  ## * state - the current game's state
+  ##
+  ## Returns the modified parameter state.
+  layoutSpaceStatic(height = 50, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+
 proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the game's hall of fame
@@ -309,13 +321,13 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       label(str = entry.name, alignment = centered)
       label(str = $entry.points, alignment = centered)
       label(str = entry.deathReason, alignment = centered)
+  showBackButton(state = state)
   layoutSpaceStatic(height = 50, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
-        return
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
@@ -350,12 +362,5 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], t
       except:
         dialog = setError(message = "Can't add information about the save file.")
     restoreButtonStyle()
-  layoutSpaceStatic(height = 50, widgetsCount = 1):
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
-        state = mainMenu
-        return
   state = loadGame
-
+  showBackButton(state = state)
