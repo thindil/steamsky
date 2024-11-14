@@ -78,7 +78,8 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
           addTooltip(bounds = getWidgetBounds(),
               text = "Load one of the previously saved games")
         labelButton(title = "Load game"):
-          echo "button pressed"
+          state = loadGame
+          return
     if showHoFButton:
       row(x = x, y = y, w = w, h = h):
         y += h
@@ -133,7 +134,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if state == news and line.len > 1 and line[0..2] == "## ":
             break
           fileContent.add(y = line & "\n")
-          var needLines = ceil(getTextWidth(text = line) / menuWidth.float)
+          var needLines: float = ceil(x = getTextWidth(text = line) / menuWidth.float)
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
@@ -264,7 +265,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
           fileLines = 6
         for line in lines(filename = docDirectory & fileName):
           fileContent.add(y = line & "\n")
-          var needLines = ceil(getTextWidth(text = line) / menuWidth.float)
+          var needLines: float = ceil(x = getTextWidth(text = line) / menuWidth.float)
           if needLines < 1.0:
             needLines = 1.0
           fileLines += needLines.int
@@ -315,3 +316,12 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
+
+proc showLoadGame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
+    RootEffect], contractual.} =
+  ## Show the list of saved games
+  ## * state - the current game's state
+  ##
+  ## Returns the modified parameter state.
+  state = loadGame
+

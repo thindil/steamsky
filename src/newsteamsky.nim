@@ -137,6 +137,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       of hallOfFame:
         # Show the game's hall of fame
         showHallOfFame(state = state)
+      of loadGame:
+        ## Show the list of saved games
+        showLoadGame(state = state)
       else:
         discard
       # Add the tooltips, if enabled
