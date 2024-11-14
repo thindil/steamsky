@@ -214,7 +214,7 @@ proc charArrayToString(charArray: openArray[char];
   ## Returns a string with text converted from the chars' array
   result = ""
   for i in 0 .. length - 1:
-    result.add(charArray[i])
+    result.add(y = charArray[i])
 
 proc stringToCharArray(str: string; length: int): tuple[charArray: seq[char];
     length: cint] {.raises: [], tags: [], contractual.} =
@@ -226,10 +226,10 @@ proc stringToCharArray(str: string; length: int): tuple[charArray: seq[char];
   ## Returns a tuple with two fields, charArray with the converted text from
   ## the string and lenght with the amount of the characters.
   for ch in str:
-    result.charArray.add(ch)
+    result.charArray.add(y = ch)
   if str.len < length:
     for i in str.len .. length:
-      result.charArray.add('\0')
+      result.charArray.add(y = '\0')
   result.length = str.len.cint
 
 proc getWidgetBounds*(): NimRect {.raises: [], tags: [], contractual.} =
@@ -238,23 +238,24 @@ proc getWidgetBounds*(): NimRect {.raises: [], tags: [], contractual.} =
   ## Returns a rectangle with the current Nuklear widget coordinates
   ## converted to NimRect
   proc nk_widget_bounds(ctx): nk_rect {.importc, nodecl, raises: [], tags: [], contractual.}
-  let rect = nk_widget_bounds(ctx)
+  let rect = nk_widget_bounds(ctx = ctx)
   return NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
 
-proc createWin(name: cstring; x, y, w, h: cfloat;
-    flags: nk_flags): bool {.raises: [], tags: [], contractual.} =
+proc createWin(title: cstring; wx, wy, ww, wh: cfloat;
+    wFlags: nk_flags): bool {.raises: [], tags: [], contractual.} =
   ## Create a new Nuklear window/widget, internal use only, temporary code
   ##
   ## Returns true if window was succesfully created otherwise false.
   proc nk_begin(ctx; title: cstring; bounds: nk_rect;
       flags: nk_flags): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_begin(ctx, name, new_nk_rect(x, y, w, h), flags)
+  return nk_begin(ctx = ctx, title = title, bounds = new_nk_rect(x = wx, y = wy,
+      w = ww, h = wh), flags = wFlags)
 
-proc winSetToInt(flags: set[WindowFlags]): cint {.raises: [], tags: [],
+proc winSetToInt(nimFlags: set[WindowFlags]): cint {.raises: [], tags: [],
     contractual.} =
   result = 0
   {.warning[HoleEnumConv]: off.}
-  for flag in flags:
+  for flag in nimFlags:
     result = result or flag.cint
   {.warning[HoleEnumConv]: on.}
 
@@ -269,9 +270,10 @@ template window*(name: string; x, y, w, h: float; flags: set[WindowFlags];
   ## * h       - the height of the window
   ## * flags   - the flags for the window
   ## * content - the content of the window
-  if createWin(name.cstring, x, y, w, h, winSetToInt(flags)):
+  if createWin(title = name.cstring, wx = x, wy = y, ww = w, wh = h,
+      wFlags = winSetToInt(nimFlags = flags)):
     content
-  nk_end(ctx)
+  nk_end(ctx = ctx)
 
 proc getTextWidth*(text: string): float {.raises: [Exception], tags: [
     RootEffect], contractual.} =
@@ -280,8 +282,8 @@ proc getTextWidth*(text: string): float {.raises: [Exception], tags: [
   ## * text - the text which width will be count
   ##
   ## Returns width in pixels of the text paramter
-  return ctx.style.font.width(ctx.style.font.userdata, ctx.style.font.height,
-      text, text.len.cint)
+  return ctx.style.font.width(arg1 = ctx.style.font.userdata,
+      h = ctx.style.font.height, arg3 = text, len = text.len.cint)
 
 proc windowIsHidden*(name: string): bool {.raises: [], tags: [], contractual.} =
   ## Check if the window with the selected name is hidden
@@ -291,7 +293,7 @@ proc windowIsHidden*(name: string): bool {.raises: [], tags: [], contractual.} =
   ## Returns true if the window is hidden, otherwise false
   proc nk_window_is_hidden(ctx; name: cstring): cint {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  return nk_window_is_hidden(ctx, name.cstring) > 0
+  return nk_window_is_hidden(ctx = ctx, name = name.cstring) > 0
 
 proc windowClose*(name: string) {.raises: [], tags: [], contractual.} =
   ## Closes the window
@@ -299,20 +301,21 @@ proc windowClose*(name: string) {.raises: [], tags: [], contractual.} =
   ## * name - the name of the window to close
   proc nk_window_close(ctx; name: cstring) {.importc, nodecl, raises: [],
       tags: [], contractual.}
-  nk_window_close(ctx, name.cstring)
+  nk_window_close(ctx = ctx, name = name.cstring)
 
 proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
   ## Add spacing in the selected between the row's boundaries in the row
   ##
   ## * cols - the amount of columns to add as the spacing
   proc nk_spacing(ctx; cols: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_spacing(ctx, cols.cint)
+  nk_spacing(ctx = ctx, cols = cols.cint)
 
 # ------
 # Popups
 # ------
 proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
-    x, y, w, h: float): bool {.raises: [], tags: [], contractual.} =
+    x, y, w, h: float): bool {.raises: [NuklearException], tags: [],
+        contractual.} =
   ## Try to create a new popup window. Internal use only.
   ##
   ## * ctx   - the Nuklear context
@@ -334,10 +337,13 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     let
       win: ptr nk_window = ctx.current
       panel: ptr nk_panel = win.layout
+    if panel.`type`.cint != panelSetPopup.cint:
+      raise newException(exceptn = NuklearException,
+          message = "Popups are not allowed to have popups.")
     return true
 
-proc createPopup(pType: PopupType; title: cstring;
-    flags: nk_flags; x, y, w, h: cfloat): bool {.raises: [], tags: [],
+proc createPopup(pType2: PopupType; title2: cstring;
+    flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [],
         contractual.} =
   ## Create a new Nuklear popup window, internal use only, temporary code
   ##
@@ -345,8 +351,8 @@ proc createPopup(pType: PopupType; title: cstring;
   proc nk_popup_begin(ctx; pType: PopupType; title: cstring;
       flags: nk_flags; rect: nk_rect): nk_bool {.importc, nodecl, raises: [],
           tags: [], contractual.}
-  return nk_popup_begin(ctx, pType, title, flags, new_nk_rect(
-      x, y, w, h))
+  return nk_popup_begin(ctx = ctx, pType = pType2, title = title2,
+      flags = flags2, rect = new_nk_rect(x = x2, y = y2, w = w2, h = h2))
 
 template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
     y, w, h: float; content: untyped) =
@@ -360,9 +366,10 @@ template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
   ## * w       - the width of the popup
   ## * h       - the height of the popup
   ## * content - the code executed when the button is pressed
-  if not createPopup(pType, title.cstring, winSetToInt(flags), x.cfloat, y, w, h):
-    raise newException(NuklearException,
-        "Can't create the popup window with title: '" & title & "'.")
+  if not createPopup(pType2 = pType, title2 = title.cstring,
+      flags2 = winSetToInt(nimFlags = flags), x2 = x.cfloat, y2 = y, w2 = w, h2 = h):
+    raise newException(exceptn = NuklearException,
+        message = "Can't create the popup window with title: '" & title & "'.")
   content
   ctx.nk_popup_end
 
