@@ -138,6 +138,7 @@ type
 # -------
 # Objects
 # -------
+{.push ruleOff: "namedParams".}
 type
   nk_color* {.importc: "struct nk_color", nodecl.} = object
     ## Internal Nuklear type
@@ -209,15 +210,9 @@ type
     panelCombo = 1 shl 5,
     panelMenu = 1 shl 6,
     panelTooltip = 1 shl 7
-  PanelSet* {.size: sizeof(cint).} = enum
-    ## The setting of panels
-    panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
-        panelTooltip.int,
-    panelSetPopup = panelSetNonBlock.int or panelPopup.int,
-    panelSetSub = panelSetPopup.int or panelGroup.int
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
-    `type`*: PanelSet
+    `type`*: PanelType
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
     layout*: ptr nk_panel
@@ -251,7 +246,6 @@ type
 # -----
 # Types
 # -----
-{.push ruleOff: "namedParams".}
 type
   NimColor* = object
     ## Used to store information about the selected color. Usually later
@@ -352,6 +346,12 @@ type
   ButtonBehavior* = enum
     ## The types of buttons behavior
     default, repeater
+  PanelSet* {.size: sizeof(cint).} = enum
+    ## The setting of panels
+    panelSetNonBlock = panelContextual.int or panelCombo.int or panelMenu.int or
+        panelTooltip.int,
+    panelSetPopup = panelSetNonBlock.int or panelPopup.int,
+    panelSetSub = panelSetPopup.int or panelGroup.int
 {.pop ruleOn: "namedParams".}
 
 # ----------
