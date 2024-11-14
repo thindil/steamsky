@@ -18,7 +18,7 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import std/[math, os, sequtils]
+import std/[math, os, sequtils, strutils, times]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, halloffame]
 import coreui, errordialog
@@ -325,7 +325,6 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], t
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  state = loadGame
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 3)
@@ -342,11 +341,21 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], t
         (_, name, _) = splitFile(path = file)
         parts = name.split(sep = '_')
       try:
-        labelButton(title = parts[0])
-        labelButton(title = parts[1])
-        labelButton(title = file.getLastModificationTime.format(f = "yyyy-MM-dd hh:mm:ss"))
-              fileName: file))
+        labelButton(title = parts[0]):
+          echo "button pressed"
+        labelButton(title = parts[1]):
+          echo "button pressed"
+        labelButton(title = file.getLastModificationTime.format(f = "yyyy-MM-dd hh:mm:ss")):
+          echo "button pressed"
       except:
         dialog = setError(message = "Can't add information about the save file.")
     restoreButtonStyle()
+  layoutSpaceStatic(height = 50, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+        return
+  state = loadGame
 
