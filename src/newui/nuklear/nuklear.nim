@@ -397,7 +397,8 @@ template treeNode*(title: string; state: var CollapseStates;
   ##
   ## Returns modified parameters state and current
   state = (if current == index: maximized else: minimized)
-  if ctx.nk_tree_state_push(ttype = node, ctitle = title.cstring, cstate = state):
+  if ctx.nk_tree_state_push(ttype = node, ctitle = title.cstring,
+      cstate = state):
     current = index
     content
     ctx.nk_tree_pop
@@ -417,7 +418,8 @@ template treeTab*(title: string; state: var CollapseStates;
   ##
   ## Returns modified parameters state and current
   state = (if current == index: maximized else: minimized)
-  if ctx.nk_tree_state_push(ttype = tab, ctitle = title.cstring, cstate = state):
+  if ctx.nk_tree_state_push(ttype = tab, ctitle = title.cstring,
+      cstate = state):
     current = index
     content
     ctx.nk_tree_pop
@@ -1052,6 +1054,19 @@ proc setButtonStyle*(field: ButtonStyleTypes; r: cint = 255; g: cint = 255;
     ctx.style.button.text_hover = nk_rgba(r, g, b, a)
   of textActive:
     ctx.style.button.text_active = nk_rgba(r, g, b, a)
+  else:
+    discard
+
+proc setButtonStyle*(field: ButtonStyleTypes; value: NimVec2) {.raises: [],
+    tags: [], contractual.} =
+  ## Set the color for the selcted field of the Nuklear buttons style
+  ##
+  ## * field - the style's field which value will be changed
+  ## * value - the new value for the style's field
+  case field
+  of padding:
+    ctx.style.button.padding = new_nk_vec2(x = value.x.cfloat,
+        y = value.y.cfloat)
   else:
     discard
 
