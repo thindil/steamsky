@@ -18,7 +18,7 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import std/[math, os, sequtils, strutils, times]
+import std/[algorithm, math, os, sequtils, strutils, times]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, halloffame]
 import coreui, errordialog
@@ -334,11 +334,11 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
 
 type
   SortingOrder = enum
-    none, playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
+    playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
   SaveData = object
-    playerName, shipName, lastSaved: string
+    playerName, shipName, saveTime: string
 
-var sortOrder: SortingOrder = none
+var sortOrder: SortingOrder = timeDesc
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -373,12 +373,55 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         parts = name.split(sep = '_')
       try:
         saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
-            lastSaved: file.getLastModificationTime.format(
+            saveTime: file.getLastModificationTime.format(
             f = "yyyy-MM-dd hh:mm:ss")))
       except:
         dialog = setError(message = "Can't add information about the save file.")
+
+    proc sortSaves(x, y: SaveData): int {.raises: [], tags: [], contractual.} =
+      ## Check how to sort the selected saves on the list
+      ##
+      ## * x - the first save to sort
+      ## * y - the second save to sort
+      ##
+      ## Returns 1 if the x save should go first, otherwise -1
+      case sortOrder
+      of playerAsc:
+        if x.playerName < y.playerName:
+          return 1
+        return -1
+      of playerDesc:
+        if x.playerName > y.playerName:
+          return 1
+        return -1
+      of shipAsc:
+        if x.shipName < y.shipName:
+          return 1
+        return -1
+      of shipDesc:
+        if x.shipName > y.shipName:
+          return 1
+        return -1
+      of timeAsc:
+        if x.saveTime < y.saveTime:
+          return 1
+        return -1
+      of timeDesc:
+        if x.saveTime > y.saveTime:
+          return 1
+        return -1
+
+    saves.sort(cmp = sortSaves)
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
+    setButtonStyle(field = normal, r = 18, g = 13, b = 13)
+    for save in saves:
+      labelButton(title = save.playerName):
+        echo "button clicked"
+      labelButton(title = save.shipName):
+        echo "button clicked"
+      labelButton(title = save.saveTime):
+        echo "button clicked"
     restoreButtonStyle()
   state = loadGame
   showBackButton(state = state)
