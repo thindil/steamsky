@@ -1030,7 +1030,7 @@ proc restoreButtonStyle*() {.raises: [], tags: [], contractual.} =
 
 proc setButtonStyle*(field: ButtonStyleTypes; r: cint = 255; g: cint = 255;
     b: cint = 255; a: cint = 255) {.raises: [], tags: [], contractual.} =
-  ## Set the color for the selcted field of the Nuklear buttons style
+  ## Set the color for the selected field of the Nuklear buttons style
   ##
   ## * field - the style's field which value will be changed
   ## * r     - the red value for the style color in RGBA
@@ -1059,7 +1059,7 @@ proc setButtonStyle*(field: ButtonStyleTypes; r: cint = 255; g: cint = 255;
 
 proc setButtonStyle*(field: ButtonStyleTypes; value: NimVec2) {.raises: [],
     tags: [], contractual.} =
-  ## Set the color for the selcted field of the Nuklear buttons style
+  ## Set the vector for the selected field of the Nuklear buttons style
   ##
   ## * field - the style's field which value will be changed
   ## * value - the new value for the style's field
