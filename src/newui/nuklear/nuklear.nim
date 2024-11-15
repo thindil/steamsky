@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import std/[hashes, macros]
-import contracts
+import contracts, nimalyzer
 import nk_types, nk_context, nk_tooltip, nk_widget
 export nk_types, nk_context, nk_tooltip, nk_widget
 
@@ -109,15 +109,15 @@ proc nk_popup_end(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
 # Trees
 # -----
 proc nk_tree_state_push(ctx; ttype: TreeType;
-    title: cstring; state: var CollapseStates): nk_bool {.importc, cdecl,
+    ctitle: cstring; cstate: var CollapseStates): nk_bool {.importc, cdecl,
         raises: [], tags: [], contractual.}
 proc nk_tree_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_tree_push_hashed(ctx; ttype: TreeType;
-    title: cstring; state: CollapseStates; hash: cstring; len,
+    ctitle: cstring; cstate: CollapseStates; chash: cstring; len,
     id: cint): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_tree_element_push_hashed(ctx; ttype: TreeType;
-    title: cstring; state: CollapseStates; selected: var nk_bool;
-    hash: cstring; len, sed: cint): nk_bool {.importc, cdecl, raises: [],
+    ctitle: cstring; cstate: CollapseStates; cselected: var nk_bool;
+    chash: cstring; len, sed: cint): nk_bool {.importc, cdecl, raises: [],
         tags: [], contractual.}
 proc nk_tree_element_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
@@ -313,6 +313,7 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # ------
 # Popups
 # ------
+{.push ruleOff: "params".}
 proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     x, y, w, h: float): bool {.raises: [NuklearException], tags: [],
         contractual.} =
@@ -341,6 +342,7 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
       raise newException(exceptn = NuklearException,
           message = "Popups are not allowed to have popups.")
     return true
+{.pop ruleOn: "params".}
 
 proc createPopup(pType2: PopupType; title2: cstring;
     flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [],
@@ -395,7 +397,7 @@ template treeNode*(title: string; state: var CollapseStates;
   ##
   ## Returns modified parameters state and current
   state = (if current == index: maximized else: minimized)
-  if ctx.nk_tree_state_push(node, title.cstring, state):
+  if ctx.nk_tree_state_push(ttype = node, ctitle = title.cstring, cstate = state):
     current = index
     content
     ctx.nk_tree_pop
@@ -415,7 +417,7 @@ template treeTab*(title: string; state: var CollapseStates;
   ##
   ## Returns modified parameters state and current
   state = (if current == index: maximized else: minimized)
-  if ctx.nk_tree_state_push(tab, title.cstring, state):
+  if ctx.nk_tree_state_push(ttype = tab, ctitle = title.cstring, cstate = state):
     current = index
     content
     ctx.nk_tree_pop
@@ -431,8 +433,9 @@ template treeNode*(title: string; state: CollapseStates; index: Positive;
   ## * state   - the current state of the tree
   ## * index   - the index of the tree. Must be unique
   ## * content - the content of the tree
-  if nk_tree_push_hashed(ctx, node, title.cstring, state, ($hash(
-      index)).cstring, 12, index.cint):
+  if nk_tree_push_hashed(ctx = ctx, ttype = node, ctitle = title.cstring,
+      cstate = state, chash = ($hash(x = index)).cstring, len = 12,
+      id = index.cint):
     content
     ctx.nk_tree_pop
 
@@ -444,8 +447,9 @@ template treeTab*(title: string; state: CollapseStates; index: Positive;
   ## * state   - the current state of the tree
   ## * index   - the index of the tree. Must be unique
   ## * content - the content of the tree
-  if nk_tree_push_hashed(ctx, tab, title.cstring, state, ($hash(
-      index)).cstring, 12, index.cint):
+  if nk_tree_push_hashed(ctx = ctx, ttype = tab, ctitle = title.cstring,
+      cstate = state, chash = ($hash(x = index)).cstring, len = 12,
+      id = index.cint):
     content
     ctx.nk_tree_pop
 
@@ -459,10 +463,11 @@ template treeElement*(eType: TreeType; title: string; state: CollapseStates;
   ## * index   - the index of the element. Must be unique
   ## * content - the content of the element
   var sel: nk_bool = selected.nk_bool
-  if nk_tree_element_push_hashed(ctx, eType, title.cstring, state, sel, (
-      $hash(index)).cstring, 12, index.cint):
+  if nk_tree_element_push_hashed(ctx = ctx, ttype = eType,
+      ctitle = title.cstring, cstate = state, cselected = sel, chash = ($hash(
+      x = index)).cstring, len = 12, sed = index.cint):
     content
-    nk_tree_element_pop(ctx)
+    nk_tree_element_pop(ctx = ctx)
   selected = sel
 
 # ------
@@ -479,7 +484,8 @@ proc colorLabel*(str: string; r, g, b: int;
   ## * align - the text aligmnent flags
   proc nk_label_colored(ctx; str: cstring; align: nk_flags;
       color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_label_colored(ctx, str.cstring, align.nk_flags, nk_rgb(r.cint, g.cint, b.cint))
+  nk_label_colored(ctx = ctx, str = str.cstring, align = align.nk_flags,
+      color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
 proc label*(str: string; alignment: TextAlignment = left) {.raises: [], tags: [
     ], contractual.} =
@@ -489,7 +495,7 @@ proc label*(str: string; alignment: TextAlignment = left) {.raises: [], tags: [
   ## * alignment - the alignment of the text. Default is alignment to the left
   proc nk_label(ctx; str: cstring; alignment: nk_flags) {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  nk_label(ctx, str.cstring, alignment.nk_flags)
+  nk_label(ctx = ctx, str = str.cstring, alignment = alignment.nk_flags)
 
 proc text*(str: string; len: int = str.len;
     alignment: TextAlignment = left) {.raises: [], tags: [], contractual.} =
@@ -501,7 +507,8 @@ proc text*(str: string; len: int = str.len;
   ## * alignment - the alignment of the text. Default is alignment to left
   proc nk_text(ctx; str: cstring; len: cint; alignment: nk_flags) {.importc,
       nodecl, raises: [], tags: [], contractual.}
-  nk_text(ctx, str.cstring, len.cint, alignment.nk_flags)
+  nk_text(ctx = ctx, str = str.cstring, len = len.cint,
+      alignment = alignment.nk_flags)
 
 proc wrapLabel*(str: string) {.raises: [], tags: [], contractual.} =
   ## Draw a text and wrap it if its lentgh is bigger than the width of its
@@ -509,8 +516,9 @@ proc wrapLabel*(str: string) {.raises: [], tags: [], contractual.} =
   ##
   ## * str - the text to draw
   proc nk_label_wrap(ctx; str: cstring) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_label_wrap(ctx, str.cstring)
+  nk_label_wrap(ctx = ctx, str = str.cstring)
 
+{.push ruleOff: "namedParams".}
 macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
   ## Draw a text formatted in the same way like the C function printf
   ##
@@ -518,6 +526,7 @@ macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
   ## * args      - the text and its arguments to draw
   result = quote do:
     nk_labelf(ctx, `alignment`.nk_flags, `args`)
+{.pop ruleOn: "namedParams".}
 
 # -------
 # Buttons
