@@ -332,6 +332,14 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       labelButton(title = "Back to menu"):
         state = mainMenu
 
+type
+  SortingOrder = enum
+    none, playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
+  SaveData = object
+    playerName, shipName, lastSaved: string
+
+var sortOrder: SortingOrder = none
+
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the list of saved games
@@ -344,27 +352,33 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "LoadGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 3)
     labelButton(title = "Player name"):
-      echo "button pressed"
+      if sortOrder == playerAsc:
+        sortOrder = playerDesc
+      else:
+        sortOrder = playerAsc
     labelButton(title = "Ship name"):
-      echo "button pressed"
+      if sortOrder == shipAsc:
+        sortOrder = shipDesc
+      else:
+        sortOrder = shipAsc
     labelButton(title = "Last saved"):
-      echo "button pressed"
-    saveButtonStyle()
-    setButtonStyle(field = borderColor, a = 0)
+      if sortOrder == timeAsc:
+        sortOrder = timeDesc
+      else:
+        sortOrder = timeAsc
+    var saves: seq[SaveData] = @[]
     for file in walkFiles(pattern = saveDirectory & "*.sav"):
       let
         (_, name, _) = splitFile(path = file)
         parts = name.split(sep = '_')
       try:
-        labelButton(title = parts[0]):
-          echo "button pressed"
-        labelButton(title = parts[1]):
-          echo "button pressed"
-        labelButton(title = file.getLastModificationTime.format(
-            f = "yyyy-MM-dd hh:mm:ss")):
-          echo "button pressed"
+        saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
+            lastSaved: file.getLastModificationTime.format(
+            f = "yyyy-MM-dd hh:mm:ss")))
       except:
         dialog = setError(message = "Can't add information about the save file.")
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
     restoreButtonStyle()
   state = loadGame
   showBackButton(state = state)
