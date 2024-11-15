@@ -213,9 +213,13 @@ type
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
+  nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
+    ## Internal Nuklear type
+    win*: ptr nk_window
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
     layout*: ptr nk_panel
+    popup*: nk_popup_state
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
