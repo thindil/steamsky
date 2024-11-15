@@ -173,7 +173,7 @@ type
     normal*, hover*, active*: nk_style_item
     border_color*, text_background*, text_normal*, text_hover*,
       text_active*: nk_color
-    rounding*: cfloat
+    rounding*, border*: cfloat
     padding*: nk_vec2
   nk_handle* {.bycopy, union.} = object
     ## Internal Nuklear type
