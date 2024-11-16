@@ -72,8 +72,8 @@ proc nk_labelf(ctx; flags: nk_flags; fmt: cstring) {.importc,
 # -------
 proc nk_layout_row_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_layout_row_begin(ctx; fmt: nk_layout_format;
-    rowHeight: cfloat; cols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
-proc nk_layout_row_push(ctx; width: cfloat) {.importc, cdecl, raises: [],
+    rowHeight: cfloat; ccols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_layout_row_push(ctx; cwidth: cfloat) {.importc, cdecl, raises: [],
     tags: [], contractual.}
 proc nk_layout_row(ctx; fmt: nk_layout_format; height: cfloat;
     cols: cint; ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
@@ -124,12 +124,12 @@ proc nk_tree_element_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # -------
 # Buttons
 # -------
-proc nk_button_label(ctx; title: cstring): nk_bool {.importc, cdecl, raises: [],
-    tags: [], contractual.}
-proc nk_button_symbol(ctx; symbol: SymbolType): nk_bool {.importc, cdecl,
+proc nk_button_label(ctx; ctitle: cstring): nk_bool {.importc, cdecl, raises: [
+    ], tags: [], contractual.}
+proc nk_button_symbol(ctx; csymbol: SymbolType): nk_bool {.importc, cdecl,
     raises: [], tags: [], contractual.}
-proc nk_button_symbol_label(ctx; symbol: SymbolType; label: cstring;
-    align: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_button_symbol_label(ctx; csymbol: SymbolType; clabel: cstring;
+    calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # -----
 # Style
@@ -533,21 +533,21 @@ macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
 # -------
 # Buttons
 # -------
-proc createColorButton(r, g, b: cint): bool {.raises: [], tags: [],
+proc createColorButton(r1, g1, b1: cint): bool {.raises: [], tags: [],
     contractual.} =
   ## Draw a button with the selected color background, internal use only, temporary code
   ##
-  ## * r   - the red value for the button color in RGB
-  ## * g   - the green value for the button color in RGB
-  ## * b   - the blue value for the button color in RGB
+  ## * r1   - the red value for the button color in RGB
+  ## * g1   - the green value for the button color in RGB
+  ## * b1   - the blue value for the button color in RGB
   ##
   ## Returns true if button was pressed
   proc nk_button_color(ctx; color: nk_color): nk_bool {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  return nk_button_color(ctx, nk_rgb(r, g, b))
+  return nk_button_color(ctx = ctx, color = nk_rgb(r = r1, g = g1, b = b1))
 
 template colorButton*(r, g, b: int; onPressCode: untyped) =
-  if createColorButton(r.cint, g.cint, b.cint):
+  if createColorButton(r1 = r.cint, g1 = g.cint, b1 = b.cint):
     onPressCode
 
 template labelButton*(title: string; onPressCode: untyped) =
@@ -556,7 +556,7 @@ template labelButton*(title: string; onPressCode: untyped) =
   ##
   ## * title       - the text to shown on the button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_label(ctx, title.cstring):
+  if nk_button_label(ctx = ctx, ctitle = title.cstring):
     onPressCode
 
 proc setButtonBehavior*(behavior: ButtonBehavior) {.raises: [], tags: [],
@@ -566,7 +566,7 @@ proc setButtonBehavior*(behavior: ButtonBehavior) {.raises: [], tags: [],
   ## * behavior - the behavior of a button
   proc nk_button_set_behavior(ctx; behavior: ButtonBehavior) {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  nk_button_set_behavior(ctx, behavior)
+  nk_button_set_behavior(ctx = ctx, behavior = behavior)
 
 template symbolButton*(symbol: SymbolType; onPressCode: untyped) =
   ## Draw the button with the selected symbol. Execute the selected code
@@ -574,7 +574,7 @@ template symbolButton*(symbol: SymbolType; onPressCode: untyped) =
   ##
   ## * symbol      - the symbol to shown on the button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_symbol(ctx, symbol):
+  if nk_button_symbol(ctx = ctx, csymbol = symbol):
     onPressCode
 
 template symbolLabelButton*(symbol: SymbolType; label: string;
@@ -586,7 +586,8 @@ template symbolLabelButton*(symbol: SymbolType; label: string;
   ## * label       - the text to display on the button
   ## * align       - the alignment of the button's label
   ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_symbol_label(ctx, symbol, label.cstring, align.nk_flags):
+  if nk_button_symbol_label(ctx = ctx, csymbol = symbol,
+      clabel = label.cstring, calign = align.nk_flags):
     onPressCode
 
 proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
@@ -596,13 +597,13 @@ proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
   ## * bTitle - the text to shown on the button
   ## * bStyle - the button's style settings
   var buttonStyle: nk_style_button = ctx.style.button
-  buttonStyle.border_color = nk_rgb(bStyle.borderColor.r.cint,
-      bStyle.borderColor.g.cint, bStyle.borderColor.b.cint)
+  buttonStyle.border_color = nk_rgb(r = bStyle.borderColor.r.cint,
+      g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
   buttonStyle.rounding = bStyle.rounding.cfloat
-  buttonStyle.padding = new_nk_vec2(bStyle.padding.x, bStyle.padding.y)
+  buttonStyle.padding = new_nk_vec2(x = bStyle.padding.x, y = bStyle.padding.y)
   proc nk_button_label_styled(ctx; style: var nk_style_button;
       title: cstring): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_button_label_styled(ctx, buttonStyle, bTitle)
+  return nk_button_label_styled(ctx = ctx, style = buttonStyle, title = bTitle)
 
 template labelButtonStyled*(title: string; style: ButtonStyle;
     onPressCode: untyped) =
@@ -631,7 +632,8 @@ proc slide*(min, val, max, step: int): int {.raises: [], tags: [],
   ## Returns the new value on the slider
   proc nk_slide_int(ctx; min, val, max, step: cint): cint {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  return nk_slide_int(ctx, min.cint, val.cint, max.cint, step.cint).int
+  return nk_slide_int(ctx = ctx, min = min.cint, val = val.cint, max = max.cint,
+      step = step.cint).int
 
 # -------
 # Layouts
@@ -647,7 +649,7 @@ proc layoutSpacePush(ctx; x, y, w, h: cfloat) {.raises: [], tags: [],
   ## * h   - the amount of pixels or ratio to push the height
   proc nk_layout_space_push(ctx; rect: nk_rect) {.importc, nodecl, raises: [],
       tags: [], contractual.}
-  nk_layout_space_push(ctx, new_nk_rect(x, y, w, h))
+  nk_layout_space_push(ctx = ctx, rect = new_nk_rect(x = x, y = y, w = w, h = h))
 
 proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [],
     contractual.} =
@@ -659,7 +661,7 @@ proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [],
   ## * cols   - the amount of columns in each row
   proc nk_layout_row_dynamic(ctx; height: cfloat; cols: cint) {.importc, cdecl,
       raises: [], tags: [], contractual.}
-  nk_layout_row_dynamic(ctx, height.cfloat, cols.cint)
+  nk_layout_row_dynamic(ctx = ctx, height = height.cfloat, cols = cols.cint)
 
 proc setLayoutRowStatic*(height: float; width, cols: int) {.raises: [], tags: [
     ], contractual.} =
@@ -672,7 +674,8 @@ proc setLayoutRowStatic*(height: float; width, cols: int) {.raises: [], tags: [
   ## * cols   - the amount of columns in each row
   proc nk_layout_row_static(ctx; height: cfloat; itemWidth,
       cols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
-  nk_layout_row_static(ctx, height.cfloat, width.cint, cols.cint)
+  nk_layout_row_static(ctx = ctx, height = height.cfloat,
+      itemWidth = width.cint, cols = cols.cint)
 
 template layoutStatic*(height: float; cols: int; content: untyped) =
   ## Start setting manualy each row of the current widgets layout. The layout
@@ -681,9 +684,10 @@ template layoutStatic*(height: float; cols: int; content: untyped) =
   ## * height  - the width in pixels or window's ratio of each row
   ## * cols    - the amount of columns in each row
   ## * content - the content of the layout
-  nk_layout_row_begin(ctx, NK_STATIC, height.cfloat, cols.cint)
+  nk_layout_row_begin(ctx = ctx, fmt = NK_STATIC, rowHeight = height.cfloat,
+      ccols = cols.cint)
   content
-  nk_layout_row_end(ctx)
+  nk_layout_row_end(ctx = ctx)
 
 template layoutDynamic*(height: float; cols: int; content: untyped) =
   ## Start setting manualy each row of the current widgets layout. The layout
@@ -692,16 +696,17 @@ template layoutDynamic*(height: float; cols: int; content: untyped) =
   ## * height   - the width in pixels or window's ratio of each row
   ## * cols    - the amount of columns in each row
   ## * content - the content of the layout
-  nk_layout_row_begin(ctx, NK_DYNAMIC, height.cfloat, cols.cint)
+  nk_layout_row_begin(ctx = ctx, fmt = NK_DYNAMIC, rowHeight = height.cfloat,
+      ccols = cols.cint)
   content
-  nk_layout_row_end(ctx)
+  nk_layout_row_end(ctx = ctx)
 
 template row*(width: float; content: untyped) =
   ## Set the content of the row in the current widgets layout
   ##
   ## * width   - the width in the pixels or window's ratio of each column
   ## * content - the content of the row
-  nk_layout_row_push(ctx, width.cfloat)
+  nk_layout_row_push(ctx = ctx, cwidth = width.cfloat)
   content
 
 proc setLayoutRowStatic*(height: float; cols: int; ratio: openArray[
@@ -713,7 +718,8 @@ proc setLayoutRowStatic*(height: float; cols: int; ratio: openArray[
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
   ## * ratio  - the array or sequence of cfloat with width of the colums
-  nk_layout_row(ctx, NK_STATIC, height.cfloat, cols.cint, ratio.addr)
+  nk_layout_row(ctx = ctx, fmt = NK_STATIC, height = height.cfloat,
+      cols = cols.cint, ratio = ratio.addr)
 
 proc setLayoutRowDynamic*(height: float; cols: int; ratio: openArray[
     cfloat]) {.raises: [], tags: [], contractual.} =
@@ -1067,6 +1073,20 @@ proc setButtonStyle*(field: ButtonStyleTypes; value: NimVec2) {.raises: [],
   of padding:
     ctx.style.button.padding = new_nk_vec2(x = value.x.cfloat,
         y = value.y.cfloat)
+  else:
+    discard
+
+proc setButtonStyle*(field: ButtonStyleTypes; value: float) {.raises: [],
+    tags: [], contractual.} =
+  ## Set the float for the selected field of the Nuklear buttons style
+  ##
+  ## * field - the style's field which value will be changed
+  ## * value - the new value for the style's field
+  case field
+  of rounding:
+    ctx.style.button.rounding = value.cfloat
+  of border:
+    ctx.style.button.border = value.cfloat
   else:
     discard
 
