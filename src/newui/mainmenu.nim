@@ -415,13 +415,19 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     setButtonStyle(field = normal, r = 18, g = 13, b = 13)
-    for save in saves:
-      labelButton(title = save.playerName):
-        echo "button clicked"
-      labelButton(title = save.shipName):
-        echo "button clicked"
-      labelButton(title = save.saveTime):
-        echo "button clicked"
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
+    layoutSpaceStatic(height = (saves.len * 30).float, widgetsCount = (saves.len * 3)):
+      for index, save in saves:
+        row(x = 0, y = (index * 30).float, w = 190, h = 30):
+          labelButton(title = save.playerName):
+            echo "button clicked"
+        row(x = 190, y = (index * 30).float, w = 190, h = 30):
+          labelButton(title = save.shipName):
+            echo "button clicked"
+        row(x = 380, y = (index * 30).float, w = 190, h = 30):
+          labelButton(title = save.saveTime):
+            echo "button clicked"
     restoreButtonStyle()
   state = loadGame
   showBackButton(state = state)
