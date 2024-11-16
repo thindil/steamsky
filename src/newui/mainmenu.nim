@@ -328,8 +328,18 @@ var
   sortOrder: SortingOrder = timeDesc
   saveClicked: string = ""
 
-proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
-  dialog = loadMenu
+proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
+  window(name = "Actions", x = (menuWidth / 3).float, y = (menuHeight /
+      3).float, w = 150, h = 150, flags = {windowBorder, windowMoveable,
+      windowTitle, windowNoScrollbar}):
+    setLayoutRowDynamic(height = 30, cols = 1)
+    labelButton(title = "Load game"):
+      echo "button clicked"
+    labelButton(title = "Delete game"):
+      echo "button clicked"
+    labelButton(title = "Close"):
+      dialog = none
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -341,7 +351,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 25, cols = 3)
+    setLayoutRowDynamic(height = 40, cols = 3)
     labelButton(title = "Player name"):
       if sortOrder == playerAsc:
         sortOrder = playerDesc
@@ -408,7 +418,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = normal, r = 18, g = 13, b = 13)
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
-    layoutSpaceStatic(height = (saves.len * 30).float, widgetsCount = (saves.len * 3)):
+    layoutSpaceStatic(height = (saves.len * 30).float, widgetsCount = (
+        saves.len * 3)):
       for index, save in saves:
         row(x = 0, y = (index * 30).float, w = 190, h = 30):
           labelButton(title = save.playerName):
