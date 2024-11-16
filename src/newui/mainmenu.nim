@@ -328,6 +328,9 @@ var
   sortOrder: SortingOrder = timeDesc
   saveClicked: string = ""
 
+proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  dialog = loadMenu
+
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the list of saved games
@@ -409,15 +412,15 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for index, save in saves:
         row(x = 0, y = (index * 30).float, w = 190, h = 30):
           labelButton(title = save.playerName):
-            dialog = loadDialog
+            dialog = loadMenu
             saveClicked = save.path
         row(x = 190, y = (index * 30).float, w = 190, h = 30):
           labelButton(title = save.shipName):
-            dialog = loadDialog
+            dialog = loadMenu
             saveClicked = save.path
         row(x = 380, y = (index * 30).float, w = 190, h = 30):
           labelButton(title = save.saveTime):
-            dialog = loadDialog
+            dialog = loadMenu
             saveClicked = save.path
     restoreButtonStyle()
   layoutSpaceStatic(height = 50, widgetsCount = 1):

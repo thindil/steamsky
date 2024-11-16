@@ -138,9 +138,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         # Show the game's hall of fame
         showHallOfFame(state = state)
       of loadGame:
-        ## Show the list of saved games
+        # Show the list of saved games
         showLoadGame(state = state, dialog = dialog)
-      else:
+      of quitGame:
+        # Quit from the game
         discard
       # Add the tooltips, if enabled
       if gameSettings.showTooltips:
@@ -151,9 +152,15 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       break
 
     # Dialogs if needed
-    if dialog == GameDialog.errorDialog:
+    case dialog
+    of errorDialog:
       # Show the error dialog
       showError(dialog = dialog)
+    of loadMenu:
+      # Show the selected save game menu
+      showLoadMenu(dialog = dialog)
+    of none:
+      discard
 
     # Draw
     nuklearDraw()
