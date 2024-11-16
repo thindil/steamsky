@@ -96,7 +96,6 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ##
   ## Returns parameter dialog
   ##
-  dialog = errorDialog
   window(name = "Error!Error!Error!", x = 40, y = 20, w = 540, h = 360,
       flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable}):
     setLayoutRowDynamic(height = 75, cols = 1)
