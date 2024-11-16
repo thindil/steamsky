@@ -275,7 +275,7 @@ type
   ButtonStyleTypes* = enum
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,
-        textActive, rounding, padding
+        textActive, rounding, padding, border
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
     spacing
