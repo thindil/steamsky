@@ -291,19 +291,6 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileContent = ""
         return
 
-proc showBackButton(state: var GameState) {.raises: [], tags: [],
-    contractual.} =
-  ## Show the back to main menu button
-  ## * state - the current game's state
-  ##
-  ## Returns the modified parameter state.
-  layoutSpaceStatic(height = 50, widgetsCount = 1):
-    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
-      labelButton(title = "Back to menu"):
-        state = mainMenu
-
 proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the game's hall of fame
@@ -324,7 +311,6 @@ proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       label(str = entry.name, alignment = centered)
       label(str = $entry.points, alignment = centered)
       label(str = entry.deathReason, alignment = centered)
-  showBackButton(state = state)
   layoutSpaceStatic(height = 50, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
@@ -336,9 +322,11 @@ type
   SortingOrder = enum
     playerAsc, playerDesc, shipAsc, shipDesc, timeAsc, timeDesc
   SaveData = object
-    playerName, shipName, saveTime: string
+    playerName, shipName, saveTime, path: string
 
-var sortOrder: SortingOrder = timeDesc
+var
+  sortOrder: SortingOrder = timeDesc
+  saveClicked: string = ""
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -374,7 +362,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       try:
         saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
             saveTime: file.getLastModificationTime.format(
-            f = "yyyy-MM-dd hh:mm:ss")))
+            f = "yyyy-MM-dd hh:mm:ss"), path: file))
       except:
         dialog = setError(message = "Can't add information about the save file.")
 
@@ -421,13 +409,21 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for index, save in saves:
         row(x = 0, y = (index * 30).float, w = 190, h = 30):
           labelButton(title = save.playerName):
-            echo "button clicked"
+            dialog = loadDialog
+            saveClicked = save.path
         row(x = 190, y = (index * 30).float, w = 190, h = 30):
           labelButton(title = save.shipName):
-            echo "button clicked"
+            dialog = loadDialog
+            saveClicked = save.path
         row(x = 380, y = (index * 30).float, w = 190, h = 30):
           labelButton(title = save.saveTime):
-            echo "button clicked"
+            dialog = loadDialog
+            saveClicked = save.path
     restoreButtonStyle()
-  state = loadGame
-  showBackButton(state = state)
+  layoutSpaceStatic(height = 50, widgetsCount = 1):
+    row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+        saveClicked = ""
