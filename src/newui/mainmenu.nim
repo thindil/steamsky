@@ -327,6 +327,7 @@ type
 var
   sortOrder: SortingOrder = timeDesc
   saveClicked: string = ""
+  saves: seq[SaveData] = @[]
 
 proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
@@ -382,17 +383,17 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         sortOrder = timeDesc
       else:
         sortOrder = timeAsc
-    var saves: seq[SaveData] = @[]
-    for file in walkFiles(pattern = saveDirectory & "*.sav"):
-      let
-        (_, name, _) = splitFile(path = file)
-        parts = name.split(sep = '_')
-      try:
-        saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
-            saveTime: file.getLastModificationTime.format(
-            f = "yyyy-MM-dd hh:mm:ss"), path: file))
-      except:
-        dialog = setError(message = "Can't add information about the save file.")
+    if saves.len == 0:
+      for file in walkFiles(pattern = saveDirectory & "*.sav"):
+        let
+          (_, name, _) = splitFile(path = file)
+          parts = name.split(sep = '_')
+        try:
+          saves.add(y = SaveData(playerName: parts[0], shipName: parts[1],
+              saveTime: file.getLastModificationTime.format(
+              f = "yyyy-MM-dd hh:mm:ss"), path: file))
+        except:
+          dialog = setError(message = "Can't add information about the save file.")
 
     proc sortSaves(x, y: SaveData): int {.raises: [], tags: [], contractual.} =
       ## Check how to sort the selected saves on the list
