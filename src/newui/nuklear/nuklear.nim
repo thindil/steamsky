@@ -61,6 +61,12 @@ proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
 # -------
 proc nk_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
+# -------
+# Windows
+# -------
+proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
+
+
 # ----
 # Text
 # ----
@@ -336,11 +342,19 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     if ctx == nil or ctx.current == nil or ctx.current.layout == nil:
       return false
     let
-      win: ptr nk_window = ctx.current
+      win: PNkWindow = ctx.current
       panel: ptr nk_panel = win.layout
     if panel.`type`.cint != panelSetPopup.cint:
       raise newException(exceptn = NuklearException,
           message = "Popups are not allowed to have popups.")
+    let titleHash: Hash = hash(x = title)
+    var popup: PNkWindow = win.popup.win
+    if (popup == nil):
+      popup = cast[PNkWindow](nk_create_window(ctx = ctx))
+      popup.parent = win
+      win.popup.win = popup
+      win.popup.active = nkFalse
+      win.popup.`type` = panelPopup
     return true
 {.pop ruleOn: "params".}
 
