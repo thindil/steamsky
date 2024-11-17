@@ -21,7 +21,7 @@
 import std/[algorithm, math, os, sequtils, strutils, times]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, halloffame]
-import coreui, errordialog
+import coreui, dialogs, errordialog
 
 var
   logo: PImage = nil
@@ -344,7 +344,8 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     labelButton(title = "Load game"):
       echo "button clicked"
     labelButton(title = "Delete game"):
-      echo "button clicked"
+      setQuestion(question = "Are you sure you want delete this savegame?", data = saveClicked)
+      dialog = questionDialog
     labelButton(title = "Close"):
       dialog = none
 
