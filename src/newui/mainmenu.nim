@@ -330,6 +330,12 @@ var
 
 proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
+  ## Show the menu for the selected saved game
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the parameter dialog. It is modified only when the player
+  ## closed the dialog
   window(name = "Actions", x = (menuWidth / 3).float, y = (menuHeight /
       3).float, w = 150, h = 150, flags = {windowBorder, windowMoveable,
       windowTitle, windowNoScrollbar}):
@@ -351,17 +357,26 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   group(title = "LoadGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 40, cols = 3)
+    setLayoutRowDynamic(height = 30, cols = 3)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Press mouse button to sort the saved games.")
     labelButton(title = "Player name"):
       if sortOrder == playerAsc:
         sortOrder = playerDesc
       else:
         sortOrder = playerAsc
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Press mouse button to sort the saved games.")
     labelButton(title = "Ship name"):
       if sortOrder == shipAsc:
         sortOrder = shipDesc
       else:
         sortOrder = shipAsc
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Press mouse button to sort the saved games.")
     labelButton(title = "Last saved"):
       if sortOrder == timeAsc:
         sortOrder = timeDesc
@@ -422,14 +437,23 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         saves.len * 3)):
       for index, save in saves:
         row(x = 0, y = (index * 30).float, w = 190, h = 30):
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(), text = "Press mouse " & (
+                if gameSettings.rightButton: "right" else: "left") & " button to show available option")
           labelButton(title = save.playerName):
             dialog = loadMenu
             saveClicked = save.path
         row(x = 190, y = (index * 30).float, w = 190, h = 30):
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(), text = "Press mouse " & (
+                if gameSettings.rightButton: "right" else: "left") & " button to show available option")
           labelButton(title = save.shipName):
             dialog = loadMenu
             saveClicked = save.path
         row(x = 380, y = (index * 30).float, w = 190, h = 30):
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(), text = "Press mouse " & (
+                if gameSettings.rightButton: "right" else: "left") & " button to show available option")
           labelButton(title = save.saveTime):
             dialog = loadMenu
             saveClicked = save.path
