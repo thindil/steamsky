@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.5] - 2024-11-17
 
 ### Added
 - Image of the game's logo
