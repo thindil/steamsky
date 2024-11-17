@@ -21,7 +21,7 @@
 import std/[os, parseopt, strutils, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, log
-import newui/[coreui, errordialog, mainmenu]
+import newui/[coreui, dialogs, errordialog, mainmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -159,6 +159,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     of loadMenu:
       # Show the selected save game menu
       showLoadMenu(dialog = dialog)
+    of questionDialog:
+      # Show the question dialog
+      showQuestion(dialog = dialog)
     of none:
       discard
 
