@@ -1,4 +1,4 @@
-# Copyright © 2023-2024 Bartek Jasicki
+# Copyright © 2023-2024 Bartek Jasickctx = i
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -78,9 +78,9 @@ proc nk_layout_row_push(ctx; cwidth: cfloat) {.importc, cdecl, raises: [],
 proc nk_layout_row(ctx; fmt: nk_layout_format; height: cfloat;
     cols: cint; ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
 proc nk_layout_space_begin(ctx; fmt: nk_layout_format;
-    height: cfloat; widgetCount: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
+    cheight: cfloat; widgetCount: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-proc nk_layout_row_template_begin(ctx; height: cfloat) {.importc, cdecl,
+proc nk_layout_row_template_begin(ctx; cheight: cfloat) {.importc, cdecl,
     raises: [], tags: [], contractual.}
 proc nk_layout_row_template_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
@@ -90,7 +90,7 @@ proc nk_layout_row_template_end(ctx) {.importc, cdecl, raises: [], tags: [], con
 proc nk_menubar_begin(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_menubar_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_menu_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-proc nk_menu_item_label(ctx; text: cstring;
+proc nk_menu_item_label(ctx; ctext: cstring;
     aligmnent: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ------
@@ -638,7 +638,7 @@ proc slide*(min, val, max, step: int): int {.raises: [], tags: [],
 # -------
 # Layouts
 # -------
-proc layoutSpacePush(ctx; x, y, w, h: cfloat) {.raises: [], tags: [],
+proc layoutSpacePush(ctx; x1, y1, w1, h1: cfloat) {.raises: [], tags: [],
     contractual.} =
   ## Push the next widget's position and size, internal use only, temporary code
   ##
@@ -649,7 +649,7 @@ proc layoutSpacePush(ctx; x, y, w, h: cfloat) {.raises: [], tags: [],
   ## * h   - the amount of pixels or ratio to push the height
   proc nk_layout_space_push(ctx; rect: nk_rect) {.importc, nodecl, raises: [],
       tags: [], contractual.}
-  nk_layout_space_push(ctx = ctx, rect = new_nk_rect(x = x, y = y, w = w, h = h))
+  nk_layout_space_push(ctx = ctx, rect = new_nk_rect(x = x1, y = y1, w = w1, h = h1))
 
 proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [],
     contractual.} =
@@ -730,7 +730,8 @@ proc setLayoutRowDynamic*(height: float; cols: int; ratio: openArray[
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
   ## * ratio  - the array or sequence of cfloat with width of the colums
-  nk_layout_row(ctx, NK_DYNAMIC, height.cfloat, cols.cint, ratio.addr)
+  nk_layout_row(ctx = ctx, fmt = NK_DYNAMIC, height = height.cfloat,
+      cols = cols.cint, ratio = ratio.addr)
 
 template layoutSpaceStatic*(height: float; widgetsCount: int;
     content: untyped) =
@@ -740,9 +741,10 @@ template layoutSpaceStatic*(height: float; widgetsCount: int;
   ## * height       - the width in pixels or window's ratio of each row
   ## * widgetsCount - the amount of widgets in each row.
   ## * content      - the content of the layout
-  nk_layout_space_begin(ctx, NK_STATIC, height.cfloat, widgetsCount.cint)
+  nk_layout_space_begin(ctx = ctx, fmt = NK_STATIC, cheight = height.cfloat,
+      widgetCount = widgetsCount.cint)
   content
-  nk_layout_space_end(ctx)
+  nk_layout_space_end(ctx = ctx)
 
 template layoutSpaceDynamic*(height: float; widgetsCount: int;
     content: untyped) =
@@ -752,9 +754,10 @@ template layoutSpaceDynamic*(height: float; widgetsCount: int;
   ## * height       - the width in pixels or window's ratio of each row
   ## * widgetsCount - the amount of widgets in each row.
   ## * content      - the content of the layout
-  nk_layout_space_begin(ctx, NK_DYNAMIC, height.cfloat, widgetsCount.cint)
+  nk_layout_space_begin(ctx = ctx, fmt = NK_DYNAMIC, cheight = height.cfloat,
+      widgetCount = widgetsCount.cint)
   content
-  nk_layout_space_end(ctx)
+  nk_layout_space_end(ctx = ctx)
 
 template row*(x, y, w, h: float; content: untyped) =
   ## Set the content of the row in the current widgets layout, used in space
@@ -765,7 +768,7 @@ template row*(x, y, w, h: float; content: untyped) =
   ## * w       - the amount of pixels or ratio to push the width
   ## * h       - the amount of pixels or ratio to push the height
   ## * content - the content of the row
-  layoutSpacePush(ctx, x.cfloat, y.cfloat, w.cfloat, h.cfloat)
+  layoutSpacePush(ctx = ctx, x1 = x.cfloat, y1 = y.cfloat, w1 = w.cfloat, h1 = h.cfloat)
   content
 
 template setRowTemplate*(height: float; settings: untyped) =
@@ -773,16 +776,16 @@ template setRowTemplate*(height: float; settings: untyped) =
   ##
   ## * height   - the height of the each row
   ## * settings - the template settings
-  nk_layout_row_template_begin(ctx, height.cfloat)
+  nk_layout_row_template_begin(ctx = ctx, cheight = height.cfloat)
   settings
-  nk_layout_row_template_end(ctx)
+  nk_layout_row_template_end(ctx = ctx)
 
 proc rowTemplateDynamic*() {.raises: [], tags: [], contractual.} =
   ## Set the selected column's in the row width in the template's row as dynamic,
   ## which means, the widget will resize with its parent.
   proc nk_layout_row_template_push_dynamic(ctx) {.importc, nodecl, raises: [],
       tags: [], contractual.}
-  nk_layout_row_template_push_dynamic(ctx)
+  nk_layout_row_template_push_dynamic(ctx = ctx)
 
 proc rowTemplateVariable*(minWidth: float) {.raises: [], tags: [],
     contractual.} =
@@ -792,7 +795,7 @@ proc rowTemplateVariable*(minWidth: float) {.raises: [], tags: [],
   ## * minWidth - the minimum width in pixels for the widgets in the column
   proc nk_layout_row_template_push_variable(ctx; minWidth: cfloat) {.importc,
       nodecl, raises: [], tags: [], contractual.}
-  nk_layout_row_template_push_variable(ctx, minWidth.cfloat)
+  nk_layout_row_template_push_variable(ctx = ctx, minWidth = minWidth.cfloat)
 
 proc rowTemplateStatic*(width: float) {.raises: [], tags: [], contractual.} =
   ## Set the selected column's width in the row template to static value,
@@ -801,7 +804,7 @@ proc rowTemplateStatic*(width: float) {.raises: [], tags: [], contractual.} =
   ## * width - the width of the column in the row template
   proc nk_layout_row_template_push_static(ctx; width: cfloat) {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  nk_layout_row_template_push_static(ctx, width.cfloat)
+  nk_layout_row_template_push_static(ctx = ctx, width = width.cfloat)
 
 proc layoutWidgetBounds*(): NimRect {.raises: [], tags: [], contractual.} =
   ## Get the rectangle of the current widget in the layout
@@ -834,26 +837,28 @@ template menuBar*(content: untyped) =
   ## Create a menu bar with the selected content
   ##
   ## * content - the content of the menu bar
-  nk_menubar_begin(ctx)
+  nk_menubar_begin(ctx = ctx)
   content
-  nk_menubar_end(ctx)
+  nk_menubar_end(ctx = ctx)
 
-proc createMenu(ctx; text: cstring; align: nk_flags; x,
-    y: cfloat): bool {.raises: [], tags: [], contractual.} =
+proc createMenu(ctx; text1: cstring; align1: nk_flags; x1,
+    y1: cfloat): bool {.raises: [], tags: [], contractual.} =
   ## Create a Nuklear menu, internal use only, temporary code
   ##
   ## Returns true if the popup was successfully created, otherwise false.
   ##
-  ## * ctx   - the Nuklear context
-  ## * text  - the label for the menu
-  ## * align - the menu alignment
-  ## * x     - the X position of the top left corner of the menu
-  ## * y     - the Y position of the top left corner of the menu
+  ## * ctx    - the Nuklear context
+  ## * text1  - the label for the menu
+  ## * align1 - the menu alignment
+  ## * x1     - the X position of the top left corner of the menu
+  ## * y1     - the Y position of the top left corner of the menu
   ##
   ## Returns true if menu were created, otherwise false
   proc nk_menu_begin_label(ctx; text: cstring; align: nk_flags;
-       size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_menu_begin_label(ctx, text, align, new_nk_vec2(x, y))
+      size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+  let newSize: nk_vec2 = new_nk_vec2(x = x1, y = y1)
+  return nk_menu_begin_label(ctx = ctx, text = text1, align = align1,
+      size = newSize)
 
 template menu*(text: string; align: TextAlignment; x, y: float;
     content: untyped) =
@@ -864,9 +869,10 @@ template menu*(text: string; align: TextAlignment; x, y: float;
   ## * x       - the X position of the top left corner of the menu
   ## * y       - the Y position of the top left corner of the menu
   ## * content - the content of the menu
-  if createMenu(ctx, text.cstring, align.nk_flags, x, y):
+  if createMenu(ctx = ctx, text1 = text.cstring, align1 = align.nk_flags,
+      x1 = x, y1 = y):
     content
-    nk_menu_end(ctx)
+    nk_menu_end(ctx = ctx)
 
 template menuItem*(label: string; align: TextAlignment; onPressCode: untyped) =
   ## Create a Nuklear menu's item. Execute the selected code when the user
@@ -875,7 +881,8 @@ template menuItem*(label: string; align: TextAlignment; onPressCode: untyped) =
   ## * label       - the label of the item
   ## * align       - the alignment of the item's label
   ## * onPressCode - the code executed when the menu was selected by the user
-  if nk_menu_item_label(ctx, label.cstring, align.nk_flags):
+  if nk_menu_item_label(ctx = ctx, ctext = label.cstring,
+      aligmnent = align.nk_flags):
     onPressCode
 
 # -------
@@ -943,8 +950,8 @@ proc property*(name: string; min: int; val: var int; max, step: int;
   proc nk_property_int(ctx; name: cstring; min: cint; val: var cint; max,
       step: cint; incPerPixel: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
   var newVal = val.cint
-  nk_property_int(ctx, name.cstring, min.cint, newVal, max.cint, step.cint,
-      incPerPixel.cfloat)
+  nk_property_int(ctx = ctx, name = name.cstring, min = min.cint, val = newVal,
+      max = max.cint, step = step.cint, incPerPixel = incPerPixel.cfloat)
   val = newVal.int
 
 proc property*(name: string; min: float; val: var float; max, step: float;
@@ -967,8 +974,9 @@ proc property*(name: string; min: float; val: var float; max, step: float;
       val: var cfloat; max, step, incPerPixel: cfloat) {.importc, nodecl,
           raises: [], tags: [], contractual.}
   var newVal = val.cfloat
-  nk_property_float(ctx, name.cstring, min.cfloat, newVal, max.cfloat,
-      step.cfloat, incPerPixel.cfloat)
+  nk_property_float(ctx = ctx, name = name.cstring, min = min.cfloat,
+      val = newVal, max = max.cfloat, step = step.cfloat,
+      incPerPixel = incPerPixel.cfloat)
   val = newVal.float
 
 proc property2*(name: string; min, val, max, step,
@@ -989,8 +997,9 @@ proc property2*(name: string; min, val, max, step,
   ## Returns the new value of the property
   proc nk_propertyf(ctx; name: cstring; min, val, max, step,
       incPerPixel: cfloat): cfloat {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_propertyf(ctx, name.cstring, min.cfloat, val.cfloat, max.cfloat,
-      step.cfloat, incPerPixel.cfloat).float
+  return nk_propertyf(ctx = ctx, name = name.cstring, min = min.cfloat,
+      val = val.cfloat, max = max.cfloat, step = step.cfloat,
+      incPerPixel = incPerPixel.cfloat).float
 
 proc property2*(name: string; min, val, max, step: int;
     incPerPixel: float): int {.raises: [], tags: [], contractual.} =
@@ -1010,8 +1019,9 @@ proc property2*(name: string; min, val, max, step: int;
   ## Returns the new value of the property
   proc nk_propertyi(ctx; name: cstring; min, val, max, step: cint;
       incPerPixel: cfloat): cint {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_propertyi(ctx, name.cstring, min.cint, val.cint, max.cint,
-      step.cint, incPerPixel.cfloat).int
+  return nk_propertyi(ctx = ctx, name = name.cstring, min = min.cint,
+      val = val.cint, max = max.cint, step = step.cint,
+      incPerPixel = incPerPixel.cfloat).int
 
 # -----
 # Style
@@ -1045,21 +1055,24 @@ proc setButtonStyle*(field: ButtonStyleTypes; r: cint = 255; g: cint = 255;
   ## * a     - the alpha value for the style color in RGBA
   case field
   of normal:
-    ctx.style.button.normal = nk_style_item_color(nk_rgba(r, g, b, a))
+    ctx.style.button.normal = nk_style_item_color(col = nk_rgba(r = r, g = g,
+        b = b, a = a))
   of hover:
-    ctx.style.button.hover = nk_style_item_color(nk_rgba(r, g, b, a))
+    ctx.style.button.hover = nk_style_item_color(col = nk_rgba(r = r, g = g,
+        b = b, a = a))
   of active:
-    ctx.style.button.active = nk_style_item_color(nk_rgba(r, g, b, a))
+    ctx.style.button.active = nk_style_item_color(col = nk_rgba(r = r, g = g,
+        b = b, a = a))
   of borderColor:
-    ctx.style.button.border_color = nk_rgba(r, g, b, a)
+    ctx.style.button.border_color = nk_rgba(r = r, g = g, b = b, a = a)
   of textBackground:
-    ctx.style.button.text_background = nk_rgba(r, g, b, a)
+    ctx.style.button.text_background = nk_rgba(r = r, g = g, b = b, a = a)
   of textNormal:
-    ctx.style.button.text_normal = nk_rgba(r, g, b, a)
+    ctx.style.button.text_normal = nk_rgba(r = r, g = g, b = b, a = a)
   of textHover:
-    ctx.style.button.text_hover = nk_rgba(r, g, b, a)
+    ctx.style.button.text_hover = nk_rgba(r = r, g = g, b = b, a = a)
   of textActive:
-    ctx.style.button.text_active = nk_rgba(r, g, b, a)
+    ctx.style.button.text_active = nk_rgba(r = r, g = g, b = b, a = a)
   else:
     discard
 
