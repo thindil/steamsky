@@ -61,6 +61,8 @@ type
     ## Internal Nuklear type
   nk_ushort* = cushort
     ## Internal Nuklear type
+  nk_hash* = cuint
+    ## Internal Nuklear type
 
 # ------------
 # Enumerations
@@ -218,6 +220,7 @@ type
     win*: ptr nk_window
     active*: nk_bool
     `type`*: PanelType
+    name*: nk_hash
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
     layout*: ptr nk_panel
