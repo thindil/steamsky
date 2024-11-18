@@ -665,7 +665,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffe
       "negotiate2icon", "craft2icon", "study2icon", "deconstruct2icon",
       "giveorder2icon", "foodicon", "fuelicon", "drinksicon", "expandicon",
       "contracticon", "moreoptionsicon", "mapmenuicon", "maparrowuplefticon",
-      "maparrowuplefticon"]
+      "maparrowuprighticon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -702,7 +702,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffe
         theme.giveOrderColoredIcon, theme.foodIcon, theme.fuelIcon,
         theme.drinksIcon, theme.expandIcon, theme.contractIcon,
         theme.moreOptionsIcon, theme.mapMenuIcon, theme.mapArrowUpLeftIcon,
-        theme.mapArrowUpLeftIcon]
+        theme.mapArrowUpRightIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
@@ -740,7 +740,7 @@ proc setTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
   tclEval(script = mainPaned & ".controls.buttons.e configure -image arrowrighticon")
   tclEval(script = mainPaned & ".mapframe.buttons.nw configure -image maparrowuplefticon")
   tclEval(script = mainPaned & ".controls.buttons.nw configure -image arrowuplefticon")
-  tclEval(script = mainPaned & ".mapframe.buttons.ne configure -image arrowuprighticon")
+  tclEval(script = mainPaned & ".mapframe.buttons.ne configure -image maparrowuprighticon")
   tclEval(script = mainPaned & ".controls.buttons.ne configure -image arrowuprighticon")
   tclEval(script = mainPaned & ".mapframe.buttons.se configure -image arrowdownrighticon")
   tclEval(script = mainPaned & ".controls.buttons.se configure -image arrowdownrighticon")
