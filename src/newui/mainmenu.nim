@@ -329,7 +329,7 @@ var
   saveClicked: string = ""
   saves: seq[SaveData] = @[]
 
-proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [],
+proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the menu for the selected saved game
   ##
@@ -344,7 +344,8 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     labelButton(title = "Load game"):
       echo "button clicked"
     labelButton(title = "Delete game"):
-      setQuestion(question = "Are you sure you want delete this savegame?", data = saveClicked)
+      setQuestion(question = "Are you sure you want delete this savegame?",
+          data = saveClicked, dialog = dialog)
       dialog = questionDialog
     labelButton(title = "Close"):
       dialog = none
