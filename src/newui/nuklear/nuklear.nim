@@ -1150,8 +1150,8 @@ proc stylePushVec2*(field: WindowStyleTypes; x,
   proc nk_style_push_vec2(ctx; dest: var nk_vec2;
       source: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   if field == spacing:
-    return nk_style_push_vec2(ctx, ctx.style.window.spacing, new_nk_vec2(x,
-        y))
+    return nk_style_push_vec2(ctx = ctx, dest = ctx.style.window.spacing,
+        source = new_nk_vec2(x = x, y = y))
 
 proc stylePushFloat*(field: ButtonStyleTypes;
     value: cfloat): bool {.discardable, raises: [], tags: [], contractual.} =
@@ -1167,7 +1167,8 @@ proc stylePushFloat*(field: ButtonStyleTypes;
       source: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   case field
   of rounding:
-    return nk_style_push_float(ctx, ctx.style.button.rounding, value)
+    return nk_style_push_float(ctx = ctx, dest = ctx.style.button.rounding,
+        source = value)
   else:
     return false
 
@@ -1180,21 +1181,22 @@ proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
       tags: [], contractual.}
   var newTable: array[countColors.ord, nk_color]
   for index, color in table.pairs:
-    newTable[index] = nk_rgba(color.r.cint, color.g.cint, color.b.cint, color.a.cint)
-  nk_style_from_table(ctx, newTable.addr)
+    newTable[index] = nk_rgba(r = color.r.cint, g = color.g.cint,
+        b = color.b.cint, a = color.a.cint)
+  nk_style_from_table(ctx = ctx, table = newTable.addr)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
   ## reset the UI colors to the default Nuklear setting
   proc nk_style_default(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_style_default(ctx)
+  nk_style_default(ctx = ctx)
 
 proc stylePopFloat*() {.raises: [], tags: [], contractual.} =
   proc nk_style_pop_float(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_style_pop_float(ctx)
+  nk_style_pop_float(ctx = ctx)
 
 proc stylePopVec2*() {.raises: [], tags: [], contractual.} =
   proc nk_style_pop_vec2(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_style_pop_vec2(ctx)
+  nk_style_pop_vec2(ctx = ctx)
 
 # ------
 # Combos
@@ -1218,23 +1220,24 @@ proc comboList*(items: openArray[string]; selected, itemHeight: int; x,
           raises: [], tags: [], contractual.}
   var optionsList: seq[cstring]
   for i in 0 .. amount:
-    optionsList.add(items[i].cstring)
-  return nk_combo(ctx, optionsList[0].addr, amount.cint + 1,
-      selected.cint, itemHeight.cint, new_nk_vec2(x.cfloat, y.cfloat)).int
+    optionsList.add(y = items[i].cstring)
+  return nk_combo(ctx = ctx, items = optionsList[0].addr, count = amount.cint +
+      1, selected = selected.cint, itemHeight = itemHeight.cint,
+          size = new_nk_vec2(x = x.cfloat, y = y.cfloat)).int
 
-proc createColorCombo(ctx; color: NimColor; x, y: cfloat): bool {.raises: [],
+proc createColorCombo(ctx; color1: NimColor; x1, y1: cfloat): bool {.raises: [],
     tags: [], contractual.} =
   ## Create a Nuklear combo widget which display color as the value, internal
   ## use only, temporary code
   ##
-  ## * ctx   - the Nuklear context
-  ## * color - the color displayed as the value of the combo
-  ## * x     - the width of the combo
-  ## * y     - the height of the combo's values list
+  ## * ctx    - the Nuklear context
+  ## * color1 - the color displayed as the value of the combo
+  ## * x1     - the width of the combo
+  ## * y1     - the height of the combo's values list
   ##
   ## Returns true if combo was successfully created, otherwise false
-  return nk_combo_begin_color(ctx, nk_rgb(color.r.cint, color.g.cint,
-      color.b.cint), new_nk_vec2(x, y))
+  return nk_combo_begin_color(ctx = ctx, color = nk_rgb(r = color1.r.cint,
+      g = color1.g.cint, b = color1.b.cint), size = new_nk_vec2(x = x1, y = y1))
 
 template colorCombo*(color: NimColor; x, y: float; content: untyped) =
   ## Create a Nuklear combo widget which display color as the value, internal
@@ -1244,23 +1247,24 @@ template colorCombo*(color: NimColor; x, y: float; content: untyped) =
   ## * x       - the width of the combo
   ## * y       - the height of the combo's values list
   ## * content - the content of the combo widget
-  if createColorCombo(ctx, color, x.cfloat, y.cfloat):
+  if createColorCombo(ctx = ctx, color1 = color, x1 = x.cfloat, y1 = y.cfloat):
     content
-    nk_combo_end(ctx)
+    nk_combo_end(ctx = ctx)
 
-proc createColorCombo(ctx; color: NimColorF; x, y: cfloat): bool {.raises: [],
-    tags: [], contractual.} =
+proc createColorCombo(ctx; color1: NimColorF; x1, y1: cfloat): bool {.raises: [
+    ], tags: [], contractual.} =
   ## Create a Nuklear combo widget which display color with float values as
   ## the value, internal use only, temporary code
   ##
-  ## * ctx   - the Nuklear context
-  ## * color - the color with float values displayed as the value of the combo
-  ## * x     - the width of the combo
-  ## * y     - the height of the combo's values list
+  ## * ctx    - the Nuklear context
+  ## * color1 - the color with float values displayed as the value of the combo
+  ## * x1     - the width of the combo
+  ## * y1     - the height of the combo's values list
   ##
   ## Returns true if combo was successfully created, otherwise false
-  return nk_combo_begin_color(ctx, nk_rgb_cf(nk_colorf(r: color.r.cfloat,
-      g: color.g.cfloat, b: color.b.cfloat, a: color.a.cfloat)), new_nk_vec2(x, y))
+  return nk_combo_begin_color(ctx = ctx, color = nk_rgb_cf(c = nk_colorf(
+      r: color1.r.cfloat, g: color1.g.cfloat, b: color1.b.cfloat,
+          a: color1.a.cfloat)), size = new_nk_vec2(x = x1, y = y1))
 
 
 template colorCombo*(color: NimColorF; x, y: float; content: untyped) =
@@ -1271,24 +1275,25 @@ template colorCombo*(color: NimColorF; x, y: float; content: untyped) =
   ## * x       - the width of the combo
   ## * y       - the height of the combo's values list
   ## * content - the content of the combo widget
-  if createColorCombo(ctx, color, x.cfloat, y.cfloat):
+  if createColorCombo(ctx = ctx, color1 = color, x1 = x.cfloat, y1 = y.cfloat):
     content
-    nk_combo_end(ctx)
+    nk_combo_end(ctx = ctx)
 
-proc createLabelCombo(ctx; selected: cstring; x, y: cfloat): bool {.raises: [],
-    tags: [], contractual.} =
+proc createLabelCombo(ctx; selected1: cstring; x1, y1: cfloat): bool {.raises: [
+    ], tags: [], contractual.} =
   ## Create a Nuklear combo widget which display the custom text as the value,
   ## internal use only, temporary code
   ##
-  ## * ctx      - the Nuklear context
-  ## * selected - the text to display as the value of the combo
-  ## * x        - the width of the combo
-  ## * y        - the height of the combo's values list
+  ## * ctx       - the Nuklear context
+  ## * selected1 - the text to display as the value of the combo
+  ## * x1        - the width of the combo
+  ## * y1        - the height of the combo's values list
   ##
   ## Returns true if combo was successfully created, otherwise false
   proc nk_combo_begin_label(ctx; selected: cstring;
       size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_combo_begin_label(ctx, selected, new_nk_vec2(x, y))
+  return nk_combo_begin_label(ctx = ctx, selected = selected1,
+      size = new_nk_vec2(x = x1, y = y1))
 
 template labelCombo*(selected: string; x, y: float; content: untyped) =
   ## Create a Nuklear combo widget which display the custom text as the value
@@ -1297,14 +1302,15 @@ template labelCombo*(selected: string; x, y: float; content: untyped) =
   ## * x        - the width of the combo
   ## * y        - the height of the combo's values list
   ## * content - the content of the combo widget
-  if createLabelCombo(ctx, selected.cstring, x.cfloat, y.cfloat):
+  if createLabelCombo(ctx = ctx, selected1 = selected.cstring, x1 = x.cfloat,
+      y1 = y.cfloat):
     content
-    nk_combo_end(ctx)
+    nk_combo_end(ctx = ctx)
 
 proc comboClose*() {.raises: [], tags: [], contractual.} =
   ## Stop adding a value to a combo
   proc nk_combo_close(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_combo_close(ctx)
+  nk_combo_close(ctx = ctx)
 
 # ------
 # Colors
@@ -1319,8 +1325,9 @@ proc colorfToHsva*(hsva: var array[4, float]; color: NimColorF) {.raises: [],
   ## Returns converted color as hsva argument
   proc nk_colorf_hsva_fv(hsva: pointer; color: nk_colorf) {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  nk_colorf_hsva_fv(hsva.addr, nk_colorf(r: color.r, g: color.g,
+  nk_colorf_hsva_fv(hsva = hsva.addr, color = nk_colorf(r: color.r, g: color.g,
       b: color.b, a: color.a))
+
 proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
     contractual.} =
   ## Convert HSVA values to Nim color with float values
@@ -1330,33 +1337,34 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
   ## Returns converted hsva parameter to Nim color with float values
   proc nk_hsva_colorf(h, s, v, a: cfloat): nk_colorf {.importc, nodecl,
       raises: [], tags: [], contractual.}
-  let newColor = nk_hsva_colorf(hsva[0], hsva[1], hsva[2], hsva[3])
+  let newColor = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[2], a = hsva[3])
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
 # ------
 # Charts
 # ------
-proc createColorChart(ctx; ctype: ChartType; color,
-    higlight: NimColor; count: cint; minValue,
-        maxValue: cfloat): bool {.raises: [], tags: [], contractual.} =
+proc createColorChart(ctx; ctype1: ChartType; color1,
+    higlight1: NimColor; count1: cint; minValue1,
+        maxValue1: cfloat): bool {.raises: [], tags: [], contractual.} =
   ## Create a colored chart, internal use only, temporary code
   ##
-  ## * ctx       - the Nuklear context
-  ## * ctype     - the type of the chart
-  ## * color     - the color used for drawing the chart
-  ## * highligh  - the color used for highlighting point when mouse hovering
-  ##               over it
-  ## * count     - the amount of values on the chart
-  ## * min_value - the minimal value of the chart
-  ## * max_value - the maximum value of the chart
+  ## * ctx        - the Nuklear context
+  ## * ctype1     - the type of the chart
+  ## * color1     - the color used for drawing the chart
+  ## * highligh1  - the color used for highlighting point when mouse hovering
+  ##                over it
+  ## * count1     - the amount of values on the chart
+  ## * min_value1 - the minimal value of the chart
+  ## * max_value1 - the maximum value of the chart
   ##
   ## Returns true if the chart was succesfully created otherwise false
   proc nk_chart_begin_colored(ctx; ctype: ChartType; color,
       higlight: nk_color; count: cint; minValue,
       maxValue: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_chart_begin_colored(ctx, ctype, nk_rgb(color.r.cint, color.g.cint,
-      color.b.cint), nk_rgb(higlight.r.cint, higlight.g.cint, higlight.b.cint),
-          count, minValue, maxValue)
+  return nk_chart_begin_colored(ctx = ctx, ctype = ctype1, color = nk_rgb(
+      color1.r.cint, color1.g.cint, color1.b.cint), higlight = nk_rgb(
+          higlight1.r.cint, higlight1.g.cint, higlight1.b.cint),
+          count = count1, minValue = minValue1, maxValue = maxValue1)
 
 template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
     minValue, maxValue: float; content: untyped) =
@@ -1369,10 +1377,11 @@ template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
   ## * count    - the amount of values on the chart
   ## * minValue - the minimal value of the chart
   ## * maxValue - the maximum value of the chart
-  if createColorChart(ctx, cType, color, highlight, count.cint, minValue.cfloat,
-      maxValue.cfloat):
+  if createColorChart(ctx = ctx, ctype1 = cType, color1 = color,
+      highlight1 = highlight, count1 = count.cint, minValue1 = minValue.cfloat,
+      maxValue1 = maxValue.cfloat):
     content
-    nk_chart_end(ctx)
+    nk_chart_end(ctx = ctx)
 
 proc addColorChartSlot*(ctype: ChartType; color,
     higlight: NimColor; count: cint; minValue, maxValue: cfloat) {.raises: [],
