@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Typo in changelog
+
 ## [10.5] - 2024-11-17
 
 ### Added
