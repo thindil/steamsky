@@ -323,7 +323,7 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # ------
 {.push ruleOff: "params".}
 proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
-    x, y, w, h: float): bool {.raises: [NuklearException], tags: [],
+    x, y, w, h: var float): bool {.raises: [NuklearException], tags: [],
         contractual.} =
   ## Try to create a new popup window. Internal use only.
   ##
@@ -364,10 +364,19 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
         nk_zero(`ptr` = popup, size = sizeof(popup))
         {.ruleOn: "namedParams".}
         win.popup.name = titleHash.nk_hash
-        win.popup.active = nk_true
+        win.popup.active = nkTrue
         win.popup.type = panelPopup
       else:
         return false
+    # popup position is local to window
+    ctx.current = popup
+    x += win.layout.clip.x
+    y += win.layout.clip.y
+
+    # setup popup data
+    popup.parent = win
+    popup.bounds = new_nk_rect(x = x, y = y, w = w, h = h)
+    popup.seq = ctx.seq
     return true
 {.pop ruleOn: "params".}
 

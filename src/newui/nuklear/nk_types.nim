@@ -215,6 +215,7 @@ type
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
+    clip*: nk_rect
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window
@@ -226,11 +227,14 @@ type
     layout*: ptr nk_panel
     popup*: nk_popup_state
     parent*: ptr nk_window
+    bounds*: nk_rect
+    seq*: uint
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
     current*: ptr nk_window
+    seq*: uint
   nk_rect* {.importc: "struct nk_rect", nodecl.} = object
     ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
