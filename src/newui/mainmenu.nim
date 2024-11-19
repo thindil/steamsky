@@ -20,7 +20,7 @@
 
 import std/[algorithm, math, os, sequtils, strutils, times]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, halloffame]
+import ../[config, game, gamesaveload, halloffame]
 import coreui, dialogs, errordialog
 
 var
@@ -342,7 +342,11 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       windowTitle, windowNoScrollbar}):
     setLayoutRowDynamic(height = 30, cols = 1)
     labelButton(title = "Load game"):
-      echo "button clicked"
+      try:
+        loadGame()
+      except:
+        dialog = setError(message = "Can't load this game. Reason: " & getCurrentExceptionMsg())
+        return
     labelButton(title = "Delete game"):
       setQuestion(question = "Are you sure you want delete this savegame?",
           data = saveClicked, qType = deleteSave, dialog = dialog)
@@ -399,6 +403,10 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               f = "yyyy-MM-dd hh:mm:ss"), path: file))
         except:
           dialog = setError(message = "Can't add information about the save file.")
+    if saves.len == 0:
+      showLoadButton = false
+      state = mainMenu
+      return
 
     proc sortSaves(x, y: SaveData): int {.raises: [], tags: [], contractual.} =
       ## Check how to sort the selected saves on the list
