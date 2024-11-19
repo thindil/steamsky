@@ -20,7 +20,7 @@
 
 import std/[os, parseopt, strutils, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
-import config, halloffame, game, log
+import config, halloffame, game, game2, log
 import newui/[coreui, dialogs, errordialog, mainmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -105,6 +105,11 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   if dialog != none:
     echo "Can't set the main menu. More details in error.log"
     return
+
+  try:
+    discard loadGameData()
+  except:
+    dialog = setError(message = "Can't load the game's data.")
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = dtime)

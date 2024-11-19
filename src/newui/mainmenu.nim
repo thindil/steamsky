@@ -329,8 +329,8 @@ var
   saveClicked: string = ""
   saves: seq[SaveData] = @[]
 
-proc showLoadMenu*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showLoadMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the menu for the selected saved game
   ##
   ## * state  - the current game's state
@@ -479,7 +479,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         saveClicked = ""
 
-proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [WriteIOEffect, ReadIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Start loading the selected saved game
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
@@ -487,10 +488,11 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags:
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
   try:
+    saveName = saveClicked
     loadGame()
   except:
     state = loadGame
-    dialog = setError(message = "Can't load this game. Reason: " & getCurrentExceptionMsg())
+    dialog = setError(message = "Can't load this game.")
     return
   state = map
   dialog = none
