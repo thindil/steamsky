@@ -60,7 +60,8 @@ proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
 # General
 # -------
 proc nk_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-proc nk_zero(`ptr`: pointer; size: nk_size) {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_zero(`ptr`: pointer; size: nk_size) {.importc, cdecl, raises: [],
+    tags: [], contractual.}
 
 # -------
 # Windows
@@ -103,8 +104,8 @@ proc nk_menu_item_label(ctx; ctext: cstring;
 # ------
 # Charts
 # ------
-proc nk_chart_begin(ctx; ctype: ChartType; num: cint; min,
-    max: cfloat): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_chart_begin(ctx; ctype1: ChartType; num1: cint; min1,
+    max1: cfloat): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_chart_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ------
@@ -182,14 +183,14 @@ proc nk_filter_ascii*(box: ptr nk_text_edit;
 # Contextual
 # ----------
 proc nk_contextual_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-proc nk_contextual_item_label(ctx; label: cstring;
-    align: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_contextual_item_label(ctx; clabel: cstring;
+    calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # ------
 # Groups
 # ------
-proc nk_group_begin(ctx; title: cstring;
-    flags: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+proc nk_group_begin(ctx; ctitle: cstring;
+    cflags: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_group_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 
 # -----
@@ -359,7 +360,9 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     # make sure we have correct popup
     if win.popup.name != titleHash.nk_hash:
       if not win.popup.active:
-        nk_zero(popup, sizeof(popup))
+        {.ruleOff: "namedParams".}
+        nk_zero(`ptr` = popup, size = sizeof(popup))
+        {.ruleOn: "namedParams".}
         win.popup.name = titleHash.nk_hash
         win.popup.active = nk_true
         win.popup.type = panelPopup
@@ -1372,9 +1375,10 @@ proc createColorChart(ctx; ctype1: ChartType; color1,
       higlight: nk_color; count: cint; minValue,
       maxValue: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   return nk_chart_begin_colored(ctx = ctx, ctype = ctype1, color = nk_rgb(
-      color1.r.cint, color1.g.cint, color1.b.cint), higlight = nk_rgb(
-          higlight1.r.cint, higlight1.g.cint, higlight1.b.cint),
-          count = count1, minValue = minValue1, maxValue = maxValue1)
+      r = color1.r.cint, g = color1.g.cint, b = color1.b.cint),
+      higlight = nk_rgb(r = higlight1.r.cint, g = higlight1.g.cint,
+      b = higlight1.b.cint), count = count1, minValue = minValue1,
+      maxValue = maxValue1)
 
 template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
     minValue, maxValue: float; content: untyped) =
@@ -1388,7 +1392,7 @@ template colorChart*(cType: ChartType; color, highlight: NimColor; count: int;
   ## * minValue - the minimal value of the chart
   ## * maxValue - the maximum value of the chart
   if createColorChart(ctx = ctx, ctype1 = cType, color1 = color,
-      highlight1 = highlight, count1 = count.cint, minValue1 = minValue.cfloat,
+      higlight1 = highlight, count1 = count.cint, minValue1 = minValue.cfloat,
       maxValue1 = maxValue.cfloat):
     content
     nk_chart_end(ctx = ctx)
@@ -1408,9 +1412,10 @@ proc addColorChartSlot*(ctype: ChartType; color,
   proc nk_chart_add_slot_colored(ctx; ctype: ChartType; color,
       higlight: nk_color; count: cint; minValue, maxValue: cfloat) {.importc,
           nodecl, raises: [], tags: [], contractual.}
-  nk_chart_add_slot_colored(ctx, ctype, nk_rgb(color.r.cint, color.g.cint,
-      color.b.cint), nk_rgb(higlight.r.cint, higlight.g.cint, higlight.b.cint),
-          count, minValue, maxValue)
+  nk_chart_add_slot_colored(ctx = ctx, ctype = ctype, color = nk_rgb(
+      r = color.r.cint, g = color.g.cint, b = color.b.cint), higlight = nk_rgb(
+      r = higlight.r.cint, g = higlight.g.cint, b = higlight.b.cint),
+      count = count, minValue = minValue, maxValue = maxValue)
 
 template chart*(cType: ChartType; num: int; min, max: float; content: untyped) =
   ## Create a chart of the selected type
@@ -1420,7 +1425,8 @@ template chart*(cType: ChartType; num: int; min, max: float; content: untyped) =
   ## * min     - the minimum value on the chart
   ## * max     - the maximum value on the chart
   ## * content - the content of the chart, usually coe related to adding values
-  if nk_chart_begin(ctx, cType, num.cint, min.cfloat, max.cfloat):
+  if nk_chart_begin(ctx = ctx, ctype1 = cType, num1 = num.cint,
+      min1 = min.cfloat, max1 = max.cfloat):
     content
     ctx.nk_chart_end
 
@@ -1434,7 +1440,7 @@ proc chartPush*(value: float): ChartEvent {.discardable, raises: [], tags: [],
   proc nk_chart_push(ctx; value: cfloat): nk_flags {.importc, nodecl, raises: [
       ], tags: [], contractual.}
 
-  let res = nk_chart_push(ctx, value.cfloat)
+  let res = nk_chart_push(ctx = ctx, value = value.cfloat)
   if (res and clicked.nk_flags) == clicked.nk_flags:
     return clicked
   if (res and hovering.nk_flags) == hovering.nk_flags:
@@ -1451,7 +1457,8 @@ proc addChartSlot*(ctype: ChartType; count: int; minValue,
   ## * max_value - the maximum value of the chart
   proc nk_chart_add_slot(ctx; ctype: ChartType; count: cint;
       minValue, maxValue: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
-  nk_chart_add_slot(ctx, ctype, count.cint, minValue.cfloat, maxValue.cfloat)
+  nk_chart_add_slot(ctx = ctx, ctype = ctype, count = count.cint,
+      minValue = minValue.cfloat, maxValue = maxValue.cfloat)
 
 proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable,
     raises: [], tags: [], contractual.} =
@@ -1464,7 +1471,8 @@ proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable,
   proc nk_chart_push_slot(ctx; value: cfloat; slot: cint): nk_flags {.importc,
       nodecl, raises: [], tags: [], contractual.}
 
-  let res = nk_chart_push_slot(ctx, value.cfloat, slot.cint)
+  let res = nk_chart_push_slot(ctx = ctx, value = value.cfloat,
+      slot = slot.cint)
   if (res and clicked.nk_flags) == clicked.nk_flags:
     return clicked
   if (res and hovering.nk_flags) == hovering.nk_flags:
@@ -1474,24 +1482,24 @@ proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable,
 # ----------
 # Contextual
 # ----------
-proc createContextual(ctx; flags: nk_flags; x, y: cfloat;
-    triggerBounds: NimRect): bool {.raises: [], tags: [], contractual.} =
+proc createContextual(ctx; flags1: nk_flags; x1, y1: cfloat;
+    triggerBounds1: NimRect): bool {.raises: [], tags: [], contractual.} =
   ## Create a contextual menu, internal use only, temporary code
   ##
   ## * ctx            - the Nuklear context
-  ## * flags          - the flags for the menu
-  ## * x              - the width of the menu
-  ## * y              - the height of the menu
-  ## * trigger_bounds - the rectange of coordinates in the window where clicking
+  ## * flags1         - the flags for the menu
+  ## * x1             - the width of the menu
+  ## * y1             - the height of the menu
+  ## * triggerBounds1 - the rectange of coordinates in the window where clicking
   ##                    cause the menu to appear
   ##
   ## Return true if the contextual menu was created successfully, otherwise
   ## false
   proc nk_contextual_begin(ctx; flags: nk_flags; size: nk_vec2;
       triggerBounds: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_contextual_begin(ctx, flags, new_nk_vec2(x, y), new_nk_rect(
-      triggerBounds.x, triggerBounds.y, triggerBounds.w,
-      triggerBounds.h))
+  return nk_contextual_begin(ctx = ctx, flags = flags1, size = new_nk_vec2(
+      x = x1, y = y1), triggerBounds = new_nk_rect(x = triggerBounds1.x,
+      y = triggerBounds1.y, w = triggerBounds1.w, h = triggerBounds1.h))
 
 template contextualMenu*(flags: set[WindowFlags]; x, y;
     triggerBounds: NimRect; content: untyped) =
@@ -1503,9 +1511,10 @@ template contextualMenu*(flags: set[WindowFlags]; x, y;
   ## * triggerBounds - the rectange of coordinates in the window where clicking
   ##                   cause the menu to appear
   ## * content       - the content of the menu
-  if createContextual(ctx, winSetToInt(flags), x, y, triggerBounds):
+  if createContextual(ctx = ctx, flags1 = winSetToInt(nimFlags = flags), x1 = x,
+      y1 = y, triggerBounds1 = triggerBounds):
     content
-    nk_contextual_end(ctx)
+    nk_contextual_end(ctx = ctx)
 
 template contextualItemLabel*(label: string; align: TextAlignment;
     onPressCode: untyped) =
@@ -1514,7 +1523,8 @@ template contextualItemLabel*(label: string; align: TextAlignment;
   ## * label       - the text to show on the label
   ## * align       - the alignment of the text to show
   ## * onPressCode - the Nim code to execute when the label was pressed
-  if nk_contextual_item_label(ctx, label.cstring, align.nk_flags):
+  if nk_contextual_item_label(ctx = ctx, clabel = label.cstring,
+      calign = align.nk_flags):
     onPressCode
 
 # ------
@@ -1527,9 +1537,10 @@ template group*(title: string; flags: set[WindowFlags]; content: untyped) =
   ## * title   - the title of the group
   ## * flags   - the set of WindowFlags for the group
   ## * content - the content of the group
-  if nk_group_begin(ctx, title.cstring, winSetToInt(flags)):
+  if nk_group_begin(ctx = ctx, ctitle = title.cstring, cflags = winSetToInt(
+      nimFlags = flags)):
     content
-    nk_group_end(ctx)
+    nk_group_end(ctx = ctx)
 
 # -----
 # Input
@@ -1546,8 +1557,8 @@ proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
   ## Returns true if the mouse is hovering over the rectangle, otherwise false
   proc nk_input_is_mouse_hovering_rect(i: ptr nk_input;
       rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_input_is_mouse_hovering_rect(ctx.input.addr, new_nk_rect(rect.x,
-      rect.y, rect.w, rect.h))
+  return nk_input_is_mouse_hovering_rect(i = ctx.input.addr, rect = new_nk_rect(
+      x = rect.x, y = rect.y, w = rect.w, h = rect.h))
 
 proc isMousePrevHovering*(x, y, w, h: float): bool {.raises: [], tags: [],
     contractual.} =
@@ -1561,8 +1572,8 @@ proc isMousePrevHovering*(x, y, w, h: float): bool {.raises: [], tags: [],
   ## Returns true if the mouse was hovering over the rectangle, otherwise false
   proc nk_input_is_mouse_prev_hovering_rect(i: ptr nk_input;
       rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-  return nk_input_is_mouse_prev_hovering_rect(ctx.input.addr, new_nk_rect(
-      x, y, w, h))
+  return nk_input_is_mouse_prev_hovering_rect(i = ctx.input.addr,
+      rect = new_nk_rect(x = x, y = y, w = w, h = h))
 
 proc isMouseDown*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
   ## Check if mouse is pressed
@@ -1572,7 +1583,7 @@ proc isMouseDown*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
   ## Returns true if the selected mouse button is pressed, otherwise false
   proc nk_input_is_mouse_down(i: ptr nk_input; id: Buttons): nk_bool {.importc,
       nodecl, raises: [], tags: [], contractual.}
-  return nk_input_is_mouse_down(ctx.input.addr, id)
+  return nk_input_is_mouse_down(i = ctx.input.addr, id = id)
 
 proc getMouseDelta*(): NimVec2 {.raises: [], tags: [], contractual.} =
   ## Get the mouse vector between last check and current position of the mouse
@@ -1606,7 +1617,7 @@ proc editString*(text: var string; maxLen: int; editType: EditTypes = simple;
           nodecl, raises: [], tags: [], contractual.}
 
   var
-    (cText, length) = stringToCharArray(text, maxLen)
+    (cText, length) = stringToCharArray(str = text, length = maxLen)
     cFlags: cint = editType.ord.cint
   {.warning[HoleEnumConv]: off.}
   for flag in flags:
@@ -1614,7 +1625,7 @@ proc editString*(text: var string; maxLen: int; editType: EditTypes = simple;
   result = nk_edit_string(ctx = ctx, flags = cFlags,
       memory = cText[0].addr, len = length.cint, max = maxLen.cint,
       filter = filter).EditEvent
-  text = charArrayToString(cText, length)
+  text = charArrayToString(charArray = cText, length = length)
 
 # -----------
 # Selectables
@@ -1635,7 +1646,8 @@ proc selectableLabel*(str: string; value: var bool;
   proc nk_selectable_label(ctx; str: cstring; align: nk_flags;
       value: var nk_bool): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   var newValue = value.nk_bool
-  result = nk_selectable_label(ctx, str.cstring, align.nk_flags, newValue) == nkTrue
+  result = nk_selectable_label(ctx = ctx, str = str.cstring,
+      align = align.nk_flags, value = newValue) == nkTrue
   discard $newValue
   value = newValue
 
