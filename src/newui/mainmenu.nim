@@ -329,24 +329,23 @@ var
   saveClicked: string = ""
   saves: seq[SaveData] = @[]
 
-proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showLoadMenu*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the menu for the selected saved game
   ##
+  ## * state  - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the parameter dialog. It is modified only when the player
-  ## closed the dialog
+  ## Returns the parameters state and dialog. The latter is modified only
+  ## when the player closed the dialog. The first when the player start
+  ## loading the game
   window(name = "Actions", x = (menuWidth / 3).float, y = (menuHeight /
       3).float, w = 150, h = 150, flags = {windowBorder, windowMoveable,
       windowTitle, windowNoScrollbar}):
     setLayoutRowDynamic(height = 30, cols = 1)
     labelButton(title = "Load game"):
-      try:
-        loadGame()
-      except:
-        dialog = setError(message = "Can't load this game. Reason: " & getCurrentExceptionMsg())
-        return
+      state = loadingGame
+      dialog = none
     labelButton(title = "Delete game"):
       setQuestion(question = "Are you sure you want delete this savegame?",
           data = saveClicked, qType = deleteSave, dialog = dialog)
@@ -479,3 +478,19 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         saveClicked = ""
+
+proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Start loading the selected saved game
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  try:
+    loadGame()
+  except:
+    state = loadGame
+    dialog = setError(message = "Can't load this game. Reason: " & getCurrentExceptionMsg())
+    return
+  state = map
+  dialog = none

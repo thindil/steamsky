@@ -140,6 +140,12 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       of loadGame:
         # Show the list of saved games
         showLoadGame(state = state, dialog = dialog)
+      of loadingGame:
+        # Start loading the selected saved game
+        loadGame(state = state, dialog = dialog)
+      of map:
+        # Show the game's map
+        discard
       of quitGame:
         # Quit from the game
         discard
@@ -158,7 +164,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       showError(dialog = dialog)
     of loadMenu:
       # Show the selected save game menu
-      showLoadMenu(dialog = dialog)
+      showLoadMenu(state = state, dialog = dialog)
     of questionDialog:
       # Show the question dialog
       showQuestion(dialog = dialog)

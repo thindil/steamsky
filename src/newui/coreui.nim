@@ -21,15 +21,16 @@
 import nuklear/nuklear_sdl_renderer
 
 type GameState* = enum
-  ## Used to determine the current game's state.
-  mainMenu, quitGame, news, allNews, about, showFile, hallOfFame, loadGame
+    ## Used to determine the current game's state.
+    mainMenu, quitGame, news, allNews, about, showFile, hallOfFame, loadGame,
+        loadingGame, map
 
 type GameDialog* = enum
-  ## Used to show any in-game dialog window
-  none, errorDialog, loadMenu, questionDialog
+    ## Used to show any in-game dialog window
+    none, errorDialog, loadMenu, questionDialog
 
 const
     dtime*: float = 40.0 ## The length in miliseconds of one game's frame
 
 var
-  fonts*: seq[ptr nk_font] = @[] ## The list of fonts used by the game
+    fonts*: seq[ptr nk_font] = @[] ## The list of fonts used by the game
