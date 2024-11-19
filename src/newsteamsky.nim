@@ -148,6 +148,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       of loadingGame:
         # Start loading the selected saved game
         loadGame(state = state, dialog = dialog)
+      of newGame:
+        # Show the new game's setting
+        newGame(state = state, dialog = dialog)
       of map:
         # Show the game's map
         discard

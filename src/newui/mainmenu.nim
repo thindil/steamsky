@@ -23,12 +23,15 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, gamesaveload, halloffame]
 import coreui, dialogs, errordialog
 
+const names: array[2, string] = ["Player", "Difficulty"]
+
 var
   logo: PImage = nil
   showLoadButton, showHoFButton: bool = false
   fileContent: string = ""
   fileName: string = ""
   fileLines: Positive = 1
+  currentTab: cint = 0
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
@@ -69,7 +72,8 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
         addTooltip(bounds = getWidgetBounds(),
             text = "Set and start a new game")
       labelButton(title = "New game"):
-        echo "button pressed"
+        state = newGame
+        return
     var y: float = h;
     if showLoadButton:
       row(x = x, y = y, w = w, h = h):
@@ -117,6 +121,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadDirEffect, ReadIOEffect, WriteIOEffect, TimeEffect, RootEffect],
         contractual.} =
   ## Show the game's latest changes
+  ##
   ## * state  - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
@@ -180,6 +185,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
 proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the general information about the game
+  ##
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
@@ -253,6 +259,7 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
 proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the selected file content
+  ##
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
@@ -294,6 +301,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
 proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
     RootEffect], contractual.} =
   ## Show the game's hall of fame
+  ##
   ## * state - the current game's state
   ##
   ## Returns the modified parameter state.
@@ -356,6 +364,7 @@ proc showLoadMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the list of saved games
+  ##
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
@@ -482,6 +491,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
 proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [WriteIOEffect, ReadIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Start loading the selected saved game
+  ##
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
@@ -496,3 +506,37 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   state = map
   dialog = none
+
+proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Start the new game settings
+  ##
+  ## * state  - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  stylePushVec2(spacing, 0, 0)
+  stylePushFloat(rounding, 0)
+  layoutStatic(20, 3):
+    for i in 0 .. 2:
+      try:
+        let
+          textWidth = getTextWidth(names[i])
+          widgetWidth = textWidth + 3 * getButtonStyle(padding).x;
+        row(widgetWidth):
+          if currentTab == i:
+            saveButtonStyle()
+            setButtonStyle2(active, normal)
+            currentTab = currentTab
+            labelButton(names[i]):
+              currentTab = i.cint
+            restoreButtonStyle()
+          else:
+            currentTab = currentTab
+            labelButton(names[i]):
+              currentTab = i.cint
+      except:
+        dialog = setError(message = "Can't set the tabs buttons.")
+  stylePopFloat()
+  stylePopVec2()
+  state = newGame

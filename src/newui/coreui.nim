@@ -23,7 +23,7 @@ import nuklear/nuklear_sdl_renderer
 type GameState* = enum
     ## Used to determine the current game's state.
     mainMenu, quitGame, news, allNews, about, showFile, hallOfFame, loadGame,
-        loadingGame, map
+        loadingGame, map, newGame
 
 type GameDialog* = enum
     ## Used to show any in-game dialog window
