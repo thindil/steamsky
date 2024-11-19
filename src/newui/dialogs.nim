@@ -17,22 +17,30 @@
 
 ## Provides code related to the game's dialogs, like showing questions, etc.
 
-import std/math
+import std/[os, math]
 import contracts, nuklear/nuklear_sdl_renderer
 import coreui, errordialog
 
 type
+  QuestionType* = enum
+    ## Types of questions, used to set actions to the player's response
+    deleteSave
   QuestionData = object
     question, data: string
+    qType: QuestionType
     lines: float
 
-var questionData: QuestionData = QuestionData(question: "", data: "")
+var
+  questionData: QuestionData = QuestionData(question: "", data: "")
+  answered*: bool = false ## If true, the question was answered
 
-proc setQuestion*(question: string; data: string = "", dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc setQuestion*(question: string; qType: QuestionType; data: string = "";
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the data related to the current in-game question
   ##
   ## * question - the question which will be asked to the player
+  ## * qType    - the type of the question, used to set action to the player's
+  ##              answer
   ## * data     - an additional data for the question, like saved game path,
   ##              optional.
   ## * dialog   - the current in-game dialog displayed on the screen
@@ -42,11 +50,13 @@ proc setQuestion*(question: string; data: string = "", dialog: var GameDialog) {
     var needLines: float = ceil(x = getTextWidth(text = question) / 250)
     if needLines < 1.0:
       needLines = 1.0
-    questionData = QuestionData(question: question, data: data, lines: needLines)
+    questionData = QuestionData(question: question, data: data,
+        lines: needLines, qType: qType)
+    answered = false
   except:
     dialog = setError(message = "Can't set the question.")
 
-proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [],
+proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the current question to the player
   ##
@@ -60,8 +70,14 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [],
     wrapLabel(str = questionData.question)
     setLayoutRowDynamic(height = 30, cols = 2)
     labelButton(title = "Yes"):
-      dialog = none
-      questionData = QuestionData(question: "", data: "")
+      if questionData.qType == deleteSave:
+        try:
+          removeFile(file = questionData.data)
+          dialog = none
+        except:
+          dialog = setError(message = "Can't remove the save file.")
     labelButton(title = "No"):
       dialog = none
+    if dialog == none:
       questionData = QuestionData(question: "", data: "")
+      answered = true

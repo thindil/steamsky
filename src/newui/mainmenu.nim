@@ -345,7 +345,7 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       echo "button clicked"
     labelButton(title = "Delete game"):
       setQuestion(question = "Are you sure you want delete this savegame?",
-          data = saveClicked, dialog = dialog)
+          data = saveClicked, qType = deleteSave, dialog = dialog)
       dialog = questionDialog
     labelButton(title = "Close"):
       dialog = none
@@ -385,6 +385,9 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         sortOrder = timeDesc
       else:
         sortOrder = timeAsc
+    if answered:
+      saves = @[]
+      answered = false
     if saves.len == 0:
       for file in walkFiles(pattern = saveDirectory & "*.sav"):
         let
