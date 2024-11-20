@@ -507,6 +507,8 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   state = map
   dialog = none
 
+var playerName: string = ""
+
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Start the new game settings
@@ -543,15 +545,16 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 2):
-    row(x = 0, y = 0, w = (menuWidth.float * 0.75), h = (menuHeight - 100).float):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 3):
+    row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group("groupSetting", {windowNoFlags}):
-        setLayoutRowDynamic(25, 1)
-        label(str = "test")
-    row(x = (menuWidth.float * 0.75), y = 0, w = (menuWidth.float * 0.25), h = (
-        menuHeight - 100).float):
-      group("groupSetting", {windowBorder}):
-        setLayoutRowDynamic((menuHeight - 90).float, 1)
+        setLayoutRowDynamic(30, 1)
+        label(str = "Character name:")
+        editString(text = playerName, maxLen = 64)
+    row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
+        menuHeight - 90).float):
+      group("Info", {windowBorder, windowTitle}):
+        setLayoutRowDynamic((menuHeight - 150).float, 1)
         label(str = "test2")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     row(x = 140, y = 0, w = 155, h = 40):
