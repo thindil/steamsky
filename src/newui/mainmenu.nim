@@ -532,26 +532,30 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             setButtonStyle2(source = active, destination = normal)
             labelButton(title = tabs[i]):
               currentTab = i.cint
+              echo "button pressed"
             restoreButtonStyle()
           else:
             labelButton(title = tabs[i]):
               currentTab = i.cint
+              echo "button pressed"
         x += widgetWidth
       except:
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
-  group(title = "NewsGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = fileLines.float, cols = 1)
+  setLayoutRowDynamic(height = (menuHeight - 90).float, cols = 2)
+  group(title = "SettingGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 30, cols = 3)
+  group(title = "InfoGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = (menuHeight - 100).float, cols = 1)
   layoutSpaceStatic(height = 50, widgetsCount = 2):
-    row(x = 200, y = 0, w = 155, h = 40):
+    row(x = 140, y = 0, w = 155, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Start the game")
       labelButton(title = "Start game"):
         echo "button pressed"
-    row(x = 350.float, y = 0, w = 140, h = 40):
+    row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
