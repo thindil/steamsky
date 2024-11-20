@@ -76,6 +76,11 @@ proc nk_zero(`ptr`: pointer; size: nk_size) {.importc, cdecl, raises: [],
 proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
+# ------
+# Panels
+# ------
+proc nk_create_panel(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ----
 # Text
@@ -440,6 +445,11 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     popup.parent = win
     popup.bounds = new_nk_rect(x = x, y = y, w = w, h = h)
     popup.seq = ctx.seq
+    popup.layout = cast[PNkPanel](nk_create_panel(ctx = ctx))
+    popup.flags = winSetToInt(nimFlags = flags)
+    popup.flags = popup.flags or nkWindowBorder.cint
+    if (pType == dynamicPopup):
+      popup.flags = popup.flags or NK_WINDOW_DYNAMIC.cint
     return true
 {.pop ruleOn: "params".}
 

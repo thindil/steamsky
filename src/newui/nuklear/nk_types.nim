@@ -136,6 +136,8 @@ type
   nk_anti_aliasing* = enum
     ## Internal Nuklear type
     NK_ANTI_ALIASING_OFF, NK_ANTI_ALIASING_ON
+  nk_window_flags* = enum
+    NK_WINDOW_DYNAMIC = 1 shl 11
 
 # -------
 # Objects
@@ -224,11 +226,12 @@ type
     name*: nk_hash
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
-    layout*: ptr nk_panel
+    layout*: PNkPanel
     popup*: nk_popup_state
     parent*: ptr nk_window
     bounds*: nk_rect
     seq*: uint
+    flags*: nk_flags
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
@@ -254,6 +257,8 @@ type
     region*: array[4, nk_ushort]
   PNkWindow* = ptr nk_window
     ## Pointer to nk_window structure
+  PNkPanel* = ptr nk_panel
+    ## Pointer to nk_panel structure
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
