@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- New icon for the map's manipulation: move up, author: Delapouite
+  (https://game-icons.net), license CC BY 3.0
+
 ### Fixed
 - Typo in changelog
 
@@ -11,7 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Image of the game's logo
 - New icons for the map's manipulation: menu, move up-left, move up-right,
-  author: Lorc, Delapouite (https://game-icons.net), license CC BY 3.0
+  authors: Lorc, Delapouite (https://game-icons.net), license CC BY 3.0
 
 ### Changed
 - Updated modding guide
