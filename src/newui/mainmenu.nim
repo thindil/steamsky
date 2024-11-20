@@ -518,14 +518,15 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   stylePushVec2(field = spacing, x = 0, y = 0)
   stylePushFloat(field = rounding, value = 0)
-  layoutStatic(height = 30, cols = 2):
+  layoutSpaceStatic(height = 30, widgetsCount = 2):
+    var x: float = 200
     for i in 0..1:
       try:
         let
           textWidth: float = getTextWidth(text = tabs[i])
           widgetWidth: float = textWidth + 15 * getButtonStyle(
               field = padding).x;
-        row(width = widgetWidth):
+        row(x = x, y = 0, w = widgetWidth, h = 30):
           if currentTab == i:
             saveButtonStyle()
             setButtonStyle2(source = active, destination = normal)
@@ -535,8 +536,25 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           else:
             labelButton(title = tabs[i]):
               currentTab = i.cint
+        x += widgetWidth
       except:
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
+  setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
+  group(title = "NewsGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = fileLines.float, cols = 1)
+  layoutSpaceStatic(height = 50, widgetsCount = 2):
+    row(x = 200, y = 0, w = 155, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Start the game")
+      labelButton(title = "Start game"):
+        echo "button pressed"
+    row(x = 350.float, y = 0, w = 140, h = 40):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
+      labelButton(title = "Back to menu"):
+        state = mainMenu
+        return
   state = newGame
