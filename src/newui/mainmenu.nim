@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, gamesaveload, halloffame]
 import coreui, dialogs, errordialog
 
-const names: array[2, string] = ["Player", "Difficulty"]
+const tabs: array[2, string] = ["Player", "Difficulty"]
 
 var
   logo: PImage = nil
@@ -507,7 +507,8 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   state = map
   dialog = none
 
-proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Start the new game settings
   ##
   ## * state  - the current game's state
@@ -515,25 +516,24 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: 
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  stylePushVec2(spacing, 0, 0)
-  stylePushFloat(rounding, 0)
-  layoutStatic(20, 3):
-    for i in 0 .. 2:
+  stylePushVec2(field = spacing, x = 0, y = 0)
+  stylePushFloat(field = rounding, value = 0)
+  layoutStatic(height = 30, cols = 2):
+    for i in 0..1:
       try:
         let
-          textWidth = getTextWidth(names[i])
-          widgetWidth = textWidth + 3 * getButtonStyle(padding).x;
-        row(widgetWidth):
+          textWidth: float = getTextWidth(text = tabs[i])
+          widgetWidth: float = textWidth + 15 * getButtonStyle(
+              field = padding).x;
+        row(width = widgetWidth):
           if currentTab == i:
             saveButtonStyle()
-            setButtonStyle2(active, normal)
-            currentTab = currentTab
-            labelButton(names[i]):
+            setButtonStyle2(source = active, destination = normal)
+            labelButton(title = tabs[i]):
               currentTab = i.cint
             restoreButtonStyle()
           else:
-            currentTab = currentTab
-            labelButton(names[i]):
+            labelButton(title = tabs[i]):
               currentTab = i.cint
       except:
         dialog = setError(message = "Can't set the tabs buttons.")
