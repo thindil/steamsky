@@ -33,7 +33,7 @@ export nk_types, nk_context, nk_tooltip, nk_widget
 # -------
 # Objects
 # -------
-type PImage* = pointer
+type PImage* = pointer ## A pointer to the image type
 
 # ---------------------
 # Procedures parameters
@@ -45,28 +45,36 @@ using ctx: PContext
 # -------------------
 proc new_nk_rect(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl,
     raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc new_nk_vec2(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl, raises: [
     ], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc new_nk_font_config*(pixelHeight: cfloat): nk_font_config {.importc: "nk_font_config",
     nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Input
 # -----
 proc nk_input_begin*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # General
 # -------
 proc nk_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_zero(`ptr`: pointer; size: nk_size) {.importc, cdecl, raises: [],
     tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # Windows
 # -------
 proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 
 # ----
@@ -74,44 +82,60 @@ proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], cont
 # ----
 proc nk_labelf(ctx; flags: nk_flags; fmt: cstring) {.importc,
     varargs, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # Layouts
 # -------
 proc nk_layout_row_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_row_begin(ctx; fmt: nk_layout_format;
     rowHeight: cfloat; ccols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_row_push(ctx; cwidth: cfloat) {.importc, cdecl, raises: [],
     tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_row(ctx; fmt: nk_layout_format; height: cfloat;
     cols: cint; ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_space_begin(ctx; fmt: nk_layout_format;
     cheight: cfloat; widgetCount: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_row_template_begin(ctx; cheight: cfloat) {.importc, cdecl,
     raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_row_template_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Menus
 # -----
 proc nk_menubar_begin(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_menubar_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_menu_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_menu_item_label(ctx; ctext: cstring;
     aligmnent: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------
 # Charts
 # ------
 proc nk_chart_begin(ctx; ctype1: ChartType; num1: cint; min1,
     max1: cfloat): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_chart_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------
 # Popups
 # ------
 proc nk_popup_end(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Trees
@@ -119,79 +143,105 @@ proc nk_popup_end(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
 proc nk_tree_state_push(ctx; ttype: TreeType;
     ctitle: cstring; cstate: var CollapseStates): nk_bool {.importc, cdecl,
         raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_tree_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_tree_push_hashed(ctx; ttype: TreeType;
     ctitle: cstring; cstate: CollapseStates; chash: cstring; len,
     id: cint): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_tree_element_push_hashed(ctx; ttype: TreeType;
     ctitle: cstring; cstate: CollapseStates; cselected: var nk_bool;
     chash: cstring; len, sed: cint): nk_bool {.importc, cdecl, raises: [],
         tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_tree_element_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # Buttons
 # -------
 proc nk_button_label(ctx; ctitle: cstring): nk_bool {.importc, cdecl, raises: [
     ], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_button_symbol(ctx; csymbol: SymbolType): nk_bool {.importc, cdecl,
     raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_button_symbol_label(ctx; csymbol: SymbolType; clabel: cstring;
     calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Style
 # -----
 proc nk_style_item_color(col: nk_color): nk_style_item {.importc, cdecl,
     raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_style_set_font*(ctx; font: ptr nk_user_font) {.importc, nodecl,
     raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------
 # Combos
 # ------
 proc nk_combo_begin_color(ctx; color: nk_color;
     size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_combo_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------
 # Colors
 # ------
 proc nk_rgb*(r, g, b: cint): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_rgb_cf*(c: nk_colorf): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_rgba*(r, g, b, a: cint): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # Filters
 # -------
 proc nk_filter_default*(box: ptr nk_text_edit;
     unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_filter_decimal*(box: ptr nk_text_edit;
     unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_filter_float*(box: ptr nk_text_edit;
     unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_filter_hex*(box: ptr nk_text_edit;
     unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_filter_oct*(box: ptr nk_text_edit;
     unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_filter_binary*(box: ptr nk_text_edit;
     unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_filter_ascii*(box: ptr nk_text_edit;
     unicode: nk_rune): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ----------
 # Contextual
 # ----------
 proc nk_contextual_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_contextual_item_label(ctx; clabel: cstring;
     calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------
 # Groups
 # ------
 proc nk_group_begin(ctx; ctitle: cstring;
     cflags: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_group_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Fonts
@@ -199,11 +249,14 @@ proc nk_group_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_font_atlas_add_default*(atlas: ptr nk_font_atlas; height: cfloat;
     config: ptr nk_font_config): ptr nk_font {.importc, nodecl, raises: [],
         tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
     height: cfloat;  config: ptr nk_font_config): ptr nk_font {.importc,
         nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl, raises: [
     ], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
@@ -246,6 +299,7 @@ proc getWidgetBounds*(): NimRect {.raises: [], tags: [], contractual.} =
   ## Returns a rectangle with the current Nuklear widget coordinates
   ## converted to NimRect
   proc nk_widget_bounds(ctx): nk_rect {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
   let rect = nk_widget_bounds(ctx = ctx)
   return NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
 
@@ -256,11 +310,17 @@ proc createWin(title: cstring; wx, wy, ww, wh: cfloat;
   ## Returns true if window was succesfully created otherwise false.
   proc nk_begin(ctx; title: cstring; bounds: nk_rect;
       flags: nk_flags): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
   return nk_begin(ctx = ctx, title = title, bounds = new_nk_rect(x = wx, y = wy,
       w = ww, h = wh), flags = wFlags)
 
 proc winSetToInt(nimFlags: set[WindowFlags]): cint {.raises: [], tags: [],
     contractual.} =
+  ## Convert Nim flags related to windows to C
+  ##
+  ## * nimFlags - flags to convert
+  ##
+  ## Returns a result of a bit or on the flags.
   result = 0
   {.warning[HoleEnumConv]: off.}
   for flag in nimFlags:
@@ -301,6 +361,7 @@ proc windowIsHidden*(name: string): bool {.raises: [], tags: [], contractual.} =
   ## Returns true if the window is hidden, otherwise false
   proc nk_window_is_hidden(ctx; name: cstring): cint {.importc, nodecl,
       raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
   return nk_window_is_hidden(ctx = ctx, name = name.cstring) > 0
 
 proc windowClose*(name: string) {.raises: [], tags: [], contractual.} =
@@ -309,6 +370,7 @@ proc windowClose*(name: string) {.raises: [], tags: [], contractual.} =
   ## * name - the name of the window to close
   proc nk_window_close(ctx; name: cstring) {.importc, nodecl, raises: [],
       tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
   nk_window_close(ctx = ctx, name = name.cstring)
 
 proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
@@ -316,6 +378,7 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
   ##
   ## * cols - the amount of columns to add as the spacing
   proc nk_spacing(ctx; cols: cint) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
   nk_spacing(ctx = ctx, cols = cols.cint)
 
 # ------
@@ -389,6 +452,7 @@ proc createPopup(pType2: PopupType; title2: cstring;
   proc nk_popup_begin(ctx; pType: PopupType; title: cstring;
       flags: nk_flags; rect: nk_rect): nk_bool {.importc, nodecl, raises: [],
           tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
   return nk_popup_begin(ctx = ctx, pType = pType2, title = title2,
       flags = flags2, rect = new_nk_rect(x = x2, y = y2, w = w2, h = h2))
 
@@ -414,6 +478,7 @@ template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
 proc closePopup*() {.raises: [], tags: [], contractual.} =
   ## Close the last popup window
   proc nk_popup_close(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
   ctx.nk_popup_close()
 
 # -----
@@ -1677,8 +1742,8 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
     title: cstring; align: nk_flags; value: var nk_bool): nk_bool {.importc,
         nodecl, raises: [], tags: [], contractual.}
   var newValue = value.nk_bool
-  result = nk_selectable_symbol_label(ctx, sym, title.cstring, align.nk_flags,
-      newValue) == nkTrue
+  result = nk_selectable_symbol_label(ctx = ctx, sym = sym,
+      title = title.cstring, align = align.nk_flags, value = newValue) == nkTrue
   discard $newValue
   value = newValue
 
@@ -1726,7 +1791,7 @@ proc colorPicker*(color: NimColorF;
   ## Returns Nim color selected by the user in the widget
   proc nk_color_picker(ctx; color: nk_colorf;
       fmt: colorFormat): nk_colorf {.importc, nodecl, raises: [], tags: [], contractual.}
-  let newColor = nk_color_picker(ctx, nk_colorf(r: color.r, g: color.g,
-      b: color.b, a: color.a), format)
+  let newColor = nk_color_picker(ctx = ctx, color = nk_colorf(r: color.r,
+      g: color.g, b: color.b, a: color.a), fmt = format)
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
