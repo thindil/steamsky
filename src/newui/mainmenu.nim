@@ -543,11 +543,16 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  setLayoutRowDynamic(height = (menuHeight - 90).float, cols = 2)
-  group(title = "SettingGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 30, cols = 3)
-  group(title = "InfoGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = (menuHeight - 100).float, cols = 1)
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 2):
+    row(x = 0, y = 0, w = (menuWidth.float * 0.75), h = (menuHeight - 100).float):
+      group("groupSetting", {windowNoFlags}):
+        setLayoutRowDynamic(25, 1)
+        label(str = "test")
+    row(x = (menuWidth.float * 0.75), y = 0, w = (menuWidth.float * 0.25), h = (
+        menuHeight - 100).float):
+      group("groupSetting", {windowBorder}):
+        setLayoutRowDynamic((menuHeight - 90).float, 1)
+        label(str = "test2")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     row(x = 140, y = 0, w = 155, h = 40):
       if gameSettings.showTooltips:
