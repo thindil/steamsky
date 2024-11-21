@@ -43,8 +43,8 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns parameter dialog, modified if any error happened.
   if menuImages[0] == nil:
     try:
-      menuImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
-          "images" & DirSep & "logo.svg", width = 0, height = 110)
+      menuImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
+          DirSep & "images" & DirSep & "logo.svg", width = 0, height = 110)
     except:
       dialog = setError(message = "Can't set the game's logo.")
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
@@ -506,7 +506,7 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   state = map
   dialog = none
 
-var playerName: string = ""
+var playerName: string = newGameSettings.playerName
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -532,11 +532,17 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if currentTab == index:
             saveButtonStyle()
             setButtonStyle2(source = active, destination = normal)
+            if gameSettings.showTooltips:
+              addTooltip(bounds = getWidgetBounds(),
+                  text = "Show settings for your character.")
             labelButton(title = tab):
               currentTab = index.cint
               echo "button pressed"
             restoreButtonStyle()
           else:
+            if gameSettings.showTooltips:
+              addTooltip(bounds = getWidgetBounds(),
+                  text = "Show settings for the game difficulty.")
             labelButton(title = tab):
               currentTab = index.cint
               echo "button pressed"
@@ -550,6 +556,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
         label(str = "Character name:")
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(), text = "Enter character name")
         editString(text = playerName, maxLen = 64)
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
