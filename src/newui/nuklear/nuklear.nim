@@ -390,6 +390,17 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # Popups
 # ------
 {.push ruleOff: "params".}
+proc nkStartPopup(ctx; win: PNkWindow) {.raises: [], tags: [], contractual.} =
+  ## Start setting a popup window
+  ##
+  ## * ctx - the Nuklear context
+  ## * win - the window of a popup
+  require:
+    ctx != nil
+    win != nil
+  body:
+    discard
+
 proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     x, y, w, h: var float): bool {.raises: [NuklearException], tags: [],
         contractual.} =
@@ -450,6 +461,8 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     popup.flags = popup.flags or nkWindowBorder.cint
     if (pType == dynamicPopup):
       popup.flags = popup.flags or NK_WINDOW_DYNAMIC.cint
+    popup.buffer = win.buffer
+    nkStartPopup(ctx = ctx, win = win)
     return true
 {.pop ruleOn: "params".}
 

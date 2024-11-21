@@ -215,6 +215,8 @@ type
     panelCombo = 1 shl 5,
     panelMenu = 1 shl 6,
     panelTooltip = 1 shl 7
+  nk_command_buffer* {.importc: "struct nk_command_buffer".} = object
+    ## Internal Nuklear type
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
@@ -233,6 +235,7 @@ type
     bounds*: nk_rect
     seq*: uint
     flags*: nk_flags
+    buffer*: nk_command_buffer
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
