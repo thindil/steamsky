@@ -175,6 +175,9 @@ proc nk_button_symbol(ctx; csymbol: SymbolType): nk_bool {.importc, cdecl,
 proc nk_button_symbol_label(ctx; csymbol: SymbolType; clabel: cstring;
     calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_button_image(ctx; cimage: PImage): nk_bool {.importc, cdecl,
+    raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Style
@@ -752,6 +755,15 @@ template labelButtonStyled*(title: string; style: ButtonStyle;
   ## * style       - the style used to draw the button
   ## * onPressCode - the Nim code to execute when the button was pressed
   if createStyledButton(bTitle = title.cstring, bStyle = style):
+    onPressCode
+
+template imageButton*(image: PImage; onPressCode: untyped) =
+  ## Draw the button with the selected image. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  if nk_button_image(ctx = ctx, cimage = image):
     onPressCode
 
 # -------
