@@ -23,10 +23,9 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, gamesaveload, halloffame]
 import coreui, dialogs, errordialog
 
-const tabs: array[2, string] = ["Player", "Difficulty"]
 
 var
-  logo: PImage = nil
+  menuImages: array[2, PImage] = [nil, nil]
   showLoadButton, showHoFButton: bool = false
   fileContent: string = ""
   fileName: string = ""
@@ -42,9 +41,9 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns parameter dialog, modified if any error happened.
-  if logo == nil:
+  if menuImages[0] == nil:
     try:
-      logo = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
+      menuImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" & DirSep &
           "images" & DirSep & "logo.svg", width = 0, height = 110)
     except:
       dialog = setError(message = "Can't set the game's logo.")
@@ -59,7 +58,7 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
   ## Returns the modified parameter state.
   layoutSpaceStatic(height = 90, widgetsCount = 1):
     row(x = 50, y = 0, w = 500, h = 90):
-      image(image = logo)
+      image(image = menuImages[0])
   setLayoutRowDynamic(height = 40, cols = 1)
   label(str = gameVersion & " development", alignment = centered)
   layoutSpaceStatic(height = 240, widgetsCount = 6):
@@ -522,23 +521,24 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   stylePushFloat(field = rounding, value = 0)
   layoutSpaceStatic(height = 30, widgetsCount = 2):
     var x: float = 200
-    for i in 0..1:
+    const tabs: array[2, string] = ["Player", "Difficulty"]
+    for index, tab in tabs:
       try:
         let
-          textWidth: float = getTextWidth(text = tabs[i])
+          textWidth: float = getTextWidth(text = tab)
           widgetWidth: float = textWidth + 15 * getButtonStyle(
               field = padding).x;
         row(x = x, y = 0, w = widgetWidth, h = 30):
-          if currentTab == i:
+          if currentTab == index:
             saveButtonStyle()
             setButtonStyle2(source = active, destination = normal)
-            labelButton(title = tabs[i]):
-              currentTab = i.cint
+            labelButton(title = tab):
+              currentTab = index.cint
               echo "button pressed"
             restoreButtonStyle()
           else:
-            labelButton(title = tabs[i]):
-              currentTab = i.cint
+            labelButton(title = tab):
+              currentTab = index.cint
               echo "button pressed"
         x += widgetWidth
       except:
@@ -547,14 +547,14 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   stylePopVec2()
   layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 3):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
-      group("groupSetting", {windowNoFlags}):
-        setLayoutRowDynamic(30, 1)
+      group(title = "groupSetting", flags = {windowNoScrollbar}):
+        setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.4.cfloat, 0.6])
         label(str = "Character name:")
         editString(text = playerName, maxLen = 64)
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
-      group("Info", {windowBorder, windowTitle}):
-        setLayoutRowDynamic((menuHeight - 150).float, 1)
+      group(title = "Info", flags = {windowBorder, windowTitle}):
+        setLayoutRowDynamic(height = (menuHeight - 150).float, cols = 1)
         label(str = "test2")
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     row(x = 140, y = 0, w = 155, h = 40):
