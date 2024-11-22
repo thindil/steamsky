@@ -743,6 +743,8 @@ proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
   ##
   ## * bTitle - the text to shown on the button
   ## * bStyle - the button's style settings
+  ##
+  ## Returns true if button was created, otherwise false
   var buttonStyle: nk_style_button = ctx.style.button
   buttonStyle.border_color = nk_rgb(r = bStyle.borderColor.r.cint,
       g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
@@ -764,10 +766,13 @@ template labelButtonStyled*(title: string; style: ButtonStyle;
   if createStyledButton(bTitle = title.cstring, bStyle = style):
     onPressCode
 
-proc createImageButton(img: PImage): bool {.raises: [], tags: [], contractual} =
+proc createImageButton(img: PImage): bool {.raises: [], tags: [],
+    contractual.} =
   ## Draw the button with the selected image, internal use only, temporary code
   ##
   ## * image - the image to shown on the button
+  ##
+  ## Returns true if button was created, otherwise false
   proc nk_button_image(ctx; image: nk_image): nk_bool {.importc, nodecl,
       raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -782,6 +787,35 @@ template imageButton*(image: PImage; onPressCode: untyped) =
   ##
   ## Returns true if button was pressed
   if createImageButton(img = image):
+    onPressCode
+
+proc createStyledImageButton(img: PImage; bStyle: ButtonStyle): bool {.raises: [],
+    tags: [], contractual.} =
+  ## Draw the button with the selected image, internal use only, temporary code
+  ##
+  ## * image - the image to shown on the button
+  ## * bStyle - the button's style settings
+  ##
+  ## Returns true if button was created, otherwise false
+  var buttonStyle: nk_style_button = ctx.style.button
+  buttonStyle.border_color = nk_rgb(r = bStyle.borderColor.r.cint,
+      g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
+  buttonStyle.rounding = bStyle.rounding.cfloat
+  buttonStyle.padding = new_nk_vec2(x = bStyle.padding.x, y = bStyle.padding.y)
+  proc nk_button_image_styled(ctx; style: var nk_style_button;
+      image: nk_image): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_button_image_styled(ctx = ctx, style = buttonStyle,
+      image = nk_image_ptr(iPtr = img))
+
+template imageButtonStyled*(image: PImage; onPressCode: untyped) =
+  ## Draw the button with the selected image. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * style       - the style used to draw the button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  if createStyledImageButton(img = image, bStyle = style):
     onPressCode
 
 # -------
@@ -1518,7 +1552,8 @@ proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
   proc nk_hsva_colorf(h, s, v, a: cfloat): nk_colorf {.importc, nodecl,
       raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[2], a = hsva[3])
+  let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[
+      2], a = hsva[3])
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
 # ------
@@ -1899,7 +1934,7 @@ proc colorPicker*(color: NimColorF;
   proc nk_color_picker(ctx; color: nk_colorf;
       fmt: colorFormat): nk_colorf {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  let newColor: nk_colorf = nk_color_picker(ctx = ctx, color = nk_colorf(r: color.r,
-      g: color.g, b: color.b, a: color.a), fmt = format)
+  let newColor: nk_colorf = nk_color_picker(ctx = ctx, color = nk_colorf(
+      r: color.r, g: color.g, b: color.b, a: color.a), fmt = format)
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
