@@ -19,13 +19,16 @@
 ## menu, and selecting its various sections
 
 import std/[algorithm, math, os, sequtils, strutils, times]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game, gamesaveload, halloffame]
 import coreui, dialogs, errordialog
 
 
+{.push ruleOff: "varDeclared".}
 var
-  menuImages: array[2, PImage] = [nil, nil]
+  menuImages: array[4, PImage]
+{.push ruleOn: "varDeclared".}
+var
   showLoadButton, showHoFButton: bool = false
   fileContent: string = ""
   fileName: string = ""
@@ -511,6 +514,7 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
 var
   playerName: string = newGameSettings.playerName
   currentTab: cint = 0
+  infoText: string = "General player character settings. Select field which you want to set to see more information about."
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -555,7 +559,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 4):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 7):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
@@ -568,11 +572,17 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               text = "Select a random name for the character, based on the character gender")
         imageButton(image = menuImages[1]):
           echo "button pressed"
+        setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
+        label(str = "Character gender:")
+        imageButton(image = menuImages[1]):
+          echo "button pressed"
+        imageButton(image = menuImages[1]):
+          echo "button pressed"
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
         setLayoutRowDynamic(height = (menuHeight - 150).float, cols = 1)
-        label(str = "test2")
+        wrapLabel(str = infoText)
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     row(x = 140, y = 0, w = 155, h = 40):
       if gameSettings.showTooltips:
