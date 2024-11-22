@@ -175,9 +175,6 @@ proc nk_button_symbol(ctx; csymbol: SymbolType): nk_bool {.importc, cdecl,
 proc nk_button_symbol_label(ctx; csymbol: SymbolType; clabel: cstring;
     calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_button_image(ctx; cimage: PImage): nk_bool {.importc, cdecl,
-    raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Style
@@ -264,6 +261,13 @@ proc nk_font_atlas_add_from_file*(atlas: ptr nk_font_atlas; filePath: cstring;
   ## A binding to Nuklear's function. Internal use only
 proc nk_font_atlas_clear*(atlas: ptr nk_font_atlas) {.importc, nodecl, raises: [
     ], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+
+# ------
+# Images
+# ------
+proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl, raises: [],
+    tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
 # ------------------------------------------------------------------
@@ -757,13 +761,24 @@ template labelButtonStyled*(title: string; style: ButtonStyle;
   if createStyledButton(bTitle = title.cstring, bStyle = style):
     onPressCode
 
+proc createImageButton(img: PImage): bool {.raises: [], tags: [], contractual} =
+  ## Draw the button with the selected image, internal use only, temporary code
+  ##
+  ## * image - the image to shown on the button
+  proc nk_button_image(ctx; image: nk_image): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_button_image(ctx = ctx, image = nk_image_ptr(iPtr = img))
+
 template imageButton*(image: PImage; onPressCode: untyped) =
   ## Draw the button with the selected image. Execute the selected code
   ## on pressing it.
   ##
   ## * image       - the image to shown on the button
   ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_image(ctx = ctx, cimage = image):
+  ##
+  ## Returns true if button was pressed
+  if createImageButton(img = image):
     onPressCode
 
 # -------
@@ -1847,9 +1862,6 @@ proc image*(image: PImage) {.raises: [], tags: [], contractual.} =
   ## * image - pointer to the image which will be drawn
   proc nk_new_image(ctx; img: nk_image) {.importc: "nk_image", nodecl, raises: [
       ], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  proc nk_image_ptr(iPtr: pointer): nk_image {.importc, nodecl, raises: [],
-      tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_new_image(ctx = ctx, img = nk_image_ptr(iPtr = image))
 
