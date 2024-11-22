@@ -44,12 +44,14 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns parameter dialog, modified if any error happened.
   if menuImages[0] == nil:
+    const fileNames: array[1..3, string] = ["random", "male", "female"]
     try:
       menuImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
           DirSep & "images" & DirSep & "logo.svg", width = 0, height = 110)
-      menuImages[1] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
-          DirSep & "images" & DirSep & "ui" & DirSep & "random.svg", width = 0,
-          height = 10 + gameSettings.interfaceFontSize)
+      for index, fileName in fileNames:
+        menuImages[index] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
+            DirSep & "images" & DirSep & "ui" & DirSep & fileName & ".svg", width = 0,
+            height = 10 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
@@ -514,6 +516,7 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
 var
   playerName: string = newGameSettings.playerName
   currentTab: cint = 0
+  currentGender: cint = 2
   infoText: string = "General player character settings. Select field which you want to set to see more information about."
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
@@ -562,22 +565,32 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 7):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group(title = "groupSetting", flags = {windowNoScrollbar}):
-        setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-        label(str = "Character name:")
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = "Enter character name")
-        editString(text = playerName, maxLen = 64)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Select a random name for the character, based on the character gender")
-        imageButton(image = menuImages[1]):
-          echo "button pressed"
-        setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
-        label(str = "Character gender:")
-        imageButton(image = menuImages[1]):
-          echo "button pressed"
-        imageButton(image = menuImages[1]):
-          echo "button pressed"
+        # Player settings
+        if currentTab == 0:
+          setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+          label(str = "Character name:")
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(), text = "Enter character name")
+          editString(text = playerName, maxLen = 64)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Select a random name for the character, based on the character gender")
+          imageButton(image = menuImages[1]):
+            echo "button pressed"
+          setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
+          label(str = "Character gender:")
+          for i in 2..3:
+            if currentGender == i:
+              saveButtonStyle()
+              setButtonStyle2(source = active, destination = normal)
+              imageButton(image = menuImages[i]):
+                currentGender = i.cint
+                echo "button pressed"
+              restoreButtonStyle()
+            else:
+              imageButton(image = menuImages[i]):
+                currentGender = i.cint
+                echo "button pressed"
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
