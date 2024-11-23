@@ -1304,9 +1304,18 @@ proc setButtonStyle*(field: ButtonStyleTypes; value: NimVec2) {.raises: [],
   ##
   ## * field - the style's field which value will be changed
   ## * value - the new value for the style's field
-  if field == padding:
+  case field
+  of padding:
     ctx.style.button.padding = new_nk_vec2(x = value.x.cfloat,
         y = value.y.cfloat)
+  of imagePadding:
+    ctx.style.button.image_padding = new_nk_vec2(x = value.x.cfloat,
+        y = value.y.cfloat)
+  of touchPadding:
+    ctx.style.button.touch_padding = new_nk_vec2(x = value.x.cfloat,
+        y = value.y.cfloat)
+  else:
+    discard
 
 proc setButtonStyle*(field: ButtonStyleTypes; value: float) {.raises: [],
     tags: [], contractual.} =

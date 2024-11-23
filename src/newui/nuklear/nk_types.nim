@@ -181,6 +181,7 @@ type
     rounding*, border*: cfloat
     padding*: nk_vec2
     image_padding*: nk_vec2
+    touch_padding*: nk_vec2
   nk_handle* {.bycopy, union.} = object
     ## Internal Nuklear type
     `ptr`*: pointer
@@ -298,10 +299,11 @@ type
     rounding*: float
     padding*: NimVec2
     imagePadding*: NimVec2
+    touchPadding*: NimVec2
   ButtonStyleTypes* = enum
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,
-        textActive, rounding, padding, border
+        textActive, rounding, padding, border, imagePadding, touchPadding
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
     spacing
