@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New icon for the map's manipulation: move up, author: Delapouite
   (https://game-icons.net), license CC BY 3.0
 
+### Changed
+- Updated modding guide
+
 ### Fixed
 - Typo in changelog
 
