@@ -581,21 +581,20 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label(str = "Character gender:")
           const genders: array[2..3, string] = [2: "Male", 3: "Female"]
           for i in 2..3:
+            saveButtonStyle()
+            setButtonStyle(field = padding, value = NimVec2(x: 2.0, y: 2.0))
             if playerGender == i:
-              saveButtonStyle()
               setButtonStyle2(source = active, destination = normal)
               if gameSettings.showTooltips:
                 addTooltip(bounds = getWidgetBounds(), text = genders[i])
-              imageButtonStyled(image = menuImages[i], style = ButtonStyle(
-                  imagePadding: NimVec2(x: 2.0, y: 2.0))):
+              imageButton(image = menuImages[i]):
                 playerGender = i.cint
-              restoreButtonStyle()
             else:
               if gameSettings.showTooltips:
                 addTooltip(bounds = getWidgetBounds(), text = genders[i])
-              imageButtonStyled(image = menuImages[i], style = ButtonStyle(
-                  imagePadding: NimVec2(x: 2.0, y: 2.0))):
+              imageButton(image = menuImages[i]):
                 playerGender = i.cint
+            restoreButtonStyle()
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
