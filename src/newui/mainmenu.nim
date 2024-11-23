@@ -549,7 +549,6 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                   text = "Show settings for your character.")
             labelButton(title = tab):
               currentTab = index.cint
-              echo "button pressed"
             restoreButtonStyle()
           else:
             if gameSettings.showTooltips:
@@ -557,7 +556,6 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                   text = "Show settings for the game difficulty.")
             labelButton(title = tab):
               currentTab = index.cint
-              echo "button pressed"
         x += widgetWidth
       except:
         dialog = setError(message = "Can't set the tabs buttons.")
@@ -588,13 +586,15 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               setButtonStyle2(source = active, destination = normal)
               if gameSettings.showTooltips:
                 addTooltip(bounds = getWidgetBounds(), text = genders[i])
-              imageButton(image = menuImages[i]):
+              imageButtonStyled(image = menuImages[i], style = ButtonStyle(
+                  imagePadding: NimVec2(x: 2.0, y: 2.0))):
                 playerGender = i.cint
               restoreButtonStyle()
             else:
               if gameSettings.showTooltips:
                 addTooltip(bounds = getWidgetBounds(), text = genders[i])
-              imageButton(image = menuImages[i]):
+              imageButtonStyled(image = menuImages[i], style = ButtonStyle(
+                  imagePadding: NimVec2(x: 2.0, y: 2.0))):
                 playerGender = i.cint
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
