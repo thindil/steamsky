@@ -180,6 +180,7 @@ type
       text_active*: nk_color
     rounding*, border*: cfloat
     padding*: nk_vec2
+    image_padding*: nk_vec2
   nk_handle* {.bycopy, union.} = object
     ## Internal Nuklear type
     `ptr`*: pointer
@@ -203,8 +204,10 @@ type
   nk_input* {.importc: "struct nk_input", nodecl.} = object
     ## Internal Nuklear type
     mouse*: nk_mouse
-  nk_buffer* {.importc, nodecl.} = object
+  nk_popup_buffer* {.importc: "struct nk_popup_buffer", nodecl.} = object
     ## Internal Nuklear type
+    begin*, `end`*, parent*, last*: nk_size
+    active*: nk_bool
   PanelType* {.size: sizeof(cint).} = enum
     ## The types of panels
     panelNone = 0,
@@ -227,6 +230,7 @@ type
     active*: nk_bool
     `type`*: PanelType
     name*: nk_hash
+    buf*: nk_popup_buffer
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
     layout*: PNkPanel
@@ -293,6 +297,7 @@ type
     borderColor*: NimColor
     rounding*: float
     padding*: NimVec2
+    imagePadding*: NimVec2
   ButtonStyleTypes* = enum
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,

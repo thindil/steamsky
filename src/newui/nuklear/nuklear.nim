@@ -750,6 +750,7 @@ proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
       g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
   buttonStyle.rounding = bStyle.rounding.cfloat
   buttonStyle.padding = new_nk_vec2(x = bStyle.padding.x, y = bStyle.padding.y)
+  buttonStyle.image_padding = new_nk_vec2(x = bStyle.imagePadding.x, y = bStyle.imagePadding.y)
   proc nk_button_label_styled(ctx; style: var nk_style_button;
       title: cstring): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -789,8 +790,8 @@ template imageButton*(image: PImage; onPressCode: untyped) =
   if createImageButton(img = image):
     onPressCode
 
-proc createStyledImageButton(img: PImage; bStyle: ButtonStyle): bool {.raises: [],
-    tags: [], contractual.} =
+proc createStyledImageButton(img: PImage; bStyle: ButtonStyle): bool {.raises: [
+    ], tags: [], contractual.} =
   ## Draw the button with the selected image, internal use only, temporary code
   ##
   ## * image - the image to shown on the button
@@ -802,13 +803,15 @@ proc createStyledImageButton(img: PImage; bStyle: ButtonStyle): bool {.raises: [
       g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
   buttonStyle.rounding = bStyle.rounding.cfloat
   buttonStyle.padding = new_nk_vec2(x = bStyle.padding.x, y = bStyle.padding.y)
+  buttonStyle.image_padding = new_nk_vec2(x = bStyle.imagePadding.x, y = bStyle.imagePadding.y)
   proc nk_button_image_styled(ctx; style: var nk_style_button;
       image: nk_image): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_button_image_styled(ctx = ctx, style = buttonStyle,
       image = nk_image_ptr(iPtr = img))
 
-template imageButtonStyled*(image: PImage; onPressCode: untyped) =
+template imageButtonStyled*(image: PImage; style: ButtonStyle;
+    onPressCode: untyped) =
   ## Draw the button with the selected image. Execute the selected code
   ## on pressing it.
   ##
