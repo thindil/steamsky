@@ -516,6 +516,7 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
 
 var
   playerName: string = newGameSettings.playerName
+  shipName: string = newGameSettings.shipName
   currentTab: cint = 0
   playerGender: cint = 2
   infoText: string = "General player character settings. Select field which you want to set to see more information about."
@@ -566,7 +567,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
         if currentTab == 0:
-          setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.5, 0.09])
+          # Player's name
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = "Character name:")
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
@@ -575,14 +577,18 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = "Select a random name for the character, based on the character gender")
+          saveButtonStyle()
+          setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
           imageButton(image = menuImages[1]):
             echo "button pressed"
-          setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.4.cfloat, 0.09, 0.09])
+          restoreButtonStyle()
+          # Player's gender
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
           label(str = "Character gender:")
           const genders: array[2..3, string] = [2: "Male", 3: "Female"]
           for i in 2..3:
             saveButtonStyle()
-            setButtonStyle(field = padding, value = NimVec2(x: 2.0, y: 2.0))
+            setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
             if playerGender == i:
               setButtonStyle2(source = active, destination = normal)
               if gameSettings.showTooltips:
@@ -595,6 +601,21 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               imageButton(image = menuImages[i]):
                 playerGender = i.cint
             restoreButtonStyle()
+          # Player's ship's name
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+          label(str = "Ship name:")
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Enter ship name")
+          editString(text = shipName, maxLen = 64)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Select a random name for the ship")
+          saveButtonStyle()
+          setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+          imageButton(image = menuImages[1]):
+            echo "button pressed"
+          restoreButtonStyle()
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
