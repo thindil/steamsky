@@ -23,26 +23,30 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## Provides code for nuklear context type
 import nk_types
+import contracts
 
 type
   PContext* = ptr nk_context
+    ## Used to store a pointer on nuklear context
 
 # ---------
 # Variables
 # ---------
-var ctx*: PContext ## Pointer to the Nuklear context
+var ctx*: PContext = nil
+  ## Pointer to the Nuklear context
 
 # -------
 # General
 # -------
-proc setContext*(context: PContext) {.raises: [], tags: [].} =
+proc setContext*(context: PContext) {.raises: [], tags: [], contractual.} =
   ## Set the Nuklear lib context
   ##
   ## * context - the pointer to the Nuklear context
   ctx = context
 
-proc getContext*(): PContext {.raises: [], tags: [].} =
+proc getContext*(): PContext {.raises: [], tags: [], contractual.} =
   ## Get the Nuklear lib context, temporary code
   ##
   ## Returns the pointer to the Nuklear context
