@@ -562,12 +562,12 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 7):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 10):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
         if currentTab == 0:
-          # Player's name
+          # Character's name
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = "Character name:")
           if gameSettings.showTooltips:
@@ -582,7 +582,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           imageButton(image = menuImages[1]):
             echo "button pressed"
           restoreButtonStyle()
-          # Player's gender
+          # Character's gender
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
           label(str = "Character gender:")
           const genders: array[2..3, string] = [2: "Male", 3: "Female"]
@@ -616,6 +616,17 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           imageButton(image = menuImages[1]):
             echo "button pressed"
           restoreButtonStyle()
+          # Character's goal
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.4])
+          label(str = "Character goal:")
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Select starting goal for your character. You can change it later in game.")
+          labelButton(title = "Random"):
+            echo "button pressed"
+          # Character's faction
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.4])
+          label(str = "Character faction:")
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
