@@ -20,7 +20,7 @@
 
 import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[config, game, gamesaveload, halloffame]
+import ../[basestypes, config, game, gamesaveload, halloffame]
 import coreui, dialogs, errordialog
 
 
@@ -33,8 +33,8 @@ var
   fileContent: string = ""
   fileName: string = ""
   fileLines: Positive = 1
-  playerFactions, playerCareers: seq[string] = @[]
-  currentFaction, currentCareer: Natural = 0
+  playerFactions, playerCareers, playerBases: seq[string] = @[]
+  currentFaction, currentCareer, currentBase: Natural = 0
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
@@ -66,6 +66,12 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
         for career in faction.careers.values:
           playerCareers.add(y = career.name)
         first = false
+        for baseType in faction.basesTypes.keys:
+          try:
+            playerBases.add(y = basesTypesList[baseType].name)
+          except:
+            dialog = setError(message = "Can't add a base type.")
+            break
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
@@ -573,7 +579,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 13):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 17):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
@@ -642,6 +648,9 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           # Character's career
           label(str = "Character career:")
           currentCareer = comboList(playerCareers, currentCareer, 25, 200, 200)
+          # Starting base
+          label(str = "Starting base type:")
+          currentBase = comboList(playerBases, currentBase, 25, 200, 90)
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
