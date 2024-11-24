@@ -33,10 +33,10 @@ var
   fileContent: string = ""
   fileName: string = ""
   fileLines: Positive = 1
+  playerFactions, playerCareers: seq[string] = @[]
+  currentFaction, currentCareer: Natural = 0
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
-  playerFactions: seq[string] = @[]
-  currentFaction: Natural = 0
 
 proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -59,8 +59,13 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't set the game's images.")
     # Set the list of available factions
+    var first: bool = true
     for faction in factionsList.values:
       playerFactions.add(y = faction.name)
+      if first:
+        for career in faction.careers.values:
+          playerCareers.add(y = career.name)
+        first = false
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
@@ -568,7 +573,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 11):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 13):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
@@ -634,6 +639,9 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character faction:")
           currentFaction = comboList(playerFactions, currentFaction, 25, 200, 200)
+          # Character's career
+          label(str = "Character career:")
+          currentCareer = comboList(playerCareers, currentCareer, 25, 200, 200)
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
