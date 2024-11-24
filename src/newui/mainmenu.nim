@@ -18,7 +18,7 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import std/[algorithm, math, os, sequtils, strutils, times]
+import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game, gamesaveload, halloffame]
 import coreui, dialogs, errordialog
@@ -35,6 +35,8 @@ var
   fileLines: Positive = 1
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
+  playerFactions: seq[string] = @[]
+  currentFaction: Natural = 0
 
 proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -44,6 +46,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ##
   ## Returns parameter dialog, modified if any error happened.
   if menuImages[0] == nil:
+    # Load images
     const fileNames: array[1..3, string] = ["random", "male", "female"]
     try:
       menuImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
@@ -55,6 +58,9 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             height = 10 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
+    # Set the list of available factions
+    for faction in factionsList.values:
+      playerFactions.add(y = faction.name)
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
@@ -562,7 +568,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 10):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 11):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
@@ -617,7 +623,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             echo "button pressed"
           restoreButtonStyle()
           # Character's goal
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.4])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character goal:")
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
@@ -625,8 +631,9 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           labelButton(title = "Random"):
             echo "button pressed"
           # Character's faction
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.4])
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character faction:")
+          currentFaction = comboList(playerFactions, currentFaction, 25, 200, 200)
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):

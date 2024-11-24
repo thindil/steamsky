@@ -101,15 +101,16 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     dialog: GameDialog = none
     windowWidth: float = menuWidth.float
     windowHeight: float = menuHeight.float
-  setMainMenu(dialog = dialog)
-  if dialog != none:
-    echo "Can't set the main menu. More details in error.log"
-    return
-
   try:
     discard loadGameData()
   except:
     dialog = setError(message = "Can't load the game's data.")
+
+  # Set the main menu
+  setMainMenu(dialog = dialog)
+  if dialog != none:
+    echo "Can't set the main menu. More details in error.log"
+    return
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = dtime)
