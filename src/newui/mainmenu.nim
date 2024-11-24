@@ -644,10 +644,10 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           # Character's faction
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character faction:")
-          currentFaction = comboList(playerFactions, currentFaction, 25, 200, 200)
+          currentFaction = comboList(playerFactions, currentFaction, 25, 200, 150)
           # Character's career
           label(str = "Character career:")
-          currentCareer = comboList(playerCareers, currentCareer, 25, 200, 200)
+          currentCareer = comboList(playerCareers, currentCareer, 25, 200, 150)
           # Starting base
           label(str = "Starting base type:")
           currentBase = comboList(playerBases, currentBase, 25, 200, 90)
