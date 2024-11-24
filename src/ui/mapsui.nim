@@ -578,11 +578,11 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   if tclEval2(script = "winfo exists " & mapView) == "0":
     newStart = true
     let fileName = saveDirectory & "keys.cfg"
-    var configFile = newFileStream(fileName)
+    var configFile = newFileStream(filename = fileName)
     if configFile != nil:
       var parser: CfgParser
       try:
-        parser.open(configFile, fileName)
+        parser.open(input = configFile, filename = fileName)
       except:
         showError(message = "Can't open the shortcut's configuration file.")
         return
