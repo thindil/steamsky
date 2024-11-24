@@ -399,7 +399,7 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # Popups
 # ------
 {.push ruleOff: "params".}
-proc nkStartPopup(ctx; win: PNkWindow) {.raises: [], tags: [], contractual.} =
+proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [], contractual.} =
   ## Start setting a popup window
   ##
   ## * ctx - the Nuklear context
@@ -408,7 +408,13 @@ proc nkStartPopup(ctx; win: PNkWindow) {.raises: [], tags: [], contractual.} =
     ctx != nil
     win != nil
   body:
-    discard
+    var buf: nk_popup_buffer = win.popup.buf
+    buf.begin = win.buffer.`end`
+    buf.end = win.buffer.end
+    buf.parent = win.buffer.last
+    buf.last = buf.begin
+    buf.active = nkTrue
+    win.popup.buf = buf
 
 proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     x, y, w, h: var float): bool {.raises: [NuklearException], tags: [],
@@ -431,9 +437,8 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
   body:
     if ctx == nil or ctx.current == nil or ctx.current.layout == nil:
       return false
-    let
-      win: PNkWindow = ctx.current
-      panel: ptr nk_panel = win.layout
+    var win: PNkWindow = ctx.current
+    let panel: ptr nk_panel = win.layout
     if panel.`type`.cint != panelSetPopup.cint:
       raise newException(exceptn = NuklearException,
           message = "Popups are not allowed to have popups.")

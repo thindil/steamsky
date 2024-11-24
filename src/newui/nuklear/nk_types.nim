@@ -221,6 +221,7 @@ type
     panelTooltip = 1 shl 7
   nk_command_buffer* {.importc: "struct nk_command_buffer".} = object
     ## Internal Nuklear type
+    begin*, `end`*, last*: nk_size
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
@@ -247,6 +248,7 @@ type
     input*: nk_input
     current*: ptr nk_window
     seq*: uint
+    allocated*: nk_size
   nk_rect* {.importc: "struct nk_rect", nodecl.} = object
     ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
