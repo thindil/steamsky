@@ -531,12 +531,18 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   state = map
   dialog = none
 
+const playerTooltips: array[6, string] = [
+  "General player character settings. Select field which you want to set to see more information about.",
+    "Enter character name.", "Enter ship name.",
+    "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later.",
+    "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later.", "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
+
 var
   playerName: string = newGameSettings.playerName
   shipName: string = newGameSettings.shipName
   currentTab: cint = 0
   playerGender: cint = 2
-  infoText: string = "General player character settings. Select field which you want to set to see more information about."
+  infoText: string = playerTooltips[0]
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -589,7 +595,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label(str = "Character name:")
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
-                text = "Enter character name")
+                text = playerTooltips[1])
           editString(text = playerName, maxLen = 64)
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
@@ -623,7 +629,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label(str = "Ship name:")
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
-                text = "Enter ship name")
+                text = playerTooltips[2])
           editString(text = shipName, maxLen = 64)
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
@@ -644,13 +650,25 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           # Character's faction
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character faction:")
-          currentFaction = comboList(playerFactions, currentFaction, 25, 200, 150)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = playerTooltips[3])
+          currentFaction = comboList(items = playerFactions,
+              selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           # Character's career
           label(str = "Character career:")
-          currentCareer = comboList(playerCareers, currentCareer, 25, 200, 150)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = playerTooltips[4])
+          currentCareer = comboList(items = playerCareers,
+              selected = currentCareer, itemHeight = 25, x = 200, y = 150)
           # Starting base
           label(str = "Starting base type:")
-          currentBase = comboList(playerBases, currentBase, 25, 200, 90)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = playerTooltips[5])
+          currentBase = comboList(items = playerBases, selected = currentBase,
+              itemHeight = 25, x = 200, y = 90)
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
