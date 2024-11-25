@@ -588,15 +588,19 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 17):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       group(title = "groupSetting", flags = {windowNoScrollbar}):
+        var bounds: NimRect = NimRect(x: 0, y: 0, w: 0, h: 0)
         # Player settings
         if currentTab == 0:
           # Character's name
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = "Character name:")
+          bounds = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
+            addTooltip(bounds = bounds,
                 text = playerTooltips[1])
           editString(text = playerName, maxLen = 64)
+          if mouseClicked(id = left, rect = bounds):
+            infoText = playerTooltips[1]
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = "Select a random name for the character, based on the character gender")
@@ -627,10 +631,13 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           # Player's ship's name
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = "Ship name:")
+          bounds = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
+            addTooltip(bounds = bounds,
                 text = playerTooltips[2])
           editString(text = shipName, maxLen = 64)
+          if mouseClicked(id = left, rect = bounds):
+            infoText = playerTooltips[2]
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = "Select a random name for the ship")
@@ -650,25 +657,34 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           # Character's faction
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character faction:")
+          bounds = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
+            addTooltip(bounds = bounds,
                 text = playerTooltips[3])
           currentFaction = comboList(items = playerFactions,
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
+          if mouseClicked(id = left, rect = bounds):
+            infoText = playerTooltips[3]
           # Character's career
           label(str = "Character career:")
+          bounds = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
+            addTooltip(bounds = bounds,
                 text = playerTooltips[4])
           currentCareer = comboList(items = playerCareers,
               selected = currentCareer, itemHeight = 25, x = 200, y = 150)
+          if mouseClicked(id = left, rect = bounds):
+            infoText = playerTooltips[4]
           # Starting base
           label(str = "Starting base type:")
+          bounds = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
+            addTooltip(bounds = bounds,
                 text = playerTooltips[5])
           currentBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
+          if mouseClicked(id = left, rect = bounds):
+            infoText = playerTooltips[5]
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
