@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to showing the main game's map, like drawing the map,
+## updating movement buttons, etc.
+
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import contracts
 import ../[basestypes, config, game, log, maps, missions, statistics, stories, tk, types]
@@ -313,6 +316,10 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
 
   proc insertText(newText: string; tagName: string = "") {.raises: [], tags: [],
       contractual.} =
+    ## Insert a text into the map info
+    ##
+    ## newText - the text to insert
+    ## tagName - the text's tag to add to the text in the info widget
     if newText.len > width:
       width = newText.len
     if width > 21:
