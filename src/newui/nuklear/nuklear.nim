@@ -1851,6 +1851,19 @@ proc mouseClicked*(id: Buttons; rect: NimRect): bool {.raises: [], tags: [],
   return nk_input_mouse_clicked(i = ctx.input.addr, id = id, rect = new_nk_rect(
       x = rect.x, y = rect.y, w = rect.w, h = rect.h))
 
+proc isMouseClicked*(btn: Buttons): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the selected mouse button was clicked in the current widget
+  ##
+  ## * btn  - the mouse button which was pressed
+  ##
+  ## Returns true if the selected mouse button was clicked in the current
+  ## widget, otherwise false.
+  proc nk_widget_is_mouse_clicked(ctx; btn: Buttons): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_widget_is_mouse_clicked(ctx = ctx, btn = btn)
+
 # ---------
 # Edit text
 # ---------
