@@ -399,7 +399,8 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # Draw
 # ----
 {.push ruleOff: "params".}
-proc nkPushScissor(b: var nk_command_buffer, r: nk_rect) {.raises: [], tags: [], contractual.} =
+proc nkPushScissor(b: var nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
+    contractual.} =
   ## Clear the rectangle. Internal use only
   ##
   ## b - the command buffer in which scissor will be used
@@ -412,7 +413,8 @@ proc nkPushScissor(b: var nk_command_buffer, r: nk_rect) {.raises: [], tags: [],
 # ------
 # Popups
 # ------
-proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [], contractual.} =
+proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [],
+    contractual.} =
   ## Start setting a popup window. Internal use only
   ##
   ## * ctx - the Nuklear context
@@ -770,7 +772,8 @@ proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
       g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
   buttonStyle.rounding = bStyle.rounding.cfloat
   buttonStyle.padding = new_nk_vec2(x = bStyle.padding.x, y = bStyle.padding.y)
-  buttonStyle.image_padding = new_nk_vec2(x = bStyle.imagePadding.x, y = bStyle.imagePadding.y)
+  buttonStyle.image_padding = new_nk_vec2(x = bStyle.imagePadding.x,
+      y = bStyle.imagePadding.y)
   proc nk_button_label_styled(ctx; style: var nk_style_button;
       title: cstring): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -823,7 +826,8 @@ proc createStyledImageButton(img: PImage; bStyle: ButtonStyle): bool {.raises: [
       g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
   buttonStyle.rounding = bStyle.rounding.cfloat
   buttonStyle.padding = new_nk_vec2(x = bStyle.padding.x, y = bStyle.padding.y)
-  buttonStyle.image_padding = new_nk_vec2(x = bStyle.imagePadding.x, y = bStyle.imagePadding.y)
+  buttonStyle.image_padding = new_nk_vec2(x = bStyle.imagePadding.x,
+      y = bStyle.imagePadding.y)
   proc nk_button_image_styled(ctx; style: var nk_style_button;
       image: nk_image): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -1790,10 +1794,7 @@ proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
     contractual.} =
   ## Check if mouse is hovering over the selected rectangle
   ##
-  ## * x   - the X coordinate of top left corner of the rectangle
-  ## * y   - the Y coordinate of top left corner of the rectangle
-  ## * w   - the width of the rectangle in pixels
-  ## * h   - the height of the rectangle in pixels
+  ## * rect - the area in which the mouse will be checked for hovering
   ##
   ## Returns true if the mouse is hovering over the rectangle, otherwise false
   proc nk_input_is_mouse_hovering_rect(i: ptr nk_input;
@@ -1834,6 +1835,21 @@ proc getMouseDelta*(): NimVec2 {.raises: [], tags: [], contractual.} =
   ##
   ## Returns vector with information about the mouse movement delta
   return NimVec2(x: ctx.input.mouse.delta.x, y: ctx.input.mouse.delta.y)
+
+proc mouseClicked*(id: Buttons; rect: NimRect): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the selected mouse button was clicked in the selected area
+  ##
+  ## * id  - the mouse button which was pressed
+  ## * rect - the area in which the mouse button was pressed
+  ##
+  ## Returns true if the selected mouse button was clicked in the selected
+  ## area, otherwise false.
+  proc nk_input_mouse_clicked(i: ptr nk_input; id: Buttons;
+      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_mouse_clicked(i = ctx.input.addr, id = id, rect = new_nk_rect(
+      x = rect.x, y = rect.y, w = rect.w, h = rect.h))
 
 # ---------
 # Edit text
