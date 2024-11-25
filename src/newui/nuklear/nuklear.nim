@@ -395,12 +395,25 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_spacing(ctx = ctx, cols = cols.cint)
 
+# ----
+# Draw
+# ----
+{.push ruleOff: "params".}
+proc nkPushScissor(b: var nk_command_buffer, r: nk_rect) {.raises: [], tags: [], contractual.} =
+  ## Clear the rectangle. Internal use only
+  ##
+  ## b - the command buffer in which scissor will be used
+  ## r - the rectangle of the scissor
+  ##
+  ## Returns the modified parameter b
+  discard
+{.pop ruleOn: "params".}
+
 # ------
 # Popups
 # ------
-{.push ruleOff: "params".}
 proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [], contractual.} =
-  ## Start setting a popup window
+  ## Start setting a popup window. Internal use only
   ##
   ## * ctx - the Nuklear context
   ## * win - the window of a popup
@@ -476,10 +489,12 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     if (pType == dynamicPopup):
       popup.flags = popup.flags or NK_WINDOW_DYNAMIC.cint
     {.ruleOn: "assignments".}
+
     popup.buffer = win.buffer
     nkStartPopup(ctx = ctx, win = win)
+    # var allocated: nk_size = ctx.memory.allocated
+    nkPushScissor(b = popup.buffer, r = nkNullRect)
     return true
-{.pop ruleOn: "params".}
 
 proc createPopup(pType2: PopupType; title2: cstring;
     flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [],

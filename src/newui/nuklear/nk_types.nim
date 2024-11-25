@@ -242,13 +242,16 @@ type
     seq*: uint
     flags*: nk_flags
     buffer*: nk_command_buffer
+  nk_buffer* {.importc: "struct nk_buffer", nodecl.} = object
+    ## Internal Nuklear type
+    allocated*: nk_size
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
     current*: ptr nk_window
     seq*: uint
-    allocated*: nk_size
+    memory*: nk_buffer
   nk_rect* {.importc: "struct nk_rect", nodecl.} = object
     ## Internal Nuklear type
     x*, y*, w*, h*: cfloat
@@ -270,6 +273,10 @@ type
     ## Pointer to nk_window structure
   PNkPanel* = ptr nk_panel
     ## Pointer to nk_panel structure
+
+const
+  nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
+    ## An empty rectangle
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
