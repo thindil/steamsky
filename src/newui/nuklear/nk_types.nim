@@ -139,6 +139,14 @@ type
   nk_window_flags* = enum
     ## Internal Nuklear type
     NK_WINDOW_DYNAMIC = 1 shl 11
+  nk_command_type* = enum
+    ## Internal Nuklear type
+    NK_COMMAND_NOP, NK_COMMAND_SCISSOR, NK_COMMAND_LINE, NK_COMMAND_CURVE,
+      NK_COMMAND_RECT, NK_COMMAND_RECT_FILLED, NK_COMMAND_RECT_MULTI_COLOR,
+      NK_COMMAND_CIRCLE, NK_COMMAND_CIRCLE_FILLED, NK_COMMAND_ARC,
+      NK_COMMAND_ARC_FILLED, NK_COMMAND_TRIANGLE, NK_COMMAND_TRIANGLE_FILLED,
+      NK_COMMAND_POLYGON, NK_COMMAND_POLYGON_FILLED, NK_COMMAND_POLYLINE,
+      NK_COMMAND_TEXT, NK_COMMAND_IMAGE, NK_COMMAND_CUSTOM
 
 # -------
 # Objects
@@ -219,9 +227,12 @@ type
     panelCombo = 1 shl 5,
     panelMenu = 1 shl 6,
     panelTooltip = 1 shl 7
+  nk_command_scissor* {.importc: "struct nk_command_scissor".} = object
+    ## Internal Nuklear type
   nk_command_buffer* {.importc: "struct nk_command_buffer".} = object
     ## Internal Nuklear type
     begin*, `end`*, last*: nk_size
+    clip*: nk_rect
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType

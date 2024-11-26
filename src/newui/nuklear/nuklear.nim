@@ -399,6 +399,15 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # Draw
 # ----
 {.push ruleOff: "params".}
+proc nkCommandBufferPush(b: var nk_command_buffer; t: nk_command_type;
+    size: nk_size): pointer {.raises: [], tags: [], contractual.} =
+  ## Add a command to the commands buffer
+  ##
+  ## * b    - the buffer to which to command will be added
+  ## * t    - the type of command
+  ## * size - the size of command to add
+  discard
+
 proc nkPushScissor(b: var nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
     contractual.} =
   ## Clear the rectangle. Internal use only
@@ -407,7 +416,14 @@ proc nkPushScissor(b: var nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
   ## r - the rectangle of the scissor
   ##
   ## Returns the modified parameter b
-  discard
+  body:
+    b.clip = r
+    # TODO: size of cmd, require full nk_command_scrissor declaration in nk_types
+    {.ruleOff: "namedParams".}
+    let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
+        nkCommandBufferPush(b = b, t = NK_COMMAND_SCISSOR, size = sizeOf(
+        nk_command_scissor)))
+    {.ruleOn: "namedParams".}
 {.pop ruleOn: "params".}
 
 # ------
