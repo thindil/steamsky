@@ -653,12 +653,10 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           if newFaction != currentFaction:
             currentFaction = newFaction
-            echo "here"
             var i: Natural = 0
             for faction in factionsList.values:
               if i == newFaction:
-                infoText = playerTooltips[5] & " " & faction.description
-                echo infoText
+                infoText = playerTooltips[5] & "\n\n" & faction.description
                 break
               i.inc
           # Character's career
@@ -676,8 +674,19 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               addTooltip(bounds = bound, text = playerTooltips[index])
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
+      fileLines = 1
+      for line in infoText.split(sep = "\n\n"):
+        var needLines: float = try:
+            ceil(x = getTextWidth(text = line) / menuWidth.float)
+          except:
+            dialog = setError(message = "Can't count the line height.")
+            return
+        if needLines < 1.0:
+          needLines = 1.0
+        fileLines += needLines.int
+      fileLines *= 25
       group(title = "Info", flags = {windowBorder, windowTitle}):
-        setLayoutRowDynamic(height = (menuHeight - 150).float, cols = 1)
+        setLayoutRowDynamic(height = fileLines.float, cols = 1)
         wrapLabel(str = infoText)
   layoutSpaceStatic(height = 50, widgetsCount = 2):
     row(x = 140, y = 0, w = 155, h = 40):
