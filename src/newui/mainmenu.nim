@@ -530,10 +530,14 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   state = map
   dialog = none
 
-const playerTooltips: array[6, string] = [
-    "Enter character name.", "Enter ship name.",
-    "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later.",
-    "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later.", "Select type of base in which you will start the game.\nThis may have some impact on game difficulty.",
+const playerTooltips: array[9, string] = [
+    "Enter character name.", "Select a random name for the character, based on the character gender",
+    "Enter ship name.",
+    "Select a random name for the character, based on the character gender",
+    "Select starting goal for your character. You can change it later in game.",
+    "Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.",
+    "Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.",
+    "Select type of base in which you will start the game. This may have some impact on game difficulty.",
   "General player character settings. Select field which you want to set to see more information about."]
 
 var
@@ -590,18 +594,20 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
         if currentTab == 0:
+          {.ruleOff: "assignments".}
+          var bounds: array[8, NimRect]
+          {.ruleOn: "assignments".}
           # Character's name
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = "Character name:")
+          bounds[0] = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
+            addTooltip(bounds = bounds[0],
                 text = playerTooltips[0])
-          if isMouseClicked(btn = left):
-            infoText = playerTooltips[0]
           editString(text = playerName, maxLen = 64)
+          bounds[1] = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Select a random name for the character, based on the character gender")
+            addTooltip(bounds = bounds[1], text = playerTooltips[1])
           saveButtonStyle()
           setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
           imageButton(image = menuImages[1]):
@@ -629,17 +635,17 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           # Player's ship's name
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = "Ship name:")
+          bounds[2] = getWidgetBounds()
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = playerTooltips[1])
-          if isMouseClicked(btn = left):
-            infoText = playerTooltips[1]
           editString(text = shipName, maxLen = 64)
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = "Select a random name for the ship")
           saveButtonStyle()
           setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+          bounds[3] = getWidgetBounds()
           imageButton(image = menuImages[1]):
             echo "button pressed"
           restoreButtonStyle()
@@ -649,6 +655,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = "Select starting goal for your character. You can change it later in game.")
+          bounds[4] = getWidgetBounds()
           labelButton(title = "Random"):
             echo "button pressed"
           # Character's faction
@@ -664,6 +671,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 infoText = playerTooltips[2] & "\n" & faction.description
                 break
               i.inc
+          bounds[5] = getWidgetBounds()
           newFaction = comboList(items = playerFactions,
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           # Character's career
@@ -673,6 +681,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 text = playerTooltips[3])
           if isMouseClicked(btn = left):
             infoText = playerTooltips[3]
+          bounds[6] = getWidgetBounds()
           currentCareer = comboList(items = playerCareers,
               selected = currentCareer, itemHeight = 25, x = 200, y = 150)
           # Starting base
@@ -682,6 +691,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 text = playerTooltips[4])
           if isMouseClicked(btn = left):
             infoText = playerTooltips[4]
+          bounds[7] = getWidgetBounds()
           currentBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
