@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New icon for the map's manipulation: move up, author: Delapouite
+- New icons for the map's manipulation: move up, move left, author: Delapouite
   (https://game-icons.net), license CC BY 3.0
 
 ### Changed
