@@ -545,7 +545,7 @@ var
   shipName: string = newGameSettings.shipName
   currentTab: cint = 0
   playerGender: cint = 2
-  infoText: string = playerTooltips[5]
+  infoText: string = ""
   currentFaction, newFaction, currentCareer, currentBase: Natural = 0
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
@@ -637,63 +637,51 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           label(str = "Ship name:")
           bounds[2] = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = playerTooltips[1])
+            addTooltip(bounds = bounds[2], text = playerTooltips[2])
           editString(text = shipName, maxLen = 64)
+          bounds[3] = getWidgetBounds()
           if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Select a random name for the ship")
+            addTooltip(bounds = bounds[3], text = playerTooltips[3])
           saveButtonStyle()
           setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-          bounds[3] = getWidgetBounds()
           imageButton(image = menuImages[1]):
             echo "button pressed"
           restoreButtonStyle()
           # Character's goal
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character goal:")
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = "Select starting goal for your character. You can change it later in game.")
           bounds[4] = getWidgetBounds()
+          if gameSettings.showTooltips:
+            addTooltip(bounds = bounds[4], text = playerTooltips[4])
           labelButton(title = "Random"):
             echo "button pressed"
           # Character's faction
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character faction:")
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = playerTooltips[2])
-          if isMouseClicked(btn = left):
-            var i: Natural = 0
-            for faction in factionsList.values:
-              if i == newFaction:
-                infoText = playerTooltips[2] & "\n" & faction.description
-                break
-              i.inc
           bounds[5] = getWidgetBounds()
+          if gameSettings.showTooltips:
+            addTooltip(bounds = bounds[5], text = playerTooltips[5])
           newFaction = comboList(items = playerFactions,
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           # Character's career
           label(str = "Character career:")
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = playerTooltips[3])
-          if isMouseClicked(btn = left):
-            infoText = playerTooltips[3]
           bounds[6] = getWidgetBounds()
+          if gameSettings.showTooltips:
+            addTooltip(bounds = bounds[6], text = playerTooltips[6])
           currentCareer = comboList(items = playerCareers,
               selected = currentCareer, itemHeight = 25, x = 200, y = 150)
           # Starting base
           label(str = "Starting base type:")
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(),
-                text = playerTooltips[4])
-          if isMouseClicked(btn = left):
-            infoText = playerTooltips[4]
           bounds[7] = getWidgetBounds()
+          if gameSettings.showTooltips:
+            addTooltip(bounds = bounds[7], text = playerTooltips[7])
           currentBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
+          infoText = playerTooltips[8]
+          for index, bound in bounds:
+            if mouseClicked(id = left, rect = bound):
+              infoText &= playerTooltips[index]
+              break
     row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
         menuHeight - 90).float):
       group(title = "Info", flags = {windowBorder, windowTitle}):
