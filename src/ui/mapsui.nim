@@ -24,7 +24,7 @@ import ../[basestypes, config, game, log, maps, missions, statistics, stories, t
 import coreui, dialogs, errordialog, themes, updateheader, utilsui2
 
 var
-  mapView = ".gameframe.paned.mapframe.map"
+  mapView: string = ".gameframe.paned.mapframe.map"
   menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]
     ## The game menu keyboard shortcuts
@@ -37,17 +37,17 @@ var
       "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
       "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
       "Control-c", "Control-d"]         ## The keyboard shortcuts used on the map
-  fullScreenAccel* = "Control-f"        ## Keyboard shortcut for toggle full screen
-  defaultFontSizes*: array[3, Positive] ## The default sizes of fonts
+  fullScreenAccel*: string = "Control-f"        ## Keyboard shortcut for toggle full screen
+  defaultFontSizes*: array[3, Positive] = [10, 10, 10] ## The default sizes of fonts
 
 proc updateMoveButtons*() {.raises: [], tags: [], contractual.} =
   ## Update the player's ship movement buttons, depending on the state of the
   ## ship
   let
-    moveButtonsNames = ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
-    frameName = mainPaned & ".controls.buttons"
-    speedBox = frameName & ".box.speed"
-  var button = frameName & ".box.moveto"
+    moveButtonsNames: array[8, string] = ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
+    frameName: string = mainPaned & ".controls.buttons"
+    speedBox: string = frameName & ".box.speed"
+  var button: string = frameName & ".box.moveto"
   if playerShip.speed == docked:
     tclEval(script = "grid remove " & speedBox)
     tclEval(script = "grid remove " & button)
@@ -118,7 +118,7 @@ proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
   tclEval(script = "update")
   updateMessages()
   if playerShip.speed != docked:
-    let speedBox = "$bframe.box.speed"
+    let speedBox: string = "$bframe.box.speed"
     tclEval(script = "bind " & speedBox & " <<ComboboxSelected>> {}")
     tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
     tclEval(script = "bind " & speedBox &
@@ -138,7 +138,7 @@ proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
 
 proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Draw the map on the screen
-  var preview = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
+  var preview: bool = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
   if preview and playerShip.speed != docked:
     tclUnsetVar(varName = "mappreview")
     preview = false
@@ -158,10 +158,10 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], con
   startX = centerX - (mapWidth / 2).int
   startY = centerY - (mapHeight / 2).int
   var
-    endY = centerY + (mapHeight / 2).int
-    endX = centerX + (mapWidth / 2).int
-    storyX = 1
-    storyY = 1
+    endY: int = centerY + (mapHeight / 2).int
+    endX: int = centerX + (mapWidth / 2).int
+    storyX: int = 1
+    storyY: int = 1
   if startY < 1:
     startY = 1
     endY = mapHeight + 1
@@ -186,14 +186,14 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], con
   if playerShip.speed == docked and skyMap[playerShip.skyX][
       playerShip.skyY].baseIndex == 0:
     playerShip.speed = fullStop
-  let currentTheme = try:
+  let currentTheme: ThemeRecord = try:
         themesList[gameSettings.interfaceTheme]
       except:
         showError(message = "Can't get the curernt game's theme.")
         return
   for y in startY .. endY:
     for x in startX .. endX:
-      var mapTag, mapChar = ""
+      var mapTag, mapChar: string = ""
       if x == playerShip.skyX and y == playerShip.skyY:
         mapChar = currentTheme.playerShipIcon
       else:
@@ -309,10 +309,10 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   ##
   ## * x - the X coordinate of the map's cell
   ## * y - the Y coordinate of the map's cell
-  let mapInfo = mainPaned & ".mapframe.info"
+  let mapInfo: string = mainPaned & ".mapframe.info"
   tclEval(script = mapInfo & " configure -state normal")
   tclEval(script = mapInfo & " delete 1.0 end")
-  var width = 1
+  var width: int = 1
 
   proc insertText(newText: string; tagName: string = "") {.raises: [], tags: [],
       contractual.} =
@@ -333,19 +333,19 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   insertText(newText = " " & $y, tagName = "yellow2")
   if playerShip.skyX != x or playerShip.skyY != y:
     let
-      distance = countDistance(destinationX = x, destinationY = y)
-      travelValues = travelInfo(distance = distance)
+      distance: Natural = countDistance(destinationX = x, destinationY = y)
+      travelValues: TravelArray = travelInfo(distance = distance)
     insertText(newText = "\nDistance: ")
     insertText(newText = $distance, tagName = "yellow2")
     if travelValues[1] > 0:
       insertText(newText = "\nETA:")
-      var distanceText = ""
+      var distanceText: string = ""
       minutesToDate(minutes = travelValues[1], infoText = distanceText)
       insertText(newText = distanceText, tagName = "yellow2")
       insertText(newText = "\nApprox fuel usage: ")
       insertText(newText = $travelValues[2], tagName = "yellow2")
   if skyMap[x][y].baseIndex > 0:
-    let baseIndex = skyMap[x][y].baseIndex
+    let baseIndex: Positive = skyMap[x][y].baseIndex
     if skyBases[baseIndex].known:
       insertText(newText = "\nBase info:", tagName = "pink underline")
       insertText(newText = "\nName: ")
@@ -389,8 +389,8 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
         insertText(newText = "Base is abandoned")
       if skyBases[baseIndex].population > 0:
         var
-          baseInfoText = "\n"
-          color = ""
+          baseInfoText: string = "\n"
+          color: string = ""
         case skyBases[baseIndex].reputation.level
         of -100 .. -75:
           baseInfoText = baseInfoText & "You are hated here"
@@ -422,10 +422,10 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       if baseIndex == playerShip.homeBase:
         insertText(newText = "\nIt is your home base", tagName = "cyan")
   if skyMap[x][y].missionIndex > -1:
-    var missionInfoText = "\n"
+    var missionInfoText: string = "\n"
     if skyMap[x][y].baseIndex > 0 or skyMap[x][y].eventIndex > -1:
       missionInfoText = missionInfoText & "\n"
-    let missionIndex = skyMap[x][y].missionIndex
+    let missionIndex: int = skyMap[x][y].missionIndex
     case acceptedMissions[missionIndex].mType
     of deliver:
       try:
@@ -474,11 +474,11 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   if x == playerShip.skyX and y == playerShip.skyY:
     insertText(newText = "\nYou are here", tagName = "yellow")
   if skyMap[x][y].eventIndex > -1:
-    let eventIndex = skyMap[x][y].eventIndex
-    var eventInfoText = ""
+    let eventIndex: Natural = skyMap[x][y].eventIndex
+    var eventInfoText: string = ""
     if eventsList[eventIndex].eType notin {baseRecovery, EventsTypes.none}:
       eventInfoText = "\n\n"
-    var color = ""
+    var color: string = ""
     case eventsList[eventIndex].eType
     of trader:
       try:
@@ -552,8 +552,8 @@ proc setKeys*() {.raises: [], tags: [], contractual.} =
       ".controls.buttons.box.speed current 2}", "{" & mainPaned & ".controls.buttons.box.speed current 3}"]
   for index, command in tclCommandsArray:
     var
-      pos = mapAccelerators[index + 1].rfind(sub = '-')
-      keyName = ""
+      pos: int = mapAccelerators[index + 1].rfind(sub = '-')
+      keyName: string = ""
     if pos > -1:
       keyName = mapAccelerators[index + 1][0 .. pos] & "KeyPress-" &
           mapAccelerators[index + 1][pos + 1 .. ^1]
@@ -561,8 +561,8 @@ proc setKeys*() {.raises: [], tags: [], contractual.} =
       keyName = "KeyPress-" & mapAccelerators[index + 1]
     tclEval(script = "bind . <" & keyName & "> " & command)
   var
-    pos = fullScreenAccel.rfind(sub = '-')
-    keyName = ""
+    pos: int = fullScreenAccel.rfind(sub = '-')
+    keyName: string = ""
   if pos > -1:
     keyName = fullScreenAccel[0 .. pos] & "KeyPress-" & fullScreenAccel[pos +
         1 .. ^1]
@@ -578,23 +578,23 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadIOEffect, RootEffect], contractual.} =
   ## Create the game UI and show sky map to the player
   let
-    gameFrame = ".gameframe"
-    paned = gameFrame & ".paned"
+    gameFrame: string = ".gameframe"
+    paned: string = gameFrame & ".paned"
   mapView = paned & ".mapframe.map"
-  var newStart = false
+  var newStart: bool = false
   if tclEval2(script = "winfo exists " & mapView) == "0":
     newStart = true
-    let fileName = saveDirectory & "keys.cfg"
-    var configFile = newFileStream(filename = fileName)
+    let fileName: string = saveDirectory & "keys.cfg"
+    var configFile: FileStream = newFileStream(filename = fileName)
     if configFile != nil:
-      var parser: CfgParser
+      var parser: CfgParser = CfgParser()
       try:
         parser.open(input = configFile, filename = fileName)
       except:
         showError(message = "Can't open the shortcut's configuration file.")
         return
       while true:
-        var entry = try:
+        var entry: CfgEvent = try:
             parser.next
           except:
             showError(message = "Can't get next shortcut setting.")
@@ -1019,7 +1019,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     knowledge.addCommands()
     missionsui.addCommands()
     statisticsui.addCommands()
-    let messagesFrame = paned & ".controls.messages"
+    let messagesFrame: string = paned & ".controls.messages"
     tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeLastMessages}")
     tclEval(script = "bind " & mapView & " <Configure> {DrawMap}")
     tclEval(script = "bind " & mapView & " <Motion> {UpdateMapInfo %x %y}")
@@ -1038,11 +1038,11 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   if gameSettings.fullScreen:
     tclEval(script = "wm attributes . -fullscreen 1")
   for accel in menuAccelerators:
-    let pos = accel.rfind(sub = '-')
+    let pos: int = accel.rfind(sub = '-')
     tclEval(script = "bind . <" & accel[0..pos] & "KeyPress-" &
       accel[pos + 1..^1] & "> {InvokeMenu " & accel & "}")
   if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.header"):
-    let header = gameFrame & ".header"
+    let header: string = gameFrame & ".header"
     tclEval(script = "grid " & header)
   updateHeader()
   centerX = playerShip.skyX
@@ -1050,7 +1050,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   for baseType in basesTypesList.values:
     tclEval(script = mapView & " tag configure " & baseType.name &
         " -foreground #" & baseType.color)
-  let panedPosition = (if gameSettings.windowHeight -
+  let panedPosition: int = (if gameSettings.windowHeight -
       gameSettings.messagesPosition <
       0: gameSettings.windowHeight else: gameSettings.windowHeight -
       gameSettings.messagesPosition)
@@ -1058,7 +1058,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.paned"):
     tclEval(script = "grid " & paned)
   tclEval(script = "update")
-  let button = paned & ".mapframe.buttons.hide"
+  let button: string = paned & ".mapframe.buttons.hide"
   tclEval(script = button & " invoke")
   tclEval(script = "bind . <Escape> {InvokeButton " & closeButton & "}")
   updateMessages()
@@ -1067,7 +1067,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   updateMoveButtons()
   updateMapInfo()
   if not gameSettings.showLastMessages:
-    let messagesFrame = paned & ".controls.messages"
+    let messagesFrame: string = paned & ".controls.messages"
     tclEval(script = "grid remove " & messagesFrame)
   tclSetVar(varName = "shipname", newValue = playerShip.name)
   tclSetVar(varName = "gamestate", newValue = "general")
