@@ -546,7 +546,7 @@ var
   currentTab: cint = 0
   playerGender: cint = 2
   infoText: string = playerTooltips[8]
-  currentFaction, newFaction, currentCareer, currentBase: Natural = 0
+  currentFaction, newFaction, currentCareer, currentBase: int = 0
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -594,10 +594,10 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
         if currentTab == 0:
-          {.ruleOff: "assignments".}
+          {.ruleOff: "varDeclared".}
           var
             bounds: array[8, NimRect]
-          {.ruleOn: "assignments".}
+          {.ruleOn: "varDeclared".}
           # Character's name
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
           label(str = "Character name:")
@@ -651,14 +651,13 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           bounds[5] = getWidgetBounds()
           newFaction = comboList(items = playerFactions,
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
-          if newFaction != currentFaction:
-            currentFaction = newFaction
-            var i: Natural = 0
+          if newFaction != currentFaction or mouseClicked(id = left,
+              rect = bounds[5]):
+            currentFaction = -1
             for faction in factionsList.values:
-              if i == newFaction:
+              if faction.name == playerFactions[newFaction]:
                 infoText = playerTooltips[5] & "\n\n" & faction.description
                 break
-              i.inc
           # Character's career
           label(str = "Character career:")
           bounds[6] = getWidgetBounds()
@@ -669,6 +668,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           bounds[7] = getWidgetBounds()
           currentBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
+          if newFaction != currentFaction:
+            currentFaction = newFaction
           if gameSettings.showTooltips:
             for index, bound in bounds:
               addTooltip(bounds = bound, text = playerTooltips[index])
