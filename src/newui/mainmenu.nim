@@ -535,8 +535,8 @@ var
   currentTab: cint = 0
   playerGender: cint = 2
   infoText: string = playerTooltips[8]
-  currentFaction: int = 0
-  newFaction, currentCareer, currentBase: Natural = 0
+  currentFaction, currentCareer, currentBase: int = 0
+  newFaction, newCareer, newBase: Natural = 0
   playerCareers, playerBases: seq[string] = @[]
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
@@ -661,18 +661,46 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           # Character's career
           label(str = "Character career:")
           bounds[6] = getWidgetBounds()
-          currentCareer = comboList(items = playerCareers,
-              selected = currentCareer, itemHeight = 25, x = 200, y = 100)
+          newCareer = comboList(items = playerCareers,
+              selected = currentCareer, itemHeight = 25, x = 200, y = 125)
+          if newCareer != currentCareer or mouseClicked(id = left,
+              rect = bounds[6]):
+            currentCareer = -1
           # Starting base
           label(str = "Starting base type:")
           bounds[7] = getWidgetBounds()
-          currentBase = comboList(items = playerBases, selected = currentBase,
+          newBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
+          if newBase != currentBase or mouseClicked(id = left,
+              rect = bounds[7]):
+            currentCareer = -1
           if newFaction != currentFaction:
             currentFaction = newFaction
             for faction in factionsList.values:
               if faction.name == playerFactions[newFaction]:
                 infoText = playerTooltips[5] & "\n\n" & faction.description
+                break
+          elif newCareer != currentCareer:
+            currentCareer = newCareer
+            for faction in factionsList.values:
+              if faction.name == playerFactions[newFaction]:
+                for career in faction.careers.values:
+                  if career.name == playerCareers[newCareer]:
+                    infoText = playerTooltips[6] & "\n\n" & career.description
+                    break
+                break
+          elif newBase != currentBase:
+            currentBase = newBase
+            for faction in factionsList.values:
+              if faction.name == playerFactions[newFaction]:
+                for baseType in faction.basesTypes.keys:
+                  try:
+                    if basesTypesList[baseType].name == playerBases[newBase]:
+                      infoText = playerTooltips[7] & "\n\n" & basesTypesList[baseType].description
+                      break
+                  except:
+                    dialog = setError(message = "Can't get base type.")
+                    break
                 break
           if gameSettings.showTooltips:
             for index, bound in bounds:
