@@ -43,7 +43,7 @@ var
 proc updateMoveButtons*() {.raises: [], tags: [], contractual.} =
   ## Update the player's ship movement buttons, depending on the state of the
   ## ship
-  let
+  const
     moveButtonsNames: array[8, string] = ["nw", "n", "ne", "w", "e", "sw", "s", "se"]
     frameName: string = mainPaned & ".controls.buttons"
     speedBox: string = frameName & ".box.speed"
@@ -92,7 +92,7 @@ proc finishStory*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Finish the current player's story. Give experience and ask about
   ## finishing the game
-  gameStats.points = gameStats.points + (10_000 * currentStory.maxSteps)
+  gameStats.points += (10_000 * currentStory.maxSteps)
   clearCurrentStory()
   try:
     showQuestion(question = storiesList[currentStory.index].endText &
@@ -118,7 +118,7 @@ proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
   tclEval(script = "update")
   updateMessages()
   if playerShip.speed != docked:
-    let speedBox: string = "$bframe.box.speed"
+    const speedBox: string = "$bframe.box.speed"
     tclEval(script = "bind " & speedBox & " <<ComboboxSelected>> {}")
     tclEval(script = speedBox & " current " & $(playerShip.speed.ord - 1))
     tclEval(script = "bind " & speedBox &
@@ -223,7 +223,7 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], con
             mapChar = currentTheme.passengerIcon
             mapTag = "cyan"
           if not skyMap[x][y].visited:
-            mapTag = mapTag & " unvisited"
+            mapTag &= " unvisited"
         elif skyMap[x][y].eventIndex > -1:
           if skyMap[x][y].eventIndex > eventsList.high:
             skyMap[x][y].eventIndex = -1
@@ -256,7 +256,7 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], con
             of EventsTypes.none, baseRecovery:
               discard
             if not skyMap[x][y].visited:
-              mapTag = mapTag & " unvisited"
+              mapTag &= " unvisited"
         elif skyMap[x][y].baseIndex > 0:
           mapChar = currentTheme.notVisitedBaseIcon
           if skyBases[skyMap[x][y].baseIndex].known:
@@ -293,7 +293,7 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], con
               mapChar = currentTheme.passengerIcon
               mapTag = "cyan"
             if not skyMap[x][y].visited:
-              mapTag = mapTag & " unvisited"
+              mapTag &= " unvisited"
             break
       tclEval(script = mapView & " insert end {" & mapChar & "} [list " &
           mapTag & "]")
@@ -309,7 +309,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   ##
   ## * x - the X coordinate of the map's cell
   ## * y - the Y coordinate of the map's cell
-  let mapInfo: string = mainPaned & ".mapframe.info"
+  const mapInfo: string = mainPaned & ".mapframe.info"
   tclEval(script = mapInfo & " configure -state normal")
   tclEval(script = mapInfo & " delete 1.0 end")
   var width: int = 1
@@ -393,30 +393,30 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           color: string = ""
         case skyBases[baseIndex].reputation.level
         of -100 .. -75:
-          baseInfoText = baseInfoText & "You are hated here"
+          baseInfoText &= "You are hated here"
           color = "red"
         of -74 .. -50:
-          baseInfoText = baseInfoText & "You are outlawed here"
+          baseInfoText &= "You are outlawed here"
           color = "red"
         of -49 .. -25:
-          baseInfoText = baseInfoText & "You are disliked here"
+          baseInfoText &= "You are disliked here"
           color = "red"
         of -24 .. -1:
-          baseInfoText = baseInfoText & "They are unfriendly to you"
+          baseInfoText &= "They are unfriendly to you"
           color = "red"
         of 0:
-          baseInfoText = baseInfoText & "You are unknown here"
+          baseInfoText &= "You are unknown here"
         of 1 .. 25:
-          baseInfoText = baseInfoText & "You are know here as visitor"
+          baseInfoText &= "You are know here as visitor"
           color = "green"
         of 26 .. 50:
-          baseInfoText = baseInfoText & "You are know here as trader"
+          baseInfoText &= "You are know here as trader"
           color = "green"
         of 51 .. 75:
-          baseInfoText = baseInfoText & "You are know here as friend"
+          baseInfoText &= "You are know here as friend"
           color = "green"
         of 76 .. 100:
-          baseInfoText = baseInfoText & "You are well known here"
+          baseInfoText &= "You are well known here"
           color = "green"
         insertText(newText = baseInfoText, tagName = color)
       if baseIndex == playerShip.homeBase:
@@ -577,7 +577,7 @@ import basesui, baseslootui, basesrecruitui, basesschoolui, basesshipyardui,
 proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadIOEffect, RootEffect], contractual.} =
   ## Create the game UI and show sky map to the player
-  let
+  const
     gameFrame: string = ".gameframe"
     paned: string = gameFrame & ".paned"
   mapView = paned & ".mapframe.map"
@@ -586,7 +586,35 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     newStart = true
     let fileName: string = saveDirectory & "keys.cfg"
     var configFile: FileStream = newFileStream(filename = fileName)
-    if configFile != nil:
+    if configFile == nil:
+      if DirSep == '\\':
+        mapAccelerators[5] = "Home"
+        mapAccelerators[6] = "Up"
+        mapAccelerators[7] = "Prior"
+        mapAccelerators[8] = "Left"
+        mapAccelerators[9] = "Clear"
+        mapAccelerators[10] = "Right"
+        mapAccelerators[11] = "End"
+        mapAccelerators[12] = "Down"
+        mapAccelerators[13] = "Next"
+        mapAccelerators[14] = "slash"
+        mapAccelerators[17] = "Shift-Home"
+        mapAccelerators[18] = "Shift-Up"
+        mapAccelerators[19] = "Shift-Prior"
+        mapAccelerators[20] = "Shift-Left"
+        mapAccelerators[21] = "Shift-Right"
+        mapAccelerators[22] = "Shift-End"
+        mapAccelerators[23] = "Shift-Down"
+        mapAccelerators[24] = "Shift-Next"
+        mapAccelerators[25] = "Control-Home"
+        mapAccelerators[26] = "Control-Up"
+        mapAccelerators[27] = "Control-Prior"
+        mapAccelerators[28] = "Control-Left"
+        mapAccelerators[29] = "Control-Right"
+        mapAccelerators[30] = "Control-End"
+        mapAccelerators[31] = "Control-Down"
+        mapAccelerators[32] = "Control-Next"
+    else:
       var parser: CfgParser = CfgParser()
       try:
         parser.open(input = configFile, filename = fileName)
@@ -711,34 +739,6 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
       except:
         showError(message = "Can't close the shortcuts' configuration file.")
         return
-    else:
-      if DirSep == '\\':
-        mapAccelerators[5] = "Home"
-        mapAccelerators[6] = "Up"
-        mapAccelerators[7] = "Prior"
-        mapAccelerators[8] = "Left"
-        mapAccelerators[9] = "Clear"
-        mapAccelerators[10] = "Right"
-        mapAccelerators[11] = "End"
-        mapAccelerators[12] = "Down"
-        mapAccelerators[13] = "Next"
-        mapAccelerators[14] = "slash"
-        mapAccelerators[17] = "Shift-Home"
-        mapAccelerators[18] = "Shift-Up"
-        mapAccelerators[19] = "Shift-Prior"
-        mapAccelerators[20] = "Shift-Left"
-        mapAccelerators[21] = "Shift-Right"
-        mapAccelerators[22] = "Shift-End"
-        mapAccelerators[23] = "Shift-Down"
-        mapAccelerators[24] = "Shift-Next"
-        mapAccelerators[25] = "Control-Home"
-        mapAccelerators[26] = "Control-Up"
-        mapAccelerators[27] = "Control-Prior"
-        mapAccelerators[28] = "Control-Left"
-        mapAccelerators[29] = "Control-Right"
-        mapAccelerators[30] = "Control-End"
-        mapAccelerators[31] = "Control-Down"
-        mapAccelerators[32] = "Control-Next"
     mapsuicommands.addCommands()
     tclEval(script = """
       pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
@@ -1019,7 +1019,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     knowledge.addCommands()
     missionsui.addCommands()
     statisticsui.addCommands()
-    let messagesFrame: string = paned & ".controls.messages"
+    const messagesFrame: string = paned & ".controls.messages"
     tclEval(script = "bind " & messagesFrame & " <Configure> {ResizeLastMessages}")
     tclEval(script = "bind " & mapView & " <Configure> {DrawMap}")
     tclEval(script = "bind " & mapView & " <Motion> {UpdateMapInfo %x %y}")
@@ -1058,7 +1058,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   if not tclEval2(script = "grid slaves .").contains(sub = ".gameframe.paned"):
     tclEval(script = "grid " & paned)
   tclEval(script = "update")
-  let button: string = paned & ".mapframe.buttons.hide"
+  const button: string = paned & ".mapframe.buttons.hide"
   tclEval(script = button & " invoke")
   tclEval(script = "bind . <Escape> {InvokeButton " & closeButton & "}")
   updateMessages()
@@ -1067,7 +1067,7 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   updateMoveButtons()
   updateMapInfo()
   if not gameSettings.showLastMessages:
-    let messagesFrame: string = paned & ".controls.messages"
+    const messagesFrame: string = paned & ".controls.messages"
     tclEval(script = "grid remove " & messagesFrame)
   tclSetVar(varName = "shipname", newValue = playerShip.name)
   tclSetVar(varName = "gamestate", newValue = "general")
