@@ -227,8 +227,17 @@ type
     panelCombo = 1 shl 5,
     panelMenu = 1 shl 6,
     panelTooltip = 1 shl 7
+  nk_command* {.importc: "struct nk_command".} = object
+    ## Internal Nuklear type
+    `type`*: nk_command_type
+    next*: nk_size
+    when defined(nkIncludeCommandUserData):
+      userdata*: nk_handle
   nk_command_scissor* {.importc: "struct nk_command_scissor".} = object
     ## Internal Nuklear type
+    header*: nk_command
+    x*, y*: cshort
+    w*, h*: cushort
   nk_command_buffer* {.importc: "struct nk_command_buffer".} = object
     ## Internal Nuklear type
     begin*, `end`*, last*: nk_size

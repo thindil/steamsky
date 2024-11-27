@@ -407,6 +407,7 @@ proc nkCommandBufferPush(b: var nk_command_buffer; t: nk_command_type;
   ## * t    - the type of command
   ## * size - the size of command to add
   discard
+{.pop ruleOn: "params".}
 
 proc nkPushScissor(b: var nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
     contractual.} =
@@ -418,13 +419,17 @@ proc nkPushScissor(b: var nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
   ## Returns the modified parameter b
   body:
     b.clip = r
-    # TODO: size of cmd, require full nk_command_scrissor declaration in nk_types
     {.ruleOff: "namedParams".}
     let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
         nkCommandBufferPush(b = b, t = NK_COMMAND_SCISSOR, size = sizeOf(
         nk_command_scissor)))
     {.ruleOn: "namedParams".}
-{.pop ruleOn: "params".}
+    if cmd == nil:
+      return
+    cmd.x = r.x.cshort
+    cmd.y = r.y.cshort
+    cmd.w = max(x = 0.cushort, y = r.w.cushort)
+    cmd.h = max(x = 0.cushort, y = r.h.cushort)
 
 # ------
 # Popups
