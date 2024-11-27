@@ -33,7 +33,7 @@ var
   fileContent: string = ""
   fileName: string = ""
   fileLines: Positive = 1
-  playerFactions, playerCareers, playerBases: seq[string] = @[]
+  playerFactions: seq[string] = @[]
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
@@ -58,19 +58,8 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't set the game's images.")
     # Set the list of available factions
-    var first: bool = true
     for faction in factionsList.values:
       playerFactions.add(y = faction.name)
-      if first:
-        for career in faction.careers.values:
-          playerCareers.add(y = career.name)
-        first = false
-        for baseType in faction.basesTypes.keys:
-          try:
-            playerBases.add(y = basesTypesList[baseType].name)
-          except:
-            dialog = setError(message = "Can't add a base type.")
-            break
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
@@ -546,7 +535,9 @@ var
   currentTab: cint = 0
   playerGender: cint = 2
   infoText: string = playerTooltips[8]
-  currentFaction, newFaction, currentCareer, currentBase: int = 0
+  currentFaction: int = 0
+  newFaction, currentCareer, currentBase: Natural = 0
+  playerCareers, playerBases: seq[string] = @[]
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -652,13 +643,26 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           newFaction = comboList(items = playerFactions,
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           if newFaction != currentFaction or mouseClicked(id = left,
-              rect = bounds[5]):
+              rect = bounds[5]) or playerCareers.len == 0:
             currentFaction = -1
+            for faction in factionsList.values:
+              if faction.name == playerFactions[newFaction]:
+                playerCareers = @[]
+                for career in faction.careers.values:
+                  playerCareers.add(y = career.name)
+                playerBases = @[]
+                for baseType in faction.basesTypes.keys:
+                  try:
+                    playerBases.add(y = basesTypesList[baseType].name)
+                  except:
+                    dialog = setError(message = "Can't add a base type.")
+                    break
+                break
           # Character's career
           label(str = "Character career:")
           bounds[6] = getWidgetBounds()
           currentCareer = comboList(items = playerCareers,
-              selected = currentCareer, itemHeight = 25, x = 200, y = 150)
+              selected = currentCareer, itemHeight = 25, x = 200, y = 100)
           # Starting base
           label(str = "Starting base type:")
           bounds[7] = getWidgetBounds()
