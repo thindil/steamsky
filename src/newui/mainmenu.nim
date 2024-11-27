@@ -664,16 +664,16 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           newCareer = comboList(items = playerCareers,
               selected = currentCareer, itemHeight = 25, x = 200, y = 125)
           if newCareer != currentCareer or mouseClicked(id = left,
-              rect = bounds[6]):
+              rect = bounds[6]) and currentFaction > -1:
             currentCareer = -1
           # Starting base
           label(str = "Starting base type:")
           bounds[7] = getWidgetBounds()
           newBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
-          if newBase != currentBase or mouseClicked(id = left,
-              rect = bounds[7]):
-            currentCareer = -1
+          if newBase != currentBase or mouseClicked(id = left, rect = bounds[
+              7]) and (currentFaction > -1 or currentCareer > -1):
+            currentBase = -1
           if newFaction != currentFaction:
             currentFaction = newFaction
             for faction in factionsList.values:
@@ -696,7 +696,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 for baseType in faction.basesTypes.keys:
                   try:
                     if basesTypesList[baseType].name == playerBases[newBase]:
-                      infoText = playerTooltips[7] & "\n\n" & basesTypesList[baseType].description
+                      infoText = playerTooltips[7] & "\n\n" & basesTypesList[
+                          baseType].description
                       break
                   except:
                     dialog = setError(message = "Can't get base type.")
