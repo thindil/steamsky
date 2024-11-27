@@ -142,6 +142,7 @@ type ThemeRecord* = object
   ## * mapArrowUpLeftIcon  - Icon used for moving map up and left
   ## * mapArrowUpRightIcon - Icon used for moving map up and right
   ## * mapArrowUpIcon      - Icon used for moving map up
+  ## * mapArrowLeftIcon    - Icon used for moving map left
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -258,6 +259,7 @@ type ThemeRecord* = object
   mapArrowUpLeftIcon*: string
   mapArrowUpRightIcon*: string
   mapArrowUpIcon*: string
+  mapArrowLeftIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -365,7 +367,8 @@ let
       mapMenuIcon: defaultThemeIconPath & "menu2.svg",
       mapArrowUpLeftIcon: defaultThemeIconPath & "arrow-up-left2.svg",
       mapArrowUpRightIcon: defaultThemeIconPath & "arrow-up-right2.svg",
-      mapArrowUpIcon: defaultThemeIconPath & "arrow-up2.svg")
+      mapArrowUpIcon: defaultThemeIconPath & "arrow-up2.svg",
+      mapArrowLeftIcon: defaultThemeIconPath & "arrow-left2.svg")
     ## The default game'st theme
 
 proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
@@ -625,6 +628,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.mapArrowUpRightIcon = entry.value.unixToNativePath
               of "MapArrowUpIcon":
                 theme.mapArrowUpIcon = entry.value.unixToNativePath
+              of "MapArrowLeftIcon":
+                theme.mapArrowLeftIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -647,7 +652,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
 
-proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Load all images of the current game theme
   const imagesNames = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
@@ -670,7 +676,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffe
       "negotiate2icon", "craft2icon", "study2icon", "deconstruct2icon",
       "giveorder2icon", "foodicon", "fuelicon", "drinksicon", "expandicon",
       "contracticon", "moreoptionsicon", "mapmenuicon", "maparrowuplefticon",
-      "maparrowuprighticon", "maparrowupicon"]
+      "maparrowuprighticon", "maparrowupicon", "maparrowlefticon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -707,7 +713,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffe
         theme.giveOrderColoredIcon, theme.foodIcon, theme.fuelIcon,
         theme.drinksIcon, theme.expandIcon, theme.contractIcon,
         theme.moreOptionsIcon, theme.mapMenuIcon, theme.mapArrowUpLeftIcon,
-        theme.mapArrowUpRightIcon, theme.mapArrowUpIcon]
+        theme.mapArrowUpRightIcon, theme.mapArrowUpIcon, theme.mapArrowLeftIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
