@@ -654,10 +654,6 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if newFaction != currentFaction or mouseClicked(id = left,
               rect = bounds[5]):
             currentFaction = -1
-            for faction in factionsList.values:
-              if faction.name == playerFactions[newFaction]:
-                infoText = playerTooltips[5] & "\n\n" & faction.description
-                break
           # Character's career
           label(str = "Character career:")
           bounds[6] = getWidgetBounds()
@@ -670,15 +666,19 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               itemHeight = 25, x = 200, y = 90)
           if newFaction != currentFaction:
             currentFaction = newFaction
+            for faction in factionsList.values:
+              if faction.name == playerFactions[newFaction]:
+                infoText = playerTooltips[5] & "\n\n" & faction.description
+                break
           if gameSettings.showTooltips:
             for index, bound in bounds:
               addTooltip(bounds = bound, text = playerTooltips[index])
-    row(x = (menuWidth.float * 0.65), y = 0, w = (menuWidth.float * 0.35), h = (
-        menuHeight - 90).float):
-      fileLines = 1
+    let infoWidth: float = (menuWidth.float * 0.35)
+    row(x = (menuWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
+      fileLines = 2
       for line in infoText.split(sep = "\n\n"):
         var needLines: float = try:
-            ceil(x = getTextWidth(text = line) / menuWidth.float)
+            ceil(x = getTextWidth(text = line) / (infoWidth - 35.0))
           except:
             dialog = setError(message = "Can't count the line height.")
             return
