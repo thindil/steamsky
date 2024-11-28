@@ -25,10 +25,10 @@ import coreui, dialogs, errordialog, themes, updateheader, utilsui2
 
 var
   mapView: string = ".gameframe.paned.mapframe.map"
-  menuAccelerators*: array[1 .. 11, string] = ["s", "o", "r", "m", "k", "w",
+  menuAccelerators*: array[1..11, string] = ["s", "o", "r", "m", "k", "w",
       "g", "F1", "p", "q", "x"]
     ## The game menu keyboard shortcuts
-  mapAccelerators*: array[1 .. 37, string] = ["e", "v", "plus", "minus",
+  mapAccelerators*: array[1..37, string] = ["e", "v", "plus", "minus",
       "KP_Home", "KP_Up", "KP_Prior", "KP_Left", "KP_Begin", "KP_Right",
       "KP_End", "KP_Down", "KP_Next", "KP_Divide", "Shift-Return", "Shift-h",
       "Shift-KP_Home", "Shift-KP_Up", "Shift-KP_Prior", "Shift-KP_Left",
@@ -191,8 +191,8 @@ proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], con
       except:
         showError(message = "Can't get the curernt game's theme.")
         return
-  for y in startY .. endY:
-    for x in startX .. endX:
+  for y in startY..endY:
+    for x in startX..endX:
       var mapTag, mapChar: string = ""
       if x == playerShip.skyX and y == playerShip.skyY:
         mapChar = currentTheme.playerShipIcon
@@ -392,30 +392,30 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           baseInfoText: string = "\n"
           color: string = ""
         case skyBases[baseIndex].reputation.level
-        of -100 .. -75:
+        of -100.. -75:
           baseInfoText &= "You are hated here"
           color = "red"
-        of -74 .. -50:
+        of -74.. -50:
           baseInfoText &= "You are outlawed here"
           color = "red"
-        of -49 .. -25:
+        of -49.. -25:
           baseInfoText &= "You are disliked here"
           color = "red"
-        of -24 .. -1:
+        of -24.. -1:
           baseInfoText &= "They are unfriendly to you"
           color = "red"
         of 0:
           baseInfoText &= "You are unknown here"
-        of 1 .. 25:
+        of 1..25:
           baseInfoText &= "You are know here as visitor"
           color = "green"
-        of 26 .. 50:
+        of 26..50:
           baseInfoText &= "You are know here as trader"
           color = "green"
-        of 51 .. 75:
+        of 51..75:
           baseInfoText &= "You are know here as friend"
           color = "green"
-        of 76 .. 100:
+        of 76..100:
           baseInfoText &= "You are well known here"
           color = "green"
         insertText(newText = baseInfoText, tagName = color)
@@ -424,29 +424,29 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
   if skyMap[x][y].missionIndex > -1:
     var missionInfoText: string = "\n"
     if skyMap[x][y].baseIndex > 0 or skyMap[x][y].eventIndex > -1:
-      missionInfoText = missionInfoText & "\n"
+      missionInfoText &= "\n"
     let missionIndex: int = skyMap[x][y].missionIndex
     case acceptedMissions[missionIndex].mType
     of deliver:
       try:
-        missionInfoText = missionInfoText & "Deliver " & itemsList[
+        missionInfoText &= "Deliver " & itemsList[
             acceptedMissions[missionIndex].itemIndex].name
       except:
         showError(message = "Can't get the name of the item to deliver.")
         return
     of destroy:
       try:
-        missionInfoText = missionInfoText & "Destroy " & protoShipsList[
+        missionInfoText &= "Destroy " & protoShipsList[
             acceptedMissions[missionIndex].shipIndex].name
       except:
         showError(message = "Can't get the name of the ship to destroy.")
         return
     of patrol:
-      missionInfoText = missionInfoText & "Patrol area"
+      missionInfoText &= "Patrol area"
     of explore:
-      missionInfoText = missionInfoText & "Explore area"
+      missionInfoText &= "Explore area"
     of passenger:
-      missionInfoText = missionInfoText & "Transport passenger"
+      missionInfoText &= "Transport passenger"
     insertText(newText = missionInfoText)
   if currentStory.index.len > 0:
     var storyX, storyY: Natural = 1
@@ -482,7 +482,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     case eventsList[eventIndex].eType
     of trader:
       try:
-        eventInfoText = eventInfoText & protoShipsList[eventsList[
+        eventInfoText &= protoShipsList[eventsList[
             eventIndex].shipIndex].name
       except:
         showError(message = "Can't get the name of the trader's ship for the event.")
@@ -490,7 +490,7 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       color = "green"
     of friendlyShip:
       try:
-        eventInfoText = eventInfoText & protoShipsList[eventsList[
+        eventInfoText &= protoShipsList[eventsList[
             eventIndex].shipIndex].name
       except:
         showError(message = "Can't get the name of the friendly ship for the event.")
@@ -498,27 +498,27 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
       color = "green2"
     of enemyShip:
       try:
-        eventInfoText = eventInfoText & protoShipsList[eventsList[
+        eventInfoText &= protoShipsList[eventsList[
             eventIndex].shipIndex].name
       except:
         showError(message = "Can't get the name of the enemy's ship for the event.")
         return
       color = "red"
     of fullDocks:
-      eventInfoText = eventInfoText & "Full docks in base"
+      eventInfoText &= "Full docks in base"
       color = "cyan"
     of attackOnBase:
-      eventInfoText = eventInfoText & "Base is under attack"
+      eventInfoText &= "Base is under attack"
       color = "red"
     of disease:
-      eventInfoText = eventInfoText & "Disease in base"
+      eventInfoText &= "Disease in base"
       color = "yellow"
     of enemyPatrol:
-      eventInfoText = eventInfoText & "Enemy patrol"
+      eventInfoText &= "Enemy patrol"
       color = "red3"
     of doublePrice:
       try:
-        eventInfoText = eventInfoText & "Double price for " & itemsList[
+        eventInfoText &= "Double price for " & itemsList[
             eventsList[eventIndex].itemIndex].name
       except:
         showError(message = "Can't get the name of the item for the event.")
@@ -555,7 +555,7 @@ proc setKeys*() {.raises: [], tags: [], contractual.} =
       pos: int = mapAccelerators[index + 1].rfind(sub = '-')
       keyName: string = ""
     if pos > -1:
-      keyName = mapAccelerators[index + 1][0 .. pos] & "KeyPress-" &
+      keyName = mapAccelerators[index + 1][0..pos] & "KeyPress-" &
           mapAccelerators[index + 1][pos + 1 .. ^1]
     else:
       keyName = "KeyPress-" & mapAccelerators[index + 1]
@@ -564,7 +564,7 @@ proc setKeys*() {.raises: [], tags: [], contractual.} =
     pos: int = fullScreenAccel.rfind(sub = '-')
     keyName: string = ""
   if pos > -1:
-    keyName = fullScreenAccel[0 .. pos] & "KeyPress-" & fullScreenAccel[pos +
+    keyName = fullScreenAccel[0..pos] & "KeyPress-" & fullScreenAccel[pos +
         1 .. ^1]
   else:
     keyName = "KeyPress-" & fullScreenAccel
