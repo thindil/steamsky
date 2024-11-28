@@ -1168,6 +1168,8 @@ story.
   to move map up and right. Optional.
 * Key `MapArrowUpIcon`: Path to the SVG image which will be used on button to
   move map up. Optional.
+* Key `MapArrowLeftIcon`: Path to the SVG image which will be used on button to
+  move map left. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
