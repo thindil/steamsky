@@ -20,7 +20,7 @@
 
 import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[basestypes, config, game, gamesaveload, halloffame]
+import ../[basestypes, config, game, gamesaveload, halloffame, shipscrew, ships2]
 import coreui, dialogs, errordialog
 
 
@@ -593,6 +593,22 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             dialog = setError(message = "Can't get base type.")
             return
 
+proc randomName(forPlayer: bool) {.raises: [], tags: [], contractual.} =
+  ## Generate a random name for the player's character or their ship
+  ##
+  ## * forPlayer - if true, generate a random name for the player's character
+  var factionIndex: string = ""
+  for index, faction in factionsList:
+    if faction.name == playerFactions[newFaction]:
+      factionIndex = index
+      break
+  if forPlayer:
+    let gender = (if playerGender == 2: 'M' else: 'F')
+    playerName = generateMemberName(gender = gender,
+        factionIndex = factionIndex)
+  else:
+    shipName = generateShipName(factionIndex = factionIndex)
+
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Start the new game settings
@@ -652,7 +668,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           saveButtonStyle()
           setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
           imageButton(image = menuImages[1]):
-            echo "button pressed"
+            randomName(forPlayer = true)
           restoreButtonStyle()
           # Character's gender
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
@@ -682,7 +698,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           saveButtonStyle()
           setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
           imageButton(image = menuImages[1]):
-            echo "button pressed"
+            randomName(forPlayer = false)
           restoreButtonStyle()
           # Character's goal
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
