@@ -34,6 +34,8 @@ var
   fileName: string = ""
   fileLines: Positive = 1
   playerFactions: seq[string] = @[]
+  currentFaction, currentCareer, currentBase: int = 0
+  newFaction, newCareer, newBase: Natural = 0
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
@@ -58,8 +60,22 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     except:
       dialog = setError(message = "Can't set the game's images.")
     # Set the list of available factions
-    for faction in factionsList.values:
+    for index, faction in factionsList:
       playerFactions.add(y = faction.name)
+      if index == newGameSettings.playerFaction:
+        currentFaction = playerFactions.high
+        var i: Natural = 0
+        for index in faction.careers.keys:
+          if index == newGameSettings.playerCareer:
+            currentCareer = i
+            break
+          i.inc
+        i = 0
+        for baseType in faction.basesTypes.keys:
+          if baseType == newGameSettings.startingBase:
+            currentBase = i
+            break
+          i.inc
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
@@ -535,9 +551,42 @@ var
   currentTab: cint = 0
   playerGender: cint = 2
   infoText: string = playerTooltips[8]
-  currentFaction, currentCareer, currentBase: int = 0
-  newFaction, newCareer, newBase: Natural = 0
   playerCareers, playerBases: seq[string] = @[]
+
+proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Set the info text based on the selected player's faction, career or base
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if newFaction != currentFaction:
+    currentFaction = newFaction
+    for faction in factionsList.values:
+      if faction.name == playerFactions[newFaction]:
+        infoText = playerTooltips[5] & "\n\n" & faction.description
+        return
+  if newCareer != currentCareer:
+    currentCareer = newCareer
+    for faction in factionsList.values:
+      if faction.name == playerFactions[newFaction]:
+        for career in faction.careers.values:
+          if career.name == playerCareers[newCareer]:
+            infoText = playerTooltips[6] & "\n\n" & career.description
+            return
+  if newBase != currentBase:
+    currentBase = newBase
+    for faction in factionsList.values:
+      if faction.name == playerFactions[newFaction]:
+        for baseType in faction.basesTypes.keys:
+          try:
+            if basesTypesList[baseType].name == playerBases[newBase]:
+              infoText = playerTooltips[7] & "\n\n" & basesTypesList[
+                  baseType].description
+              return
+          except:
+            dialog = setError(message = "Can't get base type.")
+            return
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -674,35 +723,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           if newBase != currentBase or mouseClicked(id = left, rect = bounds[
               7]) and (currentFaction > -1 or currentCareer > -1):
             currentBase = -1
-          if newFaction != currentFaction:
-            currentFaction = newFaction
-            for faction in factionsList.values:
-              if faction.name == playerFactions[newFaction]:
-                infoText = playerTooltips[5] & "\n\n" & faction.description
-                break
-          elif newCareer != currentCareer:
-            currentCareer = newCareer
-            for faction in factionsList.values:
-              if faction.name == playerFactions[newFaction]:
-                for career in faction.careers.values:
-                  if career.name == playerCareers[newCareer]:
-                    infoText = playerTooltips[6] & "\n\n" & career.description
-                    break
-                break
-          elif newBase != currentBase:
-            currentBase = newBase
-            for faction in factionsList.values:
-              if faction.name == playerFactions[newFaction]:
-                for baseType in faction.basesTypes.keys:
-                  try:
-                    if basesTypesList[baseType].name == playerBases[newBase]:
-                      infoText = playerTooltips[7] & "\n\n" & basesTypesList[
-                          baseType].description
-                      break
-                  except:
-                    dialog = setError(message = "Can't get base type.")
-                    break
-                break
+          setInfoText(dialog = dialog)
           if gameSettings.showTooltips:
             for index, bound in bounds:
               addTooltip(bounds = bound, text = playerTooltips[index])
