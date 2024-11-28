@@ -33,7 +33,7 @@ var
   fileContent: string = ""
   fileName: string = ""
   fileLines: Positive = 1
-  playerFactions: seq[string] = @[]
+  playerFactions, playerCareers, playerBases: seq[string] = @[]
   currentFaction, currentCareer, currentBase: int = 0
   newFaction, newCareer, newBase: Natural = 0
   menuWidth*: Positive = 600  ## The width of the game's main window
@@ -65,13 +65,18 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
       if index == newGameSettings.playerFaction:
         currentFaction = playerFactions.high
         var i: Natural = 0
-        for index in faction.careers.keys:
+        for index, career in faction.careers:
+          playerCareers.add(y = career.name)
           if index == newGameSettings.playerCareer:
             currentCareer = i
-            break
           i.inc
         i = 0
         for baseType in faction.basesTypes.keys:
+          try:
+            playerBases.add(y = basesTypesList[baseType].name)
+          except:
+            dialog = setError(message = "Can't add a base type.")
+            break
           if baseType == newGameSettings.startingBase:
             currentBase = i
             break
@@ -551,9 +556,9 @@ var
   currentTab: cint = 0
   playerGender: cint = 2
   infoText: string = playerTooltips[8]
-  playerCareers, playerBases: seq[string] = @[]
 
-proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the info text based on the selected player's faction, career or base
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -692,14 +697,16 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           newFaction = comboList(items = playerFactions,
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           if newFaction != currentFaction or mouseClicked(id = left,
-              rect = bounds[5]) or playerCareers.len == 0:
+              rect = bounds[5]):
             currentFaction = -1
             for faction in factionsList.values:
               if faction.name == playerFactions[newFaction]:
                 playerCareers = @[]
+                currentCareer = 0
                 for career in faction.careers.values:
                   playerCareers.add(y = career.name)
                 playerBases = @[]
+                currentBase = 0
                 for baseType in faction.basesTypes.keys:
                   try:
                     playerBases.add(y = basesTypesList[baseType].name)
