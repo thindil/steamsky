@@ -399,17 +399,22 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # Draw
 # ----
 {.push ruleOff: "params".}
-proc nkCommandBufferPush(b: var nk_command_buffer; t: nk_command_type;
+proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     size: nk_size): pointer {.raises: [], tags: [], contractual.} =
   ## Add a command to the commands buffer
   ##
   ## * b    - the buffer to which to command will be added
   ## * t    - the type of command
   ## * size - the size of command to add
-  discard
+  require:
+    b != nil
+    b.base != nil
+  body:
+    if b == nil:
+      return nil
 {.pop ruleOn: "params".}
 
-proc nkPushScissor(b: var nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
+proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
     contractual.} =
   ## Clear the rectangle. Internal use only
   ##
@@ -516,7 +521,7 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
     popup.buffer = win.buffer
     nkStartPopup(ctx = ctx, win = win)
     # var allocated: nk_size = ctx.memory.allocated
-    nkPushScissor(b = popup.buffer, r = nkNullRect)
+    nkPushScissor(b = popup.buffer.addr, r = nkNullRect)
     return true
 
 proc createPopup(pType2: PopupType; title2: cstring;

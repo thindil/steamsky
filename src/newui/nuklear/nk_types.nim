@@ -232,7 +232,7 @@ type
     `type`*: nk_command_type
     next*: nk_size
     when defined(nkIncludeCommandUserData):
-      userdata*: nk_handle
+      userdata*: nk_handle ## Interna Nuklear data
   nk_command_scissor* {.importc: "struct nk_command_scissor".} = object
     ## Internal Nuklear type
     header*: nk_command
@@ -242,6 +242,7 @@ type
     ## Internal Nuklear type
     begin*, `end`*, last*: nk_size
     clip*: nk_rect
+    base*: ptr nk_buffer
   nk_panel* {.importc: "struct nk_paned", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
