@@ -565,13 +565,13 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  if newFaction != currentFaction:
+  if currentFaction == -1:
     currentFaction = newFaction
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
         infoText = playerTooltips[5] & "\n\n" & faction.description
         return
-  if newCareer != currentCareer:
+  if currentCareer == -1:
     currentCareer = newCareer
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
@@ -579,7 +579,7 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           if career.name == playerCareers[newCareer]:
             infoText = playerTooltips[6] & "\n\n" & career.description
             return
-  if newBase != currentBase:
+  if currentBase == -1:
     currentBase = newBase
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
@@ -698,6 +698,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           if newFaction != currentFaction or mouseClicked(id = left,
               rect = bounds[5]):
+            echo "faction"
             currentFaction = -1
             for faction in factionsList.values:
               if faction.name == playerFactions[newFaction]:
@@ -719,16 +720,19 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           bounds[6] = getWidgetBounds()
           newCareer = comboList(items = playerCareers,
               selected = currentCareer, itemHeight = 25, x = 200, y = 125)
-          if newCareer != currentCareer or mouseClicked(id = left,
-              rect = bounds[6]) and currentFaction > -1:
+          if (newCareer != currentCareer or mouseClicked(id = left,
+              rect = bounds[6])) and currentFaction > -1:
+            echo "career"
             currentCareer = -1
           # Starting base
           label(str = "Starting base type:")
           bounds[7] = getWidgetBounds()
           newBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
-          if newBase != currentBase or mouseClicked(id = left, rect = bounds[
-              7]) and (currentFaction > -1 or currentCareer > -1):
+          if mouseClicked(id = left, rect = bounds[7]) and not mouseClicked(
+              id = left, rect = bounds[5]) and not mouseClicked(id = left,
+              rect = bounds[6]):
+            echo "base"
             currentBase = -1
           setInfoText(dialog = dialog)
           if gameSettings.showTooltips:
@@ -736,7 +740,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               addTooltip(bounds = bound, text = playerTooltips[index])
     let infoWidth: float = (menuWidth.float * 0.35)
     row(x = (menuWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
-      fileLines = 2
+      fileLines = 3
       for line in infoText.split(sep = "\n\n"):
         var needLines: float = try:
             ceil(x = getTextWidth(text = line) / (infoWidth - 35.0))
