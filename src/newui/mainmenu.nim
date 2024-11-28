@@ -694,12 +694,13 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
           label(str = "Character faction:")
           bounds[5] = getWidgetBounds()
+          var updated: bool = false
           newFaction = comboList(items = playerFactions,
               selected = currentFaction, itemHeight = 25, x = 200, y = 150)
           if newFaction != currentFaction or mouseClicked(id = left,
               rect = bounds[5]):
-            echo "faction"
             currentFaction = -1
+            updated = true
             for faction in factionsList.values:
               if faction.name == playerFactions[newFaction]:
                 playerCareers = @[]
@@ -720,19 +721,16 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
           bounds[6] = getWidgetBounds()
           newCareer = comboList(items = playerCareers,
               selected = currentCareer, itemHeight = 25, x = 200, y = 125)
-          if (newCareer != currentCareer or mouseClicked(id = left,
-              rect = bounds[6])) and currentFaction > -1:
-            echo "career"
+          if newCareer != currentCareer or mouseClicked(id = left,
+              rect = bounds[6]):
             currentCareer = -1
           # Starting base
           label(str = "Starting base type:")
           bounds[7] = getWidgetBounds()
           newBase = comboList(items = playerBases, selected = currentBase,
               itemHeight = 25, x = 200, y = 90)
-          if mouseClicked(id = left, rect = bounds[7]) and not mouseClicked(
-              id = left, rect = bounds[5]) and not mouseClicked(id = left,
-              rect = bounds[6]):
-            echo "base"
+          if newBase != currentBase or mouseClicked(id = left, rect = bounds[
+              7]):
             currentBase = -1
           setInfoText(dialog = dialog)
           if gameSettings.showTooltips:
