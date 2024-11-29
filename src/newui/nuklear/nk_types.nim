@@ -147,6 +147,9 @@ type
       NK_COMMAND_ARC_FILLED, NK_COMMAND_TRIANGLE, NK_COMMAND_TRIANGLE_FILLED,
       NK_COMMAND_POLYGON, NK_COMMAND_POLYGON_FILLED, NK_COMMAND_POLYLINE,
       NK_COMMAND_TEXT, NK_COMMAND_IMAGE, NK_COMMAND_CUSTOM
+  nk_buffer_allocation_type* = enum
+    ## Internal Nuklear type
+    NK_BUFFER_FRONT, NK_BUFFER_BACK, NK_BUFFER_MAX
 
 # -------
 # Objects
@@ -227,7 +230,7 @@ type
     panelCombo = 1 shl 5,
     panelMenu = 1 shl 6,
     panelTooltip = 1 shl 7
-  nk_command* {.importc: "struct nk_command".} = object
+  nk_command* {.importc: "struct nk_command", completeStruct.} = object
     ## Internal Nuklear type
     `type`*: nk_command_type
     next*: nk_size
@@ -265,7 +268,7 @@ type
     buffer*: nk_command_buffer
   nk_buffer* {.importc: "struct nk_buffer", nodecl.} = object
     ## Internal Nuklear type
-    allocated*: nk_size
+    allocated*, needed*: nk_size
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style

@@ -395,10 +395,30 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_spacing(ctx = ctx, cols = cols.cint)
 
+# ------
+# Buffer
+# ------
+
+{.push ruleOff: "params".}
+proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
+    align: nk_size): pointer {.raises: [], tags: [], contractual.} =
+  ## Allocate memory for the selected buffer
+  ##
+  ## * b      - the buffer in which the memory will be allocated
+  ## * `type` - the allocation type
+  ## * size   - the size of memory to allocate
+  ## * align  - the align
+  require:
+    b != nil
+    size != 0
+  body:
+    b.needed += size
+    return nil
+
 # ----
 # Draw
 # ----
-{.push ruleOff: "params".}
+
 proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     size: nk_size): pointer {.raises: [], tags: [], contractual.} =
   ## Add a command to the commands buffer
@@ -411,6 +431,11 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     b.base != nil
   body:
     if b == nil:
+      return nil
+    const align: nk_size = alignOf(x = nk_command)
+    let cmd: ptr nk_command = cast[ptr nk_command](nkBufferAlloc(b = b.base,
+        `type` = NK_BUFFER_FRONT, size = size, align = align))
+    if cmd == nil:
       return nil
 {.pop ruleOn: "params".}
 
