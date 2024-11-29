@@ -22,7 +22,8 @@ import coreui
 
 proc createDialog(name, title: string; titleWidth: Positive = 275;
     columns: Positive = 1;
-    parentName: string = ".gameframe"): string {.raises: [], tags: [].} =
+    parentName: string = ".gameframe"): string {.raises: [], tags: [],
+    contractual.} =
   ## Create a new dialog with the selected title
   ##
   ## * name       - the Tk path of the new dialog
@@ -32,30 +33,33 @@ proc createDialog(name, title: string; titleWidth: Positive = 275;
   ## * parentName - the Tk path of the parent widget
   ##
   ## Returns the full Tk path of the new dialog
-  if parentName == ".gameframe":
-    tclEval(script = "tk busy " & gameHeader)
-    tclEval(script = "tk busy " & mainPaned)
-  else:
-    tclEval(script = "tk busy " & parentName)
-  tclEval(script = "update")
-  result = name
-  tclEval(script = "ttk::frame " & result & " -style Dialog.TFrame")
-  let dialogHeader = result & ".header"
-  tclEval(script = "ttk::label " & dialogHeader & " -text {" & title &
-      "} -wraplength " & $titleWidth & " -style Header.TLabel -cursor hand1")
-  tclEval(script = "grid " & dialogHeader & " -sticky we -padx 2 -pady {2 0}" &
-      (if columns > 1: " -columnspan " & $columns else: ""))
-  tclEval(script = "bind " & dialogHeader & " <ButtonPress-" & (
-      if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
-      dialogHeader & " %X %Y}")
-  tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " & result & " %X %Y}")
-  tclEval(script = "bind " & dialogHeader & " <ButtonRelease-" & (
-      if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
-      dialogHeader & " 0 0}")
+  require:
+    name.len > 0
+  body:
+    if parentName == ".gameframe":
+      tclEval(script = "tk busy " & gameHeader)
+      tclEval(script = "tk busy " & mainPaned)
+    else:
+      tclEval(script = "tk busy " & parentName)
+    tclEval(script = "update")
+    result = name
+    tclEval(script = "ttk::frame " & result & " -style Dialog.TFrame")
+    let dialogHeader = result & ".header"
+    tclEval(script = "ttk::label " & dialogHeader & " -text {" & title &
+        "} -wraplength " & $titleWidth & " -style Header.TLabel -cursor hand1")
+    tclEval(script = "grid " & dialogHeader & " -sticky we -padx 2 -pady {2 0}" &
+        (if columns > 1: " -columnspan " & $columns else: ""))
+    tclEval(script = "bind " & dialogHeader & " <ButtonPress-" & (
+        if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
+        dialogHeader & " %X %Y}")
+    tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " & result & " %X %Y}")
+    tclEval(script = "bind " & dialogHeader & " <ButtonRelease-" & (
+        if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
+        dialogHeader & " 0 0}")
 
 proc addCloseButton(name, text, command: string; columnSpan: Positive = 1;
     row: Natural = 0; column: Natural = 0; icon: string = "exiticon";
-    color: string = "") {.raises: [], tags: [].} =
+    color: string = "") {.raises: [], tags: [], contractual.} =
   ## Add a close button to the selected dialog and set keyboard bindings for it
   ##
   ## * name       - the Tk path (name) for the button
@@ -68,21 +72,24 @@ proc addCloseButton(name, text, command: string; columnSpan: Positive = 1;
   ##                button intead of the text or close to the text
   ## * color      - the color of the text on the button. Depends on the
   ##                current game's theme
-  let button = name
-  tclEval(script = "ttk::button " & button & " -command {" & command &
-      "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
-      text & "}")
-  tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
-  tclEval(script = "grid " & button & " -pady 5" & (if columnSpan >
-      1: " -columnspan " & $columnSpan else: "") & " -row " & $row & (
-      if column > 0: " -column " & $column else: ""))
-  tclEval(script = "focus " & button)
-  tclEval(script = "bind " & button & " <Tab> {break}")
-  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
+  require:
+    name.len > 0
+  body:
+    let button = name
+    tclEval(script = "ttk::button " & button & " -command {" & command &
+        "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
+        text & "}")
+    tclEval(script = "tooltip::tooltip " & button & " \"Close the dialog \\[Escape key\\]\"")
+    tclEval(script = "grid " & button & " -pady 5" & (if columnSpan >
+        1: " -columnspan " & $columnSpan else: "") & " -row " & $row & (
+        if column > 0: " -column " & $column else: ""))
+    tclEval(script = "focus " & button)
+    tclEval(script = "bind " & button & " <Tab> {break}")
+    tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
 
 proc showDialog(dialog: string; parentFrame: string = ".gameframe";
-    relativeX: float = 0.3; relativeY: float = 0.3) {.raises: [],
-        tags: [].} =
+    relativeX: float = 0.3; relativeY: float = 0.3) {.raises: [], tags: [],
+    contractual.} =
   ## Show the selected dialog to the player
   ##
   ## * dialog      - the Tk path (name) of the dialog to show
@@ -91,9 +98,12 @@ proc showDialog(dialog: string; parentFrame: string = ".gameframe";
   ##                 frame. 0.0 is the left border
   ## * relativeY   - the relative Y coordinate of the dialog inside its parent
   ##                 frame. 0.0 is the top border
-  tclEval(script = "place " & dialog & " -in " & parentFrame & " -relx " &
-      $relativeX & " -rely " & $relativeY)
-  tclEval(script = "raise " & dialog)
+  require:
+    dialog.len > 0
+  body:
+    tclEval(script = "place " & dialog & " -in " & parentFrame & " -relx " &
+        $relativeX & " -rely " & $relativeY)
+    tclEval(script = "raise " & dialog)
 
 proc showError*(message: string; e: ref Exception = getCurrentException(
     )): TclResults {.discardable, raises: [], tags: [WriteIOEffect, TimeEffect,
