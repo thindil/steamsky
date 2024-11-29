@@ -25,11 +25,17 @@ import coreui
 
 var
   selectedGoal*: string = "Random" ## Currently selected goal
-  selected: seq[bool] = @[]
+  selected: int = -1
+  goals: Table[string, seq[string]] = initTable[string, seq[string]]()
+
+proc setGoalsUi*() {.raises: [], tags: [], contractual} =
+  ## Set the goals UI, like types of goals, etc.
+  for goal in goalsList.values:
+    discard
 
 proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
   ## Set the selection in the list of available goals
-  selected = newSeq[bool](len = goalsList.len + 1)
+  selected = -1
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the dialog with the list of available goals for players
@@ -43,7 +49,19 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
     setLayoutRowDynamic(height = 230, cols = 1)
     group(title = "GoalsGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = 25, cols = 1)
-      selectableLabel(str = "Random", selected[0])
+      var sel: bool = selected == 0
+
+      proc addSelectable(label: string) {.raises: [], tags: [], contractual.} =
+        ## Add a selectable goal to the list
+        ##
+        ## * label - the goal text to add
+        if selectableLabel(str = label, sel):
+          if sel:
+            selected = 0
+          else:
+            selected = -1
+
+      addSelectable(label = "Random")
     setLayoutRowDynamic(height = 35, cols = 1)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
