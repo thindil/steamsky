@@ -668,6 +668,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   bounds[4] = getWidgetBounds()
   labelButton(title = selectedGoal):
     dialog = goalsDialog
+    setSelectedGoal()
   # Character's faction
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
   label(str = "Character faction:")

@@ -23,7 +23,13 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
 import coreui
 
-var selectedGoal*: string = "Random"
+var
+  selectedGoal*: string = "Random" ## Currently selected goal
+  selected: seq[bool] = @[]
+
+proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
+  ## Set the selection in the list of available goals
+  selected = newSeq[bool](len = goalsList.len + 1)
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the dialog with the list of available goals for players
@@ -37,8 +43,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
     setLayoutRowDynamic(height = 230, cols = 1)
     group(title = "GoalsGroup", flags = {windowNoFlags}):
       setLayoutRowDynamic(height = 25, cols = 1)
-      for goal in goalsList.values:
-        discard
+      selectableLabel(str = "Random", selected[0])
     setLayoutRowDynamic(height = 35, cols = 1)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
