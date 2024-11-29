@@ -603,11 +603,117 @@ proc randomName(forPlayer: bool) {.raises: [], tags: [], contractual.} =
       factionIndex = index
       break
   if forPlayer:
-    let gender = (if playerGender == 2: 'M' else: 'F')
+    let gender: char = (if playerGender == 2: 'M' else: 'F')
     playerName = generateMemberName(gender = gender,
         factionIndex = factionIndex)
   else:
     shipName = generateShipName(factionIndex = factionIndex)
+
+proc newGamePlayer(dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the player's settings for starting a new game
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  {.ruleOff: "varDeclared".}
+  var
+    bounds: array[8, NimRect]
+  {.ruleOn: "varDeclared".}
+  # Character's name
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  label(str = "Character name:")
+  bounds[0] = getWidgetBounds()
+  editString(text = playerName, maxLen = 64)
+  bounds[1] = getWidgetBounds()
+  saveButtonStyle()
+  setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+  imageButton(image = menuImages[1]):
+    randomName(forPlayer = true)
+  restoreButtonStyle()
+  # Character's gender
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
+  label(str = "Character gender:")
+  const genders: array[2..3, string] = [2: "Male", 3: "Female"]
+  for i in 2..3:
+    saveButtonStyle()
+    setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+    if playerGender == i:
+      setButtonStyle2(source = active, destination = normal)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = genders[i])
+      imageButton(image = menuImages[i]):
+        playerGender = i.cint
+    else:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = genders[i])
+      imageButton(image = menuImages[i]):
+        playerGender = i.cint
+    restoreButtonStyle()
+  # Player's ship's name
+  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+  label(str = "Ship name:")
+  bounds[2] = getWidgetBounds()
+  editString(text = shipName, maxLen = 64)
+  bounds[3] = getWidgetBounds()
+  saveButtonStyle()
+  setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+  imageButton(image = menuImages[1]):
+    randomName(forPlayer = false)
+  restoreButtonStyle()
+  # Character's goal
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+  label(str = "Character goal:")
+  bounds[4] = getWidgetBounds()
+  labelButton(title = "Random"):
+    dialog = goalsDialog
+  # Character's faction
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+  label(str = "Character faction:")
+  bounds[5] = getWidgetBounds()
+  var updated: bool = false
+  newFaction = comboList(items = playerFactions,
+      selected = currentFaction, itemHeight = 25, x = 200, y = 150)
+  if newFaction != currentFaction or mouseClicked(id = left,
+      rect = bounds[5]):
+    currentFaction = -1
+    updated = true
+    for faction in factionsList.values:
+      if faction.name == playerFactions[newFaction]:
+        playerCareers = @[]
+        currentCareer = 0
+        for career in faction.careers.values:
+          playerCareers.add(y = career.name)
+        playerBases = @[]
+        currentBase = 0
+        for baseType in faction.basesTypes.keys:
+          try:
+            playerBases.add(y = basesTypesList[baseType].name)
+          except:
+            dialog = setError(message = "Can't add a base type.")
+            break
+        break
+  # Character's career
+  label(str = "Character career:")
+  bounds[6] = getWidgetBounds()
+  newCareer = comboList(items = playerCareers,
+      selected = currentCareer, itemHeight = 25, x = 200, y = 125)
+  if newCareer != currentCareer or mouseClicked(id = left,
+      rect = bounds[6]):
+    currentCareer = -1
+  # Starting base
+  label(str = "Starting base type:")
+  bounds[7] = getWidgetBounds()
+  newBase = comboList(items = playerBases, selected = currentBase,
+      itemHeight = 25, x = 200, y = 90)
+  if newBase != currentBase or mouseClicked(id = left, rect = bounds[
+      7]):
+    currentBase = -1
+  setInfoText(dialog = dialog)
+  if gameSettings.showTooltips:
+    for index, bound in bounds:
+      addTooltip(bounds = bound, text = playerTooltips[index])
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -655,103 +761,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       group(title = "groupSetting", flags = {windowNoScrollbar}):
         # Player settings
         if currentTab == 0:
-          {.ruleOff: "varDeclared".}
-          var
-            bounds: array[8, NimRect]
-          {.ruleOn: "varDeclared".}
-          # Character's name
-          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-          label(str = "Character name:")
-          bounds[0] = getWidgetBounds()
-          editString(text = playerName, maxLen = 64)
-          bounds[1] = getWidgetBounds()
-          saveButtonStyle()
-          setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-          imageButton(image = menuImages[1]):
-            randomName(forPlayer = true)
-          restoreButtonStyle()
-          # Character's gender
-          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
-          label(str = "Character gender:")
-          const genders: array[2..3, string] = [2: "Male", 3: "Female"]
-          for i in 2..3:
-            saveButtonStyle()
-            setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-            if playerGender == i:
-              setButtonStyle2(source = active, destination = normal)
-              if gameSettings.showTooltips:
-                addTooltip(bounds = getWidgetBounds(), text = genders[i])
-              imageButton(image = menuImages[i]):
-                playerGender = i.cint
-            else:
-              if gameSettings.showTooltips:
-                addTooltip(bounds = getWidgetBounds(), text = genders[i])
-              imageButton(image = menuImages[i]):
-                playerGender = i.cint
-            restoreButtonStyle()
-          # Player's ship's name
-          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-          label(str = "Ship name:")
-          bounds[2] = getWidgetBounds()
-          editString(text = shipName, maxLen = 64)
-          bounds[3] = getWidgetBounds()
-          saveButtonStyle()
-          setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-          imageButton(image = menuImages[1]):
-            randomName(forPlayer = false)
-          restoreButtonStyle()
-          # Character's goal
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
-          label(str = "Character goal:")
-          bounds[4] = getWidgetBounds()
-          labelButton(title = "Random"):
-            echo "button pressed"
-          # Character's faction
-          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
-          label(str = "Character faction:")
-          bounds[5] = getWidgetBounds()
-          var updated: bool = false
-          newFaction = comboList(items = playerFactions,
-              selected = currentFaction, itemHeight = 25, x = 200, y = 150)
-          if newFaction != currentFaction or mouseClicked(id = left,
-              rect = bounds[5]):
-            currentFaction = -1
-            updated = true
-            for faction in factionsList.values:
-              if faction.name == playerFactions[newFaction]:
-                playerCareers = @[]
-                currentCareer = 0
-                for career in faction.careers.values:
-                  playerCareers.add(y = career.name)
-                playerBases = @[]
-                currentBase = 0
-                for baseType in faction.basesTypes.keys:
-                  try:
-                    playerBases.add(y = basesTypesList[baseType].name)
-                  except:
-                    dialog = setError(message = "Can't add a base type.")
-                    break
-                break
-          # Character's career
-          label(str = "Character career:")
-          bounds[6] = getWidgetBounds()
-          newCareer = comboList(items = playerCareers,
-              selected = currentCareer, itemHeight = 25, x = 200, y = 125)
-          if newCareer != currentCareer or mouseClicked(id = left,
-              rect = bounds[6]):
-            currentCareer = -1
-          # Starting base
-          label(str = "Starting base type:")
-          bounds[7] = getWidgetBounds()
-          newBase = comboList(items = playerBases, selected = currentBase,
-              itemHeight = 25, x = 200, y = 90)
-          if newBase != currentBase or mouseClicked(id = left, rect = bounds[
-              7]):
-            currentBase = -1
-          setInfoText(dialog = dialog)
-          if gameSettings.showTooltips:
-            for index, bound in bounds:
-              addTooltip(bounds = bound, text = playerTooltips[index])
+          newGamePlayer(dialog = dialog)
     let infoWidth: float = (menuWidth.float * 0.35)
     row(x = (menuWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
       fileLines = 3
@@ -781,4 +791,3 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
-  state = newGame

@@ -15,22 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-## Provides various types and variables for the game's UI, like the game's
-## state, the main window width and height, etc
+## Provides code related to the selecting the player's goal dialog, like
+## showing the dialog, and selecting it.
 
-import nuklear/nuklear_sdl_renderer
+import contracts
+import coreui
 
-type GameState* = enum
-    ## Used to determine the current game's state.
-    mainMenu, quitGame, news, allNews, about, showFile, hallOfFame, loadGame,
-        loadingGame, map, newGame
-
-type GameDialog* = enum
-    ## Used to show any in-game dialog window
-    none, errorDialog, loadMenu, questionDialog, goalsDialog
-
-const
-    dtime*: float = 40.0 ## The length in miliseconds of one game's frame
-
-var
-    fonts*: seq[ptr nk_font] = @[] ## The list of fonts used by the game
+proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Show the dialog with the list of available goals for players
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  dialog = goalsDialog
