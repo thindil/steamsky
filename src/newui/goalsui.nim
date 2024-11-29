@@ -18,8 +18,10 @@
 ## Provides code related to the selecting the player's goal dialog, like
 ## showing the dialog, and selecting it.
 
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 import coreui
+
+var selectedGoal*: string = "Random"
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the dialog with the list of available goals for players
@@ -27,4 +29,14 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  dialog = goalsDialog
+  window(name = "Select a new goal", x = 40, y = 20, w = 540, h = 360, flags = {
+      windowBorder, windowMoveable, windowTitle, windowMinimizable,
+      windowNoScrollbar}):
+    setLayoutRowDynamic(height = 240, cols = 1)
+    group(title = "GoalsGroup", flags = {windowNoFlags}):
+      setLayoutRowDynamic(height = 25, cols = 1)
+    setLayoutRowDynamic(height = 35, cols = 1)
+    labelButton(title = "Select goal"):
+      dialog = none
+    labelButton(title = "Close"):
+      dialog = none

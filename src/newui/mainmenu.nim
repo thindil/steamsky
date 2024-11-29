@@ -21,7 +21,7 @@
 import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[basestypes, config, game, gamesaveload, halloffame, shipscrew, ships2]
-import coreui, dialogs, errordialog
+import coreui, dialogs, errordialog, goalsui
 
 
 {.push ruleOff: "varDeclared".}
@@ -666,7 +666,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
   label(str = "Character goal:")
   bounds[4] = getWidgetBounds()
-  labelButton(title = "Random"):
+  labelButton(title = selectedGoal):
     dialog = goalsDialog
   # Character's faction
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
