@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to showing information about in-game error, like
+## saving the error data in the error.log file and present them to the
+## player.
+
 import std/[logging, strutils, times]
 import contracts
 import ../[config, game, log, tk]
