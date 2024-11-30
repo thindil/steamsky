@@ -120,6 +120,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = dtime)
+  const showGame = [GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews]
   while true:
     let started: float = cpuTime()
     # Input
@@ -136,19 +137,19 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       case state
       of GameState.mainMenu:
         # Show the main game menu
-        showMainMenu(state = state)
+        showMainMenu(state = state, dialog = dialog)
       of news, allNews:
         # Show the game's latests changes
         showNews(state = state, dialog = dialog)
       of about:
         # Show the general information about the game
-        showAbout(state = state)
+        showAbout(state = state, dialog = dialog)
       of showFile:
         # Show the content of the selected file in the main menu
         showFile(state = state, dialog = dialog)
       of hallOfFame:
         # Show the game's hall of fame
-        showHallOfFame(state = state)
+        showHallOfFame(state = state, dialog = dialog)
       of loadGame:
         # Show the list of saved games
         showLoadGame(state = state, dialog = dialog)

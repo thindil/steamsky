@@ -84,12 +84,15 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
-proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
+proc showMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [], contractual.} =
   ## Show the game's main menu and set the game's state
   ##
   ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter state.
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
   layoutSpaceStatic(height = 90, widgetsCount = 1):
     row(x = 50, y = 0, w = 500, h = 90):
       image(image = menuImages[0])
@@ -106,6 +109,7 @@ proc showMainMenu*(state: var GameState) {.raises: [], tags: [], contractual.} =
             text = "Set and start a new game")
       labelButton(title = "New game"):
         state = newGame
+        dialog = none
         return
     var y: float = h;
     if showLoadButton:
@@ -215,13 +219,15 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileContent = ""
         return
 
-proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
-    RootEffect], contractual.} =
+proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the general information about the game
   ##
   ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter state.
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
   setLayoutRowDynamic(height = 30, cols = 1)
   label(str = "Roguelike in the sky with a steampunk theme",
       alignment = centered)
@@ -253,6 +259,7 @@ proc showAbout*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
       labelButton(title = "Get involved"):
         fileName = "CONTRIBUTING.md"
         state = showFile
+        dialog = none
         return
     row(x = 230, y = 0, w = 150, h = 30):
       if gameSettings.showTooltips:
@@ -331,13 +338,16 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         fileContent = ""
         return
 
-proc showHallOfFame*(state: var GameState) {.raises: [], tags: [ReadIOEffect,
-    RootEffect], contractual.} =
+proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [ReadIOEffect, RootEffect], contractual.} =
   ## Show the game's hall of fame
   ##
   ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter state.
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  dialog = none
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   group(title = "HofGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 4)
