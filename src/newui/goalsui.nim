@@ -18,20 +18,32 @@
 ## Provides code related to the selecting the player's goal dialog, like
 ## showing the dialog, and selecting it.
 
-import std/tables
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game]
-import coreui
+import ../[config, game, goals]
+import coreui, errordialog
 
 var
   selectedGoal*: string = "Random" ## Currently selected goal
   selected: int = -1
-  goals: Table[string, seq[string]] = initTable[string, seq[string]]()
+  goalsUiList: Table[string, seq[string]] = initTable[string, seq[string]]()
 
-proc setGoalsUi*() {.raises: [], tags: [], contractual} =
+proc setGoalsUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the goals UI, like types of goals, etc.
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
   for goal in goalsList.values:
-    discard
+    try:
+      let key: string = ($goal.goalType).toUpperAscii
+      if not goalsUiList.hasKey(key = key):
+        goalsUiList[key] = @[]
+      goalsUiList[key].add(y = goalText(index = goal.index.parseInt))
+    except:
+      dialog = setError(message = "Can't set the list of goals")
+      return
 
 proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
   ## Set the selection in the list of available goals
@@ -55,7 +67,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
         ## Add a selectable goal to the list
         ##
         ## * label - the goal text to add
-        if selectableLabel(str = label, sel):
+        if selectableLabel(str = label, value = sel):
           if sel:
             selected = 0
           else:

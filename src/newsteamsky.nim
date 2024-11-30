@@ -112,6 +112,12 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     echo "Can't set the main menu. More details in error.log"
     return
 
+  # Set the goals UI
+  setGoalsUi(dialog = dialog)
+  if dialog != none:
+    echo "Can't set the goals UI. More details in error.log"
+    return
+
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = dtime)
   while true:
