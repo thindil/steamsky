@@ -266,9 +266,14 @@ type
     seq*: uint
     flags*: nk_flags
     buffer*: nk_command_buffer
+  nk_memory* {.importc: "struct nk_memory", nodecl.} = object
+    ## Internal Nuklear type
+    `ptr`*: ptr nk_size
+    size*: nk_size
   nk_buffer* {.importc: "struct nk_buffer", nodecl.} = object
     ## Internal Nuklear type
     allocated*, needed*: nk_size
+    memory*: nk_memory
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style

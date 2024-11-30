@@ -399,6 +399,18 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # Buffer
 # ------
 
+{.push ruleOff: "namedParams".}
+template `+`[T](p: ptr T, off: nk_size): ptr T =
+  ## Pointer artihmetic, adding
+  ##
+  ## * p   - the pointer to modify
+  ## * off - the value to add to the pointer
+  ##
+  ## Returns the new pointer moved by off.
+  cast[ptr type(p[])](cast[nk_size](p) +% off * sizeof(p[]))
+{.pop ruleOn: "namedParams".}
+
+
 {.push ruleOff: "params".}
 proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     align: nk_size): pointer {.raises: [], tags: [], contractual.} =
@@ -413,6 +425,9 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     size != 0
   body:
     b.needed += size
+    var unaligned: ptr nk_size = nil
+    if `type` == NK_BUFFER_FRONT:
+      unaligned = b.memory.`ptr` + b.allocated
     return nil
 
 # ----
