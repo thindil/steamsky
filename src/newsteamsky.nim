@@ -120,7 +120,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = dtime)
-  const showGame = [GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews]
+  const showGame = [GameState.mainMenu: showMainMenu, news: showNews,
+      allNews: showNews, about: showAbout, showFile: mainMenu.showFile,
+      hallOfFame: showHallOfFame, loadGame: showLoadGame,
+      loadingGame: mainMenu.loadGame, newGame: mainMenu.newGame]
   while true:
     let started: float = cpuTime()
     # Input
@@ -135,30 +138,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     window(name = "Main", x = 0, y = 0, w = windowWidth,
         h = windowHeight, flags = {windowNoScrollbar}):
       case state
-      of GameState.mainMenu:
-        # Show the main game menu
-        showMainMenu(state = state, dialog = dialog)
-      of news, allNews:
-        # Show the game's latests changes
-        showNews(state = state, dialog = dialog)
-      of about:
-        # Show the general information about the game
-        showAbout(state = state, dialog = dialog)
-      of showFile:
-        # Show the content of the selected file in the main menu
-        showFile(state = state, dialog = dialog)
-      of hallOfFame:
-        # Show the game's hall of fame
-        showHallOfFame(state = state, dialog = dialog)
-      of loadGame:
-        # Show the list of saved games
-        showLoadGame(state = state, dialog = dialog)
-      of loadingGame:
-        # Start loading the selected saved game
-        loadGame(state = state, dialog = dialog)
-      of newGame:
-        # Show the new game's setting
-        newGame(state = state, dialog = dialog)
+      of GameState.mainMenu..GameState.newGame:
+        # Show the proper window
+        showGame[state](state = state, dialog = dialog)
       of map:
         # Show the game's map
         discard
