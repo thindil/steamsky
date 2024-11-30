@@ -380,23 +380,20 @@ var
   saveClicked: string = ""
   saves: seq[SaveData] = @[]
 
-proc showLoadMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Show the menu for the selected saved game
   ##
-  ## * state  - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the parameters state and dialog. The latter is modified only
-  ## when the player closed the dialog. The first when the player start
-  ## loading the game
+  ## Returns the parameters state and dialog. It is modified only
+  ## when the player closed the dialog.
   window(name = "Actions", x = (menuWidth / 3).float, y = (menuHeight /
       3).float, w = 150, h = 150, flags = {windowBorder, windowMoveable,
       windowTitle, windowNoScrollbar}):
     setLayoutRowDynamic(height = 30, cols = 1)
     labelButton(title = "Load game"):
-      state = loadingGame
-      dialog = none
+      dialog = loading
     labelButton(title = "Delete game"):
       setQuestion(question = "Are you sure you want delete this savegame?",
           data = saveClicked, qType = deleteSave, dialog = dialog)

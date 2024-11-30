@@ -120,10 +120,12 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = dtime)
-  const showGame = [GameState.mainMenu: showMainMenu, news: showNews,
-      allNews: showNews, about: showAbout, showFile: mainMenu.showFile,
-      hallOfFame: showHallOfFame, loadGame: showLoadGame,
-      loadingGame: mainMenu.loadGame, newGame: mainMenu.newGame]
+  const showGame: array[GameState.mainMenu..GameState.newGame, proc (
+      state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
+    GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
+      about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
+      loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
+      newGame: mainMenu.newGame]
   while true:
     let started: float = cpuTime()
     # Input
@@ -162,13 +164,17 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       showError(dialog = dialog)
     of loadMenu:
       # Show the selected save game menu
-      showLoadMenu(state = state, dialog = dialog)
+      showLoadMenu(dialog = dialog)
     of questionDialog:
       # Show the question dialog
       showQuestion(dialog = dialog)
     of goalsDialog:
       # Show goal selection dialog
       showGoals(dialog = dialog)
+    of loading:
+      # Start loading the game
+      state = loadingGame
+      dialog = none
     of none:
       discard
 
