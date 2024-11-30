@@ -126,6 +126,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
       newGame: mainMenu.newGame]
+  const showDialog: array[GameDialog.errorDialog..GameDialog.goalsDialog, proc (
+      dialog: var GameDialog){.nimcall, raises: [].}] = [
+    GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
+      questionDialog: showQuestion, goalsDialog: showGoals]
   while true:
     let started: float = cpuTime()
     # Input
@@ -159,23 +163,15 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
     # Dialogs if needed
     case dialog
-    of errorDialog:
-      # Show the error dialog
-      showError(dialog = dialog)
-    of loadMenu:
-      # Show the selected save game menu
-      showLoadMenu(dialog = dialog)
-    of questionDialog:
-      # Show the question dialog
-      showQuestion(dialog = dialog)
-    of goalsDialog:
-      # Show goal selection dialog
-      showGoals(dialog = dialog)
+    of GameDialog.errorDialog..goalsDialog:
+      # Show the dialog
+      showDialog[dialog](dialog = dialog)
     of loading:
       # Start loading the game
       state = loadingGame
       dialog = none
     of none:
+      # No dialog to show
       discard
 
     # Draw
