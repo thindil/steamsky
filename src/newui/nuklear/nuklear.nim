@@ -400,7 +400,7 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
 # ------
 
 {.push ruleOff: "namedParams".}
-template `+`[T](p: ptr T, off: nk_size): ptr T =
+template `+`[T](p: ptr T; off: nk_size): ptr T =
   ## Pointer artihmetic, adding
   ##
   ## * p   - the pointer to modify
@@ -412,6 +412,20 @@ template `+`[T](p: ptr T, off: nk_size): ptr T =
 
 
 {.push ruleOff: "params".}
+
+proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
+    `type`: nk_buffer_allocation_type): pointer {.raises: [], tags: [],
+    contractual.} =
+  ## Align the sekected buffer
+  ##
+  ## * unaligned - the pointer to unaligned data
+  ## * align     - the size of data to align
+  ## * alignment - the size of data after alignment
+  ## * `type`    - the allocation type
+  ##
+  ## Returns pointer to aligned buffer
+  return nil
+
 proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     align: nk_size): pointer {.raises: [], tags: [], contractual.} =
   ## Allocate memory for the selected buffer
@@ -420,6 +434,8 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
   ## * `type` - the allocation type
   ## * size   - the size of memory to allocate
   ## * align  - the align
+  ##
+  ## Returns pointer to allocated memory
   require:
     b != nil
     size != 0
@@ -428,7 +444,12 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     var unaligned: ptr nk_size = nil
     if `type` == NK_BUFFER_FRONT:
       unaligned = b.memory.`ptr` + b.allocated
-    return nil
+    else:
+      unaligned = b.memory.`ptr` + (b.size - size)
+    var alignment: nk_size = 0
+    var memory: pointer = nkBufferAlign(unaligned = unaligned, align = align,
+        alignment = alignment, `type` = `type`)
+    return memory
 
 # ----
 # Draw

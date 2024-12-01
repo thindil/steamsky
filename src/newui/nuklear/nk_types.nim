@@ -274,6 +274,7 @@ type
     ## Internal Nuklear type
     allocated*, needed*: nk_size
     memory*: nk_memory
+    size*: nk_size
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
