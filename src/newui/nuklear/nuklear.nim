@@ -166,6 +166,9 @@ proc nk_tree_element_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractua
 # -------
 # Buttons
 # -------
+proc nk_button_text(ctx; ctitle: cstring; clen: cint): nk_bool {.importc, cdecl,
+    raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 proc nk_button_label(ctx; ctitle: cstring): nk_bool {.importc, cdecl, raises: [
     ], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
@@ -803,6 +806,16 @@ template colorButton*(r, g, b: int; onPressCode: untyped) =
   ## * b           - the blue value for the button color in RGB
   ## * onPressCode - the Nim code to execute when the button was pressed
   if createColorButton(r1 = r.cint, g1 = g.cint, b1 = b.cint):
+    onPressCode
+
+template textButton*(title: string; len: Natural; onPressCode: untyped) =
+  ## Draw the button and the selected text with selected length on it. Execute
+  ## the selected code on pressing it.
+  ##
+  ## * title       - the text to shown on the button
+  ## * len         - the maximum length of the text to show on the button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  if nk_button_text(ctx = ctx, ctitle = title.cstring, clen = len.cint):
     onPressCode
 
 template labelButton*(title: string; onPressCode: untyped) =
