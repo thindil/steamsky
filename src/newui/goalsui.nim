@@ -115,6 +115,14 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     else:
       labelButton(title = "Select goal"):
         dialog = none
+        clearCurrentGoal()
+        if selected > 0:
+          try:
+            for goal in goalsList.values:
+              if selectedGoal == goalText(index = goal.index.parseInt):
+                currentGoal = goal
+          except:
+            dialog = setError(message = "Can't set the current goal.")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Close the goals list without any changes")
