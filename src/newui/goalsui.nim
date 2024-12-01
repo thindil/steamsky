@@ -72,6 +72,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         if selectableLabel(str = label, value = sel):
           if sel:
             selected = num
+            selectedGoal = label
           else:
             selected = -1
 
@@ -80,7 +81,10 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       try:
         const categories: OrderedTable[string, string] = {
           "REPUTATION": "Gain max reputation in bases",
-            "DESTROY": "Destroy enemy ships"}.toOrderedTable
+            "DESTROY": "Destroy enemy ships", "DISCOVER": "Discover map",
+            "VISIT": "Visit bases", "CRAFT": "Craft items",
+            "MISSION": "Finish missions",
+            "KILL": "Kill enemies in melee combat"}.toOrderedTable
         var catIndex: Positive = 1
         for catName, category in categories:
           treeNode(title = category, state = minimized, index = catIndex):
@@ -95,8 +99,22 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then.")
-    labelButton(title = "Select goal"):
-      dialog = none
+    if selected == -1:
+      saveButtonStyle()
+      setButtonStyle(normal, 40, 40, 40)
+      setButtonStyle(hover, 40, 40, 40)
+      setButtonStyle(active, 40, 40, 40)
+      setButtonStyle(borderColor, 60, 60, 60)
+      setButtonStyle(textBackground, 60, 60, 60)
+      setButtonStyle(textNormal, 60, 60, 60)
+      setButtonStyle(textHover, 60, 60, 60)
+      setButtonStyle(textActive, 60, 60, 60)
+      labelButton("Select goal"):
+        discard
+      restoreButtonStyle()
+    else:
+      labelButton(title = "Select goal"):
+        dialog = none
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Close the goals list without any changes")
