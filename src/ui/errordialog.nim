@@ -48,15 +48,17 @@ proc createDialog(name, title: string; titleWidth: Positive = 275;
     tclEval(script = "update")
     result = name
     tclEval(script = "ttk::frame " & result & " -style Dialog.TFrame")
-    let dialogHeader = result & ".header"
+    let dialogHeader: string = result & ".header"
     tclEval(script = "ttk::label " & dialogHeader & " -text {" & title &
         "} -wraplength " & $titleWidth & " -style Header.TLabel -cursor hand1")
-    tclEval(script = "grid " & dialogHeader & " -sticky we -padx 2 -pady {2 0}" &
-        (if columns > 1: " -columnspan " & $columns else: ""))
+    tclEval(script = "grid " & dialogHeader &
+        " -sticky we -padx 2 -pady {2 0}" & (if columns > 1: " -columnspan " &
+            $columns else: ""))
     tclEval(script = "bind " & dialogHeader & " <ButtonPress-" & (
         if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
         dialogHeader & " %X %Y}")
-    tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " & result & " %X %Y}")
+    tclEval(script = "bind " & dialogHeader & " <Motion> {MoveDialog " &
+        result & " %X %Y}")
     tclEval(script = "bind " & dialogHeader & " <ButtonRelease-" & (
         if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
         dialogHeader & " 0 0}")
@@ -79,7 +81,7 @@ proc addCloseButton(name, text, command: string; columnSpan: Positive = 1;
   require:
     name.len > 0
   body:
-    let button = name
+    let button: string = name
     tclEval(script = "ttk::button " & button & " -command {" & command &
         "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
         text & "}")
@@ -134,14 +136,14 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
     debugInfo.add(y = "Can't save error to file. Reason: " &
         getCurrentExceptionMsg())
   let
-    parentName = (if tclEval2(script = "winfo exists .gameframe") ==
+    parentName: string = (if tclEval2(script = "winfo exists .gameframe") ==
         "1": ".gameframe" else: ".")
-    errorDialog = createDialog(name = ".errordialog",
+    errorDialog: string = createDialog(name = ".errordialog",
         title = "Error!Error!Error!", parentName = parentName)
-  var errorLabel = errorDialog & ".general"
+  var errorLabel: string = errorDialog & ".general"
   tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:}")
   tclEval(script = "grid " & errorLabel & " -padx 5 -sticky w")
-  var errorButton = errorDialog & ".link"
+  var errorButton: string = errorDialog & ".link"
   tclEval(script = "ttk::button " & errorButton & " -text {https://www.laeran.pl.eu.org/repositories/steamsky/ticket} -command {OpenLink https://www.laeran.pl.eu.org/repositories/steamsky/ticket} -style Toolbutton")
   tclEval(script = "grid " & errorButton)
   errorLabel = errorDialog & ".general2"
@@ -153,7 +155,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   errorLabel = errorDialog & ".general3"
   tclEval(script = "ttk::label " & errorLabel & " -wraplength 650 -text {and attach (if possible) file with saved game or 'error.log'.}")
   tclEval(script = "grid " & errorLabel & " -padx 5 -sticky w")
-  var errorFrame = errorDialog & ".frame"
+  var errorFrame: string = errorDialog & ".frame"
   tclEval(script = "ttk::frame " & errorFrame)
   errorButton = errorFrame & ".showdirectory"
   tclEval(script = "ttk::button " & errorButton &
@@ -167,7 +169,7 @@ proc showError*(message: string; e: ref Exception = getCurrentException(
   errorFrame = errorDialog & ".technical"
   tclEval(script = "ttk::labelframe " & errorFrame & " -text {Technical details:}")
   errorLabel = errorFrame & ".technical"
-  let yScroll = errorFrame & ".yscroll"
+  let yScroll: string = errorFrame & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll &
       " -orient vertical -command [list " & errorLabel & " yview]")
   tclEval(script = "text " & errorLabel &
