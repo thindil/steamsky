@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, goals]
+import ../[config, game, goals, utils]
 import coreui, errordialog
 
 var
@@ -75,6 +75,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             selectedGoal = label
           else:
             selected = -1
+            selectedGoal = "Random"
 
       var index: Natural = 0
       addSelectable(label = "Random", num = index)
@@ -101,15 +102,15 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           text = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then.")
     if selected == -1:
       saveButtonStyle()
-      setButtonStyle(normal, 40, 40, 40)
-      setButtonStyle(hover, 40, 40, 40)
-      setButtonStyle(active, 40, 40, 40)
-      setButtonStyle(borderColor, 60, 60, 60)
-      setButtonStyle(textBackground, 60, 60, 60)
-      setButtonStyle(textNormal, 60, 60, 60)
-      setButtonStyle(textHover, 60, 60, 60)
-      setButtonStyle(textActive, 60, 60, 60)
-      labelButton("Select goal"):
+      setButtonStyle(field = normal, r = 40, g = 40, b = 40)
+      setButtonStyle(field = hover, r = 40, g = 40, b = 40)
+      setButtonStyle(field = active, r = 40, g = 40, b = 40)
+      setButtonStyle(field = borderColor, r = 60, g = 60, b = 60)
+      setButtonStyle(field = textBackground, r = 60, g = 60, b = 60)
+      setButtonStyle(field = textNormal, r = 60, g = 60, b = 60)
+      setButtonStyle(field = textHover, r = 60, g = 60, b = 60)
+      setButtonStyle(field = textActive, r = 60, g =60, b = 60)
+      labelButton(title = "Select goal"):
         discard
       restoreButtonStyle()
     else:
@@ -123,6 +124,13 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                 currentGoal = goal
           except:
             dialog = setError(message = "Can't set the current goal.")
+        elif dialog != newGoalDialog:
+          try:
+            currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
+          except:
+            dialog = setError(message = "Can't set random current goal.")
+        if selectedGoal.len > 16:
+          selectedGoal = selectedGoal[0..16] & "..."
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Close the goals list without any changes")

@@ -126,10 +126,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
       newGame: mainMenu.newGame]
-  const showDialog: array[GameDialog.errorDialog..GameDialog.goalsDialog, proc (
+  const showDialog: array[GameDialog.errorDialog..GameDialog.newGoalDialog, proc (
       dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
-      questionDialog: showQuestion, goalsDialog: showGoals]
+      questionDialog: showQuestion, newGoalDialog: showGoals]
   while true:
     let started: float = cpuTime()
     # Input
@@ -163,7 +163,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
     # Dialogs if needed
     case dialog
-    of GameDialog.errorDialog..goalsDialog:
+    of GameDialog.errorDialog..newGoalDialog:
       # Show the dialog
       showDialog[dialog](dialog = dialog)
     of loading:
