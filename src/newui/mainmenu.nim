@@ -721,6 +721,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     for index, bound in bounds:
       addTooltip(bounds = bound, text = playerTooltips[index])
 
+var currentLevel: Natural = 3
 
 proc newGameDifficulty() {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -729,12 +730,18 @@ proc newGameDifficulty() {.raises: [],
   var
     bounds: array[8, NimRect]
   {.ruleOn: "varDeclared".}
+  # Difficulty level
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
   label(str = "Difficulty level:")
-  var currentLevel: Natural = 0
   bounds[0] = getWidgetBounds()
   var newLevel = comboList(items = ["Very Easy", "Easy", "Normal", "Hard",
       "Very Hard", "Custom"], selected = currentLevel, itemHeight = 25, x = 200, y = 90)
+  if newLevel != currentLevel:
+    currentLevel = newLevel
+  # Enemy ship damage
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+  label(str = "Enemy ship damage:")
+  bounds[1] = getWidgetBounds()
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
