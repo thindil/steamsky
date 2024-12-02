@@ -680,13 +680,11 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
   label(str = "Character faction:")
   bounds[5] = getWidgetBounds()
-  var updated: bool = false
   newFaction = comboList(items = playerFactions,
       selected = currentFaction, itemHeight = 25, x = 200, y = 150)
   if newFaction != currentFaction or mouseClicked(id = left,
       rect = bounds[5]):
     currentFaction = -1
-    updated = true
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
         playerCareers = @[]
@@ -722,6 +720,21 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   if gameSettings.showTooltips:
     for index, bound in bounds:
       addTooltip(bounds = bound, text = playerTooltips[index])
+
+
+proc newGameDifficulty() {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the difficulty settings for starting a new game
+  {.ruleOff: "varDeclared".}
+  var
+    bounds: array[8, NimRect]
+  {.ruleOn: "varDeclared".}
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+  label(str = "Difficulty level:")
+  var currentLevel: Natural = 0
+  bounds[0] = getWidgetBounds()
+  var newLevel = comboList(items = ["Very Easy", "Easy", "Normal", "Hard",
+      "Very Hard", "Custom"], selected = currentLevel, itemHeight = 25, x = 200, y = 90)
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -770,6 +783,9 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         # Player settings
         if currentTab == 0:
           newGamePlayer(dialog = dialog)
+        # Difficulty settings
+        else:
+          newGameDifficulty()
     let infoWidth: float = (menuWidth.float * 0.35)
     row(x = (menuWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
       fileLines = 3
