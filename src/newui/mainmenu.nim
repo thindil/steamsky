@@ -723,7 +723,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
 
 var
   currentLevel: Natural = 2
-  enemyDamage: Positive = 100
+  enemyDamage, playerDamage, enemyMelee, playerMelee, expBonus, repBonus: Positive = 100
 
 proc newGameDifficulty() {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -736,7 +736,7 @@ proc newGameDifficulty() {.raises: [],
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
   label(str = "Difficulty level:")
   bounds[0] = getWidgetBounds()
-  var newLevel = comboList(items = ["Very Easy", "Easy", "Normal", "Hard",
+  var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal", "Hard",
       "Very Hard", "Custom"], selected = currentLevel, itemHeight = 25, x = 200, y = 90)
   if newLevel != currentLevel:
     currentLevel = newLevel
@@ -744,7 +744,38 @@ proc newGameDifficulty() {.raises: [],
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
   label(str = "Enemy ship damage:")
   bounds[1] = getWidgetBounds()
-  property("", 1, enemyDamage, 500, 1, 1)
+  property(name = "#", min = 1, val = enemyDamage, max = 500, step = 1,
+      incPerPixel = 1)
+  # Player's ship damage
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+  label(str = "Player ship damage:")
+  bounds[2] = getWidgetBounds()
+  property(name = "#", min = 1, val = playerDamage, max = 500, step = 1,
+      incPerPixel = 1)
+  # Enemy damage in melee combat
+  setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
+  wrapLabel(str = "Enemy damage in melee combat:")
+  bounds[3] = getWidgetBounds()
+  property(name = "#", min = 1, val = enemyMelee, max = 500, step = 1,
+      incPerPixel = 1)
+  # Player's crew damage in melee combat
+  setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
+  wrapLabel(str = "Player crew damage in melee combat:")
+  bounds[4] = getWidgetBounds()
+  property(name = "#", min = 1, val = playerMelee, max = 500, step = 1,
+      incPerPixel = 1)
+  # Experience
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+  label(str = "Experience gained:")
+  bounds[5] = getWidgetBounds()
+  property(name = "#", min = 1, val = expBonus, max = 500, step = 1,
+      incPerPixel = 1)
+  # Reputation
+  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+  label(str = "Reputation gained:")
+  bounds[6] = getWidgetBounds()
+  property(name = "#", min = 1, val = repBonus, max = 500, step = 1,
+      incPerPixel = 1)
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
