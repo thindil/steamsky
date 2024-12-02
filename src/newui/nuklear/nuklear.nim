@@ -427,7 +427,22 @@ proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
   ## * `type`    - the allocation type
   ##
   ## Returns pointer to aligned buffer
-  return nil
+  var memory: pointer = nil
+  if `type` == NK_BUFFER_BACK:
+    if align == 0:
+      memory = unaligned
+      alignment = 0
+    else:
+      memory = cast[pointer](cast[nk_size](unaligned) and not(align - 1))
+      alignment = (cast[nk_byte](unaligned) - cast[nk_byte](memory)).nk_size
+  else:
+    if align == 0:
+      memory = unaligned
+      alignment = 0
+    else:
+      memory = cast[pointer]((cast[nk_size](unaligned) + (align - 1)) and not(align - 1))
+      alignment = (cast[nk_byte](memory) - cast[nk_byte](unaligned)).nk_size
+  return memory
 
 proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     align: nk_size): pointer {.raises: [], tags: [], contractual.} =
@@ -452,6 +467,14 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     var alignment: nk_size = 0
     var memory: pointer = nkBufferAlign(unaligned = unaligned, align = align,
         alignment = alignment, `type` = `type`)
+    var full: bool = false
+    if `type` == NK_BUFFER_FRONT:
+      full = (b.allocated + size + alignment) > b.size
+    else:
+      full = (b.size - min(x = b.size, y = (size + alignment))) <= b.allocated
+    if full:
+      if b.`type` != NK_BUFFER_DYNAMIC:
+        return nil
     return memory
 
 # ----

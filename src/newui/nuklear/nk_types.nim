@@ -150,6 +150,9 @@ type
   nk_buffer_allocation_type* = enum
     ## Internal Nuklear type
     NK_BUFFER_FRONT, NK_BUFFER_BACK, NK_BUFFER_MAX
+  nk_allocation_type* = enum
+    ## Internal Nuklear type
+    NK_BUFFER_FIXED, NK_BUFFER_DYNAMIC
 
 # -------
 # Objects
@@ -275,6 +278,7 @@ type
     allocated*, needed*: nk_size
     memory*: nk_memory
     size*: nk_size
+    `type`*: nk_allocation_type
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
