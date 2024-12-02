@@ -143,6 +143,7 @@ type ThemeRecord* = object
   ## * mapArrowUpRightIcon - Icon used for moving map up and right
   ## * mapArrowUpIcon      - Icon used for moving map up
   ## * mapArrowLeftIcon    - Icon used for moving map left
+  ## * mapArrowRightIcon    - Icon used for moving map right
   name*: string
   fileName*: string
   enemyShipIcon*: string
@@ -260,6 +261,7 @@ type ThemeRecord* = object
   mapArrowUpRightIcon*: string
   mapArrowUpIcon*: string
   mapArrowLeftIcon*: string
+  mapArrowRightIcon*: string
 
 var themesList*: Table[string, ThemeRecord] ## The list of all available themes
 
@@ -368,7 +370,8 @@ let
       mapArrowUpLeftIcon: defaultThemeIconPath & "arrow-up-left2.svg",
       mapArrowUpRightIcon: defaultThemeIconPath & "arrow-up-right2.svg",
       mapArrowUpIcon: defaultThemeIconPath & "arrow-up2.svg",
-      mapArrowLeftIcon: defaultThemeIconPath & "arrow-left2.svg")
+      mapArrowLeftIcon: defaultThemeIconPath & "arrow-left2.svg",
+      mapArrowRightIcon: defaultThemeIconPath & "arrow-right2.svg")
     ## The default game'st theme
 
 proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
@@ -630,6 +633,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.mapArrowUpIcon = entry.value.unixToNativePath
               of "MapArrowLeftIcon":
                 theme.mapArrowLeftIcon = entry.value.unixToNativePath
+              of "MapArrowRightIcon":
+                theme.mapArrowRightIcon = entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
@@ -676,7 +681,7 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       "negotiate2icon", "craft2icon", "study2icon", "deconstruct2icon",
       "giveorder2icon", "foodicon", "fuelicon", "drinksicon", "expandicon",
       "contracticon", "moreoptionsicon", "mapmenuicon", "maparrowuplefticon",
-      "maparrowuprighticon", "maparrowupicon", "maparrowlefticon"]
+      "maparrowuprighticon", "maparrowupicon", "maparrowlefticon", "maparrowrighticon"]
   let
     theme = try:
         themesList[gameSettings.interfaceTheme]
@@ -713,7 +718,8 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
         theme.giveOrderColoredIcon, theme.foodIcon, theme.fuelIcon,
         theme.drinksIcon, theme.expandIcon, theme.contractIcon,
         theme.moreOptionsIcon, theme.mapMenuIcon, theme.mapArrowUpLeftIcon,
-        theme.mapArrowUpRightIcon, theme.mapArrowUpIcon, theme.mapArrowLeftIcon]
+        theme.mapArrowUpRightIcon, theme.mapArrowUpIcon, theme.mapArrowLeftIcon,
+        theme.mapArrowRightIcon]
   for index, name in imagesNames:
     tclEval(script = "image create photo " & name & " -file {" & imagesFiles[
         index] & "} -format {svg -scaletoheight " & $(
