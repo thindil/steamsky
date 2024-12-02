@@ -721,7 +721,9 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     for index, bound in bounds:
       addTooltip(bounds = bound, text = playerTooltips[index])
 
-var currentLevel: Natural = 3
+var
+  currentLevel: Natural = 2
+  enemyDamage: Positive = 100
 
 proc newGameDifficulty() {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -742,6 +744,7 @@ proc newGameDifficulty() {.raises: [],
   setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
   label(str = "Enemy ship damage:")
   bounds[1] = getWidgetBounds()
+  property("", 1, enemyDamage, 500, 1, 1)
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
