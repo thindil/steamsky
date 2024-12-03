@@ -726,13 +726,14 @@ var
   currentLevel: Natural = 2
   enemyDamage, playerDamage, enemyMelee, playerMelee, expBonus, repBonus,
     costBonus, pricesBonus: Positive = 100
+  randomSettings: bool = false
 
 proc newGameDifficulty() {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   {.ruleOff: "varDeclared".}
   var
-    bounds: array[9, NimRect]
+    bounds: array[11, NimRect]
   {.ruleOn: "varDeclared".}
   group(title = "groupSetting", flags = {windowNoFlags}):
     # Difficulty level
@@ -740,8 +741,8 @@ proc newGameDifficulty() {.raises: [],
     label(str = "Difficulty level:")
     bounds[0] = getWidgetBounds()
     var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
-        "Hard", "Very Hard", "Custom"], selected = currentLevel, itemHeight = 25,
-            x = 200, y = 90)
+        "Hard", "Very Hard", "Custom"], selected = currentLevel,
+        itemHeight = 25, x = 200, y = 90)
     if newLevel != currentLevel:
       currentLevel = newLevel
     # Enemy ship damage
@@ -792,6 +793,16 @@ proc newGameDifficulty() {.raises: [],
     bounds[8] = getWidgetBounds()
     property(name = "#", min = 1, val = pricesBonus, max = 500, step = 1,
         incPerPixel = 1)
+    # Randomize settings
+    setLayoutRowDynamic(height = 35, cols = 1)
+    bounds[9] = getWidgetBounds()
+    labelButton(title = "Random"):
+      echo "button pressed"
+    # Rnadomize the settings on the game's start
+    setLayoutRowDynamic(height = 50, cols = 1, ratio = [0.7.cfloat, 0.3])
+    wrapLabel(str = "Randomize difficulty on game start:")
+    bounds[10] = getWidgetBounds()
+    checkBox("#", randomSettings)
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -834,7 +845,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't set the tabs buttons.")
   stylePopFloat()
   stylePopVec2()
-  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 17):
+  layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = (
+      if currentTab == 0: 17 else: 20)):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
       # Player settings
       if currentTab == 0:
