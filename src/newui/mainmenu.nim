@@ -628,154 +628,170 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   var
     bounds: array[8, NimRect]
   {.ruleOn: "varDeclared".}
-  # Character's name
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-  label(str = "Character name:")
-  bounds[0] = getWidgetBounds()
-  editString(text = playerName, maxLen = 64)
-  bounds[1] = getWidgetBounds()
-  saveButtonStyle()
-  setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-  imageButton(image = menuImages[1]):
-    randomName(forPlayer = true)
-  restoreButtonStyle()
-  # Character's gender
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
-  label(str = "Character gender:")
-  const genders: array[2..3, string] = [2: "Male", 3: "Female"]
-  for i in 2..3:
+  group(title = "groupSetting", flags = {windowNoScrollbar}):
+    # Character's name
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    label(str = "Character name:")
+    bounds[0] = getWidgetBounds()
+    editString(text = playerName, maxLen = 64)
+    bounds[1] = getWidgetBounds()
     saveButtonStyle()
     setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-    if playerGender == i:
-      setButtonStyle2(source = active, destination = normal)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = genders[i])
-      imageButton(image = menuImages[i]):
-        playerGender = i.cint
-    else:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = genders[i])
-      imageButton(image = menuImages[i]):
-        playerGender = i.cint
+    imageButton(image = menuImages[1]):
+      randomName(forPlayer = true)
     restoreButtonStyle()
-  # Player's ship's name
-  setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
-  label(str = "Ship name:")
-  bounds[2] = getWidgetBounds()
-  editString(text = shipName, maxLen = 64)
-  bounds[3] = getWidgetBounds()
-  saveButtonStyle()
-  setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-  imageButton(image = menuImages[1]):
-    randomName(forPlayer = false)
-  restoreButtonStyle()
-  # Character's goal
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
-  label(str = "Character goal:")
-  bounds[4] = getWidgetBounds()
-  labelButton(title = selectedGoal):
-    dialog = newGoalDialog
-    setSelectedGoal()
-  # Character's faction
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
-  label(str = "Character faction:")
-  bounds[5] = getWidgetBounds()
-  newFaction = comboList(items = playerFactions,
-      selected = currentFaction, itemHeight = 25, x = 200, y = 150)
-  if newFaction != currentFaction or mouseClicked(id = left,
-      rect = bounds[5]):
-    currentFaction = -1
-    for faction in factionsList.values:
-      if faction.name == playerFactions[newFaction]:
-        playerCareers = @[]
-        currentCareer = 0
-        for career in faction.careers.values:
-          playerCareers.add(y = career.name)
-        playerBases = @[]
-        currentBase = 0
-        for baseType in faction.basesTypes.keys:
-          try:
-            playerBases.add(y = basesTypesList[baseType].name)
-          except:
-            dialog = setError(message = "Can't add a base type.")
-            break
-        break
-  # Character's career
-  label(str = "Character career:")
-  bounds[6] = getWidgetBounds()
-  newCareer = comboList(items = playerCareers,
-      selected = currentCareer, itemHeight = 25, x = 200, y = 125)
-  if newCareer != currentCareer or mouseClicked(id = left,
-      rect = bounds[6]):
-    currentCareer = -1
-  # Starting base
-  label(str = "Starting base type:")
-  bounds[7] = getWidgetBounds()
-  newBase = comboList(items = playerBases, selected = currentBase,
-      itemHeight = 25, x = 200, y = 90)
-  if newBase != currentBase or mouseClicked(id = left, rect = bounds[
-      7]):
-    currentBase = -1
-  setInfoText(dialog = dialog)
-  if gameSettings.showTooltips:
-    for index, bound in bounds:
-      addTooltip(bounds = bound, text = playerTooltips[index])
+    # Character's gender
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
+    label(str = "Character gender:")
+    const genders: array[2..3, string] = [2: "Male", 3: "Female"]
+    for i in 2..3:
+      saveButtonStyle()
+      setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+      if playerGender == i:
+        setButtonStyle2(source = active, destination = normal)
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(), text = genders[i])
+        imageButton(image = menuImages[i]):
+          playerGender = i.cint
+      else:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(), text = genders[i])
+        imageButton(image = menuImages[i]):
+          playerGender = i.cint
+      restoreButtonStyle()
+    # Player's ship's name
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
+    label(str = "Ship name:")
+    bounds[2] = getWidgetBounds()
+    editString(text = shipName, maxLen = 64)
+    bounds[3] = getWidgetBounds()
+    saveButtonStyle()
+    setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+    imageButton(image = menuImages[1]):
+      randomName(forPlayer = false)
+    restoreButtonStyle()
+    # Character's goal
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    label(str = "Character goal:")
+    bounds[4] = getWidgetBounds()
+    labelButton(title = selectedGoal):
+      dialog = newGoalDialog
+      setSelectedGoal()
+    # Character's faction
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
+    label(str = "Character faction:")
+    bounds[5] = getWidgetBounds()
+    newFaction = comboList(items = playerFactions,
+        selected = currentFaction, itemHeight = 25, x = 200, y = 150)
+    if newFaction != currentFaction or mouseClicked(id = left,
+        rect = bounds[5]):
+      currentFaction = -1
+      for faction in factionsList.values:
+        if faction.name == playerFactions[newFaction]:
+          playerCareers = @[]
+          currentCareer = 0
+          for career in faction.careers.values:
+            playerCareers.add(y = career.name)
+          playerBases = @[]
+          currentBase = 0
+          for baseType in faction.basesTypes.keys:
+            try:
+              playerBases.add(y = basesTypesList[baseType].name)
+            except:
+              dialog = setError(message = "Can't add a base type.")
+              break
+          break
+    # Character's career
+    label(str = "Character career:")
+    bounds[6] = getWidgetBounds()
+    newCareer = comboList(items = playerCareers,
+        selected = currentCareer, itemHeight = 25, x = 200, y = 125)
+    if newCareer != currentCareer or mouseClicked(id = left,
+        rect = bounds[6]):
+      currentCareer = -1
+    # Starting base
+    label(str = "Starting base type:")
+    bounds[7] = getWidgetBounds()
+    newBase = comboList(items = playerBases, selected = currentBase,
+        itemHeight = 25, x = 200, y = 90)
+    if newBase != currentBase or mouseClicked(id = left, rect = bounds[
+        7]):
+      currentBase = -1
+    setInfoText(dialog = dialog)
+    if gameSettings.showTooltips:
+      for index, bound in bounds:
+        addTooltip(bounds = bound, text = playerTooltips[index])
 
 var
   currentLevel: Natural = 2
-  enemyDamage, playerDamage, enemyMelee, playerMelee, expBonus, repBonus: Positive = 100
+  enemyDamage, playerDamage, enemyMelee, playerMelee, expBonus, repBonus,
+    costBonus, pricesBonus: Positive = 100
 
 proc newGameDifficulty() {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   {.ruleOff: "varDeclared".}
   var
-    bounds: array[8, NimRect]
+    bounds: array[9, NimRect]
   {.ruleOn: "varDeclared".}
-  # Difficulty level
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
-  label(str = "Difficulty level:")
-  bounds[0] = getWidgetBounds()
-  var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal", "Hard",
-      "Very Hard", "Custom"], selected = currentLevel, itemHeight = 25, x = 200, y = 90)
-  if newLevel != currentLevel:
-    currentLevel = newLevel
-  # Enemy ship damage
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
-  label(str = "Enemy ship damage:")
-  bounds[1] = getWidgetBounds()
-  property(name = "#", min = 1, val = enemyDamage, max = 500, step = 1,
-      incPerPixel = 1)
-  # Player's ship damage
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
-  label(str = "Player ship damage:")
-  bounds[2] = getWidgetBounds()
-  property(name = "#", min = 1, val = playerDamage, max = 500, step = 1,
-      incPerPixel = 1)
-  # Enemy damage in melee combat
-  setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
-  wrapLabel(str = "Enemy damage in melee combat:")
-  bounds[3] = getWidgetBounds()
-  property(name = "#", min = 1, val = enemyMelee, max = 500, step = 1,
-      incPerPixel = 1)
-  # Player's crew damage in melee combat
-  setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
-  wrapLabel(str = "Player crew damage in melee combat:")
-  bounds[4] = getWidgetBounds()
-  property(name = "#", min = 1, val = playerMelee, max = 500, step = 1,
-      incPerPixel = 1)
-  # Experience
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
-  label(str = "Experience gained:")
-  bounds[5] = getWidgetBounds()
-  property(name = "#", min = 1, val = expBonus, max = 500, step = 1,
-      incPerPixel = 1)
-  # Reputation
-  setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
-  label(str = "Reputation gained:")
-  bounds[6] = getWidgetBounds()
-  property(name = "#", min = 1, val = repBonus, max = 500, step = 1,
-      incPerPixel = 1)
+  group(title = "groupSetting", flags = {windowNoFlags}):
+    # Difficulty level
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Difficulty level:")
+    bounds[0] = getWidgetBounds()
+    var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
+        "Hard", "Very Hard", "Custom"], selected = currentLevel, itemHeight = 25,
+            x = 200, y = 90)
+    if newLevel != currentLevel:
+      currentLevel = newLevel
+    # Enemy ship damage
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Enemy ship damage:")
+    bounds[1] = getWidgetBounds()
+    property(name = "#", min = 1, val = enemyDamage, max = 500, step = 1,
+        incPerPixel = 1)
+    # Player's ship damage
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Player ship damage:")
+    bounds[2] = getWidgetBounds()
+    property(name = "#", min = 1, val = playerDamage, max = 500, step = 1,
+        incPerPixel = 1)
+    # Enemy damage in melee combat
+    setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
+    wrapLabel(str = "Enemy damage in melee combat:")
+    bounds[3] = getWidgetBounds()
+    property(name = "#", min = 1, val = enemyMelee, max = 500, step = 1,
+        incPerPixel = 1)
+    # Player's crew damage in melee combat
+    setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
+    wrapLabel(str = "Player crew damage in melee combat:")
+    bounds[4] = getWidgetBounds()
+    property(name = "#", min = 1, val = playerMelee, max = 500, step = 1,
+        incPerPixel = 1)
+    # Experience
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Experience gained:")
+    bounds[5] = getWidgetBounds()
+    property(name = "#", min = 1, val = expBonus, max = 500, step = 1,
+        incPerPixel = 1)
+    # Reputation
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Reputation gained:")
+    bounds[6] = getWidgetBounds()
+    property(name = "#", min = 1, val = repBonus, max = 500, step = 1,
+        incPerPixel = 1)
+    # Upgrade cost
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Upgrade cost:")
+    bounds[7] = getWidgetBounds()
+    property(name = "#", min = 1, val = costBonus, max = 500, step = 1,
+        incPerPixel = 1)
+    # Prices in bases
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+    label(str = "Prices in bases:")
+    bounds[8] = getWidgetBounds()
+    property(name = "#", min = 1, val = pricesBonus, max = 500, step = 1,
+        incPerPixel = 1)
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -820,13 +836,12 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   stylePopVec2()
   layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = 17):
     row(x = 0, y = 0, w = (menuWidth.float * 0.65), h = (menuHeight - 90).float):
-      group(title = "groupSetting", flags = {windowNoScrollbar}):
-        # Player settings
-        if currentTab == 0:
-          newGamePlayer(dialog = dialog)
-        # Difficulty settings
-        else:
-          newGameDifficulty()
+      # Player settings
+      if currentTab == 0:
+        newGamePlayer(dialog = dialog)
+      # Difficulty settings
+      else:
+        newGameDifficulty()
     let infoWidth: float = (menuWidth.float * 0.35)
     row(x = (menuWidth.float * 0.65), y = 0, w = infoWidth, h = (menuHeight - 90).float):
       fileLines = 3
