@@ -216,7 +216,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
       "::colors(-red)"))
   var
     startIndex = 0
-    tagIndex = text.find('{')
+    tagIndex = text.find(sub = '{')
   while true:
     if tagIndex == -1:
       tagIndex = text.len
@@ -225,14 +225,14 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     if tagIndex == text.len:
       break
     startIndex = tagIndex
-    tagIndex = text.find('}', startIndex)
+    tagIndex = text.find(sub = '}', start = startIndex)
     let tagName = text[startIndex + 1 .. tagIndex - 1]
     startIndex = tagIndex + 1
-    tagIndex = text.find("{/" & tagName & "}", startIndex)
+    tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
     tclEval(script = infoLabel & " insert end {" & text[startIndex .. tagIndex -
         1] & "} [list " & tagName & "]")
     startIndex = tagIndex + tagName.len + 3
-    tagIndex = text.find('{', startIndex)
+    tagIndex = text.find(sub = '{', start = startIndex)
   try:
     discard tclEval(script = infoLabel & " configure -state disabled -height " &
         $(tclEval2(script = infoLabel & " index end").parseFloat + 1.0))
