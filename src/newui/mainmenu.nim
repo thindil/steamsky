@@ -727,6 +727,7 @@ var
   enemyDamage, playerDamage, enemyMelee, playerMelee, expBonus, repBonus,
     costBonus, pricesBonus: Positive = 100
   randomSettings: bool = false
+  points: Natural = 100
 
 proc newGameDifficulty() {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -798,11 +799,15 @@ proc newGameDifficulty() {.raises: [],
     bounds[9] = getWidgetBounds()
     labelButton(title = "Random"):
       echo "button pressed"
-    # Rnadomize the settings on the game's start
-    setLayoutRowDynamic(height = 50, cols = 1, ratio = [0.7.cfloat, 0.3])
-    wrapLabel(str = "Randomize difficulty on game start:")
+    # Randomize the settings on the game's start
+    setLayoutRowDynamic(height = 50, cols = 1)
     bounds[10] = getWidgetBounds()
-    checkBox("#", randomSettings)
+    checkBox(label = "Randomize difficulty on game start:",
+        checked = randomSettings)
+    # Total gained points
+    setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.7.cfloat, 0.3])
+    label(str = "Total gained points:")
+    label(str = $points & "%")
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
