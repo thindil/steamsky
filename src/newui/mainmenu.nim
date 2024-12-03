@@ -743,15 +743,66 @@ proc newGameDifficulty() {.raises: [],
     bounds[0] = getWidgetBounds()
     var newLevel: Natural = comboList(items = ["Very Easy", "Easy", "Normal",
         "Hard", "Very Hard", "Custom"], selected = currentLevel,
-        itemHeight = 25, x = 200, y = 90)
+        itemHeight = 25, x = 200, y = 180)
     if newLevel != currentLevel:
       currentLevel = newLevel
+      case currentLevel
+      of 0:
+        enemyDamage = 10
+        playerDamage = 450
+        enemyMelee = 10
+        playerMelee = 450
+        expBonus = 450
+        repBonus = 450
+        costBonus = 10
+        pricesBonus = 10
+      of 1:
+        enemyDamage = 50
+        playerDamage = 250
+        enemyMelee = 50
+        playerMelee = 250
+        expBonus = 250
+        repBonus = 250
+        costBonus = 50
+        pricesBonus = 50
+      of 2:
+        enemyDamage = 100
+        playerDamage = 100
+        enemyMelee = 100
+        playerMelee = 100
+        expBonus = 100
+        repBonus = 100
+        costBonus = 100
+        pricesBonus = 100
+      of 3:
+        enemyDamage = 250
+        playerDamage = 50
+        enemyMelee = 250
+        playerMelee = 50
+        expBonus = 50
+        repBonus = 50
+        costBonus = 250
+        pricesBonus = 250
+      of 4:
+        enemyDamage = 450
+        playerDamage = 10
+        enemyMelee = 450
+        playerMelee = 10
+        expBonus = 10
+        repBonus = 10
+        costBonus = 450
+        pricesBonus = 450
+      else:
+        discard
     # Enemy ship damage
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Enemy ship damage:")
     bounds[1] = getWidgetBounds()
-    property(name = "#", min = 1, val = enemyDamage, max = 500, step = 1,
-        incPerPixel = 1)
+    var newValue: int = property2(name = "#", min = 1, val = enemyDamage,
+        max = 500, step = 1, incPerPixel = 1)
+    if newValue != enemyDamage:
+      enemyDamage = newValue
+      currentLevel = 5
     # Player's ship damage
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Player ship damage:")
