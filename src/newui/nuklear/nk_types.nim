@@ -273,12 +273,18 @@ type
     ## Internal Nuklear type
     `ptr`*: ptr nk_size
     size*: nk_size
+  nk_plugin_alloc* = proc (handle: nk_handle; old: pointer; size: nk_size): pointer
+    ## Internal Nuklear type
+  nk_allocator* {.importc: "struct nk_allocator", nodecl.} = object
+    ## Internal Nuklear type
+    alloc*: nk_plugin_alloc
   nk_buffer* {.importc: "struct nk_buffer", nodecl.} = object
     ## Internal Nuklear type
     allocated*, needed*: nk_size
     memory*: nk_memory
     size*: nk_size
     `type`*: nk_allocation_type
+    pool*: nk_allocator
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style

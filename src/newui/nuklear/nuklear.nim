@@ -460,6 +460,7 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
   body:
     b.needed += size
     var unaligned: ptr nk_size = nil
+    # calculate total size with needed alignment + size
     if `type` == NK_BUFFER_FRONT:
       unaligned = b.memory.`ptr` + b.allocated
     else:
@@ -467,7 +468,9 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     var alignment: nk_size = 0
     var memory: pointer = nkBufferAlign(unaligned = unaligned, align = align,
         alignment = alignment, `type` = `type`)
+
     var full: bool = false
+    # check if buffer has enough memory
     if `type` == NK_BUFFER_FRONT:
       full = (b.allocated + size + alignment) > b.size
     else:
