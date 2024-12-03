@@ -44,10 +44,10 @@ proc checkBox*(label: string; checked: var bool): bool {.discardable, raises: [
   proc nk_checkbox_label(ctx; text: cstring;
       active: var cint): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## Nuklear C binding
-  var active: cint = (if checked: 1 else: 0)
+  var active: cint = (if checked: 0 else: 1)
   result = nk_checkbox_label(ctx = ctx, text = label.cstring,
       active = active) == nkTrue
-  checked = active == 1
+  checked = active == 0
 
 proc option*(label: string; selected: bool): bool {.raises: [], tags: [],
     contractual.} =
