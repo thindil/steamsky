@@ -20,7 +20,8 @@
 
 import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[basestypes, config, game, gamesaveload, halloffame, shipscrew, ships2]
+import ../[basestypes, config, game, gamesaveload, halloffame, shipscrew,
+    ships2, utils]
 import coreui, dialogs, errordialog, goalsui
 
 
@@ -729,8 +730,7 @@ var
   randomSettings: bool = false
   points: Natural = 100
 
-proc newGameDifficulty() {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   {.ruleOff: "varDeclared".}
   var
@@ -807,49 +807,78 @@ proc newGameDifficulty() {.raises: [],
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Player ship damage:")
     bounds[2] = getWidgetBounds()
-    property(name = "#", min = 1, val = playerDamage, max = 500, step = 1,
-        incPerPixel = 1)
+    newValue = property2(name = "#", min = 1, val = playerDamage, max = 500,
+        step = 1, incPerPixel = 1)
+    if newValue != playerDamage:
+      playerDamage = newValue
+      currentLevel = 5
     # Enemy damage in melee combat
     setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
     wrapLabel(str = "Enemy damage in melee combat:")
     bounds[3] = getWidgetBounds()
-    property(name = "#", min = 1, val = enemyMelee, max = 500, step = 1,
-        incPerPixel = 1)
+    newValue = property2(name = "#", min = 1, val = enemyMelee, max = 500,
+        step = 1, incPerPixel = 1)
+    if newValue != enemyMelee:
+      enemyMelee = newValue
+      currentLevel = 5
     # Player's crew damage in melee combat
     setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
     wrapLabel(str = "Player crew damage in melee combat:")
     bounds[4] = getWidgetBounds()
-    property(name = "#", min = 1, val = playerMelee, max = 500, step = 1,
-        incPerPixel = 1)
+    newValue = property2(name = "#", min = 1, val = playerMelee, max = 500,
+        step = 1, incPerPixel = 1)
+    if newValue != playerMelee:
+      playerMelee = newValue
+      currentLevel = 5
     # Experience
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Experience gained:")
     bounds[5] = getWidgetBounds()
-    property(name = "#", min = 1, val = expBonus, max = 500, step = 1,
-        incPerPixel = 1)
+    newValue = property2(name = "#", min = 1, val = expBonus, max = 500,
+        step = 1, incPerPixel = 1)
+    if newValue != expBonus:
+      expBonus = newValue
+      currentLevel = 5
     # Reputation
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Reputation gained:")
     bounds[6] = getWidgetBounds()
-    property(name = "#", min = 1, val = repBonus, max = 500, step = 1,
-        incPerPixel = 1)
+    newValue = property2(name = "#", min = 1, val = repBonus, max = 500,
+        step = 1, incPerPixel = 1)
+    if newValue != repBonus:
+      repBonus = newValue
+      currentLevel = 5
     # Upgrade cost
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Upgrade cost:")
     bounds[7] = getWidgetBounds()
-    property(name = "#", min = 1, val = costBonus, max = 500, step = 1,
-        incPerPixel = 1)
+    newValue = property2(name = "#", min = 1, val = costBonus, max = 500,
+        step = 1, incPerPixel = 1)
+    if newValue != costBonus:
+      costBonus = newValue
+      currentLevel = 5
     # Prices in bases
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Prices in bases:")
     bounds[8] = getWidgetBounds()
-    property(name = "#", min = 1, val = pricesBonus, max = 500, step = 1,
-        incPerPixel = 1)
+    newValue = property2(name = "#", min = 1, val = pricesBonus, max = 500,
+        step = 1, incPerPixel = 1)
+    if newValue != pricesBonus:
+      pricesBonus = newValue
+      currentLevel = 5
     # Randomize settings
     setLayoutRowDynamic(height = 35, cols = 1)
     bounds[9] = getWidgetBounds()
     labelButton(title = "Random"):
-      echo "button pressed"
+      enemyDamage = getRandom(min = 1, max = 500)
+      playerDamage = getRandom(min = 1, max = 500)
+      enemyMelee = getRandom(min = 1, max = 500)
+      playerMelee = getRandom(min = 1, max = 500)
+      expBonus = getRandom(min = 1, max = 500)
+      repBonus = getRandom(min = 1, max = 500)
+      costBonus = getRandom(min = 1, max = 500)
+      pricesBonus = getRandom(min = 1, max = 500)
+      currentLevel = 5
     # Randomize the settings on the game's start
     setLayoutRowDynamic(height = 50, cols = 1)
     bounds[10] = getWidgetBounds()
