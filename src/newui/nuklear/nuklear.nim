@@ -398,6 +398,15 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_spacing(ctx = ctx, cols = cols.cint)
 
+{.push ruleOff: "params".}
+proc nkRoundUpPow2(v: nk_uint): nk_uint {.raises: [], tags: [], contractual.} =
+  ## Round up power of 2 in bits. Internal use only
+  ##
+  ## * v - value to count
+  ##
+  ## Returns counted value
+  discard
+
 # ------
 # Buffer
 # ------
@@ -412,9 +421,6 @@ template `+`[T](p: ptr T; off: nk_size): ptr T =
   ## Returns the new pointer moved by off.
   cast[ptr type(p[])](cast[nk_size](p) +% off * sizeof(p[]))
 {.pop ruleOn: "namedParams".}
-
-
-{.push ruleOff: "params".}
 
 proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
     `type`: nk_buffer_allocation_type): pointer {.raises: [], tags: [],
@@ -440,7 +446,8 @@ proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
       memory = unaligned
       alignment = 0
     else:
-      memory = cast[pointer]((cast[nk_size](unaligned) + (align - 1)) and not(align - 1))
+      memory = cast[pointer]((cast[nk_size](unaligned) + (align - 1)) and not(
+          align - 1))
       alignment = (cast[nk_byte](memory) - cast[nk_byte](unaligned)).nk_size
   return memory
 
@@ -478,6 +485,13 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     if full:
       if b.`type` != NK_BUFFER_DYNAMIC:
         return nil
+      if b.`type` != NK_BUFFER_DYNAMIC or b.pool.alloc == nil or b.pool.free == nil:
+        return nil
+      # buffer is full so allocate bigger buffer if dynamic
+      var capacity: nk_size = (b.memory.size.cfloat * b.grow_factor).nk_size
+      capacity = max(x = capacity, y = nkRoundUpPow2(v = (b.allocated.nk_uint +
+          size.nk_uint)).nk_size)
+
     return memory
 
 # ----

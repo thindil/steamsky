@@ -63,6 +63,8 @@ type
     ## Internal Nuklear type
   nk_hash* = cuint
     ## Internal Nuklear type
+  nk_uint* = cuint
+    ## Internal Nuklear type
 
 # ------------
 # Enumerations
@@ -275,9 +277,12 @@ type
     size*: nk_size
   nk_plugin_alloc* = proc (handle: nk_handle; old: pointer; size: nk_size): pointer
     ## Internal Nuklear type
+  nk_plugin_free* = proc (handle: nk_handle; old: pointer): pointer
+    ## Internal Nuklear type
   nk_allocator* {.importc: "struct nk_allocator", nodecl.} = object
     ## Internal Nuklear type
     alloc*: nk_plugin_alloc
+    free*: nk_plugin_free
   nk_buffer* {.importc: "struct nk_buffer", nodecl.} = object
     ## Internal Nuklear type
     allocated*, needed*: nk_size
@@ -285,6 +290,7 @@ type
     size*: nk_size
     `type`*: nk_allocation_type
     pool*: nk_allocator
+    grow_factor*: cfloat
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style
