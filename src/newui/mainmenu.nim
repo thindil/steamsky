@@ -730,6 +730,13 @@ var
   randomSettings: bool = false
   points: Natural = 100
 
+proc setPoints() {.raises: [], tags: [], contractual.} =
+  ## Count the bonus for gained points with the selected game's difficulty
+  points = ((enemyDamage + playerDamage + enemyMelee + playerMelee + expBonus +
+      repBonus + costBonus + pricesBonus).float / 8.0).Natural
+  if points == 0:
+    points = 1
+
 proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   {.ruleOff: "varDeclared".}
@@ -794,6 +801,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
         pricesBonus = 450
       else:
         discard
+      setPoints()
     # Enemy ship damage
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Enemy ship damage:")
@@ -803,6 +811,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != enemyDamage:
       enemyDamage = newValue
       currentLevel = 5
+      setPoints()
     # Player's ship damage
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Player ship damage:")
@@ -812,6 +821,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != playerDamage:
       playerDamage = newValue
       currentLevel = 5
+      setPoints()
     # Enemy damage in melee combat
     setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
     wrapLabel(str = "Enemy damage in melee combat:")
@@ -821,6 +831,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != enemyMelee:
       enemyMelee = newValue
       currentLevel = 5
+      setPoints()
     # Player's crew damage in melee combat
     setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
     wrapLabel(str = "Player crew damage in melee combat:")
@@ -830,6 +841,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != playerMelee:
       playerMelee = newValue
       currentLevel = 5
+      setPoints()
     # Experience
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Experience gained:")
@@ -839,6 +851,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != expBonus:
       expBonus = newValue
       currentLevel = 5
+      setPoints()
     # Reputation
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Reputation gained:")
@@ -848,6 +861,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != repBonus:
       repBonus = newValue
       currentLevel = 5
+      setPoints()
     # Upgrade cost
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Upgrade cost:")
@@ -857,6 +871,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != costBonus:
       costBonus = newValue
       currentLevel = 5
+      setPoints()
     # Prices in bases
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Prices in bases:")
@@ -866,6 +881,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     if newValue != pricesBonus:
       pricesBonus = newValue
       currentLevel = 5
+      setPoints()
     # Randomize settings
     setLayoutRowDynamic(height = 35, cols = 1)
     bounds[9] = getWidgetBounds()
@@ -879,6 +895,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       costBonus = getRandom(min = 1, max = 500)
       pricesBonus = getRandom(min = 1, max = 500)
       currentLevel = 5
+      setPoints()
     # Randomize the settings on the game's start
     setLayoutRowDynamic(height = 50, cols = 1)
     bounds[10] = getWidgetBounds()
