@@ -731,17 +731,19 @@ var
 
 proc setPoints() {.raises: [], tags: [], contractual.} =
   ## Count the bonus for gained points with the selected game's difficulty
+  var newPoints: int = 0
   for index, difficulty in diffSettings:
-    var value = difficulty
+    var value: int = difficulty
     if index in {1, 3, 4, 5}:
       if value < 100:
         value = 100 + ((100 - value) * 4)
       elif value > 100:
         value = 100 - value
-    points += value
-  points = ((points.float) / 8.0).Natural
-  if points == 0:
-    points = 1
+    newPoints += value
+  newPoints = ((newPoints.float) / 8.0).int
+  if newPoints < 1:
+    newPoints = 1
+  points = newPoints
 
 proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
@@ -837,7 +839,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               addTooltip(bounds = getWidgetBounds(),
                   text = "Show settings for your character.")
             labelButton(title = tab):
-              currentTab = index.cint
+              discard
             restoreButtonStyle()
           else:
             if gameSettings.showTooltips:
@@ -845,6 +847,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                   text = "Show settings for the game difficulty.")
             labelButton(title = tab):
               currentTab = index.cint
+              if index == 0:
+                infoText = playerTooltips[8]
         x += widgetWidth
       except:
         dialog = setError(message = "Can't set the tabs buttons.")
