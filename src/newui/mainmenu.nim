@@ -725,15 +725,14 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
 
 var
   currentLevel: Natural = 2
-  enemyDamage, playerDamage, enemyMelee, playerMelee, expBonus, repBonus,
-    costBonus, pricesBonus: Positive = 100
+  diffSettings: array[8, Positive] = [100, 100, 100, 100, 100, 100, 100, 100]
   randomSettings: bool = false
   points: Natural = 100
 
 proc setPoints() {.raises: [], tags: [], contractual.} =
   ## Count the bonus for gained points with the selected game's difficulty
-  points = ((enemyDamage + playerDamage + enemyMelee + playerMelee + expBonus +
-      repBonus + costBonus + pricesBonus).float / 8.0).Natural
+  for difficulty in diffSettings:
+    points += difficulty
   if points == 0:
     points = 1
 
@@ -755,53 +754,19 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       currentLevel = newLevel
       case currentLevel
       of 0:
-        enemyDamage = 10
-        playerDamage = 450
-        enemyMelee = 10
-        playerMelee = 450
-        expBonus = 450
-        repBonus = 450
-        costBonus = 10
-        pricesBonus = 10
+        diffSettings = [10, 450, 10, 450, 450, 450, 10, 10]
       of 1:
-        enemyDamage = 50
-        playerDamage = 250
-        enemyMelee = 50
-        playerMelee = 250
-        expBonus = 250
-        repBonus = 250
-        costBonus = 50
-        pricesBonus = 50
+        diffSettings = [50, 250, 50, 250, 250, 250, 50, 50]
       of 2:
-        enemyDamage = 100
-        playerDamage = 100
-        enemyMelee = 100
-        playerMelee = 100
-        expBonus = 100
-        repBonus = 100
-        costBonus = 100
-        pricesBonus = 100
+        diffSettings = [100, 100, 100, 100, 100, 100, 100, 100]
       of 3:
-        enemyDamage = 250
-        playerDamage = 50
-        enemyMelee = 250
-        playerMelee = 50
-        expBonus = 50
-        repBonus = 50
-        costBonus = 250
-        pricesBonus = 250
+        diffSettings = [250, 50, 250, 50, 50, 50, 250, 250]
       of 4:
-        enemyDamage = 450
-        playerDamage = 10
-        enemyMelee = 450
-        playerMelee = 10
-        expBonus = 10
-        repBonus = 10
-        costBonus = 450
-        pricesBonus = 450
+        diffSettings = [450, 10, 450, 10, 10, 10, 450, 450]
       else:
         discard
       setPoints()
+    const diffLabels: array[8, string] = ["Enemy ship damage:", "Player ship damage:", "Enemy damage in melee combat:", "Player crew damage in melee combat:", "Experience gained:", ]
     # Enemy ship damage
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
     label(str = "Enemy ship damage:")
