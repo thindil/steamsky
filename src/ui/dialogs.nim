@@ -15,16 +15,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to creating, showing and destroying various in game
+## dialogs, like messages, items information, etc
+
 import std/strutils
 import contracts
 import ../[config, game, tk]
 import coreui, errordialog
 
 type ButtonSettings* = object
-  text*, command*, icon*, tooltip*, color*: string
+  ## Used to store information about a button in a dialog
+  text*: string ## Text to show on the button
+  command*:string ## Tcl command to execute when button was pressed
+  icon*: string ## Tcl icon to show on the button
+  tooltip*: string ## The tooltip text associated with the button
+  color*: string ## The color of the button's text
 
 const emptyButtonSettings* = ButtonSettings(text: "", command: "", icon: "",
-    tooltip: "", color: "")
+    tooltip: "", color: "") ## Empty Button setting, used to disable the selected button
 
 var timerId*: string = "" ## Id of the timer for auto close command
 
