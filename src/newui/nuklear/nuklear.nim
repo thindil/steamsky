@@ -398,14 +398,21 @@ proc addSpacing*(cols: int) {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_spacing(ctx = ctx, cols = cols.cint)
 
-{.push ruleOff: "params".}
 proc nkRoundUpPow2(v: nk_uint): nk_uint {.raises: [], tags: [], contractual.} =
   ## Round up power of 2 in bits. Internal use only
   ##
   ## * v - value to count
   ##
   ## Returns counted value
-  discard
+  result = v - 1
+  {.ruleOff: "assignments".}
+  result = result or (v shr 1)
+  result = result or (v shr 2)
+  result = result or (v shr 4)
+  result = result or (v shr 8)
+  result = result or (v shr 16)
+  {.ruleOn: "assignments".}
+  result.inc
 
 # ------
 # Buffer
@@ -422,10 +429,11 @@ template `+`[T](p: ptr T; off: nk_size): ptr T =
   cast[ptr type(p[])](cast[nk_size](p) +% off * sizeof(p[]))
 {.pop ruleOn: "namedParams".}
 
+{.push ruleOff: "params".}
 proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
     `type`: nk_buffer_allocation_type): pointer {.raises: [], tags: [],
     contractual.} =
-  ## Align the sekected buffer
+  ## Align the sekected buffer. Internal use only
   ##
   ## * unaligned - the pointer to unaligned data
   ## * align     - the size of data to align
@@ -451,9 +459,20 @@ proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
       alignment = (cast[nk_byte](memory) - cast[nk_byte](unaligned)).nk_size
   return memory
 
+proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
+    size: nk_size): ptr nk_size {.raises: [], tags: [], contractual.} =
+  ## Reallocate memory for the selected buffer. Internal use only
+  ##
+  ## * b        - the buffer which memory will be reallocated
+  ## * capacity - the new capacity of the buffer
+  ## * size     - the size of the buffer
+  ##
+  ## Returns the new pointer to the reallocated memory
+  return nil
+
 proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     align: nk_size): pointer {.raises: [], tags: [], contractual.} =
-  ## Allocate memory for the selected buffer
+  ## Allocate memory for the selected buffer. Internal use only
   ##
   ## * b      - the buffer in which the memory will be allocated
   ## * `type` - the allocation type
@@ -491,6 +510,8 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
       var capacity: nk_size = (b.memory.size.cfloat * b.grow_factor).nk_size
       capacity = max(x = capacity, y = nkRoundUpPow2(v = (b.allocated.nk_uint +
           size.nk_uint)).nk_size)
+      b.memory.`ptr` = nkBufferRealloc(b = b, capacity = capacity,
+          size = b.memory.size)
 
     return memory
 
@@ -500,7 +521,7 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
 
 proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     size: nk_size): pointer {.raises: [], tags: [], contractual.} =
-  ## Add a command to the commands buffer
+  ## Add a command to the commands buffer. Internal use only
   ##
   ## * b    - the buffer to which to command will be added
   ## * t    - the type of command
