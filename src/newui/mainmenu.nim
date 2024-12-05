@@ -84,6 +84,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             currentBase = i
             break
           i.inc
+    playerFactions.add(y = "Random")
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
 
@@ -696,38 +697,41 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     if newFaction != currentFaction or mouseClicked(id = left,
         rect = bounds[5]):
       currentFaction = -1
-      for faction in factionsList.values:
-        if faction.name == playerFactions[newFaction]:
-          showGender = "nogender" notin faction.flags
-          playerCareers = @[]
-          currentCareer = 0
-          for career in faction.careers.values:
-            playerCareers.add(y = career.name)
-          playerBases = @[]
-          currentBase = 0
-          for baseType in faction.basesTypes.keys:
-            try:
-              playerBases.add(y = basesTypesList[baseType].name)
-            except:
-              dialog = setError(message = "Can't add a base type.")
-              break
-          break
+      playerCareers = @[]
+      currentCareer = 0
+      playerBases = @[]
+      currentBase = 0
+      if newFaction < playerFactions.high:
+        for faction in factionsList.values:
+          if faction.name == playerFactions[newFaction]:
+            showGender = "nogender" notin faction.flags
+            for career in faction.careers.values:
+              playerCareers.add(y = career.name)
+            for baseType in faction.basesTypes.keys:
+              try:
+                playerBases.add(y = basesTypesList[baseType].name)
+              except:
+                dialog = setError(message = "Can't add a base type.")
+                break
+            break
     # Character's career
-    label(str = "Character career:")
-    bounds[6] = getWidgetBounds()
-    newCareer = comboList(items = playerCareers,
-        selected = currentCareer, itemHeight = 25, x = 200, y = 125)
-    if newCareer != currentCareer or mouseClicked(id = left,
-        rect = bounds[6]):
-      currentCareer = -1
+    if playerCareers.len > 0:
+      label(str = "Character career:")
+      bounds[6] = getWidgetBounds()
+      newCareer = comboList(items = playerCareers,
+          selected = currentCareer, itemHeight = 25, x = 200, y = 125)
+      if newCareer != currentCareer or mouseClicked(id = left,
+          rect = bounds[6]):
+        currentCareer = -1
     # Starting base
-    label(str = "Starting base type:")
-    bounds[7] = getWidgetBounds()
-    newBase = comboList(items = playerBases, selected = currentBase,
-        itemHeight = 25, x = 200, y = 90)
-    if newBase != currentBase or mouseClicked(id = left, rect = bounds[
-        7]):
-      currentBase = -1
+    if playerBases.len > 0:
+      label(str = "Starting base type:")
+      bounds[7] = getWidgetBounds()
+      newBase = comboList(items = playerBases, selected = currentBase,
+          itemHeight = 25, x = 200, y = 90)
+      if newBase != currentBase or mouseClicked(id = left, rect = bounds[
+          7]):
+        currentBase = -1
     setInfoText(dialog = dialog)
     if gameSettings.showTooltips:
       for index, bound in bounds:
@@ -920,6 +924,19 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             except:
               dialog = setError(message = "Can't set the current goal.")
               return
+        newGameSettings.playerName = playerName
+        newGameSettings.shipName = shipName
+        if currentFaction == playerFactions.high:
+          newGameSettings.playerFaction = "random"
+        else:
+          block setFaction:
+            for index, faction in factionsList:
+              if faction.name == playerFactions[currentFaction]:
+                newGameSettings.playerFaction = index
+                for key, career in faction.careers:
+                  if career.name == playerCareers[currentCareer]:
+                    newGameSettings.playerCareer = key
+                    break setFaction
     row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
