@@ -25,14 +25,15 @@ import coreui, errordialog
 
 type ButtonSettings* = object
   ## Used to store information about a button in a dialog
-  text*: string ## Text to show on the button
-  command*:string ## Tcl command to execute when button was pressed
-  icon*: string ## Tcl icon to show on the button
+  text*: string    ## Text to show on the button
+  command*: string ## Tcl command to execute when button was pressed
+  icon*: string    ## Tcl icon to show on the button
   tooltip*: string ## The tooltip text associated with the button
-  color*: string ## The color of the button's text
+  color*: string   ## The color of the button's text
 
-const emptyButtonSettings* = ButtonSettings(text: "", command: "", icon: "",
-    tooltip: "", color: "") ## Empty Button setting, used to disable the selected button
+const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "",
+    command: "", icon: "", tooltip: "",
+    color: "") ## Empty Button setting, used to disable the selected button
 
 var timerId*: string = "" ## Id of the timer for auto close command
 
@@ -63,7 +64,7 @@ proc createDialog*(name, title: string; titleWidth: Positive = 275;
     tclEval(script = "update")
     result = name
     tclEval(script = "ttk::frame " & result & " -style Dialog.TFrame")
-    let dialogHeader = result & ".header"
+    let dialogHeader: string = result & ".header"
     tclEval(script = "ttk::label " & dialogHeader & " -text {" & title &
         "} -wraplength " & $titleWidth & " -style Header.TLabel -cursor hand1")
     tclEval(script = "grid " & dialogHeader &
@@ -96,7 +97,7 @@ proc addCloseButton*(name, text, command: string; columnSpan: Positive = 1;
   require:
     name.len > 0
   body:
-    let button = name
+    let button: string = name
     tclEval(script = "ttk::button " & button & " -command {" & command &
         "} -image {" & icon & "} -style Dialog" & color & ".TButton -text {" &
         text & "}")
@@ -138,10 +139,10 @@ proc showMessage*(text: string; parentFrame: string = ".gameframe";
   ## * parentFrame - the Tk path (name) of the parent frame of the message
   ## * title       - the title of the dialog with the message
   let
-    messageDialog = createDialog(name = (if parentFrame ==
+    messageDialog: string = createDialog(name = (if parentFrame ==
         ".": "" else: parentFrame) & ".message", title = title,
         parentName = parentFrame)
-    messageLabel = messageDialog & ".text"
+    messageLabel: string = messageDialog & ".text"
   tclEval(script = "ttk::label " & messageLabel & " -text {" & text & "} -wraplength 300")
   tclEval(script = "grid " & messageLabel & " -sticky we -padx 5 -pady 5")
   addCloseButton(name = messageDialog & ".button", text = "Close " &
@@ -163,13 +164,13 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.raises: [],
     question.len > 0
   body:
     let
-      questionDialog = createDialog(name = ".questiondialog", title = (if res ==
+      questionDialog: string = createDialog(name = ".questiondialog", title = (if res ==
           "showstats": "Question" else: "Confirmation"), titleWidth = 275,
           columns = 2, parentName = (if inGame: ".gameframe" else: "."))
-      label = questionDialog & ".question"
+      label: string = questionDialog & ".question"
     tclEval(script = "ttk::label " & label & " -text {" & question & "} -wraplength 370 -takefocus 0")
     tclEval(script = "grid " & label & " -columnspan 2 -padx 5 -pady {5 0}")
-    var button = questionDialog & ".yesbutton"
+    var button: string = questionDialog & ".yesbutton"
     tclEval(script = "ttk::button " & button &
         " -text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
         res & "}")
@@ -209,9 +210,9 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   ## * button2    - the settings for the second optional button. If empty,
   ##                the button will not shown
   let
-    infoDialog = createDialog(name = ".info", title = title, titleWidth = 275,
+    infoDialog: string = createDialog(name = ".info", title = title, titleWidth = 275,
         columns = 3, parentName = parentName)
-    infoLabel = infoDialog & ".text"
+    infoLabel: string = infoDialog & ".text"
   tclEval(script = "text " & infoLabel & " -width 30 -height 25 -wrap word")
   tclEval(script = infoLabel & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
@@ -223,8 +224,8 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-red)"))
   var
-    startIndex = 0
-    tagIndex = text.find(sub = '{')
+    startIndex: int = 0
+    tagIndex: int = text.find(sub = '{')
   while true:
     if tagIndex == -1:
       tagIndex = text.len
@@ -234,7 +235,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
       break
     startIndex = tagIndex
     tagIndex = text.find(sub = '}', start = startIndex)
-    let tagName = text[startIndex + 1 .. tagIndex - 1]
+    let tagName: string = text[startIndex + 1 .. tagIndex - 1]
     startIndex = tagIndex + 1
     tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
     tclEval(script = infoLabel & " insert end {" & text[startIndex .. tagIndex -
@@ -249,11 +250,11 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
     return
   tclEval(script = "grid " & infoLabel & " -sticky we -padx 5 -pady {5 0}")
   let
-    buttonsFrame = infoDialog & ".buttons"
-    closeCommand = "CloseDialog " & infoDialog & (if parentName ==
+    buttonsFrame: string = infoDialog & ".buttons"
+    closeCommand: string = "CloseDialog " & infoDialog & (if parentName ==
         ".gameframe": "" else: " " & parentName)
   tclEval(script = "ttk::frame " & buttonsFrame)
-  var button = ""
+  var button: string = ""
   if button1.text.len > 0 and button1.command.len > 0:
     button = buttonsFrame & ".button1"
     tclEval(script = "ttk::button " & button & " -text {" & button1.text & "}" &
@@ -304,9 +305,9 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
   ##                zero.
   ## * cost       - The cost (in buying) or gain (in selling) for one item in
   ##                the game money. Can be zero. Default value is zero.
-  let itemDialog = createDialog(name = ".itemdialog", title = title,
+  let itemDialog: string = createDialog(name = ".itemdialog", title = title,
       titleWidth = 275, columns = 2)
-  var button = itemDialog & ".dropbutton"
+  var button: string = itemDialog & ".dropbutton"
   tclEval(script = "ttk::button " & button & " -command {" & command &
       "} -style Dialoggreen.TButton" & (if action ==
       "drop": " -image drop2icon" elif action ==
@@ -322,7 +323,7 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
     tclEval(script = "tooltip::tooltip " & button & " \"Buy the selected amount of the item\"")
   elif action == "sell":
     tclEval(script = "tooltip::tooltip " & button & " \"Sell the selected amount of the item\"")
-  let amountBox = itemDialog & ".amount"
+  let amountBox: string = itemDialog & ".amount"
   if maxAmount == 0:
     tclEval(script = "ttk::spinbox " & amountBox & " -width 10 -from 1 -to " &
         $playerShip.cargo[itemIndex].amount &
@@ -339,8 +340,8 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
         "} -command {ValidateAmount " & amountBox & " " & $(itemIndex + 1) &
         " " & action & (if cost > 0: " " & $cost else: "") & " " & button & "}")
   let
-    amountLabel = itemDialog & ".amountlbl"
-    newMaxAmount = (if maxAmount == 0: playerShip.cargo[
+    amountLabel: string = itemDialog & ".amountlbl"
+    newMaxAmount: int = (if maxAmount == 0: playerShip.cargo[
         itemIndex].amount else: maxAmount)
   tclEval(script = "ttk::label " & amountLabel & " -text {Amount (max: " &
       $newMaxAmount & "):}")
@@ -350,27 +351,27 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
   tclEval(script = "grid " & amountBox & " -column 1 -row 1 -padx {0 5}")
   tclEval(script = "bind " & amountBox & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   # Add amount buttons
-  let amountFrame = itemDialog & ".amountframe"
+  let amountFrame: string = itemDialog & ".amountframe"
   tclEval(script = "ttk::frame " & amountFrame)
   const amounts: array[3, Positive] = [100, 500, 1000]
   var column: Natural = 0
   for amount in amounts:
     if newMaxAmount <= amount:
       break
-    let button = amountFrame & ".button" & $amount
-    tclEval(script = "ttk::button " & button & " -text {" & $amount &
+    let amountButton: string = amountFrame & ".button" & $amount
+    tclEval(script = "ttk::button " & amountButton & " -text {" & $amount &
         "} -command {" & amountBox & " set " & $amount & ";" & amountBox & " validate} -style Dialog.TButton")
-    tclEval(script = "grid " & button & " -padx {5 0} -row 0 -column " &
+    tclEval(script = "grid " & amountButton & " -padx {5 0} -row 0 -column " &
         $column & " -sticky w")
     column.inc
-  let allButton = amountFrame & ".button" & $newMaxAmount
+  let allButton: string = amountFrame & ".button" & $newMaxAmount
   tclEval(script = "ttk::button " & allButton & " -text {Max} -command {" &
       amountBox & " set " & $newMaxAmount & ";" & amountBox & " validate} -style Dialog.TButton")
   tclEval(script = "grid " & allButton & " -padx {5 0} -row 0 -column " &
       $column & " -sticky w")
   tclEval(script = "grid " & amountFrame & " -padx 5 -pady 5 -columnspan 2")
   # Add other labels
-  var label = ""
+  var label: string = ""
   if cost > 0:
     label = itemDialog & ".costlbl"
     tclEval(script = "ttk::label " & label & " -text {Total " & (if action ==
