@@ -634,6 +634,8 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Character name:")
     bounds[0] = getWidgetBounds()
+    if mouseClicked(id = left, rect = bounds[0]):
+      infoText = playerTooltips[0]
     editString(text = playerName, maxLen = 64)
     bounds[1] = getWidgetBounds()
     saveButtonStyle()
@@ -664,6 +666,8 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Ship name:")
     bounds[2] = getWidgetBounds()
+    if mouseClicked(id = left, rect = bounds[2]):
+      infoText = playerTooltips[2]
     editString(text = shipName, maxLen = 64)
     bounds[3] = getWidgetBounds()
     saveButtonStyle()
@@ -675,6 +679,8 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.4.cfloat, 0.6])
     label(str = "Character goal:")
     bounds[4] = getWidgetBounds()
+    if mouseClicked(id = left, rect = bounds[4]):
+      infoText = playerTooltips[4]
     labelButton(title = selectedGoal):
       dialog = newGoalDialog
       setSelectedGoal()
@@ -745,6 +751,18 @@ proc setPoints() {.raises: [], tags: [], contractual.} =
     newPoints = 1
   points = newPoints
 
+const diffTooltips: array[12, string] = ["Select game difficulty preset level.",
+    "Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well.",
+    "Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well.",
+    "Percentage of the standard prices for services in bases (docking, repairing ship,\nrecruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.",
+    "Select random values for all settings.",
+    "If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.", "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it."]
+
 proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the difficulty settings for starting a new game
   {.ruleOff: "varDeclared".}
@@ -780,12 +798,12 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
         "Player crew damage in melee combat:", "Experience gained:",
         "Reputation gained:", "Upgrade cost:", "Prices in bases:"]
     for index, diffLabel in diffLabels:
-      if index notin {2, 3}:
-        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
-        label(str = diffLabel)
-      else:
+      if index in {2, 3}:
         setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.5.cfloat, 0.5])
         wrapLabel(str = diffLabel)
+      else:
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.5.cfloat, 0.5])
+        label(str = diffLabel)
       bounds[index + 1] = getWidgetBounds()
       let newValue: int = property2(name = "#", min = 1, val = diffSettings[
           index], max = 500, step = 1, incPerPixel = 1)
@@ -847,8 +865,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
                   text = "Show settings for the game difficulty.")
             labelButton(title = tab):
               currentTab = index.cint
-              if index == 0:
-                infoText = playerTooltips[8]
+              infoText = (if index == 0: playerTooltips[^1] else: diffTooltips[^1])
         x += widgetWidth
       except:
         dialog = setError(message = "Can't set the tabs buttons.")
