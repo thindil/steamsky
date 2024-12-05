@@ -73,6 +73,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
           if index == newGameSettings.playerCareer:
             currentCareer = i
           i.inc
+        playerCareers.add(y = "Random")
         i = 0
         for baseType in faction.basesTypes.keys:
           try:
@@ -84,6 +85,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             currentBase = i
             break
           i.inc
+        playerBases.add(y = "Any")
     playerFactions.add(y = "Random")
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
@@ -551,15 +553,17 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   state = map
   dialog = none
 
-const playerTooltips: array[9, string] = [
-    "Enter character name.", "Select a random name for the character, based on the character gender",
+const playerTooltips: array[12, string] = ["Enter character name.",
+    "Select a random name for the character, based on the character gender",
     "Enter ship name.",
     "Select a random name for the character, based on the character gender",
     "Select starting goal for your character. You can change it later in game.",
     "Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.",
     "Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.",
     "Select type of base in which you will start the game. This may have some impact on game difficulty.",
-  "General player character settings. Select field which you want to set to see more information about."]
+    "General player character settings. Select field which you want to set to see more information about.",
+    "Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.",
+    "Career will be randomly selected for you during creating new game. Not recommended for new player.", "Start the game in randomly selected base type."]
 
 var
   playerName: string = newGameSettings.playerName
@@ -578,12 +582,18 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   if currentFaction == -1:
     currentFaction = newFaction
+    if currentFaction == playerFactions.high:
+      infoText = playerTooltips[5] & "\n\n" & playerTooltips[9]
+      return
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
         infoText = playerTooltips[5] & "\n\n" & faction.description
         return
   if currentCareer == -1:
     currentCareer = newCareer
+    if currentCareer == playerCareers.high:
+      infoText = playerTooltips[5] & "\n\n" & playerTooltips[10]
+      return
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
         for career in faction.careers.values:
@@ -592,6 +602,9 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             return
   if currentBase == -1:
     currentBase = newBase
+    if currentBase == playerBases.high:
+      infoText = playerTooltips[5] & "\n\n" & playerTooltips[11]
+      return
     for faction in factionsList.values:
       if faction.name == playerFactions[newFaction]:
         for baseType in faction.basesTypes.keys:
@@ -707,12 +720,14 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
             showGender = "nogender" notin faction.flags
             for career in faction.careers.values:
               playerCareers.add(y = career.name)
+            playerCareers.add(y = "Random")
             for baseType in faction.basesTypes.keys:
               try:
                 playerBases.add(y = basesTypesList[baseType].name)
               except:
                 dialog = setError(message = "Can't add a base type.")
                 break
+            playerBases.add(y = "Any")
             break
     # Character's career
     if playerCareers.len > 0:
