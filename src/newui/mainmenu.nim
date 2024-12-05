@@ -20,7 +20,7 @@
 
 import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[basestypes, config, game, gamesaveload, halloffame, shipscrew,
+import ../[basestypes, config, game, gamesaveload, goals, halloffame, shipscrew,
     ships2, utils]
 import coreui, dialogs, errordialog, goalsui
 
@@ -37,6 +37,7 @@ var
   playerFactions, playerCareers, playerBases: seq[string] = @[]
   currentFaction, currentCareer, currentBase: int = 0
   newFaction, newCareer, newBase: Natural = 0
+  showGender: bool = true
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 
@@ -64,6 +65,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     for index, faction in factionsList:
       playerFactions.add(y = faction.name)
       if index == newGameSettings.playerFaction:
+        showGender = "nogender" notin faction.flags
         currentFaction = playerFactions.high
         var i: Natural = 0
         for index, career in faction.careers:
@@ -643,25 +645,26 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     imageButton(image = menuImages[1]):
       randomName(forPlayer = true)
     restoreButtonStyle()
-    # Character's gender
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
-    label(str = "Character gender:")
-    const genders: array[2..3, string] = [2: "Male", 3: "Female"]
-    for i in 2..3:
-      saveButtonStyle()
-      setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-      if playerGender == i:
-        setButtonStyle2(source = active, destination = normal)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = genders[i])
-        imageButton(image = menuImages[i]):
-          playerGender = i.cint
-      else:
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(), text = genders[i])
-        imageButton(image = menuImages[i]):
-          playerGender = i.cint
-      restoreButtonStyle()
+    if showGender:
+      # Character's gender
+      setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.1, 0.1])
+      label(str = "Character gender:")
+      const genders: array[2..3, string] = [2: "Male", 3: "Female"]
+      for i in 2..3:
+        saveButtonStyle()
+        setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+        if playerGender == i:
+          setButtonStyle2(source = active, destination = normal)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(), text = genders[i])
+          imageButton(image = menuImages[i]):
+            playerGender = i.cint
+        else:
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(), text = genders[i])
+          imageButton(image = menuImages[i]):
+            playerGender = i.cint
+        restoreButtonStyle()
     # Player's ship's name
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Ship name:")
@@ -695,6 +698,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       currentFaction = -1
       for faction in factionsList.values:
         if faction.name == playerFactions[newFaction]:
+          showGender = "nogender" notin faction.flags
           playerCareers = @[]
           currentCareer = 0
           for career in faction.careers.values:
@@ -909,6 +913,13 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             text = "Start the game")
       labelButton(title = "Start game"):
         newGameSettings.playerGender = (if playerGender == 3: 'F' else: 'M')
+        if selectedGoal == "Random":
+          clearCurrentGoal()
+          currentGoal = try:
+              goalsList[getRandom(min = 1, max = goalsList.len)]
+            except:
+              dialog = setError(message = "Can't set the current goal.")
+              return
     row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
