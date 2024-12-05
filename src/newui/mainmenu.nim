@@ -828,6 +828,12 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.7.cfloat, 0.3])
     label(str = "Total gained points:")
     label(str = $points & "%")
+    for index, bound in bounds:
+      if mouseClicked(id = left, rect = bound):
+        infoText = diffTooltips[index]
+    if gameSettings.showTooltips:
+      for index, bound in bounds:
+        addTooltip(bounds = bound, text = diffTooltips[index])
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -902,7 +908,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         addTooltip(bounds = getWidgetBounds(),
             text = "Start the game")
       labelButton(title = "Start game"):
-        echo "button pressed"
+        newGameSettings.playerGender = (if playerGender == 3: 'F' else: 'M')
     row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
