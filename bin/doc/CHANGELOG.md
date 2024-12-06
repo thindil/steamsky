@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typo in changelog
+- Showing the visited bases' colors on the map
 
 ## [10.5] - 2024-11-17
 
