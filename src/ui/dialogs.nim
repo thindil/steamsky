@@ -164,8 +164,9 @@ proc showQuestion*(question, res: string; inGame: bool = true) {.raises: [],
     question.len > 0
   body:
     let
-      questionDialog: string = createDialog(name = ".questiondialog", title = (if res ==
-          "showstats": "Question" else: "Confirmation"), titleWidth = 275,
+      questionDialog: string = createDialog(name = ".questiondialog", title = (
+          if res == "showstats": "Question" else: "Confirmation"),
+              titleWidth = 275,
           columns = 2, parentName = (if inGame: ".gameframe" else: "."))
       label: string = questionDialog & ".question"
     tclEval(script = "ttk::label " & label & " -text {" & question & "} -wraplength 370 -takefocus 0")
@@ -210,8 +211,8 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   ## * button2    - the settings for the second optional button. If empty,
   ##                the button will not shown
   let
-    infoDialog: string = createDialog(name = ".info", title = title, titleWidth = 275,
-        columns = 3, parentName = parentName)
+    infoDialog: string = createDialog(name = ".info", title = title,
+        titleWidth = 275, columns = 3, parentName = parentName)
     infoLabel: string = infoDialog & ".text"
   tclEval(script = "text " & infoLabel & " -width 30 -height 25 -wrap word")
   tclEval(script = infoLabel & " tag configure gold -foreground " & tclGetVar(
@@ -229,16 +230,16 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   while true:
     if tagIndex == -1:
       tagIndex = text.len
-    tclEval(script = infoLabel & " insert end {" & text[startIndex .. tagIndex -
+    tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
         1] & "}")
     if tagIndex == text.len:
       break
     startIndex = tagIndex
     tagIndex = text.find(sub = '}', start = startIndex)
-    let tagName: string = text[startIndex + 1 .. tagIndex - 1]
+    let tagName: string = text[startIndex + 1..tagIndex - 1]
     startIndex = tagIndex + 1
     tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
-    tclEval(script = infoLabel & " insert end {" & text[startIndex .. tagIndex -
+    tclEval(script = infoLabel & " insert end {" & text[startIndex..tagIndex -
         1] & "} [list " & tagName & "]")
     startIndex = tagIndex + tagName.len + 3
     tagIndex = text.find(sub = '{', start = startIndex)
@@ -309,20 +310,28 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
       titleWidth = 275, columns = 2)
   var button: string = itemDialog & ".dropbutton"
   tclEval(script = "ttk::button " & button & " -command {" & command &
-      "} -style Dialoggreen.TButton" & (if action ==
-      "drop": " -image drop2icon" elif action ==
-      "take": " -image give2icon" elif action ==
-      "buy": " -image buyicon" elif action ==
-      "sell": " -image sellicon" else: "") & " -text {" &
-      action.capitalizeAscii & "}")
-  if action == "drop":
+      "} -style Dialoggreen.TButton" & (case action
+    of "drop":
+      " -image drop2icon"
+    of "take":
+      " -image give2icon"
+    of "buy":
+      " -image buyicon"
+    of "sell":
+      " -image sellicon"
+    else:
+      "") & " -text {" & action.capitalizeAscii & "}")
+  case action
+  of "drop":
     tclEval(script = "tooltip::tooltip " & button & " \"Drop the item from the ship's cargo\"")
-  elif action == "take":
+  of "take":
     tclEval(script = "tooltip::tooltip " & button & " \"Take the item from the base\"")
-  elif action == "buy":
+  of "buy":
     tclEval(script = "tooltip::tooltip " & button & " \"Buy the selected amount of the item\"")
-  elif action == "sell":
+  of "sell":
     tclEval(script = "tooltip::tooltip " & button & " \"Sell the selected amount of the item\"")
+  else:
+    discard
   let amountBox: string = itemDialog & ".amount"
   if maxAmount == 0:
     tclEval(script = "ttk::spinbox " & amountBox & " -width 10 -from 1 -to " &
