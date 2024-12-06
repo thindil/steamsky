@@ -74,6 +74,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             currentCareer = i
           i.inc
         playerCareers.add(y = "Random")
+        playerBases.add(y = "Any")
         i = 0
         for baseType in faction.basesTypes.keys:
           try:
@@ -85,7 +86,6 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             currentBase = i
             break
           i.inc
-        playerBases.add(y = "Any")
     playerFactions.add(y = "Random")
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
   showHoFButton = fileExists(filename = saveDirectory & "halloffame.dat")
@@ -602,7 +602,7 @@ proc setInfoText(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             return
   if currentBase == -1:
     currentBase = newBase
-    if currentBase == playerBases.high:
+    if currentBase == 0:
       infoText = playerTooltips[5] & "\n\n" & playerTooltips[11]
       return
     for faction in factionsList.values:
@@ -721,13 +721,13 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
             for career in faction.careers.values:
               playerCareers.add(y = career.name)
             playerCareers.add(y = "Random")
+            playerBases.add(y = "Any")
             for baseType in faction.basesTypes.keys:
               try:
                 playerBases.add(y = basesTypesList[baseType].name)
               except:
                 dialog = setError(message = "Can't add a base type.")
                 break
-            playerBases.add(y = "Any")
             break
     # Character's career
     if playerCareers.len > 0:
@@ -858,6 +858,42 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       for index, bound in bounds:
         addTooltip(bounds = bound, text = diffTooltips[index])
 
+proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Start the new game
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  newGameSettings.playerGender = (if playerGender == 3: 'F' else: 'M')
+  if selectedGoal == "Random":
+    clearCurrentGoal()
+    currentGoal = try:
+        goalsList[getRandom(min = 1, max = goalsList.len)]
+      except:
+        dialog = setError(message = "Can't set the current goal.")
+        return
+  newGameSettings.playerName = playerName
+  newGameSettings.shipName = shipName
+  if currentFaction == playerFactions.high:
+    newGameSettings.playerFaction = "random"
+  else:
+    block setFaction:
+      for index, faction in factionsList:
+        if faction.name == playerFactions[currentFaction]:
+          newGameSettings.playerFaction = index
+          for key, career in faction.careers:
+            if career.name == playerCareers[currentCareer]:
+              newGameSettings.playerCareer = key
+              break setFaction
+  if currentCareer == playerCareers.high:
+    newGameSettings.playerCareer = "random"
+  newGameSettings.startingBase = "Any"
+  for index, baseType in basesTypesList:
+    if baseType.name == playerBases[currentBase]:
+      newGameSettings.startingBase = index
+      break
+
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Start the new game settings
@@ -931,27 +967,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         addTooltip(bounds = getWidgetBounds(),
             text = "Start the game")
       labelButton(title = "Start game"):
-        newGameSettings.playerGender = (if playerGender == 3: 'F' else: 'M')
-        if selectedGoal == "Random":
-          clearCurrentGoal()
-          currentGoal = try:
-              goalsList[getRandom(min = 1, max = goalsList.len)]
-            except:
-              dialog = setError(message = "Can't set the current goal.")
-              return
-        newGameSettings.playerName = playerName
-        newGameSettings.shipName = shipName
-        if currentFaction == playerFactions.high:
-          newGameSettings.playerFaction = "random"
-        else:
-          block setFaction:
-            for index, faction in factionsList:
-              if faction.name == playerFactions[currentFaction]:
-                newGameSettings.playerFaction = index
-                for key, career in faction.careers:
-                  if career.name == playerCareers[currentCareer]:
-                    newGameSettings.playerCareer = key
-                    break setFaction
+        startGame(dialog = dialog)
     row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
