@@ -36,8 +36,8 @@ var
       "Control-KP_Home", "Control-KP_Up", "Control-KP_Prior", "Control-KP_Left",
       "Control-KP_Right", "Control-KP_End", "Control-KP_Down",
       "Control-KP_Next", "Control-Return", "Control-a", "Control-b",
-      "Control-c", "Control-d"]         ## The keyboard shortcuts used on the map
-  fullScreenAccel*: string = "Control-f"        ## Keyboard shortcut for toggle full screen
+      "Control-c", "Control-d"] ## The keyboard shortcuts used on the map
+  fullScreenAccel*: string = "Control-f" ## Keyboard shortcut for toggle full screen
   defaultFontSizes*: array[3, Positive] = [10, 10, 10] ## The default sizes of fonts
 
 proc updateMoveButtons*() {.raises: [], tags: [], contractual.} =
@@ -136,9 +136,11 @@ proc showSkyMap*(clear: bool = false) {.raises: [], tags: [WriteIOEffect,
             res = "showstats")
     currentStory.showText = true
 
-proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc drawMap*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Draw the map on the screen
-  var preview: bool = (if tclGetVar(varName = "mappreview").len > 0: true else: false)
+  var preview: bool = (if tclGetVar(varName = "mappreview").len >
+      0: true else: false)
   if preview and playerShip.speed != docked:
     tclUnsetVar(varName = "mappreview")
     preview = false
@@ -1047,9 +1049,9 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   updateHeader()
   centerX = playerShip.skyX
   centerY = playerShip.skyY
-  for baseType in basesTypesList.values:
-    tclEval(script = mapView & " tag configure " & baseType.name &
-        " -foreground #" & baseType.color)
+  for index, baseType in basesTypesList:
+    tclEval(script = mapView & " tag configure " & index & " -foreground #" &
+        baseType.color)
   let panedPosition: int = (if gameSettings.windowHeight -
       gameSettings.messagesPosition <
       0: gameSettings.windowHeight else: gameSettings.windowHeight -
