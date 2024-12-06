@@ -283,6 +283,7 @@ type
     ## Internal Nuklear type
     alloc*: nk_plugin_alloc
     free*: nk_plugin_free
+    userdata*: nk_handle
   nk_buffer* {.importc: "struct nk_buffer", nodecl.} = object
     ## Internal Nuklear type
     allocated*, needed*: nk_size

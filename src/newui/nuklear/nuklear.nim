@@ -460,7 +460,7 @@ proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
   return memory
 
 proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
-    size: nk_size): ptr nk_size {.raises: [], tags: [], contractual.} =
+    size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Reallocate memory for the selected buffer. Internal use only
   ##
   ## * b        - the buffer which memory will be reallocated
@@ -468,10 +468,21 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
   ## * size     - the size of the buffer
   ##
   ## Returns the new pointer to the reallocated memory
-  return nil
+  require:
+    b != nil
+    size != 0
+  body:
+    if (b == nil or size == 0 or b.pool.alloc == nil or b.pool.free == nil):
+      return nil
+    let temp: pointer = try:
+        b.pool.alloc(handle = b.pool.userdata, old = b.memory.`ptr`,
+            size = capacity)
+      except:
+        return nil
+    return temp
 
 proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
-    align: nk_size): pointer {.raises: [], tags: [], contractual.} =
+    align: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Allocate memory for the selected buffer. Internal use only
   ##
   ## * b      - the buffer in which the memory will be allocated
@@ -510,8 +521,8 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
       var capacity: nk_size = (b.memory.size.cfloat * b.grow_factor).nk_size
       capacity = max(x = capacity, y = nkRoundUpPow2(v = (b.allocated.nk_uint +
           size.nk_uint)).nk_size)
-      b.memory.`ptr` = nkBufferRealloc(b = b, capacity = capacity,
-          size = b.memory.size)
+      b.memory.`ptr` = cast[ptr nk_size](nkBufferRealloc(b = b,
+          capacity = capacity, size = b.memory.size))
 
     return memory
 
@@ -520,7 +531,7 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
 # ----
 
 proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
-    size: nk_size): pointer {.raises: [], tags: [], contractual.} =
+    size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a command to the commands buffer. Internal use only
   ##
   ## * b    - the buffer to which to command will be added
@@ -539,8 +550,8 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
       return nil
 {.pop ruleOn: "params".}
 
-proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [],
-    contractual.} =
+proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Clear the rectangle. Internal use only
   ##
   ## b - the command buffer in which scissor will be used
@@ -583,8 +594,8 @@ proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [],
     win.popup.buf = buf
 
 proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
-    x, y, w, h: var float): bool {.raises: [NuklearException], tags: [],
-        contractual.} =
+    x, y, w, h: var float): bool {.raises: [NuklearException], tags: [
+        RootEffect], contractual.} =
   ## Try to create a new popup window. Internal use only.
   ##
   ## * ctx   - the Nuklear context
