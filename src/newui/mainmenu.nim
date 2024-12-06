@@ -20,8 +20,8 @@
 
 import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[basestypes, config, game, gamesaveload, goals, halloffame, shipscrew,
-    ships2, utils]
+import ../[basestypes, config, game, game2, gamesaveload, goals, halloffame,
+    shipscrew, ships2, utils]
 import coreui, dialogs, errordialog, goalsui
 
 
@@ -534,6 +534,10 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         saveClicked = ""
 
+proc setGame() {.raises: [], tags: [], contractual.} =
+  ## Set the size of the main window and show the map
+  discard
+
 proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [WriteIOEffect, ReadIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Start loading the selected saved game
@@ -552,6 +556,7 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   state = map
   dialog = none
+  setGame()
 
 const playerTooltips: array[12, string] = ["Enter character name.",
     "Select a random name for the character, based on the character gender",
@@ -858,7 +863,8 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
       for index, bound in bounds:
         addTooltip(bounds = bound, text = diffTooltips[index])
 
-proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Start the new game
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -893,6 +899,19 @@ proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contrac
     if baseType.name == playerBases[currentBase]:
       newGameSettings.startingBase = index
       break
+  newGameSettings.difficultyLevel = currentLevel.DifficultyType
+  newGameSettings.enemyDamageBonus = diffSettings[0].float / 100.0
+  newGameSettings.playerDamageBonus = diffSettings[1].float / 100.0
+  newGameSettings.enemyMeleeDamageBonus = diffSettings[2].float / 100.0
+  newGameSettings.playerMeleeDamageBonus = diffSettings[3].float / 100.0
+  newGameSettings.experienceBonus = diffSettings[4].float / 100.0
+  newGameSettings.reputationBonus = diffSettings[5].float / 100.0
+  newGameSettings.upgradeCostBonus = diffSettings[6].float / 100.0
+  newGameSettings.pricesBonus = diffSettings[7].float / 100.0
+  try:
+    newGame()
+  except:
+    dialog = setError(message = "Can't start the new game.")
 
 proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -968,6 +987,9 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             text = "Start the game")
       labelButton(title = "Start game"):
         startGame(dialog = dialog)
+        if dialog == none:
+          state = map
+          setGame()
     row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
