@@ -91,6 +91,7 @@ proc SDL_Quit() {.importc, nodecl.}
 proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl.}
 proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
     surface: SurfacePtr): TexturePtr {.importc, nodecl.}
+proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
 proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl.}
 proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
@@ -217,7 +218,8 @@ proc nuklearLoadFont*(font: FontData): ptr nk_font =
       font.size.cfloat * fontScale, config.unsafeAddr)
   nk_sdl_font_stash_end()
 
-proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil; fontSize: int = 14) =
+proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
+    fontSize: int = 14) =
   ## Set the default font for an application
   ##
   ## * defaultFont - the pointer to the nk_font which will be used as default
@@ -236,3 +238,9 @@ proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil; fontSize: int = 14) 
   nk_sdl_font_stash_end()
   nk_style_set_font(getContext(), font.handle.unsafeAddr)
 
+proc nuklearResizeWin*(width, height: int) =
+  ## Resize the main window of the application
+  ##
+  ## * width  - the new width of the main window
+  ## * height - the new height of the main window
+  SDL_SetWindowSize(window = win, w = width.cint, h = height.cint)
