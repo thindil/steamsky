@@ -75,7 +75,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
           i.inc
         playerCareers.add(y = "Random")
         playerBases.add(y = "Any")
-        i = 0
+        i = 1
         for baseType in faction.basesTypes.keys:
           try:
             playerBases.add(y = basesTypesList[baseType].name)
