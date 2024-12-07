@@ -263,3 +263,11 @@ proc nuklearSetWindowResizable*(resizable: bool = true) =
   ##
   ## * resizable - if true, the window will be resizable, otherwise not
   SDL_SetWindowResizable(window = win, resizable = resizable.ord.cint)
+
+proc nuklearGetWindowSize*(): tuple[w: int, h: int] =
+  ## Get the current size of the main window of the application
+  ##
+  ## Returns a tuple with width and height of the window.
+  var winWidth, winHeight: cint = 0
+  SDL_GetWindowSize(window = win, w = winWidth, h = winHeight)
+  return (winWidth.int, winHeight.int)
