@@ -34,3 +34,5 @@ const
 
 var
     fonts*: seq[ptr nk_font] = @[] ## The list of fonts used by the game
+    windowWidth*: float = 800.0 ## The width of the main game window
+    windowHeight*: float = 600.0 ## The height of the main game window

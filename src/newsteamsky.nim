@@ -99,8 +99,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   var
     state: GameState = mainMenu
     dialog: GameDialog = none
-    windowWidth: float = menuWidth.float
-    windowHeight: float = menuHeight.float
   try:
     discard loadGameData()
   except:
@@ -130,6 +128,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
       questionDialog: showQuestion, newGoalDialog: showGoals]
+  windowWidth = menuWidth.float
+  windowHeight = menuHeight.float
   while true:
     let started: float = cpuTime()
     # Input
