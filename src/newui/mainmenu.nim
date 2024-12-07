@@ -20,9 +20,9 @@
 
 import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
-import ../[basestypes, config, game, game2, gamesaveload, goals, halloffame,
-    shipscrew, ships2, utils]
-import coreui, dialogs, errordialog, goalsui
+import ../[basestypes, config, events, game, game2, gamesaveload, goals,
+    halloffame, shipscrew, ships2, utils]
+import coreui, dialogs, errordialog, goalsui, mapsui
 
 
 {.push ruleOff: "varDeclared".}
@@ -534,9 +534,22 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         saveClicked = ""
 
-proc setGame() {.raises: [], tags: [], contractual.} =
+proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the size of the main window and show the map
-  discard
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  try:
+    generateTraders()
+  except:
+    dialog = setError(message = "Can't generate traders")
+    return
+  nuklearResizeWin(width = gameSettings.windowWidth,
+      height = gameSettings.windowHeight)
+  nuklearSetWindowPos(x = windowCentered, y = windowCentered)
+  createGameUi()
 
 proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [WriteIOEffect, ReadIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -556,7 +569,7 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   state = map
   dialog = none
-  setGame()
+  setGame(dialog = dialog)
 
 const playerTooltips: array[12, string] = ["Enter character name.",
     "Select a random name for the character, based on the character gender",
@@ -989,7 +1002,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         startGame(dialog = dialog)
         if dialog == none:
           state = map
-          setGame()
+          setGame(dialog = dialog)
     row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
