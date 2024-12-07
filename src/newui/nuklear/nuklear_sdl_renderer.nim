@@ -96,6 +96,7 @@ proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl.}
 proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
 proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
 proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl.}
+proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
@@ -256,3 +257,9 @@ proc nuklearSetWindowPos*(x, y: int) =
   ## * y - the y coordinate of the window in screen coordinates or
   ##       windowCentered
   SDL_SetWindowPosition(window = win, x = x.cint, y = y.cint)
+
+proc nuklearSetWindowResizable*(resizable: bool = true) =
+  ## Set the main window of application resizable, or not
+  ##
+  ## * resizable - if true, the window will be resizable, otherwise not
+  SDL_SetWindowResizable(window = win, resizable = resizable.ord.cint)
