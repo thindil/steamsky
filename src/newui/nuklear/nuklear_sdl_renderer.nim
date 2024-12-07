@@ -51,6 +51,7 @@ const
   SDL_RENDERER_ACCELERATED*: cint = 0x00000002
   SDL_RENDERER_PRESENTVSYNC*: cint = 0x0000000
   IMG_INIT_PNG*: cint = 0x00000002
+  windowCentered* = SDL_WINDOWPOS_CENTERED
 
 type
   SDL_EventType = enum
@@ -91,9 +92,10 @@ proc SDL_Quit() {.importc, nodecl.}
 proc SDL_SetWindowIcon(window: WindowPtr; icon: SurfacePtr) {.importc, nodecl.}
 proc SDL_CreateTextureFromSurface(renderer: RendererPtr;
     surface: SurfacePtr): TexturePtr {.importc, nodecl.}
-proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
 proc SDL_FreeSurface(surface: SurfacePtr) {.importc, nodecl.}
 proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
+proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
+proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
@@ -244,3 +246,13 @@ proc nuklearResizeWin*(width, height: int) =
   ## * width  - the new width of the main window
   ## * height - the new height of the main window
   SDL_SetWindowSize(window = win, w = width.cint, h = height.cint)
+
+proc nuklearSetWindowPos*(x, y: int) =
+  ## Set the window position on the screen, related to the upper left corner
+  ## of the screen
+  ##
+  ## * x - the x coordinate of the window in screen coordinates or
+  ##       windowCentered
+  ## * y - the y coordinate of the window in screen coordinates or
+  ##       windowCentered
+  SDL_SetWindowPosition(window = win, x = x.cint, y = y.cint)
