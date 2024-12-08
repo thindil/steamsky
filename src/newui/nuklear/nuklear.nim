@@ -60,6 +60,9 @@ proc nk_input_begin*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_input_key*(ctx; key: nk_keys; down: nk_bool) {.importc, nodecl,
+    raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # General

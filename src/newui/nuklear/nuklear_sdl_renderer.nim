@@ -52,6 +52,14 @@ const
   SDL_RENDERER_PRESENTVSYNC*: cint = 0x0000000
   SDLK_RSHIFT: uint = 0x400000e5u
   SDLK_LSHIFT: uint = 0x400000e1u
+  SDLK_DELETE: uint = 0x0000007fu
+  SDLK_RETURN: uint = 0x0000000du
+  SDLK_TAB: uint = 0x00000009u
+  SDLK_BACKSPACE: uint = 0x00000008u
+  SDLK_HOME: uint = 0x4000004au
+  SDLK_END: uint = 0x4000004du
+  SDLK_PAGEDOWN: uint = 0x4000004eu
+  SDLK_PAGEUP: uint = 0x4000004bu
   IMG_INIT_PNG*: cint = 0x00000002
   windowCentered* = SDL_WINDOWPOS_CENTERED
 
@@ -189,12 +197,23 @@ proc nuklearInput*(): UserEvents =
         return sizeChangedEvent
     of SDL_KEYUP.cuint, SDL_KEYDOWN.cuint:
       let
-        down: bool = evt.`type` == SDL_KEYDOWN.cuint
+        down: nk_bool = (evt.`type` == SDL_KEYDOWN.cuint).nk_bool
         state: uint8 = SDL_GetKeyboardState(numkeys = 0)
         kEvnt: SDL_KeyboardEvent = cast[SDL_KeyboardEvent](evt)
       case kEvnt.keysym.sym
       of SDLK_RSHIFT.cuint, SDLK_LSHIFT.cuint:
         nk_input_key(ctx, NK_KEY_SHIFT, down)
+      of SDLK_DELETE.cuint:
+        nk_input_key(ctx, NK_KEY_DEL, down)
+      of SDLK_RETURN.cuint:
+        nk_input_key(ctx, NK_KEY_ENTER, down)
+      of SDLK_TAB.cuint:
+        nk_input_key(ctx, NK_KEY_TAB, down)
+      of SDLK_BACKSPACE.cuint:
+        nk_input_key(ctx, NK_KEY_BACKSPACE, down)
+      of SDLK_HOME.cuint:
+        nk_input_key(ctx, NK_KEY_TEXT_START, down)
+        nk_input_key(ctx, NK_KEY_SCROLL_START, down)
       else:
         discard
     else:
