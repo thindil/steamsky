@@ -60,6 +60,7 @@ const
   SDLK_END: uint = 0x4000004du
   SDLK_PAGEDOWN: uint = 0x4000004eu
   SDLK_PAGEUP: uint = 0x4000004bu
+  SDLK_Z: uint = 0x0000007au
   IMG_INIT_PNG*: cint = 0x00000002
   windowCentered* = SDL_WINDOWPOS_CENTERED
 
@@ -88,6 +89,8 @@ type
   SDL_KeyboardEvent{.importc, nodecl.} = object
     `type`: cuint
     keysym: SDL_KeySym
+  SDL_Scancode = enum
+    SDL_SCANCODE_LCTRL = 224
 
 proc SDL_SetHint(name, value: cstring) {.importc, nodecl.}
 proc SDL_Init(flags: cint): cint {.importc, nodecl.}
@@ -117,7 +120,7 @@ proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
 proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
 proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl.}
 proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc, nodecl.}
-proc SDL_GetKeyboardState(numkeys: cint): uint8 {.importc, nodecl.}
+proc SDL_GetKeyboardState(numkeys: cint): pointer {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
@@ -195,27 +198,36 @@ proc nuklearInput*(): UserEvents =
       let wEvt: SDL_WindowEvt = cast[SDL_WindowEvt](evt)
       if wEvt.event == SDL_WINDOWEVENT_SIZE_CHANGED.cuint:
         return sizeChangedEvent
-    of SDL_KEYUP.cuint, SDL_KEYDOWN.cuint:
-      let
-        down: nk_bool = (evt.`type` == SDL_KEYDOWN.cuint).nk_bool
-        state: uint8 = SDL_GetKeyboardState(numkeys = 0)
-        kEvnt: SDL_KeyboardEvent = cast[SDL_KeyboardEvent](evt)
-      case kEvnt.keysym.sym
-      of SDLK_RSHIFT.cuint, SDLK_LSHIFT.cuint:
-        nk_input_key(ctx, NK_KEY_SHIFT, down)
-      of SDLK_DELETE.cuint:
-        nk_input_key(ctx, NK_KEY_DEL, down)
-      of SDLK_RETURN.cuint:
-        nk_input_key(ctx, NK_KEY_ENTER, down)
-      of SDLK_TAB.cuint:
-        nk_input_key(ctx, NK_KEY_TAB, down)
-      of SDLK_BACKSPACE.cuint:
-        nk_input_key(ctx, NK_KEY_BACKSPACE, down)
-      of SDLK_HOME.cuint:
-        nk_input_key(ctx, NK_KEY_TEXT_START, down)
-        nk_input_key(ctx, NK_KEY_SCROLL_START, down)
-      else:
-        discard
+#    of SDL_KEYUP.cuint, SDL_KEYDOWN.cuint:
+#      let
+#        down: nk_bool = (evt.`type` == SDL_KEYDOWN.cuint).nk_bool
+#        state: array[512, uint8] = cast[array[512, uint8]](SDL_GetKeyboardState(numkeys = 0))
+#        kEvnt: SDL_KeyboardEvent = cast[SDL_KeyboardEvent](evt)
+#      case kEvnt.keysym.sym
+#      of SDLK_RSHIFT.cuint, SDLK_LSHIFT.cuint:
+#        nk_input_key(ctx, NK_KEY_SHIFT, down)
+#      of SDLK_DELETE.cuint:
+#        nk_input_key(ctx, NK_KEY_DEL, down)
+#      of SDLK_RETURN.cuint:
+#        nk_input_key(ctx, NK_KEY_ENTER, down)
+#      of SDLK_TAB.cuint:
+#        nk_input_key(ctx, NK_KEY_TAB, down)
+#      of SDLK_BACKSPACE.cuint:
+#        nk_input_key(ctx, NK_KEY_BACKSPACE, down)
+#      of SDLK_HOME.cuint:
+#        nk_input_key(ctx, NK_KEY_TEXT_START, down)
+#        nk_input_key(ctx, NK_KEY_SCROLL_START, down)
+#      of SDLK_END.cuint:
+#        nk_input_key(ctx, NK_KEY_TEXT_END, down)
+#        nk_input_key(ctx, NK_KEY_SCROLL_END, down)
+#      of SDLK_PAGEDOWN.cuint:
+#        nk_input_key(ctx, NK_KEY_SCROLL_DOWN, down)
+#      of SDLK_PAGEUP.cuint:
+#        nk_input_key(ctx, NK_KEY_SCROLL_UP, down)
+#      of SDLK_z.cuint:
+#        nk_input_key(ctx, NK_KEY_TEXT_UNDO, (down == nk_true and (state[SDL_SCANCODE_LCTRL] == 1)).nk_bool)
+#      else:
+#        discard
     else:
       discard nk_sdl_handle_event(evt)
   nk_input_end(ctx)
