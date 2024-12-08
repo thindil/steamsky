@@ -133,8 +133,13 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   while true:
     let started: float = cpuTime()
     # Input
-    if nuklearInput():
+    case nuklearInput()
+    of quitEvent:
       break
+    of sizeChangedEvent:
+      (windowWidth, windowHeight) = nuklearGetWindowSize()
+    of noEvent:
+      discard
 
     # Reset the UI tooltips if enabled
     if gameSettings.showTooltips:
