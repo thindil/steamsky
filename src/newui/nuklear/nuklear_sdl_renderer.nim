@@ -50,6 +50,8 @@ const
   SDL_WINDOW_ALLOW_HIGHDPI*: cuint = 0x00002000
   SDL_RENDERER_ACCELERATED*: cint = 0x00000002
   SDL_RENDERER_PRESENTVSYNC*: cint = 0x0000000
+  SDLK_RSHIFT: uint = 0x400000e5u
+  SDLK_LSHIFT: uint = 0x400000e1u
   IMG_INIT_PNG*: cint = 0x00000002
   windowCentered* = SDL_WINDOWPOS_CENTERED
 
@@ -73,6 +75,11 @@ type
   SDL_WindowEvt {.importc: "SDL_WindowEvent", nodecl.} = object
     `type`: cuint
     event: cuint
+  SDL_KeySym {.importc, nodecl.} = object
+    sym: cuint
+  SDL_KeyboardEvent{.importc, nodecl.} = object
+    `type`: cuint
+    keysym: SDL_KeySym
 
 proc SDL_SetHint(name, value: cstring) {.importc, nodecl.}
 proc SDL_Init(flags: cint): cint {.importc, nodecl.}
@@ -184,6 +191,12 @@ proc nuklearInput*(): UserEvents =
       let
         down: bool = evt.`type` == SDL_KEYDOWN.cuint
         state: uint8 = SDL_GetKeyboardState(numkeys = 0)
+        kEvnt: SDL_KeyboardEvent = cast[SDL_KeyboardEvent](evt)
+      case kEvnt.keysym.sym
+      of SDLK_RSHIFT.cuint, SDLK_LSHIFT.cuint:
+        nk_input_key(ctx, NK_KEY_SHIFT, down)
+      else:
+        discard
     else:
       discard nk_sdl_handle_event(evt)
   nk_input_end(ctx)
