@@ -23,7 +23,8 @@ import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
 import combatui, coreui, dialogs, dialogs2, errordialog, updateheader, utilsui2
 
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show available the player's ship's orders to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -70,7 +71,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
         -1: "" else: " -row " & $row))
     tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
     lastButton = button
-    shortcuts.add(OrderShortcut(buttonName: button, shortcut: shortcut[0]))
+    shortcuts.add(y = OrderShortcut(buttonName: button, shortcut: shortcut[0]))
 
   if currentStory.index.len > 0:
     let step = try:
@@ -92,9 +93,9 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
                     name = "item").parseInt].name,
                 command = "ExecuteStory", shortcut = "f", underLine = 4)
           except:
-            return showError("Can't add the story button.")
+            return showError(message = "Can't add the story button.")
     of destroyShip:
-      let parts = currentStory.data.split(';')
+      let parts = currentStory.data.split(sep = ';')
       try:
         if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
           try:
@@ -106,7 +107,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the story step location.")
     of explore:
-      let parts = currentStory.data.split(';')
+      let parts = currentStory.data.split(sep = ';')
       try:
         if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
           addButton(name = ".story", label = "Search area",
@@ -416,7 +417,7 @@ proc askForEventsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc attackCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl, contractual.} =
+        RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Start the combat between ships
   ##
   ## * clientData - the additional data for the Tcl command
@@ -447,7 +448,8 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Pray
 
 proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Set the selected base as the home base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -470,7 +472,8 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showTraderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Generate cargo for the trader and show the trading UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -552,27 +555,28 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   ## If argument type is free, deliver medicines for free, otherwise deliver
   ## medicines for a price
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the orders menu
   try:
-    addCommand("ShowOrders", showOrdersCommand)
-    addCommand("Docking", dockingCommand)
-    addCommand("AskForBases", askForBasesCommand)
-    addCommand("AskForEvents", askForEventsCommand)
-    addCommand("Attack", attackCommand)
-    addCommand("Pray", prayCommand)
-    addCommand("SetAsHome", setAsHomeCommand)
-    addCommand("ShowTrader", showTraderCommand)
-    addCommand("StartMission", startMissionCommand)
-    addCommand("CompleteMission", completeMissionCommand)
-    addCommand("ExecuteStory", executeStoryCommand)
-    addCommand("DeliverMedicines", deliverMedicinesCommand)
+    addCommand(name = "ShowOrders", nimProc = showOrdersCommand)
+    addCommand(name = "Docking", nimProc = dockingCommand)
+    addCommand(name = "AskForBases", nimProc = askForBasesCommand)
+    addCommand(name = "AskForEvents", nimProc = askForEventsCommand)
+    addCommand(name = "Attack", nimProc = attackCommand)
+    addCommand(name = "Pray", nimProc = prayCommand)
+    addCommand(name = "SetAsHome", nimProc = setAsHomeCommand)
+    addCommand(name = "ShowTrader", nimProc = showTraderCommand)
+    addCommand(name = "StartMission", nimProc = startMissionCommand)
+    addCommand(name = "CompleteMission", nimProc = completeMissionCommand)
+    addCommand(name = "ExecuteStory", nimProc = executeStoryCommand)
+    addCommand(name = "DeliverMedicines", nimProc = deliverMedicinesCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
 import mapsui, waitmenu
 
-{.push ruleOff: "hasPragma"}
+{.push ruleOff: "hasPragma".}
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   var message = ""
@@ -722,7 +726,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
       return tclOk
   try:
     if progressStory():
-      let tokens = currentStory.data.split(';')
+      let tokens = currentStory.data.split(sep = ';')
       case step.finishCondition
       of destroyShip:
         if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
