@@ -102,6 +102,7 @@ proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
 proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
 proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl.}
 proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc, nodecl.}
+proc SDL_GetKeyboardState(numkeys: cint): uint8 {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
@@ -179,6 +180,10 @@ proc nuklearInput*(): UserEvents =
       let wEvt: SDL_WindowEvt = cast[SDL_WindowEvt](evt)
       if wEvt.event == SDL_WINDOWEVENT_SIZE_CHANGED.cuint:
         return sizeChangedEvent
+    of SDL_KEYUP.cuint, SDL_KEYDOWN.cuint:
+      let
+        down: bool = evt.`type` == SDL_KEYDOWN.cuint
+        state: uint8 = SDL_GetKeyboardState(numkeys = 0)
     else:
       discard nk_sdl_handle_event(evt)
   nk_input_end(ctx)
