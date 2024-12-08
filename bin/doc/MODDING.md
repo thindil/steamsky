@@ -1172,6 +1172,8 @@ story.
   move map left. Optional.
 * Key `MapArrowRightIcon`: Path to the SVG image which will be used on button to
   move map right. Optional.
+* Key `MapArrowDownLeftIcon`: Path to the SVG image which will be used on button
+  to move map down and left. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
