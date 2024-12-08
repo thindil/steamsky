@@ -55,7 +55,9 @@ const
 
 type
   SDL_EventType = enum
-    SDL_FIRSTEVENT = 0, SDL_QUIT = 0x100
+    SDL_FIRSTEVENT = 0, SDL_QUIT = 0x100, SDL_WINDOWEVENT = 0x200, SDL_KEYUP = 0x300, SDL_KEYDOWN
+  SDL_WindowEventId = enum
+    SDL_WINDOWEVENT_SIZE_CHANGED = 6
   SDL_Window {.importc, nodecl.} = object
   SDL_Renderer {.importc, nodecl.} = object
   SDL_Surface {.importc, nodecl.} = object
@@ -68,6 +70,9 @@ type
   RWPtr = ptr SDL_RWops
   SDL_Event {.importc, nodecl.} = object
     `type`: cuint
+  SDL_WindowEvt {.importc: "SDL_WindowEvent", nodecl.} = object
+    `type`: cuint
+    event: cuint
 
 proc SDL_SetHint(name, value: cstring) {.importc, nodecl.}
 proc SDL_Init(flags: cint): cint {.importc, nodecl.}
@@ -81,7 +86,7 @@ proc SDL_GetRendererOutputSize(renderer: RendererPtr; w, h: var cint) {.importc,
 proc SDL_GetWindowSize(window: WindowPtr; w, h: var cint) {.importc, nodecl.}
 proc SDL_RenderSetScale(renderer: RendererPtr; scaleX,
     scaleY: cfloat) {.importc, nodecl.}
-proc SDL_PollEvent(event: ptr SDL_Event): cint {.importc, nodecl.}
+proc SDL_PollEvent(event: var SDL_Event): cint {.importc, nodecl.}
 proc SDL_SetRenderDrawColor(renderer: RendererPtr; r, g, b,
     a: uint8): cint {.importc, nodecl.}
 proc SDL_RenderClear(renderer: RendererPtr): cint {.importc, nodecl.}
@@ -107,7 +112,7 @@ proc IMG_Quit() {.importc, nodecl.}
 proc nk_sdl_init(win: WindowPtr; renderer: RendererPtr): PContext {.importc, nodecl.}
 proc nk_sdl_font_stash_begin(atlas: ptr ptr nk_font_atlas) {.importc, nodecl.}
 proc nk_sdl_font_stash_end() {.importc, nodecl.}
-proc nk_sdl_handle_event(evt: ptr SDL_Event): cint {.importc, nodecl.}
+proc nk_sdl_handle_event(evt: var SDL_Event): cint {.importc, nodecl.}
 proc nk_sdl_render(aa: nk_anti_aliasing) {.importc, nodecl.}
 proc nk_sdl_shutdown() {.importc, nodecl.}
 
@@ -158,17 +163,24 @@ proc nuklearInit*(windowWidth, windowHeight: int; name: string = "";
   setContext(nk_sdl_init(win, renderer))
   return getContext()
 
-proc nuklearInput*(): bool =
+proc nuklearInput*(): UserEvents =
   ## Handle the user input
   ##
   ## Returns true if user requested to close the window, otherwise false
   let ctx = getContext()
   var evt: SDL_Event
   nk_input_begin(ctx)
-  while SDL_PollEvent(evt.unsafeAddr) != 0:
-    if evt.`type` == SDL_QUIT.cuint:
-      return true
-    discard nk_sdl_handle_event(evt.unsafeAddr)
+  result = noEvent
+  while SDL_PollEvent(evt) != 0:
+    case evt.`type`
+    of SDL_QUIT.cuint:
+      return quitEvent
+    of SDL_WINDOWEVENT.cuint:
+      let wEvt: SDL_WindowEvt = cast[SDL_WindowEvt](evt)
+      if wEvt.event == SDL_WINDOWEVENT_SIZE_CHANGED.cuint:
+        return sizeChangedEvent
+    else:
+      discard nk_sdl_handle_event(evt)
   nk_input_end(ctx)
 
 proc nuklearDraw*() =
@@ -264,10 +276,10 @@ proc nuklearSetWindowResizable*(resizable: bool = true) =
   ## * resizable - if true, the window will be resizable, otherwise not
   SDL_SetWindowResizable(window = win, resizable = resizable.ord.cint)
 
-proc nuklearGetWindowSize*(): tuple[w: int, h: int] =
+proc nuklearGetWindowSize*(): tuple[w: float, h: float] =
   ## Get the current size of the main window of the application
   ##
   ## Returns a tuple with width and height of the window.
   var winWidth, winHeight: cint = 0
   SDL_GetWindowSize(window = win, w = winWidth, h = winHeight)
-  return (winWidth.int, winHeight.int)
+  return (winWidth.float, winHeight.float)

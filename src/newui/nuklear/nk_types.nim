@@ -440,6 +440,9 @@ type
         panelTooltip.int,
     panelSetPopup = panelSetNonBlock.int or panelPopup.int,
     panelSetSub = panelSetPopup.int or panelGroup.int
+  UserEvents* = enum
+    ## The UI events caused by the user
+    noEvent, quitEvent, sizeChangedEvent
 {.pop ruleOn: "namedParams".}
 
 # ----------
