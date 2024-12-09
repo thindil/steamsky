@@ -789,8 +789,8 @@ enum nk_keys {
     NK_KEY_SCROLL_END,
     NK_KEY_SCROLL_DOWN,
     NK_KEY_SCROLL_UP,
+    NK_KEY_ESCAPE,
     NK_KEY_MAX,
-    NK_KEY_ESCAPE
 };
 enum nk_buttons {
     NK_BUTTON_LEFT,
@@ -27046,6 +27046,7 @@ retry:
     case NK_KEY_COPY:
     case NK_KEY_CUT:
     case NK_KEY_PASTE:
+    case NK_KEY_ESCAPE:
     case NK_KEY_MAX:
     default: break;
     case NK_KEY_TEXT_UNDO:
@@ -27904,7 +27905,7 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
         {int i; /* keyboard input */
         int old_mode = edit->mode;
         for (i = 0; i < NK_KEY_MAX; ++i) {
-            if (i == NK_KEY_ENTER || i == NK_KEY_TAB) continue; /* special case */
+            if (i == NK_KEY_ENTER || i == NK_KEY_TAB || i == NK_KEY_ESCAPE) continue; /* special case */
             if (nk_input_is_key_pressed(in, (enum nk_keys)i)) {
                 nk_textedit_key(edit, (enum nk_keys)i, shift_mod, font, row_height);
                 cursor_follow = nk_true;
@@ -28752,7 +28753,7 @@ nk_do_property(nk_flags *ws,
     *cursor = text_edit->cursor;
     *select_begin = text_edit->select_start;
     *select_end = text_edit->select_end;
-    if (text_edit->active && nk_input_is_key_pressed(in, NK_KEY_ENTER))
+    if (text_edit->active && (nk_input_is_key_pressed(in, NK_KEY_ENTER) || nk_input_is_key_pressed(in, NK_KEY_ESCAPE)))
         text_edit->active = nk_false;
 
     if (active && !text_edit->active) {
