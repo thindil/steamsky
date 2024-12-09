@@ -273,6 +273,7 @@ proc nuklearInput*(): UserEvents =
           nk_input_key(ctx, NK_KEY_RIGHT, down)
       of SDLK_ESCAPE.cuint:
         nk_input_key(ctx, NK_KEY_ESCAPE, down)
+        echo "here:"
       else:
         discard
     else:
