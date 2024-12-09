@@ -27967,16 +27967,6 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             nk_textedit_text(edit, "    ", 4);
             cursor_follow = nk_true;
         }}
-
-       if (nk_input_is_key_pressed(in, NK_KEY_ESCAPE)) {
-           const enum nk_text_edit_type type = (flags & NK_EDIT_MULTILINE) ?
-               NK_TEXT_EDIT_MULTI_LINE: NK_TEXT_EDIT_SINGLE_LINE;
-           /* keep scroll position when re-activating edit widget */
-           struct nk_vec2 oldscrollbar = edit->scrollbar;
-           nk_textedit_clear_state(edit, type, filter);
-           edit->scrollbar = oldscrollbar;
-           edit->active = nk_false;
-       }
     }
 
     /* set widget state */
