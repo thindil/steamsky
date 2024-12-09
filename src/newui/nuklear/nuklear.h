@@ -789,7 +789,8 @@ enum nk_keys {
     NK_KEY_SCROLL_END,
     NK_KEY_SCROLL_DOWN,
     NK_KEY_SCROLL_UP,
-    NK_KEY_MAX
+    NK_KEY_MAX,
+    NK_KEY_ESCAPE
 };
 enum nk_buttons {
     NK_BUTTON_LEFT,

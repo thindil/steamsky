@@ -71,6 +71,7 @@ const
   SDLK_DOWN: uint = 0x40000051u
   SDLK_LEFT: uint = 0x40000050u
   SDLK_RIGHT: uint = 0x4000004fu
+  SDLK_ESCAPE: uint = 0x0000001bu
   IMG_INIT_PNG*: cint = 0x00000002
   windowCentered* = SDL_WINDOWPOS_CENTERED
 
@@ -270,6 +271,8 @@ proc nuklearInput*(): UserEvents =
           nk_input_key(ctx, NK_KEY_TEXT_WORD_RIGHT, down)
         else:
           nk_input_key(ctx, NK_KEY_RIGHT, down)
+      of SDLK_ESCAPE.cuint:
+        nk_input_key(ctx, NK_KEY_ESCAPE, down)
       else:
         discard
     else:
