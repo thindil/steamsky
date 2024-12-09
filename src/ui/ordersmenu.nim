@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the orders menu in the game, like show the menu,
+## execute some orders, etc.
+
 import std/[tables, strutils]
 import contracts, nimalyzer
 import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
@@ -63,6 +66,16 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
 
   proc addButton(name, label, command, shortcut: string; underline: Natural;
       row: int = -1) {.raises: [], tags: [], contractual.} =
+    ## Add a button to the orders menu
+    ##
+    ## * name      - the neme of the button
+    ## * label     - the text on the button
+    ## * command   - the Tcl command to execute when the button was pressed
+    ## * shortcut  - the keyboard shortcut for the button
+    ## * underline - the character which will be underlined in the text
+    ##               (for shortcut)
+    ## * row       - the row in which the button will be added, default is -1
+    ##               which means, the next row
     let button = ordersMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & ordersMenu & ";" & command &
@@ -577,6 +590,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
 import mapsui, waitmenu
 
 {.push ruleOff: "hasPragma".}
+{.push ruleOff: "hasDoc".}
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   var message = ""
