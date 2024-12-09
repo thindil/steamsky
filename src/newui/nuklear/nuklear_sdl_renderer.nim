@@ -61,12 +61,23 @@ const
   SDLK_PAGEDOWN: uint = 0x4000004eu
   SDLK_PAGEUP: uint = 0x4000004bu
   SDLK_Z: uint = 0x0000007au
+  SDLK_R: uint = 0x00000072u
+  SDLK_C: uint = 0x00000063u
+  SDLK_V: uint = 0x00000076u
+  SDLK_X: uint = 0x00000078u
+  SDLK_B: uint = 0x00000062u
+  SDLK_E: uint = 0x00000065u
+  SDLK_UP: uint = 0x40000052u
+  SDLK_DOWN: uint = 0x40000051u
+  SDLK_LEFT: uint = 0x40000050u
+  SDLK_RIGHT: uint = 0x4000004fu
   IMG_INIT_PNG*: cint = 0x00000002
   windowCentered* = SDL_WINDOWPOS_CENTERED
 
 type
   SDL_EventType = enum
-    SDL_FIRSTEVENT = 0, SDL_QUIT = 0x100, SDL_WINDOWEVENT = 0x200, SDL_KEYUP = 0x300, SDL_KEYDOWN
+    SDL_FIRSTEVENT = 0, SDL_QUIT = 0x100, SDL_WINDOWEVENT = 0x200,
+        SDL_KEYUP = 0x300, SDL_KEYDOWN
   SDL_WindowEventId = enum
     SDL_WINDOWEVENT_SIZE_CHANGED = 6
   SDL_Window {.importc, nodecl.} = object
@@ -120,7 +131,7 @@ proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
 proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
 proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl.}
 proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc, nodecl.}
-proc SDL_GetKeyboardState(numkeys: cint): pointer {.importc, nodecl.}
+proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512, uint8] {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
@@ -198,36 +209,69 @@ proc nuklearInput*(): UserEvents =
       let wEvt: SDL_WindowEvt = cast[SDL_WindowEvt](evt)
       if wEvt.event == SDL_WINDOWEVENT_SIZE_CHANGED.cuint:
         return sizeChangedEvent
-#    of SDL_KEYUP.cuint, SDL_KEYDOWN.cuint:
-#      let
-#        down: nk_bool = (evt.`type` == SDL_KEYDOWN.cuint).nk_bool
-#        state: array[512, uint8] = cast[array[512, uint8]](SDL_GetKeyboardState(numkeys = 0))
-#        kEvnt: SDL_KeyboardEvent = cast[SDL_KeyboardEvent](evt)
-#      case kEvnt.keysym.sym
-#      of SDLK_RSHIFT.cuint, SDLK_LSHIFT.cuint:
-#        nk_input_key(ctx, NK_KEY_SHIFT, down)
-#      of SDLK_DELETE.cuint:
-#        nk_input_key(ctx, NK_KEY_DEL, down)
-#      of SDLK_RETURN.cuint:
-#        nk_input_key(ctx, NK_KEY_ENTER, down)
-#      of SDLK_TAB.cuint:
-#        nk_input_key(ctx, NK_KEY_TAB, down)
-#      of SDLK_BACKSPACE.cuint:
-#        nk_input_key(ctx, NK_KEY_BACKSPACE, down)
-#      of SDLK_HOME.cuint:
-#        nk_input_key(ctx, NK_KEY_TEXT_START, down)
-#        nk_input_key(ctx, NK_KEY_SCROLL_START, down)
-#      of SDLK_END.cuint:
-#        nk_input_key(ctx, NK_KEY_TEXT_END, down)
-#        nk_input_key(ctx, NK_KEY_SCROLL_END, down)
-#      of SDLK_PAGEDOWN.cuint:
-#        nk_input_key(ctx, NK_KEY_SCROLL_DOWN, down)
-#      of SDLK_PAGEUP.cuint:
-#        nk_input_key(ctx, NK_KEY_SCROLL_UP, down)
-#      of SDLK_z.cuint:
-#        nk_input_key(ctx, NK_KEY_TEXT_UNDO, (down == nk_true and (state[SDL_SCANCODE_LCTRL] == 1)).nk_bool)
-#      else:
-#        discard
+    of SDL_KEYUP.cuint, SDL_KEYDOWN.cuint:
+      let
+        down: nk_bool = (evt.`type` == SDL_KEYDOWN.cuint).nk_bool
+        state: ptr array[512, uint8] = SDL_GetKeyboardState()
+        kEvnt: SDL_KeyboardEvent = cast[SDL_KeyboardEvent](evt)
+      case kEvnt.keysym.sym
+      of SDLK_RSHIFT.cuint, SDLK_LSHIFT.cuint:
+        nk_input_key(ctx, NK_KEY_SHIFT, down)
+      of SDLK_DELETE.cuint:
+        nk_input_key(ctx, NK_KEY_DEL, down)
+      of SDLK_RETURN.cuint:
+        nk_input_key(ctx, NK_KEY_ENTER, down)
+      of SDLK_TAB.cuint:
+        nk_input_key(ctx, NK_KEY_TAB, down)
+      of SDLK_BACKSPACE.cuint:
+        nk_input_key(ctx, NK_KEY_BACKSPACE, down)
+      of SDLK_HOME.cuint:
+        nk_input_key(ctx, NK_KEY_TEXT_START, down)
+        nk_input_key(ctx, NK_KEY_SCROLL_START, down)
+      of SDLK_END.cuint:
+        nk_input_key(ctx, NK_KEY_TEXT_END, down)
+        nk_input_key(ctx, NK_KEY_SCROLL_END, down)
+      of SDLK_PAGEDOWN.cuint:
+        nk_input_key(ctx, NK_KEY_SCROLL_DOWN, down)
+      of SDLK_PAGEUP.cuint:
+        nk_input_key(ctx, NK_KEY_SCROLL_UP, down)
+      of SDLK_Z.cuint:
+        nk_input_key(ctx, NK_KEY_TEXT_UNDO, (down and (state[
+            SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
+      of SDLK_R.cuint:
+        nk_input_key(ctx, NK_KEY_TEXT_REDO, (down and (state[
+            SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
+      of SDLK_C.cuint:
+        nk_input_key(ctx, NK_KEY_COPY, (down and (state[
+            SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
+      of SDLK_V.cuint:
+        nk_input_key(ctx, NK_KEY_PASTE, (down and (state[
+            SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
+      of SDLK_X.cuint:
+        nk_input_key(ctx, NK_KEY_CUT, (down and (state[
+            SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
+      of SDLK_B.cuint:
+        nk_input_key(ctx, NK_KEY_TEXT_LINE_START, (down and (state[
+            SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
+      of SDLK_E.cuint:
+        nk_input_key(ctx, NK_KEY_TEXT_LINE_END, (down and (state[
+            SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
+      of SDLK_UP.cuint:
+        nk_input_key(ctx, NK_KEY_UP, down)
+      of SDLK_DOWN.cuint:
+        nk_input_key(ctx, NK_KEY_DOWN, down)
+      of SDLK_LEFT.cuint:
+        if state[SDL_SCANCODE_LCTRL.ord] == 1:
+          nk_input_key(ctx, NK_KEY_TEXT_WORD_LEFT, down)
+        else:
+          nk_input_key(ctx, NK_KEY_LEFT, down)
+      of SDLK_RIGHT.cuint:
+        if state[SDL_SCANCODE_LCTRL.ord] == 1:
+          nk_input_key(ctx, NK_KEY_TEXT_WORD_RIGHT, down)
+        else:
+          nk_input_key(ctx, NK_KEY_RIGHT, down)
+      else:
+        discard
     else:
       discard nk_sdl_handle_event(evt)
   nk_input_end(ctx)
@@ -325,7 +369,7 @@ proc nuklearSetWindowResizable*(resizable: bool = true) =
   ## * resizable - if true, the window will be resizable, otherwise not
   SDL_SetWindowResizable(window = win, resizable = resizable.ord.cint)
 
-proc nuklearGetWindowSize*(): tuple[w: float, h: float] =
+proc nuklearGetWindowSize*(): tuple[w: float; h: float] =
   ## Get the current size of the main window of the application
   ##
   ## Returns a tuple with width and height of the window.
