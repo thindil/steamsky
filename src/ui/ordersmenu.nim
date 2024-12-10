@@ -39,7 +39,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowOrders
-  var ordersMenu = createDialog(name = ".gameframe.orders",
+  var ordersMenu: string = createDialog(name = ".gameframe.orders",
       title = "Ship orders")
   if tclEval2(script = "winfo ismapped " & ordersMenu) == "1":
     return closeDialogCommand(clientData = clientData, interp = interp,
@@ -49,20 +49,21 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "busy forget " & gameHeader)
     tclEval(script = "destroy " & ordersMenu)
     return tclOk
-  var haveTrader = false
+  var haveTrader: bool = false
   if findMember(order = talk) > -1:
     haveTrader = true
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    dialogCloseButton = ordersMenu & ".closebutton"
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
+    dialogCloseButton: string = ordersMenu & ".closebutton"
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -text Close -command {CloseDialog " & ordersMenu & "}")
   type OrderShortcut = object
     buttonName: string
     shortcut: char
   var
-    lastButton = "."
-    shortcuts: seq[OrderShortcut]
+    lastButton: string = "."
+    shortcuts: seq[OrderShortcut] = @[]
 
   proc addButton(name, label, command, shortcut: string; underline: Natural;
       row: int = -1) {.raises: [], tags: [], contractual.} =
@@ -76,7 +77,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     ##               (for shortcut)
     ## * row       - the row in which the button will be added, default is -1
     ##               which means, the next row
-    let button = ordersMenu & name
+    let button: string = ordersMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & ordersMenu & ";" & command &
         "} -underline " & $underline)
@@ -87,7 +88,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     shortcuts.add(y = OrderShortcut(buttonName: button, shortcut: shortcut[0]))
 
   if currentStory.index.len > 0:
-    let step = try:
+    let step: StepData = try:
         (if currentStory.currentStep == -1: storiesList[
           currentStory.index].startingStep elif currentStory.currentStep >
           -1: storiesList[currentStory.index].steps[
@@ -108,7 +109,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           except:
             return showError(message = "Can't add the story button.")
     of destroyShip:
-      let parts = currentStory.data.split(sep = ';')
+      let parts: seq[string] = currentStory.data.split(sep = ';')
       try:
         if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
           try:
@@ -120,7 +121,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the story step location.")
     of explore:
-      let parts = currentStory.data.split(sep = ';')
+      let parts: seq[string] = currentStory.data.split(sep = ';')
       try:
         if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
           addButton(name = ".story", label = "Search area",
@@ -182,14 +183,14 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
         except:
           return showError(message = "Can't check if base has recipes for sale.")
       if skyBases[baseIndex].missions.len > 0:
-        var missionsLimit = case skyBases[baseIndex].reputation.level
-          of 0 .. 25:
+        var missionsLimit: int = case skyBases[baseIndex].reputation.level
+          of 0..25:
             1
-          of 26 .. 50:
+          of 26..50:
             3
-          of 51 .. 75:
+          of 51..75:
             5
-          of 76 .. 100:
+          of 76..100:
             10
           else:
             0
@@ -241,7 +242,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
       addButton(name = ".loot", label = "Loot", command = "ShowLoot",
           shortcut = "l", underline = 0)
   else:
-    var event = EventsTypes.none
+    var event: EventsTypes = EventsTypes.none
     if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
       event = eventsList[skyMap[playerShip.skyX][
           playerShip.skyY].eventIndex].eType
@@ -257,7 +258,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           shortcut = "d", underline = 0)
     of disease:
       if haveTrader:
-        let itemIndex = try:
+        let itemIndex: int = try:
             findItem(inventory = playerShip.cargo,
               itemType = factionsList[skyBases[baseIndex].owner].healingTools)
           except:
@@ -271,7 +272,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     of none, doublePrice, baseRecovery:
       if baseIndex > 0:
         if skyBases[baseIndex].reputation.level > -25:
-          var dockingCost = 1
+          var dockingCost: int = 1
           for module in playerShip.modules:
             if module.mType == ModuleType2.hull:
               dockingCost = module.maxModules
@@ -372,7 +373,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "bind " & dialogCloseButton & " <Alt-" &
           shortcut.shortcut & "> {" & shortcut.buttonName & " invoke;break}")
     for button in shortcuts:
-      let menuButton = button.buttonName
+      let menuButton: string = button.buttonName
       for shortcut in shortcuts:
         tclEval(script = "bind " & menuButton & " <Alt-" & shortcut.shortcut &
             "> {" & shortcut.buttonName & " invoke;break}")
@@ -474,7 +475,7 @@ proc setAsHomeCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetAsHome
-  let traderIndex = findMember(order = talk)
+  let traderIndex: int = findMember(order = talk)
   var price: Natural = 1_000
   try:
     countPrice(price = price, traderIndex = traderIndex)
@@ -593,7 +594,7 @@ import mapsui, waitmenu
 {.push ruleOff: "hasDoc".}
 proc dockingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  var message = ""
+  var message: string = ""
   if playerShip.speed == docked:
     try:
       message = (if argc == 1: dockShip(docking = false) else: dockShip(
@@ -658,7 +659,7 @@ proc prayCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc startMissionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  var startsCombat, uMission = false
+  var startsCombat, uMission: bool = false
   for mission in acceptedMissions:
     if mission.targetX == playerShip.skyX and mission.targetY ==
         playerShip.skyY and not mission.finished:
@@ -722,7 +723,7 @@ proc completeMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  var step = try:
+  var step: StepData = try:
         (if currentStory.currentStep == -1: storiesList[
         currentStory.index].startingStep elif currentStory.currentStep >
         -1: storiesList[currentStory.index].steps[
@@ -731,7 +732,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the current story step.")
   if playerShip.speed != docked and step.finishCondition == askInBase:
-    let message = try:
+    let message: string = try:
         dockShip(docking = true)
       except:
         return showError(message = "Can't dock to the base.")
@@ -740,7 +741,7 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
       return tclOk
   try:
     if progressStory():
-      let tokens = currentStory.data.split(sep = ';')
+      let tokens: seq[string] = currentStory.data.split(sep = ';')
       case step.finishCondition
       of destroyShip:
         if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
@@ -771,15 +772,15 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
 proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-    itemIndex = try:
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+    itemIndex: int = try:
         findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[
             baseIndex].owner].healingTools)
       except:
         return showError(message = "Can't get index of medicines.")
-    event = eventsList[eventIndex]
-    newTime = event.time - playerShip.cargo[itemIndex].amount
+    event: EventData = eventsList[eventIndex]
+    newTime: int = event.time - playerShip.cargo[itemIndex].amount
   if newTime < 1:
     deleteEvent(eventIndex = eventIndex)
   if argv[1] == "free":
