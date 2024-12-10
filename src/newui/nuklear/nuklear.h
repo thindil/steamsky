@@ -27968,6 +27968,12 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             nk_textedit_text(edit, "    ", 4);
             cursor_follow = nk_true;
         }}
+
+       if (edit->active && nk_input_is_key_pressed(in, NK_KEY_ESCAPE)) {
+         edit->active = nk_false;
+         edit->mode = NK_TEXT_EDIT_MODE_VIEW;
+         ret = NK_EDIT_INACTIVE | NK_EDIT_DEACTIVATED;
+       }
     }
 
     /* set widget state */
