@@ -224,6 +224,9 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         fileContent = ""
         return
+  if isKeyPressed(key = NK_KEY_ESCAPE):
+    state = mainMenu
+    fileContent = ""
 
 proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -300,6 +303,9 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
+  if isKeyPressed(key = NK_KEY_ESCAPE):
+    state = mainMenu
+    return
   showLinkError()
 
 proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
@@ -343,6 +349,9 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         fileContent = ""
         return
+  if isKeyPressed(key = NK_KEY_ESCAPE):
+    state = mainMenu
+    fileContent = ""
 
 proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -374,6 +383,8 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
+  if isKeyPressed(key = NK_KEY_ESCAPE):
+    state = mainMenu
 
 type
   SortingOrder = enum
@@ -406,6 +417,8 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = questionDialog
     labelButton(title = "Close"):
       dialog = none
+  if isKeyPressed(key = NK_KEY_ESCAPE):
+    dialog = none
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -533,6 +546,9 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         saveClicked = ""
+  if isKeyPressed(key = NK_KEY_ESCAPE):
+    state = mainMenu
+    saveClicked = ""
 
 proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the size of the main window and show the map
@@ -1012,3 +1028,5 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
+  if isKeyPressed(key = NK_KEY_ESCAPE):
+    state = mainMenu
