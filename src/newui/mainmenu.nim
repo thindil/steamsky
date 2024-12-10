@@ -550,7 +550,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     state = mainMenu
     saveClicked = ""
 
-proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the size of the main window and show the map
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -958,7 +959,9 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   stylePushFloat(field = rounding, value = 0)
   layoutSpaceStatic(height = 30, widgetsCount = 2):
     var x: float = 200
-    const tabs: array[2, string] = ["Player", "Difficulty"]
+    const
+      tabs: array[2, string] = ["Player", "Difficulty"]
+      tabTooltips: array[2, string] = ["Show settings for your character.", "Show settings for the game difficulty."]
     for index, tab in tabs:
       try:
         let
@@ -970,18 +973,16 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             saveButtonStyle()
             setButtonStyle2(source = active, destination = normal)
             if gameSettings.showTooltips:
-              addTooltip(bounds = getWidgetBounds(),
-                  text = "Show settings for your character.")
+              addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
             labelButton(title = tab):
               discard
             restoreButtonStyle()
           else:
             if gameSettings.showTooltips:
-              addTooltip(bounds = getWidgetBounds(),
-                  text = "Show settings for the game difficulty.")
+              addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
             labelButton(title = tab):
               currentTab = index.cint
-              infoText = (if index == 0: playerTooltips[^1] else: diffTooltips[^1])
+              infoText = (if index == 0: playerTooltips[8] else: diffTooltips[^1])
         x += widgetWidth
       except:
         dialog = setError(message = "Can't set the tabs buttons.")
