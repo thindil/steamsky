@@ -417,8 +417,6 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = questionDialog
     labelButton(title = "Close"):
       dialog = none
-  if isKeyPressed(key = NK_KEY_ESCAPE):
-    dialog = none
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -547,8 +545,11 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         saveClicked = ""
   if isKeyPressed(key = NK_KEY_ESCAPE):
-    state = mainMenu
-    saveClicked = ""
+    if dialog != none:
+      dialog = none
+    else:
+      state = mainMenu
+      saveClicked = ""
 
 proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
