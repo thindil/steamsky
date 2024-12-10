@@ -2039,6 +2039,17 @@ proc isMouseClicked*(btn: Buttons): bool {.raises: [], tags: [],
     ## A binding to Nuklear's function. Internal use only
   return nk_widget_is_mouse_clicked(ctx = ctx, btn = btn)
 
+proc isKeyPressed*(key: nk_keys): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the selected key is pressed
+  ##
+  ## * key - the key which was pressed
+  ##
+  ## Returns true if the selected key is pressed, otherwise false
+  proc nk_input_is_key_pressed(i: ptr nk_input;
+      key: nk_keys): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_is_key_pressed(i = ctx.input.addr, key = key)
+
 # ---------
 # Edit text
 # ---------
