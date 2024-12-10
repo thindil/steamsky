@@ -417,6 +417,29 @@ proc nkRoundUpPow2(v: nk_uint): nk_uint {.raises: [], tags: [], contractual.} =
   {.ruleOn: "assignments".}
   result.inc
 
+# -------
+# Windows
+# -------
+
+proc windowHasFocus*(): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the currently processed window is currently active
+  ##
+  ## Returns true if the window is active, otherwise false
+  proc nk_window_has_focus(ctx): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_window_has_focus(ctx = ctx)
+
+proc windowIsActive*(name: string): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the selected window is active
+  ##
+  ## * name - the neme of the window to check
+  ##
+  ## Returns true if the window is active, otherwise false
+  proc nk_window_is_active(ctx; name: cstring): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_window_is_active(ctx = ctx, name = name.cstring)
+
 # ------
 # Buffer
 # ------
