@@ -72,6 +72,10 @@ proc nk_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
 proc nk_zero(`ptr`: pointer; size: nk_size) {.importc, cdecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_widget_disable_begin(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_widget_disable_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # -------
 # Windows
@@ -419,6 +423,14 @@ proc nkRoundUpPow2(v: nk_uint): nk_uint {.raises: [], tags: [], contractual.} =
   result = result or (v shr 16)
   {.ruleOn: "assignments".}
   result.inc
+
+template disabled*(content: untyped) =
+  ## Create disabled widgets list
+  ##
+  ## * content - the content of the list
+  nk_widget_disable_begin(ctx = ctx)
+  content
+  nk_widget_disable_end(ctx = ctx)
 
 # -------
 # Windows
