@@ -21,7 +21,7 @@
 import std/[os, parseopt, strutils, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[coreui, dialogs, errordialog, goalsui, mainmenu]
+import newui/[coreui, dialogs, errordialog, goalsui, mainmenu, mapsui]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -118,12 +118,12 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = dtime)
-  const showGame: array[GameState.mainMenu..GameState.newGame, proc (
+  const showGame: array[GameState.mainMenu..GameState.map, proc (
       state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
-      newGame: mainMenu.newGame]
+      newGame: mainMenu.newGame, map: showMap]
   const showDialog: array[GameDialog.errorDialog..GameDialog.newGoalDialog, proc (
       dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
@@ -149,12 +149,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     window(name = "Main", x = 0, y = 0, w = windowWidth,
         h = windowHeight, flags = {windowNoScrollbar}):
       case state
-      of GameState.mainMenu..GameState.newGame:
+      of GameState.mainMenu..GameState.map:
         # Show the proper window
         showGame[state](state = state, dialog = dialog)
-      of map:
-        # Show the game's map
-        discard
       of quitGame:
         # Quit from the game
         discard

@@ -18,8 +18,31 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
+import coreui
 
 proc createGameUi*() {.raises: [], tags: [], contractual.} =
   ## Create the game's UI and show the map to the player
   discard
+
+proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [], contractual.} =
+  ## Show the game's map
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  layoutDynamic(30, 3):
+    row(0.1):
+      labelButton(title = "menu"):
+        discard
+    row(0.4):
+      label(str = "Time")
+    row(0.5):
+      setLayoutRowDynamic(30, 2)
+      label(str = "test")
+      label(str = "test2")
+  dialog = none
+  state = map
