@@ -101,18 +101,9 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       addTooltip(bounds = getWidgetBounds(),
           text = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then.")
     if selected == -1:
-      saveButtonStyle()
-      setButtonStyle(field = normal, r = 40, g = 40, b = 40)
-      setButtonStyle(field = hover, r = 40, g = 40, b = 40)
-      setButtonStyle(field = active, r = 40, g = 40, b = 40)
-      setButtonStyle(field = borderColor, r = 60, g = 60, b = 60)
-      setButtonStyle(field = textBackground, r = 60, g = 60, b = 60)
-      setButtonStyle(field = textNormal, r = 60, g = 60, b = 60)
-      setButtonStyle(field = textHover, r = 60, g = 60, b = 60)
-      setButtonStyle(field = textActive, r = 60, g =60, b = 60)
-      labelButton(title = "Select goal"):
-        discard
-      restoreButtonStyle()
+      disabled:
+        labelButton(title = "Select goal"):
+          discard
     else:
       labelButton(title = "Select goal"):
         dialog = none
