@@ -273,6 +273,12 @@ type
     `type`*: PanelType
     name*: nk_hash
     buf*: nk_popup_buffer
+  nk_edit_state* {.importc: "struct nk_edit_state", nodecl.} = object
+    ## Internal Nuklear type
+    active*: cint
+  nk_property_state* {.importc: "struct nk_property_state", nodecl.} = object
+    ## Internal Nuklear type
+    active*: cint
   nk_window* {.importc: "struct nk_window", nodecl.} = object
     ## Internal Nuklear type
     layout*: PNkPanel
@@ -282,6 +288,8 @@ type
     seq*: uint
     flags*: nk_flags
     buffer*: nk_command_buffer
+    edit*: nk_edit_state
+    property*: nk_property_state
   nk_memory* {.importc: "struct nk_memory", nodecl.} = object
     ## Internal Nuklear type
     `ptr`*: ptr nk_size

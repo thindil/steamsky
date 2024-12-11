@@ -79,6 +79,9 @@ proc nk_zero(`ptr`: pointer; size: nk_size) {.importc, cdecl, raises: [],
 proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
+proc nk_window_find(ctx; name: cstring): ptr nk_window {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+
 # ------
 # Panels
 # ------
@@ -439,6 +442,24 @@ proc windowIsActive*(name: string): bool {.raises: [], tags: [], contractual.} =
       raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_window_is_active(ctx = ctx, name = name.cstring)
+
+proc windowEditActive*(name: string): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the selected window has active edit widget
+  ##
+  ## * name - the name of the window to check
+  ##
+  ## Returns true if the window has active edit widget, otherwise false
+  return nk_window_find(ctx = ctx, name = name.cstring).edit.active == 1
+
+proc windowPropertyActive*(name: string): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the selected window has active property widget
+  ##
+  ## * name - the name of the window to check
+  ##
+  ## Returns true if the window has active property widget, otherwise false
+  return nk_window_find(ctx = ctx, name = name.cstring).property.active == 1
 
 # ------
 # Buffer
