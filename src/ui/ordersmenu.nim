@@ -25,6 +25,36 @@ import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     shipsmovement, stories, stories2, tk, trades, types, utils]
 import combatui, coreui, dialogs, dialogs2, errordialog, updateheader, utilsui2
 
+type OrderShortcut = object
+  buttonName: string
+  shortcut: char
+
+var
+  lastButton: string = "."
+  shortcuts: seq[OrderShortcut] = @[]
+
+proc addButton(name, label, command, shortcut: string; underline: Natural;
+    row: int = -1) {.raises: [], tags: [], contractual.} =
+  ## Add a button to the orders menu
+  ##
+  ## * name      - the neme of the button
+  ## * label     - the text on the button
+  ## * command   - the Tcl command to execute when the button was pressed
+  ## * shortcut  - the keyboard shortcut for the button
+  ## * underline - the character which will be underlined in the text
+  ##               (for shortcut)
+  ## * row       - the row in which the button will be added, default is -1
+  ##               which means, the next row
+  let button: string = ".gameframe.orders" & name
+  tclEval(script = "ttk::button " & button & " -text {" & label &
+      "} -command {CloseDialog .gameframe.orders;" & command &
+      "} -underline " & $underline)
+  tclEval(script = "grid " & button & " -sticky we -padx 5" & (if row ==
+      -1: "" else: " -row " & $row))
+  tclEval(script = "bind " & button & " <Escape> {.gameframe.orders.closebutton invoke;break}")
+  lastButton = button
+  shortcuts.add(y = OrderShortcut(buttonName: button, shortcut: shortcut[0]))
+
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
         TimeEffect, RootEffect], cdecl, contractual.} =
@@ -58,34 +88,8 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     dialogCloseButton: string = ordersMenu & ".closebutton"
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -text Close -command {CloseDialog " & ordersMenu & "}")
-  type OrderShortcut = object
-    buttonName: string
-    shortcut: char
-  var
-    lastButton: string = "."
-    shortcuts: seq[OrderShortcut] = @[]
-
-  proc addButton(name, label, command, shortcut: string; underline: Natural;
-      row: int = -1) {.raises: [], tags: [], contractual.} =
-    ## Add a button to the orders menu
-    ##
-    ## * name      - the neme of the button
-    ## * label     - the text on the button
-    ## * command   - the Tcl command to execute when the button was pressed
-    ## * shortcut  - the keyboard shortcut for the button
-    ## * underline - the character which will be underlined in the text
-    ##               (for shortcut)
-    ## * row       - the row in which the button will be added, default is -1
-    ##               which means, the next row
-    let button: string = ordersMenu & name
-    tclEval(script = "ttk::button " & button & " -text {" & label &
-        "} -command {CloseDialog " & ordersMenu & ";" & command &
-        "} -underline " & $underline)
-    tclEval(script = "grid " & button & " -sticky we -padx 5" & (if row ==
-        -1: "" else: " -row " & $row))
-    tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
-    lastButton = button
-    shortcuts.add(y = OrderShortcut(buttonName: button, shortcut: shortcut[0]))
+  lastButton = "."
+  shortcuts = @[]
 
   if currentStory.index.len > 0:
     let step: StepData = try:
