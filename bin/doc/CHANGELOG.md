@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New icons for the map's manipulation: move up, move left, move right, move
-  down left author: Delapouite (https://game-icons.net), license CC BY 3.0
+  down left, move down author: Delapouite (https://game-icons.net), license CC BY 3.0
 
 ### Changed
 - Updated modding guide
