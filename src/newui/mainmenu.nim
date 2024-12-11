@@ -24,12 +24,8 @@ import ../[basestypes, config, events, game, game2, gamesaveload, goals,
     halloffame, shipscrew, ships2, utils]
 import coreui, dialogs, errordialog, goalsui, mapsui
 
-
-{.push ruleOff: "varDeclared".}
 var
-  menuImages: array[4, PImage]
-{.push ruleOn: "varDeclared".}
-var
+  menuImages: array[4, PImage] = [nil, nil, nil, nil]
   showLoadButton, showHoFButton: bool = false
   fileContent: string = ""
   fileName: string = ""
