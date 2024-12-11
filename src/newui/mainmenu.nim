@@ -545,11 +545,11 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         saveClicked = ""
   if isKeyPressed(key = NK_KEY_ESCAPE):
-    if dialog != none:
-      dialog = none
-    else:
+    if dialog == none:
       state = mainMenu
       saveClicked = ""
+    else:
+      dialog = none
 
 proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -956,6 +956,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
+  var editActive: bool = windowEditActive(name = "Main") or
+      windowPropertyActive(name = "Main")
   stylePushVec2(field = spacing, x = 0, y = 0)
   stylePushFloat(field = rounding, value = 0)
   layoutSpaceStatic(height = 30, widgetsCount = 2):
@@ -1030,5 +1032,8 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
-  if isKeyPressed(key = NK_KEY_ESCAPE):
-    state = mainMenu
+  if isKeyPressed(key = NK_KEY_ESCAPE) and not editActive:
+    if dialog == none:
+      state = mainMenu
+    else:
+      dialog = none
