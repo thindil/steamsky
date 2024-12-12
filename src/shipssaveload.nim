@@ -207,7 +207,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         owners: seq[int] = @[]
         upgradeAction: ShipUpgrade = none
         upgradeProgress: int = 0
-        mType: ModuleType2 = any
+        mType: ModuleType2 = ModuleType2.any
       if module.attr(name = "owner") == "":
         for owner in module.findAll(tag = "owner"):
           owners.add(y = owner.attr(name = "value").parseInt - 1)
@@ -246,7 +246,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         of harpoonGun:
           mType = harpoonGun
         else:
-          mType = any
+          mType = ModuleType2.any
       else:
         case modulesList[protoIndex].mType
         of medicalRoom:
@@ -279,12 +279,13 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         data: array[1..3, int] = [0, 0, 0]
         dataIndex: int = 1
       case mType
-      of any:
+      of ModuleType2.any:
         for modData in module.findAll(tag = "data"):
           data[dataIndex] = modData.attr(name = "value").parseInt
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: any, name: name,
-            protoIndex: protoIndex, weight: weight, durability: modDur,
+        playerShip.modules.add(y = ModuleData(mType: ModuleType2.any,
+            name: name, protoIndex: protoIndex, weight: weight,
+            durability: modDur,
             maxDurability: maxDur, owner: owners,
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction, data: data))
       of engine:
@@ -457,8 +458,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         amount: Natural = cargo.attr(name = "amount").parseInt
         name: string = cargo.attr(name = "name")
         itemDurability: int = cargo.attr(name = "durability").parseInt
-        price: int = (if cargo.attr(name = "price").len == 0: 0 else: cargo.attr(
-            name = "price").parseInt)
+        price: int = (if cargo.attr(name = "price").len ==
+            0: 0 else: cargo.attr(name = "price").parseInt)
       playerShip.cargo.add(y = InventoryData(protoIndex: protoIndex,
           amount: amount, name: name, durability: itemDurability, price: price))
     for crew in shipNode.findAll(tag = "member"):
@@ -482,8 +483,8 @@ proc loadPlayerShip*(saveData: XmlNode) {.raises: [ValueError],
         let
           index: int = skill.attr(name = "index").parseInt
           level: Natural = skill.attr(name = "level").parseInt
-          experience: Natural = (if skill.attr(name = "experience").len > 0: skill.attr(
-              name = "experience").parseInt else: 0)
+          experience: Natural = (if skill.attr(name = "experience").len >
+              0: skill.attr(name = "experience").parseInt else: 0)
         member.skills.add(y = SkillInfo(index: index, level: level,
             experience: experience))
       var priorityIndex: int = 1

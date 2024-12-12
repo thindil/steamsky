@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import ../[config, game, maps, ships, tk]
+import ../[config, game, maps, ships, tk, types]
 import coreui, errordialog, shipsuicrew, utilsui2, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;

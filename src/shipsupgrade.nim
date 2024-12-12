@@ -316,7 +316,7 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.raises: [Shi
     else:
       raise newException(exceptn = ShipUpgradeError,
           message = playerShip.modules[moduleIndex].name & " can't be upgraded in that way.")
-    upgradeAction = maxValue
+    upgradeAction = ShipUpgrade.maxValue
   of 3:
     case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
     of engine:
