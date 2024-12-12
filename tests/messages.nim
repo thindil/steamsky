@@ -16,7 +16,8 @@ suite "Unit tests for messages module":
 
   test "Getting formatted game time.":
     check:
-      formattedTime(1600, 1, 1, 10, 1) == "1600-01-01 10:01"
+      formattedTime(time = DateRecord(year: 1600, month: 1, day: 1, hour: 10,
+          minutes: 1)) == "1600-01-01 10:01"
 
   test "Getting an existent message.":
     gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 1)

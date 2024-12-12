@@ -64,6 +64,7 @@ suite "Unit tests for shipsmovement module":
   skyBases[1].baseType = "1"
   skyBases[1].owner = "POLEIS"
   skyBases[1].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+  gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
 
   test "Wait in place.":
     waitInPlace(1)

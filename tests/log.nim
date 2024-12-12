@@ -6,7 +6,7 @@ suite "Unit tests for log module":
   test "Logging a message.":
     let oldSaveDirectory = saveDirectory
     saveDirectory = "tests/"
-    debugMode = everything
+    debugMode = all
     startLogging()
-    logMessage(message = "Test message", debugType = everything)
+    logMessage(message = "Test message")
     saveDirectory = oldSaveDirectory
