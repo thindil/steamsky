@@ -20,7 +20,7 @@
 
 import std/os
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game]
+import ../[config, game, messages]
 import coreui, errordialog
 
 var
@@ -43,7 +43,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't set the game's images.")
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
-    tags: [], contractual.} =
+    tags: [RootEffect], contractual.} =
   ## Show the game's map
   ##
   ## * state - the current game's state
@@ -51,15 +51,22 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  layoutSpaceStatic(height = 35, widgetsCount = 4):
+  layoutSpaceStatic(height = 35, widgetsCount = 3):
     row(x = 0, y = 0, w = 40, h = 35):
       saveButtonStyle()
       setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
       imageButton(image = mapImages[0]):
         discard
       restoreButtonStyle()
-    row(x = windowWidth / 2.4, y = 0, w = 30, h = 30):
-      label(str = "Time")
+    var
+      text: string = formattedTime()
+      widgetWidth: float = try:
+        getTextWidth(text = text) + 15 * getButtonStyle(field = padding).x;
+      except:
+        dialog = setError(message = "Can't get widget width.")
+        return
+    row(x = windowWidth / 3.5, y = 0, w = widgetWidth, h = 30):
+      label(str = text)
     row(x = windowWidth - 100, y = 0, w = 30, h = 30):
       label(str = "test")
   dialog = none
