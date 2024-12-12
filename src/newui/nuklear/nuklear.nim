@@ -519,7 +519,7 @@ proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
   return memory
 
 proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
-    size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
+    size: var nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Reallocate memory for the selected buffer. Internal use only
   ##
   ## * b        - the buffer which memory will be reallocated
@@ -538,6 +538,15 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
             size = capacity)
       except:
         return nil
+
+    size = capacity
+    let bufferSize: nk_size = b.memory.size
+    if temp != b.memory.`ptr`:
+      copyMem(dest = temp, source = b.memory.`ptr`, size = bufferSize)
+      try:
+        discard b.pool.free(handle = b.pool.userdata, old = b.memory.`ptr`)
+      except:
+        discard
     return temp
 
 proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
