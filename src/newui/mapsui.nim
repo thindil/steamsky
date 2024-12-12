@@ -42,6 +42,26 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't set the game's images.")
 
+proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the game's header
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened or the game's menu is to show.
+  setRowTemplate(35):
+    rowTemplateStatic(40)
+    rowTemplateDynamic()
+    rowTemplateVariable(80)
+  saveButtonStyle()
+  setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+  imageButton(image = mapImages[0]):
+    discard
+  restoreButtonStyle()
+  label(str = formattedTime(), alignment = centered)
+  label(str = "test")
+
+
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
@@ -49,25 +69,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## * state - the current game's state
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  layoutSpaceStatic(height = 35, widgetsCount = 3):
-    row(x = 0, y = 0, w = 40, h = 35):
-      saveButtonStyle()
-      setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
-      imageButton(image = mapImages[0]):
-        discard
-      restoreButtonStyle()
-    var
-      text: string = formattedTime()
-      widgetWidth: float = try:
-        getTextWidth(text = text) + 15 * getButtonStyle(field = padding).x;
-      except:
-        dialog = setError(message = "Can't get widget width.")
-        return
-    row(x = windowWidth / 3.5, y = 0, w = widgetWidth, h = 30):
-      label(str = text)
-    row(x = windowWidth - 100, y = 0, w = 30, h = 30):
-      label(str = "test")
-  dialog = none
+  showHeader(dialog = dialog)
   state = map
