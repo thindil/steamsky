@@ -148,13 +148,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     # The main window
     window(name = "Main", x = 0, y = 0, w = windowWidth,
         h = windowHeight, flags = {windowNoScrollbar}):
-      case state
-      of GameState.mainMenu..GameState.map:
+      if state in GameState.mainMenu..GameState.map:
         # Show the proper window
         showGame[state](state = state, dialog = dialog)
-      of quitGame:
-        # Quit from the game
-        discard
       # Add the tooltips, if enabled
       if gameSettings.showTooltips:
         showTooltips()

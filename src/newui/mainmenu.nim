@@ -566,7 +566,7 @@ proc setGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   windowWidth = gameSettings.windowWidth.float
   windowHeight = gameSettings.windowHeight.float
   nuklearSetWindowResizable()
-  createGameUi()
+  createGameUi(dialog = dialog)
 
 proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [WriteIOEffect, ReadIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -584,9 +584,10 @@ proc loadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     state = loadGame
     dialog = setError(message = "Can't load this game.")
     return
-  state = map
   dialog = none
   setGame(dialog = dialog)
+  if dialog == none:
+    state = map
 
 const playerTooltips: array[12, string] = ["Enter character name.",
     "Select a random name for the character, based on the character gender",
@@ -1020,8 +1021,9 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Start game"):
         startGame(dialog = dialog)
         if dialog == none:
-          state = map
           setGame(dialog = dialog)
+          if dialog == none:
+            state = map
     row(x = 300.float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")

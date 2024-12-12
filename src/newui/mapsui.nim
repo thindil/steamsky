@@ -18,12 +18,29 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
+import std/os
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui
+import ../[config, game]
+import coreui, errordialog
 
-proc createGameUi*() {.raises: [], tags: [], contractual.} =
+var
+  mapImages: array[2, PImage] = [nil, nil]
+
+proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Create the game's UI and show the map to the player
-  discard
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns parameter dialog, modified if any error happened.
+  if mapImages[0] == nil:
+    # Load images
+    try:
+      mapImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
+          DirSep & "images" & DirSep & "ui" & DirSep & "menu.svg", width = 0,
+          height = 10 + gameSettings.interfaceFontSize)
+    except:
+      dialog = setError(message = "Can't set the game's images.")
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [], contractual.} =
@@ -34,15 +51,16 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameter state and dialog. The latter is modified if
   ## any error happened.
-  layoutDynamic(30, 3):
-    row(0.1):
-      labelButton(title = "menu"):
+  layoutSpaceStatic(height = 35, widgetsCount = 4):
+    row(x = 0, y = 0, w = 40, h = 35):
+      saveButtonStyle()
+      setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
+      imageButton(image = mapImages[0]):
         discard
-    row(0.4):
+      restoreButtonStyle()
+    row(x = windowWidth / 2.4, y = 0, w = 30, h = 30):
       label(str = "Time")
-    row(0.5):
-      setLayoutRowDynamic(30, 2)
+    row(x = windowWidth - 100, y = 0, w = 30, h = 30):
       label(str = "test")
-      label(str = "test2")
   dialog = none
   state = map
