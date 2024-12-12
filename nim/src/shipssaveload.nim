@@ -207,7 +207,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
         owners: seq[int] = @[]
         upgradeAction: ShipUpgrade = none
         upgradeProgress: int = 0
-        mType: ModuleType2 = any
+        mType: ModuleType2 = ModuleType2.any
       if module.attr(name = "owner") == "":
         for owner in module.findAll(tag = "owner"):
           owners.add(y = owner.attr(name = "value").parseInt - 1)
@@ -246,7 +246,7 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
         of harpoonGun:
           mType = harpoonGun
         else:
-          mType = any
+          mType = ModuleType2.any
       else:
         case modulesList[protoIndex].mType
         of medicalRoom:
@@ -279,11 +279,11 @@ proc loadPlayerShip*(saveData: XmlNode) {.sideEffect, raises: [ValueError],
         data: array[1..3, int] = [0, 0, 0]
         dataIndex: int = 1
       case mType
-      of any:
+      of ModuleType2.any:
         for modData in module.findAll(tag = "data"):
           data[dataIndex] = modData.attr(name = "value").parseInt
           dataIndex.inc
-        playerShip.modules.add(y = ModuleData(mType: any, name: name,
+        playerShip.modules.add(y = ModuleData(mType: ModuleType2.any, name: name,
             protoIndex: protoIndex, weight: weight, durability: modDur,
             maxDurability: maxDur, owner: owners,
             upgradeProgress: upgradeProgress, upgradeAction: upgradeAction, data: data))

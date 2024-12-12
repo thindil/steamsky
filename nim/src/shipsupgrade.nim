@@ -1,4 +1,4 @@
-# Copyright 2023 Bartek thindil Jasicki
+# Copyright 2023-2024 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -314,7 +314,7 @@ proc startUpgrading*(moduleIndex: Natural, upgradeType: Positive) {.sideEffect,
     else:
       raise newException(exceptn = ShipUpgradeError,
           message = playerShip.modules[moduleIndex].name & " can't be upgraded in that way.")
-    upgradeAction = maxValue
+    upgradeAction = ShipUpgrade.maxValue
   of 3:
     case modulesList[playerShip.modules[moduleIndex].protoIndex].mType
     of engine:

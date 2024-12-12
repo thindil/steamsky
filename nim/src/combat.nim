@@ -1401,7 +1401,7 @@ proc setAdaGuns(adaGuns: AdaGunsArray) {.raises: [], tags: [], exportc,
   for gun in adaGuns:
     if gun[0] == -1:
       break
-    guns.add(y = [gun[0].int - 1, gun[1].int, gun[2].int])
+    guns.add(y = [1: gun[0].int - 1, 2: gun[1].int, 3: gun[2].int])
 
 proc getAdaBoardingOrders(adaOrders: var AdaBoardingOrders) {.raises: [],
     tags: [], exportc, contractual.} =

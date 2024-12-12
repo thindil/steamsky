@@ -254,7 +254,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           addButton(name = ".deliverprice",
               label = "Deliver medicines for price",
               command = "DeliverMedicines paid", shortcut = "m", underline = 8)
-    of none, doublePrice, baseRecovery:
+    of EventsTypes.none, doublePrice, baseRecovery:
       if baseIndex > 0:
         if skyBases[baseIndex].reputation.level > -25:
           var dockingCost = 1
