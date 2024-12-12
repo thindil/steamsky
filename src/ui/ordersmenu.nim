@@ -55,6 +55,132 @@ proc addButton(name, label, command, shortcut: string; underline: Natural;
   lastButton = button
   shortcuts.add(y = OrderShortcut(buttonName: button, shortcut: shortcut[0]))
 
+proc showDockedCommands(baseIndex: ExtendedBasesRange;
+    haveTrader: bool): bool {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the available orders when the player's ship is docked to a base
+  ##
+  ## * baseIndex  - the index of the base to which the player's ship is docked
+  ## * haveTrader - if true, someone in the crew is assigned to trader position
+  ##
+  ## Returns false if everything was show ok, otherwise show error and return
+  ## true
+  result = false
+  addButton(name = ".undock", label = "Undock", command = "Docking",
+      shortcut = "d", underline = 2)
+  if skyBases[baseIndex].population > 0:
+    addButton(name = ".escape", label = "Escape", command = "Docking escape",
+        shortcut = "a", underline = 3)
+    if haveTrader and skyBases[baseIndex].population > 0:
+      addButton(name = ".trade", label = "Trade", command = "ShowTrade",
+          shortcut = "t", underline = 0)
+      addButton(name = ".school", label = "School", command = "ShowSchool",
+          shortcut = "s", underline = 0)
+      if skyBases[baseIndex].recruits.len > 0:
+        addButton(name = ".recruits", label = "Recruit",
+            command = "ShowRecruit", shortcut = "r", underline = 0)
+    if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
+      addButton(name = ".events", label = "Ask for events",
+          command = "AskForEvents", shortcut = "e", underline = 8)
+    if not skyBases[baseIndex].askedForBases:
+      addButton(name = ".bases", label = "Ask for bases",
+          command = "AskForBases", shortcut = "b", underline = 8)
+    try:
+      if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
+        addButton(name = ".pray", label = "Pray", command = "Pray",
+            shortcut = "p", underline = 0)
+    except:
+      showError(message = "Can't check if base has temple flag.")
+      return true
+    for member in playerShip.crew:
+      if member.health < 100:
+        addButton(name = ".heal", label = "Heal wounded",
+            command = "ShowBaseUI heal", shortcut = "w", underline = 5)
+        break
+    for module in playerShip.modules:
+      if module.durability < module.maxDurability:
+        addButton(name = ".repair", label = "Repair ship",
+            command = "ShowBaseUI repair", shortcut = "p", underline = 2)
+        break
+    try:
+      if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
+        addButton(name = ".shipyard", label = "Shipyard",
+            command = "ShowShipyard", shortcut = "i", underline = 2)
+    except:
+      showError(message = "Can't check if the base has shipyard flag.")
+      return true
+    for index, recipe in recipesList:
+      try:
+        if index notin knownRecipes and index in basesTypesList[skyBases[
+            baseIndex].baseType].recipes and recipe.reputation <= skyBases[
+            baseIndex].reputation.level:
+          addButton(name = ".recipes", label = "Buy recipes",
+              command = "ShowBaseUI recipes", shortcut = "y", underline = 2)
+          break
+      except:
+        showError(message = "Can't check if base has recipes for sale.")
+        return true
+    if skyBases[baseIndex].missions.len > 0:
+      var missionsLimit: int = case skyBases[baseIndex].reputation.level
+        of 0..25:
+          1
+        of 26..50:
+          3
+        of 51..75:
+          5
+        of 76..100:
+          10
+        else:
+          0
+      for mission in acceptedMissions:
+        if (mission.finished and mission.startBase == baseIndex) or (
+            mission.targetX == playerShip.skyX and mission.targetY ==
+            playerShip.skyY):
+          case mission.mType
+          of deliver:
+            try:
+              addButton(name = ".mission", label = "Complete delivery of " &
+                  itemsList[mission.itemIndex].name,
+                  command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+            except:
+              showError(message = "Can't add mission button.")
+              return true
+          of destroy:
+            if mission.finished:
+              try:
+                addButton(name = ".mission", label = "Complete destroy " &
+                    protoShipsList[mission.shipIndex].name,
+                    command = "CompleteMission", shortcut = "c",
+                        underline = 0, row = 0)
+              except:
+                showError(message = "Can't add mission button.")
+                return true
+          of patrol:
+            if mission.finished:
+              addButton(name = ".mission",
+                  label = "Complete Patrol area mission",
+                  command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+          of explore:
+            if mission.finished:
+              addButton(name = ".mission",
+                  label = "Complete Explore area mission",
+                  command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+          of passenger:
+            if mission.finished:
+              addButton(name = ".mission",
+                  label = "Complete Transport passenger mission",
+                  command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
+        if mission.startBase == baseIndex:
+          missionsLimit.dec
+      if missionsLimit > 0:
+        addButton(name = ".missions", label = "Missions",
+            command = "ShowBaseMissions", shortcut = "m", underline = 0)
+    if playerShip.homeBase != baseIndex:
+      addButton(name = ".home", label = "Set as home", command = "SetAsHome",
+          shortcut = "h", underline = 7)
+  if skyBases[baseIndex].population == 0:
+    addButton(name = ".loot", label = "Loot", command = "ShowLoot",
+        shortcut = "l", underline = 0)
+
 proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
         TimeEffect, RootEffect], cdecl, contractual.} =
@@ -135,116 +261,8 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
     of any, loot:
       discard
   if playerShip.speed == docked:
-    addButton(name = ".undock", label = "Undock", command = "Docking",
-        shortcut = "d", underline = 2)
-    if skyBases[baseIndex].population > 0:
-      addButton(name = ".escape", label = "Escape", command = "Docking escape",
-          shortcut = "a", underline = 3)
-      if haveTrader and skyBases[baseIndex].population > 0:
-        addButton(name = ".trade", label = "Trade", command = "ShowTrade",
-            shortcut = "t", underline = 0)
-        addButton(name = ".school", label = "School", command = "ShowSchool",
-            shortcut = "s", underline = 0)
-        if skyBases[baseIndex].recruits.len > 0:
-          addButton(name = ".recruits", label = "Recruit",
-              command = "ShowRecruit", shortcut = "r", underline = 0)
-      if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
-        addButton(name = ".events", label = "Ask for events",
-            command = "AskForEvents", shortcut = "e", underline = 8)
-      if not skyBases[baseIndex].askedForBases:
-        addButton(name = ".bases", label = "Ask for bases",
-            command = "AskForBases", shortcut = "b", underline = 8)
-      try:
-        if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
-          addButton(name = ".pray", label = "Pray", command = "Pray",
-              shortcut = "p", underline = 0)
-      except:
-        return showError(message = "Can't check if base has temple flag.")
-      for member in playerShip.crew:
-        if member.health < 100:
-          addButton(name = ".heal", label = "Heal wounded",
-              command = "ShowBaseUI heal", shortcut = "w", underline = 5)
-          break
-      for module in playerShip.modules:
-        if module.durability < module.maxDurability:
-          addButton(name = ".repair", label = "Repair ship",
-              command = "ShowBaseUI repair", shortcut = "p", underline = 2)
-          break
-      try:
-        if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
-          addButton(name = ".shipyard", label = "Shipyard",
-              command = "ShowShipyard", shortcut = "i", underline = 2)
-      except:
-        return showError(message = "Can't check if the base has shipyard flag.")
-      for index, recipe in recipesList:
-        try:
-          if index notin knownRecipes and index in basesTypesList[skyBases[
-              baseIndex].baseType].recipes and recipe.reputation <= skyBases[
-              baseIndex].reputation.level:
-            addButton(name = ".recipes", label = "Buy recipes",
-                command = "ShowBaseUI recipes", shortcut = "y", underline = 2)
-            break
-        except:
-          return showError(message = "Can't check if base has recipes for sale.")
-      if skyBases[baseIndex].missions.len > 0:
-        var missionsLimit: int = case skyBases[baseIndex].reputation.level
-          of 0..25:
-            1
-          of 26..50:
-            3
-          of 51..75:
-            5
-          of 76..100:
-            10
-          else:
-            0
-        for mission in acceptedMissions:
-          if (mission.finished and mission.startBase == baseIndex) or (
-              mission.targetX == playerShip.skyX and mission.targetY ==
-              playerShip.skyY):
-            case mission.mType
-            of deliver:
-              try:
-                addButton(name = ".mission", label = "Complete delivery of " &
-                    itemsList[mission.itemIndex].name,
-                    command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
-              except:
-                return showError(message = "Can't add mission button.")
-            of destroy:
-              if mission.finished:
-                try:
-                  addButton(name = ".mission", label = "Complete destroy " &
-                      protoShipsList[mission.shipIndex].name,
-                      command = "CompleteMission", shortcut = "c",
-                          underline = 0, row = 0)
-                except:
-                  return showError(message = "Can't add mission button.")
-            of patrol:
-              if mission.finished:
-                addButton(name = ".mission",
-                    label = "Complete Patrol area mission",
-                    command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
-            of explore:
-              if mission.finished:
-                addButton(name = ".mission",
-                    label = "Complete Explore area mission",
-                    command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
-            of passenger:
-              if mission.finished:
-                addButton(name = ".mission",
-                    label = "Complete Transport passenger mission",
-                    command = "CompleteMission", shortcut = "c", underline = 0, row = 0)
-          if mission.startBase == baseIndex:
-            missionsLimit.dec
-        if missionsLimit > 0:
-          addButton(name = ".missions", label = "Missions",
-              command = "ShowBaseMissions", shortcut = "m", underline = 0)
-      if playerShip.homeBase != baseIndex:
-        addButton(name = ".home", label = "Set as home", command = "SetAsHome",
-            shortcut = "h", underline = 7)
-    if skyBases[baseIndex].population == 0:
-      addButton(name = ".loot", label = "Loot", command = "ShowLoot",
-          shortcut = "l", underline = 0)
+    if showDockedCommands(baseIndex = baseIndex, haveTrader = haveTrader):
+      return tclOk
   else:
     var event: EventsTypes = EventsTypes.none
     if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
@@ -273,7 +291,7 @@ proc showOrdersCommand*(clientData: cint; interp: PInterp; argc: cint;
           addButton(name = ".deliverprice",
               label = "Deliver medicines for price",
               command = "DeliverMedicines paid", shortcut = "m", underline = 8)
-    of none, doublePrice, baseRecovery:
+    of EventsTypes.none, doublePrice, baseRecovery:
       if baseIndex > 0:
         if skyBases[baseIndex].reputation.level > -25:
           var dockingCost: int = 1
@@ -776,7 +794,8 @@ proc executeStoryCommand(clientData: cint; interp: PInterp; argc: cint;
 proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
     itemIndex: int = try:
         findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[
