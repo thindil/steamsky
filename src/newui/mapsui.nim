@@ -24,7 +24,7 @@ import ../[config, game, messages]
 import coreui, errordialog
 
 var
-  mapImages: array[2, PImage] = [nil, nil]
+  mapImages: array[4, PImage] = [nil, nil, nil, nil]
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -35,31 +35,35 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns parameter dialog, modified if any error happened.
   if mapImages[0] == nil:
     # Load images
+    const imagesNames: array[4, string] = ["menu", "fuel", "nofuel", "lowfuel"]
     try:
-      mapImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
-          DirSep & "images" & DirSep & "ui" & DirSep & "menu.svg", width = 0,
-          height = 10 + gameSettings.interfaceFontSize)
+      for index, name in imagesNames:
+        mapImages[index] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
+            DirSep & "images" & DirSep & "ui" & DirSep & name & ".svg",
+            width = 0, height = 30 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
 
-proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Show the game's header
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show.
-  setRowTemplate(35):
-    rowTemplateStatic(40)
+  setRowTemplate(height = 35):
+    rowTemplateStatic(width = 40)
     rowTemplateDynamic()
-    rowTemplateVariable(80)
+    rowTemplateStatic(width = 30)
   saveButtonStyle()
   setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
   imageButton(image = mapImages[0]):
     discard
   restoreButtonStyle()
   label(str = formattedTime(), alignment = centered)
-  label(str = "test")
+  image(image = mapImages[1])
+  dialog = none
 
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
