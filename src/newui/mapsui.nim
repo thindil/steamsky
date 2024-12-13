@@ -20,7 +20,7 @@
 
 import std/os
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, messages]
+import ../[config, game, messages, shipscargo]
 import coreui, errordialog
 
 var
@@ -52,10 +52,20 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show.
+  let fuelAmount: Natural = try:
+        getItemAmount(itemType = fuelType)
+      except KeyError:
+        dialog = setError(message = "Can't get fuel amount.")
+        return
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
     rowTemplateDynamic()
     rowTemplateStatic(width = 30)
+    try:
+      rowTemplateStatic(width = getTextWidth(text = $fuelAmount))
+    except:
+      dialog = setError(message = "Can't set fuel text width")
+      return
   saveButtonStyle()
   setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
   imageButton(image = mapImages[0]):
@@ -63,8 +73,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   restoreButtonStyle()
   label(str = formattedTime(), alignment = centered)
   image(image = mapImages[1])
-  dialog = none
-
+  colorLabel(str = $fuelAmount, r = 78, g = 158, b = 6)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
