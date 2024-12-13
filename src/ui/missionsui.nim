@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts, nimalyzer
 import ../[config, events, game, items, maps, missions, missions2, ships, tk,
     types, utils]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
@@ -24,7 +25,7 @@ var baseIndex = 0
 
 proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-       TimeEffect, RootEffect], cdecl.} =
+       TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show mission on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -46,7 +47,7 @@ proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
       missionIndex].targetX)
   return tclOk
 
-proc countMissionsAmount(): Natural {.raises: [], tags: [].} =
+proc countMissionsAmount(): Natural {.raises: [], tags: [], contractual.} =
   ## Count the amount of missions which the player can get from the selected
   ##
   ## Returns the amount of missions which the player can get from the base
@@ -73,7 +74,7 @@ var
   missionsIndexes: seq[Natural]
 
 proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect].} =
+    TimeEffect, RootEffect], contractual.} =
   ## Refresh the list of available missions
   ##
   ## * page - The current page of the list to show. Default value is 1.
@@ -197,7 +198,8 @@ proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
         nextCommand = "ShowBaseMissions " & $(page + 1))
 
 proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+       contractual.} =
   ## Accept the mission in a base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -236,7 +238,8 @@ proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+       contractual.} =
   ## Show the list of available missions in the base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -290,8 +293,8 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     """)
     tclEval(script = "bind " & missionsFrame & " <Configure> {ResizeCanvas %W.canvas %w %h}")
     try:
-      addCommand("ShowMission", showMissionCommand)
-      addCommand("SetMission", setMissionCommand)
+      addCommand(name = "ShowMission", nimProc = showMissionCommand)
+      addCommand(name = "SetMission", nimProc = setMissionCommand)
     except:
       return showError(message = "Can't add Tcl commands.")
     missionsTable = createTable(parent = missionsCanvas & ".missions",
@@ -327,7 +330,7 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-       TimeEffect, RootEffect], cdecl.} =
+       TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show more info about the selected mission
   ##
   ## * clientData - the additional data for the Tcl command
@@ -460,7 +463,7 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-       TimeEffect, RootEffect], cdecl.} =
+       TimeEffect, RootEffect], cdecl, contractual.} =
   ## Accept the mission in a base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -532,7 +535,7 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-       TimeEffect, RootEffect], cdecl.} =
+       TimeEffect, RootEffect], cdecl, contractual.} =
   ## Update the information about the selected mission reward
   ##
   ## * clientData - the additional data for the Tcl command
@@ -570,7 +573,8 @@ const defaultMissionsSortOrder: MissionsSortOrders = none
 var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+       contractual.} =
   ## Sort the list of available missions
   ##
   ## * clientData - the additional data for the Tcl command
@@ -646,7 +650,8 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
             reward: mission.reward, id: index))
     except:
       return showError(message = "Can't add mission to list.")
-  proc sortMissions(x, y: LocalMissionData): int =
+  proc sortMissions(x, y: LocalMissionData): int {.raises: [], tags: [],
+      contractual.} =
     case missionsSortOrder
     of typeAsc:
       if x.mType < y.mType:
@@ -719,13 +724,13 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the list of available missions
   try:
-    addCommand("ShowBaseMissions", showBaseMissionsCommand)
-    addCommand("MissionMoreInfo", missionMoreInfoCommand)
-    addCommand("AcceptMission", acceptMissionCommand)
-    addCommand("UpdateMissionReward", updateMissionRewardCommand)
-    addCommand("SortAvailableMissions", sortAvailableMissionsCommand)
+    addCommand(name = "ShowBaseMissions", nimProc = showBaseMissionsCommand)
+    addCommand(name = "MissionMoreInfo", nimProc = missionMoreInfoCommand)
+    addCommand(name = "AcceptMission", nimProc = acceptMissionCommand)
+    addCommand(name = "UpdateMissionReward", nimProc = updateMissionRewardCommand)
+    addCommand(name = "SortAvailableMissions", nimProc = sortAvailableMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
