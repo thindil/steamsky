@@ -564,6 +564,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].
     addCommand("ShowDropItem", showDropItemCommand)
     addCommand("DropItem", dropItemCommand)
     addCommand("ShowCargoItemInfo", showCargoItemInfoCommand)
-    addCommand("updateMaxGiveAmount", updateMaxGiveAmountCommand)
+    addCommand("UpdateMaxGiveAmount", updateMaxGiveAmountCommand)
   except:
     showError(message = "Can't add a Tcl command.")
