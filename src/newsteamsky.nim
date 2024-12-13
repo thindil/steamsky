@@ -21,7 +21,7 @@
 import std/[os, parseopt, strutils, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[coreui, dialogs, errordialog, goalsui, mainmenu, mapsui]
+import newui/[coreui, dialogs, errordialog, goalsui, mainmenu, mapsui, themes]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -96,6 +96,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       size: gameSettings.interfaceFontSize + 10)))
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
+  # Load the game's theme
+  loadTheme()
   var
     state: GameState = mainMenu
     dialog: GameDialog = none
