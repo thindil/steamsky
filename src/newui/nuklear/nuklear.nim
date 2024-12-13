@@ -547,6 +547,19 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
         discard b.pool.free(handle = b.pool.userdata, old = b.memory.`ptr`)
       except:
         discard
+
+    if b.size == bufferSize:
+      # no back buffer so just set correct size
+      b.size = capacity
+      return temp
+
+    # copy back buffer to the end of the new buffer
+    let
+      backSize: nk_size = bufferSize - b.size
+      dst: pointer = cast[pointer](cast[ptr nk_buffer](temp) + (capacity - backSize))
+      src: pointer = cast[pointer](cast[ptr nk_buffer](temp) + b.size)
+    copyMem(dest = dst, source = src, size = backSize)
+    b.size = capacity - backSize
     return temp
 
 proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
@@ -580,11 +593,13 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
       full = (b.allocated + size + alignment) > b.size
     else:
       full = (b.size - min(x = b.size, y = (size + alignment))) <= b.allocated
+
     if full:
       if b.`type` != NK_BUFFER_DYNAMIC:
         return nil
       if b.`type` != NK_BUFFER_DYNAMIC or b.pool.alloc == nil or b.pool.free == nil:
         return nil
+
       # buffer is full so allocate bigger buffer if dynamic
       var capacity: nk_size = (b.memory.size.cfloat * b.grow_factor).nk_size
       capacity = max(x = capacity, y = nkRoundUpPow2(v = (b.allocated.nk_uint +
