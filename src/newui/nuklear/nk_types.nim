@@ -312,6 +312,7 @@ type
     `type`*: nk_allocation_type
     pool*: nk_allocator
     grow_factor*: cfloat
+    calls*: nk_size
   nk_context* {.importc: "struct nk_context", nodecl.} = object
     ## Internal Nuklear type
     style*: nk_style

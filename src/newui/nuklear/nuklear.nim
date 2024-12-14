@@ -83,7 +83,8 @@ proc nk_widget_disable_end(ctx) {.importc, cdecl, raises: [], tags: [], contract
 proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
-proc nk_window_find(ctx; name: cstring): ptr nk_window {.importc, nodecl, raises: [], tags: [], contractual.}
+proc nk_window_find(ctx; name: cstring): ptr nk_window {.importc, nodecl,
+    raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
 # ------
@@ -488,7 +489,6 @@ template `+`[T](p: ptr T; off: nk_size): ptr T =
   cast[ptr type(p[])](cast[nk_size](p) +% off * sizeof(p[]))
 {.pop ruleOn: "namedParams".}
 
-{.push ruleOff: "params".}
 proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
     `type`: nk_buffer_allocation_type): pointer {.raises: [], tags: [],
     contractual.} =
@@ -519,7 +519,8 @@ proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
   return memory
 
 proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
-    size: var nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
+    size: var nk_size): pointer {.raises: [], tags: [RootEffect],
+        contractual.} =
   ## Reallocate memory for the selected buffer. Internal use only
   ##
   ## * b        - the buffer which memory will be reallocated
@@ -606,13 +607,30 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
           size.nk_uint)).nk_size)
       b.memory.`ptr` = cast[ptr nk_size](nkBufferRealloc(b = b,
           capacity = capacity, size = b.memory.size))
+      if b.memory.`ptr` == nil:
+        return nil
 
+      # align newly allocated pointer
+      if `type` == NK_BUFFER_FRONT:
+        unaligned = b.memory.`ptr` + b.allocated
+      else:
+        unaligned = b.memory.`ptr` + (b.size - size)
+      memory = nkBufferAlign(unaligned = unaligned, align = align,
+          alignment = alignment, `type` = `type`)
+
+    if `type` == NK_BUFFER_FRONT:
+      unaligned = b.memory.`ptr` + b.allocated
+    else:
+      unaligned = b.memory.`ptr` + (b.size - size)
+    b.needed += alignment
+    b.calls.inc
     return memory
 
 # ----
 # Draw
 # ----
 
+{.push ruleOff: "params".}
 proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a command to the commands buffer. Internal use only
@@ -631,6 +649,8 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
         `type` = NK_BUFFER_FRONT, size = size, align = align))
     if cmd == nil:
       return nil
+
+    # make sure the offset to the next command is aligned
 {.pop ruleOn: "params".}
 
 proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
