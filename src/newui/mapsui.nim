@@ -18,10 +18,10 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
-import std/os
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, messages, shipscargo]
-import coreui, errordialog
+import coreui, errordialog, themes
 
 var
   mapImages: array[4, PImage] = [nil, nil, nil, nil]
@@ -35,11 +35,9 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns parameter dialog, modified if any error happened.
   if mapImages[0] == nil:
     # Load images
-    const imagesNames: array[4, string] = ["menu", "fuel", "nofuel", "lowfuel"]
     try:
-      for index, name in imagesNames:
-        mapImages[index] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
-            DirSep & "images" & DirSep & "ui" & DirSep & name & ".svg",
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..7]:
+        mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 30 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
