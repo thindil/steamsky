@@ -27,15 +27,18 @@ type
     ## Stores data about the game's theme
     name: string
     fileName: string
-    menuIcons*: array[4, string]
-    mapIcons*: array[4, string]
+    icons*: array[8, string]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
       DirSep & "ui" & DirSep ## The path to the default theme's icons
   defaultTheme: ThemeData = ThemeData(name: "Default theme",
-    fileName: dataDirectory & "ui" & DirSep & "theme.cfg", menuIcons: ["", "",
-    "", ""], mapIcons: ["", "", "", ""])
+      fileName: dataDirectory & "ui" & DirSep & "theme.cfg", icons: [
+      dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg",
+      defaultThemeIconPath & "random.svg", defaultThemeIconPath & "male.svg",
+      defaultThemeIconPath & "female.svg", defaultThemeIconPath & "menu.svg",
+      defaultThemeIconPath & "fuel.svg", defaultThemeIconPath & "nofuel.svg",
+      defaultThemeIconPath & "lowfuel.svg"])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -45,6 +48,8 @@ proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme: ThemeData = defaultTheme
   themesList["steamsky"] = theme
   try:
+    const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
+        "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -69,6 +74,8 @@ proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.name = entry.value
               of "FileName":
                 theme.fileName = themeDir & DirSep & entry.value
+              of iconsNames:
+                discard
               else:
                 discard
             of cfgError:
