@@ -22,7 +22,7 @@ import std/[algorithm, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[basestypes, config, events, game, game2, gamesaveload, goals,
     halloffame, shipscrew, ships2, utils]
-import coreui, dialogs, errordialog, goalsui, mapsui
+import coreui, dialogs, errordialog, goalsui, mapsui, themes
 
 var
   menuImages: array[4, PImage] = [nil, nil, nil, nil]
@@ -46,15 +46,11 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   ## Returns parameter dialog, modified if any error happened.
   if menuImages[0] == nil:
     # Load images
-    const fileNames: array[1..3, string] = ["random", "male", "female"]
     try:
-      menuImages[0] = nuklearLoadSVGImage(filePath = dataDirectory & "ui" &
-          DirSep & "images" & DirSep & "logo.svg", width = 0, height = 110)
-      for index, fileName in fileNames:
-        menuImages[index] = nuklearLoadSVGImage(filePath = dataDirectory &
-            "ui" & DirSep & "images" & DirSep & "ui" & DirSep & fileName &
-            ".svg", width = 0,
-            height = 10 + gameSettings.interfaceFontSize)
+      let theme: ThemeData = themesList[gameSettings.interfaceTheme]
+      menuImages[0] = nuklearLoadSVGImage(filePath = theme.icons[0], width = 0, height = 110)
+      for index, fileName in theme.icons[1 .. 3]:
+        menuImages[index] = nuklearLoadSVGImage(filePath = fileName, width = 0, height = 10 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
     # Set the list of available factions

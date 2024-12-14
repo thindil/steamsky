@@ -75,7 +75,8 @@ proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
               of "FileName":
                 theme.fileName = themeDir & DirSep & entry.value
               of iconsNames:
-                discard
+                let index: Natural = iconsNames.find(item = entry.value)
+                theme.icons[index] = themeDir & DirSep & entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
