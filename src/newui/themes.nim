@@ -18,9 +18,9 @@
 ## Provides code related to the game's themes' system, like default
 ## theme setting, etc
 
-import std/os
-import contracts, nuklear/nuklear_sdl_renderer
-import ../game
+import std/[os, parsecfg, streams, tables]
+import contracts
+import ../[config, game]
 
 type
   ThemeData* = object
@@ -30,10 +30,63 @@ type
     menuIcons*: array[4, string]
     mapIcons*: array[4, string]
 
-let defaultTheme: ThemeData = ThemeData(name: "default",
-    fileName: dataDirectory & "ui" & DirSep & "theme.txt", menuIcons: ["", "",
+let
+  defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
+      DirSep & "ui" & DirSep ## The path to the default theme's icons
+  defaultTheme: ThemeData = ThemeData(name: "Default theme",
+    fileName: dataDirectory & "ui" & DirSep & "theme.cfg", menuIcons: ["", "",
     "", ""], mapIcons: ["", "", "", ""])
 
-proc loadTheme*() {.raises: [], tags: [], contractual.} =
+var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
+
+proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
+    ReadDirEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Set the theme for the game
-  discard
+  var theme: ThemeData = defaultTheme
+  themesList["steamsky"] = theme
+  try:
+    for themeDir in walkDirs(pattern = themesDirectory):
+      for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
+        var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
+        if configFile == nil:
+          continue
+        var parser: CfgParser = CfgParser()
+        try:
+          parser.open(input = configFile, filename = configName)
+        except OSError, IOError, Exception:
+          echo "Can't initialize configuration file parser. Reason: " &
+              getCurrentExceptionMsg()
+          return
+        while true:
+          try:
+            let entry: CfgEvent = parser.next()
+            case entry.kind
+            of cfgEof:
+              break
+            of cfgKeyValuePair, cfgOption:
+              case entry.key
+              of "Name":
+                theme.name = entry.value
+              of "FileName":
+                theme.fileName = themeDir & DirSep & entry.value
+              else:
+                discard
+            of cfgError:
+              echo entry.msg
+            of cfgSectionStart:
+              discard
+          except ValueError, OSError, IOError:
+            echo "Invalid data in the theme configuration file. Details: " &
+                getCurrentExceptionMsg()
+            continue
+        try:
+          parser.close()
+        except OSError, IOError, Exception:
+          echo "Can't close configuration file parser. Reason: " &
+              getCurrentExceptionMsg()
+      themesList[themeDir.lastPathPart] = theme
+      theme = defaultTheme
+  except:
+    discard
+  if gameSettings.interfaceTheme notin themesList:
+    gameSettings.interfaceTheme = "steamsky"
