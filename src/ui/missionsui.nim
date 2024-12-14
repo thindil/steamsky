@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to UI in bases' available missions list, like show
+## the list, accept a mission, show a mission on the map, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[config, events, game, items, maps, missions, missions2, ships, tk,
@@ -652,6 +655,14 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't add mission to list.")
   proc sortMissions(x, y: LocalMissionData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two missions and return which should go first, based on the sort
+    ## order of the missions
+    ##
+    ## * x - the first mission to compare
+    ## * y - the second mission to compare
+    ##
+    ## Returns 1 if the first mission should go first, -1 if the second mission
+    ## should go first.
     case missionsSortOrder
     of typeAsc:
       if x.mType < y.mType:
