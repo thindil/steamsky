@@ -19,7 +19,7 @@
 ## theme setting, etc
 
 import std/[colors, os, parsecfg, streams, tables]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game]
 
 type
@@ -106,14 +106,25 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     discard
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
+  {.ruleOff: "varDeclared".}
   var table: array[countColors, NimColor]
-  for index in 0..1:
+  {.ruleOn: "varDeclared".}
+
+  proc setColor(colorName: StyleColors; index: Natural) {.raises: [], tags: [],
+      contractual.} =
+    ## Convert the selected color to Nuklear color
+    ##
+    ## * colorName - the Nuklear's theme's color name to which will be converted
+    ## * index     - the index of the color from the game's current theme
     let (r, g, b) = try:
         extractRGB(a = themesList[gameSettings.interfaceTheme].colors[index])
       except:
         echo "Can't set the theme's color."
         return
-    table[index.StyleColors] = NimColor(r: r, g: g, b: b, a: 255)
+    table[colorName] = NimColor(r: r, g: g, b: b, a: 255)
+
+  setColor(colorName = textColor, index = 1)
+  setColor(colorName = windowColor, index = 0)
   table[headerColor] = NimColor(r: 51, g: 51, b: 56, a: 220)
   table[StyleColors.borderColor] = NimColor(r: 46, g: 46, b: 46, a: 255)
   table[buttonColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
@@ -140,4 +151,4 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   table[scrollbarCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)
   table[scrollbarCursorActiveColor] = NimColor(r: 58, g: 93, b: 121, a: 255)
   table[tabHeaderColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
-  styleFromTable(table)
+  styleFromTable(table = table)
