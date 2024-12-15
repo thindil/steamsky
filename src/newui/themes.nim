@@ -18,7 +18,7 @@
 ## Provides code related to the game's themes' system, like default
 ## theme setting, etc
 
-import std/[os, parsecfg, streams, tables]
+import std/[colors, os, parsecfg, streams, tables]
 import contracts
 import ../[config, game]
 
@@ -28,6 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
+    colors*: array[3, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -38,7 +39,9 @@ let
       defaultThemeIconPath & "random.svg", defaultThemeIconPath & "male.svg",
       defaultThemeIconPath & "female.svg", defaultThemeIconPath & "menu.svg",
       defaultThemeIconPath & "fuel.svg", defaultThemeIconPath & "nofuel.svg",
-      defaultThemeIconPath & "lowfuel.svg"])
+      defaultThemeIconPath & "lowfuel.svg"], colors: [parseColor(
+      name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
+      name = "#4e9a06")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -50,6 +53,7 @@ proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
+    const colorsNames: array[3, string] = ["BackgroundColor", "ForegroundColor", "GreenColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -76,7 +80,11 @@ proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.fileName = themeDir & DirSep & entry.value
               of iconsNames:
                 let index: Natural = iconsNames.find(item = entry.value)
-                theme.icons[index] = themeDir & DirSep & entry.value.unixToNativePath
+                theme.icons[index] = themeDir & DirSep &
+                    entry.value.unixToNativePath
+              of colorsNames:
+                let index: Natural = colorsNames.find(item = entry.value)
+                theme.colors[index] = parseColor(name = entry.value)
               else:
                 discard
             of cfgError:
