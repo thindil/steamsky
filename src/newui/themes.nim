@@ -19,7 +19,7 @@
 ## theme setting, etc
 
 import std/[colors, os, parsecfg, streams, tables]
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game]
 
 type
@@ -45,9 +45,9 @@ let
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
-proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
+proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadDirEffect, ReadIOEffect, RootEffect], contractual.} =
-  ## Set the theme for the game
+  ## Load all the game's themes and set the configured theme for the game
   var theme: ThemeData = defaultTheme
   themesList["steamsky"] = theme
   try:
@@ -106,3 +106,38 @@ proc loadTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     discard
   if gameSettings.interfaceTheme notin themesList:
     gameSettings.interfaceTheme = "steamsky"
+  var table: array[countColors, NimColor]
+  for index in 0..1:
+    let (r, g, b) = try:
+        extractRGB(a = themesList[gameSettings.interfaceTheme].colors[index])
+      except:
+        echo "Can't set the theme's color."
+        return
+    table[index.StyleColors] = NimColor(r: r, g: g, b: b, a: 255)
+  table[headerColor] = NimColor(r: 51, g: 51, b: 56, a: 220)
+  table[StyleColors.borderColor] = NimColor(r: 46, g: 46, b: 46, a: 255)
+  table[buttonColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
+  table[buttonHoverColor] = NimColor(r: 58, g: 93, b: 121, a: 255)
+  table[buttonActiveColor] = NimColor(r: 63, g: 98, b: 126, a: 255)
+  table[toggleColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
+  table[toggleHoverColor] = NimColor(r: 45, g: 53, b: 56, a: 255)
+  table[toggleCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
+  table[selectColor] = NimColor(r: 57, g: 67, b: 61, a: 255)
+  table[selectActiveColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
+  table[sliderColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
+  table[sliderCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 245)
+  table[sliderCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)
+  table[sliderCursorActiveColor] = NimColor(r: 58, g: 93, b: 121, a: 255)
+  table[propertyColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
+  table[editColor] = NimColor(r: 50, g: 58, b: 61, a: 225)
+  table[editCursorColor] = NimColor(r: 210, g: 210, b: 210, a: 255)
+  table[comboColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
+  table[chartColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
+  table[colorChartColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
+  table[colorChartHighlightColor] = NimColor(r: 255, g: 0, b: 0, a: 255)
+  table[scrollbarColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
+  table[scrollbarCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
+  table[scrollbarCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)
+  table[scrollbarCursorActiveColor] = NimColor(r: 58, g: 93, b: 121, a: 255)
+  table[tabHeaderColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
+  styleFromTable(table)
