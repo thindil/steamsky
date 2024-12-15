@@ -24,7 +24,7 @@ import ../[config, events, game, items, maps, missions, missions2, ships, tk,
     types, utils]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
 
-var baseIndex = 0
+var baseIndex: ExtendedBasesRange = 0
 
 proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
@@ -41,7 +41,7 @@ proc showMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowMission missionindex
   ## MissionIndex is the index of the mission to show on map
-  let missionIndex = try:
+  let missionIndex: int = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the mission index.")
@@ -73,8 +73,8 @@ proc countMissionsAmount(): Natural {.raises: [], tags: [], contractual.} =
         break
 
 var
-  missionsTable: TableWidget
-  missionsIndexes: seq[Natural]
+  missionsTable: TableWidget = TableWidget()
+  missionsIndexes: seq[Natural] = @[]
 
 proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], contractual.} =
@@ -86,8 +86,8 @@ proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
     showSkyMap(clear = true)
     return
   let
-    missionsLimit = countMissionsAmount()
-    missionLabel = mainPaned & ".missionsframe.canvas.missions.missionslabel.missionslbl2"
+    missionsLimit: Natural = countMissionsAmount()
+    missionLabel: string = mainPaned & ".missionsframe.canvas.missions.missionslabel.missionslbl2"
   tclEval(script = missionLabel & " configure -text {" & $missionsLimit & "}")
   if missionsTable.row > 1:
     clearTable(table = missionsTable)
@@ -95,19 +95,19 @@ proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
     missionsIndexes = @[]
     for index, _ in skyBases[baseIndex].missions:
       missionsIndexes.add(y = index)
-  let startRow = ((page - 1) * 25) + 1
+  let startRow: Positive = ((page - 1) * 25) + 1
   var
-    currentRow = 1
-    row = 2
-    rows = 0
+    currentRow: Positive = 1
+    row: Positive = 2
+    rows: Natural = 0
   for index in missionsIndexes:
     if currentRow < startRow:
       currentRow.inc
       continue
     var
-      canAccept = true
-      cabinTaken = false
-    var mission = skyBases[baseIndex].missions[index]
+      canAccept: bool = true
+      cabinTaken: bool = false
+    var mission: MissionData = skyBases[baseIndex].missions[index]
     if mission.mType == passenger:
       canAccept = false
       for module in playerShip.modules:
@@ -147,7 +147,7 @@ proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
           command = "MissionMoreInfo " & $(index + 1), column = 4)
     of destroy:
       if mission.shipIndex == -1:
-        var enemies: seq[Positive]
+        var enemies: seq[Positive] = @[]
         try:
           generateEnemies(enemies = enemies, withTraders = false)
         except:
@@ -175,7 +175,7 @@ proc refreshMissionsList(page: Positive = 1) {.raises: [], tags: [WriteIOEffect,
     addButton(table = missionsTable, text = "X: " & $mission.targetX & " Y: " &
         $mission.targetY, tooltip = "Show more info about the mission",
         command = "MissionMoreInfo " & $(index + 1), column = 3)
-    var missionTime = ""
+    var missionTime: string = ""
     minutesToDate(minutes = mission.time, infoText = missionTime)
     addButton(table = missionsTable, text = missionTime,
         tooltip = "The time limit for finish and return the mission",
@@ -215,7 +215,7 @@ proc setMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SetMission missionindex
   ## MissionIndex is the index of the mission to accept
-  let missionIndex = try:
+  let missionIndex: int = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the mission index.")
@@ -256,10 +256,10 @@ proc showBaseMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowBaseMissions ?page?
   ## Page is the number of page of the missions list to show. If not
   ## set then it is 1
-  var missionsFrame = mainPaned & ".missionsframe"
+  var missionsFrame: string = mainPaned & ".missionsframe"
   let
-    missionsCanvas = missionsFrame & ".canvas"
-    label = missionsCanvas & ".missions.missionslabel"
+    missionsCanvas: string = missionsFrame & ".canvas"
+    label: string = missionsCanvas & ".missions.missionslabel"
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.missionsframe
@@ -347,14 +347,14 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## MissionMoreInfo missionindex
   ## MissionIndex is the index of the mission's info to show
   let
-    missionIndex = try:
+    missionIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get mission index.")
-    mission = skyBases[baseIndex].missions[missionIndex]
-    missionDialog = createDialog(name = ".missiondialog",
+    mission: MissionData = skyBases[baseIndex].missions[missionIndex]
+    missionDialog: string = createDialog(name = ".missiondialog",
         title = "More info about " & getMissionType(mType = mission.mType))
-    label = missionDialog & ".infolabel"
+    label: string = missionDialog & ".infolabel"
   tclEval(script = "text " & label & " -height 5 -width 30")
   tclEval(script = label & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
@@ -365,7 +365,7 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = label & " tag configure green -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-green)"))
-  var canAccept = true
+  var canAccept: bool = true
   case mission.mType
   of deliver:
     tclEval(script = label & " insert end {Item: }")
@@ -395,7 +395,7 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of explore:
     tclEval(script = label & " insert end {Explore selected area} [list gold]")
   of passenger:
-    var cabinTaken = false
+    var cabinTaken: bool = false
     canAccept = false
     for module in playerShip.modules:
       if (module.mType == ModuleType2.cabin and not canAccept) and
@@ -418,12 +418,12 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = label & " insert end {\nTo base: }")
     tclEval(script = label & " insert end {" & skyBases[skyMap[mission.targetX][
         mission.targetY].baseIndex].name & "} [list gold]")
-  let travelValues = travelInfo(distance = (if mission.mType in {deliver,
-      passenger}: countDistance(destinationX = mission.targetX,
+  let travelValues: TravelArray = travelInfo(distance = (if mission.mType in {
+      deliver, passenger}: countDistance(destinationX = mission.targetX,
       destinationY = mission.targetY) else: countDistance(
       destinationX = mission.targetX, destinationY = mission.targetY) * 2))
   if travelValues[1] > 0:
-    var missionInfo = ""
+    var missionInfo: string = ""
     minutesToDate(minutes = travelValues[1], infoText = missionInfo)
     tclEval(script = label & " insert end {\nETA:}")
     tclEval(script = label & " insert end {" & missionInfo & "} [list gold]")
@@ -436,9 +436,9 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't get fuel name.")
   tclEval(script = label & " configure -state disabled")
   tclEval(script = "grid " & label & " -padx 5")
-  let buttonsFrame = missionDialog & ".buttons"
+  let buttonsFrame: string = missionDialog & ".buttons"
   tclEval(script = "ttk::frame " & buttonsFrame)
-  var button = buttonsFrame & ".button1"
+  var button: string = buttonsFrame & ".button1"
   tclEval(script = "ttk::button " & button &
       " -text Show -image show2icon -command {CloseDialog " & missionDialog &
       ";set mappreview 1;ShowOnMap " & $mission.targetX & " " &
@@ -480,32 +480,32 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## AcceptMission missionindex
   ## MissionIndex is the index of the mission to accept
   let
-    missionIndex = try:
+    missionIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the mission index.")
-    mission = skyBases[baseIndex].missions[missionIndex]
-    missionDialog = createDialog(name = ".missiondialog", title = "Accept " &
-        getMissionType(mType = mission.mType), columns = 2)
-    rewardScale = missionDialog & ".reward"
+    mission: MissionData = skyBases[baseIndex].missions[missionIndex]
+    missionDialog: string = createDialog(name = ".missiondialog",
+        title = "Accept " & getMissionType(mType = mission.mType), columns = 2)
+    rewardScale: string = missionDialog & ".reward"
   tclEval(script = "ttk::scale " & rewardScale &
       " -from 0 -to 200 -variable reward -command {UpdateMissionReward " &
       $argv[1] & "} -length 300")
   tclEval(script = "tooltip::tooltip " & rewardScale & " \"Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.\"")
-  let buttonsBox = missionDialog & ".buttons"
+  let buttonsBox: string = missionDialog & ".buttons"
   tclEval(script = "ttk::frame " & buttonsBox)
-  var button = buttonsBox & ".accept"
+  var button: string = buttonsBox & ".accept"
   tclEval(script = "ttk::button " & button &
       " -text Accept -command {CloseDialog " & missionDialog & ";SetMission " &
       $argv[1] & "} -image negotiate2icon -style Dialoggreen.TButton")
-  let rewardField = missionDialog & ".rewardfield"
+  let rewardField: string = missionDialog & ".rewardfield"
   tclEval(script = "ttk::spinbox " & rewardField &
       " -from 0 -to 200 -textvariable reward -validate key -validatecommand {ValidateSpinbox %W %P " &
       button & "} -width 3")
   tclEval(script = "tooltip::tooltip " & rewardField & " \"Lower value - more reputation from mission but less money,\nhigher value - more money from mission but less reputation.\"")
-  let rewardBox = missionDialog & ".rewardbox"
+  let rewardBox: string = missionDialog & ".rewardbox"
   tclEval(script = "ttk::frame " & rewardBox)
-  var rewardLabel = rewardBox & ".rewardlbl"
+  var rewardLabel: string = rewardBox & ".rewardlbl"
   tclEval(script = "ttk::label " & rewardLabel & " -text {Reward: }")
   tclEval(script = "grid " & rewardLabel & " -stick w")
   rewardLabel = rewardBox & ".rewardlbl2"
@@ -551,18 +551,18 @@ proc updateMissionRewardCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## UpdateMissionReward missionindex
   ## MissionIndex is the index of the mission to update info
-  let value = try:
+  let value: Natural = try:
       tclGetVar(varName = "reward").parseFloat.Natural
     except:
       return showError(message = "Can't get the value.")
   tclSetVar(varName = "reward", newValue = $(value.Natural))
   let
-    missionIndex = try:
+    missionIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the mission's index.")
-    mission = skyBases[baseIndex].missions[missionIndex]
-    rewardLabel = ".missiondialog.rewardbox.rewardlbl2"
+    mission: MissionData = skyBases[baseIndex].missions[missionIndex]
+  const rewardLabel: string = ".missiondialog.rewardbox.rewardlbl2"
   tclEval(script = rewardLabel & " configure -text {" & $((
       mission.reward.float * value.float) / 100.0).Natural & " " & moneyName & "}")
   return tclOk
@@ -590,7 +590,7 @@ proc sortAvailableMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortAvailableMissions x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: Positive = try:
         getColumnNumber(table = missionsTable, xPosition = ($argv[1]).parseInt)
       except:
         return showError(message = "Can't get the column number.")
@@ -741,7 +741,9 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand(name = "ShowBaseMissions", nimProc = showBaseMissionsCommand)
     addCommand(name = "MissionMoreInfo", nimProc = missionMoreInfoCommand)
     addCommand(name = "AcceptMission", nimProc = acceptMissionCommand)
-    addCommand(name = "UpdateMissionReward", nimProc = updateMissionRewardCommand)
-    addCommand(name = "SortAvailableMissions", nimProc = sortAvailableMissionsCommand)
+    addCommand(name = "UpdateMissionReward",
+        nimProc = updateMissionRewardCommand)
+    addCommand(name = "SortAvailableMissions",
+        nimProc = sortAvailableMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
