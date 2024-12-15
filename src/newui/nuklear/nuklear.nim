@@ -651,6 +651,12 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
       return nil
 
     # make sure the offset to the next command is aligned
+    b.last = cast[nk_size](cast[ptr nk_byte](cmd)) - cast[nk_size](cast[
+        ptr nk_byte](b.base.memory.`ptr`))
+    let
+      unaligned: pointer = cast[ptr nk_byte](cmd) + size
+      memory: pointer = cast[pointer]((cast[nk_size](unaligned) + (align -
+          1)) and not(align - 1))
 {.pop ruleOn: "params".}
 
 proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
