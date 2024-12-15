@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.6] - 2024-12-15
 
 ### Added
 - New icons for the map's manipulation: move up, move left, move right, move

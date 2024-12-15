@@ -97,7 +97,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   # Load the game's theme
-  loadTheme()
+  loadThemes()
   var
     state: GameState = mainMenu
     dialog: GameDialog = none
