@@ -68,7 +68,7 @@ const
       minutes: 1) ## The start date for a new game
   noDate*: DateRecord = DateRecord(year: 0, month: 0, day: 0, hour: 0,
       minutes: 0) ## The empty, not set game date
-  gameVersion*: string = "Version: 10.6" ## The current version of the game
+  gameVersion*: string = "Version: 10.7" ## The current version of the game
 
 {.warning[UnsafeSetLen]: off.}
 {.warning[UnsafeDefault]: off.}
