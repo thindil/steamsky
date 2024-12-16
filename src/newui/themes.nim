@@ -28,7 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
-    colors*: array[9, Color]
+    colors*: array[10, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -41,10 +41,10 @@ let
       defaultThemeIconPath & "fuel.svg", defaultThemeIconPath & "nofuel.svg",
       defaultThemeIconPath & "lowfuel.svg"], colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
-      name = "#4e9a06"), parseColor(name = "#1a130c"), parseColor(
+      name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
       name = "#291913"), parseColor(name = "#500000"), parseColor(
       name = "#120d0d"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#120d0d")])
+      name = "#120d0d"), parseColor(name = "#372412")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -56,9 +56,9 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
-    const colorsNames: array[9, string] = ["BackgroundColor", "ForegroundColor",
+    const colorsNames: array[10, string] = ["BackgroundColor", "ForegroundColor",
         "GreenColor", "BorderColor", "ButtonColor", "ButtonHoverColor",
-        "EditColor", "EditCursorColor", "ButtonActiveColor"]
+        "EditColor", "EditCursorColor", "ButtonActiveColor", "HeaderColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -136,7 +136,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = editColor, index = 6)
   setColor(colorName = editCursorColor, index = 7)
   setColor(colorName = buttonActiveColor, index = 8)
-  table[headerColor] = NimColor(r: 51, g: 51, b: 56, a: 220)
+  setColor(colorName = headerColor, index = 9)
   table[toggleColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[toggleHoverColor] = NimColor(r: 45, g: 53, b: 56, a: 255)
   table[toggleCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
