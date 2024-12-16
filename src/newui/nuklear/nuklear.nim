@@ -630,7 +630,6 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
 # Draw
 # ----
 
-{.push ruleOff: "params".}
 proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a command to the commands buffer. Internal use only
@@ -657,7 +656,14 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
       unaligned: pointer = cast[ptr nk_byte](cmd) + size
       memory: pointer = cast[pointer]((cast[nk_size](unaligned) + (align -
           1)) and not(align - 1))
-{.pop ruleOn: "params".}
+      alignment: nk_size = cast[nk_size](cast[ptr nk_byte](memory)) - cast[
+          nk_size](cast[ptr nk_byte](unaligned))
+    cmd.`type` = t
+    cmd.next = b.base.allocated + alignment
+    when defined(nkIncludeCommandUserData):
+      cmd.userdata = b.userdata
+    b.`end` = cmd.next
+    return cmd
 
 proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     RootEffect], contractual.} =
@@ -680,6 +686,22 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     cmd.y = r.y.cshort
     cmd.w = max(x = 0.cushort, y = r.w.cushort)
     cmd.h = max(x = 0.cushort, y = r.h.cushort)
+
+# -----
+# Panel
+# -----
+{.push ruleOff: "params"}
+proc nkPanelBegin(ctx; title: string; panelType: nk_panel_type): bool {.raises: [],
+    tags: [], contractual.} =
+  ## Start drawing a Nuklear panel. Internal use only
+  ##
+  ## * ctx       - the Nuklear context
+  ## * title     - the panel's title
+  ## * panelType - the type of the panel to draw
+  ##
+  ## Returns true if the panel was drawn, otherwise false
+  return true
+{.pop ruleOn: "params"}
 
 # ------
 # Popups
