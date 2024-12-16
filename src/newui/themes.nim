@@ -28,7 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
-    colors*: array[3, Color]
+    colors*: array[9, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -41,7 +41,10 @@ let
       defaultThemeIconPath & "fuel.svg", defaultThemeIconPath & "nofuel.svg",
       defaultThemeIconPath & "lowfuel.svg"], colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
-      name = "#4e9a06")])
+      name = "#4e9a06"), parseColor(name = "#1a130c"), parseColor(
+      name = "#291913"), parseColor(name = "#500000"), parseColor(
+      name = "#120d0d"), parseColor(name = "#ffdf00"), parseColor(
+      name = "#120d0d")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -53,7 +56,9 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
-    const colorsNames: array[3, string] = ["BackgroundColor", "ForegroundColor", "GreenColor"]
+    const colorsNames: array[9, string] = ["BackgroundColor", "ForegroundColor",
+        "GreenColor", "BorderColor", "ButtonColor", "ButtonHoverColor",
+        "EditColor", "EditCursorColor", "ButtonActiveColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -123,13 +128,15 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         return
     table[colorName] = NimColor(r: r, g: g, b: b, a: 255)
 
-  setColor(colorName = textColor, index = 1)
   setColor(colorName = windowColor, index = 0)
+  setColor(colorName = textColor, index = 1)
+  setColor(colorName = borderColor, index = 3)
+  setColor(colorName = buttonColor, index = 4)
+  setColor(colorName = buttonHoverColor, index = 5)
+  setColor(colorName = editColor, index = 6)
+  setColor(colorName = editCursorColor, index = 7)
+  setColor(colorName = buttonActiveColor, index = 8)
   table[headerColor] = NimColor(r: 51, g: 51, b: 56, a: 220)
-  table[StyleColors.borderColor] = NimColor(r: 46, g: 46, b: 46, a: 255)
-  table[buttonColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
-  table[buttonHoverColor] = NimColor(r: 58, g: 93, b: 121, a: 255)
-  table[buttonActiveColor] = NimColor(r: 63, g: 98, b: 126, a: 255)
   table[toggleColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[toggleHoverColor] = NimColor(r: 45, g: 53, b: 56, a: 255)
   table[toggleCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
@@ -140,8 +147,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   table[sliderCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)
   table[sliderCursorActiveColor] = NimColor(r: 58, g: 93, b: 121, a: 255)
   table[propertyColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
-  table[editColor] = NimColor(r: 50, g: 58, b: 61, a: 225)
-  table[editCursorColor] = NimColor(r: 210, g: 210, b: 210, a: 255)
   table[comboColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[chartColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[colorChartColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
