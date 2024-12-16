@@ -168,14 +168,14 @@ type
       NK_KEY_SCROLL_UP, NK_KEY_ESCAPE, NK_KEY_MAX
   nk_panel_type* = enum
     ## Internal Nuklear type
-    NK_PANEL_NONE       = 0,
-    NK_PANEL_WINDOW     = 1 shl 0,
-    NK_PANEL_GROUP      = 1 shl 1,
-    NK_PANEL_POPUP      = 1 shl 2,
+    NK_PANEL_NONE = 0,
+    NK_PANEL_WINDOW = 1 shl 0,
+    NK_PANEL_GROUP = 1 shl 1,
+    NK_PANEL_POPUP = 1 shl 2,
     NK_PANEL_CONTEXTUAL = 1 shl 4,
-    NK_PANEL_COMBO      = 1 shl 5,
-    NK_PANEL_MENU       = 1 shl 6,
-    NK_PANEL_TOOLTIP    = 1 shl 7
+    NK_PANEL_COMBO = 1 shl 5,
+    NK_PANEL_MENU = 1 shl 6,
+    NK_PANEL_TOOLTIP = 1 shl 7
 
 # -------
 # Objects
@@ -458,7 +458,8 @@ type
       propertyColor, editColor, editCursorColor, comboColor, chartColor,
       colorChartColor, colorChartHighlightColor, scrollbarColor,
       scrollbarCursorColor, scrollbarCursorHoverColor,
-      scrollbarCursorActiveColor, tabHeaderColor, countColors
+      scrollbarCursorActiveColor, tabHeaderColor, knobColor, knobCursorColor,
+      knobCursorHoverColor, knobCursorActiveColor, countColors
   StyleHeaderAlign* = enum
     ## The styles of the window's header
     headerLeft, headerRight
