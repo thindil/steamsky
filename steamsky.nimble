@@ -2,7 +2,7 @@ import os
 
 # Package
 
-version = "v10.6-dev"
+version = "10.6"
 author = "Bartek thindil Jasicki"
 description = "A roguelike game with steampunk setting"
 license = "GPL-3"
@@ -29,14 +29,14 @@ task release, "builds the project in release mode":
       srcDir & DirSep & "steamsky.nim"
 
 task releasewindows, "builds the project in release mode for Windows 64-bit on Linux":
-  exec "nim c -d:mingw --app:gui --os:windows --cpu:amd64 --amd64.windows.gcc.exe:x86_64-w64-mingw32-gcc --amd64.windows.gcc.linkerexe=x86_64-w64-mingw32-gcc -d:release --passC:-flto --passL:-Wl,-s --passL:-Wl,-mwindows --outdir:" & binDir & " " & srcDir & DirSep & "steamsky.nim"
+  exec "nim c -d:mingw --app:gui --os:windows --cpu:amd64 --amd64.windows.gcc.exe:x86_64-w64-mingw32-gcc --amd64.windows.gcc.linkerexe=x86_64-w64-mingw32-gcc -d:release --passC:-flto --passL:-Wl,-s --passL:-mwindows --outdir:" & binDir & " " & srcDir & DirSep & "steamsky.nim"
 
 task fullrelease, "builds the project in release mode for all supported platforms":
   exec "others/build.nims x86_64-linux-gnu"
   exec "others/build.nims x86_64-windows"
 
 task debugwindows, "builds the project in debug mode for Windows 64-bit on Linux":
-  exec "nim c -d:mingw --app:gui --os:windows --cpu:amd64 --amd64.windows.gcc.exe:x86_64-w64-mingw32-gcc --amd64.windows.gcc.linkerexe=x86_64-w64-mingw32-gcc -d:debug --passL:-Wl,-mwindows --outdir:" & binDir & " " & srcDir & DirSep & "steamsky.nim"
+  exec "nim c -d:mingw --app:gui --os:windows --cpu:amd64 --amd64.windows.gcc.exe:x86_64-w64-mingw32-gcc --amd64.windows.gcc.linkerexe=x86_64-w64-mingw32-gcc -d:debug --passL:-mwindows --outdir:" & binDir & " " & srcDir & DirSep & "steamsky.nim"
 
 task analyze, "builds the project in analyze mode (release with nimprofiler support)":
   exec "nim c -d:release --profiler:on --stackTrace:on --passC:-flto --passL:-Wl,-s --outdir:" & binDir & " " &
