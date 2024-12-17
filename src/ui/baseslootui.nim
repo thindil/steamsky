@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts, nimalyzer
 import ../[basescargo, config, crewinventory, game, items, maps, messages,
     shipscargo, tk, types]
 import coreui, dialogs, errordialog, dialogs2, mapsui, table, updateheader, utilsui2
@@ -34,7 +35,7 @@ var itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
 
 proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual, contractual, ruleOff: "params".} =
   ## Show information about looting
   ##
   ## * clientData - the additional data for the Tcl command
@@ -264,7 +265,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
 var itemIndex = -1
 
 proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -382,7 +384,7 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Take or drop the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -476,7 +478,8 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show dialog to enter amount of items to drop or take
   ##
   ## * clientData - the additional data for the Tcl command
@@ -515,7 +518,7 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Sort the looting list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -582,7 +585,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
     try:
-      localItems.add(LocalItemData(name: getItemName(item = item), iType: (
+      localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
           if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
           item.durability.float / defaultItemDurability.float),
@@ -591,7 +594,8 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
           baseCargoIndex].amount else: 0), id: index))
     except:
       return showError(message = "Can't add player's ship's item.")
-  proc sortItems(x, y: LocalItemData): int =
+  proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [],
+      contractual.} =
     case itemsSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -669,13 +673,14 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   return showLootCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowLoot", "All"].allocCStringArray)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
-    addCommand("ShowLoot", showLootCommand)
-    addCommand("ShowLootItemInfo", showLootItemInfoCommand)
-    addCommand("LootItem", lootItemCommand)
-    addCommand("LootAmount", lootAmountCommand)
-    addCommand("SortLootItems", sortLootItemsCommand)
+    addCommand(name = "ShowLoot", nimProc = showLootCommand)
+    addCommand(name = "ShowLootItemInfo", nimProc = showLootItemInfoCommand)
+    addCommand(name = "LootItem", nimProc = lootItemCommand)
+    addCommand(name = "LootAmount", nimProc = lootAmountCommand)
+    addCommand(name = "SortLootItems", nimProc = sortLootItemsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
