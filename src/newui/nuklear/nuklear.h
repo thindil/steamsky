@@ -3681,6 +3681,9 @@ enum nk_style_colors {
     NK_COLOR_KNOB_CURSOR,
     NK_COLOR_KNOB_CURSOR_HOVER,
     NK_COLOR_KNOB_CURSOR_ACTIVE,
+    NK_COLOR_BUTTON_TEXT,
+    NK_COLOR_BUTTON_HOVER_TEXT,
+    NK_COLOR_BUTTON_ACTIVE_TEXT,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18355,7 +18358,10 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_KNOB,                     38, 38, 38, 255) \
     NK_COLOR(NK_COLOR_KNOB_CURSOR,              100,100,100,255) \
     NK_COLOR(NK_COLOR_KNOB_CURSOR_HOVER,        120,120,120,255) \
-    NK_COLOR(NK_COLOR_KNOB_CURSOR_ACTIVE,       150,150,150,255)
+    NK_COLOR(NK_COLOR_KNOB_CURSOR_ACTIVE,       150,150,150,255) \
+    NK_COLOR(NK_COLOR_BUTTON_TEXT,              175,175,175,255) \
+    NK_COLOR(NK_COLOR_BUTTON_HOVER_TEXT,        175,175,175,255) \
+    NK_COLOR(NK_COLOR_BUTTON_ACTIVE_TEXT,       175,175,175,255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -18445,9 +18451,9 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     button->active                     = nk_style_item_color(table[NK_COLOR_BUTTON_ACTIVE]);
     button->border_color               = table[NK_COLOR_BORDER];
     button->text_background            = table[NK_COLOR_BUTTON];
-    button->text_normal                = table[NK_COLOR_TEXT];
-    button->text_hover                 = table[NK_COLOR_TEXT];
-    button->text_active                = table[NK_COLOR_TEXT];
+    button->text_normal                = table[NK_COLOR_BUTTON_TEXT];
+    button->text_hover                 = table[NK_COLOR_BUTTON_HOVER_TEXT];
+    button->text_active                = table[NK_COLOR_BUTTON_ACTIVE_TEXT];
     button->padding                    = nk_vec2(2.0f,2.0f);
     button->image_padding              = nk_vec2(0.0f,0.0f);
     button->touch_padding              = nk_vec2(0.0f, 0.0f);
@@ -18469,9 +18475,9 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     button->active          = nk_style_item_color(table[NK_COLOR_BUTTON_ACTIVE]);
     button->border_color    = table[NK_COLOR_WINDOW];
     button->text_background = table[NK_COLOR_WINDOW];
-    button->text_normal     = table[NK_COLOR_TEXT];
-    button->text_hover      = table[NK_COLOR_TEXT];
-    button->text_active     = table[NK_COLOR_TEXT];
+    button->text_normal     = table[NK_COLOR_BUTTON_TEXT];
+    button->text_hover      = table[NK_COLOR_BUTTON_HOVER_TEXT];
+    button->text_active     = table[NK_COLOR_BUTTON_ACTIVE_TEXT];
     button->padding         = nk_vec2(2.0f,2.0f);
     button->touch_padding   = nk_vec2(0.0f,0.0f);
     button->userdata        = nk_handle_ptr(0);

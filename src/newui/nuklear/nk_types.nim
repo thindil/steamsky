@@ -459,7 +459,8 @@ type
       colorChartColor, colorChartHighlightColor, scrollbarColor,
       scrollbarCursorColor, scrollbarCursorHoverColor,
       scrollbarCursorActiveColor, tabHeaderColor, knobColor, knobCursorColor,
-      knobCursorHoverColor, knobCursorActiveColor, countColors
+      knobCursorHoverColor, knobCursorActiveColor, buttonTextColor,
+      buttonHoverTextColor, buttonActiveTextColor, countColors
   StyleHeaderAlign* = enum
     ## The styles of the window's header
     headerLeft, headerRight
