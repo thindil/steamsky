@@ -3685,6 +3685,7 @@ enum nk_style_colors {
     NK_COLOR_BUTTON_HOVER_TEXT,
     NK_COLOR_BUTTON_ACTIVE_TEXT,
     NK_COLOR_EDIT_TEXT,
+    NK_COLOR_COMBO_TEXT,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18363,7 +18364,8 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_BUTTON_TEXT,              175,175,175,255) \
     NK_COLOR(NK_COLOR_BUTTON_HOVER_TEXT,        175,175,175,255) \
     NK_COLOR(NK_COLOR_BUTTON_ACTIVE_TEXT,       175,175,175,255) \
-    NK_COLOR(NK_COLOR_EDIT_TEXT,                175,175,175,255)
+    NK_COLOR(NK_COLOR_EDIT_TEXT,                175,175,175,255) \
+    NK_COLOR(NK_COLOR_COMBO_TEXT,                175,175,175,255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -18849,9 +18851,9 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     combo->hover            = nk_style_item_color(table[NK_COLOR_COMBO]);
     combo->active           = nk_style_item_color(table[NK_COLOR_COMBO]);
     combo->border_color     = table[NK_COLOR_BORDER];
-    combo->label_normal     = table[NK_COLOR_TEXT];
-    combo->label_hover      = table[NK_COLOR_TEXT];
-    combo->label_active     = table[NK_COLOR_TEXT];
+    combo->label_normal     = table[NK_COLOR_COMBO_TEXT];
+    combo->label_hover      = table[NK_COLOR_COMBO_TEXT];
+    combo->label_active     = table[NK_COLOR_COMBO_TEXT];
     combo->sym_normal       = NK_SYMBOL_TRIANGLE_DOWN;
     combo->sym_hover        = NK_SYMBOL_TRIANGLE_DOWN;
     combo->sym_active       = NK_SYMBOL_TRIANGLE_DOWN;
