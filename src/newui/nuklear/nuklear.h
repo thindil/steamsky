@@ -3686,6 +3686,8 @@ enum nk_style_colors {
     NK_COLOR_BUTTON_ACTIVE_TEXT,
     NK_COLOR_EDIT_TEXT,
     NK_COLOR_COMBO_TEXT,
+    NK_COLOR_TOOLTIP,
+    NK_COLOR_TOOLTIP_BORDER,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -5377,6 +5379,7 @@ struct nk_style_window {
     struct nk_color menu_border_color;
     struct nk_color group_border_color;
     struct nk_color tooltip_border_color;
+    struct nk_color tooltip_background;
     struct nk_style_item scaler;
 
     float border;
@@ -18365,7 +18368,9 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_BUTTON_HOVER_TEXT,        175,175,175,255) \
     NK_COLOR(NK_COLOR_BUTTON_ACTIVE_TEXT,       175,175,175,255) \
     NK_COLOR(NK_COLOR_EDIT_TEXT,                175,175,175,255) \
-    NK_COLOR(NK_COLOR_COMBO_TEXT,                175,175,175,255)
+    NK_COLOR(NK_COLOR_COMBO_TEXT,               175,175,175,255) \
+    NK_COLOR(NK_COLOR_TOOLTIP,                  45, 45, 45, 255) \
+    NK_COLOR(NK_COLOR_TOOLTIP_BORDER,           65, 65, 65, 255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -19023,6 +19028,7 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     win->menu_border_color = table[NK_COLOR_BORDER];
     win->group_border_color = table[NK_COLOR_BORDER];
     win->tooltip_border_color = table[NK_COLOR_BORDER];
+    win->tooltip_background = table[NK_COLOR_WINDOW];
     win->scaler = nk_style_item_color(table[NK_COLOR_TEXT]);
 
     win->rounding = 0.0f;
@@ -19799,7 +19805,7 @@ nk_panel_get_padding(const struct nk_style *style, enum nk_panel_type type)
     case NK_PANEL_CONTEXTUAL: return style->window.contextual_padding;
     case NK_PANEL_COMBO: return style->window.combo_padding;
     case NK_PANEL_MENU: return style->window.menu_padding;
-    case NK_PANEL_TOOLTIP: return style->window.menu_padding;}
+    case NK_PANEL_TOOLTIP: return style->window.tooltip_padding;}
 }
 NK_LIB float
 nk_panel_get_border(const struct nk_style *style, nk_flags flags,
@@ -19814,7 +19820,7 @@ nk_panel_get_border(const struct nk_style *style, nk_flags flags,
         case NK_PANEL_CONTEXTUAL: return style->window.contextual_border;
         case NK_PANEL_COMBO: return style->window.combo_border;
         case NK_PANEL_MENU: return style->window.menu_border;
-        case NK_PANEL_TOOLTIP: return style->window.menu_border;
+        case NK_PANEL_TOOLTIP: return style->window.tooltip_border;
     }} else return 0;
 }
 NK_LIB struct nk_color
@@ -19828,7 +19834,7 @@ nk_panel_get_border_color(const struct nk_style *style, enum nk_panel_type type)
     case NK_PANEL_CONTEXTUAL: return style->window.contextual_border_color;
     case NK_PANEL_COMBO: return style->window.combo_border_color;
     case NK_PANEL_MENU: return style->window.menu_border_color;
-    case NK_PANEL_TOOLTIP: return style->window.menu_border_color;}
+    case NK_PANEL_TOOLTIP: return style->window.tooltip_border_color;}
 }
 NK_LIB nk_bool
 nk_panel_is_sub(enum nk_panel_type type)
