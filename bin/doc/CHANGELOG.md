@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated modding guide
+
 ## [10.6] - 2024-12-15
 
 ### Added
