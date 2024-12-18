@@ -28,7 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
-    colors*: array[16, Color]
+    colors*: array[17, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -47,7 +47,8 @@ let
       name = "#120d0d"), parseColor(name = "#372412"), parseColor(
       name = "#1a130c"), parseColor(name = "#120d0d"), parseColor(
       name = "#120d0d"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#372412"), parseColor(name = "#ffdf00")])
+      name = "#372412"), parseColor(name = "#ffdf00"), parseColor(
+      name = "#ffdf00")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -59,11 +60,12 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
-    const colorsNames: array[16, string] = ["BackgroundColor",
+    const colorsNames: array[17, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
-        "ButtonTextColor", "ScrollbarCursorColor", "EditTextColor"]
+        "ButtonTextColor", "ScrollbarCursorColor", "EditTextColor",
+        "ComboTextColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -152,6 +154,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = scrollbarCursorHoverColor, index = 14)
   setColor(colorName = scrollbarCursorActiveColor, index = 14)
   setColor(colorName = editTextColor, index = 15)
+  setColor(colorName = comboTextColor, index = 16)
   table[toggleColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[toggleHoverColor] = NimColor(r: 45, g: 53, b: 56, a: 255)
   table[toggleCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
