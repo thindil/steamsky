@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to looting empty bases UI, like the list of items to
+## loot, selecting amount of items to get or drop, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[basescargo, config, crewinventory, game, items, maps, messages,
@@ -596,6 +599,14 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't add player's ship's item.")
   proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two items and return which should go first, based on the sort
+    ## order of the items
+    ##
+    ## * x - the first item to compare
+    ## * y - the second item to compare
+    ##
+    ## Returns 1 if the first item should go first, -1 if the second item
+    ## should go first.
     case itemsSortOrder
     of nameAsc:
       if x.name < y.name:
