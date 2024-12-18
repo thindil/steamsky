@@ -28,7 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
-    colors*: array[17, Color]
+    colors*: array[19, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -48,7 +48,8 @@ let
       name = "#1a130c"), parseColor(name = "#120d0d"), parseColor(
       name = "#120d0d"), parseColor(name = "#ffdf00"), parseColor(
       name = "#372412"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#ffdf00")])
+      name = "#ffdf00"), parseColor(name = "#7f8c8d"), parseColor(
+      name = "#000000")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -60,12 +61,12 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
-    const colorsNames: array[17, string] = ["BackgroundColor",
+    const colorsNames: array[19, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
         "ButtonTextColor", "ScrollbarCursorColor", "EditTextColor",
-        "ComboTextColor"]
+        "ComboTextColor", "TooltipBorderColor", "TooltipColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -155,6 +156,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = scrollbarCursorActiveColor, index = 14)
   setColor(colorName = editTextColor, index = 15)
   setColor(colorName = comboTextColor, index = 16)
+  setColor(colorName = tooltipBorderColor, index = 17)
+  setColor(colorName = tooltipColor, index = 18)
   table[toggleColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[toggleHoverColor] = NimColor(r: 45, g: 53, b: 56, a: 255)
   table[toggleCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
