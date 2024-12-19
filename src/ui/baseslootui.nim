@@ -24,9 +24,11 @@ import ../[basescargo, config, crewinventory, game, items, maps, messages,
     shipscargo, tk, types]
 import coreui, dialogs, errordialog, dialogs2, mapsui, table, updateheader, utilsui2
 
+{.push ruleOff:"varDeclared".}
 var
   lootTable: TableWidget
-  itemsIndexes: seq[int]
+  itemsIndexes: seq[int] = @[]
+{.pop ruleOn:"varDeclared".}
 
 type ItemsSortOrders = enum
   none, nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc,
@@ -50,9 +52,9 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowLoot
-  var lootFrame = mainPaned & ".lootframe"
-  let lootCanvas = lootFrame & ".canvas"
-  var label = lootCanvas & ".loot.options.typelabel"
+  var lootFrame: string = mainPaned & ".lootframe"
+  let lootCanvas: string = lootFrame & ".canvas"
+  var label: string = lootCanvas & ".loot.options.typelabel"
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.lootframe
@@ -98,10 +100,10 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & closeButton)
     showSkyMap(clear = true)
   lootFrame = lootCanvas & ".loot"
-  var comboBox = lootFrame & ".options.type"
+  var comboBox: string = lootFrame & ".options.type"
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    currentBaseCargo = skyBases[baseIndex].cargo
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    currentBaseCargo: seq[BaseCargo] = skyBases[baseIndex].cargo
   if itemsSortOrder == defaultItemsSortOrder:
     itemsIndexes = @[]
     for index, _ in playerShip.cargo:
@@ -110,13 +112,13 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, _ in currentBaseCargo:
       itemsIndexes.add(y = index)
   clearTable(table = lootTable)
-  var itemsTypes = "All"
+  var itemsTypes: string = "All"
   for index in itemsIndexes:
     if index == -1:
       break
     let
-      protoIndex = playerShip.cargo[index].protoIndex
-      itemType = try:
+      protoIndex: int = playerShip.cargo[index].protoIndex
+      itemType: string = try:
           (if itemsList[protoIndex].showType.len == 0: itemsList[
             protoIndex].itemType else: itemsList[protoIndex].showType)
         except:
@@ -124,27 +126,27 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     if not itemsTypes.contains(sub = "{" & itemType & "}"):
       itemsTypes.add(y = " {" & itemType & "}")
   var
-    currentItemIndex = 1
-    indexesList: seq[Natural]
-    currentRow = 1
+    currentItemIndex: int = 1
+    indexesList: seq[Natural] = @[]
+    currentRow: Positive = 1
   let
-    page = try:
+    page: int = try:
         (if argc == 3: ($argv[2]).parseInt else: 1)
       except:
         return showError(message = "Can't get page number.")
-    startRow = ((page - 1) * gameSettings.listsLimit) + 1
-  const tableTooltip = "Show item's description and actions"
+    startRow: Natural = ((page - 1) * gameSettings.listsLimit) + 1
+  const tableTooltip: string = "Show item's description and actions"
   for index in itemsIndexes:
     currentItemIndex.inc
     if index == -1:
       break
     let
-      protoIndex = playerShip.cargo[index].protoIndex
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+      protoIndex: int = playerShip.cargo[index].protoIndex
+      baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
           durability = playerShip.cargo[index].durability)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
-    let itemType = try:
+    let itemType: string = try:
         (if itemsList[protoIndex].showType.len == 0: itemsList[
           protoIndex].itemType else: itemsList[protoIndex].showType)
       except:
@@ -154,13 +156,13 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     if currentRow < startRow:
       currentRow.inc
       continue
-    let itemName = getItemName(item = playerShip.cargo[index],
+    let itemName: string = getItemName(item = playerShip.cargo[index],
         damageInfo = false, toLower = false)
     addButton(table = lootTable, text = itemName, tooltip = tableTooltip,
         command = "ShowLootItemInfo " & $(index + 1), column = 1)
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
         command = "ShowLootItemInfo " & $(index + 1), column = 2)
-    let itemDurability = (if playerShip.cargo[index].durability <
+    let itemDurability: string = (if playerShip.cargo[index].durability <
         100: getItemDamage(itemDurability = playerShip.cargo[
         index].durability) else: "Unused")
     addProgressbar(table = lootTable, value = playerShip.cargo[
@@ -168,7 +170,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         tooltip = itemDurability, command = "ShowLootItemInfo " & $(index + 1), column = 3)
     addButton(table = lootTable, text = $playerShip.cargo[index].amount,
         tooltip = tableTooltip, command = "ShowLootItemInfo " & $(index + 1), column = 4)
-    let baseAmount = if baseCargoIndex > -1: skyBases[baseIndex].cargo[
+    let baseAmount: int = if baseCargoIndex > -1: skyBases[baseIndex].cargo[
         baseCargoIndex].amount else: 0
     addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
         command = "ShowLootItemInfo " & $(index + 1), column = 5, newRow = true)
@@ -177,8 +179,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   currentItemIndex = playerShip.cargo.len + 2
   for index in currentItemIndex .. itemsIndexes.high:
     let
-      protoIndex = currentBaseCargo[itemsIndexes[index]].protoIndex
-      itemType = try:
+      protoIndex: int = currentBaseCargo[itemsIndexes[index]].protoIndex
+      itemType: string = try:
           (if itemsList[protoIndex].showType.len == 0: itemsList[
             protoIndex].itemType else: itemsList[protoIndex].showType)
         except:
@@ -191,8 +193,8 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     if indexesList.contains(item = itemsIndexes[index]):
       continue
     let
-      protoIndex = currentBaseCargo[itemsIndexes[index]].protoIndex
-      itemType = try:
+      protoIndex: int = currentBaseCargo[itemsIndexes[index]].protoIndex
+      itemType: string = try:
           (if itemsList[protoIndex].showType.len == 0: itemsList[
             protoIndex].itemType else: itemsList[protoIndex].showType)
         except:
@@ -202,7 +204,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     if currentRow < startRow:
       currentRow.inc
       continue
-    let itemName = try:
+    let itemName: string = try:
         itemsList[protoIndex].name
       except:
         return showError(message = "Can't get item name.")
@@ -210,7 +212,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 1)
     addButton(table = lootTable, text = itemType, tooltip = tableTooltip,
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 2)
-    let itemDurability = (if currentBaseCargo[itemsIndexes[index]].durability <
+    let itemDurability: string = (if currentBaseCargo[itemsIndexes[index]].durability <
         100: getItemDamage(itemDurability = currentBaseCargo[itemsIndexes[
         index]].durability) else: "Unused")
     addProgressbar(table = lootTable, value = currentBaseCargo[itemsIndexes[
@@ -219,10 +221,10 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
         itemsIndexes[index] + 1), column = 3)
     addButton(table = lootTable, text = "0", tooltip = tableTooltip,
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 4)
-    let baseAmount = skyBases[baseIndex].cargo[itemsIndexes[index]].amount
+    let baseAmount: int = skyBases[baseIndex].cargo[itemsIndexes[index]].amount
     addButton(table = lootTable, text = $baseAmount, tooltip = tableTooltip,
         command = "ShowLootItemInfo -" & $(itemsIndexes[index] + 1), column = 5, newRow = true)
-  let arguments = (if argc > 1: "{" & $argv[1] & "}" else: "All")
+  let arguments: string = (if argc > 1: "{" & $argv[1] & "}" else: "All")
   if page > 1:
     if lootTable.row < gameSettings.listsLimit + 1:
       addPagination(table = lootTable, previousCommand = "ShowLoot " &
@@ -241,13 +243,13 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = comboBox & " configure -values [list " & itemsTypes & "]")
   if argc == 1:
     tclEval(script = comboBox & " current 0")
-  var freeSpace = try:
+  var freeSpace: int = try:
       freeCargo(amount = 0)
     except:
       return showError(message = "Can't count free space.")
   if freeSpace < 0:
     freeSpace = 0
-  let tradeInfo = $(freeSpace) & " kg"
+  let tradeInfo: string = $(freeSpace) & " kg"
   label = lootCanvas & ".loot.options.info.playerinfo2"
   tclEval(script = label & " configure -text {" & tradeInfo & "}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
