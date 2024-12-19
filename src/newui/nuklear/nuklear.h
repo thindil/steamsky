@@ -3690,6 +3690,7 @@ enum nk_style_colors {
     NK_COLOR_TOOLTIP_BORDER,
     NK_COLOR_GROUP_BORDER,
     NK_COLOR_HEADER_TEXT,
+    NK_COLOR_GROUP_TEXT,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -5380,6 +5381,7 @@ struct nk_style_window {
     struct nk_color contextual_border_color;
     struct nk_color menu_border_color;
     struct nk_color group_border_color;
+    struct nk_color group_text_color;
     struct nk_color tooltip_border_color;
     struct nk_color tooltip_background;
     struct nk_style_item scaler;
@@ -19030,6 +19032,7 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     win->contextual_border_color = table[NK_COLOR_BORDER];
     win->menu_border_color = table[NK_COLOR_BORDER];
     win->group_border_color = table[NK_COLOR_GROUP_BORDER];
+    win->group_text_color = table[NK_COLOR_GROUP_TEXT];
     win->tooltip_border_color = table[NK_COLOR_TOOLTIP_BORDER];
     win->tooltip_background = table[NK_COLOR_TOOLTIP];
     win->scaler = nk_style_item_color(table[NK_COLOR_TEXT]);
@@ -19971,13 +19974,25 @@ nk_panel_begin(struct nk_context *ctx, const char *title, enum nk_panel_type pan
         /* select correct header background and text color */
         if (ctx->active == win) {
             background = &style->window.header.active;
-            text.text = style->window.header.label_active;
+            if (layout->type == NK_PANEL_GROUP) {
+               text.text = style->window.group_text_color;
+            } else {
+               text.text = style->window.header.label_active;
+            }
         } else if (nk_input_is_mouse_hovering_rect(&ctx->input, header)) {
             background = &style->window.header.hover;
-            text.text = style->window.header.label_hover;
+            if (layout->type == NK_PANEL_GROUP) {
+               text.text = style->window.group_text_color;
+            } else {
+              text.text = style->window.header.label_hover;
+            }
         } else {
             background = &style->window.header.normal;
-            text.text = style->window.header.label_normal;
+            if (layout->type == NK_PANEL_GROUP) {
+               text.text = style->window.group_text_color;
+            } else {
+               text.text = style->window.header.label_normal;
+            }
         }
 
         /* draw header background */
