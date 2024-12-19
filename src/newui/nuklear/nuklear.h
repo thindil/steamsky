@@ -3688,6 +3688,7 @@ enum nk_style_colors {
     NK_COLOR_COMBO_TEXT,
     NK_COLOR_TOOLTIP,
     NK_COLOR_TOOLTIP_BORDER,
+    NK_COLOR_GROUP_BORDER,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18370,7 +18371,8 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_EDIT_TEXT,                175,175,175,255) \
     NK_COLOR(NK_COLOR_COMBO_TEXT,               175,175,175,255) \
     NK_COLOR(NK_COLOR_TOOLTIP,                  45, 45, 45, 255) \
-    NK_COLOR(NK_COLOR_TOOLTIP_BORDER,           65, 65, 65, 255)
+    NK_COLOR(NK_COLOR_TOOLTIP_BORDER,           65, 65, 65, 255) \
+    NK_COLOR(NK_COLOR_GROUP_BORDER,             65, 65, 65, 255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -19026,9 +19028,9 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     win->combo_border_color = table[NK_COLOR_BORDER];
     win->contextual_border_color = table[NK_COLOR_BORDER];
     win->menu_border_color = table[NK_COLOR_BORDER];
-    win->group_border_color = table[NK_COLOR_BORDER];
+    win->group_border_color = table[NK_COLOR_GROUP_BORDER];
     win->tooltip_border_color = table[NK_COLOR_TOOLTIP_BORDER];
-    win->tooltip_background = table[NK_COLOR_WINDOW];
+    win->tooltip_background = table[NK_COLOR_TOOLTIP];
     win->scaler = nk_style_item_color(table[NK_COLOR_TEXT]);
 
     win->rounding = 0.0f;
@@ -21934,7 +21936,11 @@ nk_panel_layout(const struct nk_context *ctx, struct nk_window *win,
     layout = win->layout;
     style = &ctx->style;
     out = &win->buffer;
-    color = style->window.background;
+    if (layout->type == NK_PANEL_TOOLTIP) {
+       color = style->window.tooltip_background;
+    } else {
+       color = style->window.background;
+    }
     item_spacing = style->window.spacing;
 
     /*  if one of these triggers you forgot to add an `if` condition around either
