@@ -3689,6 +3689,7 @@ enum nk_style_colors {
     NK_COLOR_TOOLTIP,
     NK_COLOR_TOOLTIP_BORDER,
     NK_COLOR_GROUP_BORDER,
+    NK_COLOR_HEADER_TEXT,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18967,9 +18968,9 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     win->header.normal = nk_style_item_color(table[NK_COLOR_HEADER]);
     win->header.hover = nk_style_item_color(table[NK_COLOR_HEADER]);
     win->header.active = nk_style_item_color(table[NK_COLOR_HEADER]);
-    win->header.label_normal = table[NK_COLOR_TEXT];
-    win->header.label_hover = table[NK_COLOR_TEXT];
-    win->header.label_active = table[NK_COLOR_TEXT];
+    win->header.label_normal = table[NK_COLOR_HEADER_TEXT];
+    win->header.label_hover = table[NK_COLOR_HEADER_TEXT];
+    win->header.label_active = table[NK_COLOR_HEADER_TEXT];
     win->header.label_padding = nk_vec2(4,4);
     win->header.padding = nk_vec2(4,4);
     win->header.spacing = nk_vec2(0,0);
