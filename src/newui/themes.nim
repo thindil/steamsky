@@ -28,7 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
-    colors*: array[22, Color]
+    colors*: array[23, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -50,7 +50,8 @@ let
       name = "#372412"), parseColor(name = "#ffdf00"), parseColor(
       name = "#ffdf00"), parseColor(name = "#7f8c8d"), parseColor(
       name = "#000000"), parseColor(name = "#006400"), parseColor(
-      name = "#458588"), parseColor(name = "#4e9a06")])
+      name = "#458588"), parseColor(name = "#4e9a06"), parseColor(
+      name = "#ffdf00")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -62,13 +63,13 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
-    const colorsNames: array[22, string] = ["BackgroundColor",
+    const colorsNames: array[23, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
         "ButtonTextColor", "ScrollbarCursorColor", "EditTextColor",
         "ComboTextColor", "TooltipBorderColor", "TooltipColor",
-        "GroupBorderColor", "HeaderTextColor", "GroupTextColor"]
+        "GroupBorderColor", "HeaderTextColor", "GroupTextColor", "SelecteActiveTextColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -163,11 +164,12 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = groupBorderColor, index = 19)
   setColor(colorName = headerTextColor, index = 20)
   setColor(colorName = groupTextColor, index = 21)
+  setColor(colorName = selectColor, index = 0)
+  setColor(colorName = selectActiveColor, index = 5)
+  setColor(colorName = selectActiveTextColor, index = 22)
   table[toggleColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[toggleHoverColor] = NimColor(r: 45, g: 53, b: 56, a: 255)
   table[toggleCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
-  table[selectColor] = NimColor(r: 57, g: 67, b: 61, a: 255)
-  table[selectActiveColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
   table[sliderColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[sliderCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 245)
   table[sliderCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)
