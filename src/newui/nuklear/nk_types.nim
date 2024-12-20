@@ -462,7 +462,7 @@ type
       knobCursorHoverColor, knobCursorActiveColor, buttonTextColor,
       buttonHoverTextColor, buttonActiveTextColor, editTextColor,
       comboTextColor, tooltipColor, tooltipBorderColor, groupBorderColor,
-      headerTextColor, groupTextColor, countColors
+      headerTextColor, groupTextColor, selectActiveTextColor, countColors
   StyleHeaderAlign* = enum
     ## The styles of the window's header
     headerLeft, headerRight

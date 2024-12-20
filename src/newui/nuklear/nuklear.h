@@ -3691,6 +3691,7 @@ enum nk_style_colors {
     NK_COLOR_GROUP_BORDER,
     NK_COLOR_HEADER_TEXT,
     NK_COLOR_GROUP_TEXT,
+    NK_COLOR_SELECT_ACTIVE_TEXT,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18375,7 +18376,10 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_COMBO_TEXT,               175,175,175,255) \
     NK_COLOR(NK_COLOR_TOOLTIP,                  45, 45, 45, 255) \
     NK_COLOR(NK_COLOR_TOOLTIP_BORDER,           65, 65, 65, 255) \
-    NK_COLOR(NK_COLOR_GROUP_BORDER,             65, 65, 65, 255)
+    NK_COLOR(NK_COLOR_GROUP_BORDER,             65, 65, 65, 255) \
+    NK_COLOR(NK_COLOR_HEADER_TEXT,              175,175,175,255) \
+    NK_COLOR(NK_COLOR_GROUP_TEXT,               175,175,175,255) \
+    NK_COLOR(NK_COLOR_SELECT_ACTIVE_TEXT,       175,175,175,255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -18581,9 +18585,9 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     select->text_normal     = table[NK_COLOR_TEXT];
     select->text_hover      = table[NK_COLOR_TEXT];
     select->text_pressed    = table[NK_COLOR_TEXT];
-    select->text_normal_active  = table[NK_COLOR_TEXT];
-    select->text_hover_active   = table[NK_COLOR_TEXT];
-    select->text_pressed_active = table[NK_COLOR_TEXT];
+    select->text_normal_active  = table[NK_COLOR_SELECT_ACTIVE_TEXT];
+    select->text_hover_active   = table[NK_COLOR_SELECT_ACTIVE_TEXT];
+    select->text_pressed_active = table[NK_COLOR_SELECT_ACTIVE_TEXT];
     select->padding         = nk_vec2(2.0f,2.0f);
     select->image_padding   = nk_vec2(2.0f,2.0f);
     select->touch_padding   = nk_vec2(0,0);
