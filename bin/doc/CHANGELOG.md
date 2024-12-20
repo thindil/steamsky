@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- The look of buttons used to move the map around
 
 ### Fixed
 - Typo in changelog
