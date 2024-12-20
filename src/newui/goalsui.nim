@@ -25,6 +25,7 @@ import coreui, errordialog
 
 var
   selectedGoal*: string = "Random" ## Currently selected goal
+  oldSelected: string = ""
   selected: int = -1
   goalsUiList: Table[string, seq[string]] = initTable[string, seq[string]]()
 
@@ -48,6 +49,7 @@ proc setGoalsUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
   ## Set the selection in the list of available goals
   selected = -1
+  oldSelected = selectedGoal
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -127,3 +129,4 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           text = "Close the goals list without any changes")
     labelButton(title = "Close"):
       dialog = none
+      selectedGoal = oldSelected
