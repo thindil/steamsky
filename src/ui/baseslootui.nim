@@ -267,7 +267,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
-var itemIndex = -1
+var itemIndex: int = -1
 
 proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
@@ -289,20 +289,20 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get item's index.")
   var
-    cargoIndex = -1
-    baseCargoIndex = 0
+    cargoIndex: int = -1
+    baseCargoIndex: int = 0
   if itemIndex < 0:
     baseCargoIndex = (itemIndex + 1).abs
   else:
     cargoIndex = itemIndex - 1
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if cargoIndex > playerShip.cargo.high or baseCargoIndex > skyBases[
       baseIndex].cargo.high:
     return tclOk
-  let protoIndex = (if cargoIndex > -1: playerShip.cargo[
+  let protoIndex: int = (if cargoIndex > -1: playerShip.cargo[
       cargoIndex].protoIndex else: skyBases[baseIndex].cargo[
       baseCargoIndex].protoIndex)
-  var itemInfo = try:
+  var itemInfo: string = try:
       "Weight: {gold}" & $itemsList[protoIndex].weight & " kg{/gold}"
     except:
       return showError(message = "Can't get item's weight.")
@@ -362,16 +362,16 @@ proc showLootItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
   else:
     cargoIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex)
-  var maxAmount = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
+  var maxAmount: int = (if baseCargoIndex > -1: skyBases[baseIndex].cargo[
       baseCargoIndex].amount else: 0)
   let
-    freeAmount = try:
+    freeAmount: int = try:
         (if baseCargoIndex > -1: (freeCargo(amount = 0).float /
           itemsList[skyBases[baseIndex].cargo[
           baseCargoIndex].protoIndex].weight.float).Natural else: 0)
       except:
         return showError(message = "Can't count free amount.")
-    cargoMaxAmount = (if cargoIndex > -1: playerShip.cargo[
+    cargoMaxAmount: Natural = (if cargoIndex > -1: playerShip.cargo[
         cargoIndex].amount.Natural else: 0)
   if maxAmount > freeAmount:
     maxAmount = freeAmount
@@ -402,21 +402,21 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## LootItem actiontype
   ## actiontype can be: drop, dropall, take, takeall
-  var baseCargoIndex, cargoIndex = -1
+  var baseCargoIndex, cargoIndex: int = -1
   if itemIndex < 0:
     baseCargoIndex = (itemIndex + 1).abs
   else:
     cargoIndex = itemIndex - 1
-  var protoIndex = 0
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var protoIndex: int = 0
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if cargoIndex > -1:
     protoIndex = playerShip.cargo[cargoIndex].protoIndex
     if baseCargoIndex == -1:
       baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
   else:
     protoIndex = skyBases[baseIndex].cargo[baseCargoIndex].protoIndex
-  var amount = 0
-  let amountBox = ".itemdialog.amount"
+  var amount: int = 0
+  const amountBox: string = ".itemdialog.amount"
   if $argv[1] in ["drop", "dropall"]:
     amount = try:
         (if argv[1] == "drop": tclEval2(script = amountBox &
@@ -477,7 +477,7 @@ proc lootItemCommand(clientData: cint; interp: PInterp; argc: cint;
       return tclError
   updateHeader()
   updateMessages()
-  let typeBox = mainPaned & ".lootframe.canvas.loot.options.type"
+  let typeBox: string = mainPaned & ".lootframe.canvas.loot.options.type"
   return showLootCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["ShowLoot", tclEval2(script = typeBox &
       " get")].allocCStringArray)
@@ -511,7 +511,7 @@ proc lootAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't take item from base.")
     else:
-      let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
       try:
         showManipulateItem(title = "Take " & itemsList[skyBases[
             baseIndex].cargo[(itemIndex + 1).abs].protoIndex].name,
@@ -536,7 +536,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortLootItems x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         getColumnNumber(table = lootTable, xPosition = ($argv[1]).parseInt)
       except:
         return showError(message = "Can't get the column number.")
@@ -580,12 +580,12 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   var
     localItems: seq[LocalItemData] = @[]
     indexesList: seq[Natural] = @[]
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   var localBaseCargo: seq[BaseCargo] = skyBases[baseIndex].cargo
   for index, item in playerShip.cargo:
     let
-      protoIndex = item.protoIndex
-      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+      protoIndex: int = item.protoIndex
+      baseCargoIndex: int = findBaseCargo(protoIndex = protoIndex,
           durability = item.durability)
     if baseCargoIndex > -1:
       indexesList.add(y = baseCargoIndex)
@@ -671,7 +671,7 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   for index, item in localBaseCargo:
     if indexesList.contains(item = index):
       continue
-    let protoIndex = item.protoIndex
+    let protoIndex: int = item.protoIndex
     try:
       localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
           iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
