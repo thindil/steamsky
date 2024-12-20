@@ -3692,6 +3692,7 @@ enum nk_style_colors {
     NK_COLOR_HEADER_TEXT,
     NK_COLOR_GROUP_TEXT,
     NK_COLOR_SELECT_ACTIVE_TEXT,
+    NK_COLOR_PROPERTY_TEXT,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18379,7 +18380,8 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_GROUP_BORDER,             65, 65, 65, 255) \
     NK_COLOR(NK_COLOR_HEADER_TEXT,              175,175,175,255) \
     NK_COLOR(NK_COLOR_GROUP_TEXT,               175,175,175,255) \
-    NK_COLOR(NK_COLOR_SELECT_ACTIVE_TEXT,       175,175,175,255)
+    NK_COLOR(NK_COLOR_SELECT_ACTIVE_TEXT,       175,175,175,255) \
+    NK_COLOR(NK_COLOR_PROPERTY_TEXT,            175,175,175,255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -18827,15 +18829,15 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     edit->hover             = nk_style_item_color(table[NK_COLOR_PROPERTY]);
     edit->active            = nk_style_item_color(table[NK_COLOR_PROPERTY]);
     edit->border_color      = nk_rgba(0,0,0,0);
-    edit->cursor_normal     = table[NK_COLOR_TEXT];
-    edit->cursor_hover      = table[NK_COLOR_TEXT];
+    edit->cursor_normal     = table[NK_COLOR_PROPERTY_TEXT];
+    edit->cursor_hover      = table[NK_COLOR_PROPERTY_TEXT];
     edit->cursor_text_normal= table[NK_COLOR_EDIT];
     edit->cursor_text_hover = table[NK_COLOR_EDIT];
-    edit->text_normal       = table[NK_COLOR_TEXT];
-    edit->text_hover        = table[NK_COLOR_TEXT];
-    edit->text_active       = table[NK_COLOR_TEXT];
-    edit->selected_normal   = table[NK_COLOR_TEXT];
-    edit->selected_hover    = table[NK_COLOR_TEXT];
+    edit->text_normal       = table[NK_COLOR_PROPERTY_TEXT];
+    edit->text_hover        = table[NK_COLOR_PROPERTY_TEXT];
+    edit->text_active       = table[NK_COLOR_PROPERTY_TEXT];
+    edit->selected_normal   = table[NK_COLOR_PROPERTY_TEXT];
+    edit->selected_hover    = table[NK_COLOR_PROPERTY_TEXT];
     edit->selected_text_normal  = table[NK_COLOR_EDIT];
     edit->selected_text_hover   = table[NK_COLOR_EDIT];
     edit->padding           = nk_vec2(0,0);
