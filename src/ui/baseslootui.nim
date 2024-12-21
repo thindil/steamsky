@@ -177,7 +177,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
     if lootTable.row == gameSettings.listsLimit + 1:
       break
   currentItemIndex = playerShip.cargo.len + 2
-  for index in currentItemIndex .. itemsIndexes.high:
+  for index in currentItemIndex..itemsIndexes.high:
     let
       protoIndex: int = currentBaseCargo[itemsIndexes[index]].protoIndex
       itemType: string = try:
@@ -187,7 +187,7 @@ proc showLootCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't get item type3.")
     if not itemsTypes.contains(sub = "{" & itemType & "}"):
       itemsTypes.add(y = " {" & itemType & "}")
-  for index in currentItemIndex .. itemsIndexes.high:
+  for index in currentItemIndex..itemsIndexes.high:
     if lootTable.row == gameSettings.listsLimit + 1:
       break
     if indexesList.contains(item = itemsIndexes[index]):
@@ -613,53 +613,43 @@ proc sortLootItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of typeAsc:
       if x.iType < y.iType:
         return 1
-      else:
-        return -1
+      return -1
     of typeDesc:
       if x.iType > y.iType:
         return 1
-      else:
-        return -1
+      return -1
     of durabilityAsc:
       if x.damage < y.damage:
         return 1
-      else:
-        return -1
+      return -1
     of durabilityDesc:
       if x.damage > y.damage:
         return 1
-      else:
-        return -1
+      return -1
     of ownedAsc:
       if x.owned < y.owned:
         return 1
-      else:
-        return -1
+      return -1
     of ownedDesc:
       if x.owned > y.owned:
         return 1
-      else:
-        return -1
+      return -1
     of availableAsc:
       if x.available < y.available:
         return 1
-      else:
-        return -1
+      return -1
     of availableDesc:
       if x.available > y.available:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
   localItems.sort(cmp = sortItems)
