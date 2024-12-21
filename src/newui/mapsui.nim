@@ -18,7 +18,7 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
-import std/tables
+import std/[colors, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, game, messages, shipscargo]
 import coreui, errordialog, themes
@@ -70,8 +70,14 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     discard
   restoreButtonStyle()
   label(str = formattedTime(), alignment = centered)
+  let theme: ThemeData = try:
+      themesList[gameSettings.interfaceTheme]
+    except:
+      dialog = setError(message = "Can't get the game's theme.")
+      return
+  var (r, g, b) = theme.colors[2].extractRGB
   image(image = mapImages[1])
-  colorLabel(str = $fuelAmount, r = 78, g = 158, b = 6)
+  colorLabel(str = $fuelAmount, r = r, g = g, b = b)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
