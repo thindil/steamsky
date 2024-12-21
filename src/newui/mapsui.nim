@@ -38,7 +38,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     try:
       for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..7]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
-            width = 0, height = 30 + gameSettings.interfaceFontSize)
+            width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
 
@@ -64,19 +64,32 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't set fuel text width")
       return
-  saveButtonStyle()
-  setButtonStyle(field = padding, value = NimVec2(x: 0.0, y: 0.0))
   imageButton(image = mapImages[0]):
     discard
-  restoreButtonStyle()
   label(str = formattedTime(), alignment = centered)
   let theme: ThemeData = try:
       themesList[gameSettings.interfaceTheme]
     except:
       dialog = setError(message = "Can't get the game's theme.")
       return
-  var (r, g, b) = theme.colors[2].extractRGB
-  image(image = mapImages[1])
+  var
+    itemAmount = try:
+        getItemAmount(itemType = fuelType)
+      except KeyError:
+        dialog = setError(message = "Can't get fuel amount.")
+        return
+    r, g, b: Natural = 0
+    image: PImage = nil
+  if itemAmount > gameSettings.lowFuel:
+    (r, g, b) = theme.colors[2].extractRGB
+    image = mapImages[1]
+  elif itemAmount > 0:
+    (r, g, b) = theme.colors[27].extractRGB
+    image = mapImages[3]
+  else:
+    (r, g, b) = theme.colors[28].extractRGB
+    image = mapImages[2]
+  image(image = image)
   colorLabel(str = $fuelAmount, r = r, g = g, b = b)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],

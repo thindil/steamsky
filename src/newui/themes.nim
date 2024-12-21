@@ -53,7 +53,7 @@ let
       name = "#458588"), parseColor(name = "#4e9a06"), parseColor(
       name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
       name = "#372412"), parseColor(name = "#500000"), parseColor(
-      name = "#ffdf00"), parseColor(name = "#d79921"), parseColor(
+      name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
       name = "#fb4934")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
@@ -74,7 +74,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "ComboTextColor", "TooltipBorderColor", "TooltipColor",
         "GroupBorderColor", "HeaderTextColor", "GroupTextColor",
         "SelecteActiveTextColor", "PropertyTextColor", "ToggleColor",
-        "ToggleHoverColor", "ToggleCursorColor", "YellowColor", "RedColor"]
+        "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
