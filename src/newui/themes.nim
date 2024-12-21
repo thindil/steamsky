@@ -28,7 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
-    colors*: array[24, Color]
+    colors*: array[27, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -51,7 +51,9 @@ let
       name = "#ffdf00"), parseColor(name = "#7f8c8d"), parseColor(
       name = "#000000"), parseColor(name = "#006400"), parseColor(
       name = "#458588"), parseColor(name = "#4e9a06"), parseColor(
-      name = "#ffdf00"), parseColor(name = "#ffdf00")])
+      name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
+      name = "#372412"), parseColor(name = "#500000"), parseColor(
+      name = "#ffdf00")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -63,14 +65,15 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
-    const colorsNames: array[24, string] = ["BackgroundColor",
+    const colorsNames: array[27, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
         "ButtonTextColor", "ScrollbarCursorColor", "EditTextColor",
         "ComboTextColor", "TooltipBorderColor", "TooltipColor",
         "GroupBorderColor", "HeaderTextColor", "GroupTextColor",
-        "SelecteActiveTextColor", "PropertyTextColor"]
+        "SelecteActiveTextColor", "PropertyTextColor", "ToggleColor",
+        "ToggleHoverColor", "ToggleCursorColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -169,9 +172,9 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = selectActiveColor, index = 5)
   setColor(colorName = selectActiveTextColor, index = 22)
   setColor(colorName = propertyTextColor, index = 23)
-  table[toggleColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
-  table[toggleHoverColor] = NimColor(r: 45, g: 53, b: 56, a: 255)
-  table[toggleCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
+  setColor(colorName = toggleColor, index = 24)
+  setColor(colorName = toggleHoverColor, index = 25)
+  setColor(colorName = toggleCursorColor, index = 26)
   table[sliderColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[sliderCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 245)
   table[sliderCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)
