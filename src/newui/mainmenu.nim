@@ -678,7 +678,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
   var
     bounds: array[8, NimRect]
   {.ruleOn: "varDeclared".}
-  group(title = "groupSetting", flags = {windowNoScrollbar}):
+  group(title = "groupSetting", flags = {windowNoFlags}):
     # Character's name
     setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.4.cfloat, 0.5, 0.1])
     label(str = "Character name:")
