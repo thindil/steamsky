@@ -665,6 +665,10 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     b.`end` = cmd.next
     return cmd
 
+# ----
+# Misc
+# ----
+
 proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Clear the rectangle. Internal use only
@@ -677,7 +681,7 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     b.clip = r
     {.ruleOff: "namedParams".}
     let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
-        nkCommandBufferPush(b = b, t = NK_COMMAND_SCISSOR, size = sizeOf(
+        nkCommandBufferPush(b = b, t = NK_COMMAND_SCISSOR, size = sizeof(
         nk_command_scissor)))
     {.ruleOn: "namedParams".}
     if cmd == nil:
@@ -690,9 +694,9 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
 # -----
 # Panel
 # -----
-{.push ruleOff: "params"}
-proc nkPanelBegin(ctx; title: string; panelType: nk_panel_type): bool {.raises: [],
-    tags: [], contractual.} =
+{.push ruleOff: "params".}
+proc nkPanelBegin(ctx; title: string; panelType: nk_panel_type): bool {.raises: [
+    ], tags: [], contractual.} =
   ## Start drawing a Nuklear panel. Internal use only
   ##
   ## * ctx       - the Nuklear context
@@ -700,8 +704,16 @@ proc nkPanelBegin(ctx; title: string; panelType: nk_panel_type): bool {.raises: 
   ## * panelType - the type of the panel to draw
   ##
   ## Returns true if the panel was drawn, otherwise false
-  return true
-{.pop ruleOn: "params"}
+  require:
+    ctx != nil
+    ctx.current != nil
+    ctx.current.layout != nil
+  body:
+    {.ruleOff: "namedParams".}
+    zeroMem(p = ctx.current.layout, size = sizeof(ctx.current.layout))
+    {.ruleOn: "namedParams".}
+    return true
+{.pop ruleOn: "params".}
 
 # ------
 # Popups
