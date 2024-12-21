@@ -28,7 +28,7 @@ type
     name: string
     fileName: string
     icons*: array[8, string]
-    colors*: array[27, Color]
+    colors*: array[29, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -53,7 +53,8 @@ let
       name = "#458588"), parseColor(name = "#4e9a06"), parseColor(
       name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
       name = "#372412"), parseColor(name = "#500000"), parseColor(
-      name = "#ffdf00")])
+      name = "#ffdf00"), parseColor(name = "#d79921"), parseColor(
+      name = "#fb4934")])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -65,7 +66,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   try:
     const iconsNames: array[8, string] = ["LogoImage", "RandomIcon", "MaleIcon",
         "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon", "LowfuelIcon"]
-    const colorsNames: array[27, string] = ["BackgroundColor",
+    const colorsNames: array[29, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
@@ -73,7 +74,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "ComboTextColor", "TooltipBorderColor", "TooltipColor",
         "GroupBorderColor", "HeaderTextColor", "GroupTextColor",
         "SelecteActiveTextColor", "PropertyTextColor", "ToggleColor",
-        "ToggleHoverColor", "ToggleCursorColor"]
+        "ToggleHoverColor", "ToggleCursorColor", "YellowColor", "RedColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
