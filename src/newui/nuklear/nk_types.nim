@@ -141,6 +141,8 @@ type
   nk_window_flags* = enum
     ## Internal Nuklear type
     NK_WINDOW_DYNAMIC = 1 shl 11
+    NK_WINDOW_HIDDEN = 1 shl 13
+    NK_WINDOW_CLOSED = 1 shl 14
   nk_command_type* = enum
     ## Internal Nuklear type
     NK_COMMAND_NOP, NK_COMMAND_SCISSOR, NK_COMMAND_LINE, NK_COMMAND_CURVE,
@@ -276,6 +278,7 @@ type
     ## Internal Nuklear type
     `type`*: PanelType
     clip*: nk_rect
+    flags*: nk_flags
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window

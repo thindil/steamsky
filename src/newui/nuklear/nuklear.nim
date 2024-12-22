@@ -486,7 +486,7 @@ template `+`[T](p: ptr T; off: nk_size): ptr T =
   ## * off - the value to add to the pointer
   ##
   ## Returns the new pointer moved by off.
-  cast[ptr type(p[])](cast[nk_size](p) +% off * sizeof(p[]))
+  cast[ptr type(p[])](cast[nk_size](p) +% off * p[].sizeof)
 {.pop ruleOn: "namedParams".}
 
 proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
@@ -679,11 +679,9 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
   ## Returns the modified parameter b
   body:
     b.clip = r
-    {.ruleOff: "namedParams".}
     let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
-        nkCommandBufferPush(b = b, t = NK_COMMAND_SCISSOR, size = sizeof(
-        nk_command_scissor)))
-    {.ruleOn: "namedParams".}
+        nkCommandBufferPush(b = b, t = NK_COMMAND_SCISSOR,
+            size = nk_command_scissor.sizeof))
     if cmd == nil:
       return
     cmd.x = r.x.cshort
@@ -709,9 +707,10 @@ proc nkPanelBegin(ctx; title: string; panelType: nk_panel_type): bool {.raises: 
     ctx.current != nil
     ctx.current.layout != nil
   body:
-    {.ruleOff: "namedParams".}
-    zeroMem(p = ctx.current.layout, size = sizeof(ctx.current.layout))
-    {.ruleOn: "namedParams".}
+    zeroMem(p = ctx.current.layout, size = ctx.current.layout.sizeof)
+    if (ctx.current.flags and NK_WINDOW_HIDDEN.cint) == 1 or (
+        ctx.current.flags and NK_WINDOW_CLOSED.cint) == 1:
+      zeroMem(p = ctx.current.layout, size = nk_panel.sizeof)
     return true
 {.pop ruleOn: "params".}
 
