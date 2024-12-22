@@ -20,7 +20,7 @@
 
 import std/[colors, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, messages, shipscargo]
+import ../[config, game, messages, shipscargo, shipsmovement]
 import coreui, errordialog, themes
 
 var
@@ -64,32 +64,56 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't set fuel text width")
       return
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
   imageButton(image = mapImages[0]):
     discard
-  label(str = formattedTime(), alignment = centered)
+  if gameSettings.showNumbers:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Game time and current ship speed.")
+    try:
+      label(str = formattedTime() & " Speed: " & $((realSpeed(
+          ship = playerShip) * 60) / 1_000) & " km/h", alignment = centered)
+    except:
+      dialog = setError(message = "Can't get the ship's speed")
+      return
+  else:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = "Game time.")
+    label(str = formattedTime(), alignment = centered)
   let theme: ThemeData = try:
       themesList[gameSettings.interfaceTheme]
     except:
       dialog = setError(message = "Can't get the game's theme.")
       return
   var
-    itemAmount = try:
+    itemAmount: Natural = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
         dialog = setError(message = "Can't get fuel amount.")
         return
     r, g, b: Natural = 0
     image: PImage = nil
+    tooltipText: string = ""
   if itemAmount > gameSettings.lowFuel:
     (r, g, b) = theme.colors[2].extractRGB
     image = mapImages[1]
+    tooltipText = "The amount of fuel in the ship's cargo."
   elif itemAmount > 0:
     (r, g, b) = theme.colors[27].extractRGB
     image = mapImages[3]
+    tooltipText = "Low level of fuel on ship. Only " & $itemAmount & " left."
   else:
     (r, g, b) = theme.colors[28].extractRGB
     image = mapImages[2]
+    tooltipText = "You can't travel anymore, because you don't have any fuel for ship."
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   image(image = image)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $fuelAmount, r = r, g = g, b = b)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
