@@ -27,7 +27,7 @@ type
     ## Stores data about the game's theme
     name: string
     fileName: string
-    icons*: array[11, string]
+    icons*: array[14, string]
     colors*: array[29, Color]
 
 let
@@ -36,12 +36,15 @@ let
   defaultTheme: ThemeData = ThemeData(name: "Default theme",
       fileName: dataDirectory & "ui" & DirSep & "theme.cfg", icons: [
       dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg",
-      defaultThemeIconPath & "random.svg", defaultThemeIconPath & "male.svg",
-      defaultThemeIconPath & "female.svg", defaultThemeIconPath & "menu.svg",
-      defaultThemeIconPath & "fuel.svg", defaultThemeIconPath & "nofuel.svg",
-      defaultThemeIconPath & "lowfuel.svg", defaultThemeIconPath & "food.svg",
+      defaultThemeIconPath & "random.svg", defaultThemeIconPath &
+      "male.svg", defaultThemeIconPath & "female.svg",
+      defaultThemeIconPath & "menu.svg", defaultThemeIconPath & "fuel.svg",
+      defaultThemeIconPath & "nofuel.svg", defaultThemeIconPath &
+      "lowfuel.svg", defaultThemeIconPath & "food.svg",
       defaultThemeIconPath & "nofood.svg", defaultThemeIconPath &
-      "lowfood.svg"], colors: [parseColor(
+      "lowfood.svg", defaultThemeIconPath & "drinks.svg",
+      defaultThemeIconPath & "nodrinks.svg", defaultThemeIconPath &
+      "lowdrinks.svg"], colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
       name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
       name = "#291913"), parseColor(name = "#500000"), parseColor(
@@ -66,9 +69,10 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme: ThemeData = defaultTheme
   themesList["steamsky"] = theme
   try:
-    const iconsNames: array[11, string] = ["LogoImage", "RandomIcon",
+    const iconsNames: array[14, string] = ["LogoImage", "RandomIcon",
         "MaleIcon", "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon",
-        "LowfuelIcon", "FoodIcon", "NofoodIcon", "LowfoodIcon"]
+        "LowfuelIcon", "FoodIcon", "NofoodIcon", "LowfoodIcon", "DrinksIcon",
+        "NodrinksIcon", "LowdrinksIcon"]
     const colorsNames: array[29, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
