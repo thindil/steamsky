@@ -19,12 +19,14 @@
 ## etc.
 
 import std/[colors, tables]
-import contracts, nuklear/nuklear_sdl_renderer
+import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, game, messages, shipscargo, shipsmovement]
 import coreui, errordialog, themes
 
-var
-  mapImages: array[4, PImage] = [nil, nil, nil, nil]
+
+{.push ruleOff: "varDeclared".}
+var mapImages: array[7, PImage]
+{.pop ruleOn: "varDeclared".}
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -36,7 +38,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if mapImages[0] == nil:
     # Load images
     try:
-      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..7]:
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..10]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
@@ -50,10 +52,16 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show.
-  let fuelAmount: Natural = try:
+  let
+    fuelAmount: Natural = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
         dialog = setError(message = "Can't get fuel amount.")
+        return
+    foodAmount: Natural = try:
+        getItemsAmount(iType = "Food")
+      except KeyError:
+        dialog = setError(message = "Can't get food amount.")
         return
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
@@ -63,6 +71,12 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       rowTemplateStatic(width = getTextWidth(text = $fuelAmount))
     except:
       dialog = setError(message = "Can't set fuel text width")
+      return
+    rowTemplateStatic(width = 30)
+    try:
+      rowTemplateStatic(width = getTextWidth(text = $foodAmount))
+    except:
+      dialog = setError(message = "Can't set food text width")
       return
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
@@ -89,22 +103,17 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't get the game's theme.")
       return
   var
-    itemAmount: Natural = try:
-        getItemAmount(itemType = fuelType)
-      except KeyError:
-        dialog = setError(message = "Can't get fuel amount.")
-        return
     r, g, b: Natural = 0
     image: PImage = nil
     tooltipText: string = ""
-  if itemAmount > gameSettings.lowFuel:
+  if fuelAmount > gameSettings.lowFuel:
     (r, g, b) = theme.colors[2].extractRGB
     image = mapImages[1]
     tooltipText = "The amount of fuel in the ship's cargo."
-  elif itemAmount > 0:
+  elif fuelAmount > 0:
     (r, g, b) = theme.colors[27].extractRGB
     image = mapImages[3]
-    tooltipText = "Low level of fuel on ship. Only " & $itemAmount & " left."
+    tooltipText = "Low level of fuel on ship. Only " & $fuelAmount & " left."
   else:
     (r, g, b) = theme.colors[28].extractRGB
     image = mapImages[2]
@@ -115,6 +124,24 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $fuelAmount, r = r, g = g, b = b)
+  if foodAmount > gameSettings.lowFood:
+    (r, g, b) = theme.colors[2].extractRGB
+    image = mapImages[1]
+    tooltipText = "The amount of fuel in the ship's cargo."
+  elif foodAmount > 0:
+    (r, g, b) = theme.colors[27].extractRGB
+    image = mapImages[3]
+    tooltipText = "Low level of fuel on ship. Only " & $foodAmount & " left."
+  else:
+    (r, g, b) = theme.colors[28].extractRGB
+    image = mapImages[2]
+    tooltipText = "You can't travel anymore, because you don't have any fuel for ship."
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+  image(image = image)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+  colorLabel(str = $foodAmount, r = r, g = g, b = b)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
