@@ -126,16 +126,16 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   colorLabel(str = $fuelAmount, r = r, g = g, b = b)
   if foodAmount > gameSettings.lowFood:
     (r, g, b) = theme.colors[2].extractRGB
-    image = mapImages[1]
-    tooltipText = "The amount of fuel in the ship's cargo."
+    image = mapImages[4]
+    tooltipText = "The amount of food in the ship's cargo."
   elif foodAmount > 0:
     (r, g, b) = theme.colors[27].extractRGB
-    image = mapImages[3]
-    tooltipText = "Low level of fuel on ship. Only " & $foodAmount & " left."
+    image = mapImages[6]
+    tooltipText = "Low level of food on ship. Only " & $foodAmount & " left."
   else:
     (r, g, b) = theme.colors[28].extractRGB
-    image = mapImages[2]
-    tooltipText = "You can't travel anymore, because you don't have any fuel for ship."
+    image = mapImages[5]
+    tooltipText = "You don't have any food in ship but your crew needs them to live."
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   image(image = image)
