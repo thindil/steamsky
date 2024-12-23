@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the list of known stories, like showing it,
+## sorting or showing them on the map.
+
 import std/[strutils, tables]
 import contracts, nimalyzer
 import ../[game, stories, tk]
