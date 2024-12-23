@@ -27,7 +27,7 @@ type
     ## Stores data about the game's theme
     name: string
     fileName: string
-    icons*: array[14, string]
+    icons*: array[18, string]
     colors*: array[29, Color]
 
 let
@@ -44,7 +44,10 @@ let
       defaultThemeIconPath & "nofood.svg", defaultThemeIconPath &
       "lowfood.svg", defaultThemeIconPath & "drinks.svg",
       defaultThemeIconPath & "nodrinks.svg", defaultThemeIconPath &
-      "lowdrinks.svg"], colors: [parseColor(
+      "lowdrinks.svg", defaultThemeIconPath & "pilot.svg",
+      defaultThemeIconPath & "nopilot.svg", defaultThemeIconPath &
+      "engineer.svg", defaultThemeIconPath & "noengineer.svg"],
+      colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
       name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
       name = "#291913"), parseColor(name = "#500000"), parseColor(
