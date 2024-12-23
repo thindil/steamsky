@@ -20,12 +20,12 @@
 
 import std/[colors, tables]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
-import ../[config, game, messages, shipscargo, shipsmovement]
+import ../[config, game, messages, shipscargo, shipsmovement, types]
 import coreui, errordialog, themes
 
 
 {.push ruleOff: "varDeclared".}
-var mapImages: array[10, PImage]
+var mapImages: array[14, PImage]
 {.pop ruleOn: "varDeclared".}
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -38,7 +38,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if mapImages[0] == nil:
     # Load images
     try:
-      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..13]:
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..17]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
@@ -68,6 +68,15 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       except KeyError:
         dialog = setError(message = "Can't get drinks amount.")
         return
+  var havePilot, haveEngineer: bool = false
+  for member in playerShip.crew:
+    case member.order
+    of pilot:
+      havePilot = true
+    of engineer:
+      haveEngineer = true
+    else:
+      discard
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
     rowTemplateDynamic()
@@ -89,6 +98,10 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't set drinks text width")
       return
+    if not havePilot:
+      rowTemplateStatic(width = 30)
+    if not haveEngineer:
+      rowTemplateStatic(width = 30)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
@@ -171,6 +184,22 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $drinksAmount, r = r, g = g, b = b)
+  let
+    faction = try:
+        factionsList[playerShip.crew[0].faction]
+      except KeyError:
+        dialog = setError(message = "Can't get faction.")
+        return
+  if not havePilot:
+    if "sentientships" in faction.flags:
+      image = mapImages[11]
+      tooltipText = "No pilot assigned. Ship fly on it own."
+    else:
+      image = mapImages[10]
+      tooltipText = "No pilot assigned. Ship can't move."
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+    image(image = image)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
