@@ -143,6 +143,9 @@ type
     NK_WINDOW_DYNAMIC = 1 shl 11
     NK_WINDOW_HIDDEN = 1 shl 13
     NK_WINDOW_CLOSED = 1 shl 14
+  nk_panel_flags* = enum
+    ## Internal Nuklear type
+    NK_WINDOW_NO_INPUT = 1 shl 10
   nk_command_type* = enum
     ## Internal Nuklear type
     NK_COMMAND_NOP, NK_COMMAND_SCISSOR, NK_COMMAND_LINE, NK_COMMAND_CURVE,
@@ -168,16 +171,6 @@ type
       NK_KEY_TEXT_SELECT_ALL, NK_KEY_TEXT_WORD_LEFT, NK_KEY_TEXT_WORD_RIGHT,
       NK_KEY_SCROLL_START, NK_KEY_SCROLL_END, NK_KEY_SCROLL_DOWN,
       NK_KEY_SCROLL_UP, NK_KEY_ESCAPE, NK_KEY_MAX
-  nk_panel_type* = enum
-    ## Internal Nuklear type
-    NK_PANEL_NONE = 0,
-    NK_PANEL_WINDOW = 1 shl 0,
-    NK_PANEL_GROUP = 1 shl 1,
-    NK_PANEL_POPUP = 1 shl 2,
-    NK_PANEL_CONTEXTUAL = 1 shl 4,
-    NK_PANEL_COMBO = 1 shl 5,
-    NK_PANEL_MENU = 1 shl 6,
-    NK_PANEL_TOOLTIP = 1 shl 7
 
 # -------
 # Objects

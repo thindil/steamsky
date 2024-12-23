@@ -693,7 +693,7 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
 # Panel
 # -----
 {.push ruleOff: "params".}
-proc nkPanelBegin(ctx; title: string; panelType: nk_panel_type): bool {.raises: [
+proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     ], tags: [], contractual.} =
   ## Start drawing a Nuklear panel. Internal use only
   ##
@@ -711,6 +711,16 @@ proc nkPanelBegin(ctx; title: string; panelType: nk_panel_type): bool {.raises: 
     if (ctx.current.flags and NK_WINDOW_HIDDEN.cint) == 1 or (
         ctx.current.flags and NK_WINDOW_CLOSED.cint) == 1:
       zeroMem(p = ctx.current.layout, size = nk_panel.sizeof)
+      ctx.current.layout.`type` = panelType
+      return false;
+    # pull state into local stack
+    let
+      style: nk_style = ctx.style
+      font: ptr nk_user_font = style.font
+      win: ptr nk_window = ctx.current
+      layout: PNkPanel = win.layout
+      `out`: nk_command_buffer = win.buffer
+      `in`: nk_input = (if (win.flags and NK_WINDOW_NO_INPUT.cint) == 1: nk_input() else: ctx.input)
     return true
 {.pop ruleOn: "params".}
 
