@@ -25,7 +25,7 @@ import coreui, errordialog, themes
 
 
 {.push ruleOff: "varDeclared".}
-var mapImages: array[14, PImage]
+var mapImages: array[15, PImage]
 {.pop ruleOn: "varDeclared".}
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -38,7 +38,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if mapImages[0] == nil:
     # Load images
     try:
-      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..17]:
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..18]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
@@ -77,6 +77,22 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       haveEngineer = true
     else:
       discard
+  var speed: float = 0.0
+  let
+    faction = try:
+        factionsList[playerShip.crew[0].faction]
+      except KeyError:
+        dialog = setError(message = "Can't get faction.")
+        return
+  if (havePilot or haveEngineer) or "sentientships" in faction.flags:
+    speed = try:
+        (if playerShip.speed != docked: realSpeed(
+            ship = playerShip).float / 1_000.0 else: realSpeed(
+                ship = playerShip,
+            infoOnly = true).float / 1_000)
+      except ValueError:
+        dialog = setError(message = "Can't coutn speed.")
+        return
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
     rowTemplateDynamic()
@@ -98,6 +114,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't set drinks text width")
       return
+    if speed < 0.5:
+      rowTemplateStatic(width = 30)
     if not havePilot:
       rowTemplateStatic(width = 30)
     if not haveEngineer:
@@ -184,12 +202,11 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $drinksAmount, r = r, g = g, b = b)
-  let
-    faction = try:
-        factionsList[playerShip.crew[0].faction]
-      except KeyError:
-        dialog = setError(message = "Can't get faction.")
-        return
+  if speed < 0.5:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "You can't fly with your ship, because it is overloaded.")
+    image(image = mapImages[14])
   if not havePilot:
     if "sentientships" in faction.flags:
       image = mapImages[11]
@@ -197,6 +214,16 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     else:
       image = mapImages[10]
       tooltipText = "No pilot assigned. Ship can't move."
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+    image(image = image)
+  if not haveEngineer:
+    if "sentientships" in faction.flags:
+      image = mapImages[13]
+      tooltipText = "No engineer assigned. Ship fly on it own."
+    else:
+      image = mapImages[12]
+      tooltipText = "No engineer assigned. Ship can't move."
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(), text = tooltipText)
     image(image = image)
