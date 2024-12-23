@@ -25,7 +25,7 @@ import coreui, errordialog, themes
 
 
 {.push ruleOff: "varDeclared".}
-var mapImages: array[7, PImage]
+var mapImages: array[10, PImage]
 {.pop ruleOn: "varDeclared".}
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -38,7 +38,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if mapImages[0] == nil:
     # Load images
     try:
-      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..10]:
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..13]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
@@ -63,6 +63,11 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       except KeyError:
         dialog = setError(message = "Can't get food amount.")
         return
+    drinksAmount: Natural = try:
+        getItemsAmount(iType = "Drinks")
+      except KeyError:
+        dialog = setError(message = "Can't get drinks amount.")
+        return
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
     rowTemplateDynamic()
@@ -77,6 +82,12 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       rowTemplateStatic(width = getTextWidth(text = $foodAmount))
     except:
       dialog = setError(message = "Can't set food text width")
+      return
+    rowTemplateStatic(width = 30)
+    try:
+      rowTemplateStatic(width = getTextWidth(text = $drinksAmount))
+    except:
+      dialog = setError(message = "Can't set drinks text width")
       return
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
@@ -142,6 +153,24 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $foodAmount, r = r, g = g, b = b)
+  if drinksAmount > gameSettings.lowFood:
+    (r, g, b) = theme.colors[2].extractRGB
+    image = mapImages[7]
+    tooltipText = "The amount of drinks in the ship's cargo."
+  elif drinksAmount > 0:
+    (r, g, b) = theme.colors[27].extractRGB
+    image = mapImages[8]
+    tooltipText = "Low level of drinks on ship. Only " & $drinksAmount & " left."
+  else:
+    (r, g, b) = theme.colors[28].extractRGB
+    image = mapImages[9]
+    tooltipText = "You don't have any drinks in ship but your crew needs them to live."
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+  image(image = image)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+  colorLabel(str = $drinksAmount, r = r, g = g, b = b)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
