@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated modding guide
 
+### Fixed
+- Counting ships' speed
+
 ## [10.6] - 2024-12-15
 
 ### Added
