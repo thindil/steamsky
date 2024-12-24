@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nimalyzer
-import ../[game, stories, tk]
+import ../[game, stories, tk, types]
 import coreui, errordialog
 
 proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -38,27 +38,27 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowStory
   let
-    frameName = mainPaned & ".knowledgeframe.stories.canvas.frame"
-    storiesBox = frameName & ".options.titles"
-    storyIndex = try:
+    frameName: string = mainPaned & ".knowledgeframe.stories.canvas.frame"
+    storiesBox: string = frameName & ".options.titles"
+    storyIndex: int = try:
         tclEval2(script = storiesBox & " current").parseInt
       except:
         return showError(message = "Can't get story index.")
-  var button = frameName & ".options.show"
+  var button: string = frameName & ".options.show"
   let
-    lineWidth = try:
+    lineWidth: Natural = try:
         ((tclEval2(script = "winfo reqwidth " & storiesBox).parseInt +
           tclEval2(script = "winfo reqwidth " & button).parseInt) / tclEval2(
           script = "font measure InterfaceFont { }").parseInt).int
       except:
         return showError(message = "Can't get line width.")
-    storyView = frameName & ".view"
+    storyView: string = frameName & ".view"
   tclEval(script = storyView & " configure -state normal -width " & $lineWidth)
   tclEval(script = storyView & " delete 1.0 end")
   var
-    storyText = ""
-    rows = 1
-  let story = finishedStories[storyIndex]
+    storyText: string = ""
+    rows: Positive = 1
+  let story: FinishedStoryData = finishedStories[storyIndex]
   for stepText in story.stepsTexts:
     storyText.add(y = stepText & '\n')
     rows = rows + (stepText.len / lineWidth).int + 1
@@ -70,7 +70,7 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't get current story text.")
     if currentStory.data.len > 0:
       let
-        step = try:
+        step: StepData = try:
             (if currentStory.currentStep == -1: storiesList[
               currentStory.index].startingStep elif currentStory.currentStep >
               -1: storiesList[currentStory.index].steps[
@@ -78,7 +78,7 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
               currentStory.index].finalStep)
           except:
             return showError(message = "Can't get the step.")
-        storyData = currentStory.data.split(sep = ';')
+        storyData: seq[string] = currentStory.data.split(sep = ';')
       case step.finishCondition
       of askInBase:
         if storyData.len < 2:
@@ -106,7 +106,7 @@ proc showStoryCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't get the loot data.")
         if storyData[1] == "any":
           storyText.add(y = "any ")
-          let faction = try:
+          let faction: FactionData = try:
               factionsList[getStepData(finishData = step.finishData,
                 name = "faction")]
             except:
