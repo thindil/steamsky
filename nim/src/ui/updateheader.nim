@@ -107,7 +107,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
         showError(message = "Can't get faction.")
         return
     frame = mainPaned & ".combat"
-  if havePilot and (haveEngineer or "sentientships" in faction.flags) and (
+  if ((havePilot and haveEngineer) or "sentientships" in faction.flags) and (
       tclEval2(script = "winfo exists " & frame) == "0" or tclEval2(
       script = "winfo ismapped " & frame) == "0"):
     let speed = try:
@@ -116,7 +116,7 @@ proc updateHeader*() {.sideEffect, raises: [], tags: [].} =
                   ship = playerShip,
               infoOnly = true).float / 1_000)
         except ValueError:
-          showError(message = "Can't coutn speed.")
+          showError(message = "Can't count speed.")
           return
     if speed < 0.5:
       tclEval(script = "tooltip::tooltip " & label & " \"You can't fly with your ship, because it is overloaded.\"")
