@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Counting ships' speed
+
 ## [10.0.4] - 2024-10-27
 
 ### Fixed
