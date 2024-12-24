@@ -205,6 +205,7 @@ type
     ## Internal Nuklear type
     header*: nk_style_window_header
     spacing*: nk_vec2
+    scrollbar_size*: nk_vec2
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
@@ -326,6 +327,8 @@ type
     current*: ptr nk_window
     seq*: uint
     memory*: nk_buffer
+    when defined(nkIncludeCommandUserData):
+      userdata*: nk_handle ## Interna Nuklear data
   nk_rect* {.importc: "struct nk_rect", nodecl.} = object
     ## Internal Nuklear type
     x*, y*, w*, h*: cfloat

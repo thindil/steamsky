@@ -717,10 +717,15 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     let
       style: nk_style = ctx.style
       font: ptr nk_user_font = style.font
-      win: ptr nk_window = ctx.current
+    var win: ptr nk_window = ctx.current
+    let
       layout: PNkPanel = win.layout
       `out`: nk_command_buffer = win.buffer
       `in`: nk_input = (if (win.flags and NK_WINDOW_NO_INPUT.cint) == 1: nk_input() else: ctx.input)
+    # pull style configuration into local stack
+    let scrollbarSize: nk_vec2 = style.window.scrollbar_size
+    when defined(nkIncludeCommandUserdata):
+      win.buffer.userdata = ctx.userdata
     return true
 {.pop ruleOn: "params".}
 
