@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Counting ships' speed
+- Showing information about overloading the player's ship
 
 ## [10.6] - 2024-12-15
 
