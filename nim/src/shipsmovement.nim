@@ -90,45 +90,48 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.sideEffect,
   ## * infoOnly - if true, the ship is docked, count with its max speed
   ##
   ## Returns the ships' speed in meters per minute
-  result = 0
+  var newSpeed: int = 0
   if ship.name == playerShip.name and not infoOnly:
     if haveOrderRequirements().len > 0:
       return
-  var baseSpeed = 0
+  var baseSpeed: int = 0
   for module in ship.modules:
     if module.mType == ModuleType2.engine and not module.disabled:
       baseSpeed = module.power * 10
-      var damage = 1.0 - (module.durability.float / module.maxDurability.float)
-      result = result + (baseSpeed - (baseSpeed.float * damage).Natural)
-  result = ((result.float / countShipWeight(ship = ship).float) *
-      100_000.0).Natural
+      var damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
+      newSpeed += (baseSpeed - (baseSpeed.float * damage).Natural)
+  newSpeed = ((newSpeed.float - countShipWeight(ship = ship).float) *
+      100_000.0).int
   if ship.crew.len > 0:
-    if "sentientships" notin factionsList[ship.crew[0].faction].flags:
-      for member in ship.crew:
-        if member.order == pilot:
-          result = result + (result.float * (getSkillLevel(member = member,
-              skillIndex = pilotingSkill).float / 300.0)).Natural
-    else:
+    if "sentientships" in factionsList[ship.crew[0].faction].flags:
       for module in ship.modules:
         if module.mType == ModuleType2.hull:
-          result = result + (result.float * ((module.maxModules * 2).float /
-              300.0)).Natural
-  var shipSetSpeed = ship.speed
+          newSpeed += (newSpeed.float * ((module.maxModules * 2).float /
+              300.0)).int
+    else:
+      for member in ship.crew:
+        if member.order == pilot:
+          newSpeed += (newSpeed.float * (getSkillLevel(member = member,
+              skillIndex = pilotingSkill).float / 300.0)).int
+  var shipSetSpeed: ShipSpeed = ship.speed
   if ship.name == playerShip.name and ship.speed in {docked, fullStop} and infoOnly:
-    shipSetSpeed = parseEnum[ShipSpeed]((
+    shipSetSpeed = parseEnum[ShipSpeed](s = (
         $gameSettings.undockSpeed).toLowerAscii)
     if shipSetSpeed == fullStop:
       shipSetSpeed = quarterSpeed
   case shipSetSpeed
   of quarterSpeed:
-    result = (result.float * 0.25).Natural
+    newSpeed = (newSpeed.float * 0.25).int
   of halfSpeed:
-    result = (result.float * 0.5).Natural
+    newSpeed = (newSpeed.float * 0.5).int
   of fullSpeed:
     discard
   else:
     return 0
-  result = (result / 60).Natural
+  newSpeed = (newSpeed / 60).int
+  if newSpeed < 0:
+    return 0
+  return newSpeed.Natural
 
 proc dockShip*(docking: bool; escape: bool = false): string {.sideEffect,
     raises: [KeyError, IOError, Exception], tags: [WriteIOEffect,
