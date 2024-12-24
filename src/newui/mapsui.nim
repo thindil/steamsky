@@ -79,19 +79,18 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       discard
   var speed: float = 0.0
   let
-    faction = try:
+    faction: FactionData = try:
         factionsList[playerShip.crew[0].faction]
       except KeyError:
         dialog = setError(message = "Can't get faction.")
         return
-  if (havePilot or haveEngineer) or "sentientships" in faction.flags:
+  if (havePilot and haveEngineer) or "sentientships" in faction.flags:
     speed = try:
-        (if playerShip.speed != docked: realSpeed(
-            ship = playerShip).float / 1_000.0 else: realSpeed(
-                ship = playerShip,
-            infoOnly = true).float / 1_000)
+        (if playerShip.speed == docked: realSpeed(ship = playerShip,
+            infoOnly = true).float / 1_000 else: realSpeed(
+            ship = playerShip).float / 1_000.0)
       except ValueError:
-        dialog = setError(message = "Can't coutn speed.")
+        dialog = setError(message = "Can't count speed.")
         return
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
