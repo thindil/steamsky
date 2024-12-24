@@ -27,7 +27,7 @@ type
     ## Stores data about the game's theme
     name: string
     fileName: string
-    icons*: array[19, string]
+    icons*: array[20, string]
     colors*: array[29, Color]
 
 let
@@ -47,7 +47,8 @@ let
       "lowdrinks.svg", defaultThemeIconPath & "pilot.svg",
       defaultThemeIconPath & "nopilot.svg", defaultThemeIconPath &
       "engineer.svg", defaultThemeIconPath & "noengineer.svg",
-      defaultThemeIconPath & "overloaded.svg"], colors: [parseColor(
+      defaultThemeIconPath & "overloaded.svg", defaultThemeIconPath &
+      "gunner.svg"], colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
       name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
       name = "#291913"), parseColor(name = "#500000"), parseColor(
@@ -72,10 +73,11 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme: ThemeData = defaultTheme
   themesList["steamsky"] = theme
   try:
-    const iconsNames: array[14, string] = ["LogoImage", "RandomIcon",
+    const iconsNames: array[20, string] = ["LogoImage", "RandomIcon",
         "MaleIcon", "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon",
         "LowfuelIcon", "FoodIcon", "NofoodIcon", "LowfoodIcon", "DrinksIcon",
-        "NodrinksIcon", "LowdrinksIcon"]
+        "NodrinksIcon", "LowdrinksIcon", "PilotIcon", "NopilotIcon",
+        "EngineerIcon", "NoenginerIcon", "OverloadedIcon", "GunnerIcon"]
     const colorsNames: array[29, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
