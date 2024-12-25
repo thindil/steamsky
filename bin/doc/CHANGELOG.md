@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Counting ships' speed
 - Showing information about overloading the player's ship
+- Showing 'Repair ship' order multiple time on the player's ship's crew's
+  members' orders list
 
 ## [10.6] - 2024-12-15
 
