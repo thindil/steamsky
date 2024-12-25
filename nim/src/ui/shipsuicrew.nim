@@ -1247,6 +1247,7 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
           return true
       return false
 
+    var orderAdded: bool = false
     for index, module in playerShip.modules:
       if module.durability > 0:
         case module.mType
@@ -1286,9 +1287,10 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
                 index + 1) & "}")
         else:
           discard
-        if needRepair:
+        if needRepair and not orderAdded:
           availableOrders.add(y = " {Repair ship}")
           tclCommands.add(y = " {Repair " & $(memberIndex + 1) & "}")
+          orderAdded = true
     for index, member2 in playerShip.crew:
       if member2.health < 100 and index != memberIndex and member2.order != heal:
         availableOrders.add(y = " {Heal wounded crew members}")
