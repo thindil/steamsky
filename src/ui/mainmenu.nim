@@ -16,18 +16,19 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, tables]
+import contracts
 import ../[basestypes, careers, config, game, game2, tk]
 import dialogs2, errordialog, goalsui, mainmenucommands, showmainmenu,
     table, themes, utilsui, utilsui2
 
 proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
-    WriteIOEffect, TimeEffect, RootEffect].} =
+    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Create the main menu UI
   let
     uiDirectory = dataDirectory & "ui" & DirSep
     iconPath = uiDirectory & "images" & DirSep & "icon.png"
     mainWindow = "."
-  if not fileExists(iconPath):
+  if not fileExists(filename = iconPath):
     tclEval(script = "wm withdraw " & mainWindow)
     tclEval(script = "tk_messageBox -message {Couldn't not find the game data files and the game have to stop. Are you sure that directory \"" &
         dataDirectory & "\" is the proper place where the game data files exists?} -icon error -type ok")
