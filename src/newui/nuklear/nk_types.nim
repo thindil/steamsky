@@ -204,8 +204,9 @@ type
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
-    spacing*: nk_vec2
-    scrollbar_size*: nk_vec2
+    spacing*, scrollbar_size*, padding*, group_padding*, popup_padding*,
+      contextual_padding*, combo_padding*, menu_padding*,
+      tooltip_padding*: nk_vec2
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item

@@ -692,6 +692,32 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
 # -----
 # Panel
 # -----
+proc nkPanelGetPadding(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [],
+    tags: [], contractual.} =
+  ## Get the padding for the selected panel, based on its type
+  ##
+  ## * style - the whole style of the application
+  ## * type  - the selected type of the panel
+  ##
+  ## Returns vector with information about padding for the selected panel
+  case `type`
+  of panelWindow:
+    return style.window.padding
+  of panelGroup:
+    return style.window.group_padding
+  of panelPopup:
+    return style.window.popup_padding
+  of panelContextual:
+    return style.window.contextual_padding
+  of panelCombo:
+    return style.window.combo_padding
+  of panelMenu:
+    return style.window.menu_padding
+  of panelTooltip:
+    return style.window.tooltip_padding
+  else:
+    discard
+
 {.push ruleOff: "params".}
 proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     ], tags: [], contractual.} =
@@ -721,11 +747,15 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     let
       layout: PNkPanel = win.layout
       `out`: nk_command_buffer = win.buffer
-      `in`: nk_input = (if (win.flags and NK_WINDOW_NO_INPUT.cint) == 1: nk_input() else: ctx.input)
-    # pull style configuration into local stack
-    let scrollbarSize: nk_vec2 = style.window.scrollbar_size
+      `in`: nk_input = (if (win.flags and NK_WINDOW_NO_INPUT.cint) ==
+          1: nk_input() else: ctx.input)
     when defined(nkIncludeCommandUserdata):
       win.buffer.userdata = ctx.userdata
+    # pull style configuration into local stack
+    let
+      scrollbarSize: nk_vec2 = style.window.scrollbar_size
+      panelPadding: nk_vec2 = nkPanelGetPadding(style = style,
+          `type` = panelType)
     return true
 {.pop ruleOn: "params".}
 
