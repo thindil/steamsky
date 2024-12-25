@@ -25,7 +25,7 @@ import coreui, errordialog, themes
 
 
 {.push ruleOff: "varDeclared".}
-var mapImages: array[16, PImage]
+var mapImages: array[18, PImage]
 {.pop ruleOn: "varDeclared".}
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -38,7 +38,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if mapImages[0] == nil:
     # Load images
     try:
-      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..19]:
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..21]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
@@ -144,13 +144,22 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       except KeyError:
         dialog = setError(message = "Can't get drinks amount.")
         return
-  var havePilot, haveEngineer: bool = false
+  var havePilot, haveEngineer, haveTrader, haveUpgrader, haveCleaner,
+    haveRepairman: bool = false
   for member in playerShip.crew:
     case member.order
     of pilot:
       havePilot = true
     of engineer:
       haveEngineer = true
+    of talk:
+      haveTrader = true
+    of upgrading:
+      haveUpgrader = true
+    of clean:
+      haveCleaner = true
+    of repair:
+      haveRepairman = true
     else:
       discard
   var speed: float = 0.0
@@ -228,6 +237,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       rowTemplateStatic(width = 30)
     if not haveGunner:
       rowTemplateStatic(width = 30)
+    if needRepairs:
+      rowTemplateStatic(width = 30)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
@@ -284,6 +295,17 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       addTooltip(bounds = getWidgetBounds(),
           text = "One or more guns don't have a gunner.")
     image(image = mapImages[15])
+  if needRepairs:
+    if haveRepairman:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "The ship is being repaired.")
+      image(image = mapImages[16])
+    else:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "The ship needs repairs but no one is working them.")
+      image(image = mapImages[17])
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
