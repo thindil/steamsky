@@ -37,7 +37,8 @@ proc checkTool(toolNeeded: string): bool {.raises: [], tags: [].} =
           break
 
 proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
-    hasMaterials: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+    hasMaterials: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect,
+        RootEffect].} =
   ## Check if the selected recipe can be crafted (has all requirements meet)
   ##
   ## * recipe       - The crafting recipe to check
@@ -78,7 +79,8 @@ proc isCraftable(recipe: CraftData; canCraft, hasWorkplace, hasTool,
     canCraft = true
 
 proc checkStudyPrerequisities(canCraft, hasTool,
-    hasWorkplace: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+    hasWorkplace: var bool) {.raises: [], tags: [WriteIOEffect, TimeEffect,
+        RootEffect].} =
   ## Check if the study and decontruct recipes can be crafted
   ##
   ## * canCraft      - If recipe can be crafter then it will be True, otherwise
@@ -487,7 +489,8 @@ proc sortCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowCrafting", "1"].allocCStringArray)
 
 proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show dialog to set the selected recipe as crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -516,8 +519,24 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't create a dialog.")
     maxAmount = try:
         checkRecipe(recipeIndex = recipeIndex)
-      except:
+      except ValueError:
         return showError(message = "Can't get max amount.")
+      except CraftingNoWorkshopError:
+        showMessage(text = "You can't start crafting because you don't have a workshop.",
+            title = "Can't start crafting")
+        return tclOk
+      except CraftingNoMaterialsError:
+        showMessage(text = "You can't start crafting because you don't have materials.",
+            title = "Can't start crafting")
+        return tclOk
+      except CraftingNoToolsError:
+        showMessage(text = "You can't start crafting because you don't have a proper tool.",
+            title = "Can't start crafting")
+        return tclOk
+      except TradeNoFreeCargoError:
+        showMessage(text = "You can't start crafting because you don't have free cargo.",
+            title = "Can't start crafting")
+        return tclOk
     amountBox = craftDialog & ".amount"
   tclEval(script = "ttk::spinbox " & amountBox & " -from 1 -to " & $maxAmount &
       " -validate key -validatecommand {ValidateSpinbox %W %P " & craftDialog & ".craft} -width 20")
@@ -704,7 +723,8 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected recipe
   ##
   ## * clientData - the additional data for the Tcl command
@@ -907,7 +927,8 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = recipeDialog, relativeX = 0.2, relativeY = 0.1)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("ShowCrafting", showCraftingCommand)
