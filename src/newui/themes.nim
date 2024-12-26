@@ -22,13 +22,17 @@ import std/[colors, os, parsecfg, streams, tables]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game]
 
+const
+  iconsAmount: Positive = 24
+  colorsAmount: Positive = 29
+
 type
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
     fileName: string
-    icons*: array[22, string]
-    colors*: array[29, Color]
+    icons*: array[iconsAmount, string]
+    colors*: array[colorsAmount, Color]
 
 let
   defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
@@ -49,7 +53,9 @@ let
       "engineer.svg", defaultThemeIconPath & "noengineer.svg",
       defaultThemeIconPath & "overloaded.svg", defaultThemeIconPath &
       "gunner.svg", defaultThemeIconPath & "repair.svg",
-      defaultThemeIconPath & "repair-empty.svg"], colors: [parseColor(
+      defaultThemeIconPath & "repair-empty.svg", defaultThemeIconPath &
+      "craft.svg", defaultThemeIconPath & "craft-empty.svg"],
+      colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
       name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
       name = "#291913"), parseColor(name = "#500000"), parseColor(
@@ -74,13 +80,13 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme: ThemeData = defaultTheme
   themesList["steamsky"] = theme
   try:
-    const iconsNames: array[22, string] = ["LogoImage", "RandomIcon",
-        "MaleIcon", "FemaleIcon", "MenuIcon", "FuelIcon", "NofuelIcon",
-        "LowfuelIcon", "FoodIcon", "NofoodIcon", "LowfoodIcon", "DrinksIcon",
-        "NodrinksIcon", "LowdrinksIcon", "PilotIcon", "NopilotIcon",
-        "EngineerIcon", "NoenginerIcon", "OverloadedIcon", "GunnerIcon",
-        "RepairIcon", "NorepairIcon"]
-    const colorsNames: array[29, string] = ["BackgroundColor",
+    const iconsNames: array[iconsAmount, string] = ["LogoImage", "RandomIcon",
+        "MaleIcon", "FemaleIcon", "MenuIcon", "FuelIcon", "NoFuelIcon",
+        "LowFuelIcon", "FoodIcon", "NoFoodIcon", "LowFoodIcon", "DrinksIcon",
+        "NoDrinksIcon", "LowDrinksIcon", "PilotIcon", "NoPilotIcon",
+        "EngineerIcon", "NoEnginerIcon", "OverloadedIcon", "GunnerIcon",
+        "RepairIcon", "NoRepairIcon", "ManufactureIcon", "NoManufactureIcon"]
+    const colorsNames: array[colorsAmount, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
