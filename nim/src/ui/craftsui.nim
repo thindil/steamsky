@@ -485,8 +485,24 @@ proc showSetRecipeCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't create a dialog.")
     maxAmount = try:
         checkRecipe(recipeIndex = recipeIndex)
-      except:
+      except ValueError:
         return showError(message = "Can't get max amount.")
+      except CraftingNoWorkshopError:
+        showMessage(text = "You can't start crafting because you don't have a workshop.",
+            title = "Can't start crafting")
+        return tclOk
+      except CraftingNoMaterialsError:
+        showMessage(text = "You can't start crafting because you don't have materials.",
+            title = "Can't start crafting")
+        return tclOk
+      except CraftingNoToolsError:
+        showMessage(text = "You can't start crafting because you don't have a proper tool.",
+            title = "Can't start crafting")
+        return tclOk
+      except TradeNoFreeCargoError:
+        showMessage(text = "You can't start crafting because you don't have free cargo.",
+            title = "Can't start crafting")
+        return tclOk
     amountBox = craftDialog & ".amount"
   tclEval(script = "ttk::spinbox " & amountBox & " -from 1 -to " & $maxAmount &
       " -validate key -validatecommand {ValidateSpinbox %W %P " & craftDialog & ".craft} -width 20")
