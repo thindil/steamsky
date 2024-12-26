@@ -23,9 +23,10 @@ import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, game, messages, shipscargo, shipsmovement, types]
 import coreui, errordialog, themes
 
+const iconsAmount: Positive = 20
 
 {.push ruleOff: "varDeclared".}
-var mapImages: array[18, PImage]
+var mapImages: array[iconsAmount, PImage]
 {.pop ruleOn: "varDeclared".}
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -38,7 +39,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if mapImages[0] == nil:
     # Load images
     try:
-      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..21]:
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..iconsAmount + 3]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
@@ -239,6 +240,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       rowTemplateStatic(width = 30)
     if needRepairs:
       rowTemplateStatic(width = 30)
+    if needWorker:
+      rowTemplateStatic(width = 30)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
@@ -306,6 +309,17 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         addTooltip(bounds = getWidgetBounds(),
             text = "The ship needs repairs but no one is working them.")
       image(image = mapImages[17])
+  if needWorker:
+    if haveWorker:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "All crafting orders are being executed.")
+      image(image = mapImages[18])
+    else:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "You need to assign crew members to begin manufacturing.")
+      image(image = mapImages[19])
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
