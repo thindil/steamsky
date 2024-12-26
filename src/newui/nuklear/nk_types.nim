@@ -141,10 +141,12 @@ type
   nk_window_flags* = enum
     ## Internal Nuklear type
     NK_WINDOW_DYNAMIC = 1 shl 11
+    NK_WINDOW_ROM = 1 shl 12
     NK_WINDOW_HIDDEN = 1 shl 13
     NK_WINDOW_CLOSED = 1 shl 14
   nk_panel_flags* = enum
     ## Internal Nuklear type
+    NK_WINDOW_MOVEABLE = 1 shl 1
     NK_WINDOW_NO_INPUT = 1 shl 10
   nk_command_type* = enum
     ## Internal Nuklear type

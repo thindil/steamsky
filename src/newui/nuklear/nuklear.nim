@@ -692,8 +692,8 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
 # -----
 # Panel
 # -----
-proc nkPanelGetPadding(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [],
-    tags: [], contractual.} =
+proc nkPanelGetPadding(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [
+    ], tags: [], contractual.} =
   ## Get the padding for the selected panel, based on its type
   ##
   ## * style - the whole style of the application
@@ -756,6 +756,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       scrollbarSize: nk_vec2 = style.window.scrollbar_size
       panelPadding: nk_vec2 = nkPanelGetPadding(style = style,
           `type` = panelType)
+
+    # window movement
+    if (win.flags and NK_WINDOW_MOVEABLE.ord.int) == 1 and (win.flags and
+        NK_WINDOW_ROM.ord.int) != 1:
+      # calculate draggable window space
+      let header: nk_rect = nk_rect(x: win.bounds.x, y: win.bounds.y,
+          w: win.bounds.w, h: 0)
     return true
 {.pop ruleOn: "params".}
 
