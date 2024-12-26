@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Showing information about overloading the player's ship
 - Showing 'Repair ship' order multiple time on the player's ship's crew's
   members' orders list
+- Crash when trying to start crafting order when there is no free space on
+  the player's ship
 
 ## [10.0.4] - 2024-10-27
 
