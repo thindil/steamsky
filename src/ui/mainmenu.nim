@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to showing the main game's menu, like creating it.
+
 import std/[os, tables]
 import contracts
 import ../[basestypes, careers, config, game, game2, tk]
