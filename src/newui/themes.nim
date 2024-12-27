@@ -56,7 +56,7 @@ let
       defaultThemeIconPath & "repair-empty.svg", defaultThemeIconPath &
       "craft.svg", defaultThemeIconPath & "craft-empty.svg",
       defaultThemeIconPath & "upgrade.svg", defaultThemeIconPath &
-      "upgrade-empty.svg", defaultThemeIconPath & "trader.svg"],
+      "upgrade-empty.svg", defaultThemeIconPath & "crewtrader.svg"],
       colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
       name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
