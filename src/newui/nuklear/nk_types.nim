@@ -147,6 +147,9 @@ type
   nk_panel_flags* = enum
     ## Internal Nuklear type
     NK_WINDOW_MOVEABLE = 1 shl 1
+    NK_WINDOW_CLOSABLE = 1 shl 3
+    NK_WINDOW_MINIMIZABLE = 1 shl 4
+    NK_WINDOW_TITLE = 1 shl 6
     NK_WINDOW_NO_INPUT = 1 shl 10
   nk_command_type* = enum
     ## Internal Nuklear type
@@ -203,6 +206,7 @@ type
   nk_style_window_header* {.importc, nodecl.} = object
     ## Internal Nuklear type
     align*: nk_style_header_align
+    padding*: nk_vec2
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
