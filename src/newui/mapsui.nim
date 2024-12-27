@@ -23,7 +23,7 @@ import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, game, messages, shipscargo, shipsmovement, types]
 import coreui, errordialog, themes
 
-const iconsAmount: Positive = 20
+const iconsAmount: Positive = 22
 
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
@@ -39,7 +39,8 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if mapImages[0] == nil:
     # Load images
     try:
-      for index, fileName in themesList[gameSettings.interfaceTheme].icons[4..iconsAmount + 3]:
+      for index, fileName in themesList[gameSettings.interfaceTheme].icons[
+          4..iconsAmount + 3]:
         mapImages[index] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
@@ -120,6 +121,92 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $drinksAmount, r = r, g = g, b = b)
+
+proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
+    haveUpgrader, haveCleaner, haveRepairman, haveGunner, needRepairs,
+    needWorker, haveWorker: bool; faction: FactionData) {.raises: [], tags: [],
+    contractual.} =
+  ## Show various notifications icons, like lack of crew members on position,
+  ## crafting something, etc
+  ##
+  ## * speed         - the current speed of the player's ship
+  ## * havePilot     - do there is a pilot on duty
+  ## * haveEngineer  - do there is an engineer on duty
+  ## * haveTrader    - do there is a trader on duty
+  ## * haveUpgrader  - do there is someone who upgrading the ship
+  ## * haveCleaner   - do there is someone who cleans the ship
+  ## * haveRepairman - do there is someone who repairs the ship
+  ## * haveGunner    - do all guns have gunners
+  ## * needRepairs   - do the ship need repair
+  ## * needWorker    - do there are crafting orders set
+  ## * haveWorker    - do all crafting orders have assigned worker
+  ## * faction       - the player's faction
+  var
+    image: PImage = nil
+    tooltipText: string = ""
+  if speed < 0.5:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "You can't fly with your ship, because it is overloaded.")
+    image(image = mapImages[14])
+  if not havePilot:
+    if "sentientships" in faction.flags:
+      image = mapImages[11]
+      tooltipText = "No pilot assigned. Ship fly on it own."
+    else:
+      image = mapImages[10]
+      tooltipText = "No pilot assigned. Ship can't move."
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+    image(image = image)
+  if not haveEngineer:
+    if "sentientships" in faction.flags:
+      image = mapImages[13]
+      tooltipText = "No engineer assigned. Ship fly on it own."
+    else:
+      image = mapImages[12]
+      tooltipText = "No engineer assigned. Ship can't move."
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(), text = tooltipText)
+    image(image = image)
+  if not haveGunner:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "One or more guns don't have a gunner.")
+    image(image = mapImages[15])
+  if needRepairs:
+    if haveRepairman:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "The ship is being repaired.")
+      image(image = mapImages[16])
+    else:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "The ship needs repairs but no one is working them.")
+      image(image = mapImages[17])
+  if needWorker:
+    if haveWorker:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "All crafting orders are being executed.")
+      image(image = mapImages[18])
+    else:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "You need to assign crew members to begin manufacturing.")
+      image(image = mapImages[19])
+  if playerShip.upgradeModule > -1:
+    if haveUpgrader:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "A ship module upgrade in progress.")
+      image(image = mapImages[20])
+    else:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "A ship module upgrade is in progress but no one is working on it.")
+      image(image = mapImages[21])
 
 proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -242,6 +329,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       rowTemplateStatic(width = 30)
     if needWorker:
       rowTemplateStatic(width = 30)
+    if playerShip.upgradeModule > -1:
+      rowTemplateStatic(width = 30)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
@@ -265,61 +354,12 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       drinksAmount = drinksAmount, dialog = dialog)
   if dialog != none:
     return
-  var
-    image: PImage = nil
-    tooltipText: string = ""
-  if speed < 0.5:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "You can't fly with your ship, because it is overloaded.")
-    image(image = mapImages[14])
-  if not havePilot:
-    if "sentientships" in faction.flags:
-      image = mapImages[11]
-      tooltipText = "No pilot assigned. Ship fly on it own."
-    else:
-      image = mapImages[10]
-      tooltipText = "No pilot assigned. Ship can't move."
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-    image(image = image)
-  if not haveEngineer:
-    if "sentientships" in faction.flags:
-      image = mapImages[13]
-      tooltipText = "No engineer assigned. Ship fly on it own."
-    else:
-      image = mapImages[12]
-      tooltipText = "No engineer assigned. Ship can't move."
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-    image(image = image)
-  if not haveGunner:
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "One or more guns don't have a gunner.")
-    image(image = mapImages[15])
-  if needRepairs:
-    if haveRepairman:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "The ship is being repaired.")
-      image(image = mapImages[16])
-    else:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "The ship needs repairs but no one is working them.")
-      image(image = mapImages[17])
-  if needWorker:
-    if haveWorker:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "All crafting orders are being executed.")
-      image(image = mapImages[18])
-    else:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "You need to assign crew members to begin manufacturing.")
-      image(image = mapImages[19])
+  showNotifications(speed = speed, havePilot = havePilot,
+      haveEngineer = haveEngineer, haveTrader = haveTrader,
+      haveUpgrader = haveUpgrader, haveCleaner = haveCleaner,
+      haveRepairman = haveRepairman, haveGunner = haveGunner,
+      needRepairs = needRepairs, needWorker = needWorker,
+      haveWorker = haveWorker, faction = faction)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
