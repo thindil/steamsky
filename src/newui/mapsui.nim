@@ -174,6 +174,18 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
       addTooltip(bounds = getWidgetBounds(),
           text = "One or more guns don't have a gunner.")
     image(image = mapImages[15])
+  if not haveTrader:
+    if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "No trader assigned. You need one to talk/trade.")
+      image(image = mapImages[22])
+    elif skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
+        eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == friendlyShip:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "No trader assigned. You need one to talk/trade.")
+      image(image = mapImages[22])
   if needRepairs:
     if haveRepairman:
       if gameSettings.showTooltips:
@@ -207,18 +219,6 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
         addTooltip(bounds = getWidgetBounds(),
             text = "A ship module upgrade is in progress but no one is working on it.")
       image(image = mapImages[21])
-  if not haveTrader:
-    if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "No trader assigned. You need one to talk/trade.")
-      image(image = mapImages[22])
-    elif skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
-        eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == friendlyShip:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "No trader assigned. You need one to talk/trade.")
-      image(image = mapImages[22])
 
 proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -337,13 +337,13 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       rowTemplateStatic(width = 30)
     if not haveGunner:
       rowTemplateStatic(width = 30)
+    if not haveTrader:
+      rowTemplateStatic(width = 30)
     if needRepairs:
       rowTemplateStatic(width = 30)
     if needWorker:
       rowTemplateStatic(width = 30)
     if playerShip.upgradeModule > -1:
-      rowTemplateStatic(width = 30)
-    if not haveTrader:
       rowTemplateStatic(width = 30)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
