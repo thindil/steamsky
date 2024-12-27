@@ -27,9 +27,9 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
     WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Create the main menu UI
   let
-    uiDirectory = dataDirectory & "ui" & DirSep
-    iconPath = uiDirectory & "images" & DirSep & "icon.png"
-    mainWindow = "."
+    uiDirectory: string = dataDirectory & "ui" & DirSep
+    iconPath: string = uiDirectory & "images" & DirSep & "icon.png"
+  const mainWindow: string = "."
   if not fileExists(filename = iconPath):
     tclEval(script = "wm withdraw " & mainWindow)
     tclEval(script = "tk_messageBox -message {Couldn't not find the game data files and the game have to stop. Are you sure that directory \"" &
@@ -41,7 +41,7 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
   utilsui.addCommands()
   goalsui.addCommands()
   table.addCommands()
-  let icon = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
+  let icon: string = tclEval2(script = "image create photo logo -file {" & iconPath & "}")
   tclEval(script = "wm iconphoto . -default " & icon)
   try:
     tclEvalFile(fileName = themesList[gameSettings.interfaceTheme].fileName)
@@ -668,7 +668,7 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
   setFonts(newSize = gameSettings.mapFontSize, fontType = mapFont)
   setFonts(newSize = gameSettings.helpFontSize, fontType = helpFont)
   setFonts(newSize = gameSettings.interfaceFontSize, fontType = interfaceFont)
-  let versionLabel = ".mainmenu.version"
+  const versionLabel: string = ".mainmenu.version"
   tclEval(script = versionLabel & " configure -text {" & gameVersion & " development}")
   try:
     dataError = loadGameData()
@@ -678,20 +678,20 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
   if dataError.len > 0:
     showMainMenu()
     return
-  let playerFrameName = ".newgamemenu.canvas.player"
-  var textEntry = playerFrameName & ".playername"
+  const playerFrameName: string = ".newgamemenu.canvas.player"
+  var textEntry: string = playerFrameName & ".playername"
   tclEval(script = textEntry & " delete 0 end")
   tclEval(script = textEntry & " insert 0 {" & newGameSettings.playerName & "}")
   tclSetVar(varName = "playergender", newValue = $newGameSettings.playerGender)
   textEntry = playerFrameName & ".shipname"
   tclEval(script = textEntry & " delete 0 end")
   tclEval(script = textEntry & " insert 0 {" & newGameSettings.shipName & "}")
-  var values = ""
+  var values: string = ""
   for faction in factionsList.values:
     if faction.careers.len > 0:
       values = values & " {" & faction.name & "}"
   values.add(y = " Random")
-  var comboBox = playerFrameName & ".faction"
+  var comboBox: string = playerFrameName & ".faction"
   tclEval(script = comboBox & " configure -values [list" & values & "]")
   if newGameSettings.playerFaction == "random":
     tclEval(script = comboBox & " set Random")
@@ -718,9 +718,9 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
         basesTypesList[newGameSettings.startingBase].name & "}"))
   except:
     showError(message = "Can't set starting base.")
-  let difficultyFrameName = ".newgamemenu.canvas.difficulty"
+  const difficultyFrameName: string = ".newgamemenu.canvas.difficulty"
   comboBox = difficultyFrameName & ".difficultylevel"
-  var spinBox = difficultyFrameName & ".enemydamage"
+  var spinBox: string = difficultyFrameName & ".enemydamage"
   tclEval(script = spinBox & " set " & $((newGameSettings.enemyDamageBonus *
       100.0).Natural))
   spinBox = difficultyFrameName & ".playerdamage"
@@ -748,7 +748,7 @@ proc createMainMenu*() {.raises: [], tags: [ReadDirEffect,
   tclEval(script = comboBox & " current " & $(
       newGameSettings.difficultyLevel.ord))
   tclEval(script = "event generate " & comboBox & " <<ComboboxSelected>>")
-  var button = ".newgamemenu.canvas.player.randomplayer"
+  var button: string = ".newgamemenu.canvas.player.randomplayer"
   tclEval(script = button & " configure -image randomicon")
   button = ".newgamemenu.canvas.player.randomship"
   tclEval(script = button & " configure -image randomicon")
