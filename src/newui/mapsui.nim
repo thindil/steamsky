@@ -20,10 +20,10 @@
 
 import std/[colors, tables]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
-import ../[config, game, messages, shipscargo, shipsmovement, types]
+import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
 import coreui, errordialog, themes
 
-const iconsAmount: Positive = 22
+const iconsAmount: Positive = 23
 
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
@@ -207,6 +207,18 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
         addTooltip(bounds = getWidgetBounds(),
             text = "A ship module upgrade is in progress but no one is working on it.")
       image(image = mapImages[21])
+  if not haveTrader:
+    if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "No trader assigned. You need one to talk/trade.")
+      image(image = mapImages[22])
+    elif skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
+        eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == friendlyShip:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "No trader assigned. You need one to talk/trade.")
+      image(image = mapImages[22])
 
 proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -330,6 +342,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if needWorker:
       rowTemplateStatic(width = 30)
     if playerShip.upgradeModule > -1:
+      rowTemplateStatic(width = 30)
+    if not haveTrader:
       rowTemplateStatic(width = 30)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
