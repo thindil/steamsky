@@ -2345,14 +2345,20 @@ proc selectableSymbolLabel*(sym: SymbolType; title: string; value: var bool;
 # ------
 # Images
 # ------
-proc image*(image: PImage) {.raises: [], tags: [], contractual.} =
+proc image*(image: PImage; padding: NimVec2 = NimVec2(x: 0, y: 0)) {.raises: [], tags: [], contractual.} =
   ## Draw an image
   ##
-  ## * image - pointer to the image which will be drawn
-  proc nk_new_image(ctx; img: nk_image) {.importc: "nk_image", nodecl, raises: [
+  ## * image   - pointer to the image which will be drawn
+  ## * padding - the padding of the image, can be empty
+  proc nk_draw_image(b: var nk_command_buffer; r: nk_rect; img: var nk_image; col: nk_color) {.importc: "nk_draw_image", nodecl, raises: [
       ], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  nk_new_image(ctx = ctx, img = nk_image_ptr(iPtr = image))
+  proc nk_state_widget(bounds: var nk_rect; ctx): int {.importc: "nk_widget", nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  var bounds: nk_rect = nk_rect(x: padding.x, y: 0, w: 0, h: 0)
+  discard nk_state_widget(bounds = bounds, ctx = ctx)
+  var newImage: nk_image = nk_image_ptr(iPtr = image)
+  nk_draw_image(b = ctx.current.buffer, r = bounds, img = newImage, col = nk_color(r: 255, g: 255, b: 255, a: 255))
 
 # --------
 # Tooltips
