@@ -16,13 +16,15 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, strutils, tables]
+import contracts, nimalyzer
 import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
     messages, missions2, shipscargo, shipscrew, shipscrew2, tk, types, utils]
 import combatui, coreui, dialogs, errordialog, mapsui, shipsuicrew,
     shipsuimodules2, showmainmenu, statisticsui, updateheader, utilsui2
 
 proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], contractual, cdecl,
+    ruleOff: "params".} =
   ## Resize the selected canvas
   ##
   ## * clientData - the additional data for the Tcl command
@@ -47,7 +49,7 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], contractual, cdecl.} =
   ## Check the amount of the item, if it is not below low level of warning or
   ## if the entered amount is a proper number
   ##
@@ -142,7 +144,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclError
 
 proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], contractual, cdecl.} =
   ## Validate amount of the item when the spinbox button to increase or
   ## decrease the amount was pressed
   ##
@@ -166,7 +168,7 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], contractual, cdecl.} =
   ## Set the player's ship, module or crew member's name in Nim and Tcl
   ##
   ## * clientData - the additional data for the Tcl command
@@ -210,7 +212,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], cdecl.} =
+    TimeEffect, RootEffect], contractual, cdecl.} =
   ## Show the selected point on map
   ##
   ## * clientData - the additional data for the Tcl command
@@ -238,7 +240,7 @@ proc showOnMapCommand*(clientData: cint; interp: PInterp; argc: cint;
 
 proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
   ## Process question from dialog when the player answer Yes there
   ##
   ## * clientData - the additional data for the Tcl command
@@ -388,7 +390,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], contractual, cdecl.} =
   ## Assign scrolling events with mouse wheel to the selected vertical
   ## scrollbar from the selected widget
   ##
@@ -420,7 +422,7 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect], cdecl.} =
+    TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set the selected map point as the player's ship destination
   ##
   ## * clientData - the additional data for the Tcl command
@@ -456,7 +458,7 @@ proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect].} =
+    TimeEffect, RootEffect], contractual.} =
   ## Add Tcl commands related to the various UI elements
   try:
     addCommand("ResizeCanvas", resizeCanvasCommand)
