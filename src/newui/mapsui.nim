@@ -23,7 +23,7 @@ import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
 import coreui, errordialog, themes
 
-const iconsAmount: Positive = 23
+const iconsAmount: Positive = 25
 
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
@@ -124,8 +124,8 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
 
 proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
     haveUpgrader, haveCleaner, haveRepairman, haveGunner, needRepairs,
-    needWorker, haveWorker: bool; faction: FactionData) {.raises: [], tags: [],
-    contractual.} =
+    needWorker, haveWorker, needCleaning: bool;
+    faction: FactionData) {.raises: [], tags: [], contractual.} =
   ## Show various notifications icons, like lack of crew members on position,
   ## crafting something, etc
   ##
@@ -140,6 +140,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
   ## * needRepairs   - do the ship need repair
   ## * needWorker    - do there are crafting orders set
   ## * haveWorker    - do all crafting orders have assigned worker
+  ## * needCleaning  - do the ship is dirty
   ## * faction       - the player's faction
   var
     image: PImage = nil
@@ -219,6 +220,17 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
         addTooltip(bounds = getWidgetBounds(),
             text = "A ship module upgrade is in progress but no one is working on it.")
       image(image = mapImages[21])
+  if needCleaning:
+    if haveCleaner:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Ship is cleaned.")
+      image(image = mapImages[23])
+    else:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Ship is dirty but no one is cleaning it.")
+      image(image = mapImages[24])
 
 proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -345,6 +357,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       rowTemplateStatic(width = 30)
     if playerShip.upgradeModule > -1:
       rowTemplateStatic(width = 30)
+    if needCleaning:
+      rowTemplateStatic(width = 30)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
@@ -373,7 +387,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       haveUpgrader = haveUpgrader, haveCleaner = haveCleaner,
       haveRepairman = haveRepairman, haveGunner = haveGunner,
       needRepairs = needRepairs, needWorker = needWorker,
-      haveWorker = haveWorker, faction = faction)
+      haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
