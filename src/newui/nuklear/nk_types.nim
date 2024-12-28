@@ -359,8 +359,6 @@ const
     ## A window has title bar
   nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
     ## An empty rectangle
-  nkWhite*: nk_color = nk_color(r: 255, g: 255, b: 255, a: 255)
-    ## A white color
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding

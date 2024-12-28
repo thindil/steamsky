@@ -2357,8 +2357,13 @@ proc image*(image: PImage; padding: NimVec2 = NimVec2(x: 0, y: 0)) {.raises: [],
     ## A binding to Nuklear's function. Internal use only
   var bounds: nk_rect = nk_rect(x: padding.x, y: 0, w: 0, h: 0)
   discard nk_state_widget(bounds = bounds, ctx = ctx)
+  if padding != NimVec2(x: 0, y: 0):
+    bounds.x += padding.x
+    bounds.y += padding.y
+    bounds.w -= 2 * padding.x
+    bounds.h -= 2 * padding.y
   var newImage: nk_image = nk_image_ptr(iPtr = image)
-  nk_draw_image(b = ctx.current.buffer, r = bounds, img = newImage, col = nkWhite)
+  nk_draw_image(b = ctx.current.buffer, r = bounds, img = newImage, col = nk_color(r: 255, g: 255, b: 255, a: 255))
 
 # --------
 # Tooltips
