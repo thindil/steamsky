@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game]
 
 const
-  iconsAmount: Positive = 27
+  iconsAmount: Positive = 29
   colorsAmount: Positive = 29
 
 type
@@ -56,8 +56,9 @@ let
       defaultThemeIconPath & "repair-empty.svg", defaultThemeIconPath &
       "craft.svg", defaultThemeIconPath & "craft-empty.svg",
       defaultThemeIconPath & "upgrade.svg", defaultThemeIconPath &
-      "upgrade-empty.svg", defaultThemeIconPath & "crewtrader.svg"],
-      colors: [parseColor(
+      "upgrade-empty.svg", defaultThemeIconPath & "crewtrader.svg",
+      defaultThemeIconPath & "clean.svg", defaultThemeIconPath &
+      "clean-empty.svg"], colors: [parseColor(
       name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
       name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
       name = "#291913"), parseColor(name = "#500000"), parseColor(
@@ -88,7 +89,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "NoDrinksIcon", "LowDrinksIcon", "PilotIcon", "NoPilotIcon",
         "EngineerIcon", "NoEnginerIcon", "OverloadedIcon", "GunnerIcon",
         "RepairIcon", "NoRepairIcon", "ManufactureIcon", "NoManufactureIcon",
-        "UpgradeIcon", "NoUpgradeIcon", "TraderIcon"]
+        "UpgradeIcon", "NoUpgradeIcon", "TraderIcon", "CleanIcon", "NoCleanIcon"]
     const colorsNames: array[colorsAmount, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
