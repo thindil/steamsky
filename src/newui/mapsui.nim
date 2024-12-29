@@ -392,8 +392,9 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
   if playerShip.crew[0].health == 0 and showQuestion:
     try:
-      popup(pType = staticPopup, flags = {windowNoScrollbar}, title = "Question",
-          x = windowWidth / 3, y = windowHeight / 3, w = 300, h = 115):
+      popup(pType = staticPopup, flags = {windowNoScrollbar},
+          title = "Question", x = windowWidth / 3, y = windowHeight / 3,
+              w = 300, h = 115):
         setLayoutRowDynamic(height = 60, cols = 1)
         wrapLabel(str = "You are dead. Would you like to see your game statistics?")
         setLayoutRowDynamic(height = 30, cols = 2)
@@ -418,13 +419,21 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   showHeader(dialog = dialog)
   # draw map
+  nuklearSetDefaultFont(defaultFont = fonts[1],
+      fontSize = gameSettings.mapFontSize + 10)
   let
-    rows: Natural = ((windowHeight.Natural - 35 - gameSettings.messagesPosition) / gameSettings.mapFontSize).floor.Natural
+    rows: Natural = ((windowHeight.Natural - 35 -
+        gameSettings.messagesPosition) / (gameSettings.mapFontSize + 10)).floor.Natural
     colWidth: Positive = try:
         getTextWidth(text = " ").Positive
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
     cols: Natural = (windowWidth.Natural / colWidth).floor.Positive
-  echo rows, " ", cols
+  setLayoutRowDynamic(height = (gameSettings.mapFontSize + 10).float, cols = cols)
+  for row in 1..rows:
+    for col in 1..cols:
+      label(str = "1")
+  nuklearSetDefaultFont(defaultFont = fonts[0],
+      fontSize = gameSettings.interfaceFontSize + 10)
   state = map
