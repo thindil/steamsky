@@ -18,7 +18,7 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
-import std/[colors, tables]
+import std/[colors, math, tables]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
 import coreui, errordialog, themes
@@ -417,4 +417,14 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
   showHeader(dialog = dialog)
+  # draw map
+  let
+    rows: Natural = ((windowHeight.Natural - 35 - gameSettings.messagesPosition) / gameSettings.mapFontSize).floor.Natural
+    colWidth: Positive = try:
+        getTextWidth(text = " ").Positive
+      except:
+        dialog = setError(message = "Can't count map column's width.")
+        return
+    cols: Natural = (windowWidth.Natural / colWidth).floor.Positive
+  echo rows, " ", cols
   state = map
