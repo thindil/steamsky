@@ -33,6 +33,6 @@ const
     dtime*: float = 40.0 ## The length in miliseconds of one game's frame
 
 var
-    fonts*: seq[ptr nk_font] = @[] ## The list of fonts used by the game
+    fonts*: array[2, ptr nk_font] = [nil, nil] ## The list of fonts used by the game
     windowWidth*: float = 800.0 ## The width of the main game window
     windowHeight*: float = 600.0 ## The height of the main game window

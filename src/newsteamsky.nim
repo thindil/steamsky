@@ -18,7 +18,7 @@
 ## The main game module. Read the game configuration, command line arguments,
 ## initialize graphic and start the game.
 
-import std/[os, parseopt, strutils, times]
+import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
 import newui/[coreui, dialogs, errordialog, goalsui, mainmenu, mapsui, themes]
@@ -81,8 +81,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   try:
     loadHallOfFame()
   except:
-    echo "Can't load hall of fame"
-    return
+    quit "Can't load hall of fame"
 
   const windowName: string = "Steam Sky"
 
@@ -90,14 +89,19 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   nuklearInit(windowWidth = menuWidth, windowHeight = menuHeight,
       name = windowName, iconPath = dataDirectory & "ui" & DirSep & "images" &
       DirSep & "icon.png")
-  # Load the game's fonts
-  fonts.add(y = nuklearLoadFont(font = FontData(path: dataDirectory & "ui" &
-      DirSep & "fonts" & DirSep & "Amarante-Regular.ttf",
-      size: gameSettings.interfaceFontSize + 10)))
-  nuklearSetDefaultFont(defaultFont = fonts[0],
-      fontSize = gameSettings.interfaceFontSize + 10)
   # Load the game's theme
   loadThemes()
+  # Load the game's fonts
+  try:
+    fonts[0] = nuklearLoadFont(font = FontData(path: themesList[
+        gameSettings.interfaceTheme].fonts[0],
+        size: gameSettings.interfaceFontSize + 10))
+    fonts[1] = nuklearLoadFont(font = FontData(path: themesList[
+        gameSettings.interfaceTheme].fonts[1], size: gameSettings.mapFontSize + 10))
+  except:
+    quit "Can't load the game's fonts."
+  nuklearSetDefaultFont(defaultFont = fonts[0],
+      fontSize = gameSettings.interfaceFontSize + 10)
   var
     state: GameState = mainMenu
     dialog: GameDialog = none
@@ -126,8 +130,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
       newGame: mainMenu.newGame, map: showMap]
-  const showDialog: array[GameDialog.errorDialog..GameDialog.newGoalDialog, proc (
-      dialog: var GameDialog){.nimcall, raises: [].}] = [
+  const showDialog: array[GameDialog.errorDialog..GameDialog.newGoalDialog,
+      proc (dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
       questionDialog: showQuestion, newGoalDialog: showGoals]
   windowWidth = menuWidth.float

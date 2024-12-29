@@ -39,7 +39,7 @@ type
 let
   defaultThemePath: string = dataDirectory & "ui" & DirSep
   defaultThemeIconPath: string = defaultThemePath & "images" & DirSep & "ui" & DirSep
-  defaultThemeFontPath: string = defaultThemePath & "fonts"
+  defaultThemeFontPath: string = defaultThemePath & "fonts" & DirSep
   defaultTheme: ThemeData = ThemeData(name: "Default theme",
       fileName: dataDirectory & "ui" & DirSep & "theme.cfg", icons: [
       dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg",
