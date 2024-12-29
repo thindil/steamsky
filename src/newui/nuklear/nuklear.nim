@@ -2401,3 +2401,11 @@ proc colorPicker*(color: NimColorF;
       r: color.r, g: color.g, b: color.b, a: color.a), fmt = format)
   result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
 
+proc ruleHorizontal*(color: NimColor, rounding: bool) {.raises: [], tags: [], contractual.} =
+  ## Draw a horizontal rule with selected color
+  ##
+  ## * color    - the color of the rule
+  ## * rounding - if true, corners of the rule will be rounded
+  proc nk_rule_horizontal(ctx; color: nk_color; rounding: nk_bool) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_rule_horizontal(ctx = ctx, color = nk_color(r: color.r.uint8, g: color.g.uint8, b: color.b.uint8), rounding = (if rounding: nkTrue else: nkFalse))
