@@ -25,6 +25,7 @@ import ../[config, game]
 const
   iconsAmount: Positive = 29
   colorsAmount: Positive = 29
+  fontsAmount: Positive = 2
 
 type
   ThemeData* = object
@@ -33,10 +34,12 @@ type
     fileName: string
     icons*: array[iconsAmount, string]
     colors*: array[colorsAmount, Color]
+    fonts*: array[fontsAmount, string]
 
 let
-  defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" &
-      DirSep & "ui" & DirSep ## The path to the default theme's icons
+  defaultThemePath: string = dataDirectory & "ui" & DirSep
+  defaultThemeIconPath: string = defaultThemePath & "images" & DirSep & "ui" & DirSep
+  defaultThemeFontPath: string = defaultThemePath & "fonts"
   defaultTheme: ThemeData = ThemeData(name: "Default theme",
       fileName: dataDirectory & "ui" & DirSep & "theme.cfg", icons: [
       dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg",
@@ -73,7 +76,8 @@ let
       name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
       name = "#372412"), parseColor(name = "#500000"), parseColor(
       name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#fb4934")])
+      name = "#fb4934")], fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
+      defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -99,6 +103,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "GroupBorderColor", "HeaderTextColor", "GroupTextColor",
         "SelecteActiveTextColor", "PropertyTextColor", "ToggleColor",
         "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor"]
+    const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -130,6 +135,10 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
               of colorsNames:
                 let index: Natural = colorsNames.find(item = entry.value)
                 theme.colors[index] = parseColor(name = entry.value)
+              of fontsNames:
+                let index: Natural = fontsNames.find(item = entry.value)
+                theme.fonts[index] = themeDir & DirSep &
+                    entry.value.unixToNativePath
               else:
                 discard
             of cfgError:
