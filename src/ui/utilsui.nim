@@ -73,7 +73,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         let val = $argv[3]
         value = val.parseInt
       except:
-        tclSetResult("0")
+        tclSetResult(value = "0")
         return tclOk
     var warningText = ""
     if $argv[1] == ".itemdialog.giveamount":
@@ -87,7 +87,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
     if value < 1:
       if button.len > 0:
         tclEval(script = button & " configure -state disabled")
-      tclSetResult("1")
+      tclSetResult(value = "1")
       return tclOk
     elif value > maxValue:
       tclEval(script = spinBox & " set " & $maxValue)
@@ -96,7 +96,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = button & " configure -state normal")
     if argc > 4:
       if argv[4] == "take":
-        tclSetResult("1")
+        tclSetResult(value = "1")
         return tclOk
       elif $argv[4] in ["buy", "sell"]:
         var cost: Natural = value * parseInt(s = $argv[5])
@@ -106,7 +106,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = label & " configure -text {" & $cost & " " &
             moneyName & "}")
         if argv[4] == "buy":
-          tclSetResult("1")
+          tclSetResult(value = "1")
           return tclOk
     let
       label = ".itemdialog.errorlbl"
@@ -116,7 +116,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       if amount <= gameSettings.lowFuel:
         tclEval(script = label & " configure -text {" & warningText & "fuel.}")
         tclEval(script = "grid " & label)
-        tclSetResult("1")
+        tclSetResult(value = "1")
         return tclOk
     for member in playerShip.crew:
       let faction = factionsList[member.faction]
@@ -126,7 +126,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         if amount <= gameSettings.lowDrinks:
           tclEval(script = label & " configure -text {" & warningText & "drinks.}")
           tclEval(script = "grid " & label)
-          tclSetResult("1")
+          tclSetResult(value = "1")
           return tclOk
       elif itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
           faction.foodTypes:
@@ -134,13 +134,13 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         if amount <= gameSettings.lowFood:
           tclEval(script = label & " configure -text {" & warningText & "food.}")
           tclEval(script = "grid " & label)
-          tclSetResult("1")
+          tclSetResult(value = "1")
           return tclOk
     tclEval(script = "grid remove " & label)
-    tclSetResult("1")
+    tclSetResult(value = "1")
     return tclOk
   except:
-    tclSetResult("0")
+    tclSetResult(value = "0")
     return tclError
 
 proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -161,10 +161,10 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   let value = tclEval2(script = $argv[1] & " get")
   var newArgv: seq[string]
   for i in 0 ..< argc:
-    newArgv.add($argv[i])
-  newArgv.insert(value, 3)
-  return checkAmountCommand(clientData, interp, newArgv.len.cint,
-      newArgv.allocCStringArray)
+    newArgv.add(y = $argv[i])
+  newArgv.insert(item = value, i = 3)
+  return checkAmountCommand(clientData = clientData, interp = interp,
+      argc = newArgv.len.cint, argv = newArgv.allocCStringArray)
 
 proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -185,7 +185,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     varName = $argv[1]
     tEntry = ".getstring.entry"
     value = tclEval2(script = tEntry & " get")
-  tclSetVar(varName, value)
+  tclSetVar(varName = varName, newValue = value)
   if varName == "shipname":
     playerShip.name = value
   elif varName.len > 10 and varName[0 .. 9] == "modulename":
@@ -196,7 +196,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     if moduleIndex == -1:
       return tclError
     playerShip.modules[moduleIndex - 1].name = value
-    tclUnsetVar(varName)
+    tclUnsetVar(varName = varName)
     updateModulesInfo()
   elif varName.len > 8 and varName[0 .. 7] == "crewname":
     let crewIndex = try:
@@ -206,7 +206,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     if crewIndex == -1:
       return tclError
     playerShip.crew[crewIndex - 1].name = value
-    tclUnsetVar(varName)
+    tclUnsetVar(varName = varName)
     updateCrewInfo()
   return tclOk
 
@@ -256,10 +256,10 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   let answer = argv[1]
   if answer == "deletesave":
     try:
-      removeFile(tclGetVar("deletesave"))
+      removeFile(file = tclGetVar(varName = "deletesave"))
     except:
       return showError(message = "Can't remove the save file.")
-    tclUnsetVar("deletesave")
+    tclUnsetVar(varName = "deletesave")
     tclEval(script = "ShowLoadGame")
   elif answer == "sethomebase":
     let moneyIndex2 = findItem(inventory = playerShip.cargo,
@@ -461,13 +461,14 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], contractual.} =
   ## Add Tcl commands related to the various UI elements
   try:
-    addCommand("ResizeCanvas", resizeCanvasCommand)
-    addCommand("CheckAmount", checkAmountCommand)
-    addCommand("ValidateAmount", validateAmountCommand)
-    addCommand("SetTextVariable", setTextVariableCommand)
-    addCommand("ShowOnMap", showOnMapCommand)
-    addCommand("ProcessQuestion", processQuestionCommand)
-    addCommand("SetScrollbarBindings", setScrollbarBindingsCommand)
-    addCommand("SetDestination2", setDestination2Command)
+    addCommand(name = "ResizeCanvas", nimProc = resizeCanvasCommand)
+    addCommand(name = "CheckAmount", nimProc = checkAmountCommand)
+    addCommand(name = "ValidateAmount", nimProc = validateAmountCommand)
+    addCommand(name = "SetTextVariable", nimProc = setTextVariableCommand)
+    addCommand(name = "ShowOnMap", nimProc = showOnMapCommand)
+    addCommand(name = "ProcessQuestion", nimProc = processQuestionCommand)
+    addCommand(name = "SetScrollbarBindings",
+        nimProc = setScrollbarBindingsCommand)
+    addCommand(name = "SetDestination2", nimProc = setDestination2Command)
   except:
     showError(message = "Can't add a Tcl command.")
