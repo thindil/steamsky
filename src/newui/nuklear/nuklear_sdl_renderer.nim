@@ -211,6 +211,7 @@ proc nuklearInput*(): UserEvents =
       if wEvt.event == SDL_WINDOWEVENT_SIZE_CHANGED.cuint:
         return sizeChangedEvent
     of SDL_KEYUP.cuint, SDL_KEYDOWN.cuint:
+      result = keyEvent
       let
         down: nk_bool = (evt.`type` == SDL_KEYDOWN.cuint).nk_bool
         state: ptr array[512, uint8] = SDL_GetKeyboardState()
@@ -274,9 +275,10 @@ proc nuklearInput*(): UserEvents =
       of SDLK_ESCAPE.cuint:
         nk_input_key(ctx, NK_KEY_ESCAPE, down)
       else:
-        discard
+        result = noEvent
     else:
       discard nk_sdl_handle_event(evt)
+      result = anyEvent
   nk_input_end(ctx)
 
 proc nuklearDraw*() =

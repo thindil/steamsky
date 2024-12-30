@@ -495,7 +495,7 @@ type
     panelSetSub = panelSetPopup.int or panelGroup.int
   UserEvents* = enum
     ## The UI events caused by the user
-    noEvent, quitEvent, sizeChangedEvent
+    noEvent, quitEvent, sizeChangedEvent, keyEvent, anyEvent
 {.pop ruleOn: "namedParams".}
 
 # ----------
