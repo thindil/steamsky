@@ -466,9 +466,116 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
-  for row in 1..rows:
-    for col in 1..cols:
-      label(str = "1")
+  let currentTheme: ThemeData = try:
+      themesList[gameSettings.interfaceTheme]
+    except:
+      dialog = setError(message = "Can't get the game's theme.")
+      return
+  for x in startX..endX:
+    for y in startY..endY:
+      var mapTag, mapChar: string = ""
+#      if x == playerShip.skyX and y == playerShip.skyY:
+#        mapChar = currentTheme.playerShipIcon
+#      else:
+#        mapChar = currentTheme.emptyMapIcon
+#        mapTag = (if skyMap[x][y].visited: "black" else: "unvisited gray")
+#        if x == playerShip.destinationX and y == playerShip.destinationY:
+#          mapChar = currentTheme.targetIcon
+#          mapTag = (if skyMap[x][y].visited: "" else: "unvisited")
+#        elif currentStory.index.len > 0 and (x == storyX and y == storyY):
+#          mapChar = currentTheme.storyIcon
+#          mapTag = "green"
+#        elif skyMap[x][y].missionIndex > -1:
+#          case acceptedMissions[skyMap[x][y].missionIndex].mType
+#          of deliver:
+#            mapChar = currentTheme.deliverIcon
+#            mapTag = "yellow"
+#          of destroy:
+#            mapChar = currentTheme.destroyIcon
+#            mapTag = "red"
+#          of patrol:
+#            mapChar = currentTheme.patrolIcon
+#            mapTag = "lime"
+#          of explore:
+#            mapChar = currentTheme.exploreIcon
+#            mapTag = "green"
+#          of passenger:
+#            mapChar = currentTheme.passengerIcon
+#            mapTag = "cyan"
+#          if not skyMap[x][y].visited:
+#            mapTag &= " unvisited"
+#        elif skyMap[x][y].eventIndex > -1:
+#          if skyMap[x][y].eventIndex > eventsList.high:
+#            skyMap[x][y].eventIndex = -1
+#          else:
+#            case eventsList[skyMap[x][y].eventIndex].eType
+#            of enemyShip:
+#              mapChar = currentTheme.enemyShipIcon
+#              mapTag = "red"
+#            of attackOnBase:
+#              mapChar = currentTheme.attackOnBaseIcon
+#              mapTag = "red2"
+#            of enemyPatrol:
+#              mapChar = currentTheme.enemyPatrolIcon
+#              mapTag = "red3"
+#            of disease:
+#              mapChar = currentTheme.diseaseIcon
+#              mapTag = "yellow"
+#            of fullDocks:
+#              mapChar = currentTheme.fullDocksIcon
+#              mapTag = "cyan"
+#            of doublePrice:
+#              mapChar = currentTheme.doublePriceIcon
+#              mapTag = "lime"
+#            of trader:
+#              mapChar = currentTheme.traderIcon
+#              mapTag = "green"
+#            of friendlyShip:
+#              mapChar = currentTheme.friendlyShipIcon
+#              mapTag = "green2"
+#            of EventsTypes.none, baseRecovery:
+#              discard
+#            if not skyMap[x][y].visited:
+#              mapTag &= " unvisited"
+#        elif skyMap[x][y].baseIndex > 0:
+#          mapChar = currentTheme.notVisitedBaseIcon
+#          if skyBases[skyMap[x][y].baseIndex].known:
+#            if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
+#              mapChar = try:
+#                  factionsList[skyBases[skyMap[x][
+#                      y].baseIndex].owner].baseIcon.Rune.toUTF8
+#                except:
+#                  showError(message = "Can't get the base icon.")
+#                  return
+#              mapTag = skyBases[skyMap[x][y].baseIndex].baseType
+#            else:
+#              mapTag = "unvisited"
+#          else:
+#            mapTag = "unvisited gray"
+#      if preview:
+#        for mission in skyBases[skyMap[playerShip.skyX][
+#            playerShip.skyY].baseIndex].missions:
+#          if mission.targetX == x and mission.targetY == y:
+#            case mission.mType
+#            of deliver:
+#              mapChar = currentTheme.deliverIcon
+#              mapTag = "yellow"
+#            of destroy:
+#              mapChar = currentTheme.destroyIcon
+#              mapTag = "red"
+#            of patrol:
+#              mapChar = currentTheme.patrolIcon
+#              mapTag = "lime"
+#            of explore:
+#              mapChar = currentTheme.exploreIcon
+#              mapTag = "green"
+#            of passenger:
+#              mapChar = currentTheme.passengerIcon
+#              mapTag = "cyan"
+#            if not skyMap[x][y].visited:
+#              mapTag &= " unvisited"
+#            break
+      label(str = mapChar)
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   state = map
