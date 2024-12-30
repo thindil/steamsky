@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various procedures related to the game's UI, like resizing canvas,
+## validating the player's input, showing on the map, etc.
+
 import std/[os, strutils, tables]
 import contracts, nimalyzer
 import ../[bases, config, crew2, crewinventory, events2, game, game2, maps,
