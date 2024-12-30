@@ -155,6 +155,13 @@ type
       NK_KEY_TEXT_SELECT_ALL, NK_KEY_TEXT_WORD_LEFT, NK_KEY_TEXT_WORD_RIGHT,
       NK_KEY_SCROLL_START, NK_KEY_SCROLL_END, NK_KEY_SCROLL_DOWN,
       NK_KEY_SCROLL_UP, NK_KEY_ESCAPE, NK_KEY_MAX
+  nk_buttons* = enum
+    ## Internal Nuklear type
+    NK_BUTTON_LEFT,
+    NK_BUTTON_MIDDLE,
+    NK_BUTTON_RIGHT,
+    NK_BUTTON_DOUBLE,
+    NK_BUTTON_MAX
 
 # -------
 # Objects
@@ -186,6 +193,7 @@ type
     ## Internal Nuklear type
     align*: nk_style_header_align
     padding*: nk_vec2
+    label_padding*: nk_vec2
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
@@ -218,9 +226,14 @@ type
     window*: nk_style_window
     button*: nk_style_button
     font*: ptr nk_user_font
-  nk_mouse* {.importc, nodecl.} = object
+  nk_mouse_button* = object
+    ## Internal Nuklear type
+    down*: nk_bool
+    clicked*: cuint
+  nk_mouse* {.importc: "struct nk_mouse", nodecl.} = object
     ## Internal Nuklear type
     delta*: nk_vec2
+    buttons*: array[NK_BUTTON_MAX, nk_mouse_button]
   nk_input* {.importc: "struct nk_input", nodecl.} = object
     ## Internal Nuklear type
     mouse*: nk_mouse

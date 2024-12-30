@@ -777,6 +777,11 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           w: win.bounds.w, h: 0)
       if nkPanelHasHeader(flags = win.flags, title = title):
         header.h = font.height + 2.0 * style.window.header.padding.y
+        header.h += 2.0 * style.window.header.label_padding.y
+      else:
+        header.h = panelPadding.y
+      # window movement by dragging
+      let leftMouseDown: bool = `in`.mouse.buttons[NK_BUTTON_LEFT].down
     return true
 {.pop ruleOn: "params".}
 
