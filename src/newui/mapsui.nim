@@ -20,7 +20,7 @@
 
 import std/[colors, math, tables]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, messages, shipscargo, shipsmovement, types]
+import ../[config, game, maps, messages, shipscargo, shipsmovement, stories, types]
 import coreui, errordialog, themes
 
 const iconsAmount: Positive = 25
@@ -28,6 +28,9 @@ const iconsAmount: Positive = 25
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
 {.pop ruleOn: "varDeclared".}
+var
+  centerX: MapXRange = 1
+  centerY: MapYRange = 1
 
 proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -45,6 +48,8 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
+  centerX = playerShip.skyX
+  centerY = playerShip.skyY
 
 proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
@@ -423,14 +428,44 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       fontSize = gameSettings.mapFontSize + 10)
   let
     rows: Natural = ((windowHeight.Natural - 35 -
-        gameSettings.messagesPosition) / (gameSettings.mapFontSize + 10)).floor.Natural
+        gameSettings.messagesPosition) / (gameSettings.mapFontSize +
+            10)).floor.Natural
     colWidth: Positive = try:
         getTextWidth(text = " ").Positive
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
     cols: Natural = (windowWidth.Natural / colWidth).floor.Positive
+  var
+    startX: int = centerX - (cols / 2).int
+    startY: int = centerY - (rows / 2).int
+  var
+    endY: int = centerY + (rows / 2).int
+    endX: int = centerX + (cols / 2).int
+    storyX: int = 1
+    storyY: int = 1
+  if startY < 1:
+    startY = 1
+    endY = rows + 1
+  if startX < 1:
+    startX = 1
+    endX = cols + 1
+  if endY > 1_024:
+    endY = 1_024
+    startY = 1_024 - rows
+  if endX > 1_024:
+    endX = 1_024
+    startX = 1_025 - cols
   setLayoutRowDynamic(height = (gameSettings.mapFontSize + 10).float, cols = cols)
+  if currentStory.index.len > 0:
+    (storyX, storyY) = try:
+        getStoryLocation()
+      except:
+        dialog = setError(message = "Can't get the current story location.")
+        return
+    if storyX == playerShip.skyX and storyY == playerShip.skyY:
+      storyX = 0
+      storyY = 0
   for row in 1..rows:
     for col in 1..cols:
       label(str = "1")
