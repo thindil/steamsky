@@ -136,50 +136,60 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       questionDialog: showQuestion, newGoalDialog: showGoals]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
+  var redraw: bool = true
   while true:
     let started: float = cpuTime()
+    if redraw:
+      # Reset the UI tooltips if enabled
+      if gameSettings.showTooltips:
+        resetTooltips()
+
+      # The main window
+      window(name = "Main", x = 0, y = 0, w = windowWidth,
+          h = windowHeight, flags = {windowNoScrollbar}):
+        let
+          oldState: GameState = state
+          oldDialog: GameDialog = dialog
+        if state in GameState.mainMenu..GameState.map:
+          # Show the proper window
+          showGame[state](state = state, dialog = dialog)
+        # Add the tooltips, if enabled
+        if gameSettings.showTooltips:
+          showTooltips()
+        if oldState != state or oldDialog != dialog:
+          redraw = true
+
+      # Quit from the game
+      if state == quitGame:
+        break
+
+      # Dialogs if needed
+      case dialog
+      of GameDialog.errorDialog..newGoalDialog:
+        # Show the dialog
+        showDialog[dialog](dialog = dialog)
+      of loading:
+        # Start loading the game
+        state = loadingGame
+        dialog = none
+      of none:
+        # No dialog to show
+        discard
+
+      # Draw
+      nuklearDraw()
+
     # Input
     case nuklearInput()
     of quitEvent:
       break
     of sizeChangedEvent:
       (windowWidth, windowHeight) = nuklearGetWindowSize()
+      redraw = true
     of noEvent:
-      discard
-
-    # Reset the UI tooltips if enabled
-    if gameSettings.showTooltips:
-      resetTooltips()
-
-    # The main window
-    window(name = "Main", x = 0, y = 0, w = windowWidth,
-        h = windowHeight, flags = {windowNoScrollbar}):
-      if state in GameState.mainMenu..GameState.map:
-        # Show the proper window
-        showGame[state](state = state, dialog = dialog)
-      # Add the tooltips, if enabled
-      if gameSettings.showTooltips:
-        showTooltips()
-
-    # Quit from the game
-    if state == quitGame:
-      break
-
-    # Dialogs if needed
-    case dialog
-    of GameDialog.errorDialog..newGoalDialog:
-      # Show the dialog
-      showDialog[dialog](dialog = dialog)
-    of loading:
-      # Start loading the game
-      state = loadingGame
-      dialog = none
-    of none:
-      # No dialog to show
-      discard
-
-    # Draw
-    nuklearDraw()
+      redraw = false
+    else:
+      redraw = true
 
     # Timing
     let dt: float = cpuTime() - started
