@@ -187,7 +187,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       (windowWidth, windowHeight) = nuklearGetWindowSize()
       redraw = true
     of noEvent:
-      redraw = false
+      redraw = state == loadingGame
     else:
       redraw = true
 
