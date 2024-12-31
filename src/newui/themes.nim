@@ -26,6 +26,7 @@ const
   iconsAmount: Positive = 29
   colorsAmount: Positive = 29
   fontsAmount: Positive = 2
+  mapIconsAmount: Positive = 2
 
 type
   ThemeData* = object
@@ -35,6 +36,7 @@ type
     icons*: array[iconsAmount, string]
     colors*: array[colorsAmount, Color]
     fonts*: array[fontsAmount, string]
+    mapIcons*: array[mapIconsAmount, string]
 
 let
   defaultThemePath: string = dataDirectory & "ui" & DirSep
@@ -77,7 +79,8 @@ let
       name = "#372412"), parseColor(name = "#500000"), parseColor(
       name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
       name = "#fb4934")], fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
-      defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"])
+      defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
+      mapIcons: ["\uf135", "\uf0c8"])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -104,6 +107,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "SelecteActiveTextColor", "PropertyTextColor", "ToggleColor",
         "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor"]
     const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
+    const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon", "EmptyMapIcon"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -139,6 +143,9 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 let index: Natural = fontsNames.find(item = entry.value)
                 theme.fonts[index] = themeDir & DirSep &
                     entry.value.unixToNativePath
+              of mapIconsNames:
+                let index: Natural = mapIconsNames.find(item = entry.value)
+                theme.mapIcons[index] = entry.value
               else:
                 discard
             of cfgError:
