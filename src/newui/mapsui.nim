@@ -443,10 +443,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     cols: Positive = (windowWidth.Natural / colWidth).floor.Positive
   var
     startX: int = centerX - (cols / 2).int
-    startY: int = centerY - (rows / 2).int
+    startY: int = centerY - (rows / 2).int - 1
   var
-    endY: int = centerY + (rows / 2).int
-    endX: int = centerX + (cols / 2).int
+    endY: int = centerY + (rows / 2).floor.int + 1
+    endX: int = centerX + (cols / 2).floor.int
     storyX: int = 1
     storyY: int = 1
   if startY < 1:
@@ -471,6 +471,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
+  echo endX, " ", endY
   for x in startX..endX:
     for y in startY..endY:
       var mapTag, mapChar: string = ""
