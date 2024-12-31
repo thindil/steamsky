@@ -41,10 +41,10 @@ proc resizeCanvasCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ResizeCanvas name width height
   ## Name is the name of the canvas to resize, width it a new width, height
   ## is a new height
-  let canvas = $argv[1]
+  let canvas: string = $argv[1]
   if tclEval2(script = "winfo exists " & canvas) == "0":
     return tclOk
-  let parentFrame = tclEval2(script = "winfo parent " & canvas)
+  let parentFrame: string = tclEval2(script = "winfo parent " & canvas)
   tclEval(script = "bind " & parentFrame & " <Configure>")
   tclEval(script = canvas & " configure -width " & $argv[2] &
       " -height [expr " & $argv[3] & " - 20]")
@@ -70,23 +70,23 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   ## player, action is the action performed by the player and button is
   ## the button which accept the action
   try:
-    var value = 0
+    var value: int = 0
     if argv[3].len > 0:
       try:
-        let val = $argv[3]
+        let val: string = $argv[3]
         value = val.parseInt
       except:
         tclSetResult(value = "0")
         return tclOk
-    var warningText = ""
+    var warningText: string = ""
     if $argv[1] == ".itemdialog.giveamount":
       warningText = "You will give amount below low lewel of "
     else:
       warningText = "You will " & $argv[4] & " amount below low lewel of "
     let
-      spinBox = $argv[1]
-      maxValue = tclEval2(script = spinBox & " cget -to").parseInt
-    let button = $argv[argc - 1]
+      spinBox: string = $argv[1]
+      maxValue: int = tclEval2(script = spinBox & " cget -to").parseInt
+    let button: string = $argv[argc - 1]
     if value < 1:
       if button.len > 0:
         tclEval(script = button & " configure -state disabled")
@@ -105,27 +105,26 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         var cost: Natural = value * parseInt(s = $argv[5])
         countPrice(price = cost, traderIndex = findMember(order = talk),
             reduce = argv[4] == "buy")
-        let label = ".itemdialog.cost2lbl"
+        const label: string = ".itemdialog.cost2lbl"
         tclEval(script = label & " configure -text {" & $cost & " " &
             moneyName & "}")
         if argv[4] == "buy":
           tclSetResult(value = "1")
           return tclOk
-    let
-      label = ".itemdialog.errorlbl"
-      cargoIndex = parseInt(s = $argv[2]) - 1
+    const label: string = ".itemdialog.errorlbl"
+    let  cargoIndex: int = parseInt(s = $argv[2]) - 1
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
-      let amount = getItemAmount(itemType = fuelType) - value
+      let amount: int = getItemAmount(itemType = fuelType) - value
       if amount <= gameSettings.lowFuel:
         tclEval(script = label & " configure -text {" & warningText & "fuel.}")
         tclEval(script = "grid " & label)
         tclSetResult(value = "1")
         return tclOk
     for member in playerShip.crew:
-      let faction = factionsList[member.faction]
+      let faction: FactionData = factionsList[member.faction]
       if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
           faction.drinksTypes:
-        let amount = getItemsAmount(iType = "Drinks") - value
+        let amount: int = getItemsAmount(iType = "Drinks") - value
         if amount <= gameSettings.lowDrinks:
           tclEval(script = label & " configure -text {" & warningText & "drinks.}")
           tclEval(script = "grid " & label)
@@ -133,7 +132,7 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
           return tclOk
       elif itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
           faction.foodTypes:
-        let amount = getItemsAmount(iType = "Food") - value
+        let amount: int = getItemsAmount(iType = "Food") - value
         if amount <= gameSettings.lowFood:
           tclEval(script = label & " configure -text {" & warningText & "food.}")
           tclEval(script = "grid " & label)
@@ -161,8 +160,8 @@ proc validateAmountCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ValidateAmount name
   ## Name is the name of spinbox which value will be validated
-  let value = tclEval2(script = $argv[1] & " get")
-  var newArgv: seq[string]
+  let value: string = tclEval2(script = $argv[1] & " get")
+  var newArgv: seq[string] = @[]
   for i in 0 ..< argc:
     newArgv.add(y = $argv[i])
   newArgv.insert(item = value, i = 3)
@@ -184,15 +183,15 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SetTextVariable variablename
   ## Variablename is the name of variable to set
+  const tEntry: string = ".getstring.entry"
   let
-    varName = $argv[1]
-    tEntry = ".getstring.entry"
-    value = tclEval2(script = tEntry & " get")
+    varName: string = $argv[1]
+    value: string = tclEval2(script = tEntry & " get")
   tclSetVar(varName = varName, newValue = value)
   if varName == "shipname":
     playerShip.name = value
   elif varName.len > 10 and varName[0 .. 9] == "modulename":
-    let moduleIndex = try:
+    let moduleIndex: int = try:
         varName[10 .. ^1].parseInt
       except ValueError:
         -1
@@ -202,7 +201,7 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     tclUnsetVar(varName = varName)
     updateModulesInfo()
   elif varName.len > 8 and varName[0 .. 7] == "crewname":
-    let crewIndex = try:
+    let crewIndex: int = try:
         varName[8 .. ^1].parseInt
       except ValueError:
         -1
@@ -256,7 +255,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ProcessQuestion answer
   ## Answer is the answer set for the selected question
-  let answer = argv[1]
+  let answer: cstring = argv[1]
   if answer == "deletesave":
     try:
       removeFile(file = tclGetVar(varName = "deletesave"))
@@ -265,13 +264,13 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     tclUnsetVar(varName = "deletesave")
     tclEval(script = "ShowLoadGame")
   elif answer == "sethomebase":
-    let moneyIndex2 = findItem(inventory = playerShip.cargo,
+    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
     if moneyIndex2 == -1:
       showMessage(text = "You don't have any " & moneyName &
           " for change ship home base.", title = "No money")
       return tclOk
-    let traderIndex = findMember(order = talk)
+    let traderIndex: int = findMember(order = talk)
     var price: Natural = 1_000
     try:
       countPrice(price = price, traderIndex = traderIndex)
@@ -296,11 +295,11 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       waitForRest()
     except:
       return showError(message = "Can't wait for rest.")
-    let startsCombat = try:
+    let startsCombat: bool = try:
         checkForEvent()
       except:
         return showError(message = "Can't start a combat.")
-    var message: string
+    var message: string = ""
     if not startsCombat and gameSettings.autoFinish:
       message = try:
           autoFinishMissions()
@@ -333,7 +332,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     showQuestion(question = "You are dead. Would you like to see your game statistics?",
         res = "showstats")
   elif answer == "showstats":
-    let button = gameHeader & ".menubutton"
+    let button: string = gameHeader & ".menubutton"
     tclEval(script = "grid " & button)
     tclEval(script = closeButton & " configure -command ShowMainMenu")
     tclEval(script = "grid " & closeButton & " -row 0 -column 1")
@@ -355,7 +354,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't end the game3.")
     showMainMenu()
   elif answer == "messages":
-    let typeBox = mainPaned & ".messagesframe.canvas.messages.options.types"
+    let typeBox: string = mainPaned & ".messagesframe.canvas.messages.options.types"
     clearMessages()
     tclEval(script = typeBox & " current 0")
     tclEval(script = "ShowLastMessages")
@@ -369,8 +368,8 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
         res = "showstats")
   else:
     let
-      baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-      memberIndex = try:
+      baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+      memberIndex: int = try:
           ($argv[1]).parseInt - 1
         except:
           return showError(message = "Can't get the member index.")
@@ -409,8 +408,8 @@ proc setScrollbarBindingsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Widget is the widget from which events will be fired, scrollbar is
   ## Ttk::scrollbar which to which bindings will be added
   let
-    widget = $argv[1]
-    scrollbar = $argv[2]
+    widget: string = $argv[1]
+    scrollbar: string = $argv[2]
   tclEval(script = "bind " & widget & " <Button-4> {if {[winfo ismapped " &
       scrollbar & "]} {event generate " & scrollbar & " <Button-4>}}")
   tclEval(script = "bind " & widget & " <Key-Prior> {if {[winfo ismapped " &
@@ -440,11 +439,11 @@ proc setDestination2Command(clientData: cint; interp: PInterp; argc: cint;
   ## X is the x coordinate of point to set, Y is the y coordinate of point
   ## to set
   let
-    posX = try:
+    posX: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the X position.")
-    posY = try:
+    posY: int = try:
         ($argv[2]).parseInt
       except:
         return showError(message = "Can't get the Y position.")
