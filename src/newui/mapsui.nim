@@ -426,6 +426,11 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
+  let currentTheme: ThemeData = try:
+      themesList[gameSettings.interfaceTheme]
+    except:
+      dialog = setError(message = "Can't get the game's theme.")
+      return
   let
     rows: Natural = ((windowHeight.Natural - 35 -
         gameSettings.messagesPosition) / (gameSettings.mapFontSize +
@@ -435,7 +440,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
-    cols: Natural = (windowWidth.Natural / colWidth).floor.Positive
+    cols: Positive = (windowWidth.Natural / colWidth).floor.Positive
   var
     startX: int = centerX - (cols / 2).int
     startY: int = centerY - (rows / 2).int
@@ -466,19 +471,14 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
-  let currentTheme: ThemeData = try:
-      themesList[gameSettings.interfaceTheme]
-    except:
-      dialog = setError(message = "Can't get the game's theme.")
-      return
   for x in startX..endX:
     for y in startY..endY:
       var mapTag, mapChar: string = ""
-#      if x == playerShip.skyX and y == playerShip.skyY:
-#        mapChar = currentTheme.playerShipIcon
-#      else:
-#        mapChar = currentTheme.emptyMapIcon
-#        mapTag = (if skyMap[x][y].visited: "black" else: "unvisited gray")
+      if x == playerShip.skyX and y == playerShip.skyY:
+        mapChar = currentTheme.mapIcons[0]
+      else:
+        mapChar = currentTheme.mapIcons[1]
+        mapTag = (if skyMap[x][y].visited: "black" else: "unvisited gray")
 #        if x == playerShip.destinationX and y == playerShip.destinationY:
 #          mapChar = currentTheme.targetIcon
 #          mapTag = (if skyMap[x][y].visited: "" else: "unvisited")
@@ -552,30 +552,11 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #              mapTag = "unvisited"
 #          else:
 #            mapTag = "unvisited gray"
-#      if preview:
-#        for mission in skyBases[skyMap[playerShip.skyX][
-#            playerShip.skyY].baseIndex].missions:
-#          if mission.targetX == x and mission.targetY == y:
-#            case mission.mType
-#            of deliver:
-#              mapChar = currentTheme.deliverIcon
-#              mapTag = "yellow"
-#            of destroy:
-#              mapChar = currentTheme.destroyIcon
-#              mapTag = "red"
-#            of patrol:
-#              mapChar = currentTheme.patrolIcon
-#              mapTag = "lime"
-#            of explore:
-#              mapChar = currentTheme.exploreIcon
-#              mapTag = "green"
-#            of passenger:
-#              mapChar = currentTheme.passengerIcon
-#              mapTag = "cyan"
-#            if not skyMap[x][y].visited:
-#              mapTag &= " unvisited"
-#            break
-      label(str = mapChar)
+      case mapTag
+      of "black":
+        colorLabel(str = mapChar, r = 0, g = 0, b = 0)
+      of "unvisited gray":
+        colorLabel(str = mapChar, r = 31, g = 34, b = 35)
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   state = map
