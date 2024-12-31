@@ -340,6 +340,7 @@ type
     ## Internal Nuklear type
   nk_font_config* {.importc: "struct nk_font_config", nodecl.} = object
     ## Internal Nuklear type
+    `range`*: pointer
   nk_image* {.importc: "struct nk_image", nodecl.} = object
     ## Internal Nuklear type
     handle*: nk_handle

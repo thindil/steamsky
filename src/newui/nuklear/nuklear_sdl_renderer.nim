@@ -132,7 +132,8 @@ proc SDL_RWFromFile(file, mode: cstring): RWPtr {.importc, nodecl.}
 proc SDL_SetWindowSize(window: WindowPtr; w, h: cint) {.importc, nodecl.}
 proc SDL_SetWindowPosition(window: WindowPtr; x, y: cint) {.importc, nodecl.}
 proc SDL_SetWindowResizable(window: WindowPtr; resizable: cint) {.importc, nodecl.}
-proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512, uint8] {.importc, nodecl.}
+proc SDL_GetKeyboardState(numkeys: ptr int = nil): ptr array[512,
+    uint8] {.importc, nodecl.}
 proc IMG_Init(flags: cint): cint {.importc, nodecl.}
 proc IMG_Load(file: cstring): SurfacePtr {.importc, nodecl.}
 proc IMG_LoadSizedSVG_RW(src: RWPtr; width, height: cint): SurfacePtr {.importc, nodecl.}
@@ -317,18 +318,22 @@ proc nuklearLoadSVGImage*(filePath: string; width, height: int): PImage =
   SDL_FreeSurface(surface = surface)
   return image
 
-proc nuklearLoadFont*(font: FontData): ptr nk_font =
+proc nuklearLoadFont*(font: FontData; glyphsRanges: openArray[nk_rune] = []): ptr nk_font =
   ## Load a font from file with the selected size
   ##
-  ## * font - the font to load. Its path and size
+  ## * font         - the font to load. Its path and size
+  ## * glyphsRanges - Optional, the list of glyphs ranges to load. The list must
+  ##                  be terminated with zero.
   ##
   ## Returns the pointer for the font
   var
     atlas: ptr nk_font_atlas
     config = new_nk_font_config(0)
+  if glyphsRanges.len > 0:
+    config.`range` = glyphsRanges.addr
   nk_sdl_font_stash_begin(atlas.unsafeAddr)
   result = nk_font_atlas_add_from_file(atlas, font.path.cstring,
-      font.size.cfloat * fontScale, config.unsafeAddr)
+      font.size.cfloat * fontScale, config.addr)
   nk_sdl_font_stash_end()
 
 proc nuklearSetDefaultFont*(defaultFont: ptr nk_font = nil;
