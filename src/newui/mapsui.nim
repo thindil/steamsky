@@ -471,7 +471,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
-  echo endX, " ", endY
   for x in startX..endX:
     for y in startY..endY:
       var mapTag, mapChar: string = ""
