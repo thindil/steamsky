@@ -69,19 +69,19 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
       dialog = setError(message = "Can't get the game's theme.")
       return
   var
-    r, g, b: Natural = 0
+    color: Color = colBlack
     image: PImage = nil
     tooltipText: string = ""
   if fuelAmount > gameSettings.lowFuel:
-    (r, g, b) = theme.colors[2].extractRGB
+    color = theme.colors[2]
     image = mapImages[1]
     tooltipText = "The amount of fuel in the ship's cargo."
   elif fuelAmount > 0:
-    (r, g, b) = theme.colors[27].extractRGB
+    color = theme.colors[27]
     image = mapImages[3]
     tooltipText = "Low level of fuel on ship. Only " & $fuelAmount & " left."
   else:
-    (r, g, b) = theme.colors[28].extractRGB
+    color = theme.colors[28]
     image = mapImages[2]
     tooltipText = "You can't travel anymore, because you don't have any fuel for ship."
   if gameSettings.showTooltips:
@@ -89,17 +89,17 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
   image(image = image, padding = NimVec2(x: 5, y: 5))
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-  colorLabel(str = $fuelAmount, r = r, g = g, b = b)
+  colorLabel(str = $fuelAmount, color = color)
   if foodAmount > gameSettings.lowFood:
-    (r, g, b) = theme.colors[2].extractRGB
+    color = theme.colors[2]
     image = mapImages[4]
     tooltipText = "The amount of food in the ship's cargo."
   elif foodAmount > 0:
-    (r, g, b) = theme.colors[27].extractRGB
+    color = theme.colors[27]
     image = mapImages[6]
     tooltipText = "Low level of food on ship. Only " & $foodAmount & " left."
   else:
-    (r, g, b) = theme.colors[28].extractRGB
+    color = theme.colors[28]
     image = mapImages[5]
     tooltipText = "You don't have any food in ship but your crew needs them to live."
   if gameSettings.showTooltips:
@@ -107,17 +107,17 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
   image(image = image, padding = NimVec2(x: 5, y: 5))
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-  colorLabel(str = $foodAmount, r = r, g = g, b = b)
+  colorLabel(str = $foodAmount, color = color)
   if drinksAmount > gameSettings.lowFood:
-    (r, g, b) = theme.colors[2].extractRGB
+    color = theme.colors[2]
     image = mapImages[7]
     tooltipText = "The amount of drinks in the ship's cargo."
   elif drinksAmount > 0:
-    (r, g, b) = theme.colors[27].extractRGB
+    color = theme.colors[27]
     image = mapImages[8]
     tooltipText = "Low level of drinks on ship. Only " & $drinksAmount & " left."
   else:
-    (r, g, b) = theme.colors[28].extractRGB
+    color = theme.colors[28]
     image = mapImages[9]
     tooltipText = "You don't have any drinks in ship but your crew needs them to live."
   if gameSettings.showTooltips:
@@ -125,7 +125,7 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
   image(image = image, padding = NimVec2(x: 5, y: 5))
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
-  colorLabel(str = $drinksAmount, r = r, g = g, b = b)
+  colorLabel(str = $drinksAmount, color = color)
 
 proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
     haveUpgrader, haveCleaner, haveRepairman, haveGunner, needRepairs,
@@ -413,6 +413,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't create popup. Reason: " &
           getCurrentExceptionMsg())
 
+const mapColors: array[2, Color] = [colBlack, parseColor(name = "#1f2223")]
+
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
@@ -554,9 +556,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #            mapTag = "unvisited gray"
       case mapTag
       of "black":
-        colorLabel(str = mapChar, r = 0, g = 0, b = 0)
+        colorLabel(str = mapChar, color = mapColors[0])
       of "unvisited gray":
-        colorLabel(str = mapChar, r = 31, g = 34, b = 35)
+        colorLabel(str = mapChar, color = mapColors[1])
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   state = map

@@ -18,7 +18,7 @@
 ## Provides code related to the game's main menu, like showing the
 ## menu, and selecting its various sections
 
-import std/[algorithm, math, os, sequtils, strutils, tables, times]
+import std/[algorithm, colors, math, os, sequtils, strutils, tables, times]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[basestypes, config, events, game, game2, gamesaveload, goals,
     halloffame, shipscrew, ships2, utils]
@@ -359,10 +359,10 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = (menuHeight - 50).float, cols = 1)
   group(title = "HofGroup", flags = {windowNoFlags}):
     setLayoutRowDynamic(height = 25, cols = 4)
-    colorLabel(str = "Position", r = 255, g = 255, b = 0, align = centered)
-    colorLabel(str = "Name", r = 255, g = 255, b = 0, align = centered)
-    colorLabel(str = "Points", r = 255, g = 255, b = 0, align = centered)
-    colorLabel(str = "Died from", r = 255, g = 255, b = 0, align = centered)
+    colorLabel(str = "Position", color = colYellow, align = centered)
+    colorLabel(str = "Name", color = colYellow, align = centered)
+    colorLabel(str = "Points", color = colYellow, align = centered)
+    colorLabel(str = "Died from", color = colYellow, align = centered)
     for index, entry in hallOfFameArray:
       if entry.points == 0:
         break
