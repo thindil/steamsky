@@ -23,7 +23,7 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import std/[hashes, macros]
+import std/[colors, hashes, macros]
 import contracts, nimalyzer
 import nk_types, nk_context, nk_tooltip, nk_widget
 export nk_types, nk_context, nk_tooltip, nk_widget
@@ -1006,18 +1006,16 @@ template treeElement*(eType: TreeType; title: string; state: CollapseStates;
 # ------
 # Labels
 # ------
-proc colorLabel*(str: string; r, g, b: int;
-    align: TextAlignment = left) {.raises: [], tags: [], contractual.} =
+proc colorLabel*(str: string; color: Color; align: TextAlignment = left) {.raises: [], tags: [], contractual.} =
   ## Draw a text with the selected color
   ##
   ## * str   - the text to display
-  ## * r     - the red value for the text color in RGB
-  ## * g     - the green value for the text color in RGB
-  ## * b     - the blue value for the text color in RGB
+  ## * color - the color of the text
   ## * align - the text aligmnent flags
   proc nk_label_colored(ctx; str: cstring; align: nk_flags;
       color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
+  var (r, g, b) = color.extractRGB
   nk_label_colored(ctx = ctx, str = str.cstring, align = align.nk_flags,
       color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 

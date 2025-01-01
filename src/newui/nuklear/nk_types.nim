@@ -221,11 +221,15 @@ type
     userdata*: nk_handle
     height*: cfloat
     width*: nk_text_width_f
+  nk_style_text* {.importc: "struct nk_style_text", nodecl.} = object
+    ## Internal Nuklear type
+    padding*: nk_vec2
   nk_style* {.importc, nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
     button*: nk_style_button
     font*: ptr nk_user_font
+    text*: nk_style_text
   nk_mouse_button* = object
     ## Internal Nuklear type
     down*: nk_bool
