@@ -1,4 +1,4 @@
-# Copyright © 2023-2024 Bartek Jasicki
+# Copyright © 2023-2025 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -414,6 +414,9 @@ type
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,
         textActive, rounding, padding, border, imagePadding, touchPadding
+  ColorStyleTypes* = enum
+    ## The types of fields in style's settings for UI colors
+    background
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
     spacing
