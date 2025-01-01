@@ -1,4 +1,4 @@
-# Copyright © 2023-2024 Bartek Jasicki
+# Copyright © 2023-2025 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -1793,6 +1793,22 @@ proc stylePushFloat*(field: ButtonStyleTypes;
         source = value)
   return false
 
+proc stylePushColor*(field: ColorStyleTypes; color: Color): bool {.discardable, raises: [], tags: [], contractual.} =
+  ## Push the color value for the selected Nuklear window style on a
+  ## temporary stack
+  ##
+  ## * field - the Nuklear windows style field which will be modified
+  ## * color - the new color for the selected field
+  ##
+  ## Returns true if value was succesfully pushed, otherwise false
+  proc nk_style_push_color(ctx; dest: var nk_color;
+      source: nk_color): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  let (r, g, b) = color.extractRGB()
+  if field == background:
+    return nk_style_push_color(ctx = ctx, dest = ctx.style.window.background,
+      source = nk_rgba(r = r.cint, g = g.cint, b = b.cint, a = 255.cint))
+
 proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
     contractual.} =
   ## Set the Nuklear style colors from the table
@@ -1810,13 +1826,13 @@ proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
   nk_style_from_table(ctx = ctx, table = newTable.addr)
 
 proc defaultStyle*() {.raises: [], tags: [], contractual.} =
-  ## reset the UI colors to the default Nuklear setting
+  ## Reset the UI colors to the default Nuklear setting
   proc nk_style_default(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_style_default(ctx = ctx)
 
 proc stylePopFloat*() {.raises: [], tags: [], contractual.} =
-  ## reset the UI float setting to the default Nuklear setting
+  ## Reset the UI float setting to the default Nuklear setting
   proc nk_style_pop_float(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_float(ctx = ctx)
@@ -1826,6 +1842,12 @@ proc stylePopVec2*() {.raises: [], tags: [], contractual.} =
   proc nk_style_pop_vec2(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_vec2(ctx = ctx)
+
+proc stylePopColor*() {.raises: [], tags: [], contractual.} =
+  ## reset the UI color setting to the default Nuklear setting
+  proc nk_style_pop_color(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_style_pop_color(ctx = ctx)
 
 # ------
 # Combos
