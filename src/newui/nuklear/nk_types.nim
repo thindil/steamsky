@@ -200,6 +200,7 @@ type
     spacing*, scrollbar_size*, padding*, group_padding*, popup_padding*,
       contextual_padding*, combo_padding*, menu_padding*,
       tooltip_padding*: nk_vec2
+    background*: nk_color
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
