@@ -190,9 +190,9 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = varName, newValue = value)
   if varName == "shipname":
     playerShip.name = value
-  elif varName.len > 10 and varName[0 .. 9] == "modulename":
+  elif varName.len > 10 and varName[0..9] == "modulename":
     let moduleIndex: int = try:
-        varName[10 .. ^1].parseInt
+        varName[10..^1].parseInt
       except ValueError:
         -1
     if moduleIndex == -1:
@@ -200,9 +200,9 @@ proc setTextVariableCommand(clientData: cint; interp: PInterp; argc: cint;
     playerShip.modules[moduleIndex - 1].name = value
     tclUnsetVar(varName = varName)
     updateModulesInfo()
-  elif varName.len > 8 and varName[0 .. 7] == "crewname":
+  elif varName.len > 8 and varName[0..7] == "crewname":
     let crewIndex: int = try:
-        varName[8 .. ^1].parseInt
+        varName[8..^1].parseInt
       except ValueError:
         -1
     if crewIndex == -1:
@@ -256,14 +256,15 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ProcessQuestion answer
   ## Answer is the answer set for the selected question
   let answer: cstring = argv[1]
-  if answer == "deletesave":
+  case answer
+  of "deletesave":
     try:
       removeFile(file = tclGetVar(varName = "deletesave"))
     except:
       return showError(message = "Can't remove the save file.")
     tclUnsetVar(varName = "deletesave")
     tclEval(script = "ShowLoadGame")
-  elif answer == "sethomebase":
+  of "sethomebase":
     let moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
     if moneyIndex2 == -1:
@@ -290,7 +291,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't update the game.")
     showSkyMap()
-  elif answer == "nopilot":
+  of "nopilot":
     try:
       waitForRest()
     except:
@@ -313,7 +314,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       showCombatUi()
     else:
       showSkyMap()
-  elif answer == "quit":
+  of "quit":
     gameSettings.messagesPosition = try:
         gameSettings.windowHeight - tclEval2(script = mainPaned &
             " sashpos 0").parseInt
@@ -324,14 +325,14 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't end the game.")
     showMainMenu()
-  elif answer == "resign":
+  of "resign":
     try:
       death(memberIndex = 0, reason = "resignation", ship = playerShip)
     except:
       return showError(message = "Can't kill the player.")
     showQuestion(question = "You are dead. Would you like to see your game statistics?",
         res = "showstats")
-  elif answer == "showstats":
+  of "showstats":
     let button: string = gameHeader & ".menubutton"
     tclEval(script = "grid " & button)
     tclEval(script = closeButton & " configure -command ShowMainMenu")
@@ -342,7 +343,7 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
       endGame(save = false)
     except:
       return showError(message = "Can't end the game2.")
-  elif answer == "mainmenu":
+  of "mainmenu":
     gameSettings.messagesPosition = try:
         gameSettings.windowHeight - tclEval2(script = mainPaned &
             " sashpos 0").parseInt
@@ -353,12 +354,12 @@ proc processQuestionCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't end the game3.")
     showMainMenu()
-  elif answer == "messages":
+  of "messages":
     let typeBox: string = mainPaned & ".messagesframe.canvas.messages.options.types"
     clearMessages()
     tclEval(script = typeBox & " current 0")
     tclEval(script = "ShowLastMessages")
-  elif answer == "retire":
+  of "retire":
     try:
       death(memberIndex = 0, reason = "retired after finished the game",
           ship = playerShip)
