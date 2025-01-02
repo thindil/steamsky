@@ -434,13 +434,13 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't get the game's theme.")
       return
   let
-    rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) / (gameSettings.mapFontSize + 8).float).floor.Natural
+    rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) / gameSettings.mapFontSize.float).floor.Natural
     colWidth: Positive = try:
-        getTextWidth(text = currentTheme.mapIcons[1]).Positive
+        getTextWidth(text = currentTheme.mapIcons[1]).Positive + 4
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
-    cols: Positive = (windowWidth / colWidth.float).floor.Positive - 1
+    cols: Positive = (windowWidth / colWidth.float).floor.Positive - 4
   var
     startX: int = centerX - (cols / 2).int
     startY: int = centerY - (rows / 2).int - 1
@@ -461,7 +461,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if endX > 1_024:
     endX = 1_024
     startX = 1_025 - cols
-  setLayoutRowDynamic(height = (gameSettings.mapFontSize - 6).float, cols = cols)
+  saveButtonStyle()
+  setButtonStyle(field = borderColor, a = 0)
+  setButtonStyle(field = rounding, value = 0)
+  setButtonStyle(field = border, value = 0)
+  stylePushVec2(field = spacing, x = 0, y = 0)
+  setLayoutRowDynamic(height = gameSettings.mapFontSize.float, cols = cols)
   if currentStory.index.len > 0:
     (storyX, storyY) = try:
         getStoryLocation()
@@ -471,7 +476,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
-  stylePushVec2(field = spacing, x = 0, y = 0)
   for x in startX..endX:
     for y in startY..endY:
       var mapTag, mapChar: string = ""
@@ -553,20 +557,15 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #              mapTag = "unvisited"
 #          else:
 #            mapTag = "unvisited gray"
-      case mapTag
-      of "black":
-        stylePushColor(field = background, color = mapColors[0])
-        colorLabel(str = mapChar, color = mapColors[0])
-        stylePopColor()
-      of "unvisited gray":
-        stylePushColor(field = background, color = mapColors[1])
-        colorLabel(str = mapChar, color = mapColors[1])
-        stylePopColor()
-      of "unvisited":
-        stylePushColor(field = background, color = mapColors[1])
-        label(str = mapChar)
-        stylePopColor()
+      try:
+        setButtonStyle(field = normal, color = (if skyMap[x][y].visited: colWhite else: colWhite))
+      except:
+        dialog = setError(message = "Can't set map color")
+        return
+      labelButton(title = mapChar):
+        discard
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
+  restoreButtonStyle()
   stylePopVec2()
   state = map
