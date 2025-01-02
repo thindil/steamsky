@@ -1807,7 +1807,7 @@ proc stylePushColor*(field: ColorStyleTypes; color: Color): bool {.discardable, 
   let (r, g, b) = color.extractRGB()
   if field == background:
     return nk_style_push_color(ctx = ctx, dest = ctx.style.window.background,
-      source = nk_rgba(r = r.cint, g = g.cint, b = b.cint, a = 255.cint))
+      source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
 proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
     contractual.} =
