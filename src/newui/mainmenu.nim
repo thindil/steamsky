@@ -502,7 +502,11 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     saves.sort(cmp = sortSaves)
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
-    setButtonStyle(field = normal, r = 18, g = 13, b = 13)
+    try:
+      setButtonStyle(field = normal, color = "#120d0d".parseColor)
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
     layoutSpaceStatic(height = (saves.len * 30).float, widgetsCount = (
