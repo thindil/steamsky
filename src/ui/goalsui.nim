@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,12 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[tables, strutils]
+import contracts, nimalyzer
 import ../[config, game, goals, tk, utils]
 import errordialog
 
 proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl, ruleOff: "params".} =
   ## Show goals UI to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -114,7 +115,7 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set selected goal as a current goal
   ##
   ## * clientData - the additional data for the Tcl command
@@ -161,7 +162,7 @@ proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect].} =
+    TimeEffect, RootEffect], contractual.} =
   ## Adds Tcl commands related to the goals UI
   try:
     addCommand("ShowGoals", showGoalsCommand)
