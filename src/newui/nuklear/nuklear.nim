@@ -1673,35 +1673,33 @@ proc restoreButtonStyle*() {.raises: [], tags: [], contractual.} =
   ##
   ctx.style.button = buttonStyle
 
-proc setButtonStyle*(field: ButtonStyleTypes; r: cint = 255; g: cint = 255;
-    b: cint = 255; a: cint = 255) {.raises: [], tags: [], contractual.} =
+proc setButtonStyle*(field: ButtonStyleTypes; color: Color = colWhite; a: Natural = 255) {.raises: [], tags: [], contractual.} =
   ## Set the color for the selected field of the Nuklear buttons style
   ##
   ## * field - the style's field which value will be changed
-  ## * r     - the red value for the style color in RGBA
-  ## * g     - the green value for the style color in RGBA
-  ## * b     - the blue value for the style color in RGBA
-  ## * a     - the alpha value for the style color in RGBA
+  ## * color - the new value for the field
+  ## * a     - the intensity (alpha) of the color from 0 to 255
+  let (r, g, b) = color.extractRGB
   case field
   of normal:
     ctx.style.button.normal = nk_style_item_color(col = nk_rgba(r = r, g = g,
-        b = b, a = a))
+        b = b, a = a.cint))
   of hover:
     ctx.style.button.hover = nk_style_item_color(col = nk_rgba(r = r, g = g,
-        b = b, a = a))
+        b = b, a = a.cint))
   of active:
     ctx.style.button.active = nk_style_item_color(col = nk_rgba(r = r, g = g,
-        b = b, a = a))
+        b = b, a = a.cint))
   of borderColor:
-    ctx.style.button.border_color = nk_rgba(r = r, g = g, b = b, a = a)
+    ctx.style.button.border_color = nk_rgba(r = r, g = g, b = b, a = a.cint)
   of textBackground:
-    ctx.style.button.text_background = nk_rgba(r = r, g = g, b = b, a = a)
+    ctx.style.button.text_background = nk_rgba(r = r, g = g, b = b, a = a.cint)
   of textNormal:
-    ctx.style.button.text_normal = nk_rgba(r = r, g = g, b = b, a = a)
+    ctx.style.button.text_normal = nk_rgba(r = r, g = g, b = b, a = a.cint)
   of textHover:
-    ctx.style.button.text_hover = nk_rgba(r = r, g = g, b = b, a = a)
+    ctx.style.button.text_hover = nk_rgba(r = r, g = g, b = b, a = a.cint)
   of textActive:
-    ctx.style.button.text_active = nk_rgba(r = r, g = g, b = b, a = a)
+    ctx.style.button.text_active = nk_rgba(r = r, g = g, b = b, a = a.cint)
   else:
     discard
 
