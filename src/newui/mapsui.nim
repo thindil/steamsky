@@ -413,7 +413,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't create popup. Reason: " &
           getCurrentExceptionMsg())
 
-const mapColors: array[3, Color] = [colBlack, "#1f2223".parseColor, colWhite]
+const mapColors: array[4, Color] = [colBlack, "#1f2223".parseColor, colWhite, "#4e9a06".parseColor]
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -488,9 +488,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         if x == playerShip.destinationX and y == playerShip.destinationY:
           mapChar = currentTheme.mapIcons[2]
-#        elif currentStory.index.len > 0 and (x == storyX and y == storyY):
-#          mapChar = currentTheme.storyIcon
-#          mapTag = "green"
+        elif currentStory.index.len > 0 and (x == storyX and y == storyY):
+          mapChar = currentTheme.mapIcons[3]
+          mapColor = mapColors[3]
 #        elif skyMap[x][y].missionIndex > -1:
 #          case acceptedMissions[skyMap[x][y].missionIndex].mType
 #          of deliver:
