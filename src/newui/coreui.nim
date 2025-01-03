@@ -30,7 +30,7 @@ type GameDialog* = enum
     none, loading, errorDialog, loadMenu, questionDialog, newGoalDialog
 
 const
-    dtime*: float = 40.0 ## The length in miliseconds of one game's frame
+    dtime*: float = 20.0 ## The length in miliseconds of one game's frame
 
 var
     fonts*: array[2, ptr nk_font] = [nil, nil] ## The list of fonts used by the game
