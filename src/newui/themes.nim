@@ -27,6 +27,7 @@ const
   colorsAmount: Positive = 29
   fontsAmount: Positive = 2
   mapIconsAmount: Positive = 4
+  mapColorsAmount: Positive = 4
 
 type
   ThemeData* = object
@@ -37,6 +38,7 @@ type
     colors*: array[colorsAmount, Color]
     fonts*: array[fontsAmount, string]
     mapIcons*: array[mapIconsAmount, string]
+    mapColors*: array[mapColorsAmount, Color]
 
 let
   defaultThemePath: string = dataDirectory & "ui" & DirSep
@@ -63,24 +65,21 @@ let
       defaultThemeIconPath & "upgrade.svg", defaultThemeIconPath &
       "upgrade-empty.svg", defaultThemeIconPath & "crewtrader.svg",
       defaultThemeIconPath & "clean.svg", defaultThemeIconPath &
-      "clean-empty.svg"], colors: [parseColor(
-      name = "#1a130c"), parseColor(name = "#eee8aa"), parseColor(
-      name = "#4e9a06"), parseColor(name = "#372412"), parseColor(
-      name = "#291913"), parseColor(name = "#500000"), parseColor(
-      name = "#120d0d"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#120d0d"), parseColor(name = "#372412"), parseColor(
-      name = "#1a130c"), parseColor(name = "#120d0d"), parseColor(
-      name = "#120d0d"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#372412"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#ffdf00"), parseColor(name = "#7f8c8d"), parseColor(
-      name = "#000000"), parseColor(name = "#006400"), parseColor(
-      name = "#458588"), parseColor(name = "#4e9a06"), parseColor(
-      name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#372412"), parseColor(name = "#500000"), parseColor(
-      name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
-      name = "#fb4934")], fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
+      "clean-empty.svg"], colors: ["#1a130c".parseColor, "#eee8aa".parseColor,
+      "#4e9a06".parseColor, "#372412".parseColor, "#291913".parseColor,
+      "#500000".parseColor, "#120d0d".parseColor, "#ffdf00".parseColor,
+      "#120d0d".parseColor, "#372412".parseColor, "#1a130c".parseColor,
+      "#120d0d".parseColor, "#120d0d".parseColor, "#ffdf00".parseColor,
+      "#372412".parseColor, "#ffdf00".parseColor, "#ffdf00".parseColor,
+      "#7f8c8d".parseColor, "#000000".parseColor, "#006400".parseColor,
+      "#458588".parseColor, "#4e9a06".parseColor, "#ffdf00".parseColor,
+      "#ffdf00".parseColor, "#372412".parseColor, "#500000".parseColor,
+      "#ffdf00".parseColor, "#ffdf00".parseColor, "#fb4934".parseColor],
+      fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
-      mapIcons: ["\uf135", "\uf0c8", "\uf05b", "\uf059"])
+      mapIcons: ["\uf135", "\uf0c8", "\uf05b", "\uf059"],
+      mapColors: [colBlack, "#1f2223".parseColor, colWhite,
+          "#4e9a06".parseColor])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -109,6 +108,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
     const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
         "EmptyMapIcon", "TargetIcon", "StoryIcon"]
+    const mapColorsNames: array[mapColorsAmount, string] = ["MapVisitedColor",
+        "MapUnvisitedColor", "MapDefaultColor", "MapGreenColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -147,6 +148,9 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
               of mapIconsNames:
                 let index: Natural = mapIconsNames.find(item = entry.value)
                 theme.mapIcons[index] = entry.value
+              of mapColorsNames:
+                let index: Natural = mapColorsNames.find(item = entry.value)
+                theme.mapColors[index] = entry.value.parseColor
               else:
                 discard
             of cfgError:
