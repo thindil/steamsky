@@ -22,7 +22,8 @@ import errordialog
 
 proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl, ruleOff: "params".} =
+    WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl,
+        ruleOff: "params".} =
   ## Show goals UI to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -165,7 +166,7 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], contractual.} =
   ## Adds Tcl commands related to the goals UI
   try:
-    addCommand("ShowGoals", showGoalsCommand)
-    addCommand("SetGoal", setGoalCommand)
+    addCommand(name = "ShowGoals", nimProc = showGoalsCommand)
+    addCommand(name = "SetGoal", nimProc = setGoalCommand)
   except:
     showError(message = "Can't add a Tcl command.")
