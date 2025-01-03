@@ -413,7 +413,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't create popup. Reason: " &
           getCurrentExceptionMsg())
 
-const mapColors: array[2, Color] = [colBlack, parseColor(name = "#1f2223")]
+const mapColors: array[3, Color] = [colBlack, "#1f2223".parseColor, colWhite]
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -434,7 +434,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't get the game's theme.")
       return
   let
-    rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) / gameSettings.mapFontSize.float).floor.Natural
+    height: Positive = gameSettings.mapFontSize + 10
+    rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) / height.float).floor.Natural
     colWidth: Positive = try:
         getTextWidth(text = currentTheme.mapIcons[1]).Positive + 4
       except:
@@ -462,11 +463,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     endX = 1_024
     startX = 1_025 - cols
   saveButtonStyle()
-  setButtonStyle(field = borderColor, a = 0)
   setButtonStyle(field = rounding, value = 0)
   setButtonStyle(field = border, value = 0)
   stylePushVec2(field = spacing, x = 0, y = 0)
-  setLayoutRowDynamic(height = gameSettings.mapFontSize.float, cols = cols)
+  setLayoutRowDynamic(height = height.float, cols = cols)
   if currentStory.index.len > 0:
     (storyX, storyY) = try:
         getStoryLocation()
@@ -476,17 +476,18 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
-  for x in startX..endX:
-    for y in startY..endY:
-      var mapTag, mapChar: string = ""
+  for y in startY..endY:
+    for x in startX..endX:
+      var
+        mapChar: string = currentTheme.mapIcons[1]
+        mapColor: Color = mapColors[1]
       if x == playerShip.skyX and y == playerShip.skyY:
+        skyMap[x][y].visited = true
         mapChar = currentTheme.mapIcons[0]
+        mapColor = mapColors[2]
       else:
-        mapChar = currentTheme.mapIcons[1]
-        mapTag = (if skyMap[x][y].visited: "black" else: "unvisited gray")
         if x == playerShip.destinationX and y == playerShip.destinationY:
           mapChar = currentTheme.mapIcons[2]
-          mapTag = (if skyMap[x][y].visited: "" else: "unvisited")
 #        elif currentStory.index.len > 0 and (x == storyX and y == storyY):
 #          mapChar = currentTheme.storyIcon
 #          mapTag = "green"
@@ -558,7 +559,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #          else:
 #            mapTag = "unvisited gray"
       try:
-        setButtonStyle(field = normal, color = (if skyMap[x][y].visited: colWhite else: colWhite))
+        setButtonStyle(field = borderColor, color = (if skyMap[x][y].visited: mapColors[0] else: mapColors[1]))
+        setButtonStyle(field = normal, color = (if skyMap[x][y].visited: mapColors[0] else: mapColors[1]))
+        setButtonStyle(field = textNormal, color = mapColor)
       except:
         dialog = setError(message = "Can't set map color")
         return
