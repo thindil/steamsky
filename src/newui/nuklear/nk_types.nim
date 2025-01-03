@@ -174,7 +174,7 @@ type
   nk_colorf* {.importc: "struct nk_colorf", nodecl.} = object
     ## Internal Nuklear type
     r*, g*, b*, a*: cfloat
-  nk_vec2* {.importc: "struct nk_vec2", nodecl.} = object
+  nk_vec2* {.importc: "struct nk_vec2", nodecl, completeStruct.} = object
     ## Internal Nuklear type
     x*, y*: cfloat
   nk_nine_slice* {.importc: "struct nk_nine_slice", nodecl.} = object
