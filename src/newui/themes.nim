@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -26,7 +26,7 @@ const
   iconsAmount: Positive = 29
   colorsAmount: Positive = 29
   fontsAmount: Positive = 2
-  mapIconsAmount: Positive = 3
+  mapIconsAmount: Positive = 4
 
 type
   ThemeData* = object
@@ -80,7 +80,7 @@ let
       name = "#ffdf00"), parseColor(name = "#ffdf00"), parseColor(
       name = "#fb4934")], fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
-      mapIcons: ["\uf135", "\uf0c8", "\uf05b"])
+      mapIcons: ["\uf135", "\uf0c8", "\uf05b", "\uf059"])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -108,7 +108,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor"]
     const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
     const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
-        "EmptyMapIcon", "TargetIcon"]
+        "EmptyMapIcon", "TargetIcon", "StoryIcon"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
