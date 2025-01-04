@@ -26,7 +26,7 @@ const
   iconsAmount: Positive = 29
   colorsAmount: Positive = 29
   fontsAmount: Positive = 2
-  mapIconsAmount: Positive = 4
+  mapIconsAmount: Positive = 9
   mapColorsAmount: Positive = 4
 
 type
@@ -77,7 +77,8 @@ let
       "#ffdf00".parseColor, "#ffdf00".parseColor, "#fb4934".parseColor],
       fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
-      mapIcons: ["\uf135", "\uf0c8", "\uf05b", "\uf059"],
+      mapIcons: ["\uf135", "\uf0c8", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
+          "\uf540", "\uf707", "\uf183"],
       mapColors: [colBlack, "#1f2223".parseColor, colWhite,
           "#4e9a06".parseColor])
 
@@ -107,7 +108,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor"]
     const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
     const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
-        "EmptyMapIcon", "TargetIcon", "StoryIcon"]
+        "EmptyMapIcon", "TargetIcon", "StoryIcon", "DeliverIcon", "DestroyIcon",
+        "PatrolIcon", "ExploreIcon", "PassengerIcon"]
     const mapColorsNames: array[mapColorsAmount, string] = ["MapVisitedColor",
         "MapUnvisitedColor", "MapDefaultColor", "MapGreenColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
