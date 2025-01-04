@@ -25,8 +25,8 @@
 
 import std/[colors, hashes, macros]
 import contracts, nimalyzer
-import nk_types, nk_context, nk_tooltip, nk_widget
-export nk_types, nk_context, nk_tooltip, nk_widget
+import nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
+export nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
 
 # Temporary disable unused warnings
 {.push hint[XDeclaredButNotUsed]: off.}
@@ -210,16 +210,6 @@ proc nk_combo_begin_color(ctx; color: nk_color;
     size: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_combo_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-
-# ------
-# Colors
-# ------
-proc nk_rgb*(r, g, b: cint): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_rgb_cf*(c: nk_colorf): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_rgba*(r, g, b, a: cint): nk_color {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
 # -------
