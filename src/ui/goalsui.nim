@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the list of available goals, like showing them and
+## setting them.
+
 import std/[tables, strutils]
 import contracts, nimalyzer
 import ../[config, game, goals, tk, utils]
