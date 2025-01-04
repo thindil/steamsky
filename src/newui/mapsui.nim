@@ -20,7 +20,7 @@
 
 import std/[colors, math, tables]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, messages, shipscargo, shipsmovement, stories, types]
+import ../[config, game, maps, messages, missions, shipscargo, shipsmovement, stories, types]
 import coreui, errordialog, themes
 
 const iconsAmount: Positive = 25
@@ -489,25 +489,23 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         elif currentStory.index.len > 0 and (x == storyX and y == storyY):
           mapChar = theme.mapIcons[3]
           mapColor = theme.mapColors[3]
-#        elif skyMap[x][y].missionIndex > -1:
-#          case acceptedMissions[skyMap[x][y].missionIndex].mType
-#          of deliver:
-#            mapChar = theme.deliverIcon
+        elif skyMap[x][y].missionIndex > -1:
+          case acceptedMissions[skyMap[x][y].missionIndex].mType
+          of deliver:
+            mapChar = theme.mapIcons[4]
 #            mapTag = "yellow"
-#          of destroy:
-#            mapChar = theme.destroyIcon
+          of destroy:
+            mapChar = theme.mapIcons[5]
 #            mapTag = "red"
-#          of patrol:
-#            mapChar = theme.patrolIcon
+          of patrol:
+            mapChar = theme.mapIcons[6]
 #            mapTag = "lime"
-#          of explore:
-#            mapChar = theme.exploreIcon
+          of explore:
+            mapChar = theme.mapIcons[7]
 #            mapTag = "green"
-#          of passenger:
-#            mapChar = theme.passengerIcon
+          of passenger:
+            mapChar = theme.mapIcons[8]
 #            mapTag = "cyan"
-#          if not skyMap[x][y].visited:
-#            mapTag &= " unvisited"
 #        elif skyMap[x][y].eventIndex > -1:
 #          if skyMap[x][y].eventIndex > eventsList.high:
 #            skyMap[x][y].eventIndex = -1
