@@ -413,8 +413,6 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't create popup. Reason: " &
           getCurrentExceptionMsg())
 
-const mapColors: array[4, Color] = [colBlack, "#1f2223".parseColor, colWhite, "#4e9a06".parseColor]
-
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
@@ -428,7 +426,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
-  let currentTheme: ThemeData = try:
+  let theme: ThemeData = try:
       themesList[gameSettings.interfaceTheme]
     except:
       dialog = setError(message = "Can't get the game's theme.")
@@ -437,7 +435,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     height: Positive = gameSettings.mapFontSize + 10
     rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) / height.float).floor.Natural
     colWidth: Positive = try:
-        getTextWidth(text = currentTheme.mapIcons[1]).Positive + 4
+        getTextWidth(text = theme.mapIcons[1]).Positive + 4
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
@@ -479,34 +477,34 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   for y in startY..endY:
     for x in startX..endX:
       var
-        mapChar: string = currentTheme.mapIcons[1]
-        mapColor: Color = mapColors[1]
+        mapChar: string = theme.mapIcons[1]
+        mapColor: Color = theme.mapColors[1]
       if x == playerShip.skyX and y == playerShip.skyY:
         skyMap[x][y].visited = true
-        mapChar = currentTheme.mapIcons[0]
-        mapColor = mapColors[2]
+        mapChar = theme.mapIcons[0]
+        mapColor = theme.mapColors[2]
       else:
         if x == playerShip.destinationX and y == playerShip.destinationY:
-          mapChar = currentTheme.mapIcons[2]
+          mapChar = theme.mapIcons[2]
         elif currentStory.index.len > 0 and (x == storyX and y == storyY):
-          mapChar = currentTheme.mapIcons[3]
-          mapColor = mapColors[3]
+          mapChar = theme.mapIcons[3]
+          mapColor = theme.mapColors[3]
 #        elif skyMap[x][y].missionIndex > -1:
 #          case acceptedMissions[skyMap[x][y].missionIndex].mType
 #          of deliver:
-#            mapChar = currentTheme.deliverIcon
+#            mapChar = theme.deliverIcon
 #            mapTag = "yellow"
 #          of destroy:
-#            mapChar = currentTheme.destroyIcon
+#            mapChar = theme.destroyIcon
 #            mapTag = "red"
 #          of patrol:
-#            mapChar = currentTheme.patrolIcon
+#            mapChar = theme.patrolIcon
 #            mapTag = "lime"
 #          of explore:
-#            mapChar = currentTheme.exploreIcon
+#            mapChar = theme.exploreIcon
 #            mapTag = "green"
 #          of passenger:
-#            mapChar = currentTheme.passengerIcon
+#            mapChar = theme.passengerIcon
 #            mapTag = "cyan"
 #          if not skyMap[x][y].visited:
 #            mapTag &= " unvisited"
@@ -516,35 +514,35 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #          else:
 #            case eventsList[skyMap[x][y].eventIndex].eType
 #            of enemyShip:
-#              mapChar = currentTheme.enemyShipIcon
+#              mapChar = theme.enemyShipIcon
 #              mapTag = "red"
 #            of attackOnBase:
-#              mapChar = currentTheme.attackOnBaseIcon
+#              mapChar = theme.attackOnBaseIcon
 #              mapTag = "red2"
 #            of enemyPatrol:
-#              mapChar = currentTheme.enemyPatrolIcon
+#              mapChar = theme.enemyPatrolIcon
 #              mapTag = "red3"
 #            of disease:
-#              mapChar = currentTheme.diseaseIcon
+#              mapChar = theme.diseaseIcon
 #              mapTag = "yellow"
 #            of fullDocks:
-#              mapChar = currentTheme.fullDocksIcon
+#              mapChar = theme.fullDocksIcon
 #              mapTag = "cyan"
 #            of doublePrice:
-#              mapChar = currentTheme.doublePriceIcon
+#              mapChar = theme.doublePriceIcon
 #              mapTag = "lime"
 #            of trader:
-#              mapChar = currentTheme.traderIcon
+#              mapChar = theme.traderIcon
 #              mapTag = "green"
 #            of friendlyShip:
-#              mapChar = currentTheme.friendlyShipIcon
+#              mapChar = theme.friendlyShipIcon
 #              mapTag = "green2"
 #            of EventsTypes.none, baseRecovery:
 #              discard
 #            if not skyMap[x][y].visited:
 #              mapTag &= " unvisited"
 #        elif skyMap[x][y].baseIndex > 0:
-#          mapChar = currentTheme.notVisitedBaseIcon
+#          mapChar = theme.notVisitedBaseIcon
 #          if skyBases[skyMap[x][y].baseIndex].known:
 #            if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
 #              mapChar = try:
@@ -559,8 +557,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #          else:
 #            mapTag = "unvisited gray"
       try:
-        setButtonStyle(field = borderColor, color = (if skyMap[x][y].visited: mapColors[0] else: mapColors[1]))
-        setButtonStyle(field = normal, color = (if skyMap[x][y].visited: mapColors[0] else: mapColors[1]))
+        setButtonStyle(field = borderColor, color = (if skyMap[x][y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+        setButtonStyle(field = normal, color = (if skyMap[x][y].visited: theme.mapColors[0] else: theme.mapColors[1]))
         setButtonStyle(field = textNormal, color = mapColor)
       except:
         dialog = setError(message = "Can't set map color")
