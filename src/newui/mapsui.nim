@@ -493,19 +493,19 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
           case acceptedMissions[skyMap[x][y].missionIndex].mType
           of deliver:
             mapChar = theme.mapIcons[4]
-#            mapTag = "yellow"
+            mapColor = theme.mapColors[4]
           of destroy:
             mapChar = theme.mapIcons[5]
-#            mapTag = "red"
+            mapColor = theme.mapColors[5]
           of patrol:
             mapChar = theme.mapIcons[6]
-#            mapTag = "lime"
+            mapColor = theme.mapColors[6]
           of explore:
             mapChar = theme.mapIcons[7]
-#            mapTag = "green"
+            mapColor = theme.mapColors[3]
           of passenger:
             mapChar = theme.mapIcons[8]
-#            mapTag = "cyan"
+            mapColor = theme.mapColors[7]
 #        elif skyMap[x][y].eventIndex > -1:
 #          if skyMap[x][y].eventIndex > eventsList.high:
 #            skyMap[x][y].eventIndex = -1
