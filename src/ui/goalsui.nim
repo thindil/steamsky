@@ -94,9 +94,9 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
       tk busy $parent
       raise .goalsdialog
   """)
-  let
-    goalsDialog = ".goalsdialog"
-    goalsView = goalsDialog & ".view"
+  const
+    goalsDialog: string = ".goalsdialog"
+    goalsView: string = goalsDialog & ".view"
   for goal in goalsList.values:
     try:
       tclEval(script = goalsView & " insert " & ($goal.goalType).toUpperAscii &
@@ -104,9 +104,9 @@ proc showGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
           index = goal.index.parseInt) & "}")
     except:
       return showError(message = "Can't add a goal.")
-  let selectButton = goalsDialog & ".selectbutton"
+  const selectButton: string = goalsDialog & ".selectbutton"
   tclEval(script = selectButton & " configure -command {SetGoal " & $argv[1] & "}")
-  let dialogHeader = goalsDialog & ".header"
+  const dialogHeader: string = goalsDialog & ".header"
   tclEval(script = "bind " & dialogHeader & " <ButtonPress-" & (
       if gameSettings.rightButton: "3" else: "1") & "> {SetMousePosition " &
       dialogHeader & " %X %Y}")
@@ -132,14 +132,14 @@ proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SetGoal buttonpath
   ## Buttonpath is path to the button which is used to set the goal
+  const goalsView: string = ".goalsdialog.view"
   let
-    goalsView = ".goalsdialog.view"
-    selectedGoal = try:
+    selectedGoal: int = try:
         tclEval2(script = goalsView & " selection").parseInt
       except:
         return showError(message = "Can't get the goal.")
   clearCurrentGoal()
-  let buttonName = $argv[1]
+  let buttonName: string = $argv[1]
   if selectedGoal > 0:
     try:
       currentGoal = goalsList[selectedGoal]
@@ -150,9 +150,9 @@ proc setGoalCommand(clientData: cint; interp: PInterp; argc: cint;
       currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
     except:
       return showError(message = "Can't set random current goal.")
-  let goalButton = buttonName
+  let goalButton: string = buttonName
   if selectedGoal > 0:
-    var buttonText = try:
+    var buttonText: string = try:
         goalText(index = selectedGoal)
       except:
         return showError(message = "Can't get the goal's text.")
