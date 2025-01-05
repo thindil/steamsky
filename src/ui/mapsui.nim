@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 ## Provides code related to showing the main game's map, like drawing the map,
 ## updating movement buttons, etc.
 
-import std/[os, parsecfg, streams, strutils, tables, unicode]
+import std/[colors, os, parsecfg, streams, strutils, tables, unicode]
 import contracts
 import ../[basestypes, config, game, log, maps, missions, statistics, stories, tk, types]
 import coreui, dialogs, errordialog, themes, updateheader, utilsui2
@@ -355,8 +355,8 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
     if skyBases[baseIndex].visited.year > 0:
       try:
         discard tclEval(script = mapInfo &
-            " tag configure basetype -foreground #" & basesTypesList[skyBases[
-            baseIndex].baseType].color)
+            " tag configure basetype -foreground " & $basesTypesList[skyBases[
+                baseIndex].baseType].color)
       except:
         showError(message = "Can't get the color of the base's type.")
         return
@@ -394,16 +394,16 @@ proc updateMapInfo*(x: Positive = playerShip.skyX;
           baseInfoText: string = "\n"
           color: string = ""
         case skyBases[baseIndex].reputation.level
-        of -100.. -75:
+        of -100 .. -75:
           baseInfoText &= "You are hated here"
           color = "red"
-        of -74.. -50:
+        of -74 .. -50:
           baseInfoText &= "You are outlawed here"
           color = "red"
-        of -49.. -25:
+        of -49 .. -25:
           baseInfoText &= "You are disliked here"
           color = "red"
-        of -24.. -1:
+        of -24 .. -1:
           baseInfoText &= "They are unfriendly to you"
           color = "red"
         of 0:
@@ -1050,8 +1050,8 @@ proc createGameUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   centerX = playerShip.skyX
   centerY = playerShip.skyY
   for index, baseType in basesTypesList:
-    tclEval(script = mapView & " tag configure " & index & " -foreground #" &
-        baseType.color)
+    tclEval(script = mapView & " tag configure " & index & " -foreground " &
+        $baseType.color)
   let panedPosition: int = (if gameSettings.windowHeight -
       gameSettings.messagesPosition <
       0: gameSettings.windowHeight else: gameSettings.windowHeight -

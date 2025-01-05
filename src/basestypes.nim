@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -18,7 +18,7 @@
 ## Provides code related to sky bases types like loading them from file,
 ## getting price, checking do an item is buyable.
 
-import std/[logging, strutils, tables, xmlparser, xmltree]
+import std/[colors, logging, strutils, tables, xmlparser, xmltree]
 import contracts
 import game, log, types
 
@@ -39,7 +39,7 @@ type
     ##                 etc.
     ## * description - the description of the base type, show in the new game screen
     name*: string
-    color*: string
+    color*: Color
     trades: Table[Positive, PricesArray]
     recipes*: seq[string]
     flags*: seq[string]
@@ -98,7 +98,12 @@ proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
         baseType.name = attribute
       attribute = baseTypeNode.attr(name = "color")
       if attribute.len() > 0:
-        baseType.color = attribute
+        baseType.color = try:
+            ("#" & attribute).parseColor
+          except:
+            raise newException(exceptn = DataLoadingError,
+                message = "Can't add base type '" & baseTypeIndex &
+                "', invalid the type's color: '" & attribute & "'.")
       for childNode in baseTypeNode:
         if childNode.kind != xnElement:
           continue
