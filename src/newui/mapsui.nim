@@ -513,7 +513,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
             case eventsList[skyMap[x][y].eventIndex].eType
             of enemyShip:
               mapChar = theme.mapIcons[9]
-#              mapTag = "red"
+              mapColor = theme.mapColors[5]
             of attackOnBase:
               mapChar = theme.mapIcons[10]
 #              mapTag = "red2"
@@ -522,16 +522,16 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #              mapTag = "red3"
             of disease:
               mapChar = theme.mapIcons[12]
-#              mapTag = "yellow"
+              mapColor = theme.mapColors[4]
             of fullDocks:
               mapChar = theme.mapIcons[13]
-#              mapTag = "cyan"
+              mapColor = theme.mapColors[7]
             of doublePrice:
               mapChar = theme.mapIcons[14]
-#              mapTag = "lime"
+              mapColor = theme.mapColors[6]
             of trader:
               mapChar = theme.mapIcons[15]
-#              mapTag = "green"
+              mapColor = theme.mapColors[3]
             of friendlyShip:
               mapChar = theme.mapIcons[16]
 #              mapTag = "green2"
