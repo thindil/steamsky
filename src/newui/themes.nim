@@ -27,7 +27,7 @@ const
   colorsAmount: Positive = 29
   fontsAmount: Positive = 2
   mapIconsAmount: Positive = 17
-  mapColorsAmount: Positive = 8
+  mapColorsAmount: Positive = 11
 
 type
   ThemeData* = object
@@ -82,7 +82,8 @@ let
           "\uf057", "\uf0d6", "\uf197", "\uf197"],
       mapColors: [colBlack, "#1f2223".parseColor, colWhite,
           "#4e9a06".parseColor, "#d79921".parseColor, "#fb4934".parseColor,
-          "#00ff00".parseColor, "#00ffff".parseColor])
+          "#00ff00".parseColor, "#00ffff".parseColor, "#a40000".parseColor,
+          "#732727".parseColor, "#73d216".parseColor])
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
@@ -116,7 +117,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "DoublePriceIcon", "MapTraderIcon", "FriendlyShipIcon"]
     const mapColorsNames: array[mapColorsAmount, string] = ["MapVisitedColor",
         "MapUnvisitedColor", "MapDefaultColor", "MapGreenColor",
-        "MapYellowColor", "MapRedColor", "MapLimeColor", "MapCyanColor"]
+        "MapYellowColor", "MapRedColor", "MapLimeColor", "MapCyanColor",
+        "MapRed2Color", "MapRed3Color", "MapGreen2Color"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
