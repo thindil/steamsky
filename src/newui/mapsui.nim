@@ -506,39 +506,37 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
           of passenger:
             mapChar = theme.mapIcons[8]
             mapColor = theme.mapColors[7]
-#        elif skyMap[x][y].eventIndex > -1:
-#          if skyMap[x][y].eventIndex > eventsList.high:
-#            skyMap[x][y].eventIndex = -1
-#          else:
-#            case eventsList[skyMap[x][y].eventIndex].eType
-#            of enemyShip:
-#              mapChar = theme.enemyShipIcon
+        elif skyMap[x][y].eventIndex > -1:
+          if skyMap[x][y].eventIndex > eventsList.high:
+            skyMap[x][y].eventIndex = -1
+          else:
+            case eventsList[skyMap[x][y].eventIndex].eType
+            of enemyShip:
+              mapChar = theme.mapIcons[9]
 #              mapTag = "red"
-#            of attackOnBase:
-#              mapChar = theme.attackOnBaseIcon
+            of attackOnBase:
+              mapChar = theme.mapIcons[10]
 #              mapTag = "red2"
-#            of enemyPatrol:
-#              mapChar = theme.enemyPatrolIcon
+            of enemyPatrol:
+              mapChar = theme.mapIcons[11]
 #              mapTag = "red3"
-#            of disease:
-#              mapChar = theme.diseaseIcon
+            of disease:
+              mapChar = theme.mapIcons[12]
 #              mapTag = "yellow"
-#            of fullDocks:
-#              mapChar = theme.fullDocksIcon
+            of fullDocks:
+              mapChar = theme.mapIcons[13]
 #              mapTag = "cyan"
-#            of doublePrice:
-#              mapChar = theme.doublePriceIcon
+            of doublePrice:
+              mapChar = theme.mapIcons[14]
 #              mapTag = "lime"
-#            of trader:
-#              mapChar = theme.traderIcon
+            of trader:
+              mapChar = theme.mapIcons[15]
 #              mapTag = "green"
-#            of friendlyShip:
-#              mapChar = theme.friendlyShipIcon
+            of friendlyShip:
+              mapChar = theme.mapIcons[16]
 #              mapTag = "green2"
-#            of EventsTypes.none, baseRecovery:
-#              discard
-#            if not skyMap[x][y].visited:
-#              mapTag &= " unvisited"
+            of EventsTypes.none, baseRecovery:
+              discard
 #        elif skyMap[x][y].baseIndex > 0:
 #          mapChar = theme.notVisitedBaseIcon
 #          if skyBases[skyMap[x][y].baseIndex].known:
