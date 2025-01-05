@@ -25,8 +25,8 @@
 
 import std/[colors, hashes, macros]
 import contracts, nimalyzer
-import nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
-export nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
+import nk_button, nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
+export nk_button, nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
 
 # Temporary disable unused warnings
 {.push hint[XDeclaredButNotUsed]: off.}
@@ -42,19 +42,6 @@ type PImage* = pointer ## A pointer to the image type
 # Procedures parameters
 # ---------------------
 using ctx: PContext
-
-# -------------------
-# Creating structures
-# -------------------
-proc new_nk_rect(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl,
-    raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc new_nk_vec2(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl, raises: [
-    ], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc new_nk_font_config*(pixelHeight: cfloat): nk_font_config {.importc: "nk_font_config",
-    nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
 
 # -----
 # Input
@@ -175,22 +162,6 @@ proc nk_tree_element_push_hashed(ctx; ttype: TreeType;
         tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_tree_element_pop(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-
-# -------
-# Buttons
-# -------
-proc nk_button_text(ctx; ctitle: cstring; clen: cint): nk_bool {.importc, cdecl,
-    raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_button_label(ctx; ctitle: cstring): nk_bool {.importc, cdecl, raises: [
-    ], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_button_symbol(ctx; csymbol: SymbolType): nk_bool {.importc, cdecl,
-    raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_button_symbol_label(ctx; csymbol: SymbolType; clabel: cstring;
-    calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
 # -----
@@ -1061,113 +1032,6 @@ macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
 # -------
 # Buttons
 # -------
-proc createColorButton(r1, g1, b1: cint): bool {.raises: [], tags: [],
-    contractual.} =
-  ## Draw a button with the selected color background, internal use only, temporary code
-  ##
-  ## * r1   - the red value for the button color in RGB
-  ## * g1   - the green value for the button color in RGB
-  ## * b1   - the blue value for the button color in RGB
-  ##
-  ## Returns true if button was pressed
-  proc nk_button_color(ctx; color: nk_color): nk_bool {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_button_color(ctx = ctx, color = nk_rgb(r = r1, g = g1, b = b1))
-
-template colorButton*(r, g, b: int; onPressCode: untyped) =
-  ## Draw a button with the selected color background. Execute the selected code
-  ## on pressing it.
-  ##
-  ## * r           - the red value for the button color in RGB
-  ## * g           - the green value for the button color in RGB
-  ## * b           - the blue value for the button color in RGB
-  ## * onPressCode - the Nim code to execute when the button was pressed
-  if createColorButton(r1 = r.cint, g1 = g.cint, b1 = b.cint):
-    onPressCode
-
-template textButton*(title: string; len: Natural; onPressCode: untyped) =
-  ## Draw the button and the selected text with selected length on it. Execute
-  ## the selected code on pressing it.
-  ##
-  ## * title       - the text to shown on the button
-  ## * len         - the maximum length of the text to show on the button
-  ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_text(ctx = ctx, ctitle = title.cstring, clen = len.cint):
-    onPressCode
-
-template labelButton*(title: string; onPressCode: untyped) =
-  ## Draw the button with the selected text on it. Execute the selected code
-  ## on pressing it.
-  ##
-  ## * title       - the text to shown on the button
-  ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_label(ctx = ctx, ctitle = title.cstring):
-    onPressCode
-
-proc setButtonBehavior*(behavior: ButtonBehavior) {.raises: [], tags: [],
-    contractual.} =
-  ## Set the behavior of the the next button, when it is clicked
-  ##
-  ## * behavior - the behavior of a button
-  proc nk_button_set_behavior(ctx; behavior: ButtonBehavior) {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_button_set_behavior(ctx = ctx, behavior = behavior)
-
-template symbolButton*(symbol: SymbolType; onPressCode: untyped) =
-  ## Draw the button with the selected symbol. Execute the selected code
-  ## on pressing it.
-  ##
-  ## * symbol      - the symbol to shown on the button
-  ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_symbol(ctx = ctx, csymbol = symbol):
-    onPressCode
-
-template symbolLabelButton*(symbol: SymbolType; label: string;
-    align: TextAlignment; onPressCode: untyped) =
-  ## Draw the button with the selected symbol. Execute the selected code
-  ## on pressing it.
-  ##
-  ## * symbol      - the symbol to shown on the button
-  ## * label       - the text to display on the button
-  ## * align       - the alignment of the button's label
-  ## * onPressCode - the Nim code to execute when the button was pressed
-  if nk_button_symbol_label(ctx = ctx, csymbol = symbol,
-      clabel = label.cstring, calign = align.nk_flags):
-    onPressCode
-
-proc createStyledButton(bTitle: cstring; bStyle: ButtonStyle): bool {.raises: [
-    ], tags: [], contractual.} =
-  ## Draw a button with the selected style, internal use only, temporary code
-  ##
-  ## * bTitle - the text to shown on the button
-  ## * bStyle - the button's style settings
-  ##
-  ## Returns true if button was created, otherwise false
-  var buttonStyle: nk_style_button = ctx.style.button
-  buttonStyle.border_color = nk_rgb(r = bStyle.borderColor.r.cint,
-      g = bStyle.borderColor.g.cint, b = bStyle.borderColor.b.cint)
-  buttonStyle.rounding = bStyle.rounding.cfloat
-  buttonStyle.padding = new_nk_vec2(x = bStyle.padding.x, y = bStyle.padding.y)
-  buttonStyle.image_padding = new_nk_vec2(x = bStyle.imagePadding.x,
-      y = bStyle.imagePadding.y)
-  proc nk_button_label_styled(ctx; style: var nk_style_button;
-      title: cstring): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_button_label_styled(ctx = ctx, style = buttonStyle, title = bTitle)
-
-template labelButtonStyled*(title: string; style: ButtonStyle;
-    onPressCode: untyped) =
-  ## Draw the button with the selected text on it and unique style of the
-  ## button. Execute the selected code on pressing it.
-  ##
-  ## * title       - the text to shown on the button
-  ## * style       - the style used to draw the button
-  ## * onPressCode - the Nim code to execute when the button was pressed
-  if createStyledButton(bTitle = title.cstring, bStyle = style):
-    onPressCode
-
 proc createImageButton(img: PImage): bool {.raises: [], tags: [],
     contractual.} =
   ## Draw the button with the selected image, internal use only, temporary code

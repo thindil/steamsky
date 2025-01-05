@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Provides types from nuklear library
-import nimalyzer
+import contracts, nimalyzer
 
 # ------------
 # Simple types
@@ -522,4 +522,17 @@ converter toNkFlags*(x: EditTypes): nk_flags =
 converter toCint*(x: bool): cint =
   ## Converts Nim bool type to Nim cint type
   if x: 1 else: 0
+
+# -------------------
+# Creating structures
+# -------------------
+proc new_nk_rect*(x, y, w, h: cfloat): nk_rect {.importc: "nk_rect", nodecl,
+    raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc new_nk_vec2*(x, y: cfloat): nk_vec2 {.importc: "nk_vec2", nodecl, raises: [
+    ], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc new_nk_font_config*(pixelHeight: cfloat): nk_font_config {.importc: "nk_font_config",
+    nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
