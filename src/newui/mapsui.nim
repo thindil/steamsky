@@ -516,10 +516,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               mapColor = theme.mapColors[5]
             of attackOnBase:
               mapChar = theme.mapIcons[10]
-#              mapTag = "red2"
+              mapColor = theme.mapColors[8]
             of enemyPatrol:
               mapChar = theme.mapIcons[11]
-#              mapTag = "red3"
+              mapColor = theme.mapColors[9]
             of disease:
               mapChar = theme.mapIcons[12]
               mapColor = theme.mapColors[4]
@@ -534,7 +534,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               mapColor = theme.mapColors[3]
             of friendlyShip:
               mapChar = theme.mapIcons[16]
-#              mapTag = "green2"
+              mapColor = theme.mapColors[10]
             of EventsTypes.none, baseRecovery:
               discard
 #        elif skyMap[x][y].baseIndex > 0:
