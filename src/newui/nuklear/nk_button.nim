@@ -52,31 +52,6 @@ proc nk_button_symbol_label(ctx; csymbol: SymbolType; clabel: cstring;
 # -------------------
 # High level bindings
 # -------------------
-proc createColorButton(r1, g1, b1: cint): bool {.raises: [], tags: [],
-    contractual.} =
-  ## Draw a button with the selected color background, internal use only, temporary code
-  ##
-  ## * r1   - the red value for the button color in RGB
-  ## * g1   - the green value for the button color in RGB
-  ## * b1   - the blue value for the button color in RGB
-  ##
-  ## Returns true if button was pressed
-  proc nk_button_color(ctx; color: nk_color): nk_bool {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_button_color(ctx = ctx, color = nk_rgb(r = r1, g = g1, b = b1))
-
-template colorButton*(r, g, b: int; onPressCode: untyped) =
-  ## Draw a button with the selected color background. Execute the selected code
-  ## on pressing it.
-  ##
-  ## * r           - the red value for the button color in RGB
-  ## * g           - the green value for the button color in RGB
-  ## * b           - the blue value for the button color in RGB
-  ## * onPressCode - the Nim code to execute when the button was pressed
-  if createColorButton(r1 = r.cint, g1 = g.cint, b1 = b.cint):
-    onPressCode
-
 template textButton*(title: string; len: Natural; onPressCode: untyped) =
   ## Draw the button and the selected text with selected length on it. Execute
   ## the selected code on pressing it.

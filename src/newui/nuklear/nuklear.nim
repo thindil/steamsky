@@ -1032,6 +1032,31 @@ macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
 # -------
 # Buttons
 # -------
+proc createColorButton(r1, g1, b1: cint): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Draw a button with the selected color background, internal use only, temporary code
+  ##
+  ## * r1   - the red value for the button color in RGB
+  ## * g1   - the green value for the button color in RGB
+  ## * b1   - the blue value for the button color in RGB
+  ##
+  ## Returns true if button was pressed
+  proc nk_button_color(ctx; color: nk_color): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_button_color(ctx = ctx, color = nk_rgb(r = r1, g = g1, b = b1))
+
+template colorButton*(r, g, b: int; onPressCode: untyped) =
+  ## Draw a button with the selected color background. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * r           - the red value for the button color in RGB
+  ## * g           - the green value for the button color in RGB
+  ## * b           - the blue value for the button color in RGB
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  if createColorButton(r1 = r.cint, g1 = g.cint, b1 = b.cint):
+    onPressCode
+
 proc createImageButton(img: PImage): bool {.raises: [], tags: [],
     contractual.} =
   ## Draw the button with the selected image, internal use only, temporary code
@@ -1824,37 +1849,6 @@ proc comboClose*() {.raises: [], tags: [], contractual.} =
   nk_combo_close(ctx = ctx)
 
 # ------
-# Colors
-# ------
-proc colorfToHsva*(hsva: var array[4, float]; color: NimColorF) {.raises: [],
-    tags: [], contractual.} =
-  ## Convert Nim float color object to HSVA values
-  ##
-  ## * hsva  - the array of 4 values for HSVA color
-  ## * color - the Nim color to convert
-  ##
-  ## Returns converted color as hsva argument
-  proc nk_colorf_hsva_fv(hsva: pointer; color: nk_colorf) {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_colorf_hsva_fv(hsva = hsva.addr, color = nk_colorf(r: color.r, g: color.g,
-      b: color.b, a: color.a))
-
-proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
-    contractual.} =
-  ## Convert HSVA values to Nim color with float values
-  ##
-  ## * hsva - the array with HSVA values to convert
-  ##
-  ## Returns converted hsva parameter to Nim color with float values
-  proc nk_hsva_colorf(h, s, v, a: cfloat): nk_colorf {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[
-      2], a = hsva[3])
-  result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
-
-# ------
 # Charts
 # ------
 proc createColorChart(ctx; ctype1: ChartType; color1,
@@ -2302,3 +2296,34 @@ proc ruleHorizontal*(color: NimColor, rounding: bool) {.raises: [], tags: [], co
   proc nk_rule_horizontal(ctx; color: nk_color; rounding: nk_bool) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_rule_horizontal(ctx = ctx, color = nk_color(r: color.r.uint8, g: color.g.uint8, b: color.b.uint8), rounding = (if rounding: nkTrue else: nkFalse))
+
+# ------
+# Colors
+# ------
+proc colorfToHsva*(hsva: var array[4, float]; color: NimColorF) {.raises: [],
+    tags: [], contractual.} =
+  ## Convert Nim float color object to HSVA values
+  ##
+  ## * hsva  - the array of 4 values for HSVA color
+  ## * color - the Nim color to convert
+  ##
+  ## Returns converted color as hsva argument
+  proc nk_colorf_hsva_fv(hsva: pointer; color: nk_colorf) {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_colorf_hsva_fv(hsva = hsva.addr, color = nk_colorf(r: color.r, g: color.g,
+      b: color.b, a: color.a))
+
+proc hsvaToColorf*(hsva: array[4, float]): NimColorF {.raises: [], tags: [],
+    contractual.} =
+  ## Convert HSVA values to Nim color with float values
+  ##
+  ## * hsva - the array with HSVA values to convert
+  ##
+  ## Returns converted hsva parameter to Nim color with float values
+  proc nk_hsva_colorf(h, s, v, a: cfloat): nk_colorf {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  let newColor: nk_colorf = nk_hsva_colorf(h = hsva[0], s = hsva[1], v = hsva[
+      2], a = hsva[3])
+  result = NimColorF(r: newColor.r, g: newColor.g, b: newColor.b, a: newColor.a)
