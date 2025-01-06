@@ -18,9 +18,10 @@
 ## Provides code related to the game's main map, like, creating the game's UI,
 ## etc.
 
-import std/[colors, math, tables]
+import std/[colors, math, tables, unicode]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
-import ../[config, game, maps, messages, missions, shipscargo, shipsmovement, stories, types]
+import ../[basestypes, config, game, maps, messages, missions, shipscargo,
+    shipsmovement, stories, types]
 import coreui, errordialog, themes
 
 const iconsAmount: Positive = 25
@@ -433,7 +434,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
   let
     height: Positive = gameSettings.mapFontSize + 10
-    rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) / height.float).floor.Natural
+    rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
+        height.float).floor.Natural
     colWidth: Positive = try:
         getTextWidth(text = theme.mapIcons[1]).Positive + 4
       except:
@@ -537,24 +539,27 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               mapColor = theme.mapColors[10]
             of EventsTypes.none, baseRecovery:
               discard
-#        elif skyMap[x][y].baseIndex > 0:
-#          mapChar = theme.notVisitedBaseIcon
-#          if skyBases[skyMap[x][y].baseIndex].known:
-#            if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
-#              mapChar = try:
-#                  factionsList[skyBases[skyMap[x][
-#                      y].baseIndex].owner].baseIcon.Rune.toUTF8
-#                except:
-#                  showError(message = "Can't get the base icon.")
-#                  return
-#              mapTag = skyBases[skyMap[x][y].baseIndex].baseType
-#            else:
-#              mapTag = "unvisited"
-#          else:
-#            mapTag = "unvisited gray"
+        elif skyMap[x][y].baseIndex > 0:
+          mapChar = theme.mapIcons[17]
+          if skyBases[skyMap[x][y].baseIndex].known:
+            if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
+              mapChar = try:
+                  factionsList[skyBases[skyMap[x][
+                      y].baseIndex].owner].baseIcon.Rune.toUTF8
+                except:
+                  dialog = setError(message = "Can't get the base icon.")
+                  return
+              mapColor = try:
+                  basesTypesList[skyBases[skyMap[x][
+                      y].baseIndex].baseType].color
+                except:
+                  dialog = setError(message = "Can't get the color of the base.")
+                  return
       try:
-        setButtonStyle(field = borderColor, color = (if skyMap[x][y].visited: theme.mapColors[0] else: theme.mapColors[1]))
-        setButtonStyle(field = normal, color = (if skyMap[x][y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+        setButtonStyle(field = borderColor, color = (if skyMap[x][
+            y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+        setButtonStyle(field = normal, color = (if skyMap[x][
+            y].visited: theme.mapColors[0] else: theme.mapColors[1]))
         setButtonStyle(field = textNormal, color = mapColor)
       except:
         dialog = setError(message = "Can't set map color")
