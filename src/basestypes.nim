@@ -99,7 +99,7 @@ proc loadBasesTypes*(fileName: string) {.raises: [DataLoadingError],
       attribute = baseTypeNode.attr(name = "color")
       if attribute.len() > 0:
         baseType.color = try:
-            ("#" & attribute).parseColor
+            attribute.parseColor
           except:
             raise newException(exceptn = DataLoadingError,
                 message = "Can't add base type '" & baseTypeIndex &
