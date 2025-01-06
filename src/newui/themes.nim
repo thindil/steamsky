@@ -26,7 +26,7 @@ const
   iconsAmount: Positive = 29
   colorsAmount: Positive = 29
   fontsAmount: Positive = 2
-  mapIconsAmount: Positive = 17
+  mapIconsAmount: Positive = 18
   mapColorsAmount: Positive = 11
 
 type
@@ -79,7 +79,7 @@ let
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
       mapIcons: ["\uf135", "\uf0c8", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
           "\uf540", "\uf707", "\uf183", "\uf51c", "\uf543", "\uf51b", "\uf5a6",
-          "\uf057", "\uf0d6", "\uf197", "\uf197"],
+          "\uf057", "\uf0d6", "\uf197", "\uf197", "\u229b"],
       mapColors: [colBlack, "#1f2223".parseColor, colWhite,
           "#4e9a06".parseColor, "#d79921".parseColor, "#fb4934".parseColor,
           "#00ff00".parseColor, "#00ffff".parseColor, "#a40000".parseColor,
@@ -114,7 +114,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "EmptyMapIcon", "TargetIcon", "StoryIcon", "DeliverIcon", "DestroyIcon",
         "PatrolIcon", "ExploreIcon", "PassengerIcon", "EnemyShipIcon",
         "AttackOnBaseIcon", "EnemyPatrolIcon", "DiseaseIcon", "FullDocksIcon",
-        "DoublePriceIcon", "MapTraderIcon", "FriendlyShipIcon"]
+        "DoublePriceIcon", "MapTraderIcon", "FriendlyShipIcon", "NotVisitedBaseIcon"]
     const mapColorsNames: array[mapColorsAmount, string] = ["MapVisitedColor",
         "MapUnvisitedColor", "MapDefaultColor", "MapGreenColor",
         "MapYellowColor", "MapRedColor", "MapLimeColor", "MapCyanColor",
