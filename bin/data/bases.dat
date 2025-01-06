@@ -5,13 +5,15 @@
 type. It can be a number or text. Required
 - Attribute "name" is the base type name showed to the player ingame. Should be
 unique too. Required.
-- Attribute "color" is the base type color in hexadecimal and is used to show this
-base type to the player on the map ingame. Required.
+- Attribute "color" is the base type color and is used to show this base type
+to the player on the map ingame. Required. The value can be anything what CSS
+accept, from hexadecimal representation of colors to names of colors like white,
+black, etc.
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 -->
- <base index="0" name="Industrial" color="ff0000">
+ <base index="0" name="Industrial" color="#ff0000">
 <!--
 Tag "item" is used to set the prices of selected item in that base.
 - Attribute "index": item index from "items.dat" file. Required.
@@ -374,7 +376,7 @@ presented to the player during selection of starting base in main menu.
 -->
   <description>Industrial bases provide tools and materials for crafting. A little more difficult starting point than Agricultural bases.</description>
  </base>
- <base index="1" name="Agricultural" color="007800">
+ <base index="1" name="Agricultural" color="#007800">
   <item index="2" sellprice="2" />
   <item index="3" sellprice="1" />
   <item index="6" sellprice="1" />
@@ -407,7 +409,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="35" />
   <description>Agricultural bases provide food, drinks and the raw materials to create them. It's the easiest starting point.</description>
  </base>
- <base index="2" name="Refinery" color="ffff00">
+ <base index="2" name="Refinery" color="#ffff00">
   <item index="9" sellprice="3" />
   <item index="10" sellprice="4" />
   <item index="15" sellprice="1" />
@@ -425,7 +427,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="28" />
   <description>Refinery bases provide raw materials for refining, which later can be sold to Industrial bases. A little more difficult starting point than the Industrial bases.</description>
  </base>
- <base index="3" name="Shipyard" color="00ffff">
+ <base index="3" name="Shipyard" color="#00ffff">
 <!--
 Tag "flags" is various info about selected base type. Possible options are:
 "shipyard" - Base types that have a shipyard. Ship repairs in that base are 50%
@@ -436,7 +438,7 @@ members in that base is twice as cheap.
   <flag name="shipyard" />
   <description>Shipyard bases don't sell any items but offer cheaper repairs to ships and the ability to upgrade ships. A difficult starting point.</description>
  </base>
- <base index="4" name="Military" color="32dc32">
+ <base index="4" name="Military" color="#32dc32">
   <item index="4" sellprice="3" />
   <item index="14" sellprice="1" />
   <item index="20" sellprice="6" />
@@ -779,7 +781,7 @@ members in that base is twice as cheap.
   <recipe index="351" />
   <description>Military bases provide ammunition for guns and also melee weapons. They are the most difficult place as a starting point.</description>
  </base>
- <base index="5" name="Temple" color="7f6b00">
+ <base index="5" name="Temple" color="#7f6b00">
   <item index="2" sellprice="2" />
   <item index="3" sellprice="1" />
   <item index="22" sellprice="5" />
@@ -792,11 +794,11 @@ members in that base is twice as cheap.
   <flag name="temple" />
   <description>Temple bases provide the ability to pray for your ship's crew members. Additionally, healing is a lot cheaper than in other bases. They also provide basic food and drinks. A little more difficult starting point than Agricultural bases.</description>
  </base>
- <base index="6" name="Black market" color="787878">
+ <base index="6" name="Black market" color="#787878">
   <flag name="blackmarket" />
   <description>Black market bases buy and sell random items. Depending on your luck it can be a very easy or a very difficult place to start the game.</description>
  </base>
- <base index="7" name="Factory" color="ff0000">
+ <base index="7" name="Factory" color="#ff0000">
   <item index="5" sellprice="3" />
   <item index="12" sellprice="1" />
   <item index="13" sellprice="4" />
@@ -1139,16 +1141,16 @@ members in that base is twice as cheap.
   <flag name="shipyard" />
   <description>Factory bases provide tools and materials for crafting and allow you to repair or upgrade your ship in the shipyard. The easiest starting point for Drones.</description>
  </base>
- <base index="8" name="Market" color="5f9ea0">
+ <base index="8" name="Market" color="#5f9ea0">
   <flag name="blackmarket" />
   <flag name="shipyard" />
   <description>Market bases buy and sell random items, additionally they offer cheaper repairs for ships and also the ability to upgrade ships. Depending on your luck it can be a very easy or a very difficult point to start the game.</description>
  </base>
- <base index="9" name="Barracks" color="19785f">
+ <base index="9" name="Barracks" color="#19785f">
   <flag name="barracks" />
   <description>Barracks bases don't sell any items but have more than other bases in terms of recruits and they are cheaper to hire with lower maintenance costs. A difficult starting point.</description>
  </base>
- <base index="10" name="Agora" color="cd00cd">
+ <base index="10" name="Agora" color="#cd00cd">
   <flag name="blackmarket" />
   <flag name="shipyard" />
   <flag name="barracks" />
