@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,11 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
+import contracts
 import ../[combat, config, crewinventory, game, items, maps, messages,
     shipscrew, shipmodules, shipsmovement, tk, types]
 import coreui, dialogs, errordialog, utilsui2, updateheader
 
-proc updateCombatMessages() {.raises: [], tags: [].} =
+proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
   ## Update the list of in-game messages in combat, delete old ones and show
   ## the newest to the player
   let messagesView = mainPaned & ".controls.messages.view"
@@ -34,7 +35,7 @@ proc updateCombatMessages() {.raises: [], tags: [].} =
     loopStart = -10
   var currentTurnTime = "[" & formattedTime() & "]"
 
-  proc showMessage(message: MessageData) =
+  proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
     let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.message.startsWith(currentTurnTime):
       if message.color == white:
@@ -61,7 +62,7 @@ proc updateCombatMessages() {.raises: [], tags: [].} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Update the combat UI, remove the old elements and add new, depending
   ## on the information to show
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -75,7 +76,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
       mainPaned & ".combatframe.status.canvas.frame.maxmin}")
   var comboBox = frame & ".pilotcrew"
 
-  proc getCrewList(position: Natural): string =
+  proc getCrewList(position: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
     result = "Nobody"
     for index, member in playerShip.crew:
       if member.skills.len > 0:
@@ -121,7 +122,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
   let gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ",
       "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
 
-  proc getGunSpeed(position: Natural; index: Positive): string =
+  proc getGunSpeed(position: Natural; index: Positive): string {.raises: [KeyError], tags: [], contractual.} =
     result = ""
     var gunSpeed = modulesList[playerShip.modules[guns[position][
         1]].protoIndex].speed
@@ -459,7 +460,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
   tclEval(script = combatCanvas & " yview moveto 0.0")
   updateCombatMessages()
 
-proc showCombatFrame(frameName: string) {.raises: [], tags: [].} =
+proc showCombatFrame(frameName: string) {.raises: [], tags: [], contractual.} =
   ## Switch between ship to ship combat and boarding UI. Hide the old UI
   ## elements and show the new
   ##
@@ -484,7 +485,7 @@ proc showCombatFrame(frameName: string) {.raises: [], tags: [].} =
     for child in boardingChildren:
       tclEval(script = "grid " & combatFrame & child)
 
-proc updateBoardingUi() {.raises: [], tags: [].} =
+proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
   ## Update the boarding combat UI, remove the old elements and add new,
   ## depending on the information to show
   let frameName = mainPaned & ".combatframe"
@@ -574,7 +575,7 @@ proc updateBoardingUi() {.raises: [], tags: [].} =
 
 proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], contractual, cdecl.} =
   ## Excecute the combat orders and go the next turn
   ##
   ## * clientData - the additional data for the Tcl command
@@ -622,14 +623,14 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     updateBoardingUi()
   return tclOk
 
-proc showCombatUi*(newCombat: bool = true) {.raises: [], tags: [RootEffect].}
+proc showCombatUi*(newCombat: bool = true) {.raises: [], tags: [RootEffect], contractual.}
   ## Show the combat UI to the player
   ##
   ## * newCombat - if true, starts a new combat with an enemy's ship
 
 proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], contractual, cdecl.} =
   ## Show combat UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -648,7 +649,7 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set the combat order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -720,7 +721,7 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set the boarding order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -748,7 +749,7 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set the melee combat party (boarding or defenders)
   ##
   ## * clientData - the additional data for the Tcl command
@@ -845,7 +846,7 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], contractual, cdecl.} =
   ## Set crew member position (pilot, engineer, gunner) in combat
   ##
   ## * clientData - the additional data for the Tcl command
@@ -929,7 +930,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
   ## Show information about the selected mob in combat
   ##
   ## * clientData - the additional data for the Tcl command
@@ -962,7 +963,7 @@ proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], contractual, cdecl.} =
   ## Maximize or minimize the selected section of the combat UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1017,7 +1018,7 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], contractual, cdecl.} =
   ## Select or deselect all crew members in boarding and defending parties
   ## setting
   ##
@@ -1041,7 +1042,7 @@ proc toggleAllCombatCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], contractual, cdecl.} =
   ## Set crew members in or out of boarding and defending party
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1076,7 +1077,7 @@ proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   updateCombatUi()
   return tclOk
 
-proc showCombatUi(newCombat: bool = true) =
+proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [], contractual.} =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
   let combatFrame = mainPaned & ".combatframe"
