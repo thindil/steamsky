@@ -441,7 +441,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
-    cols: Positive = (windowWidth / colWidth.float).floor.Positive - 4
+    cols: Positive = (windowWidth / colWidth.float).floor.Positive - 12
   var
     startX: int = centerX - (cols / 2).int
     startY: int = centerY - (rows / 2).int - 1
@@ -464,7 +464,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     startX = 1_025 - cols
   saveButtonStyle()
   setButtonStyle(field = rounding, value = 0)
-  setButtonStyle(field = border, value = 0)
+  setButtonStyle(field = border, value = 1)
   stylePushVec2(field = spacing, x = 0, y = 0)
   setLayoutRowDynamic(height = height.float, cols = cols)
   if currentStory.index.len > 0:
@@ -559,6 +559,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         setButtonStyle(field = borderColor, color = (if skyMap[x][
             y].visited: theme.mapColors[0] else: theme.mapColors[1]))
         setButtonStyle(field = normal, color = (if skyMap[x][
+            y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+        setButtonStyle(field = textBackground, color = (if skyMap[x][
             y].visited: theme.mapColors[0] else: theme.mapColors[1]))
         setButtonStyle(field = textNormal, color = mapColor)
       except:
