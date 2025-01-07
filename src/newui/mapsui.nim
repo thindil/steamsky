@@ -437,11 +437,11 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
         height.float).floor.Natural
     colWidth: Positive = try:
-        getTextWidth(text = theme.mapIcons[1]).Positive + 4
+        getTextWidth(text = theme.mapIcons[1]).Positive + 10
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
-    cols: Positive = (windowWidth / colWidth.float).floor.Positive - 12
+    cols: Positive = (windowWidth / colWidth.float).floor.Positive
   var
     startX: int = centerX - (cols / 2).int
     startY: int = centerY - (rows / 2).int - 1
@@ -464,9 +464,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     startX = 1_025 - cols
   saveButtonStyle()
   setButtonStyle(field = rounding, value = 0)
-  setButtonStyle(field = border, value = 1)
+  setButtonStyle(field = border, value = 0)
   stylePushVec2(field = spacing, x = 0, y = 0)
-  setLayoutRowDynamic(height = height.float, cols = cols)
   if currentStory.index.len > 0:
     (storyX, storyY) = try:
         getStoryLocation()
@@ -476,98 +475,104 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if storyX == playerShip.skyX and storyY == playerShip.skyY:
       storyX = 0
       storyY = 0
-  for y in startY..endY:
-    for x in startX..endX:
-      var
-        mapChar: string = theme.mapIcons[1]
-        mapColor: Color = theme.mapColors[1]
-      if x == playerShip.skyX and y == playerShip.skyY:
-        skyMap[x][y].visited = true
-        mapChar = theme.mapIcons[0]
-        mapColor = theme.mapColors[2]
-      else:
-        if x == playerShip.destinationX and y == playerShip.destinationY:
-          mapChar = theme.mapIcons[2]
-        elif currentStory.index.len > 0 and (x == storyX and y == storyY):
-          mapChar = theme.mapIcons[3]
-          mapColor = theme.mapColors[3]
-        elif skyMap[x][y].missionIndex > -1:
-          case acceptedMissions[skyMap[x][y].missionIndex].mType
-          of deliver:
-            mapChar = theme.mapIcons[4]
-            mapColor = theme.mapColors[4]
-          of destroy:
-            mapChar = theme.mapIcons[5]
-            mapColor = theme.mapColors[5]
-          of patrol:
-            mapChar = theme.mapIcons[6]
-            mapColor = theme.mapColors[6]
-          of explore:
-            mapChar = theme.mapIcons[7]
-            mapColor = theme.mapColors[3]
-          of passenger:
-            mapChar = theme.mapIcons[8]
-            mapColor = theme.mapColors[7]
-        elif skyMap[x][y].eventIndex > -1:
-          if skyMap[x][y].eventIndex > eventsList.high:
-            skyMap[x][y].eventIndex = -1
+  layoutSpaceStatic(height = ((height - 2) * rows).float, widgetsCount = rows * cols):
+    var curRow, col: int = -1
+    for y in startY..endY:
+      curRow.inc
+      col = -1
+      for x in startX..endX:
+        col.inc
+        row(x = (col * colWidth).float, y = (curRow * (height - 2)).float, w = colWidth.float, h = height.float):
+          var
+            mapChar: string = theme.mapIcons[1]
+            mapColor: Color = theme.mapColors[1]
+          if x == playerShip.skyX and y == playerShip.skyY:
+            skyMap[x][y].visited = true
+            mapChar = theme.mapIcons[0]
+            mapColor = theme.mapColors[2]
           else:
-            case eventsList[skyMap[x][y].eventIndex].eType
-            of enemyShip:
-              mapChar = theme.mapIcons[9]
-              mapColor = theme.mapColors[5]
-            of attackOnBase:
-              mapChar = theme.mapIcons[10]
-              mapColor = theme.mapColors[8]
-            of enemyPatrol:
-              mapChar = theme.mapIcons[11]
-              mapColor = theme.mapColors[9]
-            of disease:
-              mapChar = theme.mapIcons[12]
-              mapColor = theme.mapColors[4]
-            of fullDocks:
-              mapChar = theme.mapIcons[13]
-              mapColor = theme.mapColors[7]
-            of doublePrice:
-              mapChar = theme.mapIcons[14]
-              mapColor = theme.mapColors[6]
-            of trader:
-              mapChar = theme.mapIcons[15]
+            if x == playerShip.destinationX and y == playerShip.destinationY:
+              mapChar = theme.mapIcons[2]
+            elif currentStory.index.len > 0 and (x == storyX and y == storyY):
+              mapChar = theme.mapIcons[3]
               mapColor = theme.mapColors[3]
-            of friendlyShip:
-              mapChar = theme.mapIcons[16]
-              mapColor = theme.mapColors[10]
-            of EventsTypes.none, baseRecovery:
-              discard
-        elif skyMap[x][y].baseIndex > 0:
-          mapChar = theme.mapIcons[17]
-          if skyBases[skyMap[x][y].baseIndex].known:
-            if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
-              mapChar = try:
-                  factionsList[skyBases[skyMap[x][
-                      y].baseIndex].owner].baseIcon.Rune.toUTF8
-                except:
-                  dialog = setError(message = "Can't get the base icon.")
-                  return
-              mapColor = try:
-                  basesTypesList[skyBases[skyMap[x][
-                      y].baseIndex].baseType].color
-                except:
-                  dialog = setError(message = "Can't get the color of the base.")
-                  return
-      try:
-        setButtonStyle(field = borderColor, color = (if skyMap[x][
-            y].visited: theme.mapColors[0] else: theme.mapColors[1]))
-        setButtonStyle(field = normal, color = (if skyMap[x][
-            y].visited: theme.mapColors[0] else: theme.mapColors[1]))
-        setButtonStyle(field = textBackground, color = (if skyMap[x][
-            y].visited: theme.mapColors[0] else: theme.mapColors[1]))
-        setButtonStyle(field = textNormal, color = mapColor)
-      except:
-        dialog = setError(message = "Can't set map color")
-        return
-      labelButton(title = mapChar):
-        discard
+            elif skyMap[x][y].missionIndex > -1:
+              case acceptedMissions[skyMap[x][y].missionIndex].mType
+              of deliver:
+                mapChar = theme.mapIcons[4]
+                mapColor = theme.mapColors[4]
+              of destroy:
+                mapChar = theme.mapIcons[5]
+                mapColor = theme.mapColors[5]
+              of patrol:
+                mapChar = theme.mapIcons[6]
+                mapColor = theme.mapColors[6]
+              of explore:
+                mapChar = theme.mapIcons[7]
+                mapColor = theme.mapColors[3]
+              of passenger:
+                mapChar = theme.mapIcons[8]
+                mapColor = theme.mapColors[7]
+            elif skyMap[x][y].eventIndex > -1:
+              if skyMap[x][y].eventIndex > eventsList.high:
+                skyMap[x][y].eventIndex = -1
+              else:
+                case eventsList[skyMap[x][y].eventIndex].eType
+                of enemyShip:
+                  mapChar = theme.mapIcons[9]
+                  mapColor = theme.mapColors[5]
+                of attackOnBase:
+                  mapChar = theme.mapIcons[10]
+                  mapColor = theme.mapColors[8]
+                of enemyPatrol:
+                  mapChar = theme.mapIcons[11]
+                  mapColor = theme.mapColors[9]
+                of disease:
+                  mapChar = theme.mapIcons[12]
+                  mapColor = theme.mapColors[4]
+                of fullDocks:
+                  mapChar = theme.mapIcons[13]
+                  mapColor = theme.mapColors[7]
+                of doublePrice:
+                  mapChar = theme.mapIcons[14]
+                  mapColor = theme.mapColors[6]
+                of trader:
+                  mapChar = theme.mapIcons[15]
+                  mapColor = theme.mapColors[3]
+                of friendlyShip:
+                  mapChar = theme.mapIcons[16]
+                  mapColor = theme.mapColors[10]
+                of EventsTypes.none, baseRecovery:
+                  discard
+            elif skyMap[x][y].baseIndex > 0:
+              mapChar = theme.mapIcons[17]
+              if skyBases[skyMap[x][y].baseIndex].known:
+                if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
+                  mapChar = try:
+                      factionsList[skyBases[skyMap[x][
+                          y].baseIndex].owner].baseIcon.Rune.toUTF8
+                    except:
+                      dialog = setError(message = "Can't get the base icon.")
+                      return
+                  mapColor = try:
+                      basesTypesList[skyBases[skyMap[x][
+                          y].baseIndex].baseType].color
+                    except:
+                      dialog = setError(message = "Can't get the color of the base.")
+                      return
+          try:
+            setButtonStyle(field = borderColor, color = (if skyMap[x][
+                y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+            setButtonStyle(field = normal, color = (if skyMap[x][
+                y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+            setButtonStyle(field = textBackground, color = (if skyMap[x][
+                y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+            setButtonStyle(field = textNormal, color = mapColor)
+          except:
+            dialog = setError(message = "Can't set map color")
+            return
+          labelButton(title = mapChar):
+            discard
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   restoreButtonStyle()
