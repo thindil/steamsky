@@ -1617,6 +1617,10 @@ proc setButtonStyle*(field: ButtonStyleTypes; value: float) {.raises: [],
     ctx.style.button.rounding = value.cfloat
   of border:
     ctx.style.button.border = value.cfloat
+  of colorFactorBackground:
+    ctx.style.button.color_factor_background = value.cfloat
+  of colorFactorText:
+    ctx.style.button.color_factor_text = value.cfloat
   else:
     discard
 
@@ -1655,6 +1659,9 @@ proc stylePushVec2*(field: WindowStyleTypes; x,
     ## A binding to Nuklear's function. Internal use only
   if field == spacing:
     return nk_style_push_vec2(ctx = ctx, dest = ctx.style.window.spacing,
+        source = new_nk_vec2(x = x, y = y))
+  elif field == padding:
+    return nk_style_push_vec2(ctx = ctx, dest = ctx.style.window.padding,
         source = new_nk_vec2(x = x, y = y))
 
 proc stylePushFloat*(field: ButtonStyleTypes;

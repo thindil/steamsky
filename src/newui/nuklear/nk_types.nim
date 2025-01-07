@@ -206,7 +206,7 @@ type
     normal*, hover*, active*: nk_style_item
     border_color*, text_background*, text_normal*, text_hover*,
       text_active*: nk_color
-    rounding*, border*: cfloat
+    rounding*, border*, color_factor_background*, color_factor_text*: cfloat
     padding*: nk_vec2
     image_padding*: nk_vec2
     touch_padding*: nk_vec2
@@ -413,13 +413,14 @@ type
   ButtonStyleTypes* = enum
     ## The types of fields in style's settings for UI buttons
     normal, hover, active, borderColor, textBackground, textNormal, textHover,
-        textActive, rounding, padding, border, imagePadding, touchPadding
+      textActive, rounding, padding, border, imagePadding, touchPadding,
+      colorFactorBackground, colorFactorText
   ColorStyleTypes* = enum
     ## The types of fields in style's settings for UI colors
     background
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
-    spacing
+    spacing, padding
   WindowFlags* {.size: sizeof(cint).} = enum
     ## The settings for windows
     windowNoFlags = 0,
