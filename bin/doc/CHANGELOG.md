@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- **BREAKING**: The bases' setting now accepts any CSS name of color as the
+  base's type's color on the map. This change should affect only the modified
+  version of the game. Most of players shouldn't encounter any problems.
 
 ### Fixed
 - Counting ships' speed
