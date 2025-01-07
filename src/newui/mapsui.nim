@@ -435,18 +435,18 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   let
     height: Positive = gameSettings.mapFontSize + 10
     rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
-        height.float).floor.Natural
+        height.float).floor.Natural + 4
     colWidth: Positive = try:
-        getTextWidth(text = theme.mapIcons[1]).Positive + 10
+        getTextWidth(text = theme.mapIcons[1]).Positive + 4
       except:
         dialog = setError(message = "Can't count map column's width.")
         return
-    cols: Positive = (windowWidth / colWidth.float).floor.Positive
+    cols: Positive = (windowWidth / colWidth.float).floor.Positive + 6
   var
     startX: int = centerX - (cols / 2).int
-    startY: int = centerY - (rows / 2).int - 1
+    startY: int = centerY - (rows / 2).int
   var
-    endY: int = centerY + (rows / 2).floor.int + 1
+    endY: int = centerY + (rows / 2).floor.int
     endX: int = centerX + (cols / 2).floor.int
     storyX: int = 1
     storyY: int = 1
@@ -465,7 +465,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   saveButtonStyle()
   setButtonStyle(field = rounding, value = 0)
   setButtonStyle(field = border, value = 0)
-  stylePushVec2(field = spacing, x = 0, y = 0)
   if currentStory.index.len > 0:
     (storyX, storyY) = try:
         getStoryLocation()
@@ -482,7 +481,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       col = -1
       for x in startX..endX:
         col.inc
-        row(x = (col * colWidth).float, y = (curRow * (height - 2)).float, w = colWidth.float, h = height.float):
+        row(x = (col * (colWidth - 2)).float, y = (curRow * (height - 2)).float,
+            w = colWidth.float, h = height.float):
           var
             mapChar: string = theme.mapIcons[1]
             mapColor: Color = theme.mapColors[1]
@@ -558,7 +558,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                       basesTypesList[skyBases[skyMap[x][
                           y].baseIndex].baseType].color
                     except:
-                      dialog = setError(message = "Can't get the color of the base.")
+                      dialog = setError(
+                          message = "Can't get the color of the base.")
                       return
           try:
             setButtonStyle(field = borderColor, color = (if skyMap[x][
@@ -576,5 +577,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   restoreButtonStyle()
-  stylePopVec2()
   state = map
