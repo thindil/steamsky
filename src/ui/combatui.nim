@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, math, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[combat, config, crewinventory, game, items, maps, messages,
     shipscrew, shipmodules, shipsmovement, tk, types]
 import coreui, dialogs, errordialog, utilsui2, updateheader
@@ -37,7 +37,7 @@ proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
 
   proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
     let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
-    if message.message.startsWith(currentTurnTime):
+    if message.message.startsWith(prefix = currentTurnTime):
       if message.color == white:
         tclEval(script = messagesView & " insert end {" & message.message & "}")
       else:
@@ -49,20 +49,21 @@ proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
   if gameSettings.messagesOrder == olderFirst:
     for i in loopStart .. -1:
       if getLastMessageIndex() + i + 1 >= messagesStarts:
-        showMessage(getMessage(messageIndex = i + 1))
+        showMessage(message = getMessage(messageIndex = i + 1))
         if i < -1:
           tclEval(script = messagesView & " insert end {\n}")
     tclEval(script = messagesView & " see end")
   else:
-    for i in countdown(-1, loopStart):
+    for i in countdown(a = -1, b = loopStart):
       if getLastMessageIndex() + i + 1 < messagesStarts:
         break
-      showMessage(getMessage(messageIndex = i + 1))
+      showMessage(message = getMessage(messageIndex = i + 1))
       if i > loopStart:
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
-proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
   ## Update the combat UI, remove the old elements and add new, depending
   ## on the information to show
   var frame = mainPaned & ".combatframe.crew.canvas.frame"
@@ -76,7 +77,8 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
       mainPaned & ".combatframe.status.canvas.frame.maxmin}")
   var comboBox = frame & ".pilotcrew"
 
-  proc getCrewList(position: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  proc getCrewList(position: Natural): string {.raises: [], tags: [
+      WriteIOEffect, TimeEffect, RootEffect], contractual.} =
     result = "Nobody"
     for index, member in playerShip.crew:
       if member.skills.len > 0:
@@ -110,7 +112,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
   else:
     tclEval(script = "grid " & comboBox)
   var
-    tclResult = tclEval2(script = "grid size " & frame).split(" ")
+    tclResult = tclEval2(script = "grid size " & frame).split(sep = " ")
     rows: Positive = try:
         tclResult[1].parseInt()
       except:
@@ -122,7 +124,8 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
   let gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ",
       "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
 
-  proc getGunSpeed(position: Natural; index: Positive): string {.raises: [KeyError], tags: [], contractual.} =
+  proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
+      KeyError], tags: [], contractual.} =
     result = ""
     var gunSpeed = modulesList[playerShip.modules[guns[position][
         1]].protoIndex].speed
@@ -270,7 +273,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
   tclEval(script = combatCanvas & " yview moveto 0.0")
   # Show the player's ship damage info if needed
   frame = mainPaned & ".combatframe.damage.canvas.frame"
-  tclResult = tclEval2(script = "grid size " & frame).split(" ")
+  tclResult = tclEval2(script = "grid size " & frame).split(sep = " ")
   try:
     rows = tclResult[1].parseInt()
     deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
@@ -410,7 +413,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect
   tclEval(script = combatCanvas & " yview moveto 0.0")
   # Show the enemy's ship damage info
   frame = mainPaned & ".combatframe.status.canvas.frame"
-  tclResult = tclEval2(script = "grid size " & frame).split(" ")
+  tclResult = tclEval2(script = "grid size " & frame).split(sep = " ")
   try:
     rows = tclResult[1].parseInt()
     deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
@@ -494,7 +497,7 @@ proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
       frame & ".maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[1] & "> {InvokeButton .left.canvas.frame.maxmin}")
   var
-    tclResult = tclEval2(script = "grid size " & frame).split(" ")
+    tclResult = tclEval2(script = "grid size " & frame).split(sep = " ")
     rows: Positive = try:
         tclResult[1].parseInt()
       except:
@@ -502,7 +505,7 @@ proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = frame)
   var ordersList = ""
   for index, member in game.enemy.ship.crew:
-    ordersList.add("{Attack " & member.name & "} ")
+    ordersList.add(y = "{Attack " & member.name & "} ")
     let button = frame & ".name" & $(index + 1)
     tclEval(script = "ttk::button " & button & " -text {" & member.name &
         "} -command {ShowCombatInfo enemy " & $(index + 1) & "}")
@@ -529,9 +532,9 @@ proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
       script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
-  ordersList.add(" {Back to the ship}")
+  ordersList.add(y = " {Back to the ship}")
   frame = frameName & ".left.canvas.frame"
-  tclResult = tclEval2(script = "grid size " & frame).split(" ")
+  tclResult = tclEval2(script = "grid size " & frame).split(sep = " ")
   rows = try:
       tclResult[1].parseInt()
     except:
@@ -573,9 +576,7 @@ proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
   tclEval(script = combatCanvas & " yview moveto 0.0")
   updateCombatMessages()
 
-proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect, RootEffect], contractual, cdecl.} =
+proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint; argv: cstringArray): TclResults {.raises: [], tags: [ WriteIOEffect, TimeEffect, RootEffect, RootEffect], contractual, cdecl, ruleOff: "params".} =
   ## Excecute the combat orders and go the next turn
   ##
   ## * clientData - the additional data for the Tcl command
@@ -649,7 +650,8 @@ proc showCombatUiCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set the combat order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -721,7 +723,8 @@ proc setCombatOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set the boarding order for the selected the player's ship's crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -749,7 +752,8 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], contractual, cdecl.} =
   ## Set the melee combat party (boarding or defenders)
   ##
   ## * clientData - the additional data for the Tcl command
@@ -930,7 +934,8 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual, cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], contractual, cdecl.} =
   ## Show information about the selected mob in combat
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1073,11 +1078,12 @@ proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't give order to selected crew member.")
       if order == boarding:
-        boardingOrders.add(0)
+        boardingOrders.add(y = 0)
   updateCombatUi()
   return tclOk
 
-proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [], contractual.} =
+proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [],
+    contractual.} =
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
   let combatFrame = mainPaned & ".combatframe"
@@ -1299,16 +1305,16 @@ proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [], contractual.} 
       pilotOrder = 2
       engineerOrder = 3
       try:
-        addCommand("NextTurn", nextTurnCommand)
-        addCommand("ShowCombatUI", showCombatUiCommand)
-        addCommand("SetCombatOrder", setCombatOrderCommand)
-        addCommand("SetBoardingOrder", setBoardingOrderCommand)
-        addCommand("SetCombatParty", setCombatPartyCommand)
-        addCommand("SetCombatPosition", setCombatPositionCommand)
-        addCommand("ShowCombatInfo", showCombatInfoCommand)
-        addCommand("CombatMaxMin", combatMaxMinCommand)
-        addCommand("ToggleAllCombat", toggleAllCombatCommand)
-        addCommand("SetParty", setPartyCommand)
+        addCommand(name = "NextTurn", nimProc = nextTurnCommand)
+        addCommand(name = "ShowCombatUI", nimProc = showCombatUiCommand)
+        addCommand(name = "SetCombatOrder", nimProc = setCombatOrderCommand)
+        addCommand(name = "SetBoardingOrder", nimProc = setBoardingOrderCommand)
+        addCommand(name = "SetCombatParty", nimProc = setCombatPartyCommand)
+        addCommand(name = "SetCombatPosition", nimProc = setCombatPositionCommand)
+        addCommand(name = "ShowCombatInfo", nimProc = showCombatInfoCommand)
+        addCommand(name = "CombatMaxMin", nimProc = combatMaxMinCommand)
+        addCommand(name = "ToggleAllCombat", nimProc = toggleAllCombatCommand)
+        addCommand(name = "SetParty", nimProc = setPartyCommand)
       except:
         showError(message = "Can't add a Tcl command.")
         return
