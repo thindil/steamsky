@@ -577,9 +577,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               return
             labelButton(title = mapChar):
               discard
+  restoreButtonStyle()
+  setLayoutRowDynamic(height = 20, cols = 5)
+  labelButton(title = "\u25B2"):
+    discard
+  labelButton(title = "-"):
+    discard
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
-  restoreButtonStyle()
-  setLayoutRowDynamic(height = 40, cols = 1)
-  ruleHorizontal(color = colBlack, rounding = true)
   state = map
