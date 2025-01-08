@@ -562,12 +562,13 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                           message = "Can't get the color of the base.")
                       return
           try:
-            setButtonStyle(field = borderColor, color = (if skyMap[x][
-                y].visited: theme.mapColors[0] else: theme.mapColors[1]))
-            setButtonStyle(field = normal, color = (if skyMap[x][
-                y].visited: theme.mapColors[0] else: theme.mapColors[1]))
-            setButtonStyle(field = textBackground, color = (if skyMap[x][
-                y].visited: theme.mapColors[0] else: theme.mapColors[1]))
+            let background: Color = (if skyMap[x][y].visited: theme.mapColors[
+                0] else: theme.mapColors[1])
+            setButtonStyle(field = borderColor, color = background)
+            setButtonStyle(field = normal, color = background)
+            setButtonStyle(field = textBackground, color = background)
+            setButtonStyle(field = hover, color = background + 0x303030.Color)
+            setButtonStyle(field = textHover, color = mapColor + 0x303030.Color)
             setButtonStyle(field = textNormal, color = mapColor)
           except:
             dialog = setError(message = "Can't set map color")
