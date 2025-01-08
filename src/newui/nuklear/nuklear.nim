@@ -25,8 +25,8 @@
 
 import std/[colors, hashes, macros]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
-export nk_button, nk_colors, nk_context, nk_tooltip, nk_types, nk_widget
+import nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
+export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
 
 # Temporary disable unused warnings
 {.push hint[XDeclaredButNotUsed]: off.}
@@ -93,22 +93,6 @@ proc nk_labelf(ctx; flags: nk_flags; fmt: cstring) {.importc,
 # -------
 # Layouts
 # -------
-proc nk_layout_row_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_layout_row_begin(ctx; fmt: nk_layout_format;
-    rowHeight: cfloat; ccols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_layout_row_push(ctx; cwidth: cfloat) {.importc, cdecl, raises: [],
-    tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_layout_row(ctx; fmt: nk_layout_format; height: cfloat;
-    cols: cint; ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_layout_space_begin(ctx; fmt: nk_layout_format;
-    cheight: cfloat; widgetCount: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
 proc nk_layout_row_template_begin(ctx; cheight: cfloat) {.importc, cdecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
@@ -1149,116 +1133,6 @@ proc layoutSpacePush(ctx; x1, y1, w1, h1: cfloat) {.raises: [], tags: [],
     ## A binding to Nuklear's function. Internal use only
   nk_layout_space_push(ctx = ctx, rect = new_nk_rect(x = x1, y = y1, w = w1, h = h1))
 
-proc setLayoutRowDynamic*(height: float; cols: int) {.raises: [], tags: [],
-    contractual.} =
-  ## Set the current widgets layout to divide it into selected amount of
-  ## columns with the selected height in rows and grows in width when the
-  ## parent window resizes
-  ##
-  ## * height - the height in pixels of each row
-  ## * cols   - the amount of columns in each row
-  proc nk_layout_row_dynamic(ctx; height: cfloat; cols: cint) {.importc, cdecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_layout_row_dynamic(ctx = ctx, height = height.cfloat, cols = cols.cint)
-
-proc setLayoutRowStatic*(height: float; width, cols: int) {.raises: [], tags: [
-    ], contractual.} =
-  ## Set the current widgets layout to divide it into selected amount of
-  ## columns with the selected height in rows but it will not grow in width
-  ## when the parent window resizes
-  ##
-  ## * height - the height in pixels of each row
-  ## * width  - the width in pixels of each column
-  ## * cols   - the amount of columns in each row
-  proc nk_layout_row_static(ctx; height: cfloat; itemWidth,
-      cols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_layout_row_static(ctx = ctx, height = height.cfloat,
-      itemWidth = width.cint, cols = cols.cint)
-
-template layoutStatic*(height: float; cols: int; content: untyped) =
-  ## Start setting manualy each row of the current widgets layout. The layout
-  ## will not resize when the parent window change its size
-  ##
-  ## * height  - the width in pixels or window's ratio of each row
-  ## * cols    - the amount of columns in each row
-  ## * content - the content of the layout
-  nk_layout_row_begin(ctx = ctx, fmt = NK_STATIC, rowHeight = height.cfloat,
-      ccols = cols.cint)
-  content
-  nk_layout_row_end(ctx = ctx)
-
-template layoutDynamic*(height: float; cols: int; content: untyped) =
-  ## Start setting manualy each row of the current widgets layout. The layout
-  ## will resize when the parent window change its size
-  ##
-  ## * height   - the width in pixels or window's ratio of each row
-  ## * cols    - the amount of columns in each row
-  ## * content - the content of the layout
-  nk_layout_row_begin(ctx = ctx, fmt = NK_DYNAMIC, rowHeight = height.cfloat,
-      ccols = cols.cint)
-  content
-  nk_layout_row_end(ctx = ctx)
-
-template row*(width: float; content: untyped) =
-  ## Set the content of the row in the current widgets layout
-  ##
-  ## * width   - the width in the pixels or window's ratio of each column
-  ## * content - the content of the row
-  nk_layout_row_push(ctx = ctx, cwidth = width.cfloat)
-  content
-
-proc setLayoutRowStatic*(height: float; cols: int; ratio: openArray[
-    cfloat]) {.raises: [], tags: [], contractual.} =
-  ## Set the current widgets layout to divide it into selected amount of
-  ## columns with the selected height in rows but it will not grow in width
-  ## when the parent window resizes
-  ##
-  ## * height - the height in pixels of each row
-  ## * cols   - the amount of columns in each row
-  ## * ratio  - the array or sequence of cfloat with width of the colums
-  nk_layout_row(ctx = ctx, fmt = NK_STATIC, height = height.cfloat,
-      cols = cols.cint, ratio = ratio.addr)
-
-proc setLayoutRowDynamic*(height: float; cols: int; ratio: openArray[
-    cfloat]) {.raises: [], tags: [], contractual.} =
-  ## Set the current widgets layout to divide it into selected amount of
-  ## columns with the selected height in rows but it will grow in width
-  ## when the parent window resizes
-  ##
-  ## * height - the height in pixels of each row
-  ## * cols   - the amount of columns in each row
-  ## * ratio  - the array or sequence of cfloat with width of the colums
-  nk_layout_row(ctx = ctx, fmt = NK_DYNAMIC, height = height.cfloat,
-      cols = cols.cint, ratio = ratio.addr)
-
-template layoutSpaceStatic*(height: float; widgetsCount: int;
-    content: untyped) =
-  ## Start setting manualy each row of the current widgets layout. The layout
-  ## will not resize when the parent window change its size
-  ##
-  ## * height       - the width in pixels or window's ratio of each row
-  ## * widgetsCount - the amount of widgets in each row.
-  ## * content      - the content of the layout
-  nk_layout_space_begin(ctx = ctx, fmt = NK_STATIC, cheight = height.cfloat,
-      widgetCount = widgetsCount.cint)
-  content
-  nk_layout_space_end(ctx = ctx)
-
-template layoutSpaceDynamic*(height: float; widgetsCount: int;
-    content: untyped) =
-  ## Start setting manualy each row of the current widgets layout. The layout
-  ## will resize when the parent window change its size
-  ##
-  ## * height       - the width in pixels or window's ratio of each row
-  ## * widgetsCount - the amount of widgets in each row.
-  ## * content      - the content of the layout
-  nk_layout_space_begin(ctx = ctx, fmt = NK_DYNAMIC, cheight = height.cfloat,
-      widgetCount = widgetsCount.cint)
-  content
-  nk_layout_space_end(ctx = ctx)
-
 template row*(x, y, w, h: float; content: untyped) =
   ## Set the content of the row in the current widgets layout, used in space
   ## layout
@@ -1308,33 +1182,6 @@ proc rowTemplateStatic*(width: float) {.raises: [], tags: [], contractual.} =
       raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_layout_row_template_push_static(ctx = ctx, width = width.cfloat)
-
-proc layoutWidgetBounds*(): NimRect {.raises: [], tags: [], contractual.} =
-  ## Get the rectangle of the current widget in the layout
-  ##
-  ## Returns NimRect with the data for the current widget
-  proc nk_layout_widget_bounds(ctx): nk_rect {.importc, nodecl, raises: [],
-      tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  let rect: nk_rect = nk_layout_widget_bounds(ctx = ctx)
-  result = NimRect(x: rect.x, y: rect.y, w: rect.w, h: rect.h)
-
-proc layoutSetMinRowHeight*(height: float) {.raises: [], tags: [],
-    contractual.} =
-  ## Set the currently used minimum row height. Must contains also paddings size.
-  ##
-  ## * height - the new minimum row height for auto generating the row height
-  proc nk_layout_set_min_row_height(ctx; height: cfloat) {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_layout_set_min_row_height(ctx = ctx, height = height.cfloat)
-
-proc lyoutResetMinRowHeight*() {.raises: [], tags: [], contractual.} =
-  ## Reset the currently used minimum row height.
-  proc nk_layout_reset_min_row_height(ctx) {.importc, nodecl, raises: [],
-      tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  nk_layout_reset_min_row_height(ctx = ctx)
 
 # -----
 # Menus
