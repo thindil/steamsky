@@ -98,7 +98,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         size: gameSettings.interfaceFontSize + 10))
     fonts[1] = nuklearLoadFont(font = FontData(path: themesList[
         gameSettings.interfaceTheme].fonts[1], size: gameSettings.mapFontSize +
-        10), glyphsRanges = [0x0020.nk_rune, 0x00ff, 0xf000, 0xffff, 0])
+        10), glyphsRanges = [0x0020.nk_rune, 0x00ff, 0x2000, 0xffff, 0])
   except:
     quit "Can't load the game's fonts."
   nuklearSetDefaultFont(defaultFont = fonts[0],
