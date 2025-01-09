@@ -579,9 +579,30 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               discard
   restoreButtonStyle()
   setLayoutRowDynamic(height = 20, cols = 5)
-  labelButton(title = "\u25B2"):
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Make the map smaller by one row.")
+  labelButton(title = "\u25b2"):
     discard
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Make the map bigger by one row.")
+  labelButton(title = "\u25bc"):
+    discard
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Zoom in the map.")
+  labelButton(title = "+"):
+    discard
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Zoom out the map.")
   labelButton(title = "-"):
+    discard
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Show the map movement menu.")
+  labelButton(title = "\uf85b"):
     discard
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
