@@ -1900,17 +1900,6 @@ template group*(title: string; flags: set[WindowFlags]; content: untyped) =
 # -----
 # Input
 # -----
-proc nkInBox(px, py, x, y, w, h: float): bool {.raises: [], tags: [], contractual.} =
-  ## Check if the selected coordinates are in the selected box
-  ##
-  ## * px - the X coordinate to check
-  ## * py - the Y coordinate to check
-  ## * x  - the starting X value
-  ## * y  - the starting Y value
-  ## * w  - the width of the box
-  ## * h  - the height of the box
-  return px in x..x+w and py in y..y+h
-
 proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
     contractual.} =
   ## Check if mouse is hovering over the selected rectangle
