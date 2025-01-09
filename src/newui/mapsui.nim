@@ -414,6 +414,15 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't create popup. Reason: " &
           getCurrentExceptionMsg())
 
+proc showMapInfo(x: MapXRange; y: MapYRange) {.raises: [NuklearException],
+    tags: [], contractual.} =
+  popup(pType = staticPopup, title = "MapInfo", flags = {windowNoFlags}, x = (
+      windowWidth - 100), y = 35, w = 100, h = 70):
+    group(title = "MapInfoGroup", flags = {windowNoScrollbar}):
+      setLayoutRowDynamic(height = 35, cols = 2)
+      label(str = "X:")
+      label(str = "Y:")
+
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
@@ -476,15 +485,16 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if storyX == playerShip.skyX and storyY == playerShip.skyY:
         storyX = 0
         storyY = 0
-    layoutSpaceStatic(height = ((height - 2) * rows).float, widgetsCount = rows * cols):
+    layoutSpaceStatic(height = ((height - 2) * rows).float,
+        widgetsCount = rows * cols):
       var curRow, col: int = -1
       for y in startY..endY:
         curRow.inc
         col = -1
         for x in startX..endX:
           col.inc
-          row(x = (col * (colWidth - 2)).float, y = (curRow * (height - 2)).float,
-              w = colWidth.float, h = height.float):
+          row(x = (col * (colWidth - 2)).float, y = (curRow * (height -
+              2)).float, w = colWidth.float, h = height.float):
             var
               mapChar: string = theme.mapIcons[1]
               mapColor: Color = theme.mapColors[1]
@@ -570,11 +580,18 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               setButtonStyle(field = normal, color = background)
               setButtonStyle(field = textBackground, color = background)
               setButtonStyle(field = hover, color = background + 0x303030.Color)
-              setButtonStyle(field = textHover, color = mapColor + 0x303030.Color)
+              setButtonStyle(field = textHover, color = mapColor +
+                  0x303030.Color)
               setButtonStyle(field = textNormal, color = mapColor)
             except:
               dialog = setError(message = "Can't set map color")
               return
+            if isMouseHovering(rect = getWidgetBounds()):
+              try:
+                showMapInfo(x = x, y = y)
+              except:
+                dialog = setError(message = "Can't show the map info")
+                return
             labelButton(title = mapChar):
               discard
   restoreButtonStyle()
