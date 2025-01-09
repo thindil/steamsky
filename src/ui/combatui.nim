@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the ship to ship combat and boarding, like
+## showing them, updating the list of messages, giving orders to the
+## crew members, etc.
+
 import std/[os, math, strutils, tables]
 import contracts, nimalyzer
 import ../[combat, config, crewinventory, game, items, maps, messages,
@@ -36,6 +40,9 @@ proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
   var currentTurnTime = "[" & formattedTime() & "]"
 
   proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
+    ## Show the selected message
+    ##
+    ## * message - the message to show
     let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.message.startsWith(prefix = currentTurnTime):
       if message.color == white:
@@ -79,6 +86,13 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
 
   proc getCrewList(position: Natural): string {.raises: [], tags: [
       WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    ## Get the list of crew members with info about they level in the selected skill
+    ##
+    ## * position - the crew member's position on the ship, 0 - pilot, 1 -
+    ##              engineer, 2 - gunner
+    ##
+    ## Returns the string with the list of crew members and the symbol related
+    ## to the selected skill.
     result = "Nobody"
     for index, member in playerShip.crew:
       if member.skills.len > 0:
@@ -126,6 +140,12 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
 
   proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
       KeyError], tags: [], contractual.} =
+    ## Get the information about the fire rate of the selected gun
+    ##
+    ## * position - the index of the gun on the guns list
+    ## * index    - the index of the order for the gun
+    ##
+    ## Returns the string with information about the gun's speed.
     result = ""
     var gunSpeed = modulesList[playerShip.modules[guns[position][
         1]].protoIndex].speed
@@ -1084,6 +1104,9 @@ proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [],
     contractual.} =
+  ## Show the whole combat UI
+  ##
+  ## * newCombat - if true, the combat started, default value is true
   tclEval(script = "grid remove " & closeButton)
   var combatStarted = false
   let combatFrame = mainPaned & ".combatframe"
