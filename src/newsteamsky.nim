@@ -124,7 +124,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     return
 
   # The main game loop
-  setTooltips(tDelay = 1_000, fDelay = dtime)
+  setTooltips(tDelay = 1_000, fDelay = 200)
   const showGame: array[GameState.mainMenu..GameState.map, proc (
       state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
@@ -137,7 +137,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       questionDialog: showQuestion, newGoalDialog: showGoals]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
-  var redraw: bool = true
+  var
+    redraw: bool = true
+    redrawTime: float = 1_000.0
   while true:
     let started: float = cpuTime()
     if redraw:
@@ -196,6 +198,13 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
     let dt: float = cpuTime() - started
     if (dt < dtime):
       sleep(milsecs = (dtime - dt).int)
+
+    # Force to redraw every 1 sec
+    if not redraw:
+      redrawTime -= dtime
+      if redrawTime <= 0.0:
+        redraw = true
+        redrawTime = 1_000.0
 
   nuklearClose()
 
