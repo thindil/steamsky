@@ -417,11 +417,16 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 proc showMapInfo(x: MapXRange; y: MapYRange) {.raises: [NuklearException],
     tags: [], contractual.} =
   popup(pType = staticPopup, title = "MapInfo", flags = {windowNoFlags}, x = (
-      windowWidth - 100), y = 35, w = 100, h = 70):
-    group(title = "MapInfoGroup", flags = {windowNoScrollbar}):
-      setLayoutRowDynamic(height = 35, cols = 2)
-      label(str = "X:")
-      label(str = "Y:")
+      windowWidth - 200), y = 5, w = 190, h = 70):
+    setLayoutRowDynamic(height = 35, cols = 4)
+    nuklearSetDefaultFont(defaultFont = fonts[0],
+        fontSize = gameSettings.interfaceFontSize + 10)
+    label(str = "X:")
+    label(str = $x)
+    label(str = "Y:")
+    label(str = $y)
+    nuklearSetDefaultFont(defaultFont = fonts[1],
+        fontSize = gameSettings.mapFontSize + 10)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
