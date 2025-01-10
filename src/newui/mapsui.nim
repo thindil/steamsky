@@ -430,6 +430,20 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     colorLabel(str = $x, color = theme.colors[27])
     label(str = "Y:")
     colorLabel(str = $y, color = theme.colors[27])
+#    setLayoutRowDynamic(height = 25, cols = 2)
+#    if playerShip.skyX != x or playerShip.skyY != y:
+#      let
+#        distance: Natural = countDistance(destinationX = x, destinationY = y)
+#        travelValues: TravelArray = travelInfo(distance = distance)
+#      label(str = "Distance: ")
+#      colorLabel(str = $distance, color = theme.colors[27])
+#      if travelValues[1] > 0:
+#        label(str = "ETA:")
+#        var distanceText: string = ""
+#        minutesToDate(minutes = travelValues[1], infoText = distanceText)
+#        colorLabel(str = distanceText, color = theme.colors[27])
+#        label(str = "Approx fuel usage: ")
+#        colorLabel(str = $travelValues[2], color = theme.colors[27])
     nuklearSetDefaultFont(defaultFont = fonts[1],
         fontSize = gameSettings.mapFontSize + 10)
 
