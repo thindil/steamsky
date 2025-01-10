@@ -28,16 +28,16 @@ import coreui, dialogs, errordialog, utilsui2, updateheader
 proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
   ## Update the list of in-game messages in combat, delete old ones and show
   ## the newest to the player
-  let messagesView = mainPaned & ".controls.messages.view"
+  let messagesView: string = mainPaned & ".controls.messages.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
-  var loopStart = 0 - messagesAmount()
+  var loopStart: int = 0 - messagesAmount()
   if loopStart == 0:
     tclEval(script = messagesView & " configure -state disable")
     return
   if loopStart < -10:
     loopStart = -10
-  var currentTurnTime = "[" & formattedTime() & "]"
+  var currentTurnTime: string = "[" & formattedTime() & "]"
 
   proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
     ## Show the selected message
@@ -73,7 +73,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Update the combat UI, remove the old elements and add new, depending
   ## on the information to show
-  var frame = mainPaned & ".combatframe.crew.canvas.frame"
+  var frame: string = mainPaned & ".combatframe.crew.canvas.frame"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
       frame & ".maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[2] & "> {InvokeButton " &
@@ -82,7 +82,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       mainPaned & ".combatframe.enemy.canvas.frame.maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[3] & "> {InvokeButton " &
       mainPaned & ".combatframe.status.canvas.frame.maxmin}")
-  var comboBox = frame & ".pilotcrew"
+  var comboBox: string = frame & ".pilotcrew"
 
   proc getCrewList(position: Natural): string {.raises: [], tags: [
       WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -105,7 +105,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   tclEval(script = comboBox & " current " & $(findMember(order = pilot) + 1))
   comboBox = frame & ".pilotorder"
   tclEval(script = comboBox & " current " & $(pilotOrder - 1))
-  let faction = try:
+  let faction: FactionData = try:
       factionsList[playerShip.crew[0].faction]
     except:
       showError(message = "Can't update combat UI, no faction: " &
@@ -126,15 +126,15 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   else:
     tclEval(script = "grid " & comboBox)
   var
-    tclResult = tclEval2(script = "grid size " & frame).split(sep = " ")
+    tclResult: seq[string] = tclEval2(script = "grid size " & frame).split(sep = " ")
     rows: Positive = try:
         tclResult[1].parseInt()
       except:
         1
   deleteWidgets(startIndex = 4, endIndex = rows - 1, frame = frame)
   var
-    haveAmmo, hasGunner = false
-    ammoAmount = 0
+    haveAmmo, hasGunner: bool = false
+    ammoAmount: int = 0
   let gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ",
       "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
 
@@ -147,7 +147,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     ##
     ## Returns the string with information about the gun's speed.
     result = ""
-    var gunSpeed = modulesList[playerShip.modules[guns[position][
+    var gunSpeed: int = modulesList[playerShip.modules[guns[position][
         1]].protoIndex].speed
     case index
     of 1:
@@ -166,7 +166,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   for gunIndex, gun in guns:
     haveAmmo = false
     hasGunner = false
-    let aIndex = (if playerShip.modules[gun[1]].mType ==
+    let aIndex: int = (if playerShip.modules[gun[1]].mType ==
         ModuleType2.gun: playerShip.modules[gun[
         1]].ammoIndex else: playerShip.modules[gun[1]].harpoonIndex)
     try:
@@ -185,7 +185,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
         try:
           if item.itemType == itemsTypesList[modulesList[playerShip.modules[gun[
               1]].protoIndex].value - 1]:
-            let ammoIndex = findItem(inventory = playerShip.cargo,
+            let ammoIndex: int = findItem(inventory = playerShip.cargo,
                 protoIndex = itemIndex)
             if ammoIndex > -1:
               ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
@@ -193,12 +193,12 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
           showError(message = "Can't show the gun's ammo information. No proto module with index: " &
               $playerShip.modules[gun[1]].protoIndex, e = nil)
           return
-    let label = frame & ".gunlabel" & $gunIndex
+    let label: string = frame & ".gunlabel" & $gunIndex
     tclEval(script = "ttk::label " & label & " -text {" & playerShip.modules[
         gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
     tclEval(script = "grid " & label & " -row " & $(gunIndex + 4) & " -padx {5 0}")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-    var comboBox = frame & ".guncrew" & $(gunIndex + 1)
+    var comboBox: string = frame & ".guncrew" & $(gunIndex + 1)
     tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
         getCrewList(position = 2) & "] -width 10 -state readonly")
     if playerShip.modules[gun[1]].owner[0] == 0:
@@ -216,7 +216,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = "bind " & comboBox &
         " <<ComboboxSelected>> {SetCombatPosition gunner " & $(gunIndex + 1) & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
-    var gunnerOrders = ""
+    var gunnerOrders: string = ""
     for orderIndex, order in gunnersOrders:
       try:
         gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
@@ -242,7 +242,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   try:
     if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
         protoShipsList[enemyShipIndex].crew.len > 0:
-      var button = frame & ".boarding"
+      var button: string = frame & ".boarding"
       tclEval(script = "ttk::button " & button & " -text {Boarding party:} -command {SetCombatParty boarding}")
       tclEval(script = "grid " & button & " -padx 5")
       tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.\"")
@@ -250,7 +250,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       tclEval(script = "ttk::button " & button & " -text {Defenders:} -command {SetCombatParty defenders}")
       tclEval(script = "grid " & button & " -sticky we -padx 5 -pady 5")
       tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your ship's defenders against the enemy party.\"")
-      var boardingParty, defenders = ""
+      var boardingParty, defenders: string = ""
       for member in playerShip.crew:
         case member.order
         of boarding:
@@ -261,8 +261,8 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
           discard
       if boardingParty.len > 0:
         boardingParty = boardingParty[0 .. ^2]
-      var label = frame & ".boardparty"
-      let labelLength = tclEval2(script = "winfo reqwidth " & frame &
+      var label: string = frame & ".boardparty"
+      let labelLength: int = tclEval2(script = "winfo reqwidth " & frame &
             ".engineercrew").parseInt + tclEval2(script = "winfo reqwidth " &
             frame & ".engineerorder").parseInt
       if tclEval2(script = "winfo exists " & label) == "0":
@@ -286,7 +286,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     showError(message = "Can't show information about boarding party and defenders.")
     return
   tclEval(script = "update")
-  var combatCanvas = mainPaned & ".combatframe.crew.canvas"
+  var combatCanvas: string = mainPaned & ".combatframe.crew.canvas"
   tclEval(script = combatCanvas & " configure -scrollregion [list " &
       tclEval2(script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
@@ -299,21 +299,21 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     deleteWidgets(startIndex = 0, endIndex = rows - 1, frame = frame)
   except:
     discard
-  var button = frame & ".maxmin"
+  var button: string = frame & ".maxmin"
   tclEval(script = "ttk::button " & button & " -style Small.TButton -image expandicon -command {CombatMaxMin damage show combat}")
   tclEval(script = "grid " & button & " -sticky w -padx 5 -row 0 -column 0")
   tclEval(script = "tooltip::tooltip " & button & " \"Maximize/minimize the ship status info\"")
-  var row = 1
+  var row: Positive = 1
   for module in playerShip.modules:
-    var label = frame & ".lbl" & $row
+    var label: string = frame & ".lbl" & $row
     tclEval(script = "ttk::label " & label & " -text {" & module.name & "}" &
         (if module.durability ==
         0: " -font OverstrikedFont -style Gray.TLabel" else: ""))
     tclEval(script = "grid " & label & " -row " & $row & " -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.damage.scrolly")
     let
-      damagePercent = module.durability.float / module.maxDurability.float
-      progressBar = frame & ".dmg" & $row
+      damagePercent: float = module.durability.float / module.maxDurability.float
+      progressBar: string = frame & ".dmg" & $row
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -length 150 -maximum 1.0 -value " &
         $damagePercent & (if damagePercent ==
@@ -330,7 +330,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       script = combatCanvas & " bbox all") & "]")
   tclEval(script = combatCanvas & " xview moveto 0.0")
   tclEval(script = combatCanvas & " yview moveto 0.0")
-  var label = mainPaned & ".combatframe.enemy.canvas.frame.info"
+  var label: string = mainPaned & ".combatframe.enemy.canvas.frame.info"
   tclEval(script = label & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
@@ -351,12 +351,12 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       10_000: "Medium" elif game.enemy.distance in 1_000 ..
       5_000: "Short" else: "Close") & "} [list gold]")
   tclEval(script = label & " insert end {\nStatus: }")
-  var enemyInfo = ""
+  var enemyInfo: string = ""
   if game.enemy.distance < 15_000:
     if game.enemy.ship.modules[0].durability == 0:
       enemyInfo = enemyInfo & "Destroyed"
     else:
-      var enemyStatus = "Ok"
+      var enemyStatus: string = "Ok"
       for module in game.enemy.ship.modules:
         if module.durability < module.maxDurability:
           enemyStatus = "Damaged"
@@ -398,7 +398,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     else:
       discard
     if game.enemy.ship.speed != fullStop:
-      let speedDiff = try:
+      let speedDiff: int = try:
           realSpeed(ship = game.enemy.ship) - realSpeed(ship = playerShip)
         except:
           showError(message = "Can't count the speed difference.")
@@ -463,8 +463,8 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = "grid " & label & " -row " & $row & " -column 0 -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.status.scrolly")
     let
-      damagePercent = (module.durability.float / module.maxDurability.float)
-      progressBar = frame & ".dmg" & $row
+      damagePercent: float = (module.durability.float / module.maxDurability.float)
+      progressBar: string = frame & ".dmg" & $row
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -length 150 -maximum 1.0 -value " &
         $damagePercent & (if damagePercent ==
@@ -489,9 +489,9 @@ proc showCombatFrame(frameName: string) {.raises: [], tags: [], contractual.} =
   ##
   ## * frameName - the name of the UI's frame to show
   let
-    combatFrame = ".gameframe.paned.combatframe"
-    combatChildren = [".crew", ".damage", ".enemy", ".status", ".next"]
-    boardingChildren = [".left", ".right", ".next"]
+    combatFrame: string = ".gameframe.paned.combatframe"
+    combatChildren: array[5, string] = [".crew", ".damage", ".enemy", ".status", ".next"]
+    boardingChildren: array[3, string] = [".left", ".right", ".next"]
   var childFrame = tclEval2(script = "grid slaves " & combatFrame & " -row 0 -column 0")
   if frameName == ".combat":
     if childFrame == combatFrame & combatChildren[0]:
