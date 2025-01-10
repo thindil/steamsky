@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   bases' types' color on the map. This change should affect only the modified
   version of the game. Most of players shouldn't encounter any problems.
 - Updated the game's data to the new version of bases' types' colors
+- Updated colors of icons to match the default colors of the game
 
 ### Fixed
 - Counting ships' speed
