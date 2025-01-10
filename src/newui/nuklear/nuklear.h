@@ -3693,6 +3693,8 @@ enum nk_style_colors {
     NK_COLOR_GROUP_TEXT,
     NK_COLOR_SELECT_ACTIVE_TEXT,
     NK_COLOR_PROPERTY_TEXT,
+    NK_COLOR_POPUP,
+    NK_COLOR_POPUP_BORDER,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -5379,6 +5381,7 @@ struct nk_style_window {
 
     struct nk_color border_color;
     struct nk_color popup_border_color;
+    struct nk_color popup_background;
     struct nk_color combo_border_color;
     struct nk_color contextual_border_color;
     struct nk_color menu_border_color;
@@ -18381,7 +18384,9 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_HEADER_TEXT,              175,175,175,255) \
     NK_COLOR(NK_COLOR_GROUP_TEXT,               175,175,175,255) \
     NK_COLOR(NK_COLOR_SELECT_ACTIVE_TEXT,       175,175,175,255) \
-    NK_COLOR(NK_COLOR_PROPERTY_TEXT,            175,175,175,255)
+    NK_COLOR(NK_COLOR_PROPERTY_TEXT,            175,175,175,255) \
+    NK_COLOR(NK_COLOR_POPUP,                    45, 45, 45, 255) \
+    NK_COLOR(NK_COLOR_POPUP_BORDER,             65, 65, 65, 255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -19033,7 +19038,8 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     win->background = table[NK_COLOR_WINDOW];
     win->fixed_background = nk_style_item_color(table[NK_COLOR_WINDOW]);
     win->border_color = table[NK_COLOR_BORDER];
-    win->popup_border_color = table[NK_COLOR_BORDER];
+    win->popup_border_color = table[NK_COLOR_POPUP_BORDER];
+    win->popup_background = table[NK_COLOR_POPUP];
     win->combo_border_color = table[NK_COLOR_BORDER];
     win->contextual_border_color = table[NK_COLOR_BORDER];
     win->menu_border_color = table[NK_COLOR_BORDER];
@@ -21960,6 +21966,8 @@ nk_panel_layout(const struct nk_context *ctx, struct nk_window *win,
     out = &win->buffer;
     if (layout->type == NK_PANEL_TOOLTIP) {
        color = style->window.tooltip_background;
+    } else if (layout->type == NK_PANEL_POPUP) {
+       color = style->window.popup_background;
     } else {
        color = style->window.background;
     }
