@@ -414,17 +414,22 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't create popup. Reason: " &
           getCurrentExceptionMsg())
 
-proc showMapInfo(x: MapXRange; y: MapYRange) {.raises: [NuklearException],
-    tags: [], contractual.} =
-  popup(pType = staticPopup, title = "MapInfo", flags = {windowNoFlags}, x = (
-      windowWidth - 200), y = 5, w = 190, h = 70):
-    setLayoutRowDynamic(height = 35, cols = 4)
+proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
+    NuklearException], tags: [], contractual.} =
+  ## Show the map cell info popup
+  ##
+  ## * x     - the X coordinate of the map cell which info will be show
+  ## * y     - the Y coordinate of the map cell which info will be show
+  ## * theme - the current game's theme
+  popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
+      x = (windowWidth - 200), y = 5, w = 190, h = 70):
+    setLayoutRowDynamic(height = 25, cols = 4)
     nuklearSetDefaultFont(defaultFont = fonts[0],
         fontSize = gameSettings.interfaceFontSize + 10)
     label(str = "X:")
-    label(str = $x)
+    colorLabel(str = $x, color = theme.colors[27])
     label(str = "Y:")
-    label(str = $y)
+    colorLabel(str = $y, color = theme.colors[27])
     nuklearSetDefaultFont(defaultFont = fonts[1],
         fontSize = gameSettings.mapFontSize + 10)
 
@@ -593,7 +598,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               return
             if isMouseHovering(rect = getWidgetBounds()):
               try:
-                showMapInfo(x = x, y = y)
+                showMapInfo(x = x, y = y, theme = theme)
               except:
                 dialog = setError(message = "Can't show the map info")
                 return
