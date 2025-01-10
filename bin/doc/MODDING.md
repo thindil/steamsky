@@ -879,8 +879,8 @@ story.
   type. It can be a number or text. Required
 * Attribute `name` is a base type name showed to player in game. Should be
   unique too. Required.
-* Attribute `color` is a base type color in hexadecimal used to show this
-  base type to player on the map in game. Required.
+* Attribute `color` is a base type color in CSS style used to show this base
+  type to player on the map in game. Required.
 * Optional attribute `action`: What to do with this entry. Possible values
   are: "add" (add this entry, default option), "remove" (remove this entry) or
   "update" (update selected entry).
