@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -145,6 +145,14 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       ::autoscroll::autoscroll .gameframe.paned.craftframe.scrolly
       ::autoscroll::autoscroll .gameframe.paned.craftframe.scrollx
       set craftframe [ttk::frame $craftcanvas.craft]
+      set newtab recipes
+      grid [ttk::frame $craftframe.tabs]
+      grid [ttk::radiobutton $craftframe.tabs.recipes -text {Known recipes} \
+         -state selected -style Radio.Toolbutton -value recipes -variable newtab \
+         -command ShowCrafting] -padx 5
+      grid [ttk::radiobutton $craftframe.tabs.orders -text {Workshops} \
+         -style Radio.Toolbutton -value orders -variable newtab \
+         -command ShowCrafting] -row 0 -column 1 -padx 5
       grid [ttk::frame $craftframe.sframe] -sticky w
       grid [ttk::label $craftframe.sframe.searchlabel -text {Name:}]
       tooltip::tooltip $craftframe.sframe.searchlabel \
