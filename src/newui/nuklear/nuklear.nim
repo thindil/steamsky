@@ -730,8 +730,9 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         header.h = panelPadding.y
       # window movement by dragging
       let
-        leftMouseDown: bool = `in`.mouse.buttons[NK_BUTTON_LEFT].down
-        leftMouseClicked: bool = `in`.mouse.buttons[NK_BUTTON_LEFT].clicked == 1
+        buttons: ButtonsArray = cast[ButtonsArray](`in`.mouse.buttons)
+        leftMouseDown: bool = buttons[NK_BUTTON_LEFT].down
+        leftMouseClicked: bool = buttons[NK_BUTTON_LEFT].clicked == 1
     return true
 {.pop ruleOn: "params".}
 

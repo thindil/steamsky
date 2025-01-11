@@ -231,14 +231,15 @@ type
     button*: nk_style_button
     font*: ptr nk_user_font
     text*: nk_style_text
-  nk_mouse_button* = object
+  nk_mouse_button* {.importc: "struct nk_mouse_button", nodecl.} = object
     ## Internal Nuklear type
     down*: nk_bool
     clicked*: cuint
+    clicked_pos*: nk_vec2
   nk_mouse* {.importc: "struct nk_mouse", nodecl.} = object
     ## Internal Nuklear type
     delta*: nk_vec2
-    buttons*: array[NK_BUTTON_MAX, nk_mouse_button]
+    buttons*: pointer
   nk_input* {.importc: "struct nk_input", nodecl.} = object
     ## Internal Nuklear type
     mouse*: nk_mouse
@@ -355,6 +356,8 @@ type
     ## Pointer to nk_window structure
   PNkPanel* = ptr nk_panel
     ## Pointer to nk_panel structure
+  ButtonsArray* = array[NK_BUTTON_MAX, nk_mouse_button]
+    ## The array of mouse buttons
 
 # ---------
 # Constants
