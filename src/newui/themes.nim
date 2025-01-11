@@ -24,7 +24,7 @@ import ../[config, game]
 
 const
   iconsAmount: Positive = 29
-  colorsAmount: Positive = 31
+  colorsAmount: Positive = 32
   fontsAmount: Positive = 2
   mapIconsAmount: Positive = 18
   mapColorsAmount: Positive = 11
@@ -75,7 +75,7 @@ let
       "#458588".parseColor, "#4e9a06".parseColor, "#ffdf00".parseColor,
       "#ffdf00".parseColor, "#372412".parseColor, "#500000".parseColor,
       "#ffdf00".parseColor, "#ffdf00".parseColor, "#fb4934".parseColor,
-      "#7f8c8d".parseColor, "#000000".parseColor],
+      "#7f8c8d".parseColor, "#000000".parseColor, "#b16286".parseColor],
       fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
       mapIcons: ["\uf135", " ", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
@@ -110,7 +110,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "GroupBorderColor", "HeaderTextColor", "GroupTextColor",
         "SelecteActiveTextColor", "PropertyTextColor", "ToggleColor",
         "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor",
-        "MapInfoBorderColor", "MapInfoColor"]
+        "MapInfoBorderColor", "MapInfoColor", "PinkColor"]
     const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
     const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
         "EmptyMapIcon", "TargetIcon", "StoryIcon", "DeliverIcon", "DestroyIcon",
