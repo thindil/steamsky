@@ -423,9 +423,9 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
   ## * theme - the current game's theme
   popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
       x = (windowWidth - 200), y = 5, w = 190, h = 250):
-    setLayoutRowDynamic(height = 25, cols = 4)
     nuklearSetDefaultFont(defaultFont = fonts[0],
         fontSize = gameSettings.interfaceFontSize + 10)
+    setLayoutRowDynamic(height = 25, cols = 4, ratio = [0.1.cfloat, 0.4, 0.1, 0.4])
     label(str = "X:")
     colorLabel(str = $x, color = theme.colors[27])
     label(str = "Y:")
