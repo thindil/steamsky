@@ -422,32 +422,39 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
   ## * y     - the Y coordinate of the map cell which info will be show
   ## * theme - the current game's theme
   popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
-      x = (windowWidth - 200), y = 5, w = 190, h = 250):
+      x = (windowWidth - 240), y = 5, w = 230, h = 250):
     nuklearSetDefaultFont(defaultFont = fonts[0],
         fontSize = gameSettings.interfaceFontSize + 10)
     layoutStatic(height = 25, cols = 4):
       row(width = 20):
         label(str = "X:")
-      row(width = 60):
+      row(width = 80):
         colorLabel(str = $x, color = theme.colors[27])
       row(width = 20):
         label(str = "Y:")
-      row(width = 60):
+      row(width = 80):
         colorLabel(str = $y, color = theme.colors[27])
     if playerShip.skyX != x or playerShip.skyY != y:
-      setLayoutRowDynamic(height = 25, cols = 2)
       let
         distance: Natural = countDistance(destinationX = x, destinationY = y)
         travelValues: TravelArray = travelInfo(distance = distance)
-      label(str = "Distance: ")
-      colorLabel(str = $distance, color = theme.colors[27])
+      layoutStatic(height = 25, cols = 2):
+        row(width = 80):
+          label(str = "Distance:")
+        row(width = 100):
+          colorLabel(str = $distance, color = theme.colors[27])
       if travelValues[1] > 0:
-        label(str = "ETA:")
-        var distanceText: string = ""
-        minutesToDate(minutes = travelValues[1], infoText = distanceText)
-        colorLabel(str = distanceText, color = theme.colors[27])
-        label(str = "Approx fuel usage: ")
-        colorLabel(str = $travelValues[2], color = theme.colors[27])
+        layoutStatic(height = 25, cols = 2):
+          row(width = 50):
+            label(str = "ETA:")
+          row(width = 180):
+            var distanceText: string = ""
+            minutesToDate(minutes = travelValues[1], infoText = distanceText)
+            colorLabel(str = distanceText, color = theme.colors[27])
+          row(width = 160):
+            label(str = "Approx fuel usage:")
+          row(width = 70):
+            colorLabel(str = $travelValues[2], color = theme.colors[27])
     nuklearSetDefaultFont(defaultFont = fonts[1],
         fontSize = gameSettings.mapFontSize + 10)
 
