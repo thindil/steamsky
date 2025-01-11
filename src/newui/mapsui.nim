@@ -425,13 +425,17 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
       x = (windowWidth - 200), y = 5, w = 190, h = 250):
     nuklearSetDefaultFont(defaultFont = fonts[0],
         fontSize = gameSettings.interfaceFontSize + 10)
-    setLayoutRowDynamic(height = 25, cols = 4, ratio = [0.1.cfloat, 0.4, 0.1, 0.4])
-    label(str = "X:")
-    colorLabel(str = $x, color = theme.colors[27])
-    label(str = "Y:")
-    colorLabel(str = $y, color = theme.colors[27])
-    setLayoutRowDynamic(height = 25, cols = 2)
+    layoutStatic(height = 25, cols = 4):
+      row(width = 20):
+        label(str = "X:")
+      row(width = 60):
+        colorLabel(str = $x, color = theme.colors[27])
+      row(width = 20):
+        label(str = "Y:")
+      row(width = 60):
+        colorLabel(str = $y, color = theme.colors[27])
     if playerShip.skyX != x or playerShip.skyY != y:
+      setLayoutRowDynamic(height = 25, cols = 2)
       let
         distance: Natural = countDistance(destinationX = x, destinationY = y)
         travelValues: TravelArray = travelInfo(distance = distance)
