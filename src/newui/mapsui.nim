@@ -22,7 +22,7 @@ import std/[colors, math, tables, unicode]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
-import coreui, errordialog, themes
+import coreui, errordialog, themes, utilsui2
 
 const iconsAmount: Positive = 25
 
@@ -415,14 +415,14 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           getCurrentExceptionMsg())
 
 proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
-    NuklearException], tags: [], contractual.} =
+    NuklearException, ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
   ## * x     - the X coordinate of the map cell which info will be show
   ## * y     - the Y coordinate of the map cell which info will be show
   ## * theme - the current game's theme
   popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
-      x = (windowWidth - 200), y = 5, w = 190, h = 70):
+      x = (windowWidth - 200), y = 5, w = 190, h = 250):
     setLayoutRowDynamic(height = 25, cols = 4)
     nuklearSetDefaultFont(defaultFont = fonts[0],
         fontSize = gameSettings.interfaceFontSize + 10)
@@ -430,20 +430,20 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     colorLabel(str = $x, color = theme.colors[27])
     label(str = "Y:")
     colorLabel(str = $y, color = theme.colors[27])
-#    setLayoutRowDynamic(height = 25, cols = 2)
-#    if playerShip.skyX != x or playerShip.skyY != y:
-#      let
-#        distance: Natural = countDistance(destinationX = x, destinationY = y)
-#        travelValues: TravelArray = travelInfo(distance = distance)
-#      label(str = "Distance: ")
-#      colorLabel(str = $distance, color = theme.colors[27])
-#      if travelValues[1] > 0:
-#        label(str = "ETA:")
-#        var distanceText: string = ""
-#        minutesToDate(minutes = travelValues[1], infoText = distanceText)
-#        colorLabel(str = distanceText, color = theme.colors[27])
-#        label(str = "Approx fuel usage: ")
-#        colorLabel(str = $travelValues[2], color = theme.colors[27])
+    setLayoutRowDynamic(height = 25, cols = 2)
+    if playerShip.skyX != x or playerShip.skyY != y:
+      let
+        distance: Natural = countDistance(destinationX = x, destinationY = y)
+        travelValues: TravelArray = travelInfo(distance = distance)
+      label(str = "Distance: ")
+      colorLabel(str = $distance, color = theme.colors[27])
+      if travelValues[1] > 0:
+        label(str = "ETA:")
+        var distanceText: string = ""
+        minutesToDate(minutes = travelValues[1], infoText = distanceText)
+        colorLabel(str = distanceText, color = theme.colors[27])
+        label(str = "Approx fuel usage: ")
+        colorLabel(str = $travelValues[2], color = theme.colors[27])
     nuklearSetDefaultFont(defaultFont = fonts[1],
         fontSize = gameSettings.mapFontSize + 10)
 
