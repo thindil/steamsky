@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various utility procedures for the game's UI, like counting the
+## travel information, converting minutes to in-game date, etc.
+
+import contracts
 import ../[crew, game, shipsmovement, types]
 
 type
@@ -22,7 +26,7 @@ type
     ## Used to store data about travel to some point on the map
 
 proc travelInfo*(distance: Natural): TravelArray {.raises: [ValueError],
-    tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
   ## * distance - Distance in map fields to destination point
@@ -34,7 +38,7 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [ValueError],
   result = [0, 0]
   if distance == 0:
     return
-  let speed = realSpeed(ship = playerShip, infoOnly = true) / 1_000
+  let speed: float = realSpeed(ship = playerShip, infoOnly = true) / 1_000
   if speed == 0.0:
     return
   var minutesDiff: int = (100.0 / speed).int
@@ -50,22 +54,22 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [ValueError],
       minutesDiff = 15
   else:
     discard
-  minutesDiff = minutesDiff * distance
-  var rests, restTime = 0
+  minutesDiff *= distance
+  var rests, restTime: int = 0
   for index, member in playerShip.crew:
     if member.order notin {pilot, engineer}:
       continue
-    let tired = (minutesDiff / 15).int + member.tired
+    let tired: int = (minutesDiff / 15).int + member.tired
     if (tired / (80 + member.attributes[conditionIndex].level)).int > rests:
       rests = (tired / (80 + member.attributes[conditionIndex].level)).int
     if rests > 0:
-      let cabinIndex = findCabin(memberIndex = index)
+      let cabinIndex: int = findCabin(memberIndex = index)
       var tempTime: int = 0
       if cabinIndex > -1:
         let
-          damage = 1.0 - (playerShip.modules[cabinIndex].durability.float /
+          damage: float = 1.0 - (playerShip.modules[cabinIndex].durability.float /
               playerShip.modules[cabinIndex].maxDurability.float)
-        var cabinBonus = playerShip.modules[cabinIndex].cleanliness - (
+        var cabinBonus: int = playerShip.modules[cabinIndex].cleanliness - (
             playerShip.modules[cabinIndex].cleanliness.float * damage).int
         if cabinBonus == 0:
           cabinBonus = 1
@@ -75,14 +79,14 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [ValueError],
           tempTime = 15
       else:
         tempTime = (80 + member.attributes[conditionIndex].level) * 15
-      tempTime = tempTime + 15
+      tempTime += 15
       if tempTime > restTime:
         restTime = tempTime
   result[1] = minutesDiff + (rests * restTime)
-  result[2] = abs(distance * countFuelNeeded()) + (rests * (restTime / 10).int)
+  result[2] = abs(x = distance * countFuelNeeded()) + (rests * (restTime / 10).int)
 
 proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
-    ], tags: [].} =
+    ], tags: [], contractual.} =
   ## Convert the game minutes to the game time in days, hours, etc
   ##
   ## * minutes  - the amount of minutes to convert
@@ -91,20 +95,20 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
   ## Returns the updated infoText paramater with converted minutes to the game
   ## time
   var
-    travelTime: DateRecord
+    travelTime: DateRecord = DateRecord()
     minutesDiff: int = minutes
   while minutesDiff > 0:
     if minutesDiff > 518_400:
-      minutesDiff = minutesDiff - 518_400
+      minutesDiff -= 518_400
       travelTime.year.inc()
     elif minutesDiff in 43_201 .. 518_400:
-      minutesDiff = minutesDiff - 43_200
+      minutesDiff -= 43_200
       travelTime.month.inc()
       if travelTime.month > 12:
         travelTime.year.inc()
         travelTime.month = 1
     elif minutesDiff in 1_441..43_200:
-      minutesDiff = minutesDiff - 1_440
+      minutesDiff -= 1_440
       travelTime.day.inc()
       if travelTime.day > 31:
         travelTime.month.inc()
@@ -112,7 +116,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
           travelTime.year.inc()
           travelTime.month = 1
     elif minutesDiff in 61..1_440:
-      minutesDiff = minutesDiff - 60
+      minutesDiff -= 60
       travelTime.hour.inc()
       if travelTime.hour > 23:
         travelTime.hour = 0
