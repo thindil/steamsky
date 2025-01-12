@@ -415,16 +415,17 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           getCurrentExceptionMsg())
 
 proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
-    NuklearException, ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    NuklearException, ValueError], tags: [WriteIOEffect, TimeEffect,
+        RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
   ## * x     - the X coordinate of the map cell which info will be show
   ## * y     - the Y coordinate of the map cell which info will be show
   ## * theme - the current game's theme
+  nuklearSetDefaultFont(defaultFont = fonts[0],
+      fontSize = gameSettings.interfaceFontSize + 10)
   popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
       x = (windowWidth - 240), y = 5, w = 230, h = 250):
-    nuklearSetDefaultFont(defaultFont = fonts[0],
-        fontSize = gameSettings.interfaceFontSize + 10)
     layoutStatic(height = 25, cols = 4):
       row(width = 20):
         label(str = "X:")
@@ -455,8 +456,25 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
             label(str = "Approx fuel usage:")
           row(width = 70):
             colorLabel(str = $travelValues[2], color = theme.colors[27])
-    nuklearSetDefaultFont(defaultFont = fonts[1],
-        fontSize = gameSettings.mapFontSize + 10)
+      if skyMap[x][y].baseIndex > 0:
+        let baseIndex: Positive = skyMap[x][y].baseIndex
+        if skyBases[baseIndex].known:
+          setLayoutRowDynamic(height = 25, cols = 1)
+          colorLabel(str = "Base info:", color = theme.colors[31])
+          layoutStatic(height = 25, cols = 2):
+            row(width = 60):
+              label(str = "Name:")
+            row(width = 170):
+              colorLabel(str = skyBases[baseIndex].name, color = theme.colors[27])
+            if skyBases[baseIndex].visited.year > 0:
+              row(width = 60):
+                label(str = "Type:")
+              row(width = 170):
+                colorLabel(str = basesTypesList[skyBases[
+                    baseIndex].baseType].name, color = basesTypesList[skyBases[
+                    baseIndex].baseType].color)
+  nuklearSetDefaultFont(defaultFont = fonts[1],
+      fontSize = gameSettings.mapFontSize + 10)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
