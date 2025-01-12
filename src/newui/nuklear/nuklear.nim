@@ -43,17 +43,6 @@ type PImage* = pointer ## A pointer to the image type
 # ---------------------
 using ctx: PContext
 
-# -----
-# Input
-# -----
-proc nk_input_begin*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-proc nk_input_key*(ctx; key: nk_keys; down: nk_bool) {.importc, nodecl,
-    raises: [], tags: [], contractual.}
-  ## A binding to Nuklear's function. Internal use only
-
 # -------
 # General
 # -------
@@ -74,6 +63,17 @@ proc nk_create_window(ctx): pointer {.importc, cdecl, raises: [], tags: [], cont
   ## A binding to Nuklear's function. Internal use only
 
 proc nk_window_find(ctx; name: cstring): ptr nk_window {.importc, nodecl,
+    raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+
+# -----
+# Input
+# -----
+proc nk_input_begin*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
+proc nk_input_key*(ctx; key: nk_keys; down: nk_bool) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
@@ -425,7 +425,6 @@ proc windowPropertyActive*(name: string): bool {.raises: [], tags: [],
 # ------
 # Buffer
 # ------
-
 {.push ruleOff: "namedParams".}
 template `+`[T](p: ptr T; off: nk_size): ptr T =
   ## Pointer artihmetic, adding
@@ -577,7 +576,6 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
 # ----
 # Draw
 # ----
-
 proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
     size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a command to the commands buffer. Internal use only
@@ -616,7 +614,6 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
 # ----
 # Misc
 # ----
-
 proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Clear the rectangle. Internal use only
@@ -636,6 +633,94 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     cmd.y = r.y.cshort
     cmd.w = max(x = 0.cushort, y = r.w.cushort)
     cmd.h = max(x = 0.cushort, y = r.h.cushort)
+
+# -----
+# Input
+# -----
+proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if mouse is hovering over the selected rectangle
+  ##
+  ## * rect - the area in which the mouse will be checked for hovering
+  ##
+  ## Returns true if the mouse is hovering over the rectangle, otherwise false
+  proc nk_input_is_mouse_hovering_rect(i: ptr nk_input;
+      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_is_mouse_hovering_rect(i = ctx.input.addr, rect = new_nk_rect(
+      x = rect.x, y = rect.y, w = rect.w, h = rect.h))
+
+proc isMousePrevHovering*(x, y, w, h: float): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the mouse was previously hovering over the selected rectangle
+  ##
+  ## * x   - the X coordinate of top left corner of the rectangle
+  ## * y   - the Y coordinate of top left corner of the rectangle
+  ## * w   - the width of the rectangle in pixels
+  ## * h   - the height of the rectangle in pixels
+  ##
+  ## Returns true if the mouse was hovering over the rectangle, otherwise false
+  proc nk_input_is_mouse_prev_hovering_rect(i: ptr nk_input;
+      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_is_mouse_prev_hovering_rect(i = ctx.input.addr,
+      rect = new_nk_rect(x = x, y = y, w = w, h = h))
+
+proc isMouseDown*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
+  ## Check if mouse is pressed
+  ##
+  ## * id  - the mouse button which is pressed
+  ##
+  ## Returns true if the selected mouse button is pressed, otherwise false
+  proc nk_input_is_mouse_down(i: ptr nk_input; id: Buttons): nk_bool {.importc,
+      nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_is_mouse_down(i = ctx.input.addr, id = id)
+
+proc getMouseDelta*(): NimVec2 {.raises: [], tags: [], contractual.} =
+  ## Get the mouse vector between last check and current position of the mouse
+  ##
+  ## Returns vector with information about the mouse movement delta
+  return NimVec2(x: ctx.input.mouse.delta.x, y: ctx.input.mouse.delta.y)
+
+proc mouseClicked*(id: Buttons; rect: NimRect): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the selected mouse button was clicked in the selected area
+  ##
+  ## * id  - the mouse button which was pressed
+  ## * rect - the area in which the mouse button was pressed
+  ##
+  ## Returns true if the selected mouse button was clicked in the selected
+  ## area, otherwise false.
+  proc nk_input_mouse_clicked(i: ptr nk_input; id: Buttons;
+      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_mouse_clicked(i = ctx.input.addr, id = id, rect = new_nk_rect(
+      x = rect.x, y = rect.y, w = rect.w, h = rect.h))
+
+proc isMouseClicked*(btn: Buttons): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Check if the selected mouse button was clicked in the current widget
+  ##
+  ## * btn  - the mouse button which was pressed
+  ##
+  ## Returns true if the selected mouse button was clicked in the current
+  ## widget, otherwise false.
+  proc nk_widget_is_mouse_clicked(ctx; btn: Buttons): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_widget_is_mouse_clicked(ctx = ctx, btn = btn)
+
+proc isKeyPressed*(key: nk_keys): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the selected key is pressed
+  ##
+  ## * key - the key which was pressed
+  ##
+  ## Returns true if the selected key is pressed, otherwise false
+  proc nk_input_is_key_pressed(i: ptr nk_input;
+      key: nk_keys): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_is_key_pressed(i = ctx.input.addr, key = key)
 
 # -----
 # Panel
@@ -1897,94 +1982,6 @@ template group*(title: string; flags: set[WindowFlags]; content: untyped) =
       nimFlags = flags)):
     content
     nk_group_end(ctx = ctx)
-
-# -----
-# Input
-# -----
-proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
-    contractual.} =
-  ## Check if mouse is hovering over the selected rectangle
-  ##
-  ## * rect - the area in which the mouse will be checked for hovering
-  ##
-  ## Returns true if the mouse is hovering over the rectangle, otherwise false
-  proc nk_input_is_mouse_hovering_rect(i: ptr nk_input;
-      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_input_is_mouse_hovering_rect(i = ctx.input.addr, rect = new_nk_rect(
-      x = rect.x, y = rect.y, w = rect.w, h = rect.h))
-
-proc isMousePrevHovering*(x, y, w, h: float): bool {.raises: [], tags: [],
-    contractual.} =
-  ## Check if the mouse was previously hovering over the selected rectangle
-  ##
-  ## * x   - the X coordinate of top left corner of the rectangle
-  ## * y   - the Y coordinate of top left corner of the rectangle
-  ## * w   - the width of the rectangle in pixels
-  ## * h   - the height of the rectangle in pixels
-  ##
-  ## Returns true if the mouse was hovering over the rectangle, otherwise false
-  proc nk_input_is_mouse_prev_hovering_rect(i: ptr nk_input;
-      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_input_is_mouse_prev_hovering_rect(i = ctx.input.addr,
-      rect = new_nk_rect(x = x, y = y, w = w, h = h))
-
-proc isMouseDown*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
-  ## Check if mouse is pressed
-  ##
-  ## * id  - the mouse button which is pressed
-  ##
-  ## Returns true if the selected mouse button is pressed, otherwise false
-  proc nk_input_is_mouse_down(i: ptr nk_input; id: Buttons): nk_bool {.importc,
-      nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_input_is_mouse_down(i = ctx.input.addr, id = id)
-
-proc getMouseDelta*(): NimVec2 {.raises: [], tags: [], contractual.} =
-  ## Get the mouse vector between last check and current position of the mouse
-  ##
-  ## Returns vector with information about the mouse movement delta
-  return NimVec2(x: ctx.input.mouse.delta.x, y: ctx.input.mouse.delta.y)
-
-proc mouseClicked*(id: Buttons; rect: NimRect): bool {.raises: [], tags: [],
-    contractual.} =
-  ## Check if the selected mouse button was clicked in the selected area
-  ##
-  ## * id  - the mouse button which was pressed
-  ## * rect - the area in which the mouse button was pressed
-  ##
-  ## Returns true if the selected mouse button was clicked in the selected
-  ## area, otherwise false.
-  proc nk_input_mouse_clicked(i: ptr nk_input; id: Buttons;
-      rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_input_mouse_clicked(i = ctx.input.addr, id = id, rect = new_nk_rect(
-      x = rect.x, y = rect.y, w = rect.w, h = rect.h))
-
-proc isMouseClicked*(btn: Buttons): bool {.raises: [], tags: [],
-    contractual.} =
-  ## Check if the selected mouse button was clicked in the current widget
-  ##
-  ## * btn  - the mouse button which was pressed
-  ##
-  ## Returns true if the selected mouse button was clicked in the current
-  ## widget, otherwise false.
-  proc nk_widget_is_mouse_clicked(ctx; btn: Buttons): nk_bool {.importc, nodecl,
-      raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_widget_is_mouse_clicked(ctx = ctx, btn = btn)
-
-proc isKeyPressed*(key: nk_keys): bool {.raises: [], tags: [], contractual.} =
-  ## Check if the selected key is pressed
-  ##
-  ## * key - the key which was pressed
-  ##
-  ## Returns true if the selected key is pressed, otherwise false
-  proc nk_input_is_key_pressed(i: ptr nk_input;
-      key: nk_keys): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
-    ## A binding to Nuklear's function. Internal use only
-  return nk_input_is_key_pressed(i = ctx.input.addr, key = key)
 
 # ---------
 # Edit text
