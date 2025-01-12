@@ -430,11 +430,11 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
       row(width = 20):
         label(str = "X:")
       row(width = 80):
-        colorLabel(str = $x, color = theme.colors[27])
+        colorLabel(str = $x, color = theme.mapColors[11])
       row(width = 20):
         label(str = "Y:")
       row(width = 80):
-        colorLabel(str = $y, color = theme.colors[27])
+        colorLabel(str = $y, color = theme.mapColors[11])
     if playerShip.skyX != x or playerShip.skyY != y:
       let
         distance: Natural = countDistance(destinationX = x, destinationY = y)
@@ -443,7 +443,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         row(width = 80):
           label(str = "Distance:")
         row(width = 100):
-          colorLabel(str = $distance, color = theme.colors[27])
+          colorLabel(str = $distance, color = theme.mapColors[11])
       if travelValues[1] > 0:
         layoutStatic(height = 25, cols = 2):
           row(width = 50):
@@ -451,11 +451,11 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
           row(width = 180):
             var distanceText: string = ""
             minutesToDate(minutes = travelValues[1], infoText = distanceText)
-            colorLabel(str = distanceText, color = theme.colors[27])
+            colorLabel(str = distanceText, color = theme.mapColors[11])
           row(width = 160):
             label(str = "Approx fuel usage:")
           row(width = 70):
-            colorLabel(str = $travelValues[2], color = theme.colors[27])
+            colorLabel(str = $travelValues[2], color = theme.mapColors[11])
       if skyMap[x][y].baseIndex > 0:
         let baseIndex: Positive = skyMap[x][y].baseIndex
         if skyBases[baseIndex].known:
@@ -465,7 +465,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
             row(width = 60):
               label(str = "Name:")
             row(width = 170):
-              colorLabel(str = skyBases[baseIndex].name, color = theme.colors[27])
+              colorLabel(str = skyBases[baseIndex].name, color = theme.mapColors[11])
             if skyBases[baseIndex].visited.year > 0:
               row(width = 60):
                 label(str = "Type:")
@@ -479,22 +479,22 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
                 row(width = 130):
                   case skyBases[baseIndex].population
                   of 1..149:
-                    colorLabel(str = "small", color = theme.colors[27])
+                    colorLabel(str = "small", color = theme.mapColors[11])
                   of 150..299:
-                    colorLabel(str = "medium", color = theme.colors[27])
+                    colorLabel(str = "medium", color = theme.mapColors[11])
                   else:
-                    colorLabel(str = "large", color = theme.colors[27])
+                    colorLabel(str = "large", color = theme.mapColors[11])
               row(width = 60):
                 label(str = "Size:")
               row(width = 170):
                 colorLabel(str = $skyBases[baseIndex].size,
-                    color = theme.colors[27])
+                    color = theme.mapColors[11])
               if skyBases[baseIndex].population > 0:
                 row(width = 70):
                   label(str = "Owner:")
                 row(width = 160):
                   colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
-                      color = theme.colors[27])
+                      color = theme.mapColors[11])
               else:
                 row(width = 230):
                   label(str = "Base is abandoned")
@@ -502,23 +502,23 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
           if skyBases[baseIndex].population > 0:
             case skyBases[baseIndex].reputation.level
             of -100.. -75:
-              colorLabel(str = "You are hated here", color = theme.colors[28])
+              colorLabel(str = "You are hated here", color = theme.mapColors[5])
             of -74.. -50:
-              colorLabel(str = "You are outlawed here", color = theme.colors[28])
+              colorLabel(str = "You are outlawed here", color = theme.mapColors[5])
             of -49.. -25:
-              colorLabel(str = "You are disliked here", color = theme.colors[28])
+              colorLabel(str = "You are disliked here", color = theme.mapColors[5])
             of -24.. -1:
-              colorLabel(str = "They are unfriendly to you", color = theme.colors[28])
+              colorLabel(str = "They are unfriendly to you", color = theme.mapColors[5])
             of 0:
-              colorLabel(str = "You are unknown here", color = theme.colors[27])
+              colorLabel(str = "You are unknown here", color = theme.mapColors[11])
             of 1..25:
-              colorLabel(str = "You are know here as visitor", color = theme.colors[2])
+              colorLabel(str = "You are know here as visitor", color = theme.mapColors[3])
             of 26..50:
-              colorLabel(str = "You are know here as trader", color = theme.colors[2])
+              colorLabel(str = "You are know here as trader", color = theme.mapColors[3])
             of 51..75:
-              colorLabel(str = "You are know here as friend", color = theme.colors[2])
+              colorLabel(str = "You are know here as friend", color = theme.mapColors[3])
             of 76..100:
-              colorLabel(str = "You are well known here", color = theme.colors[2])
+              colorLabel(str = "You are well known here", color = theme.mapColors[3])
 #            if baseIndex == playerShip.homeBase:
 #              insertText(newText = "\nIt is your home base", tagName = "cyan")
   nuklearSetDefaultFont(defaultFont = fonts[1],
