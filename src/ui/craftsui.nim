@@ -147,12 +147,12 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       set craftframe [ttk::frame $craftcanvas.craft]
       set newtab recipes
       grid [ttk::frame $craftframe.tabs]
-      grid [ttk::radiobutton $craftframe.tabs.recipes -text {Known recipes} \
+      grid [ttk::radiobutton $craftframe.tabs.recipes -text {Recipes} \
          -state selected -style Radio.Toolbutton -value recipes -variable newtab \
-         -command ShowCrafting] -padx 5
+         -command ShowCraftingTab] -padx 5
       grid [ttk::radiobutton $craftframe.tabs.orders -text {Workshops} \
          -style Radio.Toolbutton -value orders -variable newtab \
-         -command ShowCrafting] -row 0 -column 1 -padx 5
+         -command ShowCraftingTab] -row 0 -column 1 -padx 5
       grid [ttk::frame $craftframe.sframe] -sticky w
       grid [ttk::label $craftframe.sframe.searchlabel -text {Name:}]
       tooltip::tooltip $craftframe.sframe.searchlabel \
@@ -935,6 +935,25 @@ proc showRecipeInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = recipeDialog, relativeX = 0.2, relativeY = 0.1)
   return tclOk
 
+proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [
+    RootEffect], cdecl.} =
+  ## Show the list of known recipes or information about workshops
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ShowCraftingTab
+  if argc == 1:
+    return showCraftingCommand(clientData = clientData, interp = interp,
+        argc = 2, argv = @["ShowCrafting", "0"].allocCStringArray)
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect].} =
   ## Adds Tcl commands related to the crew UI
@@ -944,5 +963,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand("ShowSetRecipe", showSetRecipeCommand)
     addCommand("SetCrafting", setCraftingCommand)
     addCommand("ShowRecipeInfo", showRecipeInfoCommand)
+    addCommand("ShowCraftingTab", showCraftingTabCommand)
   except:
     showError(message = "Can't add a Tcl command.")
