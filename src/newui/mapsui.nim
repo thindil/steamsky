@@ -425,7 +425,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
-      x = (windowWidth - 240), y = 5, w = 230, h = 300):
+      x = (windowWidth - 240), y = 5, w = 230, h = 350):
     layoutStatic(height = 25, cols = 4):
       row(width = 20):
         label(str = "X:")
@@ -479,57 +479,46 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
                 row(width = 130):
                   case skyBases[baseIndex].population
                   of 1..149:
-                      colorLabel(str = "small", color = theme.colors[27])
+                    colorLabel(str = "small", color = theme.colors[27])
                   of 150..299:
-                      colorLabel(str = "medium", color = theme.colors[27])
+                    colorLabel(str = "medium", color = theme.colors[27])
                   else:
-                      colorLabel(str = "large", color = theme.colors[27])
-            row(width = 60):
-              label(str = "Size:")
-            row(width = 170):
-              colorLabel(str = $skyBases[baseIndex].size, color = theme.colors[27])
-#            if skyBases[baseIndex].population > 0:
-#              insertText(newText = "Owner: ")
-#              try:
-#                insertText(newText = factionsList[skyBases[baseIndex].owner].name,
-#                    tagName = "yellow2")
-#              except:
-#                showError(message = "Can't get the name of the owner's faction.")
-#                return
-#            else:
-#              insertText(newText = "Base is abandoned")
-#            if skyBases[baseIndex].population > 0:
-#              var
-#                baseInfoText: string = "\n"
-#                color: string = ""
-#              case skyBases[baseIndex].reputation.level
-#              of -100.. -75:
-#                baseInfoText &= "You are hated here"
-#                color = "red"
-#              of -74.. -50:
-#                baseInfoText &= "You are outlawed here"
-#                color = "red"
-#              of -49.. -25:
-#                baseInfoText &= "You are disliked here"
-#                color = "red"
-#              of -24.. -1:
-#                baseInfoText &= "They are unfriendly to you"
-#                color = "red"
-#              of 0:
-#                baseInfoText &= "You are unknown here"
-#              of 1..25:
-#                baseInfoText &= "You are know here as visitor"
-#                color = "green"
-#              of 26..50:
-#                baseInfoText &= "You are know here as trader"
-#                color = "green"
-#              of 51..75:
-#                baseInfoText &= "You are know here as friend"
-#                color = "green"
-#              of 76..100:
-#                baseInfoText &= "You are well known here"
-#                color = "green"
-#              insertText(newText = baseInfoText, tagName = color)
+                    colorLabel(str = "large", color = theme.colors[27])
+              row(width = 60):
+                label(str = "Size:")
+              row(width = 170):
+                colorLabel(str = $skyBases[baseIndex].size,
+                    color = theme.colors[27])
+              if skyBases[baseIndex].population > 0:
+                row(width = 70):
+                  label(str = "Owner:")
+                row(width = 160):
+                  colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
+                      color = theme.colors[27])
+              else:
+                row(width = 230):
+                  label(str = "Base is abandoned")
+          setLayoutRowDynamic(height = 25, cols = 1)
+          if skyBases[baseIndex].population > 0:
+            case skyBases[baseIndex].reputation.level
+            of -100.. -75:
+              colorLabel(str = "You are hated here", color = theme.colors[28])
+            of -74.. -50:
+              colorLabel(str = "You are outlawed here", color = theme.colors[28])
+            of -49.. -25:
+              colorLabel(str = "You are disliked here", color = theme.colors[28])
+            of -24.. -1:
+              colorLabel(str = "They are unfriendly to you", color = theme.colors[28])
+            of 0:
+              colorLabel(str = "You are unknown here", color = theme.colors[27])
+            of 1..25:
+              colorLabel(str = "You are know here as visitor", color = theme.colors[2])
+            of 26..50:
+              colorLabel(str = "You are know here as trader", color = theme.colors[2])
+            of 51..75:
+              colorLabel(str = "You are know here as friend", color = theme.colors[2])
+            of 76..100:
+              colorLabel(str = "You are well known here", color = theme.colors[2])
 #            if baseIndex == playerShip.homeBase:
 #              insertText(newText = "\nIt is your home base", tagName = "cyan")
   nuklearSetDefaultFont(defaultFont = fonts[1],
