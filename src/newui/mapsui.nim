@@ -701,22 +701,22 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addTooltip(bounds = getWidgetBounds(),
         text = "Make the map smaller by one row.")
   labelButton(title = "\u25b2"):
-    discard
+    gameSettings.messagesPosition += height
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Make the map bigger by one row.")
   labelButton(title = "\u25bc"):
-    discard
+    gameSettings.messagesPosition -= height
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Zoom in the map.")
   labelButton(title = "+"):
-    discard
+    gameSettings.mapFontSize += 2
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Zoom out the map.")
   labelButton(title = "-"):
-    discard
+    gameSettings.mapFontSize -= 2
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Show the map movement menu.")
