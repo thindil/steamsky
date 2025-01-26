@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[os, parsecfg, streams, strutils, tables, unicode]
+import contracts
 import ../[config, game, tk]
 import coreui, errordialog
 
@@ -384,7 +385,7 @@ let
     ## The default game'st theme
 
 proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
-    ReadDirEffect, ReadIOEffect, RootEffect].} =
+    ReadDirEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load all data of the game themes
   var theme = defaultTheme
   themesList["steamsky"] = theme
@@ -673,7 +674,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     gameSettings.interfaceTheme = "steamsky"
 
 proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Load all images of the current game theme
   const imagesNames = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
@@ -745,7 +746,8 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       "::LoadImages {" & theme.fileName.parentDir & "} " & $(
       gameSettings.interfaceFontSize + 8))
 
-proc setTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc setTheme*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Set images and buttons for the current game theme
   loadThemeImages()
   tclEval(script = gameHeader & ".fuel configure -image fuelicon")
