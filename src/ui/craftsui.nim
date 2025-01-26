@@ -949,6 +949,25 @@ proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowCraftingTab
+  let
+    craftCanvas = mainPaned & ".craftframe.canvas"
+    craftFrame = craftCanvas & ".craft"
+  if tclGetVar(varName = "newtab") == "recipes":
+    var frame = craftFrame & ".orders"
+    tclEval(script = "grid remove " & frame)
+    frame = craftFrame & ".orders"
+    tclEval(script = "grid " & frame)
+  else:
+    var frame = craftFrame & ".recipes"
+    tclEval(script = "grid remove " & frame)
+    frame = craftFrame & ".orders"
+    tclEval(script = "grid " & frame)
+  tclEval(script = craftCanvas & " delete all")
+  tclEval(script = craftCanvas & " create window 0 0 -anchor nw -window " & craftFrame)
+  tclEval(script = "update")
+  tclEval(script = craftCanvas & " configure -scrollregion [list " &
+      tclEval2(script = craftCanvas & " bbox all") & "]")
+  tclSetResult(value = "1")
   if argc == 1:
     return showCraftingCommand(clientData = clientData, interp = interp,
         argc = 2, argv = @["ShowCrafting", "0"].allocCStringArray)
