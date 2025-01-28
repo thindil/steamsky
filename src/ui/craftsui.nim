@@ -153,22 +153,23 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       grid [ttk::radiobutton $craftframe.tabs.orders -text {Workshops} \
          -style Radio.Toolbutton -value orders -variable newtab \
          -command ShowCraftingTab] -row 0 -column 1 -padx 5
-      grid [ttk::frame $craftframe.sframe] -sticky w
-      grid [ttk::label $craftframe.sframe.searchlabel -text {Name:}]
-      tooltip::tooltip $craftframe.sframe.searchlabel \
+      set craftframe2 [ttk::frame $craftframe.recipes]
+      grid [ttk::frame $craftframe2.sframe] -sticky w
+      grid [ttk::label $craftframe2.sframe.searchlabel -text {Name:}]
+      tooltip::tooltip $craftframe2.sframe.searchlabel \
          {Search for the selected recipe.}
-      grid [ttk::entry $craftframe.sframe.search -validate key \
+      grid [ttk::entry $craftframe2.sframe.search -validate key \
          -validatecommand {ShowCrafting 1 %P} -width 30] -sticky w -row 0 -column 1
-      tooltip::tooltip $craftframe.sframe.search {Search for the selected recipe.}
-      grid [ttk::label $craftframe.sframe.showlabel -text {Show:}]
-      tooltip::tooltip $craftframe.sframe.showlabel \
+      tooltip::tooltip $craftframe2.sframe.search {Search for the selected recipe.}
+      grid [ttk::label $craftframe2.sframe.showlabel -text {Show:}]
+      tooltip::tooltip $craftframe2.sframe.showlabel \
          {Show only the selected type of recipes.}
-      grid [ttk::combobox $craftframe.sframe.show \
+      grid [ttk::combobox $craftframe2.sframe.show \
          -values [list {All} {Craftable only} {Non-craftable only}] -width 15 -state readonly] \
          -sticky w -row 1 -column 1
-      tooltip::tooltip $craftframe.sframe.show {Show only the selected type of recipes.}
-      $craftframe.sframe.show current 0
-      bind $craftframe.sframe.show <<ComboboxSelected>> {ShowCrafting 1}
+      tooltip::tooltip $craftframe2.sframe.show {Show only the selected type of recipes.}
+      $craftframe2.sframe.show current 0
+      bind $craftframe2.sframe.show <<ComboboxSelected>> {ShowCrafting 1}
       SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
       SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
     """)
@@ -203,14 +204,14 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     for recipe in deconstructs:
       recipesIndexes.add(y = $recipe)
   if recipesTable.rowHeight == 0:
-    recipesTable = createTable(parent = craftsCanvas & ".craft", headers = @[
+    recipesTable = createTable(parent = craftsCanvas & ".craft.recipes", headers = @[
         "Name", "Workshop", "Tools", "Materials"], scrollbar = craftsFrame &
         ".scrolly", command = "SortCrafting",
         tooltipText = "Press mouse button to sort the crafting recipes.")
   else:
     recipesTable.clearTable
   let
-    typeBox = craftsCanvas & ".craft.sframe.show"
+    typeBox = craftsCanvas & ".craft.recipes.sframe.show"
     showType = try:
         tclEval2(script = typeBox & " current").parseInt + 1
       except:
@@ -349,6 +350,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = craftsCanvas & " configure -scrollregion [list " & tclEval2(
       script = craftsCanvas & " bbox all") & "]")
   showScreen(newScreenName = "craftframe")
+  tclEval(script = "ShowCraftingTab show")
   tclSetResult(value = "1")
   return tclOk
 
@@ -955,7 +957,7 @@ proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclGetVar(varName = "newtab") == "recipes":
     var frame = craftFrame & ".orders"
     tclEval(script = "grid remove " & frame)
-    frame = craftFrame & ".orders"
+    frame = craftFrame & ".recipes"
     tclEval(script = "grid " & frame)
   else:
     var frame = craftFrame & ".recipes"
