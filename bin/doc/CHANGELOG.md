@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when starting a new game with random goal
+
 ## [10.7] - 2025-01-12
 
 ### Changed
