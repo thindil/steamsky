@@ -530,16 +530,15 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
 
 var showMenu: bool = false
 
-proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [],
+proc showMapMenu() {.raises: [NuklearException], tags: [],
     contractual.} =
   ## Show the map's menu
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog. It is modified if any error
-  ## happened.
-  if not showMenu:
-    return
+  popup(pType = staticPopup, title = "Move map", flags = {windowNoScrollbar},
+      x = windowWidth.float / 2.0, y = windowHeight.float / 2.0, w = 100, h = 300):
+    setLayoutRowDynamic(35, 1)
+    labelButton("Close"):
+      showMenu = false
+      closePopup()
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -738,7 +737,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
     showMenu = not showMenu
-    showMapMenu(dialog = dialog)
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
+  if showMenu:
+    try:
+      showMapMenu()
+    except:
+      dialog = setError(message = "Can't show the move map menu")
+      return
   state = map
