@@ -390,8 +390,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme = defaultTheme
   themesList["steamsky"] = theme
   try:
-    for themeDir in walkDirs(themesDirectory):
-      for configName in walkPattern(themeDir & DirSep & "*.cfg"):
+    for themeDir in walkDirs(pattern = themesDirectory):
+      for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile = newFileStream(filename = configName, mode = fmRead)
         if configFile == nil:
           continue
@@ -415,31 +415,38 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
               of "FileName":
                 theme.fileName = themeDir & DirSep & entry.value
               of "EnemyShipIcon":
-                theme.enemyShipIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.enemyShipIcon = fromHex[int32](
+                    s = entry.value).Rune.toUTF8
               of "attackOnBaseIcon":
-                theme.attackOnBaseIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.attackOnBaseIcon = fromHex[int32](
+                    s = entry.value).Rune.toUTF8
               of "DiseaseIcon":
-                theme.diseaseIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.diseaseIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "DoublePriceIcon":
-                theme.doublePriceIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.doublePriceIcon = fromHex[int32](
+                    s = entry.value).Rune.toUTF8
               of "FullDocksIcon":
-                theme.fullDocksIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.fullDocksIcon = fromHex[int32](
+                    s = entry.value).Rune.toUTF8
               of "EnemyPatrolIcon":
-                theme.enemyPatrolIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.enemyPatrolIcon = fromHex[int32](
+                    s = entry.value).Rune.toUTF8
               of "TraderIcon":
-                theme.traderIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.traderIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "FriendlyShipIcon":
-                theme.friendlyShipIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.friendlyShipIcon = fromHex[int32](
+                    s = entry.value).Rune.toUTF8
               of "DeliverIcon":
-                theme.deliverIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.deliverIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "DestroyIcon":
-                theme.destroyIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.destroyIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "PatrolIcon":
-                theme.patrolIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.patrolIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "ExploreIcon":
-                theme.exploreIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.exploreIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "PassengerIcon":
-                theme.passengerIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.passengerIcon = fromHex[int32](
+                    s = entry.value).Rune.toUTF8
               of "PilotIcon":
                 theme.pilotIcon = entry.value.unixToNativePath
               of "EngineerIcon":
@@ -490,13 +497,13 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.lowDrinksIcon = entry.value.unixToNativePath
               of "NotVisitedBaseIcon":
                 theme.notVisitedBaseIcon = fromHex[int32](
-                    entry.value).Rune.toUTF8
+                    s = entry.value).Rune.toUTF8
               of "EmptyMapIcon":
-                theme.emptyMapIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.emptyMapIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "TargetIcon":
-                theme.targetIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.targetIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "StoryIcon":
-                theme.storyIcon = fromHex[int32](entry.value).Rune.toUTF8
+                theme.storyIcon = fromHex[int32](s = entry.value).Rune.toUTF8
               of "OverloadedIcon":
                 theme.overloadedIcon = entry.value.unixToNativePath
               of "ArrowUpIcon":
