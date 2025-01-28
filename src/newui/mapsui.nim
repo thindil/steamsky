@@ -501,28 +501,45 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         setLayoutRowDynamic(height = 25, cols = 1)
         if skyBases[baseIndex].population > 0:
           case skyBases[baseIndex].reputation.level
-          of -100.. -75:
+          of -100 .. -75:
             colorLabel(str = "You are hated here", color = theme.mapColors[5])
-          of -74.. -50:
+          of -74 .. -50:
             colorLabel(str = "You are outlawed here", color = theme.mapColors[5])
-          of -49.. -25:
+          of -49 .. -25:
             colorLabel(str = "You are disliked here", color = theme.mapColors[5])
-          of -24.. -1:
-            colorLabel(str = "They are unfriendly to you", color = theme.mapColors[5])
+          of -24 .. -1:
+            colorLabel(str = "They are unfriendly to you",
+                color = theme.mapColors[5])
           of 0:
             colorLabel(str = "You are unknown here", color = theme.mapColors[11])
           of 1..25:
-            colorLabel(str = "You are know here as visitor", color = theme.mapColors[3])
+            colorLabel(str = "You are know here as visitor",
+                color = theme.mapColors[3])
           of 26..50:
-            colorLabel(str = "You are know here as trader", color = theme.mapColors[3])
+            colorLabel(str = "You are know here as trader",
+                color = theme.mapColors[3])
           of 51..75:
-            colorLabel(str = "You are know here as friend", color = theme.mapColors[3])
+            colorLabel(str = "You are know here as friend",
+                color = theme.mapColors[3])
           of 76..100:
             colorLabel(str = "You are well known here", color = theme.mapColors[3])
         if baseIndex == playerShip.homeBase:
           colorLabel(str = "It is your home base", color = theme.mapColors[7])
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
+
+var showMenu: bool = false
+
+proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
+  ## Show the map's menu
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  if not showMenu:
+    return
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -718,10 +735,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   labelButton(title = "-"):
     gameSettings.mapFontSize -= 2
   if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Show the map movement menu.")
+    addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
-    discard
+    showMenu = not showMenu
+    showMapMenu(dialog = dialog)
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   state = map
