@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -418,7 +418,10 @@ proc newGameCommand(clientData: cint; interp: PInterp; argc: cint;
     currentGoal = try:
         goalsList[getRandom(min = 1, max = goalsList.len)]
       except:
-        return showError(message = "Can't set the current goal.")
+        try:
+          goalsList[getRandom(min = 1, max = goalsList.len)]
+        except:
+          return showError(message = "Can't set the current goal.")
   var textEntry: string = playerFrameName & ".playername"
   newGameSettings.playerName = tclEval2(script = textEntry & " get")
   textEntry = playerFrameName & ".shipname"

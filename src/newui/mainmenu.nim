@@ -909,8 +909,11 @@ proc startGame(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     currentGoal = try:
         goalsList[getRandom(min = 1, max = goalsList.len)]
       except:
-        dialog = setError(message = "Can't set the current goal.")
-        return
+        try:
+          goalsList[getRandom(min = 1, max = goalsList.len)]
+        except:
+          dialog = setError(message = "Can't set the current goal.")
+          return
   newGameSettings.playerName = playerName
   newGameSettings.shipName = shipName
   if currentFaction == playerFactions.high:
