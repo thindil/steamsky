@@ -744,5 +744,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showMapMenu()
     except:
       dialog = setError(message = "Can't show the move map menu")
+      showMenu = false
       return
   state = map
