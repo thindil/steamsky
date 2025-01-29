@@ -24,7 +24,7 @@ import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
 import coreui, errordialog, themes, utilsui2
 
-const iconsAmount: Positive = 25
+const iconsAmount: Positive = 33
 
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
@@ -536,7 +536,28 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} 
   ## Returns the modified parameters dialog.
   window(name = "Move map", x = windowWidth.float / 4.0, y = windowHeight.float / 4.0, w = 300, h = 300,
       flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
+    setLayoutRowStatic(height = 35, width = 35, cols = 3)
+    imageButton(image = mapImages[25]):
+      discard
+    imageButton(image = mapImages[26]):
+      discard
+    imageButton(image = mapImages[27]):
+      discard
+    setLayoutRowStatic(height = 35, width = 35, cols = 2)
+    imageButton(image = mapImages[28]):
+      discard
+    imageButton(image = mapImages[29]):
+      discard
+    setLayoutRowStatic(height = 35, width = 35, cols = 3)
+    imageButton(image = mapImages[30]):
+      discard
+    imageButton(image = mapImages[31]):
+      discard
+    imageButton(image = mapImages[32]):
+      discard
     setLayoutRowDynamic(35, 1)
+    label(str = "X:")
+    label(str = "Y:")
     labelButton("Close"):
       dialog = none
 
