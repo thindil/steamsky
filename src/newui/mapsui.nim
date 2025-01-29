@@ -528,15 +528,23 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
 
-proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+var
+  moveX: MapXRange = 1
+  moveY: MapYRange = 1
+
+proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Show the map's menu
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog.
-  window(name = "Move map", x = windowWidth.float / 4.0, y = windowHeight.float / 4.0, w = 300, h = 280,
-      flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
-    setLayoutRowStatic(height = 35, width = 35, cols = 4)
+  window(name = "Move map", x = windowWidth.float / 4.0,
+      y = windowHeight.float / 4.0, w = 300, h = 295,
+
+flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable,
+          windowNoScrollbar}):
+    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
     imageButton(image = mapImages[25]):
       discard
     imageButton(image = mapImages[26]):
@@ -544,13 +552,17 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} 
     imageButton(image = mapImages[27]):
       discard
     label(str = "X:")
-    setLayoutRowStatic(height = 35, width = 35, cols = 3)
+    property(name = "#", min = MapXRange.low, val = moveX, max = MapXRange.high,
+        step = 1, incPerPixel = 1)
     imageButton(image = mapImages[28]):
       discard
+    label(str = "")
     imageButton(image = mapImages[29]):
       discard
     label(str = "Y:")
-    setLayoutRowStatic(height = 35, width = 35, cols = 4)
+    property(name = "#", min = MapYRange.low, val = moveY, max = MapYRange.high,
+        step = 1, incPerPixel = 1)
+    setLayoutRowStatic(height = 35, cols = 4, ratio = [35.cfloat, 35, 35, 170])
     imageButton(image = mapImages[30]):
       discard
     imageButton(image = mapImages[31]):
