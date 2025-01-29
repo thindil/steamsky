@@ -528,17 +528,17 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
 
-var showMenu: bool = false
-
-proc showMapMenu() {.raises: [NuklearException], tags: [],
-    contractual.} =
+proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the map's menu
-  popup(pType = staticPopup, title = "Move map", flags = {windowNoScrollbar},
-      x = windowWidth.float / 2.0, y = windowHeight.float / 2.0, w = 100, h = 300):
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  window(name = "Move map", x = windowWidth.float / 4.0, y = windowHeight.float / 4.0, w = 300, h = 300,
+      flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
     setLayoutRowDynamic(35, 1)
     labelButton("Close"):
-      showMenu = false
-      closePopup()
+      dialog = none
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -736,14 +736,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
-    showMenu = not showMenu
+    if dialog == none:
+      dialog = mapMenuDialog
+    elif dialog == mapMenuDialog:
+      dialog = none
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
-  if showMenu:
-    try:
-      showMapMenu()
-    except:
-      dialog = setError(message = "Can't show the move map menu")
-      showMenu = false
-      return
   state = map

@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -131,10 +131,11 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
       newGame: mainMenu.newGame, map: showMap]
-  const showDialog: array[GameDialog.errorDialog..GameDialog.newGoalDialog,
+  const showDialog: array[GameDialog.errorDialog..mapMenuDialog,
       proc (dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
-      questionDialog: showQuestion, newGoalDialog: showGoals]
+      questionDialog: showQuestion, newGoalDialog: showGoals,
+      mapMenuDialog: showMapMenu]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -168,7 +169,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
       # Dialogs if needed
       case dialog
-      of GameDialog.errorDialog..newGoalDialog:
+      of GameDialog.errorDialog..mapMenuDialog:
         # Show the dialog
         showDialog[dialog](dialog = dialog)
       of loading:

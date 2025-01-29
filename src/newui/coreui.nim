@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -27,7 +27,7 @@ type GameState* = enum
 
 type GameDialog* = enum
     ## Used to show any in-game dialog window
-    none, loading, errorDialog, loadMenu, questionDialog, newGoalDialog
+    none, loading, errorDialog, loadMenu, questionDialog, newGoalDialog, mapMenuDialog
 
 const
     dtime*: float = 20.0 ## The length in miliseconds of one game's frame
