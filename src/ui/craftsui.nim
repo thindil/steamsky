@@ -110,7 +110,7 @@ var
   studies: seq[Positive]
   deconstructs: seq[Positive]
   recipesIndexes: seq[string]
-  recipesTable: TableWidget
+  recipesTable, ordersTable: TableWidget
 
 proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -170,6 +170,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       tooltip::tooltip $craftframe2.sframe.show {Show only the selected type of recipes.}
       $craftframe2.sframe.show current 0
       bind $craftframe2.sframe.show <<ComboboxSelected>> {ShowCrafting 1}
+      ttk::frame $craftframe.orders
       SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
       SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
     """)
@@ -204,8 +205,9 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     for recipe in deconstructs:
       recipesIndexes.add(y = $recipe)
   if recipesTable.rowHeight == 0:
-    recipesTable = createTable(parent = craftsCanvas & ".craft.recipes", headers = @[
-        "Name", "Workshop", "Tools", "Materials"], scrollbar = craftsFrame &
+    recipesTable = createTable(parent = craftsCanvas & ".craft.recipes",
+        headers = @["Name", "Workshop", "Tools", "Materials"],
+            scrollbar = craftsFrame &
         ".scrolly", command = "SortCrafting",
         tooltipText = "Press mouse button to sort the crafting recipes.")
   else:
@@ -340,6 +342,13 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         0: " {" & recipeName & "}" else: ""))
   updateTable(table = recipesTable, grabFocus = not (tclEval2(
       script = "focus") == searchEntry))
+  if ordersTable.rowHeight == 0:
+    ordersTable = createTable(parent = craftsCanvas & ".craft.orders",
+        headers = @["Name", "Workshop", "Worker"],
+        scrollbar = craftsFrame & ".scrolly", command = "SortCrafting2",
+        tooltipText = "Press mouse button to sort the crafting orders.")
+  else:
+    ordersTable.clearTable
   craftsFrame = craftsCanvas & ".craft"
   tclEval(script = craftsCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
