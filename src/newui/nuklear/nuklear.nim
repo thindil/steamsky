@@ -805,7 +805,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     let
       layout: PNkPanel = win.layout
       `out`: nk_command_buffer = win.buffer
-      `in`: nk_input = (if (win.flags and NK_WINDOW_NO_INPUT.cint) ==
+    var `in`: nk_input = (if (win.flags and NK_WINDOW_NO_INPUT.cint) ==
           1: nk_input() else: ctx.input)
     when defined(nkIncludeCommandUserdata):
       win.buffer.userdata = ctx.userdata
@@ -827,14 +827,16 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       else:
         header.h = panelPadding.y
       # window movement by dragging
+      var buttons: ButtonsArray = cast[ButtonsArray](`in`.mouse.buttons)
       let
-        buttons: ButtonsArray = cast[ButtonsArray](`in`.mouse.buttons)
         leftMouseDown: bool = buttons[NK_BUTTON_LEFT].down
         leftMouseClicked: bool = buttons[NK_BUTTON_LEFT].clicked == 1
-        leftMouseClickInCursor: bool = hasMouseClickDownInRect(id = left, rect = header, down = nk_true)
+        leftMouseClickInCursor: bool = hasMouseClickDownInRect(id = left, rect = header, down = nkTrue)
       if leftMouseDown and leftMouseClickInCursor and not leftMouseClicked:
         win.bounds.x += `in`.mouse.delta.x
         win.bounds.y += `in`.mouse.delta.y
+        buttons[NK_BUTTON_LEFT].clicked_pos.x += `in`.mouse.delta.x
+      `in`.mouse.buttons = buttons.addr
     return true
 {.pop ruleOn: "params".}
 
