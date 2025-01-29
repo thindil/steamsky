@@ -534,30 +534,36 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} 
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog.
-  window(name = "Move map", x = windowWidth.float / 4.0, y = windowHeight.float / 4.0, w = 300, h = 300,
+  window(name = "Move map", x = windowWidth.float / 4.0, y = windowHeight.float / 4.0, w = 300, h = 280,
       flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
-    setLayoutRowStatic(height = 35, width = 35, cols = 3)
+    setLayoutRowStatic(height = 35, width = 35, cols = 4)
     imageButton(image = mapImages[25]):
       discard
     imageButton(image = mapImages[26]):
       discard
     imageButton(image = mapImages[27]):
       discard
-    setLayoutRowStatic(height = 35, width = 35, cols = 2)
+    label(str = "X:")
+    setLayoutRowStatic(height = 35, width = 35, cols = 3)
     imageButton(image = mapImages[28]):
       discard
     imageButton(image = mapImages[29]):
       discard
-    setLayoutRowStatic(height = 35, width = 35, cols = 3)
+    label(str = "Y:")
+    setLayoutRowStatic(height = 35, width = 35, cols = 4)
     imageButton(image = mapImages[30]):
       discard
     imageButton(image = mapImages[31]):
       discard
     imageButton(image = mapImages[32]):
       discard
+    labelButton("Move map"):
+      dialog = none
     setLayoutRowDynamic(35, 1)
-    label(str = "X:")
-    label(str = "Y:")
+    labelButton("Center map on ship"):
+      dialog = none
+    labelButton("Center map on home base"):
+      dialog = none
     labelButton("Close"):
       dialog = none
 
