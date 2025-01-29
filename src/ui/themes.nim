@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's themes' system, like default theme,
+## loading them from files, setting images, etc.
+
 import std/[os, parsecfg, streams, strutils, tables, unicode]
 import contracts
 import ../[config, game, tk]
