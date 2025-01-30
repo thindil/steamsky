@@ -832,10 +832,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         leftMouseDown: bool = buttons[NK_BUTTON_LEFT].down
         leftMouseClicked: bool = buttons[NK_BUTTON_LEFT].clicked == 1
         leftMouseClickInCursor: bool = hasMouseClickDownInRect(id = left, rect = header, down = nkTrue)
+        cursors: CursorsArray = cast[CursorsArray](ctx.style.cursors)
       if leftMouseDown and leftMouseClickInCursor and not leftMouseClicked:
         win.bounds.x += `in`.mouse.delta.x
         win.bounds.y += `in`.mouse.delta.y
         buttons[NK_BUTTON_LEFT].clicked_pos.x += `in`.mouse.delta.x
+        buttons[NK_BUTTON_LEFT].clicked_pos.y += `in`.mouse.delta.y
+        ctx.style.cursor_active = cursors[NK_CURSOR_MOVE]
       `in`.mouse.buttons = buttons.addr
     return true
 {.pop ruleOn: "params".}

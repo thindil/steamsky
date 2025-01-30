@@ -162,6 +162,16 @@ type
     NK_BUTTON_RIGHT,
     NK_BUTTON_DOUBLE,
     NK_BUTTON_MAX
+  nk_style_cursor* = enum
+    ## Internal Nuklear type
+    NK_CURSOR_ARROW,
+    NK_CURSOR_TEXT,
+    NK_CURSOR_MOVE,
+    NK_CURSOR_RESIZE_VERTICAL,
+    NK_CURSOR_RESIZE_HORIZONTAL,
+    NK_CURSOR_RESIZE_TOP_LEFT_DOWN_RIGHT,
+    NK_CURSOR_RESIZE_TOP_RIGHT_DOWN_LEFT,
+    NK_CURSOR_COUNT
 
 # -------
 # Objects
@@ -225,12 +235,16 @@ type
   nk_style_text* {.importc: "struct nk_style_text", nodecl.} = object
     ## Internal Nuklear type
     padding*: nk_vec2
+  nk_cursor* {.importc: "struct nk_cursor", nodecl.} = object
+    ## Internal Nuklear type
   nk_style* {.importc, nodecl.} = object
     ## Internal Nuklear type
     window*: nk_style_window
     button*: nk_style_button
     font*: ptr nk_user_font
     text*: nk_style_text
+    cursor_active*: nk_cursor
+    cursors*: pointer
   nk_mouse_button* {.importc: "struct nk_mouse_button", nodecl.} = object
     ## Internal Nuklear type
     down*: nk_bool
@@ -357,6 +371,8 @@ type
   PNkPanel* = ptr nk_panel
     ## Pointer to nk_panel structure
   ButtonsArray* = array[NK_BUTTON_MAX, nk_mouse_button]
+    ## The array of mouse buttons
+  CursorsArray* = array[NK_CURSOR_COUNT, nk_cursor]
     ## The array of mouse buttons
 
 # ---------
