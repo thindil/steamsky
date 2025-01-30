@@ -539,11 +539,16 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog.
-  window(name = "Move map", x = windowWidth.float / 4.0,
-      y = windowHeight.float / 4.0, w = 300, h = 295,
 
-flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable,
-          windowNoScrollbar}):
+  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+    ## Close the menu, reset the position form
+    moveX = 1
+    moveY = 1
+    dialog = none
+
+  window(name = "Move map", x = windowWidth.float / 4.0,
+      y = windowHeight - 300, w = 300, h = 295, flags = {windowBorder,
+      windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
     setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
     imageButton(image = mapImages[25]):
       discard
@@ -570,14 +575,16 @@ flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable,
     imageButton(image = mapImages[32]):
       discard
     labelButton("Move map"):
-      dialog = none
+      centerX = moveX
+      centerY = moveY
+      closeMapMenu(dialog = dialog)
     setLayoutRowDynamic(35, 1)
     labelButton("Center map on ship"):
-      dialog = none
+      closeMapMenu(dialog = dialog)
     labelButton("Center map on home base"):
-      dialog = none
+      closeMapMenu(dialog = dialog)
     labelButton("Close"):
-      dialog = none
+      closeMapMenu(dialog = dialog)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
