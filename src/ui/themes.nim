@@ -273,12 +273,13 @@ type ThemeRecord* = object
   mapArrowDownIcon*: string
   mapArrowDownRightIcon*: string
 
-var themesList*: Table[string, ThemeRecord] ## The list of all available themes
+var themesList*: Table[string, ThemeRecord] = initTable[string, ThemeRecord]()
+  ## The list of all available themes
 
 let
-  defaultThemeIconPath = dataDirectory & "ui" & DirSep & "images" & DirSep &
+  defaultThemeIconPath: string = dataDirectory & "ui" & DirSep & "images" & DirSep &
       "ui" & DirSep ## The path to the default theme's icons
-  defaultTheme = ThemeRecord(name: "Default theme", fileName: dataDirectory &
+  defaultTheme: ThemeRecord = ThemeRecord(name: "Default theme", fileName: dataDirectory &
       DirSep & "ui" & DirSep & "theme.tcl", enemyShipIcon: "\uf51c",
       attackOnBaseIcon: "\uf543", diseaseIcon: "\uf5a6",
       doublePriceIcon: "\uf0d6", fullDocksIcon: "\uf057",
@@ -390,15 +391,15 @@ let
 proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadDirEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load all data of the game themes
-  var theme = defaultTheme
+  var theme: ThemeRecord = defaultTheme
   themesList["steamsky"] = theme
   try:
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
-        var configFile = newFileStream(filename = configName, mode = fmRead)
+        var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
         if configFile == nil:
           continue
-        var parser: CfgParser
+        var parser: CfgParser = CfgParser()
         try:
           parser.open(input = configFile, filename = configName)
         except OSError, IOError, Exception:
@@ -407,7 +408,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
           return
         while true:
           try:
-            let entry = parser.next()
+            let entry: CfgEvent = parser.next()
             case entry.kind
             of cfgEof:
               break
@@ -686,7 +687,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
 proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Load all images of the current game theme
-  const imagesNames = ["piloticon", "engineericon", "gunnericon",
+  const imagesNames: array[97, string] = ["piloticon", "engineericon", "gunnericon",
       "crewtradericon", "repairicon", "norepairicon", "repairordericon",
       "upgradeicon", "noupgradeicon", "cleanicon", "nocleanicon",
       "cleanordericon", "manufactureicon", "nocrafticon", "nofuelicon",
@@ -710,12 +711,12 @@ proc loadThemeImages*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       "maparrowuprighticon", "maparrowupicon", "maparrowlefticon",
       "maparrowrighticon", "maparrowdownlefticon", "maparrowdownicon", "maparrowdownrighticon"]
   let
-    theme = try:
+    theme: ThemeRecord = try:
         themesList[gameSettings.interfaceTheme]
       except:
         showError(message = "Can't find theme '" & gameSettings.interfaceTheme & "'")
         return
-    imagesFiles = [theme.pilotIcon, theme.engineerIcon, theme.gunnerIcon,
+    imagesFiles: array[97, string] = [theme.pilotIcon, theme.engineerIcon, theme.gunnerIcon,
         theme.crewTraderIcon, theme.repairIcon, theme.noRepairIcon,
         theme.repairOrderIcon, theme.upgradeIcon, theme.noUpgradeIcon,
         theme.cleanIcon, theme.noCleanIcon, theme.cleanOrderIcon,
