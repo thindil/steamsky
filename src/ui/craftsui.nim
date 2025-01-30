@@ -171,6 +171,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       $craftframe2.sframe.show current 0
       bind $craftframe2.sframe.show <<ComboboxSelected>> {ShowCrafting 1}
       ttk::frame $craftframe.orders
+      grid [ttk::label $craftframe.orders.orders]
       SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
       SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
     """)
@@ -342,9 +343,20 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         0: " {" & recipeName & "}" else: ""))
   updateTable(table = recipesTable, grabFocus = not (tclEval2(
       script = "focus") == searchEntry))
+  type OrderObject = object
+    name, workshop: string
+  var orders: seq[OrderObject] = @[]
+  for index, module in playerShip.modules:
+    if module.mType != workshop:
+      continue
+    try:
+      orders.add(y = OrderObject(name: getWorkshopRecipeName(workshop = index),
+          workshop: module.name))
+    except:
+      return showError(message = "Can't get a workshop's order.")
   if ordersTable.rowHeight == 0:
     ordersTable = createTable(parent = craftsCanvas & ".craft.orders",
-        headers = @["Name", "Workshop", "Worker"],
+        headers = @["Order", "Workshop", "Cancel"],
         scrollbar = craftsFrame & ".scrolly", command = "SortCrafting2",
         tooltipText = "Press mouse button to sort the crafting orders.")
   else:
