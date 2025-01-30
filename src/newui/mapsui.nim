@@ -552,7 +552,10 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
       windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
     setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
     imageButton(image = mapImages[25]):
-      discard
+      centerY = (if centerY - (rows / 3).int < 1: (rows /
+          3).int else: centerY - (rows / 3).int)
+      centerX = (if centerX - (cols / 3).int < 1: (cols /
+          3).int else: centerX - (cols / 3).int)
     imageButton(image = mapImages[26]):
       discard
     imageButton(image = mapImages[27]):
@@ -574,7 +577,10 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     imageButton(image = mapImages[31]):
       discard
     imageButton(image = mapImages[32]):
-      discard
+      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+          3).int else: centerY + (rows / 3).int)
+      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+          3).int else: centerX + (cols / 3).int)
     labelButton("Move map"):
       centerX = moveX
       centerY = moveY
