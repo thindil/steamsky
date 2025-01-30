@@ -580,8 +580,12 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
       closeMapMenu(dialog = dialog)
     setLayoutRowDynamic(35, 1)
     labelButton("Center map on ship"):
+      centerX = playerShip.skyX
+      centerY = playerShip.skyY
       closeMapMenu(dialog = dialog)
     labelButton("Center map on home base"):
+      centerX = skyBases[playerShip.homeBase].skyX
+      centerY = skyBases[playerShip.homeBase].skyY
       closeMapMenu(dialog = dialog)
     labelButton("Close"):
       closeMapMenu(dialog = dialog)
@@ -599,12 +603,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
-  let theme: ThemeData = try:
-      themesList[gameSettings.interfaceTheme]
-    except:
-      dialog = setError(message = "Can't get the game's theme.")
-      return
   let
+    theme: ThemeData = try:
+        themesList[gameSettings.interfaceTheme]
+      except:
+        dialog = setError(message = "Can't get the game's theme.")
+        return
     height: Positive = gameSettings.mapFontSize + 10
     rows: Natural = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
         height.float).floor.Natural + 4
@@ -619,7 +623,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     var
       startX: int = centerX - (cols / 2).int
       startY: int = centerY - (rows / 2).int
-    var
       endY: int = centerY + (rows / 2).floor.int
       endX: int = centerX + (cols / 2).floor.int
       storyX: int = 1
