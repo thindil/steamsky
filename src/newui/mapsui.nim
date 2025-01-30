@@ -531,25 +531,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
 var
   moveX: MapXRange = 1
   moveY: MapYRange = 1
-
-proc countMapSize(dialog: var GameDialog): tuple[rows: Positive; cols: Positive;
-    colWidth: Positive; height: Positive] {.raises: [], tags: [RootEffect],
-    contractual.} =
-  ## Count the size of the map widget
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns tuple with amount of rows, columns, columnWidth and height of the
-  ## map. Additionally, it returns the modified parameters dialog if error happens.
-  result.height = gameSettings.mapFontSize + 10
-  result.rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
-      result.height.float).floor.Natural + 4
-  result.colWidth = try:
-      getTextWidth(text = " ").Positive + 4
-    except:
-      dialog = setError(message = "Can't count map column's width.")
-      return
-  result.cols = (windowWidth / result.colWidth.float).floor.Positive + 6
+  rows, cols: Positive = 1
 
 proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
@@ -559,8 +541,7 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
   ##
   ## Returns the modified parameters dialog.
 
-  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [],
-      contractual.} =
+  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
     ## Close the menu, reset the position form
     moveX = 1
     moveY = 1
@@ -629,9 +610,15 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't get the game's theme.")
         return
-    (height, rows, colWidth, cols) = countMapSize(dialog = dialog)
-  if dialog != none:
-    return
+    height: Positive = gameSettings.mapFontSize + 10
+  rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
+        height.float).floor.Natural + 4
+  let colWidth: Positive = try:
+      getTextWidth(text = theme.mapIcons[1]).Positive + 4
+    except:
+      dialog = setError(message = "Can't count map column's width.")
+      return
+  cols = (windowWidth / colWidth.float).floor.Positive + 6
   setLayoutRowDynamic(height = (((height - 2) * rows) + 5).float, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
     var
