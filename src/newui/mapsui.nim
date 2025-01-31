@@ -541,7 +541,8 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
   ##
   ## Returns the modified parameters dialog.
 
-  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [],
+      contractual.} =
     ## Close the menu, reset the position form
     moveX = 1
     moveY = 1
@@ -552,30 +553,40 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
       windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
     setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
     imageButton(image = mapImages[25]):
-      centerY = (if centerY - (rows / 3).int < 1: (rows /
-          3).int else: centerY - (rows / 3).int)
-      centerX = (if centerX - (cols / 3).int < 1: (cols /
-          3).int else: centerX - (cols / 3).int)
+      centerY = (if centerY - (rows / 3).int < 1: (rows / 3).int else: centerY -
+          (rows / 3).int)
+      centerX = (if centerX - (cols / 3).int < 1: (cols / 3).int else: centerX -
+          (cols / 3).int)
     imageButton(image = mapImages[26]):
-      discard
+      centerY = (if centerY - (rows / 3).int < 1: (rows / 3).int else: centerY -
+          (rows / 3).int)
     imageButton(image = mapImages[27]):
-      discard
+      centerY = (if centerY - (rows / 3).int < 1: (rows / 3).int else: centerY -
+          (rows / 3).int)
+      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+          3).int else: centerX + (cols / 3).int)
     label(str = "X:")
     property(name = "#", min = MapXRange.low, val = moveX, max = MapXRange.high,
         step = 1, incPerPixel = 1)
     imageButton(image = mapImages[28]):
-      discard
+      centerX = (if centerX - (cols / 3).int < 1: (cols / 3).int else: centerX -
+          (cols / 3).int)
     label(str = "")
     imageButton(image = mapImages[29]):
-      discard
+      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+          3).int else: centerX + (cols / 3).int)
     label(str = "Y:")
     property(name = "#", min = MapYRange.low, val = moveY, max = MapYRange.high,
         step = 1, incPerPixel = 1)
     setLayoutRowStatic(height = 35, cols = 4, ratio = [35.cfloat, 35, 35, 170])
     imageButton(image = mapImages[30]):
-      discard
+      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+          3).int else: centerY + (rows / 3).int)
+      centerX = (if centerX - (cols / 3).int < 1: (cols / 3).int else: centerX -
+          (cols / 3).int)
     imageButton(image = mapImages[31]):
-      discard
+      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+          3).int else: centerY + (rows / 3).int)
     imageButton(image = mapImages[32]):
       centerY = (if centerY + (rows / 3).int > 1_024: (rows /
           3).int else: centerY + (rows / 3).int)
