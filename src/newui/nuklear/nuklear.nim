@@ -393,6 +393,15 @@ proc windowHasFocus*(): bool {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   return nk_window_has_focus(ctx = ctx)
 
+proc windowSetFocus(name: string) {.raises: [], tags: [], contractual.} =
+  ## Set the selected window as an active window
+  ##
+  ## * name - the name of the window to set as active
+  proc nk_window_set_focus(ctx; name: cstring) {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_window_set_focus(ctx = ctx, name = name.cstring)
+
 proc windowIsActive*(name: string): bool {.raises: [], tags: [], contractual.} =
   ## Check if the selected window is active
   ##
