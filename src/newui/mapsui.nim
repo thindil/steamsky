@@ -414,30 +414,30 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't create popup. Reason: " &
           getCurrentExceptionMsg())
 
-
-var
-  mapX: MapXRange = 1
-  mapY: MapYRange = 1
-  theme: ThemeData
-
-proc showMapInfo*() {.raises: [ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
+    NuklearException, ValueError], tags: [WriteIOEffect, TimeEffect,
+        RootEffect], contractual.} =
   ## Show the map cell info popup
+  ##
+  ## * x     - the X coordinate of the map cell which info will be show
+  ## * y     - the Y coordinate of the map cell which info will be show
+  ## * theme - the current game's theme
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
-  window(name = "MapInfo", flags = {windowNoScrollbar}, x = (windowWidth - 240),
-      y = 5, w = 230, h = 350):
+  popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
+      x = (windowWidth - 240), y = 5, w = 230, h = 350):
     layoutStatic(height = 25, cols = 4):
       row(width = 20):
         label(str = "X:")
       row(width = 80):
-        colorLabel(str = $mapX, color = theme.mapColors[11])
+        colorLabel(str = $x, color = theme.mapColors[11])
       row(width = 20):
         label(str = "Y:")
       row(width = 80):
-        colorLabel(str = $mapY, color = theme.mapColors[11])
-    if playerShip.skyX != mapX or playerShip.skyY != mapY:
+        colorLabel(str = $y, color = theme.mapColors[11])
+    if playerShip.skyX != x or playerShip.skyY != y:
       let
-        distance: Natural = countDistance(destinationX = mapX, destinationY = mapY)
+        distance: Natural = countDistance(destinationX = x, destinationY = y)
         travelValues: TravelArray = travelInfo(distance = distance)
       layoutStatic(height = 25, cols = 2):
         row(width = 80):
@@ -456,8 +456,8 @@ proc showMapInfo*() {.raises: [ValueError], tags: [WriteIOEffect, TimeEffect, Ro
             label(str = "Approx fuel usage:")
           row(width = 70):
             colorLabel(str = $travelValues[2], color = theme.mapColors[11])
-    if skyMap[mapX][mapY].baseIndex > 0:
-      let baseIndex: Positive = skyMap[mapX][mapY].baseIndex
+    if skyMap[x][y].baseIndex > 0:
+      let baseIndex: Positive = skyMap[x][y].baseIndex
       if skyBases[baseIndex].known:
         setLayoutRowDynamic(height = 25, cols = 1)
         colorLabel(str = "Base info:", color = theme.mapColors[12])
@@ -621,12 +621,13 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
-  theme = try:
-      themesList[gameSettings.interfaceTheme]
-    except:
-      dialog = setError(message = "Can't get the game's theme.")
-      return
-  let  height: Positive = gameSettings.mapFontSize + 10
+  let
+    theme: ThemeData = try:
+        themesList[gameSettings.interfaceTheme]
+      except:
+        dialog = setError(message = "Can't get the game's theme.")
+        return
+    height: Positive = gameSettings.mapFontSize + 10
   rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
         height.float).floor.Natural + 4
   let colWidth: Positive = try:
@@ -770,8 +771,11 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               dialog = setError(message = "Can't set map color")
               return
             if isMouseHovering(rect = getWidgetBounds()):
-              mapX = x
-              mapY = y
+              try:
+                showMapInfo(x = x, y = y, theme = theme)
+              except:
+                dialog = setError(message = "Can't show the map info")
+                return
             labelButton(title = mapChar):
               echo "map pressed"
   restoreButtonStyle()
