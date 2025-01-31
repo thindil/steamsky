@@ -343,24 +343,28 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         0: " {" & recipeName & "}" else: ""))
   updateTable(table = recipesTable, grabFocus = not (tclEval2(
       script = "focus") == searchEntry))
-  type OrderObject = object
-    name, workshop: string
-  var orders: seq[OrderObject] = @[]
+  if ordersTable.rowHeight == 0:
+    ordersTable = createTable(parent = craftsCanvas & ".craft.orders",
+        headers = @["Workshop", "Order", "Workers"],
+        scrollbar = craftsFrame & ".scrolly", command = "SortCrafting2",
+        tooltipText = "Press mouse button to sort the workshops.")
+  else:
+    ordersTable.clearTable
   for index, module in playerShip.modules:
     if module.mType != workshop:
       continue
+    addButton(table = ordersTable, text = module.name,
+        tooltip = "Change the workshop's order", command = "ChangeCraftOrder " &
+        $index, column = 1)
     try:
-      orders.add(y = OrderObject(name: getWorkshopRecipeName(workshop = index),
-          workshop: module.name))
+      let recipeName: string = getWorkshopRecipeName(workshop = index)
+      addButton(table = ordersTable, text = (if recipeName.len >
+          0: recipeName else: "Not set"),
+          tooltip = "Change the workshop's order",
+          command = "ChangeCraftOrder " & $index, column = 2, newRow = true)
     except:
-      return showError(message = "Can't get a workshop's order.")
-  if ordersTable.rowHeight == 0:
-    ordersTable = createTable(parent = craftsCanvas & ".craft.orders",
-        headers = @["Order", "Workshop", "Cancel"],
-        scrollbar = craftsFrame & ".scrolly", command = "SortCrafting2",
-        tooltipText = "Press mouse button to sort the crafting orders.")
-  else:
-    ordersTable.clearTable
+      return showError(message = "Can't get the recipe name.")
+  updateTable(table = ordersTable)
   craftsFrame = craftsCanvas & ".craft"
   tclEval(script = craftsCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
