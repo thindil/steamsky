@@ -548,7 +548,7 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     moveY = 1
     dialog = none
 
-  window(name = "Move map", x = windowWidth.float / 4.0,
+  window(name = "Move map", x = windowWidth.float / 3.0,
       y = windowHeight - 300, w = 300, h = 295, flags = {windowBorder,
       windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
     setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
@@ -777,7 +777,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 dialog = setError(message = "Can't show the map info")
                 return
             labelButton(title = mapChar):
-              discard
+              echo "map pressed"
   restoreButtonStyle()
   setLayoutRowDynamic(height = 20, cols = 5)
   if gameSettings.showTooltips:
