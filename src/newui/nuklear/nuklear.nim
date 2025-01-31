@@ -840,6 +840,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         buttons[NK_BUTTON_LEFT].clicked_pos.y += `in`.mouse.delta.y
         ctx.style.cursor_active = cursors[NK_CURSOR_MOVE]
       `in`.mouse.buttons = buttons.addr
+
+    # setup panel
+    layout.`type` = panelType
+    layout.flags = win.flags
+    layout.bounds = win.bounds
+    layout.bounds.x += panelPadding.x
+    layout.bounds.w -= (2 * panelPadding.x)
     return true
 {.pop ruleOn: "params".}
 
