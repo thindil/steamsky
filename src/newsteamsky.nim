@@ -163,6 +163,10 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         if oldState != state or oldDialog != dialog:
           redraw = true
 
+      # Map info if needed
+      if state == map:
+        showMapInfo()
+
       # Quit from the game
       if state == quitGame:
         break
