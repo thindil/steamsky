@@ -26,7 +26,8 @@ import nk_context, nk_types
 # ---------------------
 using ctx: PContext
 
-proc nk_tooltipf(ctx; fmt: cstring) {.importc, nodecl, varargs, raises: [], tags: [], contractual.}
+proc nk_tooltipf(ctx; fmt: cstring) {.importc, nodecl, varargs, raises: [],
+    tags: [], contractual.}
   ## Internal Nuklear C binding
 
 macro fmtTooltip*(args: varargs[untyped]): untyped =
@@ -58,7 +59,7 @@ var
   tooltips*: seq[TooltipData] = @[]
     ## The list of tooltips available in the window
   delay*: float = tooltipDelay
-   ## The current delay before show a tooltip, when reached 0, show a tooltip
+    ## The current delay before show a tooltip, when reached 0, show a tooltip
 
 proc setTooltips*(tDelay, fDelay: float) {.raises: [], tags: [], contractual.} =
   ## Set the tooltips configuration
@@ -73,7 +74,8 @@ proc resetTooltips*() {.raises: [], tags: [], contractual.} =
   ## at the begining of a Nuklear window declaration.
   tooltips = @[]
 
-proc addTooltip*(bounds: NimRect; text: string) {.raises: [], tags: [], contractual.} =
+proc addTooltip*(bounds: NimRect; text: string) {.raises: [], tags: [],
+    contractual.} =
   ## Add a tooltip to the list of tooltips. The procedure should be called
   ## before the widget declaration, because it also needs bounds in which the
   ## mouse will be check.
