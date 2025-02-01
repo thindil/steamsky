@@ -990,7 +990,7 @@ template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
   content
   ctx.nk_popup_end
 
-template nonBlockPopup*(falgs: set[WindowFlags]; x, y, w, h: float; content: untyped) =
+template nonBlockPopup*(flags: set[WindowFlags]; x, y, w, h: float; content: untyped) =
   ## Create a new Nuklear non-blocking popup window with the selected content
   ##
   ## * flags   - the flags for the popup
