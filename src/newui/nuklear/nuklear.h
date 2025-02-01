@@ -30491,6 +30491,45 @@ nk_tooltip_begin(struct nk_context *ctx, float width)
     return ret;
 }
 
+NK_API nk_bool
+nk_tooltip_begin2(struct nk_context *ctx, float width, float startx, float starty)
+{
+    int x,y,w,h;
+    struct nk_window *win;
+    const struct nk_input *in;
+    struct nk_rect bounds;
+    int ret;
+
+    NK_ASSERT(ctx);
+    NK_ASSERT(ctx->current);
+    NK_ASSERT(ctx->current->layout);
+    if (!ctx || !ctx->current || !ctx->current->layout)
+        return 0;
+
+    /* make sure that no nonblocking popup is currently active */
+    win = ctx->current;
+    in = &ctx->input;
+    if (win->popup.win && ((int)win->popup.type & (int)NK_PANEL_SET_NONBLOCK))
+        return 0;
+
+    w = nk_iceilf(width);
+    h = nk_iceilf(nk_null_rect.h);
+    x = nk_ifloorf(startx) - (int)win->layout->clip.x;
+    y = nk_ifloorf(starty) - (int)win->layout->clip.y;
+
+    bounds.x = (float)x;
+    bounds.y = (float)y;
+    bounds.w = (float)w;
+    bounds.h = (float)h;
+
+    ret = nk_popup_begin(ctx, NK_POPUP_DYNAMIC,
+        "__##Tooltip##__", NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BORDER, bounds);
+    if (ret) win->layout->flags &= ~(nk_flags)NK_WINDOW_ROM;
+    win->popup.type = NK_PANEL_TOOLTIP;
+    ctx->current->layout->type = NK_PANEL_TOOLTIP;
+    return ret;
+}
+
 NK_API void
 nk_tooltip_end(struct nk_context *ctx)
 {
