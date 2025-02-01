@@ -534,7 +534,9 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
           order.index].resultIndex].name, amount: order.amount, id: index))
     except:
       return showError(message = "Can't add local order.")
-  proc sortCrafting(x, y: SortingData): int =
+
+  proc sortCrafting(x, y: SortingData): int {.raises: [], tags: [],
+      contractual.} =
     case craftingSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -558,6 +560,7 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localCrafting.sort(cmp = sortCrafting)
   craftingIndexes = @[]
   for order in localCrafting:
@@ -606,7 +609,9 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
           "Passengers transported"), amount: mission.amount, id: index))
     except:
       return showError(message = "Can't add local mission.")
-  proc sortMissions(x, y: SortingData): int =
+
+  proc sortMissions(x, y: SortingData): int {.raises: [], tags: [],
+      contractual.} =
     case missionsSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -630,6 +635,7 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localMissions.sort(cmp = sortMissions)
   missionsIndexes = @[]
   for mission in localMissions:
@@ -673,7 +679,8 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
           amount: finishedGoal.amount, id: index))
     except:
       return showError(message = "Can't add local goal.")
-  proc sortGoals(x, y: SortingData): int =
+
+  proc sortGoals(x, y: SortingData): int {.raises: [], tags: [], contractual.} =
     case goalsSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -697,6 +704,7 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localGoals.sort(cmp = sortGoals)
   goalsIndexes = @[]
   for goal in localGoals:
@@ -735,7 +743,9 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
         localDestroyed.add(y = SortingData(name: ship.name,
             amount: destroyed.amount, id: index))
         break
-  proc sortDestroyed(x, y: SortingData): int =
+
+  proc sortDestroyed(x, y: SortingData): int {.raises: [], tags: [],
+      contractual.} =
     case destroyedSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -759,6 +769,7 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localDestroyed.sort(cmp = sortDestroyed)
   destroyedIndexes = @[]
   for ship in localDestroyed:
@@ -793,7 +804,9 @@ proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
   var localKilled: SortingList = @[]
   for index, killed in gameStats.killedMobs:
     localKilled.add(y = SortingData(name: killed.index, amount: killed.amount, id: index))
-  proc sortKilled(x, y: SortingData): int =
+
+  proc sortKilled(x, y: SortingData): int {.raises: [], tags: [],
+      contractual.} =
     case killedSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -817,6 +830,7 @@ proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localKilled.sort(cmp = sortKilled)
   killedIndexes = @[]
   for mob in localKilled:
