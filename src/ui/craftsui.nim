@@ -361,9 +361,22 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       addButton(table = ordersTable, text = (if recipeName.len >
           0: recipeName else: "Not set"),
           tooltip = "Change the workshop's order",
-          command = "ChangeCraftOrder " & $index, column = 2, newRow = true)
+          command = "ChangeCraftOrder " & $index, column = 2)
     except:
       return showError(message = "Can't get the recipe name.")
+    var workers: string = ""
+    var haveWorkers = false
+    for worker in module.owner:
+      if worker > -1:
+        if haveWorkers:
+          workers.add(", ")
+        haveWorkers = true
+        workers.add(playerShip.crew[worker].name)
+    if not haveWorkers:
+      workers = "none"
+    addButton(table = ordersTable, text = workers,
+        tooltip = "Change the workshop's order", command = "ChangeCraftOrder " &
+        $index, column = 3, newRow = true)
   updateTable(table = ordersTable)
   craftsFrame = craftsCanvas & ".craft"
   tclEval(script = craftsCanvas & " configure -height [expr " & tclEval2(
