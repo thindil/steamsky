@@ -45,6 +45,16 @@ proc tooltip*(text: string) {.raises: [], tags: [], contractual.} =
     ## Internal Nuklear C binding
   nk_tooltip(ctx = ctx, text = text.cstring)
 
+proc tooltip*(text: string; x, y: float) {.raises: [], tags: [], contractual.} =
+  ## Create a tooltip with the selected text at the selected position.
+  ##
+  ## * text - the text to show on the tooltip window
+  ## * x    - the X coordinate of the tooltip window
+  ## * y    - the Y coordinate of the tooltip window
+  proc nk_tooltip2(ctx; text: cstring, startx, starty: cfloat) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## Internal Nuklear C binding
+  nk_tooltip2(ctx = ctx, text = text.cstring, startx = x, starty = y)
+
 type
   TooltipData = object
     bounds*: NimRect

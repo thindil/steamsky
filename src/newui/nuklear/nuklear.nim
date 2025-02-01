@@ -965,7 +965,7 @@ proc createNonBlocking(flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises:
   ## temporary code
   ##
   ## Returns true if the popup is active, otherwise false.
-  proc nk_nonblock_begin(ctx; flags: nk_flags; body, header: nk_rect, panel_type: PanelType): nk_bool
+  proc nk_nonblock_begin(ctx; flags: nk_flags; body, header: nk_rect, panelType: PanelType): nk_bool
     {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_nonblock_begin(ctx = ctx, flags = flags2, body = new_nk_rect(x = x2, y = y2, w = w2, h = h2),
@@ -990,7 +990,7 @@ template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
   content
   ctx.nk_popup_end
 
-template nonBlockPopup*(flags: set[WindowFlags]; x, y, w, h: float; content: untyped) =
+template nonBlocking*(flags: set[WindowFlags]; x, y, w, h: float; content: untyped) =
   ## Create a new Nuklear non-blocking popup window with the selected content
   ##
   ## * flags   - the flags for the popup
