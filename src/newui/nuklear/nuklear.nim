@@ -960,14 +960,16 @@ proc createPopup(pType2: PopupType; title2: cstring;
   return nk_popup_begin(ctx = ctx, pType = pType2, title = title2,
       flags = flags2, rect = new_nk_rect(x = x2, y = y2, w = w2, h = h2))
 
-proc createNonBlocking(flags: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [], contractual.} =
+proc createNonBlocking(flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [], contractual, discardable.} =
   ## Create a new Nuklear non-blocking popup window, internal use only,
   ## temporary code
   ##
   ## Returns true if the popup is active, otherwise false.
-  proc nk_nonblock_begin(ctx; flags: nk_flags; body, header: nk_rect, panel_type: PanelType): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_nonblock_begin(ctx; flags: nk_flags; body, header: nk_rect, panel_type: PanelType): nk_bool
+    {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  return true
+  return nk_nonblock_begin(ctx = ctx, flags = flags2, body = new_nk_rect(x = x2, y = y2, w = w2, h = h2),
+    header = new_nk_rect(x = 0, y = 0, w = 0, h = 0), panel_type = panelPopup)
 
 template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
     y, w, h: float; content: untyped) =
@@ -985,6 +987,20 @@ template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
       flags2 = winSetToInt(nimFlags = flags), x2 = x.cfloat, y2 = y, w2 = w, h2 = h):
     raise newException(exceptn = NuklearException,
         message = "Can't create the popup window with title: '" & title & "'.")
+  content
+  ctx.nk_popup_end
+
+template nonBlockPopup*(falgs: set[WindowFlags]; x, y, w, h: float; content: untyped) =
+  ## Create a new Nuklear non-blocking popup window with the selected content
+  ##
+  ## * flags   - the flags for the popup
+  ## * x       - the X position of the top left corner of the popup
+  ## * y       - the Y position of the top left corner of the popup
+  ## * w       - the width of the popup
+  ## * h       - the height of the popup
+  ## * content - the code executed when the button is pressed
+  discard createNonBlocking(flags2 = winSetToInt(nimFlags = flags),
+    x2 = x.cfloat, y2 = y, w2 = w, h2 = h)
   content
   ctx.nk_popup_end
 
