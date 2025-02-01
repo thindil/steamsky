@@ -960,6 +960,15 @@ proc createPopup(pType2: PopupType; title2: cstring;
   return nk_popup_begin(ctx = ctx, pType = pType2, title = title2,
       flags = flags2, rect = new_nk_rect(x = x2, y = y2, w = w2, h = h2))
 
+proc createNonBlocking(flags: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises: [], tags: [], contractual.} =
+  ## Create a new Nuklear non-blocking popup window, internal use only,
+  ## temporary code
+  ##
+  ## Returns true if the popup is active, otherwise false.
+  proc nk_nonblock_begin(ctx; flags: nk_flags; body, header: nk_rect, panel_type: PanelType): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return true
+
 template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
     y, w, h: float; content: untyped) =
   ## Create a new Nuklear popup window with the selected content
