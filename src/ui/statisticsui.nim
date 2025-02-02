@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strformat, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[game, goals, statistics, tk, types]
 import coreui, errordialog, utilsui2
 
@@ -507,7 +507,7 @@ type
 
 proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
+        TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Sort the list of finished crafting orders
   ##
   ## * clientData - the additional data for the Tcl command
