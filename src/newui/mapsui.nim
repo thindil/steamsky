@@ -809,7 +809,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       dialog = none
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
-  setLayoutRowDynamic(height = windowHeight - mapHeight, cols = (if playerShip.speed == docked: 1 else: 2))
+  setLayoutRowDynamic(height = windowHeight - mapHeight - 75, cols = (
+      if playerShip.speed == docked: 1 else: 2))
   # Draw last messages
   showLastMessages()
   state = map

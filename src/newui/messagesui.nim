@@ -21,5 +21,6 @@ import contracts, nuklear/nuklear_sdl_renderer
 
 proc showLastMessages*() {.raises: [], tags: [], contractual.} =
   ## Show the last in-game messages to the player
-  group(title = "LastMessagesGroup", flags = {}):
+  group(title = "LastMessagesGroup", flags = {windowBorder}):
+    setLayoutRowDynamic(height = 25, cols = 1)
     label(str = "here")
