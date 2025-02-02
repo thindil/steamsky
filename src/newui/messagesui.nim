@@ -35,7 +35,7 @@ proc showLastMessages*(theme: ThemeData) {.raises: [], tags: [], contractual.} =
     ## Show the selected message
     ##
     ## * message - the message to show
-    let colors: array[1..5, Colors] = ["yellow", theme.colors[2], "red", "blue", "cyan"]
+    # let colors: array[1..5, Colors] = ["yellow", theme.colors[2], "red", "blue", "cyan"]
     if message.color == white:
       label(str = message.message)
     else:
