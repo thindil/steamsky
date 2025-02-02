@@ -22,7 +22,7 @@ import std/[colors, math, tables, unicode]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
-import coreui, errordialog, themes, utilsui2
+import coreui, errordialog, messagesui, themes, utilsui2
 
 const iconsAmount: Positive = 33
 
@@ -634,7 +634,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't count map column's width.")
       return
   cols = (windowWidth / colWidth.float).floor.Positive + 6
-  setLayoutRowDynamic(height = (((height - 2) * rows) + 5).float, cols = 1)
+  let mapHeight: float = (((height - 2) * rows) + 5).float
+  setLayoutRowDynamic(height = mapHeight, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
     var
       startX: int = centerX - (cols / 2).int
@@ -777,6 +778,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
             labelButton(title = mapChar):
               echo "map pressed"
   restoreButtonStyle()
+  # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
@@ -807,4 +809,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       dialog = none
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
+  setLayoutRowDynamic(height = windowHeight - mapHeight, cols = (if playerShip.speed == docked: 1 else: 2))
+  # Draw last messages
+  showLastMessages()
   state = map
