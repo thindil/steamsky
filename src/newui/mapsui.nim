@@ -415,8 +415,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           getCurrentExceptionMsg())
 
 proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
-    NuklearException, ValueError], tags: [WriteIOEffect, TimeEffect,
-        RootEffect], contractual.} =
+    ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
   ## * x     - the X coordinate of the map cell which info will be show
@@ -424,8 +423,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
   ## * theme - the current game's theme
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
-  popup(pType = dynamicPopup, title = "MapInfo", flags = {windowNoScrollbar},
-      x = (windowWidth - 240), y = 5, w = 230, h = 350):
+  tooltip(x = (windowWidth - 240), y = 45, width = 230):
     layoutStatic(height = 25, cols = 4):
       row(width = 20):
         label(str = "X:")
