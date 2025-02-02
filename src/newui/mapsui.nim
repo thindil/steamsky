@@ -812,5 +812,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = windowHeight - mapHeight - 75, cols = (
       if playerShip.speed == docked: 1 else: 2))
   # Draw last messages
-  showLastMessages()
+  showLastMessages(theme = theme)
   state = map

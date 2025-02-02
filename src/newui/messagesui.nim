@@ -18,9 +18,34 @@
 ## Provides code related to showing in-game messages
 
 import contracts, nuklear/nuklear_sdl_renderer
+import ../[config, messages, types]
+import themes
 
-proc showLastMessages*() {.raises: [], tags: [], contractual.} =
+proc showLastMessages*(theme: ThemeData) {.raises: [], tags: [], contractual.} =
   ## Show the last in-game messages to the player
+  ##
+  ## * theme - the current game's theme
+  var loopStart = 0 - messagesAmount()
+  if loopStart == 0:
+    return
+  if loopStart < -10:
+    loopStart = -10
+
+  proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
+    ## Show the selected message
+    ##
+    ## * message - the message to show
+    let colors: array[1..5, Colors] = ["yellow", theme.colors[2], "red", "blue", "cyan"]
+    if message.color == white:
+      label(str = message.message)
+    else:
+      discard
+
   group(title = "LastMessagesGroup", flags = {windowBorder}):
     setLayoutRowDynamic(height = 25, cols = 1)
-    label(str = "here")
+    if gameSettings.messagesOrder == olderFirst:
+      for i in loopStart .. -1:
+        showMessage(getMessage(messageIndex = i + 1))
+    else:
+      for i in countdown(-1, loopStart):
+        showMessage(getMessage(messageIndex = i + 1))
