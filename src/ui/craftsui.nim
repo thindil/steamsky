@@ -353,17 +353,21 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   for index, module in playerShip.modules:
     if module.mType != workshop:
       continue
-    addButton(table = ordersTable, text = module.name,
-        tooltip = "Change the workshop's order", command = "ChangeCraftOrder " &
-        $index, column = 1)
-    try:
-      let recipeName: string = getWorkshopRecipeName(workshop = index)
-      addButton(table = ordersTable, text = (if recipeName.len >
-          0: recipeName else: "Not set"),
-          tooltip = "Change the workshop's order",
-          command = "ChangeCraftOrder " & $index, column = 2)
-    except:
-      return showError(message = "Can't get the recipe name.")
+    var
+      recipeName: string = try:
+          getWorkshopRecipeName(workshop = index)
+      except:
+        return showError(message = "Can't get the recipe name.")
+      tooltipText: string = "Cancel the selected order"
+      command: string = "ChangeCraftOrder " & $index & " cancel"
+    if recipeName.len == 0:
+      recipeName = "Not set"
+      tooltipText = "Set a new order for the workshop"
+      command = "ChangeCraftOrder " & $index & " new"
+    addButton(table = ordersTable, text = module.name, tooltip = tooltipText,
+        command = command, column = 1)
+    addButton(table = ordersTable, text = recipeName, tooltip = tooltipText,
+        command = command, column = 2)
     var workers: string = ""
     var haveWorkers = false
     for worker in module.owner:
@@ -374,9 +378,8 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         workers.add(playerShip.crew[worker].name)
     if not haveWorkers:
       workers = "none"
-    addButton(table = ordersTable, text = workers,
-        tooltip = "Change the workshop's order", command = "ChangeCraftOrder " &
-        $index, column = 3, newRow = true)
+    addButton(table = ordersTable, text = workers, tooltip = tooltipText,
+        command = command, column = 3, newRow = true)
   updateTable(table = ordersTable)
   craftsFrame = craftsCanvas & ".craft"
   tclEval(script = craftsCanvas & " configure -height [expr " & tclEval2(
