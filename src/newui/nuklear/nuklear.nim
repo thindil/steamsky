@@ -1154,6 +1154,16 @@ proc wrapLabel*(str: string) {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_label_wrap(ctx = ctx, str = str.cstring)
 
+proc colorWrapLabel*(str: string; color: Color) {.raises: [], tags: [], contractual.} =
+  ## Draw a text and wrap it if its lentgh is bigger than the width of its
+  ## container
+  ##
+  ## * str - the text to draw
+  proc nk_label_colored_wrap(ctx; str: cstring; color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  var (r, g, b) = color.extractRGB
+  nk_label_colored_wrap(ctx = ctx, str = str.cstring, color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
+
 {.push ruleOff: "namedParams".}
 macro fmtLabel*(alignment: TextAlignment; args: varargs[untyped]): untyped =
   ## Draw a text formatted in the same way like the C function printf
