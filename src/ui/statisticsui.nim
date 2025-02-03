@@ -291,7 +291,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     if craftingIndexes.len != statsList.len:
       craftingIndexes = @[]
       for index, order in statsList:
-        craftingIndexes.add(index)
+        craftingIndexes.add(y = index)
     for item in craftingIndexes:
       try:
         discard tclEval(script = treeView & " insert {} end -values [list {" &
@@ -328,10 +328,10 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     if missionsIndexes.len != statsList.len:
       missionsIndexes = @[]
       for index, mission in statsList:
-        missionsIndexes.add(index)
+        missionsIndexes.add(y = index)
     for item in missionsIndexes:
       try:
-        case parseEnum[MissionsTypes](statsList[item].index)
+        case parseEnum[MissionsTypes](s = statsList[item].index)
         of deliver:
           tclEval(script = treeView & " insert {} end -values [list {Delivered items} {" &
               $statsList[item].amount & "}]")
@@ -359,9 +359,10 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   label = statsCanvas & ".stats.left.goal"
   try:
     discard tclEval(script = label & " configure -text {" & (if goalText(
-        0).len < 22: goalText(0) else: goalText(0)[0 .. 21] & "...") & "}")
+        index = 0).len < 22: goalText(index = 0) else: goalText(index = 0)[0 ..
+        21] & "...") & "}")
     discard tclEval(script = "tooltip::tooltip " & label &
-        " \"The current goal: " & goalText(0) & "\"")
+        " \"The current goal: " & goalText(index = 0) & "\"")
   except:
     showError(message = "Can't show the current goal.")
     return
@@ -383,7 +384,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     if goalsIndexes.len != statsList.len:
       goalsIndexes = @[]
       for index, goal in statsList:
-        goalsIndexes.add(index)
+        goalsIndexes.add(y = index)
     for item in goalsIndexes:
       var protoIndex = 0
       try:
@@ -412,7 +413,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     if destroyedIndexes.len != statsList.len:
       destroyedIndexes = @[]
       for index, ship in statsList:
-        destroyedIndexes.add(index)
+        destroyedIndexes.add(y = index)
     for item in destroyedIndexes:
       for index, ship in protoShipsList:
         if $index == statsList[item].index:
@@ -441,7 +442,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     if killedIndexes.len != statsList.len:
       killedIndexes = @[]
       for index, mob in statsList:
-        killedIndexes.add(index)
+        killedIndexes.add(y = index)
     for mob in statsList:
       tclEval(script = treeView & " insert {} end -values [list {" &
           mob.index & "} {" & $mob.amount & "}]")
@@ -842,10 +843,12 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the list of available missions
   try:
-    addCommand("SortFinishedCrafting", sortFinishedCraftingCommand)
-    addCommand("SortFinishedMissions", sortFinishedMissionsCommand)
-    addCommand("SortFinishedGoals", sortFinishedGoalsCommand)
-    addCommand("SortDestroyedShips", sortDestroyedCommand)
-    addCommand("SortKilledMobs", sortKilledCommand)
+    addCommand(name = "SortFinishedCrafting",
+        nimProc = sortFinishedCraftingCommand)
+    addCommand(name = "SortFinishedMissions",
+        nimProc = sortFinishedMissionsCommand)
+    addCommand(name = "SortFinishedGoals", nimProc = sortFinishedGoalsCommand)
+    addCommand(name = "SortDestroyedShips", nimProc = sortDestroyedCommand)
+    addCommand(name = "SortKilledMobs", nimProc = sortKilledCommand)
   except:
     showError(message = "Can't add a Tcl command.")
