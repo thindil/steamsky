@@ -608,10 +608,14 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
 
 proc showButtons() {.raises: [], tags: [], contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
-  if playerShip.speed == docked:
-    setLayoutRowDynamic(height = 35, cols = 1)
-    labelButton(title = "Ship orders"):
-      discard
+  group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
+    if playerShip.speed == docked:
+      setLayoutRowDynamic(height = 35, cols = 1)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available orders for your ship.")
+      labelButton(title = "Ship orders"):
+        discard
 
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
