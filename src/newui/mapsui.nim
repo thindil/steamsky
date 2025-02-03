@@ -606,6 +606,14 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     labelButton("Close"):
       closeMapMenu(dialog = dialog)
 
+proc showButtons() {.raises: [], tags: [], contractual.} =
+  ## Show the buttons for manage the ship, like orders, movement or wait
+  if playerShip.speed == docked:
+    setLayoutRowDynamic(height = 35, cols = 1)
+    labelButton(title = "Ship orders"):
+      discard
+
+
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
@@ -814,5 +822,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(0.8):
       showLastMessages(theme = theme, dialog = dialog)
     row(0.2):
-      label(str = "test")
+      showButtons()
   state = map
