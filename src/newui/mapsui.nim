@@ -24,7 +24,7 @@ import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
 import coreui, errordialog, messagesui, themes, utilsui2
 
-const iconsAmount: Positive = 33
+const iconsAmount: Positive = 34
 
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
@@ -609,12 +609,14 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
 proc showButtons() {.raises: [], tags: [], contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
   group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
+    setLayoutRowDynamic(height = 35, cols = 1)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show available orders for your ship.")
+    labelButton(title = "Ship orders"):
+      discard
     if playerShip.speed == docked:
-      setLayoutRowDynamic(height = 35, cols = 1)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show available orders for your ship.")
-      labelButton(title = "Ship orders"):
+      imageButton(image = mapImages[33]):
         discard
 
 
