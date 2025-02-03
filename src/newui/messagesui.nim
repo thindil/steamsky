@@ -17,11 +17,13 @@
 
 ## Provides code related to showing in-game messages
 
+import std/[colors, math]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, messages, types]
-import themes
+import coreui, errordialog, themes
 
-proc showLastMessages*(theme: ThemeData) {.raises: [], tags: [], contractual.} =
+proc showLastMessages*(theme: ThemeData; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the last in-game messages to the player
   ##
   ## * theme - the current game's theme
@@ -31,21 +33,30 @@ proc showLastMessages*(theme: ThemeData) {.raises: [], tags: [], contractual.} =
   if loopStart < -10:
     loopStart = -10
 
-  proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
+  proc showMessage(message: MessageData; dialog: var GameDialog) {.raises: [],
+      tags: [RootEffect], contractual.} =
     ## Show the selected message
     ##
     ## * message - the message to show
-    # let colors: array[1..5, Colors] = ["yellow", theme.colors[2], "red", "blue", "cyan"]
+    let colors: array[1..5, Color] = [theme.colors[32], theme.colors[2],
+        theme.colors[28], theme.colors[33], theme.colors[34]]
+    var needLines: float = try:
+          ceil(x = getTextWidth(text = message.message) / (windowWidth * 0.75).float)
+        except:
+          dialog = setError(message = "Can't count the message lenght.")
+          return
+    if needLines < 1.0:
+      needLines = 1.0
+    setLayoutRowDynamic(height = 25 * needLines, cols = 1)
     if message.color == white:
-      label(str = message.message)
+      wrapLabel(str = message.message)
     else:
-      discard
+      colorWrapLabel(str = message.message, color = colors[message.color.ord])
 
   group(title = "LastMessagesGroup", flags = {windowBorder}):
-    setLayoutRowDynamic(height = 25, cols = 1)
     if gameSettings.messagesOrder == olderFirst:
       for i in loopStart .. -1:
-        showMessage(getMessage(messageIndex = i + 1))
+        showMessage(getMessage(messageIndex = i + 1), dialog = dialog)
     else:
       for i in countdown(-1, loopStart):
-        showMessage(getMessage(messageIndex = i + 1))
+        showMessage(getMessage(messageIndex = i + 1), dialog = dialog)
