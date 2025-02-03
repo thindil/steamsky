@@ -137,6 +137,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       set craftcanvas [canvas .gameframe.paned.craftframe.canvas \
          -yscrollcommand [list .gameframe.paned.craftframe.scrolly set] \
          -xscrollcommand [list .gameframe.paned.craftframe.scrollx set]]
+      set workshop -1
       pack [ttk::scrollbar .gameframe.paned.craftframe.scrolly -orient vertical \
          -command [list $craftcanvas yview]] -side right -fill y
       pack $craftcanvas -side top -fill both
@@ -1016,6 +1017,28 @@ proc showCraftingTabCommand(clientData: cint; interp: PInterp; argc: cint;
         argc = 2, argv = @["ShowCrafting", "0"].allocCStringArray)
   return tclOk
 
+proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+  ## Change the crafting order of the selected workshop
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## ChangeCraftOrder
+  # Cancel the order
+  if argv[2] == "cancel":
+    echo "cancel"
+  else:
+    tclSetVar(varName = "workshop", newValue = $argv[1])
+    tclSetVar(varName = "newtab", newValue = "recipes")
+  tclEval(script = "ShowCraftingTab")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect].} =
   ## Adds Tcl commands related to the crew UI
@@ -1026,5 +1049,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand("SetCrafting", setCraftingCommand)
     addCommand("ShowRecipeInfo", showRecipeInfoCommand)
     addCommand("ShowCraftingTab", showCraftingTabCommand)
+    addCommand("ChangeCraftOrder", changeCraftOrderCommand)
   except:
     showError(message = "Can't add a Tcl command.")
