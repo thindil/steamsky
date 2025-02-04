@@ -1225,6 +1225,29 @@ template imageButton*(image: PImage; onPressCode: untyped) =
   if createImageButton(img = image):
     onPressCode
 
+proc createImageButtonCentered(img: PImage): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Draw the button with the selected image, internal use only, temporary code
+  ##
+  ## * image - the image to shown on the button
+  ##
+  ## Returns true if button was created, otherwise false
+  proc nk_button_image_centered(ctx; image: nk_image): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_button_image_centered(ctx = ctx, image = nk_image_ptr(iPtr = img))
+
+template imageButtonCentered*(image: PImage; onPressCode: untyped) =
+  ## Draw the button with the selected image. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  ##
+  ## Returns true if button was pressed
+  if createImageButtonCentered(img = image):
+    onPressCode
+
 proc createStyledImageButton(img: PImage; bStyle: ButtonStyle): bool {.raises: [
     ], tags: [], contractual.} =
   ## Draw the button with the selected image, internal use only, temporary code
