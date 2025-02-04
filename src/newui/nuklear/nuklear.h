@@ -24510,6 +24510,34 @@ nk_do_button_image(nk_flags *state,
     if (style->draw_end) style->draw_end(out, style->userdata);
     return ret;
 }
+nk_do_button_image_centered(nk_flags *state,
+    struct nk_command_buffer *out, struct nk_rect bounds,
+    struct nk_image img, enum nk_button_behavior b,
+    const struct nk_style_button *style, const struct nk_input *in)
+{
+    int ret;
+    struct nk_rect content;
+
+    NK_ASSERT(state);
+    NK_ASSERT(style);
+    NK_ASSERT(out);
+    if (!out || !style || !state)
+        return nk_false;
+
+    ret = nk_do_button(state, out, bounds, style, in, b, &content);
+    content.y = bounds.y + style->image_padding.y;
+    content.w = content.h = bounds.h - 2 * style->image_padding.x;
+    content.x = bounds.x + 2 * style->image_padding.x;
+    content.x += style->image_padding.x;
+    content.y += style->image_padding.y;
+    content.w -= 2 * style->image_padding.x;
+    content.h -= 2 * style->image_padding.y;
+
+    if (style->draw_begin) style->draw_begin(out, style->userdata);
+    nk_draw_button_image(out, &bounds, &content, *state, style, &img);
+    if (style->draw_end) style->draw_end(out, style->userdata);
+    return ret;
+}
 NK_LIB void
 nk_draw_button_text_symbol(struct nk_command_buffer *out,
     const struct nk_rect *bounds, const struct nk_rect *label,
@@ -24826,6 +24854,39 @@ nk_button_image(struct nk_context *ctx, struct nk_image img)
     NK_ASSERT(ctx);
     if (!ctx) return 0;
     return nk_button_image_styled(ctx, &ctx->style.button, img);
+}
+NK_API nk_bool
+nk_button_image_styled_centered(struct nk_context *ctx, const struct nk_style_button *style,
+    struct nk_image img)
+{
+    struct nk_window *win;
+    struct nk_panel *layout;
+    const struct nk_input *in;
+
+    struct nk_rect bounds;
+    enum nk_widget_layout_states state;
+
+    NK_ASSERT(ctx);
+    NK_ASSERT(ctx->current);
+    NK_ASSERT(ctx->current->layout);
+    if (!ctx || !ctx->current || !ctx->current->layout)
+        return 0;
+
+    win = ctx->current;
+    layout = win->layout;
+
+    state = nk_widget(&bounds, ctx);
+    if (!state) return 0;
+    in = (state == NK_WIDGET_ROM || state == NK_WIDGET_DISABLED || layout->flags & NK_WINDOW_ROM) ? 0 : &ctx->input;
+    return nk_do_button_image_centered(&ctx->last_widget_state, &win->buffer, bounds,
+                img, ctx->button_behavior, style, in);
+}
+NK_API nk_bool
+nk_button_image_centered(struct nk_context *ctx, struct nk_image img)
+{
+    NK_ASSERT(ctx);
+    if (!ctx) return 0;
+    return nk_button_image_styled_centered(ctx, &ctx->style.button, img);
 }
 NK_API nk_bool
 nk_button_symbol_text_styled(struct nk_context *ctx,
