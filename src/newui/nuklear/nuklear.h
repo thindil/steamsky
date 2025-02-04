@@ -24527,10 +24527,8 @@ nk_do_button_image_centered(nk_flags *state,
     ret = nk_do_button(state, out, bounds, style, in, b, &content);
     content.y = bounds.y + style->image_padding.y;
     content.w = content.h = bounds.h - 2 * style->image_padding.x;
-    content.x = bounds.x + 2 * style->image_padding.x;
-    content.x += style->image_padding.x;
+    content.x += bounds.w / 3;
     content.y += style->image_padding.y;
-    content.w -= 2 * style->image_padding.x;
     content.h -= 2 * style->image_padding.y;
 
     if (style->draw_begin) style->draw_begin(out, style->userdata);
