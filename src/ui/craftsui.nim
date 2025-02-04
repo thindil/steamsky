@@ -771,6 +771,7 @@ proc setCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
             return showError(message = "Can't give order to the player.")
       updateHeader()
       updateMessages()
+      tclSetVar(varName = "workshop", newValue = "-1")
       break
   return tclOk
 
@@ -1030,10 +1031,18 @@ proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ChangeCraftOrder
+  let workshop: Natural = try:
+      ($argv[1]).parseInt
+    except:
+      return showError(message = "Can't get the workshop index.")
   # Cancel the order
   if argv[2] == "cancel":
     echo "cancel"
   else:
+    if playerShip.modules[workshop].durability == 0:
+      showMessage(text = "Can't set a new order because the workshop is destroyed.",
+          title = "Can't set an order")
+      return tclOk
     tclSetVar(varName = "workshop", newValue = $argv[1])
     tclSetVar(varName = "newtab", newValue = "recipes")
   tclEval(script = "ShowCraftingTab")
