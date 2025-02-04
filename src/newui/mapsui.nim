@@ -616,7 +616,7 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
     labelButton(title = "Ship orders"):
       discard
     if playerShip.speed == docked:
-      imageButton(image = mapImages[33]):
+      imageLabelButton(image = mapImages[33], text = "", alignment = centered):
         discard
 
 
