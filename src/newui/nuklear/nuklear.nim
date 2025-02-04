@@ -1257,6 +1257,33 @@ template imageButtonStyled*(image: PImage; style: ButtonStyle;
   if createStyledImageButton(img = image, bStyle = style):
     onPressCode
 
+proc createImageLabelButton(img: PImage; txt: string; align: TextAlignment): bool {.raises: [], tags: [],
+    contractual.} =
+  ## Draw the button with the selected image and text, internal use only, temporary code
+  ##
+  ## * image - the image to show on the button
+  ## * text  - the text to show on the button
+  ## * align - the alignment of the text to show
+  ##
+  ## Returns true if button was created, otherwise false
+  proc nk_button_image_label(ctx; image: nk_image; text: cstring; textAlignment: nk_flags): nk_bool {.importc, nodecl,
+      raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_button_image_label(ctx = ctx, image = nk_image_ptr(iPtr = img), text = txt.cstring, text_alignment = align.nk_flags)
+
+template imageLabelButton*(image: PImage; text: string; alignment: TextAlignment; onPressCode: untyped) =
+  ## Draw the button with the selected image and text. Execute the selected code
+  ## on pressing it.
+  ##
+  ## * image       - the image to shown on the button
+  ## * text        - the text to show on the button
+  ## * align       - the alignment of the text to show
+  ## * onPressCode - the Nim code to execute when the button was pressed
+  ##
+  ## Returns true if button was pressed
+  if createImageLabelButton(img = image, txt = text, align = alignment):
+    onPressCode
+
 # -------
 # Sliders
 # -------
