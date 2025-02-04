@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provide code related to showing the game's statistics to the user,
+## like showing their screen, sorting them, etc.
+
 import std/[algorithm, strformat, strutils, tables]
 import contracts, nimalyzer
 import ../[game, goals, statistics, tk, types]
@@ -538,6 +541,14 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortCrafting(x, y: SortingData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two crafting orders and return which should go first, based on the sort
+    ## order of the orders
+    ##
+    ## * x - the first order to compare
+    ## * y - the second order to compare
+    ##
+    ## Returns 1 if the first order should go first, -1 if the second order
+    ## should go first.
     case craftingSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -613,6 +624,14 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortMissions(x, y: SortingData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two missions and return which should go first, based on the sort
+    ## order of the missions
+    ##
+    ## * x - the first mission to compare
+    ## * y - the second mission to compare
+    ##
+    ## Returns 1 if the first mission should go first, -1 if the second mission
+    ## should go first.
     case missionsSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -682,6 +701,14 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't add local goal.")
 
   proc sortGoals(x, y: SortingData): int {.raises: [], tags: [], contractual.} =
+    ## Compare two goals and return which should go first, based on the sort
+    ## order of the goals
+    ##
+    ## * x - the first goal to compare
+    ## * y - the second goal to compare
+    ##
+    ## Returns 1 if the first goal should go first, -1 if the second goal
+    ## should go first.
     case goalsSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -747,6 +774,14 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortDestroyed(x, y: SortingData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two destroyed ships and return which should go first, based on the sort
+    ## order of the ships
+    ##
+    ## * x - the first ship to compare
+    ## * y - the second ship to compare
+    ##
+    ## Returns 1 if the first ship should go first, -1 if the second ship
+    ## should go first.
     case destroyedSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -808,6 +843,14 @@ proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortKilled(x, y: SortingData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two killed mobs and return which should go first, based on the sort
+    ## order of the mobs
+    ##
+    ## * x - the first mob to compare
+    ## * y - the second mob to compare
+    ##
+    ## Returns 1 if the first mob should go first, -1 if the second mob
+    ## should go first.
     case killedSortOrder
     of nameAsc:
       if x.name < y.name:
