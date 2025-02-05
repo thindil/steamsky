@@ -606,6 +606,9 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     labelButton("Close"):
       closeMapMenu(dialog = dialog)
 
+const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
+    "Half speed", "Full speed"]
+
 proc showButtons() {.raises: [], tags: [], contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
   group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
@@ -618,6 +621,10 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
     if playerShip.speed == docked:
       imageButtonCentered(image = mapImages[33]):
         discard
+    else:
+      playerShip.speed = (comboList(items = shipSpeeds,
+          selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200,
+          y = 150) + 1).ShipSpeed
 
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
