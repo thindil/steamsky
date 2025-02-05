@@ -53,6 +53,9 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog) {.raises: [],
     else:
       colorWrapLabel(str = message.message, color = colors[message.color.ord])
 
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "The last game messages. You can see more of them in Menu->Last messages screen")
   group(title = "LastMessagesGroup", flags = {windowBorder}):
     if gameSettings.messagesOrder == olderFirst:
       for i in loopStart .. -1:
