@@ -228,6 +228,10 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   var
     currentRow = 1
     canCraft, hasWorkplace, hasTool, hasMaterials = false
+  let workshop: int = try:
+        tclGetVar(varName = "workshop").parseInt
+      except:
+        return showError(message = "Can't get workshop index")
   for index, rec in recipesIndexes:
     if index > knownRecipes.high:
       break
@@ -239,13 +243,19 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
         continue
     except:
       return showError(message = "Can't check recipeName.")
-    if currentRow < startRow:
-      currentRow.inc
-      continue
     let recipe = try:
         recipesList[rec]
       except:
         return showError(message = "Can't get the recipe.")
+    try:
+      if workshop > -1 and modulesList[playerShip.modules[
+          workshop].protoIndex].mType != recipe.workplace:
+        continue
+    except:
+      return showError(message = "Can't check the workshop")
+    if currentRow < startRow:
+      currentRow.inc
+      continue
     isCraftable(recipe = recipe, canCraft = canCraft,
         hasWorkplace = hasWorkplace, hasTool = hasTool,
         hasMaterials = hasMaterials)
@@ -352,7 +362,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     ordersTable.clearTable
   for index, module in playerShip.modules:
-    if module.mType != workshop:
+    if module.mType != ModuleType2.workshop:
       continue
     var
       recipeName: string = try:

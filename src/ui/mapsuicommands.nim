@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -914,6 +914,7 @@ proc showSkyMapCommand(clientData: cint; interp: PInterp; argc: cint;
   if argc == 1:
     tclEval(script = "grid remove " & closeButton)
     tclEval(script = "grid remove " & gameHeader & ".morebutton")
+    tclSetVar(varName = "workshop", newValue = "-1")
     showSkyMap(clear = true)
   else:
     tclEval(script = $argv[1])
