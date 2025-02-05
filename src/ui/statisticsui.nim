@@ -24,16 +24,16 @@ import ../[game, goals, statistics, tk, types]
 import coreui, errordialog, utilsui2
 
 var craftingIndexes, missionsIndexes, goalsIndexes, destroyedIndexes,
-  killedIndexes: seq[Natural]
+  killedIndexes: seq[Natural] = @[]
 
 proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], contractual.} =
   ## Show the game statistics to the player
   ##
   ## * refresh - if true, refresh the view, otherwise back to the sky map
-  var statsFrame = mainPaned & ".statsframe"
-  let statsCanvas = statsFrame & ".canvas"
-  var label = statsCanvas & ".stats.left.points.points"
+  var statsFrame: string = mainPaned & ".statsframe"
+  let statsCanvas: string = statsFrame & ".canvas"
+  var label: string = statsCanvas & ".stats.left.points.points"
   if tclEval2(script = "winfo exists " & label) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.statsframe
@@ -235,8 +235,8 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of points gained in this game\"")
   label = statsCanvas & ".stats.left.points.lblpoints"
   tclEval(script = "tooltip::tooltip " & label & " \"The amount of points gained in this game\"")
-  var statsText = ""
-  let minutesDiff = (gameDate.minutes + (gameDate.hour * 60) + (gameDate.day *
+  var statsText: string = ""
+  let minutesDiff: int = (gameDate.minutes + (gameDate.hour * 60) + (gameDate.day *
       1_440) + (gameDate.month * 43_200) + (gameDate.year * 518_400)) - 829_571_520
   minutesToDate(minutes = minutesDiff, infoText = statsText)
   label = statsCanvas & ".stats.left.time.time"
@@ -276,8 +276,8 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of map's fields visited\"")
   statsFrame = statsCanvas & ".stats"
   var
-    totalFinished = 0
-    statsList = gameStats.craftingOrders
+    totalFinished: Natural = 0
+    statsList: seq[StatisticsData] = gameStats.craftingOrders
   for craftingOrder in statsList:
     totalFinished = totalFinished + craftingOrder.amount
   label = statsFrame & ".left.crafts.crafts"
@@ -286,7 +286,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   label = statsFrame & ".left.crafts.lblcrafts"
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of crafting orders finished in this game\"")
   statsFrame = statsCanvas & ".stats.left.craftsframe"
-  var treeView = statsFrame & ".craftsview"
+  var treeView: string = statsFrame & ".craftsview"
   if tclEval2(script = treeView & " children {}") != "{}":
     tclEval(script = treeView & " delete [list " & tclEval2(script = treeView &
         " children {}") & "]")
@@ -313,7 +313,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   for finishedMission in statsList:
     totalFinished = totalFinished + finishedMission.amount
   label = statsCanvas & ".stats.left.missions.missions"
-  var missionsPercent = 0
+  var missionsPercent: int = 0
   if gameStats.acceptedMissions > 0:
     missionsPercent = ((totalFinished.float /
         gameStats.acceptedMissions.float) * 100.0).int
@@ -389,7 +389,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
       for index, goal in statsList:
         goalsIndexes.add(y = index)
     for item in goalsIndexes:
-      var protoIndex = 0
+      var protoIndex: Natural = 0
       try:
         for j in 1 .. 256:
           if goalsList[j].index == statsList[item].index:
@@ -408,7 +408,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   statsFrame = statsCanvas & ".stats.right.destroyedframe"
   treeView = statsFrame & ".destroyedview"
   statsList = gameStats.destroyedShips
-  var totalDestroyed = 0
+  var totalDestroyed: Natural = 0
   if statsList.len > 0:
     if tclEval2(script = treeView & " children {}") != "{}":
       tclEval(script = treeView & " delete [list " & tclEval2(
@@ -524,7 +524,7 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortFinishedCrafting x
   ## X is the number of column where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the column number.")
@@ -597,7 +597,7 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortFinishedMissions x
   ## X is the number of column where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the column number.")
@@ -680,7 +680,7 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortFinishedGoals x
   ## X is the number of column where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the column number.")
@@ -689,7 +689,7 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   var localGoals: SortingList = @[]
   for index, finishedGoal in gameStats.finishedGoals:
-    var protoIndex = -1
+    var protoIndex: int = -1
     for i, goal in goalsList:
       if goal.index == finishedGoal.index:
         protoIndex = i
@@ -757,7 +757,7 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortDestroyedShips x
   ## X is the number of column where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the column number.")
@@ -830,7 +830,7 @@ proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortKilledEnemies x
   ## X is the number of column where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the column number.")
