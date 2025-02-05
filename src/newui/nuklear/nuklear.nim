@@ -776,6 +776,35 @@ proc nkPanelGetPadding(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [
   else:
     discard
 
+proc nkPanelGetBorder(style: nk_style; flags: nk_flags; `type`: PanelType): float {.raises: [], tags: [], contractual.} =
+  ## Get the border size for the selected panel, based on its type. Internal use
+  ## only
+  ##
+  ## * style - the whole style of the application
+  ## * type  - the selected type of the panel
+  ##
+  ## Returns size of the border of the selected panel
+  if (flags and NK_WINDOW_BORDER.ord.int).nk_bool:
+    case `type`
+    of panelWindow:
+      return style.window.border.float
+    of panelGroup:
+      return style.window.group_border.float
+    of panelPopup:
+      return style.window.popup_border.float
+    of panelContextual:
+      return style.window.contextual_border.float
+    of panelCombo:
+      return style.window.combo_border.float
+    of panelMenu:
+      return style.window.menu_border.float
+    of panelTooltip:
+      return style.window.tooltip_border.float
+    else:
+      return 0
+  else:
+    return 0
+
 proc nkPanelHasHeader(flags: nk_flags; title: string): bool {.raises: [], tags: [], contractual.} =
   ## Check if a panel has a header to draw. Internal use only
   ##

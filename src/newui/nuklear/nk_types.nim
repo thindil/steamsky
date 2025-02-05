@@ -125,6 +125,7 @@ type
     NK_WINDOW_CLOSED = 1 shl 14
   nk_panel_flags* = enum
     ## Internal Nuklear type
+    NK_WINDOW_BORDER = 1 shl 0
     NK_WINDOW_MOVEABLE = 1 shl 1
     NK_WINDOW_CLOSABLE = 1 shl 3
     NK_WINDOW_MINIMIZABLE = 1 shl 4
@@ -211,6 +212,8 @@ type
       contextual_padding*, combo_padding*, menu_padding*,
       tooltip_padding*: nk_vec2
     background*: nk_color
+    border*, combo_border*, contextual_border*, menu_border*, group_border*,
+      tooltip_border*, popup_border*: cfloat
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
     ## Internal Nuklear type
     normal*, hover*, active*: nk_style_item
