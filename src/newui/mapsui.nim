@@ -612,7 +612,7 @@ const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
 proc showButtons() {.raises: [], tags: [], contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
   group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
-    setLayoutRowDynamic(height = 35, cols = 1)
+    setLayoutRowDynamic(height = 30, cols = 1)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show available orders for your ship.")
@@ -625,6 +625,19 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       playerShip.speed = (comboList(items = shipSpeeds,
           selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200,
           y = 150) + 1).ShipSpeed
+    setLayoutRowStatic(height = 20, cols = 3, ratio = [35.cfloat, 35, 35])
+    imageButton(image = mapImages[25]):
+      discard
+    imageButton(image = mapImages[26]):
+      discard
+    imageButton(image = mapImages[27]):
+      discard
+    imageButton(image = mapImages[28]):
+      discard
+    imageButton(image = mapImages[33]):
+      discard
+    imageButton(image = mapImages[29]):
+      discard
 
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
