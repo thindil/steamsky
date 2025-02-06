@@ -622,10 +622,15 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
     labelButton(title = "Ship orders"):
       discard
     if playerShip.speed != docked and playerShip.destinationX > 0:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Auto move your ship to its destination.")
       imageButton(image = mapImages[33]):
         discard
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(), text = "Wait 1 minute.")
       imageButtonCentered(image = mapImages[33]):
         discard
     else:
@@ -636,22 +641,49 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
           selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200,
           y = 150) + 1).ShipSpeed
       setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship up and left")
       imageButton(image = mapImages[25]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship up")
       imageButton(image = mapImages[26]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship up and right")
       imageButton(image = mapImages[27]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship left")
       imageButton(image = mapImages[28]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Wait 1 minute")
       imageButton(image = mapImages[33]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship right")
       imageButton(image = mapImages[29]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship down and left")
       imageButton(image = mapImages[30]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship down")
       imageButton(image = mapImages[31]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Move ship down and right")
       imageButton(image = mapImages[32]):
         discard
 
