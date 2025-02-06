@@ -628,25 +628,25 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       playerShip.speed = (comboList(items = shipSpeeds,
           selected = playerShip.speed.ord - 1, itemHeight = 25, x = 200,
           y = 150) + 1).ShipSpeed
-    setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
-    imageButton(image = mapImages[25]):
-      discard
-    imageButton(image = mapImages[26]):
-      discard
-    imageButton(image = mapImages[27]):
-      discard
-    imageButton(image = mapImages[28]):
-      discard
-    imageButton(image = mapImages[33]):
-      discard
-    imageButton(image = mapImages[29]):
-      discard
-    imageButton(image = mapImages[30]):
-      discard
-    imageButton(image = mapImages[31]):
-      discard
-    imageButton(image = mapImages[32]):
-      discard
+      setLayoutRowStatic(height = 30, cols = 3, ratio = [40.cfloat, 40, 40])
+      imageButton(image = mapImages[25]):
+        discard
+      imageButton(image = mapImages[26]):
+        discard
+      imageButton(image = mapImages[27]):
+        discard
+      imageButton(image = mapImages[28]):
+        discard
+      imageButton(image = mapImages[33]):
+        discard
+      imageButton(image = mapImages[29]):
+        discard
+      imageButton(image = mapImages[30]):
+        discard
+      imageButton(image = mapImages[31]):
+        discard
+      imageButton(image = mapImages[32]):
+        discard
 
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
