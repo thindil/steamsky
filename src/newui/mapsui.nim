@@ -731,6 +731,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
             else:
               if x == playerShip.destinationX and y == playerShip.destinationY:
                 mapChar = theme.mapIcons[2]
+                mapColor = theme.mapColors[2]
               elif currentStory.index.len > 0 and (x == storyX and y == storyY):
                 mapChar = theme.mapIcons[3]
                 mapColor = theme.mapColors[3]
