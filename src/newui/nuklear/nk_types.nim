@@ -296,6 +296,7 @@ type
     clip*: nk_rect
     flags*: nk_flags
     bounds*: nk_rect
+    border*: cfloat
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window

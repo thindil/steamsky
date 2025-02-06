@@ -776,7 +776,7 @@ proc nkPanelGetPadding(style: nk_style; `type`: PanelType): nk_vec2 {.raises: [
   else:
     discard
 
-proc nkPanelGetBorder(style: nk_style; flags: nk_flags; `type`: PanelType): float {.raises: [], tags: [], contractual.} =
+proc nkPanelGetBorder(style: nk_style; flags: nk_flags; `type`: PanelType): cfloat {.raises: [], tags: [], contractual.} =
   ## Get the border size for the selected panel, based on its type. Internal use
   ## only
   ##
@@ -787,19 +787,19 @@ proc nkPanelGetBorder(style: nk_style; flags: nk_flags; `type`: PanelType): floa
   if (flags and NK_WINDOW_BORDER.ord.int).nk_bool:
     case `type`
     of panelWindow:
-      return style.window.border.float
+      return style.window.border
     of panelGroup:
-      return style.window.group_border.float
+      return style.window.group_border
     of panelPopup:
-      return style.window.popup_border.float
+      return style.window.popup_border
     of panelContextual:
-      return style.window.contextual_border.float
+      return style.window.contextual_border
     of panelCombo:
-      return style.window.combo_border.float
+      return style.window.combo_border
     of panelMenu:
-      return style.window.menu_border.float
+      return style.window.menu_border
     of panelTooltip:
-      return style.window.tooltip_border.float
+      return style.window.tooltip_border
     else:
       return 0
   else:
@@ -887,6 +887,8 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.bounds = win.bounds
     layout.bounds.x += panelPadding.x
     layout.bounds.w -= (2 * panelPadding.x)
+    if (win.flags and NK_WINDOW_BORDER.ord.int).nk_bool:
+      layout.border = nkPanelGetBorder(style = style, flags = win.flags, `type` = panelType)
     return true
 {.pop ruleOn: "params".}
 
