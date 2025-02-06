@@ -24,7 +24,7 @@ import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
 import coreui, errordialog, messagesui, themes, utilsui2
 
-const iconsAmount: Positive = 34
+const iconsAmount: Positive = 35
 
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
@@ -612,12 +612,19 @@ const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
 proc showButtons() {.raises: [], tags: [], contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
   group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
-    setLayoutRowDynamic(height = 30, cols = 1)
+    if playerShip.speed == docked or playerShip.destinationX == 0:
+      setLayoutRowDynamic(height = 30, cols = 1)
+    else:
+      setLayoutRowDynamic(height = 30, cols = 2, ratio = [0.75.cfloat, 0.25])
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Show available orders for your ship.")
     labelButton(title = "Ship orders"):
       discard
+    if playerShip.speed != docked and playerShip.destinationX > 0:
+      imageButton(image = mapImages[33]):
+        discard
+    setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
       imageButtonCentered(image = mapImages[33]):
         discard
@@ -855,8 +862,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       fontSize = gameSettings.interfaceFontSize + 10)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
     # Draw last messages
-    row(0.8):
+    row(0.75):
       showLastMessages(theme = theme, dialog = dialog)
-    row(0.2):
+    row(0.25):
       showButtons()
   state = map
