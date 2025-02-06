@@ -279,7 +279,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     totalFinished: Natural = 0
     statsList: seq[StatisticsData] = gameStats.craftingOrders
   for craftingOrder in statsList:
-    totalFinished = totalFinished + craftingOrder.amount
+    totalFinished += craftingOrder.amount
   label = statsFrame & ".left.crafts.crafts"
   tclEval(script = label & " configure -text {" & $totalFinished & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of crafting orders finished in this game\"")
@@ -311,7 +311,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   totalFinished = 0
   statsList = gameStats.finishedMissions
   for finishedMission in statsList:
-    totalFinished = totalFinished + finishedMission.amount
+    totalFinished += finishedMission.amount
   label = statsCanvas & ".stats.left.missions.missions"
   var missionsPercent: int = 0
   if gameStats.acceptedMissions > 0:
@@ -372,7 +372,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
   totalFinished = 0
   statsList = gameStats.finishedGoals
   for finishedGoal in statsList:
-    totalFinished = totalFinished + finishedGoal.amount
+    totalFinished += finishedGoal.amount
   label = statsCanvas & ".stats.left.goals.goals"
   tclEval(script = label & " configure -text {" & $totalFinished & "}")
   tclEval(script = "tooltip::tooltip " & label & " \"The total amount of goals finished in this game\"")
@@ -422,7 +422,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
         if $index == statsList[item].index:
           tclEval(script = treeView & " insert {} end -values [list {" &
               ship.name & "} {" & $statsList[item].amount & "}]")
-      totalDestroyed = totalDestroyed + statsList[item].amount
+      totalDestroyed += statsList[item].amount
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
@@ -449,7 +449,7 @@ proc showStatistics*(refresh: bool = false) {.raises: [], tags: [WriteIOEffect,
     for mob in statsList:
       tclEval(script = treeView & " insert {} end -values [list {" &
           mob.index & "} {" & $mob.amount & "}]")
-      totalDestroyed = totalDestroyed + mob.amount
+      totalDestroyed += mob.amount
     tclEval(script = treeView & " configure -height " & (if statsList.len <
         10: $statsList.len else: "10"))
     tclEval(script = "grid " & statsFrame)
@@ -553,23 +553,19 @@ proc sortFinishedCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of amountAsc:
       if x.amount < y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of amountDesc:
       if x.amount > y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
@@ -636,23 +632,19 @@ proc sortFinishedMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of amountAsc:
       if x.amount < y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of amountDesc:
       if x.amount > y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
@@ -713,23 +705,19 @@ proc sortFinishedGoalsCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of amountAsc:
       if x.amount < y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of amountDesc:
       if x.amount > y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
@@ -786,23 +774,19 @@ proc sortDestroyedCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of amountAsc:
       if x.amount < y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of amountDesc:
       if x.amount > y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
@@ -855,23 +839,19 @@ proc sortKilledCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of amountAsc:
       if x.amount < y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of amountDesc:
       if x.amount > y.amount:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
