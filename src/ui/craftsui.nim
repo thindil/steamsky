@@ -1054,7 +1054,16 @@ proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't get the workshop index.")
   # Cancel the order
   if argv[2] == "cancel":
-    echo "cancel"
+    try:
+      cancelCraftOrder(moduleIndex = workshop)
+      updateMessages()
+      updateHeader()
+    except CrewOrderError, CrewNoSpaceError:
+      showMessage(text = getCurrentExceptionMsg(),
+          title = "Can't cancel the order")
+      return tclOk
+    except:
+      return showError(message = "Can't cancel the order.")
   else:
     if playerShip.modules[workshop].durability == 0:
       showMessage(text = "Can't set a new order because the workshop is destroyed.",
