@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game]
 
 const
-  iconsAmount: Positive = 39
+  iconsAmount: Positive = 40
   colorsAmount: Positive = 35
   fontsAmount: Positive = 2
   mapIconsAmount: Positive = 18
@@ -71,7 +71,8 @@ let
       defaultThemeIconPath & "arrow-right.svg", defaultThemeIconPath &
       "arrow-down-left.svg", defaultThemeIconPath & "arrow-down.svg",
       defaultThemeIconPath & "arrow-down-right.svg", defaultThemeIconPath &
-      "wait.svg", defaultThemeIconPath & "moveto.svg"],
+      "wait.svg", defaultThemeIconPath & "moveto.svg", defaultThemeIconPath &
+      "movestep.svg"],
       colors: ["#1a130c".parseColor, "#eee8aa".parseColor,
       "#4e9a06".parseColor, "#372412".parseColor, "#291913".parseColor,
       "#500000".parseColor, "#120d0d".parseColor, "#ffdf00".parseColor,
@@ -112,7 +113,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "UpgradeIcon", "NoUpgradeIcon", "TraderIcon", "CleanIcon",
         "NoCleanIcon", "ArrowUpLeft", "ArrowUp", "ArrowUpRight", "ArrowLeft",
         "ArrowRight", "ArrowDownLeft", "ArrowDown", "ArrowDownRight",
-        "WaitIcon", "MoveToIcon"]
+        "WaitIcon", "MoveToIcon", "MoveStepIcon"]
     const colorsNames: array[colorsAmount, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
