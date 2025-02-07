@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -699,3 +699,18 @@ proc getWorkshopRecipeName*(workshop: Natural): string {.raises: [
       return "Manufacturing " & $module.craftingAmount & "x " & itemsList[
           recipesList[module.craftingIndex].resultIndex].name
     return ""
+
+proc cancelCraftOrder*(moduleIndex: Natural) {.raises: [CrewOrderError,
+    CrewNoSpaceError, Exception], tags: [RootEffect], contractual.} =
+  ## Cancel the crafting order in the selected workshop
+  ##
+  ## * moduleIndex - the index of the workshop in the player's ship in which
+  ##                 the order will be canceled
+  playerShip.modules[moduleIndex].craftingIndex = ""
+  playerShip.modules[moduleIndex].craftingAmount = 0
+  playerShip.modules[moduleIndex].craftingTime = 0
+  for owner in playerShip.modules[moduleIndex].owner:
+    if owner > -1:
+      giveOrders(ship = playerShip, memberIndex = owner, givenOrder = rest)
+  addMessage(message = "You cancelled crafting order in " & playerShip.modules[
+      moduleIndex].name & ".", mType = craftMessage, color = red)
