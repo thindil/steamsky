@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,11 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
+import contracts
 import ../[basestypes, config, game, help, items, tk]
 import dialogs, errordialog, themes
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.}
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.}
   ## Show the content of the selected topic help
   ##
   ## * clientData - the additional data for the Tcl command
@@ -34,7 +35,8 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowTopic
 
 proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Destroy the help window and save the sash position to the game
   ## configuration
   ##
@@ -59,7 +61,8 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the help window to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -158,7 +161,8 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = topicsView & " see " & topicIndex)
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the help system
   try:
     addCommand("ShowTopic", showTopicCommand)
