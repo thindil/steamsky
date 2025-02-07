@@ -645,6 +645,21 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     cmd.w = max(x = 0.cushort, y = r.w.cushort)
     cmd.h = max(x = 0.cushort, y = r.h.cushort)
 
+proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], contractual.} =
+  ## Shrink the selected rectangle. Internal use only
+  ##
+  ## * r      - the rectangle to shrink
+  ## * amount - the size of which the rectangle will be shrinked
+  ##
+  ## Returns the shrinked rectangle
+  let
+    w = max(r.w, 2 * amount)
+    h = max(r.h, 2 * amount)
+  result.x = r.x + amount
+  result.y = r.y + amount
+  result.w = w - 2 * amount
+  result.h = h - 2 * amount
+
 # -----
 # Input
 # -----
@@ -889,6 +904,14 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.bounds.w -= (2 * panelPadding.x)
     if (win.flags and NK_WINDOW_BORDER.ord.int).nk_bool:
       layout.border = nkPanelGetBorder(style = style, flags = win.flags, `type` = panelType)
+      layout.bounds = nkShrinkRect(r = layout.bounds, amount = layout.border)
+    else:
+      layout.border = 0
+    layout.at_y = layout.bounds.y
+    layout.at_x = layout.bounds.x
+    layout.max_x = 0
+    layout.header_height = 0
+    layout.footer_height = 0
     return true
 {.pop ruleOn: "params".}
 
