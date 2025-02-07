@@ -24,7 +24,7 @@ import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
 import coreui, errordialog, messagesui, themes, utilsui2
 
-const iconsAmount: Positive = 35
+const iconsAmount: Positive = 36
 
 {.push ruleOff: "varDeclared".}
 var mapImages: array[iconsAmount, PImage]
@@ -625,7 +625,7 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Auto move your ship to its destination.")
-      imageButton(image = mapImages[33]):
+      imageButton(image = mapImages[34]):
         discard
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
@@ -661,11 +661,18 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
             text = "Move ship left")
       imageButton(image = mapImages[28]):
         discard
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Wait 1 minute")
-      imageButton(image = mapImages[33]):
-        discard
+      if playerShip.destinationX == 0:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Wait 1 minute")
+        imageButton(image = mapImages[33]):
+          discard
+      else:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Move ship one map field toward destination")
+        imageButton(image = mapImages[35]):
+          discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship right")
