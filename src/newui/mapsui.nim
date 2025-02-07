@@ -238,7 +238,9 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
             text = "Ship is dirty but no one is cleaning it.")
       image(image = mapImages[24], padding = NimVec2(x: 5, y: 5))
 
-var showQuestion: bool = true
+var
+  showQuestion: bool = true
+  showMainMenu: bool = false
 
 proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -371,7 +373,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
   imageButton(image = mapImages[0]):
-    discard
+    showMainMenu = true
   if gameSettings.showNumbers:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -694,6 +696,13 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       imageButton(image = mapImages[32]):
         discard
 
+proc showGameMenu() {.raises: [NuklearException], tags: [], contractual.} =
+  ## Show the main game's menu
+  popup(staticPopup, "Game Menu", {windowTitle, windowNoScrollbar}, 20, 100, 220, 90):
+    setLayoutRowDynamic(35, 1)
+    labelButton("Close"):
+      showMainMenu = false
+      closePopup()
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -905,4 +914,10 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showLastMessages(theme = theme, dialog = dialog)
     row(0.25):
       showButtons()
+  if showMainMenu:
+    try:
+      showGameMenu()
+    except:
+      dialog = setError(message = "Can't show the game's menu")
+      showMainMenu = false
   state = map
