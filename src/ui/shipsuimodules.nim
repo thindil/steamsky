@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -21,7 +21,8 @@ import ../[game, config, crafts, crewinventory, items, messages, missions,
 import dialogs, errordialog, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected module and set option for it
   ##
   ## * clientData - the additional data for the Tcl command
@@ -58,7 +59,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
       columnSpan: Natural = 0; wrapLength: Natural = 0;
-      countHeight: bool = false; secondary: bool = false) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+      countHeight: bool = false; secondary: bool = false) {.raises: [], tags: [
+          WriteIOEffect, TimeEffect, RootEffect].} =
     label = name
     tclEval(script = "ttk::label " & label & " -text {" & labelText &
         "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
@@ -332,7 +334,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't count the height of the button (3).")
 
   proc addOwnersInfo(ownersName: string; addButton: bool = false;
-      row: Natural = 0) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+      row: Natural = 0) {.raises: [], tags: [WriteIOEffect, TimeEffect,
+          RootEffect].} =
     var ownersText = ownersName
     if module.owner.len > 1:
       ownersText.add("s")
@@ -979,7 +982,8 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't give order to a crew member.")
     elif assignModuleCommand(clientData = clientData, interp = interp, argc = 4,
-        argv = ["assignModule", "crew", $argv[1], $argv[2]].allocCStringArray) != tclOk:
+        argv = ["assignModule", "crew", $argv[1], $argv[
+            2]].allocCStringArray) != tclOk:
       return tclError
   for index, _ in playerShip.crew:
     let crewButton = frameName & ".crewbutton" & $index
@@ -1200,28 +1204,22 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the module index.")
-  playerShip.modules[moduleIndex].craftingIndex = ""
-  playerShip.modules[moduleIndex].craftingAmount = 0
-  playerShip.modules[moduleIndex].craftingTime = 0
-  for owner in playerShip.modules[moduleIndex].owner:
-    if owner > -1:
-      try:
-        giveOrders(ship = playerShip, memberIndex = owner, givenOrder = rest)
-      except CrewOrderError, CrewNoSpaceError:
-        showMessage(text = getCurrentExceptionMsg(),
-            title = "Can't give a order")
-        return tclOk
-      except:
-        return showError(message = "Can't give rest order.")
-  addMessage(message = "You cancelled crafting order in " & playerShip.modules[
-      moduleIndex].name & ".", mType = craftMessage, color = red)
+  try:
+    cancelCraftOrder(moduleIndex = moduleIndex)
+  except CrewOrderError, CrewNoSpaceError:
+    showMessage(text = getCurrentExceptionMsg(),
+        title = "Can't cancel the order")
+    return tclOk
+  except:
+    return showError(message = "Can't cancel the order.")
   updateMessages()
   updateHeader()
   updateCrewInfo()
   return tclOk
 
 proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Get the next active button in assing crew dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1336,7 +1334,8 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = ammoMenu, parentFrame = ".")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowModuleInfo", showModuleInfoCommand)
