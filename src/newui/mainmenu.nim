@@ -960,7 +960,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   var editActive: bool = windowEditActive(name = "Main") or
       windowPropertyActive(name = "Main")
   stylePushVec2(field = spacing, x = 0, y = 0)
-  stylePushFloat(field = rounding, value = 0)
+  stylePushFloat(field = buttonRounding, value = 0)
   layoutSpaceStatic(height = 30, widgetsCount = 2):
     var x: float = 200
     const
