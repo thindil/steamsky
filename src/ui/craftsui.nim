@@ -171,6 +171,16 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       tooltip::tooltip $craftframe2.sframe.show {Show only the selected type of recipes.}
       $craftframe2.sframe.show current 0
       bind $craftframe2.sframe.show <<ComboboxSelected>> {ShowCrafting 1}
+      grid [ttk::label $craftframe2.sframe.workshoplabel -text {Workshop:}]
+      tooltip::tooltip $craftframe2.sframe.workshoplabel \
+         {Show only recipes craftable in the selected workshop.}
+      grid [ttk::combobox $craftframe2.sframe.workshop \
+         -values [list {All}] -width 15 -state readonly] \
+         -sticky w -row 2 -column 1
+      tooltip::tooltip $craftframe2.sframe.workshop \
+         {Show only recipes craftable in the selected workshop.}
+      $craftframe2.sframe.workshop current 0
+      bind $craftframe2.sframe.workshop <<ComboboxSelected>> {SetRecipesWorkshop}
       ttk::frame $craftframe.orders
       grid [ttk::label $craftframe.orders.orders]
       SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
