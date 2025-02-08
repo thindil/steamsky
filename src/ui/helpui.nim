@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[basestypes, config, game, help, items, tk]
 import dialogs, errordialog, themes
 
@@ -36,7 +36,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
+        TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Destroy the help window and save the sash position to the game
   ## configuration
   ##
