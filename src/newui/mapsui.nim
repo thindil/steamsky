@@ -701,9 +701,13 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
   ## Show the main game's menu
   window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 220,
-      h = 90, flags = {windowBorder, windowMoveable, windowTitle,
+      h = 150, flags = {windowBorder, windowMoveable, windowTitle,
       windowMinimizable, windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
+    labelButton("Ship information"):
+      discard
+    labelButton("Ship orders"):
+      discard
     labelButton("Close"):
       dialog = none
 
