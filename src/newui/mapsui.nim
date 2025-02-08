@@ -371,7 +371,10 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
   imageButton(image = mapImages[0]):
-    dialog = gameMenuDialog
+    if dialog == none:
+      dialog = gameMenuDialog
+    elif dialog == gameMenuDialog:
+      dialog = none
   if gameSettings.showNumbers:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -531,7 +534,8 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Show the map's menu
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -693,9 +697,12 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       imageButton(image = mapImages[32]):
         discard
 
-proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Show the main game's menu
-  window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 220, h = 90, flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
+  window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 220,
+      h = 90, flags = {windowBorder, windowMoveable, windowTitle,
+      windowMinimizable, windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     labelButton("Close"):
       dialog = none
