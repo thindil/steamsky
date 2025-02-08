@@ -238,9 +238,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
             text = "Ship is dirty but no one is cleaning it.")
       image(image = mapImages[24], padding = NimVec2(x: 5, y: 5))
 
-var
-  showQuestion: bool = true
-  showMainMenu: bool = false
+var showQuestion: bool = true
 
 proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -373,7 +371,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
   imageButton(image = mapImages[0]):
-    showMainMenu = true
+    dialog = gameMenuDialog
   if gameSettings.showNumbers:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -533,8 +531,7 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
-    contractual.} =
+proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the map's menu
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -696,14 +693,12 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       imageButton(image = mapImages[32]):
         discard
 
-proc showGameMenu() {.raises: [NuklearException], tags: [], contractual.} =
+proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the main game's menu
-  popup(staticPopup, "Game Menu", {windowTitle, windowNoScrollbar},
-      windowWidth / 3, 30, 220, 90):
+  window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 220, h = 90, flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     labelButton("Close"):
-      showMainMenu = false
-      closePopup()
+      dialog = none
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -915,10 +910,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showLastMessages(theme = theme, dialog = dialog)
     row(0.25):
       showButtons()
-  if showMainMenu:
-    try:
-      showGameMenu()
-    except:
-      dialog = setError(message = "Can't show the game's menu")
-      showMainMenu = false
   state = map

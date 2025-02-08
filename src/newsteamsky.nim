@@ -131,11 +131,11 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
       newGame: mainMenu.newGame, map: showMap]
-  const showDialog: array[GameDialog.errorDialog..mapMenuDialog,
+  const showDialog: array[GameDialog.errorDialog..gameMenuDialog,
       proc (dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
       questionDialog: showQuestion, newGoalDialog: showGoals,
-      mapMenuDialog: showMapMenu]
+      mapMenuDialog: showMapMenu, gameMenuDialog: showGameMenu]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -169,7 +169,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
       # Dialogs if needed
       case dialog
-      of GameDialog.errorDialog..mapMenuDialog:
+      of GameDialog.errorDialog..gameMenuDialog:
         # Show the dialog
         showDialog[dialog](dialog = dialog)
       of loading:
