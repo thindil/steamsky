@@ -698,8 +698,9 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
 
 proc showGameMenu() {.raises: [NuklearException], tags: [], contractual.} =
   ## Show the main game's menu
-  popup(staticPopup, "Game Menu", {windowTitle, windowNoScrollbar}, 20, 100, 220, 90):
-    setLayoutRowDynamic(35, 1)
+  popup(staticPopup, "Game Menu", {windowTitle, windowNoScrollbar},
+      windowWidth / 3, 30, 220, 90):
+    setLayoutRowDynamic(30, 1)
     labelButton("Close"):
       showMainMenu = false
       closePopup()
