@@ -439,6 +439,9 @@ type
     normal, hover, active, borderColor, textBackground, textNormal, textHover,
       textActive, rounding, padding, border, imagePadding, touchPadding,
       colorFactorBackground, colorFactorText
+  FloatStyleTypes* = enum
+    ## The types of fields in style's settings with float values
+    buttonRounding, popupBorder
   ColorStyleTypes* = enum
     ## The types of fields in style's settings for UI colors
     background

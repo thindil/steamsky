@@ -1776,7 +1776,7 @@ proc stylePushVec2*(field: WindowStyleTypes; x,
     return nk_style_push_vec2(ctx = ctx, dest = ctx.style.window.padding,
         source = new_nk_vec2(x = x, y = y))
 
-proc stylePushFloat*(field: ButtonStyleTypes;
+proc stylePushFloat*(field: FloatStyleTypes;
     value: cfloat): bool {.discardable, raises: [], tags: [], contractual.} =
   ## Push the float value for the selected Nuklear buttons style on a
   ## temporary stack
@@ -1789,8 +1789,11 @@ proc stylePushFloat*(field: ButtonStyleTypes;
   proc nk_style_push_float(ctx; dest: var cfloat;
       source: cfloat): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  if field == rounding:
+  if field == buttonRounding:
     return nk_style_push_float(ctx = ctx, dest = ctx.style.button.rounding,
+        source = value)
+  elif field == popupBorder:
+    return nk_style_push_float(ctx = ctx, dest = ctx.style.window.popup_border,
         source = value)
   return false
 
