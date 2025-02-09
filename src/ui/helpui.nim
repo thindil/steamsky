@@ -165,9 +165,9 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the help system
   try:
-    addCommand("ShowTopic", showTopicCommand)
-    addCommand("CloseHelp", closeHelpCommand)
-    addCommand("ShowHelp", showHelpCommand)
+    addCommand(name = "ShowTopic", nimProc = showTopicCommand)
+    addCommand(name = "CloseHelp", nimProc = closeHelpCommand)
+    addCommand(name = "ShowHelp", nimProc = showHelpCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
@@ -257,9 +257,9 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         for faction in factionsList.values:
           if tagText in faction.flags:
             if factionsWithFlag.len > 0:
-              factionsWithFlag.add(", ")
-            factionsWithFlag.add(faction.name)
-        factionsWithFlag.removeSuffix(", ")
+              factionsWithFlag.add(y = ", ")
+            factionsWithFlag.add(y = faction.name)
+        factionsWithFlag.removeSuffix(suffix = ", ")
         tclEval(script = helpView & " insert end {" & factionsWithFlag & "}")
         break
     for tag in basesFlags:
@@ -269,9 +269,9 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
       for baseType in basesTypesList.values:
         if tagText in baseType.flags:
           if basesWithFlag.len > 0:
-            basesWithFlag.add(", ")
-          basesWithFlag.add(baseType.name)
-      basesWithFlag.removeSuffix(", ")
+            basesWithFlag.add(y = ", ")
+          basesWithFlag.add(y = baseType.name)
+      basesWithFlag.removeSuffix(suffix = ", ")
       tclEval(script = helpView & " insert end {" & basesWithFlag & "}")
       break
     oldIndex = endIndex + 2
