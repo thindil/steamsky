@@ -175,12 +175,12 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       tooltip::tooltip $craftframe2.sframe.workshoplabel \
          {Show only recipes craftable in the selected workshop.}
       grid [ttk::combobox $craftframe2.sframe.workshop \
-         -values [list {All}] -width 15 -state readonly] \
+         -values [list {All}] -width 29 -state readonly] \
          -sticky w -row 2 -column 1
       tooltip::tooltip $craftframe2.sframe.workshop \
          {Show only recipes craftable in the selected workshop.}
       $craftframe2.sframe.workshop current 0
-      bind $craftframe2.sframe.workshop <<ComboboxSelected>> {SetRecipesWorkshop}
+      bind $craftframe2.sframe.workshop <<ComboboxSelected>> {ShowCrafting 1}
       ttk::frame $craftframe.orders
       grid [ttk::label $craftframe.orders.orders]
       SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
@@ -192,9 +192,15 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & closeButton)
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "crafts")
+  var workshops: string = "{All}"
+  for module in playerShip.modules:
+    if module.mType == workshop:
+      workshops.add(y = " {" & module.name & "}")
+  tclEval(script = craftsCanvas & ".craft.recipes.sframe.workshop configure -values [list " &
+      workshops & "]")
   let
     recipeName = (if argc == 3: $argv[2] else: "")
-    searchEntry = craftsCanvas & ".crafts.sframe.search"
+    searchEntry = craftsCanvas & ".craft.recipes.sframe.search"
   if recipeName.len == 0:
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
