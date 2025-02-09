@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -81,3 +81,4 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if dialog == none:
       questionData = QuestionData(question: "", data: "")
       answered = true
+  windowSetFocus(name = "Question")
