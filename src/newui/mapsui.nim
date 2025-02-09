@@ -608,6 +608,7 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
       closeMapMenu(dialog = dialog)
     labelButton("Close"):
       closeMapMenu(dialog = dialog)
+  windowSetFocus(name = "Move Map")
 
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
@@ -700,6 +701,10 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
 proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     contractual.} =
   ## Show the main game's menu
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
   window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 220,
       h = 150, flags = {windowBorder, windowMoveable, windowTitle,
       windowMinimizable, windowNoScrollbar}):
@@ -710,6 +715,7 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
       discard
     labelButton("Close"):
       dialog = none
+  windowSetFocus(name = "Game Menu")
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
