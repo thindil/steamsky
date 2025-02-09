@@ -415,6 +415,15 @@ proc windowIsActive*(name: string): bool {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   return nk_window_is_active(ctx = ctx, name = name.cstring)
 
+proc windowIsHovered*(): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the currently processed window is hovered by mouse
+  ##
+  ## Returns true if the window is hovered by mouse, otherwise false
+  proc nk_window_is_hovered(ctx): nk_bool {.importc, nodecl, raises: [],
+    tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_window_is_hovered(ctx = ctx)
+
 proc windowEditActive*(name: string): bool {.raises: [], tags: [],
     contractual.} =
   ## Check if the selected window has active edit widget
