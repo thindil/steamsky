@@ -410,6 +410,7 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = questionDialog
     labelButton(title = "Close"):
       dialog = none
+  windowSetFocus(name = "Actions")
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
