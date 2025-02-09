@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -130,3 +130,4 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     labelButton(title = "Close"):
       dialog = none
       selectedGoal = oldSelected
+  windowSetFocus(name = "Select a new goal")
