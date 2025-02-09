@@ -148,6 +148,19 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       if gameSettings.showTooltips:
         resetTooltips()
 
+      # Dialogs if needed
+      case dialog
+      of GameDialog.errorDialog..gameMenuDialog:
+        # Show the dialog
+        showDialog[dialog](dialog = dialog)
+      of loading:
+        # Start loading the game
+        state = loadingGame
+        dialog = none
+      of none:
+        # No dialog to show
+        discard
+
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
           h = windowHeight, flags = {windowNoScrollbar}):
@@ -166,19 +179,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       # Quit from the game
       if state == quitGame:
         break
-
-      # Dialogs if needed
-      case dialog
-      of GameDialog.errorDialog..gameMenuDialog:
-        # Show the dialog
-        showDialog[dialog](dialog = dialog)
-      of loading:
-        # Start loading the game
-        state = loadingGame
-        dialog = none
-      of none:
-        # No dialog to show
-        discard
 
       # Draw
       nuklearDraw()
