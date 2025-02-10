@@ -446,7 +446,16 @@ proc windowInput*(name: string; disable: bool = true) {.raises: [], tags: [], co
   ## Enable or disable input in the selected window
   ##
   ## * name - the name of the window in which input will be enabled or disabled
-  let root: PNkPanel = nk_window_find(ctx = ctx, name = name.cstring).layout
+  var root: PNkPanel = nk_window_find(ctx = ctx, name = name.cstring).layout
+  if disable:
+    while root != nil:
+      root.flags = root.flags or NK_WINDOW_ROM.ord.cint
+      root.flags = root.flags and not NK_WINDOW_REMOVE_ROM.ord.cint
+      root = root.parent
+  else:
+    while root != nil:
+      root.flags = root.flags or NK_WINDOW_REMOVE_ROM.ord.cint
+      root = root.parent
 
 # ------
 # Buffer

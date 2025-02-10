@@ -123,6 +123,7 @@ type
     NK_WINDOW_ROM = 1 shl 12
     NK_WINDOW_HIDDEN = 1 shl 13
     NK_WINDOW_CLOSED = 1 shl 14
+    NK_WINDOW_REMOVE_ROM = 1 shl 16
   nk_panel_flags* = enum
     ## Internal Nuklear type
     NK_WINDOW_BORDER = 1 shl 0
@@ -302,6 +303,7 @@ type
     bounds*: nk_rect
     border*, at_y*, at_x*, max_x*, header_height*, footer_height*: cfloat
     row*: nk_row_layout
+    parent*: PNkPanel
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window
