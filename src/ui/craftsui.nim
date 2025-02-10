@@ -180,7 +180,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
       tooltip::tooltip $craftframe2.sframe.workshop \
          {Show only recipes craftable in the selected workshop.}
       $craftframe2.sframe.workshop current 0
-      bind $craftframe2.sframe.workshop <<ComboboxSelected>> {ShowCrafting 1}
+      bind $craftframe2.sframe.workshop <<ComboboxSelected>> {SetCraftWorkshop}
       ttk::frame $craftframe.orders
       grid [ttk::label $craftframe.orders.orders]
       SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
@@ -1090,6 +1090,28 @@ proc changeCraftOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ShowCraftingTab")
   return tclOk
 
+proc setCraftWorkshopCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+  ## Set the current workshop index, based on the list of workshops
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SetCraftWorkshop
+  let workshop: Natural = try:
+      tclEval2(script = mainPaned & ".craftframe.canvas.craft.recipes.sframe.workshop current").parseInt
+    except:
+      return showError(message = "Can't get workshop index.")
+  if workshop == 0:
+    tclSetVar(varName = "workshop", newValue = "-1")
+  tclEval(script = "ShowCraftingTab")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect].} =
   ## Adds Tcl commands related to the crew UI
@@ -1101,5 +1123,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand("ShowRecipeInfo", showRecipeInfoCommand)
     addCommand("ShowCraftingTab", showCraftingTabCommand)
     addCommand("ChangeCraftOrder", changeCraftOrderCommand)
+    addCommand("SetCraftWorkshop", setCraftWorkshopCommand)
   except:
     showError(message = "Can't add a Tcl command.")
