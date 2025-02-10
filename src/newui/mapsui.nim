@@ -705,13 +705,19 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog.
-  window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 220,
-      h = 150, flags = {windowBorder, windowMoveable, windowTitle,
-      windowMinimizable, windowNoScrollbar}):
+  window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 200,
+      h = 250, flags = {windowBorder, windowMoveable, windowTitle,
+      windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     labelButton("Ship information"):
       discard
     labelButton("Ship orders"):
+      discard
+    labelButton("Crafting"):
+      discard
+    labelButton("Last messages"):
+      discard
+    labelButton("Knowledge lists"):
       discard
     labelButton("Close"):
       dialog = none
