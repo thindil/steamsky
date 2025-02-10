@@ -442,6 +442,12 @@ proc windowPropertyActive*(name: string): bool {.raises: [], tags: [],
   ## Returns true if the window has active property widget, otherwise false
   return nk_window_find(ctx = ctx, name = name.cstring).property.active == 1
 
+proc windowInput*(name: string; disable: bool = true) {.raises: [], tags: [], contractual.} =
+  ## Enable or disable input in the selected window
+  ##
+  ## * name - the name of the window in which input will be enabled or disabled
+  let root: PNkPanel = nk_window_find(ctx = ctx, name = name.cstring).layout
+
 # ------
 # Buffer
 # ------
