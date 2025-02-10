@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the in-game help system, like showing the
+## help window, selecting help topics, etc.
+
 import std/[strutils, tables]
 import contracts, nimalyzer
 import ../[basestypes, config, game, help, items, tk]
