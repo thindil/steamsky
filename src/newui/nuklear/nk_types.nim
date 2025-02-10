@@ -290,6 +290,10 @@ type
     begin*, `end`*, last*: nk_size
     clip*: nk_rect
     base*: ptr nk_buffer
+  nk_row_layout*  {.importc: "struct nk_row_layout".} = object
+    ## Internal Nuklear type
+    index*, columns*: cint
+    ratio*: cfloat
   nk_panel* {.importc: "struct nk_panel", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
@@ -297,6 +301,7 @@ type
     flags*: nk_flags
     bounds*: nk_rect
     border*, at_y*, at_x*, max_x*, header_height*, footer_height*: cfloat
+    row*: nk_row_layout
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window

@@ -921,6 +921,10 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.max_x = 0
     layout.header_height = 0
     layout.footer_height = 0
+    layoutResetMinRowHeight()
+    layout.row.index = 0
+    layout.row.columns = 0
+    layout.row.ratio = 0
     return true
 {.pop ruleOn: "params".}
 

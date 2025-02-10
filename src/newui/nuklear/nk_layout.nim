@@ -186,7 +186,7 @@ proc layoutSetMinRowHeight*(height: float) {.raises: [], tags: [],
     ## A binding to Nuklear's function. Internal use only
   nk_layout_set_min_row_height(ctx = ctx, height = height.cfloat)
 
-proc lyoutResetMinRowHeight*() {.raises: [], tags: [], contractual.} =
+proc layoutResetMinRowHeight*() {.raises: [], tags: [], contractual.} =
   ## Reset the currently used minimum row height.
   proc nk_layout_reset_min_row_height(ctx) {.importc, nodecl, raises: [],
       tags: [], contractual.}
