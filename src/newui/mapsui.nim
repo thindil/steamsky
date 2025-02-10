@@ -722,7 +722,6 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     labelButton("Close"):
       dialog = none
   windowSetFocus(name = "Game Menu")
-  windowInput(name = "Game Menu", disable = false)
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =

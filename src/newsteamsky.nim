@@ -167,6 +167,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
+        if dialog != none:
+          windowInput(name = "Main")
         if state in GameState.mainMenu..GameState.map:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
