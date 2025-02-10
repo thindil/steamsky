@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to manage workshops' crafting orders from the crafting screen
+
 ### Fixed
 - Crash when starting a new game with random goal
 
