@@ -33,6 +33,13 @@ type
 var
   questionData: QuestionData = QuestionData(question: "", data: "")
   answered*: bool = false ## If true, the question was answered
+  dialogX: float = 0
+  dialogY: float = 0
+
+proc setDialog*() {.raises: [], tags: [], contractual.} =
+  ## Set the starting position of a dialog
+  dialogX = windowWidth / 3
+  dialogY = windowHeight / 4
 
 proc setQuestion*(question: string; qType: QuestionType; data: string = "";
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
