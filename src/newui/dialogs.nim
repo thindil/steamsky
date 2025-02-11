@@ -82,21 +82,27 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the parameter dialog. It is modified only when the player
   ## closed the dialog
-  window(name = "Question", x = 150, y = 75, w = 250, h = 150, flags = {
-      windowBorder, windowMoveable, windowTitle, windowNoScrollbar}):
-    setLayoutRowDynamic(height = 30 * questionData.lines, cols = 1)
-    wrapLabel(str = questionData.question)
-    setLayoutRowDynamic(height = 30, cols = 2)
-    labelButton(title = "Yes"):
-      if questionData.qType == deleteSave:
-        try:
-          removeFile(file = questionData.data)
-          dialog = none
-        except:
-          dialog = setError(message = "Can't remove the save file.")
-    labelButton(title = "No"):
-      dialog = none
-    if dialog == none:
-      questionData = QuestionData(question: "", data: "")
-      answered = true
-  windowSetFocus(name = "Question")
+  if answered:
+    return
+  try:
+    popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
+        w = 250, h = 150, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(height = 30 * questionData.lines, cols = 1)
+      wrapLabel(str = questionData.question)
+      setLayoutRowDynamic(height = 30, cols = 2)
+      labelButton(title = "Yes"):
+        if questionData.qType == deleteSave:
+          try:
+            removeFile(file = questionData.data)
+            dialog = none
+          except:
+            dialog = setError(message = "Can't remove the save file.")
+      labelButton(title = "No"):
+        dialog = none
+      if dialog == none:
+        questionData = QuestionData(question: "", data: "")
+        answered = true
+  except:
+    answered = true
+    dialog = setError(message = "Can't show the question")
