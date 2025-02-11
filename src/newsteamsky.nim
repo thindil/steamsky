@@ -148,6 +148,21 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       if gameSettings.showTooltips:
         resetTooltips()
 
+      # The main window
+      window(name = "Main", x = 0, y = 0, w = windowWidth,
+          h = windowHeight, flags = {windowNoScrollbar}):
+        let
+          oldState: GameState = state
+          oldDialog: GameDialog = dialog
+        if state in GameState.mainMenu..GameState.map:
+          # Show the proper window
+          showGame[state](state = state, dialog = dialog)
+        # Add the tooltips, if enabled
+        if gameSettings.showTooltips:
+          showTooltips()
+        if oldState != state or oldDialog != dialog:
+          redraw = true
+
       # Dialogs if needed
       case dialog
       of GameDialog.errorDialog..gameMenuDialog:
@@ -160,23 +175,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       of none:
         # No dialog to show
         discard
-
-      # The main window
-      window(name = "Main", x = 0, y = 0, w = windowWidth,
-          h = windowHeight, flags = {windowNoScrollbar}):
-        let
-          oldState: GameState = state
-          oldDialog: GameDialog = dialog
-        if dialog != none:
-          windowInput(name = "Main")
-        if state in GameState.mainMenu..GameState.map:
-          # Show the proper window
-          showGame[state](state = state, dialog = dialog)
-        # Add the tooltips, if enabled
-        if gameSettings.showTooltips:
-          showTooltips()
-        if oldState != state or oldDialog != dialog:
-          redraw = true
 
       # Quit from the game
       if state == quitGame:
