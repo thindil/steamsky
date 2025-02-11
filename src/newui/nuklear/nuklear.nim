@@ -424,6 +424,14 @@ proc windowIsHovered*(): bool {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   return nk_window_is_hovered(ctx = ctx)
 
+proc windowFind*(name: string): ptr nk_window {.raises: [], tags: [], contractual.} =
+  ## Find the window with the selected name
+  ##
+  ## * name - the name of the window to find
+  ##
+  ## Returns the pointer to the selected window
+  return nk_window_find(ctx = ctx, name = name.cstring)
+
 proc windowEditActive*(name: string): bool {.raises: [], tags: [],
     contractual.} =
   ## Check if the selected window has active edit widget
@@ -431,7 +439,7 @@ proc windowEditActive*(name: string): bool {.raises: [], tags: [],
   ## * name - the name of the window to check
   ##
   ## Returns true if the window has active edit widget, otherwise false
-  return nk_window_find(ctx = ctx, name = name.cstring).edit.active == 1
+  return windowFind(name = name).edit.active == 1
 
 proc windowPropertyActive*(name: string): bool {.raises: [], tags: [],
     contractual.} =
@@ -440,13 +448,13 @@ proc windowPropertyActive*(name: string): bool {.raises: [], tags: [],
   ## * name - the name of the window to check
   ##
   ## Returns true if the window has active property widget, otherwise false
-  return nk_window_find(ctx = ctx, name = name.cstring).property.active == 1
+  return windowFind(name = name).property.active == 1
 
 proc windowInput*(name: string; disable: bool = true) {.raises: [], tags: [], contractual.} =
   ## Enable or disable input in the selected window
   ##
   ## * name - the name of the window in which input will be enabled or disabled
-  var root: PNkPanel = nk_window_find(ctx = ctx, name = name.cstring).layout
+  var root: PNkPanel = windowFind(name = name).layout
   if disable:
     while root != nil:
       root.flags = root.flags or NK_WINDOW_ROM.ord.cint
