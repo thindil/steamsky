@@ -41,6 +41,17 @@ proc setDialog*() {.raises: [], tags: [], contractual.} =
   dialogX = windowWidth / 3
   dialogY = windowHeight / 4
 
+proc updateDialog*(width, height: float) {.raises: [], tags: [], contractual.} =
+  ## Update the current dialog position if needed
+  ##
+  ## * width  - the dialog width
+  ## * height - the dialog height
+  if isMouseDown(id = left) and isMouseHovering(rect = NimRect(x: dialogX,
+      y: dialogY, w: width, h: height)):
+    let delta = getMouseDelta()
+    dialogX += delta.x
+    dialogY += delta.y
+
 proc setQuestion*(question: string; qType: QuestionType; data: string = "";
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the data related to the current in-game question
