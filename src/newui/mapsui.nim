@@ -706,7 +706,7 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
   ##
   ## Returns the modified parameters dialog.
   window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 200,
-      h = 250, flags = {windowBorder, windowMoveable, windowTitle,
+      h = 355, flags = {windowBorder, windowMoveable, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     labelButton("Ship information"):
@@ -718,6 +718,12 @@ proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     labelButton("Last messages"):
       discard
     labelButton("Knowledge lists"):
+      discard
+    labelButton("Wait orders"):
+      discard
+    labelButton("Game statistics"):
+      discard
+    labelButton("Help"):
       discard
     labelButton("Close"):
       dialog = none
