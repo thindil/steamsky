@@ -53,9 +53,9 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## CloseHelp
   let
-    helpWindow = ".help"
-    paned = helpWindow & ".paned"
-    topicPosition = tclEval2(script = paned & " sashpos 0")
+    helpWindow: string = ".help"
+    paned: string = helpWindow & ".paned"
+    topicPosition: string = tclEval2(script = paned & " sashpos 0")
   gameSettings.topicsPosition = try:
       topicPosition.parseInt
     except:
@@ -78,7 +78,7 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowHelp topicindex
   ## Topicindex is the index of the help topic which content will be show
-  let helpWindow = ".help"
+  let helpWindow: string = ".help"
   if tclEval2(script = "winfo exists " & helpWindow) == "1":
     return closeHelpCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
@@ -111,9 +111,9 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
       }
   """)
   let
-    paned = helpWindow & ".paned"
-    helpView = paned & ".content.view"
-  let theme = try:
+    paned: string = helpWindow & ".paned"
+    helpView: string = paned & ".content.view"
+  let theme: ThemeRecord = try:
         themesList[gameSettings.interfaceTheme]
       except:
         return showError(message = "Can't find theme '" &
@@ -126,14 +126,14 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
       theme.boldHelpColor & "} -font BoldHelpFont")
   tclEval(script = helpView & " tag configure italic -foreground {" &
       theme.italicHelpColor & "} -font ItalicHelpFont")
-  var x = try:
+  var x: int = try:
         ((tclEval2(script = "winfo vrootwidth " & helpWindow).parseInt -
             gameSettings.windowWidth) / 2).int
       except:
         return showError(message = "Can't count X position of help window.")
   if x < 0:
     x = 0
-  var y = try:
+  var y: int = try:
         ((tclEval2(script = "winfo vrootheight " & helpWindow).parseInt -
             gameSettings.windowHeight) / 2).int
       except:
@@ -145,7 +145,7 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
       "+" & $y)
   tclEval(script = "update")
   tclEval(script = paned & " sashpos 0 " & $gameSettings.topicsPosition)
-  let topicsView = paned & ".topics.view"
+  let topicsView: string = paned & ".topics.view"
   for title, help in helpList:
     tclEval(script = topicsView & " insert {} end -id {" & help.index &
         "} -text {" & title & "}")
@@ -178,16 +178,16 @@ import mapsui
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  let helpView = ".help.paned.content.view"
+  let helpView: string = ".help.paned.content.view"
   tclEval(script = helpView & " configure -state normal")
   tclEval(script = helpView & " delete 1.0 end")
-  let topicsView = ".help.paned.topics.view"
-  var newText = ""
+  let topicsView: string = ".help.paned.topics.view"
+  var newText: string = ""
   for entry in helpList.values:
     if entry.index == tclEval2(script = topicsView & " selection"):
       newText = entry.text
       break
-  var oldIndex = 0
+  var oldIndex: int = 0
   type
     VariablesData = object
       name, value: string
@@ -231,14 +231,14 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         "fanaticism", "loner"]
     basesFlags: array[1 .. 4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
   while true:
-    var startIndex = newText.find(sub = '{', start = oldIndex)
+    var startIndex: int = newText.find(sub = '{', start = oldIndex)
     if startIndex == -1:
       tclEval(script = helpView & " insert end {" & newText[oldIndex .. ^1] & "}")
       break
     tclEval(script = helpView & " insert end {" & newText[oldIndex ..
         startIndex - 1] & "}")
-    var endIndex = newText.find(sub = '}', start = startIndex) - 1
-    let tagText = newText[startIndex + 1 .. endIndex]
+    var endIndex: int = newText.find(sub = '}', start = startIndex) - 1
+    let tagText: string = newText[startIndex + 1 .. endIndex]
     for variable in variables:
       if tagText == variable.name:
         tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
@@ -256,7 +256,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         break
     for tag in flagsTags:
       if tagText == tag:
-        var factionsWithFlag = ""
+        var factionsWithFlag: string = ""
         for faction in factionsList.values:
           if tagText in faction.flags:
             if factionsWithFlag.len > 0:
@@ -268,7 +268,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     for tag in basesFlags:
       if tagText != tag:
         continue
-      var basesWithFlag = ""
+      var basesWithFlag: string = ""
       for baseType in basesTypesList.values:
         if tagText in baseType.flags:
           if basesWithFlag.len > 0:
