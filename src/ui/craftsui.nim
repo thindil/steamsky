@@ -1103,12 +1103,25 @@ proc setCraftWorkshopCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SetCraftWorkshop
-  let workshop: Natural = try:
-      tclEval2(script = mainPaned & ".craftframe.canvas.craft.recipes.sframe.workshop current").parseInt
+  let
+    workshopBox: string = mainPaned & ".craftframe.canvas.craft.recipes.sframe.workshop"
+    workshop: Natural = try:
+      tclEval2(script = workshopBox & " current").parseInt
     except:
       return showError(message = "Can't get workshop index.")
   if workshop == 0:
     tclSetVar(varName = "workshop", newValue = "-1")
+  else:
+    var workshopIndex: Natural = try:
+        tclEval2(script = workshopBox & " current").parseInt
+      except:
+        return showError(message = "Can't get the workshop index.")
+    for index, module in playerShip.modules:
+      if module.name == tclEval2(script = workshopBox & " get"):
+        workshopIndex.dec
+      if workshopIndex == 0:
+        tclSetVar(varName = "workshop", newValue = $index)
+        break
   tclEval(script = "ShowCraftingTab")
   return tclOk
 
