@@ -50,6 +50,7 @@ proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
   ## Set the selection in the list of available goals
   selected = -1
   oldSelected = selectedGoal
+  setDialog()
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -58,76 +59,82 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  window(name = "Select a new goal", x = 40, y = 20, w = 540, h = 360, flags = {
-      windowBorder, windowMoveable, windowTitle, windowMinimizable,
-      windowNoScrollbar}):
-    setLayoutRowDynamic(height = 230, cols = 1)
-    group(title = "GoalsGroup", flags = {windowNoFlags}):
-      setLayoutRowDynamic(height = 25, cols = 1)
+  try:
+    const
+      width: float = 250
+      height: float = 150
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Select a new goal", x = dialogX,
+        y = dialogY, w = 540, h = 360, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(height = 230, cols = 1)
+      group(title = "GoalsGroup", flags = {windowNoFlags}):
+        setLayoutRowDynamic(height = 25, cols = 1)
 
-      proc addSelectable(label: string; num: Natural) {.raises: [], tags: [],
-          contractual.} =
-        ## Add a selectable goal to the list
-        ##
-        ## * label - the goal text to add
-        var sel: bool = selected == num
-        if selectableLabel(str = label, value = sel):
-          if sel:
-            selected = num
-            selectedGoal = label
-          else:
-            selected = -1
-            selectedGoal = "Random"
+        proc addSelectable(label: string; num: Natural) {.raises: [], tags: [],
+            contractual.} =
+          ## Add a selectable goal to the list
+          ##
+          ## * label - the goal text to add
+          var sel: bool = selected == num
+          if selectableLabel(str = label, value = sel):
+            if sel:
+              selected = num
+              selectedGoal = label
+            else:
+              selected = -1
+              selectedGoal = "Random"
 
-      var index: Natural = 0
-      addSelectable(label = "Random", num = index)
-      try:
-        const categories: OrderedTable[string, string] = {
-          "REPUTATION": "Gain max reputation in bases",
-            "DESTROY": "Destroy enemy ships", "DISCOVER": "Discover map",
-            "VISIT": "Visit bases", "CRAFT": "Craft items",
-            "MISSION": "Finish missions",
-            "KILL": "Kill enemies in melee combat"}.toOrderedTable
-        var catIndex: Positive = 1
-        for catName, category in categories:
-          treeNode(title = category, state = minimized, index = catIndex):
-            for goal in goalsUiList[catName]:
-              index.inc
-              addSelectable(label = goal, num = index)
-          catIndex.inc
-      except:
-        dialog = setError(message = "Can't show a goal.")
-        return
-    setLayoutRowDynamic(height = 35, cols = 1)
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then.")
-    if selected == -1:
-      disabled:
+        var index: Natural = 0
+        addSelectable(label = "Random", num = index)
+        try:
+          const categories: OrderedTable[string, string] = {
+            "REPUTATION": "Gain max reputation in bases",
+              "DESTROY": "Destroy enemy ships", "DISCOVER": "Discover map",
+              "VISIT": "Visit bases", "CRAFT": "Craft items",
+              "MISSION": "Finish missions",
+              "KILL": "Kill enemies in melee combat"}.toOrderedTable
+          var catIndex: Positive = 1
+          for catName, category in categories:
+            treeNode(title = category, state = minimized, index = catIndex):
+              for goal in goalsUiList[catName]:
+                index.inc
+                addSelectable(label = goal, num = index)
+            catIndex.inc
+        except:
+          dialog = setError(message = "Can't show a goal.")
+          return
+      setLayoutRowDynamic(height = 35, cols = 1)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Select the goal for your character from the list. If you choose Random option, a random goal will be assigned. You can always change it later during the game, but you will lose all progress then.")
+      if selected == -1:
+        disabled:
+          labelButton(title = "Select goal"):
+            discard
+      else:
         labelButton(title = "Select goal"):
-          discard
-    else:
-      labelButton(title = "Select goal"):
+          dialog = none
+          clearCurrentGoal()
+          if selected > 0:
+            try:
+              for goal in goalsList.values:
+                if selectedGoal == goalText(index = goal.index.parseInt):
+                  currentGoal = goal
+            except:
+              dialog = setError(message = "Can't set the current goal.")
+          elif dialog != newGoalDialog:
+            try:
+              currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
+            except:
+              dialog = setError(message = "Can't set random current goal.")
+          if selectedGoal.len > 16:
+            selectedGoal = selectedGoal[0..16] & "..."
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Close the goals list without any changes")
+      labelButton(title = "Close"):
         dialog = none
-        clearCurrentGoal()
-        if selected > 0:
-          try:
-            for goal in goalsList.values:
-              if selectedGoal == goalText(index = goal.index.parseInt):
-                currentGoal = goal
-          except:
-            dialog = setError(message = "Can't set the current goal.")
-        elif dialog != newGoalDialog:
-          try:
-            currentGoal = goalsList[getRandom(min = 1, max = goalsList.len - 1)]
-          except:
-            dialog = setError(message = "Can't set random current goal.")
-        if selectedGoal.len > 16:
-          selectedGoal = selectedGoal[0..16] & "..."
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Close the goals list without any changes")
-    labelButton(title = "Close"):
-      dialog = none
-      selectedGoal = oldSelected
-  windowSetFocus(name = "Select a new goal")
+        selectedGoal = oldSelected
+  except:
+    dialog = setError(message = "Can't show the goals' dialog")
