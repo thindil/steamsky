@@ -52,10 +52,10 @@ proc closeHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## CloseHelp
-  let
+  const
     helpWindow: string = ".help"
     paned: string = helpWindow & ".paned"
-    topicPosition: string = tclEval2(script = paned & " sashpos 0")
+  let topicPosition: string = tclEval2(script = paned & " sashpos 0")
   gameSettings.topicsPosition = try:
       topicPosition.parseInt
     except:
@@ -78,7 +78,7 @@ proc showHelpCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowHelp topicindex
   ## Topicindex is the index of the help topic which content will be show
-  let helpWindow: string = ".help"
+  const helpWindow: string = ".help"
   if tclEval2(script = "winfo exists " & helpWindow) == "1":
     return closeHelpCommand(clientData = clientData, interp = interp,
         argc = argc, argv = argv)
@@ -178,10 +178,10 @@ import mapsui
 
 proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  let helpView: string = ".help.paned.content.view"
+  const helpView: string = ".help.paned.content.view"
   tclEval(script = helpView & " configure -state normal")
   tclEval(script = helpView & " delete 1.0 end")
-  let topicsView: string = ".help.paned.topics.view"
+  const topicsView: string = ".help.paned.topics.view"
   var newText: string = ""
   for entry in helpList.values:
     if entry.index == tclEval2(script = topicsView & " selection"):
@@ -194,7 +194,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
     FontTag = object
       tag, textTag: string
   let
-    variables: array[1 .. 11, VariablesData] = try:
+    variables: array[1..11, VariablesData] = try:
         [VariablesData(name: "MoneyName", value: moneyName), VariablesData(
             name: "FuelName", value: itemsList[findProtoItem(
             itemType = fuelType)].name), VariablesData(name: "StrengthName",
@@ -214,7 +214,7 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = "bgerror {Can't set help variables. Reason: " &
             getCurrentExceptionMsg() & "}")
         return tclOk
-    accelNames: array[1 .. 25, string] = [mapAccelerators[5], mapAccelerators[
+    accelNames: array[1..25, string] = [mapAccelerators[5], mapAccelerators[
         6], mapAccelerators[7], mapAccelerators[8], mapAccelerators[9],
         mapAccelerators[10], mapAccelerators[11], mapAccelerators[12],
         mapAccelerators[13], mapAccelerators[14], menuAccelerators[1],
@@ -223,22 +223,23 @@ proc showTopicCommand(clientData: cint; interp: PInterp; argc: cint;
         menuAccelerators[7], menuAccelerators[9], menuAccelerators[10],
         menuAccelerators[11], mapAccelerators[1], menuAccelerators[8],
         mapAccelerators[3], mapAccelerators[4]]
-    fontTags: array[1 .. 3, FontTag] = [FontTag(tag: "b", textTag: "bold"),
+  const
+    fontTags: array[1..3, FontTag] = [FontTag(tag: "b", textTag: "bold"),
         FontTag(tag: "u", textTag: "underline"), FontTag(tag: "i",
         textTag: "italic")]
-    flagsTags: array[1 .. 8, string] = ["diseaseimmune", "nofatigue",
+    flagsTags: array[1..8, string] = ["diseaseimmune", "nofatigue",
         "nomorale", "naturalarmor", "toxicattack", "sentientships",
         "fanaticism", "loner"]
-    basesFlags: array[1 .. 4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
+    basesFlags: array[1..4, string] = ["shipyard", "temple", "blackmarket", "barracks"]
   while true:
     var startIndex: int = newText.find(sub = '{', start = oldIndex)
     if startIndex == -1:
       tclEval(script = helpView & " insert end {" & newText[oldIndex .. ^1] & "}")
       break
-    tclEval(script = helpView & " insert end {" & newText[oldIndex ..
-        startIndex - 1] & "}")
+    tclEval(script = helpView & " insert end {" & newText[oldIndex..startIndex -
+        1] & "}")
     var endIndex: int = newText.find(sub = '}', start = startIndex) - 1
-    let tagText: string = newText[startIndex + 1 .. endIndex]
+    let tagText: string = newText[startIndex + 1..endIndex]
     for variable in variables:
       if tagText == variable.name:
         tclEval(script = helpView & " insert end {" & variable.value & "} [list special]")
