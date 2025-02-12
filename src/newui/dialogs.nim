@@ -33,29 +33,6 @@ type
 var
   questionData: QuestionData = QuestionData(question: "", data: "")
   answered*: bool = false ## If true, the question was answered
-  dialogX: float = 0
-  dialogY: float = 0
-
-proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight / 4) {.raises: [], tags: [], contractual.} =
-  ## Set the starting position of a dialog
-  ##
-  ## * x - the X position of a dialog, can be empty, default to 1/3 of window's
-  ##       width
-  ## * y - the Y position of a dialog, can be empty, default to 1/4 of window's
-  ##       height
-  dialogX = x
-  dialogY = y
-
-proc updateDialog*(width, height: float) {.raises: [], tags: [], contractual.} =
-  ## Update the current dialog position if needed
-  ##
-  ## * width  - the dialog width
-  ## * height - the dialog height
-  if isMouseDown(id = left) and isMouseHovering(rect = NimRect(x: dialogX,
-      y: dialogY, w: width, h: height)):
-    let delta = getMouseDelta()
-    dialogX += delta.x
-    dialogY += delta.y
 
 proc setQuestion*(question: string; qType: QuestionType; data: string = "";
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
