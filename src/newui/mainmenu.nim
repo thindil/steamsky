@@ -462,6 +462,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               f = "yyyy-MM-dd hh:mm:ss"), path: file))
         except:
           dialog = setError(message = "Can't add information about the save file.")
+    showQuestion(dialog = dialog)
     if saves.len == 0:
       showLoadButton = false
       state = mainMenu
