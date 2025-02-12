@@ -36,10 +36,15 @@ var
   dialogX: float = 0
   dialogY: float = 0
 
-proc setDialog*() {.raises: [], tags: [], contractual.} =
+proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight / 4) {.raises: [], tags: [], contractual.} =
   ## Set the starting position of a dialog
-  dialogX = windowWidth / 3
-  dialogY = windowHeight / 4
+  ##
+  ## * x - the X position of a dialog, can be empty, default to 1/3 of window's
+  ##       width
+  ## * y - the Y position of a dialog, can be empty, default to 1/4 of window's
+  ##       height
+  dialogX = x
+  dialogY = y
 
 proc updateDialog*(width, height: float) {.raises: [], tags: [], contractual.} =
   ## Update the current dialog position if needed
@@ -64,6 +69,7 @@ proc setQuestion*(question: string; qType: QuestionType; data: string = "";
   ## * dialog   - the current in-game dialog displayed on the screen
   ##
   ## Returns the parameter dialog. It is modified only when an error occurs.
+  setDialog()
   try:
     var needLines: float = ceil(x = getTextWidth(text = question) / 250)
     if needLines < 1.0:
@@ -82,11 +88,15 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## Returns the parameter dialog. It is modified only when the player
   ## closed the dialog
-  if answered:
+  if dialog != questionDialog:
     return
   try:
+    const
+      width: float = 250
+      height: float = 150
+    updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
-        w = 250, h = 150, flags = {windowBorder, windowTitle,
+        w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 30 * questionData.lines, cols = 1)
       wrapLabel(str = questionData.question)
