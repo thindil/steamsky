@@ -948,6 +948,10 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.row.index = 0
     layout.row.columns = 0
     layout.row.ratio = 0
+    layout.row.item_width = 0
+    layout.row.tree_depth = 0
+    layout.row.height = panelPadding.y
+    layout.has_scrolling = nkTrue.cuint
     return true
 {.pop ruleOn: "params".}
 

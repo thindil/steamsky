@@ -293,8 +293,8 @@ type
     base*: ptr nk_buffer
   nk_row_layout*  {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
-    index*, columns*: cint
-    ratio*: cfloat
+    index*, columns*, tree_depth*: cint
+    ratio*, item_width*, item_height*, height*: cfloat
   nk_panel* {.importc: "struct nk_panel", nodecl.} = object
     ## Internal Nuklear type
     `type`*: PanelType
@@ -304,6 +304,7 @@ type
     border*, at_y*, at_x*, max_x*, header_height*, footer_height*: cfloat
     row*: nk_row_layout
     parent*: PNkPanel
+    has_scrolling*: cuint
   nk_popup_state* {.importc: "struct nk_popup_state", nodecl.} = object
     ## Internal Nuklear type
     win*: ptr nk_window
