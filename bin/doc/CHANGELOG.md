@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to manage workshops' crafting orders from the crafting screen
+- Ability to show crafting recipes only for a selected workshop in the
+  crafting screen
 
 ### Fixed
 - Crash when starting a new game with random goal
