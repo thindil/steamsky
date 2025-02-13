@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -338,7 +338,10 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       1: "" else: "ShowShipyard " & arguments & " " & $(page + 1)))
   updateTable(table = removeTable)
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
-  tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
+  if tclGetVar(varName = "newtab") == "install":
+    tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
+  else:
+    tclEval(script = "grid remove " & gameHeader & ".morebutton")
   tclEval(script = shipyardCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
       script = mainPaned & " cget -width"))
