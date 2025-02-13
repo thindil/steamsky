@@ -372,6 +372,7 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
   imageButton(image = mapImages[0]):
     if dialog == none:
+      setDialog(y = 20)
       dialog = gameMenuDialog
     elif dialog == gameMenuDialog:
       dialog = none
@@ -698,36 +699,44 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       imageButton(image = mapImages[32]):
         discard
 
-proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [],
+proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the main game's menu
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog.
-  window(name = "Game Menu", x = windowWidth.float / 3.0, y = 30, w = 200,
-      h = 355, flags = {windowBorder, windowMoveable, windowTitle,
-      windowNoScrollbar}):
-    setLayoutRowDynamic(30, 1)
-    labelButton("Ship information"):
-      discard
-    labelButton("Ship orders"):
-      discard
-    labelButton("Crafting"):
-      discard
-    labelButton("Last messages"):
-      discard
-    labelButton("Knowledge lists"):
-      discard
-    labelButton("Wait orders"):
-      discard
-    labelButton("Game statistics"):
-      discard
-    labelButton("Help"):
-      discard
-    labelButton("Close"):
-      dialog = none
-  windowSetFocus(name = "Game Menu")
+  if dialog != gameMenuDialog:
+    return
+  try:
+    const
+      width: float = 200
+      height: float = 355
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Game Menu", x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(30, 1)
+      labelButton("Ship information"):
+        discard
+      labelButton("Ship orders"):
+        discard
+      labelButton("Crafting"):
+        discard
+      labelButton("Last messages"):
+        discard
+      labelButton("Knowledge lists"):
+        discard
+      labelButton("Wait orders"):
+        discard
+      labelButton("Game statistics"):
+        discard
+      labelButton("Help"):
+        discard
+      labelButton("Close"):
+        dialog = none
+  except:
+    dialog = setError(message = "Can't show the game's menu")
 
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -939,4 +948,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showLastMessages(theme = theme, dialog = dialog)
     row(0.25):
       showButtons()
+  showGameMenu(dialog = dialog)
   state = map
