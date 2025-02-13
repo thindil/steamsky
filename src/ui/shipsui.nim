@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,10 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import ../[game, tk]
+import contracts
 import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Change name of the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -40,7 +42,8 @@ proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Maximize or minimize the selected section of the player's ship info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -86,7 +89,8 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Maximize or minimize the selected part in the player's ship info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -124,7 +128,7 @@ proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect,
-    TimeEffect, RootEffect].} =
+    TimeEffect, RootEffect], contractual.} =
   ## Adds Tcl commands related to the wait menu
   try:
     shipsuimodules.addCommands()
