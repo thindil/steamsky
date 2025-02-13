@@ -790,6 +790,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
     if gameSettings.showTooltips:
       for index, bound in bounds:
         addTooltip(bounds = bound, text = playerTooltips[index])
+    showGoals(dialog = dialog)
 
 var
   currentLevel: Natural = 2
