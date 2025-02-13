@@ -63,11 +63,11 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     return
   try:
     const
-      width: float = 250
-      height: float = 150
+      width: float = 540
+      height: float = 360
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Select a new goal", x = dialogX,
-        y = dialogY, w = 540, h = 360, flags = {windowBorder, windowTitle,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 230, cols = 1)
       group(title = "GoalsGroup", flags = {windowNoFlags}):

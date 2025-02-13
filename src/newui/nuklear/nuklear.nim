@@ -961,7 +961,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.row.height = panelPadding.y
     layout.has_scrolling = nkTrue.cuint
     if not(win.flags and NK_WINDOW_NO_SCROLLBAR.cint).nk_bool:
-      layout.bounds.w -= scrollbar_size.x
+      layout.bounds.w -= scrollbarSize.x
     return true
 {.pop ruleOn: "params".}
 
