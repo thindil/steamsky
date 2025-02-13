@@ -50,7 +50,7 @@ proc setSelectedGoal*() {.raises: [], tags: [], contractual.} =
   ## Set the selection in the list of available goals
   selected = -1
   oldSelected = selectedGoal
-  setDialog()
+  setDialog(x = 20, y = 0)
 
 proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -59,6 +59,8 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
+  if dialog != newGoalDialog:
+    return
   try:
     const
       width: float = 250
