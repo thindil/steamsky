@@ -863,6 +863,14 @@ proc nkPanelHasHeader(flags: nk_flags; title: string): bool {.raises: [], tags: 
   active = (active and not(flags and NK_WINDOW_HIDDEN.ord.int).nk_bool and title.len > 0).nk_bool
   return active
 
+proc nkPanelIsNonblock(`type`: nk_panel_type): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the selected panel's type is non-blocking panel
+  ##
+  ## * type - the type of panel to check
+  ##
+  ## Returns true if the panel's type is non-blocking, otherwise false.
+  return (`type`.cint and NK_PANEL_SET_NONBLOCK.cint).bool
+
 {.push ruleOff: "params".}
 proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     ], tags: [], contractual.} =
@@ -903,8 +911,8 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           `type` = panelType)
 
     # window movement
-    if (win.flags and NK_WINDOW_MOVEABLE.ord.int) == 1 and (win.flags and
-        NK_WINDOW_ROM.ord.int) != 1:
+    if (win.flags and NK_WINDOW_MOVEABLE.cint) == 1 and (win.flags and
+        NK_WINDOW_ROM.cint) != 1:
       # calculate draggable window space
       var header: nk_rect = nk_rect(x: win.bounds.x, y: win.bounds.y,
           w: win.bounds.w, h: 0)
@@ -934,7 +942,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.bounds = win.bounds
     layout.bounds.x += panelPadding.x
     layout.bounds.w -= (2 * panelPadding.x)
-    if (win.flags and NK_WINDOW_BORDER.ord.int).nk_bool:
+    if (win.flags and NK_WINDOW_BORDER.cint).nk_bool:
       layout.border = nkPanelGetBorder(style = style, flags = win.flags, `type` = panelType)
       layout.bounds = nkShrinkRect(r = layout.bounds, amount = layout.border)
     else:
@@ -952,6 +960,8 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.row.tree_depth = 0
     layout.row.height = panelPadding.y
     layout.has_scrolling = nkTrue.cuint
+    if not(win.flags and NK_WINDOW_NO_SCROLLBAR.cint).nk_bool:
+      layout.bounds.w -= scrollbar_size.x
     return true
 {.pop ruleOn: "params".}
 

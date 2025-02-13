@@ -130,8 +130,19 @@ type
     NK_WINDOW_MOVEABLE = 1 shl 1
     NK_WINDOW_CLOSABLE = 1 shl 3
     NK_WINDOW_MINIMIZABLE = 1 shl 4
+    NK_WINDOW_NO_SCROLLBAR = 1 shl 5
     NK_WINDOW_TITLE = 1 shl 6
     NK_WINDOW_NO_INPUT = 1 shl 10
+  nk_panel_type* = enum
+    ## Internal Nuklear type
+    NK_PANEL_CONTEXTUAL = 1 shl 4
+    NK_PANEL_COMBO = 1 shl 5
+    NK_PANEL_MENU = 1 shl 6
+    NK_PANEL_TOOLTIP = 1 shl 7
+  nk_panel_set* = enum
+    ## Internal Nuklear type
+    NK_PANEL_SET_NONBLOCK = NK_PANEL_CONTEXTUAL.cint or NK_PANEL_COMBO.cint or
+        NK_PANEL_MENU.cint or NK_PANEL_TOOLTIP.cint
   nk_command_type* = enum
     ## Internal Nuklear type
     NK_COMMAND_NOP, NK_COMMAND_SCISSOR, NK_COMMAND_LINE, NK_COMMAND_CURVE,
@@ -291,7 +302,7 @@ type
     begin*, `end`*, last*: nk_size
     clip*: nk_rect
     base*: ptr nk_buffer
-  nk_row_layout*  {.importc: "struct nk_row_layout".} = object
+  nk_row_layout* {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
     ratio*, item_width*, item_height*, height*: cfloat
