@@ -134,8 +134,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   const showDialog: array[GameDialog.errorDialog..gameMenuDialog,
       proc (dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameDialog.errorDialog: showError, loadMenu: showLoadMenu,
-    newGoalDialog: showGoals, mapMenuDialog: showMapMenu,
-    gameMenuDialog: showGameMenu]
+    mapMenuDialog: showMapMenu, gameMenuDialog: showGameMenu]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var

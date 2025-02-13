@@ -21,26 +21,26 @@
 import contracts, nuklear/nuklear_sdl_renderer
 
 type GameState* = enum
-    ## Used to determine the current game's state.
-    quitGame, mainMenu, news, allNews, about, showFile, hallOfFame, loadGame,
-        loadingGame, newGame, map
+  ## Used to determine the current game's state.
+  quitGame, mainMenu, news, allNews, about, showFile, hallOfFame, loadGame,
+      loadingGame, newGame, map
 
 type GameDialog* = enum
-    ## Used to show any in-game dialog window
-    none, loading, errorDialog, loadMenu, newGoalDialog, mapMenuDialog,
-        gameMenuDialog, questionDialog
+  ## Used to show any in-game dialog window
+  none, loading, errorDialog, loadMenu, mapMenuDialog, gameMenuDialog,
+      questionDialog, newGoalDialog
 
-const
-    dtime*: float = 20.0 ## The length in miliseconds of one game's frame
+const dtime*: float = 20.0 ## The length in miliseconds of one game's frame
 
 var
   fonts*: array[2, ptr nk_font] = [nil, nil] ## The list of fonts used by the game
-  windowWidth*: float = 800.0 ## The width of the main game window
+  windowWidth*: float = 800.0  ## The width of the main game window
   windowHeight*: float = 600.0 ## The height of the main game window
-  dialogX*: float = 0 ## The X position of a dialog
-  dialogY*: float = 0 ## The Y position of a dialog
+  dialogX*: float = 0          ## The X position of a dialog
+  dialogY*: float = 0          ## The Y position of a dialog
 
-proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight / 4) {.raises: [], tags: [], contractual.} =
+proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
+        4) {.raises: [], tags: [], contractual.} =
   ## Set the starting position of a dialog
   ##
   ## * x - the X position of a dialog, can be empty, default to 1/3 of window's
