@@ -535,7 +535,7 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
+proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the map's menu
   ##
@@ -550,66 +550,74 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [],
     moveY = 1
     dialog = none
 
-  window(name = "Move map", x = windowWidth.float / 3.0,
-      y = windowHeight - 300, w = 300, h = 295, flags = {windowBorder,
-      windowMoveable, windowTitle, windowMinimizable, windowNoScrollbar}):
-    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
-    imageButton(image = mapImages[25]):
-      centerY = (if centerY - (rows / 3).int < 1: (rows / 3).int else: centerY -
-          (rows / 3).int)
-      centerX = (if centerX - (cols / 3).int < 1: (cols / 3).int else: centerX -
-          (cols / 3).int)
-    imageButton(image = mapImages[26]):
-      centerY = (if centerY - (rows / 3).int < 1: (rows / 3).int else: centerY -
-          (rows / 3).int)
-    imageButton(image = mapImages[27]):
-      centerY = (if centerY - (rows / 3).int < 1: (rows / 3).int else: centerY -
-          (rows / 3).int)
-      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-          3).int else: centerX + (cols / 3).int)
-    label(str = "X:")
-    property(name = "#", min = MapXRange.low, val = moveX, max = MapXRange.high,
-        step = 1, incPerPixel = 1)
-    imageButton(image = mapImages[28]):
-      centerX = (if centerX - (cols / 3).int < 1: (cols / 3).int else: centerX -
-          (cols / 3).int)
-    label(str = "")
-    imageButton(image = mapImages[29]):
-      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-          3).int else: centerX + (cols / 3).int)
-    label(str = "Y:")
-    property(name = "#", min = MapYRange.low, val = moveY, max = MapYRange.high,
-        step = 1, incPerPixel = 1)
-    setLayoutRowStatic(height = 35, cols = 4, ratio = [35.cfloat, 35, 35, 170])
-    imageButton(image = mapImages[30]):
-      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-          3).int else: centerY + (rows / 3).int)
-      centerX = (if centerX - (cols / 3).int < 1: (cols / 3).int else: centerX -
-          (cols / 3).int)
-    imageButton(image = mapImages[31]):
-      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-          3).int else: centerY + (rows / 3).int)
-    imageButton(image = mapImages[32]):
-      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-          3).int else: centerY + (rows / 3).int)
-      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-          3).int else: centerX + (cols / 3).int)
-    labelButton("Move map"):
-      centerX = moveX
-      centerY = moveY
-      closeMapMenu(dialog = dialog)
-    setLayoutRowDynamic(35, 1)
-    labelButton("Center map on ship"):
-      centerX = playerShip.skyX
-      centerY = playerShip.skyY
-      closeMapMenu(dialog = dialog)
-    labelButton("Center map on home base"):
-      centerX = skyBases[playerShip.homeBase].skyX
-      centerY = skyBases[playerShip.homeBase].skyY
-      closeMapMenu(dialog = dialog)
-    labelButton("Close"):
-      closeMapMenu(dialog = dialog)
-  windowSetFocus(name = "Move Map")
+  if dialog != gameMenuDialog:
+    return
+  try:
+    const
+      width: float = 300
+      height: float = 295
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Move map", x = windowWidth.float / 3.0,
+        y = windowHeight - 300, w = width, h = height, flags = {windowBorder,
+        windowTitle, windowNoScrollbar}):
+      setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
+      imageButton(image = mapImages[25]):
+        centerY = (if centerY - (rows / 3).int < 1: (rows /
+            3).int else: centerY - (rows / 3).int)
+        centerX = (if centerX - (cols / 3).int < 1: (cols /
+            3).int else: centerX - (cols / 3).int)
+      imageButton(image = mapImages[26]):
+        centerY = (if centerY - (rows / 3).int < 1: (rows /
+            3).int else: centerY - (rows / 3).int)
+      imageButton(image = mapImages[27]):
+        centerY = (if centerY - (rows / 3).int < 1: (rows /
+            3).int else: centerY - (rows / 3).int)
+        centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+            3).int else: centerX + (cols / 3).int)
+      label(str = "X:")
+      property(name = "#", min = MapXRange.low, val = moveX,
+          max = MapXRange.high, step = 1, incPerPixel = 1)
+      imageButton(image = mapImages[28]):
+        centerX = (if centerX - (cols / 3).int < 1: (cols /
+            3).int else: centerX - (cols / 3).int)
+      label(str = "")
+      imageButton(image = mapImages[29]):
+        centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+            3).int else: centerX + (cols / 3).int)
+      label(str = "Y:")
+      property(name = "#", min = MapYRange.low, val = moveY,
+          max = MapYRange.high, step = 1, incPerPixel = 1)
+      setLayoutRowStatic(height = 35, cols = 4, ratio = [35.cfloat, 35, 35, 170])
+      imageButton(image = mapImages[30]):
+        centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+            3).int else: centerY + (rows / 3).int)
+        centerX = (if centerX - (cols / 3).int < 1: (cols /
+            3).int else: centerX - (cols / 3).int)
+      imageButton(image = mapImages[31]):
+        centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+            3).int else: centerY + (rows / 3).int)
+      imageButton(image = mapImages[32]):
+        centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+            3).int else: centerY + (rows / 3).int)
+        centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+            3).int else: centerX + (cols / 3).int)
+      labelButton("Move map"):
+        centerX = moveX
+        centerY = moveY
+        closeMapMenu(dialog = dialog)
+      setLayoutRowDynamic(35, 1)
+      labelButton("Center map on ship"):
+        centerX = playerShip.skyX
+        centerY = playerShip.skyY
+        closeMapMenu(dialog = dialog)
+      labelButton("Center map on home base"):
+        centerX = skyBases[playerShip.homeBase].skyX
+        centerY = skyBases[playerShip.homeBase].skyY
+        closeMapMenu(dialog = dialog)
+      labelButton("Close"):
+        closeMapMenu(dialog = dialog)
+  except:
+    dialog = setError(message = "Can't show the move map menu")
 
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
