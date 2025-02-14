@@ -863,13 +863,13 @@ proc nkPanelHasHeader(flags: nk_flags; title: string): bool {.raises: [], tags: 
   active = (active and not(flags and NK_WINDOW_HIDDEN.ord.int).nk_bool and title.len > 0).nk_bool
   return active
 
-proc nkPanelIsNonblock(`type`: nk_panel_type): bool {.raises: [], tags: [], contractual.} =
+proc nkPanelIsNonblock(`type`: PanelType): bool {.raises: [], tags: [], contractual.} =
   ## Check if the selected panel's type is non-blocking panel
   ##
   ## * type - the type of panel to check
   ##
   ## Returns true if the panel's type is non-blocking, otherwise false.
-  return (`type`.cint and NK_PANEL_SET_NONBLOCK.cint).bool
+  return (`type`.cint and panelSetNonBlock.cint).bool
 
 {.push ruleOff: "params".}
 proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
@@ -911,7 +911,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           `type` = panelType)
 
     # window movement
-    if (win.flags and NK_WINDOW_MOVEABLE.cint) == 1 and (win.flags and
+    if (win.flags and NK_WINDOW_MOVABLE.cint) == 1 and (win.flags and
         NK_WINDOW_ROM.cint) != 1:
       # calculate draggable window space
       var header: nk_rect = nk_rect(x: win.bounds.x, y: win.bounds.y,
@@ -962,6 +962,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.has_scrolling = nkTrue.cuint
     if not(win.flags and NK_WINDOW_NO_SCROLLBAR.cint).nk_bool:
       layout.bounds.w -= scrollbarSize.x
+    if nkPanelIsNonblock(`type` = panelType):
+      layout.footer_height = 0
+      if not(win.flags and NK_WINDOW_NO_SCROLLBAR.cint).nk_bool or (win.flags and NK_WINDOW_SCALABLE.cint).nk_bool:
+        layout.footer_height = scrollbarSize.y
+      layout.bounds.h -= layout.footer_height
+
+    # panel header
     return true
 {.pop ruleOn: "params".}
 
