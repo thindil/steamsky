@@ -535,7 +535,7 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the map's menu
   ##
@@ -550,16 +550,16 @@ proc showMapMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     moveY = 1
     dialog = none
 
-  if dialog != gameMenuDialog:
+  if dialog != mapMenuDialog:
     return
   try:
     const
       width: float = 300
       height: float = 295
     updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Move map", x = windowWidth.float / 3.0,
-        y = windowHeight - 300, w = width, h = height, flags = {windowBorder,
-        windowTitle, windowNoScrollbar}):
+    popup(pType = staticPopup, title = "Move map", x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
       setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
       imageButton(image = mapImages[25]):
         centerY = (if centerY - (rows / 3).int < 1: (rows /
@@ -707,7 +707,7 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       imageButton(image = mapImages[32]):
         discard
 
-proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the main game's menu
   ##
@@ -945,6 +945,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
     if dialog == none:
+      setDialog(x = windowWidth.float / 3.0, y = windowHeight - 300)
       dialog = mapMenuDialog
     elif dialog == mapMenuDialog:
       dialog = none
@@ -957,4 +958,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(0.25):
       showButtons()
   showGameMenu(dialog = dialog)
+  showMapMenu(dialog = dialog)
   state = map
