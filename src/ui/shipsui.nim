@@ -16,12 +16,12 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import ../[game, tk]
-import contracts
+import contracts, nimalyzer
 import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
 
 proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
-        contractual.} =
+        contractual, ruleOff: "params".} =
   ## Change name of the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
