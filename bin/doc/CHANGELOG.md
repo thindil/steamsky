@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 - Ability to show crafting recipes only for a selected workshop in the
   crafting screen
 
+### Changed
+- Show "More options" button in the shipyard only when needed - the tab
+  "Install module" is shown.
+
 ### Fixed
 - Crash when starting a new game with random goal
 
