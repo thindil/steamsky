@@ -390,7 +390,7 @@ var
   saveClicked: string = ""
   saves: seq[SaveData] = @[]
 
-proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showLoadMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the menu for the selected saved game
   ##
@@ -414,7 +414,6 @@ proc showLoadMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       labelButton(title = "Delete game"):
         setQuestion(question = "Are you sure you want delete this savegame?",
             data = saveClicked, qType = deleteSave, dialog = dialog)
-        dialog = questionDialog
       labelButton(title = "Close"):
         dialog = none
   except:
@@ -470,7 +469,6 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
               f = "yyyy-MM-dd hh:mm:ss"), path: file))
         except:
           dialog = setError(message = "Can't add information about the save file.")
-    showQuestion(dialog = dialog)
     if saves.len == 0:
       showLoadButton = false
       state = mainMenu
@@ -554,6 +552,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         saveClicked = ""
+  showQuestion(dialog = dialog)
   showLoadMenu(dialog = dialog)
   if isKeyPressed(key = NK_KEY_ESCAPE):
     if dialog == none:

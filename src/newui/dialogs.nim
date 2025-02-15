@@ -54,6 +54,7 @@ proc setQuestion*(question: string; qType: QuestionType; data: string = "";
     questionData = QuestionData(question: question, data: data,
         lines: needLines, qType: qType)
     answered = false
+    dialog = questionDialog
   except:
     dialog = setError(message = "Can't set the question.")
 
