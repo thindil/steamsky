@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -96,26 +96,36 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
   ##
   ## Returns parameter dialog
   ##
-  window(name = "Error!Error!Error!", x = 40, y = 20, w = 540, h = 360,
-      flags = {windowBorder, windowMoveable, windowTitle, windowMinimizable}):
-    setLayoutRowDynamic(height = 75, cols = 1)
-    wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
-    setLayoutRowDynamic(height = 25, cols = 1)
-    var url: string = "https://www.laeran.pl.eu.org/repositories/steamsky/ticket"
-    labelButton(title = url):
-      openLink(link = url)
-    setLayoutRowDynamic(height = 25, cols = 1)
-    label(str = "or if you prefer, on one of the game community options:")
-    url = "https://thindil.itch.io/steam-sky"
-    labelButton(title = url):
-      openLink(link = url)
-    label(str = "and attach (if possible) file with saved game or 'error.log'.")
-    labelButton(title = "Open directory with saved games"):
-      openLink(link = saveDirectory)
-    treeTab(title = "Technical details", state = minimized, index = 1):
-      setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
-      wrapLabel(str = debugInfo)
-    setLayoutRowDynamic(height = 25, cols = 1)
-    labelButton(title = "Close"):
-      dialog = none
+  if dialog != GameDialog.errorDialog:
+    return
+  try:
+    const
+      width: float = 540
+      height: float = 360
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Error!Error!Error!", x = 40, y = 20,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowMinimizable}):
+      setLayoutRowDynamic(height = 75, cols = 1)
+      wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
+      setLayoutRowDynamic(height = 25, cols = 1)
+      var url: string = "https://www.laeran.pl.eu.org/repositories/steamsky/ticket"
+      labelButton(title = url):
+        openLink(link = url)
+      setLayoutRowDynamic(height = 25, cols = 1)
+      label(str = "or if you prefer, on one of the game community options:")
+      url = "https://thindil.itch.io/steam-sky"
+      labelButton(title = url):
+        openLink(link = url)
+      label(str = "and attach (if possible) file with saved game or 'error.log'.")
+      labelButton(title = "Open directory with saved games"):
+        openLink(link = saveDirectory)
+      treeTab(title = "Technical details", state = minimized, index = 1):
+        setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
+        wrapLabel(str = debugInfo)
+      setLayoutRowDynamic(height = 25, cols = 1)
+      labelButton(title = "Close"):
+        dialog = none
     showLinkError()
+  except:
+    discard
