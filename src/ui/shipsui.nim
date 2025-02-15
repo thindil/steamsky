@@ -134,9 +134,9 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect,
     shipsuimodules.addCommands()
     shipsuicrew.addCommands()
     shipsuicargo.addCommands()
-    addCommand("ShowShipInfo", showShipInfoCommand)
-    addCommand("SetShipName", setShipNameCommand)
-    addCommand("ShipMaxMin", shipMaxMinCommand)
-    addCommand("ShipMore", shipMoreCommand)
+    addCommand(name = "ShowShipInfo", nimProc = showShipInfoCommand)
+    addCommand(name = "SetShipName", nimProc = setShipNameCommand)
+    addCommand(name = "ShipMaxMin", nimProc = shipMaxMinCommand)
+    addCommand(name = "ShipMore", nimProc = shipMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
