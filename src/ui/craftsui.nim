@@ -190,8 +190,10 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
   elif tclEval2(script = "winfo ismapped " & craftsCanvas) == "1" and argc == 1:
     tclEval(script = "InvokeButton " & closeButton)
     tclEval(script = "grid remove " & closeButton)
+    tclEval(script = "grid remove " & gameHeader & ".morebutton")
     return tclOk
   tclSetVar(varName = "gamestate", newValue = "crafts")
+  tclEval(script = gameHeader & ".morebutton configure -command {CraftsMore show}")
   var workshops: string = "{All}"
   for module in playerShip.modules:
     if module.mType == workshop:
@@ -408,6 +410,10 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     addButton(table = ordersTable, text = workers, tooltip = tooltipText,
         command = command, column = 3, newRow = true)
   updateTable(table = ordersTable)
+  if tclGetVar(varName = "newtab") == "recipes":
+    tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
+  else:
+    tclEval(script = "grid remove " & gameHeader & ".morebutton")
   craftsFrame = craftsCanvas & ".craft"
   tclEval(script = craftsCanvas & " configure -height [expr " & tclEval2(
       script = mainPaned & " sashpos 0") & " - 20] -width " & tclEval2(
