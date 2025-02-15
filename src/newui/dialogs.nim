@@ -80,6 +80,7 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       wrapLabel(str = questionData.question)
       setLayoutRowDynamic(height = 30, cols = 2)
       labelButton(title = "Yes"):
+        closePopup()
         if questionData.qType == deleteSave:
           try:
             removeFile(file = questionData.data)
@@ -87,6 +88,7 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           except:
             dialog = setError(message = "Can't remove the save file.")
       labelButton(title = "No"):
+        closePopup()
         dialog = none
       if dialog == none:
         questionData = QuestionData(question: "", data: "")

@@ -549,6 +549,7 @@ proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     moveX = 1
     moveY = 1
     dialog = none
+    closePopup()
 
   if dialog != mapMenuDialog:
     return
@@ -726,22 +727,23 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
       labelButton("Ship information"):
-        discard
+        closePopup()
       labelButton("Ship orders"):
-        discard
+        closePopup()
       labelButton("Crafting"):
-        discard
+        closePopup()
       labelButton("Last messages"):
-        discard
+        closePopup()
       labelButton("Knowledge lists"):
-        discard
+        closePopup()
       labelButton("Wait orders"):
-        discard
+        closePopup()
       labelButton("Game statistics"):
-        discard
+        closePopup()
       labelButton("Help"):
-        discard
+        closePopup()
       labelButton("Close"):
+        closePopup()
         dialog = none
   except:
     dialog = setError(message = "Can't show the game's menu")

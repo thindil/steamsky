@@ -117,6 +117,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       else:
         labelButton(title = "Select goal"):
           dialog = none
+          closePopup()
           clearCurrentGoal()
           if selected > 0:
             try:
@@ -137,6 +138,7 @@ proc showGoals*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             text = "Close the goals list without any changes")
       labelButton(title = "Close"):
         dialog = none
+        closePopup()
         selectedGoal = oldSelected
   except:
     dialog = setError(message = "Can't show the goals' dialog")

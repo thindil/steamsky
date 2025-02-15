@@ -412,10 +412,12 @@ proc showLoadMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       labelButton(title = "Load game"):
         dialog = loading
       labelButton(title = "Delete game"):
+        closePopup()
         setQuestion(question = "Are you sure you want delete this savegame?",
             data = saveClicked, qType = deleteSave, dialog = dialog)
       labelButton(title = "Close"):
         dialog = none
+        closePopup()
   except:
     dialog = setError(message = "Can't show the actions menu.")
 
