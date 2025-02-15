@@ -22,7 +22,7 @@ import std/[colors, math, tables, unicode]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
-import coreui, errordialog, messagesui, themes, utilsui2
+import coreui, dialogs, errordialog, messagesui, themes, utilsui2
 
 const iconsAmount: Positive = 36
 
@@ -238,8 +238,6 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
             text = "Ship is dirty but no one is cleaning it.")
       image(image = mapImages[24], padding = NimVec2(x: 5, y: 5))
 
-var showQuestion: bool = true
-
 proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the game's header
@@ -400,23 +398,10 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       haveRepairman = haveRepairman, haveGunner = haveGunner,
       needRepairs = needRepairs, needWorker = needWorker,
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
-  if playerShip.crew[0].health == 0 and showQuestion:
-    try:
-      popup(pType = staticPopup, flags = {windowNoScrollbar},
-          title = "Question", x = windowWidth / 3, y = windowHeight / 3,
-              w = 300, h = 115):
-        setLayoutRowDynamic(height = 60, cols = 1)
-        wrapLabel(str = "You are dead. Would you like to see your game statistics?")
-        setLayoutRowDynamic(height = 30, cols = 2)
-        labelButton(title = "Yes"):
-          showQuestion = false
-          closePopup()
-        labelButton(title = "No"):
-          showQuestion = false
-          closePopup()
-    except:
-      dialog = setError(message = "Can't create popup. Reason: " &
-          getCurrentExceptionMsg())
+  if playerShip.crew[0].health == 0 and dialog == none:
+    setQuestion(question = "You are dead. Would you like to see your game statistics?",
+        qType = showDeadStats, dialog = dialog)
+  showQuestion(dialog = dialog)
 
 proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
