@@ -969,6 +969,27 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       layout.bounds.h -= layout.footer_height
 
     # panel header
+    if nkPanelHasHeader(flags = win.flags, title):
+      var
+        header: NimRect
+        background: nk_style_item
+
+      # calculate header bounds
+      header.x = win.bounds.x
+      header.y = win.bounds.y
+      header.w = win.bounds.w
+      header.h = font.height + 2.0 + style.window.header.padding.y
+      header.h += (2.0 + style.window.header.label_padding.y)
+
+      # shrink panel by header
+      layout.header_height = header.h
+      layout.bounds.y += header.h
+      layout.bounds.h -= header.h
+      layout.at_y += header.h
+
+      # select correct header background and text color
+      if ctx.active == win:
+        background = style.window.header.active
     return true
 {.pop ruleOn: "params".}
 

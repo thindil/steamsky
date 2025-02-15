@@ -208,6 +208,7 @@ type
     align*: nk_style_header_align
     padding*: nk_vec2
     label_padding*: nk_vec2
+    active*: nk_style_item
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
@@ -358,7 +359,7 @@ type
     ## Internal Nuklear type
     style*: nk_style
     input*: nk_input
-    current*: ptr nk_window
+    current*, active*: ptr nk_window
     seq*: uint
     memory*: nk_buffer
     when defined(nkIncludeCommandUserData):
