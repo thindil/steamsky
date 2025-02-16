@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the information about the player's ship, like
+## minimizing/maximizin its sections, setting the ship's name, etc.
+
 import ../[game, tk]
 import contracts, nimalyzer
 import coreui, errordialog, shipsuicargo, shipsuicrew, shipsuimodules, showshipinfo
