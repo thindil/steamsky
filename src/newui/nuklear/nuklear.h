@@ -3596,7 +3596,7 @@ NK_API void nk_combo_end(struct nk_context*);
  *                                  CONTEXTUAL
  *
  * ============================================================================= */
-NK_API nk_bool nk_contextual_begin(struct nk_context*, nk_flags, struct nk_vec2, struct nk_rect trigger_bounds);
+NK_API nk_bool nk_contextual_begin(struct nk_context*, nk_flags, struct nk_vec2, struct nk_rect trigger_bounds, enum nk_buttons button);
 NK_API nk_bool nk_contextual_item_text(struct nk_context*, const char*, int,nk_flags align);
 NK_API nk_bool nk_contextual_item_label(struct nk_context*, const char*, nk_flags align);
 NK_API nk_bool nk_contextual_item_image_label(struct nk_context*, struct nk_image, const char*, nk_flags alignment);
@@ -21368,7 +21368,7 @@ nk_popup_set_scroll(struct nk_context *ctx, nk_uint offset_x, nk_uint offset_y)
  * ===============================================================*/
 NK_API nk_bool
 nk_contextual_begin(struct nk_context *ctx, nk_flags flags, struct nk_vec2 size,
-    struct nk_rect trigger_bounds)
+    struct nk_rect trigger_bounds, enum nk_buttons button)
 {
     struct nk_window *win;
     struct nk_window *popup;
@@ -21396,7 +21396,7 @@ nk_contextual_begin(struct nk_context *ctx, nk_flags flags, struct nk_vec2 size,
     is_open = (popup && win->popup.type == NK_PANEL_CONTEXTUAL);
     in = win->widgets_disabled ? 0 : &ctx->input;
     if (in) {
-        is_clicked = nk_input_mouse_clicked(in, NK_BUTTON_RIGHT, trigger_bounds);
+        is_clicked = nk_input_mouse_clicked(in, button, trigger_bounds);
         if (win->popup.active_con && win->popup.con_count != win->popup.active_con)
             return 0;
         if (!is_open && win->popup.active_con)

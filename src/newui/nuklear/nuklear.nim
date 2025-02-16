@@ -2183,7 +2183,7 @@ proc chartPushSlot*(value: float; slot: int): ChartEvent {.discardable,
 # Contextual
 # ----------
 proc createContextual(ctx; flags1: nk_flags; x1, y1: cfloat;
-    triggerBounds1: NimRect): bool {.raises: [], tags: [], contractual.} =
+    triggerBounds1: NimRect; btn: Buttons): bool {.raises: [], tags: [], contractual.} =
   ## Create a contextual menu, internal use only, temporary code
   ##
   ## * ctx            - the Nuklear context
@@ -2192,18 +2192,20 @@ proc createContextual(ctx; flags1: nk_flags; x1, y1: cfloat;
   ## * y1             - the height of the menu
   ## * triggerBounds1 - the rectange of coordinates in the window where clicking
   ##                    cause the menu to appear
+  ## * btn            - the mouse button which must be pressed to show the menu
   ##
   ## Return true if the contextual menu was created successfully, otherwise
   ## false
   proc nk_contextual_begin(ctx; flags: nk_flags; size: nk_vec2;
-      triggerBounds: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+      triggerBounds: nk_rect; cButton: nk_buttons): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_contextual_begin(ctx = ctx, flags = flags1, size = new_nk_vec2(
       x = x1, y = y1), triggerBounds = new_nk_rect(x = triggerBounds1.x,
-      y = triggerBounds1.y, w = triggerBounds1.w, h = triggerBounds1.h))
+      y = triggerBounds1.y, w = triggerBounds1.w, h = triggerBounds1.h),
+      cButton = btn.cint.nk_buttons)
 
 template contextualMenu*(flags: set[WindowFlags]; x, y;
-    triggerBounds: NimRect; content: untyped) =
+    triggerBounds: NimRect; button: Buttons; content: untyped) =
   ## Create a contextual menu
   ##
   ## * flags         - the flags for the menu
@@ -2211,9 +2213,10 @@ template contextualMenu*(flags: set[WindowFlags]; x, y;
   ## * y             - the height of the menu
   ## * triggerBounds - the rectange of coordinates in the window where clicking
   ##                   cause the menu to appear
+  ## * button        - the mouse button which must be pressed to show the menu
   ## * content       - the content of the menu
   if createContextual(ctx = ctx, flags1 = winSetToInt(nimFlags = flags), x1 = x,
-      y1 = y, triggerBounds1 = triggerBounds):
+      y1 = y, triggerBounds1 = triggerBounds, btn = button):
     content
     nk_contextual_end(ctx = ctx)
 
