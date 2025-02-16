@@ -390,36 +390,44 @@ var
   saveClicked: string = ""
   saves: seq[SaveData] = @[]
 
-proc showLoadMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the menu for the selected saved game
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the parameters state and dialog. It is modified only
   ## when the player closed the dialog.
-  if dialog != loadMenu:
-    return
-  try:
-    const
-      width: float = 150
-      height: float = 150
-    updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Actions", x = (menuWidth / 3).float,
-        y = (menuHeight / 3).float, w = width, h = height, flags = {
-        windowBorder, windowTitle, windowNoScrollbar}):
-      setLayoutRowDynamic(height = 30, cols = 1)
-      labelButton(title = "Load game"):
-        dialog = loading
-      labelButton(title = "Delete game"):
-        closePopup()
-        setQuestion(question = "Are you sure you want delete this savegame?",
-            data = saveClicked, qType = deleteSave, dialog = dialog)
-      labelButton(title = "Close"):
-        dialog = none
-        closePopup()
-  except:
-    dialog = setError(message = "Can't show the actions menu.")
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = left):
+    setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "Load game", align = centered):
+      dialog = loading
+    contextualItemLabel(label = "Delete game", align = centered):
+      setQuestion(question = "Are you sure you want delete this savegame?",
+          data = saveClicked, qType = deleteSave, dialog = dialog)
+    contextualItemLabel(label = "Close", align = centered):
+      discard
+#  try:
+#    const
+#      width: float = 150
+#      height: float = 150
+#    updateDialog(width = width, height = height)
+#    popup(pType = staticPopup, title = "Actions", x = (menuWidth / 3).float,
+#        y = (menuHeight / 3).float, w = width, h = height, flags = {
+#        windowBorder, windowTitle, windowNoScrollbar}):
+#      setLayoutRowDynamic(height = 30, cols = 1)
+#      labelButton(title = "Load game"):
+#        dialog = loading
+#      labelButton(title = "Delete game"):
+#        closePopup()
+#        setQuestion(question = "Are you sure you want delete this savegame?",
+#            data = saveClicked, qType = deleteSave, dialog = dialog)
+#      labelButton(title = "Close"):
+#        dialog = none
+#        closePopup()
+#  except:
+#    dialog = setError(message = "Can't show the actions menu.")
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -522,26 +530,21 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     layoutSpaceStatic(height = (saves.len * 30).float, widgetsCount = (
         saves.len * 3)):
       for index, save in saves:
-        row(x = 0, y = (index * 30).float, w = 190, h = 30):
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(), text = "Press mouse " & (
-                if gameSettings.rightButton: "right" else: "left") & " button to show available option")
-          labelButton(title = save.playerName):
-            setDialog()
-            dialog = loadMenu
-            saveClicked = save.path
-        row(x = 190, y = (index * 30).float, w = 190, h = 30):
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(), text = "Press mouse " & (
-                if gameSettings.rightButton: "right" else: "left") & " button to show available option")
+        let
+          y: float = (index * 30).float
+          bounds: NimRect = NimRect(x: 0, y: y, w: 570, h: 300)
+        if gameSettings.showTooltips:
+          addTooltip(bounds = bounds, text = "Press mouse " & (
+              if gameSettings.rightButton: "right" else: "left") & " button to show available option")
+        row(x = 0, y = y, w = 190, h = 30):
+          label(str = save.playerName)
+          showLoadMenu(dialog = dialog, bounds = bounds)
+        row(x = 190, y = y, w = 190, h = 30):
           labelButton(title = save.shipName):
             setDialog()
             dialog = loadMenu
             saveClicked = save.path
-        row(x = 380, y = (index * 30).float, w = 190, h = 30):
-          if gameSettings.showTooltips:
-            addTooltip(bounds = getWidgetBounds(), text = "Press mouse " & (
-                if gameSettings.rightButton: "right" else: "left") & " button to show available option")
+        row(x = 380, y = y, w = 190, h = 30):
           labelButton(title = save.saveTime):
             setDialog()
             dialog = loadMenu
@@ -555,7 +558,6 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         saveClicked = ""
   showQuestion(dialog = dialog)
-  showLoadMenu(dialog = dialog)
   if isKeyPressed(key = NK_KEY_ESCAPE):
     if dialog == none:
       state = mainMenu
