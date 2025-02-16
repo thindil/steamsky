@@ -155,7 +155,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
          -style Radio.Toolbutton -value orders -variable newtab \
          -command ShowCraftingTab] -row 0 -column 1 -padx 5
       set craftframe2 [ttk::frame $craftframe.recipes]
-      grid [ttk::frame $craftframe2.sframe] -sticky w
+      ttk::frame $craftframe2.sframe
       grid [ttk::label $craftframe2.sframe.searchlabel -text {Name:}]
       tooltip::tooltip $craftframe2.sframe.searchlabel \
          {Search for the selected recipe.}
@@ -230,6 +230,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
             scrollbar = craftsFrame &
         ".scrolly", command = "SortCrafting",
         tooltipText = "Press mouse button to sort the crafting recipes.")
+    tclEval(script = "grid configure " & recipesTable.canvas & " -row 1")
   else:
     recipesTable.clearTable
   let
@@ -1131,6 +1132,31 @@ proc setCraftWorkshopCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ShowCraftingTab")
   return tclOk
 
+proc craftsMoreCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+  ## Maximize or minimize the options for the list of recipes.
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## CraftMore show/hide
+  ## If th argument is set to show, show the options, otherwise hide them.
+  let
+    craftFrame = mainPaned & ".craftframe"
+    button = gameHeader & ".morebutton"
+  if argv[1] == "show":
+    tclEval(script = "grid " & craftFrame & ".canvas.craft.recipes.sframe -sticky w -row 0")
+    tclEval(script = button & " configure -command {CraftsMore hide}")
+  else:
+    tclEval(script = "grid remove " & craftFrame & ".canvas.craft.recipes.sframe")
+    tclEval(script = button & " configure -command {CraftsMore show}")
+  return tclOk
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect].} =
   ## Adds Tcl commands related to the crew UI
@@ -1143,5 +1169,6 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     addCommand("ShowCraftingTab", showCraftingTabCommand)
     addCommand("ChangeCraftOrder", changeCraftOrderCommand)
     addCommand("SetCraftWorkshop", setCraftWorkshopCommand)
+    addCommand("CraftsMore", craftsMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
