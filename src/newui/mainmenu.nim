@@ -532,13 +532,8 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for index, save in saves:
         let
           y: float = (index * 30).float
-          bounds: NimRect = NimRect(x: 0, y: y, w: 570, h: 300)
-        if gameSettings.showTooltips:
-          addTooltip(bounds = bounds, text = "Press mouse " & (
-              if gameSettings.rightButton: "right" else: "left") & " button to show available option")
         row(x = 0, y = y, w = 190, h = 30):
           label(str = save.playerName)
-          showLoadMenu(dialog = dialog, bounds = bounds)
         row(x = 190, y = y, w = 190, h = 30):
           labelButton(title = save.shipName):
             setDialog()
@@ -550,6 +545,11 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
             dialog = loadMenu
             saveClicked = save.path
     restoreButtonStyle()
+  let bounds: NimRect = NimRect(x: 0, y: 35, w: 580, h: (saves.len * 35).float)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = bounds, text = "Press mouse " & (
+        if gameSettings.rightButton: "right" else: "left") & " button to show available option")
+  showLoadMenu(dialog = dialog, bounds = bounds)
   layoutSpaceStatic(height = 50, widgetsCount = 1):
     row(x = (menuWidth - 150).float, y = 0, w = 140, h = 40):
       if gameSettings.showTooltips:
