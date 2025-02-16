@@ -780,7 +780,7 @@ proc isKeyPressed*(key: nk_keys): bool {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   return nk_input_is_key_pressed(i = ctx.input.addr, key = key)
 
-proc hasMouseClickInRect(id: Buttons; rect: NimRect): bool {.raises: [], tags: [], contractual.} =
+proc hasMouseClickInRect*(id: Buttons; rect: NimRect): bool {.raises: [], tags: [], contractual.} =
   ## Check if the mouse button was clicked in the selected rectangle
   ##
   ## * id   - the mouse button which will be checked
