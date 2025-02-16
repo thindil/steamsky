@@ -398,6 +398,10 @@ proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
   ##
   ## Returns the parameters state and dialog. It is modified only
   ## when the player closed the dialog.
+  for index, save in saves:
+    if mouseClicked(id = left, rect = NimRect(x: 0, y: ((index + 1) * 35).float,
+        w: 580, h: 35)):
+      saveClicked = save.path
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
       triggerBounds = bounds, button = left):
     setLayoutRowDynamic(25, 1)
