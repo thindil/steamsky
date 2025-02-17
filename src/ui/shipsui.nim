@@ -39,7 +39,7 @@ proc setShipNameCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Shipname is the new name for the player's ship
   if argc == 1:
     return tclOk
-  let nameEntry = mainPaned & ".shipinfoframe.general.canvas.frame.name"
+  let nameEntry: string = mainPaned & ".shipinfoframe.general.canvas.frame.name"
   playerShip.name = $argv[1]
   tclEval(script = nameEntry & " configure -text {Name: " & $argv[1] & "}")
   return tclOk
@@ -63,15 +63,15 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     name: string
     column: range[0 .. 1]
     row: range[0 .. 1]
-  let
-    frames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "general", column: 0,
+  const frames: array[1..4, FrameInfo] = [FrameInfo(name: "general", column: 0,
         row: 0), FrameInfo(name: "modules", column: 0, row: 1), FrameInfo(
         name: "crew", column: 1, row: 0), FrameInfo(name: "cargo", column: 1, row: 1)]
-    shipFrame = mainPaned & ".shipinfoframe"
-    button = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.maxmin"
+  let
+    shipFrame: string = mainPaned & ".shipinfoframe"
+    button: string = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.maxmin"
   if argv[2] == "show":
     for frameInfo in frames:
-      let frame = shipFrame & "." & frameInfo.name
+      let frame: string = shipFrame & "." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frame & " -columnspan 2 -rowspan 2 -row 0 -column 0")
       else:
@@ -80,7 +80,7 @@ proc shipMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " hide}")
   else:
     for frameInfo in frames:
-      let frame = shipFrame & "." & frameInfo.name
+      let frame: string = shipFrame & "." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frame &
             " -columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
@@ -108,8 +108,8 @@ proc shipMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Framename is name of the frame in which the part will be shown or hidden.
   ## If the second argument is set to show, show the part, otherwise hide it.
   let
-    shipFrame = mainPaned & ".shipinfoframe"
-    button = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
+    shipFrame: string = mainPaned & ".shipinfoframe"
+    button: string = shipFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
   if argv[1] == "crew":
     if argv[2] == "show":
       tclEval(script = "grid " & shipFrame & ".crew.canvas.frame.ordersbuttons -sticky w -row 1")
