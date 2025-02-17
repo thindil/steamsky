@@ -1264,6 +1264,36 @@ proc colorLabel*(str: string; color: Color; align: TextAlignment = left) {.raise
   nk_label_colored(ctx = ctx, str = str.cstring, align = align.nk_flags,
       color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
+proc colorLabel*(str: string; color, background: Color; align: TextAlignment = left) {.raises: [], tags: [], contractual.} =
+  ## Draw a text with the selected color and background
+  ##
+  ## * str        - the text to display
+  ## * color       - the color of the text
+  ## * background - the color of the text's background
+  ## * align      - the text aligmnent flags
+  proc nk_label_colored2(ctx; str: cstring; align: nk_flags;
+      color, color2: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  var
+    (r, g, b) = color.extractRGB
+    (r2, g2, b2) = background.extractRGB
+  nk_label_colored2(ctx = ctx, str = str.cstring, align = align.nk_flags,
+      color = nk_rgb(r = r.cint, g = g.cint, b = b.cint),
+      color2 = nk_rgb(r = r2.cint, g = g2.cint, b = b2.cint))
+
+proc colorLabel*(str: string; background: Color; align: TextAlignment = left) {.raises: [], tags: [], contractual.} =
+  ## Draw a text with the selected background color
+  ##
+  ## * str        - the text to display
+  ## * background - the color of the text's background
+  ## * align      - the text aligmnent flags
+  proc nk_label_colored3(ctx; str: cstring; align: nk_flags;
+      color: nk_color) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  var (r, g, b) = background.extractRGB
+  nk_label_colored3(ctx = ctx, str = str.cstring, align = align.nk_flags,
+      color = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
+
 proc label*(str: string; alignment: TextAlignment = left) {.raises: [], tags: [
     ], contractual.} =
   ## Draw the text with the selected alignment

@@ -3155,6 +3155,8 @@ enum nk_text_alignment {
 };
 NK_API void nk_text(struct nk_context*, const char*, int, nk_flags);
 NK_API void nk_text_colored(struct nk_context*, const char*, int, nk_flags, struct nk_color);
+NK_API void nk_text_colored2(struct nk_context*, const char*, int, nk_flags, struct nk_color, struct nk_color);
+NK_API void nk_text_colored3(struct nk_context*, const char*, int, nk_flags, struct nk_color);
 NK_API void nk_text_wrap(struct nk_context*, const char*, int);
 NK_API void nk_text_wrap_colored(struct nk_context*, const char*, int, struct nk_color);
 NK_API void nk_label(struct nk_context*, const char*, nk_flags align);
@@ -23808,6 +23810,60 @@ nk_text_colored(struct nk_context *ctx, const char *str, int len,
     nk_widget_text(&win->buffer, bounds, str, len, &text, alignment, style->font);
 }
 NK_API void
+nk_text_colored2(struct nk_context *ctx, const char *str, int len,
+    nk_flags alignment, struct nk_color color, struct nk_color color2)
+{
+    struct nk_window *win;
+    const struct nk_style *style;
+
+    struct nk_vec2 item_padding;
+    struct nk_rect bounds;
+    struct nk_text text;
+
+    NK_ASSERT(ctx);
+    NK_ASSERT(ctx->current);
+    NK_ASSERT(ctx->current->layout);
+    if (!ctx || !ctx->current || !ctx->current->layout) return;
+
+    win = ctx->current;
+    style = &ctx->style;
+    nk_panel_alloc_space(&bounds, ctx);
+    item_padding = style->text.padding;
+
+    text.padding.x = item_padding.x;
+    text.padding.y = item_padding.y;
+    text.background = color2;
+    text.text = nk_rgb_factor(color, style->text.color_factor);
+    nk_widget_text(&win->buffer, bounds, str, len, &text, alignment, style->font);
+}
+NK_API void
+nk_text_colored3(struct nk_context *ctx, const char *str, int len,
+    nk_flags alignment, struct nk_color color)
+{
+    struct nk_window *win;
+    const struct nk_style *style;
+
+    struct nk_vec2 item_padding;
+    struct nk_rect bounds;
+    struct nk_text text;
+
+    NK_ASSERT(ctx);
+    NK_ASSERT(ctx->current);
+    NK_ASSERT(ctx->current->layout);
+    if (!ctx || !ctx->current || !ctx->current->layout) return;
+
+    win = ctx->current;
+    style = &ctx->style;
+    nk_panel_alloc_space(&bounds, ctx);
+    item_padding = style->text.padding;
+
+    text.padding.x = item_padding.x;
+    text.padding.y = item_padding.y;
+    text.background = color;
+    text.text = style->text.color;
+    nk_widget_text(&win->buffer, bounds, str, len, &text, alignment, style->font);
+}
+NK_API void
 nk_text_wrap_colored(struct nk_context *ctx, const char *str,
     int len, struct nk_color color)
 {
@@ -23968,6 +24024,16 @@ nk_label_colored(struct nk_context *ctx, const char *str, nk_flags align,
     struct nk_color color)
 {
     nk_text_colored(ctx, str, nk_strlen(str), align, color);
+}
+nk_label_colored2(struct nk_context *ctx, const char *str, nk_flags align,
+    struct nk_color color, struct nk_color color2)
+{
+    nk_text_colored2(ctx, str, nk_strlen(str), align, color, color2);
+}
+nk_label_colored3(struct nk_context *ctx, const char *str, nk_flags align,
+    struct nk_color color)
+{
+    nk_text_colored3(ctx, str, nk_strlen(str), align, color);
 }
 NK_API void
 nk_label_wrap(struct nk_context *ctx, const char *str)
