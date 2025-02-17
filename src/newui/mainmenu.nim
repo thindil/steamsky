@@ -398,12 +398,9 @@ proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
   ##
   ## Returns the parameters state and dialog. It is modified only
   ## when the player closed the dialog.
-  for index, save in saves:
-    if mouseClicked(id = left, rect = NimRect(x: 0, y: ((index + 1) * 35).float,
-        w: 580, h: 35)):
-      saveClicked = save.path
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
-      triggerBounds = bounds, button = left):
+      triggerBounds = bounds, button = (
+      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
     setLayoutRowDynamic(25, 1)
     contextualItemLabel(label = "Load game", align = centered):
       dialog = loading
@@ -412,26 +409,6 @@ proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
           data = saveClicked, qType = deleteSave, dialog = dialog)
     contextualItemLabel(label = "Close", align = centered):
       discard
-#  try:
-#    const
-#      width: float = 150
-#      height: float = 150
-#    updateDialog(width = width, height = height)
-#    popup(pType = staticPopup, title = "Actions", x = (menuWidth / 3).float,
-#        y = (menuHeight / 3).float, w = width, h = height, flags = {
-#        windowBorder, windowTitle, windowNoScrollbar}):
-#      setLayoutRowDynamic(height = 30, cols = 1)
-#      labelButton(title = "Load game"):
-#        dialog = loading
-#      labelButton(title = "Delete game"):
-#        closePopup()
-#        setQuestion(question = "Are you sure you want delete this savegame?",
-#            data = saveClicked, qType = deleteSave, dialog = dialog)
-#      labelButton(title = "Close"):
-#        dialog = none
-#        closePopup()
-#  except:
-#    dialog = setError(message = "Can't show the actions menu.")
 
 proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [ReadIOEffect, RootEffect], contractual.} =
@@ -537,18 +514,15 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         let
           y: float = (index * 30).float
         row(x = 0, y = y, w = 190, h = 30):
-          label(str = save.playerName)
+          labelButton(title = save.playerName):
+            saveClicked = save.path
         row(x = 190, y = y, w = 190, h = 30):
           labelButton(title = save.shipName):
-            setDialog()
-            dialog = loadMenu
             saveClicked = save.path
         row(x = 380, y = y, w = 190, h = 30):
           labelButton(title = save.saveTime):
-            setDialog()
-            dialog = loadMenu
             saveClicked = save.path
-    restoreButtonStyle()
+  restoreButtonStyle()
   let bounds: NimRect = NimRect(x: 0, y: 35, w: 580, h: (saves.len * 35).float)
   if gameSettings.showTooltips:
     addTooltip(bounds = bounds, text = "Press mouse " & (
