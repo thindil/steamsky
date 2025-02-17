@@ -544,7 +544,7 @@ proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     popup(pType = staticPopup, title = "Move map", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 150])
+      setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 190])
       imageButton(image = mapImages[25]):
         centerY = (if centerY - (rows / 3).int < 1: (rows /
             3).int else: centerY - (rows / 3).int)
@@ -579,7 +579,7 @@ proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         centerX = skyBases[playerShip.homeBase].skyX
         centerY = skyBases[playerShip.homeBase].skyY
         closeMapMenu(dialog = dialog)
-      setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 150])
+      setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 190])
       imageButton(image = mapImages[30]):
         centerY = (if centerY + (rows / 3).int > 1_024: (rows /
             3).int else: centerY + (rows / 3).int)
@@ -906,6 +906,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
   if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
+  labelButton(title = "\uf85b"):
+    if dialog == none:
+      setDialog(x = windowWidth.float / 5.0, y = windowHeight - 200)
+      dialog = mapMenuDialog
+  if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Make the map smaller by one row.")
   labelButton(title = "\u25b2"):
@@ -925,12 +931,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         text = "Zoom out the map.")
   labelButton(title = "-"):
     gameSettings.mapFontSize -= 2
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
-  labelButton(title = "\uf85b"):
-    if dialog == none:
-      setDialog(x = windowWidth.float / 5.0, y = windowHeight - 200)
-      dialog = mapMenuDialog
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
