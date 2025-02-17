@@ -372,8 +372,6 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if dialog == none:
       setDialog(y = 20)
       dialog = gameMenuDialog
-    elif dialog == gameMenuDialog:
-      dialog = none
   if gameSettings.showNumbers:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -934,8 +932,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     if dialog == none:
       setDialog(x = windowWidth.float / 3.0, y = windowHeight - 300)
       dialog = mapMenuDialog
-    elif dialog == mapMenuDialog:
-      dialog = none
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
