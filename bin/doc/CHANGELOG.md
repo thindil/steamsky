@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Ability to manage workshops' crafting orders from the crafting screen
 - Ability to show crafting recipes only for a selected workshop in the
   crafting screen
+- Button "More options" to the list of crafting recipes in the crafting
+  screen
 
 ### Changed
 - Show "More options" button in the shipyard only when needed - the tab
