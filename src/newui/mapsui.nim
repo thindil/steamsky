@@ -538,13 +538,13 @@ proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     return
   try:
     const
-      width: float = 300
-      height: float = 295
+      width: float = 500
+      height: float = 190
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Move map", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 35, 135])
+      setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 150])
       imageButton(image = mapImages[25]):
         centerY = (if centerY - (rows / 3).int < 1: (rows /
             3).int else: centerY - (rows / 3).int)
@@ -561,6 +561,10 @@ proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       label(str = "X:")
       property(name = "#", min = MapXRange.low, val = moveX,
           max = MapXRange.high, step = 1, incPerPixel = 1)
+      labelButton("Center map on ship"):
+        centerX = playerShip.skyX
+        centerY = playerShip.skyY
+        closeMapMenu(dialog = dialog)
       imageButton(image = mapImages[28]):
         centerX = (if centerX - (cols / 3).int < 1: (cols /
             3).int else: centerX - (cols / 3).int)
@@ -571,7 +575,11 @@ proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       label(str = "Y:")
       property(name = "#", min = MapYRange.low, val = moveY,
           max = MapYRange.high, step = 1, incPerPixel = 1)
-      setLayoutRowStatic(height = 35, cols = 4, ratio = [35.cfloat, 35, 35, 170])
+      labelButton("Center map on home base"):
+        centerX = skyBases[playerShip.homeBase].skyX
+        centerY = skyBases[playerShip.homeBase].skyY
+        closeMapMenu(dialog = dialog)
+      setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 150])
       imageButton(image = mapImages[30]):
         centerY = (if centerY + (rows / 3).int > 1_024: (rows /
             3).int else: centerY + (rows / 3).int)
@@ -588,15 +596,6 @@ proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       labelButton("Move map"):
         centerX = moveX
         centerY = moveY
-        closeMapMenu(dialog = dialog)
-      setLayoutRowDynamic(35, 1)
-      labelButton("Center map on ship"):
-        centerX = playerShip.skyX
-        centerY = playerShip.skyY
-        closeMapMenu(dialog = dialog)
-      labelButton("Center map on home base"):
-        centerX = skyBases[playerShip.homeBase].skyX
-        centerY = skyBases[playerShip.homeBase].skyY
         closeMapMenu(dialog = dialog)
       labelButton("Close"):
         closeMapMenu(dialog = dialog)
@@ -930,7 +929,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
   labelButton(title = "\uf85b"):
     if dialog == none:
-      setDialog(x = windowWidth.float / 3.0, y = windowHeight - 300)
+      setDialog(x = windowWidth.float / 5.0, y = windowHeight - 200)
       dialog = mapMenuDialog
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
