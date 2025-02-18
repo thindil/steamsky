@@ -208,14 +208,15 @@ type
     align*: nk_style_header_align
     padding*: nk_vec2
     label_padding*: nk_vec2
-    active*: nk_style_item
+    active*, hover*: nk_style_item
+    label_active*: nk_color
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
     spacing*, scrollbar_size*, padding*, group_padding*, popup_padding*,
       contextual_padding*, combo_padding*, menu_padding*,
       tooltip_padding*: nk_vec2
-    background*: nk_color
+    background*, group_text_color*: nk_color
     border*, combo_border*, contextual_border*, menu_border*, group_border*,
       tooltip_border*, popup_border*: cfloat
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
@@ -382,6 +383,10 @@ type
     handle*: nk_handle
     w*, h*: nk_ushort
     region*: array[4, nk_ushort]
+  nk_text* {.importc: "struct nk_text", nodecl.} = object
+    ## Internal Nuklear type
+    padding*: nk_vec2
+    background*, text*: nk_color
   PNkWindow* = ptr nk_window
     ## Pointer to nk_window structure
   PNkPanel* = ptr nk_panel

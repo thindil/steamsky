@@ -883,7 +883,6 @@ proc nkPanelIsNonblock(`type`: PanelType): bool {.raises: [], tags: [], contract
   ## Returns true if the panel's type is non-blocking, otherwise false.
   return (`type`.cint and panelSetNonBlock.cint).bool
 
-{.push ruleOff: "params".}
 proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     ], tags: [], contractual.} =
   ## Start drawing a Nuklear panel. Internal use only
@@ -985,6 +984,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       var
         header: NimRect
         background: nk_style_item
+        text: nk_text
 
       # calculate header bounds
       header.x = win.bounds.x
@@ -1002,8 +1002,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       # select correct header background and text color
       if ctx.active == win:
         background = style.window.header.active
+        if layout.`type` == panelGroup:
+          text.text = style.window.group_text_color
+        else:
+          text.text = style.window.header.label_active
+      elif isMouseHovering(rect = header):
+        background = style.window.header.hover
     return true
-{.pop ruleOn: "params".}
 
 # ------
 # Popups
