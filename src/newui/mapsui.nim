@@ -518,89 +518,77 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the map's menu
   ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameters dialog.
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
 
-  proc closeMapMenu(dialog: var GameDialog) {.raises: [], tags: [],
-      contractual.} =
+  proc closeMapMenu() {.raises: [], tags: [], contractual.} =
     ## Close the menu, reset the position form
     moveX = 1
     moveY = 1
-    dialog = none
-    closePopup()
 
-  if dialog != mapMenuDialog:
-    return
-  try:
-    const
-      width: float = 500
-      height: float = 190
-    updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Move map", x = dialogX, y = dialogY,
-        w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
-      setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 190])
-      imageButton(image = mapImages[25]):
-        centerY = (if centerY - (rows / 3).int < 1: (rows /
-            3).int else: centerY - (rows / 3).int)
-        centerX = (if centerX - (cols / 3).int < 1: (cols /
-            3).int else: centerX - (cols / 3).int)
-      imageButton(image = mapImages[26]):
-        centerY = (if centerY - (rows / 3).int < 1: (rows /
-            3).int else: centerY - (rows / 3).int)
-      imageButton(image = mapImages[27]):
-        centerY = (if centerY - (rows / 3).int < 1: (rows /
-            3).int else: centerY - (rows / 3).int)
-        centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-            3).int else: centerX + (cols / 3).int)
-      label(str = "X:")
-      property(name = "#", min = MapXRange.low, val = moveX,
-          max = MapXRange.high, step = 1, incPerPixel = 1)
-      labelButton("Center map on ship"):
-        centerX = playerShip.skyX
-        centerY = playerShip.skyY
-        closeMapMenu(dialog = dialog)
-      imageButton(image = mapImages[28]):
-        centerX = (if centerX - (cols / 3).int < 1: (cols /
-            3).int else: centerX - (cols / 3).int)
-      label(str = "")
-      imageButton(image = mapImages[29]):
-        centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-            3).int else: centerX + (cols / 3).int)
-      label(str = "Y:")
-      property(name = "#", min = MapYRange.low, val = moveY,
-          max = MapYRange.high, step = 1, incPerPixel = 1)
-      labelButton("Center map on home base"):
-        centerX = skyBases[playerShip.homeBase].skyX
-        centerY = skyBases[playerShip.homeBase].skyY
-        closeMapMenu(dialog = dialog)
-      setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 190])
-      imageButton(image = mapImages[30]):
-        centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-            3).int else: centerY + (rows / 3).int)
-        centerX = (if centerX - (cols / 3).int < 1: (cols /
-            3).int else: centerX - (cols / 3).int)
-      imageButton(image = mapImages[31]):
-        centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-            3).int else: centerY + (rows / 3).int)
-      imageButton(image = mapImages[32]):
-        centerY = (if centerY + (rows / 3).int > 1_024: (rows /
-            3).int else: centerY + (rows / 3).int)
-        centerX = (if centerX + (cols / 3).int > 1_024: (cols /
-            3).int else: centerX + (cols / 3).int)
-      labelButton("Move map"):
-        centerX = moveX
-        centerY = moveY
-        closeMapMenu(dialog = dialog)
-      labelButton("Close"):
-        closeMapMenu(dialog = dialog)
-  except:
-    dialog = setError(message = "Can't show the move map menu")
+  nuklearSetDefaultFont(defaultFont = fonts[0],
+      fontSize = gameSettings.interfaceFontSize + 10)
+  contextualMenu(flags = {windowNoFlags}, x = 500, y = 190, triggerBounds = bounds, button = left):
+    setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 190])
+    imageButton(image = mapImages[25]):
+      centerY = (if centerY - (rows / 3).int < 1: (rows /
+          3).int else: centerY - (rows / 3).int)
+      centerX = (if centerX - (cols / 3).int < 1: (cols /
+          3).int else: centerX - (cols / 3).int)
+    imageButton(image = mapImages[26]):
+      centerY = (if centerY - (rows / 3).int < 1: (rows /
+          3).int else: centerY - (rows / 3).int)
+    imageButton(image = mapImages[27]):
+      centerY = (if centerY - (rows / 3).int < 1: (rows /
+          3).int else: centerY - (rows / 3).int)
+      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+          3).int else: centerX + (cols / 3).int)
+    label(str = "X:")
+    property(name = "#", min = MapXRange.low, val = moveX,
+        max = MapXRange.high, step = 1, incPerPixel = 1)
+    labelButton("Center map on ship"):
+      centerX = playerShip.skyX
+      centerY = playerShip.skyY
+      closeMapMenu()
+    imageButton(image = mapImages[28]):
+      centerX = (if centerX - (cols / 3).int < 1: (cols /
+          3).int else: centerX - (cols / 3).int)
+    label(str = "")
+    imageButton(image = mapImages[29]):
+      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+          3).int else: centerX + (cols / 3).int)
+    label(str = "Y:")
+    property(name = "#", min = MapYRange.low, val = moveY,
+        max = MapYRange.high, step = 1, incPerPixel = 1)
+    labelButton("Center map on home base"):
+      centerX = skyBases[playerShip.homeBase].skyX
+      centerY = skyBases[playerShip.homeBase].skyY
+      closeMapMenu()
+    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 190])
+    imageButton(image = mapImages[30]):
+      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+          3).int else: centerY + (rows / 3).int)
+      centerX = (if centerX - (cols / 3).int < 1: (cols /
+          3).int else: centerX - (cols / 3).int)
+    imageButton(image = mapImages[31]):
+      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+          3).int else: centerY + (rows / 3).int)
+    imageButton(image = mapImages[32]):
+      centerY = (if centerY + (rows / 3).int > 1_024: (rows /
+          3).int else: centerY + (rows / 3).int)
+      centerX = (if centerX + (cols / 3).int > 1_024: (cols /
+          3).int else: centerX + (cols / 3).int)
+    labelButton("Move map"):
+      centerX = moveX
+      centerY = moveY
+      closeMapMenu()
+    labelButton("Close"):
+      closeMapMenu()
+  nuklearSetDefaultFont(defaultFont = fonts[1],
+      fontSize = gameSettings.mapFontSize + 10)
 
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
@@ -905,12 +893,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   restoreButtonStyle()
   # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
+  let bounds: NimRect = getWidgetBounds()
   if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(), text = "Show the map movement menu.")
+    addTooltip(bounds = bounds, text = "Show the map movement menu.")
+  showMapMenu(bounds = bounds)
   labelButton(title = "\uf85b"):
-    if dialog == none:
-      setDialog(x = windowWidth.float / 5.0, y = windowHeight - 200)
-      dialog = mapMenuDialog
+    discard
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Make the map smaller by one row.")
@@ -940,5 +928,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(0.25):
       showButtons()
   showGameMenu(dialog = dialog)
-  showMapMenu(dialog = dialog)
   state = map
