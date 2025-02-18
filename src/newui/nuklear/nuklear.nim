@@ -202,6 +202,9 @@ proc nk_contextual_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.
 proc nk_contextual_item_label(ctx; clabel: cstring;
     calign: nk_flags): nk_bool {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
+proc nk_contextual_item_image(ctx; img: PImage;): nk_bool {.importc, cdecl,
+  raises: [], tags: [], contractual.}
+  ## A binding to Nuklear's function. Internal use only
 
 # ------
 # Groups
@@ -2276,6 +2279,14 @@ template contextualItemLabel*(label: string; align: TextAlignment;
   ## * onPressCode - the Nim code to execute when the label was pressed
   if nk_contextual_item_label(ctx = ctx, clabel = label.cstring,
       calign = align.nk_flags):
+    onPressCode
+
+template contextualItemImage*(image: PImage; onPressCode: untyped) =
+  ## Add a clickable image to a contextual menu
+  ##
+  ## * image       - the image to show in the menu
+  ## * onPressCode - the Nim code to execute when the image was pressed
+  if nk_contextual_item_image(ctx = ctx, img = image):
     onPressCode
 
 # ------
