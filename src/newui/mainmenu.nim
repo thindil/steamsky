@@ -395,9 +395,11 @@ proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
   ## Show the menu for the selected saved game
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
   ##
-  ## Returns the parameters state and dialog. It is modified only
-  ## when the player closed the dialog.
+  ## Returns the parameter dialog. It is modified only when the player start
+  ## loading the game.
   contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
       triggerBounds = bounds, button = (
       if gameSettings.rightButton: Buttons.right else: Buttons.left)):
