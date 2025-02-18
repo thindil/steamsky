@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,12 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import ../[config, game, maps, ships, tk, types]
 import coreui, errordialog, shipsuicrew, utilsui2, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Show information about the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
