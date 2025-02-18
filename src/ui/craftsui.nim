@@ -257,8 +257,7 @@ proc showCraftingCommand(clientData: cint; interp: PInterp; argc: cint;
     try:
       if recipeName.len > 0 and itemsList[recipesList[
           rec].resultIndex].name.toLowerAscii.find(
-          sub = recipeName.toLowerAscii,
-          start = 1) == -1:
+          sub = recipeName.toLowerAscii) == -1:
         continue
     except:
       return showError(message = "Can't check recipeName.")
