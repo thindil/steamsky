@@ -531,8 +531,8 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.
 
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
-  contextualMenu(flags = {windowNoFlags}, x = 500, y = 190, triggerBounds = bounds, button = left):
-    setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 190])
+  contextualMenu(flags = {windowNoFlags}, x = 525, y = 190, triggerBounds = bounds, button = left):
+    setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 220])
     imageButton(image = mapImages[25]):
       centerY = (if centerY - (rows / 3).int < 1: (rows /
           3).int else: centerY - (rows / 3).int)
@@ -549,7 +549,7 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.
     label(str = "X:")
     property(name = "#", min = MapXRange.low, val = moveX,
         max = MapXRange.high, step = 1, incPerPixel = 1)
-    labelButton("Center map on ship"):
+    labelButton(title = "Center map on ship"):
       centerX = playerShip.skyX
       centerY = playerShip.skyY
       closeMapMenu()
@@ -563,11 +563,11 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.
     label(str = "Y:")
     property(name = "#", min = MapYRange.low, val = moveY,
         max = MapYRange.high, step = 1, incPerPixel = 1)
-    labelButton("Center map on home base"):
+    labelButton(title = "Center map on home base"):
       centerX = skyBases[playerShip.homeBase].skyX
       centerY = skyBases[playerShip.homeBase].skyY
       closeMapMenu()
-    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 190])
+    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 220])
     imageButton(image = mapImages[30]):
       centerY = (if centerY + (rows / 3).int > 1_024: (rows /
           3).int else: centerY + (rows / 3).int)
@@ -581,11 +581,11 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.
           3).int else: centerY + (rows / 3).int)
       centerX = (if centerX + (cols / 3).int > 1_024: (cols /
           3).int else: centerX + (cols / 3).int)
-    labelButton("Move map"):
+    labelButton(title = "Move map"):
       centerX = moveX
       centerY = moveY
       closeMapMenu()
-    labelButton("Close"):
+    contextualItemLabel(label = "Close", align = centered):
       closeMapMenu()
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
