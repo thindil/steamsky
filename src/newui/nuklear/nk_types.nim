@@ -208,8 +208,8 @@ type
     align*: nk_style_header_align
     padding*: nk_vec2
     label_padding*: nk_vec2
-    active*, hover*: nk_style_item
-    label_active*: nk_color
+    active*, hover*, normal*: nk_style_item
+    label_active*, label_hover*, label_normal*: nk_color
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header

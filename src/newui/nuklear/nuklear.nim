@@ -1011,6 +1011,19 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           text.text = style.window.header.label_active
       elif isMouseHovering(rect = header):
         background = style.window.header.hover
+        if layout.`type` == panelGroup:
+          text.text = style.window.group_text_color
+        else:
+          text.text = style.window.header.label_hover
+      else:
+        background = style.window.header.normal
+        if layout.`type` == panelGroup:
+          text.text = style.window.group_text_color
+        else:
+          text.text = style.window.header.label_normal
+
+      # draw header background
+      header.h += 1.0
     return true
 
 # ------
