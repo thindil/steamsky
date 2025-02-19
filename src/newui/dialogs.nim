@@ -24,7 +24,7 @@ import coreui, errordialog
 type
   QuestionType* = enum
     ## Types of questions, used to set actions to the player's response
-    deleteSave, showDeadStats
+    deleteSave, showDeadStats, quitGame
   QuestionData = object
     question, data: string
     qType: QuestionType
@@ -81,13 +81,16 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       setLayoutRowDynamic(height = 30, cols = 2)
       labelButton(title = "Yes"):
         closePopup()
-        if questionData.qType == deleteSave:
+        case questionData.qType
+        of deleteSave:
           try:
             removeFile(file = questionData.data)
             dialog = none
           except:
             dialog = setError(message = "Can't remove the save file.")
-        elif questionData.qType == showDeadStats:
+        of quitGame:
+          discard
+        of showDeadStats:
           discard
       labelButton(title = "No"):
         closePopup()

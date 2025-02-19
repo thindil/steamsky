@@ -701,26 +701,29 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       setLayoutRowDynamic(30, 1)
       labelButton(title = "Ship information"):
         closePopup()
-      labelButton(title = "Ship orders"):
-        closePopup()
-      labelButton(title = "Crafting"):
-        closePopup()
+      if playerShip.crew[0].health > 0:
+        labelButton(title = "Ship orders"):
+          closePopup()
+        labelButton(title = "Crafting"):
+          closePopup()
       labelButton(title = "Last messages"):
         closePopup()
       labelButton(title = "Knowledge lists"):
         closePopup()
-      labelButton(title = "Wait orders"):
-        closePopup()
+      if playerShip.crew[0].health > 0:
+        labelButton(title = "Wait orders"):
+          closePopup()
       labelButton(title = "Game statistics"):
         closePopup()
-      labelButton(title = "Help"):
-        closePopup()
-      labelButton(title = "Game options"):
-        closePopup()
-      labelButton(title = "Quit from game"):
-        closePopup()
-      labelButton(title = "Resign from game"):
-        closePopup()
+      if playerShip.crew[0].health > 0:
+        labelButton(title = "Help"):
+          closePopup()
+        labelButton(title = "Game options"):
+          closePopup()
+        labelButton(title = "Quit from game"):
+          closePopup()
+        labelButton(title = "Resign from game"):
+          closePopup()
       labelButton(title = "Close"):
         closePopup()
         dialog = none
