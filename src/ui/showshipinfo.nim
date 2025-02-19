@@ -16,13 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import ../[config, game, maps, ships, tk, types]
 import coreui, errordialog, shipsuicrew, utilsui2, shipsuimodules2
 
 proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl, contractual.} =
+        RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show information about the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
