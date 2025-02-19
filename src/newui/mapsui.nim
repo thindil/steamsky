@@ -939,5 +939,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(0.25):
       showButtons()
   showGameMenu(dialog = dialog)
-  showQuestion(dialog = dialog)
-  state = map
+  showQuestion(dialog = dialog, state = state)

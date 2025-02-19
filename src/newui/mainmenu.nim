@@ -537,7 +537,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         saveClicked = ""
-  showQuestion(dialog = dialog)
+  showQuestion(dialog = dialog, state = state)
   if isKeyPressed(key = NK_KEY_ESCAPE):
     if dialog == none:
       state = mainMenu

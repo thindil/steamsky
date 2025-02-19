@@ -19,6 +19,7 @@
 
 import std/[os, math]
 import contracts, nuklear/nuklear_sdl_renderer
+import ../game2
 import coreui, errordialog
 
 type
@@ -58,14 +59,15 @@ proc setQuestion*(question: string; qType: QuestionType; data: string = "";
   except:
     dialog = setError(message = "Can't set the question.")
 
-proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the current question to the player
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
   ##
-  ## Returns the parameter dialog. It is modified only when the player
-  ## closed the dialog
+  ## Returns the parameter dialog and state. The first is modified only when
+  ## the player closed the dialog and the second when the player quit the game.
   if dialog != questionDialog:
     return
   try:
@@ -89,7 +91,13 @@ proc showQuestion*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           except:
             dialog = setError(message = "Can't remove the save file.")
         of quitGame:
-          discard
+          try:
+            endGame(save = true)
+            state = mainMenu
+            nuklearResizeWin(width = 600, height = 400)
+            nuklearSetWindowPos(x = windowCentered, y = windowCentered)
+          except:
+            dialog = setError(message = "Can't end the game.")
         of showDeadStats:
           discard
       labelButton(title = "No"):
