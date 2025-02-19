@@ -518,7 +518,8 @@ var
   moveY: MapYRange = 1
   rows, cols: Positive = 1
 
-proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.} =
+proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Show the map's menu
   ##
   ## * bounds - the rectangle in which the player should click the mouse's
@@ -531,8 +532,10 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.
 
   nuklearSetDefaultFont(defaultFont = fonts[0],
       fontSize = gameSettings.interfaceFontSize + 10)
-  contextualMenu(flags = {windowNoFlags}, x = 525, y = 190, triggerBounds = bounds, button = left):
-    setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35, 135, 220])
+  contextualMenu(flags = {windowNoFlags}, x = 535, y = 190,
+      triggerBounds = bounds, button = left):
+    setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35,
+        135, 230])
     imageButton(image = mapImages[25]):
       centerY = (if centerY - (rows / 3).int < 1: (rows /
           3).int else: centerY - (rows / 3).int)
@@ -567,7 +570,7 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect], contractual.
       centerX = skyBases[playerShip.homeBase].skyX
       centerY = skyBases[playerShip.homeBase].skyY
       closeMapMenu()
-    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 220])
+    setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 230])
     imageButton(image = mapImages[30]):
       centerY = (if centerY + (rows / 3).int > 1_024: (rows /
           3).int else: centerY + (rows / 3).int)
@@ -690,29 +693,35 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   try:
     const
       width: float = 200
-      height: float = 355
+      height: float = 455
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Game Menu", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
-      labelButton("Ship information"):
+      labelButton(title = "Ship information"):
         closePopup()
-      labelButton("Ship orders"):
+      labelButton(title = "Ship orders"):
         closePopup()
-      labelButton("Crafting"):
+      labelButton(title = "Crafting"):
         closePopup()
-      labelButton("Last messages"):
+      labelButton(title = "Last messages"):
         closePopup()
-      labelButton("Knowledge lists"):
+      labelButton(title = "Knowledge lists"):
         closePopup()
-      labelButton("Wait orders"):
+      labelButton(title = "Wait orders"):
         closePopup()
-      labelButton("Game statistics"):
+      labelButton(title = "Game statistics"):
         closePopup()
-      labelButton("Help"):
+      labelButton(title = "Help"):
         closePopup()
-      labelButton("Close"):
+      labelButton(title = "Game options"):
+        closePopup()
+      labelButton(title = "Quit from game"):
+        closePopup()
+      labelButton(title = "Resign from game"):
+        closePopup()
+      labelButton(title = "Close"):
         closePopup()
         dialog = none
   except:
