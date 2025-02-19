@@ -388,8 +388,6 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     label(str = formattedTime(), alignment = centered)
   showResourcesInfo(fuelAmount = fuelAmount, foodAmount = foodAmount,
       drinksAmount = drinksAmount, dialog = dialog)
-  if dialog != none:
-    return
   showNotifications(speed = speed, havePilot = havePilot,
       haveEngineer = haveEngineer, haveTrader = haveTrader,
       haveUpgrader = haveUpgrader, haveCleaner = haveCleaner,
@@ -399,7 +397,6 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if playerShip.crew[0].health == 0 and dialog == none:
     setQuestion(question = "You are dead. Would you like to see your game statistics?",
         qType = showDeadStats, dialog = dialog)
-  showQuestion(dialog = dialog)
 
 proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -722,6 +719,8 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           closePopup()
         labelButton(title = "Quit from game"):
           closePopup()
+          setQuestion(question = "Are you sure want to quit?", qType = quitGame,
+              dialog = dialog)
         labelButton(title = "Resign from game"):
           closePopup()
       labelButton(title = "Close"):
@@ -940,4 +939,5 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(0.25):
       showButtons()
   showGameMenu(dialog = dialog)
+  showQuestion(dialog = dialog)
   state = map
