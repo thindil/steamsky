@@ -295,7 +295,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
       maxUpgrade = 0
     case playerShip.modules[playerShip.upgradeModule].upgradeAction
     of durability:
-      upgradeInfo.add("(durability)")
+      upgradeInfo.add(y = "(durability)")
       maxUpgrade = try:
           modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].durability
@@ -306,23 +306,23 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         case modulesList[playerShip.modules[
             playerShip.upgradeModule].protoIndex].mType
         of engine:
-          upgradeInfo.add("(power)")
+          upgradeInfo.add(y = "(power)")
           maxUpgrade = (modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue / 20).int
         of cabin:
-          upgradeInfo.add("(quality)")
+          upgradeInfo.add(y = "(quality)")
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue
         of gun, batteringRam:
-          upgradeInfo.add("(damage)")
+          upgradeInfo.add(y = "(damage)")
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue * 2
         of hull:
-          upgradeInfo.add("(enlarge)")
+          upgradeInfo.add(y = "(enlarge)")
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue * 40
         of harpoonGun:
-          upgradeInfo.add("(strength)")
+          upgradeInfo.add(y = "(strength)")
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].maxValue * 10
         else:
@@ -334,7 +334,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         case modulesList[playerShip.modules[
             playerShip.upgradeModule].protoIndex].mType
         of engine:
-          upgradeInfo.add("(fuel usage)")
+          upgradeInfo.add(y = "(fuel usage)")
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].value * 20
         else:
