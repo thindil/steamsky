@@ -171,8 +171,10 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   moneyLabel = shipyardCanvas & ".shipyard.modulesinfo.lblmodules4"
   tclEval(script = moneyLabel & " configure -text {" & $allSpace & "}")
   tclEval(script = "SetScrollbarBindings " & moneyLabel & " .gameframe.paned.shipyardframe.scrolly")
-  let searchEntry = shipyardCanvas & ".shipyard.install.options.search"
-  if argc < 3:
+  let
+    moduleName = (if argc == 3: $argv[2] else: "")
+    searchEntry = shipyardCanvas & ".shipyard.install.options.search"
+  if moduleName.len == 0:
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
     tclEval(script = searchEntry & " -validatecommand {ShowShipyard [" &
@@ -211,8 +213,8 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get proto module's type.")
     try:
-      if argc > 2 and argv[2].len > 0 and not modulesList[
-          index].name.toLowerAscii.contains(sub = ($argv[2]).toLowerAscii):
+      if moduleName.len > 0 and not modulesList[
+          index].name.toLowerAscii.contains(sub = moduleName.toLowerAscii):
         continue
     except:
       return showError(message = "Can't check modules' name.")
