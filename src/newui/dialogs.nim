@@ -19,13 +19,13 @@
 
 import std/[os, math]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../game2
+import ../[game, game2, shipscrew2]
 import coreui, errordialog
 
 type
   QuestionType* = enum
     ## Types of questions, used to set actions to the player's response
-    deleteSave, showDeadStats, quitGame
+    deleteSave, showDeadStats, quitGame, resignGame
   QuestionData = object
     question, data: string
     qType: QuestionType
@@ -59,8 +59,8 @@ proc setQuestion*(question: string; qType: QuestionType; data: string = "";
   except:
     dialog = setError(message = "Can't set the question.")
 
-proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the current question to the player
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -74,6 +74,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [], t
     const
       width: float = 250
       height: float = 150
+
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
@@ -102,9 +103,18 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [], t
             dialog = none
           except:
             dialog = setError(message = "Can't end the game.")
+        of resignGame:
+          try:
+            death(memberIndex = 0, reason = "resignation", ship = playerShip)
+            closePopup()
+            dialog = none
+          except:
+            dialog = setError(message = "Can't kill the player.")
         of showDeadStats:
           discard
       labelButton(title = "No"):
+        if questionData.qType == showDeadStats:
+          state = mainMenu
         closePopup()
         dialog = none
       if dialog == none:

@@ -722,6 +722,8 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           setQuestion(question = "Are you sure want to quit?", qType = quitGame,
               dialog = dialog)
         labelButton(title = "Resign from game"):
+          setQuestion(question = "Are you sure want to resign from game?",
+              qType = resignGame, dialog = dialog)
           closePopup()
       labelButton(title = "Close"):
         closePopup()
