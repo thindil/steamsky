@@ -75,6 +75,21 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
       width: float = 250
       height: float = 150
 
+    proc setMainMenu(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [], contractual.} =
+      ## Set the main window for the main game menu
+      ##
+      ## * dialog - the current in-game dialog displayed on the screen
+      ## * state  - the current game's state
+      ##
+      ## Returns the parameter dialog and state.
+      state = mainMenu
+      nuklearResizeWin(width = menuWidth, height = menuHeight)
+      nuklearSetWindowPos(x = windowCentered, y = windowCentered)
+      nuklearSetWindowResizable(resizable = false)
+      closePopup()
+      dialog = none
+
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Question", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
@@ -95,12 +110,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
         of quitGame:
           try:
             endGame(save = true)
-            state = mainMenu
-            nuklearResizeWin(width = menuWidth, height = menuHeight)
-            nuklearSetWindowPos(x = windowCentered, y = windowCentered)
-            nuklearSetWindowResizable(resizable = false)
-            closePopup()
-            dialog = none
+            setMainMenu(dialog = dialog, state = state)
           except:
             dialog = setError(message = "Can't end the game.")
         of resignGame:
@@ -114,9 +124,10 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           discard
       labelButton(title = "No"):
         if questionData.qType == showDeadStats:
-          state = mainMenu
-        closePopup()
-        dialog = none
+          setMainMenu(dialog = dialog, state = state)
+        else:
+          closePopup()
+          dialog = none
       if dialog == none:
         questionData = QuestionData(question: "", data: "")
         answered = true
