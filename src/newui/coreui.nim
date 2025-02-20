@@ -27,10 +27,10 @@ type GameState* = enum
 
 type GameDialog* = enum
   ## Used to show any in-game dialog window
-  none, loading, errorDialog, gameMenuDialog, questionDialog, newGoalDialog
+  none, loading, errorDialog, gameMenuDialog, questionDialog, newGoalDialog, ordersDialog
 
 const
-  dtime*: float = 20.0 ## The length in miliseconds of one game's frame
+  dtime*: float = 20.0        ## The length in miliseconds of one game's frame
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
 

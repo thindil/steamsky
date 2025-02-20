@@ -22,7 +22,7 @@ import std/[colors, math, tables, unicode]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
-import coreui, dialogs, errordialog, messagesui, themes, utilsui2
+import coreui, dialogs, errordialog, messagesui, ordersmenu, themes, utilsui2
 
 const iconsAmount: Positive = 36
 
@@ -902,7 +902,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 dialog = setError(message = "Can't show the map info")
                 return
             labelButton(title = mapChar):
-              echo "map pressed"
+              if x == playerShip.skyX and y == playerShip.skyY:
+                setDialog()
+                dialog = ordersDialog
   restoreButtonStyle()
   # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
@@ -942,3 +944,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showButtons()
   showGameMenu(dialog = dialog)
   showQuestion(dialog = dialog, state = state)
+  showShipOrders(dialog = dialog)
