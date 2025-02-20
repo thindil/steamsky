@@ -87,6 +87,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [], t
         of deleteSave:
           try:
             removeFile(file = questionData.data)
+            closePopup()
             dialog = none
           except:
             dialog = setError(message = "Can't remove the save file.")
@@ -94,8 +95,11 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [], t
           try:
             endGame(save = true)
             state = mainMenu
-            nuklearResizeWin(width = 600, height = 400)
+            nuklearResizeWin(width = menuWidth, height = menuHeight)
             nuklearSetWindowPos(x = windowCentered, y = windowCentered)
+            nuklearSetWindowResizable(resizable = false)
+            closePopup()
+            dialog = none
           except:
             dialog = setError(message = "Can't end the game.")
         of showDeadStats:
