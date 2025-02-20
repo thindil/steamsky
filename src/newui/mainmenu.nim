@@ -34,8 +34,6 @@ var
   currentFaction, currentCareer, currentBase: int = 0
   newFaction, newCareer, newBase: Natural = 0
   showGender: bool = true
-  menuWidth*: Positive = 600  ## The width of the game's main window
-  menuHeight*: Positive = 400 ## The height of the game's main window
 
 proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     ReadDirEffect, WriteIOEffect, TimeEffect, RootEffect], contractual.} =
