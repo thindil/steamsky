@@ -295,6 +295,7 @@ type
     begin*, `end`*, last*: nk_size
     clip*: nk_rect
     base*: ptr nk_buffer
+    use_clipping*: cint
   nk_row_layout* {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint

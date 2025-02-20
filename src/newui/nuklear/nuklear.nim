@@ -386,6 +386,20 @@ template disabled*(content: untyped) =
   content
   nk_widget_disable_end(ctx = ctx)
 
+# ----
+# Math
+# ----
+
+proc nkIntersect(x0, y0, w0, h0, x1, y1, w1, h1: cint): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the rectangle is inside the second rectangle
+  ##
+  ## * x0, y0, w0, h0 - the coordinates of the rectangle to check
+  ## * x1, y1, w1, h1 - the coordinates of the second rectangle
+  ##
+  ## Returns true if the rectangle is inside the second rectangle, otherwise
+  ## false.
+  return ((x1 < (x0 + w0)) and (x0 < (x1 + w1)) and (y1 < (y0 + h0)) and (y0 < (y1 + h1)))
+
 # -------
 # Windows
 # -------
@@ -694,6 +708,19 @@ proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], c
   result.y = r.y + amount
   result.w = w - 2 * amount
   result.h = h - 2 * amount
+
+proc nkDrawImage(b: ptr nk_command_buffer, r: nk_rect, img: PImage, col: nk_color)
+  {.raises: [], tags: [], contractual.} =
+  ## Draw the selected image
+  ##
+  ## * b   - the command buffer in which the image will be drawn
+  ## * r   - the rectangle in which the image will be drawn
+  ## * img - the image to draw
+  ## * col - the color used as a background for the image
+  if b == nil:
+    return
+  if b.use_clipping != 0:
+    let c: nk_rect = b.clip
 
 # -----
 # Input
