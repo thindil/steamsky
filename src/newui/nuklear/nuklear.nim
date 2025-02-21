@@ -390,7 +390,7 @@ template disabled*(content: untyped) =
 # Math
 # ----
 
-proc nkIntersect(x0, y0, w0, h0, x1, y1, w1, h1: cint): bool {.raises: [], tags: [], contractual.} =
+proc nkIntersect(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [], tags: [], contractual.} =
   ## Check if the rectangle is inside the second rectangle
   ##
   ## * x0, y0, w0, h0 - the coordinates of the rectangle to check
@@ -710,7 +710,7 @@ proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], c
   result.h = h - 2 * amount
 
 proc nkDrawImage(b: ptr nk_command_buffer, r: nk_rect, img: PImage, col: nk_color)
-  {.raises: [], tags: [], contractual.} =
+  {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
   ##
   ## * b   - the command buffer in which the image will be drawn
@@ -721,6 +721,12 @@ proc nkDrawImage(b: ptr nk_command_buffer, r: nk_rect, img: PImage, col: nk_colo
     return
   if b.use_clipping != 0:
     let c: nk_rect = b.clip
+    if c.w == 0 or c.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w,
+      h0 = r.h, x1 = c.x, y1 = c.y, w1 = c.w, h1 = c.h):
+      return
+
+  var cmd: ptr nk_command_image
+  cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = NK_COMMAND_IMAGE, cmd.sizeof))
 
 # -----
 # Input

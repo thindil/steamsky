@@ -296,6 +296,13 @@ type
     clip*: nk_rect
     base*: ptr nk_buffer
     use_clipping*: cint
+  nk_command_image* {.importc: "struct nk_command_image".} = object
+    ## Internal Nuklear type
+    header*: nk_command
+    x*, y*: cshort
+    w*, h*: cushort
+    img*: nk_image
+    col*: nk_color
   nk_row_layout* {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
