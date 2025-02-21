@@ -593,8 +593,12 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
 
-proc showButtons() {.raises: [], tags: [], contractual.} =
+proc showButtons(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
   group(title = "ButtonsGroup", flags = {windowNoScrollbar}):
     if playerShip.speed == docked or playerShip.destinationX == 0:
       setLayoutRowDynamic(height = 30, cols = 1)
@@ -604,7 +608,8 @@ proc showButtons() {.raises: [], tags: [], contractual.} =
       addTooltip(bounds = getWidgetBounds(),
           text = "Show available orders for your ship.")
     labelButton(title = "Ship orders"):
-      discard
+      setDialog()
+      dialog = ordersDialog
     if playerShip.speed != docked and playerShip.destinationX > 0:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -701,6 +706,8 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       if playerShip.crew[0].health > 0:
         labelButton(title = "Ship orders"):
           closePopup()
+          setDialog()
+          dialog = ordersDialog
         labelButton(title = "Crafting"):
           closePopup()
       labelButton(title = "Last messages"):
@@ -941,7 +948,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     row(0.75):
       showLastMessages(theme = theme, dialog = dialog)
     row(0.25):
-      showButtons()
+      showButtons(dialog = dialog)
   showGameMenu(dialog = dialog)
   showQuestion(dialog = dialog, state = state)
   showShipOrders(dialog = dialog)
