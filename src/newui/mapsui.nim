@@ -747,9 +747,8 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect
   if dialog != destinationDialog:
     return
   try:
-    const
-      width: float = 200
-      height: float = 255
+    const width: float = 250
+    let height: float = (if playerShip.speed == docked: 115 else: 185)
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Set destination", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
