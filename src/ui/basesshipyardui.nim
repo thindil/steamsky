@@ -177,7 +177,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   if moduleName.len == 0:
     tclEval(script = searchEntry & " configure -validatecommand {}")
     tclEval(script = searchEntry & " delete 0 end")
-    tclEval(script = searchEntry & " -validatecommand {ShowShipyard [" &
+    tclEval(script = searchEntry & " configure -validatecommand {ShowShipyard [" &
         shipyardFrame & ".install.options.modules current] %P}")
   if installIndexes.len == 0:
     for index in modulesList.keys:
