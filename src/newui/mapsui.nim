@@ -749,9 +749,9 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect
   try:
     const
       width: float = 200
-      height: float = 455
+      height: float = 255
     updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Game Menu", x = dialogX, y = dialogY,
+    popup(pType = staticPopup, title = "Set destination", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
@@ -935,6 +935,9 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               if x == playerShip.skyX and y == playerShip.skyY:
                 setDialog()
                 dialog = ordersDialog
+              else:
+                setDialog()
+                dialog = destinationDialog
   restoreButtonStyle()
   # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
@@ -975,3 +978,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showGameMenu(dialog = dialog)
   showQuestion(dialog = dialog, state = state)
   showShipOrders(dialog = dialog)
+  showDestinationMenu(dialog = dialog)
