@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the player's ship's info screen, like show the
+## general information about the ship. Mmoved to separated module to
+## avoid circular dependencies.
+
 import std/tables
 import contracts, nimalyzer
 import ../[config, game, maps, ships, tk, types]
