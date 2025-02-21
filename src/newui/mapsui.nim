@@ -738,6 +738,29 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   except:
     dialog = setError(message = "Can't show the game's menu")
 
+proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show the menu for setting a destination for the player's ship
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  if dialog != destinationDialog:
+    return
+  try:
+    const
+      width: float = 200
+      height: float = 455
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Game Menu", x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(30, 1)
+      labelButton(title = "Close"):
+        closePopup()
+        dialog = none
+  except:
+    dialog = setError(message = "Can't show the destination's menu")
+
 proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the game's map
