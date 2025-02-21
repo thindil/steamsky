@@ -755,6 +755,13 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
+      labelButton(title = "Set destination"):
+        discard
+      if playerShip.speed != docked:
+        labelButton(title = "Set destination and move"):
+          discard
+        labelButton(title = "Move to"):
+          discard
       labelButton(title = "Close"):
         closePopup()
         dialog = none
