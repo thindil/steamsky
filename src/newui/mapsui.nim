@@ -738,10 +738,12 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   except:
     dialog = setError(message = "Can't show the game's menu")
 
-proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showDestinationMenu(dialog: var GameDialog; x, y: Natural) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the menu for setting a destination for the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * x      - the X coordinate on the map where the mouse was clicked
+  ## * y      - the Y coordinate on the map where the mouse was clicked
   ##
   ## Returns the modified parameters dialog.
   if dialog != destinationDialog:
@@ -796,6 +798,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
   cols = (windowWidth / colWidth.float).floor.Positive + 6
   let mapHeight: float = (((height - 2) * rows) + 5).float
+  var mapX, mapY: Natural = 0
   setLayoutRowDynamic(height = mapHeight, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
     var
@@ -944,6 +947,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               else:
                 setDialog()
                 dialog = destinationDialog
+                mapX = x
+                mapY = y
   restoreButtonStyle()
   # Draw the map's buttons
   setLayoutRowDynamic(height = 20, cols = 5)
@@ -984,4 +989,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showGameMenu(dialog = dialog)
   showQuestion(dialog = dialog, state = state)
   showShipOrders(dialog = dialog)
-  showDestinationMenu(dialog = dialog)
+  showDestinationMenu(dialog = dialog, x = mapX, y = mapY)
