@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash when starting a new game with random goal
 - Searching for crafting recipes in the crafting screen isn't case-insensitive
+- Searching for modules to install in shipyards
 
 ## [10.7] - 2025-01-12
 
