@@ -17,7 +17,9 @@
 
 ## Provides code related to the player's ship's orders menu
 
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
+import ../[game, maps, stories, types]
 import coreui, errordialog
 
 proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -30,6 +32,8 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if dialog != ordersDialog:
     return
   try:
+    let
+      baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
     const
       width: float = 200
       height: float = 80
@@ -38,6 +42,51 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
+      if currentStory.index.len > 0:
+        let step: StepData = try:
+            (if currentStory.currentStep == -1: storiesList[
+              currentStory.index].startingStep elif currentStory.currentStep >
+              -1: storiesList[currentStory.index].steps[
+              currentStory.currentStep] else: storiesList[
+              currentStory.index].finalStep)
+          except:
+            dialog  = setError(message = "Can't get the current story step.")
+            return
+        case step.finishCondition
+        of askInBase:
+          if baseIndex > 0:
+            if currentStory.data.len == 0 or currentStory.data == skyBases[
+                baseIndex].name:
+              try:
+                labelButton(title = "Ask for " & itemsList[getStepData(finishData = step.finishData, name = "item").parseInt].name):
+                  discard
+              except:
+                dialog = setError(message = "Can't add the story button.")
+                return
+        of destroyShip:
+          let parts: seq[string] = currentStory.data.split(sep = ';')
+          try:
+            if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
+              try:
+                labelButton(title = "Search for " & protoShipsList[parts[3].parseInt].name):
+                  discard
+              except:
+                dialog = setError(message = "Can't add the story button.")
+                return
+          except:
+            dialog = setError(message = "Can't get the story step location.")
+            return
+        of explore:
+          let parts: seq[string] = currentStory.data.split(sep = ';')
+          try:
+            if playerShip.skyX == parts[0].parseInt and playerShip.skyY == parts[1].parseInt:
+              labelButton(title = "Search area"):
+                discard
+          except:
+            dialog = setError(message = "Can't get the story step location.")
+            return
+        of any, loot:
+          discard
       labelButton(title = "Close"):
         closePopup()
         dialog = none
