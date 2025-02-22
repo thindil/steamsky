@@ -727,6 +727,14 @@ proc nkDrawImage(b: ptr nk_command_buffer, r: nk_rect, img: PImage, col: nk_colo
 
   var cmd: ptr nk_command_image
   cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = NK_COMMAND_IMAGE, cmd.sizeof))
+  if cmd == nil:
+    return
+  cmd.x = r.x.cshort
+  cmd.y = r.y.cshort
+  cmd.w = max(x = 0.cushort, y = r.w.cushort)
+  cmd.h = max(x = 0.cushort, y = r.h.cushort)
+  cmd.img = cast[nk_image](img)
+  cmd.col = col
 
 # -----
 # Input
@@ -1057,6 +1065,12 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
 
       # draw header background
       header.h += 1.0
+      case background.`type`
+      of NK_STYLE_ITEM_IMAGE:
+        text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
+        # nk_draw_image(b = win.buffer, r = header, img = background.data.image, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+      else:
+        discard
     return true
 
 # ------
