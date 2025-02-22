@@ -738,12 +738,12 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   except:
     dialog = setError(message = "Can't show the game's menu")
 
-proc showDestinationMenu(dialog: var GameDialog; x, y: Natural) {.raises: [], tags: [RootEffect], contractual.} =
+var mapX, mapY: Natural = 0
+
+proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the menu for setting a destination for the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
-  ## * x      - the X coordinate on the map where the mouse was clicked
-  ## * y      - the Y coordinate on the map where the mouse was clicked
   ##
   ## Returns the modified parameter dialog.
   if dialog != destinationDialog:
@@ -752,36 +752,40 @@ proc showDestinationMenu(dialog: var GameDialog; x, y: Natural) {.raises: [], ta
     const width: float = 250
     let height: float = (if playerShip.speed == docked: 115 else: 185)
 
-    proc setDestination(dialog: var GameDialog; x, y: Natural) {.raises: [], tags: [], contractual.} =
+    proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+      ## Close the destination menu dialog
+      ## * dialog - the current in-game dialog displayed on the screen
+      ##
+      ## Returns the reseted parameter dialog.
+      closePopup()
+      dialog = none
+      mapX = 0
+      mapY = 0
+
+    proc setDestination(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
       ## Set the new destination point for the player's ship
       ##
       ## * dialog - the current in-game dialog displayed on the screen
-      ## * x      - the X coordinate for the new destination point
-      ## * y      - the Y coordinate for the new destination point
       ##
       ## Returns the reseted parameter dialog.
-      echo playerShip.skyX, " ", playerShip.skyY, " ", x, " ", y
-      playerShip.destinationX = x
-      playerShip.destinationY = y
-      closePopup()
-      dialog = none
+      playerShip.destinationX = mapX
+      playerShip.destinationY = mapY
+      closeDialog(dialog = dialog)
 
-    echo x
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Set destination", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
       labelButton(title = "Set destination"):
-        setDestination(dialog = dialog, x = x, y = y)
+        setDestination(dialog = dialog)
       if playerShip.speed != docked:
         labelButton(title = "Set destination and move"):
-          setDestination(dialog = dialog, x = x, y = y)
+          setDestination(dialog = dialog)
         labelButton(title = "Move to"):
           discard
       labelButton(title = "Close"):
-        closePopup()
-        dialog = none
+        closeDialog(dialog = dialog)
   except:
     dialog = setError(message = "Can't show the destination's menu")
 
@@ -814,7 +818,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
   cols = (windowWidth / colWidth.float).floor.Positive + 6
   let mapHeight: float = (((height - 2) * rows) + 5).float
-  var mapX, mapY: Natural = 0
   setLayoutRowDynamic(height = mapHeight, cols = 1)
   group(title = "MapGroup", flags = {windowNoScrollbar}):
     var
@@ -1005,4 +1008,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showGameMenu(dialog = dialog)
   showQuestion(dialog = dialog, state = state)
   showShipOrders(dialog = dialog)
-  showDestinationMenu(dialog = dialog, x = mapX, y = mapY)
+  showDestinationMenu(dialog = dialog)
