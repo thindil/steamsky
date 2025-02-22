@@ -745,22 +745,38 @@ proc showDestinationMenu(dialog: var GameDialog; x, y: Natural) {.raises: [], ta
   ## * x      - the X coordinate on the map where the mouse was clicked
   ## * y      - the Y coordinate on the map where the mouse was clicked
   ##
-  ## Returns the modified parameters dialog.
+  ## Returns the modified parameter dialog.
   if dialog != destinationDialog:
     return
   try:
     const width: float = 250
     let height: float = (if playerShip.speed == docked: 115 else: 185)
+
+    proc setDestination(dialog: var GameDialog; x, y: Natural) {.raises: [], tags: [], contractual.} =
+      ## Set the new destination point for the player's ship
+      ##
+      ## * dialog - the current in-game dialog displayed on the screen
+      ## * x      - the X coordinate for the new destination point
+      ## * y      - the Y coordinate for the new destination point
+      ##
+      ## Returns the reseted parameter dialog.
+      echo playerShip.skyX, " ", playerShip.skyY, " ", x, " ", y
+      playerShip.destinationX = x
+      playerShip.destinationY = y
+      closePopup()
+      dialog = none
+
+    echo x
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Set destination", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
       labelButton(title = "Set destination"):
-        discard
+        setDestination(dialog = dialog, x = x, y = y)
       if playerShip.speed != docked:
         labelButton(title = "Set destination and move"):
-          discard
+          setDestination(dialog = dialog, x = x, y = y)
         labelButton(title = "Move to"):
           discard
       labelButton(title = "Close"):
