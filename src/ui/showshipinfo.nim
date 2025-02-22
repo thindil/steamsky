@@ -39,8 +39,8 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowShipInfo
   var
-    shipInfoFrame = mainPaned & ".shipinfoframe"
-    button = mainPaned & ".shipinfoframe.general.canvas.frame.rename"
+    shipInfoFrame: string = mainPaned & ".shipinfoframe"
+    button: string = mainPaned & ".shipinfoframe.general.canvas.frame.rename"
   if tclEval2(script = "winfo exists " & shipInfoFrame) == "0":
     tclEval(script = """
       set shipinfoframe [ttk::frame .gameframe.paned.shipinfoframe]
@@ -269,7 +269,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     for i in 0 .. 3:
       tclEval(script = "bind . <" & generalAccelerators[i] & "> {}")
     return tclOk
-  let shipCanvas = shipInfoFrame & ".general.canvas"
+  let shipCanvas: string = shipInfoFrame & ".general.canvas"
   tclEval(script = "bind . <" & generalAccelerators[0] & "> {InvokeButton " &
       shipCanvas & ".frame.maxmin}")
   tclEval(script = "bind . <" & generalAccelerators[2] & "> {InvokeButton " &
@@ -280,11 +280,11 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
       shipInfoFrame & ".cargo.canvas.frame.maxmin}")
   tclEval(script = "grid " & closeButton & " -row 0 -column 1")
   shipInfoFrame = mainPaned & ".shipinfoframe.general.canvas.frame"
-  var label = shipInfoFrame & ".name"
+  var label: string = shipInfoFrame & ".name"
   tclEval(script = label & " configure -text {Name: " & playerShip.name & "}")
   label = shipInfoFrame & ".upgradelabel"
-  let upgradeProgress = shipInfoFrame & ".upgrade"
-  var cancelButton = shipInfoFrame & ".cancelupgrade"
+  let upgradeProgress: string = shipInfoFrame & ".upgrade"
+  var cancelButton: string = shipInfoFrame & ".cancelupgrade"
   # Show or hide upgrade module info
   if playerShip.upgradeModule == -1:
     tclEval(script = "grid remove " & label)
@@ -294,9 +294,9 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid remove " & cancelButton)
   else:
     var
-      upgradeInfo = playerShip.modules[
+      upgradeInfo: string = playerShip.modules[
           playerShip.upgradeModule].name & " "
-      maxUpgrade = 0
+      maxUpgrade: int = 0
     case playerShip.modules[playerShip.upgradeModule].upgradeAction
     of durability:
       upgradeInfo.add(y = "(durability)")
@@ -335,14 +335,11 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't set upgrade info.")
     of value:
       try:
-        case modulesList[playerShip.modules[
-            playerShip.upgradeModule].protoIndex].mType
-        of engine:
+        if modulesList[playerShip.modules[
+            playerShip.upgradeModule].protoIndex].mType == engine:
           upgradeInfo.add(y = "(fuel usage)")
           maxUpgrade = modulesList[playerShip.modules[
               playerShip.upgradeModule].protoIndex].value * 20
-        else:
-          discard
       except:
         return showError(message = "Can't set upgrade fuel usage info.")
     else:
@@ -351,9 +348,9 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     if maxUpgrade == 0:
       maxUpgrade = 1
     let
-      upgradePercent = 1.0 - (playerShip.modules[
+      upgradePercent: float = 1.0 - (playerShip.modules[
           playerShip.upgradeModule].upgradeProgress.float / maxUpgrade.float)
-      progressBarStyle = if upgradePercent > 0.74:
+      progressBarStyle: string = if upgradePercent > 0.74:
           " -style green.Horizontal.TProgressbar"
         elif upgradePercent > 0.24:
           " -style yellow.Horizontal.TProgressbar"
@@ -393,13 +390,13 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   else:
     if skyMap[playerShip.destinationX][playerShip.destinationY].baseIndex > 0:
       tclEval(script = label & " configure -text {Destination: }")
-      let label2 = shipInfoFrame & ".destinationlbl"
+      let label2: string = shipInfoFrame & ".destinationlbl"
       tclEval(script = label2 & " configure -text {" & skyBases[
           skyMap[playerShip.destinationX][
           playerShip.destinationY].baseIndex].name & "}")
     else:
       tclEval(script = label & " configure -text {Destination: }")
-      let label2 = shipInfoFrame & ".destinationlbl"
+      let label2: string = shipInfoFrame & ".destinationlbl"
       tclEval(script = label2 & " configure -text {X: " &
           $playerShip.destinationX & " Y: " & $playerShip.destinationY & "}")
     tclEval(script = "grid " & label)
@@ -429,7 +426,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   # Setting crew info
   updateCrewInfo()
   # Setting cargo info
-  let typeBox = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
+  let typeBox: string = mainPaned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo"
   tclEval(script = typeBox & " set All")
   tclEval(script = "event generate " & typeBox & " <<ComboboxSelected>>")
   # Show ship info
