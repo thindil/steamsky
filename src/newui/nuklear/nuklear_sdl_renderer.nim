@@ -1,4 +1,4 @@
-# Copyright © 2023-2024 Bartek Jasicki
+# Copyright © 2023-2025 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -78,7 +78,8 @@ const
 type
   SDL_EventType = enum
     SDL_FIRSTEVENT = 0, SDL_QUIT = 0x100, SDL_WINDOWEVENT = 0x200,
-        SDL_KEYUP = 0x300, SDL_KEYDOWN
+        SDL_KEYDOWN = 0x300, SDL_KEYUP, SDL_MOUSEMOTION = 0x400,
+        SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP
   SDL_WindowEventId = enum
     SDL_WINDOWEVENT_SIZE_CHANGED = 6
   SDL_Window {.importc, nodecl.} = object
@@ -101,8 +102,14 @@ type
   SDL_KeyboardEvent{.importc, nodecl.} = object
     `type`: cuint
     keysym: SDL_KeySym
+  SDL_MouseButtonEvent{.importc, nodecl.} = object
+    `type`: cuint
+    button, clicks: uint8
+    x, y: cint
   SDL_Scancode = enum
     SDL_SCANCODE_LCTRL = 224
+  SDL_Mouse_Buttons = enum
+    SDL_BUTTON_LEFT = 1, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT
 
 proc SDL_SetHint(name, value: cstring) {.importc, nodecl.}
 proc SDL_Init(flags: cint): cint {.importc, nodecl.}
@@ -277,6 +284,24 @@ proc nuklearInput*(): UserEvents =
         nk_input_key(ctx, NK_KEY_ESCAPE, down)
       else:
         result = noEvent
+    of SDL_MOUSEBUTTONDOWN.cuint, SDL_MOUSEBUTTONUP.cuint:
+      result = mouseButtonEvent
+      let
+        down: nk_bool = (evt.`type` == SDL_MOUSEBUTTONDOWN.cuint).nk_bool
+        mEvnt: SDL_MouseButtonEvent = cast[SDL_MouseButtonEvent](evt)
+        x: cint = mEvnt.x
+        y: cint = mEvnt.y
+      case mEvnt.button:
+      of SDL_BUTTON_LEFT.uint8:
+        if mEvnt.clicks > 1:
+            nk_input_button(ctx, NK_BUTTON_DOUBLE, x, y, down)
+        nk_input_button(ctx, NK_BUTTON_LEFT, x, y, down)
+      of SDL_BUTTON_MIDDLE.uint8:
+        nk_input_button(ctx, NK_BUTTON_MIDDLE, x, y, down)
+      of SDL_BUTTON_RIGHT.uint8:
+        nk_input_button(ctx, NK_BUTTON_RIGHT, x, y, down)
+      else:
+        discard
     else:
       discard nk_sdl_handle_event(evt)
       result = anyEvent
