@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.8] - 2025-02-23
 
 ### Added
 - Ability to manage workshops' crafting orders from the crafting screen
