@@ -283,22 +283,6 @@ nk_sdl_handle_event(SDL_Event *evt)
 
     switch(evt->type)
     {
-        case SDL_MOUSEBUTTONUP: /* MOUSEBUTTONUP & MOUSEBUTTONDOWN share same routine */
-        case SDL_MOUSEBUTTONDOWN:
-            {
-                int down = evt->type == SDL_MOUSEBUTTONDOWN;
-                const int x = evt->button.x, y = evt->button.y;
-                switch(evt->button.button)
-                {
-                    case SDL_BUTTON_LEFT:
-                        if (evt->button.clicks > 1)
-                            nk_input_button(ctx, NK_BUTTON_DOUBLE, x, y, down);
-                        nk_input_button(ctx, NK_BUTTON_LEFT, x, y, down); break;
-                    case SDL_BUTTON_MIDDLE: nk_input_button(ctx, NK_BUTTON_MIDDLE, x, y, down); break;
-                    case SDL_BUTTON_RIGHT:  nk_input_button(ctx, NK_BUTTON_RIGHT, x, y, down); break;
-                }
-            }
-            return 1;
 
         case SDL_MOUSEMOTION:
             if (ctx->input.mouse.grabbed) {
