@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,12 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
+import contracts
 import ../[basestypes, game, stories, tk]
 import coreui, errordialog, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
 proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+       contractual.} =
   ## Show information about known by player things
   ##
   ## * clientData - the additional data for the Tcl command
@@ -277,7 +279,8 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+   argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+       contractual.} =
   ## Maximize or minimize the selected section of knowledge info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -323,7 +326,8 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc knowledgeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Maximize or minimize the selected part in the knowledge info
   ##
   ## * clientData - the additional data for the Tcl command
@@ -353,7 +357,8 @@ proc knowledgeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " show}")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
     knowledgebases.addCommands()
