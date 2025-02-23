@@ -23,7 +23,8 @@ import ../[basestypes, game, maps, missions, shipscrew, stories, types, utils]
 import coreui, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
-    haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [RootEffect], contractual.} =
+    haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [
+        RootEffect], contractual.} =
   ## Count the height of the orders menu, based on the amount of buttons inside
   ##
   ## * baseIndex  - the index of the base to which the player's ship is docked
@@ -31,7 +32,75 @@ proc countHeight(baseIndex: ExtendedBasesRange;
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog if error happened.
-  return 1
+  result = 80
+  if playerShip.speed == docked:
+    result += 35
+    if skyBases[baseIndex].population > 0:
+      result += 35
+      if haveTrader and skyBases[baseIndex].population > 0:
+        result += 70
+        if skyBases[baseIndex].recruits.len > 0:
+          result += 35
+      if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
+        result += 35
+      if not skyBases[baseIndex].askedForBases:
+        result += 35
+      try:
+        if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
+          result += 35
+      except:
+        dialog = setError(message = "Can't check if base has temple flag.")
+        return
+      for member in playerShip.crew:
+        if member.health < 100:
+          result += 35
+          break
+      for module in playerShip.modules:
+        if module.durability < module.maxDurability:
+          result += 35
+          break
+      try:
+        if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
+          result += 35
+      except:
+        dialog = setError(message = "Can't check if the base has shipyard flag.")
+        return
+      for index, recipe in recipesList:
+        try:
+          if index notin knownRecipes and index in basesTypesList[skyBases[
+              baseIndex].baseType].recipes and recipe.reputation <= skyBases[
+              baseIndex].reputation.level:
+            result += 35
+            break
+        except:
+          dialog = setError(message = "Can't check if base has recipes for sale.")
+          return
+      if skyBases[baseIndex].missions.len > 0:
+        var missionsLimit: int = case skyBases[baseIndex].reputation.level
+          of 0..25:
+            1
+          of 26..50:
+            3
+          of 51..75:
+            5
+          of 76..100:
+            10
+          else:
+            0
+        for mission in acceptedMissions:
+          if (mission.finished and mission.startBase == baseIndex) or (
+              mission.targetX == playerShip.skyX and mission.targetY ==
+              playerShip.skyY):
+            if mission.mType == deliver or mission.finished:
+              result += 35
+          if mission.startBase == baseIndex:
+            missionsLimit.dec
+        if missionsLimit > 0:
+          result += 35
+      if playerShip.homeBase != baseIndex:
+        result += 35
+    if skyBases[baseIndex].population == 0:
+      result += 35
 
 proc showDockedCommands(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -168,9 +237,11 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     let
       baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
           playerShip.skyY].baseIndex
+      haveTrader: bool = findMember(order = talk) > -1
+      height: float = countHeight(baseIndex = baseIndex,
+          haveTrader = haveTrader, dialog = dialog).float
     const
       width: float = 200
-      height: float = 80
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Ship orders", x = dialogX, y = dialogY,
         w = width, h = height, flags = {windowBorder, windowTitle,
@@ -226,7 +297,6 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             return
         of any, loot:
           discard
-      let haveTrader: bool = findMember(order = talk) > -1
       if playerShip.speed == docked:
         showDockedCommands(baseIndex = baseIndex, haveTrader = haveTrader,
             dialog = dialog)
