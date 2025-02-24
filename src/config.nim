@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -80,6 +80,8 @@ type
     ## * rightButton           - If true, use the right mouse button for show menus in various lists
     ## * listsLimit            - The amount of items displayed in various lists
     ## * waitMinutes           - The amount of in-game minutes which pass when the player press Wait button
+    ## * autoDestination       - If true, automatically set the player's ship destination
+    ##                           after accepting a mission in a base
     autoRest*: bool
     undockSpeed*: ShipSpeed
     autoCenter*: bool
@@ -111,6 +113,7 @@ type
     rightButton*: bool
     listsLimit*: Positive
     waitMinutes*: Positive
+    autoDestination*: bool
 
   BonusType* = range[0.0..5.0]
     ## Points' multiplier from various game's settings
@@ -172,7 +175,7 @@ const
     showTooltips: true, showLastMessages: true, messagesPosition: 256,
     fullScreen: false, autoCloseMessagesTime: 6, autoSave: none,
     topicsPosition: 200, showNumbers: false, rightButton: false, listsLimit: 25,
-    waitMinutes: 1)
+    waitMinutes: 1, autoDestination: true)
     ## The default setting for the game
 
   defaultNewGameSettings*: NewGameRecord = NewGameRecord(playerName: "Laeran",
@@ -324,6 +327,8 @@ proc loadConfig*() {.raises: [], tags: [RootEffect], contractual.} =
           gameSettings.listsLimit = entry.value.parseInt().cint
         of "WaitMinutes":
           gameSettings.waitMinutes = entry.value.parseInt().cint
+        of "AutoDestination":
+          gameSettings.autoDestination = entry.value.parseAdaBool()
         else:
           discard
       of cfgError:
@@ -439,4 +444,5 @@ proc saveConfig*() {.raises: [KeyError, IOError, OSError], tags: [
       value = $gameSettings.listsLimit)
   config.setSectionKey(section = "", key = "WaitMinutes",
       value = $gameSettings.waitMinutes)
+  saveAdaBoolean(value = gameSettings.autoDestination, name = "AutoDestination")
   config.writeConfig(filename = saveDirectory & "game.cfg")
