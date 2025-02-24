@@ -16,14 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[basestypes, game, stories, tk]
 import coreui, errordialog, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
 proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
-   argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
-       contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+    contractual, ruleOff: "params".} =
   ## Show information about known by player things
   ##
   ## * clientData - the additional data for the Tcl command
