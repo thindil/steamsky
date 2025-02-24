@@ -203,6 +203,7 @@ type
   nk_style_item* {.importc: "struct nk_style_item", nodecl.} = object
     ## Internal Nuklear type
     `type`*: nk_style_item_type
+    data*: pointer
   nk_style_window_header* {.importc, nodecl.} = object
     ## Internal Nuklear type
     align*: nk_style_header_align

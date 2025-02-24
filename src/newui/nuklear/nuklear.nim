@@ -712,7 +712,7 @@ proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], c
   result.w = w - 2 * amount
   result.h = h - 2 * amount
 
-proc nkDrawImage(b: ptr nk_command_buffer, r: nk_rect, img: PImage, col: nk_color)
+proc nkDrawImage(b: ptr nk_command_buffer, r: NimRect, img: PImage, col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
   ##
@@ -931,7 +931,7 @@ proc nkPanelIsNonblock(`type`: PanelType): bool {.raises: [], tags: [], contract
   return (`type`.cint and panelSetNonBlock.cint).bool
 
 proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
-    ], tags: [], contractual.} =
+    ], tags: [RootEffect], contractual.} =
   ## Start drawing a Nuklear panel. Internal use only
   ##
   ## * ctx       - the Nuklear context
@@ -1071,7 +1071,8 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       case background.`type`
       of NK_STYLE_ITEM_IMAGE:
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-        # nk_draw_image(b = win.buffer, r = header, img = background.data.image, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+        let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
+        nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
       else:
         discard
     return true
