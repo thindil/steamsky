@@ -32,7 +32,7 @@ proc countHeight(baseIndex: ExtendedBasesRange;
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog if error happened.
-  result = 80
+  result = 75
   if playerShip.speed == docked:
     result += 35
     if skyBases[baseIndex].population > 0:

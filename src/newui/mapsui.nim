@@ -966,7 +966,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 return
             labelButton(title = mapChar):
               if x == playerShip.skyX and y == playerShip.skyY:
-                setDialog()
+                setDialog(y = windowHeight / 7)
                 dialog = ordersDialog
               else:
                 setDialog()
