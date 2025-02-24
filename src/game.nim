@@ -18,7 +18,7 @@
 ## Provides code related to update the global state of the game, like global
 ## variables, loading the game data, etc.
 
-import std/[os, strutils, tables, xmlparser, xmltree]
+import std/[os, parsecfg, streams, strutils, tables, xmlparser, xmltree]
 import contracts, nimalyzer
 import types
 
@@ -68,7 +68,10 @@ const
       minutes: 1) ## The start date for a new game
   noDate*: DateRecord = DateRecord(year: 0, month: 0, day: 0, hour: 0,
       minutes: 0) ## The empty, not set game date
-  gameVersion*: string = "Version: 10.9" ## The current version of the game
+  gameVersion*: string = "Version: " & staticRead(".." & DirSep &
+      "steamsky.nimble").newStringStream.loadConfig.getSectionValue("",
+      "version")
+    ## The current version of the game
 
 {.warning[UnsafeSetLen]: off.}
 {.warning[UnsafeDefault]: off.}
@@ -179,7 +182,8 @@ var
     ## The list of prototypes of all ships' modules available in the game
   recipesList*: Table[string, CraftData] = initTable[string, CraftData]()
     ## The list of all available crafting recipes in the game
-  goalsList*: OrderedTable[Positive, GoalData] = initOrderedTable[Positive, GoalData]()
+  goalsList*: OrderedTable[Positive, GoalData] = initOrderedTable[Positive,
+      GoalData]()
     ## The list of available goals in the game
   playerCareer*: string = ""
     ## Index of the career of the player selected when starting a new game
@@ -236,7 +240,8 @@ proc loadData*(fileName: string) {.raises: [DataLoadingError],
     fileName.len > 0
   body:
 
-    proc findAttributeIndex(attributeName: string): int {.raises: [], tags: [], contractual.} =
+    proc findAttributeIndex(attributeName: string): int {.raises: [], tags: [],
+        contractual.} =
       ## Find the index of the selected attribute
       ##
       ## * attributeName - the name of the attribute which index will be looking
