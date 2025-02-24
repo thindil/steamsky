@@ -19,7 +19,7 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, game, maps, missions, shipscrew, stories, types, utils]
+import ../[basestypes, crewinventory, game, maps, missions, shipscrew, stories, types, utils]
 import coreui, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
@@ -300,6 +300,126 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       if playerShip.speed == docked:
         showDockedCommands(baseIndex = baseIndex, haveTrader = haveTrader,
             dialog = dialog)
+      else:
+        var event: EventsTypes = EventsTypes.none
+        if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
+          event = eventsList[skyMap[playerShip.skyX][
+              playerShip.skyY].eventIndex].eType
+        case event
+        of enemyShip, enemyPatrol:
+          labelButton(title = "Attack"):
+            discard
+        of fullDocks:
+          labelButton(title = "Wait (full docks)"):
+            discard
+        of attackOnBase:
+          labelButton(title = "Defend"):
+            discard
+        of disease:
+          if haveTrader:
+            let itemIndex: int = try:
+                findItem(inventory = playerShip.cargo,
+                  itemType = factionsList[skyBases[baseIndex].owner].healingTools)
+              except:
+                dialog = setError(message = "Can't find medicinet in the ship cargo.")
+                return
+            if itemIndex > -1:
+              labelButton(title = "Deliver medicines for free"):
+               discard
+              labelButton(title = ".deliverprice"):
+                discard
+        of EventsTypes.none, doublePrice, baseRecovery:
+          if baseIndex > 0:
+            if skyBases[baseIndex].reputation.level > -25:
+              var dockingCost: int = 1
+              for module in playerShip.modules:
+                if module.mType == ModuleType2.hull:
+                  dockingCost = module.maxModules
+                  break
+              if skyBases[baseIndex].population > 0:
+                labelButton(title = "Dock (" & $dockingCost & " " & moneyName & ")"):
+                  discard
+              else:
+                labelButton(title = "Dock"):
+                  discard
+            for mission in acceptedMissions:
+              if haveTrader and mission.targetX == playerShip.skyX and
+                  mission.targetY == playerShip.skyY and mission.finished:
+                case mission.mType
+                of deliver:
+                  try:
+                    labelButton(title = "Complete delivery of " &
+                        itemsList[mission.itemIndex].name):
+                      discard
+                  except:
+                    dialog = setError(message = "Can't add accepted mission button.")
+                    return
+                of destroy:
+                  try:
+                    labelButton(title = "Complete destroy " &
+                        protoShipsList[mission.shipIndex].name):
+                      discard
+                  except:
+                    dialog = setError(message = "Can't add accepted mission button.")
+                    return
+                of patrol:
+                  labelButton(title = "Complete Patrol area mission"):
+                    discard
+                of explore:
+                  labelButton(title = "Complete Explore area mission"):
+                    discard
+                of passenger:
+                  labelButton(title = "Complete Transport passenger mission"):
+                    discard
+        else:
+          discard
+#          else:
+#            for mission in acceptedMissions:
+#              if mission.targetX == playerShip.skyX and mission.targetY ==
+#                  playerShip.skyY and not mission.finished:
+#                case mission.mType
+#                of deliver, passenger:
+#                  discard
+#                of destroy:
+#                  try:
+#                    addButton(name = ".mission", label = "Search for " &
+#                        protoShipsList[mission.shipIndex].name,
+#                        command = "StartMission", shortcut = "s", underline = 0)
+#                  except:
+#                    return showError(message = "Can't add accepted mission button.")
+#                of patrol:
+#                  addButton(name = ".mission", label = "Patrol area",
+#                      command = "StartMission", shortcut = "p", underline = 0)
+#                of explore:
+#                  addButton(name = ".mission", label = "Explore area",
+#                      command = "StartMission", shortcut = "e", underline = 0)
+#        of trader:
+#          if haveTrader:
+#            addButton(name = ".trade", label = "Trade", command = "ShowTrader " &
+#                $eventsList[skyMap[playerShip.skyX][
+#                playerShip.skyY].eventIndex].shipIndex, shortcut = "t", underline = 0)
+#            addButton(name = ".askevents", label = "Ask for events",
+#                command = "AskForEvents", shortcut = "e", underline = 8)
+#            addButton(name = ".askbases", label = "Ask for bases",
+#                command = "AskForBases", shortcut = "b", underline = 8)
+#          addButton(name = ".attack", label = "Attack", command = "Attack",
+#              shortcut = "a", underline = 0)
+#        of friendlyShip:
+#          if haveTrader:
+#            try:
+#              if tradersName in protoShipsList[eventsList[skyMap[playerShip.skyX][
+#                  playerShip.skyY].eventIndex].shipIndex].name:
+#                addButton(name = ".trade", label = "Trade",
+#                    command = "ShowTrader " & $eventsList[skyMap[playerShip.skyX][
+#                    playerShip.skyY].eventIndex].shipIndex, shortcut = "t", underline = 0)
+#                addButton(name = ".askbases", label = "Ask for bases",
+#                    command = "AskForBases", shortcut = "b", underline = 8)
+#            except:
+#              return showError(message = "Can't check if ship is trader.")
+#            addButton(name = ".askevents", label = "Ask for events",
+#                command = "AskForEvents", shortcut = "e", underline = 8)
+#          addButton(name = ".attack", label = "Attack", command = "Attack",
+#              shortcut = "a", underline = 0)
       labelButton(title = "Close"):
         closePopup()
         dialog = none
