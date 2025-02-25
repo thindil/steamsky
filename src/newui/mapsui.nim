@@ -800,7 +800,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   showHeader(dialog = dialog)
   # draw dialogs
-  showGameMenu(dialog = dialog)
   showQuestion(dialog = dialog, state = state)
   showShipOrders(dialog = dialog)
   showDestinationMenu(dialog = dialog)
@@ -1010,3 +1009,4 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
       showLastMessages(theme = theme, dialog = dialog)
     row(0.25):
       showButtons(dialog = dialog)
+  showGameMenu(dialog = dialog)
