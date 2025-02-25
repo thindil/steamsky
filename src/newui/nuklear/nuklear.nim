@@ -1073,6 +1073,8 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
         let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
         nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+      of NK_STYLE_ITEM_NINE_SLICE:
+        text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
       else:
         discard
     return true
