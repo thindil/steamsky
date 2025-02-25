@@ -134,7 +134,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
-    redraw: bool = true
     redrawTime: float = 1_000.0
   while true:
     let started: float = cpuTime()

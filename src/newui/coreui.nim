@@ -41,6 +41,7 @@ var
   windowHeight*: float = 600.0 ## The height of the main game window
   dialogX*: float = 0          ## The X position of a dialog
   dialogY*: float = 0          ## The Y position of a dialog
+  redraw*: bool = true         ## If true, redraw the game
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
@@ -52,6 +53,7 @@ proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
   ##       height
   dialogX = x
   dialogY = y
+  redraw = true
 
 proc updateDialog*(width, height: float) {.raises: [], tags: [], contractual.} =
   ## Update the current dialog position if needed
