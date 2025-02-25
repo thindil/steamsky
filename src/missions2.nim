@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -21,8 +21,8 @@
 
 import std/tables
 import contracts
-import game, game2, goals, maps, messages, missions, shipscrew, shipscargo,
-    shipsmovement, statistics, types, utils
+import config, game, game2, goals, maps, messages, missions, shipscrew,
+    shipscargo, shipsmovement, statistics, types, utils
 
 type
   MissionFinishingError* = object of CatchableError
@@ -154,16 +154,16 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
   var acceptMessage: string = "You accepted the mission to "
   case mission.mType
   of deliver:
-    acceptMessage.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'.")
+    acceptMessage.add(y = "'Deliver " & itemsList[mission.itemIndex].name & "'")
     updateCargo(ship = playerShip, protoIndex = mission.itemIndex, amount = 1)
   of destroy:
-    acceptMessage.add(y = "'Destroy " & protoShipsList[mission.shipIndex].name & "'.")
+    acceptMessage.add(y = "'Destroy " & protoShipsList[mission.shipIndex].name & "'")
   of patrol:
-    acceptMessage.add(y = "'Patrol selected area'.")
+    acceptMessage.add(y = "'Patrol selected area'")
   of explore:
-    acceptMessage.add(y = "'Explore selected area'.")
+    acceptMessage.add(y = "'Explore selected area'")
   of passenger:
-    acceptMessage.add(y = "'Transpor passenger to base'.")
+    acceptMessage.add(y = "'Transpor passenger to base'")
     let
       passengerBase: ExtendedBasesRange = (if getRandom(min = 1, max = 100) <
           60: baseIndex else: getRandom(min = skyBases.low,
@@ -210,6 +210,12 @@ proc acceptMission*(missionIndex: Natural) {.raises: [
   skyBases[baseIndex].missions.delete(i = missionIndex)
   acceptedMissions.add(y = mission)
   skyMap[mission.targetX][mission.targetY].missionIndex = acceptedMissions.high
+  if gameSettings.autoDestination:
+    playerShip.destinationX = mission.targetX
+    playerShip.destinationY = mission.targetY
+    acceptMessage.add(y = " and set it as the destination for your ship.")
+  else:
+    acceptMessage.add(y = ".")
   addMessage(message = acceptMessage, mType = missionMessage)
   let traderIndex: int = findMember(order = talk)
   gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
