@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -229,99 +229,106 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       grid [ttk::checkbutton $goptions.autoreturn] -row 3 -column 1 -sticky w
       tooltip::tooltip $goptions.autoreturn \
          "After finished mission, set skybase from\nwhich mission was taken as a destination for ship."
-      grid [ttk::label $goptions.lbl5 -text {Auto finish missions:}] -sticky w
+      grid [ttk::label $goptions.lbl5 -text {Auto set destination after accepting mission:}] \
+         -sticky w
       tooltip::tooltip $goptions.lbl5 \
+         "After accepting a mission, set its target as a destination for ship."
+      grid [ttk::checkbutton $goptions.autodestination] -row 4 -column 1 -sticky w
+      tooltip::tooltip $goptions.autodestination \
+         "After accepting a mission, set its target as a destination for ship."
+      grid [ttk::label $goptions.lbl6 -text {Auto finish missions:}] -sticky w
+      tooltip::tooltip $goptions.lbl6 \
          "Auto finish missions when ship is near corresponding skybase.\nMissions will not be finished if there is no trader on position\nor when there is Double Price event in the base."
-      grid [ttk::checkbutton $goptions.autofinish] -row 4 -column 1 -sticky w
+      grid [ttk::checkbutton $goptions.autofinish] -row 5 -column 1 -sticky w
       tooltip::tooltip $goptions.autofinish \
          "Auto finish missions when ship is near corresponding skybase.\nMissions will not be finished if there is no trader on position\nor when there is Double Price event in the base."
-      grid [ttk::label $goptions.lbl6 -text {Auto ask for bases:}] -sticky w
-      tooltip::tooltip $goptions.lbl6 \
+      grid [ttk::label $goptions.lbl7 -text {Auto ask for bases:}] -sticky w
+      tooltip::tooltip $goptions.lbl7 \
          {Auto ask for bases when ship end docking to bases.}
-      grid [ttk::checkbutton $goptions.autoaskforbases] -row 5 -column 1 -sticky w
+      grid [ttk::checkbutton $goptions.autoaskforbases] -row 6 -column 1 -sticky w
       tooltip::tooltip $goptions.autoaskforbases \
          {Auto ask for bases when ship end docking to bases.}
-      grid [ttk::label $goptions.lbl7 -text {Auto ask for events:}] -sticky w
-      tooltip::tooltip $goptions.lbl7 \
+      grid [ttk::label $goptions.lbl8 -text {Auto ask for events:}] -sticky w
+      tooltip::tooltip $goptions.lbl8 \
          {Auto ask for events when ship end docking to bases.}
-      grid [ttk::checkbutton $goptions.autoaskforevents] -row 6 -column 1 -sticky w
+      grid [ttk::checkbutton $goptions.autoaskforevents] -row 7 -column 1 -sticky w
       tooltip::tooltip $goptions.autoaskforevents \
          {Auto ask for events when ship end docking to bases.}
-      grid [ttk::label $goptions.lbl8 -text {Low level of fuel:}] -sticky w
-      tooltip::tooltip $goptions.lbl8 \
+      grid [ttk::label $goptions.lbl9 -text {Low level of fuel:}] -sticky w
+      tooltip::tooltip $goptions.lbl9 \
          "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
       grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key \
-         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 7 -column 1 \
+         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 8 -column 1 \
          -sticky w
       tooltip::tooltip $goptions.fuel \
          "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
-      grid [ttk::label $goptions.lbl9 -text {Low level of drinks:}] -sticky w
-      tooltip::tooltip $goptions.lbl9 \
+      grid [ttk::label $goptions.lbl10 -text {Low level of drinks:}] -sticky w
+      tooltip::tooltip $goptions.lbl10 \
          "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
       grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key \
-         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 8 -column 1 \
+         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 9 -column 1 \
          -sticky w
       tooltip::tooltip $goptions.drinks \
          "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
-      grid [ttk::label $goptions.lbl10 -text {Low level of food:}] -sticky w
-      tooltip::tooltip $goptions.lbl10 \
+      grid [ttk::label $goptions.lbl11 -text {Low level of food:}] -sticky w
+      tooltip::tooltip $goptions.lbl11 \
          "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
       grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key \
-         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 9 -column 1 \
+         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 10 -column 1 \
          -sticky w
       tooltip::tooltip $goptions.food \
          "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
-      grid [ttk::label $goptions.lbl11 -text {Stop auto movement:}] -sticky w
-      tooltip::tooltip $goptions.lbl11 \
+      grid [ttk::label $goptions.lbl12 -text {Stop auto movement:}] -sticky w
+      tooltip::tooltip $goptions.lbl12 \
          "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
       grid [ttk::combobox $goptions.automovestop -state readonly \
          -values [list {Never} {Any ship} {Friendly ship} {Enemy ship}] -width 10]\
-         -row 10 -column 1 -sticky w
+         -row 11 -column 1 -sticky w
       tooltip::tooltip $goptions.automovestop \
          "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
-      grid [ttk::label $goptions.lbl12 -text {Messages limit:}] -sticky w
-      tooltip::tooltip $goptions.lbl12 \
+      grid [ttk::label $goptions.lbl13 -text {Messages limit:}] -sticky w
+      tooltip::tooltip $goptions.lbl13 \
          "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
       grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key \
-         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 11 -column 1 \
+         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 12 -column 1 \
          -sticky w
       tooltip::tooltip $goptions.messageslimit \
          "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
-      grid [ttk::label $goptions.lbl13 -text {Saved messages:}] -sticky w
-      tooltip::tooltip $goptions.lbl13 \
+      grid [ttk::label $goptions.lbl14 -text {Saved messages:}] -sticky w
+      tooltip::tooltip $goptions.lbl14 \
          "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
       grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key \
-         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 12 -column 1 \
+         -validatecommand {ValidateSpinbox %W %P {}} -width 5] -row 13 -column 1 \
          -sticky w
       tooltip::tooltip $goptions.savedmessages \
          "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
-      grid [ttk::label $goptions.lbl14 -text {Messages order:}] -sticky w
-      tooltip::tooltip $goptions.lbl14 \
+      grid [ttk::label $goptions.lbl15 -text {Messages order:}] -sticky w
+      tooltip::tooltip $goptions.lbl15 \
          "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
       grid [ttk::combobox $goptions.messagesorder -state readonly \
          -values [list {Older messages first} {Newer messages first}] -width 16] \
-         -row 13 -column 1 -sticky w
+         -row 14 -column 1 -sticky w
       tooltip::tooltip $goptions.messagesorder \
          "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
-      grid [ttk::label $goptions.lbl15 -text {Autosave game:}] -sticky w
-      tooltip::tooltip $goptions.lbl15 \
+      grid [ttk::label $goptions.lbl16 -text {Autosave game:}] -sticky w
+      tooltip::tooltip $goptions.lbl16 \
          {How often game should be automatically saved to disk.}
       grid [ttk::combobox $goptions.autosave -state readonly \
          -values [list {Never} {After dock to base} {After undock from base} \
          {Every game day} {Every game month} {Every game year}] -width 18] \
-         -row 14 -column 1 -sticky w
+         -row 15 -column 1 -sticky w
       tooltip::tooltip $goptions.autosave \
          {How often game should be automatically saved to disk.}
-      grid [ttk::label $goptions.lbl16 -text {Wait time:}] -sticky w
-      tooltip::tooltip $goptions.lbl16 \
+      grid [ttk::label $goptions.lbl17 -text {Wait time:}] -sticky w
+      tooltip::tooltip $goptions.lbl17 \
          {How much minutes will pass after press the Wait button.}
       grid [ttk::spinbox $goptions.waitinterval -from 1 -to 1440 -validate key \
-         -validatecommand {ValidateSpinbox %W %P {}} -width 6] -row 15 -column 1 \
+         -validatecommand {ValidateSpinbox %W %P {}} -width 6] -row 16 -column 1 \
          -sticky w
       tooltip::tooltip $goptions.waitinterval \
          "How much minutes will pass after press the Wait button.\nEnter value between 1 and 1440"
       SetScrollbarBindings $goptions .gameframe.paned.optionsframe.scrolly
-      for {set i 1} {$i < 17} {incr i} {
+      for {set i 1} {$i < 18} {incr i} {
          SetScrollbarBindings $goptions.lbl$i .gameframe.paned.optionsframe.scrolly
       }
       # Movement keys options
@@ -934,13 +941,15 @@ proc showOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
     return tclOk
   optionsFrame = optionsCanvas & ".options.general"
   tclEval(script = "grid " & optionsFrame & " -sticky nwes -padx 10")
-  let checkboxArray: array[11, WidgetData] = [WidgetData(name: optionsCanvas &
+  let checkboxArray: array[12, WidgetData] = [WidgetData(name: optionsCanvas &
       ".options.general.autorest", value: (
       if gameSettings.autoRest: "1" else: "0")), WidgetData(
       name: optionsCanvas & ".options.general.autocenter", value: (
       if gameSettings.autoCenter: "1" else: "0")), WidgetData(
       name: optionsCanvas & ".options.general.autoreturn", value: (
       if gameSettings.autoReturn: "1" else: "0")), WidgetData(
+      name: optionsCanvas & ".options.general.autodestination", value:
+      (if gameSettings.autoDestination: "1" else: "0")), WidgetData(
       name: optionsCanvas & ".options.general.autofinish", value: (
       if gameSettings.autoFinish: "1" else: "0")), WidgetData(
       name: optionsCanvas & ".options.general.autoaskforbases", value: (
@@ -1116,6 +1125,8 @@ proc closeOptionsCommand(clientData: cint; interp: PInterp; argc: cint;
       checkboxName = ".general.autocenter")
   gameSettings.autoReturn = getCheckboxValue(
       checkboxName = ".general.autoreturn")
+  gameSettings.autoDestination = getCheckboxValue(
+      checkboxName = ".general.autodestination")
   gameSettings.autoFinish = getCheckboxValue(
       checkboxName = ".general.autofinish")
   gameSettings.autoAskForBases = getCheckboxValue(
