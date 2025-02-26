@@ -19,7 +19,8 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, crewinventory, game, maps, missions, shipscrew, stories, types, utils]
+import ../[basestypes, crewinventory, game, maps, missions, shipscrew,
+    shipsmovement, stories, types, utils]
 import coreui, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
@@ -154,6 +155,39 @@ proc countHeight(baseIndex: ExtendedBasesRange;
         result += 35
       result += 35
 
+proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Docking, undocking and escaping from bases
+  ##
+  ## * escape  - if true, escape from a base
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog if error happened.
+  var message: string = ""
+  if playerShip.speed == docked:
+    try:
+      message = dockShip(docking = false, escape = escape)
+    except:
+      dialog = setError(message = "Can't undock from the base.")
+      return
+    if message.len > 0:
+      # showMessage(text = message, title = "Can't undock from base")
+      return
+  else:
+    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
+      if eventsList[skyMap[playerShip.skyX][
+          playerShip.skyY].eventIndex].eType == fullDocks:
+        return
+    try:
+      message = dockShip(docking = true)
+    except:
+      dialog = setError(message = "Can't dock to the base.")
+    if message.len > 0:
+      # showMessage(text = message, title = "Can't dock to base")
+      return
+  dialog = none
+  closePopup()
+
 proc showDockedCommands(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         contractual.} =
@@ -165,10 +199,10 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
   ##
   ## Returns the modified parameters dialog if error happened.
   labelButton(title = "Undock"):
-    discard
+    dockingOrder(dialog = dialog)
   if skyBases[baseIndex].population > 0:
     labelButton(title = "Escape"):
-      discard
+      dockingOrder(escape = true, dialog = dialog)
     if haveTrader and skyBases[baseIndex].population > 0:
       labelButton(title = "Trade"):
         discard
@@ -371,13 +405,14 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           if haveTrader:
             let itemIndex: int = try:
                 findItem(inventory = playerShip.cargo,
-                  itemType = factionsList[skyBases[baseIndex].owner].healingTools)
+                  itemType = factionsList[skyBases[
+                      baseIndex].owner].healingTools)
               except:
                 dialog = setError(message = "Can't find medicinet in the ship cargo.")
                 return
             if itemIndex > -1:
               labelButton(title = "Deliver medicines for free"):
-               discard
+                discard
               labelButton(title = "Deliver medicines for price"):
                 discard
         of EventsTypes.none, doublePrice, baseRecovery:
@@ -457,8 +492,8 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         of friendlyShip:
           if haveTrader:
             try:
-              if tradersName in protoShipsList[eventsList[skyMap[playerShip.skyX][
-                  playerShip.skyY].eventIndex].shipIndex].name:
+              if tradersName in protoShipsList[eventsList[skyMap[
+                  playerShip.skyX][playerShip.skyY].eventIndex].shipIndex].name:
                 labelButton(title = "Trade"):
                   discard
                 labelButton(title = "Ask for bases"):
