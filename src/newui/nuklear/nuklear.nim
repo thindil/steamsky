@@ -712,7 +712,7 @@ proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], c
   result.w = w - 2 * amount
   result.h = h - 2 * amount
 
-proc nkDrawImage(b: ptr nk_command_buffer, r: NimRect, img: PImage, col: nk_color)
+proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
   ##
@@ -738,6 +738,26 @@ proc nkDrawImage(b: ptr nk_command_buffer, r: NimRect, img: PImage, col: nk_colo
   cmd.h = max(x = 0.cushort, y = r.h.cushort)
   cmd.img = cast[nk_image](img)
   cmd.col = col
+
+proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slice; col: nk_color)
+  {.raises: [], tags: [], contractual.} =
+  ## Draw the selected fragments of an image
+  ##
+  ## * b   - the command buffer in which the slice will be drawn
+  ## * r   - the rectangle in which the slice will be drawn
+  ## * slc - the image's slice to draw
+  ## * col - the color used as a background for the slice
+  let slcImg: ptr nk_image = cast[ptr nk_image](slc)
+  var rgnX, rgnY, rgnW, rgnH: nk_ushort;
+  rgnX = slcImg.region[0]
+  rgnY = slcImg.region[1]
+  rgnW = slcImg.region[2]
+  rgnH = slcImg.region[3]
+
+  var img: nk_image;
+
+  # top-left
+  img.handle = slcImg.handle
 
 # -----
 # Input
