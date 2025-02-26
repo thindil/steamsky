@@ -30,10 +30,13 @@ type
     question, data: string
     qType: QuestionType
     lines: float
+  MessageData = object
+    text, title: string
+    lines: float
 
 var
   questionData: QuestionData = QuestionData(question: "", data: "")
-  msg: string
+  messageData: MessageData = MessageData(text: "", title: "Info")
   answered*: bool = false ## If true, the question was answered
 
 proc setQuestion*(question: string; qType: QuestionType; data: string = "";
@@ -136,10 +139,12 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     answered = true
     dialog = setError(message = "Can't show the question")
 
-proc setMessage*(message: string; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setMessage*(message, title: string; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Set the data related to the current in-game message
   ##
   ## * message - the message which will be show to the player
+  ## * title   - the title of the message's dialog
   ## * dialog  - the current in-game dialog displayed on the screen
   ##
   ## Returns the parameter dialog. It is modified only when an error occurs.
@@ -148,7 +153,7 @@ proc setMessage*(message: string; dialog: var GameDialog) {.raises: [], tags: [R
     var needLines: float = ceil(x = getTextWidth(text = message) / 250)
     if needLines < 1.0:
       needLines = 1.0
-    msg = message
+    messageData = MessageData(text: message, title: title, lines: needLines)
     dialog = messageDialog
   except:
     dialog = setError(message = "Can't set the message.")
@@ -169,11 +174,11 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
       height: float = 150
 
     updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Message", x = dialogX, y = dialogY,
-        w = width, h = height, flags = {windowBorder, windowTitle,
+    popup(pType = staticPopup, title = messageData.title, x = dialogX,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(height = 30 * questionData.lines, cols = 1)
-      wrapLabel(str = questionData.question)
+      setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
+      wrapLabel(str = messageData.text)
       setLayoutRowDynamic(height = 30, cols = 2)
       labelButton(title = "Close"):
         closePopup()
