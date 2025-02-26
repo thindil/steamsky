@@ -425,10 +425,10 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                   break
               if skyBases[baseIndex].population > 0:
                 labelButton(title = "Dock (" & $dockingCost & " " & moneyName & ")"):
-                  discard
+                  dockingOrder(dialog = dialog)
               else:
                 labelButton(title = "Dock"):
-                  discard
+                  dockingOrder(dialog = dialog)
             for mission in acceptedMissions:
               if haveTrader and mission.targetX == playerShip.skyX and
                   mission.targetY == playerShip.skyY and mission.finished:
