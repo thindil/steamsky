@@ -21,7 +21,7 @@ import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basestypes, crewinventory, game, maps, missions, shipscrew,
     shipsmovement, stories, types, utils]
-import coreui, errordialog
+import coreui, dialogs, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [
@@ -171,7 +171,7 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't undock from the base.")
       return
     if message.len > 0:
-      # showMessage(text = message, title = "Can't undock from base")
+      setMessage(message = message, title = "Can't undock from base", dialog = dialog)
       return
   else:
     if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
@@ -182,8 +182,9 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
       message = dockShip(docking = true)
     except:
       dialog = setError(message = "Can't dock to the base.")
+      return
     if message.len > 0:
-      # showMessage(text = message, title = "Can't dock to base")
+      setMessage(message = message, title = "Can't dock to base", dialog = dialog)
       return
   dialog = none
   closePopup()
