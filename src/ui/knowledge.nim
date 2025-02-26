@@ -232,7 +232,7 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   # Setting the known stories list
   knowledgeFrame = mainPaned & ".knowledgeframe.stories.canvas.frame"
   var rows = try:
-      tclEval2(script = "grid size " & knowledgeFrame).split(" ")[1].parseInt
+      tclEval2(script = "grid size " & knowledgeFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
@@ -365,8 +365,8 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     knowledgeevents.addCommands()
     knowledgemissions.addCommands()
     knowledgestories.addCommands()
-    addCommand("ShowKnowledge", showKnowledgeCommand)
-    addCommand("KnowledgeMaxMin", knowledgeMaxMinCommand)
-    addCommand("KnowledgeMore", knowledgeMoreCommand)
+    addCommand(name = "ShowKnowledge", nimProc = showKnowledgeCommand)
+    addCommand(name = "KnowledgeMaxMin", nimProc = knowledgeMaxMinCommand)
+    addCommand(name = "KnowledgeMore", nimProc = knowledgeMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
