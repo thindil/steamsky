@@ -28,7 +28,7 @@ type GameState* = enum
 type GameDialog* = enum
   ## Used to show any in-game dialog window
   none, loading, errorDialog, gameMenuDialog, questionDialog, newGoalDialog,
-    ordersDialog, destinationDialog, messageDialog
+    ordersDialog, destinationDialog, messageDialog, waitDialog
 
 const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
