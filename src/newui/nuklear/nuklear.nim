@@ -740,7 +740,7 @@ proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_colo
   cmd.col = col
 
 proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slice; col: nk_color)
-  {.raises: [], tags: [], contractual.} =
+  {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected fragments of an image
   ##
   ## * b   - the command buffer in which the slice will be drawn
@@ -758,6 +758,17 @@ proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slic
 
   # top-left
   img.handle = slcImg.handle
+  img.w = slcImg.w
+  img.h = slcImg.h
+  img.region = [rgnX, rgnY, slc.l, slc.t]
+
+  nkDrawImage(b = b, r = NimRect(x: r.x, y: r.y, w: slc.l.float, h: slc.t.float), img = img.addr, col = col)
+
+  # top-center
+  img.region = [rgnX + slc.l, rgnY, rgnW - slc.l - slc.r, slc.t]
+  nkDrawImage(b = b, r = NimRect(x: r.x + slc.l.float, y: r.y, w: r.w - slc.l.float - slc.r.float, h: slc.t.float), img = img.addr, col = col)
+
+  # top-right
 
 # -----
 # Input
