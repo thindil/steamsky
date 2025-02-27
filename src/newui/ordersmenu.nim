@@ -171,7 +171,7 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't undock from the base.")
       return
     if message.len > 0:
-      setMessage(message = message, title = "Can't undock from base", dialog = dialog)
+      dialog = setMessage(message = message, title = "Can't undock from base")
       return
   else:
     if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
@@ -184,7 +184,7 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't dock to the base.")
       return
     if message.len > 0:
-      setMessage(message = message, title = "Can't dock to base", dialog = dialog)
+      dialog = setMessage(message = message, title = "Can't dock to base")
       return
   dialog = none
   closePopup()

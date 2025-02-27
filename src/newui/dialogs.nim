@@ -139,24 +139,24 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     answered = true
     dialog = setError(message = "Can't show the question")
 
-proc setMessage*(message, title: string; dialog: var GameDialog) {.raises: [],
+proc setMessage*(message, title: string): GameDialog {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Set the data related to the current in-game message
   ##
   ## * message - the message which will be show to the player
   ## * title   - the title of the message's dialog
-  ## * dialog  - the current in-game dialog displayed on the screen
   ##
-  ## Returns the parameter dialog. It is modified only when an error occurs.
+  ## Returns the messageDialog if the message was set, otherwise
+  ## errorDialog
   setDialog()
   try:
     var needLines: float = ceil(x = getTextWidth(text = message) / 250)
     if needLines < 1.0:
       needLines = 1.0
     messageData = MessageData(text: message, title: title, lines: needLines)
-    dialog = messageDialog
+    result = messageDialog
   except:
-    dialog = setError(message = "Can't set the message.")
+    result = setError(message = "Can't set the message.")
 
 proc showMessage*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
