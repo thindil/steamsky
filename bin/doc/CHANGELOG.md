@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Auto setting the destination for the player's ship when accepting a mission
+  in a base. It can be enabled or disabled in the game's options. By default
+  it is enabled
+
 ### Fixed
 - Reading the game's themes from files
 
