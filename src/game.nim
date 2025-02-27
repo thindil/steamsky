@@ -68,8 +68,8 @@ const
       minutes: 1) ## The start date for a new game
   noDate*: DateRecord = DateRecord(year: 0, month: 0, day: 0, hour: 0,
       minutes: 0) ## The empty, not set game date
-  gameVersion*: string = "Version: " & staticRead(filename = ".." & DirSep &
-      "steamsky.nimble").newStringStream.loadConfig.getSectionValue(
+  gameVersion*: string = "Version: " & staticRead(
+      filename = "../steamsky.nimble").newStringStream.loadConfig.getSectionValue(
       section = "", key = "version")
     ## The current version of the game
 
