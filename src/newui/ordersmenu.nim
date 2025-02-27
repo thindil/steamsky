@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  if, see <http://www.gnu.org/licenses/>.
 
-## Provides code related to the player's ship's orders menu
+## Provides code related to the player's ship's orders menu, like counting
+## the menu's height, showing the menu and executing some of its commands.
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
