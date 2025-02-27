@@ -405,8 +405,8 @@ proc showLoadMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
     contextualItemLabel(label = "Load game", align = centered):
       dialog = loading
     contextualItemLabel(label = "Delete game", align = centered):
-      setQuestion(question = "Are you sure you want delete this savegame?",
-          data = saveClicked, qType = deleteSave, dialog = dialog)
+      dialog = setQuestion(question = "Are you sure you want delete this savegame?",
+          data = saveClicked, qType = deleteSave)
     contextualItemLabel(label = "Close", align = centered):
       discard
 

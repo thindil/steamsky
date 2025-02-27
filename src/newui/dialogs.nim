@@ -39,18 +39,18 @@ var
   messageData: MessageData = MessageData(text: "", title: "Info")
   answered*: bool = false ## If true, the question was answered
 
-proc setQuestion*(question: string; qType: QuestionType; data: string = "";
-    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setQuestion*(question: string; qType: QuestionType;
+    data: string = ""): GameDialog {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the data related to the current in-game question
   ##
   ## * question - the question which will be asked to the player
   ## * qType    - the type of the question, used to set action to the player's
   ##              answer
-  ## * data     - an additional data for the question, like saved game path,
-  ##              optional.
   ## * dialog   - the current in-game dialog displayed on the screen
   ##
-  ## Returns the parameter dialog. It is modified only when an error occurs.
+  ## Returns the questionDialog if the message was set, otherwise
+  ## errorDialog
   setDialog()
   try:
     var needLines: float = ceil(x = getTextWidth(text = question) / 250)
@@ -59,9 +59,9 @@ proc setQuestion*(question: string; qType: QuestionType; data: string = "";
     questionData = QuestionData(question: question, data: data,
         lines: needLines, qType: qType)
     answered = false
-    dialog = questionDialog
+    result = questionDialog
   except:
-    dialog = setError(message = "Can't set the question.")
+    result = setError(message = "Can't set the question.")
 
 proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [RootEffect], contractual.} =

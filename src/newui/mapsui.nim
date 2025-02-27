@@ -395,8 +395,8 @@ proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       needRepairs = needRepairs, needWorker = needWorker,
       haveWorker = haveWorker, needCleaning = needCleaning, faction = faction)
   if playerShip.crew[0].health == 0 and dialog == none:
-    setQuestion(question = "You are dead. Would you like to see your game statistics?",
-        qType = showDeadStats, dialog = dialog)
+    dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
+        qType = showDeadStats)
 
 proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -726,11 +726,11 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           closePopup()
         labelButton(title = "Quit from game"):
           closePopup()
-          setQuestion(question = "Are you sure want to quit?", qType = quitGame,
-              dialog = dialog)
+          dialog = setQuestion(question = "Are you sure want to quit?",
+              qType = quitGame)
         labelButton(title = "Resign from game"):
-          setQuestion(question = "Are you sure want to resign from game?",
-              qType = resignGame, dialog = dialog)
+          dialog = setQuestion(question = "Are you sure want to resign from game?",
+              qType = resignGame)
           closePopup()
       labelButton(title = "Close"):
         closePopup()
@@ -740,7 +740,8 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
 
 var mapX, mapY: Natural = 0
 
-proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the menu for setting a destination for the player's ship
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -752,7 +753,8 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect
     const width: float = 250
     let height: float = (if playerShip.speed == docked: 115 else: 185)
 
-    proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+    proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
+        contractual.} =
       ## Close the destination menu dialog
       ## * dialog - the current in-game dialog displayed on the screen
       ##
@@ -762,7 +764,8 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect
       mapX = 0
       mapY = 0
 
-    proc setDestination(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+    proc setDestination(dialog: var GameDialog) {.raises: [], tags: [],
+        contractual.} =
       ## Set the new destination point for the player's ship
       ##
       ## * dialog - the current in-game dialog displayed on the screen
@@ -773,8 +776,8 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect
       closeDialog(dialog = dialog)
 
     updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Set destination", x = dialogX, y = dialogY,
-        w = width, h = height, flags = {windowBorder, windowTitle,
+    popup(pType = staticPopup, title = "Set destination", x = dialogX,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(30, 1)
       labelButton(title = "Set destination"):
