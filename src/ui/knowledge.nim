@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the information about the player's character's
+## knowledge, like minimizing/maximizing its sections, drawing the UI, etc.
+
 import std/[strutils, tables]
 import contracts, nimalyzer
 import ../[basestypes, game, stories, tk]
