@@ -21,7 +21,7 @@
 import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[coreui, errordialog, goalsui, mainmenu, mapsui, themes]
+import newui/[coreui, errordialog, goalsui, mainmenu, mapsui, themes, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -141,6 +141,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       # Reset the UI tooltips if enabled
       if gameSettings.showTooltips:
         resetTooltips()
+
+      # Wait menu if needed
+      showWaitMenu(dialog = dialog)
 
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,

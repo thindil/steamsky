@@ -22,7 +22,7 @@ import std/[colors, math, tables, unicode]
 import contracts, nimalyzer, nuklear/nuklear_sdl_renderer
 import ../[basestypes, config, game, maps, messages, missions, shipscargo,
     shipsmovement, stories, types]
-import coreui, dialogs, errordialog, messagesui, ordersmenu, themes, utilsui2, waitmenu
+import coreui, dialogs, errordialog, messagesui, ordersmenu, themes, utilsui2
 
 const iconsAmount: Positive = 36
 
@@ -809,7 +809,6 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showShipOrders(dialog = dialog)
   showDestinationMenu(dialog = dialog)
   showMessage(dialog = dialog)
-  showWaitMenu(dialog = dialog)
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)

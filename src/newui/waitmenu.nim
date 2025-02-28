@@ -37,8 +37,8 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   const
     height: float = 320
     width: float = 400
-  window(name = "Wait in place", x = dialogX,
-      y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+  window(name = "Wait in place", x = windowWidth / 4, y = windowHeight / 4,
+      w = width, h = height, flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     labelButton(title = "Wait 1 minute"):
