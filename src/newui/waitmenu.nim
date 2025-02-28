@@ -19,7 +19,7 @@
 ## executing a wait command, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui, errordialog
+import coreui
 
 var
   waitAmount: Positive = 1
@@ -34,41 +34,36 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameters dialog if error happened or menu has closed.
   if dialog != waitDialog:
     return
-  try:
-    const
-      height: float = 320
-      width: float = 400
-    updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Wait in place", x = dialogX,
-        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
-      setLayoutRowDynamic(30, 1)
-      labelButton(title = "Wait 1 minute"):
-        discard
-      labelButton(title = "Wait 5 minutes"):
-        discard
-      labelButton(title = "Wait 10 minutes"):
-        discard
-      labelButton(title = "Wait 15 minutes"):
-        discard
-      labelButton(title = "Wait 30 minutes"):
-        discard
-      labelButton(title = "Wait 1 hour"):
-        discard
-      setLayoutRowDynamic(30, 3)
-      labelButton(title = "Wait"):
-        discard
-      let newValue: int = property2(name = "#", min = 1, val = waitAmount,
-          max = 1440, step = 1, incPerPixel = 1)
-      if newValue != waitAmount:
-        waitAmount = newValue
-      var newInterval: Natural = comboList(items = ["minutes", "hours", "days"],
-          selected = waitInterval, itemHeight = 25, x = 200, y = 180)
-      if newInterval != waitInterval:
-        waitInterval = newInterval
-      setLayoutRowDynamic(30, 1)
-      labelButton(title = "Close"):
-        closePopup()
-        dialog = none
-  except:
-    dialog = setError(message = "Can't show the game's menu")
+  const
+    height: float = 320
+    width: float = 400
+  window(name = "Wait in place", x = dialogX,
+      y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+      windowNoScrollbar}):
+    setLayoutRowDynamic(30, 1)
+    labelButton(title = "Wait 1 minute"):
+      discard
+    labelButton(title = "Wait 5 minutes"):
+      discard
+    labelButton(title = "Wait 10 minutes"):
+      discard
+    labelButton(title = "Wait 15 minutes"):
+      discard
+    labelButton(title = "Wait 30 minutes"):
+      discard
+    labelButton(title = "Wait 1 hour"):
+      discard
+    setLayoutRowDynamic(30, 3)
+    labelButton(title = "Wait"):
+      discard
+    let newValue: int = property2(name = "#", min = 1, val = waitAmount,
+        max = 1440, step = 1, incPerPixel = 1)
+    if newValue != waitAmount:
+      waitAmount = newValue
+    var newInterval: Natural = comboList(items = ["minutes", "hours", "days"],
+        selected = waitInterval, itemHeight = 25, x = 200, y = 180)
+    if newInterval != waitInterval:
+      waitInterval = newInterval
+    setLayoutRowDynamic(30, 1)
+    labelButton(title = "Close"):
+      dialog = none
