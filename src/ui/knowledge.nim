@@ -39,8 +39,8 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowKnowledge
   var
-    knowledgeFrame = mainPaned & ".knowledgeframe"
-    knowledgeCanvas = knowledgeFrame & ".bases.canvas"
+    knowledgeFrame: string = mainPaned & ".knowledgeframe"
+    knowledgeCanvas: string = knowledgeFrame & ".bases.canvas"
   if tclEval2(script = "winfo exists " & knowledgeFrame) == "0":
     tclEval(script = """
       set knowledgeframe [ttk::frame .gameframe.paned.knowledgeframe]
@@ -196,10 +196,10 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
       grid rowconfigure $knowledgeframe 0 -weight 1
       grid rowconfigure $knowledgeframe 1 -weight 1
     """)
-    var comboValues = " {Any}"
+    var comboValues: string = " {Any}"
     for baseType in basesTypesList.values:
       comboValues.add(y = " { " & baseType.name & "}")
-    var comboBox = knowledgeCanvas & ".frame.options.types"
+    var comboBox: string = knowledgeCanvas & ".frame.options.types"
     tclEval(script = comboBox & " configure -values [list" & comboValues & "]")
     tclEval(script = comboBox & " current 0")
     comboValues = " {Any}"
@@ -234,40 +234,40 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   updateEventsList()
   # Setting the known stories list
   knowledgeFrame = mainPaned & ".knowledgeframe.stories.canvas.frame"
-  var rows = try:
+  var rows: Natural = try:
       tclEval2(script = "grid size " & knowledgeFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = knowledgeFrame)
   if finishedStories.len == 0:
-    let label = knowledgeFrame & ".nostories"
+    let label: string = knowledgeFrame & ".nostories"
     tclEval(script = "ttk::label " & label & " -text {You didn't discover any story yet.} -wraplength 400")
     tclEval(script = "grid " & label & " -padx 10")
   else:
-    var finishedStoriesList = ""
+    var finishedStoriesList: string = ""
     for finishedStory in finishedStories:
       try:
         finishedStoriesList.add(y = "{ " & storiesList[
             finishedStory.index].name & "}")
       except:
         return showError(message = "Can't get finished story.")
-    let optionsFrame = knowledgeFrame & ".options"
+    let optionsFrame: string = knowledgeFrame & ".options"
     tclEval(script = "ttk::frame " & optionsFrame)
-    let storiesBox = optionsFrame & ".titles"
+    let storiesBox: string = optionsFrame & ".titles"
     tclEval(script = "ttk::combobox " & storiesBox &
         " -state readonly -values [list " & finishedStoriesList & "]")
     tclEval(script = "bind " & storiesBox & " <<ComboboxSelected>> ShowStory")
     tclEval(script = storiesBox & " current " & $finishedStories.high)
     tclEval(script = "grid " & storiesBox)
-    var button = optionsFrame & ".show"
+    var button: string = optionsFrame & ".show"
     tclEval(script = "ttk::button " & button & " -text {Show on map} -command ShowStoryLocation")
     tclEval(script = "grid " & button & " -column 1 -row 0")
     button = optionsFrame & ".set"
     tclEval(script = "ttk::button " & button & " -text {Set as destination for ship} -command SetStory")
     tclEval(script = "grid " & button & " -column 2 -row 0")
     tclEval(script = "grid " & optionsFrame & " -sticky w")
-    let storiesView = knowledgeFrame & ".view"
+    let storiesView: string = knowledgeFrame & ".view"
     tclEval(script = "text " & storiesView & " -wrap word")
     tclEval(script = "grid " & storiesView & " -sticky w")
     tclEval(script = "event generate " & storiesBox & " <<ComboboxSelected>>")
@@ -304,11 +304,11 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
       row: 0), FrameInfo(name: "missions", column: 0, row: 1), FrameInfo(
       name: "events", column: 1, row: 0), FrameInfo(name: "stories", column: 1, row: 1)]
   let
-    frameName = mainPaned & ".knowledgeframe"
-    button = frameName & "." & $argv[1] & ".canvas.frame.maxmin.maxmin"
+    frameName: string = mainPaned & ".knowledgeframe"
+    button: string = frameName & "." & $argv[1] & ".canvas.frame.maxmin.maxmin"
   if argv[2] == "show":
     for frameInfo in frames:
-      let frame = frameName & "." & frameInfo.name
+      let frame: string = frameName & "." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frame & " -columnspan 2 -rowspan 2 -row 0 -column 0")
       else:
@@ -317,7 +317,7 @@ proc knowledgeMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
         $argv[1] & " hide}")
   else:
     for frameInfo in frames:
-      let frame = frameName & "." & frameInfo.name
+      let frame: string = frameName & "." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frame &
             " -columnspan 1 -rowspan 1 -row " & $frameInfo.row & " -column " &
@@ -345,8 +345,8 @@ proc knowledgeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Framename is name of the frame in which the part will be shown or hidden.
   ## If the second argument is set to show, show the part, otherwise hide it.
   let
-    knowledgeFrame = mainPaned & ".knowledgeframe"
-    button = knowledgeFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
+    knowledgeFrame: string = mainPaned & ".knowledgeframe"
+    button: string = knowledgeFrame & "." & $argv[1] & ".canvas.frame.maxmin.more"
   if argv[1] == "bases":
     if argv[2] == "show":
       tclEval(script = "grid " & knowledgeFrame & ".bases.canvas.frame.options -columnspan 6 -sticky w -padx 5 -row 1")
