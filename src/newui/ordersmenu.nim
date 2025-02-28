@@ -399,7 +399,9 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             discard
         of fullDocks:
           labelButton(title = "Wait (full docks)"):
-            discard
+            closePopup()
+            dialog = waitDialog
+            setDialog()
         of attackOnBase:
           labelButton(title = "Defend"):
             discard
