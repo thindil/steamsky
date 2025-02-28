@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -97,6 +97,8 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
       value = maxValue
     if button.len > 0:
       tclEval(script = button & " configure -state normal")
+    let cargoIndex: int = parseInt(s = $argv[2]) - 1
+    const label: string = ".itemdialog.errorlbl"
     if argc > 4:
       if argv[4] == "take":
         tclSetResult(value = "1")
@@ -105,14 +107,15 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
         var cost: Natural = value * parseInt(s = $argv[5])
         countPrice(price = cost, traderIndex = findMember(order = talk),
             reduce = argv[4] == "buy")
-        const label: string = ".itemdialog.cost2lbl"
-        tclEval(script = label & " configure -text {" & $cost & " " &
+        const costLabel: string = ".itemdialog.cost2lbl"
+        tclEval(script = costLabel & " configure -text {" & $cost & " " &
             moneyName & "}")
         if argv[4] == "buy":
+          if getItemAmount(itemType = fuelType) - cost <= gameSettings.lowFuel:
+            tclEval(script = label & " configure -text {You will spend " & moneyName & " below low level of fuel.}")
+            tclEval(script = "grid " & label)
           tclSetResult(value = "1")
           return tclOk
-    const label: string = ".itemdialog.errorlbl"
-    let  cargoIndex: int = parseInt(s = $argv[2]) - 1
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
       let amount: int = getItemAmount(itemType = fuelType) - value
       if amount <= gameSettings.lowFuel:
