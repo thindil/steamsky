@@ -21,7 +21,9 @@
 import contracts, nuklear/nuklear_sdl_renderer
 import coreui, errordialog
 
-var waitAmount: Positive = 1
+var
+  waitAmount: Positive = 1
+  waitInterval: Natural = 0
 
 proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -60,8 +62,10 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           max = 1440, step = 1, incPerPixel = 1)
       if newValue != waitAmount:
         waitAmount = newValue
-      labelButton(title = "W"):
-        discard
+      var newInterval: Natural = comboList(items = ["minutes", "hours", "days"],
+          selected = waitInterval, itemHeight = 25, x = 200, y = 180)
+      if newInterval != waitInterval:
+        waitInterval = newInterval
       setLayoutRowDynamic(30, 1)
       labelButton(title = "Close"):
         closePopup()
