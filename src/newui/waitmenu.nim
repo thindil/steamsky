@@ -19,7 +19,8 @@
 ## executing a wait command, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
-import coreui
+import ../[game2, shipsmovement]
+import coreui, errordialog
 
 var
   waitAmount: Positive = 1
@@ -34,28 +35,37 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameters dialog if error happened or menu has closed.
   if dialog != waitDialog:
     return
-  const
-    height: float = 320
-    width: float = 400
+
+  proc wait(minutes: Positive): GameDialog {.raises: [], tags: [RootEffect], contractual.} =
+    ## Wait in place by selected in-game minutes
+    ##
+    ## * minutes - the amount of minutes to wait
+    try:
+      updateGame(minutes = minutes)
+      waitInPlace(minutes = minutes)
+    except:
+      return setError(message = "Can't wait in place.")
+    return none
+
   window(name = "Wait in place", x = windowWidth / 4, y = windowHeight / 4,
-      w = width, h = height, flags = {windowBorder, windowTitle,
+      w = 320, h = 400, flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     labelButton(title = "Wait 1 minute"):
-      discard
+      dialog = wait(minutes = 1)
     labelButton(title = "Wait 5 minutes"):
-      discard
+      dialog = wait(minutes = 5)
     labelButton(title = "Wait 10 minutes"):
-      discard
+      dialog = wait(minutes = 10)
     labelButton(title = "Wait 15 minutes"):
-      discard
+      dialog = wait(minutes = 15)
     labelButton(title = "Wait 30 minutes"):
-      discard
+      dialog = wait(minutes = 30)
     labelButton(title = "Wait 1 hour"):
-      discard
+      dialog = wait(minutes = 60)
     setLayoutRowDynamic(30, 3)
     labelButton(title = "Wait"):
-      discard
+      dialog = none
     let newValue: int = property2(name = "#", min = 1, val = waitAmount,
         max = 1440, step = 1, incPerPixel = 1)
     if newValue != waitAmount:
