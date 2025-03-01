@@ -1048,4 +1048,3 @@ proc backToMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setMainMenu(dialog = dialog)
   showMainMenu(state = state, dialog = dialog)
   state = mainMenu
-  echo "here"
