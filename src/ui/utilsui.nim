@@ -114,6 +114,8 @@ proc checkAmountCommand(clientData: cint; interp: PInterp; argc: cint;
           if getItemAmount(itemType = fuelType) - cost <= gameSettings.lowFuel:
             tclEval(script = label & " configure -text {You will spend " & moneyName & " below low level of fuel.}")
             tclEval(script = "grid " & label)
+          else:
+            tclEval(script = "grid remove " & label)
           tclSetResult(value = "1")
           return tclOk
     if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
