@@ -48,7 +48,7 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     return none
 
   window(name = "Wait in place", x = windowWidth / 4, y = windowHeight / 4,
-      w = 320, h = 400, flags = {windowBorder, windowTitle,
+      w = 320, h = 320, flags = {windowBorder, windowTitle,
       windowNoScrollbar}):
     setLayoutRowDynamic(30, 1)
     labelButton(title = "Wait 1 minute"):
@@ -65,7 +65,15 @@ proc showWaitMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = wait(minutes = 60)
     setLayoutRowDynamic(30, 3)
     labelButton(title = "Wait"):
-      dialog = none
+      case waitInterval
+      of 0:
+        dialog = wait(minutes = waitAmount)
+      of 1:
+        dialog = wait(minutes = waitAmount * 60)
+      of 2:
+        dialog = wait(minutes = waitAmount * 1440)
+      else:
+        discard
     let newValue: int = property2(name = "#", min = 1, val = waitAmount,
         max = 1440, step = 1, incPerPixel = 1)
     if newValue != waitAmount:
