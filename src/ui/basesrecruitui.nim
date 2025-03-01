@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,12 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[bases, basestrade, config, crew, crewinventory, game, maps,
     shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
 
 proc getHighestAttribute(baseIndex: BasesRange;
-    memberIndex: Natural): string {.raises: [], tags: [].} =
+    memberIndex: Natural): string {.raises: [], tags: [], contractual.} =
   ## Get the highest attribute's name of the selected recruit
   ##
   ## * baseIndex   - The index of the base in which the recruit's attributes
@@ -40,7 +41,7 @@ proc getHighestAttribute(baseIndex: BasesRange;
   return attributesList[highestIndex].name
 
 proc getHighestSkill(baseIndex: BasesRange;
-    memberIndex: Natural): string {.raises: [], tags: [].} =
+    memberIndex: Natural): string {.raises: [], tags: [], contractual.} =
   ## Get the highest skill's name of the selected recruit
   ##
   ## * baseIndex   - The index of the base in which the recruit's skill will
@@ -67,7 +68,7 @@ var
 
 proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the selected base available recruits
   ##
   ## * clientData - the additional data for the Tcl command
@@ -158,7 +159,8 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
 var recruitIndex: Natural
 
 proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected recruit
   ##
   ## * clientData - the additional data for the Tcl command
@@ -345,7 +347,8 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Update information about hiring of the selected recruit
   ##
   ## * clientData - the additional data for the Tcl command
@@ -417,7 +420,8 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl.} =
+        WriteIOEffect, TimeEffect, RootEffect, RootEffect], cdecl,
+            contractual.} =
   ## Hire the selected recruit
   ##
   ## * clientData - the additional data for the Tcl command
@@ -486,7 +490,8 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowRecruit", "1"].allocCStringArray)
 
 proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Show the selected information about the selected recruit
   ##
   ## * clientData - the additional data for the Tcl command
@@ -509,7 +514,8 @@ proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show negotation UI to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -639,7 +645,7 @@ var recruitsSortOrder = defaultRecruitsSortOrder
 
 proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Sort the list of available recruits in base
   ##
   ## * clientData - the additional data for the Tcl command
@@ -780,7 +786,8 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowRecruit", "1"].allocCStringArray)
 
 proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Validate value of numeric fields in negotiate dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -806,7 +813,8 @@ proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetResult(value = "1")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowRecruit", showRecruitCommand)
