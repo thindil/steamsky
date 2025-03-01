@@ -1035,3 +1035,17 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       state = mainMenu
     else:
       dialog = none
+
+proc backToMainMenu*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Return to the game's main menu and set the game's state
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter state and dialog. The latter is modified if
+  ## any error happened.
+  setMainMenu(dialog = dialog)
+  showMainMenu(state = state, dialog = dialog)
+  state = mainMenu
+  echo "here"

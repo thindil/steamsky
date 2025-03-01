@@ -125,12 +125,12 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
-  const showGame: array[GameState.mainMenu..GameState.map, proc (
+  const showGame: array[GameState.mainMenu..GameState.endGame, proc (
       state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
-      newGame: mainMenu.newGame, map: showMap]
+      newGame: mainMenu.newGame, map: showMap, endGame: backToMainMenu]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
