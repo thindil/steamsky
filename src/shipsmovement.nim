@@ -152,6 +152,7 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
   if result.len > 0:
     return
   if docking:
+    echo "docking"
     if skyBases[baseIndex].population > 0:
       addMessage(message = "Ship docked to base " & skyBases[baseIndex].name,
           mType = orderMessage)
@@ -187,7 +188,6 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
         $gameSettings.undockSpeed).toLowerAscii)
     if (realSpeed(ship = playerShip).float / 1_000.0) < 0.5:
       return "You can't undock because your ship is overloaded."
-    playerShip.speed = docked
     if escape:
       let roll: Positive = getRandom(min = 1, max = 100)
       var
@@ -204,12 +204,12 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
             deathReason = "damage during escaping from the base")
       addMessage(message = messageText, mType = orderMessage, color = color)
       gainRep(baseIndex = baseIndex, points = -(getRandom(min = 10, max = 30)))
-    if playerShip.crew[0].health > 0:
-      playerShip.speed = parseEnum[ShipSpeed](s = (
-          $gameSettings.undockSpeed).toLowerAscii)
-      updateGame(minutes = 5)
-      if $gameSettings.autoSave == $undock:
-        saveGame()
+      if playerShip.crew[0].health > 0:
+        playerShip.speed = parseEnum[ShipSpeed](s = (
+            $gameSettings.undockSpeed).toLowerAscii)
+        updateGame(minutes = 5)
+        if $gameSettings.autoSave == $undock:
+          saveGame()
     else:
       if skyBases[baseIndex].population > 0:
         let moneyIndex2: int = findItem(inventory = playerShip.cargo,
