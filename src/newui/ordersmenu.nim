@@ -20,7 +20,7 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, crewinventory, game, maps, missions, shipscrew,
+import ../[bases2, basestypes, crewinventory, game, maps, missions, shipscrew,
     shipsmovement, stories, types, utils]
 import coreui, dialogs, errordialog
 
@@ -215,10 +215,22 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
           discard
     if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
       labelButton(title = "Ask for events"):
-        discard
+        try:
+          askForEvents()
+          dialog = none
+          closePopup()
+        except:
+          dialog = setError(message = "Can't ask for events.")
+          return
     if not skyBases[baseIndex].askedForBases:
       labelButton(title = "Ask for bases"):
-        discard
+        try:
+          askForBases()
+          dialog = none
+          closePopup()
+        except:
+          dialog = setError(message = "Can't ask for bases.")
+          return
     try:
       if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
         labelButton(title = "Pray"):
