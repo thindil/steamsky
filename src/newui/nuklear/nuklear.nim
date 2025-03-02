@@ -786,6 +786,14 @@ proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slic
 
   # bottom-left
   img.region = [rgnX, rgnY + rgnH - slc.b, slc.l, slc.b]
+  nkDrawImage(b = b, r = NimRect(x: r.x, y: r.y + r.h - slc.b.float, w: slc.l.float, h: slc.b.float), img = img.addr, col = col)
+
+  # bottom-center
+  img.region = [rgnX + slc.l, rgnY + rgnH - slc.b, rgnW - slc.l - slc.r, slc.b]
+  nkDrawImage(b = b, r = NimRect(x: r.x + slc.l.float, y: r.y + r.h - slc.b.float, w: r.w - slc.l.float - slc.r.float, h: slc.b.float), img = img.addr, col = col)
+
+  # bottom-right
+  img.region = [rgnX + rgnW - slc.r, rgnY + rgnH - slc.b, slc.r, slc.b]
 
 # -----
 # Input
