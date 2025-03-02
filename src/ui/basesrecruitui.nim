@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[bases, basestrade, config, crew, crewinventory, game, maps,
     shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, utilsui2
@@ -68,7 +68,7 @@ var
 
 proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl, contractual.} =
+    RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show the selected base available recruits
   ##
   ## * clientData - the additional data for the Tcl command
@@ -714,7 +714,9 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
         attribute: getHighestAttribute(baseIndex = baseIndex,
         memberIndex = index), skill: getHighestSkill(baseIndex = baseIndex,
         memberIndex = index), id: index))
-  proc sortRecruits(x, y: LocalRecruitData): int =
+
+  proc sortRecruits(x, y: LocalRecruitData): int {.raises: [], tags: [],
+      contractual.} =
     case recruitsSortOrder
     of nameAsc:
       if x.name < y.name:
@@ -778,6 +780,7 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localRecruits.sort(cmp = sortRecruits)
   recruitsIndexes = @[]
   for recruit in localRecruits:
