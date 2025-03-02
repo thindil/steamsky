@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Auto setting the destination for the player's ship when accepting a mission
   in a base. It can be enabled or disabled in the game's options. By default
   it is enabled
+- Check if the player doesn't spend money below the low level of fuel during
+  buying items
 
 ### Fixed
 - Reading the game's themes from files
