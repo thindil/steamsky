@@ -132,7 +132,7 @@ proc askForEvents*() {.raises: [KeyError, Exception], tags: [
       var newItemIndex: int = 0
       block setDoublePrice:
         while true:
-          var itemIndex: Positive = getRandom(min = 1, max = itemsList.len)
+          var itemIndex: Natural = getRandom(min = 1, max = itemsList.len)
           for j in 1 .. itemsList.len:
             itemIndex.dec
             if itemIndex <= 0 and getPrice(baseType = skyBases[skyMap[eventX][
