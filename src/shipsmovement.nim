@@ -152,7 +152,6 @@ proc dockShip*(docking: bool; escape: bool = false): string {.raises: [KeyError,
   if result.len > 0:
     return
   if docking:
-    echo "docking"
     if skyBases[baseIndex].population > 0:
       addMessage(message = "Ship docked to base " & skyBases[baseIndex].name,
           mType = orderMessage)
