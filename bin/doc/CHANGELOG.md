@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Reading the game's themes from files
 - Undocking from bases doesn't charge for docking
+- Crash when asking for events in bases
 
 ## [10.8] - 2025-02-23
 
