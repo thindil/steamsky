@@ -935,8 +935,8 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                     discard
               elif skyMap[x][y].baseIndex > 0:
                 mapChar = theme.mapIcons[17]
-                mapColor = theme.mapColors[2]
                 if skyBases[skyMap[x][y].baseIndex].known:
+                  mapColor = theme.mapColors[2]
                   if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
                     mapChar = try:
                         factionsList[skyBases[skyMap[x][
