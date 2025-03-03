@@ -37,18 +37,23 @@ type
     ## Used to store information about a button in a dialog
     text*: string    ## Text to show on the button
     code*: proc(dialog: var GameDialog) ## The code to execute when the button was pressed
-    icon*: int    ## The index of the icon to show on the button
+    icon*: int       ## The index of the icon to show on the button
     tooltip*: string ## The tooltip text associated with the button
     color*: string   ## The color of the button's text
+  InfoData = object
+    data: MessageData
+    button1, button2: ButtonSettings
 
-const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "",
-    code: nil, icon: -1, tooltip: "",
+const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
+    icon: -1, tooltip: "",
     color: "") ## Empty Button setting, used to disable the selected button
 
 var
   questionData: QuestionData = QuestionData(question: "", data: "")
   messageData: MessageData = MessageData(text: "", title: "Info")
   answered*: bool = false ## If true, the question was answered
+  infoData: InfoData = InfoData(data: MessageData(text: "", title: ""),
+      button1: emptyButtonSettings, button2: emptyButtonSettings)
 
 proc setQuestion*(question: string; qType: QuestionType;
     data: string = ""): GameDialog {.raises: [], tags: [RootEffect],
@@ -196,3 +201,27 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
         dialog = none
   except:
     dialog = setError(message = "Can't show the message")
+
+proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings;
+    button2: ButtonSettings = emptyButtonSettings): GameDialog {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the data related to the current in-game info dialog
+  ##
+  ## * text    - the text to show in the dialog
+  ## * title   - the title of the dialog
+  ## * button1 - the settings for the first optional button. If empty, the
+  ##             button will not show
+  ## * button2 - the settings for the second optional button. If empty, the
+  ##             button will not show
+  ##
+  ## Returns the infoDialog if the info was set, otherwise errorDialog
+  setDialog()
+  try:
+    var needLines: float = ceil(x = getTextWidth(text = text) / 250)
+    if needLines < 1.0:
+      needLines = 1.0
+    infoData = InfoData(data: MessageData(text: text, title: title,
+        lines: needLines), button1: button1, button2: button2)
+    result = infoDialog
+  except:
+    result = setError(message = "Can't set the message.")
