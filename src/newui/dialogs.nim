@@ -33,6 +33,17 @@ type
   MessageData = object
     text, title: string
     lines: float
+  ButtonSettings* = object
+    ## Used to store information about a button in a dialog
+    text*: string    ## Text to show on the button
+    code*: proc(dialog: var GameDialog) ## The code to execute when the button was pressed
+    icon*: int    ## The index of the icon to show on the button
+    tooltip*: string ## The tooltip text associated with the button
+    color*: string   ## The color of the button's text
+
+const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "",
+    code: nil, icon: -1, tooltip: "",
+    color: "") ## Empty Button setting, used to disable the selected button
 
 var
   questionData: QuestionData = QuestionData(question: "", data: "")
