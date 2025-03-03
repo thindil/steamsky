@@ -820,13 +820,13 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
-    addCommand("ShowRecruit", showRecruitCommand)
-    addCommand("ShowRecruitInfo", showRecruitInfoCommand)
-    addCommand("NegotiateHire", negotiateHireCommand)
-    addCommand("Hire", hireCommand)
-    addCommand("ShowRecruitTab", showRecruitTabCommand)
-    addCommand("Negotiate", negotiateCommand)
-    addCommand("SortRecruits", sortRecruitsCommand)
-    addCommand("ValidateNegotiate", validateNegotiateCommand)
+    addCommand(name = "ShowRecruit", nimProc = showRecruitCommand)
+    addCommand(name = "ShowRecruitInfo", nimProc = showRecruitInfoCommand)
+    addCommand(name = "NegotiateHire", nimProc = negotiateHireCommand)
+    addCommand(name = "Hire", nimProc = hireCommand)
+    addCommand(name = "ShowRecruitTab", nimProc = showRecruitTabCommand)
+    addCommand(name = "Negotiate", nimProc = negotiateCommand)
+    addCommand(name = "SortRecruits", nimProc = sortRecruitsCommand)
+    addCommand(name = "ValidateNegotiate", nimProc = validateNegotiateCommand)
   except:
     showError(message = "Can't add a Tcl command.")
