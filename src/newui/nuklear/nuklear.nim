@@ -794,6 +794,7 @@ proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slic
 
   # bottom-right
   img.region = [rgnX + rgnW - slc.r, rgnY + rgnH - slc.b, slc.r, slc.b]
+  nkDrawImage(b = b, r = NimRect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img.addr, col = col)
 
 # -----
 # Input
@@ -1124,15 +1125,16 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
 
       # draw header background
       header.h += 1.0
+      let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
       case background.`type`
       of NK_STYLE_ITEM_IMAGE:
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-        let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
         nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
       of NK_STYLE_ITEM_NINE_SLICE:
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
-      else:
-        discard
+        nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+      of NK_STYLE_ITEM_COLOR:
+        text.background = bg.color
     return true
 
 # ------
