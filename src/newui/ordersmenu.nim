@@ -20,8 +20,8 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases2, basestypes, crewinventory, game, maps, missions, shipscrew,
-    shipsmovement, stories, types, utils]
+import ../[bases2, basestypes, crewinventory, game, game2, maps, messages,
+    missions, missions2, shipscrew, shipsmovement, stories, types, utils]
 import coreui, dialogs, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
@@ -190,6 +190,22 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
   dialog = none
   closePopup()
 
+proc completeMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Complete the current mission
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog if error happened.
+  try:
+    finishMission(missionIndex = skyMap[playerShip.skyX][
+        playerShip.skyY].missionIndex)
+  except MissionFinishingError:
+    discard
+#    showInfo(text = getCurrentExceptionMsg(),
+#        title = "Can't finish the mission")
+  except:
+    dialog = setError(message = "Can't finish the mission.")
+
 proc showDockedCommands(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         contractual.} =
@@ -234,7 +250,21 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
     try:
       if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
         labelButton(title = "Pray"):
-          discard
+          for index, _ in playerShip.crew:
+            try:
+              updateMorale(ship = playerShip, memberIndex = index, value = 10)
+            except:
+              dialog = setError(message = "Can't update morale of crew member.")
+              return
+          addMessage(message = "You and your crew were praying for some time. Now you all feel a bit better.",
+              mType = orderMessage)
+          try:
+            updateGame(minutes = 30)
+            dialog = none
+            closePopup()
+          except:
+            dialog = setError(message = "Can't update the game.")
+            return
     except:
       dialog = setError(message = "Can't check if base has temple flag.")
       return
@@ -287,7 +317,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
             try:
               labelButton(title = "Complete delivery of " & itemsList[
                   mission.itemIndex].name):
-                discard
+                completeMission(dialog = dialog)
             except:
               dialog = setError(message = "Can't add mission button.")
               return
