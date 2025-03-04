@@ -712,6 +712,16 @@ proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], c
   result.w = w - 2 * amount
   result.h = h - 2 * amount
 
+proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_color) {.raises: [], tags: [], contractual.} =
+  ## Fill the rectangle with the selected color
+  ##
+  ## * b        - the command buffer in which the rectangle will be drawn
+  ## * rect     - the rectangle which will be filled with color
+  ## * rounding - if bigger than zero, round the corners of the rectangle
+  ## * c        - the color to fill the rectangle
+  if b == nil or rect.w == 0 or rect.h == 0:
+    return
+
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected image
