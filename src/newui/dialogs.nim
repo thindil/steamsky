@@ -40,8 +40,12 @@ type
     icon*: int       ## The index of the icon to show on the button
     tooltip*: string ## The tooltip text associated with the button
     color*: string   ## The color of the button's text
+  TextData = object
+    text, color: string
+    lines: float
   InfoData = object
-    data: MessageData
+    data: seq[TextData]
+    title: string
     button1, button2: ButtonSettings
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
@@ -52,7 +56,7 @@ var
   questionData: QuestionData = QuestionData(question: "", data: "")
   messageData: MessageData = MessageData(text: "", title: "Info")
   answered*: bool = false ## If true, the question was answered
-  infoData: InfoData = InfoData(data: MessageData(text: "", title: ""),
+  infoData: InfoData = InfoData(data: @[], title: "",
       button1: emptyButtonSettings, button2: emptyButtonSettings)
 
 proc setQuestion*(question: string; qType: QuestionType;
@@ -207,7 +211,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
     tags: [RootEffect], contractual.} =
   ## Set the data related to the current in-game info dialog
   ##
-  ## * text    - the text to show in the dialog
+  ## * text    - the text to show in the dialog. Can use special tags for
+  ##             colors, like `{gold}{/gold}`
   ## * title   - the title of the dialog
   ## * button1 - the settings for the first optional button. If empty, the
   ##             button will not show
@@ -220,8 +225,36 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
     var needLines: float = ceil(x = getTextWidth(text = text) / 250)
     if needLines < 1.0:
       needLines = 1.0
-    infoData = InfoData(data: MessageData(text: text, title: title,
-        lines: needLines), button1: button1, button2: button2)
+    infoData = InfoData(data: @[TextData(text: text, color: "",
+        lines: needLines)], button1: button1, button2: button2)
     result = infoDialog
   except:
     result = setError(message = "Can't set the message.")
+
+proc showInfo*(dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the info to the player
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the parameter dialog. It is modified only when the player closed
+  ## the dialog.
+  if dialog != infoDialog:
+    return
+  try:
+    const
+      width: float = 250
+      height: float = 150
+
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = infoData.title, x = dialogX,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
+      wrapLabel(str = infoData.data[0].text)
+      setLayoutRowDynamic(height = 30, cols = 2)
+      labelButton(title = "Close"):
+        closePopup()
+        dialog = none
+  except:
+    dialog = setError(message = "Can't show the info")
