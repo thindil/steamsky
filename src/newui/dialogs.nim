@@ -17,7 +17,7 @@
 
 ## Provides code related to the game's dialogs, like showing questions, etc.
 
-import std/[os, math]
+import std/[os, math, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[game, game2, shipscrew2]
 import coreui, errordialog
@@ -222,11 +222,37 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
   ## Returns the infoDialog if the info was set, otherwise errorDialog
   setDialog()
   try:
+    var
+      startIndex: int = 0
+      tagIndex: int = text.find(sub = '{')
+      parts: seq[TextData] = @[]
+    while true:
+      if tagIndex == -1:
+        tagIndex = text.len
+      var
+        partText: string = text[startIndex..tagIndex - 1]
+        needLines: float = ceil(x = getTextWidth(text = partText) / 250)
+      if needLines < 1.0:
+        needLines = 1.0
+      parts.add(y = TextData(text: partText, color: "", lines: needLines))
+      if tagIndex == text.len:
+        break
+      startIndex = tagIndex
+      tagIndex = text.find(sub = '}', start = startIndex)
+      let tagName: string = text[startIndex + 1..tagIndex - 1]
+      startIndex = tagIndex + 1
+      tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
+      partText = text[startIndex..tagIndex - 1]
+      needLines = ceil(x = getTextWidth(text = partText) / 250)
+      if needLines < 1.0:
+        needLines = 1.0
+      parts.add(y = TextData(text: partText, color: tagName, lines: needLines))
+      startIndex = tagIndex + tagName.len + 3
+      tagIndex = text.find(sub = '{', start = startIndex)
     var needLines: float = ceil(x = getTextWidth(text = text) / 250)
     if needLines < 1.0:
       needLines = 1.0
-    infoData = InfoData(data: @[TextData(text: text, color: "",
-        lines: needLines)], button1: button1, button2: button2)
+    infoData = InfoData(data: parts, button1: button1, button2: button2)
     result = infoDialog
   except:
     result = setError(message = "Can't set the message.")
