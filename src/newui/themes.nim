@@ -18,7 +18,7 @@
 ## Provides code related to the game's themes' system, like default
 ## theme setting, etc
 
-import std/[colors, os, parsecfg, streams, tables]
+import std/[colors, os, parsecfg, streams, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game]
 
@@ -29,14 +29,14 @@ const
   mapColorsAmount: Positive = 13
 
 type
-  colorsNames* = enum
+  ColorsNames* = enum
     backgroundColor, foregroundColor, greenColor, borderColor, buttonColor, buttonHoverColor, editColor, editCursorColor, buttonActiveColor, headerColor, comboColor, propertyColor, scrollbarColor, buttonTextColor, scrollbarCursorColor, editTextColor, comboTextColor, tooltipBorderColor, tooltipColor, groupBorderColor, headerTextColor, groupTextColor, selectedActiveTextColor, propertyTextColor, toggleColor, toggleHoverColor, toggleCursorColor, goldenColor, redColor, mapInfoBorderColor, mapInfoColor, pinkColor, YellowColor, blueColor, cyanColor
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
     fileName: string
     icons*: array[iconsAmount, string]
-    colors*: array[colorsNames, Color]
+    colors*: array[ColorsNames, Color]
     fonts*: array[fontsAmount, string]
     mapIcons*: array[mapIconsAmount, string]
     mapColors*: array[mapColorsAmount, Color]
@@ -115,7 +115,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "NoCleanIcon", "ArrowUpLeft", "ArrowUp", "ArrowUpRight", "ArrowLeft",
         "ArrowRight", "ArrowDownLeft", "ArrowDown", "ArrowDownRight",
         "WaitIcon", "MoveToIcon", "MoveStepIcon"]
-    const colorsNames: array[colorsNames, string] = ["BackgroundColor",
+    const colorsNames: array[ColorsNames, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
@@ -166,7 +166,10 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.icons[index] = themeDir & DirSep &
                     entry.value.unixToNativePath
               of colorsNames:
-                let index: Natural = colorsNames.find(item = entry.value)
+                let index: ColorsNames = try:
+                    parseEnum[ColorsNames](s = entry.value)
+                  except:
+                    break
                 theme.colors[index] = parseColor(name = entry.value)
               of fontsNames:
                 let index: Natural = fontsNames.find(item = entry.value)
@@ -203,7 +206,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var table: array[countColors, NimColor]
   {.ruleOn: "varDeclared".}
 
-  proc setColor(colorName: StyleColors; index: Natural) {.raises: [], tags: [],
+  proc setColor(colorName: StyleColors; index: ColorsNames) {.raises: [], tags: [],
       contractual.} =
     ## Convert the selected color to Nuklear color
     ##
@@ -216,21 +219,21 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         return
     table[colorName] = NimColor(r: r, g: g, b: b, a: 255)
 
-  setColor(colorName = windowColor, index = 0)
-  setColor(colorName = textColor, index = 1)
-  setColor(colorName = borderColor, index = 3)
-  setColor(colorName = buttonColor, index = 4)
-  setColor(colorName = buttonHoverColor, index = 5)
-  setColor(colorName = editColor, index = 6)
-  setColor(colorName = editCursorColor, index = 15)
-  setColor(colorName = buttonActiveColor, index = 8)
-  setColor(colorName = headerColor, index = 9)
-  setColor(colorName = comboColor, index = 10)
-  setColor(colorName = propertyColor, index = 11)
-  setColor(colorName = scrollbarColor, index = 12)
-  setColor(colorName = buttonTextColor, index = 13)
-  setColor(colorName = buttonHoverTextColor, index = 1)
-  setColor(colorName = buttonActiveTextColor, index = 1)
+  setColor(colorName = windowColor, index = backgroundColor)
+  setColor(colorName = textColor, index = foregroundColor)
+  setColor(colorName = borderColor, index = borderColor)
+  setColor(colorName = buttonColor, index = buttonColor)
+  setColor(colorName = buttonHoverColor, index = buttonHoverColor)
+  setColor(colorName = editColor, index = editColor)
+  setColor(colorName = editCursorColor, index = editCursorColor)
+  setColor(colorName = buttonActiveColor, index = buttonActiveColor)
+  setColor(colorName = headerColor, index = headerColor)
+  setColor(colorName = comboColor, index = comboColor)
+  setColor(colorName = propertyColor, index = propertyColor)
+  setColor(colorName = scrollbarColor, index = scrollbarColor)
+  setColor(colorName = buttonTextColor, index = buttonTextColor)
+  setColor(colorName = buttonHoverTextColor, index = foregroundColor)
+  setColor(colorName = buttonActiveTextColor, index = foregroundColor)
   setColor(colorName = scrollbarCursorColor, index = 14)
   setColor(colorName = scrollbarCursorHoverColor, index = 14)
   setColor(colorName = scrollbarCursorActiveColor, index = 14)
