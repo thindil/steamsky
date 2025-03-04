@@ -30,7 +30,14 @@ const
 
 type
   ColorsNames* = enum
-    backgroundColor, foregroundColor, greenColor, borderColor, buttonColor, buttonHoverColor, editColor, editCursorColor, buttonActiveColor, headerColor, comboColor, propertyColor, scrollbarColor, buttonTextColor, scrollbarCursorColor, editTextColor, comboTextColor, tooltipBorderColor, tooltipColor, groupBorderColor, headerTextColor, groupTextColor, selectedActiveTextColor, propertyTextColor, toggleColor, toggleHoverColor, toggleCursorColor, goldenColor, redColor, mapInfoBorderColor, mapInfoColor, pinkColor, YellowColor, blueColor, cyanColor
+    backgroundColor, foregroundColor, greenColor, borderColor, buttonColor,
+      buttonHoverColor, editColor, editCursorColor, buttonActiveColor,
+      headerColor, comboColor, propertyColor, scrollbarColor, buttonTextColor,
+      scrollbarCursorColor, editTextColor, comboTextColor, tooltipBorderColor,
+      tooltipColor, groupBorderColor, headerTextColor, groupTextColor,
+      selectActiveTextColor, propertyTextColor, toggleColor, toggleHoverColor,
+      toggleCursorColor, goldenColor, redColor, mapInfoBorderColor,
+      mapInfoColor, pinkColor, yellowColor, blueColor, cyanColor
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
@@ -122,7 +129,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "ButtonTextColor", "ScrollbarCursorColor", "EditTextColor",
         "ComboTextColor", "TooltipBorderColor", "TooltipColor",
         "GroupBorderColor", "HeaderTextColor", "GroupTextColor",
-        "SelecteActiveTextColor", "PropertyTextColor", "ToggleColor",
+        "SelectActiveTextColor", "PropertyTextColor", "ToggleColor",
         "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor",
         "MapInfoBorderColor", "MapInfoColor", "PinkColor", "YellowColor",
         "BlueColor", "CyanColor"]
@@ -206,8 +213,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var table: array[countColors, NimColor]
   {.ruleOn: "varDeclared".}
 
-  proc setColor(colorName: StyleColors; index: ColorsNames) {.raises: [], tags: [],
-      contractual.} =
+  proc setColor(colorName: StyleColors; index: ColorsNames) {.raises: [],
+      tags: [], contractual.} =
     ## Convert the selected color to Nuklear color
     ##
     ## * colorName - the Nuklear's theme's color name to which will be converted
@@ -234,25 +241,25 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   setColor(colorName = buttonTextColor, index = buttonTextColor)
   setColor(colorName = buttonHoverTextColor, index = foregroundColor)
   setColor(colorName = buttonActiveTextColor, index = foregroundColor)
-  setColor(colorName = scrollbarCursorColor, index = 14)
-  setColor(colorName = scrollbarCursorHoverColor, index = 14)
-  setColor(colorName = scrollbarCursorActiveColor, index = 14)
-  setColor(colorName = editTextColor, index = 15)
-  setColor(colorName = comboTextColor, index = 16)
-  setColor(colorName = tooltipBorderColor, index = 17)
-  setColor(colorName = tooltipColor, index = 18)
-  setColor(colorName = groupBorderColor, index = 19)
-  setColor(colorName = headerTextColor, index = 20)
-  setColor(colorName = groupTextColor, index = 21)
-  setColor(colorName = selectColor, index = 0)
-  setColor(colorName = selectActiveColor, index = 5)
-  setColor(colorName = selectActiveTextColor, index = 22)
-  setColor(colorName = propertyTextColor, index = 23)
-  setColor(colorName = toggleColor, index = 24)
-  setColor(colorName = toggleHoverColor, index = 25)
-  setColor(colorName = toggleCursorColor, index = 26)
-  setColor(colorName = popupBorderColor, index = 29)
-  setColor(colorName = popupColor, index = 30)
+  setColor(colorName = scrollbarCursorColor, index = scrollbarCursorColor)
+  setColor(colorName = scrollbarCursorHoverColor, index = scrollbarCursorColor)
+  setColor(colorName = scrollbarCursorActiveColor, index = scrollbarCursorColor)
+  setColor(colorName = editTextColor, index = editTextColor)
+  setColor(colorName = comboTextColor, index = comboTextColor)
+  setColor(colorName = tooltipBorderColor, index = tooltipBorderColor)
+  setColor(colorName = tooltipColor, index = tooltipColor)
+  setColor(colorName = groupBorderColor, index = groupBorderColor)
+  setColor(colorName = headerTextColor, index = headerTextColor)
+  setColor(colorName = groupTextColor, index = groupTextColor)
+  setColor(colorName = selectColor, index = backgroundColor)
+  setColor(colorName = selectActiveColor, index = buttonHoverColor)
+  setColor(colorName = selectActiveTextColor, index = selectActiveTextColor)
+  setColor(colorName = propertyTextColor, index = propertyTextColor)
+  setColor(colorName = toggleColor, index = toggleColor)
+  setColor(colorName = toggleHoverColor, index = toggleHoverColor)
+  setColor(colorName = toggleCursorColor, index = toggleCursorColor)
+  setColor(colorName = popupBorderColor, index = mapInfoBorderColor)
+  setColor(colorName = popupColor, index = mapInfoColor)
   table[sliderColor] = NimColor(r: 50, g: 58, b: 61, a: 255)
   table[sliderCursorColor] = NimColor(r: 48, g: 83, b: 111, a: 245)
   table[sliderCursorHoverColor] = NimColor(r: 53, g: 88, b: 116, a: 255)

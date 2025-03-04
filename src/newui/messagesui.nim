@@ -38,8 +38,8 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog) {.raises: [],
     ## Show the selected message
     ##
     ## * message - the message to show
-    let colors: array[1..5, Color] = [theme.colors[32], theme.colors[2],
-        theme.colors[28], theme.colors[33], theme.colors[34]]
+    let colors: array[1..5, Color] = [theme.colors[yellowColor], theme.colors[greenColor],
+        theme.colors[redColor], theme.colors[blueColor], theme.colors[cyanColor]]
     var needLines: float = try:
           ceil(x = getTextWidth(text = message.message) / (windowWidth * 0.75).float)
         except:

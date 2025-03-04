@@ -74,15 +74,15 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     image: PImage = nil
     tooltipText: string = ""
   if fuelAmount > gameSettings.lowFuel:
-    color = theme.colors[2]
+    color = theme.colors[greenColor]
     image = mapImages[1]
     tooltipText = "The amount of fuel in the ship's cargo."
   elif fuelAmount > 0:
-    color = theme.colors[27]
+    color = theme.colors[goldenColor]
     image = mapImages[3]
     tooltipText = "Low level of fuel on ship. Only " & $fuelAmount & " left."
   else:
-    color = theme.colors[28]
+    color = theme.colors[redColor]
     image = mapImages[2]
     tooltipText = "You can't travel anymore, because you don't have any fuel for ship."
   if gameSettings.showTooltips:
@@ -92,15 +92,15 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $fuelAmount, color = color)
   if foodAmount > gameSettings.lowFood:
-    color = theme.colors[2]
+    color = theme.colors[greenColor]
     image = mapImages[4]
     tooltipText = "The amount of food in the ship's cargo."
   elif foodAmount > 0:
-    color = theme.colors[27]
+    color = theme.colors[goldenColor]
     image = mapImages[6]
     tooltipText = "Low level of food on ship. Only " & $foodAmount & " left."
   else:
-    color = theme.colors[28]
+    color = theme.colors[redColor]
     image = mapImages[5]
     tooltipText = "You don't have any food in ship but your crew needs them to live."
   if gameSettings.showTooltips:
@@ -110,15 +110,15 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
     addTooltip(bounds = getWidgetBounds(), text = tooltipText)
   colorLabel(str = $foodAmount, color = color)
   if drinksAmount > gameSettings.lowFood:
-    color = theme.colors[2]
+    color = theme.colors[greenColor]
     image = mapImages[7]
     tooltipText = "The amount of drinks in the ship's cargo."
   elif drinksAmount > 0:
-    color = theme.colors[27]
+    color = theme.colors[goldenColor]
     image = mapImages[8]
     tooltipText = "Low level of drinks on ship. Only " & $drinksAmount & " left."
   else:
-    color = theme.colors[28]
+    color = theme.colors[redColor]
     image = mapImages[9]
     tooltipText = "You don't have any drinks in ship but your crew needs them to live."
   if gameSettings.showTooltips:
