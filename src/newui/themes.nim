@@ -24,18 +24,19 @@ import ../[config, game]
 
 const
   iconsAmount: Positive = 40
-  colorsAmount: Positive = 35
   fontsAmount: Positive = 2
   mapIconsAmount: Positive = 18
   mapColorsAmount: Positive = 13
 
 type
+  colorsNames* = enum
+    backgroundColor, foregroundColor, greenColor, borderColor, buttonColor, buttonHoverColor, editColor, editCursorColor, buttonActiveColor, headerColor, comboColor, propertyColor, scrollbarColor, buttonTextColor, scrollbarCursorColor, editTextColor, comboTextColor, tooltipBorderColor, tooltipColor, groupBorderColor, headerTextColor, groupTextColor, selectedActiveTextColor, propertyTextColor, toggleColor, toggleHoverColor, toggleCursorColor, goldenColor, redColor, mapInfoBorderColor, mapInfoColor, pinkColor, YellowColor, blueColor, cyanColor
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
     fileName: string
     icons*: array[iconsAmount, string]
-    colors*: array[colorsAmount, Color]
+    colors*: array[colorsNames, Color]
     fonts*: array[fontsAmount, string]
     mapIcons*: array[mapIconsAmount, string]
     mapColors*: array[mapColorsAmount, Color]
@@ -114,7 +115,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "NoCleanIcon", "ArrowUpLeft", "ArrowUp", "ArrowUpRight", "ArrowLeft",
         "ArrowRight", "ArrowDownLeft", "ArrowDown", "ArrowDownRight",
         "WaitIcon", "MoveToIcon", "MoveStepIcon"]
-    const colorsNames: array[colorsAmount, string] = ["BackgroundColor",
+    const colorsNames: array[colorsNames, string] = ["BackgroundColor",
         "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
         "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
         "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
