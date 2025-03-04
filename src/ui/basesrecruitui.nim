@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to recruit new crew members in bases, like the list
+## of recruits to hire, hiring them, information about them, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[bases, basestrade, config, crew, crewinventory, game, maps,
@@ -717,6 +720,14 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortRecruits(x, y: LocalRecruitData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two recruits and return which should go first, based on the sort
+    ## order of the recruits
+    ##
+    ## * x - the first recruit to compare
+    ## * y - the second recruit to compare
+    ##
+    ## Returns 1 if the first recruit should go first, -1 if the second recruit
+    ## should go first.
     case recruitsSortOrder
     of nameAsc:
       if x.name < y.name:
