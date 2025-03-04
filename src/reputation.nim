@@ -18,10 +18,26 @@
 ## Provides code for the player's reputation system with bases and factions,
 ## like updating reputation, storing it, etc.
 
-import types
+import std/tables
+import contracts
+import types, game
 
 type
   ReputationObject = object
     ## Used to store data about the player's reputation in the selected faction
-    factionIndex: string ## Index of faction to which the reputation is related
+    factionIndex: string       ## Index of faction to which the reputation is related
     reputation: ReputationData ## The information about the reputation
+
+var
+  reputationsList: seq[ReputationObject] = @[]
+    ## The list of player's reputation with all factions
+
+proc resetReputations*(playerFaction: string) {.raises: [], tags: [],
+    contractual.} =
+  ## Reset the player's reputation with all factions
+  ##
+  ## * playerFaction - the current faction of the player
+  reputationsList = @[]
+  for index, faction in factionsList:
+    reputationsList.add(y = ReputationObject(factionIndex: index,
+        reputation: ReputationData(level: 0, experience: 0)))
