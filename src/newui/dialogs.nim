@@ -47,6 +47,7 @@ type
     data: seq[TextData]
     title: string
     button1, button2: ButtonSettings
+    lines: float
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
     icon: -1, tooltip: "",
@@ -252,7 +253,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
     var needLines: float = ceil(x = getTextWidth(text = text) / 250)
     if needLines < 1.0:
       needLines = 1.0
-    infoData = InfoData(data: parts, button1: button1, button2: button2)
+    infoData = InfoData(data: parts, button1: button1, button2: button2,
+        lines: needLines)
     result = infoDialog
   except:
     result = setError(message = "Can't set the message.")
