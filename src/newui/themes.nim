@@ -26,7 +26,6 @@ const
   iconsAmount: Positive = 40
   fontsAmount: Positive = 2
   mapIconsAmount: Positive = 18
-  mapColorsAmount: Positive = 13
 
 type
   ColorsNames* = enum
@@ -39,6 +38,9 @@ type
       selectActiveTextColor, propertyTextColor, toggleColor, toggleHoverColor,
       toggleCursorColor, goldenColor, redColor, mapInfoBorderColor,
       mapInfoColor, pinkColor, yellowColor, blueColor, cyanColor
+  MapColorsNames* = enum
+    ## Names of colors used in the game's map
+    mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor, mapYellowColor, mapRedColor, mapLimeColor, mapCyanColor, mapRed2Color, mapRed3Color, mapGreen2Color, mapGoldenYellow, mapPinkColor
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
@@ -47,7 +49,7 @@ type
     colors*: array[ColorsNames, Color]
     fonts*: array[fontsAmount, string]
     mapIcons*: array[mapIconsAmount, string]
-    mapColors*: array[mapColorsAmount, Color]
+    mapColors*: array[MapColorsNames, Color]
 
 let
   defaultThemePath: string = dataDirectory & "ui" & DirSep
@@ -129,11 +131,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "PatrolIcon", "ExploreIcon", "PassengerIcon", "EnemyShipIcon",
         "AttackOnBaseIcon", "EnemyPatrolIcon", "DiseaseIcon", "FullDocksIcon",
         "DoublePriceIcon", "MapTraderIcon", "FriendlyShipIcon", "NotVisitedBaseIcon"]
-    const mapColorsNames: array[mapColorsAmount, string] = ["MapVisitedColor",
-        "MapUnvisitedColor", "MapDefaultColor", "MapGreenColor",
-        "MapYellowColor", "MapRedColor", "MapLimeColor", "MapCyanColor",
-        "MapRed2Color", "MapRed3Color", "MapGreen2Color", "MapGoldenYellow",
-        "MapPinkColor"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -169,17 +166,24 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
               of mapIconsNames:
                 let index: Natural = mapIconsNames.find(item = entry.value)
                 theme.mapIcons[index] = entry.value
-              of mapColorsNames:
-                let index: Natural = mapColorsNames.find(item = entry.value)
-                theme.mapColors[index] = entry.value.parseColor
               else:
                 var validName: bool = true
+                # Check if the option is a color
                 try:
                   let index: ColorsNames = parseEnum[ColorsNames](
                       s = entry.value)
-                  theme.colors[index] = parseColor(name = entry.value)
+                  theme.colors[index] = entry.value.parseColor
                 except:
                   validName = false
+                # Check if the option is a map's color
+                if not validName:
+                  try:
+                    let index: MapColorsNames = parseEnum[MapColorsNames](
+                        s = entry.value)
+                    theme.mapColors[index] = entry.value.parseColor
+                    validName = true
+                  except:
+                    discard
                 if not validName:
                   echo "Invalid name of configuration option '" & entry.key &
                       "' in file: " & configName
