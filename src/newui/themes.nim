@@ -30,6 +30,7 @@ const
 
 type
   ColorsNames* = enum
+    ## Names of the colors used in the game's themes
     backgroundColor, foregroundColor, greenColor, borderColor, buttonColor,
       buttonHoverColor, editColor, editCursorColor, buttonActiveColor,
       headerColor, comboColor, propertyColor, scrollbarColor, buttonTextColor,
