@@ -712,7 +712,7 @@ proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], c
   result.w = w - 2 * amount
   result.h = h - 2 * amount
 
-proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_color) {.raises: [], tags: [], contractual.} =
+proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
   ##
   ## * b        - the command buffer in which the rectangle will be drawn
@@ -720,6 +720,15 @@ proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_
   ## * rounding - if bigger than zero, round the corners of the rectangle
   ## * c        - the color to fill the rectangle
   if b == nil or rect.w == 0 or rect.h == 0:
+    return
+  if b.use_clipping == 1:
+    let clip: nk_rect = b.clip
+    if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h, x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
+      return
+
+  var cmd: ptr nk_command_rect_filled
+  cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b, t = NK_COMMAND_RECT_FILLED, cmd.sizeof))
+  if cmd == nil:
     return
 
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
