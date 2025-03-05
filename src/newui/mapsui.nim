@@ -412,11 +412,11 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
       row(width = 20):
         label(str = "X:")
       row(width = 80):
-        colorLabel(str = $x, color = theme.mapColors[11])
+        colorLabel(str = $x, color = theme.mapColors[mapGoldenYellow])
       row(width = 20):
         label(str = "Y:")
       row(width = 80):
-        colorLabel(str = $y, color = theme.mapColors[11])
+        colorLabel(str = $y, color = theme.mapColors[mapGoldenYellow])
     if playerShip.skyX != x or playerShip.skyY != y:
       let
         distance: Natural = countDistance(destinationX = x, destinationY = y)
@@ -425,7 +425,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         row(width = 80):
           label(str = "Distance:")
         row(width = 100):
-          colorLabel(str = $distance, color = theme.mapColors[11])
+          colorLabel(str = $distance, color = theme.mapColors[mapGoldenYellow])
       if travelValues[1] > 0:
         layoutStatic(height = 25, cols = 2):
           row(width = 50):
@@ -433,21 +433,21 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
           row(width = 180):
             var distanceText: string = ""
             minutesToDate(minutes = travelValues[1], infoText = distanceText)
-            colorLabel(str = distanceText, color = theme.mapColors[11])
+            colorLabel(str = distanceText, color = theme.mapColors[mapGoldenYellow])
           row(width = 160):
             label(str = "Approx fuel usage:")
           row(width = 70):
-            colorLabel(str = $travelValues[2], color = theme.mapColors[11])
+            colorLabel(str = $travelValues[2], color = theme.mapColors[mapGoldenYellow])
     if skyMap[x][y].baseIndex > 0:
       let baseIndex: Positive = skyMap[x][y].baseIndex
       if skyBases[baseIndex].known:
         setLayoutRowDynamic(height = 25, cols = 1)
-        colorLabel(str = "Base info:", color = theme.mapColors[12])
+        colorLabel(str = "Base info:", color = theme.mapColors[mapPinkColor])
         layoutStatic(height = 25, cols = 2):
           row(width = 60):
             label(str = "Name:")
           row(width = 170):
-            colorLabel(str = skyBases[baseIndex].name, color = theme.mapColors[11])
+            colorLabel(str = skyBases[baseIndex].name, color = theme.mapColors[mapGoldenYellow])
           if skyBases[baseIndex].visited.year > 0:
             row(width = 60):
               label(str = "Type:")
@@ -461,22 +461,22 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
               row(width = 130):
                 case skyBases[baseIndex].population
                 of 1..149:
-                  colorLabel(str = "small", color = theme.mapColors[11])
+                  colorLabel(str = "small", color = theme.mapColors[mapGoldenYellow])
                 of 150..299:
-                  colorLabel(str = "medium", color = theme.mapColors[11])
+                  colorLabel(str = "medium", color = theme.mapColors[mapGoldenYellow])
                 else:
-                  colorLabel(str = "large", color = theme.mapColors[11])
+                  colorLabel(str = "large", color = theme.mapColors[mapGoldenYellow])
             row(width = 60):
               label(str = "Size:")
             row(width = 170):
               colorLabel(str = $skyBases[baseIndex].size,
-                  color = theme.mapColors[11])
+                  color = theme.mapColors[mapGoldenYellow])
             if skyBases[baseIndex].population > 0:
               row(width = 70):
                 label(str = "Owner:")
               row(width = 160):
                 colorLabel(str = factionsList[skyBases[baseIndex].owner].name,
-                    color = theme.mapColors[11])
+                    color = theme.mapColors[mapGoldenYellow])
             else:
               row(width = 230):
                 label(str = "Base is abandoned")
@@ -484,29 +484,29 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         if skyBases[baseIndex].population > 0:
           case skyBases[baseIndex].reputation.level
           of -100 .. -75:
-            colorLabel(str = "You are hated here", color = theme.mapColors[5])
+            colorLabel(str = "You are hated here", color = theme.mapColors[mapRedColor])
           of -74 .. -50:
-            colorLabel(str = "You are outlawed here", color = theme.mapColors[5])
+            colorLabel(str = "You are outlawed here", color = theme.mapColors[mapRedColor])
           of -49 .. -25:
-            colorLabel(str = "You are disliked here", color = theme.mapColors[5])
+            colorLabel(str = "You are disliked here", color = theme.mapColors[mapRedColor])
           of -24 .. -1:
             colorLabel(str = "They are unfriendly to you",
-                color = theme.mapColors[5])
+                color = theme.mapColors[mapRedColor])
           of 0:
-            colorLabel(str = "You are unknown here", color = theme.mapColors[11])
+            colorLabel(str = "You are unknown here", color = theme.mapColors[mapGoldenYellow])
           of 1..25:
             colorLabel(str = "You are know here as visitor",
-                color = theme.mapColors[3])
+                color = theme.mapColors[mapGreenColor])
           of 26..50:
             colorLabel(str = "You are know here as trader",
-                color = theme.mapColors[3])
+                color = theme.mapColors[mapGreenColor])
           of 51..75:
             colorLabel(str = "You are know here as friend",
-                color = theme.mapColors[3])
+                color = theme.mapColors[mapGreenColor])
           of 76..100:
-            colorLabel(str = "You are well known here", color = theme.mapColors[3])
+            colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
         if baseIndex == playerShip.homeBase:
-          colorLabel(str = "It is your home base", color = theme.mapColors[7])
+          colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
   nuklearSetDefaultFont(defaultFont = fonts[1],
       fontSize = gameSettings.mapFontSize + 10)
 
@@ -873,35 +873,35 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
               2)).float, w = colWidth.float, h = height.float):
             var
               mapChar: string = theme.mapIcons[1]
-              mapColor: Color = theme.mapColors[1]
+              mapColor: Color = theme.mapColors[mapUnvisitedColor]
             if x == playerShip.skyX and y == playerShip.skyY:
               skyMap[x][y].visited = true
               mapChar = theme.mapIcons[0]
-              mapColor = theme.mapColors[2]
+              mapColor = theme.mapColors[mapDefaultColor]
             else:
               if x == playerShip.destinationX and y == playerShip.destinationY:
                 mapChar = theme.mapIcons[2]
-                mapColor = theme.mapColors[2]
+                mapColor = theme.mapColors[mapDefaultColor]
               elif currentStory.index.len > 0 and (x == storyX and y == storyY):
                 mapChar = theme.mapIcons[3]
-                mapColor = theme.mapColors[3]
+                mapColor = theme.mapColors[mapGreenColor]
               elif skyMap[x][y].missionIndex > -1:
                 case acceptedMissions[skyMap[x][y].missionIndex].mType
                 of deliver:
                   mapChar = theme.mapIcons[4]
-                  mapColor = theme.mapColors[4]
+                  mapColor = theme.mapColors[mapYellowColor]
                 of destroy:
                   mapChar = theme.mapIcons[5]
-                  mapColor = theme.mapColors[5]
+                  mapColor = theme.mapColors[mapRedColor]
                 of patrol:
                   mapChar = theme.mapIcons[6]
-                  mapColor = theme.mapColors[6]
+                  mapColor = theme.mapColors[mapLimeColor]
                 of explore:
                   mapChar = theme.mapIcons[7]
-                  mapColor = theme.mapColors[3]
+                  mapColor = theme.mapColors[mapGreenColor]
                 of passenger:
                   mapChar = theme.mapIcons[8]
-                  mapColor = theme.mapColors[7]
+                  mapColor = theme.mapColors[mapCyanColor]
               elif skyMap[x][y].eventIndex > -1:
                 if skyMap[x][y].eventIndex > eventsList.high:
                   skyMap[x][y].eventIndex = -1
@@ -909,34 +909,34 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                   case eventsList[skyMap[x][y].eventIndex].eType
                   of enemyShip:
                     mapChar = theme.mapIcons[9]
-                    mapColor = theme.mapColors[5]
+                    mapColor = theme.mapColors[mapRedColor]
                   of attackOnBase:
                     mapChar = theme.mapIcons[10]
-                    mapColor = theme.mapColors[8]
+                    mapColor = theme.mapColors[mapRed2Color]
                   of enemyPatrol:
                     mapChar = theme.mapIcons[11]
-                    mapColor = theme.mapColors[9]
+                    mapColor = theme.mapColors[mapRed3Color]
                   of disease:
                     mapChar = theme.mapIcons[12]
-                    mapColor = theme.mapColors[4]
+                    mapColor = theme.mapColors[mapYellowColor]
                   of fullDocks:
                     mapChar = theme.mapIcons[13]
-                    mapColor = theme.mapColors[7]
+                    mapColor = theme.mapColors[mapCyanColor]
                   of doublePrice:
                     mapChar = theme.mapIcons[14]
-                    mapColor = theme.mapColors[6]
+                    mapColor = theme.mapColors[mapLimeColor]
                   of trader:
                     mapChar = theme.mapIcons[15]
-                    mapColor = theme.mapColors[3]
+                    mapColor = theme.mapColors[mapGreenColor]
                   of friendlyShip:
                     mapChar = theme.mapIcons[16]
-                    mapColor = theme.mapColors[10]
+                    mapColor = theme.mapColors[mapGreen2Color]
                   of EventsTypes.none, baseRecovery:
                     discard
               elif skyMap[x][y].baseIndex > 0:
                 mapChar = theme.mapIcons[17]
                 if skyBases[skyMap[x][y].baseIndex].known:
-                  mapColor = theme.mapColors[2]
+                  mapColor = theme.mapColors[mapDefaultColor]
                   if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
                     mapChar = try:
                         factionsList[skyBases[skyMap[x][
@@ -953,7 +953,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                         return
             try:
               let background: Color = (if skyMap[x][y].visited: theme.mapColors[
-                  0] else: theme.mapColors[1])
+                  mapVisitedColor] else: theme.mapColors[mapUnvisitedColor])
               setButtonStyle(field = borderColor, color = background)
               setButtonStyle(field = normal, color = background)
               setButtonStyle(field = textBackground, color = background)

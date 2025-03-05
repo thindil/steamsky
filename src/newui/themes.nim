@@ -40,7 +40,9 @@ type
       mapInfoColor, pinkColor, yellowColor, blueColor, cyanColor
   MapColorsNames* = enum
     ## Names of colors used in the game's map
-    mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor, mapYellowColor, mapRedColor, mapLimeColor, mapCyanColor, mapRed2Color, mapRed3Color, mapGreen2Color, mapGoldenYellow, mapPinkColor
+    mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor,
+      mapYellowColor, mapRedColor, mapLimeColor, mapCyanColor, mapRed2Color,
+      mapRed3Color, mapGreen2Color, mapGoldenYellow, mapPinkColor
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
