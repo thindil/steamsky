@@ -35,8 +35,8 @@ proc getHighestAttribute(baseIndex: BasesRange;
   ## Returns the name of the attribute with the highest level of the selected
   ## recruit
   var
-    highestLevel = 1
-    highestIndex = 0
+    highestLevel: Positive = 1
+    highestIndex: Natural = 0
   for index, attrib in skyBases[baseIndex].recruits[memberIndex].attributes:
     if attrib.level > highestLevel:
       highestLevel = attrib.level
@@ -54,8 +54,8 @@ proc getHighestSkill(baseIndex: BasesRange;
   ## Returns the name of the skill with the highest level of the selected
   ## recruit
   var
-    highestLevel = 1
-    highestIndex = 0
+    highestLevel: Positive = 1
+    highestIndex: Natural = 0
   for skill in skyBases[baseIndex].recruits[memberIndex].skills:
     if skill.level > highestLevel:
       highestLevel = skill.level
@@ -66,8 +66,8 @@ proc getHighestSkill(baseIndex: BasesRange;
     return ""
 
 var
-  recruitTable: TableWidget
-  recruitsIndexes: seq[Natural]
+  recruitTable: TableWidget = TableWidget()
+  recruitsIndexes: seq[Natural] = @[]
 
 proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -83,8 +83,8 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowRecruit
-  var recruitFrame = mainPaned & ".recruitframe"
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  var recruitFrame: string = mainPaned & ".recruitframe"
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if tclEval2(script = "winfo exists " & recruitFrame) == "0":
     tclEval(script = "ttk::frame " & recruitFrame)
     recruitTable = createTable(parent = recruitFrame, headers = @[
@@ -106,12 +106,12 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
       recruitsIndexes.add(y = index)
   clearTable(table = recruitTable)
   let
-    page = try:
+    page: Natural = try:
         (if argc == 2: ($argv[1]).parseInt else: 1)
       except:
         return showError(message = "Can't get the page.")
-    startRow = ((page - 1) * gameSettings.listsLimit) + 1
-  var currentRow = 1
+    startRow: Natural = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow: Natural = 1
   for index in recruitsIndexes:
     if currentRow < startRow:
       currentRow.inc
@@ -159,7 +159,7 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
   showScreen(newScreenName = "recruitframe")
   return tclOk
 
-var recruitIndex: Natural
+var recruitIndex: Natural = 0
 
 proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
@@ -181,14 +181,14 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get recruit index.")
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    recruit = skyBases[baseIndex].recruits[recruitIndex]
-    recruitDialog = createDialog(name = ".recruitdialog", title = recruit.name)
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    recruitDialog: string = createDialog(name = ".recruitdialog", title = recruit.name)
   const tabNames: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
   tclSetVar(varName = "newtab", newValue = tabNames[0])
-  var frame = recruitDialog & ".buttonbox"
+  var frame: string = recruitDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
-  var tabButton = ""
+  var tabButton: string = ""
   for index, tab in tabNames:
     tabButton = frame & "." & tab.toLowerAscii
     tclEval(script = "ttk::radiobutton " & tabButton & " -text " & tab &
@@ -198,8 +198,8 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "bind " & tabButton & " <Tab> {focus " & recruitDialog & ".buttonbox2.hirebutton;break}")
   tclEval(script = "grid " & frame & " -pady {5 0} -columnspan 2")
   let
-    recruitCanvas = recruitDialog & ".canvas"
-    yScroll = recruitDialog & ".yscroll"
+    recruitCanvas: string = recruitDialog & ".canvas"
+    yScroll: string = recruitDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll &
       " -orient vertical -command [list " & recruitCanvas & " yview]")
   tclEval(script = "canvas " & recruitCanvas & " -yscrollcommand [list " &
@@ -208,12 +208,12 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1")
   frame = recruitDialog & ".buttonbox2"
   tclEval(script = "ttk::frame " & frame)
-  let button = recruitDialog & ".buttonbox2.hirebutton"
+  let button: string = recruitDialog & ".buttonbox2.hirebutton"
   tclEval(script = "ttk::button " & button &
       " -text Negotiate -command {CloseDialog " & recruitDialog & ";Negotiate} -image negotiateicon -style Dialog.TButton")
   tclEval(script = "grid " & button)
   tclEval(script = "tooltip::tooltip " & button & " \"Start hiring negotiating.\"")
-  let dialogCloseButton = recruitDialog & ".buttonbox2.button"
+  let dialogCloseButton: string = recruitDialog & ".buttonbox2.button"
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -text Close -command {CloseDialog " & recruitDialog & "} -image exiticon -style Dialog.TButton")
   tclEval(script = "grid " & dialogCloseButton & " -row 0 -column 1")
@@ -224,12 +224,12 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   # General info about the selected recruit
   frame = recruitCanvas & ".general"
   tclEval(script = "ttk::frame " & frame)
-  var recruitText = frame & ".label"
+  var recruitText: string = frame & ".label"
   tclEval(script = "text " & recruitText & " -height 3 -width 30")
   tclEval(script = recruitText & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
-  let faction = try:
+  let faction: FactionData = try:
       factionsList[recruit.faction]
     except:
       return showError(message = "Can't get the recruit's faction.")
@@ -249,9 +249,9 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   frame = recruitCanvas & ".attributes"
   tclEval(script = "ttk::frame " & frame)
   for index, attrib in recruit.attributes:
-    let progressFrame = frame & ".statinfo" & $(index + 1)
+    let progressFrame: string = frame & ".statinfo" & $(index + 1)
     tclEval(script = "ttk::frame " & progressFrame)
-    var recruitLabel = progressFrame & ".label"
+    var recruitLabel: string = progressFrame & ".label"
     tclEval(script = "ttk::label " & recruitLabel & " -text {" & attributesList[
         index].name & ": }")
     tclEval(script = "grid " & recruitLabel & " -sticky w")
