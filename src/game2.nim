@@ -23,7 +23,7 @@ import std/[logging, os, strutils, tables, xmlparser, xmltree]
 import contracts
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
-    messages, missions, mobs, shipmodules, ships, shipscrew, shipsrepairs,
+    messages, missions, mobs, reputation, shipmodules, ships, shipscrew, shipsrepairs,
     shipsupgrade, statistics, stories, types, utils
 
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
@@ -481,6 +481,8 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
     generateSaveName()
     # Set the player's career
     playerCareer = newGameSettings.playerCareer
+    # Set the player's reputations
+    resetReputations()
     # Add the welcoming message
     addMessage(message = "Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
         mType = otherMessage)

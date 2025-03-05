@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts
-import types, game
+import config, factions, types, game
 
 type
   ReputationObject = object
@@ -32,12 +32,12 @@ var
   reputationsList: seq[ReputationObject] = @[]
     ## The list of player's reputation with all factions
 
-proc resetReputations*(playerFaction: string) {.raises: [], tags: [],
+proc resetReputations*() {.raises: [KeyError], tags: [],
     contractual.} =
   ## Reset the player's reputation with all factions
-  ##
-  ## * playerFaction - the current faction of the player
   reputationsList = @[]
   for index, faction in factionsList:
+    let reputationLevel: int = if index == newGameSettings.playerFaction or isFriendly(
+        sourceFaction = newGameSettings.playerFaction, targetFaction = index): 1 else: -1
     reputationsList.add(y = ReputationObject(factionIndex: index,
-        reputation: ReputationData(level: 0, experience: 0)))
+        reputation: ReputationData(level: reputationLevel, experience: 0)))
