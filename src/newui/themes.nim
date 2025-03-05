@@ -123,17 +123,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "NoCleanIcon", "ArrowUpLeft", "ArrowUp", "ArrowUpRight", "ArrowLeft",
         "ArrowRight", "ArrowDownLeft", "ArrowDown", "ArrowDownRight",
         "WaitIcon", "MoveToIcon", "MoveStepIcon"]
-    const colorsNames: array[ColorsNames, string] = ["BackgroundColor",
-        "ForegroundColor", "GreenColor", "BorderColor", "ButtonColor",
-        "ButtonHoverColor", "EditColor", "EditCursorColor", "ButtonActiveColor",
-        "HeaderColor", "ComboColor", "PropertyColor", "ScrollbarColor",
-        "ButtonTextColor", "ScrollbarCursorColor", "EditTextColor",
-        "ComboTextColor", "TooltipBorderColor", "TooltipColor",
-        "GroupBorderColor", "HeaderTextColor", "GroupTextColor",
-        "SelectActiveTextColor", "PropertyTextColor", "ToggleColor",
-        "ToggleHoverColor", "ToggleCursorColor", "GoldenColor", "RedColor",
-        "MapInfoBorderColor", "MapInfoColor", "PinkColor", "YellowColor",
-        "BlueColor", "CyanColor"]
     const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
     const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
         "EmptyMapIcon", "TargetIcon", "StoryIcon", "DeliverIcon", "DestroyIcon",
@@ -173,12 +162,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 let index: Natural = iconsNames.find(item = entry.value)
                 theme.icons[index] = themeDir & DirSep &
                     entry.value.unixToNativePath
-              of colorsNames:
-                let index: ColorsNames = try:
-                    parseEnum[ColorsNames](s = entry.value)
-                  except:
-                    break
-                theme.colors[index] = parseColor(name = entry.value)
               of fontsNames:
                 let index: Natural = fontsNames.find(item = entry.value)
                 theme.fonts[index] = themeDir & DirSep &
@@ -190,7 +173,17 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 let index: Natural = mapColorsNames.find(item = entry.value)
                 theme.mapColors[index] = entry.value.parseColor
               else:
-                discard
+                var validName: bool = true
+                try:
+                  let index: ColorsNames = parseEnum[ColorsNames](
+                      s = entry.value)
+                  theme.colors[index] = parseColor(name = entry.value)
+                except:
+                  validName = false
+                if not validName:
+                  echo "Invalid name of configuration option '" & entry.key &
+                      "' in file: " & configName
+                  return
             of cfgError:
               echo entry.msg
             of cfgSectionStart:
