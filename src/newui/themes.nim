@@ -24,7 +24,6 @@ import ../[config, game]
 
 const
   iconsAmount: Positive = 40
-  fontsAmount: Positive = 2
   mapIconsAmount: Positive = 18
 
 type
@@ -43,13 +42,16 @@ type
     mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor,
       mapYellowColor, mapRedColor, mapLimeColor, mapCyanColor, mapRed2Color,
       mapRed3Color, mapGreen2Color, mapGoldenYellow, mapPinkColor
+  FontsNames* = enum
+    ## Names of fonts used in the game's themes
+    UIFont, mapFont
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
     fileName: string
     icons*: array[iconsAmount, string]
     colors*: array[ColorsNames, Color]
-    fonts*: array[fontsAmount, string]
+    fonts*: array[FontsNames, string]
     mapIcons*: array[mapIconsAmount, string]
     mapColors*: array[MapColorsNames, Color]
 
@@ -127,7 +129,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         "NoCleanIcon", "ArrowUpLeft", "ArrowUp", "ArrowUpRight", "ArrowLeft",
         "ArrowRight", "ArrowDownLeft", "ArrowDown", "ArrowDownRight",
         "WaitIcon", "MoveToIcon", "MoveStepIcon"]
-    const fontsNames: array[fontsAmount, string] = ["UIFont", "MapFont"]
     const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
         "EmptyMapIcon", "TargetIcon", "StoryIcon", "DeliverIcon", "DestroyIcon",
         "PatrolIcon", "ExploreIcon", "PassengerIcon", "EnemyShipIcon",
@@ -161,10 +162,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 let index: Natural = iconsNames.find(item = entry.value)
                 theme.icons[index] = themeDir & DirSep &
                     entry.value.unixToNativePath
-              of fontsNames:
-                let index: Natural = fontsNames.find(item = entry.value)
-                theme.fonts[index] = themeDir & DirSep &
-                    entry.value.unixToNativePath
               of mapIconsNames:
                 let index: Natural = mapIconsNames.find(item = entry.value)
                 theme.mapIcons[index] = entry.value
@@ -183,6 +180,15 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                     let index: MapColorsNames = parseEnum[MapColorsNames](
                         s = entry.value)
                     theme.mapColors[index] = entry.value.parseColor
+                    validName = true
+                  except:
+                    discard
+                # Check if the option is a font's name
+                if not validName:
+                  try:
+                    let index: FontsNames = parseEnum[FontsNames](s = entry.value)
+                    theme.fonts[index] = themeDir & DirSep &
+                    entry.value.unixToNativePath
                     validName = true
                   except:
                     discard
