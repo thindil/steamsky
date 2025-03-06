@@ -405,7 +405,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
   ## * x     - the X coordinate of the map cell which info will be show
   ## * y     - the Y coordinate of the map cell which info will be show
   ## * theme - the current game's theme
-  nuklearSetDefaultFont(defaultFont = fonts[0],
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
   tooltip(x = (windowWidth - 240), y = 45, width = 230):
     layoutStatic(height = 25, cols = 4):
@@ -507,7 +507,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
             colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
         if baseIndex == playerShip.homeBase:
           colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
-  nuklearSetDefaultFont(defaultFont = fonts[1],
+  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
 
 var
@@ -527,7 +527,7 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
     moveX = 1
     moveY = 1
 
-  nuklearSetDefaultFont(defaultFont = fonts[0],
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
   contextualMenu(flags = {windowNoFlags}, x = 535, y = 190,
       triggerBounds = bounds, button = left):
@@ -587,7 +587,7 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
       closeMapMenu()
     contextualItemLabel(label = "Close", align = centered):
       closeMapMenu()
-  nuklearSetDefaultFont(defaultFont = fonts[1],
+  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
 
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
@@ -810,7 +810,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showDestinationMenu(dialog = dialog)
   showMessage(dialog = dialog)
   # draw map
-  nuklearSetDefaultFont(defaultFont = fonts[1],
+  nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
   let
     theme: ThemeData = try:
@@ -1008,7 +1008,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         text = "Zoom out the map.")
   labelButton(title = "-"):
     gameSettings.mapFontSize -= 2
-  nuklearSetDefaultFont(defaultFont = fonts[0],
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
   layoutDynamic(height = windowHeight - mapHeight - 75, cols = 2):
     # Draw last messages

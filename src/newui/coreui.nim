@@ -19,6 +19,7 @@
 ## state, the main window width and height, etc
 
 import contracts, nuklear/nuklear_sdl_renderer
+import themes
 
 type GameState* = enum
   ## Used to determine the current game's state.
@@ -36,7 +37,7 @@ const
   menuHeight*: Positive = 400 ## The height of the game's main window
 
 var
-  fonts*: array[2, ptr nk_font] = [nil, nil] ## The list of fonts used by the game
+  fonts*: array[FontsNames, ptr nk_font] = [nil, nil] ## The list of fonts used by the game
   windowWidth*: float = 800.0  ## The width of the main game window
   windowHeight*: float = 600.0 ## The height of the main game window
   dialogX*: float = 0          ## The X position of a dialog

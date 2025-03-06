@@ -93,15 +93,16 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   loadThemes()
   # Load the game's fonts
   try:
-    fonts[0] = nuklearLoadFont(font = FontData(path: themesList[
-        gameSettings.interfaceTheme].fonts[0],
+    fonts[UIFont] = nuklearLoadFont(font = FontData(path: themesList[
+        gameSettings.interfaceTheme].fonts[UIFont],
         size: gameSettings.interfaceFontSize + 10))
-    fonts[1] = nuklearLoadFont(font = FontData(path: themesList[
-        gameSettings.interfaceTheme].fonts[1], size: gameSettings.mapFontSize +
-        10), glyphsRanges = [0x0020.nk_rune, 0x00ff, 0x2000, 0xffff, 0])
+    fonts[FontsNames.mapFont] = nuklearLoadFont(font = FontData(
+        path: themesList[gameSettings.interfaceTheme].fonts[FontsNames.mapFont],
+        size: gameSettings.mapFontSize + 10), glyphsRanges = [0x0020.nk_rune,
+        0x00ff, 0x2000, 0xffff, 0])
   except:
     quit "Can't load the game's fonts."
-  nuklearSetDefaultFont(defaultFont = fonts[0],
+  nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
   var
     state: GameState = mainMenu
