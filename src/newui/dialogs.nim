@@ -47,7 +47,7 @@ type
     data: seq[TextData]
     title: string
     button1, button2: ButtonSettings
-    lines: float
+    widgetsAmount: seq[Positive]
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
     icon: -1, tooltip: "",
@@ -223,6 +223,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
   ## Returns the infoDialog if the info was set, otherwise errorDialog
   setDialog()
   try:
+    const width: float = 250
     var
       startIndex: int = 0
       tagIndex: int = text.find(sub = '{')
@@ -232,7 +233,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         tagIndex = text.len
       var
         partText: string = text[startIndex..tagIndex - 1]
-        needLines: float = ceil(x = getTextWidth(text = partText) / 250)
+        needLines: float = ceil(x = getTextWidth(text = partText) / width)
       if needLines < 1.0:
         needLines = 1.0
       parts.add(y = TextData(text: partText, color: "", lines: needLines))
@@ -244,17 +245,20 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       startIndex = tagIndex + 1
       tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
       partText = text[startIndex..tagIndex - 1]
-      needLines = ceil(x = getTextWidth(text = partText) / 250)
+      needLines = ceil(x = getTextWidth(text = partText) / width)
       if needLines < 1.0:
         needLines = 1.0
       parts.add(y = TextData(text: partText, color: tagName, lines: needLines))
       startIndex = tagIndex + tagName.len + 3
       tagIndex = text.find(sub = '{', start = startIndex)
-    var needLines: float = ceil(x = getTextWidth(text = text) / 250)
-    if needLines < 1.0:
-      needLines = 1.0
+    var widgetsAmount: seq[Positive] = @[]
+    for part in parts:
+      var wAmount: Positive = 1
+      if part.lines > 1:
+        widgetsAmount.add(y = wAmount)
+        continue
     infoData = InfoData(data: parts, button1: button1, button2: button2,
-        lines: needLines)
+        widgetsAmount: widgetsAmount)
     result = infoDialog
   except:
     result = setError(message = "Can't set the message.")
