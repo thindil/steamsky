@@ -262,7 +262,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid columnconfigure " & progressFrame & " " &
         recruitLabel & " -weight 1")
     tclEval(script = "grid rowconfigure " & progressFrame & " " & recruitLabel & " -weight 1")
-    let infoButton = progressFrame & ".button"
+    let infoButton: string = progressFrame & ".button"
     tclEval(script = "ttk::button " & infoButton &
         " -image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo " &
         $(index + 1) & " .recruitdialog}")
@@ -270,7 +270,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid " & infoButton & " -column 2 -row 0")
     tclEval(script = "grid " & progressFrame & " -sticky we -padx 5 -pady {5 0}")
     tclEval(script = "update")
-    let progressBar = frame & ".level" & $(index + 1)
+    let progressBar: string = frame & ".level" & $(index + 1)
     tclEval(script = "ttk::progressbar " & progressBar & " -value " & $(
         attrib.level * 2) & " -length 360")
     tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the attribute.\"")
@@ -279,9 +279,9 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   frame = recruitCanvas & ".skills"
   tclEval(script = "ttk::frame " & frame)
   for index, skill in recruit.skills:
-    let progressFrame = frame & ".skillinfo" & $(index + 1)
+    let progressFrame: string = frame & ".skillinfo" & $(index + 1)
     tclEval(script = "ttk::frame " & progressFrame)
-    var recruitLabel = progressFrame & ".label"
+    var recruitLabel: string = progressFrame & ".label"
     try:
       tclEval(script = "ttk::label " & recruitLabel & " -text {" & skillsList[
           skill.index].name & ": }")
@@ -295,7 +295,7 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "grid columnconfigure " & progressFrame & " " &
         recruitLabel & " -weight 1")
     tclEval(script = "grid rowconfigure " & progressFrame & " " & recruitLabel & " -weight 1")
-    var toolQuality = 100
+    var toolQuality: int = 100
     try:
       for quality in skillsList[skill.index].toolsQuality:
         if skill.level <= quality.level:
@@ -303,14 +303,14 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           break
     except:
       return showError(message = "Can't get tools for skill.")
-    let infoButton = progressFrame & ".button"
+    let infoButton: string = progressFrame & ".button"
     tclEval(script = "ttk::button " & infoButton &
         " -image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo " &
         $(skill.index) & " " & $toolQuality & "  .recruitdialog}")
     tclEval(script = "tooltip::tooltip " & infoButton & " \"Show detailed information about the selected skill.\"")
     tclEval(script = "grid " & infoButton & " -column 2 -row 0")
     tclEval(script = "grid " & progressFrame & " -sticky we")
-    let progressBar = frame & ".level" & $(index + 1)
+    let progressBar: string = frame & ".level" & $(index + 1)
     tclEval(script = "ttk::progressbar " & progressBar & " -value " &
         $skill.level & " -length 360")
     tclEval(script = "tooltip::tooltip " & progressBar & " \"The current level of the skill.\"")
@@ -364,25 +364,25 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## NegotiateHire
   let
-    dailyPayment = try:
+    dailyPayment: Natural = try:
         tclGetVar(varName = "daily").parseFloat.Natural
       except:
         return showError(message = "Can't get daily payment.")
-    tradePayment = try:
+    tradePayment: Natural = try:
         tclGetVar(varName = "percent").parseFloat.Natural
       except:
         return showError(message = "Can't get trade payment.")
   tclSetVar(varName = "daily", newValue = $dailyPayment)
   tclSetVar(varName = "percent", newValue = $tradePayment)
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    recruit = skyBases[baseIndex].recruits[recruitIndex]
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
   var newCost: int = recruit.price - ((dailyPayment - recruit.payment) * 50) -
       (tradePayment * 5_000)
-  const dialogName = ".negotiatedialog"
+  const dialogName: string = ".negotiatedialog"
   let
-    contractBox = dialogName & ".contract"
-    contractLength = try:
+    contractBox: string = dialogName & ".contract"
+    contractLength: int = try:
         tclEval2(script = contractBox & " current").parseInt
       except:
         return showError(message = "Can't get contract length.")
@@ -404,7 +404,7 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
     countPrice(price = cost, traderIndex = findMember(order = talk))
   except:
     return showError(message = "Can't count price.")
-  let moneyInfo = dialogName & ".cost"
+  let moneyInfo: string = dialogName & ".cost"
   tclEval(script = moneyInfo & " configure -state normal")
   tclEval(script = moneyInfo & " delete 2.0 end")
   tclEval(script = moneyInfo & " insert end {\nHire for }")
@@ -412,9 +412,9 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moneyInfo & " insert end { " & moneyName & "}")
   tclEval(script = moneyInfo & " configure -state disabled")
   let
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
+    moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-    hireButton = dialogName & ".buttonbox.hirebutton"
+    hireButton: string = dialogName & ".buttonbox.hirebutton"
   if moneyIndex > -1 and playerShip.cargo[moneyIndex2].amount < cost:
     tclEval(script = hireButton & " configure -state disabled")
   else:
@@ -436,22 +436,22 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## Hire
-  const dialogName = ".negotiatedialog"
-  var scale = dialogName & ".percent"
-  let tradePayment = try:
+  const dialogName: string = ".negotiatedialog"
+  var scale: string = dialogName & ".percent"
+  let tradePayment: Natural = try:
       tclEval2(script = scale & " cget -value").parseFloat.Natural
     except:
       return showError(message = "Can't get trade payment.")
   scale = dialogName & ".daily"
-  let dailyPayment = try:
+  let dailyPayment: Natural = try:
       tclEval2(script = scale & " cget -value").parseFloat.Natural
     except:
       return showError(message = "Can't get daily payment")
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    recruit = skyBases[baseIndex].recruits[recruitIndex]
-    contractBox = dialogName & ".contract"
-    contractLength = try:
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    contractBox: string = dialogName & ".contract"
+    contractLength: int = try:
         tclEval2(script = contractBox & " current").parseInt
       except:
         return showError(message = "Can't get contract length.")
