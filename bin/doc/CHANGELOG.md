@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 - Reading the game's themes from files
 - Undocking from bases doesn't charge for docking
 - Crash when asking for events in bases
+- Gaining or losing reputation in bases when the player reached max or min
+  level of the reputation
 
 ## [10.8] - 2025-02-23
 
