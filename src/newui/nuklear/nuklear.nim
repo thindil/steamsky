@@ -730,6 +730,12 @@ proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_
   cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b, t = NK_COMMAND_RECT_FILLED, cmd.sizeof))
   if cmd == nil:
     return
+  cmd.rounding = rounding.cushort
+  cmd.x = rect.x.cshort
+  cmd.y = rect.y.cshort
+  cmd.w = max(0, rect.w).cushort
+  cmd.h = max(0, rect.h).cushort
+  cmd.color = c
 
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
@@ -1154,6 +1160,18 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
       of NK_STYLE_ITEM_COLOR:
         text.background = bg.color
+        nkFillRect(b = `out`.addr, rect = header, rounding = 0, c = bg.color)
+
+      # window close button
+      var button: NimRect = NimRect()
+      button.y = header.y + style.window.header.padding.y
+      button.h = header.h - 2 * style.window.header.padding.y
+      button.w = button.h
+      if (win.flags and NK_WINDOW_CLOSABLE.cint).nk_bool:
+        var ws: nk_flags = 0
+        if style.window.header.align == NK_HEADER_RIGHT:
+          button.x = (header.w + header.x) - (button.w + style.window.header.padding.x)
+          header.w -= button.w + style.window.header.spacing.x + style.window.header.padding.x
     return true
 
 # ------

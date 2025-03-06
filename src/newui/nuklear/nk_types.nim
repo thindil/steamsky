@@ -207,8 +207,7 @@ type
   nk_style_window_header* {.importc, nodecl.} = object
     ## Internal Nuklear type
     align*: nk_style_header_align
-    padding*: nk_vec2
-    label_padding*: nk_vec2
+    padding*, label_padding*, spacing*: nk_vec2
     active*, hover*, normal*: nk_style_item
     label_active*, label_hover*, label_normal*: nk_color
   nk_style_window* {.importc, nodecl.} = object
