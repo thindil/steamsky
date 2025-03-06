@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,7 +20,8 @@
 
 import std/tables
 import contracts
-import basestypes, config, factions, game, goals, items, maps, shipscrew, types, utils
+import basestypes, config, factions, game, goals, items, maps, reputation,
+    shipscrew, types, utils
 
 proc generateBaseName*(factionIndex: string): string {.raises: [],
     tags: [], contractual.} =
@@ -68,7 +69,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
   if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
     case skyBases[skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex].reputation.level
-    of -24.. -1:
+    of -24 .. -1:
       bonus -= (price.float * 0.05).int
     of 26..50:
       bonus += (price.float * 0.05).int
@@ -246,11 +247,12 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
 
 proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [],
     tags: [], contractual.} =
-  ## Change the player reputation in the selected sky base
+  ## Change the player reputation in the selected sky base and factions
   ##
   ## * baseIndex - the index of the base in which the reputation will change
   ## * points    - the amount of reputation points about which the reputation
   ##               will change
+  updateReputation(baseIndex = baseIndex, amount = points)
   if skyBases[baseIndex].reputation.level == -100 or skyBases[
       baseIndex].reputation.level == 100:
     return
@@ -269,7 +271,8 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [],
     skyBases[baseIndex].reputation.level.inc
   skyBases[baseIndex].reputation.experience = newPoints
   if skyBases[baseIndex].reputation.level == 100:
-    updateGoal(goalType = reputation, targetIndex = skyBases[baseIndex].owner)
+    updateGoal(goalType = GoalTypes.reputation, targetIndex = skyBases[
+        baseIndex].owner)
 
 proc updatePrices*() {.raises: [], tags: [], contractual.} =
   ## Random changes to the items' prices in the selected base

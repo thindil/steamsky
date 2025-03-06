@@ -41,3 +41,12 @@ proc resetReputations*() {.raises: [KeyError], tags: [],
         sourceFaction = newGameSettings.playerFaction, targetFaction = index): 1 else: -1
     reputationsList.add(y = ReputationObject(factionIndex: index,
         reputation: ReputationData(level: reputationLevel, experience: 0)))
+
+proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [], tags: [], contractual.} =
+  ## Update the reputation in factions
+  ##
+  ## * baseIndex - the index of the base in which the reputation will be
+  ##               updated
+  ## * amount    - the amount of the reputation to be added or removed from
+  ##               the player's reputations' levels
+  discard
