@@ -252,9 +252,13 @@ proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [],
   ## * baseIndex - the index of the base in which the reputation will change
   ## * points    - the amount of reputation points about which the reputation
   ##               will change
+  # Update the factions' reputation
   updateReputation(baseIndex = baseIndex, amount = points)
-  if skyBases[baseIndex].reputation.level == -100 or skyBases[
-      baseIndex].reputation.level == 100:
+  # Don't lose reputation below the lowest value
+  if skyBases[baseIndex].reputation.level == -100 and points < 0:
+    return
+  # Don't gain reputation above the highest value
+  if skyBases[baseIndex].reputation.level == 100 and points > 0:
     return
   var newPoints: int = skyBases[baseIndex].reputation.experience + (
       points.float * newGameSettings.reputationBonus).int
