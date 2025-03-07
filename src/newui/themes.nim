@@ -23,7 +23,6 @@ import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game]
 
 const
-  iconsAmount: Positive = 40
   mapIconsAmount: Positive = 18
 
 type
@@ -45,11 +44,20 @@ type
   FontsNames* = enum
     ## Names of fonts used in the game's themes
     UIFont, mapFont
+  IconsNames* = enum
+    ## Names of icons used in the game
+    logoImage, randomIcon, maleIcon, femaleIcon, menuIcon, fuelIcon, noFuelIcon,
+      lowFuelIcon, foodIcon, noFoodIcon, lowFoodIcon, drinksIcon, noDrinksIcon,
+      lowDrinksIcon, pilotIcon, noPilotIcon, engineerIcon, noEngineerIcon,
+      overloadedIcon, gunnerIcon, repairIcon, noRepairIcon, manufactureIcon,
+      noManufactureIcon, upgradeIcon, noUpgradeIcon, traderIcon, cleanIcon,
+      noCleanIcon, arrowUpLeft, arrowUp, arrowUpRight, arrowLeft, arrowRight,
+      arrowDownLeft, arrowDown, arrowDownRight, waitIcon, moveToIcon, moveStepIcon
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
     fileName: string
-    icons*: array[iconsAmount, string]
+    icons*: array[IconsNames, string]
     colors*: array[ColorsNames, Color]
     fonts*: array[FontsNames, string]
     mapIcons*: array[mapIconsAmount, string]
@@ -119,16 +127,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme: ThemeData = defaultTheme
   themesList["steamsky"] = theme
   try:
-    const iconsNames: array[iconsAmount, string] = ["LogoImage", "RandomIcon",
-        "MaleIcon", "FemaleIcon", "MenuIcon", "FuelIcon", "NoFuelIcon",
-        "LowFuelIcon", "FoodIcon", "NoFoodIcon", "LowFoodIcon", "DrinksIcon",
-        "NoDrinksIcon", "LowDrinksIcon", "PilotIcon", "NoPilotIcon",
-        "EngineerIcon", "NoEnginerIcon", "OverloadedIcon", "GunnerIcon",
-        "RepairIcon", "NoRepairIcon", "ManufactureIcon", "NoManufactureIcon",
-        "UpgradeIcon", "NoUpgradeIcon", "TraderIcon", "CleanIcon",
-        "NoCleanIcon", "ArrowUpLeft", "ArrowUp", "ArrowUpRight", "ArrowLeft",
-        "ArrowRight", "ArrowDownLeft", "ArrowDown", "ArrowDownRight",
-        "WaitIcon", "MoveToIcon", "MoveStepIcon"]
     const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
         "EmptyMapIcon", "TargetIcon", "StoryIcon", "DeliverIcon", "DestroyIcon",
         "PatrolIcon", "ExploreIcon", "PassengerIcon", "EnemyShipIcon",
@@ -158,10 +156,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.name = entry.value
               of "FileName":
                 theme.fileName = themeDir & DirSep & entry.value
-              of iconsNames:
-                let index: Natural = iconsNames.find(item = entry.value)
-                theme.icons[index] = themeDir & DirSep &
-                    entry.value.unixToNativePath
               of mapIconsNames:
                 let index: Natural = mapIconsNames.find(item = entry.value)
                 theme.mapIcons[index] = entry.value
@@ -186,9 +180,19 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 # Check if the option is a font's name
                 if not validName:
                   try:
-                    let index: FontsNames = parseEnum[FontsNames](s = entry.value)
+                    let index: FontsNames = parseEnum[FontsNames](
+                        s = entry.value)
                     theme.fonts[index] = themeDir & DirSep &
-                    entry.value.unixToNativePath
+                      entry.value.unixToNativePath
+                    validName = true
+                  except:
+                    discard
+                # Check if the option is an icon's name
+                if not validName:
+                  try:
+                    let index: IconsNames = parseEnum[IconsNames](s = entry.value)
+                    theme.icons[index] = themeDir & DirSep &
+                        entry.value.unixToNativePath
                     validName = true
                   except:
                     discard
