@@ -1172,6 +1172,9 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         if style.window.header.align == NK_HEADER_RIGHT:
           button.x = (header.w + header.x) - (button.w + style.window.header.padding.x)
           header.w -= button.w + style.window.header.spacing.x + style.window.header.padding.x
+        else:
+          button.x = header.x + style.window.header.padding.x
+          header.x += button.w + style.window.header.spacing.x + style.window.header.padding.x
     return true
 
 # ------
