@@ -37,16 +37,32 @@ proc resetReputations*() {.raises: [KeyError], tags: [],
   ## Reset the player's reputation with all factions
   reputationsList = @[]
   for index, faction in factionsList:
-    let reputationLevel: int = if index == newGameSettings.playerFaction or isFriendly(
-        sourceFaction = newGameSettings.playerFaction, targetFaction = index): 1 else: -1
+    let reputationLevel: int = if index == newGameSettings.playerFaction or
+        isFriendly(sourceFaction = newGameSettings.playerFaction,
+            targetFaction = index): 1 else: -1
     reputationsList.add(y = ReputationObject(factionIndex: index,
         reputation: ReputationData(level: reputationLevel, experience: 0)))
 
-proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [], tags: [], contractual.} =
+proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
+    ReputationError], tags: [], contractual.} =
   ## Update the reputation in factions
   ##
   ## * baseIndex - the index of the base in which the reputation will be
   ##               updated
   ## * amount    - the amount of the reputation to be added or removed from
   ##               the player's reputations' levels
-  discard
+  let factionIndex: string = skyBases[baseIndex].owner
+  var reputationIndex: int = -1
+  for index, reputation in reputationsList:
+    if reputation.factionIndex == factionIndex:
+      reputationIndex = index
+      break
+  if reputationIndex == -1:
+    raise newException(exceptn = ReputationError,
+        message = "Can't find index of the faction")
+  # Don't lose reputation below the lowest value
+  if reputationsList[reputationIndex].reputation.level == -100 and amount < 0:
+    return
+  # Don't gain reputation above the highest value
+  if reputationsList[reputationIndex].reputation.level == 100 and amount > 0:
+    return
