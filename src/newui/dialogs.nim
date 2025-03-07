@@ -251,12 +251,22 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       parts.add(y = TextData(text: partText, color: tagName, lines: needLines))
       startIndex = tagIndex + tagName.len + 3
       tagIndex = text.find(sub = '{', start = startIndex)
-    var widgetsAmount: seq[Positive] = @[]
+    var
+      widgetsAmount: seq[Positive] = @[]
+      lineWidth, wAmount: Natural = 0
     for part in parts:
-      var wAmount: Positive = 1
       if part.lines > 1:
-        widgetsAmount.add(y = wAmount)
+        widgetsAmount.add(y = 1)
+        lineWidth = 0
+        wAmount = 0
         continue
+      lineWidth += getTextWidth(text = part.text).Natural
+      if lineWidth <= width.Natural:
+        wAmount.inc
+      else:
+        widgetsAmount.add(y = wAmount)
+        wAmount = 0
+        lineWidth = 0
     infoData = InfoData(data: parts, button1: button1, button2: button2,
         widgetsAmount: widgetsAmount)
     result = infoDialog
