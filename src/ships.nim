@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -477,7 +477,7 @@ proc loadShips*(fileName: string) {.raises: [DataLoadingError],
       protoShipsList[shipIndex] = ship
 
 proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;
-    deathReason: string) {.raises: [KeyError, IOError], tags: [
+    deathReason: string) {.raises: [KeyError, IOError, ReputationError], tags: [
     WriteIOEffect], contractual.} =
   ## Damage the selected module, kill its owner if the module was destroyed
   ##
@@ -494,7 +494,7 @@ proc damageModule*(ship: var ShipRecord; moduleIndex: Natural; damage: Positive;
   body:
 
     proc removeGun(moduleIndex2: Natural; ship: var ShipRecord) {.raises: [
-        KeyError, IOError], tags: [WriteIOEffect], contractual.} =
+        KeyError, IOError, ReputationError], tags: [WriteIOEffect], contractual.} =
       ## Remove a gun from the ship and kill a gunner in it.
       ##
       ## * moduleIndex2 - the index of the gun to remove

@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -44,6 +44,10 @@ type
 
   CantBuyError* = object of CatchableError
     ## Raised when the item is not available for sale
+
+  ReputationError* = object of CatchableError
+    ## Raised when there is some problems with reputations
+
   ShipUpgrade* = enum
     ## Available types of the player's ship's upgrades
     none, durability, maxValue, value

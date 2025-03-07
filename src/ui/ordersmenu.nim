@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -807,8 +807,11 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
   if newTime < 1:
     deleteEvent(eventIndex = eventIndex)
   if argv[1] == "free":
-    gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
-        itemIndex].amount / 10).Natural)
+    try:
+      gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
+          itemIndex].amount / 10).Natural)
+    except:
+      return showError(message = "Can't gain reputation in base.")
     try:
       addMessage(message = "You gave " & itemsList[playerShip.cargo[
           itemIndex].protoIndex].name & " for free to base.",
@@ -818,8 +821,11 @@ proc deliverMedicinesCommand(clientData: cint; interp: PInterp; argc: cint;
     updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
         itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
   else:
-    gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
-        itemIndex].amount / 20).int * (-1))
+    try:
+      gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
+          itemIndex].amount / 20).int * (-1))
+    except:
+      return showError(message = "Can't gain reputation in base.")
     try:
       sellItems(itemIndex = itemIndex, amount = $playerShip.cargo[
           itemIndex].amount)

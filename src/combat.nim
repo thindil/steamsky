@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -385,7 +385,7 @@ proc countMeleeDamage(attacker, defender: MemberData; playerAttack2: bool;
 
 proc characterAttack(attackerIndex2, defenderIndex2: Natural; playerAttack,
     playerAttack2: bool; orderIndex: var int): bool {.raises: [
-    KeyError, CrewNoSpaceError, IOError], tags: [WriteIOEffect], contractual.} =
+    KeyError, CrewNoSpaceError, IOError, ReputationError], tags: [WriteIOEffect], contractual.} =
   ## The attack of the selected crew member on its target
   ##
   ## * attackerIndex2 - the index of the crew member which attacks
@@ -696,7 +696,7 @@ proc countHitLocation(armorIndex, gunnerIndex, gunnerOrder: int;
 proc shooting(ship, enemyShip: var ShipRecord; currentAccuracyBonus, evadeBonus,
     gunnerIndex, shoots, gunnerOrder, speedBonus, ammoIndex: int;
     module: ModuleData; hitLocation: var int): bool {.raises: [
-    KeyError, IOError], tags: [WriteIOEffect, RootEffect], contractual.} =
+    KeyError, IOError, ReputationError], tags: [WriteIOEffect, RootEffect], contractual.} =
   ## Shoot to the enemy ship
   ##
   ## * ship                 - the ship which will shoot
@@ -974,7 +974,7 @@ proc prepareGun(gunnerIndex, shoots, gunnerOrder, currentAccuracyBonus,
       discard
 
 proc attack(ship, enemyShip: var ShipRecord; ammoIndex2: var int; accuracyBonus,
-    speedBonus: int) {.raises: [KeyError, IOError], tags: [
+    speedBonus: int) {.raises: [KeyError, IOError, ReputationError], tags: [
     RootEffect], contractual.} =
   ## Made one attack of one of the ships in the combat
   ##

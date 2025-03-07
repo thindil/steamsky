@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -23,7 +23,7 @@ import std/tables
 import contracts
 import crafts, game, halloffame, messages, missions, shipscrew, types, utils
 
-proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [KeyError], tags: [], contractual.} =
+proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [KeyError, ReputationError], tags: [], contractual.} =
   ## Delete the selected member from the selected ship crew list, update
   ## the ship modules with the new crew list and delete accepted missions
   ## if neccessary.
@@ -56,7 +56,7 @@ proc deleteMember*(memberIndex: Natural; ship: var ShipRecord) {.raises: [KeyErr
           owner.dec
 
 proc death*(memberIndex: Natural; reason: string; ship: var ShipRecord;
-    createBody: bool = true) {.raises: [KeyError, IOError], tags: [
+    createBody: bool = true) {.raises: [KeyError, IOError, ReputationError], tags: [
     WriteIOEffect], contractual.} =
   ## Handle the death of a crew member in ships
   ##

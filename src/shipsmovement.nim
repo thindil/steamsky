@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -23,7 +23,7 @@ import contracts
 import bases, bases2, config, crewinventory, game, game2, gamesaveload, maps,
     messages, ships, shipscargo, shipscrew, shipscrew2, types, utils
 
-proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError],
+proc waitInPlace*(minutes: Positive) {.raises: [KeyError, IOError, ReputationError],
     tags: [WriteIOEffect], contractual.} =
   ## Count the fuel usage when the player waits in the open space
   ##

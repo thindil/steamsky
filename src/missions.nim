@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -25,7 +25,7 @@ import bases, config, events, game, maps, messages, shipscrew, shipscargo,
 
 var acceptedMissions*: seq[MissionData] = @[] ## The list of accepted missions by the player
 
-proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [KeyError], tags: [], contractual.} =
+proc deleteMission*(missionIndex: Natural; failed: bool = true) {.raises: [KeyError, ReputationError], tags: [], contractual.} =
   ## Delete the selected accepted mission, update the player's repuration in
   ## connected bases and update the sky map
   ##
@@ -244,7 +244,7 @@ proc generateMissions*() {.raises: [KeyError], tags: [],
     skyBases[baseIndex].missions.add(y = mission)
   skyBases[baseIndex].missionsDate = gameDate
 
-proc updateMissions*(minutes: Positive) {.raises: [KeyError],
+proc updateMissions*(minutes: Positive) {.raises: [KeyError, ReputationError],
     tags: [], contractual.} =
   ## Update accepted missions timers and delete expired ones.
   ##

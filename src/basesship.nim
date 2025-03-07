@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -23,7 +23,7 @@ import contracts
 import bases, basescargo, basestypes, config, crewinventory, game, items, maps,
     messages, shipscargo, shipscrew, types
 
-proc payForDock*() {.raises: [KeyError], tags: [], contractual.} =
+proc payForDock*() {.raises: [KeyError, ReputationError], tags: [], contractual.} =
   ## Pay daily fee for docking, if the player doesn't have enough money for
   ## pay, reduce the player's reputation in the base
   let baseIndex: BasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
