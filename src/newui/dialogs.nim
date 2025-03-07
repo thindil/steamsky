@@ -17,10 +17,10 @@
 
 ## Provides code related to the game's dialogs, like showing questions, etc.
 
-import std/[os, math, strutils]
+import std/[colors, os, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[game, game2, shipscrew2]
-import coreui, errordialog
+import ../[config, game, game2, shipscrew2]
+import coreui, errordialog, themes
 
 type
   QuestionType* = enum
@@ -41,13 +41,14 @@ type
     tooltip*: string ## The tooltip text associated with the button
     color*: string   ## The color of the button's text
   TextData = object
-    text, color: string
+    text: string
     lines: float
+    widgets: Positive = 1
+    color: Color
   InfoData = object
     data: seq[TextData]
     title: string
     button1, button2: ButtonSettings
-    widgetsAmount: seq[Positive]
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
     icon: -1, tooltip: "",
@@ -228,6 +229,11 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       startIndex: int = 0
       tagIndex: int = text.find(sub = '{')
       parts: seq[TextData] = @[]
+    let
+      theme: ThemeData = try:
+          themesList[gameSettings.interfaceTheme]
+        except:
+          return
     while true:
       if tagIndex == -1:
         tagIndex = text.len
@@ -236,7 +242,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         needLines: float = ceil(x = getTextWidth(text = partText) / width)
       if needLines < 1.0:
         needLines = 1.0
-      parts.add(y = TextData(text: partText, color: "", lines: needLines))
+      parts.add(y = TextData(text: partText, color: theme.colors[foregroundColor], lines: needLines, widgets: 1))
       if tagIndex == text.len:
         break
       startIndex = tagIndex
@@ -248,15 +254,20 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       needLines = ceil(x = getTextWidth(text = partText) / width)
       if needLines < 1.0:
         needLines = 1.0
-      parts.add(y = TextData(text: partText, color: tagName, lines: needLines))
+      parts.add(y = TextData(text: partText, color: case tagName
+        of "gold":
+          theme.colors[goldenColor]
+        of "green":
+          theme.colors[greenColor]
+        of "red:":
+          theme.colors[redColor]
+        else:
+          theme.colors[foregroundColor], lines: needLines, widgets: 1))
       startIndex = tagIndex + tagName.len + 3
       tagIndex = text.find(sub = '{', start = startIndex)
-    var
-      widgetsAmount: seq[Positive] = @[]
-      lineWidth, wAmount: Natural = 0
-    for part in parts:
+    var lineWidth, wAmount: Natural = 0
+    for part in parts.mitems:
       if part.lines > 1:
-        widgetsAmount.add(y = 1)
         lineWidth = 0
         wAmount = 0
         continue
@@ -264,11 +275,10 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       if lineWidth <= width.Natural:
         wAmount.inc
       else:
-        widgetsAmount.add(y = wAmount)
+        part.widgets = wAmount
         wAmount = 0
         lineWidth = 0
-    infoData = InfoData(data: parts, button1: button1, button2: button2,
-        widgetsAmount: widgetsAmount)
+    infoData = InfoData(data: parts, button1: button1, button2: button2)
     result = infoDialog
   except:
     result = setError(message = "Can't set the message.")
