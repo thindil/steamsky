@@ -69,7 +69,7 @@ proc countPrice*(price: var Natural; traderIndex: int;
   if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
     case skyBases[skyMap[playerShip.skyX][
         playerShip.skyY].baseIndex].reputation.level
-    of -24 .. -1:
+    of -24.. -1:
       bonus -= (price.float * 0.05).int
     of 26..50:
       bonus += (price.float * 0.05).int
@@ -245,7 +245,7 @@ proc generateRecruits*() {.raises: [KeyError], tags: [],
   skyBases[baseIndex].recruitDate = gameDate
   skyBases[baseIndex].recruits = baseRecruits
 
-proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [],
+proc gainRep*(baseIndex: BasesRange; points: int) {.raises: [ReputationError],
     tags: [], contractual.} =
   ## Change the player reputation in the selected sky base and factions
   ##
