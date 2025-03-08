@@ -22,9 +22,6 @@ import std/[colors, os, parsecfg, streams, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer, nimalyzer
 import ../[config, game]
 
-const
-  mapIconsAmount: Positive = 18
-
 type
   ColorsNames* = enum
     ## Names of the colors used in the game's themes
@@ -53,6 +50,12 @@ type
       noManufactureIcon, upgradeIcon, noUpgradeIcon, traderIcon, cleanIcon,
       noCleanIcon, arrowUpLeft, arrowUp, arrowUpRight, arrowLeft, arrowRight,
       arrowDownLeft, arrowDown, arrowDownRight, waitIcon, moveToIcon, moveStepIcon
+  MapIconsNames* = enum
+    ## Names of icons used in the game's map
+    playerShipIcon, emptyMapIcon, targetIcon, storyIcon, deliverIcon,
+      destroyIcon, patrolIcon, exploreIcon, passengerIcon, enemyShipIcon,
+      attackOnBaseIcon, enemyPatrolIcon, diseaseIcon, fullDocksIcon,
+      doublePriceIcon, mapTraderIcon, friendlyShipIcon, notVisitedBaseIcon
   ThemeData* = object
     ## Stores data about the game's theme
     name: string
@@ -60,7 +63,7 @@ type
     icons*: array[IconsNames, string]
     colors*: array[ColorsNames, Color]
     fonts*: array[FontsNames, string]
-    mapIcons*: array[mapIconsAmount, string]
+    mapIcons*: array[MapIconsNames, string]
     mapColors*: array[MapColorsNames, Color]
 
 let
@@ -127,11 +130,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   var theme: ThemeData = defaultTheme
   themesList["steamsky"] = theme
   try:
-    const mapIconsNames: array[mapIconsAmount, string] = ["PlayerShipIcon",
-        "EmptyMapIcon", "TargetIcon", "StoryIcon", "DeliverIcon", "DestroyIcon",
-        "PatrolIcon", "ExploreIcon", "PassengerIcon", "EnemyShipIcon",
-        "AttackOnBaseIcon", "EnemyPatrolIcon", "DiseaseIcon", "FullDocksIcon",
-        "DoublePriceIcon", "MapTraderIcon", "FriendlyShipIcon", "NotVisitedBaseIcon"]
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
         var configFile: FileStream = newFileStream(filename = configName, mode = fmRead)
@@ -156,9 +154,6 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 theme.name = entry.value
               of "FileName":
                 theme.fileName = themeDir & DirSep & entry.value
-              of mapIconsNames:
-                let index: Natural = mapIconsNames.find(item = entry.value)
-                theme.mapIcons[index] = entry.value
               else:
                 var validName: bool = true
                 # Check if the option is a color
@@ -190,9 +185,19 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                 # Check if the option is an icon's name
                 if not validName:
                   try:
-                    let index: IconsNames = parseEnum[IconsNames](s = entry.value)
+                    let index: IconsNames = parseEnum[IconsNames](
+                        s = entry.value)
                     theme.icons[index] = themeDir & DirSep &
                         entry.value.unixToNativePath
+                    validName = true
+                  except:
+                    discard
+                # Check if the option is a map's icon's name
+                if not validName:
+                  try:
+                    let index: MapIconsNames = parseEnum[MapIconsNames](
+                        s = entry.value)
+                    theme.mapIcons[index] = entry.value
                     validName = true
                   except:
                     discard
