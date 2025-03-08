@@ -84,7 +84,8 @@ proc showRecruitCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ShowRecruit
   var recruitFrame: string = mainPaned & ".recruitframe"
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if tclEval2(script = "winfo exists " & recruitFrame) == "0":
     tclEval(script = "ttk::frame " & recruitFrame)
     recruitTable = createTable(parent = recruitFrame, headers = @[
@@ -181,9 +182,11 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get recruit index.")
   let
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
-    recruitDialog: string = createDialog(name = ".recruitdialog", title = recruit.name)
+    recruitDialog: string = createDialog(name = ".recruitdialog",
+        title = recruit.name)
   const tabNames: array[4, string] = ["General", "Attributes", "Skills", "Inventory"]
   tclSetVar(varName = "newtab", newValue = tabNames[0])
   var frame: string = recruitDialog & ".buttonbox"
@@ -375,7 +378,8 @@ proc negotiateHireCommand(clientData: cint; interp: PInterp; argc: cint;
   tclSetVar(varName = "daily", newValue = $dailyPayment)
   tclSetVar(varName = "percent", newValue = $tradePayment)
   let
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
   var newCost: int = recruit.price - ((dailyPayment - recruit.payment) * 50) -
       (tradePayment * 5_000)
@@ -448,7 +452,8 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get daily payment")
   let
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
     recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
     contractBox: string = dialogName & ".contract"
     contractLength: int = try:
@@ -458,7 +463,7 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
   var
     newCost: int = recruit.price - ((dailyPayment - recruit.payment) * 50) -
       (tradePayment * 5_000)
-    contractLength2 = 0
+    contractLength2: int = 0
   case contractLength
   of 1:
     newCost = newCost - (recruit.price.float * 0.1).int
@@ -506,9 +511,9 @@ proc showRecruitTabCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowRecruitTab
-  const recruitCanvas = ".recruitdialog.canvas"
+  const recruitCanvas: string = ".recruitdialog.canvas"
   tclEval(script = recruitCanvas & " delete info")
-  let frame = recruitCanvas & "." & tclGetVar(varName = "newtab")
+  let frame: string = recruitCanvas & "." & tclGetVar(varName = "newtab")
   tclEval(script = recruitCanvas & " create window 32 0 -anchor nw -window " &
       frame & " -tag info")
   tclEval(script = "update")
@@ -531,30 +536,31 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## Negotiate
   let
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-    recruit = skyBases[baseIndex].recruits[recruitIndex]
-    negotiateDialog = createDialog(name = ".negotiatedialog",
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
+    recruit: RecruitData = skyBases[baseIndex].recruits[recruitIndex]
+    negotiateDialog: string = createDialog(name = ".negotiatedialog",
         title = "Negotiate with " & recruit.name)
-  var labelFrame = negotiateDialog & ".dailylbl"
+  var labelFrame: string = negotiateDialog & ".dailylbl"
   tclEval(script = "ttk::frame " & labelFrame)
-  var label = labelFrame & ".label"
+  var label: string = labelFrame & ".label"
   tclEval(script = "ttk::label " & label & " -text {Daily payment:}")
   tclEval(script = "grid " & label & " -pady {5 0}")
   tclSetVar(varName = "daily", newValue = $recruit.payment)
-  var spinBox = labelFrame & ".field"
+  var spinBox: string = labelFrame & ".field"
   tclEval(script = "ttk::spinbox " & spinBox & " -from 0 -to " & $(
       recruit.payment * 2) &
       " -width 5 -textvariable daily -validate key -validatecommand {ValidateNegotiate %W %P} -command {ValidateNegotiate " &
       labelFrame & ".field}")
-  let frame = negotiateDialog & ".buttonbox"
+  let frame: string = negotiateDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
-  let dialogCloseButton = negotiateDialog & ".buttonbox.button"
+  let dialogCloseButton: string = negotiateDialog & ".buttonbox.button"
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -text Close -command {CloseDialog " & negotiateDialog & "} -image cancelicon -style Dialogred.TButton")
   tclEval(script = "bind " & spinBox & " <Escape> {" & dialogCloseButton & " invoke;break}")
   tclEval(script = "grid " & spinBox & " -row 0 -column 1")
   tclEval(script = "grid " & labelFrame)
-  var scale = negotiateDialog & ".daily"
+  var scale: string = negotiateDialog & ".daily"
   tclEval(script = "ttk::scale " & scale &
       " -from 0 -command NegotiateHire -length 250 -to " & $(recruit.payment *
       2) & " -variable daily")
@@ -579,19 +585,19 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   label = negotiateDialog & ".contractlbl"
   tclEval(script = "ttk::label " & label & " -text {Contract time:}")
   tclEval(script = "grid " & label)
-  let contractBox = negotiateDialog & ".contract"
+  let contractBox: string = negotiateDialog & ".contract"
   tclEval(script = "ttk::combobox " & contractBox & " -state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]")
   tclEval(script = "grid " & contractBox)
   tclEval(script = "bind " & contractBox & " <<ComboboxSelected>> {NegotiateHire}")
   tclEval(script = "bind " & scale & " <Tab> {focus " & contractBox & ";break}")
   tclEval(script = "bind " & scale & " <Escape> {" & negotiateDialog & ".buttonbox.button invoke;break}")
   tclEval(script = contractBox & " current 0")
-  let hireButton = frame & ".hirebutton"
+  let hireButton: string = frame & ".hirebutton"
   tclEval(script = "ttk::button " & hireButton & " -text Hire -command {Hire} -image negotiate2icon -style Dialoggreen.TButton")
   tclEval(script = "tooltip::tooltip " & hireButton & " \"Hire the selected recruit.\"")
   tclEval(script = "bind " & contractBox & " <Tab> {focus " & hireButton & ";break}")
   tclEval(script = "bind " & contractBox & " <Escape> {" & negotiateDialog & ".buttonbox.button invoke;break}")
-  let moneyInfo = negotiateDialog & ".cost"
+  let moneyInfo: string = negotiateDialog & ".cost"
   tclEval(script = "text " & moneyInfo & " -height 2 -width 22 -wrap char")
   tclEval(script = "grid " & moneyInfo)
   var cost: Natural = recruit.price
@@ -605,7 +611,7 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = moneyInfo & " tag configure gold -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-goldenyellow)"))
-  let moneyIndex2 = findItem(inventory = playerShip.cargo,
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
       protoIndex = moneyIndex)
   if moneyIndex > -1:
     tclEval(script = moneyInfo & " insert end {You have }")
@@ -642,9 +648,9 @@ type RecruitsSortOrders = enum
   none, nameAsc, nameDesc, genderAsc, genderDesc, factionAsc, factionDesc,
     priceAsc, priceDesc, attributeAsc, attributeDesc, skillAsc, skillDesc
 
-const defaultRecruitsSortOrder = none
+const defaultRecruitsSortOrder: RecruitsSortOrders = none
 
-var recruitsSortOrder = defaultRecruitsSortOrder
+var recruitsSortOrder: RecruitsSortOrders = defaultRecruitsSortOrder
 
 proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -661,7 +667,7 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortRecruits x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: Natural = try:
         (if argv[1] == "-1": Positive.high else: getColumnNumber(
             table = recruitTable, xPosition = ($argv[1]).parseInt))
       except:
@@ -709,7 +715,8 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
     attribute: string
     skill: string
     id: Natural = 0
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   var localRecruits: seq[LocalRecruitData] = @[]
   for index, recruit in skyBases[baseIndex].recruits:
     localRecruits.add(y = LocalRecruitData(name: recruit.name,
@@ -816,8 +823,8 @@ proc validateNegotiateCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Field is Tcl path to the field which will be validated, value is
   ## the new value of the field to validate
   let
-    spinBox = $argv[1]
-    value = (if argc == 3: $argv[2] else: tclEval2(script = spinBox & " get"))
+    spinBox: string = $argv[1]
+    value: string = (if argc == 3: $argv[2] else: tclEval2(script = spinBox & " get"))
   if value.len == 0:
     tclSetResult(value = "1")
     return tclOk
