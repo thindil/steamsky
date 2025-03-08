@@ -822,7 +822,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
         height.float).floor.Natural + 4
   let colWidth: Positive = try:
-      getTextWidth(text = theme.mapIcons[1]).Positive + 4
+      getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 4
     except:
       dialog = setError(message = "Can't count map column's width.")
       return
@@ -872,35 +872,35 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
           row(x = (col * (colWidth - 2)).float, y = (curRow * (height -
               2)).float, w = colWidth.float, h = height.float):
             var
-              mapChar: string = theme.mapIcons[1]
+              mapChar: string = theme.mapIcons[emptyMapIcon]
               mapColor: Color = theme.mapColors[mapUnvisitedColor]
             if x == playerShip.skyX and y == playerShip.skyY:
               skyMap[x][y].visited = true
-              mapChar = theme.mapIcons[0]
+              mapChar = theme.mapIcons[playerShipIcon]
               mapColor = theme.mapColors[mapDefaultColor]
             else:
               if x == playerShip.destinationX and y == playerShip.destinationY:
-                mapChar = theme.mapIcons[2]
+                mapChar = theme.mapIcons[targetIcon]
                 mapColor = theme.mapColors[mapDefaultColor]
               elif currentStory.index.len > 0 and (x == storyX and y == storyY):
-                mapChar = theme.mapIcons[3]
+                mapChar = theme.mapIcons[storyIcon]
                 mapColor = theme.mapColors[mapGreenColor]
               elif skyMap[x][y].missionIndex > -1:
                 case acceptedMissions[skyMap[x][y].missionIndex].mType
                 of deliver:
-                  mapChar = theme.mapIcons[4]
+                  mapChar = theme.mapIcons[deliverIcon]
                   mapColor = theme.mapColors[mapYellowColor]
                 of destroy:
-                  mapChar = theme.mapIcons[5]
+                  mapChar = theme.mapIcons[destroyIcon]
                   mapColor = theme.mapColors[mapRedColor]
                 of patrol:
-                  mapChar = theme.mapIcons[6]
+                  mapChar = theme.mapIcons[patrolIcon]
                   mapColor = theme.mapColors[mapLimeColor]
                 of explore:
-                  mapChar = theme.mapIcons[7]
+                  mapChar = theme.mapIcons[exploreIcon]
                   mapColor = theme.mapColors[mapGreenColor]
                 of passenger:
-                  mapChar = theme.mapIcons[8]
+                  mapChar = theme.mapIcons[passengerIcon]
                   mapColor = theme.mapColors[mapCyanColor]
               elif skyMap[x][y].eventIndex > -1:
                 if skyMap[x][y].eventIndex > eventsList.high:
@@ -908,33 +908,33 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 else:
                   case eventsList[skyMap[x][y].eventIndex].eType
                   of enemyShip:
-                    mapChar = theme.mapIcons[9]
+                    mapChar = theme.mapIcons[enemyShipIcon]
                     mapColor = theme.mapColors[mapRedColor]
                   of attackOnBase:
-                    mapChar = theme.mapIcons[10]
+                    mapChar = theme.mapIcons[attackOnBaseIcon]
                     mapColor = theme.mapColors[mapRed2Color]
                   of enemyPatrol:
-                    mapChar = theme.mapIcons[11]
+                    mapChar = theme.mapIcons[enemyPatrolIcon]
                     mapColor = theme.mapColors[mapRed3Color]
                   of disease:
-                    mapChar = theme.mapIcons[12]
+                    mapChar = theme.mapIcons[diseaseIcon]
                     mapColor = theme.mapColors[mapYellowColor]
                   of fullDocks:
-                    mapChar = theme.mapIcons[13]
+                    mapChar = theme.mapIcons[fullDocksIcon]
                     mapColor = theme.mapColors[mapCyanColor]
                   of doublePrice:
-                    mapChar = theme.mapIcons[14]
+                    mapChar = theme.mapIcons[doublePriceIcon]
                     mapColor = theme.mapColors[mapLimeColor]
                   of trader:
-                    mapChar = theme.mapIcons[15]
+                    mapChar = theme.mapIcons[mapTraderIcon]
                     mapColor = theme.mapColors[mapGreenColor]
                   of friendlyShip:
-                    mapChar = theme.mapIcons[16]
+                    mapChar = theme.mapIcons[friendlyShipIcon]
                     mapColor = theme.mapColors[mapGreen2Color]
                   of EventsTypes.none, baseRecovery:
                     discard
               elif skyMap[x][y].baseIndex > 0:
-                mapChar = theme.mapIcons[17]
+                mapChar = theme.mapIcons[notVisitedBaseIcon]
                 if skyBases[skyMap[x][y].baseIndex].known:
                   mapColor = theme.mapColors[mapDefaultColor]
                   if skyBases[skyMap[x][y].baseIndex].visited.year > 0:
