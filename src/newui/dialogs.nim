@@ -43,12 +43,12 @@ type
   TextData = object
     text: string
     lines: float
-    widgets: Positive = 1
     color: Color
   InfoData = object
     data: seq[TextData]
     title: string
     button1, button2: ButtonSettings
+    widgetsAmount: seq[Positive]
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
     icon: -1, tooltip: "",
@@ -242,7 +242,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         needLines: float = ceil(x = getTextWidth(text = partText) / width)
       if needLines < 1.0:
         needLines = 1.0
-      parts.add(y = TextData(text: partText, color: theme.colors[foregroundColor], lines: needLines, widgets: 1))
+      parts.add(y = TextData(text: partText, color: theme.colors[foregroundColor], lines: needLines))
       if tagIndex == text.len:
         break
       startIndex = tagIndex
@@ -262,12 +262,15 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         of "red:":
           theme.colors[redColor]
         else:
-          theme.colors[foregroundColor], lines: needLines, widgets: 1))
+          theme.colors[foregroundColor], lines: needLines))
       startIndex = tagIndex + tagName.len + 3
       tagIndex = text.find(sub = '{', start = startIndex)
-    var lineWidth, wAmount: Natural = 0
+    var
+      widgetsAmount: seq[Positive] = @[]
+      lineWidth, wAmount: Natural = 0
     for part in parts.mitems:
       if part.lines > 1:
+        widgetsAmount.add(y = 1)
         lineWidth = 0
         wAmount = 0
         continue
@@ -275,10 +278,11 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       if lineWidth <= width.Natural:
         wAmount.inc
       else:
-        part.widgets = wAmount
+        widgetsAmount.add(y = wAmount)
         wAmount = 0
         lineWidth = 0
-    infoData = InfoData(data: parts, button1: button1, button2: button2)
+    infoData = InfoData(data: parts, button1: button1, button2: button2,
+        widgetsAmount: widgetsAmount)
     result = infoDialog
   except:
     result = setError(message = "Can't set the message.")
