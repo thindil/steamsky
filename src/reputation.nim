@@ -52,17 +52,34 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
   ## * amount    - the amount of the reputation to be added or removed from
   ##               the player's reputations' levels
   let factionIndex: string = skyBases[baseIndex].owner
-  var reputationIndex: int = -1
+  var repIndex: int = -1
   for index, reputation in reputationsList:
     if reputation.factionIndex == factionIndex:
-      reputationIndex = index
+      repIndex = index
       break
-  if reputationIndex == -1:
+  if repIndex == -1:
     raise newException(exceptn = ReputationError,
         message = "Can't find index of the faction")
   # Don't lose reputation below the lowest value
-  if reputationsList[reputationIndex].reputation.level == -100 and amount < 0:
+  if reputationsList[repIndex].reputation.level == -100 and amount < 0:
     return
   # Don't gain reputation above the highest value
-  if reputationsList[reputationIndex].reputation.level == 100 and amount > 0:
+  if reputationsList[repIndex].reputation.level == 100 and amount > 0:
     return
+  # Gain or lose reputation with the faction
+  var newPoints: int = reputationsList[repIndex].reputation.experience + (
+      amount.float * newGameSettings.reputationBonus).int
+  while newPoints < 0:
+    reputationsList[repIndex].reputation.level.dec
+    newPoints += abs(x = skyBases[baseIndex].reputation.level * 5)
+    if newPoints >= 0:
+      reputationsList[repIndex].reputation.experience = newPoints
+      return
+  while newPoints > abs(x = reputationsList[repIndex].reputation.level * 5):
+    newPoints -= abs(x = reputationsList[repIndex].reputation.level * 5)
+    reputationsList[repIndex].reputation.level.inc
+  reputationsList[repIndex].reputation.experience = newPoints
+  # Gain or lose reputation with other factions, depending if they are friends
+  # or enemies of the main faction
+  for reputation in reputationsList.mitems:
+    echo reputation.factionIndex
