@@ -197,12 +197,12 @@ proc completeMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect], c
   ##
   ## Returns the modified parameters dialog if error happened.
   try:
+    closePopup()
     finishMission(missionIndex = skyMap[playerShip.skyX][
         playerShip.skyY].missionIndex)
   except MissionFinishingError:
-    discard
-#    showInfo(text = getCurrentExceptionMsg(),
-#        title = "Can't finish the mission")
+    dialog = setInfo(text = getCurrentExceptionMsg(),
+        title = "Can't finish the mission")
   except:
     dialog = setError(message = "Can't finish the mission.")
 

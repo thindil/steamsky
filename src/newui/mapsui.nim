@@ -809,6 +809,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showShipOrders(dialog = dialog)
   showDestinationMenu(dialog = dialog)
   showMessage(dialog = dialog)
+  showInfo(dialog = dialog)
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
