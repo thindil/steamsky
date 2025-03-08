@@ -176,6 +176,10 @@ type
     NK_CURSOR_RESIZE_TOP_LEFT_DOWN_RIGHT,
     NK_CURSOR_RESIZE_TOP_RIGHT_DOWN_LEFT,
     NK_CURSOR_COUNT
+  nk_button_behavior* = enum
+    ## Internal Nuklear type
+    NK_BUTTON_DEFAULT,
+    NK_BUTTON_REPEATER
 
 # -------
 # Objects

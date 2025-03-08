@@ -934,6 +934,15 @@ proc hasMouseClickDownInRect(id: Buttons; rect: nk_rect; down: nk_bool): bool {.
     ## A binding to Nuklear's function. Internal use only
   return nk_input_has_mouse_click_down_in_rect(i = ctx.input.addr, id = id, rect = rect, down = down)
 
+# -------
+# Buttons
+# -------
+proc nkDoButtonSymbol(state: ptr nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
+  symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
+  `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [], contractual.} =
+  ## Draw a button with the selected symbol on it
+  return true
+
 # -----
 # Panel
 # -----
