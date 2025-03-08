@@ -201,7 +201,7 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowDynamic(height = 30, cols = 1)
       labelButton(title = "Close"):
         closePopup()
         dialog = none
@@ -242,7 +242,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         needLines: float = ceil(x = getTextWidth(text = partText) / width)
       if needLines < 1.0:
         needLines = 1.0
-      parts.add(y = TextData(text: partText, color: theme.colors[foregroundColor], lines: needLines))
+      parts.add(y = TextData(text: partText, color: theme.colors[
+          foregroundColor], lines: needLines))
       if tagIndex == text.len:
         break
       startIndex = tagIndex
@@ -306,9 +307,17 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
     popup(pType = staticPopup, title = infoData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
-      wrapLabel(str = infoData.data[0].text)
-      setLayoutRowDynamic(height = 30, cols = 2)
+      var index: Natural = 0
+      for wAmount in infoData.widgetsAmount:
+        if wAmount == 1:
+          setLayoutRowDynamic(height = 30 * infoData.data[index].lines, cols = 1)
+          wrapLabel(str = infoData.data[index].text)
+        else:
+          setLayoutRowDynamic(height = 30, cols = wAmount)
+          for index2 in index..index + wAmount - 1:
+            wrapLabel(str = infoData.data[index2].text)
+        index += wAmount
+      setLayoutRowDynamic(height = 30, cols = 3)
       labelButton(title = "Close"):
         closePopup()
         dialog = none
