@@ -20,8 +20,8 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, bases2, basestypes, crewinventory, game, game2, maps,
-    messages, missions, missions2, shipscrew, shipsmovement, stories, types, utils]
+import ../[bases, bases2, basestypes, combat, crewinventory, game, game2, maps,
+    messages, missions, missions2, shipscrew, shipsmovement, stories, stories2, types, utils]
 import coreui, dialogs, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
@@ -373,6 +373,57 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
     labelButton(title = "Loot"):
       discard
 
+proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Execute the current story step
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  closePopup()
+  var step: StepData = try:
+        (if currentStory.currentStep == -1: storiesList[
+        currentStory.index].startingStep elif currentStory.currentStep >
+        -1: storiesList[currentStory.index].steps[
+        currentStory.currentStep] else: storiesList[
+            currentStory.index].finalStep)
+      except:
+        dialog = setError(message = "Can't get the current story step.")
+        return
+  if playerShip.speed != docked and step.finishCondition == askInBase:
+    let message: string = try:
+        dockShip(docking = true)
+      except:
+        dialog = setError(message = "Can't dock to the base.")
+        return
+    if message.len > 0:
+      dialog = setInfo(text = message, title = "Can't dock to base")
+      return
+  try:
+    if progressStory():
+      let tokens: seq[string] = currentStory.data.split(sep = ';')
+      case step.finishCondition
+      of destroyShip:
+        if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
+          return
+      else:
+        discard
+      if currentStory.currentStep > -3:
+        step = (if currentStory.currentStep > -1: storiesList[
+            currentStory.index].steps[currentStory.currentStep] else: storiesList[
+            currentStory.index].finalStep)
+        for text in step.texts:
+          if currentStory.finishedStep == text.condition:
+            dialog = setInfo(text = text.text, title = "Story")
+            break
+      else:
+        discard
+        # finishStory()
+    else:
+      dialog = setInfo(text = step.failText, title = "Story")
+      currentStory.showText = false
+  except:
+    dialog = setError(message = "Can't progress the current story.")
+
 proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the player's ship's orders menu
@@ -415,7 +466,7 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                 labelButton(title = "Ask for " & itemsList[getStepData(
                     finishData = step.finishData,
                     name = "item").parseInt].name):
-                  discard
+                  executeStory(dialog = dialog)
               except:
                 dialog = setError(message = "Can't add the story button.")
                 return
