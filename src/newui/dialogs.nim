@@ -25,7 +25,7 @@ import coreui, errordialog, themes
 type
   QuestionType* = enum
     ## Types of questions, used to set actions to the player's response
-    deleteSave, showDeadStats, quitGame, resignGame
+    deleteSave, showDeadStats, quitGame, resignGame, homeBase
   QuestionData = object
     question, data: string
     qType: QuestionType
@@ -147,6 +147,8 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           except:
             dialog = setError(message = "Can't kill the player.")
         of showDeadStats:
+          discard
+        of homeBase:
           discard
       labelButton(title = "No"):
         if questionData.qType == showDeadStats:

@@ -20,8 +20,8 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases2, basestypes, crewinventory, game, game2, maps, messages,
-    missions, missions2, shipscrew, shipsmovement, stories, types, utils]
+import ../[bases, bases2, basestypes, crewinventory, game, game2, maps,
+    messages, missions, missions2, shipscrew, shipsmovement, stories, types, utils]
 import coreui, dialogs, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
@@ -190,14 +190,15 @@ proc dockingOrder(escape: bool = false; dialog: var GameDialog) {.raises: [],
   dialog = none
   closePopup()
 
-proc completeMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc completeMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Complete the current mission
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameters dialog if error happened.
+  closePopup()
   try:
-    closePopup()
     finishMission(missionIndex = skyMap[playerShip.skyX][
         playerShip.skyY].missionIndex)
   except MissionFinishingError:
@@ -205,6 +206,24 @@ proc completeMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect], c
         title = "Can't finish the mission")
   except:
     dialog = setError(message = "Can't finish the mission.")
+
+proc setAsHome(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the current base as the home base
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  closePopup()
+  let traderIndex: int = findMember(order = talk)
+  var price: Natural = 1_000
+  try:
+    countPrice(price = price, traderIndex = traderIndex)
+  except:
+    dialog = setError(message = "Can't count the price for set as home.")
+    return
+  dialog = setQuestion(question = "Are you sure want to change your home base (it cost " &
+      $price & " " & moneyName & ")?", qType = homeBase, data = $price)
 
 proc showDockedCommands(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -349,7 +368,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
           discard
     if playerShip.homeBase != baseIndex:
       labelButton(title = "Set as home"):
-        discard
+        setAsHome(dialog = dialog)
   if skyBases[baseIndex].population == 0:
     labelButton(title = "Loot"):
       discard
