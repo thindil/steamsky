@@ -60,26 +60,33 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
   if repIndex == -1:
     raise newException(exceptn = ReputationError,
         message = "Can't find index of the faction")
-  # Don't lose reputation below the lowest value
-  if reputationsList[repIndex].reputation.level == -100 and amount < 0:
-    return
-  # Don't gain reputation above the highest value
-  if reputationsList[repIndex].reputation.level == 100 and amount > 0:
-    return
-  # Gain or lose reputation with the faction
-  var newPoints: int = reputationsList[repIndex].reputation.experience + (
-      amount.float * newGameSettings.reputationBonus).int
-  while newPoints < 0:
-    reputationsList[repIndex].reputation.level.dec
-    newPoints += abs(x = skyBases[baseIndex].reputation.level * 5)
-    if newPoints >= 0:
-      reputationsList[repIndex].reputation.experience = newPoints
+
+  proc updateRep(index: Natural) {.raises: [], tags: [], contractual.} =
+    ## Update reputation in the selected faction
+    ##
+    ## * index  - the index of the reputation which will be updated
+    # Don't lose reputation below the lowest value
+    if reputationsList[index].reputation.level == -100 and amount < 0:
       return
-  while newPoints > abs(x = reputationsList[repIndex].reputation.level * 5):
-    newPoints -= abs(x = reputationsList[repIndex].reputation.level * 5)
-    reputationsList[repIndex].reputation.level.inc
-  reputationsList[repIndex].reputation.experience = newPoints
+    # Don't gain reputation above the highest value
+    if reputationsList[index].reputation.level == 100 and amount > 0:
+      return
+    # Gain or lose reputation with the faction
+    var newPoints: int = reputationsList[index].reputation.experience + (
+        amount.float * newGameSettings.reputationBonus).int
+    while newPoints < 0:
+      reputationsList[repIndex].reputation.level.dec
+      newPoints += abs(x = reputationsList[index].reputation.level * 500)
+      if newPoints >= 0:
+        reputationsList[index].reputation.experience = newPoints
+        return
+    while newPoints > abs(x = reputationsList[index].reputation.level * 500):
+      newPoints -= abs(x = reputationsList[index].reputation.level * 500)
+      reputationsList[index].reputation.level.inc
+    reputationsList[index].reputation.experience = newPoints
+
+  updateRep(index = repIndex)
   # Gain or lose reputation with other factions, depending if they are friends
   # or enemies of the main faction
-  for reputation in reputationsList.mitems:
+  for index, reputation in reputationsList:
     echo reputation.factionIndex
