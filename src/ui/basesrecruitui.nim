@@ -466,19 +466,18 @@ proc hireCommand(clientData: cint; interp: PInterp; argc: cint;
     contractLength2: int = 0
   case contractLength
   of 1:
-    newCost = newCost - (recruit.price.float * 0.1).int
+    newCost -= (recruit.price.float * 0.1).int
     contractLength2 = 100
   of 2:
-    newCost = newCost - (recruit.price.float * 0.5).int
+    newCost -= (recruit.price.float * 0.5).int
     contractLength2 = 30
   of 3:
-    newCost = newCost - (recruit.price.float * 0.75).int
+    newCost -= (recruit.price.float * 0.75).int
     contractLength2 = 20
   of 4:
-    newCost = newCost - (recruit.price.float * 0.9).int
+    newCost -= (recruit.price.float * 0.9).int
     contractLength2 = 10
   else:
-    newCost = newCost
     contractLength2 = -1
   if newCost < 1:
     newCost = 1
@@ -739,63 +738,51 @@ proc sortRecruitsCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of genderAsc:
       if x.gender < y.gender:
         return 1
-      else:
-        return -1
+      return -1
     of genderDesc:
       if x.gender > y.gender:
         return 1
-      else:
-        return -1
+      return -1
     of factionAsc:
       if x.faction < y.faction:
         return 1
-      else:
-        return -1
+      return -1
     of factionDesc:
       if x.faction > y.faction:
         return 1
-      else:
-        return -1
+      return -1
     of priceAsc:
       if x.price < y.price:
         return 1
-      else:
-        return -1
+      return -1
     of priceDesc:
       if x.price > y.price:
         return 1
-      else:
-        return -1
+      return -1
     of attributeAsc:
       if x.attribute < y.attribute:
         return 1
-      else:
-        return -1
+      return -1
     of attributeDesc:
       if x.attribute > y.attribute:
         return 1
-      else:
-        return -1
+      return -1
     of skillAsc:
       if x.skill < y.skill:
         return 1
-      else:
-        return -1
+      return -1
     of skillDesc:
       if x.skill > y.skill:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
 
