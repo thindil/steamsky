@@ -19,7 +19,7 @@
 
 import std/[colors, os, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, game2, shipscrew2]
+import ../[config, crewinventory, game, game2, maps, shipscargo, shipscrew2]
 import coreui, errordialog, themes
 
 type
@@ -85,6 +85,25 @@ proc setQuestion*(question: string; qType: QuestionType;
   except:
     result = setError(message = "Can't set the question.")
 
+proc setMessage*(message, title: string): GameDialog {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the data related to the current in-game message
+  ##
+  ## * message - the message which will be show to the player
+  ## * title   - the title of the message's dialog
+  ##
+  ## Returns the messageDialog if the message was set, otherwise
+  ## errorDialog
+  setDialog()
+  try:
+    var needLines: float = ceil(x = getTextWidth(text = message) / 250)
+    if needLines < 1.0:
+      needLines = 1.0
+    messageData = MessageData(text: message, title: title, lines: needLines)
+    result = messageDialog
+  except:
+    result = setError(message = "Can't set the message.")
+
 proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the current question to the player
@@ -149,7 +168,27 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
         of showDeadStats:
           discard
         of homeBase:
-          discard
+          let moneyIndex2: int = findItem(inventory = playerShip.cargo,
+              protoIndex = moneyIndex)
+          if moneyIndex2 == -1:
+            dialog = setMessage(message = "You don't have any " & moneyName &
+                " for change ship home base.", title = "No money")
+            return
+          let price: Natural = questionData.data.parseInt
+          if playerShip.cargo[moneyIndex2].amount < price:
+            dialog = setMessage(message = "You don't have enough " & moneyName &
+                " for change ship home base.", title = "No money")
+            return
+          playerShip.homeBase = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+          updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
+          addMessage(message = "You changed your ship home base to: " & skyBases[
+              playerShip.homeBase].name, mType = otherMessage)
+          let traderIndex: int = findMember(order = talk)
+          gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+          try:
+            updateGame(minutes = 10)
+          except:
+            return showError(message = "Can't update the game.")
       labelButton(title = "No"):
         if questionData.qType == showDeadStats:
           setMainMenu(dialog = dialog, state = state)
@@ -162,25 +201,6 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
   except:
     answered = true
     dialog = setError(message = "Can't show the question")
-
-proc setMessage*(message, title: string): GameDialog {.raises: [],
-    tags: [RootEffect], contractual.} =
-  ## Set the data related to the current in-game message
-  ##
-  ## * message - the message which will be show to the player
-  ## * title   - the title of the message's dialog
-  ##
-  ## Returns the messageDialog if the message was set, otherwise
-  ## errorDialog
-  setDialog()
-  try:
-    var needLines: float = ceil(x = getTextWidth(text = message) / 250)
-    if needLines < 1.0:
-      needLines = 1.0
-    messageData = MessageData(text: message, title: title, lines: needLines)
-    result = messageDialog
-  except:
-    result = setError(message = "Can't set the message.")
 
 proc showMessage*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
