@@ -326,22 +326,22 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
               try:
                 labelButton(title = "Complete destroy " & protoShipsList[
                     mission.shipIndex].name):
-                  discard
+                  completeMission(dialog = dialog)
               except:
                 dialog = setError(message = "Can't add mission button.")
                 return
           of patrol:
             if mission.finished:
               labelButton(title = "Complete Patrol area mission"):
-                discard
+                completeMission(dialog = dialog)
           of explore:
             if mission.finished:
               labelButton(title = "Complete Explore area mission"):
-                discard
+                completeMission(dialog = dialog)
           of passenger:
             if mission.finished:
               labelButton(title = "Complete Transport passenger mission"):
-                discard
+                completeMission(dialog = dialog)
         if mission.startBase == baseIndex:
           missionsLimit.dec
       if missionsLimit > 0:
@@ -483,7 +483,7 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                   try:
                     labelButton(title = "Complete delivery of " &
                         itemsList[mission.itemIndex].name):
-                      discard
+                      completeMission(dialog = dialog)
                   except:
                     dialog = setError(message = "Can't add accepted mission button.")
                     return
@@ -491,19 +491,19 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                   try:
                     labelButton(title = "Complete destroy " &
                         protoShipsList[mission.shipIndex].name):
-                      discard
+                      completeMission(dialog = dialog)
                   except:
                     dialog = setError(message = "Can't add accepted mission button.")
                     return
                 of patrol:
                   labelButton(title = "Complete Patrol area mission"):
-                    discard
+                    completeMission(dialog = dialog)
                 of explore:
                   labelButton(title = "Complete Explore area mission"):
-                    discard
+                    completeMission(dialog = dialog)
                 of passenger:
                   labelButton(title = "Complete Transport passenger mission"):
-                    discard
+                    completeMission(dialog = dialog)
           else:
             for mission in acceptedMissions:
               if mission.targetX == playerShip.skyX and mission.targetY ==
