@@ -19,7 +19,8 @@
 
 import std/[colors, os, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crewinventory, game, game2, maps, shipscargo, shipscrew2]
+import ../[config, crewinventory, game, game2, maps, messages, shipscargo,
+    shipscrew, shipscrew2, types]
 import coreui, errordialog, themes
 
 type
@@ -179,16 +180,20 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
             dialog = setMessage(message = "You don't have enough " & moneyName &
                 " for change ship home base.", title = "No money")
             return
-          playerShip.homeBase = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-          updateCargo(ship = playerShip, cargoIndex = moneyIndex2, amount = -price)
-          addMessage(message = "You changed your ship home base to: " & skyBases[
-              playerShip.homeBase].name, mType = otherMessage)
+          playerShip.homeBase = skyMap[playerShip.skyX][
+              playerShip.skyY].baseIndex
+          updateCargo(ship = playerShip, cargoIndex = moneyIndex2,
+              amount = -price)
+          addMessage(message = "You changed your ship home base to: " &
+              skyBases[playerShip.homeBase].name, mType = otherMessage)
           let traderIndex: int = findMember(order = talk)
-          gainExp(amount = 1, skillNumber = talkingSkill, crewIndex = traderIndex)
+          gainExp(amount = 1, skillNumber = talkingSkill,
+              crewIndex = traderIndex)
           try:
             updateGame(minutes = 10)
           except:
-            return showError(message = "Can't update the game.")
+            dialog = setError(message = "Can't update the game.")
+            return
       labelButton(title = "No"):
         if questionData.qType == showDeadStats:
           setMainMenu(dialog = dialog, state = state)
