@@ -937,11 +937,35 @@ proc hasMouseClickDownInRect(id: Buttons; rect: nk_rect; down: nk_bool): bool {.
 # -------
 # Buttons
 # -------
+proc nkDoButton(state: ptr nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
+  style: ptr nk_style_button; `in`: ptr nk_input; behavior: nk_button_behavior;
+  content: NimRect): bool {.raises: [], tags: [], contractual.} =
+  ## Draw a button. Internal use only
+  return true
+
 proc nkDoButtonSymbol(state: ptr nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
   `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [], contractual.} =
-  ## Draw a button with the selected symbol on it
-  return true
+  ## Draw a button with the selected symbol on it. Internal use only
+  ##
+  ## * state    - the state of the button
+  ## * out      - the command buffer in which the button will be drawn
+  ## * bounds   - the bounds of the button
+  ## * symbol   - the symbol to draw on the button
+  ## * behavior - the behavior of the button, normal or repeater
+  ## * style    - the style of the button
+  ## * in       - the user input
+  ## * font     - the font used to draw on the button
+  ##
+  ## Returns true if button was properly drawn, otherwise false
+  require:
+    state != nil
+    style != nil
+    font != nil
+  body:
+    var content: NimRect
+    result = nkDoButton(state = state, `out` = `out`, r = bounds, style = style,
+      `in` = `in`, behavior = behavior, content = content)
 
 # -----
 # Panel
