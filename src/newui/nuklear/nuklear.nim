@@ -937,11 +937,46 @@ proc hasMouseClickDownInRect(id: Buttons; rect: nk_rect; down: nk_bool): bool {.
 # -------
 # Buttons
 # -------
+proc nkButtonBehavior(state: ptr nk_flags; r: NimRect; i: ptr nk_input;
+  behavior: nk_button_behavior): bool {.raises: [], tags: [], contractual.} =
+  ## Set the button's behavior. Internal use only
+  return true
+
+
 proc nkDoButton(state: ptr nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
   style: ptr nk_style_button; `in`: ptr nk_input; behavior: nk_button_behavior;
-  content: NimRect): bool {.raises: [], tags: [], contractual.} =
+  content: var NimRect): bool {.raises: [], tags: [], contractual.} =
   ## Draw a button. Internal use only
-  return true
+  ##
+  ## * state    - the state of the button
+  ## * out      - the command buffer in which the button will be drawn
+  ## * r        - the bounds of the button
+  ## * style    - the style of the button
+  ## * in       - the user input
+  ## * behavior - the behavior of the button, normal or repeater
+  ## * content  - the space of the button's content
+  ##
+  ## Returns true if button was properly drawn, otherwise false
+  require:
+    style != nil
+    state != nil
+  body:
+    if `out` == nil or style == nil:
+      return false
+
+    # calculate button content space
+    content.x = r.x + style.padding.x + style.border + style.rounding
+    content.y = r.y + style.padding.y + style.border + style.rounding
+    content.w = r.w - (2 * (style.padding.x + style.border + style.rounding))
+    content.h = r.h - (2 * (style.padding.y + style.border + style.rounding))
+
+    # execute button behavior
+    var bounds: NimRect = NimRect()
+    bounds.x = r.x - style.touch_padding.x
+    bounds.y = r.y - style.touch_padding.y
+    bounds.w = r.w + 2 * style.touch_padding.x
+    bounds.h = r.h + 2 * style.touch_padding.y
+    return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
 
 proc nkDoButtonSymbol(state: ptr nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
@@ -963,7 +998,7 @@ proc nkDoButtonSymbol(state: ptr nk_flags; `out`: ptr nk_command_buffer; bounds:
     style != nil
     font != nil
   body:
-    var content: NimRect
+    var content: NimRect = NimRect()
     result = nkDoButton(state = state, `out` = `out`, r = bounds, style = style,
       `in` = `in`, behavior = behavior, content = content)
 
