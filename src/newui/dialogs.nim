@@ -193,7 +193,12 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
             dialog = setError(message = "Can't update the game.")
             return
         of finishGame:
-          discard
+          try:
+            death(memberIndex = 0, reason = "resignation", ship = playerShip)
+          except:
+            dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
+                qType = showDeadStats)
+            return
         of showDeadStats:
           discard
       labelButton(title = "No"):
