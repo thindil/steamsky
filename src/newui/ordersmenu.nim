@@ -20,7 +20,7 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, bases2, basestypes, combat, crewinventory, game, game2, maps,
+import ../[bases, bases2, basestypes, combat, crewinventory, events2, game, game2, maps,
     messages, missions, missions2, shipscrew, shipsmovement, statistics,
     stories, stories2, types, utils]
 import coreui, dialogs, errordialog
@@ -439,6 +439,60 @@ proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   except:
     dialog = setError(message = "Can't progress the current story.")
 
+
+proc startMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Start the mission in the current map cell
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  var startsCombat, uMission: bool = false
+  closePopup()
+  dialog = none
+  for mission in acceptedMissions:
+    if mission.targetX == playerShip.skyX and mission.targetY ==
+        playerShip.skyY and not mission.finished:
+      case mission.mType
+      of deliver, passenger:
+        discard
+      of destroy:
+        try:
+          updateGame(minutes = getRandom(min = 15, max = 45))
+          startsCombat = checkForEvent()
+          if not startsCombat:
+            startsCombat = startCombat(enemyIndex = mission.shipIndex,
+                newCombat = false)
+        except:
+          dialog = setError(message = "Can't start destroy mission.")
+          return
+      of patrol:
+        try:
+          updateGame(minutes = getRandom(min = 45, max = 75))
+          startsCombat = checkForEvent()
+        except:
+          dialog = setError(message = "Can't start patrol mission.")
+          return
+        if not startsCombat:
+          uMission = true
+      of explore:
+        try:
+          updateGame(minutes = getRandom(min = 30, max = 60))
+          startsCombat = checkForEvent()
+        except:
+          dialog = setError(message = "Can't start explore mission.")
+          return
+        if not startsCombat:
+          uMission = true
+  if startsCombat:
+    # showCombatUi()
+    return
+  if uMission:
+    try:
+      updateMission(missionIndex = skyMap[playerShip.skyX][
+          playerShip.skyY].missionIndex)
+    except:
+      dialog = setError(message = "Can't update the mission.")
+
 proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the player's ship's orders menu
@@ -493,7 +547,7 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
               try:
                 labelButton(title = "Search for " & protoShipsList[parts[
                     3].parseInt].name):
-                  discard
+                  executeStory(dialog = dialog)
               except:
                 dialog = setError(message = "Can't add the story button.")
                 return
@@ -506,7 +560,7 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
             if playerShip.skyX == parts[0].parseInt and playerShip.skyY ==
                 parts[1].parseInt:
               labelButton(title = "Search area"):
-                discard
+                executeStory(dialog = dialog)
           except:
             dialog = setError(message = "Can't get the story step location.")
             return
@@ -600,16 +654,16 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                   try:
                     labelButton(title = "Search for " &
                         protoShipsList[mission.shipIndex].name):
-                      discard
+                      startMission(dialog = dialog)
                   except:
                     dialog = setError(message = "Can't add accepted mission button.")
                     return
                 of patrol:
                   labelButton(title = "Patrol area"):
-                    discard
+                    startMission(dialog = dialog)
                 of explore:
                   labelButton(title = "Explore area"):
-                    discard
+                    startMission(dialog = dialog)
         of trader:
           if haveTrader:
             labelButton(title = "Trade"):
