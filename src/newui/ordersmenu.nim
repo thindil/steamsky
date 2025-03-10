@@ -21,7 +21,8 @@
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, bases2, basestypes, combat, crewinventory, game, game2, maps,
-    messages, missions, missions2, shipscrew, shipsmovement, stories, stories2, types, utils]
+    messages, missions, missions2, shipscrew, shipsmovement, statistics,
+    stories, stories2, types, utils]
 import coreui, dialogs, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
@@ -373,7 +374,22 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
     labelButton(title = "Loot"):
       discard
 
-proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc finishStory(): GameDialog {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
+  ## Finish the current player's story. Give experience and ask about
+  ## finishing the game
+  ##
+  ## Returns current dialog of the game.
+  gameStats.points += (10_000 * currentStory.maxSteps)
+  clearCurrentStory()
+  try:
+    result = setQuestion(question = storiesList[currentStory.index].endText &
+        " Do you want to finish the game?", qType = finishGame)
+  except KeyError:
+    result = setError(message = "Can't get the end text of the current story. ")
+
+proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Execute the current story step
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -416,8 +432,7 @@ proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect], cont
             dialog = setInfo(text = text.text, title = "Story")
             break
       else:
-        discard
-        # finishStory()
+        dialog = finishStory()
     else:
       dialog = setInfo(text = step.failText, title = "Story")
       currentStory.showText = false

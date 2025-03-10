@@ -26,7 +26,7 @@ import coreui, errordialog, themes
 type
   QuestionType* = enum
     ## Types of questions, used to set actions to the player's response
-    deleteSave, showDeadStats, quitGame, resignGame, homeBase
+    deleteSave, showDeadStats, quitGame, resignGame, homeBase, finishGame
   QuestionData = object
     question, data: string
     qType: QuestionType
@@ -166,8 +166,6 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
             dialog = none
           except:
             dialog = setError(message = "Can't kill the player.")
-        of showDeadStats:
-          discard
         of homeBase:
           let moneyIndex2: int = findItem(inventory = playerShip.cargo,
               protoIndex = moneyIndex)
@@ -194,6 +192,10 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           except:
             dialog = setError(message = "Can't update the game.")
             return
+        of finishGame:
+          discard
+        of showDeadStats:
+          discard
       labelButton(title = "No"):
         if questionData.qType == showDeadStats:
           setMainMenu(dialog = dialog, state = state)
