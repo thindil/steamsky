@@ -194,10 +194,13 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
             return
         of finishGame:
           try:
-            death(memberIndex = 0, reason = "resignation", ship = playerShip)
-          except:
+            death(memberIndex = 0, reason = "retired after finished the game",
+                ship = playerShip)
+            closePopup()
             dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
                 qType = showDeadStats)
+          except:
+            dialog = setError(message = "Can't kill the player.")
             return
         of showDeadStats:
           discard
