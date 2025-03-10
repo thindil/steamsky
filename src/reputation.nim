@@ -61,19 +61,20 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
     raise newException(exceptn = ReputationError,
         message = "Can't find index of the faction")
 
-  proc updateRep(index: Natural) {.raises: [], tags: [], contractual.} =
+  proc updateRep(index: Natural; points: int) {.raises: [], tags: [], contractual.} =
     ## Update reputation in the selected faction
     ##
     ## * index  - the index of the reputation which will be updated
+    ## * points - the amount of reputation's points to gain or lose
     # Don't lose reputation below the lowest value
-    if reputationsList[index].reputation.level == -100 and amount < 0:
+    if reputationsList[index].reputation.level == -100 and points < 0:
       return
     # Don't gain reputation above the highest value
-    if reputationsList[index].reputation.level == 100 and amount > 0:
+    if reputationsList[index].reputation.level == 100 and points > 0:
       return
     # Gain or lose reputation with the faction
     var newPoints: int = reputationsList[index].reputation.experience + (
-        amount.float * newGameSettings.reputationBonus).int
+        points.float * newGameSettings.reputationBonus).int
     while newPoints < 0:
       reputationsList[repIndex].reputation.level.dec
       newPoints += abs(x = reputationsList[index].reputation.level * 500)
@@ -85,8 +86,15 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
       reputationsList[index].reputation.level.inc
     reputationsList[index].reputation.experience = newPoints
 
-  updateRep(index = repIndex)
+  updateRep(index = repIndex, points = amount)
   # Gain or lose reputation with other factions, depending if they are friends
   # or enemies of the main faction
   for index, reputation in reputationsList:
-    echo reputation.factionIndex
+    try:
+      if isFriendly(sourceFaction = factionIndex, targetFaction = reputation.factionIndex):
+        updateRep(index = index, points = amount)
+      else:
+        updateRep(index = index, points = (amount * -1))
+    except:
+      raise newException(exceptn = ReputationError,
+          message = getCurrentExceptionMsg())
