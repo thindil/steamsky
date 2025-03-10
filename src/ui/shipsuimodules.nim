@@ -16,13 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[game, config, crafts, crewinventory, items, messages, missions,
     ships, shipscargo, shipscrew, shipsupgrade, tk, types]
 import dialogs, errordialog, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected module and set option for it
   ##
   ## * clientData - the additional data for the Tcl command
@@ -60,7 +61,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
       columnSpan: Natural = 0; wrapLength: Natural = 0;
       countHeight: bool = false; secondary: bool = false) {.raises: [], tags: [
-          WriteIOEffect, TimeEffect, RootEffect].} =
+          WriteIOEffect, TimeEffect, RootEffect], contractual.} =
     label = name
     tclEval(script = "ttk::label " & label & " -text {" & labelText &
         "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
@@ -147,7 +148,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip, box: string;
       shipModule: ModuleData; column: Positive = 1;
-      buttonName: string = "button"; row: Natural = 0) =
+      buttonName: string = "button"; row: Natural = 0) {.raises: [], tags: [],
+          contractual.} =
     let upgradeNumber = case upgradeType
       of maxValue:
         "2"
@@ -335,7 +337,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addOwnersInfo(ownersName: string; addButton: bool = false;
       row: Natural = 0) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-          RootEffect].} =
+          RootEffect], contractual.} =
     var ownersText = ownersName
     if module.owner.len > 1:
       ownersText.add("s")
@@ -839,7 +841,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Set the selected upgrade for the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -856,7 +858,7 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Assign member, ammo or skill to module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -875,7 +877,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Enable or disable selected engine
   ##
   ## * clientData - the additional data for the Tcl command
@@ -891,7 +893,7 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Stop the current ship upgrade
   ##
   ## * clientData - the additional data for the Tcl command
@@ -906,7 +908,7 @@ proc stopUpgradingCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Set or remove the repair priority from the selected module
   ##
   ## * clientData - the additional data for the Tcl command
@@ -924,7 +926,7 @@ proc setRepairCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Reset the current destination point for the player's ship
   ##
   ## * clientData - the additional data for the Tcl command
@@ -939,7 +941,7 @@ proc resetDestinationCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Update assign the crew member UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1009,7 +1011,7 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Show assign the crew member UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1112,7 +1114,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Show assign the skill UI
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1186,7 +1188,7 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Cancel the current crafting order
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1219,7 +1221,7 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl.} =
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Get the next active button in assing crew dialog
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1250,7 +1252,7 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Show the list of the player's ship modules to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1267,7 +1269,7 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.}
+        RootEffect], cdecl, contractual.}
   ## Sort the player's ship's modules list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1283,7 +1285,7 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Show the list of available ammo for the selected gun
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1309,7 +1311,8 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     ammoMenu = createDialog(name = ".ammomenu", title = "Available ammo",
         parentName = ".")
 
-  proc addButton(name, label, command: string) =
+  proc addButton(name, label, command: string) {.raises: [], tags: [],
+      contractual.} =
     let button = ammoMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & ammoMenu & " .;" & command & "}")
@@ -1335,7 +1338,7 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect].} =
+    RootEffect], contractual.} =
   ## Adds Tcl commands related to the wait menu
   try:
     addCommand("ShowModuleInfo", showModuleInfoCommand)
