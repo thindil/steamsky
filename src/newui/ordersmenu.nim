@@ -20,9 +20,9 @@
 
 import std/[tables, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, bases2, basestypes, combat, crewinventory, events2, game, game2, maps,
-    messages, missions, missions2, shipscrew, shipsmovement, statistics,
-    stories, stories2, types, utils]
+import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
+    game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
+    shipsmovement, statistics, stories, stories2, trades, types, utils]
 import coreui, dialogs, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
@@ -440,7 +440,8 @@ proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     dialog = setError(message = "Can't progress the current story.")
 
 
-proc startMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc startMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Start the mission in the current map cell
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -492,6 +493,66 @@ proc startMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect], cont
           playerShip.skyY].missionIndex)
     except:
       dialog = setError(message = "Can't update the mission.")
+
+proc deliverMedicines(dialog: var GameDialog; forFree: bool = true) {.raises: [
+    ], tags: [RootEffect], contractual.} =
+  ## Deliver medicines to a base
+  ##
+  ## * dialog  - the current in-game dialog displayed on the screen
+  ## * forFree - if true, deliver the medicines for free to base, otherwise
+  ##             request payment for them
+  ##
+  ## Returns the modified parameters dialog.
+  closePopup()
+  let
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
+    eventIndex: int = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+    itemIndex: int = try:
+        findItem(inventory = playerShip.cargo, itemType = factionsList[skyBases[
+            baseIndex].owner].healingTools)
+      except:
+        dialog = setError(message = "Can't get index of medicines.")
+        return
+    event: EventData = eventsList[eventIndex]
+    newTime: int = event.time - playerShip.cargo[itemIndex].amount
+  if newTime < 1:
+    deleteEvent(eventIndex = eventIndex)
+  if forFree:
+    try:
+      gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
+          itemIndex].amount / 10).Natural)
+    except:
+      dialog = setError(message = "Can't gain reputation in base.")
+      return
+    try:
+      addMessage(message = "You gave " & itemsList[playerShip.cargo[
+          itemIndex].protoIndex].name & " for free to base.",
+          mType = tradeMessage)
+    except:
+      dialog = setError(message = "Can't show message.")
+      return
+    updateCargo(ship = playerShip, protoIndex = playerShip.cargo[
+        itemIndex].protoIndex, amount = -(playerShip.cargo[itemIndex].amount))
+  else:
+    try:
+      gainRep(baseIndex = baseIndex, points = (playerShip.cargo[
+          itemIndex].amount / 20).int * (-1))
+    except:
+      dialog = setError(message = "Can't gain reputation in base.")
+      return
+    try:
+      sellItems(itemIndex = itemIndex, amount = $playerShip.cargo[
+          itemIndex].amount)
+    except TradeNoFreeCargoError:
+      dialog = setMessage(message = "You can't sell medicines to the base because you don't have enough free cargo space for money.",
+          title = "No free cargo space")
+      return
+    except NoMoneyInBaseError:
+      dialog = setMessage(message = "You can't sell medicines to the base because the base don't have enough money to buy them.",
+          title = "Can't sell medicines")
+    except:
+      dialog = setError(message = "Can't sell medicines to base.")
 
 proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -597,9 +658,9 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                 return
             if itemIndex > -1:
               labelButton(title = "Deliver medicines for free"):
-                discard
+                deliverMedicines(dialog = dialog)
               labelButton(title = "Deliver medicines for price"):
-                discard
+                deliverMedicines(dialog = dialog, forFree = false)
         of EventsTypes.none, doublePrice, baseRecovery:
           if baseIndex > 0:
             if skyBases[baseIndex].reputation.level > -25:
