@@ -239,14 +239,26 @@ proc askForEvents(dialog: var GameDialog) {.raises: [], tags: [RootEffect], cont
   except:
     dialog = setError(message = "Can't ask for events.")
 
-proc showDockedCommands(baseIndex: ExtendedBasesRange;
-    haveTrader: bool; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-        contractual.} =
+proc askForBases(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Ask for known bases
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  try:
+    askForBases()
+    dialog = none
+    closePopup()
+  except:
+    dialog = setError(message = "Can't ask for bases.")
+
+proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool; dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the available orders when the player's ship is docked to a base
   ##
   ## * baseIndex  - the index of the base to which the player's ship is docked
   ## * haveTrader - if true, someone in the crew is assigned to trader position
-  ## * dialog - the current in-game dialog displayed on the screen
+  ## * dialog     - the current in-game dialog displayed on the screen
+  ## * state      - the current state of the game
   ##
   ## Returns the modified parameters dialog if error happened.
   labelButton(title = "Undock"):
@@ -256,12 +268,18 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
       dockingOrder(escape = true, dialog = dialog)
     if haveTrader and skyBases[baseIndex].population > 0:
       labelButton(title = "Trade"):
-        discard
+        state = trade
+        dialog = none
+        closePopup()
       labelButton(title = "School"):
-        discard
+        state = school
+        dialog = none
+        closePopup()
       if skyBases[baseIndex].recruits.len > 0:
         labelButton(title = "Recruit"):
-          discard
+          state = recruits
+          dialog = none
+          closePopup()
     if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
       labelButton(title = "Ask for events"):
         askForEvents(dialog = dialog)
@@ -269,12 +287,8 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
           return
     if not skyBases[baseIndex].askedForBases:
       labelButton(title = "Ask for bases"):
-        try:
-          askForBases()
-          dialog = none
-          closePopup()
-        except:
-          dialog = setError(message = "Can't ask for bases.")
+        askForBases(dialog = dialog)
+        if dialog != none:
           return
     try:
       if "temple" in basesTypesList[skyBases[baseIndex].baseType].flags:
@@ -640,7 +654,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
           discard
       if playerShip.speed == docked:
         showDockedCommands(baseIndex = baseIndex, haveTrader = haveTrader,
-            dialog = dialog)
+            dialog = dialog, state = state)
       else:
         var event: EventsTypes = EventsTypes.none
         if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1:
@@ -745,7 +759,9 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               if dialog != none:
                 return
             labelButton(title = "Ask for bases"):
-              discard
+              askForBases(dialog = dialog)
+              if dialog != none:
+                return
           labelButton(title = "Attack"):
             discard
         of friendlyShip:
@@ -756,12 +772,16 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
                 labelButton(title = "Trade"):
                   discard
                 labelButton(title = "Ask for bases"):
-                  discard
+                  askForBases(dialog = dialog)
+                  if dialog != none:
+                    return
             except:
               dialog = setError(message = "Can't check if ship is trader.")
               return
             labelButton(title = "Ask for events"):
-              discard
+              askForEvents(dialog = dialog)
+              if dialog != none:
+                return
           labelButton(title = "Attack"):
             discard
       labelButton(title = "Close"):
