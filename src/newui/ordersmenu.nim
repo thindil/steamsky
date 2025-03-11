@@ -314,17 +314,23 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool; dialog:
     for member in playerShip.crew:
       if member.health < 100:
         labelButton(title = "Heal wounded"):
-          discard
+          state = healWounded
+          dialog = none
+          closePopup()
         break
     for module in playerShip.modules:
       if module.durability < module.maxDurability:
         labelButton(title = "Repair ship"):
-          discard
+          state = repairShip
+          dialog = none
+          closePopup()
         break
     try:
       if "shipyard" in basesTypesList[skyBases[baseIndex].baseType].flags:
         labelButton(title = "Shipyard"):
-          discard
+          state = shipyard
+          dialog = none
+          closePopup()
     except:
       dialog = setError(message = "Can't check if the base has shipyard flag.")
       return
@@ -334,7 +340,9 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool; dialog:
             baseIndex].baseType].recipes and recipe.reputation <= skyBases[
             baseIndex].reputation.level:
           labelButton(title = "Buy recipes"):
-            discard
+            state = buyRecipes
+            dialog = none
+            closePopup()
           break
       except:
         dialog = setError(message = "Can't check if base has recipes for sale.")
