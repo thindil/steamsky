@@ -226,6 +226,19 @@ proc setAsHome(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   dialog = setQuestion(question = "Are you sure want to change your home base (it cost " &
       $price & " " & moneyName & ")?", qType = homeBase, data = $price)
 
+proc askForEvents(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Ask for known events
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  try:
+    askForEvents()
+    dialog = none
+    closePopup()
+  except:
+    dialog = setError(message = "Can't ask for events.")
+
 proc showDockedCommands(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         contractual.} =
@@ -251,12 +264,8 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange;
           discard
     if daysDifference(dateToCompare = skyBases[baseIndex].askedForEvents) > 6:
       labelButton(title = "Ask for events"):
-        try:
-          askForEvents()
-          dialog = none
-          closePopup()
-        except:
-          dialog = setError(message = "Can't ask for events.")
+        askForEvents(dialog = dialog)
+        if dialog != none:
           return
     if not skyBases[baseIndex].askedForBases:
       labelButton(title = "Ask for bases"):
@@ -732,7 +741,9 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
             labelButton(title = "Trade"):
               discard
             labelButton(title = "Ask for events"):
-              discard
+              askForEvents(dialog = dialog)
+              if dialog != none:
+                return
             labelButton(title = "Ask for bases"):
               discard
           labelButton(title = "Attack"):
