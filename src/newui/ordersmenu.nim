@@ -440,13 +440,14 @@ proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     dialog = setError(message = "Can't progress the current story.")
 
 
-proc startMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc startMission(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Start the mission in the current map cell
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
   ##
-  ## Returns the modified parameters dialog.
+  ## Returns the modified parameters dialog and state.
   var startsCombat, uMission: bool = false
   closePopup()
   dialog = none
@@ -485,7 +486,7 @@ proc startMission(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         if not startsCombat:
           uMission = true
   if startsCombat:
-    # showCombatUi()
+    state = combat
     return
   if uMission:
     try:
@@ -554,11 +555,12 @@ proc deliverMedicines(dialog: var GameDialog; forFree: bool = true) {.raises: [
     except:
       dialog = setError(message = "Can't sell medicines to base.")
 
-proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the player's ship's orders menu
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current game's state
   ##
   ## Returns the modified parameters dialog.
   if dialog != ordersDialog:
@@ -715,16 +717,16 @@ proc showShipOrders*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                   try:
                     labelButton(title = "Search for " &
                         protoShipsList[mission.shipIndex].name):
-                      startMission(dialog = dialog)
+                      startMission(dialog = dialog, state = state)
                   except:
                     dialog = setError(message = "Can't add accepted mission button.")
                     return
                 of patrol:
                   labelButton(title = "Patrol area"):
-                    startMission(dialog = dialog)
+                    startMission(dialog = dialog, state = state)
                 of explore:
                   labelButton(title = "Explore area"):
-                    startMission(dialog = dialog)
+                    startMission(dialog = dialog, state = state)
         of trader:
           if haveTrader:
             labelButton(title = "Trade"):

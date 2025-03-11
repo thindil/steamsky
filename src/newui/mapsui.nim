@@ -806,7 +806,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showHeader(dialog = dialog)
   # draw dialogs
   showQuestion(dialog = dialog, state = state)
-  showShipOrders(dialog = dialog)
+  showShipOrders(dialog = dialog, state = state)
   showDestinationMenu(dialog = dialog)
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
