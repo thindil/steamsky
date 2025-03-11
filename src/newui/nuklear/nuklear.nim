@@ -389,6 +389,21 @@ template disabled*(content: untyped) =
   content
   nk_widget_disable_end(ctx = ctx)
 
+# ------
+# Widget
+# ------
+
+proc nkWidgetStateReset(s: var nk_flags) {.raises: [], tags: [], contractual.} =
+  ## Reset the state of a widget. Internal use only
+  ##
+  ## * s - the state to reset
+  ##
+  ## Returns the modified parameter s
+  if (s and NK_WIDGET_STATE_MODIFIED.int).bool:
+    s = NK_WIDGET_STATE_INACTIVE.int or NK_WIDGET_STATE_MODIFIED.int
+  else:
+    s = NK_WIDGET_STATE_INACTIVE.ord
+
 # ----
 # Math
 # ----
@@ -937,13 +952,21 @@ proc hasMouseClickDownInRect(id: Buttons; rect: nk_rect; down: nk_bool): bool {.
 # -------
 # Buttons
 # -------
-proc nkButtonBehavior(state: ptr nk_flags; r: NimRect; i: ptr nk_input;
+proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
   behavior: nk_button_behavior): bool {.raises: [], tags: [], contractual.} =
   ## Set the button's behavior. Internal use only
+  ##
+  ## * state    - the state of the button
+  ## * r        - the bounds of the button
+  ## * i        - the user input
+  ## * behavior - the behavior of the button, normal or repeater
+  ##
+  ## Returns true if button's behavior was properly set, otherwise false
+  nkWidgetStateReset(s = state)
   return true
 
 
-proc nkDoButton(state: ptr nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
+proc nkDoButton(state: var nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
   style: ptr nk_style_button; `in`: ptr nk_input; behavior: nk_button_behavior;
   content: var NimRect): bool {.raises: [], tags: [], contractual.} =
   ## Draw a button. Internal use only
@@ -959,7 +982,6 @@ proc nkDoButton(state: ptr nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
   ## Returns true if button was properly drawn, otherwise false
   require:
     style != nil
-    state != nil
   body:
     if `out` == nil or style == nil:
       return false
@@ -978,7 +1000,7 @@ proc nkDoButton(state: ptr nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
     bounds.h = r.h + 2 * style.touch_padding.y
     return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
 
-proc nkDoButtonSymbol(state: ptr nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
+proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
   `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
@@ -994,7 +1016,6 @@ proc nkDoButtonSymbol(state: ptr nk_flags; `out`: ptr nk_command_buffer; bounds:
   ##
   ## Returns true if button was properly drawn, otherwise false
   require:
-    state != nil
     style != nil
     font != nil
   body:

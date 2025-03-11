@@ -180,6 +180,18 @@ type
     ## Internal Nuklear type
     NK_BUTTON_DEFAULT,
     NK_BUTTON_REPEATER
+  nk_widget_states* = enum
+    ## Internal Nuklear type
+    NK_WIDGET_STATE_MODIFIED = 1 shl 1
+    NK_WIDGET_STATE_INACTIVE = 1 shl 2
+    NK_WIDGET_STATE_ENTERED = 1 shl 3
+    NK_WIDGET_STATE_HOVER = 1 shl 4
+    NK_WIDGET_STATE_ACTIVED = 1 shl 5
+    NK_WIDGET_STATE_LEFT = 1 shl 6
+    NK_WIDGET_STATE_HOVERED = NK_WIDGET_STATE_HOVER.int or
+        NK_WIDGET_STATE_MODIFIED.int
+    NK_WIDGET_STATE_ACTIVE = NK_WIDGET_STATE_ACTIVED.int or
+        NK_WIDGET_STATE_MODIFIED.int
 
 # -------
 # Objects
