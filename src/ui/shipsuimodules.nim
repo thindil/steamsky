@@ -16,14 +16,14 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[game, config, crafts, crewinventory, items, messages, missions,
     ships, shipscargo, shipscrew, shipsupgrade, tk, types]
 import dialogs, errordialog, updateheader, shipsuicrew, table, utilsui2
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
+    TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show information about the selected module and set option for it
   ##
   ## * clientData - the additional data for the Tcl command
