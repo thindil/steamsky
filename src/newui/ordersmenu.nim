@@ -226,7 +226,8 @@ proc setAsHome(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   dialog = setQuestion(question = "Are you sure want to change your home base (it cost " &
       $price & " " & moneyName & ")?", qType = homeBase, data = $price)
 
-proc askForEvents(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc askForEvents(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Ask for known events
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -239,7 +240,8 @@ proc askForEvents(dialog: var GameDialog) {.raises: [], tags: [RootEffect], cont
   except:
     dialog = setError(message = "Can't ask for events.")
 
-proc askForBases(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc askForBases(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Ask for known bases
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -252,7 +254,9 @@ proc askForBases(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
   except:
     dialog = setError(message = "Can't ask for bases.")
 
-proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool; dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
+proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
+    dialog: var GameDialog; state: var GameState) {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Show the available orders when the player's ship is docked to a base
   ##
   ## * baseIndex  - the index of the base to which the player's ship is docked
@@ -397,13 +401,17 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool; dialog:
           missionsLimit.dec
       if missionsLimit > 0:
         labelButton(title = "Missions"):
-          discard
+          state = baseMissions
+          dialog = none
+          closePopup()
     if playerShip.homeBase != baseIndex:
       labelButton(title = "Set as home"):
         setAsHome(dialog = dialog)
   if skyBases[baseIndex].population == 0:
     labelButton(title = "Loot"):
-      discard
+      state = loot
+      dialog = none
+      closePopup()
 
 proc finishStory(): GameDialog {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
@@ -419,11 +427,12 @@ proc finishStory(): GameDialog {.raises: [], tags: [WriteIOEffect, TimeEffect,
   except KeyError:
     result = setError(message = "Can't get the end text of the current story. ")
 
-proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc executeStory(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Execute the current story step
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * state  - the current state of the game
   ##
   ## Returns the modified parameters dialog.
   closePopup()
@@ -448,12 +457,12 @@ proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   try:
     if progressStory():
       let tokens: seq[string] = currentStory.data.split(sep = ';')
-      case step.finishCondition
-      of destroyShip:
+      if step.finishCondition == destroyShip:
         if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
+          state = combat
+          dialog = none
+          closePopup()
           return
-      else:
-        discard
       if currentStory.currentStep > -3:
         step = (if currentStory.currentStep > -1: storiesList[
             currentStory.index].steps[currentStory.currentStep] else: storiesList[
@@ -471,8 +480,8 @@ proc executeStory(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     dialog = setError(message = "Can't progress the current story.")
 
 
-proc startMission(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc startMission(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Start the mission in the current map cell
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -518,6 +527,8 @@ proc startMission(dialog: var GameDialog; state: var GameState) {.raises: [], ta
           uMission = true
   if startsCombat:
     state = combat
+    dialog = none
+    closePopup()
     return
   if uMission:
     try:
@@ -586,8 +597,8 @@ proc deliverMedicines(dialog: var GameDialog; forFree: bool = true) {.raises: [
     except:
       dialog = setError(message = "Can't sell medicines to base.")
 
-proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the player's ship's orders menu
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -629,7 +640,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
                 labelButton(title = "Ask for " & itemsList[getStepData(
                     finishData = step.finishData,
                     name = "item").parseInt].name):
-                  executeStory(dialog = dialog)
+                  executeStory(dialog = dialog, state = state)
               except:
                 dialog = setError(message = "Can't add the story button.")
                 return
@@ -641,7 +652,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               try:
                 labelButton(title = "Search for " & protoShipsList[parts[
                     3].parseInt].name):
-                  executeStory(dialog = dialog)
+                  executeStory(dialog = dialog, state = state)
               except:
                 dialog = setError(message = "Can't add the story button.")
                 return
@@ -654,7 +665,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
             if playerShip.skyX == parts[0].parseInt and playerShip.skyY ==
                 parts[1].parseInt:
               labelButton(title = "Search area"):
-                executeStory(dialog = dialog)
+                executeStory(dialog = dialog, state = state)
           except:
             dialog = setError(message = "Can't get the story step location.")
             return
@@ -671,7 +682,9 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
         case event
         of enemyShip, enemyPatrol:
           labelButton(title = "Attack"):
-            discard
+            state = combat
+            dialog = none
+            closePopup()
         of fullDocks:
           labelButton(title = "Wait (full docks)"):
             closePopup()
@@ -679,7 +692,9 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
             setDialog()
         of attackOnBase:
           labelButton(title = "Defend"):
-            discard
+            state = combat
+            dialog = none
+            closePopup()
         of disease:
           if haveTrader:
             let itemIndex: int = try:
@@ -761,7 +776,9 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
         of trader:
           if haveTrader:
             labelButton(title = "Trade"):
-              discard
+              state = trade
+              dialog = none
+              closePopup()
             labelButton(title = "Ask for events"):
               askForEvents(dialog = dialog)
               if dialog != none:
@@ -771,14 +788,18 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               if dialog != none:
                 return
           labelButton(title = "Attack"):
-            discard
+            state = combat
+            dialog = none
+            closePopup()
         of friendlyShip:
           if haveTrader:
             try:
               if tradersName in protoShipsList[eventsList[skyMap[
                   playerShip.skyX][playerShip.skyY].eventIndex].shipIndex].name:
                 labelButton(title = "Trade"):
-                  discard
+                  state = trade
+                  dialog = none
+                  closePopup()
                 labelButton(title = "Ask for bases"):
                   askForBases(dialog = dialog)
                   if dialog != none:
@@ -791,7 +812,9 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               if dialog != none:
                 return
           labelButton(title = "Attack"):
-            discard
+            state = combat
+            dialog = none
+            closePopup()
       labelButton(title = "Close"):
         closePopup()
         dialog = none
