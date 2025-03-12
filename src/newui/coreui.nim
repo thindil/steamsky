@@ -36,6 +36,7 @@ const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
   menuWidth*: Positive = 600  ## The width of the game's main window
   menuHeight*: Positive = 400 ## The height of the game's main window
+  iconsAmount*: Positive = 36 ## The amount of map's icons
 
 var
   fonts*: array[FontsNames, ptr nk_font] = [nil, nil] ## The list of fonts used by the game
@@ -45,6 +46,7 @@ var
   dialogY*: float = 0          ## The Y position of a dialog
   redraw*: bool = true         ## If true, redraw the game
   inCombat*: bool = false      ## If true, the player is in combat
+  mapImages*: array[iconsAmount, PImage] ## The images used in the map
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =

@@ -21,7 +21,7 @@
 import std/tables
 import contracts
 import ../[combat, game, maps]
-import coreui, dialogs, errordialog, mapsui
+import coreui, dialogs, errordialog, header
 
 proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the combat UI and combat itself
