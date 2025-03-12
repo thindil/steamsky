@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
     shipsmovement, statistics, stories, stories2, trades, types, utils]
-import coreui, dialogs, errordialog
+import combatui, coreui, dialogs, errordialog
 
 proc countHeight(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [
@@ -526,9 +526,8 @@ proc startMission(dialog: var GameDialog; state: var GameState) {.raises: [],
         if not startsCombat:
           uMission = true
   if startsCombat:
-    state = combat
-    dialog = none
     closePopup()
+    setCombat(state = state, dialog = dialog)
     return
   if uMission:
     try:

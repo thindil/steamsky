@@ -18,8 +18,32 @@
 ## Provides code related to all types of combat, like between the ships,
 ## boarding, giving orders to crew members, etc.
 
+import std/tables
 import contracts
-import coreui, dialogs, mapsui
+import ../[combat, game, maps]
+import coreui, dialogs, errordialog, mapsui
+
+proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Set the combat UI and combat itself
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  try:
+    if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
+        enemyName != protoShipsList[eventsList[skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex].shipIndex].name:
+      let combatStarted = startCombat(enemyIndex = eventsList[skyMap[
+          playerShip.skyX][playerShip.skyY].eventIndex].shipIndex,
+          newCombat = false)
+      if not combatStarted:
+        return
+  except:
+    dialog = setError(message = "Can't start the combat.")
+    return
+  state = combat
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the combat UI
@@ -34,4 +58,5 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tag
   showQuestion(dialog = dialog, state = state)
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
+  state = combat
   # showGameMenu(dialog = dialog)
