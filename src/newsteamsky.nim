@@ -21,7 +21,7 @@
 import std/[os, parseopt, strutils, tables, times]
 import contracts, newui/nuklear/nuklear_sdl_renderer
 import config, halloffame, game, game2, log
-import newui/[coreui, errordialog, goalsui, mainmenu, mapsui, themes, waitmenu]
+import newui/[combatui, coreui, errordialog, goalsui, mainmenu, mapsui, themes, waitmenu]
 
 proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   ## The main procedure of the game.
@@ -126,12 +126,13 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
 
   # The main game loop
   setTooltips(tDelay = 1_000, fDelay = 200)
-  const showGame: array[GameState.mainMenu..GameState.endGame, proc (
+  const showGame: array[GameState.mainMenu..GameState.combat, proc (
       state: var GameState; dialog: var GameDialog){.nimcall, raises: [].}] = [
     GameState.mainMenu: showMainMenu, news: showNews, allNews: showNews,
       about: showAbout, showFile: mainMenu.showFile, hallOfFame: showHallOfFame,
       loadGame: showLoadGame, loadingGame: mainMenu.loadGame,
-      newGame: mainMenu.newGame, map: showMap, endGame: backToMainMenu]
+      newGame: mainMenu.newGame, map: showMap, endGame: backToMainMenu,
+      combat: showCombat]
   windowWidth = menuWidth.float
   windowHeight = menuHeight.float
   var
@@ -152,7 +153,7 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
-        if state in GameState.mainMenu..GameState.endGame:
+        if state in GameState.mainMenu..GameState.combat:
           # Show the proper window
           showGame[state](state = state, dialog = dialog)
         # Add the tooltips, if enabled
