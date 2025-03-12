@@ -963,6 +963,15 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
   ##
   ## Returns true if button's behavior was properly set, otherwise false
   nkWidgetStateReset(s = state)
+  result = false
+  if i == nil:
+    return
+  if isMouseHovering(rect = r):
+    state = NK_WIDGET_STATE_HOVERED.nk_flags
+    if isMouseDown(id = left):
+      state = NK_WIDGET_STATE_ACTIVE.nk_flags
+      if hasMouseClickDownInRect(id = left, rect = nk_rect(x: r.x, y: r.y, w: r.w, h: r.h), down = nkTrue):
+        discard
   return true
 
 
