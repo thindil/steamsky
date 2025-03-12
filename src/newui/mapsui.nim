@@ -703,7 +703,7 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       setLayoutRowDynamic(30, 1)
       labelButton(title = "Ship information"):
         closePopup()
-      if playerShip.crew[0].health > 0:
+      if playerShip.crew[0].health > 0 and not inCombat:
         labelButton(title = "Ship orders"):
           closePopup()
           setDialog()
@@ -714,7 +714,7 @@ proc showGameMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         closePopup()
       labelButton(title = "Knowledge lists"):
         closePopup()
-      if playerShip.crew[0].health > 0:
+      if playerShip.crew[0].health > 0 and not inCombat:
         labelButton(title = "Wait orders"):
           closePopup()
           setDialog()

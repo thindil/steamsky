@@ -44,6 +44,7 @@ var
   dialogX*: float = 0          ## The X position of a dialog
   dialogY*: float = 0          ## The Y position of a dialog
   redraw*: bool = true         ## If true, redraw the game
+  inCombat*: bool = false      ## If true, the player is in combat
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
