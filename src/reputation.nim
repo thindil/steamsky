@@ -18,7 +18,7 @@
 ## Provides code for the player's reputation system with bases and factions,
 ## like updating reputation, storing it, etc.
 
-import std/tables
+import std/[tables, xmltree]
 import contracts
 import config, factions, types, game
 
@@ -109,3 +109,11 @@ proc getReputation*(factionIndex: string): int {.raises: [], tags: [], contractu
     if reputation.factionIndex == factionIndex:
       return reputation.reputation.level
   return 0
+
+proc saveReputation*(saveTree: var XmlNode) {.raises: [], tags: [], contractual.} =
+  ## Save the reputation's data in file
+  ##
+  ## * saveTree - the XML tree with save data
+  ##
+  ## Returns modified parameter saveTree.
+  discard

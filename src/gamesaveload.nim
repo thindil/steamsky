@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,7 +20,7 @@
 import std/[logging, os, strutils, tables, xmltree, xmlparser]
 import contracts
 import basessaveload, config, game, goals, log, maps, messages, missions,
-    shipssaveload, statistics, stories, types, utils
+    reputation, shipssaveload, statistics, stories, types, utils
 
 const saveVersion: Positive = 5 ## The current version of the game saves files
 
@@ -221,6 +221,9 @@ proc saveGame*(prettyPrint: bool = false) {.raises: [KeyError,
   var careerElement: XmlNode = newElement(tag = "playercareer")
   careerElement.attrs = {"index": playerCareer}.toXmlAttributes()
   saveTree.add(son = careerElement)
+  logMessage(message = "done", messageLevel = lvlInfo)
+  logMessage(message = "Saving player reputation...", messageLevel = lvlInfo)
+  saveReputation(saveTree = saveTree)
   logMessage(message = "done", messageLevel = lvlInfo)
   var saveText: string = $saveTree
   if not prettyPrint:
