@@ -238,7 +238,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
             text = "Ship is dirty but no one is cleaning it.")
       image(image = mapImages[24], padding = NimVec2(x: 5, y: 5))
 
-proc showHeader(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+proc showHeader*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the game's header
   ##

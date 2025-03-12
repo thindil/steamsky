@@ -19,9 +19,9 @@
 ## boarding, giving orders to crew members, etc.
 
 import contracts
-import coreui
+import coreui, dialogs, mapsui
 
-proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the combat UI
   ##
   ## * state - the current game's state
@@ -29,5 +29,9 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tag
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  state = combat
-  dialog = none
+  showHeader(dialog = dialog)
+  # draw dialogs
+  showQuestion(dialog = dialog, state = state)
+  showMessage(dialog = dialog)
+  showInfo(dialog = dialog)
+  # showGameMenu(dialog = dialog)
