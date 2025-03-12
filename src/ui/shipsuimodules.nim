@@ -127,7 +127,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't count the module's max value.")
   if module.maxDurability == moduleMaxValue:
-    statusTooltip.add(" (max upgrade)")
+    statusTooltip.add(y = " (max upgrade)")
   let progressBar = moduleFrame & ".damagebar"
   tclEval(script = "ttk::progressbar " & progressBar &
       " -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
@@ -262,7 +262,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       maxUpgrade = 0
     case module.upgradeAction
     of durability:
-      moduleInfo.add("Durability")
+      moduleInfo.add(y = "Durability")
       maxUpgrade = try:
           modulesList[module.protoIndex].durability
       except:
@@ -271,19 +271,19 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       try:
         case modulesList[module.protoIndex].mType
         of engine:
-          moduleInfo.add("Power")
+          moduleInfo.add(y = "Power")
           maxUpgrade = (modulesList[module.protoIndex].maxValue / 20).int
         of cabin:
-          moduleInfo.add("Quality")
+          moduleInfo.add(y = "Quality")
           maxUpgrade = modulesList[module.protoIndex].maxValue
         of gun, batteringRam:
-          moduleInfo.add("Damage")
+          moduleInfo.add(y = "Damage")
           maxUpgrade = modulesList[module.protoIndex].maxValue * 2
         of hull:
-          moduleInfo.add("Enlarge")
+          moduleInfo.add(y = "Enlarge")
           maxUpgrade = modulesList[module.protoIndex].maxValue * 40
         of harpoonGun:
-          moduleInfo.add("Strength")
+          moduleInfo.add(y = "Strength")
           maxUpgrade = modulesList[module.protoIndex].maxValue * 10
         else:
           discard
@@ -293,7 +293,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       try:
         case modulesList[module.protoIndex].mType:
         of engine:
-          moduleInfo.add("Fuel usage")
+          moduleInfo.add(y = "Fuel usage")
           maxUpgrade = modulesList[module.protoIndex].value * 20
         else:
           discard
@@ -340,19 +340,19 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           RootEffect], contractual.} =
     var ownersText = ownersName
     if module.owner.len > 1:
-      ownersText.add("s")
-    ownersText.add(" (max " & $module.owner.len & "):")
+      ownersText.add(y = "s")
+    ownersText.add(y = " (max " & $module.owner.len & "):")
     addLabel(name = moduleFrame & ".lblowners", labelText = ownersText, row = row)
     ownersText = ""
     var haveOwner = false
     for owner in module.owner:
       if owner > -1:
         if haveOwner:
-          ownersText.add(", ")
+          ownersText.add(y = ", ")
         haveOwner = true
-        ownersText.add(playerShip.crew[owner].name)
+        ownersText.add(y = playerShip.crew[owner].name)
     if not haveOwner:
-      ownersText.add("none")
+      ownersText.add(y = "none")
     addLabel(name = moduleFrame & ".lblowners2", labelText = ownersText,
         row = row, column = 1, secondary = true)
     if addButton:
@@ -1341,21 +1341,21 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Adds Tcl commands related to the wait menu
   try:
-    addCommand("ShowModuleInfo", showModuleInfoCommand)
-    addCommand("SetUpgrade", setUpgradeCommand)
-    addCommand("AssignModule", assignModuleCommand)
-    addCommand("DisableEngine", disableEngineCommand)
-    addCommand("StopUpgrading", stopUpgradingCommand)
-    addCommand("SetRepair", setRepairCommand)
-    addCommand("ResetDestination", resetDestinationCommand)
-    addCommand("UpdateAssignCrew", updateAssignCrewCommand)
-    addCommand("ShowAssignCrew", showAssignCrewCommand)
-    addCommand("ShowAssignSkill", showAssignSkillCommand)
-    addCommand("CancelOrder", cancelOrderCommand)
-    addCommand("GetActiveButton", getActiveButtonCommand)
-    addCommand("ShowModules", showModulesCommand)
-    addCommand("SortShipModules", sortShipModulesCommand)
-    addCommand("ShowAssignAmmo", showAssignAmmoCommand)
+    addCommand(name = "ShowModuleInfo", nimProc = showModuleInfoCommand)
+    addCommand(name = "SetUpgrade", nimProc = setUpgradeCommand)
+    addCommand(name = "AssignModule", nimProc = assignModuleCommand)
+    addCommand(name = "DisableEngine", nimProc = disableEngineCommand)
+    addCommand(name = "StopUpgrading", nimProc = stopUpgradingCommand)
+    addCommand(name = "SetRepair", nimProc = setRepairCommand)
+    addCommand(name = "ResetDestination", nimProc = resetDestinationCommand)
+    addCommand(name = "UpdateAssignCrew", nimProc = updateAssignCrewCommand)
+    addCommand(name = "ShowAssignCrew", nimProc = showAssignCrewCommand)
+    addCommand(name = "ShowAssignSkill", nimProc = showAssignSkillCommand)
+    addCommand(name = "CancelOrder", nimProc = cancelOrderCommand)
+    addCommand(name = "GetActiveButton", nimProc = getActiveButtonCommand)
+    addCommand(name = "ShowModules", nimProc = showModulesCommand)
+    addCommand(name = "SortShipModules", nimProc = sortShipModulesCommand)
+    addCommand(name = "ShowAssignAmmo", nimProc = showAssignAmmoCommand)
   except:
     showError(message = "Can't add a Tcl command.")
 
@@ -1586,7 +1586,7 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     info: string
   var localModules: seq[LocalModuleData]
   for index, module in playerShip.modules:
-    localModules.add(LocalModuleData(name: module.name, damage: (
+    localModules.add(y = LocalModuleData(name: module.name, damage: (
         module.durability / module.maxDurability).float, id: index,
         info: getModuleInfo(moduleIndex = index)))
   proc sortModules(x, y: LocalModuleData): int =
