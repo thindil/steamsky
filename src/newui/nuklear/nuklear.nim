@@ -936,7 +936,7 @@ proc hasMouseClickInRect*(id: Buttons; rect: NimRect): bool {.raises: [], tags: 
     ## A binding to Nuklear's function. Internal use only
   return nk_input_has_mouse_click_in_rect(i = ctx.input.addr, id = id, rect = nk_rect(x: rect.x, y: rect.y, w: rect.w, h: rect.h))
 
-proc hasMouseClickDownInRect(id: Buttons; rect: nk_rect; down: nk_bool): bool {.raises: [], tags: [], contractual.} =
+proc hasMouseClickDownInRect*(id: Buttons; rect: nk_rect; down: nk_bool): bool {.raises: [], tags: [], contractual.} =
   ## Check if the mouse button is clicked down in the selected rectangle
   ##
   ## * id   - the mouse button which will be checked
@@ -948,6 +948,28 @@ proc hasMouseClickDownInRect(id: Buttons; rect: nk_rect; down: nk_bool): bool {.
     {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_input_has_mouse_click_down_in_rect(i = ctx.input.addr, id = id, rect = rect, down = down)
+
+proc isMousePressed*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the selected mouse button is pressed now
+  ##
+  ## * id   - the mouse button which will be checked
+  ##
+  ## Returns true if the mouse button is pressed, otherwise false
+  proc nk_input_is_mouse_pressed(i: ptr nk_input; id: Buttons): nk_bool
+    {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_is_mouse_pressed(i = ctx.input.addr, id = id)
+
+proc isMouseReleased*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
+  ## Check if the selected mouse button was released
+  ##
+  ## * id   - the mouse button which will be checked
+  ##
+  ## Returns true if the mouse button was released, otherwise false
+  proc nk_input_is_mouse_released(i: ptr nk_input; id: Buttons): nk_bool
+    {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  return nk_input_is_mouse_released(i = ctx.input.addr, id = id)
 
 # -------
 # Buttons
@@ -971,7 +993,8 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
     if isMouseDown(id = left):
       state = NK_WIDGET_STATE_ACTIVE.nk_flags
       if hasMouseClickDownInRect(id = left, rect = nk_rect(x: r.x, y: r.y, w: r.w, h: r.h), down = nkTrue):
-        discard
+        if behavior != NK_BUTTON_DEFAULT:
+          result = isMouseDown(id = left)
   return true
 
 
