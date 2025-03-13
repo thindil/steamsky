@@ -19,11 +19,12 @@
 ## boarding, giving orders to crew members, etc.
 
 import std/tables
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 import ../[combat, config, game, maps]
 import coreui, dialogs, errordialog, header
 
-proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Set the combat UI and combat itself
   ##
   ## * state - the current game's state
@@ -47,7 +48,8 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags
   pilotOrder = 2
   engineerOrder = 3
 
-proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Show the combat UI
   ##
   ## * state - the current game's state
@@ -61,5 +63,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tag
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  setLayoutRowDynamic(height = height / 2, cols = 2)
+  group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
+    setLayoutRowStatic(height = 35, cols = 1, width = 35)
+    labelButton(title = "T"):
+      discard
+    setLayoutRowDynamic(height = 35, cols = 3)
+    label(str = "Position", alignment = centered)
+    label(str = "Name", alignment = centered)
+    label(str = "Order", alignment = centered)
   state = combat
   showGameMenu(dialog = dialog)
