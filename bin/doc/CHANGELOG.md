@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Crash when asking for events in bases
 - Gaining or losing reputation in bases when the player reached max or min
   level of the reputation
+- Selecting an event after sorting the list of known events
 
 ## [10.8] - 2025-02-23
 
