@@ -61,7 +61,8 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
     raise newException(exceptn = ReputationError,
         message = "Can't find index of the faction")
 
-  proc updateRep(index: Natural; points: int) {.raises: [], tags: [], contractual.} =
+  proc updateRep(index: Natural; points: int) {.raises: [], tags: [],
+      contractual.} =
     ## Update reputation in the selected faction
     ##
     ## * index  - the index of the reputation which will be updated
@@ -91,7 +92,8 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
   # or enemies of the main faction
   for index, reputation in reputationsList:
     try:
-      if isFriendly(sourceFaction = factionIndex, targetFaction = reputation.factionIndex):
+      if isFriendly(sourceFaction = factionIndex,
+          targetFaction = reputation.factionIndex):
         updateRep(index = index, points = amount)
       else:
         updateRep(index = index, points = (amount * -1))
@@ -99,7 +101,8 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
       raise newException(exceptn = ReputationError,
           message = getCurrentExceptionMsg())
 
-proc getReputation*(factionIndex: string): int {.raises: [], tags: [], contractual.} =
+proc getReputation*(factionIndex: string): int {.raises: [], tags: [],
+    contractual.} =
   ## Get the level of the player's reputation with the selected faction
   ##
   ## * factionIndex - the index of faction with which the reputaion will be get
@@ -110,10 +113,16 @@ proc getReputation*(factionIndex: string): int {.raises: [], tags: [], contractu
       return reputation.reputation.level
   return 0
 
-proc saveReputation*(saveTree: var XmlNode) {.raises: [], tags: [], contractual.} =
+proc saveReputation*(saveTree: var XmlNode) {.raises: [], tags: [],
+    contractual.} =
   ## Save the reputation's data in file
   ##
   ## * saveTree - the XML tree with save data
   ##
   ## Returns modified parameter saveTree.
-  discard
+  for reputation in reputationsList:
+    var repElement: XmlNode = newElement(tag = "reputation")
+    repElement.attrs = {"faction": reputation.factionIndex,
+        "level": $reputation.reputation.level,
+        "experience": $reputation.reputation.experience}.toXmlAttributes
+    saveTree.add(son = repElement)
