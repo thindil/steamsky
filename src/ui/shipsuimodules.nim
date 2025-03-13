@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the information about the player's ship's modules,
+## like showing information about them, showing the whole list, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[game, config, crafts, crewinventory, items, messages, missions,
@@ -61,7 +64,17 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
       columnSpan: Natural = 0; wrapLength: Natural = 0;
       countHeight: bool = false; secondary: bool = false) {.raises: [], tags: [
-          WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+      WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    ## Add a label to the info
+    ##
+    ## * name        - the Tcl name of the label
+    ## * row         - the row in which the label will be added
+    ## * column      - the column in which the label will be added
+    ## * columnSpan  - how many columns should be merged to show the label
+    ## * wrapLenght  - the amount of characters after which wrap the label's
+    ##                 text
+    ## * countHeight - if true, count height of the dialog
+    ## * secondary   - if true, show text in gold color
     label = name
     tclEval(script = "ttk::label " & label & " -text {" & labelText &
         "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
@@ -149,7 +162,17 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip, box: string;
       shipModule: ModuleData; column: Positive = 1;
       buttonName: string = "button"; row: Natural = 0) {.raises: [], tags: [],
-          contractual.} =
+      contractual.} =
+    ## Add button related to upgrading the mdule
+    ##
+    ## * upgradeType   - the type of the upgrade to start after clicking the
+    ##                   button
+    ## * buttonTooltip - the tooltip to show on the button
+    ## * box           - the buttons' box to which the button belongs
+    ## * shipModule    - the module to which the button will be added
+    ## * column        - the column in which the button will be added
+    ## * buttonName    - the Tcl name of the button
+    ## * row           - the row in which the button will be added
     let upgradeNumber = case upgradeType
       of maxValue:
         "2"
