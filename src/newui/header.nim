@@ -369,3 +369,60 @@ proc showHeader*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     dialog = setQuestion(question = "You are dead. Would you like to see your game statistics?",
         qType = showDeadStats)
 
+proc showGameMenu*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the main game's menu
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog.
+  if dialog != gameMenuDialog:
+    return
+  try:
+    const
+      width: float = 200
+      height: float = 455
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Game Menu", x = dialogX, y = dialogY,
+        w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(30, 1)
+      labelButton(title = "Ship information"):
+        closePopup()
+      if playerShip.crew[0].health > 0 and not inCombat:
+        labelButton(title = "Ship orders"):
+          closePopup()
+          setDialog()
+          dialog = ordersDialog
+        labelButton(title = "Crafting"):
+          closePopup()
+      labelButton(title = "Last messages"):
+        closePopup()
+      labelButton(title = "Knowledge lists"):
+        closePopup()
+      if playerShip.crew[0].health > 0 and not inCombat:
+        labelButton(title = "Wait orders"):
+          closePopup()
+          setDialog()
+          dialog = waitDialog
+      labelButton(title = "Game statistics"):
+        closePopup()
+      if playerShip.crew[0].health > 0:
+        labelButton(title = "Help"):
+          closePopup()
+        labelButton(title = "Game options"):
+          closePopup()
+        labelButton(title = "Quit from game"):
+          closePopup()
+          dialog = setQuestion(question = "Are you sure want to quit?",
+              qType = quitGame)
+        labelButton(title = "Resign from game"):
+          dialog = setQuestion(question = "Are you sure want to resign from game?",
+              qType = resignGame)
+          closePopup()
+      labelButton(title = "Close"):
+        closePopup()
+        dialog = none
+  except:
+    dialog = setError(message = "Can't show the game's menu")
+

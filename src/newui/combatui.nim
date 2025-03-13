@@ -59,4 +59,4 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [], tag
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
   state = combat
-  # showGameMenu(dialog = dialog)
+  showGameMenu(dialog = dialog)
