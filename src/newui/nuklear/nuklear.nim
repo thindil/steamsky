@@ -852,21 +852,18 @@ proc isMouseHovering*(rect: NimRect): bool {.raises: [], tags: [],
   return nk_input_is_mouse_hovering_rect(i = ctx.input.addr, rect = new_nk_rect(
       x = rect.x, y = rect.y, w = rect.w, h = rect.h))
 
-proc isMousePrevHovering*(x, y, w, h: float): bool {.raises: [], tags: [],
+proc isMousePrevHovering*(rect: NimRect): bool {.raises: [], tags: [],
     contractual.} =
   ## Check if the mouse was previously hovering over the selected rectangle
   ##
-  ## * x   - the X coordinate of top left corner of the rectangle
-  ## * y   - the Y coordinate of top left corner of the rectangle
-  ## * w   - the width of the rectangle in pixels
-  ## * h   - the height of the rectangle in pixels
+  ## * rect - the area in which the mouse will be checked for hovering
   ##
   ## Returns true if the mouse was hovering over the rectangle, otherwise false
   proc nk_input_is_mouse_prev_hovering_rect(i: ptr nk_input;
       rect: nk_rect): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_input_is_mouse_prev_hovering_rect(i = ctx.input.addr,
-      rect = new_nk_rect(x = x, y = y, w = w, h = h))
+      rect = new_nk_rect(x = rect.x, y = rect.y, w = rect.w, h = rect.h))
 
 proc isMouseDown*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
   ## Check if mouse is pressed
@@ -995,6 +992,13 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
       if hasMouseClickDownInRect(id = left, rect = nk_rect(x: r.x, y: r.y, w: r.w, h: r.h), down = nkTrue):
         if behavior != NK_BUTTON_DEFAULT:
           result = isMouseDown(id = left)
+        else:
+          when defined(nkButtonTriggerOnRelease):
+            result = isMouseReleased(id = left)
+          else:
+            result = isMousePressed(id = left)
+  if (state and NK_WIDGET_STATE_HOVER.ord).nk_bool:
+    discard
   return true
 
 
