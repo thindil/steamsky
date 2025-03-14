@@ -50,9 +50,9 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     ValueError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show the map cell info popup
   ##
-  ## * x     - the X coordinate of the map cell which info will be show
-  ## * y     - the Y coordinate of the map cell which info will be show
-  ## * theme - the current game's theme
+  ## * x      - the X coordinate of the map cell which info will be show
+  ## * y      - the Y coordinate of the map cell which info will be show
+  ## * theme  - the current game's theme
   nuklearSetDefaultFont(defaultFont = fonts[UIFont],
       fontSize = gameSettings.interfaceFontSize + 10)
   tooltip(x = (windowWidth - 240), y = 45, width = 230):
@@ -159,23 +159,34 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
       let missionIndex: int = skyMap[x][y].missionIndex
       case acceptedMissions[missionIndex].mType
       of deliver:
-        try:
-          label(str = "Deliver " & itemsList[acceptedMissions[
-              missionIndex].itemIndex].name)
-        except:
-          discard
+        label(str = "Deliver " & itemsList[acceptedMissions[
+            missionIndex].itemIndex].name)
       of destroy:
-        try:
           label(str = "Destroy " & protoShipsList[acceptedMissions[
               missionIndex].shipIndex].name)
-        except:
-          discard
       of patrol:
         label(str = "Patrol area")
       of explore:
         label(str = "Explore area")
       of passenger:
         label(str = "Transport passenger")
+  if currentStory.index.len > 0:
+    var storyX, storyY: Natural = 1
+    (storyX, storyY) = getStoryLocation()
+    if storyX == playerShip.skyX and storyY == playerShip.skyY:
+      storyX = 0
+      storyY = 0
+    var finishCondition: StepConditionType = any
+    if y == storyX and y == storyY:
+      finishCondition = (if currentStory.currentStep == 0: storiesList[
+          currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
+          0: storiesList[currentStory.index].steps[
+          currentStory.currentStep].finishCondition else: storiesList[
+          currentStory.index].finalStep.finishCondition)
+      if finishCondition in {askInBase, destroyShip, explore}:
+        label(str = "Story leads you here")
+  if x == playerShip.skyX and y == playerShip.skyY:
+    colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
 
