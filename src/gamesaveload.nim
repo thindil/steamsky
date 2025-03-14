@@ -420,6 +420,10 @@ proc loadGame*() {.raises: [IOError, OSError, ValueError,
   let careerNode: XmlNode = savedGame.child(name = "playercareer")
   playerCareer = careerNode.attr(name = "index")
   logMessage(message = "done", messageLevel = lvlInfo)
+  # Load the factions' reputation
+  logMessage(message = "Loading the player's reputation...", messageLevel = lvlInfo)
+  loadReputation(savedGame = savedGame)
+  logMessage(message = "done", messageLevel = lvlInfo)
   logMessage(message = "Finished loading the game.", messageLevel = lvlInfo)
 
 proc generateSaveName*(renameSave: bool = false) {.raises: [OSError,
