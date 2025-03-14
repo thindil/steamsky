@@ -155,6 +155,27 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
             colorLabel(str = "You are well known here", color = theme.mapColors[mapGreenColor])
         if baseIndex == playerShip.homeBase:
           colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
+    if skyMap[x][y].missionIndex > -1:
+      let missionIndex: int = skyMap[x][y].missionIndex
+      case acceptedMissions[missionIndex].mType
+      of deliver:
+        try:
+          label(str = "Deliver " & itemsList[acceptedMissions[
+              missionIndex].itemIndex].name)
+        except:
+          discard
+      of destroy:
+        try:
+          label(str = "Destroy " & protoShipsList[acceptedMissions[
+              missionIndex].shipIndex].name)
+        except:
+          discard
+      of patrol:
+        label(str = "Patrol area")
+      of explore:
+        label(str = "Explore area")
+      of passenger:
+        label(str = "Transport passenger")
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
 
