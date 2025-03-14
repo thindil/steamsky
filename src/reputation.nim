@@ -18,7 +18,7 @@
 ## Provides code for the player's reputation system with bases and factions,
 ## like updating reputation, storing it, etc.
 
-import std/[tables, xmltree]
+import std/[tables, xmltree, strutils]
 import contracts
 import config, factions, types, game
 
@@ -126,3 +126,14 @@ proc saveReputation*(saveTree: var XmlNode) {.raises: [], tags: [],
         "level": $reputation.reputation.level,
         "experience": $reputation.reputation.experience}.toXmlAttributes
     saveTree.add(son = repElement)
+
+proc loadReputation*(savedGame: XmlNode) {.raises: [ValueError], tags: [],
+    contractual.} =
+  ## Load the reputation's data from the file
+  ##
+  ## * savedGame - the XML tree with save data
+  for item in savedGame.findAll(tag = "reputation"):
+    reputationsList.add(y = ReputationObject(factionIndex: item.attr(
+        name = "faction"), reputation: ReputationData(level: item.attr(
+        name = "level").parseInt, experience: item.attr(
+        name = "experience").parseInt)))
