@@ -121,7 +121,7 @@ proc saveReputation*(saveTree: var XmlNode) {.raises: [], tags: [],
   ##
   ## Returns modified parameter saveTree.
   for reputation in reputationsList:
-    var repElement: XmlNode = newElement(tag = "reputation")
+    var repElement: XmlNode = newElement(tag = "factionrep")
     repElement.attrs = {"faction": reputation.factionIndex,
         "level": $reputation.reputation.level,
         "experience": $reputation.reputation.experience}.toXmlAttributes
@@ -132,7 +132,7 @@ proc loadReputation*(savedGame: XmlNode) {.raises: [ValueError], tags: [],
   ## Load the reputation's data from the file
   ##
   ## * savedGame - the XML tree with save data
-  for item in savedGame.findAll(tag = "reputation"):
+  for item in savedGame.findAll(tag = "factionrep"):
     reputationsList.add(y = ReputationObject(factionIndex: item.attr(
         name = "faction"), reputation: ReputationData(level: item.attr(
         name = "level").parseInt, experience: item.attr(
