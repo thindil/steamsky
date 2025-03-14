@@ -300,42 +300,42 @@ proc showHeader*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
     rowTemplateDynamic()
-    rowTemplateStatic(width = 30)
+    rowTemplateStatic(width = 35)
     try:
       rowTemplateStatic(width = getTextWidth(text = $fuelAmount))
     except:
       dialog = setError(message = "Can't set fuel text width")
       return
-    rowTemplateStatic(width = 30)
+    rowTemplateStatic(width = 35)
     try:
       rowTemplateStatic(width = getTextWidth(text = $foodAmount))
     except:
       dialog = setError(message = "Can't set food text width")
       return
-    rowTemplateStatic(width = 30)
+    rowTemplateStatic(width = 35)
     try:
       rowTemplateStatic(width = getTextWidth(text = $drinksAmount))
     except:
       dialog = setError(message = "Can't set drinks text width")
       return
     if speed < 0.5:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if not havePilot:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if not haveEngineer:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if not haveGunner:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if not haveTrader:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if needRepairs:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if needWorker:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if playerShip.upgradeModule > -1:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
     if needCleaning:
-      rowTemplateStatic(width = 30)
+      rowTemplateStatic(width = 35)
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "The main game menu. Show info about the ship, its crew and allow to quit the game")
