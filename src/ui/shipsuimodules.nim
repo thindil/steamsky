@@ -360,7 +360,12 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addOwnersInfo(ownersName: string; addButton: bool = false;
       row: Natural = 0) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-          RootEffect], contractual.} =
+      RootEffect], contractual.} =
+    ## Add information about the module's owners
+    ##
+    ## * ownersName - the name of the module's owners like crafters, medics, etc
+    ## * addButton  - if true, add the button to manipulate the owners
+    ## * row        - the row in which the info will be added
     var ownersText = ownersName
     if module.owner.len > 1:
       ownersText.add(y = "s")
@@ -1336,6 +1341,11 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addButton(name, label, command: string) {.raises: [], tags: [],
       contractual.} =
+    ## Add a button to the dialog
+    ##
+    ## * name    - the Tcl name of the button
+    ## * label   - the label to show on the button
+    ## * command - the Tcl command to execute when the button was pressed
     let button = ammoMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & ammoMenu & " .;" & command & "}")
