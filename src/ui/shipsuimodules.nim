@@ -40,14 +40,14 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowModuleInfo moduleindex
   ## ModuleIndex is the index of the module to show
   let
-    moduleIndex = try:
+    moduleIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get module index.")
-    moduleDialog = createDialog(name = ".moduledialog",
+    moduleDialog: string = createDialog(name = ".moduledialog",
         title = playerShip.modules[moduleIndex].name, columns = 2)
-    moduleCanvas = moduleDialog & ".canvas"
-    yScroll = moduleDialog & ".yscroll"
+    moduleCanvas: string = moduleDialog & ".canvas"
+    yScroll: string = moduleDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .moduledialog.canvas yview]")
   tclEval(script = "canvas " & moduleCanvas & " -yscrollcommand [list " &
       yScroll & " set]")
@@ -58,7 +58,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid rowconfigure " & moduleDialog & " " & moduleCanvas & " -weight 1")
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
   var
-    label = ""
+    label: string = ""
     height: Positive = 10
 
   proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
@@ -91,15 +91,15 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   # Show the module's name
   let
-    moduleFrame = moduleCanvas & ".frame"
-    module = playerShip.modules[moduleIndex]
+    moduleFrame: string = moduleCanvas & ".frame"
+    module: ModuleData = playerShip.modules[moduleIndex]
   tclEval(script = "ttk::frame " & moduleFrame)
   addLabel(name = moduleFrame & ".nameinfo", labelText = "Name:")
-  var currentRow = 0
+  var currentRow: Natural = 0
   addLabel(name = moduleFrame & ".nameinfo2", labelText = module.name,
       row = currentRow, column = 1, secondary = true)
-  var infoButton = moduleFrame & ".namebutton"
-  let closeDialogButton = moduleFrame & ".button"
+  var infoButton: string = moduleFrame & ".namebutton"
+  let closeDialogButton: string = moduleFrame & ".button"
   tclEval(script = "ttk::button " & infoButton & " -image editicon -command {" &
       closeDialogButton & " invoke;GetString {Enter a new name for the " &
       module.name & ":} modulename" & $argv[1] & " {Renaming the module} {Rename}} -style Small.TButton")
@@ -115,8 +115,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   currentRow.inc
   addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
       row = currentRow)
-  let damagePercent = (module.durability.float / module.maxDurability.float)
-  var progressBarStyle, statusTooltip = ""
+  let damagePercent: float = (module.durability.float / module.maxDurability.float)
+  var progressBarStyle, statusTooltip: string = ""
   if damagePercent < 1.0 and damagePercent > 0.79:
     progressBarStyle = " -style green.Horizontal.TProgressbar"
     statusTooltip = "Slightly damaged"
@@ -135,13 +135,13 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   else:
     progressBarStyle = " -style green.Horizontal.TProgressbar"
     statusTooltip = "Not damaged"
-  let moduleMaxValue = try:
+  let moduleMaxValue: Positive = try:
       (modulesList[module.protoIndex].durability.float * 1.5).Positive
     except:
       return showError(message = "Can't count the module's max value.")
   if module.maxDurability == moduleMaxValue:
     statusTooltip.add(y = " (max upgrade)")
-  let progressBar = moduleFrame & ".damagebar"
+  let progressBar: string = moduleFrame & ".damagebar"
   tclEval(script = "ttk::progressbar " & progressBar &
       " -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
   tclEval(script = "tooltip::tooltip " & progressBar & " \"" & statusTooltip & "\"")
@@ -173,7 +173,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * column        - the column in which the button will be added
     ## * buttonName    - the Tcl name of the button
     ## * row           - the row in which the button will be added
-    let upgradeNumber = case upgradeType
+    let upgradeNumber: string = case upgradeType
       of maxValue:
         "2"
       of value:
@@ -227,7 +227,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   currentRow.inc
   addLabel(name = moduleFrame & ".lblrepairmaterial",
       labelText = "Repair material: ", row = currentRow, wrapLength = 200)
-  let moduleText = moduleFrame & ".info"
+  let moduleText: string = moduleFrame & ".info"
   tclEval(script = "text " & moduleText & " -wrap char -height 5 -width 30")
   tclEval(script = moduleText & " tag configure red -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
@@ -256,7 +256,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   except:
     return showError(message = "Can't configure moduleText.")
   tclEval(script = "grid " & moduleText & " -row " & $currentRow & " -column 1 -sticky nw")
-  var newHeight = try:
+  var newHeight: Natural = try:
       tclEval2(script = "winfo reqheight " & moduleText).parseInt
     except:
       return showError(message = "Can't count the height of the text.")
@@ -281,8 +281,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   if module.upgradeAction != none:
     currentRow.inc
     var
-      moduleInfo = ""
-      maxUpgrade = 0
+      moduleInfo: string = ""
+      maxUpgrade: Natural = 0
     case module.upgradeAction
     of durability:
       moduleInfo.add(y = "Durability")
@@ -328,14 +328,14 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if maxUpgrade == 0:
       maxUpgrade = 1
     let
-      upgradePercent = 1.0 - (module.upgradeProgress.float / maxUpgrade.float)
-      progressBarStyle = if upgradePercent > 0.74:
+      upgradePercent: float = 1.0 - (module.upgradeProgress.float / maxUpgrade.float)
+      progressBarStyle: string = if upgradePercent > 0.74:
           " -style green.Horizontal.TProgressbar"
         elif upgradePercent > 0.24:
           " -style yellow.Horizontal.TProgressbar"
         else:
           " -style Horizontal.TProgressbar"
-      progressBar = moduleFrame & ".upgradebar"
+      progressBar: string = moduleFrame & ".upgradebar"
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
         "}" & progressBarStyle)
@@ -366,13 +366,13 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * ownersName - the name of the module's owners like crafters, medics, etc
     ## * addButton  - if true, add the button to manipulate the owners
     ## * row        - the row in which the info will be added
-    var ownersText = ownersName
+    var ownersText: string = ownersName
     if module.owner.len > 1:
       ownersText.add(y = "s")
     ownersText.add(y = " (max " & $module.owner.len & "):")
     addLabel(name = moduleFrame & ".lblowners", labelText = ownersText, row = row)
     ownersText = ""
-    var haveOwner = false
+    var haveOwner: bool = false
     for owner in module.owner:
       if owner > -1:
         if haveOwner:
@@ -407,7 +407,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of engine:
     # Show engine power
     currentRow.inc
-    var moduleMaxValue = try:
+    var moduleMaxValue: Natural = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the module max value.")
