@@ -141,7 +141,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
             colorLabel(str = "They are unfriendly to you",
                 color = theme.mapColors[mapRedColor])
           of 0:
-            colorLabel(str = "You are unknown here", color = theme.mapColors[mapGoldenYellow])
+            label(str = "You are unknown here")
           of 1..25:
             colorLabel(str = "You are know here as visitor",
                 color = theme.mapColors[mapGreenColor])
@@ -156,6 +156,7 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         if baseIndex == playerShip.homeBase:
           colorLabel(str = "It is your home base", color = theme.mapColors[mapCyanColor])
     if skyMap[x][y].missionIndex > -1:
+      setLayoutRowDynamic(height = 25, cols = 1)
       let missionIndex: int = skyMap[x][y].missionIndex
       case acceptedMissions[missionIndex].mType
       of deliver:
@@ -170,23 +171,25 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         label(str = "Explore area")
       of passenger:
         label(str = "Transport passenger")
-  if currentStory.index.len > 0:
-    var storyX, storyY: Natural = 1
-    (storyX, storyY) = getStoryLocation()
-    if storyX == playerShip.skyX and storyY == playerShip.skyY:
-      storyX = 0
-      storyY = 0
-    var finishCondition: StepConditionType = any
-    if y == storyX and y == storyY:
-      finishCondition = (if currentStory.currentStep == 0: storiesList[
-          currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
-          0: storiesList[currentStory.index].steps[
-          currentStory.currentStep].finishCondition else: storiesList[
-          currentStory.index].finalStep.finishCondition)
-      if finishCondition in {askInBase, destroyShip, explore}:
-        label(str = "Story leads you here")
-  if x == playerShip.skyX and y == playerShip.skyY:
-    colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
+    if currentStory.index.len > 0:
+      var storyX, storyY: Natural = 1
+      (storyX, storyY) = getStoryLocation()
+      if storyX == playerShip.skyX and storyY == playerShip.skyY:
+        storyX = 0
+        storyY = 0
+      var finishCondition: StepConditionType = any
+      if y == storyX and y == storyY:
+        finishCondition = (if currentStory.currentStep == 0: storiesList[
+            currentStory.index].startingStep.finishCondition elif currentStory.currentStep >
+            0: storiesList[currentStory.index].steps[
+            currentStory.currentStep].finishCondition else: storiesList[
+            currentStory.index].finalStep.finishCondition)
+        if finishCondition in {askInBase, destroyShip, explore}:
+          setLayoutRowDynamic(height = 25, cols = 1)
+          label(str = "Story leads you here")
+    if x == playerShip.skyX and y == playerShip.skyY:
+      setLayoutRowDynamic(height = 25, cols = 1)
+      colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
 
