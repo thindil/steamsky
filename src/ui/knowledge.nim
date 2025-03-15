@@ -18,9 +18,9 @@
 ## Provides code related to the information about the player's character's
 ## knowledge, like minimizing/maximizing its sections, drawing the UI, etc.
 
-import std/[strutils, tables]
+import std/tables
 import contracts, nimalyzer
-import ../[basestypes, game, stories, tk]
+import ../[basestypes, game, tk]
 import coreui, errordialog, knowledgebases, knowledgeevents, knowledgemissions,
     knowledgestories, utilsui2
 
@@ -233,50 +233,10 @@ proc showKnowledgeCommand(clientData: cint; interp: PInterp; argc: cint;
   # Setting the known events list
   updateEventsList()
   # Setting the known stories list
-  knowledgeFrame = mainPaned & ".knowledgeframe.stories.canvas.frame"
-  var rows: Natural = try:
-      tclEval2(script = "grid size " & knowledgeFrame).split(sep = " ")[1].parseInt
-    except:
-      showError(message = "Can't get the amount of rows.")
-      return
-  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = knowledgeFrame)
-  if finishedStories.len == 0:
-    let label: string = knowledgeFrame & ".nostories"
-    tclEval(script = "ttk::label " & label & " -text {You didn't discover any story yet.} -wraplength 400")
-    tclEval(script = "grid " & label & " -padx 10")
-  else:
-    var finishedStoriesList: string = ""
-    for finishedStory in finishedStories:
-      try:
-        finishedStoriesList.add(y = "{ " & storiesList[
-            finishedStory.index].name & "}")
-      except:
-        return showError(message = "Can't get finished story.")
-    let optionsFrame: string = knowledgeFrame & ".options"
-    tclEval(script = "ttk::frame " & optionsFrame)
-    let storiesBox: string = optionsFrame & ".titles"
-    tclEval(script = "ttk::combobox " & storiesBox &
-        " -state readonly -values [list " & finishedStoriesList & "]")
-    tclEval(script = "bind " & storiesBox & " <<ComboboxSelected>> ShowStory")
-    tclEval(script = storiesBox & " current " & $finishedStories.high)
-    tclEval(script = "grid " & storiesBox)
-    var button: string = optionsFrame & ".show"
-    tclEval(script = "ttk::button " & button & " -text {Show on map} -command ShowStoryLocation")
-    tclEval(script = "grid " & button & " -column 1 -row 0")
-    button = optionsFrame & ".set"
-    tclEval(script = "ttk::button " & button & " -text {Set as destination for ship} -command SetStory")
-    tclEval(script = "grid " & button & " -column 2 -row 0")
-    tclEval(script = "grid " & optionsFrame & " -sticky w")
-    let storiesView: string = knowledgeFrame & ".view"
-    tclEval(script = "text " & storiesView & " -wrap word")
-    tclEval(script = "grid " & storiesView & " -sticky w")
-    tclEval(script = "event generate " & storiesBox & " <<ComboboxSelected>>")
-  tclEval(script = "update")
-  knowledgeCanvas = mainPaned & ".knowledgeframe.stories.canvas"
-  tclEval(script = knowledgeCanvas & " configure -scrollregion [list " &
-      tclEval2(script = knowledgeCanvas & " bbox all") & "]")
-  tclEval(script = knowledgeCanvas & " xview moveto 0.0")
-  tclEval(script = knowledgeCanvas & " yview moveto 0.0")
+  try:
+    updateStoriesList()
+  except:
+    return showError(message = "Can't show list of stories.")
   # Show knowledge
   showScreen(newScreenName = "knowledgeframe")
   return tclOk

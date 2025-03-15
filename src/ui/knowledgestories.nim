@@ -177,6 +177,50 @@ proc setStoryCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "SetDestination2 " & $newX & " " & $newY)
   return tclOk
 
+proc updateStoriesList*() {.raises: [KeyError], tags: [RootEffect], contractual.} =
+  ## Update the information about the list of known stories
+  let knowledgeFrame = mainPaned & ".knowledgeframe.stories.canvas.frame"
+  var rows: Natural = try:
+      tclEval2(script = "grid size " & knowledgeFrame).split(sep = " ")[1].parseInt
+    except:
+      showError(message = "Can't get the amount of rows.")
+      return
+  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = knowledgeFrame)
+  if finishedStories.len == 0:
+    let label: string = knowledgeFrame & ".nostories"
+    tclEval(script = "ttk::label " & label & " -text {You didn't discover any story yet.} -wraplength 400")
+    tclEval(script = "grid " & label & " -padx 10")
+  else:
+    var finishedStoriesList: string = ""
+    for finishedStory in finishedStories:
+      finishedStoriesList.add(y = "{ " & storiesList[
+          finishedStory.index].name & "}")
+    let optionsFrame: string = knowledgeFrame & ".options"
+    tclEval(script = "ttk::frame " & optionsFrame)
+    let storiesBox: string = optionsFrame & ".titles"
+    tclEval(script = "ttk::combobox " & storiesBox &
+        " -state readonly -values [list " & finishedStoriesList & "]")
+    tclEval(script = "bind " & storiesBox & " <<ComboboxSelected>> ShowStory")
+    tclEval(script = storiesBox & " current " & $finishedStories.high)
+    tclEval(script = "grid " & storiesBox)
+    var button: string = optionsFrame & ".show"
+    tclEval(script = "ttk::button " & button & " -text {Show on map} -command ShowStoryLocation")
+    tclEval(script = "grid " & button & " -column 1 -row 0")
+    button = optionsFrame & ".set"
+    tclEval(script = "ttk::button " & button & " -text {Set as destination for ship} -command SetStory")
+    tclEval(script = "grid " & button & " -column 2 -row 0")
+    tclEval(script = "grid " & optionsFrame & " -sticky w")
+    let storiesView: string = knowledgeFrame & ".view"
+    tclEval(script = "text " & storiesView & " -wrap word")
+    tclEval(script = "grid " & storiesView & " -sticky w")
+    tclEval(script = "event generate " & storiesBox & " <<ComboboxSelected>>")
+  tclEval(script = "update")
+  let knowledgeCanvas = mainPaned & ".knowledgeframe.stories.canvas"
+  tclEval(script = knowledgeCanvas & " configure -scrollregion [list " &
+      tclEval2(script = knowledgeCanvas & " bbox all") & "]")
+  tclEval(script = knowledgeCanvas & " xview moveto 0.0")
+  tclEval(script = knowledgeCanvas & " yview moveto 0.0")
+
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the list of known stories
