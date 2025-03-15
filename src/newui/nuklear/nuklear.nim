@@ -997,10 +997,10 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
             result = isMouseReleased(id = left)
           else:
             result = isMousePressed(id = left)
-  if (state and NK_WIDGET_STATE_HOVER.ord).nk_bool:
-    discard
-  return true
-
+  if (state and NK_WIDGET_STATE_HOVER.ord).nk_bool and not isMousePrevHovering(rect = r):
+    state = state or NK_WIDGET_STATE_ENTERED.ord
+  elif isMousePrevHovering(rect = r):
+    state = state or NK_WIDGET_STATE_LEFT.ord
 
 proc nkDoButton(state: var nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
   style: ptr nk_style_button; `in`: ptr nk_input; behavior: nk_button_behavior;
@@ -1058,6 +1058,9 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds:
     var content: NimRect = NimRect()
     result = nkDoButton(state = state, `out` = `out`, r = bounds, style = style,
       `in` = `in`, behavior = behavior, content = content)
+    # TODO
+    # if style.draw_begin != nil:
+    #   style.draw_begin(b = `out`, style.userdata)
 
 # -----
 # Panel
