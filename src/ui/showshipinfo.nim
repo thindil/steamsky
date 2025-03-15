@@ -42,6 +42,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     shipInfoFrame: string = mainPaned & ".shipinfoframe"
     button: string = mainPaned & ".shipinfoframe.general.canvas.frame.rename"
   if tclEval2(script = "winfo exists " & shipInfoFrame) == "0":
+    tclSetVar(varName = "famount", newValue = $factionsList.len)
     tclEval(script = """
       set shipinfoframe [ttk::frame .gameframe.paned.shipinfoframe]
       # General ship info
@@ -148,6 +149,10 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
          -sticky w -padx 5 -row 7 -column 1
       tooltip::tooltip $shipcanvas.frame.weight2 \
          "The ship weight. The more heavy is ship, the slower it fly\nand need stronger engines"
+      # Player's factions' reputation
+      for {set i 0} {$i < $famount} {incr i} {
+          grid [ttk::label $shipcanvas.frame.replabel$i] -sticky we -padx 5
+      }
       SetScrollbarBindings $shipcanvas.frame.weight2 $shipinfoframe.general.scrolly
       $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
       ::autoscroll::autoscroll $shipinfoframe.general.scrolly
