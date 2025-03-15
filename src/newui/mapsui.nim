@@ -190,6 +190,45 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
     if x == playerShip.skyX and y == playerShip.skyY:
       setLayoutRowDynamic(height = 25, cols = 1)
       colorLabel(str = "You are here", color = theme.mapColors[mapYellowColor])
+    if skyMap[x][y].eventIndex > -1:
+      setLayoutRowDynamic(height = 25, cols = 1)
+      let eventIndex: Natural = skyMap[x][y].eventIndex
+      label(str = "")
+      case eventsList[eventIndex].eType
+      of trader:
+        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name, color = theme.mapColors[mapGreenColor])
+      of friendlyShip:
+        colorLabel(str =protoShipsList[eventsList[eventIndex].shipIndex].name, color = theme.mapColors[mapGreen2Color])
+      of enemyShip:
+        try:
+          eventInfoText &= protoShipsList[eventsList[
+              eventIndex].shipIndex].name
+        except:
+          showError(message = "Can't get the name of the enemy's ship for the event.")
+          return
+        color = "red"
+      of fullDocks:
+        eventInfoText &= "Full docks in base"
+        color = "cyan"
+      of attackOnBase:
+        eventInfoText &= "Base is under attack"
+        color = "red"
+      of disease:
+        eventInfoText &= "Disease in base"
+        color = "yellow"
+      of enemyPatrol:
+        eventInfoText &= "Enemy patrol"
+        color = "red3"
+      of doublePrice:
+        try:
+          eventInfoText &= "Double price for " & itemsList[
+              eventsList[eventIndex].itemIndex].name
+        except:
+          showError(message = "Can't get the name of the item for the event.")
+          return
+        color = "lime"
+      of EventsTypes.none, baseRecovery:
+        discard
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
 
