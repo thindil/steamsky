@@ -163,8 +163,8 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
         label(str = "Deliver " & itemsList[acceptedMissions[
             missionIndex].itemIndex].name)
       of destroy:
-          label(str = "Destroy " & protoShipsList[acceptedMissions[
-              missionIndex].shipIndex].name)
+        label(str = "Destroy " & protoShipsList[acceptedMissions[
+            missionIndex].shipIndex].name)
       of patrol:
         label(str = "Patrol area")
       of explore:
@@ -196,37 +196,25 @@ proc showMapInfo(x: MapXRange; y: MapYRange; theme: ThemeData) {.raises: [
       label(str = "")
       case eventsList[eventIndex].eType
       of trader:
-        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name, color = theme.mapColors[mapGreenColor])
+        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name,
+            color = theme.mapColors[mapGreenColor])
       of friendlyShip:
-        colorLabel(str =protoShipsList[eventsList[eventIndex].shipIndex].name, color = theme.mapColors[mapGreen2Color])
+        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name,
+            color = theme.mapColors[mapGreen2Color])
       of enemyShip:
-        try:
-          eventInfoText &= protoShipsList[eventsList[
-              eventIndex].shipIndex].name
-        except:
-          showError(message = "Can't get the name of the enemy's ship for the event.")
-          return
-        color = "red"
+        colorLabel(str = protoShipsList[eventsList[eventIndex].shipIndex].name,
+            color = theme.mapColors[mapRedColor])
       of fullDocks:
-        eventInfoText &= "Full docks in base"
-        color = "cyan"
+        colorLabel(str = "Full docks in base", color = theme.mapColors[mapCyanColor])
       of attackOnBase:
-        eventInfoText &= "Base is under attack"
-        color = "red"
+        colorLabel(str = "Base is under attack", color = theme.mapColors[mapRedColor])
       of disease:
-        eventInfoText &= "Disease in base"
-        color = "yellow"
+        colorLabel(str = "Disease in base", color = theme.mapColors[mapYellowColor])
       of enemyPatrol:
-        eventInfoText &= "Enemy patrol"
-        color = "red3"
+        colorLabel(str = "Enemy patrol", color = theme.mapColors[mapRed3Color])
       of doublePrice:
-        try:
-          eventInfoText &= "Double price for " & itemsList[
-              eventsList[eventIndex].itemIndex].name
-        except:
-          showError(message = "Can't get the name of the item for the event.")
-          return
-        color = "lime"
+        colorLabel(str = "Double price for " & itemsList[eventsList[
+            eventIndex].itemIndex].name, color = theme.mapColors[mapLimeColor])
       of EventsTypes.none, baseRecovery:
         discard
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
