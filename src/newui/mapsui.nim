@@ -20,7 +20,8 @@
 
 import std/[colors, math, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, config, game, maps, missions, shipsmovement, stories, types]
+import ../[basestypes, config, game, game2, maps, missions, shipsmovement,
+    stories, types]
 import coreui, dialogs, errordialog, header, messagesui, ordersmenu, themes, utilsui2
 
 var
@@ -39,8 +40,10 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     try:
       for index, fileName in themesList[gameSettings.interfaceTheme].icons[
           menuIcon..moveStepIcon]:
-        images[(index + 4).IconsNames] = nuklearLoadSVGImage(filePath = fileName,
-            width = 0, height = 20 + gameSettings.interfaceFontSize)
+        images[(index + 4).IconsNames] = nuklearLoadSVGImage(
+            filePath = fileName,
+
+width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
   centerX = playerShip.skyX
@@ -303,7 +306,8 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
 
-proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -332,9 +336,14 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
       if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(), text = "Wait 1 minute.")
+        addTooltip(bounds = getWidgetBounds(),
+          text = if gameSettings.waitMinutes == 1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
       imageButtonCentered(image = images[waitIcon]):
-        discard
+        try:
+          updateGame(minutes = gameSettings.waitMinutes)
+          waitInPlace(minutes = gameSettings.waitMinutes)
+        except:
+          dialog = setError(message = "Can't update the game.")
     else:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -348,7 +357,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship up and left")
       imageButton(image = images[arrowUpLeft]):
         try:
-          res =  moveShip(x = -1, y = -1, message = message)
+          res = moveShip(x = -1, y = -1, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
@@ -356,7 +365,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship up")
       imageButton(image = images[arrowUp]):
         try:
-          res =  moveShip(x = 0, y = -1, message = message)
+          res = moveShip(x = 0, y = -1, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
@@ -364,7 +373,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship up and right")
       imageButton(image = images[arrowUpRight]):
         try:
-          res =  moveShip(x = 1, y = -1, message = message)
+          res = moveShip(x = 1, y = -1, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
@@ -372,15 +381,20 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship left")
       imageButton(image = images[arrowLeft]):
         try:
-          res =  moveShip(x = -1, y = 0, message = message)
+          res = moveShip(x = -1, y = 0, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
       if playerShip.destinationX == 0:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
-              text = "Wait 1 minute")
+            text = if gameSettings.waitMinutes == 1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
         imageButton(image = images[waitIcon]):
-          discard
+          res = 1
+          try:
+            updateGame(minutes = gameSettings.waitMinutes)
+            waitInPlace(minutes = gameSettings.waitMinutes)
+          except:
+            dialog = setError(message = "Can't update the game.")
       else:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
@@ -392,7 +406,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship right")
       imageButton(image = images[arrowRight]):
         try:
-          res =  moveShip(x = 1, y = 0, message = message)
+          res = moveShip(x = 1, y = 0, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
@@ -400,7 +414,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship down and left")
       imageButton(image = images[arrowDownLeft]):
         try:
-          res =  moveShip(x = -1, y = 1, message = message)
+          res = moveShip(x = -1, y = 1, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
@@ -408,7 +422,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship down")
       imageButton(image = images[arrowDown]):
         try:
-          res =  moveShip(x = 0, y = 1, message = message)
+          res = moveShip(x = 0, y = 1, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
@@ -416,7 +430,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contr
             text = "Move ship down and right")
       imageButton(image = images[arrowDownRight]):
         try:
-          res =  moveShip(x = 1, y = 1, message = message)
+          res = moveShip(x = 1, y = 1, message = message)
         except:
           dialog = setError(message = "Can't move the ship.")
 
