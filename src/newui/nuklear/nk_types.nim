@@ -235,7 +235,11 @@ type
     background*, group_text_color*: nk_color
     border*, combo_border*, contextual_border*, menu_border*, group_border*,
       tooltip_border*, popup_border*: cfloat
+  # FIXME: check nuklear.h needs return type
   nk_draw_begin* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
+    ## Internal Nuklear type
+  # FIXME: check nuklear.h needs return type
+  nk_draw_end* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
     ## Internal Nuklear type
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
     ## Internal Nuklear type
@@ -246,8 +250,10 @@ type
     padding*: nk_vec2
     image_padding*: nk_vec2
     touch_padding*: nk_vec2
+    # TODO
     # draw_begin*: nk_draw_begin
-    # user_data*: nk_handle
+    # draw_end*: nk_draw_end
+    # userdata*: nk_handle
   nk_handle* {.bycopy, union.} = object
     ## Internal Nuklear type
     `ptr`*: pointer
