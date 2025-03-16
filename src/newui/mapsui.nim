@@ -20,7 +20,7 @@
 
 import std/[colors, math, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, config, game, maps, missions, stories, types]
+import ../[basestypes, config, game, maps, missions, shipsmovement, stories, types]
 import coreui, dialogs, errordialog, header, messagesui, ordersmenu, themes, utilsui2
 
 var
@@ -303,7 +303,7 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
 
-proc showButtons(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -320,6 +320,9 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
     labelButton(title = "Ship orders"):
       setDialog()
       dialog = ordersDialog
+    var
+      res: Natural = 0
+      message: string = ""
     if playerShip.speed != docked and playerShip.destinationX > 0:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -344,22 +347,34 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up and left")
       imageButton(image = images[arrowUpLeft]):
-        discard
+        try:
+          res =  moveShip(x = -1, y = -1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up")
       imageButton(image = images[arrowUp]):
-        discard
+        try:
+          res =  moveShip(x = 0, y = -1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up and right")
       imageButton(image = images[arrowUpRight]):
-        discard
+        try:
+          res =  moveShip(x = 1, y = -1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship left")
       imageButton(image = images[arrowLeft]):
-        discard
+        try:
+          res =  moveShip(x = -1, y = 0, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
       if playerShip.destinationX == 0:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
@@ -376,22 +391,34 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship right")
       imageButton(image = images[arrowRight]):
-        discard
+        try:
+          res =  moveShip(x = 1, y = 0, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down and left")
       imageButton(image = images[arrowDownLeft]):
-        discard
+        try:
+          res =  moveShip(x = -1, y = 1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down")
       imageButton(image = images[arrowDown]):
-        discard
+        try:
+          res =  moveShip(x = 0, y = 1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down and right")
       imageButton(image = images[arrowDownRight]):
-        discard
+        try:
+          res =  moveShip(x = 1, y = 1, message = message)
+        except:
+          dialog = setError(message = "Can't move the ship.")
 
 var mapX, mapY: Natural = 0
 
