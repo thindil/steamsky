@@ -34,12 +34,12 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns parameter dialog, modified if any error happened.
-  if gameImages[0] == nil:
+  if images[menuIcon] == nil:
     # Load images
     try:
       for index, fileName in themesList[gameSettings.interfaceTheme].icons[
-          4..iconsAmount + 3]:
-        gameImages[index] = nuklearLoadSVGImage(filePath = fileName,
+          menuIcon..moveStepIcon]:
+        images[(index + 4).IconsNames] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 20 + gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
@@ -243,15 +243,15 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
       triggerBounds = bounds, button = left):
     setLayoutRowStatic(height = 35, cols = 6, ratio = [35.cfloat, 35, 35, 35,
         135, 230])
-    imageButton(image = gameImages[25]):
+    imageButton(image = images[arrowUpLeft]):
       centerY = (if centerY - (rows / 3).int < 1: (rows /
           3).int else: centerY - (rows / 3).int)
       centerX = (if centerX - (cols / 3).int < 1: (cols /
           3).int else: centerX - (cols / 3).int)
-    imageButton(image = gameImages[26]):
+    imageButton(image = images[arrowUp]):
       centerY = (if centerY - (rows / 3).int < 1: (rows /
           3).int else: centerY - (rows / 3).int)
-    imageButton(image = gameImages[27]):
+    imageButton(image = images[arrowUpRight]):
       centerY = (if centerY - (rows / 3).int < 1: (rows /
           3).int else: centerY - (rows / 3).int)
       centerX = (if centerX + (cols / 3).int > 1_024: (cols /
@@ -263,11 +263,11 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
       centerX = playerShip.skyX
       centerY = playerShip.skyY
       closeMapMenu()
-    imageButton(image = gameImages[28]):
+    imageButton(image = images[arrowLeft]):
       centerX = (if centerX - (cols / 3).int < 1: (cols /
           3).int else: centerX - (cols / 3).int)
     label(str = "")
-    imageButton(image = gameImages[29]):
+    imageButton(image = images[arrowRight]):
       centerX = (if centerX + (cols / 3).int > 1_024: (cols /
           3).int else: centerX + (cols / 3).int)
     label(str = "Y:")
@@ -278,15 +278,15 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
       centerY = skyBases[playerShip.homeBase].skyY
       closeMapMenu()
     setLayoutRowStatic(height = 35, cols = 5, ratio = [35.cfloat, 35, 35, 175, 230])
-    imageButton(image = gameImages[30]):
+    imageButton(image = images[arrowDownLeft]):
       centerY = (if centerY + (rows / 3).int > 1_024: (rows /
           3).int else: centerY + (rows / 3).int)
       centerX = (if centerX - (cols / 3).int < 1: (cols /
           3).int else: centerX - (cols / 3).int)
-    imageButton(image = gameImages[31]):
+    imageButton(image = images[arrowDown]):
       centerY = (if centerY + (rows / 3).int > 1_024: (rows /
           3).int else: centerY + (rows / 3).int)
-    imageButton(image = gameImages[32]):
+    imageButton(image = images[arrowDownRight]):
       centerY = (if centerY + (rows / 3).int > 1_024: (rows /
           3).int else: centerY + (rows / 3).int)
       centerX = (if centerX + (cols / 3).int > 1_024: (cols /
@@ -324,13 +324,13 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Auto move your ship to its destination.")
-      imageButton(image = gameImages[34]):
+      imageButton(image = images[moveToIcon]):
         discard
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(), text = "Wait 1 minute.")
-      imageButtonCentered(image = gameImages[33]):
+      imageButtonCentered(image = images[waitIcon]):
         discard
     else:
       if gameSettings.showTooltips:
@@ -343,54 +343,54 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up and left")
-      imageButton(image = gameImages[25]):
+      imageButton(image = images[arrowUpLeft]):
         discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up")
-      imageButton(image = gameImages[26]):
+      imageButton(image = images[arrowUp]):
         discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship up and right")
-      imageButton(image = gameImages[27]):
+      imageButton(image = images[arrowUpRight]):
         discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship left")
-      imageButton(image = gameImages[28]):
+      imageButton(image = images[arrowLeft]):
         discard
       if playerShip.destinationX == 0:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Wait 1 minute")
-        imageButton(image = gameImages[33]):
+        imageButton(image = images[waitIcon]):
           discard
       else:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "Move ship one map field toward destination")
-        imageButton(image = gameImages[35]):
+        imageButton(image = images[moveStepIcon]):
           discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship right")
-      imageButton(image = gameImages[29]):
+      imageButton(image = images[arrowRight]):
         discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down and left")
-      imageButton(image = gameImages[30]):
+      imageButton(image = images[arrowDownLeft]):
         discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down")
-      imageButton(image = gameImages[31]):
+      imageButton(image = images[arrowDown]):
         discard
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship down and right")
-      imageButton(image = gameImages[32]):
+      imageButton(image = images[arrowDownRight]):
         discard
 
 var mapX, mapY: Natural = 0
