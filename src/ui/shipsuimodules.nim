@@ -495,7 +495,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addLabel(name = moduleFrame & ".modules2",
         labelText = $module.installedModules & " / " & $module.maxModules,
         row = currentRow, column = 1, secondary = true)
-    var moduleMaxValue = try:
+    var moduleMaxValue: int = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the module's max value (3).")
@@ -520,7 +520,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of cabin:
     # Show information about cabin's owners
     currentRow.inc
-    var isPassenger = false
+    var isPassenger: bool = false
     block missionLoop:
       for mission in acceptedMissions:
         if mission.mType == passenger:
@@ -535,8 +535,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addLabel(name = moduleFrame & ".cleanlbl", labelText = "Cleanliness:",
         row = currentRow, countHeight = true)
     var
-      damagePercent = 1.0 - (module.cleanliness.float / module.quality.float)
-      newStatusTooltip = ""
+      damagePercent: float = 1.0 - (module.cleanliness.float / module.quality.float)
+      newStatusTooltip: string = ""
     if damagePercent == 0.0:
       newStatusTooltip = "Clean"
       progressBarStyle = " -style green.Horizontal.TProgressbar"
@@ -555,7 +555,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     else:
       newStatusTooltip = "Ruined"
       progressBarStyle = ""
-    var progressBar = moduleFrame & ".cleanbar"
+    var progressBar: string = moduleFrame & ".cleanbar"
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent) &
         "}" & progressBarStyle)
@@ -570,7 +570,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         $(module.quality.float / 100.0) & "}")
     addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
         row = currentRow)
-    let moduleMaxValue = try:
+    let moduleMaxValue: Positive = try:
           (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
       except:
         return showError(message = "Can't count the cabin's max value.")
@@ -601,12 +601,12 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength: ",
         row = currentRow)
     let
-      moduleStrength = try:
+      moduleStrength: int = try:
           (if modulesList[module.protoIndex].mType ==
             ModuleType.gun: module.damage else: module.duration)
         except:
           return showError(message = "Can't count the module's strength.")
-      moduleMaxValue = try:
+      moduleMaxValue: Positive = try:
             (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
         except:
           return showError(message = "Can't count the gun's max value.")
@@ -637,7 +637,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     currentRow.inc
     addLabel(name = moduleFrame & ".ammolbl", labelText = "Ammunition:",
         row = currentRow)
-    let ammoText = moduleFrame & ".ammoinfo"
+    let ammoText: string = moduleFrame & ".ammoinfo"
     tclEval(script = "text " & ammoText & " -wrap char -height 5 -width 30")
     tclEval(script = ammoText & " tag configure red -foreground " & tclGetVar(
         varName = "ttk::theme::" & gameSettings.interfaceTheme &
@@ -645,8 +645,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = ammoText & " tag configure gold -foreground " & tclGetVar(
         varName = "ttk::theme::" & gameSettings.interfaceTheme &
         "::colors(-goldenyellow)"))
-    var haveAmmo = false
-    let ammoIndex = (if module.mType == ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
+    var haveAmmo: bool = false
+    let ammoIndex: int = (if module.mType == ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
     try:
       if ammoIndex in playerShip.cargo.low .. playerShip.cargo.high and
           itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
@@ -686,7 +686,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
       except:
         return showError(message = "Can't set gun's ammo button.")
-    var ammoHeight = try:
+    var ammoHeight: int = try:
           (tclEval2(script = ammoText &
             " count -displaylines 0.0 end").parseInt / tclEval2(
             script = "font metrics InterfaceFont -linespace").parseInt).int - 1
@@ -730,7 +730,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         0, row = currentRow)
     # Show information about workshop order
     currentRow.inc
-    let recipeName = try:
+    let recipeName: string = try:
         getWorkshopRecipeName(workshop = moduleIndex)
       except:
         return showError(message = "Can't get the recipe name.")
@@ -767,7 +767,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   # Show information about medical rooms
   of medicalRoom:
     currentRow.inc
-    var hasHealingTool = false
+    var hasHealingTool: bool = false
     for member in playerShip.crew:
       try:
         if member.health < 100 and findItem(inventory = playerShip.cargo,
@@ -785,7 +785,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addOwnersInfo(ownersName = "Trainee", addButton = module.trainedSkill > 0,
         row = currentRow)
     # Show information about trained skill
-    let trainText = try:
+    let trainText: string = try:
         (if module.trainedSkill > 0: skillsList[
           module.trainedSkill].name else: "not set")
       except:
@@ -813,7 +813,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     currentRow.inc
     addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength:",
         row = currentRow)
-    let moduleMaxValue = try:
+    let moduleMaxValue: int = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the battering ram max value.")
@@ -858,7 +858,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't count the height of the dialog.")
   tclEval(script = "update")
-  let width = try:
+  let width: Positive = try:
         tclEval2(script = "winfo reqwidth " & moduleFrame).parseInt +
           tclEval2(script = "winfo reqwidth " & yScroll).parseInt + 5
       except:
@@ -985,12 +985,12 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   ## be assigned. Crewindex is the index of the crew member which will be
   ## assigned or removed
   let
-    moduleIndex = try:
+    moduleIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the module index.")
-    frameName = ".moduledialog.canvas.frame"
-    crewIndex = try:
+    frameName: string = ".moduledialog.canvas.frame"
+    crewIndex: int = try:
         (if argc == 3: ($argv[2]).parseInt else: -1)
       except:
         return showError(message = "Can't get the crew index.")
@@ -1016,20 +1016,20 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
             2]].allocCStringArray) != tclOk:
       return tclError
   for index, _ in playerShip.crew:
-    let crewButton = frameName & ".crewbutton" & $index
+    let crewButton: string = frameName & ".crewbutton" & $index
     tclEval(script = crewButton & " state !disabled")
     tclEval(script = crewButton & " configure -takefocus 1")
-  var assigned = 0
+  var assigned: Natural = 0
   for owner in playerShip.modules[moduleIndex].owner:
     if owner > -1:
       assigned.inc
   if assigned == playerShip.modules[moduleIndex].owner.len:
     for index, _ in playerShip.crew:
-      let crewButton = frameName & ".crewbutton" & $index
+      let crewButton: string = frameName & ".crewbutton" & $index
       if tclGetVar(varName = crewButton) == "0":
         tclEval(script = crewButton & " state disabled")
         tclEval(script = crewButton & " configure -takefocus 0")
-  let infoLabel = frameName & ".infolabel"
+  let infoLabel: string = frameName & ".infolabel"
   if tclEval2(script = "winfo exists " & infoLabel) == "1":
     tclEval(script = infoLabel & " configure -text {Available: " &
         $(playerShip.modules[moduleIndex].owner.len - assigned) & "}")
@@ -1054,29 +1054,29 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Moduleindex is the index of the module to which a new crew members will
   ## be assigned.
   let
-    moduleIndex = try:
+    moduleIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the module index.")
-    module = playerShip.modules[moduleIndex]
-    moduleDialog = createDialog(name = ".moduledialog",
+    module: ModuleData = playerShip.modules[moduleIndex]
+    moduleDialog: string = createDialog(name = ".moduledialog",
         title = "Assign a crew member to " & module.name, titleWidth = 250)
-    yScroll = moduleDialog & ".yscroll"
-    crewCanvas = moduleDialog & ".canvas"
+    yScroll: string = moduleDialog & ".yscroll"
+    crewCanvas: string = moduleDialog & ".canvas"
   tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .moduledialog.canvas yview]")
   tclEval(script = "canvas " & crewCanvas & " -yscrollcommand [list " &
       yScroll & " set]")
   tclEval(script = "grid " & crewCanvas & " -sticky nwes -padx 5 -pady 5")
   tclEval(script = "grid " & yScroll & " -sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1")
-  let closeButton = moduleDialog & ".button"
+  let closeButton: string = moduleDialog & ".button"
   tclEval(script = "ttk::button " & closeButton &
       "  -text Close -command {CloseDialog " & moduleDialog & "}")
   tclEval(script = "grid " & closeButton & " -pady {0 5} -columnspan 2")
   tclEval(script = "focus " & closeButton)
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
   let
-    crewFrame = crewCanvas & ".frame"
-    recipe = if module.mType == ModuleType2.workshop:
+    crewFrame: string = crewCanvas & ".frame"
+    recipe: CraftData = if module.mType == ModuleType2.workshop:
         try:
           setRecipeData(recipeIndex = module.craftingIndex)
         except:
@@ -1084,12 +1084,12 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
       else:
         CraftData()
   var
-    height = 10
-    width = 250
-    assigned = 0
+    height: Positive = 10
+    width: Positive = 250
+    assigned: Natural = 0
   tclEval(script = "ttk::frame " & crewFrame)
   for index, member in playerShip.crew:
-    let crewButton = crewFrame & ".crewbutton" & $index
+    let crewButton: string = crewFrame & ".crewbutton" & $index
     tclEval(script = "ttk::checkbutton " & crewButton & " -text {" &
         member.name & (if module.mType == ModuleType2.workshop: getSkillMarks(
         skillIndex = recipe.skill, memberIndex = index) else: "") &
