@@ -20,7 +20,7 @@
 
 import std/[colors, math, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, config, game, game2, maps, messages,  missions, missions2, shipsmovement, stories, types]
+import ../[basestypes, config, crew2, events2, game, game2, maps, messages,  missions, missions2, shipscrew, shipscargo, shipsmovement, stories, types]
 import coreui, dialogs, errordialog, header, messagesui, ordersmenu, themes, utilsui2
 
 var
@@ -327,12 +327,123 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       res: Natural = 0
       message: string = ""
       newX, newY: int = 0
+      startsCombat: bool = false
+
+    proc updateCoordinates() {.raises: [], tags: [], contractual.} =
+      ## Update the new coordinates after move the player's ship
+      if playerShip.destinationX > playerShip.skyX:
+        newX = 1
+      elif playerShip.destinationX < playerShip.skyX:
+        newX = -1
+      if playerShip.destinationY > playerShip.skyY:
+        newY = 1
+      elif playerShip.destinationY < playerShip.skyY:
+        newY = -1
+
     if playerShip.speed != docked and playerShip.destinationX > 0:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Auto move your ship to its destination.")
       imageButton(image = images[moveToIcon]):
-        discard
+        while true:
+          newX = 0
+          newY = 0
+          updateCoordinates()
+          res = try:
+              moveShip(x = newX, y = newY, message = message)
+            except:
+              dialog = setError(message = "Can't move the ship.")
+              return
+          if res == 0:
+            break
+          startsCombat = try:
+              checkForEvent()
+            except:
+              dialog = setError(message = "Can't check for events.")
+              return
+          if startsCombat:
+            res = 4
+            break
+          if res == 8:
+            try:
+              waitForRest()
+            except:
+              dialog = setError(message = "Can't wait for rest of the crew.")
+              return
+            try:
+              if "sentientships" notin factionsList[playerShip.crew[
+                  0].faction].flags and (findMember(order = pilot) == -1 or
+                  findMember(order = engineer) == 0):
+                try:
+                  waitForRest()
+                except:
+                  dialog = setError(message = "Can't wait for rest of the crew.")
+                  return
+            except:
+              dialog = setError(message = "Can't check do faction has sentientships flag.")
+              return
+            res = 1
+            startsCombat = try:
+                checkForEvent()
+              except:
+                dialog = setError(message = "Can't check for events.")
+                return
+            if startsCombat:
+              res = 4
+              break
+          if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
+              playerShip.skyY].eventIndex > -1:
+            let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+            case gameSettings.autoMoveStop
+            of any:
+              if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
+                res = 0
+                break
+            of friendly:
+              if eventsList[eventIndex].eType in {trader, friendlyShip}:
+                res = 0
+                break
+            of enemy:
+              if eventsList[eventIndex].eType in {enemyShip, enemyPatrol}:
+                res = 0
+                break
+            of never:
+              discard
+          if dialog == none:
+            try:
+              if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
+                dialog = setMessage(message = "Your fuel level is dangerously low.",
+                    title = "Low fuel level")
+                res = 4
+                break
+              elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
+                dialog = setMessage(message = "Your food level is dangerously low.",
+                    title = "Low food level")
+                res = 4
+                break
+              elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
+                showMessage(text = "Your drinks level is dangerously low.",
+                    title = "Low drinks level")
+                res = 4
+                break
+            except:
+              showError(message = "Can't check low level of items.")
+              return
+          if playerShip.destinationX == playerShip.skyX and
+              playerShip.destinationY == playerShip.skyY:
+            addMessage("You reached your travel destination.", mType = orderMessage)
+            playerShip.destinationX = 0
+            playerShip.destinationY = 0
+            if gameSettings.autoFinish:
+              message = try:
+                  autoFinishMissions()
+                except:
+                  showError(message = "Can't finish missions.")
+                  return
+            res = 4
+            break
+          if res in 6 .. 7:
+            break
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
       if gameSettings.showTooltips:
@@ -345,18 +456,6 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         except:
           dialog = setError(message = "Can't update the game.")
     else:
-
-      proc updateCoordinates() {.raises: [], tags: [], contractual.} =
-        ## Update the new coordinates after move the player's ship
-        if playerShip.destinationX > playerShip.skyX:
-          newX = 1
-        elif playerShip.destinationX < playerShip.skyX:
-          newX = -1
-        if playerShip.destinationY > playerShip.skyY:
-          newY = 1
-        elif playerShip.destinationY < playerShip.skyY:
-          newY = -1
-
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.")
