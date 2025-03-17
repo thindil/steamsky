@@ -20,8 +20,7 @@
 
 import std/[colors, math, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, config, game, game2, maps, missions, shipsmovement,
-    stories, types]
+import ../[basestypes, config, game, game2, maps, messages,  missions, missions2, shipsmovement, stories, types]
 import coreui, dialogs, errordialog, header, messagesui, ordersmenu, themes, utilsui2
 
 var
@@ -327,6 +326,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     var
       res: Natural = 0
       message: string = ""
+      newX, newY: int = 0
     if playerShip.speed != docked and playerShip.destinationX > 0:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -345,6 +345,18 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
         except:
           dialog = setError(message = "Can't update the game.")
     else:
+
+      proc updateCoordinates() {.raises: [], tags: [], contractual.} =
+        ## Update the new coordinates after move the player's ship
+        if playerShip.destinationX > playerShip.skyX:
+          newX = 1
+        elif playerShip.destinationX < playerShip.skyX:
+          newX = -1
+        if playerShip.destinationY > playerShip.skyY:
+          newY = 1
+        elif playerShip.destinationY < playerShip.skyY:
+          newY = -1
+
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Set speed for your ship. The faster you move, the more fuel used. But faster movement has bigger chance to evade enemies.")
@@ -400,7 +412,25 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           addTooltip(bounds = getWidgetBounds(),
               text = "Move ship one map field toward destination")
         imageButton(image = images[moveStepIcon]):
-          discard
+          updateCoordinates()
+          res = try:
+              moveShip(x = newX, y = newY, message = message)
+            except:
+              dialog = setError(message = "Can't move the ship.")
+              return
+          if playerShip.destinationX == playerShip.skyX and
+              playerShip.destinationY == playerShip.skyY:
+            addMessage(message = "You reached your travel destination.",
+                mType = orderMessage)
+            playerShip.destinationX = 0
+            playerShip.destinationY = 0
+            if gameSettings.autoFinish:
+              message = try:
+                  autoFinishMissions()
+                except:
+                  dialog = setError(message = "Can't finish missions.")
+                  return
+            res = 4
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Move ship right")
