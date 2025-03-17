@@ -984,12 +984,12 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Moduleindex is the index of the module to which a new crew members will
   ## be assigned. Crewindex is the index of the crew member which will be
   ## assigned or removed
+  const frameName: string = ".moduledialog.canvas.frame"
   let
     moduleIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the module index.")
-    frameName: string = ".moduledialog.canvas.frame"
     crewIndex: int = try:
         (if argc == 3: ($argv[2]).parseInt else: -1)
       except:
@@ -1116,7 +1116,7 @@ proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   if updateAssignCrewCommand(clientData = clientData, interp = interp,
       argc = argc, argv = argv) != tclOk:
     return tclError
-  let infoLabel = crewFrame & ".infolabel"
+  let infoLabel: string = crewFrame & ".infolabel"
   tclEval(script = "ttk::label " & infoLabel & " -text {Available: " & $(
       module.owner.len - assigned) & "}")
   tclEval(script = "pack " & infoLabel)
@@ -1157,21 +1157,21 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Moduleindex is the index of the module to which a new skill will
   ## be assigned.
   let
-    moduleIndex = try:
+    moduleIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the module index.")
-    moduleDialog = createDialog(name = ".moduledialog",
+    moduleDialog: string = createDialog(name = ".moduledialog",
         title = "Assign skill to " & playerShip.modules[moduleIndex].name,
         titleWidth = 400)
-    skillsFrame = moduleDialog & ".frame"
+    skillsFrame: string = moduleDialog & ".frame"
   tclEval(script = "ttk::frame " & skillsFrame)
-  var skillsTable = createTable(parent = skillsFrame, headers = @["Skill",
+  var skillsTable: TableWidget = createTable(parent = skillsFrame, headers = @["Skill",
       "Training tool"])
   for index, skill in skillsList:
     var
-      protoIndex = -1
-      toolName = ""
+      protoIndex: int = -1
+      toolName: string = ""
     if skill.tool.len > 0:
       protoIndex = findProtoItem(itemType = skill.tool)
       toolName = try:
@@ -1180,8 +1180,8 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
         except:
           return showError(message = "Can't get the tool name.")
     var
-      skillName = skill.name
-      toolColor = "green"
+      skillName: string = skill.name
+      toolColor: string = "green"
     try:
       if getItemAmount(itemType = itemsList[protoIndex].itemType) == 0:
         skillName.add(y = " (no tool)")
@@ -1206,7 +1206,7 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = skillsTable.canvas & " yview moveto 0.0")
   addCloseButton(name = moduleDialog & ".button", text = "Close",
       command = "CloseDialog " & moduleDialog, row = 2)
-  let dialogCloseButton = moduleDialog & ".button"
+  let dialogCloseButton: string = moduleDialog & ".button"
   tclEval(script = "bind " & dialogCloseButton & " <Tab> {focus " &
       skillsTable.canvas & ";break}")
   tclEval(script = "bind " & skillsTable.canvas & " <Escape> {" &
@@ -1230,7 +1230,7 @@ proc cancelOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   ## CancelOrder moduleindex
   ## Moduleindex is the index of the module which the crafting order will
   ## be canceled
-  let moduleIndex = try:
+  let moduleIndex: int = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't get the module index.")
@@ -1263,11 +1263,11 @@ proc getActiveButtonCommand(clientData: cint; interp: PInterp; argc: cint;
   ## GetActiveButton crewindex
   ## Crewindex is the index of the crew member which is currently selected
   ## or 0 for close button
-  let crewIndex = try:
+  let crewIndex: int = try:
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get the crew index.")
-  var buttonName = ""
+  var buttonName: string = ""
   for index, _ in playerShip.crew:
     buttonName = ".moduledialog.canvas.frame.crewbutton" & $index
     if tclEval2(script = buttonName & " instate disabled") == "0" and index > crewIndex:
@@ -1328,15 +1328,15 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Index is the module index of the selected gun which will be have
   ## assigned a new ammo
   let
-    moduleIndex = try:
+    moduleIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the module index.")
-    ammoIndex = (if playerShip.modules[moduleIndex].mType ==
+    ammoIndex: int = (if playerShip.modules[moduleIndex].mType ==
         ModuleType2.gun: playerShip.modules[
         moduleIndex].ammoIndex else: playerShip.modules[
         moduleIndex].harpoonIndex)
-    ammoMenu = createDialog(name = ".ammomenu", title = "Available ammo",
+    ammoMenu: string = createDialog(name = ".ammomenu", title = "Available ammo",
         parentName = ".")
 
   proc addButton(name, label, command: string) {.raises: [], tags: [],
@@ -1346,7 +1346,7 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * name    - the Tcl name of the button
     ## * label   - the label to show on the button
     ## * command - the Tcl command to execute when the button was pressed
-    let button = ammoMenu & name
+    let button: string = ammoMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & ammoMenu & " .;" & command & "}")
     tclEval(script = "grid " & button & " -sticky we -padx 5" & (
@@ -1355,7 +1355,7 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     if command.len == 0:
       tclEval(script = "bind " & button & " <Tab> {focus " & ammoMenu & ".ammo1;break}")
 
-  var row = 1
+  var row: Positive = 1
   for index, item in playerShip.cargo:
     try:
       if itemsList[item.protoIndex].itemType == itemsTypesList[modulesList[
@@ -1414,11 +1414,11 @@ proc setUpgradeCommand(clientData: cint; interp: PInterp; argc: cint;
 proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
   let
-    moduleIndex = try:
+    moduleIndex: int = try:
         ($argv[2]).parseInt - 1
       except:
         return showError(message = "Can't get the module index.")
-    assignIndex = try:
+    assignIndex: int = try:
         ($argv[3]).parseInt
       except:
         return showError(message = "Can't get the assing index.")
@@ -1442,7 +1442,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
                 if owner == assignIndex:
                   owner = -1
                   break modulesLoop
-        var assigned = false
+        var assigned: bool = false
         for owner in playerShip.modules[moduleIndex].owner.mitems:
           if owner == -1:
             owner = assignIndex
@@ -1498,7 +1498,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  let moduleIndex = try:
+  let moduleIndex: int = try:
       ($argv[1]).parseInt - 1
     except:
       return showError(message = "Can't set module index.")
@@ -1507,7 +1507,7 @@ proc disableEngineCommand(clientData: cint; interp: PInterp; argc: cint;
     addMessage(message = "You enabled " & playerShip.modules[moduleIndex].name &
         ".", mType = orderMessage)
   else:
-    var canDisable = false
+    var canDisable: bool = false
     for index, module in playerShip.modules:
       if module.mType == ModuleType2.engine and (not module.disabled and
           index != moduleIndex):
@@ -1582,13 +1582,13 @@ proc showModulesCommand(clientData: cint; interp: PInterp; argc: cint;
 type ModulesSortOrders = enum
   nameAsc, nameDesc, damageAsc, damageDesc, infoAsc, infoDesc, none
 
-const defaultModulesSortOrder = none
+const defaultModulesSortOrder: ModulesSortOrders = none
 
-var modulesSortOrder = defaultModulesSortOrder
+var modulesSortOrder: ModulesSortOrders = defaultModulesSortOrder
 
 proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults =
-  let column = getColumnNumber(table = modulesTable, xPosition = try:
+  let column: int = getColumnNumber(table = modulesTable, xPosition = try:
         ($argv[1]).parseInt
       except:
         return showError(message = "Can't get the column number."))
@@ -1617,7 +1617,7 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     damage: float
     id: Natural
     info: string
-  var localModules: seq[LocalModuleData]
+  var localModules: seq[LocalModuleData] = @[]
   for index, module in playerShip.modules:
     localModules.add(y = LocalModuleData(name: module.name, damage: (
         module.durability / module.maxDurability).float, id: index,
