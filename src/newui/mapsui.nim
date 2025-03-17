@@ -20,7 +20,8 @@
 
 import std/[colors, math, tables, unicode]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestypes, config, crew2, events2, game, game2, maps, messages,  missions, missions2, shipscrew, shipscargo, shipsmovement, stories, types]
+import ../[basestypes, config, crew2, events2, game, game2, maps, messages,
+  missions, missions2, shipscrew, shipscargo, shipsmovement, stories, types]
 import coreui, dialogs, errordialog, header, messagesui, ordersmenu, themes, utilsui2
 
 var
@@ -422,12 +423,12 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
                 res = 4
                 break
               elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
-                showMessage(text = "Your drinks level is dangerously low.",
+                dialog = setMessage(message = "Your drinks level is dangerously low.",
                     title = "Low drinks level")
                 res = 4
                 break
             except:
-              showError(message = "Can't check low level of items.")
+              dialog = setError(message = "Can't check low level of items.")
               return
           if playerShip.destinationX == playerShip.skyX and
               playerShip.destinationY == playerShip.skyY:
@@ -438,11 +439,11 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
               message = try:
                   autoFinishMissions()
                 except:
-                  showError(message = "Can't finish missions.")
+                  dialog = setError(message = "Can't finish missions.")
                   return
             res = 4
             break
-          if res in 6 .. 7:
+          if res in 6..7:
             break
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
