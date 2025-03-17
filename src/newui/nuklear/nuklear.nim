@@ -1036,6 +1036,16 @@ proc nkDoButton(state: var nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
     bounds.h = r.h + 2 * style.touch_padding.y
     return nkButtonBehavior(state = state, r = bounds, i = `in`, behavior = behavior)
 
+proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
+  state: nk_flags; style: ptr nk_style_button): nk_style_item {.raises: [],
+  tags: [], contractual.} =
+  ## Draw a button. Internal use only
+  ## * out      - the command buffer in which the button will be drawn
+  ## * bounds   - the bounds of the button
+  ## * state    - the state of the button
+  ## * style    - the style of the button
+  return
+
 proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
   font: ptr nk_user_font) {.raises: [], tags: [], contractual.} =
@@ -1043,12 +1053,14 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   ##
   ## * out      - the command buffer in which the button will be drawn
   ## * bounds   - the bounds of the button
-  ## * bounds   - the bounds of the button's content
+  ## * content  - the bounds of the button's content
   ## * state    - the state of the button
   ## * style    - the style of the button
   ## * type     - the type of symbol to draw
   ## * font     - the font used to draw on the button
-  discard
+  # select correct colors/images
+  let background: nk_style_item = nkDrawButton(`out` = `out`, bounds = bounds,
+    state = state, style = style)
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
