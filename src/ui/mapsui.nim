@@ -76,7 +76,9 @@ proc updateMoveButtons*() {.raises: [], tags: [], contractual.} =
       tclEval(script = "grid configure " & speedBox)
       button = frameName & ".wait"
       tclEval(script = button & " configure -image waiticon")
-      tclEval(script = "tooltip::tooltip " & button & " \"Wait 1 minute.\"")
+      tclEval(script = "tooltip::tooltip " & button & " \"" & (
+          if gameSettings.waitMinutes == 1: "Wait 1 minute." else: "Wait " &
+          $gameSettings.waitMinutes & " minutes.") & "\"")
     tclEval(script = "grid configure " & button & " -columnspan 1 -column 1 -row 2")
     for index, name in moveButtonsNames:
       button = frameName & "." & name
