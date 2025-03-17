@@ -17,6 +17,8 @@ All notable changes to this project will be documented in this file.
 - Gaining or losing reputation in bases when the player reached max or min
   level of the reputation
 - Selecting an event after sorting the list of known events
+- Tooltip for wait button doesn't update when the amount of minutes to wait
+  was changed
 
 ## [10.8] - 2025-02-23
 
