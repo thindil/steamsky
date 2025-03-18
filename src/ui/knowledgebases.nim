@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -20,37 +20,8 @@
 
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
-import ../[basestypes, config, game, maps, messages, tk, types, utils]
+import ../[basestypes, config, game, maps, messages, reputation, tk, types, utils]
 import coreui, dialogs, errordialog, table
-
-proc getReputationText(reputationLevel: int): string {.raises: [],
-    tags: [], contractual.} =
-  ## Get the name of the reputation level in the selected base
-  ##
-  ## * reputationLevel - the numerical level of reputation in a base
-  ##
-  ## Returns the name of the reputation level in the selected base
-  case reputationLevel
-  of -100 .. -75:
-    return "Hated"
-  of -74 .. -50:
-    return "Outlaw"
-  of -49 .. -25:
-    return "Hostile"
-  of -24 .. -1:
-    return "Unfriendly"
-  of 0:
-    return "Unknown"
-  of 1..25:
-    return "Visitor"
-  of 26..50:
-    return "Trader"
-  of 51..75:
-    return "Friend"
-  of 76..100:
-    return "Well known"
-  else:
-    return ""
 
 {.push ruleOff:"varDeclared".}
 var

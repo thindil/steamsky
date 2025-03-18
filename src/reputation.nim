@@ -137,3 +137,32 @@ proc loadReputation*(savedGame: XmlNode) {.raises: [ValueError], tags: [],
         name = "faction"), reputation: ReputationData(level: item.attr(
         name = "level").parseInt, experience: item.attr(
         name = "experience").parseInt)))
+
+proc getReputationText*(reputationLevel: int): string {.raises: [],
+    tags: [], contractual.} =
+  ## Get the name of the reputation level, used for bases and factions
+  ##
+  ## * reputationLevel - the numerical level of reputation
+  ##
+  ## Returns the name of the reputation level
+  case reputationLevel
+  of -100 .. -75:
+    return "Hated"
+  of -74 .. -50:
+    return "Outlaw"
+  of -49 .. -25:
+    return "Hostile"
+  of -24 .. -1:
+    return "Unfriendly"
+  of 0:
+    return "Unknown"
+  of 1..25:
+    return "Visitor"
+  of 26..50:
+    return "Trader"
+  of 51..75:
+    return "Friend"
+  of 76..100:
+    return "Well known"
+  else:
+    return ""
