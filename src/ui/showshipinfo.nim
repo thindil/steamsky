@@ -429,30 +429,10 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   # Show player's reputation with factions
   var lblIndex: Natural = 0
   for index, faction in factionsList:
-    var repLevel: string = ""
-    case getReputation(factionIndex = index)
-    of -100.. -75:
-      repLevel = "Hated"
-    of -74.. -50:
-      repLevel = "Outlawed"
-    of -49.. -25:
-      repLevel = "Disliked"
-    of -24.. -1:
-      repLevel = "Unfriendly"
-    of 0:
-      repLevel = "Neutral"
-    of 1..25:
-      repLevel = "Visitor"
-    of 26..50:
-      repLevel = "Trader"
-    of 51..75:
-      repLevel = "Friendly"
-    of 76..100:
-      repLevel = "Well known"
-    else:
-      discard
     label = shipInfoFrame & ".repfaction" & $lblIndex
-    tclEval(script = label & " configure -text {" & faction.name & ": " & repLevel & "}")
+    tclEval(script = label & " configure -text {" & faction.name & ": " &
+        getReputationText(reputationLevel = getReputation(
+        factionIndex = index)) & "}")
     lblIndex.inc
   tclEval(script = "update")
   tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
