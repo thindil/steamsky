@@ -1038,17 +1038,32 @@ proc nkDoButton(state: var nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
 
 proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
   state: nk_flags; style: ptr nk_style_button): nk_style_item {.raises: [],
-  tags: [], contractual.} =
+  tags: [RootEffect], contractual.} =
   ## Draw a button. Internal use only
   ## * out      - the command buffer in which the button will be drawn
   ## * bounds   - the bounds of the button
   ## * state    - the state of the button
   ## * style    - the style of the button
-  return
+  ##
+  ## Returns the style of the button
+  var background: nk_style_item
+  if (state and NK_WIDGET_STATE_HOVER.ord).nk_bool:
+    background = style.hover
+  elif (state and NK_WIDGET_STATE_ACTIVED.ord).nk_bool:
+    background = style.active
+  else:
+    background = style.normal
+
+  let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
+  case background.`type`
+  of NK_STYLE_ITEM_IMAGE:
+    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+  else:
+    discard
 
 proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
-  font: ptr nk_user_font) {.raises: [], tags: [], contractual.} =
+  font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
   ##
   ## * out      - the command buffer in which the button will be drawn
@@ -1064,7 +1079,7 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
-  `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [], contractual.} =
+  `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
   ##
   ## * state    - the state of the button
