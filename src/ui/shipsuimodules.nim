@@ -329,20 +329,20 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       maxUpgrade = 1
     let
       upgradePercent: float = 1.0 - (module.upgradeProgress.float / maxUpgrade.float)
-      progressBarStyle: string = if upgradePercent > 0.74:
+      progressBarStyle2: string = if upgradePercent > 0.74:
           " -style green.Horizontal.TProgressbar"
         elif upgradePercent > 0.24:
           " -style yellow.Horizontal.TProgressbar"
         else:
           " -style Horizontal.TProgressbar"
-      progressBar: string = moduleFrame & ".upgradebar"
-    tclEval(script = "ttk::progressbar " & progressBar &
+      progressBar2: string = moduleFrame & ".upgradebar"
+    tclEval(script = "ttk::progressbar " & progressBar2 &
         " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
-        "}" & progressBarStyle)
-    tclEval(script = "tooltip::tooltip " & progressBar & " \"" & moduleInfo & "\"")
+        "}" & progressBarStyle2)
+    tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" & moduleInfo & "\"")
     addLabel(name = moduleFrame & ".upgradelbl",
         labelText = "Upgrade progress:", row = currentRow)
-    tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we -padx {5 0}")
+    tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we -padx {5 0}")
     if playerShip.upgradeModule == moduleIndex:
       infoButton = moduleFrame & ".upgradebutton"
       tclEval(script = "ttk::button " & infoButton &
@@ -407,16 +407,16 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of engine:
     # Show engine power
     currentRow.inc
-    var moduleMaxValue: Natural = try:
+    var moduleMaxValue2: Natural = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the module max value.")
     addLabel(name = moduleFrame & ".powerlbl", labelText = "Max power: ",
         row = currentRow)
     addLabel(name = moduleFrame & ".powerlbl2", labelText = $module.power & (
-        if module.power == moduleMaxValue: " (max upgrade)" else: ""),
+        if module.power == moduleMaxValue2: " (max upgrade)" else: ""),
         row = currentRow, column = 1, secondary = true)
-    if module.power < moduleMaxValue:
+    if module.power < moduleMaxValue2:
       addUpgradeButton(upgradeType = maxValue, buttonTooltip = "engine's power",
           box = moduleFrame, shipModule = module, column = 2,
           buttonName = "powerbutton", row = currentRow)
@@ -432,16 +432,16 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't count the height of the button (5).")
     # Show engine fuel usage
     currentRow.inc
-    moduleMaxValue = try:
+    moduleMaxValue2 = try:
           (modulesList[module.protoIndex].value.float / 2.0).int
       except:
         return showError(message = "Can't count the module's max value (2).")
     addLabel(name = moduleFrame & ".fuellbl", labelText = "Fuel usage: ",
         row = currentRow)
     addLabel(name = moduleFrame & ".fuellbl2", labelText = $module.fuelUsage & (
-        if moduleMaxValue == module.fuelUsage: " (max upgrade)" else: ""),
+        if moduleMaxValue2 == module.fuelUsage: " (max upgrade)" else: ""),
         row = currentRow, column = 1, secondary = true)
-    if module.fuelUsage > moduleMaxValue:
+    if module.fuelUsage > moduleMaxValue2:
       addUpgradeButton(upgradeType = value,
           buttonTooltip = "engine's fuel usage", box = moduleFrame,
           shipModule = module, column = 2, buttonName = "fuelbutton",
@@ -495,11 +495,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addLabel(name = moduleFrame & ".modules2",
         labelText = $module.installedModules & " / " & $module.maxModules,
         row = currentRow, column = 1, secondary = true)
-    var moduleMaxValue: int = try:
+    var moduleMaxValue2: int = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the module's max value (3).")
-    if module.maxModules == moduleMaxValue:
+    if module.maxModules == moduleMaxValue2:
       tclEval(script = label & " configure -text {" & tclEval2(script = label &
           " cget -text") & " (max upgrade)}")
       height = try:
@@ -535,50 +535,50 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addLabel(name = moduleFrame & ".cleanlbl", labelText = "Cleanliness:",
         row = currentRow, countHeight = true)
     var
-      damagePercent: float = 1.0 - (module.cleanliness.float / module.quality.float)
+      damagePercent2: float = 1.0 - (module.cleanliness.float / module.quality.float)
       newStatusTooltip: string = ""
-    if damagePercent == 0.0:
+    if damagePercent2 == 0.0:
       newStatusTooltip = "Clean"
       progressBarStyle = " -style green.Horizontal.TProgressbar"
-    elif damagePercent > 0.0 and damagePercent < 0.2:
+    elif damagePercent2 > 0.0 and damagePercent2 < 0.2:
       newStatusTooltip = "Bit dusty"
       progressBarStyle = " -style green.Horizontal.TProgressbar"
-    elif damagePercent > 0.19 and damagePercent < 0.5:
+    elif damagePercent2 > 0.19 and damagePercent2 < 0.5:
       newStatusTooltip = "Dusty"
       progressBarStyle = " -style yellow.Horizontal.TProgressbar"
-    elif damagePercent > 0.49 and damagePercent < 0.8:
+    elif damagePercent2 > 0.49 and damagePercent2 < 0.8:
       newStatusTooltip = "Dirty"
       progressBarStyle = " -style yellow.Horizontal.TProgressbar"
-    elif damagePercent > 0.79 and damagePercent < 1.0:
+    elif damagePercent2 > 0.79 and damagePercent2 < 1.0:
       newStatusTooltip = "Very dirty"
       progressBarStyle = ""
     else:
       newStatusTooltip = "Ruined"
       progressBarStyle = ""
-    var progressBar: string = moduleFrame & ".cleanbar"
-    tclEval(script = "ttk::progressbar " & progressBar &
+    var progressBar2: string = moduleFrame & ".cleanbar"
+    tclEval(script = "ttk::progressbar " & progressBar2 &
         " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent) &
         "}" & progressBarStyle)
-    tclEval(script = "tooltip::tooltip " & progressBar & " \"" &
+    tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
         newStatusTooltip & "\"")
-    tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
+    tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we")
     # Show information about cabin's quality
     currentRow.inc
-    progressBar = moduleFrame & ".qualitybar"
-    tclEval(script = "ttk::progressbar " & progressBar &
+    progressBar2 = moduleFrame & ".qualitybar"
+    tclEval(script = "ttk::progressbar " & progressBar2 &
         " -orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
         $(module.quality.float / 100.0) & "}")
     addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
         row = currentRow)
-    let moduleMaxValue: Positive = try:
+    let moduleMaxValue2: Positive = try:
           (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
       except:
         return showError(message = "Can't count the cabin's max value.")
-    tclEval(script = "tooltip::tooltip " & progressBar & " \"" &
+    tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
         getCabinQuality(quality = module.quality) & (if module.quality ==
-        moduleMaxValue: " (max upgrade)" else: "") & "\"")
-    tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
-    if module.quality < moduleMaxValue:
+        moduleMaxValue2: " (max upgrade)" else: "") & "\"")
+    tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we")
+    if module.quality < moduleMaxValue2:
       addUpgradeButton(upgradeType = maxValue,
           buttonTooltip = "cabin's quality",
           box = moduleFrame, shipModule = module, column = 2,
@@ -606,14 +606,14 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             ModuleType.gun: module.damage else: module.duration)
         except:
           return showError(message = "Can't count the module's strength.")
-      moduleMaxValue: Positive = try:
+      moduleMaxValue2: Positive = try:
             (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
         except:
           return showError(message = "Can't count the gun's max value.")
     addLabel(name = moduleFrame & ".strengthlbl2", labelText = $moduleStrength &
-        (if moduleStrength == moduleMaxValue: " (max upgrade)" else: ""),
+        (if moduleStrength == moduleMaxValue2: " (max upgrade)" else: ""),
         row = currentRow, column = 1, secondary = true)
-    if moduleStrength < moduleMaxValue:
+    if moduleStrength < moduleMaxValue2:
       try:
         addUpgradeButton(upgradeType = maxValue,
             buttonTooltip = (if modulesList[module.protoIndex].mType ==
@@ -813,14 +813,14 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     currentRow.inc
     addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength:",
         row = currentRow)
-    let moduleMaxValue: int = try:
+    let moduleMaxValue2: int = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the battering ram max value.")
     addLabel(name = moduleFrame & ".strengthlbl2", labelText = $module.damage2 &
-        (if module.damage2 == moduleMaxValue: " (max upgrade)" else: ""),
+        (if module.damage2 == moduleMaxValue2: " (max upgrade)" else: ""),
         row = currentRow, column = 1, countHeight = true, secondary = true)
-    if module.damage2 < moduleMaxValue:
+    if module.damage2 < moduleMaxValue2:
       addUpgradeButton(upgradeType = maxValue,
           buttonTooltip = "damage of battering ram",
           box = moduleFrame, shipModule = module, column = 2,
