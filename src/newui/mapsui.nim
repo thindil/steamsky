@@ -593,7 +593,14 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
     return
   try:
     const width: float = 250
-    let height: float = (if playerShip.speed == docked: 115 else: 185)
+    var height: float = 0
+    if playerShip.speed == docked:
+      height = 115
+    else:
+      if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+        height = 185
+      else:
+        height = 150
 
     proc closeDialog(dialog: var GameDialog) {.raises: [], tags: [],
         contractual.} =
@@ -627,8 +634,10 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
       if playerShip.speed != docked:
         labelButton(title = "Set destination and move"):
           setDestination(dialog = dialog)
-        labelButton(title = "Move to"):
-          discard
+          discard moveShipOnMap(dialog = dialog)
+        if playerShip.destinationX > 0 and playerShip.destinationY > 0:
+          labelButton(title = "Move to"):
+            discard moveShipOnMap(dialog = dialog)
       labelButton(title = "Close"):
         closeDialog(dialog = dialog)
   except:
