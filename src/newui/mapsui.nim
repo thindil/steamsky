@@ -306,6 +306,132 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
 
+proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [], contractual.} =
+  ## Update the new coordinates after move the player's ship
+  ##
+  ## * newX - the difference on X axis for the player's ship position
+  ## * newY - the difference on Y axis for the player's ship position
+  ##
+  ## Returns modified parameters newX and newY
+  if playerShip.destinationX > playerShip.skyX:
+    newX = 1
+  elif playerShip.destinationX < playerShip.skyX:
+    newX = -1
+  if playerShip.destinationY > playerShip.skyY:
+    newY = 1
+  elif playerShip.destinationY < playerShip.skyY:
+    newY = -1
+
+proc moveShipOnMap(dialog: var GameDialog): Natural {.raises: [],
+  tags: [RootEffect], contractual.} =
+  ## Move the player's ship on the map
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters dialog and the result's code of the
+  ## movement.
+  result = 0
+  while true:
+    var
+      newX, newY: int = 0
+      message: string = ""
+    updateCoordinates(newX = newX, newY = newY)
+    result = try:
+        moveShip(x = newX, y = newY, message = message)
+      except:
+        dialog = setError(message = "Can't move the ship.")
+        return
+    if result == 0:
+      break
+    var startsCombat: bool = try:
+        checkForEvent()
+      except:
+        dialog = setError(message = "Can't check for events.")
+        return
+    if startsCombat:
+      result = 4
+      break
+    if result == 8:
+      try:
+        waitForRest()
+      except:
+        dialog = setError(message = "Can't wait for rest of the crew.")
+        return
+      try:
+        if "sentientships" notin factionsList[playerShip.crew[
+            0].faction].flags and (findMember(order = pilot) == -1 or
+            findMember(order = engineer) == 0):
+          try:
+            waitForRest()
+          except:
+            dialog = setError(message = "Can't wait for rest of the crew.")
+            return
+      except:
+        dialog = setError(message = "Can't check do faction has sentientships flag.")
+        return
+      result = 1
+      startsCombat = try:
+          checkForEvent()
+        except:
+          dialog = setError(message = "Can't check for events.")
+          return
+      if startsCombat:
+        result = 4
+        break
+    if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
+        playerShip.skyY].eventIndex > -1:
+      let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+      case gameSettings.autoMoveStop
+      of any:
+        if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
+          result = 0
+          break
+      of friendly:
+        if eventsList[eventIndex].eType in {trader, friendlyShip}:
+          result = 0
+          break
+      of enemy:
+        if eventsList[eventIndex].eType in {enemyShip, enemyPatrol}:
+          result = 0
+          break
+      of never:
+        discard
+    if dialog == none:
+      try:
+        if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
+          dialog = setMessage(message = "Your fuel level is dangerously low.",
+              title = "Low fuel level")
+          result = 4
+          break
+        elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
+          dialog = setMessage(message = "Your food level is dangerously low.",
+              title = "Low food level")
+          result = 4
+          break
+        elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
+          dialog = setMessage(message = "Your drinks level is dangerously low.",
+              title = "Low drinks level")
+          result = 4
+          break
+      except:
+        dialog = setError(message = "Can't check low level of items.")
+        return
+    if playerShip.destinationX == playerShip.skyX and
+        playerShip.destinationY == playerShip.skyY:
+      addMessage("You reached your travel destination.", mType = orderMessage)
+      playerShip.destinationX = 0
+      playerShip.destinationY = 0
+      if gameSettings.autoFinish:
+        message = try:
+            autoFinishMissions()
+          except:
+            dialog = setError(message = "Can't finish missions.")
+            return
+      result = 4
+      break
+    if result in 6..7:
+      break
+
 proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the buttons for manage the ship, like orders, movement or wait
@@ -328,123 +454,13 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       res: Natural = 0
       message: string = ""
       newX, newY: int = 0
-      startsCombat: bool = false
-
-    proc updateCoordinates() {.raises: [], tags: [], contractual.} =
-      ## Update the new coordinates after move the player's ship
-      if playerShip.destinationX > playerShip.skyX:
-        newX = 1
-      elif playerShip.destinationX < playerShip.skyX:
-        newX = -1
-      if playerShip.destinationY > playerShip.skyY:
-        newY = 1
-      elif playerShip.destinationY < playerShip.skyY:
-        newY = -1
 
     if playerShip.speed != docked and playerShip.destinationX > 0:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Auto move your ship to its destination.")
       imageButton(image = images[moveToIcon]):
-        while true:
-          newX = 0
-          newY = 0
-          updateCoordinates()
-          res = try:
-              moveShip(x = newX, y = newY, message = message)
-            except:
-              dialog = setError(message = "Can't move the ship.")
-              return
-          if res == 0:
-            break
-          startsCombat = try:
-              checkForEvent()
-            except:
-              dialog = setError(message = "Can't check for events.")
-              return
-          if startsCombat:
-            res = 4
-            break
-          if res == 8:
-            try:
-              waitForRest()
-            except:
-              dialog = setError(message = "Can't wait for rest of the crew.")
-              return
-            try:
-              if "sentientships" notin factionsList[playerShip.crew[
-                  0].faction].flags and (findMember(order = pilot) == -1 or
-                  findMember(order = engineer) == 0):
-                try:
-                  waitForRest()
-                except:
-                  dialog = setError(message = "Can't wait for rest of the crew.")
-                  return
-            except:
-              dialog = setError(message = "Can't check do faction has sentientships flag.")
-              return
-            res = 1
-            startsCombat = try:
-                checkForEvent()
-              except:
-                dialog = setError(message = "Can't check for events.")
-                return
-            if startsCombat:
-              res = 4
-              break
-          if gameSettings.autoMoveStop != never and skyMap[playerShip.skyX][
-              playerShip.skyY].eventIndex > -1:
-            let eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-            case gameSettings.autoMoveStop
-            of any:
-              if eventsList[eventIndex].eType in {enemyShip, trader, friendlyShip, enemyPatrol}:
-                res = 0
-                break
-            of friendly:
-              if eventsList[eventIndex].eType in {trader, friendlyShip}:
-                res = 0
-                break
-            of enemy:
-              if eventsList[eventIndex].eType in {enemyShip, enemyPatrol}:
-                res = 0
-                break
-            of never:
-              discard
-          if dialog == none:
-            try:
-              if getItemAmount(itemType = fuelType) <= gameSettings.lowFuel:
-                dialog = setMessage(message = "Your fuel level is dangerously low.",
-                    title = "Low fuel level")
-                res = 4
-                break
-              elif getItemsAmount(iType = "Food") <= gameSettings.lowFood:
-                dialog = setMessage(message = "Your food level is dangerously low.",
-                    title = "Low food level")
-                res = 4
-                break
-              elif getItemsAmount(iType = "Drinks") <= gameSettings.lowDrinks:
-                dialog = setMessage(message = "Your drinks level is dangerously low.",
-                    title = "Low drinks level")
-                res = 4
-                break
-            except:
-              dialog = setError(message = "Can't check low level of items.")
-              return
-          if playerShip.destinationX == playerShip.skyX and
-              playerShip.destinationY == playerShip.skyY:
-            addMessage("You reached your travel destination.", mType = orderMessage)
-            playerShip.destinationX = 0
-            playerShip.destinationY = 0
-            if gameSettings.autoFinish:
-              message = try:
-                  autoFinishMissions()
-                except:
-                  dialog = setError(message = "Can't finish missions.")
-                  return
-            res = 4
-            break
-          if res in 6..7:
-            break
+        res = moveShipOnMap(dialog = dialog)
     setLayoutRowDynamic(height = 30, cols = 1)
     if playerShip.speed == docked:
       if gameSettings.showTooltips:
@@ -512,7 +528,7 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
           addTooltip(bounds = getWidgetBounds(),
               text = "Move ship one map field toward destination")
         imageButton(image = images[moveStepIcon]):
-          updateCoordinates()
+          updateCoordinates(newX = newX, newY = newY)
           res = try:
               moveShip(x = newX, y = newY, message = message)
             except:
