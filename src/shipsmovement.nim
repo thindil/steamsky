@@ -105,7 +105,7 @@ proc realSpeed*(ship: ShipRecord; infoOnly: bool = false): Natural {.raises: [Ke
       var damage: float = 1.0 - (module.durability.float / module.maxDurability.float)
       newSpeed += (baseSpeed - (baseSpeed.float * damage).Natural)
   newSpeed = ((newSpeed.float - countShipWeight(ship = ship).float) *
-      100_000.0).int
+      25.0).int
   if ship.crew.len > 0:
     if "sentientships" in factionsList[ship.crew[0].faction].flags:
       for module in ship.modules:
