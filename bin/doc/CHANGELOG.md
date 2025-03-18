@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Selecting an event after sorting the list of known events
 - Tooltip for wait button doesn't update when the amount of minutes to wait
   was changed
+- Counting speed of the player's ship
 
 ## [10.8] - 2025-02-23
 
