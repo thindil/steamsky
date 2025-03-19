@@ -19,7 +19,7 @@
 ## travel information, converting minutes to in-game date, etc.
 
 import contracts
-import ../[crew, game, shipsmovement, types]
+import ../[crew, game, shipscrew, shipsmovement, types]
 
 type
   TravelArray* = array[1..2, Natural]
@@ -143,3 +143,30 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
     infoText = infoText & " " & $travelTime.hour & "h"
   if travelTime.minutes > 0:
     infoText = infoText & " " & $travelTime.minutes & "mins"
+
+proc getSkillMarks*(skillIndex: Positive;
+    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+  ## Get the marks with information about the skill level for the selected
+  ## skill for the selected crew member
+  ##
+  ## * skillIndex  - the index of the skill to check
+  ## * memberIndex - the index of the player's ship's crew member to check
+  ##
+  ## The string with one "+" sign if the crew member known the skill, the
+  ## string with twi "+" sings if the crew member has the highest level in
+  ## the skill of the all crew members. Otherwise return an empty string.
+  var
+    skillValue = 0
+    crewIndex = -1
+  try:
+    for index, member in playerShip.crew:
+      if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
+        skillValue = getSkillLevel(member = member, skillIndex = skillIndex)
+        crewIndex = index
+    if getSkillLevel(member = playerShip.crew[memberIndex],
+        skillIndex = skillIndex) > 0:
+      result = " +"
+  except:
+    return ""
+  if memberIndex == crewIndex:
+    result = result & "+"
