@@ -1057,7 +1057,13 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
   let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
   case background.`type`
   of NK_STYLE_ITEM_IMAGE:
-    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
+    nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
+      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+      factor = style.color_factor_background))
+  of NK_STYLE_ITEM_NINE_SLICE:
+    nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
+      nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
+      factor = style.color_factor_background))
   else:
     discard
 
