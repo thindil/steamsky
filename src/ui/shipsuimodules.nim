@@ -265,7 +265,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       newHeight = tclEval2(script = "winfo reqheight " & label).parseInt
   except:
     return showError(message = "Can't count the new height of the text.")
-  height = height + newHeight
+  height += newHeight
   # Show the module's upgrade skill
   currentRow.inc
   addLabel(name = moduleFrame & ".upgradeskill", labelText = "Repair skill:",
@@ -314,12 +314,9 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't show info about upgrade.")
     of value:
       try:
-        case modulesList[module.protoIndex].mType:
-        of engine:
+        if modulesList[module.protoIndex].mType == engine:
           moduleInfo.add(y = "Fuel usage")
           maxUpgrade = modulesList[module.protoIndex].value * 20
-        else:
-          discard
       except:
         return showError(message = "Can't show info about fuel usage ugprade.")
     else:
@@ -620,7 +617,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
                 ModuleType.gun: "damage" else: "strength") & " of gun",
             box = moduleFrame, shipModule = module, column = 2,
             buttonName = "strengthbutton", row = currentRow)
-        height = height + tclEval2(script = "winfo reqheight " &
+        height += tclEval2(script = "winfo reqheight " &
             infoButton).parseInt
       except:
         return showError(message = "Can't show the gun's upgrade button.")
@@ -648,7 +645,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     var haveAmmo: bool = false
     let ammoIndex: int = (if module.mType == ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
     try:
-      if ammoIndex in playerShip.cargo.low .. playerShip.cargo.high and
+      if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
           itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
               itemsTypesList[
           modulesList[module.protoIndex].value - 1]:
@@ -1456,7 +1453,7 @@ proc assignModuleCommand(clientData: cint; interp: PInterp; argc: cint;
             mType = orderMessage)
       of gun, harpoonGun:
         updateOrder(order = gunner)
-      of alchemyLab .. greenhouse:
+      of alchemyLab..greenhouse:
         updateOrder(order = craft)
       of medicalRoom:
         updateOrder(order = heal)
@@ -1627,33 +1624,27 @@ proc sortShipModulesCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of damageAsc:
       if x.damage < y.damage:
         return 1
-      else:
-        return -1
+      return -1
     of damageDesc:
       if x.damage > y.damage:
         return 1
-      else:
-        return -1
+      return -1
     of infoAsc:
       if x.info < y.info:
         return 1
-      else:
-        return -1
+      return -1
     of infoDesc:
       if x.info > y.info:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
   localModules.sort(cmp = sortModules)
