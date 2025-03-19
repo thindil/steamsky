@@ -637,6 +637,7 @@ proc showDestinationMenu(dialog: var GameDialog) {.raises: [], tags: [
           discard moveShipOnMap(dialog = dialog)
         if playerShip.destinationX > 0 and playerShip.destinationY > 0:
           labelButton(title = "Move to"):
+            closeDialog(dialog = dialog)
             discard moveShipOnMap(dialog = dialog)
       labelButton(title = "Close"):
         closeDialog(dialog = dialog)
