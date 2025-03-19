@@ -23,6 +23,10 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[combat, config, game, maps]
 import coreui, dialogs, errordialog, header
 
+var
+  pilotList: seq[string] = @["Nobody"]
+  pilotIndex: Natural = 0
+
 proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Set the combat UI and combat itself
@@ -45,6 +49,7 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     dialog = setError(message = "Can't start the combat.")
     return
   state = combat
+  dialog = none
   pilotOrder = 2
   engineerOrder = 3
 
@@ -72,5 +77,10 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     label(str = "Position", alignment = centered)
     label(str = "Name", alignment = centered)
     label(str = "Order", alignment = centered)
+    label(str = "Pilot:", alignment = centered)
+    var newPilot = comboList(items = pilotList,
+        selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
+    if newPilot != pilotIndex:
+      pilotIndex = newPilot
   state = combat
   showGameMenu(dialog = dialog)
