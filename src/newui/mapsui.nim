@@ -671,7 +671,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
         return
     height: Positive = gameSettings.mapFontSize + 10
   rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
-        height.float).floor.Natural + 4
+        height.float).floor.Natural
   let colWidth: Positive = try:
       getTextWidth(text = theme.mapIcons[emptyMapIcon]).Positive + 4
     except:
