@@ -42,7 +42,6 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     shipInfoFrame: string = mainPaned & ".shipinfoframe"
     button: string = mainPaned & ".shipinfoframe.general.canvas.frame.rename"
   if tclEval2(script = "winfo exists " & shipInfoFrame) == "0":
-    tclSetVar(varName = "famount", newValue = $factionsList.len)
     tclEval(script = """
       set shipinfoframe [ttk::frame .gameframe.paned.shipinfoframe]
       # General ship info
@@ -153,12 +152,10 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
       grid [ttk::label $shipcanvas.frame.replabel -text {Reputation:}] -sticky we -padx 5
       tooltip::tooltip $shipcanvas.frame.replabel {Your reputation among factions}
       SetScrollbarBindings $shipcanvas.frame.replabel $shipinfoframe.general.scrolly
-      for {set i 0} {$i < $famount} {incr i} {
-          grid [ttk::label $shipcanvas.frame.repfaction$i] -sticky we -padx {10 5}
-          tooltip::tooltip $shipcanvas.frame.repfaction$i {Your reputation among factions}
-          SetScrollbarBindings $shipcanvas.frame.repfaction$i $shipinfoframe.general.scrolly
-      }
-      SetScrollbarBindings $shipcanvas.frame.weight2 $shipinfoframe.general.scrolly
+      grid [ttk::label $shipcanvas.frame.replabel2 -style Golden.TLabel] -columnspan 2 \
+         -sticky w -padx 5 -row 8 -column 1
+      tooltip::tooltip $shipcanvas.frame.replabel2 {Your reputation among factions}
+      SetScrollbarBindings $shipcanvas.frame.replabel2 $shipinfoframe.general.scrolly
       $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
       ::autoscroll::autoscroll $shipinfoframe.general.scrolly
       ::autoscroll::autoscroll $shipinfoframe.general.scrollx
@@ -427,13 +424,13 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
   except:
     return showError(message = "Can't show the weight of the ship.")
   # Show player's reputation with factions
-  var lblIndex: Natural = 0
+  var repText: string = ""
   for index, faction in factionsList:
-    label = shipInfoFrame & ".repfaction" & $lblIndex
-    tclEval(script = label & " configure -text {" & faction.name & ": " &
+    repText &= faction.name & ": " &
         getReputationText(reputationLevel = getReputation(
-        factionIndex = index)) & "}")
-    lblIndex.inc
+        factionIndex = index)) & "\n"
+  label = shipInfoFrame & ".replabel2"
+  tclEval(script = label & " configure -text {" & repText & "}")
   tclEval(script = "update")
   tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
       script = shipCanvas & " bbox all") & "]")
