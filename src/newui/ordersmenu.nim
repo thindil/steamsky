@@ -459,9 +459,8 @@ proc executeStory(dialog: var GameDialog; state: var GameState) {.raises: [],
       let tokens: seq[string] = currentStory.data.split(sep = ';')
       if step.finishCondition == destroyShip:
         if startCombat(enemyIndex = tokens[2].parseInt, newCombat = false):
-          state = combat
-          dialog = none
           closePopup()
+          setCombat(state = state, dialog = dialog)
           return
       if currentStory.currentStep > -3:
         step = (if currentStory.currentStep > -1: storiesList[
@@ -681,9 +680,8 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
         case event
         of enemyShip, enemyPatrol:
           labelButton(title = "Attack"):
-            state = combat
-            dialog = none
             closePopup()
+            setCombat(state = state, dialog = dialog)
         of fullDocks:
           labelButton(title = "Wait (full docks)"):
             closePopup()
@@ -691,9 +689,8 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
             setDialog()
         of attackOnBase:
           labelButton(title = "Defend"):
-            state = combat
-            dialog = none
             closePopup()
+            setCombat(state = state, dialog = dialog)
         of disease:
           if haveTrader:
             let itemIndex: int = try:
@@ -787,9 +784,8 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               if dialog != none:
                 return
           labelButton(title = "Attack"):
-            state = combat
-            dialog = none
             closePopup()
+            setCombat(state = state, dialog = dialog)
         of friendlyShip:
           if haveTrader:
             try:
@@ -811,9 +807,8 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               if dialog != none:
                 return
           labelButton(title = "Attack"):
-            state = combat
-            dialog = none
             closePopup()
+            setCombat(state = state, dialog = dialog)
       labelButton(title = "Close"):
         closePopup()
         dialog = none
