@@ -21,13 +21,15 @@
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[combat, config, game, maps, shipscrew, types]
-import coreui, dialogs, errordialog, header, utilsui2
+import coreui, dialogs, errordialog, header, themes, utilsui2
 
-const pilotOrders: array[4, string] = ["Go closer", "Keep distance", "Evade", "Escape"]
+const
+  pilotOrders: array[4, string] = ["Go closer", "Keep distance", "Evade", "Escape"]
+  engineerOrders: array[4, string] = ["All stop", "Quarter speed", "Half speed", "Full speed"]
 
 var
-  pilotList: seq[string] = @["Nobody"]
-  pilotIndex: Natural = 0
+  pilotList, engineerList: seq[string] = @["Nobody"]
+  pilotIndex, engineerIndex: Natural = 0
 
 proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -54,11 +56,15 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   dialog = none
   engineerOrder = 3
   pilotList = @["Nobody"]
+  engineerList = @["Nobody"]
   pilotIndex = findMember(order = pilot) + 1
+  engineerIndex = findMember(order = engineer) + 1
   for index, member in playerShip.crew:
     if member.skills.len > 0:
       pilotList.add(y = member.name & getSkillMarks(skillIndex = pilotingSkill,
           memberIndex = index))
+      engineerList.add(y = member.name & getSkillMarks(
+          skillIndex = engineeringSkill, memberIndex = index))
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -78,7 +84,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = height / 2, cols = 2)
   group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
     setLayoutRowStatic(height = 35, cols = 1, width = 35)
-    labelButton(title = "T"):
+    imageButton(image = images[expandIcon]):
       discard
     setLayoutRowDynamic(height = 35, cols = 3)
     label(str = "Position", alignment = centered)
@@ -93,5 +99,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
     if newOrder != pilotOrder - 1:
       pilotOrder = newOrder + 1
+    label(str = "Engineer:", alignment = centered)
+    var newEngineer = comboList(items = engineerList,
+        selected = engineerIndex, itemHeight = 25, x = 200, y = 150)
+    if newEngineer != engineerIndex:
+      engineerIndex = newEngineer
+    newOrder = comboList(items = engineerOrders,
+        selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
+    if newOrder != engineerOrder - 1:
+      engineerOrder = newOrder + 1
   state = combat
   showGameMenu(dialog = dialog)
