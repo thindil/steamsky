@@ -1064,8 +1064,9 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
     nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
       nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
       factor = style.color_factor_background))
-  else:
-    discard
+  of NK_STYLE_ITEM_COLOR:
+    nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
+      nk_rgb_factor(col = bg.color, factor = style.color_factor_background))
 
 proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
