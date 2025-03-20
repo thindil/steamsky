@@ -39,7 +39,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     # Load images
     try:
       for index, fileName in themesList[gameSettings.interfaceTheme].icons[
-          menuIcon..moveStepIcon]:
+          menuIcon..contractIcon]:
         images[(index + 4).IconsNames] = nuklearLoadSVGImage(
             filePath = fileName,
 

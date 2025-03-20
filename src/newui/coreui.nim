@@ -45,7 +45,7 @@ var
   dialogY*: float = 0          ## The Y position of a dialog
   redraw*: bool = true         ## If true, redraw the game
   inCombat*: bool = false      ## If true, the player is in combat
-  images*: array[menuIcon..moveStepIcon, PImage] ## The images used in the game
+  images*: array[menuIcon..contractIcon, PImage] ## The images used in the game
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
