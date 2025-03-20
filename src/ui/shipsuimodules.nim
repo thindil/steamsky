@@ -24,6 +24,41 @@ import ../[game, config, crafts, crewinventory, items, messages, missions,
     ships, shipscargo, shipscrew, shipsupgrade, tk, types]
 import dialogs, errordialog, updateheader, shipsuicrew, table, utilsui2
 
+proc addLabel(name, labelText, yScroll: string; height: var Positive;
+    row: Natural = 0; column: Natural = 0; columnSpan: Natural = 0;
+    wrapLength: Natural = 0; countHeight: bool = false;
+    secondary: bool = false): string {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
+  ## Add a label to the info
+  ##
+  ## * name        - the Tcl name of the label
+  ## * labelText   - the text on the label
+  ## * yScroll     - the Y-axis scroll related to the label
+  ## * height      - the height of the dialog
+  ## * row         - the row in which the label will be added
+  ## * column      - the column in which the label will be added
+  ## * columnSpan  - how many columns should be merged to show the label
+  ## * wrapLenght  - the amount of characters after which wrap the label's
+  ##                 text
+  ## * countHeight - if true, count height of the dialog
+  ## * secondary   - if true, show text in gold color
+  ##
+  ## Returns the name of the label and modified parameter height if
+  ## countHeight was true.
+  result = name
+  tclEval(script = "ttk::label " & name & " -text {" & labelText &
+      "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
+      if secondary: " -style Golden.TLabel" else: ""))
+  tclEval(script = "grid " & name & " -sticky w -row " & $row & " -column " &
+      $column & (if columnSpan > 0: " -columnspan " & $columnSpan else: ""))
+  tclEval(script = "SetScrollbarBindings " & name & " " & yScroll)
+  if countHeight:
+    height = try:
+        height + tclEval2(script = "winfo reqheight " & name).parseInt
+      except:
+        showError(message = "Can't count the height of the label.")
+        return
+
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -61,43 +96,17 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     label: string = ""
     height: Positive = 10
 
-  proc addLabel(name, labelText: string; row: Natural = 0; column: Natural = 0;
-      columnSpan: Natural = 0; wrapLength: Natural = 0;
-      countHeight: bool = false; secondary: bool = false) {.raises: [], tags: [
-      WriteIOEffect, TimeEffect, RootEffect], contractual.} =
-    ## Add a label to the info
-    ##
-    ## * name        - the Tcl name of the label
-    ## * row         - the row in which the label will be added
-    ## * column      - the column in which the label will be added
-    ## * columnSpan  - how many columns should be merged to show the label
-    ## * wrapLenght  - the amount of characters after which wrap the label's
-    ##                 text
-    ## * countHeight - if true, count height of the dialog
-    ## * secondary   - if true, show text in gold color
-    label = name
-    tclEval(script = "ttk::label " & label & " -text {" & labelText &
-        "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
-        if secondary: " -style Golden.TLabel" else: ""))
-    tclEval(script = "grid " & label & " -sticky w -row " & $row & " -column " &
-        $column & (if columnSpan > 0: " -columnspan " & $columnSpan else: ""))
-    tclEval(script = "SetScrollbarBindings " & label & " " & yScroll)
-    if countHeight:
-      height = try:
-          height + tclEval2(script = "winfo reqheight " & label).parseInt
-        except:
-          showError(message = "Can't count the height of the label.")
-          return
-
   # Show the module's name
   let
     moduleFrame: string = moduleCanvas & ".frame"
     module: ModuleData = playerShip.modules[moduleIndex]
   tclEval(script = "ttk::frame " & moduleFrame)
-  addLabel(name = moduleFrame & ".nameinfo", labelText = "Name:")
+  label = addLabel(name = moduleFrame & ".nameinfo", labelText = "Name:",
+      yScroll = yScroll, height = height)
   var currentRow: Natural = 0
-  addLabel(name = moduleFrame & ".nameinfo2", labelText = module.name,
-      row = currentRow, column = 1, secondary = true)
+  label = addLabel(name = moduleFrame & ".nameinfo2", labelText = module.name,
+      row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+      height = height)
   var infoButton: string = moduleFrame & ".namebutton"
   let closeDialogButton: string = moduleFrame & ".button"
   tclEval(script = "ttk::button " & infoButton & " -image editicon -command {" &
@@ -113,9 +122,10 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't count the height of the button.")
   # Show the module's damage
   currentRow.inc
-  addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
-      row = currentRow)
-  let damagePercent: float = (module.durability.float / module.maxDurability.float)
+  label = addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
+      row = currentRow, yScroll = yScroll, height = height)
+  let damagePercent: float = (module.durability.float /
+      module.maxDurability.float)
   var progressBarStyle, statusTooltip: string = ""
   if damagePercent < 1.0 and damagePercent > 0.79:
     progressBarStyle = " -style green.Horizontal.TProgressbar"
@@ -208,25 +218,27 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't count the height of the button (2).")
   # Show the module's weight
   currentRow.inc
-  addLabel(name = moduleFrame & ".weightlbl", labelText = "Weight: ",
-      row = currentRow)
-  addLabel(name = moduleFrame & ".weightlbl2", labelText = $module.weight &
-      " kg", row = currentRow, column = 1, countHeight = true, secondary = true)
+  label = addLabel(name = moduleFrame & ".weightlbl", labelText = "Weight: ",
+      row = currentRow, yScroll = yScroll, height = height)
+  label = addLabel(name = moduleFrame & ".weightlbl2", labelText = $module.weight &
+      " kg", row = currentRow, column = 1, countHeight = true, secondary = true,
+      yScroll = yScroll, height = height)
   # Show the module's size
   currentRow.inc
-  addLabel(name = moduleFrame & ".lblsize", labelText = "Size: ",
-      row = currentRow)
+  label = addLabel(name = moduleFrame & ".lblsize", labelText = "Size: ",
+      row = currentRow, yScroll = yScroll, height = height)
   try:
-    addLabel(name = moduleFrame & ".lblsize2", labelText = $modulesList[
+    label = addLabel(name = moduleFrame & ".lblsize2", labelText = $modulesList[
         module.protoIndex].size, row = currentRow, column = 1,
         countHeight = true,
-        secondary = true)
+        secondary = true, yScroll = yScroll, height = height)
   except:
     return showError(message = "Can't show the label.")
   # Show the module's repair material
   currentRow.inc
-  addLabel(name = moduleFrame & ".lblrepairmaterial",
-      labelText = "Repair material: ", row = currentRow, wrapLength = 200)
+  label = addLabel(name = moduleFrame & ".lblrepairmaterial",
+      labelText = "Repair material: ", row = currentRow, wrapLength = 200,
+      yScroll = yScroll, height = height)
   let moduleText: string = moduleFrame & ".info"
   tclEval(script = "text " & moduleText & " -wrap char -height 5 -width 30")
   tclEval(script = moduleText & " tag configure red -foreground " & tclGetVar(
@@ -268,13 +280,15 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   height += newHeight
   # Show the module's upgrade skill
   currentRow.inc
-  addLabel(name = moduleFrame & ".upgradeskill", labelText = "Repair skill:",
-      row = currentRow, wrapLength = 200, countHeight = true)
+  label = addLabel(name = moduleFrame & ".upgradeskill", labelText = "Repair skill:",
+      row = currentRow, wrapLength = 200, countHeight = true, yScroll = yScroll,
+      height = height)
   try:
-    addLabel(name = moduleFrame & ".upgradeskill2", labelText = skillsList[
+    label = addLabel(name = moduleFrame & ".upgradeskill2", labelText = skillsList[
         modulesList[module.protoIndex].repairSkill].name & "/" & attributesList[
         skillsList[modulesList[module.protoIndex].repairSkill].attribute].name,
-        row = currentRow, column = 1, secondary = true)
+        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+            height = height)
   except:
     return showError(message = "Can't show the upgrade skill.")
   # Show the module's upgrade action
@@ -325,7 +339,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if maxUpgrade == 0:
       maxUpgrade = 1
     let
-      upgradePercent: float = 1.0 - (module.upgradeProgress.float / maxUpgrade.float)
+      upgradePercent: float = 1.0 - (module.upgradeProgress.float /
+          maxUpgrade.float)
       progressBarStyle2: string = if upgradePercent > 0.74:
           " -style green.Horizontal.TProgressbar"
         elif upgradePercent > 0.24:
@@ -337,8 +352,9 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
         "}" & progressBarStyle2)
     tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" & moduleInfo & "\"")
-    addLabel(name = moduleFrame & ".upgradelbl",
-        labelText = "Upgrade progress:", row = currentRow)
+    label = addLabel(name = moduleFrame & ".upgradelbl",
+        labelText = "Upgrade progress:", row = currentRow, yScroll = yScroll,
+        height = height)
     tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we -padx {5 0}")
     if playerShip.upgradeModule == moduleIndex:
       infoButton = moduleFrame & ".upgradebutton"
@@ -367,7 +383,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if module.owner.len > 1:
       ownersText.add(y = "s")
     ownersText.add(y = " (max " & $module.owner.len & "):")
-    addLabel(name = moduleFrame & ".lblowners", labelText = ownersText, row = row)
+    label = addLabel(name = moduleFrame & ".lblowners", labelText = ownersText,
+        row = row, yScroll = yScroll, height = height)
     ownersText = ""
     var haveOwner: bool = false
     for owner in module.owner:
@@ -378,8 +395,9 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         ownersText.add(y = playerShip.crew[owner].name)
     if not haveOwner:
       ownersText.add(y = "none")
-    addLabel(name = moduleFrame & ".lblowners2", labelText = ownersText,
-        row = row, column = 1, secondary = true)
+    label = addLabel(name = moduleFrame & ".lblowners2", labelText = ownersText,
+        row = row, column = 1, secondary = true, yScroll = yScroll,
+        height = height)
     if addButton:
       infoButton = moduleFrame & ".ownersbutton"
       tclEval(script = "ttk::button " & infoButton &
@@ -408,11 +426,12 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the module max value.")
-    addLabel(name = moduleFrame & ".powerlbl", labelText = "Max power: ",
-        row = currentRow)
-    addLabel(name = moduleFrame & ".powerlbl2", labelText = $module.power & (
+    label = addLabel(name = moduleFrame & ".powerlbl", labelText = "Max power: ",
+        row = currentRow, yScroll = yScroll, height = height)
+    label = addLabel(name = moduleFrame & ".powerlbl2", labelText = $module.power & (
         if module.power == moduleMaxValue2: " (max upgrade)" else: ""),
-        row = currentRow, column = 1, secondary = true)
+        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+        height = height)
     if module.power < moduleMaxValue2:
       addUpgradeButton(upgradeType = maxValue, buttonTooltip = "engine's power",
           box = moduleFrame, shipModule = module, column = 2,
@@ -433,11 +452,12 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           (modulesList[module.protoIndex].value.float / 2.0).int
       except:
         return showError(message = "Can't count the module's max value (2).")
-    addLabel(name = moduleFrame & ".fuellbl", labelText = "Fuel usage: ",
-        row = currentRow)
-    addLabel(name = moduleFrame & ".fuellbl2", labelText = $module.fuelUsage & (
+    label = addLabel(name = moduleFrame & ".fuellbl", labelText = "Fuel usage: ",
+        row = currentRow, yScroll = yScroll, height = height)
+    label = addLabel(name = moduleFrame & ".fuellbl2", labelText = $module.fuelUsage & (
         if moduleMaxValue2 == module.fuelUsage: " (max upgrade)" else: ""),
-        row = currentRow, column = 1, secondary = true)
+        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+        height = height)
     if module.fuelUsage > moduleMaxValue2:
       addUpgradeButton(upgradeType = value,
           buttonTooltip = "engine's fuel usage", box = moduleFrame,
@@ -455,11 +475,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't count the height of the label.")
     # Show engine state
     currentRow.inc
-    addLabel(name = moduleFrame & ".statelbl", labelText = "State: ",
-        row = currentRow)
-    addLabel(name = moduleFrame & ".statelbl2", labelText = (
+    label = addLabel(name = moduleFrame & ".statelbl", labelText = "State: ",
+        row = currentRow, yScroll = yScroll, height = height)
+    label = addLabel(name = moduleFrame & ".statelbl2", labelText = (
         if module.disabled: "Disabled" else: "Enabled"), row = currentRow,
-        column = 1, secondary = true)
+        column = 1, secondary = true, yScroll = yScroll, height = height)
     infoButton = moduleFrame & ".statebutton"
     tclEval(script = "ttk::button " & infoButton &
         " -image powericon -command {" & closeDialogButton &
@@ -476,22 +496,24 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   # Show information about cargo room
   of cargoRoom:
     currentRow.inc
-    addLabel(name = moduleFrame & ".maxcargolbl", labelText = "Max cargo: ",
-        row = currentRow)
+    label = addLabel(name = moduleFrame & ".maxcargolbl", labelText = "Max cargo: ",
+        row = currentRow, yScroll = yScroll, height = height)
     try:
-      addLabel(name = moduleFrame & ".maxcargolbl2", labelText = $modulesList[
+      label = addLabel(name = moduleFrame & ".maxcargolbl2", labelText = $modulesList[
           module.protoIndex].maxValue & " kg", row = currentRow, column = 1,
-          countHeight = true, secondary = true)
+          countHeight = true, secondary = true, yScroll = yScroll,
+          height = height)
     except:
       return showError(message = "Can't show the max cargo.")
   # Show information about hull
   of hull:
     currentRow.inc
-    addLabel(name = moduleFrame & ".modules", labelText = "Modules installed: ",
-        row = currentRow)
-    addLabel(name = moduleFrame & ".modules2",
+    label = addLabel(name = moduleFrame & ".modules", labelText = "Modules installed: ",
+        row = currentRow, yScroll = yScroll, height = height)
+    label = addLabel(name = moduleFrame & ".modules2",
         labelText = $module.installedModules & " / " & $module.maxModules,
-        row = currentRow, column = 1, secondary = true)
+        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+        height = height)
     var moduleMaxValue2: int = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
@@ -529,10 +551,12 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         row = currentRow)
     # Show information about cabin's cleanliness
     currentRow.inc
-    addLabel(name = moduleFrame & ".cleanlbl", labelText = "Cleanliness:",
-        row = currentRow, countHeight = true)
+    label = addLabel(name = moduleFrame & ".cleanlbl", labelText = "Cleanliness:",
+        row = currentRow, countHeight = true, yScroll = yScroll,
+        height = height)
     var
-      damagePercent2: float = 1.0 - (module.cleanliness.float / module.quality.float)
+      damagePercent2: float = 1.0 - (module.cleanliness.float /
+          module.quality.float)
       newStatusTooltip: string = ""
     if damagePercent2 == 0.0:
       newStatusTooltip = "Clean"
@@ -565,8 +589,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "ttk::progressbar " & progressBar2 &
         " -orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
         $(module.quality.float / 100.0) & "}")
-    addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
-        row = currentRow)
+    label = addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
+        row = currentRow, yScroll = yScroll, height = height)
     let moduleMaxValue2: Positive = try:
           (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
       except:
@@ -595,8 +619,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of gun, harpoonGun:
     # Show information about gun's strength
     currentRow.inc
-    addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength: ",
-        row = currentRow)
+    label = addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength: ",
+        row = currentRow, yScroll = yScroll, height = height)
     let
       moduleStrength: int = try:
           (if modulesList[module.protoIndex].mType ==
@@ -607,9 +631,10 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
         except:
           return showError(message = "Can't count the gun's max value.")
-    addLabel(name = moduleFrame & ".strengthlbl2", labelText = $moduleStrength &
+    label = addLabel(name = moduleFrame & ".strengthlbl2", labelText = $moduleStrength &
         (if moduleStrength == moduleMaxValue2: " (max upgrade)" else: ""),
-        row = currentRow, column = 1, secondary = true)
+        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+            height = height)
     if moduleStrength < moduleMaxValue2:
       try:
         addUpgradeButton(upgradeType = maxValue,
@@ -632,8 +657,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     addOwnersInfo(ownersName = "Gunner", addButton = true, row = currentRow)
     # Show information about gun's ammunition
     currentRow.inc
-    addLabel(name = moduleFrame & ".ammolbl", labelText = "Ammunition:",
-        row = currentRow)
+    label = addLabel(name = moduleFrame & ".ammolbl", labelText = "Ammunition:",
+        row = currentRow, yScroll = yScroll, height = height)
     let ammoText: string = moduleFrame & ".ammoinfo"
     tclEval(script = "text " & ammoText & " -wrap char -height 5 -width 30")
     tclEval(script = ammoText & " tag configure red -foreground " & tclGetVar(
@@ -643,7 +668,8 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         varName = "ttk::theme::" & gameSettings.interfaceTheme &
         "::colors(-goldenyellow)"))
     var haveAmmo: bool = false
-    let ammoIndex: int = (if module.mType == ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
+    let ammoIndex: int = (if module.mType ==
+        ModuleType2.gun: module.ammoIndex else: module.harpoonIndex)
     try:
       if ammoIndex in playerShip.cargo.low..playerShip.cargo.high and
           itemsList[playerShip.cargo[ammoIndex].protoIndex].itemType ==
@@ -700,25 +726,28 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     # Show information about gun's fire rate
     if module.mType == ModuleType2.gun:
       currentRow.inc
-      addLabel(name = moduleFrame & ".lblfirerate",
-          labelText = "Max fire rate: ", row = currentRow)
+      label = addLabel(name = moduleFrame & ".lblfirerate",
+          labelText = "Max fire rate: ", row = currentRow, yScroll = yScroll,
+          height = height)
       try:
-        addLabel(name = moduleFrame & ".lblfirerate2", labelText = (
+        label = addLabel(name = moduleFrame & ".lblfirerate2", labelText = (
             if modulesList[module.protoIndex].speed > 0: $modulesList[
             module.protoIndex].speed & " each turn" else: "1 every " &
             $(modulesList[module.protoIndex].speed.abs) & " turns"),
-            row = currentRow, column = 1, countHeight = true, secondary = true)
+            row = currentRow, column = 1, countHeight = true, secondary = true,
+                yScroll = yScroll, height = height)
       except:
         return showError(message = "Can't show the info about fire rate.")
   # Show information about turrets
   of turret:
     currentRow.inc
-    addLabel(name = moduleFrame & ".lblturretgun", labelText = "Weapon:",
-        row = currentRow)
-    addLabel(name = moduleFrame & ".lblturretgun2", labelText = (
+    label = addLabel(name = moduleFrame & ".lblturretgun", labelText = "Weapon:",
+        row = currentRow, yScroll = yScroll, height = height)
+    label = addLabel(name = moduleFrame & ".lblturretgun2", labelText = (
         if module.gunIndex > -1: playerShip.modules[
         module.gunIndex].name else: "none"), row = currentRow, column = 1,
-        countHeight = true, secondary = true)
+        countHeight = true, secondary = true, yScroll = yScroll,
+        height = height)
   # Show information about workshops
   of workshop:
     # Show information about workshop owners
@@ -732,10 +761,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the recipe name.")
     if recipeName.len > 0:
-      addLabel(name = moduleFrame & ".orderlbl", labelText = "Order:",
-          row = currentRow)
-      addLabel(name = moduleFrame & ".orderlbl2", labelText = recipeName,
-          row = currentRow, column = 1, countHeight = true, secondary = true)
+      label = addLabel(name = moduleFrame & ".orderlbl", labelText = "Order:",
+          row = currentRow, yScroll = yScroll, height = height)
+      label = addLabel(name = moduleFrame & ".orderlbl2", labelText = recipeName,
+          row = currentRow, column = 1, countHeight = true, secondary = true,
+          yScroll = yScroll, height = height)
       infoButton = moduleFrame & ".orderbutton"
       tclEval(script = "ttk::button " & infoButton &
           " -image cancelicon -command {" & closeDialogButton &
@@ -751,16 +781,18 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         except:
           return showError(message = "Can't count the height of the workshop's button.")
       currentRow.inc
-      addLabel(name = moduleFrame & ".ordertimelbl",
-          labelText = "Finish order in:", row = currentRow)
-      addLabel(name = moduleFrame & ".ordertimelbl2",
+      label = addLabel(name = moduleFrame & ".ordertimelbl",
+          labelText = "Finish order in:", row = currentRow, yScroll = yScroll,
+          height = height)
+      label = addLabel(name = moduleFrame & ".ordertimelbl2",
           labelText = $module.craftingTime & " mins", row = currentRow,
-          column = 1, secondary = true)
+          column = 1, secondary = true, yScroll = yScroll, height = height)
     else:
-      addLabel(name = moduleFrame & ".orderlbl", labelText = "Order:",
-          row = currentRow)
-      addLabel(name = moduleFrame & ".orderlbl2", labelText = "not set",
-          row = currentRow, column = 1, countHeight = true, secondary = true)
+      label = addLabel(name = moduleFrame & ".orderlbl", labelText = "Order:",
+          row = currentRow, yScroll = yScroll, height = height)
+      label = addLabel(name = moduleFrame & ".orderlbl2", labelText = "not set",
+          row = currentRow, column = 1, countHeight = true, secondary = true,
+          yScroll = yScroll, height = height)
   # Show information about medical rooms
   of medicalRoom:
     currentRow.inc
@@ -788,10 +820,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't set trainText.")
     currentRow.inc
-    addLabel(name = moduleFrame & ".trainlbl", labelText = "Trained skill:",
-        row = currentRow)
-    addLabel(name = moduleFrame & ".trainlbl2", labelText = trainText,
-        row = currentRow, column = 1, secondary = true)
+    label = addLabel(name = moduleFrame & ".trainlbl", labelText = "Trained skill:",
+        row = currentRow, yScroll = yScroll, height = height)
+    label = addLabel(name = moduleFrame & ".trainlbl2", labelText = trainText,
+        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+        height = height)
     infoButton = moduleFrame & ".orderbutton"
     tclEval(script = "ttk::button " & infoButton &
         " -image assigncrewicon -command {" & closeDialogButton &
@@ -808,15 +841,16 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   # Show information about training battering rams
   of batteringRam:
     currentRow.inc
-    addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength:",
-        row = currentRow)
+    label = addLabel(name = moduleFrame & ".strengthlbl", labelText = "Strength:",
+        row = currentRow, yScroll = yScroll, height = height)
     let moduleMaxValue2: int = try:
         (modulesList[module.protoIndex].maxValue.float * 1.5).int
       except:
         return showError(message = "Can't count the battering ram max value.")
-    addLabel(name = moduleFrame & ".strengthlbl2", labelText = $module.damage2 &
+    label = addLabel(name = moduleFrame & ".strengthlbl2", labelText = $module.damage2 &
         (if module.damage2 == moduleMaxValue2: " (max upgrade)" else: ""),
-        row = currentRow, column = 1, countHeight = true, secondary = true)
+        row = currentRow, column = 1, countHeight = true, secondary = true,
+            yScroll = yScroll, height = height)
     if module.damage2 < moduleMaxValue2:
       addUpgradeButton(upgradeType = maxValue,
           buttonTooltip = "damage of battering ram",
@@ -828,10 +862,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if modulesList[module.protoIndex].description.len > 0:
       currentRow.inc
       tclEval(script = "update")
-      addLabel(name = moduleFrame & ".lbldescription", labelText = "\n" &
+      label = addLabel(name = moduleFrame & ".lbldescription", labelText = "\n" &
           modulesList[module.protoIndex].description, row = currentRow,
           countHeight = true, columnSpan = 4, wrapLength = tclEval2(
-          script = "winfo reqwidth " & moduleFrame).parseInt)
+          script = "winfo reqwidth " & moduleFrame).parseInt, yScroll = yScroll,
+          height = height)
   except:
     return showError(message = "Can't show the description.")
   addCloseButton(name = moduleFrame & ".button", text = "Close",
@@ -1163,8 +1198,8 @@ proc showAssignSkillCommand(clientData: cint; interp: PInterp; argc: cint;
         titleWidth = 400)
     skillsFrame: string = moduleDialog & ".frame"
   tclEval(script = "ttk::frame " & skillsFrame)
-  var skillsTable: TableWidget = createTable(parent = skillsFrame, headers = @["Skill",
-      "Training tool"])
+  var skillsTable: TableWidget = createTable(parent = skillsFrame, headers = @[
+      "Skill", "Training tool"])
   for index, skill in skillsList:
     var
       protoIndex: int = -1
@@ -1333,8 +1368,8 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
         ModuleType2.gun: playerShip.modules[
         moduleIndex].ammoIndex else: playerShip.modules[
         moduleIndex].harpoonIndex)
-    ammoMenu: string = createDialog(name = ".ammomenu", title = "Available ammo",
-        parentName = ".")
+    ammoMenu: string = createDialog(name = ".ammomenu",
+        title = "Available ammo", parentName = ".")
 
   proc addButton(name, label, command: string) {.raises: [], tags: [],
       contractual.} =
