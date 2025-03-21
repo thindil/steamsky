@@ -1046,16 +1046,15 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
   ## * style    - the style of the button
   ##
   ## Returns the style of the button
-  var background: nk_style_item
   if (state and NK_WIDGET_STATE_HOVER.ord).nk_bool:
-    background = style.hover
+    result = style.hover
   elif (state and NK_WIDGET_STATE_ACTIVED.ord).nk_bool:
-    background = style.active
+    result = style.active
   else:
-    background = style.normal
+    result = style.normal
 
-  let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
-  case background.`type`
+  let bg: nk_style_item_data = cast[nk_style_item_data](result.data)
+  case result.`type`
   of NK_STYLE_ITEM_IMAGE:
     nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
       nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
@@ -1083,6 +1082,14 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   # select correct colors/images
   let background: nk_style_item = nkDrawButton(`out` = `out`, bounds = bounds,
     state = state, style = style)
+  let bg: nk_color = (if background.`type` == NK_STYLE_ITEM_COLOR:
+    cast[nk_style_item_data](background.data).color else: style.text_background)
+
+  var sym: nk_color = (if (state and NK_WIDGET_STATE_HOVER.ord).bool:
+    style.text_hover elif (state and NK_WIDGET_STATE_ACTIVE.ord).bool:
+      style.text_active else: style.text_normal)
+
+  sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
