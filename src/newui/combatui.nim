@@ -18,7 +18,7 @@
 ## Provides code related to all types of combat, like between the ships,
 ## boarding, giving orders to crew members, etc.
 
-import std/tables
+import std/[math, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[combat, config, game, maps, shipscrew, types]
 import coreui, dialogs, errordialog, header, themes, utilsui2
@@ -26,11 +26,26 @@ import coreui, dialogs, errordialog, header, themes, utilsui2
 const
   pilotOrders: array[4, string] = ["Go closer", "Keep distance", "Evade", "Escape"]
   engineerOrders: array[4, string] = ["All stop", "Quarter speed", "Half speed", "Full speed"]
+  gunnersOrders: array[1..6, string] = ["Don't shoot", "Precise fire",
+      "Fire at will", "Aim for their engine", "Aim for their weapon", "Aim for their hull"]
 
 var
   pilotList, engineerList, gunnerList: seq[string] = @["Nobody"]
   pilotIndex, engineerIndex: Natural = 0
   expandedSection: Natural = 0
+
+proc updateCrewLists() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Update the list of available crew members for all positions in combat
+  pilotList = @["Nobody"]
+  engineerList = @["Nobody"]
+  for index, member in playerShip.crew:
+    if member.skills.len > 0:
+      pilotList.add(y = member.name & getSkillMarks(skillIndex = pilotingSkill,
+          memberIndex = index))
+      engineerList.add(y = member.name & getSkillMarks(
+          skillIndex = engineeringSkill, memberIndex = index))
+      gunnerList.add(y = member.name & getSkillMarks(skillIndex = gunnerySkill,
+          memberIndex = index))
 
 proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -56,18 +71,33 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   state = combat
   dialog = none
   engineerOrder = 3
-  pilotList = @["Nobody"]
-  engineerList = @["Nobody"]
   pilotIndex = findMember(order = pilot) + 1
   engineerIndex = findMember(order = engineer) + 1
-  for index, member in playerShip.crew:
-    if member.skills.len > 0:
-      pilotList.add(y = member.name & getSkillMarks(skillIndex = pilotingSkill,
-          memberIndex = index))
-      engineerList.add(y = member.name & getSkillMarks(
-          skillIndex = engineeringSkill, memberIndex = index))
-      gunnerList.add(y = member.name & getSkillMarks(skillIndex = gunnerySkill,
-          memberIndex = index))
+  updateCrewLists()
+
+proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
+    KeyError], tags: [], contractual.} =
+  ## Get the information about the fire rate of the selected gun
+  ##
+  ## * position - the index of the gun on the guns list
+  ## * index    - the index of the order for the gun
+  ##
+  ## Returns the string with information about the gun's speed.
+  result = ""
+  var gunSpeed: int = modulesList[playerShip.modules[guns[position][
+      1]].protoIndex].speed
+  case index
+  of 1:
+    gunSpeed = 0
+  of 3:
+    discard
+  else:
+    gunSpeed = (if gunSpeed > 0: (gunSpeed.float /
+        2.0).ceil.int else: gunSpeed - 1)
+  if gunSpeed > 0:
+    return "(" & $gunSpeed & "/round)"
+  elif gunSpeed < 0:
+    return "(1/" & $gunSpeed & " rounds)"
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -79,10 +109,13 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
   showHeader(dialog = dialog)
-  # draw dialogs
+  # Draw dialogs
   showQuestion(dialog = dialog, state = state)
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
+  # Draw UI
+  if pilotList.len != playerShip.crew.len + 1:
+    updateCrewLists()
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
   if expandedSection == 0:
     setLayoutRowDynamic(height = height / 2, cols = 2)
