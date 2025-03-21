@@ -28,7 +28,7 @@ const
   engineerOrders: array[4, string] = ["All stop", "Quarter speed", "Half speed", "Full speed"]
 
 var
-  pilotList, engineerList: seq[string] = @["Nobody"]
+  pilotList, engineerList, gunnerList: seq[string] = @["Nobody"]
   pilotIndex, engineerIndex: Natural = 0
   expandedSection: Natural = 0
 
@@ -66,6 +66,8 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           memberIndex = index))
       engineerList.add(y = member.name & getSkillMarks(
           skillIndex = engineeringSkill, memberIndex = index))
+      gunnerList.add(y = member.name & getSkillMarks(skillIndex = gunnerySkill,
+          memberIndex = index))
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -99,19 +101,31 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "Name", alignment = centered)
       label(str = "Order", alignment = centered)
       label(str = "Pilot:", alignment = centered)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
       var newPilot = comboList(items = pilotList,
           selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
       if newPilot != pilotIndex:
         pilotIndex = newPilot
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Select the order for the pilot")
       var newOrder = comboList(items = pilotOrders,
           selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
       if newOrder != pilotOrder - 1:
         pilotOrder = newOrder + 1
       label(str = "Engineer:", alignment = centered)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
       var newEngineer = comboList(items = engineerList,
           selected = engineerIndex, itemHeight = 25, x = 200, y = 150)
       if newEngineer != engineerIndex:
         engineerIndex = newEngineer
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Select the order for the engineer")
       newOrder = comboList(items = engineerOrders,
           selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
       if newOrder != engineerOrder - 1:
