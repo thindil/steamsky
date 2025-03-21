@@ -20,7 +20,7 @@
 
 import std/[math, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[combat, config, game, maps, shipscrew, types]
+import ../[combat, config, crewinventory, game, maps, shipscrew, types]
 import coreui, dialogs, errordialog, header, themes, utilsui2
 
 const
@@ -33,6 +33,7 @@ var
   pilotList, engineerList, gunnerList: seq[string] = @["Nobody"]
   pilotIndex, engineerIndex: Natural = 0
   expandedSection: Natural = 0
+  gunnersIndex: seq[Natural] = @[]
 
 proc updateCrewLists() {.raises: [], tags: [RootEffect], contractual.} =
   ## Update the list of available crew members for all positions in combat
@@ -163,5 +164,81 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
       if newOrder != engineerOrder - 1:
         engineerOrder = newOrder + 1
+      # Show the guns settings
+      for gunIndex, gun in guns:
+        var
+          haveAmmo, hasGunner: bool = false
+          ammoAmount: Natural = 0
+        let aIndex: int = (if playerShip.modules[gun[1]].mType ==
+            ModuleType2.gun: playerShip.modules[gun[
+            1]].ammoIndex else: playerShip.modules[gun[1]].harpoonIndex)
+        try:
+          if aIndex in playerShip.cargo.low .. playerShip.cargo.high and
+              itemsList[playerShip.cargo[aIndex].protoIndex].itemType ==
+                  itemsTypesList[modulesList[
+              playerShip.modules[gun[1]].protoIndex].value]:
+            ammoAmount = playerShip.cargo[aIndex].amount
+            haveAmmo = true
+        except:
+          dialog = setError(message = "Can't show the player's ship's gun settings. No proto item with index: " &
+              $playerShip.cargo[aIndex].protoIndex, e = nil)
+          return
+        if not haveAmmo:
+          ammoAmount = 0
+          for itemIndex, item in itemsList:
+            try:
+              if item.itemType == itemsTypesList[modulesList[playerShip.modules[
+                  gun[1]].protoIndex].value - 1]:
+                let ammoIndex: int = findItem(inventory = playerShip.cargo,
+                    protoIndex = itemIndex)
+                if ammoIndex > -1:
+                  ammoAmount = ammoAmount + playerShip.cargo[ammoIndex].amount
+            except:
+              dialog = setError(message = "Can't show the gun's ammo information. No proto module with index: " &
+                  $playerShip.modules[gun[1]].protoIndex, e = nil)
+              return
+        label(str = playerShip.modules[gun[1]].name & ": \n(Ammo: " &
+            $ammoAmount & ")", alignment = centered)
+#        var comboBox: string = frame & ".guncrew" & $(gunIndex + 1)
+#        tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
+#            getCrewList(position = 2) & "] -width 10 -state readonly")
+#        if playerShip.modules[gun[1]].owner[0] == 0:
+#          tclEval(script = comboBox & " current 0")
+#        else:
+#          if playerShip.crew[playerShip.modules[gun[1]].owner[0]].order == gunner:
+#            tclEval(script = comboBox & " current " & $(playerShip.modules[gun[
+#                1]].owner[0] + 1))
+#            hasGunner = true
+#          else:
+#            tclEval(script = comboBox & " current 0")
+#        tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 1")
+#        tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
+#            mainPaned & ".combatframe.next}")
+#        tclEval(script = "bind " & comboBox &
+#            " <<ComboboxSelected>> {SetCombatPosition gunner " & $(gunIndex + 1) & "}")
+#        tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
+#        var gunnerOrders: string = ""
+#        for orderIndex, order in gunnersOrders:
+#          try:
+#            gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
+#                position = gunIndex, index = orderIndex) & "}"
+#          except:
+#            showError(message = "Can't show gunner's order.")
+#            return
+#        comboBox = frame & ".gunorder" & $(gunIndex + 1)
+#        if tclEval2(script = "winfo exists " & comboBox) == "0":
+#          tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
+#              gunnerOrders & "] -state readonly")
+#        tclEval(script = comboBox & " current " & $(gun[2] - 1))
+#        if hasGunner:
+#          tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 2 -padx {0 5}")
+#        else:
+#          tclEval(script = "grid remove " & comboBox)
+#        tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
+#            mainPaned & ".combatframe.next}")
+#        tclEval(script = "bind " & comboBox &
+#            " <<ComboboxSelected>> {SetCombatOrder " & $(gunIndex + 1) & "}")
+#        tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
+  # Show boarding/defending settings
   state = combat
   showGameMenu(dialog = dialog)
