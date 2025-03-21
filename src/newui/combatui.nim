@@ -74,6 +74,9 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   engineerOrder = 3
   pilotIndex = findMember(order = pilot) + 1
   engineerIndex = findMember(order = engineer) + 1
+  gunnersIndex = @[]
+  for gun in guns:
+    gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0])
   updateCrewLists()
 
 proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
@@ -134,7 +137,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "Position", alignment = centered)
       label(str = "Name", alignment = centered)
       label(str = "Order", alignment = centered)
-      label(str = "Pilot:", alignment = centered)
+      label(str = "Pilot:", alignment = left)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
@@ -149,7 +152,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
       if newOrder != pilotOrder - 1:
         pilotOrder = newOrder + 1
-      label(str = "Engineer:", alignment = centered)
+      label(str = "Engineer:", alignment = left)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
@@ -165,6 +168,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if newOrder != engineerOrder - 1:
         engineerOrder = newOrder + 1
       # Show the guns settings
+      setLayoutRowDynamic(height = 70, cols = 3)
       for gunIndex, gun in guns:
         var
           haveAmmo, hasGunner: bool = false
@@ -197,8 +201,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
               dialog = setError(message = "Can't show the gun's ammo information. No proto module with index: " &
                   $playerShip.modules[gun[1]].protoIndex, e = nil)
               return
-        label(str = playerShip.modules[gun[1]].name & ": \n(Ammo: " &
-            $ammoAmount & ")", alignment = centered)
+        wrapLabel(str = playerShip.modules[gun[1]].name & ": (Ammo: " &
+            $ammoAmount & ")")
 #        var comboBox: string = frame & ".guncrew" & $(gunIndex + 1)
 #        tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
 #            getCrewList(position = 2) & "] -width 10 -state readonly")
