@@ -30,6 +30,7 @@ const
 var
   pilotList, engineerList: seq[string] = @["Nobody"]
   pilotIndex, engineerIndex: Natural = 0
+  expandedSection: Natural = 0
 
 proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -81,32 +82,39 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
   let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
-  setLayoutRowDynamic(height = height / 2, cols = 2)
-  group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
-    setLayoutRowStatic(height = 35, cols = 1, width = 35)
-    imageButton(image = images[expandIcon]):
-      discard
-    setLayoutRowDynamic(height = 35, cols = 3)
-    label(str = "Position", alignment = centered)
-    label(str = "Name", alignment = centered)
-    label(str = "Order", alignment = centered)
-    label(str = "Pilot:", alignment = centered)
-    var newPilot = comboList(items = pilotList,
-        selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
-    if newPilot != pilotIndex:
-      pilotIndex = newPilot
-    var newOrder = comboList(items = pilotOrders,
-        selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
-    if newOrder != pilotOrder - 1:
-      pilotOrder = newOrder + 1
-    label(str = "Engineer:", alignment = centered)
-    var newEngineer = comboList(items = engineerList,
-        selected = engineerIndex, itemHeight = 25, x = 200, y = 150)
-    if newEngineer != engineerIndex:
-      engineerIndex = newEngineer
-    newOrder = comboList(items = engineerOrders,
-        selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
-    if newOrder != engineerOrder - 1:
-      engineerOrder = newOrder + 1
+  if expandedSection == 0:
+    setLayoutRowDynamic(height = height / 2, cols = 2)
+  else:
+    setLayoutRowDynamic(height = height, cols = 1)
+  if expandedSection in {0, 1}:
+    group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      imageButton(image = images[expandIcon]):
+        if expandedSection == 1:
+          expandedSection = 0
+        else:
+          expandedSection = 1
+      setLayoutRowDynamic(height = 35, cols = 3)
+      label(str = "Position", alignment = centered)
+      label(str = "Name", alignment = centered)
+      label(str = "Order", alignment = centered)
+      label(str = "Pilot:", alignment = centered)
+      var newPilot = comboList(items = pilotList,
+          selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
+      if newPilot != pilotIndex:
+        pilotIndex = newPilot
+      var newOrder = comboList(items = pilotOrders,
+          selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
+      if newOrder != pilotOrder - 1:
+        pilotOrder = newOrder + 1
+      label(str = "Engineer:", alignment = centered)
+      var newEngineer = comboList(items = engineerList,
+          selected = engineerIndex, itemHeight = 25, x = 200, y = 150)
+      if newEngineer != engineerIndex:
+        engineerIndex = newEngineer
+      newOrder = comboList(items = engineerOrders,
+          selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
+      if newOrder != engineerOrder - 1:
+        engineerOrder = newOrder + 1
   state = combat
   showGameMenu(dialog = dialog)
