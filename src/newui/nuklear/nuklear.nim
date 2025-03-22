@@ -712,6 +712,28 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
     cmd.w = max(x = 0.cushort, y = r.w.cushort)
     cmd.h = max(x = 0.cushort, y = r.h.cushort)
 
+proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
+  lineThickness: float, c: nk_color) {.raises: [], tags: [RootEffect],
+  contractual.} =
+  ## Draw a rectangle. Internal use only
+  ##
+  ## * b             - the command buffer in which the rectangle will be drawn
+  ## * r             - the rectangle to draw
+  ## * rounding      - the rouding of the rectangle's corners
+  ## * lineThickness - the thinckness of the rectangle's border
+  ## * c             - the color used to draw the rectangle
+  if b == nil or c.a == 0 or rect.w == 0 or lineThickness <= 0:
+    return
+  if b.use_clipping == 1:
+    let clip: nk_rect = b.clip
+    if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
+      x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
+      return
+  var cmd: ptr nk_command_rect
+  cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = NK_COMMAND_RECT, cmd.sizeof))
+  if cmd == nil:
+    return
+
 proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], contractual.} =
   ## Shrink the selected rectangle. Internal use only
   ##

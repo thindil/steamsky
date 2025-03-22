@@ -329,6 +329,12 @@ type
     w*, h*: cushort
     img*: nk_image
     col*: nk_color
+  nk_command_rect* {.importc: "struct nk_command_rect".} = object
+    ## Internal Nuklear type
+    header*: nk_command
+    rounding*, w*, h*, lineThickness*: cushort
+    x*, y*: cshort
+    color*: nk_color
   nk_command_rect_filled* {.importc: "struct nk_command_rect_filled".} = object
     ## Internal Nuklear type
     header*: nk_command
