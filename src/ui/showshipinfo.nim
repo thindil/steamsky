@@ -155,7 +155,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
       tooltip::tooltip $shipcanvas.frame.replabel {Your reputation among factions}
       SetScrollbarBindings $shipcanvas.frame.replabel $shipinfoframe.general.scrolly
       for {set i 0} {$i < $famount} {incr i} {
-        grid [ttk::label $shipcanvas.frame.replbl$i] -sticky w -padx 5
+        grid [ttk::label $shipcanvas.frame.replbl$i] -sticky w -padx {50 5}
         tooltip::tooltip $shipcanvas.frame.replbl$i {Your reputation among factions}
         SetScrollbarBindings $shipcanvas.frame.replbl$i $shipinfoframe.general.scrolly
         grid [ttk::label $shipcanvas.frame.rep$i -style Golden.TLabel] -sticky w \
