@@ -100,6 +100,80 @@ proc addUpgradeButton(upgradeType: ShipUpgrade; buttonTooltip, box,
       $column & " -sticky n -padx {5 0}")
   tclEval(script = "bind " & result & " <Escape> {" & closeDialogButton & " invoke; break}")
 
+proc showModuleDamage(currentRow: var Natural; module: ModuleData; moduleFrame,
+    yScroll, closeDialogButton: string; height: var Positive;
+    moduleIndex: int): TclResults {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Show the level of damage of the selected module
+  ##
+  ## * currentRow        - the current row in the dialog
+  ## * module            - the module which status will be shown
+  ## * yScroll           - the dialog's scrollbar
+  ## * closeDialogButton - the dialog's close button
+  ## * height            - the height of the dialog
+  ## * moduleIndex       - the index of the module
+  ##
+  ## Returns tclOk if everything was ok, otherwise show info about the error
+  currentRow.inc
+  discard addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
+      row = currentRow, yScroll = yScroll, height = height)
+  let damagePercent: float = (module.durability.float /
+      module.maxDurability.float)
+  var progressBarStyle, statusTooltip: string = ""
+  if damagePercent < 1.0 and damagePercent > 0.79:
+    progressBarStyle = " -style green.Horizontal.TProgressbar"
+    statusTooltip = "Slightly damaged"
+  elif damagePercent < 0.8 and damagePercent > 0.49:
+    progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+    statusTooltip = "Damaged"
+  elif damagePercent < 0.5 and damagePercent > 0.19:
+    progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+    statusTooltip = "Heavily damaged"
+  elif damagePercent < 0.2 and damagePercent > 0.0:
+    progressBarStyle = ""
+    statusTooltip = "Almost destroyed"
+  elif damagePercent == 0.0:
+    progressBarStyle = ""
+    statusTooltip = "Destroyed"
+  else:
+    progressBarStyle = " -style green.Horizontal.TProgressbar"
+    statusTooltip = "Not damaged"
+  let moduleMaxValue: Positive = try:
+      (modulesList[module.protoIndex].durability.float * 1.5).Positive
+    except:
+      return showError(message = "Can't count the module's max value.")
+  if module.maxDurability == moduleMaxValue:
+    statusTooltip.add(y = " (max upgrade)")
+  let progressBar: string = moduleFrame & ".damagebar"
+  tclEval(script = "ttk::progressbar " & progressBar &
+      " -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
+  tclEval(script = "tooltip::tooltip " & progressBar & " \"" & statusTooltip & "\"")
+  tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
+  var infoButton: string = moduleFrame & ".repairbutton"
+  if playerShip.repairModule == moduleIndex:
+    tclEval(script = "ttk::button " & infoButton &
+        " -image cancelicon -command {" & closeDialogButton & " invoke;SetRepair remove} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Remove the repair priority\"")
+  else:
+    tclEval(script = "ttk::button " & infoButton &
+        " -image repairpriorityicon -command {" & closeDialogButton &
+        " invoke;SetRepair assign " & $moduleIndex & "} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Repair the selected module as first when damaged\"")
+  tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
+  tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
+
+  if module.maxDurability < moduleMaxValue:
+    infoButton = addUpgradeButton(upgradeType = durability,
+        buttonTooltip = "module's durability", box = moduleFrame,
+        shipModule = module, column = 3, buttonName = "durabilitybutton",
+        row = currentRow, closeDialogButton = closeDialogButton,
+        moduleIndex = moduleIndex)
+  height = try:
+      height + tclEval2(script = "winfo reqheight " & infoButton).parseInt
+    except:
+      return showError(message = "Can't count the height of the button (2).")
+  return tclOk
+
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -162,64 +236,10 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't count the height of the button.")
   # Show the module's damage
-  currentRow.inc
-  label = addLabel(name = moduleFrame & ".damagelbl", labelText = "Status:",
-      row = currentRow, yScroll = yScroll, height = height)
-  let damagePercent: float = (module.durability.float /
-      module.maxDurability.float)
-  var progressBarStyle, statusTooltip: string = ""
-  if damagePercent < 1.0 and damagePercent > 0.79:
-    progressBarStyle = " -style green.Horizontal.TProgressbar"
-    statusTooltip = "Slightly damaged"
-  elif damagePercent < 0.8 and damagePercent > 0.49:
-    progressBarStyle = " -style yellow.Horizontal.TProgressbar"
-    statusTooltip = "Damaged"
-  elif damagePercent < 0.5 and damagePercent > 0.19:
-    progressBarStyle = " -style yellow.Horizontal.TProgressbar"
-    statusTooltip = "Heavily damaged"
-  elif damagePercent < 0.2 and damagePercent > 0.0:
-    progressBarStyle = ""
-    statusTooltip = "Almost destroyed"
-  elif damagePercent == 0.0:
-    progressBarStyle = ""
-    statusTooltip = "Destroyed"
-  else:
-    progressBarStyle = " -style green.Horizontal.TProgressbar"
-    statusTooltip = "Not damaged"
-  let moduleMaxValue: Positive = try:
-      (modulesList[module.protoIndex].durability.float * 1.5).Positive
-    except:
-      return showError(message = "Can't count the module's max value.")
-  if module.maxDurability == moduleMaxValue:
-    statusTooltip.add(y = " (max upgrade)")
-  let progressBar: string = moduleFrame & ".damagebar"
-  tclEval(script = "ttk::progressbar " & progressBar &
-      " -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
-  tclEval(script = "tooltip::tooltip " & progressBar & " \"" & statusTooltip & "\"")
-  tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
-  infoButton = moduleFrame & ".repairbutton"
-  if playerShip.repairModule == moduleIndex:
-    tclEval(script = "ttk::button " & infoButton &
-        " -image cancelicon -command {" & closeDialogButton & " invoke;SetRepair remove} -style Small.TButton")
-    tclEval(script = "tooltip::tooltip " & infoButton & " \"Remove the repair priority\"")
-  else:
-    tclEval(script = "ttk::button " & infoButton &
-        " -image repairpriorityicon -command {" & closeDialogButton &
-        " invoke;SetRepair assign " & $moduleIndex & "} -style Small.TButton")
-    tclEval(script = "tooltip::tooltip " & infoButton & " \"Repair the selected module as first when damaged\"")
-  tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
-  tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
-
-  if module.maxDurability < moduleMaxValue:
-    infoButton = addUpgradeButton(upgradeType = durability,
-        buttonTooltip = "module's durability", box = moduleFrame,
-        shipModule = module, column = 3, buttonName = "durabilitybutton",
-        row = currentRow, closeDialogButton = closeDialogButton,
-        moduleIndex = moduleIndex)
-  height = try:
-      height + tclEval2(script = "winfo reqheight " & infoButton).parseInt
-    except:
-      return showError(message = "Can't count the height of the button (2).")
+  discard showModuleDamage(currentRow = currentRow, module = module,
+      moduleFrame = moduleFrame, yScroll = yScroll,
+      closeDialogButton = closeDialogButton, height = height,
+      moduleIndex = moduleIndex)
   # Show the module's weight
   currentRow.inc
   label = addLabel(name = moduleFrame & ".weightlbl", labelText = "Weight: ",
@@ -576,7 +596,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     var
       damagePercent2: float = 1.0 - (module.cleanliness.float /
           module.quality.float)
-      newStatusTooltip: string = ""
+      newStatusTooltip, progressBarStyle: string = ""
     if damagePercent2 == 0.0:
       newStatusTooltip = "Clean"
       progressBarStyle = " -style green.Horizontal.TProgressbar"
@@ -597,7 +617,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       progressBarStyle = ""
     var progressBar2: string = moduleFrame & ".cleanbar"
     tclEval(script = "ttk::progressbar " & progressBar2 &
-        " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent) &
+        " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent2) &
         "}" & progressBarStyle)
     tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
         newStatusTooltip & "\"")
