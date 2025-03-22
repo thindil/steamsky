@@ -76,7 +76,7 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   engineerIndex = findMember(order = engineer) + 1
   gunnersIndex = @[]
   for gun in guns:
-    gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0])
+    gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0] + 1)
   updateCrewLists()
 
 proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
@@ -141,7 +141,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
-      var newPilot = comboList(items = pilotList,
+      let newPilot = comboList(items = pilotList,
           selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
       if newPilot != pilotIndex:
         pilotIndex = newPilot
@@ -156,7 +156,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
-      var newEngineer = comboList(items = engineerList,
+      let newEngineer = comboList(items = engineerList,
           selected = engineerIndex, itemHeight = 25, x = 200, y = 150)
       if newEngineer != engineerIndex:
         engineerIndex = newEngineer
@@ -168,7 +168,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if newOrder != engineerOrder - 1:
         engineerOrder = newOrder + 1
       # Show the guns settings
-      setLayoutRowDynamic(height = 70, cols = 3)
+      setLayoutRowDynamic(height = 35, cols = 3)
       for gunIndex, gun in guns:
         var
           haveAmmo, hasGunner: bool = false
@@ -203,24 +203,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
               return
         wrapLabel(str = playerShip.modules[gun[1]].name & ": (Ammo: " &
             $ammoAmount & ")")
-#        var comboBox: string = frame & ".guncrew" & $(gunIndex + 1)
-#        tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
-#            getCrewList(position = 2) & "] -width 10 -state readonly")
-#        if playerShip.modules[gun[1]].owner[0] == 0:
-#          tclEval(script = comboBox & " current 0")
-#        else:
-#          if playerShip.crew[playerShip.modules[gun[1]].owner[0]].order == gunner:
-#            tclEval(script = comboBox & " current " & $(playerShip.modules[gun[
-#                1]].owner[0] + 1))
-#            hasGunner = true
-#          else:
-#            tclEval(script = comboBox & " current 0")
-#        tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 1")
-#        tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
-#            mainPaned & ".combatframe.next}")
-#        tclEval(script = "bind " & comboBox &
-#            " <<ComboboxSelected>> {SetCombatPosition gunner " & $(gunIndex + 1) & "}")
-#        tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
+        let newGunner = comboList(items = gunnerList,
+            selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150)
+        if newGunner != gunnersIndex[gunIndex]:
+          gunnersIndex[gunIndex] = newGunner
+        hasGunner = playerShip.modules[gun[1]].owner[0] > 0
 #        var gunnerOrders: string = ""
 #        for orderIndex, order in gunnersOrders:
 #          try:
