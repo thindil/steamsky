@@ -156,22 +156,23 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if newPilot != pilotIndex:
         pilotIndex = newPilot
       # Show engineer settings
-      setLayoutRowDynamic(height = 35, cols = 3)
+      setLayoutRowDynamic(height = 35, cols = (if engineerIndex == 0: 2 else: 3))
       label(str = "Engineer:", alignment = left)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Select the crew member which will be the engineer during the combat. The sign + after name means that this crew member has engineering skill, the sign ++ after name means that his/her engineering skill is the best in the crew")
       let newEngineer = comboList(items = engineerList,
           selected = engineerIndex, itemHeight = 25, x = 200, y = 150)
+      if engineerIndex > 0:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Select the order for the engineer")
+        let newOrder = comboList(items = engineerOrders,
+            selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
+        if newOrder != engineerOrder - 1:
+          engineerOrder = newOrder + 1
       if newEngineer != engineerIndex:
         engineerIndex = newEngineer
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Select the order for the engineer")
-      let newOrder = comboList(items = engineerOrders,
-          selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
-      if newOrder != engineerOrder - 1:
-        engineerOrder = newOrder + 1
       # Show the guns settings
       setLayoutRowDynamic(height = 35, cols = 3)
       for gunIndex, gun in guns:
@@ -216,14 +217,13 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if newGunner != gunnersIndex[gunIndex]:
           gunnersIndex[gunIndex] = newGunner
         hasGunner = playerShip.modules[gun[1]].owner[0] > 0
-#        var gunnerOrders: string = ""
-#        for orderIndex, order in gunnersOrders:
-#          try:
-#            gunnerOrders = gunnerOrders & " " & order & getGunSpeed(
-#                position = gunIndex, index = orderIndex) & "}"
-#          except:
-#            showError(message = "Can't show gunner's order.")
-#            return
+        var gunnerOrders: array[1..6, string] = gunnersOrders
+        for orderIndex, order in gunnersOrders:
+          try:
+            gunnerOrders[orderIndex] = order & getGunSpeed(position = gunIndex, index = orderIndex)
+          except:
+            dialog = setError(message = "Can't show gunner's order.")
+            return
 #        comboBox = frame & ".gunorder" & $(gunIndex + 1)
 #        if tclEval2(script = "winfo exists " & comboBox) == "0":
 #          tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
