@@ -174,10 +174,11 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if newEngineer != engineerIndex:
         engineerIndex = newEngineer
       # Show the guns settings
-      setLayoutRowDynamic(height = 35, cols = 3)
-      for gunIndex, gun in guns:
+      for gunIndex, gun in guns.mpairs:
+        let hasGunner = playerShip.modules[gun[1]].owner[0] > 0
+        setLayoutRowDynamic(height = 35, cols = (if hasGunner: 3 else: 2))
         var
-          haveAmmo, hasGunner: bool = false
+          haveAmmo: bool = false
           ammoAmount: Natural = 0
         let aIndex: int = (if playerShip.modules[gun[1]].mType ==
             ModuleType2.gun: playerShip.modules[gun[
@@ -214,16 +215,23 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
               text = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
         let newGunner = comboList(items = gunnerList,
             selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150)
+        if hasGunner:
+          var gunnerOrders: array[1..6, string] = gunnersOrders
+          for orderIndex, order in gunnersOrders:
+            try:
+              gunnerOrders[orderIndex] = order & getGunSpeed(position = gunIndex, index = orderIndex)
+            except:
+              dialog = setError(message = "Can't show gunner's order.")
+              return
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Select the order for the gunner. Shooting in the selected part of enemy ship is less precise but always hit the selected part.")
+          let newOrder = comboList(items = gunnerOrders,
+              selected = (gun[2] - 1), itemHeight = 25, x = 200, y = 150)
+          if newOrder != gun[2] - 1:
+            gun[2] = newOrder + 1
         if newGunner != gunnersIndex[gunIndex]:
           gunnersIndex[gunIndex] = newGunner
-        hasGunner = playerShip.modules[gun[1]].owner[0] > 0
-        var gunnerOrders: array[1..6, string] = gunnersOrders
-        for orderIndex, order in gunnersOrders:
-          try:
-            gunnerOrders[orderIndex] = order & getGunSpeed(position = gunIndex, index = orderIndex)
-          except:
-            dialog = setError(message = "Can't show gunner's order.")
-            return
 #        comboBox = frame & ".gunorder" & $(gunIndex + 1)
 #        if tclEval2(script = "winfo exists " & comboBox) == "0":
 #          tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
