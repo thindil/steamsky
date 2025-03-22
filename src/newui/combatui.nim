@@ -135,23 +135,28 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 1
       setLayoutRowDynamic(height = 35, cols = 3)
       label(str = "Position", alignment = centered)
-      label(str = "Name", alignment = centered)
+      label(str = "Member", alignment = centered)
       label(str = "Order", alignment = centered)
+      # Show pilot settings
+      setLayoutRowDynamic(height = 35, cols = (if pilotIndex == 0: 2 else: 3))
       label(str = "Pilot:", alignment = left)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Select the crew member which will be the pilot during the combat. The sign + after name means that this crew member has piloting skill, the sign ++ after name means that his/her piloting skill is the best in the crew")
       let newPilot = comboList(items = pilotList,
           selected = pilotIndex, itemHeight = 25, x = 200, y = 150)
+      if pilotIndex > 0:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Select the order for the pilot")
+        let newOrder = comboList(items = pilotOrders,
+            selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
+        if newOrder != pilotOrder - 1:
+          pilotOrder = newOrder + 1
       if newPilot != pilotIndex:
         pilotIndex = newPilot
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Select the order for the pilot")
-      var newOrder = comboList(items = pilotOrders,
-          selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
-      if newOrder != pilotOrder - 1:
-        pilotOrder = newOrder + 1
+      # Show engineer settings
+      setLayoutRowDynamic(height = 35, cols = 3)
       label(str = "Engineer:", alignment = left)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -163,7 +168,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Select the order for the engineer")
-      newOrder = comboList(items = engineerOrders,
+      let newOrder = comboList(items = engineerOrders,
           selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
       if newOrder != engineerOrder - 1:
         engineerOrder = newOrder + 1
