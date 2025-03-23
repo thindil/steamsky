@@ -18,7 +18,7 @@
 ## Provides code related to all types of combat, like between the ships,
 ## boarding, giving orders to crew members, etc.
 
-import std/[math, tables]
+import std/[math, strbasics, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[combat, config, crewinventory, game, maps, shipscrew, types]
 import coreui, dialogs, errordialog, header, themes, utilsui2
@@ -248,20 +248,29 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             else:
               discard
           if boardingParty.len > 0:
-            boardingParty = boardingParty[0..^2]
+            boardingParty.strip(chars = {' ', ','})
+          else:
+            boardingParty = "None"
           if defenders.len > 0:
-            defenders = defenders[0..^2]
+            defenders.strip(chars = {' ', ','})
+          else:
+            defenders = "None"
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer.")
           labelButton(title = "Boarding party:"):
             discard
+          var labelHeight = ceil(x = getTextWidth(text = boardingParty) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           wrapLabel(str = boardingParty)
+          setLayoutRowDynamic(height = 35, cols = 1)
           if gameSettings.showTooltips:
             addTooltip(bounds = getWidgetBounds(),
                 text = "Set your ship's defenders against the enemy party.")
           labelButton(title = "Defenders:"):
             discard
+          labelHeight = ceil(x = getTextWidth(text = defenders) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
+          setLayoutRowDynamic(height = labelHeight, cols = 1)
           wrapLabel(str = defenders)
       except:
         dialog = setError(message = "Can't show information about boarding party and defenders.")
