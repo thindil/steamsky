@@ -158,8 +158,8 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
         grid [ttk::label $shipcanvas.frame.replbl$i] -sticky w -padx {50 5}
         tooltip::tooltip $shipcanvas.frame.replbl$i {Your reputation among factions}
         SetScrollbarBindings $shipcanvas.frame.replbl$i $shipinfoframe.general.scrolly
-        grid [ttk::label $shipcanvas.frame.rep$i -style Golden.TLabel] -sticky w \
-          -padx 5 -row [expr 9 + $i] -column 1
+        grid [ttk::label $shipcanvas.frame.rep$i] -sticky w -padx 5 \
+          -row [expr 9 + $i] -column 1
         tooltip::tooltip $shipcanvas.frame.rep$i {Your reputation among factions}
         SetScrollbarBindings $shipcanvas.frame.rep$i $shipinfoframe.general.scrolly
       }
@@ -436,8 +436,11 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     label = shipInfoFrame & ".replbl" & $repIndex
     tclEval(script = label & " configure -text {" & faction.name & "}")
     label = shipInfoFrame & ".rep" & $repIndex
+    let repLevel = getReputation(factionIndex = index)
     tclEval(script = label & " configure -text {" & getReputationText(
-        reputationLevel = getReputation(factionIndex = index)) & "}")
+        reputationLevel = repLevel) & "} -style " & (if repLevel >
+        0: "Headergreen.TLabel" elif repLevel <
+        0: "Headerred.TLabel" else: "Golden.TLabel"))
     repIndex.inc
   tclEval(script = "update")
   tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
