@@ -219,7 +219,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           var gunnerOrders: array[1..6, string] = gunnersOrders
           for orderIndex, order in gunnersOrders:
             try:
-              gunnerOrders[orderIndex] = order & getGunSpeed(position = gunIndex, index = orderIndex)
+              gunnerOrders[orderIndex] = order & getGunSpeed(
+                  position = gunIndex, index = orderIndex)
             except:
               dialog = setError(message = "Can't show gunner's order.")
               return
@@ -236,51 +237,32 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       try:
         if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
             protoShipsList[enemyShipIndex].crew.len > 0:
-          setLayoutRowDynamic(height = 35, cols = 2)
+          setLayoutRowDynamic(height = 35, cols = 1)
+          var boardingParty, defenders: string = ""
+          for member in playerShip.crew:
+            case member.order
+            of boarding:
+              boardingParty = boardingParty & member.name & ", "
+            of defend:
+              defenders = defenders & member.name & ", "
+            else:
+              discard
+          if boardingParty.len > 0:
+            boardingParty = boardingParty[0..^2]
+          if defenders.len > 0:
+            defenders = defenders[0..^2]
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer.")
           labelButton(title = "Boarding party:"):
             discard
+          wrapLabel(str = boardingParty)
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "Set your ship's defenders against the enemy party.")
           labelButton(title = "Defenders:"):
             discard
-#          var button: string = frame & ".boarding"
-#          tclEval(script = "ttk::button " & button & " -text {Boarding party:} -command {SetCombatParty boarding}")
-#          tclEval(script = "grid " & button & " -padx 5")
-#          tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.\"")
-#          button = frame & ".defending"
-#          tclEval(script = "ttk::button " & button & " -text {Defenders:} -command {SetCombatParty defenders}")
-#          tclEval(script = "grid " & button & " -sticky we -padx 5 -pady 5")
-#          tclEval(script = "tooltip::tooltip " & comboBox & " \"Set your ship's defenders against the enemy party.\"")
-#          var boardingParty, defenders: string = ""
-#          for member in playerShip.crew:
-#            case member.order
-#            of boarding:
-#              boardingParty = boardingParty & member.name & ", "
-#            of defend:
-#              defenders = defenders & member.name & ", "
-#            else:
-#              discard
-#          if boardingParty.len > 0:
-#            boardingParty = boardingParty[0 .. ^2]
-#          var label: string = frame & ".boardparty"
-#          let labelLength: int = tclEval2(script = "winfo reqwidth " & frame &
-#                ".engineercrew").parseInt + tclEval2(script = "winfo reqwidth " &
-#                frame & ".engineerorder").parseInt
-#          if tclEval2(script = "winfo exists " & label) == "0":
-#            tclEval(script = "ttk::label " & label & " -text {" & boardingParty &
-#                "} -wraplength " & $labelLength)
-#            tclEval(script = "grid " & label & " -row " & $(guns.len + 4) & " -column 1 -columnspan 2 -sticky w")
-#            tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-#          else:
-#            tclEval(script = label & " configure -text {" & boardingParty & "}")
-#          if defenders.len > 0:
-#            defenders = defenders[0 .. ^2]
-#          label = frame & ".defenders"
-#          if tclEval2(script = "winfo exists " & label) == "0":
-#            tclEval(script = "ttk::label " & label & " -text {" & defenders &
-#                "} -wraplength " & $labelLength)
-#            tclEval(script = "grid " & label & " -row " & $(guns.len + 5) & " -column 1 -columnspan 2 -sticky w")
-#            tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-#          else:
-#            tclEval(script = label & " configure -text {" & defenders & "}")
+          wrapLabel(str = defenders)
       except:
         dialog = setError(message = "Can't show information about boarding party and defenders.")
   setLayoutRowDynamic(height = 35, cols = 1)
