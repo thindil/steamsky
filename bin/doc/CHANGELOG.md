@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [10.9] - 2025-03-23
 
 ### Added
 - Auto setting the destination for the player's ship when accepting a mission
