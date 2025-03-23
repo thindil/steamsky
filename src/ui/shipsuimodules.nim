@@ -108,6 +108,7 @@ proc showModuleDamage(currentRow: var Natural; module: ModuleData; moduleFrame,
   ##
   ## * currentRow        - the current row in the dialog
   ## * module            - the module which status will be shown
+  ## * moduleFrame       - the name of the frame where the module info is
   ## * yScroll           - the dialog's scrollbar
   ## * closeDialogButton - the dialog's close button
   ## * height            - the height of the dialog
@@ -173,6 +174,61 @@ proc showModuleDamage(currentRow: var Natural; module: ModuleData; moduleFrame,
     except:
       return showError(message = "Can't count the height of the button (2).")
   return tclOk
+
+proc addOwnersInfo(ownersName, moduleFrame, yScroll, closeDialogButton: string;
+    module: ModuleData; label, infoButton: var string; height: var Positive;
+    moduleIndex: int; addButton: bool = false; row: Natural = 0) {.raises: [],
+    tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Add information about the module's owners
+  ##
+  ## * ownersName        - the name of the module's owners like crafters, medics, etc
+  ## * moduleFrame       - the name of the frame where the module info is
+  ## * yScroll           - the dialog's scrollbar
+  ## * closeDialogButton - the dialog's close button
+  ## * module            - the module which status will be shown
+  ## * label             - the label with owners info
+  ## * infoButton        - the button to assing the crew members to the module
+  ## * height            - the height of the dialog
+  ## * moduleIndex       - the index of the module
+  ## * addButton         - if true, add the button to manipulate the owners
+  ## * row               - the row in which the info will be added
+  ##
+  ## Returns modified parameters label, infoButton and height
+  var ownersText: string = ownersName
+  if module.owner.len > 1:
+    ownersText.add(y = "s")
+  ownersText.add(y = " (max " & $module.owner.len & "):")
+  label = addLabel(name = moduleFrame & ".lblowners", labelText = ownersText,
+      row = row, yScroll = yScroll, height = height)
+  ownersText = ""
+  var haveOwner: bool = false
+  for owner in module.owner:
+    if owner > -1:
+      if haveOwner:
+        ownersText.add(y = ", ")
+      haveOwner = true
+      ownersText.add(y = playerShip.crew[owner].name)
+  if not haveOwner:
+    ownersText.add(y = "none")
+  label = addLabel(name = moduleFrame & ".lblowners2", labelText = ownersText,
+      row = row, column = 1, secondary = true, yScroll = yScroll,
+      height = height)
+  if addButton:
+    infoButton = moduleFrame & ".ownersbutton"
+    tclEval(script = "ttk::button " & infoButton &
+        " -image assigncrewicon -command {" & closeDialogButton &
+        " invoke;ShowAssignCrew " & $(moduleIndex + 1) & "} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign crew members to the module.\"")
+    tclEval(script = "grid " & infoButton & " -row " & $row & " -column 2 -sticky n -padx {5 0}")
+    tclEval(script = "bind " & infoButton & " <Escape> {" &
+        closeDialogButton & " invoke; break}")
+    tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
+  height = try:
+      height + tclEval2(script = "winfo reqheight " &
+        infoButton).parseInt
+    except:
+      showError(message = "Can't count the height of the crew button.")
+      return
 
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
@@ -397,52 +453,6 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           infoButton).parseInt
       except:
         return showError(message = "Can't count the height of the button (3).")
-
-  proc addOwnersInfo(ownersName: string; addButton: bool = false;
-      row: Natural = 0) {.raises: [], tags: [WriteIOEffect, TimeEffect,
-      RootEffect], contractual.} =
-    ## Add information about the module's owners
-    ##
-    ## * ownersName - the name of the module's owners like crafters, medics, etc
-    ## * addButton  - if true, add the button to manipulate the owners
-    ## * row        - the row in which the info will be added
-    var ownersText: string = ownersName
-    if module.owner.len > 1:
-      ownersText.add(y = "s")
-    ownersText.add(y = " (max " & $module.owner.len & "):")
-    label = addLabel(name = moduleFrame & ".lblowners", labelText = ownersText,
-        row = row, yScroll = yScroll, height = height)
-    ownersText = ""
-    var haveOwner: bool = false
-    for owner in module.owner:
-      if owner > -1:
-        if haveOwner:
-          ownersText.add(y = ", ")
-        haveOwner = true
-        ownersText.add(y = playerShip.crew[owner].name)
-    if not haveOwner:
-      ownersText.add(y = "none")
-    label = addLabel(name = moduleFrame & ".lblowners2", labelText = ownersText,
-        row = row, column = 1, secondary = true, yScroll = yScroll,
-        height = height)
-    if addButton:
-      infoButton = moduleFrame & ".ownersbutton"
-      tclEval(script = "ttk::button " & infoButton &
-          " -image assigncrewicon -command {" & closeDialogButton &
-          " invoke;ShowAssignCrew " & $(moduleIndex + 1) & "} -style Small.TButton")
-      tclEval(script = "tooltip::tooltip " & infoButton & " \"Assign crew members to the module.\"")
-      tclEval(script = "grid " & infoButton & " -row " & $row & " -column 2 -sticky n -padx {5 0}")
-      tclEval(script = "bind " & infoButton & " <Escape> {" &
-          closeDialogButton & " invoke; break}")
-      tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
-    height = try:
-        height + tclEval2(script = "winfo reqheight " &
-          infoButton).parseInt
-      except:
-        showError(message = "Can't count the height of the crew button.")
-        return
-
-
   # Show information specific to the module's type
   case module.mType
   # Show information about engine
@@ -585,7 +595,10 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             if mission.data == owner:
               isPassenger = true
               break missionLoop
-    addOwnersInfo(ownersName = "Owner", addButton = not isPassenger,
+    addOwnersInfo(ownersName = "Owner", moduleFrame = moduleFrame,
+        yScroll = yScroll, closeDialogButton = closeDialogButton,
+        module = module, label = label, infoButton = infoButton,
+        height = height, moduleIndex = moduleIndex, addButton = not isPassenger,
         row = currentRow)
     # Show information about cabin's cleanliness
     currentRow.inc
@@ -697,7 +710,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't count the height of the gun's button.")
     # Show information about gun's owners
     currentRow.inc
-    addOwnersInfo(ownersName = "Gunner", addButton = true, row = currentRow)
+    addOwnersInfo(ownersName = "Gunner", moduleFrame = moduleFrame,
+        yScroll = yScroll, closeDialogButton = closeDialogButton,
+        module = module, label = label, infoButton = infoButton,
+        height = height, moduleIndex = moduleIndex, addButton = true,
+        row = currentRow)
     # Show information about gun's ammunition
     currentRow.inc
     label = addLabel(name = moduleFrame & ".ammolbl", labelText = "Ammunition:",
@@ -796,8 +813,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   of workshop:
     # Show information about workshop owners
     currentRow.inc
-    addOwnersInfo(ownersName = "Worker", addButton = module.craftingIndex.len >
-        0, row = currentRow)
+    addOwnersInfo(ownersName = "Worker", moduleFrame = moduleFrame,
+        yScroll = yScroll, closeDialogButton = closeDialogButton,
+        module = module, label = label, infoButton = infoButton,
+        height = height, moduleIndex = moduleIndex,
+        addButton = module.craftingIndex.len > 0, row = currentRow)
     # Show information about workshop order
     currentRow.inc
     let recipeName: string = try:
@@ -851,14 +871,20 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           break
       except:
         return showError(message = "Can't find wounded crew members.")
-    addOwnersInfo(ownersName = "Medic", addButton = hasHealingTool,
-        row = currentRow)
+    addOwnersInfo(ownersName = "Medic", moduleFrame = moduleFrame,
+        yScroll = yScroll, closeDialogButton = closeDialogButton,
+        module = module, label = label, infoButton = infoButton,
+        height = height, moduleIndex = moduleIndex,
+        addButton = hasHealingTool, row = currentRow)
   # Show information about training rooms
   of trainingRoom:
     # Show information about trainees
     currentRow.inc
-    addOwnersInfo(ownersName = "Trainee", addButton = module.trainedSkill > 0,
-        row = currentRow)
+    addOwnersInfo(ownersName = "Medic", moduleFrame = moduleFrame,
+        yScroll = yScroll, closeDialogButton = closeDialogButton,
+        module = module, label = label, infoButton = infoButton,
+        height = height, moduleIndex = moduleIndex,
+        addButton = module.trainedSkill > 0, row = currentRow)
     # Show information about trained skill
     let trainText: string = try:
         (if module.trainedSkill > 0: skillsList[
