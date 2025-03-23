@@ -733,6 +733,13 @@ proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
   cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = NK_COMMAND_RECT, cmd.sizeof))
   if cmd == nil:
     return
+  cmd.rounding = rounding.cushort
+  cmd.lineThickness = lineThickness.cushort
+  cmd.x = rect.x.cshort
+  cmd.y = rect.y.cshort
+  cmd.w = max(x = 0.cushort, y = rect.w.cushort)
+  cmd.h = max(x = 0.cushort, y = rect.h.cushort)
+  cmd.color = c
 
 proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], contractual.} =
   ## Shrink the selected rectangle. Internal use only
@@ -1088,6 +1095,9 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
   of NK_STYLE_ITEM_COLOR:
     nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
       nk_rgb_factor(col = bg.color, factor = style.color_factor_background))
+    nkStrokeRect(b = `out`, rect = bounds, rounding = style.rounding,
+      lineThickness = style.border, c = nk_rgb_factor(col = bg.color,
+      factor = style.color_factor_background))
 
 proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
