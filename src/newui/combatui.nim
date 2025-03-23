@@ -237,6 +237,10 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
             protoShipsList[enemyShipIndex].crew.len > 0:
           setLayoutRowDynamic(height = 35, cols = 2)
+          labelButton(title = "Boarding party:"):
+            discard
+          labelButton(title = "Defenders:"):
+            discard
 #          var button: string = frame & ".boarding"
 #          tclEval(script = "ttk::button " & button & " -text {Boarding party:} -command {SetCombatParty boarding}")
 #          tclEval(script = "grid " & button & " -padx 5")
@@ -279,5 +283,11 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
 #            tclEval(script = label & " configure -text {" & defenders & "}")
       except:
         dialog = setError(message = "Can't show information about boarding party and defenders.")
+  setLayoutRowDynamic(height = 35, cols = 1)
+  labelButton(title = "Next turn"):
+    try:
+      combatTurn()
+    except:
+      dialog = setError(message = "Can't make next turn in combat.")
   state = combat
   showGameMenu(dialog = dialog)
