@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
   it is enabled
 - Check if the player doesn't spend money below the low level of fuel during
   buying items
+- The player's reputation among the factions. At the moment it doesn't affect
+  the game in any way
 
 ### Fixed
 - Reading the game's themes from files
