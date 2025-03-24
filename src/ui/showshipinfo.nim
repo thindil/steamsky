@@ -436,7 +436,7 @@ proc showShipInfoCommand*(clientData: cint; interp: PInterp; argc: cint;
     label = shipInfoFrame & ".replbl" & $repIndex
     tclEval(script = label & " configure -text {" & faction.name & "}")
     label = shipInfoFrame & ".rep" & $repIndex
-    let repLevel = getReputation(factionIndex = index)
+    let repLevel: int = getReputation(factionIndex = index)
     tclEval(script = label & " configure -text {" & getReputationText(
         reputationLevel = repLevel) & "} -style " & (if repLevel >
         0: "Headergreen.TLabel" elif repLevel <
