@@ -128,7 +128,10 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if expandedSection in {0, 1}:
     group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
-      imageButton(image = images[expandIcon]):
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship crew orders")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
         if expandedSection == 1:
           expandedSection = 0
         else:
@@ -138,7 +141,10 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "Member", alignment = centered)
       label(str = "Order", alignment = centered)
       # Show pilot settings
-      setLayoutRowDynamic(height = 35, cols = (if pilotIndex == 0: 2 else: 3))
+      if pilotIndex == 0:
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
+      else:
+        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
       label(str = "Pilot:", alignment = left)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -156,7 +162,10 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if newPilot != pilotIndex:
         pilotIndex = newPilot
       # Show engineer settings
-      setLayoutRowDynamic(height = 35, cols = (if engineerIndex == 0: 2 else: 3))
+      if engineerIndex == 0:
+        setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
+      else:
+        setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
       label(str = "Engineer:", alignment = left)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
@@ -176,7 +185,10 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       # Show the guns settings
       for gunIndex, gun in guns.mpairs:
         let hasGunner = playerShip.modules[gun[1]].owner[0] > 0
-        setLayoutRowDynamic(height = 35, cols = (if hasGunner: 3 else: 2))
+        if hasGunner:
+          setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
+        else:
+          setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
         var
           haveAmmo: bool = false
           ammoAmount: Natural = 0
