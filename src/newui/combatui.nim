@@ -160,6 +160,18 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if newOrder != pilotOrder - 1:
           pilotOrder = newOrder + 1
       if newPilot != pilotIndex:
+        if newPilot > 0:
+          try:
+            giveOrders(ship = playerShip, memberIndex = newPilot - 1,
+                givenOrder = pilot)
+          except:
+            dialog = setError(message = "Can't give order to the pilot.")
+        else:
+          try:
+            giveOrders(ship = playerShip, memberIndex = pilotIndex - 1,
+                givenOrder = rest)
+          except:
+            dialog = setError(message = "Can't give rest order to the pilot.")
         pilotIndex = newPilot
       # Show engineer settings
       if engineerIndex == 0:
