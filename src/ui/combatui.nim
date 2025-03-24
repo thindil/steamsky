@@ -19,7 +19,7 @@
 ## showing them, updating the list of messages, giving orders to the
 ## crew members, etc.
 
-import std/[os, math, strutils, tables]
+import std/[os, math, strbasics, strutils, tables]
 import contracts, nimalyzer
 import ../[combat, config, crewinventory, game, items, maps, messages,
     shipscrew, shipmodules, shipsmovement, tk, types]
@@ -260,7 +260,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
         else:
           discard
       if boardingParty.len > 0:
-        boardingParty = boardingParty[0 .. ^2]
+        boardingParty.strip(chars = {' ', ','})
       var label: string = frame & ".boardparty"
       let labelLength: int = tclEval2(script = "winfo reqwidth " & frame &
             ".engineercrew").parseInt + tclEval2(script = "winfo reqwidth " &
@@ -273,7 +273,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       else:
         tclEval(script = label & " configure -text {" & boardingParty & "}")
       if defenders.len > 0:
-        defenders = defenders[0 .. ^2]
+        defenders.strip(chars = {' ', ','})
       label = frame & ".defenders"
       if tclEval2(script = "winfo exists " & label) == "0":
         tclEval(script = "ttk::label " & label & " -text {" & defenders &
