@@ -1099,6 +1099,20 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
       lineThickness = style.border, c = nk_rgb_factor(col = bg.color,
       factor = style.color_factor_background))
 
+proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
+  content: NimRect; background, foreground: nk_color; borderWidth: float;
+  font: ptr nk_user_font) {.raises: [], tags: [], contractual.} =
+  ## Draw the selected symbol
+  ##
+  ## * out         - the command buffer in which the symbol will be drawn
+  ## * type        - the type of symbol to draw
+  ## * content     - the bounds of the symbol's content
+  ## * background  - the background color of the symbol
+  ## * foreground  - the foreground color of the symbol
+  ## * borderWidth - the width of border of the symbol
+  ## * font        - the font used to draw on the symbol
+  discard
+
 proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
   font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
@@ -1122,6 +1136,8 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
       style.text_active else: style.text_normal)
 
   sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
+  nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
+    background = bg, foreground = sym, borderWidth = 1, font = font)
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
@@ -1395,6 +1411,12 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         else:
           button.x = header.x + style.window.header.padding.x
           header.x += button.w + style.window.header.spacing.x + style.window.header.padding.x
+        if nkDoButtonSymbol(state = ws, `out` = win.buffer.addr, bounds = button,
+          symbol = style.window.header.close_symbol, behavior = NK_BUTTON_DEFAULT,
+          style = style.window.header.close_button.addr, `in` = `in`.addr,
+          font = style.font) and not(win.flags and NK_WINDOW_ROM.cint).nk_bool:
+          layout.flags = layout.flags or NK_WINDOW_HIDDEN.cint
+          layout.flags = layout.flags and not NK_WINDOW_MINIMIZED.cint
     return true
 
 # ------

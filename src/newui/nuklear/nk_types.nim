@@ -123,6 +123,7 @@ type
     NK_WINDOW_ROM = 1 shl 12
     NK_WINDOW_HIDDEN = 1 shl 13
     NK_WINDOW_CLOSED = 1 shl 14
+    NK_WINDOW_MINIMIZED = 1 shl 15
     NK_WINDOW_REMOVE_ROM = 1 shl 16
   nk_panel_flags* = enum
     ## Internal Nuklear type
@@ -226,6 +227,8 @@ type
     padding*, label_padding*, spacing*: nk_vec2
     active*, hover*, normal*: nk_style_item
     label_active*, label_hover*, label_normal*: nk_color
+    close_symbol*: SymbolType
+    close_button*: nk_style_button
   nk_style_window* {.importc, nodecl.} = object
     ## Internal Nuklear type
     header*: nk_style_window_header
