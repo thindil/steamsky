@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Removed colon from the end of lists of boarding party and defenders in the
+  combat screen
+
 ## [10.9] - 2025-03-23
 
 ### Added
