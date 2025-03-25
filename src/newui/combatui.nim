@@ -172,7 +172,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 givenOrder = rest)
           except:
             dialog = setError(message = "Can't give rest order to the pilot.")
-        pilotIndex = newPilot
+        pilotIndex = findMember(order = pilot) + 1
+        engineerIndex = findMember(order = engineer) + 1
       # Show engineer settings
       if engineerIndex == 0:
         setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.33.cfloat, 0.33])
@@ -193,7 +194,20 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if newOrder != engineerOrder - 1:
           engineerOrder = newOrder + 1
       if newEngineer != engineerIndex:
-        engineerIndex = newEngineer
+        if newEngineer > 0:
+          try:
+            giveOrders(ship = playerShip, memberIndex = newEngineer - 1,
+                givenOrder = engineer)
+          except:
+            dialog = setError(message = "Can't give order to the engineer.")
+        else:
+          try:
+            giveOrders(ship = playerShip, memberIndex = engineerIndex - 1,
+                givenOrder = rest)
+          except:
+            dialog = setError(message = "Can't give rest order to the engineer.")
+        engineerIndex = findMember(order = engineer) + 1
+        pilotIndex = findMember(order = pilot) + 1
       # Show the guns settings
       for gunIndex, gun in guns.mpairs:
         let hasGunner = playerShip.modules[gun[1]].owner[0] > 0
