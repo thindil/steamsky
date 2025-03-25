@@ -125,6 +125,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = height / 2, cols = 2)
   else:
     setLayoutRowDynamic(height = height, cols = 1)
+  # The player's ship's crew orders
   if expandedSection in {0, 1}:
     group(title = "Your ship crew orders:", flags = {windowBorder, windowTitle}):
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
@@ -210,7 +211,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         pilotIndex = findMember(order = pilot) + 1
       # Show the guns settings
       for gunIndex, gun in guns.mpairs:
-        let hasGunner = playerShip.modules[gun[1]].owner[0] > 0
+        var hasGunner = playerShip.modules[gun[1]].owner[0] > 0
         if hasGunner:
           setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.33.cfloat, 0.33, 0.33])
         else:
@@ -253,6 +254,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
               text = "Select the crew member which will be operating the gun during the combat. The sign + after name means that this crew member has gunnery skill, the sign ++ after name means that his/her gunnery skill is the best in the crew")
         let newGunner = comboList(items = gunnerList,
             selected = gunnersIndex[gunIndex], itemHeight = 25, x = 200, y = 150)
+        hasGunner = newGunner > 0
         if hasGunner:
           var gunnerOrders: array[1..6, string] = gunnersOrders
           for orderIndex, order in gunnersOrders:
@@ -312,6 +314,18 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           wrapLabel(str = defenders)
       except:
         dialog = setError(message = "Can't show information about boarding party and defenders.")
+  # The enemy's ship's info
+  if expandedSection in {0, 2}:
+    group(title = "Enemy info:", flags = {windowBorder, windowTitle}):
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the enemy's ship info")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 2:
+          expandedSection = 0
+        else:
+          expandedSection = 2
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
