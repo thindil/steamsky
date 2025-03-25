@@ -326,6 +326,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 2
+      setLayoutRowDynamic(height = 35, cols = 2)
+      label(str = "Name:")
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
