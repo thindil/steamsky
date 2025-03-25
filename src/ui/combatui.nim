@@ -201,7 +201,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     var comboBox: string = frame & ".guncrew" & $(gunIndex + 1)
     tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
         getCrewList(position = 2) & "] -width 10 -state readonly")
-    if playerShip.modules[gun[1]].owner[0] == 0:
+    if playerShip.modules[gun[1]].owner[0] == -1:
       tclEval(script = comboBox & " current 0")
     else:
       if playerShip.crew[playerShip.modules[gun[1]].owner[0]].order == gunner:
