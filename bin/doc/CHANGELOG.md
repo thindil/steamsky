@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Removed colon from the end of lists of boarding party and defenders in the
   combat screen
+- Setting a gunner in combat to Nobody removes completely gunner setting for
+  the gun
 
 ## [10.9] - 2025-03-23
 
