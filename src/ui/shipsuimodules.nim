@@ -230,6 +230,107 @@ proc addOwnersInfo(ownersName, moduleFrame, yScroll, closeDialogButton: string;
       showError(message = "Can't count the height of the crew button.")
       return
 
+proc showModuleUpgrade(currentRow: var Natural; height: var Positive;
+    module: ModuleData; moduleFrame, yScroll, closeDialogButton: string; label,
+    infoButton: var string; moduleIndex: int): bool {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show information about the current upgrade of the module
+  ##
+  ## * currentRow        - the current row in the dialog
+  ## * height            - the height of the dialog
+  ## * module            - the module which status will be shown
+  ## * moduleFrame       - the name of the frame where the module info is
+  ## * yScroll           - the dialog's scrollbar
+  ## * closeDialogButton - the dialog's close button
+  ## * label             - the label with owners info
+  ## * infoButton        - the button to assing the crew members to the module
+  ## * moduleIndex       - the index of the module
+  ##
+  ## Returns modified parameters label, infoButton and height. Also returns
+  ## true if everything was ok, otherwise false
+  currentRow.inc
+  var
+    moduleInfo: string = ""
+    maxUpgrade: Natural = 0
+  case module.upgradeAction
+  of durability:
+    moduleInfo.add(y = "Durability")
+    maxUpgrade = try:
+        modulesList[module.protoIndex].durability
+    except:
+      showError(message = "Can't get max upgrade.")
+      return false
+  of maxValue:
+    try:
+      case modulesList[module.protoIndex].mType
+      of engine:
+        moduleInfo.add(y = "Power")
+        maxUpgrade = (modulesList[module.protoIndex].maxValue / 20).int
+      of cabin:
+        moduleInfo.add(y = "Quality")
+        maxUpgrade = modulesList[module.protoIndex].maxValue
+      of gun, batteringRam:
+        moduleInfo.add(y = "Damage")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 2
+      of hull:
+        moduleInfo.add(y = "Enlarge")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 40
+      of harpoonGun:
+        moduleInfo.add(y = "Strength")
+        maxUpgrade = modulesList[module.protoIndex].maxValue * 10
+      else:
+        discard
+    except:
+      showError(message = "Can't show info about upgrade.")
+      return false
+  of value:
+    try:
+      if modulesList[module.protoIndex].mType == engine:
+        moduleInfo.add(y = "Fuel usage")
+        maxUpgrade = modulesList[module.protoIndex].value * 20
+    except:
+      showError(message = "Can't show info about fuel usage ugprade.")
+      return false
+  else:
+    discard
+  maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
+  if maxUpgrade == 0:
+    maxUpgrade = 1
+  let
+    upgradePercent: float = 1.0 - (module.upgradeProgress.float /
+        maxUpgrade.float)
+    progressBarStyle2: string = if upgradePercent > 0.74:
+        " -style green.Horizontal.TProgressbar"
+      elif upgradePercent > 0.24:
+        " -style yellow.Horizontal.TProgressbar"
+      else:
+        " -style Horizontal.TProgressbar"
+    progressBar2: string = moduleFrame & ".upgradebar"
+  tclEval(script = "ttk::progressbar " & progressBar2 &
+      " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
+      "}" & progressBarStyle2)
+  tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" & moduleInfo & "\"")
+  label = addLabel(name = moduleFrame & ".upgradelbl",
+      labelText = "Upgrade progress:", row = currentRow, yScroll = yScroll,
+      height = height)
+  tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we -padx {5 0}")
+  if playerShip.upgradeModule == moduleIndex:
+    infoButton = moduleFrame & ".upgradebutton"
+    tclEval(script = "ttk::button " & infoButton &
+        " -image cancelicon -command {" & closeDialogButton &
+        " invoke;StopUpgrading " & $moduleIndex & "} -style Small.TButton")
+    tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading the module.\"")
+    tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
+    tclEval(script = "bind " & infoButton & " <Escape> {" &
+        closeDialogButton & " invoke; break}")
+  height = try:
+      height + tclEval2(script = "winfo reqheight " &
+        infoButton).parseInt
+    except:
+      showError(message = "Can't count the height of the button (3).")
+      return false
+  return true
+
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -376,83 +477,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't show the upgrade skill.")
   # Show the module's upgrade action
   if module.upgradeAction != none:
-    currentRow.inc
-    var
-      moduleInfo: string = ""
-      maxUpgrade: Natural = 0
-    case module.upgradeAction
-    of durability:
-      moduleInfo.add(y = "Durability")
-      maxUpgrade = try:
-          modulesList[module.protoIndex].durability
-      except:
-        return showError(message = "Can't get max upgrade.")
-    of maxValue:
-      try:
-        case modulesList[module.protoIndex].mType
-        of engine:
-          moduleInfo.add(y = "Power")
-          maxUpgrade = (modulesList[module.protoIndex].maxValue / 20).int
-        of cabin:
-          moduleInfo.add(y = "Quality")
-          maxUpgrade = modulesList[module.protoIndex].maxValue
-        of gun, batteringRam:
-          moduleInfo.add(y = "Damage")
-          maxUpgrade = modulesList[module.protoIndex].maxValue * 2
-        of hull:
-          moduleInfo.add(y = "Enlarge")
-          maxUpgrade = modulesList[module.protoIndex].maxValue * 40
-        of harpoonGun:
-          moduleInfo.add(y = "Strength")
-          maxUpgrade = modulesList[module.protoIndex].maxValue * 10
-        else:
-          discard
-      except:
-        return showError(message = "Can't show info about upgrade.")
-    of value:
-      try:
-        if modulesList[module.protoIndex].mType == engine:
-          moduleInfo.add(y = "Fuel usage")
-          maxUpgrade = modulesList[module.protoIndex].value * 20
-      except:
-        return showError(message = "Can't show info about fuel usage ugprade.")
-    else:
-      discard
-    maxUpgrade = (maxUpgrade.float * newGameSettings.upgradeCostBonus).int
-    if maxUpgrade == 0:
-      maxUpgrade = 1
-    let
-      upgradePercent: float = 1.0 - (module.upgradeProgress.float /
-          maxUpgrade.float)
-      progressBarStyle2: string = if upgradePercent > 0.74:
-          " -style green.Horizontal.TProgressbar"
-        elif upgradePercent > 0.24:
-          " -style yellow.Horizontal.TProgressbar"
-        else:
-          " -style Horizontal.TProgressbar"
-      progressBar2: string = moduleFrame & ".upgradebar"
-    tclEval(script = "ttk::progressbar " & progressBar2 &
-        " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
-        "}" & progressBarStyle2)
-    tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" & moduleInfo & "\"")
-    label = addLabel(name = moduleFrame & ".upgradelbl",
-        labelText = "Upgrade progress:", row = currentRow, yScroll = yScroll,
-        height = height)
-    tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we -padx {5 0}")
-    if playerShip.upgradeModule == moduleIndex:
-      infoButton = moduleFrame & ".upgradebutton"
-      tclEval(script = "ttk::button " & infoButton &
-          " -image cancelicon -command {" & closeDialogButton &
-          " invoke;StopUpgrading " & $argv[1] & "} -style Small.TButton")
-      tclEval(script = "tooltip::tooltip " & infoButton & " \"Stop upgrading the module.\"")
-      tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
-      tclEval(script = "bind " & infoButton & " <Escape> {" &
-          closeDialogButton & " invoke; break}")
-    height = try:
-        height + tclEval2(script = "winfo reqheight " &
-          infoButton).parseInt
-      except:
-        return showError(message = "Can't count the height of the button (3).")
+    if not showModuleUpgrade(currentRow = currentRow, height = height,
+        module = module, moduleFrame = moduleFrame, yScroll = yScroll,
+        closeDialogButton = closeDialogButton, label = label,
+        infoButton = infoButton, moduleIndex = moduleIndex):
+      return tclOk
   # Show information specific to the module's type
   case module.mType
   # Show information about engine
