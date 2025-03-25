@@ -1111,7 +1111,26 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
   ## * foreground  - the foreground color of the symbol
   ## * borderWidth - the width of border of the symbol
   ## * font        - the font used to draw on the symbol
-  discard
+  case `type`
+  of x, underscore, plus, minus:
+    # single character text symbol
+    let ch: char = case `type`
+      of x:
+        'x'
+      of underscore:
+        '_'
+      of plus:
+        '+'
+      of minus:
+        '-'
+      else:
+        ' '
+    var text: nk_text
+    text.padding = nk_vec2(x: 0, y: 0)
+    text.background = background
+    text.text = foreground
+  else:
+    discard
 
 proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
