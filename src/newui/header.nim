@@ -122,7 +122,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
   var
     image: PImage = nil
     tooltipText: string = ""
-  if speed < 0.5:
+  if speed < 0.5 and (havePilot or "sentientships" in faction.flags):
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "You can't fly with your ship, because it is overloaded.")
