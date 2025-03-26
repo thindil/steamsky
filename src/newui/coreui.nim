@@ -46,6 +46,7 @@ var
   redraw*: bool = true         ## If true, redraw the game
   inCombat*: bool = false      ## If true, the player is in combat
   images*: array[menuIcon..contractIcon, PImage] ## The images used in the game
+  theme*: ThemeData = defaultTheme ## The current game's theme
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
