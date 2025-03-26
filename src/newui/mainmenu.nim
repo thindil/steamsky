@@ -45,7 +45,7 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
   if menuImages[0] == nil:
     # Load images
     try:
-      let theme: ThemeData = themesList[gameSettings.interfaceTheme]
+      theme = themesList[gameSettings.interfaceTheme]
       menuImages[0] = nuklearLoadSVGImage(filePath = theme.icons[logoImage], width = 0, height = 110)
       for index, fileName in theme.icons[1..3]:
         menuImages[index + 1] = nuklearLoadSVGImage(filePath = fileName,
