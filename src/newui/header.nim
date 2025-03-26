@@ -35,11 +35,6 @@ proc showResourcesInfo(fuelAmount, foodAmount, drinksAmount: Natural;
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show.
   ##
-  let theme: ThemeData = try:
-      themesList[gameSettings.interfaceTheme]
-    except:
-      dialog = setError(message = "Can't get the game's theme.")
-      return
   var
     color: Color = colBlack
     image: PImage = nil

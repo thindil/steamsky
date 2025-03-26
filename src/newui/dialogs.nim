@@ -17,7 +17,7 @@
 
 ## Provides code related to the game's dialogs, like showing questions, etc.
 
-import std/[colors, os, math, strutils, tables]
+import std/[colors, os, math, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, crewinventory, game, game2, maps, messages, shipscargo,
     shipscrew, shipscrew2, types]
@@ -266,11 +266,6 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       startIndex: int = 0
       tagIndex: int = text.find(sub = '{')
       parts: seq[TextData] = @[]
-    let
-      theme: ThemeData = try:
-          themesList[gameSettings.interfaceTheme]
-        except:
-          return
     while true:
       if tagIndex == -1:
         tagIndex = text.len

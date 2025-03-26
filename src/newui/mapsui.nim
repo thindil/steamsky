@@ -663,13 +663,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # draw map
   nuklearSetDefaultFont(defaultFont = fonts[FontsNames.mapFont],
       fontSize = gameSettings.mapFontSize + 10)
-  let
-    theme: ThemeData = try:
-        themesList[gameSettings.interfaceTheme]
-      except:
-        dialog = setError(message = "Can't get the game's theme.")
-        return
-    height: Positive = gameSettings.mapFontSize + 10
+  let height: Positive = gameSettings.mapFontSize + 10
   rows = ((windowHeight - 35 - gameSettings.messagesPosition.float) /
         height.float).ceil.Natural
   let colWidth: Positive = try:
