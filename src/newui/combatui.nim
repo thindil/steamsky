@@ -326,8 +326,51 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 2
-      setLayoutRowDynamic(height = 35, cols = 2)
+      setLayoutRowDynamic(height = 25, cols = 2)
       label(str = "Name:")
+      colorLabel(str = enemyName, color = theme.colors[goldenColor])
+      label(str = "Type:")
+      colorLabel(str = game.enemy.ship.name, color = theme.colors[goldenColor])
+      label(str = "Home:")
+      colorLabel(str = skyBases[game.enemy.ship.homeBase].name, color = theme.colors[goldenColor])
+      label(str = "Distance:")
+      colorLabel(str = (if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
+        10_000 ..
+        15_000: "Long" elif game.enemy.distance in 5_000 ..
+        10_000: "Medium" elif game.enemy.distance in 1_000 ..
+        5_000: "Short" else: "Close"), color = theme.colors[goldenColor])
+      label(str = "Status:")
+      var enemyInfo: string = ""
+      if game.enemy.distance < 15_000:
+        if game.enemy.ship.modules[0].durability == 0:
+          enemyInfo = enemyInfo & "Destroyed"
+        else:
+          var enemyStatus: string = "Ok"
+          for module in game.enemy.ship.modules:
+            if module.durability < module.maxDurability:
+              enemyStatus = "Damaged"
+              break
+          enemyInfo = enemyInfo & enemyStatus
+        for module in game.enemy.ship.modules:
+          if module.durability > 0:
+            try:
+              case modulesList[module.protoIndex].mType
+              of armor:
+                enemyInfo = enemyInfo & " (armored)"
+              of gun:
+                enemyInfo = enemyInfo & " (gun)"
+              of batteringRam:
+                enemyInfo = enemyInfo & " (battering ram)"
+              of harpoonGun:
+                enemyInfo = enemyInfo & " (harpoon gun)"
+              else:
+                discard
+            except:
+              dialog = setError(message = "Can't show information about the enemy's ship. No proto module with index:" &
+                  $module.protoIndex, e = nil)
+      else:
+        enemyInfo = enemyInfo & "Unknown"
+      colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
