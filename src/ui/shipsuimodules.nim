@@ -331,6 +331,113 @@ proc showModuleUpgrade(currentRow: var Natural; height: var Positive;
       return false
   return true
 
+proc showEngineInfo(currentRow: var Natural; module: ModuleData; label,
+    infoButton: var string; moduleFrame, yScroll, closeDialogButton: string;
+    height: var Positive; moduleIndex: int): bool {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show information about the selected engine
+  ##
+  ## * currentRow        - the current row in the dialog
+  ## * module            - the module which status will be shown
+  ## * label             - the label with owners info
+  ## * infoButton        - the button to assing the crew members to the module
+  ## * moduleFrame       - the name of the frame where the module info is
+  ## * yScroll           - the dialog's scrollbar
+  ## * closeDialogButton - the dialog's close button
+  ## * height            - the height of the dialog
+  ## * moduleIndex       - the index of the module
+  ##
+  ## Returns modified parameters label, infoButton and height. Also returns
+  ## true if everything was ok, otherwise false
+  # Show engine power
+  currentRow.inc
+  var moduleMaxValue2: Natural = try:
+      (modulesList[module.protoIndex].maxValue.float * 1.5).int
+    except:
+      showError(message = "Can't count the module max value.")
+      return false
+  label = addLabel(name = moduleFrame & ".powerlbl",
+      labelText = "Max power: ", row = currentRow, yScroll = yScroll,
+          height = height)
+  label = addLabel(name = moduleFrame & ".powerlbl2",
+      labelText = $module.power & (if module.power ==
+          moduleMaxValue2: " (max upgrade)" else: ""),
+      row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+      height = height)
+  if module.power < moduleMaxValue2:
+    infoButton = addUpgradeButton(upgradeType = maxValue,
+        buttonTooltip = "engine's power", box = moduleFrame,
+        shipModule = module, column = 2, buttonName = "powerbutton",
+        row = currentRow, closeDialogButton = closeDialogButton,
+        moduleIndex = moduleIndex)
+    height = try:
+        height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+      except:
+        showError(message = "Can't count the height of the button (4).")
+        return false
+  else:
+    height = try:
+        height + tclEval2(script = "winfo reqheight " & label).parseInt
+      except:
+        showError(message = "Can't count the height of the button (5).")
+        return false
+  # Show engine fuel usage
+  currentRow.inc
+  moduleMaxValue2 = try:
+        (modulesList[module.protoIndex].value.float / 2.0).int
+    except:
+      showError(message = "Can't count the module's max value (2).")
+      return false
+  label = addLabel(name = moduleFrame & ".fuellbl",
+      labelText = "Fuel usage: ", row = currentRow, yScroll = yScroll,
+          height = height)
+  label = addLabel(name = moduleFrame & ".fuellbl2",
+      labelText = $module.fuelUsage & (if moduleMaxValue2 ==
+          module.fuelUsage: " (max upgrade)" else: ""),
+      row = currentRow, column = 1, secondary = true, yScroll = yScroll,
+      height = height)
+  if module.fuelUsage > moduleMaxValue2:
+    infoButton = addUpgradeButton(upgradeType = value,
+        buttonTooltip = "engine's fuel usage", box = moduleFrame,
+        shipModule = module, column = 2, buttonName = "fuelbutton",
+        row = currentRow, closeDialogButton = closeDialogButton,
+        moduleIndex = moduleIndex)
+    height = try:
+        height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+      except:
+        showError(message = "Can't count the height of the button (6).")
+        return false
+  else:
+    height = try:
+        height + tclEval2(script = "winfo reqheight " & label).parseInt
+    except:
+      showError(message = "Can't count the height of the label.")
+      return false
+  # Show engine state
+  currentRow.inc
+  label = addLabel(name = moduleFrame & ".statelbl", labelText = "State: ",
+      row = currentRow, yScroll = yScroll, height = height)
+  label = addLabel(name = moduleFrame & ".statelbl2", labelText = (
+      if module.disabled: "Disabled" else: "Enabled"), row = currentRow,
+      column = 1, secondary = true, yScroll = yScroll, height = height)
+  infoButton = moduleFrame & ".statebutton"
+  tclEval(script = "ttk::button " & infoButton &
+      " -image powericon -command {" & closeDialogButton &
+      " invoke;DisableEngine " & $moduleIndex & "} -style Small.TButton")
+  tclEval(script = "tooltip::tooltip " & infoButton & " \"Turn" & (
+      if module.disabled: " on " else: " off ") & "the engine.\"")
+  tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
+  tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
+  height = try:
+      height + tclEval2(script = "winfo reqheight " &
+        infoButton).parseInt
+    except:
+      showError(message = "Can't count the height of the button (7).")
+      return false
+  return true
+
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -486,86 +593,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   case module.mType
   # Show information about engine
   of engine:
-    # Show engine power
-    currentRow.inc
-    var moduleMaxValue2: Natural = try:
-        (modulesList[module.protoIndex].maxValue.float * 1.5).int
-      except:
-        return showError(message = "Can't count the module max value.")
-    label = addLabel(name = moduleFrame & ".powerlbl",
-        labelText = "Max power: ", row = currentRow, yScroll = yScroll,
-            height = height)
-    label = addLabel(name = moduleFrame & ".powerlbl2",
-        labelText = $module.power & (if module.power ==
-            moduleMaxValue2: " (max upgrade)" else: ""),
-        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
-        height = height)
-    if module.power < moduleMaxValue2:
-      infoButton = addUpgradeButton(upgradeType = maxValue,
-          buttonTooltip = "engine's power", box = moduleFrame,
-          shipModule = module, column = 2, buttonName = "powerbutton",
-          row = currentRow, closeDialogButton = closeDialogButton,
-          moduleIndex = moduleIndex)
-      height = try:
-          height + tclEval2(script = "winfo reqheight " &
-            infoButton).parseInt
-        except:
-          return showError(message = "Can't count the height of the button (4).")
-    else:
-      height = try:
-          height + tclEval2(script = "winfo reqheight " & label).parseInt
-        except:
-          return showError(message = "Can't count the height of the button (5).")
-    # Show engine fuel usage
-    currentRow.inc
-    moduleMaxValue2 = try:
-          (modulesList[module.protoIndex].value.float / 2.0).int
-      except:
-        return showError(message = "Can't count the module's max value (2).")
-    label = addLabel(name = moduleFrame & ".fuellbl",
-        labelText = "Fuel usage: ", row = currentRow, yScroll = yScroll,
-            height = height)
-    label = addLabel(name = moduleFrame & ".fuellbl2",
-        labelText = $module.fuelUsage & (if moduleMaxValue2 ==
-            module.fuelUsage: " (max upgrade)" else: ""),
-        row = currentRow, column = 1, secondary = true, yScroll = yScroll,
-        height = height)
-    if module.fuelUsage > moduleMaxValue2:
-      infoButton = addUpgradeButton(upgradeType = value,
-          buttonTooltip = "engine's fuel usage", box = moduleFrame,
-          shipModule = module, column = 2, buttonName = "fuelbutton",
-          row = currentRow, closeDialogButton = closeDialogButton,
-          moduleIndex = moduleIndex)
-      height = try:
-          height + tclEval2(script = "winfo reqheight " &
-            infoButton).parseInt
-        except:
-          return showError(message = "Can't count the height of the button (6).")
-    else:
-      height = try:
-          height + tclEval2(script = "winfo reqheight " & label).parseInt
-      except:
-        return showError(message = "Can't count the height of the label.")
-    # Show engine state
-    currentRow.inc
-    label = addLabel(name = moduleFrame & ".statelbl", labelText = "State: ",
-        row = currentRow, yScroll = yScroll, height = height)
-    label = addLabel(name = moduleFrame & ".statelbl2", labelText = (
-        if module.disabled: "Disabled" else: "Enabled"), row = currentRow,
-        column = 1, secondary = true, yScroll = yScroll, height = height)
-    infoButton = moduleFrame & ".statebutton"
-    tclEval(script = "ttk::button " & infoButton &
-        " -image powericon -command {" & closeDialogButton &
-        " invoke;DisableEngine " & $argv[1] & "} -style Small.TButton")
-    tclEval(script = "tooltip::tooltip " & infoButton & " \"Turn" & (
-        if module.disabled: " on " else: " off ") & "the engine.\"")
-    tclEval(script = "grid " & infoButton & " -row " & $currentRow & " -column 2 -sticky n -padx {5 0}")
-    tclEval(script = "bind " & infoButton & " <Escape> {" & closeDialogButton & " invoke; break}")
-    height = try:
-        height + tclEval2(script = "winfo reqheight " &
-          infoButton).parseInt
-      except:
-        return showError(message = "Can't count the height of the button (7).")
+    if not showEngineInfo(currentRow = currentRow, module = module,
+        label = label, infoButton = infoButton, moduleFrame = moduleFrame,
+        yScroll = yScroll, closeDialogButton = closeDialogButton,
+        height = height, moduleIndex = moduleIndex):
+      return tclOk
   # Show information about cargo room
   of cargoRoom:
     currentRow.inc
