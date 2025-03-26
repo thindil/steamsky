@@ -997,6 +997,23 @@ proc isMouseReleased*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   return nk_input_is_mouse_released(i = ctx.input.addr, id = id)
 
+# ----
+# Text
+# ----
+proc nkWidgetText(o: ptr nk_command_buffer; b: NimRect; str: string; len: int;
+  t: ptr nk_text; a: nk_flags; f: ptr nk_user_font) {.raises: [], tags: [],
+  contractual.} =
+  ## Draw a text widget. Internal use only
+  ##
+  ## * o   - the command buffer in which the widget will be draw
+  ## * b   - the bounds of the widget
+  ## * str - the text to draw in the widget
+  ## * len - the length of the text to draw
+  ## * t   - the text style
+  ## * a   - the flags related to the widget
+  ## * f   - the font used to draw the widget
+  discard
+
 # -------
 # Buttons
 # -------
@@ -1129,6 +1146,8 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     text.padding = nk_vec2(x: 0, y: 0)
     text.background = background
     text.text = foreground
+    nkWidgetText(o = `out`, b = content, str = $ch, len = 1, t = text.addr,
+      a = NK_TEXT_CENTERED, f = font)
   else:
     discard
 
