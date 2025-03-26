@@ -71,7 +71,7 @@ let
   defaultThemePath: string = dataDirectory & "ui" & DirSep
   defaultThemeIconPath: string = defaultThemePath & "images" & DirSep & "ui" & DirSep
   defaultThemeFontPath: string = defaultThemePath & "fonts" & DirSep
-  defaultTheme: ThemeData = ThemeData(name: "Default theme",
+  defaultTheme*: ThemeData = ThemeData(name: "Default theme",
       fileName: dataDirectory & "ui" & DirSep & "theme.cfg", icons: [
       dataDirectory & "ui" & DirSep & "images" & DirSep & "logo.svg",
       defaultThemeIconPath & "random.svg", defaultThemeIconPath &
@@ -123,14 +123,15 @@ let
           "#00ff00".parseColor, "#00ffff".parseColor, "#a40000".parseColor,
           "#732727".parseColor, "#73d216".parseColor, "#ffdf00".parseColor,
           "#b16286".parseColor])
+    ## The default game's theme
 
 var themesList*: Table[string, ThemeData] = initTable[string, ThemeData]() ## The list of all available themes
 
 proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
     ReadDirEffect, ReadIOEffect, RootEffect], contractual.} =
   ## Load all the game's themes and set the configured theme for the game
-  var theme: ThemeData = defaultTheme
-  themesList["steamsky"] = theme
+  var localTheme: ThemeData = defaultTheme
+  themesList["steamsky"] = localTheme
   try:
     for themeDir in walkDirs(pattern = themesDirectory):
       for configName in walkPattern(pattern = themeDir & DirSep & "*.cfg"):
@@ -153,16 +154,16 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
             of cfgKeyValuePair, cfgOption:
               case entry.key
               of "Name":
-                theme.name = entry.value
+                localTheme.name = entry.value
               of "FileName":
-                theme.fileName = themeDir & DirSep & entry.value
+                localTheme.fileName = themeDir & DirSep & entry.value
               else:
                 var validName: bool = true
                 # Check if the option is a color
                 try:
                   let index: ColorsNames = parseEnum[ColorsNames](
                       s = entry.value)
-                  theme.colors[index] = entry.value.parseColor
+                  localTheme.colors[index] = entry.value.parseColor
                 except:
                   validName = false
                 # Check if the option is a map's color
@@ -170,7 +171,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                   try:
                     let index: MapColorsNames = parseEnum[MapColorsNames](
                         s = entry.value)
-                    theme.mapColors[index] = entry.value.parseColor
+                    localTheme.mapColors[index] = entry.value.parseColor
                     validName = true
                   except:
                     discard
@@ -179,7 +180,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                   try:
                     let index: FontsNames = parseEnum[FontsNames](
                         s = entry.value)
-                    theme.fonts[index] = themeDir & DirSep &
+                    localTheme.fonts[index] = themeDir & DirSep &
                       entry.value.unixToNativePath
                     validName = true
                   except:
@@ -189,7 +190,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                   try:
                     let index: IconsNames = parseEnum[IconsNames](
                         s = entry.value)
-                    theme.icons[index] = themeDir & DirSep &
+                    localTheme.icons[index] = themeDir & DirSep &
                         entry.value.unixToNativePath
                     validName = true
                   except:
@@ -199,7 +200,7 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
                   try:
                     let index: MapIconsNames = parseEnum[MapIconsNames](
                         s = entry.value)
-                    theme.mapIcons[index] = entry.value
+                    localTheme.mapIcons[index] = entry.value
                     validName = true
                   except:
                     discard
@@ -220,8 +221,8 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
         except OSError, IOError, Exception:
           echo "Can't close configuration file parser. Reason: " &
               getCurrentExceptionMsg()
-      themesList[themeDir.lastPathPart] = theme
-      theme = defaultTheme
+      themesList[themeDir.lastPathPart] = localTheme
+      localTheme = defaultTheme
   except:
     discard
   if gameSettings.interfaceTheme notin themesList:
