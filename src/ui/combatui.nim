@@ -950,6 +950,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
               givenOrder = rest)
         except:
           return showError(message = "Can't give rest order to the gunner.")
+  updateHeader()
   updateCombatUi()
   return tclOk
 
