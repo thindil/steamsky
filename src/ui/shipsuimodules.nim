@@ -438,6 +438,112 @@ proc showEngineInfo(currentRow: var Natural; module: ModuleData; label,
       return false
   return true
 
+proc showCabinInfo(currentRow: var Natural; module: ModuleData; label,
+    infoButton: var string; moduleFrame, yScroll, closeDialogButton: string;
+    height: var Positive; moduleIndex: int): bool {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show information about the selected cabin
+  ##
+  ## * currentRow        - the current row in the dialog
+  ## * module            - the module which status will be shown
+  ## * label             - the label with owners info
+  ## * infoButton        - the button to assing the crew members to the module
+  ## * moduleFrame       - the name of the frame where the module info is
+  ## * yScroll           - the dialog's scrollbar
+  ## * closeDialogButton - the dialog's close button
+  ## * height            - the height of the dialog
+  ## * moduleIndex       - the index of the module
+  ##
+  ## Returns modified parameters label, infoButton and height. Also returns
+  ## true if everything was ok, otherwise false
+  # Show information about cabin's owners
+  currentRow.inc
+  var isPassenger: bool = false
+  block missionLoop:
+    for mission in acceptedMissions:
+      if mission.mType == passenger:
+        for owner in module.owner:
+          if mission.data == owner:
+            isPassenger = true
+            break missionLoop
+  addOwnersInfo(ownersName = "Owner", moduleFrame = moduleFrame,
+      yScroll = yScroll, closeDialogButton = closeDialogButton,
+      module = module, label = label, infoButton = infoButton,
+      height = height, moduleIndex = moduleIndex, addButton = not isPassenger,
+      row = currentRow)
+  # Show information about cabin's cleanliness
+  currentRow.inc
+  label = addLabel(name = moduleFrame & ".cleanlbl",
+      labelText = "Cleanliness:", row = currentRow, countHeight = true,
+      yScroll = yScroll,
+      height = height)
+  var
+    damagePercent2: float = 1.0 - (module.cleanliness.float /
+        module.quality.float)
+    newStatusTooltip, progressBarStyle: string = ""
+  if damagePercent2 == 0.0:
+    newStatusTooltip = "Clean"
+    progressBarStyle = " -style green.Horizontal.TProgressbar"
+  elif damagePercent2 > 0.0 and damagePercent2 < 0.2:
+    newStatusTooltip = "Bit dusty"
+    progressBarStyle = " -style green.Horizontal.TProgressbar"
+  elif damagePercent2 > 0.19 and damagePercent2 < 0.5:
+    newStatusTooltip = "Dusty"
+    progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+  elif damagePercent2 > 0.49 and damagePercent2 < 0.8:
+    newStatusTooltip = "Dirty"
+    progressBarStyle = " -style yellow.Horizontal.TProgressbar"
+  elif damagePercent2 > 0.79 and damagePercent2 < 1.0:
+    newStatusTooltip = "Very dirty"
+    progressBarStyle = ""
+  else:
+    newStatusTooltip = "Ruined"
+    progressBarStyle = ""
+  var progressBar2: string = moduleFrame & ".cleanbar"
+  tclEval(script = "ttk::progressbar " & progressBar2 &
+      " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent2) &
+      "}" & progressBarStyle)
+  tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
+      newStatusTooltip & "\"")
+  tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we")
+  # Show information about cabin's quality
+  currentRow.inc
+  progressBar2 = moduleFrame & ".qualitybar"
+  tclEval(script = "ttk::progressbar " & progressBar2 &
+      " -orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
+      $(module.quality.float / 100.0) & "}")
+  label = addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
+      row = currentRow, yScroll = yScroll, height = height)
+  let moduleMaxValue2: Positive = try:
+        (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
+    except:
+      showError(message = "Can't count the cabin's max value.")
+      return false
+  tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
+      getCabinQuality(quality = module.quality) & (if module.quality ==
+      moduleMaxValue2: " (max upgrade)" else: "") & "\"")
+  tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we")
+  if module.quality < moduleMaxValue2:
+    infoButton = addUpgradeButton(upgradeType = maxValue,
+      buttonTooltip = "cabin's quality", box = moduleFrame,
+      shipModule = module, column = 2, buttonName = "qualitybutton",
+      row = currentRow, closeDialogButton = closeDialogButton,
+      moduleIndex = moduleIndex)
+    height = try:
+        height + tclEval2(script = "winfo reqheight " &
+          infoButton).parseInt
+      except:
+        showError(message = "Can't count the height of the cabin's button.")
+        return false
+  else:
+    height = try:
+        height + tclEval2(script = "winfo reqheight " &
+          label).parseInt
+    except:
+      showError(message = "Can't count the height of the cabin's label.")
+      return false
+  return true
+
 proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
     TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -646,89 +752,11 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't count the height of the button (8).")
   # Show information about cabin
   of cabin:
-    # Show information about cabin's owners
-    currentRow.inc
-    var isPassenger: bool = false
-    block missionLoop:
-      for mission in acceptedMissions:
-        if mission.mType == passenger:
-          for owner in module.owner:
-            if mission.data == owner:
-              isPassenger = true
-              break missionLoop
-    addOwnersInfo(ownersName = "Owner", moduleFrame = moduleFrame,
+    if not showCabinInfo(currentRow = currentRow, module = module,
+        label = label, infoButton = infoButton, moduleFrame = moduleFrame,
         yScroll = yScroll, closeDialogButton = closeDialogButton,
-        module = module, label = label, infoButton = infoButton,
-        height = height, moduleIndex = moduleIndex, addButton = not isPassenger,
-        row = currentRow)
-    # Show information about cabin's cleanliness
-    currentRow.inc
-    label = addLabel(name = moduleFrame & ".cleanlbl",
-        labelText = "Cleanliness:", row = currentRow, countHeight = true,
-        yScroll = yScroll,
-        height = height)
-    var
-      damagePercent2: float = 1.0 - (module.cleanliness.float /
-          module.quality.float)
-      newStatusTooltip, progressBarStyle: string = ""
-    if damagePercent2 == 0.0:
-      newStatusTooltip = "Clean"
-      progressBarStyle = " -style green.Horizontal.TProgressbar"
-    elif damagePercent2 > 0.0 and damagePercent2 < 0.2:
-      newStatusTooltip = "Bit dusty"
-      progressBarStyle = " -style green.Horizontal.TProgressbar"
-    elif damagePercent2 > 0.19 and damagePercent2 < 0.5:
-      newStatusTooltip = "Dusty"
-      progressBarStyle = " -style yellow.Horizontal.TProgressbar"
-    elif damagePercent2 > 0.49 and damagePercent2 < 0.8:
-      newStatusTooltip = "Dirty"
-      progressBarStyle = " -style yellow.Horizontal.TProgressbar"
-    elif damagePercent2 > 0.79 and damagePercent2 < 1.0:
-      newStatusTooltip = "Very dirty"
-      progressBarStyle = ""
-    else:
-      newStatusTooltip = "Ruined"
-      progressBarStyle = ""
-    var progressBar2: string = moduleFrame & ".cleanbar"
-    tclEval(script = "ttk::progressbar " & progressBar2 &
-        " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent2) &
-        "}" & progressBarStyle)
-    tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
-        newStatusTooltip & "\"")
-    tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we")
-    # Show information about cabin's quality
-    currentRow.inc
-    progressBar2 = moduleFrame & ".qualitybar"
-    tclEval(script = "ttk::progressbar " & progressBar2 &
-        " -orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
-        $(module.quality.float / 100.0) & "}")
-    label = addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
-        row = currentRow, yScroll = yScroll, height = height)
-    let moduleMaxValue2: Positive = try:
-          (modulesList[module.protoIndex].maxValue.float * 1.5).Positive
-      except:
-        return showError(message = "Can't count the cabin's max value.")
-    tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
-        getCabinQuality(quality = module.quality) & (if module.quality ==
-        moduleMaxValue2: " (max upgrade)" else: "") & "\"")
-    tclEval(script = "grid " & progressBar2 & " -row " & $currentRow & " -column 1 -sticky we")
-    if module.quality < moduleMaxValue2:
-      infoButton = addUpgradeButton(upgradeType = maxValue,
-        buttonTooltip = "cabin's quality", box = moduleFrame,
-        shipModule = module, column = 2, buttonName = "qualitybutton",
-        row = currentRow, closeDialogButton = closeDialogButton,
-        moduleIndex = moduleIndex)
-      height = try:
-          height + tclEval2(script = "winfo reqheight " &
-            infoButton).parseInt
-        except:
-          return showError(message = "Can't count the height of the cabin's button.")
-    else:
-      height = try:
-          height + tclEval2(script = "winfo reqheight " &
-            label).parseInt
-      except:
-        return showError(message = "Can't count the height of the cabin's label.")
+        height = height, moduleIndex = moduleIndex):
+      return tclOk
   # Show information about guns and harpoon guns
   of gun, harpoonGun:
     # Show information about gun's strength
