@@ -39,11 +39,10 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     # Load images
     try:
       for index, fileName in themesList[gameSettings.interfaceTheme].icons[
-          menuIcon..contractIcon]:
+          menuIcon..unselectAllIcon]:
         images[(index + 4).IconsNames] = nuklearLoadSVGImage(
-            filePath = fileName,
-
-width = 0, height = 20 + gameSettings.interfaceFontSize)
+            filePath = fileName, width = 0, height = 20 +
+            gameSettings.interfaceFontSize)
     except:
       dialog = setError(message = "Can't set the game's images.")
   centerX = playerShip.skyX
@@ -306,7 +305,8 @@ proc showMapMenu(bounds: NimRect) {.raises: [], tags: [RootEffect],
 const shipSpeeds: array[4, string] = ["Full stop", "Quarter speed",
     "Half speed", "Full speed"]
 
-proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [], contractual.} =
+proc updateCoordinates(newX, newY: var int) {.raises: [], tags: [],
+    contractual.} =
   ## Update the new coordinates after move the player's ship
   ##
   ## * newX - the difference on X axis for the player's ship position
@@ -465,7 +465,8 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     if playerShip.speed == docked:
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
-          text = if gameSettings.waitMinutes == 1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
+          text = if gameSettings.waitMinutes ==
+              1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
       imageButtonCentered(image = images[waitIcon]):
         try:
           updateGame(minutes = gameSettings.waitMinutes)
@@ -515,7 +516,8 @@ proc showButtons(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       if playerShip.destinationX == 0:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
-            text = if gameSettings.waitMinutes == 1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
+            text = if gameSettings.waitMinutes ==
+                1: "Wait 1 minute." else: "Wait " & $gameSettings.waitMinutes & " minutes.")
         imageButton(image = images[waitIcon]):
           res = 1
           try:
