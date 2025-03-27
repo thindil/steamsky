@@ -103,7 +103,7 @@ proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
   elif gunSpeed < 0:
     return "(1/" & $gunSpeed & " rounds)"
 
-proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Assign the player's ship's crew members to a boarding party or defenders
   ##
   ## * dialog   - the current in-game dialog displayed on the screen
@@ -111,6 +111,27 @@ proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.}
   ## Returns the modified parameter dialog
   if dialog notin {boardingDialog, defendingDialog}:
     return
+  try:
+    const
+      width: float = 250
+      height: float = 150
+
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = "Assign crew members to " &
+      (if dialog == boardingDialog: "boarding party" else: "defenders"),
+      x = dialogX, y = dialogY, w = width, h = height,
+      flags = {windowBorder, windowTitle}):
+      setLayoutRowDynamic(height = 30, cols = 2)
+      imageButton(image = images[selectAllIcon]):
+        discard
+      imageButton(image = images[unselectAllIcon]):
+        discard
+      setLayoutRowDynamic(height = 30, cols = 1)
+      labelButton(title = "Close"):
+        closePopup()
+        dialog = none
+  except:
+    dialog = setError(message = "Can't show the party dialog")
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
