@@ -1000,8 +1000,8 @@ proc isMouseReleased*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
 # ----
 # Text
 # ----
-proc nkWidgetText(o: ptr nk_command_buffer; b: NimRect; str: string; len: int;
-  t: ptr nk_text; a: nk_flags; f: ptr nk_user_font) {.raises: [], tags: [],
+proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: int;
+  t: ptr nk_text; a: nk_flags; f: ptr nk_user_font) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a text widget. Internal use only
   ##
@@ -1012,7 +1012,22 @@ proc nkWidgetText(o: ptr nk_command_buffer; b: NimRect; str: string; len: int;
   ## * t   - the text style
   ## * a   - the flags related to the widget
   ## * f   - the font used to draw the widget
-  discard
+  require:
+    o != nil and t != nil
+  body:
+    if o == nil or t == nil:
+      return
+    b.h = max(b.h, 2 * t.padding.y)
+    var label: NimRect = NimRect()
+    label.x = 0
+    label.w = 0
+    label.y = b.y + t.padding.y
+    label.h = min(f.height, b.h - 2 * t.padding.y)
+    var textWidth: float = 0.0
+    textWidth = try:
+        f.width(f.userdata, f.height, str.cstring, len.cint)
+      except:
+        return
 
 # -------
 # Buttons
@@ -1117,8 +1132,8 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
       factor = style.color_factor_background))
 
 proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
-  content: NimRect; background, foreground: nk_color; borderWidth: float;
-  font: ptr nk_user_font) {.raises: [], tags: [], contractual.} =
+  content: var NimRect; background, foreground: nk_color; borderWidth: float;
+  font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw the selected symbol
   ##
   ## * out         - the command buffer in which the symbol will be drawn
@@ -1151,7 +1166,7 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
   else:
     discard
 
-proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
+proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: var NimRect;
   state: nk_flags; style: ptr nk_style_button; `type`: SymbolType;
   font: ptr nk_user_font) {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
@@ -1177,7 +1192,7 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: NimRect;
   nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
     background = bg, foreground = sym, borderWidth = 1, font = font)
 
-proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: NimRect,
+proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: var NimRect,
   symbol: SymbolType; behavior: nk_button_behavior; style: ptr nk_style_button;
   `in`: ptr nk_input; font: ptr nk_user_font): bool {.raises: [], tags: [RootEffect], contractual.} =
   ## Draw a button with the selected symbol on it. Internal use only
