@@ -103,6 +103,12 @@ proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
   elif gunSpeed < 0:
     return "(1/" & $gunSpeed & " rounds)"
 
+proc assignParty(boarding: bool = true) {.raises: [], tags: [], contractual.} =
+  ## Assign the player's ship's crew members to a boarding party or defenders
+  ##
+  ## * boarding - if true, assing the crew members to the boarding party
+  discard
+
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the combat UI
@@ -112,6 +118,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
+  state = combat
   showHeader(dialog = dialog)
   # Draw dialogs
   showQuestion(dialog = dialog, state = state)
@@ -299,7 +306,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             addTooltip(bounds = getWidgetBounds(),
                 text = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer.")
           labelButton(title = "Boarding party:"):
-            discard
+            dialog = boardingDialog
           var labelHeight = ceil(x = getTextWidth(text = boardingParty) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           wrapLabel(str = boardingParty)
@@ -308,7 +315,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             addTooltip(bounds = getWidgetBounds(),
                 text = "Set your ship's defenders against the enemy party.")
           labelButton(title = "Defenders:"):
-            discard
+            dialog = defendingDialog
           labelHeight = ceil(x = getTextWidth(text = defenders) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           wrapLabel(str = defenders)
@@ -377,5 +384,4 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       combatTurn()
     except:
       dialog = setError(message = "Can't make next turn in combat.")
-  state = combat
   showGameMenu(dialog = dialog)
