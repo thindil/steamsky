@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   combat screen
 - Setting a gunner in combat to Nobody removes completely gunner setting for
   the gun
+- The info about positions on the player's ship doesn't upgrade when the player
+  change a member's order in combat
 
 ## [10.9] - 2025-03-23
 
