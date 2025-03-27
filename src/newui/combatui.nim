@@ -103,11 +103,14 @@ proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
   elif gunSpeed < 0:
     return "(1/" & $gunSpeed & " rounds)"
 
-proc assignParty(boarding: bool = true) {.raises: [], tags: [], contractual.} =
+proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Assign the player's ship's crew members to a boarding party or defenders
   ##
-  ## * boarding - if true, assing the crew members to the boarding party
-  discard
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog
+  if dialog notin {boardingDialog, defendingDialog}:
+    return
 
 proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -124,6 +127,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showQuestion(dialog = dialog, state = state)
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
+  showPartyMenu(dialog = dialog)
   # Draw UI
   if pilotList.len != playerShip.crew.len + 1:
     updateCrewLists()
