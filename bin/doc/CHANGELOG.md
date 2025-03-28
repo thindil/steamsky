@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated color of no pilot warning icon to match the default colors of the
+  game
+
 ### Fixed
 - Removed colon from the end of lists of boarding party and defenders in the
   combat screen
