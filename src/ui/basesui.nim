@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,6 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[bases, basesship, basesship2, basestrade, basestypes, config,
     crewinventory, game, maps, shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
@@ -26,7 +27,7 @@ var
 
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl.} =
+        RootEffect], cdecl, contractual.} =
   ## Show the selected base action
   ##
   ## * clientData - the additional data for the Tcl command
@@ -325,7 +326,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the selected base action
   ##
   ## * clientData - the additional data for the Tcl command
@@ -361,7 +362,7 @@ proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
 
 proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show only this recipes which contains the selected sequence
   ##
   ## * clientData - the additional data for the Tcl command
@@ -381,7 +382,8 @@ proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowBaseUI", "recipes", searchText].allocCStringArray)
 
 proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show menu with options for the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -463,7 +465,7 @@ var baseSortOrder: BaseSortOrders = defaultBaseSortOrder
 
 proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   let column = try:
         getColumnNumber(
             table = baseTable, xPosition = ($argv[2]).parseInt)
@@ -632,7 +634,8 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
       argv = @["ShowBaseUI", $argv[1]].allocCStringArray)
 
 proc recipesMoreCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Maximize or minimize the search frame for looking for recipes
   ##
   ## * clientData - the additional data for the Tcl command
@@ -656,7 +659,8 @@ proc recipesMoreCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = button & " configure -command {RecipesMore show}")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowBaseUI", showBaseUiCommand)
