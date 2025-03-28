@@ -113,17 +113,23 @@ proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], con
     return
   try:
     const
-      width: float = 250
-      height: float = 150
+      width: float = 400
+      height: float = 400
 
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = "Assign crew members to " &
       (if dialog == boardingDialog: "boarding party" else: "defenders"),
       x = dialogX, y = dialogY, w = width, h = height,
       flags = {windowBorder, windowTitle}):
-      setLayoutRowDynamic(height = 30, cols = 2)
+      setLayoutRowStatic(height = 35, cols = 2, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Select all crew members")
       imageButton(image = images[selectAllIcon]):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Unselect all crew members")
       imageButton(image = images[unselectAllIcon]):
         discard
       setLayoutRowDynamic(height = 30, cols = 1)
@@ -332,6 +338,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 text = "Set your boarding party. If you join it, you will be able to give orders them, but not your gunners or engineer.")
           labelButton(title = "Boarding party:"):
             dialog = boardingDialog
+            setDialog(x = windowWidth / 4)
           var labelHeight = ceil(x = getTextWidth(text = boardingParty) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           wrapLabel(str = boardingParty)
@@ -341,6 +348,7 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
                 text = "Set your ship's defenders against the enemy party.")
           labelButton(title = "Defenders:"):
             dialog = defendingDialog
+            setDialog(x = windowWidth / 4)
           labelHeight = ceil(x = getTextWidth(text = defenders) / (if expandedSection == 1: windowWidth.float else: (windowWidth.float / 2.0))) * 35.0
           setLayoutRowDynamic(height = labelHeight, cols = 1)
           wrapLabel(str = defenders)
