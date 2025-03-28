@@ -1028,6 +1028,26 @@ proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: in
         f.width(f.userdata, f.height, str.cstring, len.cint)
       except:
         return
+    textWidth += (2.0 * t.padding.x)
+
+    # align in x-axis
+    if (a and NK_TEXT_ALIGN_LEFT.ord).bool:
+      label.x = b.x + t.padding.x
+      label.w = max(0, b.w - 2 * t.padding.x)
+    elif (a and NK_TEXT_ALIGN_CENTERED.ord).bool:
+      label.w = max(1, 2 * t.padding.x + textWidth.float)
+      label.x = (b.x + t.padding.x + ((b.w - 2 * t.padding.x) - label.w) / 2)
+      label.x = max(b.x + t.padding.x, label.x)
+      label.w = min(b.x + b.w, label.x + label.w)
+      if label.w >= label.x:
+        label.w -= label.x
+    elif (a and NK_TEXT_ALIGN_RIGHT.ord).bool:
+      label.x = max(b.x + t.padding.x, (b.x + b.w) - (2 * t.padding.x + textWidth.float))
+      label.w = textWidth.float + 2 * t.padding.x
+    else:
+      return
+
+    # align in y-axis
 
 # -------
 # Buttons
