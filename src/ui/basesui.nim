@@ -141,7 +141,8 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't get the page number")
     startRow = ((page - 1) * gameSettings.listsLimit) + 1
 
-  proc getColor(actionCost: Natural): string =
+  proc getColor(actionCost: Natural): string {.raises: [], tags: [],
+      contractual.} =
     if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < actionCost:
       return "red"
     return ""
@@ -150,7 +151,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     cost, time: Natural = 0
     formattedTime = ""
 
-  proc formatTime() =
+  proc formatTime() {.raises: [], tags: [], contractual.} =
     if time < 60:
       formattedTime = $time & " minute"
       if time > 1:
@@ -435,7 +436,8 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     baseMenu = createDialog(name = ".basemenu", title = "Actions",
         parentName = ".")
 
-  proc addButton(name, label, command: string) =
+  proc addButton(name, label, command: string) {.raises: [], tags: [],
+      contractual.} =
     let button = baseMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & baseMenu & " .;" & command & "}")
@@ -592,7 +594,8 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
             recipe.resultIndex].name, cost: cost, time: 1, id: index))
       except:
         return showError(message = "Can't add recipe.")
-  proc sortItems(x, y: LocalItemData): int =
+  proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [],
+      contractual.} =
     case baseSortOrder
     of nameAsc:
       if x.name < y.name:
