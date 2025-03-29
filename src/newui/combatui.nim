@@ -34,6 +34,7 @@ var
   pilotIndex, engineerIndex: Natural = 0
   expandedSection: Natural = 0
   gunnersIndex: seq[Natural] = @[]
+  boardingParty, defenders: seq[bool] = @[]
 
 proc updateCrewLists() {.raises: [], tags: [RootEffect], contractual.} =
   ## Update the list of available crew members for all positions in combat
@@ -75,6 +76,13 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   pilotIndex = findMember(order = pilot) + 1
   engineerIndex = findMember(order = engineer) + 1
   gunnersIndex = @[]
+  boardingParty = @[]
+  defenders = @[]
+  for member in playerShip.crew:
+    if dialog == boardingDialog:
+      boardingParty.add(y = member.order == boarding)
+    else:
+      defenders.add(y = member.order == defend)
   for gun in guns:
     gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0] + 1)
   updateCrewLists()
@@ -133,12 +141,11 @@ proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], con
       imageButton(image = images[unselectAllIcon]):
         discard
       setLayoutRowDynamic(height = 30, cols = 1)
-      var party: seq[bool] = @[]
-      for member in playerShip.crew:
+      for index, member in playerShip.crew:
         if dialog == boardingDialog:
-          party.add(y = member.order == boarding)
+          checkbox(label = member.name, checked = boardingParty[index])
         else:
-          party.add(y = member.order == defend)
+          checkbox(label = member.name, checked = defenders[index])
       setLayoutRowDynamic(height = 30, cols = 2)
       imageLabelButton(image = images[assignCrewIcon], text = "Assign",
         alignment = right):
