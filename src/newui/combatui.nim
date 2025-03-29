@@ -139,7 +139,13 @@ proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], con
           party.add(y = member.order == boarding)
         else:
           party.add(y = member.order == defend)
-      labelButton(title = "Close"):
+      setLayoutRowDynamic(height = 30, cols = 2)
+      imageLabelButton(image = images[assignCrewIcon], text = "Assign",
+        alignment = right):
+        closePopup()
+        dialog = none
+      imageLabelButton(image = images[cancelIcon], text = "Close",
+        alignment = right):
         closePopup()
         dialog = none
   except:
