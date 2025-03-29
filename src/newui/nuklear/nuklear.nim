@@ -865,6 +865,20 @@ proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slic
   img.region = [rgnX + rgnW - slc.r, rgnY + rgnH - slc.b, slc.r, slc.b]
   nkDrawImage(b = b, r = NimRect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img.addr, col = col)
 
+proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: int;
+  font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [],
+  contractual.} =
+  ## Draw the selected text
+  ##
+  ## * b    - the command buffer in which the text will be drawn
+  ## * r    - the rectangle in which the text will be drawn
+  ## * str  - the text to draw
+  ## * len  - the length of the text to draw
+  ## * font - the font used to draw the text
+  ## * bg   - the background color of the text
+  ## * fg   - the foreground color of the text
+  discard
+
 # -----
 # Input
 # -----
@@ -1048,6 +1062,15 @@ proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: in
       return
 
     # align in y-axis
+    if (a and NK_TEXT_ALIGN_MIDDLE.ord).bool:
+      label.y = b.y + b.h / 2.0 - f.height.float / 2.0
+      label.h = max(b.h / 2.0, b.h - (b.h / 2.0 + f.height / 2.0))
+    elif (a and NK_TEXT_ALIGN_BOTTOM.ord).bool:
+      label.y = b.y + b.h - f.height
+      label.h = f.height
+
+    nkDrawText(b = o, r = label, str = str, length = len, font = f,
+      bg = t.background, fg = t.text)
 
 # -------
 # Buttons
