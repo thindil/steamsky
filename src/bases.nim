@@ -99,8 +99,9 @@ proc updatePopulation*() {.raises: [], tags: [], contractual.} =
     var populationDiff: int = (if getRandom(min = 1, max = 100) < 20: getRandom(
         min = -10, max = -1) else: getRandom(min = 1, max = 10))
     if skyBases[baseIndex].population + populationDiff < 0:
-      populationDiff = -(skyBases[baseIndex].population)
-    skyBases[baseIndex].population += populationDiff
+      skyBases[baseIndex].population = 0
+    else:
+      skyBases[baseIndex].population += populationDiff
     if skyBases[baseIndex].population == 0:
       skyBases[baseIndex].reputation = ReputationData(level: 0, experience: 0)
   else:
