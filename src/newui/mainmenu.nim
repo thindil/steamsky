@@ -879,7 +879,7 @@ proc newGameDifficulty() {.raises: [], tags: [RootEffect], contractual.} =
     setLayoutRowDynamic(height = 50, cols = 2, ratio = [0.9.cfloat, 0.1])
     label(str = "Randomize difficulty on game start:")
     bounds[10] = getWidgetBounds()
-    checkBox(label = "", checked = randomSettings)
+    checkbox(label = "", checked = randomSettings)
     # Total gained points
     setLayoutRowDynamic(height = 35, cols = 2, ratio = [0.7.cfloat, 0.3])
     label(str = "Total gained points:")
