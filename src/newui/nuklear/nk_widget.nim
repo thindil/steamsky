@@ -1,4 +1,4 @@
-# Copyright © 2024 Bartek Jasicki
+# Copyright © 2024-2025 Bartek Jasicki
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@ import nk_context, nk_types
 # ---------------------
 using ctx: PContext
 
-proc checkBox*(label: string; checked: var bool): bool {.discardable, raises: [
+proc checkbox*(label: string; checked: var bool): bool {.discardable, raises: [
     ], tags: [], contractual.} =
   ## Create a Nuklear checkbox widget
   ##
