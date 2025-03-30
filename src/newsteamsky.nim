@@ -144,8 +144,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       if gameSettings.showTooltips:
         resetTooltips()
 
-      # Wait menu if needed
+      # Secondary windows if needed
       showWaitMenu(dialog = dialog)
+      showError(dialog = dialog)
 
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
@@ -162,12 +163,8 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         if oldState != state or oldDialog != dialog:
           redraw = true
 
-        # Dialogs if needed
-        if dialog == GameDialog.errorDialog:
-          # Error dialog
-          showError(dialog = dialog)
-        elif dialog == loading:
-          # Start loading the game
+        # Start loading the game
+        if dialog == loading:
           state = loadingGame
           dialog = none
 

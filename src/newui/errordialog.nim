@@ -103,25 +103,21 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       width: float = 540
       height: float = 360
     updateDialog(width = width, height = height)
-    popup(pType = staticPopup, title = "Error!Error!Error!", x = 40, y = 20,
-        w = width, h = height, flags = {windowBorder, windowTitle,
-        windowMinimizable}):
+    window(name = "Error!Error!Error!", x = 40, y = 20, w = width, h = height,
+        flags = {windowBorder, windowTitle, windowMinimizable}):
       setLayoutRowDynamic(height = 75, cols = 1)
       wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
       setLayoutRowDynamic(height = 25, cols = 1)
       var url: string = "https://www.laeran.pl.eu.org/repositories/steamsky/ticket"
       labelButton(title = url):
-        closePopup()
         openLink(link = url)
       setLayoutRowDynamic(height = 25, cols = 1)
       label(str = "or if you prefer, on one of the game community options:")
       url = "https://thindil.itch.io/steam-sky"
       labelButton(title = url):
-        closePopup()
         openLink(link = url)
       label(str = "and attach (if possible) file with saved game or 'error.log'.")
       labelButton(title = "Open directory with saved games"):
-        closePopup()
         openLink(link = saveDirectory)
       treeTab(title = "Technical details", state = minimized, index = 1):
         setLayoutRowDynamic(height = (30 * debugInfo.countLines).float, cols = 1)
@@ -129,7 +125,6 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       setLayoutRowDynamic(height = 25, cols = 1)
       labelButton(title = "Close"):
         dialog = none
-        closePopup()
-    showLinkError()
+      showLinkError()
   except:
     discard
