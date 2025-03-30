@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[bases, basesship, basesship2, basestrade, basestypes, config,
     crewinventory, game, maps, shipscrew, tk, types]
 import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
@@ -27,7 +27,7 @@ var
 
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-        RootEffect], cdecl, contractual.} =
+        RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show the selected base action
   ##
   ## * clientData - the additional data for the Tcl command
