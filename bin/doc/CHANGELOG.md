@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - The info about positions on the player's ship doesn't upgrade when the player
   change a member's order in combat
 - Crash when updating a base's population during the game
+- Showing the enemy's ship's damage during combat
 
 ## [10.9] - 2025-03-23
 
