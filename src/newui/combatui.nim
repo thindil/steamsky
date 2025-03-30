@@ -79,10 +79,8 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   boardingParty = @[]
   defenders = @[]
   for member in playerShip.crew:
-    if dialog == boardingDialog:
-      boardingParty.add(y = member.order == boarding)
-    else:
-      defenders.add(y = member.order == defend)
+    boardingParty.add(y = member.order == boarding)
+    defenders.add(y = member.order == defend)
   for gun in guns:
     gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0] + 1)
   updateCrewLists()
