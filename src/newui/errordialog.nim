@@ -104,7 +104,7 @@ proc showError*(dialog: var GameDialog) {.raises: [], tags: [ReadIOEffect,
       height: float = 360
     updateDialog(width = width, height = height)
     window(name = "Error!Error!Error!", x = 40, y = 20, w = width, h = height,
-        flags = {windowBorder, windowTitle, windowMinimizable}):
+        flags = {windowBorder, windowTitle, windowMinimizable, windowMoveable}):
       setLayoutRowDynamic(height = 75, cols = 1)
       wrapLabel(str = "Oops, something bad happened and the game has encountered an error. Please, remember what you were doing before the error and report this problem at:")
       setLayoutRowDynamic(height = 25, cols = 1)
