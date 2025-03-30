@@ -865,8 +865,25 @@ proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slic
   img.region = [rgnX + rgnW - slc.r, rgnY + rgnH - slc.b, slc.r, slc.b]
   nkDrawImage(b = b, r = NimRect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img.addr, col = col)
 
-proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: int;
-  font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [],
+proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
+  space: float; glyphs: var int; textWidth: var float; sepList: nk_rune;
+  sepCount: int): int {.raises: [], tags: [], contractual.} =
+  ## Clamp the selected text
+  ##
+  ## * font      - font used to draw the text
+  ## * text      - the text to clamp
+  ## * textLen   - the lenght of the text
+  ## * space     - the amount of pixels used as space between letters
+  ## * glyphs    - the amount of glyphs in the text
+  ## * textWidth - the width of the text in pixels
+  ## * sepList   - the list of separators
+  ## * sepCount  - the amount of separators
+  ##
+  ## Returns the new length of the text
+  discard
+
+proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
+  font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw the selected text
   ##
@@ -877,7 +894,27 @@ proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: int;
   ## * font - the font used to draw the text
   ## * bg   - the background color of the text
   ## * fg   - the foreground color of the text
-  discard
+  require:
+    b != nil
+    font != nil
+  body:
+    if b == nil or str == "" or length == 0 or (bg.a == 0 and fg.a == 0):
+      return
+    if b.use_clipping == 1:
+      let c: nk_rect = b.clip
+      if (c.w == 0 or c.h == 0 or not nkIntersect(x0 = r.x, y0 = r.y, w0 = r.w, h0 = r.h, x1 = c.x, y1 = c.y, w1 = c.w, h1 = c.h)):
+        return
+
+    # make sure text fits inside bounds
+    let textWidth: float = try:
+        font.width(arg1 = font.userdata, h = font.height, arg3 = str.cstring, len = length.cint)
+      except:
+        return
+    if textWidth > r.w:
+      var
+        glyphs: int = 0
+        txtWidth: float = textWidth
+      length = nkTextClamp(font, str, length, r.w, glyphs, txtWidth, 0, 0)
 
 # -----
 # Input
@@ -1014,7 +1051,7 @@ proc isMouseReleased*(id: Buttons): bool {.raises: [], tags: [], contractual.} =
 # ----
 # Text
 # ----
-proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: int;
+proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: var int;
   t: ptr nk_text; a: nk_flags; f: ptr nk_user_font) {.raises: [], tags: [RootEffect],
   contractual.} =
   ## Draw a text widget. Internal use only
@@ -1204,7 +1241,8 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     text.padding = nk_vec2(x: 0, y: 0)
     text.background = background
     text.text = foreground
-    nkWidgetText(o = `out`, b = content, str = $ch, len = 1, t = text.addr,
+    var length: Positive = 1
+    nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
       a = NK_TEXT_CENTERED, f = font)
   else:
     discard
