@@ -524,6 +524,7 @@ type
     windowNoScrollbar = 1 shl 5,
     windowTitle = 1 shl 6,
     windowScaleLeft = 1 shl 9
+    windowNoInput = 1 shl 10
   NuklearException* = object of CatchableError
     ## An exception thrown when there is an issue with Nuklear library
   PopupType* = enum
