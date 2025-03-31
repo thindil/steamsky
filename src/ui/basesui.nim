@@ -85,7 +85,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     searchEntry = searchFrame & ".search"
     baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if argv[1] == "recipes":
-    tclEval(script = gameHeader & ".morebutton configure -command {RecipesMore show}")
+    tclEval(script = gameHeader & ".morebutton configure -command {RecipesMore}")
     tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
     if argc != 3:
       tclEval(script = searchEntry & " configure -validatecommand {}")
@@ -649,17 +649,16 @@ proc recipesMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## The procedure always return tclOk
   ##
   ## Tcl:
-  ## RecipesMore show/hide
-  ## If th argument is set to show, show the frame, otherwise hide it.
+  ## RecipesMore
   let
     searchFrame = mainPaned & ".baseframe.canvas.base.searchframe"
     button = gameHeader & ".morebutton"
-  if argv[1] == "show":
-    tclEval(script = "grid " & searchFrame & " -sticky w -padx 5 -pady 5 -row 0")
-    tclEval(script = button & " configure -command {RecipesMore hide}")
-  else:
+  if tclEval2(script = "winfo ismapped " & searchFrame) == "1":
     tclEval(script = "grid remove " & searchFrame)
-    tclEval(script = button & " configure -command {RecipesMore show}")
+    tclEval(script = button & " configure -command {RecipesMore}")
+  else:
+    tclEval(script = "grid " & searchFrame & " -sticky w -padx 5 -pady 5 -row 0")
+    tclEval(script = button & " configure -command {RecipesMore}")
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
