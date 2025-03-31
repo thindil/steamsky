@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -138,7 +138,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   if argc < 3:
     tclEval(script = searchEntry & " delete 0 end")
   tclEval(script = closeButton & " configure -command {ShowSkyMap ShowTrade}")
-  tclEval(script = gameHeader & ".morebutton configure -command {TradeMore show}")
+  tclEval(script = gameHeader & ".morebutton configure -command {TradeMore}")
   tradeFrame = tradeCanvas & ".trade"
   let comboBox = tradeFrame & ".options.type"
   clearTable(table = tradeTable)
@@ -400,8 +400,8 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   if moneyIndex2 > -1:
     tradeInfo = "You have"
     label = tradeFrame & ".options.playerinfo.moneyinfo2"
-    tclEval(script = label & " configure -text {" & $playerShip.cargo[moneyIndex2].amount & " " &
-        moneyName & "}")
+    tclEval(script = label & " configure -text {" & $playerShip.cargo[
+        moneyIndex2].amount & " " & moneyName & "}")
     tclEval(script = "grid " & label & " -row 0 -column 1 -sticky w")
   else:
     tradeInfo = "You don't have any " & moneyName & " to buy anything"
@@ -438,7 +438,7 @@ proc showTradeCommand(clientData: cint; interp: PInterp; argc: cint;
   label = tradeFrame & ".options.baseinfo.baseinfo2"
   if baseIndex > 0:
     if skyBases[baseIndex].cargo[0].amount > 0:
-      tradeInfo  = $skyBases[baseIndex].cargo[0].amount & " " & moneyName
+      tradeInfo = $skyBases[baseIndex].cargo[0].amount & " " & moneyName
   else:
     if traderCargo[0].amount > 0:
       tradeInfo = $traderCargo[0].amount & " " & moneyName
@@ -779,7 +779,8 @@ proc tradeItemCommand(clientData: cint; interp: PInterp; argc: cint;
       " get")].allocCStringArray)
 
 proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show information about the selected item
   ##
   ## * clientData - the additional data for the Tcl command
@@ -991,7 +992,8 @@ proc showTradeItemInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc tradeAmountCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl.} =
   ## Show dialog to enter amount of items to sell or buy
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1071,24 +1073,26 @@ proc tradeMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## The procedure always return tclOk
   ##
   ## Tcl:
-  ## TradeMore show/hide
+  ## TradeMore
   ## If th argument is set to show, show the options, otherwise hide them.
   let
     tradeFrame = mainPaned & ".tradeframe"
     button = gameHeader & ".morebutton"
-  if argv[1] == "show":
-    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.typelabel -sticky w -row 0")
-    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.type -row 0 -column 1")
-    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.search -row 0 -column 2")
-    tclEval(script = button & " configure -command {TradeMore hide}")
-  else:
+  if tclEval2(script = "winfo ismapped " & tradeFrame &
+      ".canvas.trade.options.typelabel") == "1":
     tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options.typelabel")
     tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options.type")
     tclEval(script = "grid remove " & tradeFrame & ".canvas.trade.options.search")
-    tclEval(script = button & " configure -command {TradeMore show}")
+    tclEval(script = button & " configure -command {TradeMore}")
+  else:
+    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.typelabel -sticky w -row 0")
+    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.type -row 0 -column 1")
+    tclEval(script = "grid " & tradeFrame & ".canvas.trade.options.search -row 0 -column 2")
+    tclEval(script = button & " configure -command {TradeMore}")
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect].} =
   ## Adds Tcl commands related to the trades UI
   try:
     addCommand("ShowTrade", showTradeCommand)
