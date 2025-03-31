@@ -125,16 +125,6 @@ type
     NK_WINDOW_CLOSED = 1 shl 14
     NK_WINDOW_MINIMIZED = 1 shl 15
     NK_WINDOW_REMOVE_ROM = 1 shl 16
-  nk_panel_flags* = enum
-    ## Internal Nuklear type
-    NK_WINDOW_BORDER = 1 shl 0
-    NK_WINDOW_MOVABLE = 1 shl 1
-    NK_WINDOW_SCALABLE = 1 shl 2
-    NK_WINDOW_CLOSABLE = 1 shl 3
-    NK_WINDOW_MINIMIZABLE = 1 shl 4
-    NK_WINDOW_NO_SCROLLBAR = 1 shl 5
-    NK_WINDOW_TITLE = 1 shl 6
-    NK_WINDOW_NO_INPUT = 1 shl 10
   nk_command_type* = enum
     ## Internal Nuklear type
     NK_COMMAND_NOP, NK_COMMAND_SCISSOR, NK_COMMAND_LINE, NK_COMMAND_CURVE,
@@ -513,13 +503,13 @@ type
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
     spacing, padding
-  WindowFlags* {.size: sizeof(cint).} = enum
-    ## The settings for windows
+  PanelFlags* {.size: sizeof(cint).} = enum
+    ## The settings for panels
     windowNoFlags = 0,
     windowBorder = 1 shl 0,
-    windowMoveable = 1 shl 1,
+    windowMovable = 1 shl 1,
     windowScalable = 1 shl 2,
-    windowCloseable = 1 shl 3
+    windowClosable = 1 shl 3
     windowMinimizable = 1 shl 4,
     windowNoScrollbar = 1 shl 5,
     windowTitle = 1 shl 6,

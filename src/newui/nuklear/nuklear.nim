@@ -296,7 +296,7 @@ proc createWin(title: cstring; wx, wy, ww, wh: cfloat;
   return nk_begin(ctx = ctx, title = title, bounds = new_nk_rect(x = wx, y = wy,
       w = ww, h = wh), flags = wFlags)
 
-proc winSetToInt(nimFlags: set[WindowFlags]): cint {.raises: [], tags: [],
+proc winSetToInt(nimFlags: set[PanelFlags]): cint {.raises: [], tags: [],
     contractual.} =
   ## Convert Nim flags related to windows to C
   ##
@@ -311,7 +311,7 @@ proc winSetToInt(nimFlags: set[WindowFlags]): cint {.raises: [], tags: [],
   {.ruleOn: "assignments".}
   {.warning[HoleEnumConv]: on.}
 
-template window*(name: string; x, y, w, h: float; flags: set[WindowFlags];
+template window*(name: string; x, y, w, h: float; flags: set[PanelFlags];
     content: untyped) =
   ## Create a new Nuklear window/widget with the content
   ##
@@ -1342,7 +1342,7 @@ proc nkPanelGetBorder(style: nk_style; flags: nk_flags; `type`: PanelType): cflo
   ## * type  - the selected type of the panel
   ##
   ## Returns size of the border of the selected panel
-  if (flags and NK_WINDOW_BORDER.ord.int).nk_bool:
+  if (flags and windowBorder.ord.int).nk_bool:
     case `type`
     of panelWindow:
       return style.window.border
@@ -1369,8 +1369,8 @@ proc nkPanelHasHeader(flags: nk_flags; title: string): bool {.raises: [], tags: 
   ## * flags - the panel's flags
   ## * title - the panel's  title
   var active: nk_bool = nkFalse
-  active = (flags and (NK_WINDOW_CLOSABLE.ord.int or NK_WINDOW_MINIMIZABLE.ord.int)).nk_bool
-  active = (active or (flags and NK_WINDOW_TITLE.ord.int).nk_bool).nk_bool
+  active = (flags and (windowClosable.ord.int or windowMinimizable.ord.int)).nk_bool
+  active = (active or (flags and windowTitle.ord.int).nk_bool).nk_bool
   active = (active and not(flags and NK_WINDOW_HIDDEN.ord.int).nk_bool and title.len > 0).nk_bool
   return active
 
@@ -1410,7 +1410,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     let
       layout: PNkPanel = win.layout
       `out`: nk_command_buffer = win.buffer
-    var `in`: nk_input = (if (win.flags and NK_WINDOW_NO_INPUT.cint) ==
+    var `in`: nk_input = (if (win.flags and windowNoInput.cint) ==
           1: nk_input() else: ctx.input)
     when defined(nkIncludeCommandUserdata):
       win.buffer.userdata = ctx.userdata
@@ -1421,7 +1421,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           `type` = panelType)
 
     # window movement
-    if (win.flags and NK_WINDOW_MOVABLE.cint) == 1 and (win.flags and
+    if (win.flags and windowMovable.cint) == 1 and (win.flags and
         NK_WINDOW_ROM.cint) != 1:
       # calculate draggable window space
       var header: nk_rect = nk_rect(x: win.bounds.x, y: win.bounds.y,
@@ -1452,7 +1452,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.bounds = win.bounds
     layout.bounds.x += panelPadding.x
     layout.bounds.w -= (2 * panelPadding.x)
-    if (win.flags and NK_WINDOW_BORDER.cint).nk_bool:
+    if (win.flags and windowBorder.cint).nk_bool:
       layout.border = nkPanelGetBorder(style = style, flags = win.flags, `type` = panelType)
       layout.bounds = nkShrinkRect(r = layout.bounds, amount = layout.border)
     else:
@@ -1470,11 +1470,11 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     layout.row.tree_depth = 0
     layout.row.height = panelPadding.y
     layout.has_scrolling = nkTrue.cuint
-    if not(win.flags and NK_WINDOW_NO_SCROLLBAR.cint).nk_bool:
+    if not(win.flags and windowNoScrollbar.cint).nk_bool:
       layout.bounds.w -= scrollbarSize.x
     if nkPanelIsNonblock(`type` = panelType):
       layout.footer_height = 0
-      if not(win.flags and NK_WINDOW_NO_SCROLLBAR.cint).nk_bool or (win.flags and NK_WINDOW_SCALABLE.cint).nk_bool:
+      if not(win.flags and windowNoScrollbar.cint).nk_bool or (win.flags and windowScalable.cint).nk_bool:
         layout.footer_height = scrollbarSize.y
       layout.bounds.h -= layout.footer_height
 
@@ -1537,7 +1537,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       button.y = header.y + style.window.header.padding.y
       button.h = header.h - 2 * style.window.header.padding.y
       button.w = button.h
-      if (win.flags and NK_WINDOW_CLOSABLE.cint).nk_bool:
+      if (win.flags and windowClosable.cint).nk_bool:
         var ws: nk_flags = 0
         if style.window.header.align == NK_HEADER_RIGHT:
           button.x = (header.w + header.x) - (button.w + style.window.header.padding.x)
@@ -1574,7 +1574,7 @@ proc nkStartPopup(ctx; win: var PNkWindow) {.raises: [], tags: [],
     buf.active = nkTrue
     win.popup.buf = buf
 
-proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[WindowFlags];
+proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
     x, y, w, h: var float): bool {.raises: [NuklearException], tags: [
         RootEffect], contractual.} =
   ## Try to create a new popup window. Internal use only.
@@ -1665,7 +1665,7 @@ proc createNonBlocking(flags2: nk_flags; x2, y2, w2, h2: cfloat): bool {.raises:
   return nk_nonblock_begin(ctx = ctx, flags = flags2, body = new_nk_rect(x = x2, y = y2, w = w2, h = h2),
     header = new_nk_rect(x = 0, y = 0, w = 0, h = 0), panel_type = panelPopup)
 
-template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
+template popup*(pType: PopupType; title: string; flags: set[PanelFlags]; x,
     y, w, h: float; content: untyped) =
   ## Create a new Nuklear popup window with the selected content
   ##
@@ -1684,7 +1684,7 @@ template popup*(pType: PopupType; title: string; flags: set[WindowFlags]; x,
   content
   ctx.nk_popup_end
 
-template nonBlocking*(flags: set[WindowFlags]; x, y, w, h: float; content: untyped) =
+template nonBlocking*(flags: set[PanelFlags]; x, y, w, h: float; content: untyped) =
   ## Create a new Nuklear non-blocking popup window with the selected content
   ##
   ## * flags   - the flags for the popup
@@ -2794,7 +2794,7 @@ proc createContextual(ctx; flags1: nk_flags; x1, y1: cfloat;
       y = triggerBounds1.y, w = triggerBounds1.w, h = triggerBounds1.h),
       cButton = btn.cint.nk_buttons)
 
-template contextualMenu*(flags: set[WindowFlags]; x, y;
+template contextualMenu*(flags: set[PanelFlags]; x, y;
     triggerBounds: NimRect; button: Buttons; content: untyped) =
   ## Create a contextual menu
   ##
@@ -2833,11 +2833,11 @@ template contextualItemImage*(image: PImage; onPressCode: untyped) =
 # Groups
 # ------
 
-template group*(title: string; flags: set[WindowFlags]; content: untyped) =
+template group*(title: string; flags: set[PanelFlags]; content: untyped) =
   ## Set a group of widgets inside the parent
   ##
   ## * title   - the title of the group
-  ## * flags   - the set of WindowFlags for the group
+  ## * flags   - the set of PanelFlags for the group
   ## * content - the content of the group
   if nk_group_begin(ctx = ctx, ctitle = title.cstring, cflags = winSetToInt(
       nimFlags = flags)):
