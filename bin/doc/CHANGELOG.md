@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file.
   change a member's order in combat
 - Crash when updating a base's population during the game
 - Showing the enemy's ship's damage during combat
+- Showing or hiding options in trade screen after changed the type of items to
+  show
 
 ## [10.9] - 2025-03-23
 
