@@ -134,7 +134,7 @@ proc showShipyardCommand(clientData: cint; interp: PInterp; argc: cint;
   elif tclEval2(script = "winfo ismapped " & shipyardCanvas) == "0" and argc == 1:
     tclEval(script = moduleTypeBox & " current 0")
   tclSetVar(varName = "gamestate", newValue = "repair")
-  tclEval(script = gameHeader & ".morebutton configure -command {ShipyardMore show}")
+  tclEval(script = gameHeader & ".morebutton configure -command {ShipyardMore}")
   var
     maxSize, allSpace = 1
     usedSpace = 0
@@ -1551,17 +1551,18 @@ proc shipyardMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## The procedure always return tclOk
   ##
   ## Tcl:
-  ## ShipyardMore show/hide
+  ## ShipyardMore
   ## If th argument is set to show, show the options, otherwise hide them.
   let
     shipyardFrame = mainPaned & ".shipyardframe"
     button = gameHeader & ".morebutton"
-  if argv[1] == "show":
-    tclEval(script = "grid " & shipyardFrame & ".canvas.shipyard.install.options -sticky we -pady {0 5} -row 2")
-    tclEval(script = button & " configure -command {ShipyardMore hide}")
-  else:
+  if tclEval2(script = "winfo ismapped " & shipyardFrame &
+      ".canvas.shipyard.install.options") == "1":
     tclEval(script = "grid remove " & shipyardFrame & ".canvas.shipyard.install.options")
-    tclEval(script = button & " configure -command {ShipyardMore show}")
+    tclEval(script = button & " configure -command {ShipyardMore}")
+  else:
+    tclEval(script = "grid " & shipyardFrame & ".canvas.shipyard.install.options -sticky we -pady {0 5} -row 2")
+    tclEval(script = button & " configure -command {ShipyardMore}")
   return tclOk
 
 proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
