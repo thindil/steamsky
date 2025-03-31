@@ -666,11 +666,11 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the trades UI
   try:
-    addCommand("ShowBaseUI", showBaseUiCommand)
-    addCommand("BaseAction", baseActionCommand)
-    addCommand("SearchRecipes", searchRecipesCommand)
-    addCommand("ShowBaseMenu", showBaseMenuCommand)
-    addCommand("SortBaseItems", sortBaseItemsCommand)
-    addCommand("RecipesMore", recipesMoreCommand)
+    addCommand(name = "ShowBaseUI", nimProc = showBaseUiCommand)
+    addCommand(name = "BaseAction", nimProc = baseActionCommand)
+    addCommand(name = "SearchRecipes", nimProc = searchRecipesCommand)
+    addCommand(name = "ShowBaseMenu", nimProc = showBaseMenuCommand)
+    addCommand(name = "SortBaseItems", nimProc = sortBaseItemsCommand)
+    addCommand(name = "RecipesMore", nimProc = recipesMoreCommand)
   except:
     showError(message = "Can't add a Tcl command.")
