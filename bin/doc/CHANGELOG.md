@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
 - Showing the enemy's ship's damage during combat
 - Showing or hiding options in trade screen after changed the type of items to
   show
+- Showing or hiding options in shipyards in bases after changed the type of
+  modules to show
 
 ## [10.9] - 2025-03-23
 
