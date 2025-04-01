@@ -174,7 +174,7 @@ proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], con
           elif selected and member.order != order:
             try:
               giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
-                  moduleIndex = -1)
+                  moduleIndex = -1, checkPriorities = false)
             except:
               dialog = setError(message = "Can't give order to selected crew member.")
               return

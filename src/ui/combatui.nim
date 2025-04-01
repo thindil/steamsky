@@ -1095,7 +1095,7 @@ proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     elif selected and member.order != order:
       try:
         giveOrders(ship = playerShip, memberIndex = index, givenOrder = order,
-            moduleIndex = -1)
+            moduleIndex = -1, checkPriorities = false)
       except:
         return showError(message = "Can't give order to selected crew member.")
       if order == boarding:
