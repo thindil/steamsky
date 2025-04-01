@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to various interactions in bases, like buying recipes,
+## repair ship, healing wounded crew memebrs, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[bases, basesship, basesship2, basestrade, basestypes, config,
@@ -143,6 +146,12 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc getColor(actionCost: Natural): string {.raises: [], tags: [],
       contractual.} =
+    ## Get the color used to show the cost of action on the list
+    ##
+    ## * actionCost - the amount of money needed for the action
+    ##
+    ## Returns red if the player doesn't have enough money, otherwise returns
+    ## empty string.
     if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < actionCost:
       return "red"
     return ""
@@ -152,6 +161,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     formattedTime = ""
 
   proc formatTime() {.raises: [], tags: [], contractual.} =
+    ## Format the amount of time needed for the action
     if time < 60:
       formattedTime = $time & " minute"
       if time > 1:
@@ -438,6 +448,11 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addButton(name, label, command: string) {.raises: [], tags: [],
       contractual.} =
+    ## Add a button to the menu
+    ##
+    ## * name    - the Tcl name of the button
+    ## * label   - the text to show on the button
+    ## * command - the Tcl command to execute when the button was pressed
     let button = baseMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & baseMenu & " .;" & command & "}")
@@ -468,6 +483,18 @@ var baseSortOrder: BaseSortOrders = defaultBaseSortOrder
 proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
     RootEffect], cdecl, contractual.} =
+  ## Sort the items on the list
+  ##
+  ## * clientData - the additional data for the Tcl command
+  ## * interp     - the Tcl interpreter on which the command was executed
+  ## * argc       - the amount of arguments entered for the command
+  ## * argv       - the list of the command's arguments
+  ##
+  ## The procedure always return tclOk
+  ##
+  ## Tcl:
+  ## SortBaseItems x
+  ## X is X axis coordinate where the player clicked the mouse button
   let column = try:
         getColumnNumber(
             table = baseTable, xPosition = ($argv[2]).parseInt)
@@ -596,6 +623,14 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't add recipe.")
   proc sortItems(x, y: LocalItemData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two items and return which should go first, based on the sort
+    ## order of the items
+    ##
+    ## * x - the first item to compare
+    ## * y - the second item to compare
+    ##
+    ## Returns 1 if the first item should go first, -1 if the second item
+    ## should go first.
     case baseSortOrder
     of nameAsc:
       if x.name < y.name:
