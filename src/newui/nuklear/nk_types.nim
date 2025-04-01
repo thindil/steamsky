@@ -438,24 +438,7 @@ type
 # ---------
 # Constants
 # ---------
-const
-  nkWindowBorder*: cint = 1 shl 0
-    ## A window has border
-  nkWindowMoveable*: cint = 1 shl 1
-    ## A window is moveable
-  nkWindowScalable*: cint = 1 shl 2
-    ## A window can be resized
-  nkWindowCloseable*: cint = 1 shl 3
-    ## A window can be closed
-  nkWindowMinimizable*: cint = 1 shl 4
-    ## A window can be minimized
-  nkWindowNoScrollbar*: cint = 1 shl 5
-    ## A window has a scrollbar
-  nkWindowScaleLeft*: cint = 1 shl 9
-    ## The resize grip for a window is at bottom left corner
-  nkWindowTitle*: cint = 1 shl 6
-    ## A window has title bar
-  nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
+const nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
     ## An empty rectangle
 
 # ------------------------------------------------------------------

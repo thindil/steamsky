@@ -1630,7 +1630,7 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
     popup.layout = cast[PNkPanel](nk_create_panel(ctx = ctx))
     popup.flags = winSetToInt(nimFlags = flags)
     {.ruleOff: "assignments".}
-    popup.flags = popup.flags or nkWindowBorder.cint
+    popup.flags = popup.flags or windowBorder.cint
     if (pType == dynamicPopup):
       popup.flags = popup.flags or NK_WINDOW_DYNAMIC.cint
     {.ruleOn: "assignments".}
