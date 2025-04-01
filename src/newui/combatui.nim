@@ -49,6 +49,14 @@ proc updateCrewLists() {.raises: [], tags: [RootEffect], contractual.} =
       gunnerList.add(y = member.name & getSkillMarks(skillIndex = gunnerySkill,
           memberIndex = index))
 
+proc updateParties() {.raises: [], tags: [], contractual.} =
+  ## Update boarding party and defenders lists
+  boardingParty = @[]
+  defenders = @[]
+  for member in playerShip.crew:
+    boardingParty.add(y = member.order == boarding)
+    defenders.add(y = member.order == defend)
+
 proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Set the combat UI and combat itself
@@ -76,11 +84,7 @@ proc setCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   pilotIndex = findMember(order = pilot) + 1
   engineerIndex = findMember(order = engineer) + 1
   gunnersIndex = @[]
-  boardingParty = @[]
-  defenders = @[]
-  for member in playerShip.crew:
-    boardingParty.add(y = member.order == boarding)
-    defenders.add(y = member.order == defend)
+  updateParties()
   for gun in guns:
     gunnersIndex.add(y = playerShip.modules[gun[1]].owner[0] + 1)
   updateCrewLists()
@@ -157,7 +161,6 @@ proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], con
       setLayoutRowDynamic(height = 30, cols = 2)
       imageLabelButton(image = images[assignCrewIcon], text = "Assign",
         alignment = right):
-        ## FIXME: assigning to party
         for index, member in playerShip.crew:
           let
             order: CrewOrders = (if dialog == boardingDialog: boarding else: defend)
@@ -177,6 +180,7 @@ proc showPartyMenu(dialog: var GameDialog) {.raises: [], tags: [RootEffect], con
               return
             if order == boarding:
               boardingOrders.add(y = 0)
+        updateParties()
         dialog = none
         closePopup()
       imageLabelButton(image = images[cancelIcon], text = "Close",
