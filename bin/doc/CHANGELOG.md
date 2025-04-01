@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   show
 - Showing or hiding options in shipyards in bases after changed the type of
   modules to show
+- Showing or hiding searching field when buying recipes from bases
 
 ## [10.9] - 2025-03-23
 
