@@ -20,7 +20,7 @@
 
 import std/[math, strbasics, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[combat, config, crewinventory, game, maps, shipscrew, types]
+import ../[combat, config, crewinventory, game, maps, shipscrew, shipsmovement, types]
 import coreui, dialogs, errordialog, header, themes, utilsui2
 
 const
@@ -462,6 +462,52 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         enemyInfo = enemyInfo & "Unknown"
       colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
+      label(str = "Speed:")
+      enemyInfo = ""
+      if game.enemy.distance < 15_000:
+        case game.enemy.ship.speed
+        of fullStop:
+          enemyInfo = enemyInfo & "Stopped"
+        of quarterSpeed:
+          enemyInfo = enemyInfo & "Slow"
+        of halfSpeed:
+          enemyInfo = enemyInfo & "Medium"
+        of fullSpeed:
+          enemyInfo = enemyInfo & "Fast"
+        else:
+          discard
+        if game.enemy.ship.speed != fullStop:
+          let speedDiff: int = try:
+              realSpeed(ship = game.enemy.ship) - realSpeed(ship = playerShip)
+            except:
+              dialog = setError(message = "Can't count the speed difference.")
+              return
+          if speedDiff > 250:
+            enemyInfo = enemyInfo & " (much faster)"
+          elif speedDiff > 0:
+            enemyInfo = enemyInfo & " (faster)"
+          elif speedDiff == 0:
+            enemyInfo = enemyInfo & " (equal)"
+          elif speedDiff > -250:
+            enemyInfo = enemyInfo & " (slower)"
+          else:
+            enemyInfo = enemyInfo & " (much slower)"
+      else:
+        enemyInfo = enemyInfo & "Unknown"
+      colorLabel(str = enemyInfo, color = theme.colors[goldenColor])
+  # The player's ship's status
+  if expandedSection in {0, 3}:
+    group(title = "Your ship status:", flags = {windowBorder, windowTitle}):
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship crew orders")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 1:
+          expandedSection = 0
+        else:
+          expandedSection = 3
+      setLayoutRowDynamic(height = 35, cols = 2)
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
