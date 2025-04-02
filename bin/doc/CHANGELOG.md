@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
   modules to show
 - Showing or hiding searching field when buying recipes from bases
 - Assigning crew members to boarding party or defenders during combat
+- Hiding the crew managing option in the player's ship's info screen
 
 ## [10.9] - 2025-03-23
 
