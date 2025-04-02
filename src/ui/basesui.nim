@@ -25,8 +25,8 @@ import ../[bases, basesship, basesship2, basestrade, basestypes, config,
 import coreui, dialogs, errordialog, mapsui, table, updateheader, utilsui2
 
 var
-  baseTable: TableWidget
-  itemsIndexes: seq[string]
+  baseTable: TableWidget = TableWidget()
+  itemsIndexes: seq[string] = @[]
 
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
@@ -45,8 +45,8 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   ## UIType can be heal, repair, recipes. Search is a string which will be
   ## looked for in names of recipes (only). Page is the number of current
   ## page on the list to show
-  var baseFrame = mainPaned & ".baseframe"
-  let baseCanvas = baseFrame & ".canvas"
+  var baseFrame: string = mainPaned & ".baseframe"
+  let baseCanvas: string = baseFrame & ".canvas"
   if tclEval2(script = "winfo exists " & baseCanvas) == "0":
     tclEval(script = """
       ttk::frame .gameframe.paned.baseframe
@@ -84,9 +84,9 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   if tclEval2(script = "winfo exists " & baseFrame & ".table") == "1":
     tclEval(script = "destroy " & baseTable.canvas)
   let
-    searchFrame = baseCanvas & ".base.searchframe"
-    searchEntry = searchFrame & ".search"
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    searchFrame: string = baseCanvas & ".base.searchframe"
+    searchEntry: string = searchFrame & ".search"
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if argv[1] == "recipes":
     tclEval(script = gameHeader & ".morebutton configure -command {RecipesMore}")
     tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
@@ -123,9 +123,9 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
           299: "-2" else: "-3"))
   tclEval(script = "grid configure " & baseTable.canvas & " -row 2")
   let
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
+    moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-  var moneyLabel = baseCanvas & ".base.moneyframe.lblmoney"
+  var moneyLabel: string = baseCanvas & ".base.moneyframe.lblmoney"
   if moneyIndex2 > -1:
     tclEval(script = moneyLabel & " configure -text {You have } -style TLabel")
     moneyLabel = baseCanvas & ".base.moneyframe.lblmoney2"
@@ -138,11 +138,11 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     moneyLabel = baseCanvas & ".base.moneyframe.lblmoney2"
     tclEval(script = "grid remove " & moneyLabel)
   let
-    page = try:
+    page: Positive = try:
         (if argc == 4: ($argv[3]).parseInt else: 1)
       except:
         return showError(message = "Can't get the page number")
-    startRow = ((page - 1) * gameSettings.listsLimit) + 1
+    startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
 
   proc getColor(actionCost: Natural): string {.raises: [], tags: [],
       contractual.} =
@@ -158,7 +158,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
 
   var
     cost, time: Natural = 0
-    formattedTime = ""
+    formattedTime: string = ""
 
   proc formatTime() {.raises: [], tags: [], contractual.} =
     ## Format the amount of time needed for the action
@@ -176,11 +176,11 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
           formattedTime.add(y = "s")
 
   var
-    currentRow = 1
-    firstIndex = ""
+    currentRow: Positive = 1
+    firstIndex: string = ""
   if argv[1] == "heal":
     for index in itemsIndexes:
-      let crewIndex = try:
+      let crewIndex: int = try:
           index.parseInt - 1
         except:
           return showError(message = "Can't get the crew index.")
@@ -213,7 +213,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         break
   elif argv[1] == "repair":
     for index in itemsIndexes:
-      let moduleIndex = try:
+      let moduleIndex: int = try:
           index.parseInt - 1
         except:
           return showError(message = "Can't get module index.")
@@ -259,7 +259,7 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       if baseTable.row == gameSettings.listsLimit + 1:
         break
   elif argv[1] == "recipes":
-    let baseType = skyBases[baseIndex].baseType
+    let baseType: string = skyBases[baseIndex].baseType
     for index in itemsIndexes:
       try:
         if index notin basesTypesList[baseType].recipes or index in
@@ -350,7 +350,7 @@ proc baseActionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## BaseAction ActionType
   ## ActionType can be heal, repair, recipes
-  let itemIndex = $argv[2]
+  let itemIndex: string = $argv[2]
   if argv[1] == "heal":
     try:
       healWounded(memberIndex = itemIndex.parseInt - 1)
@@ -385,7 +385,7 @@ proc searchRecipesCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## SearchRecipes TextToSearch
-  let searchText = $argv[1]
+  let searchText: string = $argv[1]
   if searchText.len == 0:
     return showBaseUiCommand(clientData = clientData, interp = interp, argc = 2,
         argv = @["ShowBaseUI", "recipes"].allocCStringArray)
@@ -410,9 +410,9 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## of the item
   var cost, time: Natural = 0
   let
-    action = $argv[1]
-    itemIndex = $argv[2]
-    baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    action: string = $argv[1]
+    itemIndex: string = $argv[2]
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if action == "heal":
     try:
       healCost(cost = cost, time = time, memberIndex = itemIndex.parseInt)
@@ -441,9 +441,9 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't count the recipe's price")
   let
-    moneyIndex2 = findItem(inventory = playerShip.cargo,
+    moneyIndex2: int = findItem(inventory = playerShip.cargo,
         protoIndex = moneyIndex)
-    baseMenu = createDialog(name = ".basemenu", title = "Actions",
+    baseMenu: string = createDialog(name = ".basemenu", title = "Actions",
         parentName = ".")
 
   proc addButton(name, label, command: string) {.raises: [], tags: [],
@@ -453,7 +453,7 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * name    - the Tcl name of the button
     ## * label   - the text to show on the button
     ## * command - the Tcl command to execute when the button was pressed
-    let button = baseMenu & name
+    let button: string = baseMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & baseMenu & " .;" & command & "}")
     tclEval(script = "grid " & button & " -sticky we -padx 5" & (
@@ -495,7 +495,7 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortBaseItems x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: Positive = try:
         getColumnNumber(
             table = baseTable, xPosition = ($argv[2]).parseInt)
       except:
@@ -526,7 +526,7 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     time: Positive = 1
     id: string
   var localItems: seq[LocalItemData] = @[]
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
   if argv[1] == "heal":
     var cost, time: Natural = 0
     for index, member in playerShip.crew:
@@ -686,8 +686,8 @@ proc recipesMoreCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## RecipesMore
   let
-    searchFrame = mainPaned & ".baseframe.canvas.base.searchframe"
-    button = gameHeader & ".morebutton"
+    searchFrame: string = mainPaned & ".baseframe.canvas.base.searchframe"
+    button: string = gameHeader & ".morebutton"
   if tclEval2(script = "winfo ismapped " & searchFrame) == "1":
     tclEval(script = "grid remove " & searchFrame)
     tclEval(script = button & " configure -command {RecipesMore}")
