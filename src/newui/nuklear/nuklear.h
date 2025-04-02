@@ -3698,6 +3698,7 @@ enum nk_style_colors {
     NK_COLOR_PROPERTY_TEXT,
     NK_COLOR_POPUP,
     NK_COLOR_POPUP_BORDER,
+    NK_COLOR_PROGRESSBAR,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18389,7 +18390,8 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_SELECT_ACTIVE_TEXT,       175,175,175,255) \
     NK_COLOR(NK_COLOR_PROPERTY_TEXT,            175,175,175,255) \
     NK_COLOR(NK_COLOR_POPUP,                    45, 45, 45, 255) \
-    NK_COLOR(NK_COLOR_POPUP_BORDER,             65, 65, 65, 255)
+    NK_COLOR(NK_COLOR_POPUP_BORDER,             65, 65, 65, 255) \
+    NK_COLOR(NK_COLOR_PROGRESSBAR,              38, 38, 38, 255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -18690,7 +18692,7 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     prog->normal            = nk_style_item_color(table[NK_COLOR_SLIDER]);
     prog->hover             = nk_style_item_color(table[NK_COLOR_SLIDER]);
     prog->active            = nk_style_item_color(table[NK_COLOR_SLIDER]);
-    prog->cursor_normal     = nk_style_item_color(table[NK_COLOR_SLIDER_CURSOR]);
+    prog->cursor_normal     = nk_style_item_color(table[NK_COLOR_PROGRESSBAR]);
     prog->cursor_hover      = nk_style_item_color(table[NK_COLOR_SLIDER_CURSOR_HOVER]);
     prog->cursor_active     = nk_style_item_color(table[NK_COLOR_SLIDER_CURSOR_ACTIVE]);
     prog->border_color      = nk_rgba(0,0,0,0);
