@@ -63,11 +63,6 @@ type
     NK_TEXT_ALIGN_TOP = 0x08,
     NK_TEXT_ALIGN_MIDDLE = 0x10,
     NK_TEXT_ALIGN_BOTTOM = 0x20
-  nk_text_alignment* = enum
-    ## Internal Nuklear type
-    NK_TEXT_LEFT = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_LEFT.int,
-    NK_TEXT_CENTERED = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_CENTERED.int,
-    NK_TEXT_RIGHT = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_RIGHT.int
   TreeType* = enum
     ## The types of tree widget
     node, tab
@@ -580,7 +575,7 @@ type
 converter toBool*(x: nk_bool): bool =
   ## Converts Nuklear nk_bool enum to Nim bool
   x == nkTrue
-converter toNkFlags*(x: nk_text_alignment): nk_flags =
+converter toNkFlags*(x: TextAlignment): nk_flags =
   ## Converts Nuklear nk_text_alignment enum to Nuklear nk_flags type
   x.ord.cint
 converter toNkFlags*(x: EditTypes): nk_flags =

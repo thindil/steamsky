@@ -1243,7 +1243,7 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     text.text = foreground
     var length: Positive = 1
     nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
-      a = NK_TEXT_CENTERED, f = font)
+      a = centered, f = font)
   else:
     discard
 
