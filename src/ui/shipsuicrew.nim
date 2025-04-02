@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -150,6 +150,9 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [], tags:
   tclEval(script = "ttk::button " & button & " -image unselectallicon -command {ToggleAllCrew unselect} -style Small.TButton")
   tclEval(script = "tooltip::tooltip " & button & " \"Unselect all crew members.\"")
   tclEval(script = "grid " & button & " -sticky w -row 1 -column 1")
+  if tclGetVar(varName = "shipoptions") == "crew":
+    tclEval(script = "grid " & crewInfoFrame & ".ordersbuttons -sticky w -row 1")
+    tclEval(script = "grid " & crewInfoFrame & ".selectskill -sticky w -row 2")
   crewTable = createTable(parent = crewInfoFrame, headers = @["", "Name",
       "Order", "Skill", "Health", "Fatigue", "Thirst", "Hunger", "Morale"],
       scrollbar = ".gameframe.paned.shipinfoframe.crew.scrolly",
