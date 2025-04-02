@@ -507,12 +507,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 3
-      setLayoutRowDynamic(height = 25, cols = 1)
+      setLayoutRowDynamic(height = 25, cols = 2)
       for module in playerShip.modules:
         if module.durability > 0:
           label(str = module.name)
         else:
           colorLabel(str = module.name, color = theme.colors[grayColor])
+        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
+        progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
