@@ -501,13 +501,18 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
-            text = "Maximize/minimize the ship crew orders")
+            text = "Maximize/minimize the ship status info")
       imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
-        if expandedSection == 1:
+        if expandedSection == 3:
           expandedSection = 0
         else:
           expandedSection = 3
-      setLayoutRowDynamic(height = 35, cols = 2)
+      setLayoutRowDynamic(height = 25, cols = 1)
+      for module in playerShip.modules:
+        if module.durability > 0:
+          label(str = module.name)
+        else:
+          colorLabel(str = module.name, color = theme.colors[grayColor])
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
