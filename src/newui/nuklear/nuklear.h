@@ -3699,6 +3699,7 @@ enum nk_style_colors {
     NK_COLOR_POPUP,
     NK_COLOR_POPUP_BORDER,
     NK_COLOR_PROGRESSBAR,
+    NK_COLOR_PROGRESSBAR_BORDER,
     NK_COLOR_COUNT
 };
 enum nk_style_cursor {
@@ -18391,7 +18392,8 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_PROPERTY_TEXT,            175,175,175,255) \
     NK_COLOR(NK_COLOR_POPUP,                    45, 45, 45, 255) \
     NK_COLOR(NK_COLOR_POPUP_BORDER,             65, 65, 65, 255) \
-    NK_COLOR(NK_COLOR_PROGRESSBAR,              100,100,100,255)
+    NK_COLOR(NK_COLOR_PROGRESSBAR,              100,100,100,255) \
+    NK_COLOR(NK_COLOR_PROGRESSBAR_BORDER,       38, 38, 38, 255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
@@ -18689,7 +18691,7 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     /* progressbar */
     prog = &style->progress;
     nk_zero_struct(*prog);
-    prog->normal            = nk_style_item_color(table[NK_COLOR_SLIDER]);
+    prog->normal            = nk_style_item_color(table[NK_COLOR_PROGRESSBAR_BORDER]);
     prog->hover             = nk_style_item_color(table[NK_COLOR_SLIDER]);
     prog->active            = nk_style_item_color(table[NK_COLOR_SLIDER]);
     prog->cursor_normal     = nk_style_item_color(table[NK_COLOR_PROGRESSBAR]);
