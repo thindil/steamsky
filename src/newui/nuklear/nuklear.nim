@@ -2480,6 +2480,9 @@ proc stylePushColor*(field: ColorStyleTypes; color: Color): bool {.discardable, 
   if field == background:
     return nk_style_push_color(ctx = ctx, dest = ctx.style.window.background,
       source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
+  elif field == progressbar:
+    return nk_style_push_color(ctx = ctx, dest = ctx.style.progress.cursor_normal,
+      source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
 proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
     contractual.} =

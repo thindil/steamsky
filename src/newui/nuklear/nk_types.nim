@@ -229,6 +229,9 @@ type
     # draw_begin*: nk_draw_begin
     # draw_end*: nk_draw_end
     # userdata*: nk_handle
+  nk_style_progress* {.importc: "struct nk_style_progress", nodecl.} = object
+    cursor_normal*: nk_color
+    ## Internal Nuklear type
   nk_handle* {.bycopy, union.} = object
     ## Internal Nuklear type
     `ptr`*: pointer
@@ -250,6 +253,7 @@ type
     ## Internal Nuklear type
     window*: nk_style_window
     button*: nk_style_button
+    progress*: nk_style_progress
     font*: ptr nk_user_font
     text*: nk_style_text
     cursor_active*: nk_cursor
@@ -464,7 +468,7 @@ type
     buttonRounding, popupBorder
   ColorStyleTypes* = enum
     ## The types of fields in style's settings for UI colors
-    background
+    background, progressbar
   WindowStyleTypes* = enum
     ## The types of fields in style's settings for windows
     spacing, padding
