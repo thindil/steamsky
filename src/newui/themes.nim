@@ -292,4 +292,5 @@ proc loadThemes*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect,
   table[colorChartHighlightColor] = NimColor(r: 255, g: 0, b: 0, a: 255)
   table[tabHeaderColor] = NimColor(r: 48, g: 83, b: 111, a: 255)
   table[progressbarColor] = NimColor(r: 78, g: 154, b: 6, a: 255)
+  table[progressbarBorderColor] = NimColor(r: 55, g: 36, b: 18, a: 255)
   styleFromTable(table = table)
