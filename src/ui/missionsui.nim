@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -510,7 +510,7 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & rewardLabel & " -stick w")
   rewardLabel = rewardBox & ".rewardlbl2"
   tclEval(script = "ttk::label " & rewardLabel & " -text {" & $((
-      mission.reward.float * mission.multiplier).Natural) & "} -style Golden.TLabel")
+      mission.reward.float * mission.multiplier).Natural) & " " & moneyName & "} -style Golden.TLabel")
   tclEval(script = "grid " & rewardLabel & " -row 0 -column 1 -stick w")
   tclEval(script = "grid " & rewardBox & " -columnspan 2 -padx 5 -stick w")
   rewardLabel = missionDialog & ".rewardinfo"
