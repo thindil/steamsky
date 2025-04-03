@@ -18391,7 +18391,7 @@ NK_API void nk_style_default(struct nk_context *ctx){nk_style_from_table(ctx, 0)
     NK_COLOR(NK_COLOR_PROPERTY_TEXT,            175,175,175,255) \
     NK_COLOR(NK_COLOR_POPUP,                    45, 45, 45, 255) \
     NK_COLOR(NK_COLOR_POPUP_BORDER,             65, 65, 65, 255) \
-    NK_COLOR(NK_COLOR_PROGRESSBAR,              38, 38, 38, 255)
+    NK_COLOR(NK_COLOR_PROGRESSBAR,              100,100,100,255)
 
 NK_GLOBAL const struct nk_color
 nk_default_color_style[NK_COLOR_COUNT] = {
