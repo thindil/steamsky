@@ -635,33 +635,27 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     of nameAsc:
       if x.name < y.name:
         return 1
-      else:
-        return -1
+      return -1
     of nameDesc:
       if x.name > y.name:
         return 1
-      else:
-        return -1
+      return -1
     of costAsc:
       if x.cost < y.cost:
         return 1
-      else:
-        return -1
+      return -1
     of costDesc:
       if x.cost > y.cost:
         return 1
-      else:
-        return -1
+      return -1
     of timeAsc:
       if x.time < y.time:
         return 1
-      else:
-        return -1
+      return -1
     of timeDesc:
       if x.time > y.time:
         return 1
-      else:
-        return -1
+      return -1
     of none:
       return -1
   localItems.sort(cmp = sortItems)
