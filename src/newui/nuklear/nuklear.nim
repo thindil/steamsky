@@ -2480,9 +2480,21 @@ proc stylePushColor*(field: ColorStyleTypes; color: Color): bool {.discardable, 
   if field == background:
     return nk_style_push_color(ctx = ctx, dest = ctx.style.window.background,
       source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
-  elif field == progressbar:
-    return nk_style_push_color(ctx = ctx, dest = ctx.style.progress.cursor_normal,
-      source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
+
+proc stylePushStyleItem*(field: StyleStyleTypes; color: Color): bool {.discardable , raises: [], tags: [], contractual.} =
+  ## Push the color value for the selected Nuklear window style on a
+  ## temporary stack
+  ##
+  ## * field - the Nuklear windows style field which will be modified
+  ## * color - the new color for the selected field
+  ##
+  ## Returns true if value was succesfully pushed, otherwise false
+  proc nk_style_push_style_item(ctx; dest: var nk_style_item; source: nk_style_item): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  let (r, g, b) = color.extractRGB()
+  if field == progressbar:
+    return nk_style_push_style_item(ctx = ctx, dest = ctx.style.progress.cursor_normal,
+      source = nk_style_item_color(nk_rgb(r = r.cint, g = g.cint, b = b.cint)))
 
 proc styleFromTable*(table: openArray[NimColor]) {.raises: [], tags: [],
     contractual.} =
@@ -2523,6 +2535,12 @@ proc stylePopColor*() {.raises: [], tags: [], contractual.} =
   proc nk_style_pop_color(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_color(ctx = ctx)
+
+proc stylePopStyleItem*() {.raises: [], tags: [], contractual.} =
+  ## reset the UI color setting to the default Nuklear setting
+  proc nk_style_pop_style_item(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
+    ## A binding to Nuklear's function. Internal use only
+  nk_style_pop_style_item(ctx = ctx)
 
 # ------
 # Combos
