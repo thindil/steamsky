@@ -2537,7 +2537,7 @@ proc stylePopColor*() {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_color(ctx = ctx)
 
-proc stylePopStyleItem*() {.raises: [], tags: [], contractual.} =
+proc stylePopStyleItem() {.raises: [], tags: [], contractual.} =
   ## reset the UI color setting to the default Nuklear setting
   proc nk_style_pop_style_item(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
