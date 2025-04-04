@@ -28,6 +28,38 @@ var
   baseTable: TableWidget = TableWidget()
   itemsIndexes: seq[string] = @[]
 
+proc getColor(actionCost: Natural; moneyIndex2: int): string {.raises: [],
+    tags: [], contractual.} =
+  ## Get the color used to show the cost of action on the list
+  ##
+  ## * actionCost  - the amount of money needed for the action
+  ## * moneyIndex2 - the index of money in the player's ship's cargo
+  ##
+  ## Returns red if the player doesn't have enough money, otherwise returns
+  ## empty string.
+  if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < actionCost:
+    return "red"
+  return ""
+
+proc formatTime(time: Natural): string {.raises: [], tags: [], contractual.} =
+  ## Format the amount of time needed for the action
+  ##
+  ## * time - the time to format
+  ##
+  ## Returns string with formatted time
+  if time < 60:
+    result = $time & " minute"
+    if time > 1:
+      result.add(y = "s")
+  else:
+    result = $(time / 60) & " hour"
+    if time / 60 > 1:
+      result.add(y = "s")
+    if time mod 60 > 0:
+      result.add(y = " and " & $(time mod 60) & " minute")
+      if time mod 60 > 1:
+        result.add(y = "s")
+
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
         RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -86,7 +118,8 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     searchFrame: string = baseCanvas & ".base.searchframe"
     searchEntry: string = searchFrame & ".search"
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
   if argv[1] == "recipes":
     tclEval(script = gameHeader & ".morebutton configure -command {RecipesMore}")
     tclEval(script = "grid " & gameHeader & ".morebutton -row 0 -column 2")
@@ -144,38 +177,9 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         return showError(message = "Can't get the page number")
     startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
 
-  proc getColor(actionCost: Natural): string {.raises: [], tags: [],
-      contractual.} =
-    ## Get the color used to show the cost of action on the list
-    ##
-    ## * actionCost - the amount of money needed for the action
-    ##
-    ## Returns red if the player doesn't have enough money, otherwise returns
-    ## empty string.
-    if moneyIndex2 == -1 or playerShip.cargo[moneyIndex2].amount < actionCost:
-      return "red"
-    return ""
-
   var
     cost, time: Natural = 0
     formattedTime: string = ""
-
-  proc formatTime() {.raises: [], tags: [], contractual.} =
-    ## Format the amount of time needed for the action
-    if time < 60:
-      formattedTime = $time & " minute"
-      if time > 1:
-        formattedTime.add(y = "s")
-    else:
-      formattedTime = $(time / 60) & " hour"
-      if time / 60 > 1:
-        formattedTime.add(y = "s")
-      if time mod 60 > 0:
-        formattedTime.add(y = " and " & $(time mod 60) & " minute")
-        if time mod 60 > 1:
-          formattedTime.add(y = "s")
-
-  var
     currentRow: Positive = 1
     firstIndex: string = ""
   if argv[1] == "heal":
@@ -204,8 +208,9 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
           index, column = 1)
       addButton(table = baseTable, text = $cost & " " & moneyName,
           tooltip = "Show available options", command = "ShowBaseMenu heal " &
-          index, column = 2, color = getColor(actionCost = cost))
-      formatTime()
+          index, column = 2, color = getColor(actionCost = cost,
+              moneyIndex2 = moneyIndex2))
+      formattedTime = formatTime(time = time)
       addButton(table = baseTable, text = formattedTime,
           tooltip = "Show available options", command = "ShowBaseMenu heal " &
           index, column = 3, newRow = true)
@@ -251,8 +256,9 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
         index, column = 1)
       addButton(table = baseTable, text = $cost & " " & moneyName,
           tooltip = "Show available options", command = "ShowBaseMenu repair " &
-          index, column = 2, color = getColor(actionCost = cost))
-      formatTime()
+          index, column = 2, color = getColor(actionCost = cost,
+              moneyIndex2 = moneyIndex2))
+      formattedTime = formatTime(time = time)
       addButton(table = baseTable, text = formattedTime,
           tooltip = "Show available options", command = "ShowBaseMenu repair " &
           index, column = 3, newRow = true)
@@ -307,7 +313,8 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       addButton(table = baseTable, text = $cost & " " & moneyName,
           tooltip = "Show available options",
           command = "ShowBaseMenu recipes " &
-          index, column = 2, color = getColor(actionCost = cost), newRow = true)
+          index, column = 2, color = getColor(actionCost = cost,
+              moneyIndex2 = moneyIndex2), newRow = true)
       if baseTable.row == gameSettings.listsLimit + 1:
         break
   let arguments: string = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
@@ -412,7 +419,8 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   let
     action: string = $argv[1]
     itemIndex: string = $argv[2]
-    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+        playerShip.skyY].baseIndex
   if action == "heal":
     try:
       healCost(cost = cost, time = time, memberIndex = itemIndex.parseInt)
@@ -526,7 +534,8 @@ proc sortBaseItemsCommand(clientData: cint; interp: PInterp; argc: cint;
     time: Positive = 1
     id: string
   var localItems: seq[LocalItemData] = @[]
-  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  let baseIndex: ExtendedBasesRange = skyMap[playerShip.skyX][
+      playerShip.skyY].baseIndex
   if argv[1] == "heal":
     var cost, time: Natural = 0
     for index, member in playerShip.crew:
