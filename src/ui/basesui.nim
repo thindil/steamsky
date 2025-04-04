@@ -52,8 +52,9 @@ proc formatTime(time: Natural): string {.raises: [], tags: [], contractual.} =
     if time > 1:
       result.add(y = "s")
   else:
-    result = $(time / 60) & " hour"
-    if time / 60 > 1:
+    let hours: Positive = (time / 60).Positive
+    result = $hours & " hour"
+    if hours > 1:
       result.add(y = "s")
     if time mod 60 > 0:
       result.add(y = " and " & $(time mod 60) & " minute")
