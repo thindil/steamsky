@@ -514,12 +514,11 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         else:
           colorLabel(str = module.name, color = theme.colors[grayColor])
         var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
-        stylePushStyleItem(field = progressbar,
+        changeStyleItem(field = progressbar,
           color = (if damagePercent == 100: theme.colors[greenColor]
             elif damagePercent > 24: theme.colors[yellowColor]
-            else: theme.colors[redColor]))
-        progressBar(value = damagePercent, maxValue = 100, modifyable = false)
-        stylePopStyleItem()
+            else: theme.colors[redColor])):
+          progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
