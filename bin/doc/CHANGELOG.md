@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Showing or hiding searching field when buying recipes from bases
 - Assigning crew members to boarding party or defenders during combat
 - Hiding the crew managing option in the player's ship's info screen
+- Rouding the time needed to repair the player's ship in bases
 
 ## [10.9] - 2025-03-23
 
