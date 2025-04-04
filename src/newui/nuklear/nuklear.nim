@@ -2481,7 +2481,7 @@ proc stylePushColor*(field: ColorStyleTypes; color: Color): bool {.discardable, 
     return nk_style_push_color(ctx = ctx, dest = ctx.style.window.background,
       source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
-proc stylePushStyleItem*(field: StyleStyleTypes; color: Color): bool {.discardable , raises: [], tags: [], contractual.} =
+proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.discardable , raises: [], tags: [], contractual.} =
   ## Push the color value for the selected Nuklear window style on a
   ## temporary stack
   ##
@@ -2489,10 +2489,11 @@ proc stylePushStyleItem*(field: StyleStyleTypes; color: Color): bool {.discardab
   ## * color - the new color for the selected field
   ##
   ## Returns true if value was succesfully pushed, otherwise false
-  proc nk_style_push_style_item(ctx; dest: var nk_style_item; source: nk_style_item): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+  proc nk_style_push_style_item(ctx; dest: var nk_style_item; source: nk_style_item):
+    nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  let (r, g, b) = color.extractRGB()
-  if field == progressbar:
+  let (r, g, b) = col.extractRGB()
+  if fld == progressbar:
     return nk_style_push_style_item(ctx = ctx, dest = ctx.style.progress.cursor_normal,
       source = nk_style_item_color(nk_rgb(r = r.cint, g = g.cint, b = b.cint)))
 
@@ -2541,6 +2542,16 @@ proc stylePopStyleItem*() {.raises: [], tags: [], contractual.} =
   proc nk_style_pop_style_item(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_style_item(ctx = ctx)
+
+template changeStyleItem*(field: StyleStyleTypes; color: Color; code: untyped) =
+  ## Change temporary the color value for the selected Nuklear style's item
+  ##
+  ## * field - the Nuklear windows style field which will be modified
+  ## * color - the new color for the selected field
+  ## * code  - the code executed when the color will be properly set
+  if stylePushStyleItem(fld = field, col = color):
+    code
+    stylePopStyleItem()
 
 # ------
 # Combos
