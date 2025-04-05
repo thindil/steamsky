@@ -2465,23 +2465,23 @@ proc stylePushFloat*(field: FloatStyleTypes;
         source = value)
   return false
 
-proc stylePushColor*(field: ColorStyleTypes; color: Color): bool {.discardable, raises: [], tags: [], contractual.} =
+proc stylePushColor(fld: ColorStyleTypes; col: Color): bool {.raises: [], tags: [], contractual.} =
   ## Push the color value for the selected Nuklear window style on a
   ## temporary stack
   ##
-  ## * field - the Nuklear windows style field which will be modified
-  ## * color - the new color for the selected field
+  ## * fld - the Nuklear windows style field which will be modified
+  ## * col - the new color for the selected field
   ##
   ## Returns true if value was succesfully pushed, otherwise false
   proc nk_style_push_color(ctx; dest: var nk_color;
       source: nk_color): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  let (r, g, b) = color.extractRGB()
-  if field == background:
+  let (r, g, b) = col.extractRGB()
+  if fld == background:
     return nk_style_push_color(ctx = ctx, dest = ctx.style.window.background,
       source = nk_rgb(r = r.cint, g = g.cint, b = b.cint))
 
-proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.discardable , raises: [], tags: [], contractual.} =
+proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.raises: [], tags: [], contractual.} =
   ## Push the color value for the selected Nuklear window style on a
   ## temporary stack
   ##
@@ -2531,7 +2531,7 @@ proc stylePopVec2*() {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_vec2(ctx = ctx)
 
-proc stylePopColor*() {.raises: [], tags: [], contractual.} =
+proc stylePopColor() {.raises: [], tags: [], contractual.} =
   ## reset the UI color setting to the default Nuklear setting
   proc nk_style_pop_color(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -2543,7 +2543,17 @@ proc stylePopStyleItem() {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_style_item(ctx = ctx)
 
-template changeStyleItem*(field: StyleStyleTypes; color: Color; code: untyped) =
+template changeStyle*(field: ColorStyleTypes; color: Color; code: untyped) =
+  ## Change temporary the color value for the selected Nuklear element
+  ##
+  ## * field - the Nuklear windows style field which will be modified
+  ## * color - the new color for the selected field
+  ## * code  - the code executed when the color will be properly set
+  if stylePushColor(fld = field, col = color):
+    code
+    stylePopColor()
+
+template changeStyle*(field: StyleStyleTypes; color: Color; code: untyped) =
   ## Change temporary the color value for the selected Nuklear style's item
   ##
   ## * field - the Nuklear windows style field which will be modified
