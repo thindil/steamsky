@@ -46,7 +46,8 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
     # Load images
     try:
       theme = themesList[gameSettings.interfaceTheme]
-      menuImages[0] = nuklearLoadSVGImage(filePath = theme.icons[logoImage], width = 0, height = 110)
+      menuImages[0] = nuklearLoadSVGImage(filePath = theme.icons[logoImage],
+          width = 0, height = 110)
       for index, fileName in theme.icons[1..3]:
         menuImages[index + 1] = nuklearLoadSVGImage(filePath = fileName,
             width = 0, height = 10 + gameSettings.interfaceFontSize)
@@ -956,37 +957,36 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
   var editActive: bool = windowEditActive(name = "Main") or
       windowPropertyActive(name = "Main")
   stylePushVec2(field = spacing, x = 0, y = 0)
-  stylePushFloat(field = buttonRounding, value = 0)
-  layoutSpaceStatic(height = 30, widgetsCount = 2):
-    var x: float = 200
-    const
-      tabs: array[2, string] = ["Player", "Difficulty"]
-      tabTooltips: array[2, string] = ["Show settings for your character.", "Show settings for the game difficulty."]
-    for index, tab in tabs:
-      try:
-        let
-          textWidth: float = getTextWidth(text = tab)
-          widgetWidth: float = textWidth + 15 * getButtonStyle(
-              field = padding).x;
-        row(x = x, y = 0, w = widgetWidth, h = 30):
-          if currentTab == index:
-            saveButtonStyle()
-            setButtonStyle2(source = active, destination = normal)
-            if gameSettings.showTooltips:
-              addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
-            labelButton(title = tab):
-              discard
-            restoreButtonStyle()
-          else:
-            if gameSettings.showTooltips:
-              addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
-            labelButton(title = tab):
-              currentTab = index.cint
-              infoText = (if index == 0: playerTooltips[8] else: diffTooltips[^1])
-        x += widgetWidth
-      except:
-        dialog = setError(message = "Can't set the tabs buttons.")
-  stylePopFloat()
+  changeStyle(field = buttonRounding, value = 0):
+    layoutSpaceStatic(height = 30, widgetsCount = 2):
+      var x: float = 200
+      const
+        tabs: array[2, string] = ["Player", "Difficulty"]
+        tabTooltips: array[2, string] = ["Show settings for your character.", "Show settings for the game difficulty."]
+      for index, tab in tabs:
+        try:
+          let
+            textWidth: float = getTextWidth(text = tab)
+            widgetWidth: float = textWidth + 15 * getButtonStyle(
+                field = padding).x;
+          row(x = x, y = 0, w = widgetWidth, h = 30):
+            if currentTab == index:
+              saveButtonStyle()
+              setButtonStyle2(source = active, destination = normal)
+              if gameSettings.showTooltips:
+                addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
+              labelButton(title = tab):
+                discard
+              restoreButtonStyle()
+            else:
+              if gameSettings.showTooltips:
+                addTooltip(bounds = getWidgetBounds(), text = tabTooltips[index])
+              labelButton(title = tab):
+                currentTab = index.cint
+                infoText = (if index == 0: playerTooltips[8] else: diffTooltips[^1])
+          x += widgetWidth
+        except:
+          dialog = setError(message = "Can't set the tabs buttons.")
   stylePopVec2()
   layoutSpaceStatic(height = (menuHeight - 90).float, widgetsCount = (
       if currentTab == 0: 17 else: 20)):
