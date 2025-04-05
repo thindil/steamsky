@@ -77,7 +77,7 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
     var newPoints: int = reputationsList[index].reputation.experience + (
         points.float * newGameSettings.reputationBonus).int
     while newPoints < 0:
-      reputationsList[repIndex].reputation.level.dec
+      reputationsList[index].reputation.level.dec
       newPoints += abs(x = reputationsList[index].reputation.level * 500)
       if newPoints >= 0:
         reputationsList[index].reputation.experience = newPoints
@@ -87,13 +87,12 @@ proc updateReputation*(baseIndex: BasesRange; amount: int) {.raises: [
       reputationsList[index].reputation.level.inc
     reputationsList[index].reputation.experience = newPoints
 
-  updateRep(index = repIndex, points = amount)
   # Gain or lose reputation with other factions, depending if they are friends
   # or enemies of the main faction
   for index, reputation in reputationsList:
     try:
       if isFriendly(sourceFaction = factionIndex,
-          targetFaction = reputation.factionIndex):
+          targetFaction = reputation.factionIndex) or index == repIndex:
         updateRep(index = index, points = amount)
       else:
         updateRep(index = index, points = (amount * -1))
