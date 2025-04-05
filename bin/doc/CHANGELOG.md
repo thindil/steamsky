@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Assigning crew members to boarding party or defenders during combat
 - Hiding the crew managing option in the player's ship's info screen
 - Rouding the time needed to repair the player's ship in bases
+- Gaining or losing reputation in factions
 
 ## [10.9] - 2025-03-23
 
