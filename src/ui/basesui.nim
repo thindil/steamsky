@@ -61,6 +61,82 @@ proc formatTime(time: Natural): string {.raises: [], tags: [], contractual.} =
       if time mod 60 > 1:
         result.add(y = "s")
 
+proc setRecipesTable(baseIndex: BasesRange; argc: cint; argv: cstringArray;
+    firstIndex: var string; startRow: Positive;
+    moneyIndex2: int): bool {.raises: [], tags: [RootEffect], contractual.} =
+  ## Set the recipes' list table
+  ##
+  ## * baseIndex   - the index of the base in which recipes will be show
+  ## * argc        - the amount of arguments entered for the command
+  ## * argv        - the list of the command's arguments
+  ## * firstIndex  - the first index in the table
+  ## * startRow    - the number of the first row to show
+  ## * moneyIndex2 - the index of money in the player's ship's cargo
+  ##
+  ## Returns true if the list was properly set, otherwise show error and
+  ## returns false.
+  let baseType: string = skyBases[baseIndex].baseType
+  var
+    currentRow: Positive = 1
+    cost: Natural = 0
+  for index in itemsIndexes:
+    try:
+      if index notin basesTypesList[baseType].recipes or index in
+          knownRecipes or recipesList[index].reputation > skyBases[
+          baseIndex].reputation.level:
+        continue
+    except:
+      showError(message = "Can't check recipe index")
+      return false
+    try:
+      if argc > 2 and argv[2].len > 0 and not itemsList[recipesList[
+          index].resultIndex].name.toLowerAscii.contains(sub = ($argv[
+          2]).toLowerAscii):
+        continue
+    except:
+      showError(message = "Can't check recipe index2")
+      return false
+    if firstIndex.len == 0:
+      firstIndex = index
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    try:
+      addButton(table = baseTable, text = itemsList[recipesList[
+          index].resultIndex].name,
+        tooltip = "Show available options",
+          command = "ShowBaseMenu recipes " &
+        index, column = 1)
+    except:
+      showError(message = "Can't add button")
+      return false
+    try:
+      cost = if getPrice(baseType = baseType, itemIndex = recipesList[
+          index].resultIndex) > 0:
+          getPrice(baseType = baseType, itemIndex = recipesList[
+              index].resultIndex) * recipesList[index].difficulty * 10
+        else:
+          recipesList[index].difficulty * 10
+    except:
+      showError(message = "Can't count recipe cost")
+      return false
+    cost = (cost.float * newGameSettings.pricesBonus).int
+    if cost < 1:
+      cost = 1
+    try:
+      countPrice(price = cost, traderIndex = findMember(order = talk))
+    except:
+      showError(message = "Can't count recipe price")
+      return false
+    addButton(table = baseTable, text = $cost & " " & moneyName,
+        tooltip = "Show available options",
+        command = "ShowBaseMenu recipes " &
+        index, column = 2, color = getColor(actionCost = cost,
+            moneyIndex2 = moneyIndex2), newRow = true)
+    if baseTable.row == gameSettings.listsLimit + 1:
+      break
+  return true
+
 proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
         RootEffect], cdecl, contractual, ruleOff: "params".} =
@@ -266,58 +342,10 @@ proc showBaseUiCommand(clientData: cint; interp: PInterp; argc: cint;
       if baseTable.row == gameSettings.listsLimit + 1:
         break
   elif argv[1] == "recipes":
-    let baseType: string = skyBases[baseIndex].baseType
-    for index in itemsIndexes:
-      try:
-        if index notin basesTypesList[baseType].recipes or index in
-            knownRecipes or recipesList[index].reputation > skyBases[
-            baseIndex].reputation.level:
-          continue
-      except:
-        return showError(message = "Can't check recipe index")
-      try:
-        if argc > 2 and argv[2].len > 0 and not itemsList[recipesList[
-            index].resultIndex].name.toLowerAscii.contains(sub = ($argv[
-            2]).toLowerAscii):
-          continue
-      except:
-        return showError(message = "Can't check recipe index2")
-      if firstIndex.len == 0:
-        firstIndex = index
-      if currentRow < startRow:
-        currentRow.inc
-        continue
-      try:
-        addButton(table = baseTable, text = itemsList[recipesList[
-            index].resultIndex].name,
-          tooltip = "Show available options",
-            command = "ShowBaseMenu recipes " &
-          index, column = 1)
-      except:
-        return showError(message = "Can't add button")
-      try:
-        cost = if getPrice(baseType = baseType, itemIndex = recipesList[
-            index].resultIndex) > 0:
-            getPrice(baseType = baseType, itemIndex = recipesList[
-                index].resultIndex) * recipesList[index].difficulty * 10
-          else:
-            recipesList[index].difficulty * 10
-      except:
-        return showError(message = "Can't count recipe cost")
-      cost = (cost.float * newGameSettings.pricesBonus).int
-      if cost < 1:
-        cost = 1
-      try:
-        countPrice(price = cost, traderIndex = findMember(order = talk))
-      except:
-        return showError(message = "Can't count recipe price")
-      addButton(table = baseTable, text = $cost & " " & moneyName,
-          tooltip = "Show available options",
-          command = "ShowBaseMenu recipes " &
-          index, column = 2, color = getColor(actionCost = cost,
-              moneyIndex2 = moneyIndex2), newRow = true)
-      if baseTable.row == gameSettings.listsLimit + 1:
-        break
+    if not setRecipesTable(baseIndex = baseIndex, argc = argc, argv = argv,
+        firstIndex = firstIndex, startRow = startRow,
+        moneyIndex2 = moneyIndex2):
+      return tclOk
   let arguments: string = (if argc > 2: "{" & $argv[1] & "} {" & $argv[2] &
       "}" else: "{" & $argv[1] & "} {}")
   addPagination(table = baseTable, previousCommand = (if page >
