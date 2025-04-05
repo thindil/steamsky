@@ -2517,7 +2517,7 @@ proc defaultStyle*() {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_style_default(ctx = ctx)
 
-proc stylePopFloat*() {.raises: [], tags: [], contractual.} =
+proc stylePopFloat() {.raises: [], tags: [], contractual.} =
   ## Reset the UI float setting to the default Nuklear setting
   proc nk_style_pop_float(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
