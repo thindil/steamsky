@@ -2424,25 +2424,25 @@ proc getButtonStyle*(field: ButtonStyleTypes): NimVec2 {.raises: [], tags: [],
   if field == padding:
     return NimVec2(x: ctx.style.button.padding.x, y: ctx.style.button.padding.y)
 
-proc stylePushVec2*(field: WindowStyleTypes; x,
-    y: cfloat): bool {.discardable, raises: [], tags: [], contractual.} =
+proc stylePushVec2(fld: WindowStyleTypes; x1,
+    y1: cfloat): bool {.discardable, raises: [], tags: [], contractual.} =
   ## Push the vector value for the selected Nuklear window style on a
   ## temporary stack
   ##
-  ## * field - the Nuklear windows style field which will be modified
-  ## * x     - the X value of the vector to push
-  ## * y     - the Y value of the vector to push
+  ## * fld - the Nuklear windows style field which will be modified
+  ## * x1  - the X value of the vector to push
+  ## * y1  - the Y value of the vector to push
   ##
   ## Returns true if value was succesfully pushed, otherwise false
   proc nk_style_push_vec2(ctx; dest: var nk_vec2;
       source: nk_vec2): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
-  if field == spacing:
+  if fld == spacing:
     return nk_style_push_vec2(ctx = ctx, dest = ctx.style.window.spacing,
-        source = new_nk_vec2(x = x, y = y))
-  elif field == padding:
+        source = new_nk_vec2(x = x1, y = y1))
+  elif fld == padding:
     return nk_style_push_vec2(ctx = ctx, dest = ctx.style.window.padding,
-        source = new_nk_vec2(x = x, y = y))
+        source = new_nk_vec2(x = x1, y = y1))
 
 proc stylePushFloat(fld: FloatStyleTypes;
     val: cfloat): bool {.raises: [], tags: [], contractual.} =
@@ -2483,8 +2483,8 @@ proc stylePushStyleItem(fld: StyleStyleTypes; col: Color): bool {.raises: [], ta
   ## Push the color value for the selected Nuklear window style on a
   ## temporary stack
   ##
-  ## * field - the Nuklear windows style field which will be modified
-  ## * color - the new color for the selected field
+  ## * fld - the Nuklear windows style field which will be modified
+  ## * col - the new color for the selected field
   ##
   ## Returns true if value was succesfully pushed, otherwise false
   proc nk_style_push_style_item(ctx; dest: var nk_style_item; source: nk_style_item):
@@ -2523,7 +2523,7 @@ proc stylePopFloat() {.raises: [], tags: [], contractual.} =
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_float(ctx = ctx)
 
-proc stylePopVec2*() {.raises: [], tags: [], contractual.} =
+proc stylePopVec2() {.raises: [], tags: [], contractual.} =
   ## reset the UI vector setting to the default Nuklear setting
   proc nk_style_pop_vec2(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
@@ -2540,6 +2540,26 @@ proc stylePopStyleItem() {.raises: [], tags: [], contractual.} =
   proc nk_style_pop_style_item(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   nk_style_pop_style_item(ctx = ctx)
+
+template changeStyle*(field: WindowStyleTypes; x, y: float; code: untyped) =
+  ## Change temporary the vector value for the selected Nuklear window style
+  ##
+  ## * field - the Nuklear windows style field which will be modified
+  ## * x     - the X value of the vector to push
+  ## * y     - the Y value of the vector to push
+  if stylePushVec2(fld = field, x1 = x.cfloat, y1 = y.cfloat):
+    code
+    stylePopVec2()
+
+template changeStyle*(field: FloatStyleTypes; value: float; code: untyped) =
+  ## Change temporary the float value for the selected Nuklear style
+  ##
+  ## * field - the Nuklear buttons style field which will be modified
+  ## * value - the float value to push
+  ## * code  - the code executed when the value will be properly set
+  if stylePushFloat(fld = field, val = value.cfloat):
+    code
+    stylePopFloat()
 
 template changeStyle*(field: ColorStyleTypes; color: Color; code: untyped) =
   ## Change temporary the color value for the selected Nuklear element
@@ -2560,16 +2580,6 @@ template changeStyle*(field: StyleStyleTypes; color: Color; code: untyped) =
   if stylePushStyleItem(fld = field, col = color):
     code
     stylePopStyleItem()
-
-template changeStyle*(field: FloatStyleTypes; value: float; code: untyped) =
-  ## Change temporary the float value for the selected Nuklear style
-  ##
-  ## * field - the Nuklear buttons style field which will be modified
-  ## * value - the float value to push
-  ## * code  - the code executed when the value will be properly set
-  if stylePushFloat(fld = field, val = value.cfloat):
-    code
-    stylePopFloat()
 
 # ------
 # Combos
