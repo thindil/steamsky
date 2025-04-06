@@ -537,14 +537,22 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for module in game.enemy.ship.modules.mitems:
         if endCombat:
           module.durability = 0
-        if module.durability > 0:
-          try:
-            label(str = (if game.enemy.distance > 1_000:
+        let moduleName: string = try: (if game.enemy.distance > 1_000:
               getModuleType(moduleIndex = module.protoIndex) else:
-              modulesList[module.protoIndex].name))
-          except:
-            dialog = setError(message = "Can't show the enemy's ship's module name")
-            return
+              modulesList[module.protoIndex].name)
+            except:
+              dialog = setError(message = "Can't show the enemy's ship's module name")
+              return
+        if module.durability > 0:
+          label(str = moduleName)
+        else:
+          colorLabel(str = moduleName, color = theme.colors[grayColor])
+        var damagePercent: int = ((module.durability.float / module.maxDurability.float) * 100.0).int
+        changeStyle(field = progressbar,
+          color = (if damagePercent == 100: theme.colors[greenColor]
+            elif damagePercent > 24: theme.colors[yellowColor]
+            else: theme.colors[redColor])):
+          progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
