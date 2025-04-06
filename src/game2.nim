@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -418,8 +418,8 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
           if index == factionBases.low or ("loner" in factionsList[skyBases[
               factionBases[0]].owner].flags and "loner" in factionsList[skyBases[
               faction].owner].flags):
-            posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
-            posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
+            posX = getRandom(min = BasesRange.low + 10, max = BasesRange.high - 10)
+            posY = getRandom(min = BasesRange.low + 10, max = BasesRange.high - 10)
           else:
             posX = getRandom(min = skyBases[factionBases[index - 1]].skyX - 20,
                 max = skyBases[factionBases[index - 1]].skyX + 20)
@@ -427,10 +427,18 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
             posY = getRandom(min = skyBases[factionBases[index - 1]].skyY - 20,
                 max = skyBases[factionBases[index - 1]].skyY + 20)
             normalizeCoord(coord = posY, isXAxis = false)
+            if posX < BasesRange.low + 10:
+              posX = BasesRange.low + 10
+            elif posX > BasesRange.high - 10:
+              posX = BasesRange.high - 10
+            if posY < BasesRange.low + 10:
+              posY = BasesRange.low + 10
+            elif posY > BasesRange.high - 10:
+              posY = BasesRange.high - 10
             attempts.inc
             if attempts > 250:
-              posX = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
-              posY = getRandom(min = BasesRange.low + 5, max = BasesRange.high - 5)
+              posX = getRandom(min = BasesRange.low + 10, max = BasesRange.high - 10)
+              posY = getRandom(min = BasesRange.low + 10, max = BasesRange.high - 10)
               attempts = 1
           for j in -5..5:
             var tempX: int = posX + j
