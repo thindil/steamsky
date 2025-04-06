@@ -26,7 +26,10 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the last in-game messages to the player
   ##
-  ## * theme - the current game's theme
+  ## * theme  - the current game's theme
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns parameter dialog, modified if any error happened.
   var loopStart = 0 - messagesAmount()
   if loopStart == 0:
     return
