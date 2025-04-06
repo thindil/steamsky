@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Hiding the crew managing option in the player's ship's info screen
 - Rouding the time needed to repair the player's ship in bases
 - Gaining or losing reputation in factions
+- Don't create bases at the map's borders
 
 ## [10.9] - 2025-03-23
 
