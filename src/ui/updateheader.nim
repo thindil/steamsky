@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,10 +16,11 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/tables
+import contracts
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
-proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Update in-game header with information about time, state of the crew
   ## members, etc.
   var label = gameHeader & ".time"
