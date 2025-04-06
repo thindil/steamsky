@@ -20,7 +20,7 @@
 
 import std/[math, strbasics, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[combat, config, crewinventory, game, maps, shipscrew, shipsmovement, types]
+import ../[combat, config, crewinventory, game, maps, shipscrew, shipmodules, shipsmovement, types]
 import coreui, dialogs, errordialog, header, themes, utilsui2
 
 const
@@ -519,6 +519,32 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             elif damagePercent > 24: theme.colors[yellowColor]
             else: theme.colors[redColor])):
           progressBar(value = damagePercent, maxValue = 100, modifyable = false)
+  # The enemy's ship's status
+  if expandedSection in {0, 4}:
+    group(title = "Enemy ship status:", flags = {windowBorder, windowTitle}):
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize the ship status info")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 4:
+          expandedSection = 0
+        else:
+          expandedSection = 4
+      setLayoutRowDynamic(height = 25, cols = 2)
+      if endCombat:
+        game.enemy.distance = 100
+      for module in game.enemy.ship.modules.mitems:
+        if endCombat:
+          module.durability = 0
+        if module.durability > 0:
+          try:
+            label(str = (if game.enemy.distance > 1_000:
+              getModuleType(moduleIndex = module.protoIndex) else:
+              modulesList[module.protoIndex].name))
+          except:
+            dialog = setError(message = "Can't show the enemy's ship's module name")
+            return
   setLayoutRowDynamic(height = 35, cols = 1)
   labelButton(title = "Next turn"):
     try:
