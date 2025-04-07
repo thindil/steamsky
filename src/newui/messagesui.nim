@@ -17,17 +17,18 @@
 
 ## Provides code related to showing in-game messages
 
-import std/[colors, math]
+import std/[colors, math, strutils]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, messages, types]
 import coreui, errordialog, themes
 
-proc showLastMessages*(theme: ThemeData; dialog: var GameDialog) {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
+    inCombat: bool = false) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the last in-game messages to the player
   ##
-  ## * theme  - the current game's theme
-  ## * dialog - the current in-game dialog displayed on the screen
+  ## * theme    - the current game's theme
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ## * inCombat - if true, show messages in combat
   ##
   ## Returns parameter dialog, modified if any error happened.
   var loopStart = 0 - messagesAmount()
@@ -41,20 +42,31 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog) {.raises: [],
     ## Show the selected message
     ##
     ## * message - the message to show
-    let colors: array[1..5, Color] = [theme.colors[yellowColor], theme.colors[greenColor],
-        theme.colors[redColor], theme.colors[blueColor], theme.colors[cyanColor]]
+    let
+      colors: array[1..5, Color] = [theme.colors[yellowColor], theme.colors[greenColor], theme.colors[redColor], theme.colors[blueColor], theme.colors[cyanColor]]
+      currentTurnTime: string = "[" & formattedTime() & "]"
+      width: float = (if inCombat: windowWidth else: windowWidth * 0.75)
     var needLines: float = try:
-          ceil(x = getTextWidth(text = message.message) / (windowWidth * 0.75).float)
+          ceil(x = getTextWidth(text = message.message) / width.float)
         except:
           dialog = setError(message = "Can't count the message lenght.")
           return
     if needLines < 1.0:
       needLines = 1.0
     setLayoutRowDynamic(height = 25 * needLines, cols = 1)
-    if message.color == white:
-      wrapLabel(str = message.message)
+    if inCombat:
+      if message.message.startsWith(prefix = currentTurnTime):
+        if message.color == white:
+          wrapLabel(str = message.message)
+        else:
+          colorWrapLabel(str = message.message, color = colors[message.color.ord])
+      else:
+          colorWrapLabel(str = message.message, color = theme.colors[grayColor])
     else:
-      colorWrapLabel(str = message.message, color = colors[message.color.ord])
+      if message.color == white:
+        wrapLabel(str = message.message)
+      else:
+        colorWrapLabel(str = message.message, color = colors[message.color.ord])
 
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
