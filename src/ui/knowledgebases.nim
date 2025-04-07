@@ -267,7 +267,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     if skyBases[baseIndex].population > 0 and skyBases[
         baseIndex].reputation.level > -1:
       timeDiff = 7 - daysDifference(dateToCompare = skyBases[
-          baseIndex].askedForEvents)
+          baseIndex].missionsDate)
       if timeDiff > 0:
         tclEval(script = baseLabel & " insert end {\nNew missions available in }")
         tclEval(script = baseLabel & " insert end {" & $timeDiff & "} [list gold]")
