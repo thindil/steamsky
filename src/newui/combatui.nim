@@ -20,7 +20,7 @@
 
 import std/[math, strbasics, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[combat, config, crewinventory, game, maps, shipscrew, shipmodules, shipsmovement, types]
+import ../[combat, config, crewinventory, game, maps, messages, shipscrew, shipmodules, shipsmovement, types]
 import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
 
 const
@@ -283,6 +283,9 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
         if newOrder != engineerOrder - 1:
           engineerOrder = newOrder + 1
+          addMessage(message = "Order for " & playerShip.crew[findMember(
+              order = engineer)].name & " was set on: " & engineerOrders[
+              newOrder], mType = combatMessage)
       if newEngineer != engineerIndex:
         if newEngineer > 0:
           try:
@@ -360,6 +363,9 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
               selected = (gun[2] - 1), itemHeight = 25, x = 200, y = 150)
           if newOrder != gun[2] - 1:
             gun[2] = newOrder + 1
+            addMessage(message = "Order for " & playerShip.crew[
+                playerShip.modules[guns[gunIndex][1]].owner[0]].name &
+                " was set on: " & gunnerOrders[gun[2]], mType = combatMessage)
         if newGunner != gunnersIndex[gunIndex]:
           gunnersIndex[gunIndex] = newGunner
       # Show boarding/defending settings
