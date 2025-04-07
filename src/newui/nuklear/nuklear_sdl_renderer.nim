@@ -294,12 +294,12 @@ proc nuklearInput*(): UserEvents =
       case mEvnt.button:
       of SDL_BUTTON_LEFT.uint8:
         if mEvnt.clicks > 1:
-            nk_input_button(ctx, NK_BUTTON_DOUBLE, x, y, down)
-        nk_input_button(ctx, NK_BUTTON_LEFT, x, y, down)
+            nk_input_button(ctx, double, x, y, down)
+        nk_input_button(ctx, left, x, y, down)
       of SDL_BUTTON_MIDDLE.uint8:
-        nk_input_button(ctx, NK_BUTTON_MIDDLE, x, y, down)
+        nk_input_button(ctx, middle, x, y, down)
       of SDL_BUTTON_RIGHT.uint8:
-        nk_input_button(ctx, NK_BUTTON_RIGHT, x, y, down)
+        nk_input_button(ctx, right, x, y, down)
       else:
         discard
     else:

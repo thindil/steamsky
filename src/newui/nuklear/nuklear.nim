@@ -76,7 +76,7 @@ proc nk_input_end*(ctx) {.importc, nodecl, raises: [], tags: [], contractual.}
 proc nk_input_key*(ctx; key: nk_keys; down: nk_bool) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_input_button*(ctx; id: nk_buttons; x, y: cint; down: nk_bool) {.importc, nodecl,
+proc nk_input_button*(ctx; id: Buttons; x, y: cint; down: nk_bool) {.importc, nodecl,
     raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 
@@ -1082,27 +1082,27 @@ proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: va
     textWidth += (2.0 * t.padding.x)
 
     # align in x-axis
-    if (a and NK_TEXT_ALIGN_LEFT.ord).bool:
+    if (a and textLeft.ord).bool:
       label.x = b.x + t.padding.x
       label.w = max(0, b.w - 2 * t.padding.x)
-    elif (a and NK_TEXT_ALIGN_CENTERED.ord).bool:
+    elif (a and textCentered.ord).bool:
       label.w = max(1, 2 * t.padding.x + textWidth.float)
       label.x = (b.x + t.padding.x + ((b.w - 2 * t.padding.x) - label.w) / 2)
       label.x = max(b.x + t.padding.x, label.x)
       label.w = min(b.x + b.w, label.x + label.w)
       if label.w >= label.x:
         label.w -= label.x
-    elif (a and NK_TEXT_ALIGN_RIGHT.ord).bool:
+    elif (a and textRight.ord).bool:
       label.x = max(b.x + t.padding.x, (b.x + b.w) - (2 * t.padding.x + textWidth.float))
       label.w = textWidth.float + 2 * t.padding.x
     else:
       return
 
     # align in y-axis
-    if (a and NK_TEXT_ALIGN_MIDDLE.ord).bool:
+    if (a and textMiddle.ord).bool:
       label.y = b.y + b.h / 2.0 - f.height.float / 2.0
       label.h = max(b.h / 2.0, b.h - (b.h / 2.0 + f.height / 2.0))
-    elif (a and NK_TEXT_ALIGN_BOTTOM.ord).bool:
+    elif (a and textBottom.ord).bool:
       label.y = b.y + b.h - f.height
       label.h = f.height
 
@@ -1434,15 +1434,15 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       # window movement by dragging
       var buttons: ButtonsArray = cast[ButtonsArray](`in`.mouse.buttons)
       let
-        leftMouseDown: bool = buttons[NK_BUTTON_LEFT].down
-        leftMouseClicked: bool = buttons[NK_BUTTON_LEFT].clicked == 1
+        leftMouseDown: bool = buttons[Buttons.left].down
+        leftMouseClicked: bool = buttons[Buttons.left].clicked == 1
         leftMouseClickInCursor: bool = hasMouseClickDownInRect(id = left, rect = header, down = nkTrue)
         cursors: CursorsArray = cast[CursorsArray](ctx.style.cursors)
       if leftMouseDown and leftMouseClickInCursor and not leftMouseClicked:
         win.bounds.x += `in`.mouse.delta.x
         win.bounds.y += `in`.mouse.delta.y
-        buttons[NK_BUTTON_LEFT].clicked_pos.x += `in`.mouse.delta.x
-        buttons[NK_BUTTON_LEFT].clicked_pos.y += `in`.mouse.delta.y
+        buttons[Buttons.left].clicked_pos.x += `in`.mouse.delta.x
+        buttons[Buttons.left].clicked_pos.y += `in`.mouse.delta.y
         ctx.style.cursor_active = cursors[NK_CURSOR_MOVE]
       `in`.mouse.buttons = buttons.addr
 
@@ -2847,12 +2847,12 @@ proc createContextual(ctx; flags1: nk_flags; x1, y1: cfloat;
   ## Return true if the contextual menu was created successfully, otherwise
   ## false
   proc nk_contextual_begin(ctx; flags: nk_flags; size: nk_vec2;
-      triggerBounds: nk_rect; cButton: nk_buttons): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
+      triggerBounds: nk_rect; cButton: Buttons): nk_bool {.importc, nodecl, raises: [], tags: [], contractual.}
     ## A binding to Nuklear's function. Internal use only
   return nk_contextual_begin(ctx = ctx, flags = flags1, size = new_nk_vec2(
       x = x1, y = y1), triggerBounds = new_nk_rect(x = triggerBounds1.x,
       y = triggerBounds1.y, w = triggerBounds1.w, h = triggerBounds1.h),
-      cButton = btn.cint.nk_buttons)
+      cButton = btn.cint.Buttons)
 
 template contextualMenu*(flags: set[PanelFlags]; x, y;
     triggerBounds: NimRect; button: Buttons; content: untyped) =

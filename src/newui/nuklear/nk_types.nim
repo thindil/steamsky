@@ -55,14 +55,14 @@ type
   nk_layout_format* = enum
     ## Internal Nuklear type
     NK_DYNAMIC, NK_STATIC
-  nk_text_align* = enum
-    ## Internal Nuklear type
-    NK_TEXT_ALIGN_LEFT = 0x01,
-    NK_TEXT_ALIGN_CENTERED = 0x02,
-    NK_TEXT_ALIGN_RIGHT = 0x04,
-    NK_TEXT_ALIGN_TOP = 0x08,
-    NK_TEXT_ALIGN_MIDDLE = 0x10,
-    NK_TEXT_ALIGN_BOTTOM = 0x20
+  TextAlign* = enum
+    ## The alignment of a text
+    textLeft = 0x01,
+    textCentered = 0x02,
+    textRight = 0x04,
+    textTop = 0x08,
+    textMiddle = 0x10,
+    textBottom = 0x20
   TreeType* = enum
     ## The types of tree widget
     node, tab
@@ -132,13 +132,6 @@ type
       NK_KEY_TEXT_SELECT_ALL, NK_KEY_TEXT_WORD_LEFT, NK_KEY_TEXT_WORD_RIGHT,
       NK_KEY_SCROLL_START, NK_KEY_SCROLL_END, NK_KEY_SCROLL_DOWN,
       NK_KEY_SCROLL_UP, NK_KEY_ESCAPE, NK_KEY_MAX
-  nk_buttons* = enum
-    ## Internal Nuklear type
-    NK_BUTTON_LEFT,
-    NK_BUTTON_MIDDLE,
-    NK_BUTTON_RIGHT,
-    NK_BUTTON_DOUBLE,
-    NK_BUTTON_MAX
   nk_style_cursor* = enum
     ## Internal Nuklear type
     NK_CURSOR_ARROW,
@@ -416,7 +409,7 @@ type
     ## Pointer to nk_window structure
   PNkPanel* = ptr nk_panel
     ## Pointer to nk_panel structure
-  ButtonsArray* = array[NK_BUTTON_MAX, nk_mouse_button]
+  ButtonsArray* = array[Buttons.max, nk_mouse_button]
     ## The array of mouse buttons
   CursorsArray* = array[NK_CURSOR_COUNT, nk_cursor]
     ## The array of mouse buttons
@@ -494,9 +487,9 @@ type
     staticPopup, dynamicPopup
   TextAlignment* {.size: sizeof(cint).} = enum
     ## The alignments of a text
-    left = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_LEFT.int,
-    centered = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_CENTERED.int,
-    right = NK_TEXT_ALIGN_MIDDLE.int or NK_TEXT_ALIGN_RIGHT.int
+    left = textMiddle.int or textLeft.int,
+    centered = textMiddle.int or textCentered.int,
+    right = textMiddle.int or textRight.int
   EditFlags* {.size: sizeof(cint).} = enum
     ## The edit fields' flags
     default = 0,
@@ -571,7 +564,7 @@ converter toBool*(x: nk_bool): bool =
   ## Converts Nuklear nk_bool enum to Nim bool
   x == nkTrue
 converter toNkFlags*(x: TextAlignment): nk_flags =
-  ## Converts Nuklear nk_text_alignment enum to Nuklear nk_flags type
+  ## Converts Nuklear TextAlignment enum to Nuklear nk_flags type
   x.ord.cint
 converter toNkFlags*(x: EditTypes): nk_flags =
   ## Converts EditTypes enum to Nuklear nk_flags type
