@@ -21,7 +21,7 @@
 import std/[math, strbasics, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[combat, config, crewinventory, game, maps, shipscrew, shipmodules, shipsmovement, types]
-import coreui, dialogs, errordialog, header, themes, utilsui2
+import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
 
 const
   pilotOrders: array[4, string] = ["Go closer", "Keep distance", "Evade", "Escape"]
@@ -559,4 +559,6 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
       combatTurn()
     except:
       dialog = setError(message = "Can't make next turn in combat.")
+  setLayoutRowDynamic(height = windowHeight - 90 - height, cols = 1)
+  showLastMessages(theme = theme, dialog = dialog, inCombat = true)
   showGameMenu(dialog = dialog)
