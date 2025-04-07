@@ -209,7 +209,13 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Draw UI
   if pilotList.len != playerShip.crew.len + 1:
     updateCrewLists()
-  let height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  let
+    height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+    faction = try:
+        factionsList[playerShip.crew[0].faction]
+      except:
+        dialog = setError(message = "Can't get the player's faction.")
+        return
   if expandedSection == 0:
     setLayoutRowDynamic(height = height / 2, cols = 2)
   else:
@@ -249,6 +255,13 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             selected = (pilotOrder - 1), itemHeight = 25, x = 200, y = 150)
         if newOrder != pilotOrder - 1:
           pilotOrder = newOrder + 1
+          if "sentientships" in faction.flags:
+            addMessage(message = "Order for ship was set on: " & pilotOrders[
+              newOrder], mType = combatMessage)
+          else:
+            addMessage(message = "Order for " & playerShip.crew[findMember(
+                order = pilot)].name & " was set on: " & pilotOrders[newOrder],
+                mType = combatMessage)
       if newPilot != pilotIndex:
         if newPilot > 0:
           try:
@@ -283,9 +296,13 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             selected = (engineerOrder - 1), itemHeight = 25, x = 200, y = 150)
         if newOrder != engineerOrder - 1:
           engineerOrder = newOrder + 1
-          addMessage(message = "Order for " & playerShip.crew[findMember(
-              order = engineer)].name & " was set on: " & engineerOrders[
+          if "sentientships" in faction.flags:
+            addMessage(message = "Order for ship was set on: " & engineerOrders[
               newOrder], mType = combatMessage)
+          else:
+            addMessage(message = "Order for " & playerShip.crew[findMember(
+                order = engineer)].name & " was set on: " & engineerOrders[
+                newOrder], mType = combatMessage)
       if newEngineer != engineerIndex:
         if newEngineer > 0:
           try:
@@ -560,11 +577,13 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             else: theme.colors[redColor])):
           progressBar(value = damagePercent, maxValue = 100, modifyable = false)
   setLayoutRowDynamic(height = 35, cols = 1)
-  labelButton(title = "Next turn"):
-    try:
-      combatTurn()
-    except:
-      dialog = setError(message = "Can't make next turn in combat.")
-  setLayoutRowDynamic(height = windowHeight - 90 - height, cols = 1)
+  if not endCombat:
+    labelButton(title = "Next turn"):
+      try:
+        combatTurn()
+      except:
+        dialog = setError(message = "Can't make next turn in combat.")
+  let heightDiff: float = (if endCombat: 55 else: 90)
+  setLayoutRowDynamic(height = windowHeight - heightDiff - height, cols = 1)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true)
   showGameMenu(dialog = dialog)
