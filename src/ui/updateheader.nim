@@ -56,7 +56,7 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect]
   itemAmount = try:
       getItemsAmount(iType = "Drinks")
     except KeyError:
-      showError("Can't get items amount (2).")
+      showError(message = "Can't get items amount (2).")
       return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nodrinksicon -text {" &
@@ -75,7 +75,7 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect]
   itemAmount = try:
       getItemsAmount(iType = "Food")
     except KeyError:
-      showError("Can't get items amount (3).")
+      showError(message = "Can't get items amount (3).")
       return
   if itemAmount == 0:
     tclEval(script = label & " configure -image nofoodicon -text {" &
