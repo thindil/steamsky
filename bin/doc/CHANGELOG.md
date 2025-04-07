@@ -27,6 +27,8 @@ All notable changes to this project will be documented in this file.
 - Rouding the time needed to repair the player's ship in bases
 - Gaining or losing reputation in factions
 - Don't create bases at the map's borders
+- Showing information about availability of new missions in bases in the
+  knowledge screen
 
 ## [10.9] - 2025-03-23
 
