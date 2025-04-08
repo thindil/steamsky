@@ -29,6 +29,8 @@ All notable changes to this project will be documented in this file.
 - Don't create bases at the map's borders
 - Showing information about availability of new missions in bases in the
   knowledge screen
+- Showing information about home base when there are new missions available in
+  the selected base
 
 ## [10.9] - 2025-03-23
 
