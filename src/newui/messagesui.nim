@@ -43,7 +43,9 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     ##
     ## * message - the message to show
     let
-      colors: array[1..5, Color] = [theme.colors[yellowColor], theme.colors[greenColor], theme.colors[redColor], theme.colors[blueColor], theme.colors[cyanColor]]
+      colors: array[1..5, Color] = [theme.colors[yellowColor], theme.colors[
+          greenColor], theme.colors[redColor], theme.colors[blueColor],
+          theme.colors[cyanColor]]
       currentTurnTime: string = "[" & formattedTime() & "]"
       width: float = (if inCombat: windowWidth else: windowWidth * 0.75)
     var needLines: float = try:
@@ -59,9 +61,10 @@ proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
         if message.color == white:
           wrapLabel(str = message.message)
         else:
-          colorWrapLabel(str = message.message, color = colors[message.color.ord])
+          colorWrapLabel(str = message.message, color = colors[
+              message.color.ord])
       else:
-          colorWrapLabel(str = message.message, color = theme.colors[grayColor])
+        colorWrapLabel(str = message.message, color = theme.colors[grayColor])
     else:
       if message.color == white:
         wrapLabel(str = message.message)
