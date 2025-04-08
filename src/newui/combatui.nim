@@ -200,7 +200,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
   state = combat
-  showHeader(dialog = dialog)
+  showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
+      CloseDestination.none))
   # Draw dialogs
   showQuestion(dialog = dialog, state = state)
   showMessage(dialog = dialog)
@@ -576,8 +577,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
             elif damagePercent > 24: theme.colors[yellowColor]
             else: theme.colors[redColor])):
           progressBar(value = damagePercent, maxValue = 100, modifyable = false)
-  setLayoutRowDynamic(height = 35, cols = 1)
   if not endCombat:
+    setLayoutRowDynamic(height = 35, cols = 1)
     labelButton(title = "Next turn"):
       try:
         combatTurn()
