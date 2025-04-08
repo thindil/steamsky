@@ -1539,7 +1539,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       button.w = button.h
       if (win.flags and windowClosable.cint).nk_bool:
         var ws: nk_flags = 0
-        if style.window.header.align == NK_HEADER_RIGHT:
+        if style.window.header.align == headerRight:
           button.x = (header.w + header.x) - (button.w + style.window.header.padding.x)
           header.w -= button.w + style.window.header.spacing.x + style.window.header.padding.x
         else:
@@ -2324,7 +2324,7 @@ proc headerAlign*(value: StyleHeaderAlign) {.raises: [], tags: [],
   ## Set the Nuklear windows header alignment
   ##
   ## * value - the new value for the alignment
-  ctx.style.window.header.align = value.ord.nk_style_header_align
+  ctx.style.window.header.align = value.ord.StyleHeaderAlign
 
 var buttonStyle: nk_style_button = nk_style_button() ## Used to store the Nuklear buttons style
 

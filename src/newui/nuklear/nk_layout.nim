@@ -38,16 +38,16 @@ using ctx: PContext
 # ------------------
 proc nk_layout_row_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_layout_row_begin(ctx; fmt: nk_layout_format;
+proc nk_layout_row_begin(ctx; fmt: LayoutFormat;
     rowHeight: cfloat; ccols: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_layout_row_push(ctx; cwidth: cfloat) {.importc, cdecl, raises: [],
     tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_layout_row(ctx; fmt: nk_layout_format; height: cfloat;
+proc nk_layout_row(ctx; fmt: LayoutFormat; height: cfloat;
     cols: cint; ratio: pointer) {.importc, nodecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
-proc nk_layout_space_begin(ctx; fmt: nk_layout_format;
+proc nk_layout_space_begin(ctx; fmt: LayoutFormat;
     cheight: cfloat; widgetCount: cint) {.importc, cdecl, raises: [], tags: [], contractual.}
   ## A binding to Nuklear's function. Internal use only
 proc nk_layout_space_end(ctx) {.importc, cdecl, raises: [], tags: [], contractual.}
@@ -91,7 +91,7 @@ template layoutStatic*(height: float; cols: int; content: untyped) =
   ## * height  - the width in pixels or window's ratio of each row
   ## * cols    - the amount of columns in each row
   ## * content - the content of the layout
-  nk_layout_row_begin(ctx = ctx, fmt = NK_STATIC, rowHeight = height.cfloat,
+  nk_layout_row_begin(ctx = ctx, fmt = static, rowHeight = height.cfloat,
       ccols = cols.cint)
   content
   nk_layout_row_end(ctx = ctx)
@@ -103,7 +103,7 @@ template layoutDynamic*(height: float; cols: int; content: untyped) =
   ## * height   - the width in pixels or window's ratio of each row
   ## * cols    - the amount of columns in each row
   ## * content - the content of the layout
-  nk_layout_row_begin(ctx = ctx, fmt = NK_DYNAMIC, rowHeight = height.cfloat,
+  nk_layout_row_begin(ctx = ctx, fmt = dynamic, rowHeight = height.cfloat,
       ccols = cols.cint)
   content
   nk_layout_row_end(ctx = ctx)
@@ -125,7 +125,7 @@ proc setLayoutRowStatic*(height: float; cols: int; ratio: openArray[
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
   ## * ratio  - the array or sequence of cfloat with width of the colums
-  nk_layout_row(ctx = ctx, fmt = NK_STATIC, height = height.cfloat,
+  nk_layout_row(ctx = ctx, fmt = static, height = height.cfloat,
       cols = cols.cint, ratio = ratio.addr)
 
 proc setLayoutRowDynamic*(height: float; cols: int; ratio: openArray[
@@ -137,7 +137,7 @@ proc setLayoutRowDynamic*(height: float; cols: int; ratio: openArray[
   ## * height - the height in pixels of each row
   ## * cols   - the amount of columns in each row
   ## * ratio  - the array or sequence of cfloat with width of the colums
-  nk_layout_row(ctx = ctx, fmt = NK_DYNAMIC, height = height.cfloat,
+  nk_layout_row(ctx = ctx, fmt = dynamic, height = height.cfloat,
       cols = cols.cint, ratio = ratio.addr)
 
 template layoutSpaceStatic*(height: float; widgetsCount: int;
@@ -148,7 +148,7 @@ template layoutSpaceStatic*(height: float; widgetsCount: int;
   ## * height       - the width in pixels or window's ratio of each row
   ## * widgetsCount - the amount of widgets in each row.
   ## * content      - the content of the layout
-  nk_layout_space_begin(ctx = ctx, fmt = NK_STATIC, cheight = height.cfloat,
+  nk_layout_space_begin(ctx = ctx, fmt = static, cheight = height.cfloat,
       widgetCount = widgetsCount.cint)
   content
   nk_layout_space_end(ctx = ctx)
@@ -161,7 +161,7 @@ template layoutSpaceDynamic*(height: float; widgetsCount: int;
   ## * height       - the width in pixels or window's ratio of each row
   ## * widgetsCount - the amount of widgets in each row.
   ## * content      - the content of the layout
-  nk_layout_space_begin(ctx = ctx, fmt = NK_DYNAMIC, cheight = height.cfloat,
+  nk_layout_space_begin(ctx = ctx, fmt = dynamic, cheight = height.cfloat,
       widgetCount = widgetsCount.cint)
   content
   nk_layout_space_end(ctx = ctx)

@@ -49,12 +49,12 @@ type
 # Enumerations
 # ------------
 type
-  nk_style_header_align* = enum
-    ## Internal Nuklear type
-    NK_HEADER_LEFT, NK_HEADER_RIGHT
-  nk_layout_format* = enum
-    ## Internal Nuklear type
-    NK_DYNAMIC, NK_STATIC
+  StyleHeaderAlign* = enum
+    ## The window's header alignment
+    headerLeft, headerRight
+  LayoutFormat* = enum
+    ## The layout format
+    dynamic, static
   TextAlign* = enum
     ## The alignment of a text
     textLeft = 0x01,
@@ -188,7 +188,7 @@ type
     data*: pointer
   nk_style_window_header* {.importc, nodecl.} = object
     ## Internal Nuklear type
-    align*: nk_style_header_align
+    align*: StyleHeaderAlign
     padding*, label_padding*, spacing*: nk_vec2
     active*, hover*, normal*: nk_style_item
     label_active*, label_hover*, label_normal*: nk_color
@@ -540,9 +540,6 @@ type
       headerTextColor, groupTextColor, selectActiveTextColor, propertyTextColor,
       popupColor, popupBorderColor, progressbarColor, progressbarBorderColor,
       countColors
-  StyleHeaderAlign* = enum
-    ## The styles of the window's header
-    headerLeft, headerRight
   ButtonBehavior* = enum
     ## The types of buttons behavior
     default, repeater
