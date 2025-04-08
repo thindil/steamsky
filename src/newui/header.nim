@@ -204,11 +204,18 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
             text = "Ship is dirty but no one is cleaning it.")
       image(image = images[noCleanIcon], padding = NimVec2(x: 5, y: 5))
 
-proc showHeader*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+type
+  CloseDestination* = enum
+    ## Destination for the close button in the header
+    none, combat, map
+
+proc showHeader*(dialog: var GameDialog;
+    close: CloseDestination = none) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Show the game's header
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * close  - the close button's destination. If none, don't show the button
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show.
