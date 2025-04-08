@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the game's UI header, like showing the ship info,
+## time and buttons. Split from the map's UI module to avoid circular dependencies.
+
 import std/tables
 import contracts
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
