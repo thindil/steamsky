@@ -23,11 +23,11 @@ import contracts, nimalyzer
 import ../[basestypes, config, game, maps, messages, reputation, tk, types, utils]
 import coreui, dialogs, errordialog, table
 
-{.push ruleOff:"varDeclared".}
+{.push ruleOff: "varDeclared".}
 var
   basesTable: TableWidget
   basesIndexes: seq[Positive] = @[]
-{.pop ruleOn:"varDeclared".}
+{.pop ruleOn: "varDeclared".}
 
 proc updateBasesList*(baseName: string = "", page: Positive = 1) {.
     raises: [], tags: [RootEffect], contractual.} =
@@ -235,6 +235,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyX & "} [list gold]")
   tclEval(script = baseLabel & " insert end { Y: }")
   tclEval(script = baseLabel & " insert end {" & $skyBases[baseIndex].skyY & "} [list gold]")
+  var linesDiff: int = (if skyBases[baseIndex].visited.year > 0: 1 else: 0)
   if skyBases[baseIndex].visited.year > 0:
     tclEval(script = baseLabel & " insert end {\nLast visited: }")
     tclEval(script = baseLabel & " insert end {" & formattedTime(
@@ -274,6 +275,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval(script = baseLabel & " insert end { days.}")
       else:
         tclEval(script = baseLabel & " insert end {\nNew missions available now.} [list green]")
+        linesDiff.dec
     else:
       tclEval(script = baseLabel & " insert end {\nYou can't take missions at this base.} [list red]")
 
@@ -311,8 +313,8 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   try:
     tclEval(script = baseLabel & " configure -state disabled -height " & $((
         tclEval2(script = baseLabel & " count -displaylines 0.0 end").parseInt /
-        tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) - (
-        if skyBases[baseIndex].visited.year > 0: 1 else: 0)))
+        tclEval2(script = "font metrics InterfaceFont -linespace").parseInt) -
+        linesDiff.float))
   except:
     return showError(message = "Can't configure text field.")
   tclEval(script = "grid " & baseLabel & " -row 1 -columnspan 3 -padx 5 -pady {5 0} -sticky w")
