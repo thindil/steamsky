@@ -23,7 +23,8 @@ import std/[logging, os, strutils, tables, xmlparser, xmltree]
 import contracts
 import bases, basescargo, basesship, basestypes, careers, config, crafts, crew,
     events, factions, game, gamesaveload, goals, help, items, log, maps,
-    messages, missions, mobs, reputation, shipmodules, ships, shipscrew, shipsrepairs,
+    messages, missions, mobs, reputation, shipmodules, ships, shipscrew,
+        shipsrepairs,
     shipsupgrade, statistics, stories, types, utils
 
 proc updateGame*(minutes: Positive; inCombat: bool = false) {.raises: [KeyError,
@@ -319,6 +320,79 @@ proc setGameStats(): FactionData {.raises: [KeyError], tags: [],
           break
         index.inc
 
+proc setBases(maxSpawnRoll: Natural; basesArray: var Table[string, seq[
+    Positive]]) {.raises: [KeyError], tags: [], contractual.} =
+  ## Set bases in the new game
+  ##
+  ## * maxSpawnRoll - the max chance for any base to spawn
+  ## * basesArray   - the temporary list of bases
+  ##
+  ## Returns the modified parameter basesArray
+  var
+    baseOwner, baseType: string = ""
+    basePopulation: Natural = 0
+    baseReputation: ReputationRange = 0
+    baseSize: BasesSize = unknown
+  for index, skyBase in skyBases.mpairs:
+    var factionRoll: Natural = getRandom(min = 1, max = maxSpawnRoll)
+    for index, faction in factionsList:
+      if factionRoll < faction.spawnChance:
+        baseOwner = index
+        basePopulation = (if faction.population[2] == 0: faction.population[
+            1] else: getRandom(min = faction.population[1],
+                max = faction.population[2]))
+        baseReputation = getReputation(
+            sourceFaction = newGameSettings.playerFaction,
+            targetFaction = index)
+        var maxBaseSpawnRoll: Natural = 0
+        for spawnChance in faction.basesTypes.values:
+          maxBaseSpawnRoll += spawnChance
+        var baseTypeRoll: Positive = getRandom(min = 1,
+            max = maxBaseSpawnRoll)
+        for tindex, baseTypeChance in faction.basesTypes:
+          if baseTypeRoll <= baseTypeChance:
+            baseType = tindex
+            break
+          baseTypeRoll -= baseTypeChance
+        break
+      factionRoll -= faction.spawnChance
+    if baseOwner.len == 0:
+      baseOwner = newGameSettings.playerFaction
+    baseSize = case basePopulation
+      of 0:
+        getRandom(min = 0, max = 2).BasesSize
+      of 1..149:
+        small
+      of 150..299:
+        medium
+      else: big
+    skyBase.name = generateBaseName(factionIndex = baseOwner)
+    skyBase.visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBase.skyX = 1
+    skyBase.skyY = 1
+    skyBase.baseType = baseType
+    skyBase.population = basePopulation
+    skyBase.recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBase.known = false
+    skyBase.askedForBases = false
+    skyBase.askedForEvents = DateRecord(year: 0, month: 0, day: 0,
+        hour: 0, minutes: 0)
+    skyBase.reputation = ReputationData(level: baseReputation, experience: 0)
+    skyBase.missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
+    skyBase.missions = @[]
+    skyBase.owner = baseOwner
+    skyBase.size = baseSize
+    skyBase.recruits = @[]
+    let baseFaction: FactionData = factionsList[baseOwner]
+    if "loner" in baseFaction.flags:
+      factionRoll = getRandom(min = 1, max = maxSpawnRoll)
+      for index, faction in factionsList:
+        if factionRoll > faction.spawnChance:
+          factionRoll -= faction.spawnChance
+        else:
+          baseOwner = index
+    basesArray[baseOwner].add(y = index)
+
 proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
     Exception], tags: [WriteIOEffect, ReadIOEffect], contractual.} =
   ## Start a new game, save configuration, create bases, fill the map, create
@@ -344,70 +418,7 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
     for index, faction in factionsList:
       maxSpawnRoll += faction.spawnChance
       basesArray[index] = @[]
-    var
-      baseOwner, baseType: string = ""
-      basePopulation: Natural = 0
-      baseReputation: ReputationRange = 0
-      baseSize: BasesSize = unknown
-    for i in skyBases.low..skyBases.high:
-      var factionRoll: Natural = getRandom(min = 1, max = maxSpawnRoll)
-      for index, faction in factionsList:
-        if factionRoll < faction.spawnChance:
-          baseOwner = index
-          basePopulation = (if faction.population[2] == 0: faction.population[
-              1] else: getRandom(min = faction.population[1],
-                  max = faction.population[2]))
-          baseReputation = getReputation(
-              sourceFaction = newGameSettings.playerFaction,
-              targetFaction = index)
-          var maxBaseSpawnRoll: Natural = 0
-          for spawnChance in faction.basesTypes.values:
-            maxBaseSpawnRoll += spawnChance
-          var baseTypeRoll: Positive = getRandom(min = 1,
-              max = maxBaseSpawnRoll)
-          for tindex, baseTypeChance in faction.basesTypes:
-            if baseTypeRoll <= baseTypeChance:
-              baseType = tindex
-              break
-            baseTypeRoll -= baseTypeChance
-          break
-        factionRoll -= faction.spawnChance
-      if baseOwner.len == 0:
-        baseOwner = newGameSettings.playerFaction
-      baseSize = case basePopulation
-        of 0:
-          getRandom(min = 0, max = 2).BasesSize
-        of 1..149:
-          small
-        of 150..299:
-          medium
-        else: big
-      skyBases[i].name = generateBaseName(factionIndex = baseOwner)
-      skyBases[i].visited = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-      skyBases[i].skyX = 1
-      skyBases[i].skyY = 1
-      skyBases[i].baseType = baseType
-      skyBases[i].population = basePopulation
-      skyBases[i].recruitDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-      skyBases[i].known = false
-      skyBases[i].askedForBases = false
-      skyBases[i].askedForEvents = DateRecord(year: 0, month: 0, day: 0,
-          hour: 0, minutes: 0)
-      skyBases[i].reputation = ReputationData(level: baseReputation, experience: 0)
-      skyBases[i].missionsDate = DateRecord(year: 0, month: 0, day: 0, hour: 0, minutes: 0)
-      skyBases[i].missions = @[]
-      skyBases[i].owner = baseOwner
-      skyBases[i].size = baseSize
-      skyBases[i].recruits = @[]
-      let baseFaction: FactionData = factionsList[baseOwner]
-      if "loner" in baseFaction.flags:
-        factionRoll = getRandom(min = 1, max = maxSpawnRoll)
-        for index, faction in factionsList:
-          if factionRoll > faction.spawnChance:
-            factionRoll -= faction.spawnChance
-          else:
-            baseOwner = index
-      basesArray[baseOwner].add(y = i)
+    setBases(maxSpawnRoll = maxSpawnRoll, basesArray = basesArray)
     for factionBases in basesArray.values:
       for index, faction in factionBases:
         var
@@ -437,8 +448,10 @@ proc newGame*() {.raises: [OSError, KeyError, IOError, ValueError,
               posY = BasesRange.high - 10
             attempts.inc
             if attempts > 250:
-              posX = getRandom(min = BasesRange.low + 10, max = BasesRange.high - 10)
-              posY = getRandom(min = BasesRange.low + 10, max = BasesRange.high - 10)
+              posX = getRandom(min = BasesRange.low + 10,
+                  max = BasesRange.high - 10)
+              posY = getRandom(min = BasesRange.low + 10,
+                  max = BasesRange.high - 10)
               attempts = 1
           for j in -5..5:
             var tempX: int = posX + j
