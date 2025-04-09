@@ -24,8 +24,9 @@ import themes
 type GameState* = enum
   ## Used to determine the current game's state.
   quitGame, mainMenu, news, allNews, about, showFile, hallOfFame, loadGame,
-      loadingGame, newGame, map, endGame, combat, trade, school, recruits,
-      healWounded, repairShip, shipyard, buyRecipes, baseMissions, loot
+      loadingGame, newGame, map, endGame, combat, boarding, trade, school,
+      recruits, healWounded, repairShip, shipyard, buyRecipes, baseMissions,
+      loot
 
 type GameDialog* = enum
   ## Used to show any in-game dialog window

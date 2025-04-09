@@ -587,7 +587,20 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
         combatTurn()
       except:
         dialog = setError(message = "Can't make next turn in combat.")
+      if playerShip.crew[0].order == boarding:
+        state = boarding
   let heightDiff: float = (if endCombat: 55 else: 90)
   setLayoutRowDynamic(height = windowHeight - heightDiff - height, cols = 1)
   showLastMessages(theme = theme, dialog = dialog, inCombat = true)
   showGameMenu(dialog = dialog)
+
+proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the boarding UI
+  ##
+  ## * state - the current game's state
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameters state and dialog. The latter is modified if
+  ## any error happened.
+  state = boarding
