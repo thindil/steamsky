@@ -199,11 +199,14 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  state = combat
   showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
-      CloseDestination.none))
+      CloseDestination.none), state = state)
+  if state != GameState.combat:
+    return
   # Draw dialogs
   showQuestion(dialog = dialog, state = state)
+  if state != GameState.combat:
+    return
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
   showPartyMenu(dialog = dialog)
