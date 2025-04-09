@@ -209,13 +209,13 @@ type
     ## Destination for the close button in the header
     none, combat, map
 
-proc showHeader*(dialog: var GameDialog;
-    close: CloseDestination = none) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
+    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the game's header
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ## * close  - the close button's destination. If none, don't show the button
+  ## * state  - the current state of the game
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show.
@@ -301,6 +301,8 @@ proc showHeader*(dialog: var GameDialog;
       needRepairs = true
   setRowTemplate(height = 35):
     rowTemplateStatic(width = 40)
+    if close != none:
+      rowTemplateStatic(width = 40)
     rowTemplateDynamic()
     rowTemplateStatic(width = 35)
     try:
@@ -345,6 +347,15 @@ proc showHeader*(dialog: var GameDialog;
     if dialog == none:
       setDialog(y = 20)
       dialog = gameMenuDialog
+  if close != none:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Back to the " & $close & " screen")
+    imageButton(image = images[exitIcon]):
+      if close == combat:
+        state = combat
+      else:
+        state = map
   if gameSettings.showNumbers:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
