@@ -39,7 +39,7 @@ proc createGameUi*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     # Load images
     try:
       for index, fileName in themesList[gameSettings.interfaceTheme].icons[
-          menuIcon..assignCrewIcon]:
+          menuIcon..exitIcon]:
         images[(index + 4).IconsNames] = nuklearLoadSVGImage(
             filePath = fileName, width = 0, height = 20 +
             gameSettings.interfaceFontSize)
@@ -655,7 +655,7 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog)
+  showHeader(dialog = dialog, state = state)
   # draw dialogs
   showQuestion(dialog = dialog, state = state)
   showShipOrders(dialog = dialog, state = state)
