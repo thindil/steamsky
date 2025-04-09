@@ -82,9 +82,9 @@ type
     ## The types of symbolic icons
     none, x, underscore, circleSolid, circleOutline, rectSolid, rectOutline,
       triangleUp, triangleDown, triangleLeft, triangleRight, plus, minus, max
-  nk_style_item_type* = enum
+  StyleItemType* = enum
     ## Internal Nuklear type
-    NK_STYLE_ITEM_COLOR, NK_STYLE_ITEM_IMAGE, NK_STYLE_ITEM_NINE_SLICE
+    itemColor, itemImage, itemNineSlice
   colorFormat* = enum
     ## Colors formats
     rgb, rgba
@@ -184,7 +184,7 @@ type
     slice*: nk_nine_slice
   nk_style_item* {.importc: "struct nk_style_item", nodecl.} = object
     ## Internal Nuklear type
-    `type`*: nk_style_item_type
+    `type`*: StyleItemType
     data*: pointer
   nk_style_window_header* {.importc, nodecl.} = object
     ## Internal Nuklear type

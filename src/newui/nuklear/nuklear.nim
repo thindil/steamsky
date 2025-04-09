@@ -1196,15 +1196,15 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
 
   let bg: nk_style_item_data = cast[nk_style_item_data](result.data)
   case result.`type`
-  of NK_STYLE_ITEM_IMAGE:
+  of itemImage:
     nkDrawImage(b = `out`, r = bounds, img = bg.image.addr, col =
       nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
       factor = style.color_factor_background))
-  of NK_STYLE_ITEM_NINE_SLICE:
+  of itemNineSlice:
     nkDrawNineSlice(b = `out`, r = bounds, slc = bg.slice.addr, col =
       nk_rgb_factor(col = nk_rgba(r = 255, g = 255, b = 255, a = 255),
       factor = style.color_factor_background))
-  of NK_STYLE_ITEM_COLOR:
+  of itemColor:
     nkFillRect(b = `out`, rect = bounds, rounding = style.rounding, c =
       nk_rgb_factor(col = bg.color, factor = style.color_factor_background))
     nkStrokeRect(b = `out`, rect = bounds, rounding = style.rounding,
@@ -1262,7 +1262,7 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: var NimRe
   # select correct colors/images
   let background: nk_style_item = nkDrawButton(`out` = `out`, bounds = bounds,
     state = state, style = style)
-  let bg: nk_color = (if background.`type` == NK_STYLE_ITEM_COLOR:
+  let bg: nk_color = (if background.`type` == itemColor:
     cast[nk_style_item_data](background.data).color else: style.text_background)
 
   var sym: nk_color = (if (state and NK_WIDGET_STATE_HOVER.ord).bool:
@@ -1522,13 +1522,13 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
       header.h += 1.0
       let bg: nk_style_item_data = cast[nk_style_item_data](background.data)
       case background.`type`
-      of NK_STYLE_ITEM_IMAGE:
+      of itemImage:
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
         nkDrawImage(b = win.buffer.addr, r = header, img = bg.image.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
-      of NK_STYLE_ITEM_NINE_SLICE:
+      of itemNineSlice:
         text.background = nk_rgba(r = 0, g = 0, b = 0, a = 0)
         nkDrawNineSlice(b = win.buffer.addr, r = header, slc = bg.slice.addr, col = nk_rgba(r = 255, g = 255, b = 255, a = 255))
-      of NK_STYLE_ITEM_COLOR:
+      of itemColor:
         text.background = bg.color
         nkFillRect(b = `out`.addr, rect = header, rounding = 0, c = bg.color)
 
