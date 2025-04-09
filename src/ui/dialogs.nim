@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -269,6 +269,7 @@ proc showInfo*(text: string; parentName: string = ".gameframe"; title: string;
   addCloseButton(name = buttonsFrame & ".button", text = "Close",
       command = closeCommand, column = (if button1.text.len > 0: 1 else: 0),
       icon = "exiticon")
+  tclEval(script = "bind " & infoLabel & " <Escape> {" & buttonsFrame & ".button invoke;break}")
   button = buttonsFrame & ".button"
   if button2.text.len > 0 and button2.command.len > 1:
     tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button2;break}")
