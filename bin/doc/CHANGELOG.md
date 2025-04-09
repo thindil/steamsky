@@ -31,6 +31,8 @@ All notable changes to this project will be documented in this file.
   knowledge screen
 - Showing information about home base when there are new missions available in
   the selected base
+- Hide info about an item in the player's ship's crew member's inventory with
+  Escape key
 
 ## [10.9] - 2025-03-23
 
