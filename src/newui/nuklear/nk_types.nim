@@ -98,7 +98,7 @@ type
     left, middle, right, double, max
   nk_anti_aliasing* = enum
     ## Internal Nuklear type
-    NK_ANTI_ALIASING_OFF, NK_ANTI_ALIASING_ON
+    antiAliasingOff, antiAliasingOn
   nk_window_flags* = enum
     ## Internal Nuklear type
     NK_WINDOW_DYNAMIC = 1 shl 11

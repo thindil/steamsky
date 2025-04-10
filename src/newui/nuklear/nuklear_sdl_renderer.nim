@@ -312,7 +312,7 @@ proc nuklearDraw*() =
   discard SDL_SetRenderDrawColor(renderer, (0.10 * 255).uint8, (0.18 *
       255).uint8, (0.24 * 255).uint8, 255)
   discard SDL_RenderClear(renderer)
-  nk_sdl_render(NK_ANTI_ALIASING_ON)
+  nk_sdl_render(antiAliasingOn)
   SDL_RenderPresent(renderer)
 
 proc nuklearClose*() =
