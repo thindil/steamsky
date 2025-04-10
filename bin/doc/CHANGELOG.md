@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
   the selected base
 - Hide info about an item in the player's ship's crew member's inventory with
   Escape key
+- Hide drop item from the player's ship's cargo dialog with Escape key
 
 ## [10.9] - 2025-03-23
 
