@@ -26,7 +26,7 @@ import coreui, dialogs, errordialog
 proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Update in-game header with information about time, state of the crew
   ## members, etc.
-  var label = gameHeader & ".time"
+  var label: string = gameHeader & ".time"
   tclEval(script = label & " configure -text {" & formattedTime() & "}")
   if gameSettings.showNumbers:
     try:
@@ -37,7 +37,7 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect]
       return
     tclEval(script = "tooltip::tooltip " & label & " \"Game time and current ship speed.\"")
   label = gameHeader & ".fuel"
-  var itemAmount = try:
+  var itemAmount: Natural = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
         showError(message = "Can't get items amount.")
@@ -94,7 +94,7 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect]
         $itemAmount & "} -style Headergreen.TLabel")
     tclEval(script = "tooltip::tooltip " & label & " \"The amount of food in the ship's cargo.\"")
   var havePilot, haveEngineer, haveTrader, haveUpgrader, haveCleaner,
-    haveRepairman = false
+    haveRepairman: bool = false
   for member in playerShip.crew:
     case member.order
     of pilot:
@@ -114,16 +114,16 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect]
   label = gameHeader & ".overloaded"
   tclEval(script = "grid remove " & label)
   let
-    faction = try:
+    faction: FactionData = try:
         factionsList[playerShip.crew[0].faction]
       except KeyError:
         showError(message = "Can't get faction.")
         return
-    frame = mainPaned & ".combat"
+    frame: string = mainPaned & ".combat"
   if ((havePilot and haveEngineer) or "sentientships" in faction.flags) and (
       tclEval2(script = "winfo exists " & frame) == "0" or tclEval2(
       script = "winfo ismapped " & frame) == "0"):
-    let speed = try:
+    let speed: float = try:
           (if playerShip.speed != docked: realSpeed(
               ship = playerShip).float / 1_000.0 else: realSpeed(
                   ship = playerShip,
@@ -135,8 +135,8 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect]
       tclEval(script = "tooltip::tooltip " & label & " \"You can't fly with your ship, because it is overloaded.\"")
       tclEval(script = "grid " & label)
   var
-    haveGunner, haveWorker = true
-    needWorker, needCleaning, needRepairs = false
+    haveGunner, haveWorker: bool = true
+    needWorker, needCleaning, needRepairs: bool = false
   for module in playerShip.modules:
     try:
       case modulesList[module.protoIndex].mType
