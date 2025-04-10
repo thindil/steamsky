@@ -312,7 +312,8 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = "grid " & label & " -row " & $row & " -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.damage.scrolly")
     let
-      damagePercent: float = module.durability.float / module.maxDurability.float
+      damagePercent: float = module.durability.float /
+          module.maxDurability.float
       progressBar: string = frame & ".dmg" & $row
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -length 150 -maximum 1.0 -value " &
@@ -463,7 +464,8 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = "grid " & label & " -row " & $row & " -column 0 -sticky w -padx 5")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.status.scrolly")
     let
-      damagePercent: float = (module.durability.float / module.maxDurability.float)
+      damagePercent: float = (module.durability.float /
+          module.maxDurability.float)
       progressBar: string = frame & ".dmg" & $row
     tclEval(script = "ttk::progressbar " & progressBar &
         " -orient horizontal -length 150 -maximum 1.0 -value " &
@@ -596,7 +598,10 @@ proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
   tclEval(script = combatCanvas & " yview moveto 0.0")
   updateCombatMessages()
 
-proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint; argv: cstringArray): TclResults {.raises: [], tags: [ WriteIOEffect, TimeEffect, RootEffect, RootEffect], contractual, cdecl, ruleOff: "params".} =
+proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+    TimeEffect, RootEffect, RootEffect], contractual, cdecl,
+    ruleOff: "params".} =
   ## Excecute the combat orders and go the next turn
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1334,7 +1339,8 @@ proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [],
         addCommand(name = "SetCombatOrder", nimProc = setCombatOrderCommand)
         addCommand(name = "SetBoardingOrder", nimProc = setBoardingOrderCommand)
         addCommand(name = "SetCombatParty", nimProc = setCombatPartyCommand)
-        addCommand(name = "SetCombatPosition", nimProc = setCombatPositionCommand)
+        addCommand(name = "SetCombatPosition",
+            nimProc = setCombatPositionCommand)
         addCommand(name = "ShowCombatInfo", nimProc = showCombatInfoCommand)
         addCommand(name = "CombatMaxMin", nimProc = combatMaxMinCommand)
         addCommand(name = "ToggleAllCombat", nimProc = toggleAllCombatCommand)
