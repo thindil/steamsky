@@ -47,7 +47,7 @@ var
   dialogY*: float = 0          ## The Y position of a dialog
   redraw*: bool = true         ## If true, redraw the game
   inCombat*: bool = false      ## If true, the player is in combat
-  images*: array[menuIcon..exitIcon, PImage] ## The images used in the game
+  images*: array[menuIcon..IconsNames.high, PImage] ## The images used in the game
   theme*: ThemeData = defaultTheme ## The current game's theme
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
