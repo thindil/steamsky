@@ -603,4 +603,31 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  state = boarding
+  showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
+      CloseDestination.none), state = state)
+  if state != GameState.combat:
+    return
+  # Draw dialogs
+  showQuestion(dialog = dialog, state = state)
+  if state != GameState.combat:
+    return
+  showMessage(dialog = dialog)
+  showInfo(dialog = dialog)
+  let
+    height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
+  if expandedSection == 0:
+    setLayoutRowDynamic(height = height / 2, cols = 2)
+  else:
+    setLayoutRowDynamic(height = height, cols = 1)
+  # The player's ship's crew orders
+  if expandedSection in {0, 1}:
+    group(title = "Your crew:", flags = {windowBorder, windowTitle}):
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize your crew list")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+        if expandedSection == 1:
+          expandedSection = 0
+        else:
+          expandedSection = 1
