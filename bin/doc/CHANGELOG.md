@@ -34,6 +34,8 @@ All notable changes to this project will be documented in this file.
 - Hide info about an item in the player's ship's crew member's inventory with
   Escape key
 - Hide drop item from the player's ship's cargo dialog with Escape key
+- Hide the assign crew member dialog to the player's ship's module with Escape
+  key
 
 ## [10.9] - 2025-03-23
 
