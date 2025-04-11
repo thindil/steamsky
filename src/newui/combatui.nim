@@ -619,6 +619,10 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setLayoutRowDynamic(height = height / 2, cols = 2)
   else:
     setLayoutRowDynamic(height = height, cols = 1)
+  var ordersList: seq[string] = @[]
+  for member in game.enemy.ship.crew:
+    ordersList.add(y = "Attack " & member.name)
+  ordersList.add(y = "Back to the ship")
   # The player's ship's crew orders
   if expandedSection in {0, 1}:
     group(title = "Your crew:", flags = {windowBorder, windowTitle}):
@@ -635,6 +639,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = "Member", alignment = centered)
       label(str = "Health", alignment = centered)
       label(str = "Order", alignment = centered)
+      var orderIndex: Natural = 0
       for index, member in playerShip.crew:
         if member.order != boarding:
           continue
@@ -645,5 +650,13 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
           color = (if health == 100: theme.colors[greenColor]
             elif health > 24: theme.colors[yellowColor]
             else: theme.colors[redColor])):
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "The crew member's health.")
           progressBar(value = health, maxValue = 100, modifyable = false)
-        label(str = "placeholder")
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "The crew member current order.")
+        let newOrder = comboList(items = ordersList,
+            selected = orderIndex, itemHeight = 25, x = 200, y = 150)
+        orderIndex.inc
