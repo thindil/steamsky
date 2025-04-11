@@ -23,7 +23,8 @@ import contracts
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
-proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
   ## Update in-game header with information about time, state of the crew
   ## members, etc.
   var label: string = gameHeader & ".time"
@@ -124,10 +125,9 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect]
       tclEval2(script = "winfo exists " & frame) == "0" or tclEval2(
       script = "winfo ismapped " & frame) == "0"):
     let speed: float = try:
-          (if playerShip.speed != docked: realSpeed(
-              ship = playerShip).float / 1_000.0 else: realSpeed(
-                  ship = playerShip,
-              infoOnly = true).float / 1_000)
+          (if playerShip.speed == docked: realSpeed(ship = playerShip,
+              infoOnly = true).float / 1_000 else: realSpeed(
+              ship = playerShip).float / 1_000.0)
         except ValueError:
           showError(message = "Can't count speed.")
           return
