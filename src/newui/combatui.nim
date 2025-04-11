@@ -630,7 +630,8 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Maximize/minimize your crew list")
-      imageButton(image = (if expandedSection == 0: images[expandIcon] else: images[contractIcon])):
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else:
+        images[contractIcon])):
         if expandedSection == 1:
           expandedSection = 0
         else:
@@ -657,6 +658,8 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "The crew member current order.")
-        let newOrder = comboList(items = ordersList,
-            selected = orderIndex, itemHeight = 25, x = 200, y = 150)
+        let newOrder = comboList(items = ordersList, selected = (if boardingOrders[orderIndex] > -1: boardingOrders[orderIndex] else: ordersList.high), itemHeight = 25, x = 200, y = 150)
+        if newOrder != boardingOrders[orderIndex]:
+          boardingOrders[orderIndex] = (if newOrder == game.enemy.ship.crew.len: -1
+            else: newOrder)
         orderIndex.inc
