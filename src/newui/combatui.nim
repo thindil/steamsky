@@ -605,11 +605,11 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ## any error happened.
   showHeader(dialog = dialog, close = (if endCombat: CloseDestination.map else:
       CloseDestination.none), state = state)
-  if state != GameState.combat:
+  if state != boarding:
     return
   # Draw dialogs
   showQuestion(dialog = dialog, state = state)
-  if state != GameState.combat:
+  if state != boarding:
     return
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
@@ -631,3 +631,19 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
           expandedSection = 0
         else:
           expandedSection = 1
+      setLayoutRowDynamic(height = 25, cols = 3)
+      label(str = "Member", alignment = centered)
+      label(str = "Health", alignment = centered)
+      label(str = "Order", alignment = centered)
+      for index, member in playerShip.crew:
+        if member.order != boarding:
+          continue
+        labelButton(title = member.name):
+          discard
+        var health: int = member.health
+        changeStyle(field = progressbar,
+          color = (if health == 100: theme.colors[greenColor]
+            elif health > 24: theme.colors[yellowColor]
+            else: theme.colors[redColor])):
+          progressBar(value = health, maxValue = 100, modifyable = false)
+        label(str = "placeholder")
