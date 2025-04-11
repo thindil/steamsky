@@ -20,7 +20,7 @@
 
 import std/[math, strbasics, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[combat, config, crewinventory, game, maps, messages, shipscrew, shipmodules, shipsmovement, types]
+import ../[combat, config, crewinventory, game, items, maps, messages, shipscrew, shipmodules, shipsmovement, types]
 import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
 
 const
@@ -594,6 +594,27 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showLastMessages(theme = theme, dialog = dialog, inCombat = true)
   showGameMenu(dialog = dialog)
 
+proc showBoardingInfo(index: Natural; inCrew: bool = true; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show information about the selected mob in the boarding combat
+  ##
+  ## * index  - the index of the mob which information will be shown
+  ## * inCrew - if true, the index is in the player's ship's crew
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  var info = "Uses: "
+  if inCrew:
+    for item in playerShip.crew[index].equipment:
+      if item > -1:
+        info = info & "\n" & getItemName(item = playerShip.crew[
+            index].inventory[item])
+  else:
+    for item in game.enemy.ship.crew[index].equipment:
+      if item > -1:
+        info = info & "\n" & getItemName(item = game.enemy.ship.crew[
+            index].inventory[item])
+  dialog = setInfo(text = info, title = "More info")
+
 proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the boarding UI
@@ -615,10 +636,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showInfo(dialog = dialog)
   let
     height: float = (windowHeight - 35 - gameSettings.messagesPosition.float)
-  if expandedSection == 0:
-    setLayoutRowDynamic(height = height / 2, cols = 2)
-  else:
-    setLayoutRowDynamic(height = height, cols = 1)
+  setLayoutRowDynamic(height = height, cols = (if expandedSection == 0: 2 else: 1))
   var ordersList: seq[string] = @[]
   for member in game.enemy.ship.crew:
     ordersList.add(y = "Attack " & member.name)
@@ -645,7 +663,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if member.order != boarding:
           continue
         labelButton(title = member.name):
-          discard
+          showBoardingInfo(index = index, dialog = dialog)
         var health: int = member.health
         changeStyle(field = progressbar,
           color = (if health == 100: theme.colors[greenColor]
@@ -658,7 +676,9 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
               text = "The crew member current order.")
-        let newOrder = comboList(items = ordersList, selected = (if boardingOrders[orderIndex] > -1: boardingOrders[orderIndex] else: ordersList.high), itemHeight = 25, x = 200, y = 150)
+        let newOrder = comboList(items = ordersList,
+          selected = (if boardingOrders[orderIndex] > -1: boardingOrders[orderIndex]
+          else: ordersList.high), itemHeight = 25, x = 200, y = 150)
         if newOrder != boardingOrders[orderIndex]:
           boardingOrders[orderIndex] = (if newOrder == game.enemy.ship.crew.len: -1
             else: newOrder)
