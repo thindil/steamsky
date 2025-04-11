@@ -492,12 +492,12 @@ proc windowInput*(name: string; disable: bool = true) {.raises: [], tags: [], co
   var root: PNkPanel = windowFind(name = name).layout
   if disable:
     while root != nil:
-      root.flags = root.flags or NK_WINDOW_ROM.ord.cint
-      root.flags = root.flags and not NK_WINDOW_REMOVE_ROM.ord.cint
+      root.flags = root.flags or windowRom.ord.cint
+      root.flags = root.flags and not windowRemoveRom.ord.cint
       root = root.parent
   else:
     while root != nil:
-      root.flags = root.flags or NK_WINDOW_REMOVE_ROM.ord.cint
+      root.flags = root.flags or windowRemoveRom.ord.cint
       root = root.parent
 
 # ------
@@ -1371,7 +1371,7 @@ proc nkPanelHasHeader(flags: nk_flags; title: string): bool {.raises: [], tags: 
   var active: nk_bool = nkFalse
   active = (flags and (windowClosable.ord.int or windowMinimizable.ord.int)).nk_bool
   active = (active or (flags and windowTitle.ord.int).nk_bool).nk_bool
-  active = (active and not(flags and NK_WINDOW_HIDDEN.ord.int).nk_bool and title.len > 0).nk_bool
+  active = (active and not(flags and windowHidden.ord.int).nk_bool and title.len > 0).nk_bool
   return active
 
 proc nkPanelIsNonblock(`type`: PanelType): bool {.raises: [], tags: [], contractual.} =
@@ -1397,8 +1397,8 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
     ctx.current.layout != nil
   body:
     zeroMem(p = ctx.current.layout, size = ctx.current.layout.sizeof)
-    if (ctx.current.flags and NK_WINDOW_HIDDEN.cint) == 1 or (
-        ctx.current.flags and NK_WINDOW_CLOSED.cint) == 1:
+    if (ctx.current.flags and windowHidden.cint) == 1 or (
+        ctx.current.flags and windowClosed.cint) == 1:
       zeroMem(p = ctx.current.layout, size = nk_panel.sizeof)
       ctx.current.layout.`type` = panelType
       return false;
@@ -1422,7 +1422,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
 
     # window movement
     if (win.flags and windowMovable.cint) == 1 and (win.flags and
-        NK_WINDOW_ROM.cint) != 1:
+        windowRom.cint) != 1:
       # calculate draggable window space
       var header: nk_rect = nk_rect(x: win.bounds.x, y: win.bounds.y,
           w: win.bounds.w, h: 0)
@@ -1548,9 +1548,9 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
         if nkDoButtonSymbol(state = ws, `out` = win.buffer.addr, bounds = button,
           symbol = style.window.header.close_symbol, behavior = NK_BUTTON_DEFAULT,
           style = style.window.header.close_button.addr, `in` = `in`.addr,
-          font = style.font) and not(win.flags and NK_WINDOW_ROM.cint).nk_bool:
-          layout.flags = layout.flags or NK_WINDOW_HIDDEN.cint
-          layout.flags = layout.flags and not NK_WINDOW_MINIMIZED.cint
+          font = style.font) and not(win.flags and windowRom.cint).nk_bool:
+          layout.flags = layout.flags or windowHidden.cint
+          layout.flags = layout.flags and not windowMinimized.cint
     return true
 
 # ------
@@ -1632,7 +1632,7 @@ proc nkPopupBegin(ctx; pType: PopupType; title: string; flags: set[PanelFlags];
     {.ruleOff: "assignments".}
     popup.flags = popup.flags or windowBorder.cint
     if (pType == dynamicPopup):
-      popup.flags = popup.flags or NK_WINDOW_DYNAMIC.cint
+      popup.flags = popup.flags or windowDynamic.cint
     {.ruleOn: "assignments".}
 
     popup.buffer = win.buffer

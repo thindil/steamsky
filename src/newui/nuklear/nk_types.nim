@@ -99,14 +99,14 @@ type
   nk_anti_aliasing* = enum
     ## Internal Nuklear type
     antiAliasingOff, antiAliasingOn
-  nk_window_flags* = enum
-    ## Internal Nuklear type
-    NK_WINDOW_DYNAMIC = 1 shl 11
-    NK_WINDOW_ROM = 1 shl 12
-    NK_WINDOW_HIDDEN = 1 shl 13
-    NK_WINDOW_CLOSED = 1 shl 14
-    NK_WINDOW_MINIMIZED = 1 shl 15
-    NK_WINDOW_REMOVE_ROM = 1 shl 16
+  WindowFlags* = enum
+    ## Flags related to windows
+    windowDynamic = 1 shl 11
+    windowRom = 1 shl 12
+    windowHidden = 1 shl 13
+    windowClosed = 1 shl 14
+    windowMinimized = 1 shl 15
+    windowRemoveRom = 1 shl 16
   nk_command_type* = enum
     ## Internal Nuklear type
     NK_COMMAND_NOP, NK_COMMAND_SCISSOR, NK_COMMAND_LINE, NK_COMMAND_CURVE,
