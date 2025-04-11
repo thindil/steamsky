@@ -1233,6 +1233,10 @@ proc updateAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
         $(playerShip.modules[moduleIndex].owner.len - assigned) & "}")
     updateHeader()
     updateCrewInfo()
+  if crewIndex > -1:
+    tclEval(script = "focus " & frameName & ".crewbutton" & $crewIndex)
+  else:
+    tclEval(script = "focus .moduledialog.button")
   return tclOk
 
 proc showAssignCrewCommand(clientData: cint; interp: PInterp; argc: cint;
