@@ -245,6 +245,8 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
   except:
     dialog = setError(message = "Can't show the message")
 
+var infoWidth: float = 0.0
+
 proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings): GameDialog {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -259,9 +261,9 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
   ##             button will not show
   ##
   ## Returns the infoDialog if the info was set, otherwise errorDialog
-  setDialog()
+  setDialog(x = windowWidth / 5.0)
   try:
-    const width: float = 250
+    infoWidth = windowWidth / 1.5
     var
       startIndex: int = 0
       tagIndex: int = text.find(sub = '{')
@@ -271,7 +273,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         tagIndex = text.len
       var
         partText: string = text[startIndex..tagIndex - 1]
-        needLines: float = ceil(x = getTextWidth(text = partText) / width)
+        needLines: float = ceil(x = getTextWidth(text = partText) / infoWidth)
         newLines: float = partText.count(sub = '\n').float + 1.0
       if needLines < 1.0:
         needLines = 1.0
@@ -287,7 +289,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       startIndex = tagIndex + 1
       tagIndex = text.find(sub = "{/" & tagName & "}", start = startIndex)
       partText = text[startIndex..tagIndex - 1]
-      needLines = ceil(x = getTextWidth(text = partText) / width)
+      needLines = ceil(x = getTextWidth(text = partText) / infoWidth)
       if needLines < 1.0:
         needLines = 1.0
       parts.add(y = TextData(text: partText, color: case tagName
@@ -311,7 +313,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         wAmount = 0
         continue
       lineWidth += getTextWidth(text = part.text).Natural
-      if lineWidth <= width.Natural:
+      if lineWidth <= infoWidth.Natural:
         wAmount.inc
       else:
         widgetsAmount.add(y = wAmount)
@@ -334,13 +336,12 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   if dialog != infoDialog:
     return
   try:
-    const width: float = 250
     var height: float = 90
     for data in infoData.data:
       height += (30 * data.lines).float
-    updateDialog(width = width, height = height)
+    updateDialog(width = infoWidth, height = height)
     popup(pType = staticPopup, title = infoData.title, x = dialogX,
-        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+        y = dialogY, w = infoWidth, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       var index: Natural = 0
       for wAmount in infoData.widgetsAmount:
