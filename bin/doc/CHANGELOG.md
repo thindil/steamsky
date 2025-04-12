@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Hide drop item from the player's ship's cargo dialog with Escape key
 - Hide the assign crew member dialog to the player's ship's module with Escape
   key
+- Tab key doesn't select the first crew member in the assign crew member dialog
 
 ## [10.9] - 2025-03-23
 
