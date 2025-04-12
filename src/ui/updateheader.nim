@@ -19,7 +19,7 @@
 ## time and buttons. Split from the map's UI module to avoid circular dependencies.
 
 import std/tables
-import contracts
+import contracts, nimalyzer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
@@ -228,6 +228,7 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   else:
     tclEval(script = "grid remove " & label)
   label = gameHeader & ".talk"
+  {.ruleOff: "ifStatements".}
   if haveTrader:
     tclEval(script = "grid remove " & label)
   elif skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
@@ -241,6 +242,7 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       tclEval(script = "grid remove " & label)
   else:
     tclEval(script = "grid remove " & label)
+  {.ruleOn: "ifStatements".}
   label = gameHeader & ".clean"
   if needCleaning:
     if haveCleaner:
