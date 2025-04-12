@@ -272,10 +272,14 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       var
         partText: string = text[startIndex..tagIndex - 1]
         needLines: float = ceil(x = getTextWidth(text = partText) / width)
+        newLines: float = partText.count(sub = '\n').float + 1.0
       if needLines < 1.0:
         needLines = 1.0
+      if needLines < newLines:
+        needLines = newLines
       parts.add(y = TextData(text: partText, color: theme.colors[
           foregroundColor], lines: needLines))
+      echo parts
       if tagIndex == text.len:
         break
       startIndex = tagIndex
@@ -315,7 +319,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         wAmount = 0
         lineWidth = 0
     infoData = InfoData(data: parts, button1: button1, button2: button2,
-        widgetsAmount: widgetsAmount)
+        widgetsAmount: widgetsAmount, title: title)
     result = infoDialog
   except:
     result = setError(message = "Can't set the message.")
@@ -331,10 +335,10 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   if dialog != infoDialog:
     return
   try:
-    const
-      width: float = 250
-      height: float = 150
-
+    const width: float = 250
+    var height: float = 90
+    for data in infoData.data:
+      height += (30 * data.lines).float
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = infoData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
