@@ -74,7 +74,7 @@ type
     nkFalse, nkTrue
   nk_modify* = enum
     ## Internal Nuklear type
-    NK_FIXED, NK_MODIFIABLE
+    fixed, modifiable
   CollapseStates* = enum
     ## The states of a tree's content
     minimized, maximized
