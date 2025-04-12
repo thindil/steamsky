@@ -279,7 +279,6 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         needLines = newLines
       parts.add(y = TextData(text: partText, color: theme.colors[
           foregroundColor], lines: needLines))
-      echo parts
       if tagIndex == text.len:
         break
       startIndex = tagIndex
@@ -353,7 +352,12 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
           for index2 in index..index + wAmount - 1:
             wrapLabel(str = infoData.data[index2].text)
         index += wAmount
-      setLayoutRowDynamic(height = 30, cols = 3)
+      var cols: Positive = 3
+      if infoData.button1 == emptyButtonSettings:
+        cols.dec
+      if infoData.button2 == emptyButtonSettings:
+        cols.dec
+      setLayoutRowDynamic(height = 30, cols = cols)
       labelButton(title = "Close"):
         closePopup()
         dialog = none
