@@ -594,7 +594,8 @@ proc showCombat*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showLastMessages(theme = theme, dialog = dialog, inCombat = true)
   showGameMenu(dialog = dialog)
 
-proc showBoardingInfo(index: Natural; inCrew: bool = true; dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc showBoardingInfo(index: Natural; inCrew: bool = true; dialog: var GameDialog)
+  {.raises: [], tags: [RootEffect], contractual.} =
   ## Show information about the selected mob in the boarding combat
   ##
   ## * index  - the index of the mob which information will be shown
