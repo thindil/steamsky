@@ -107,14 +107,14 @@ type
     windowClosed = 1 shl 14
     windowMinimized = 1 shl 15
     windowRemoveRom = 1 shl 16
-  nk_command_type* = enum
-    ## Internal Nuklear type
-    NK_COMMAND_NOP, NK_COMMAND_SCISSOR, NK_COMMAND_LINE, NK_COMMAND_CURVE,
-      NK_COMMAND_RECT, NK_COMMAND_RECT_FILLED, NK_COMMAND_RECT_MULTI_COLOR,
-      NK_COMMAND_CIRCLE, NK_COMMAND_CIRCLE_FILLED, NK_COMMAND_ARC,
-      NK_COMMAND_ARC_FILLED, NK_COMMAND_TRIANGLE, NK_COMMAND_TRIANGLE_FILLED,
-      NK_COMMAND_POLYGON, NK_COMMAND_POLYGON_FILLED, NK_COMMAND_POLYLINE,
-      NK_COMMAND_TEXT, NK_COMMAND_IMAGE, NK_COMMAND_CUSTOM
+  CommandType* = enum
+    ## Type of command
+    commandNop, commandScissor, commandLine, commandCurve,
+      commandRect, commandRectFilled, commandRectMultiColor,
+      commandCircle, commandCircleFilled, commandArc,
+      commandArcFilled, commandTriangle, commandTriangleFilled,
+      commandPolygon, commandPolygonFilled, commandPolyline,
+      commandText, commandImage, commandCustom
   nk_buffer_allocation_type* = enum
     ## Internal Nuklear type
     NK_BUFFER_FRONT, NK_BUFFER_BACK, NK_BUFFER_MAX
@@ -279,7 +279,7 @@ type
     panelTooltip = 1 shl 7
   nk_command* {.importc: "struct nk_command", completeStruct.} = object
     ## Internal Nuklear type
-    `type`*: nk_command_type
+    `type`*: CommandType
     next*: nk_size
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle ## Interna Nuklear data

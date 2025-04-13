@@ -654,7 +654,7 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
 # ----
 # Draw
 # ----
-proc nkCommandBufferPush(b: ptr nk_command_buffer; t: nk_command_type;
+proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
     size: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a command to the commands buffer. Internal use only
   ##
@@ -703,7 +703,7 @@ proc nkPushScissor(b: ptr nk_command_buffer; r: nk_rect) {.raises: [], tags: [
   body:
     b.clip = r
     let cmd: ptr nk_command_scissor = cast[ptr nk_command_scissor](
-        nkCommandBufferPush(b = b, t = NK_COMMAND_SCISSOR,
+        nkCommandBufferPush(b = b, t = commandScissor,
             size = nk_command_scissor.sizeof))
     if cmd == nil:
       return
@@ -730,7 +730,7 @@ proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
       x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
   var cmd: ptr nk_command_rect
-  cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = NK_COMMAND_RECT, cmd.sizeof))
+  cmd = cast[ptr nk_command_rect](nkCommandBufferPush(b = b, t = commandRect, cmd.sizeof))
   if cmd == nil:
     return
   cmd.rounding = rounding.cushort
@@ -771,7 +771,7 @@ proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_
       return
 
   var cmd: ptr nk_command_rect_filled
-  cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b, t = NK_COMMAND_RECT_FILLED, cmd.sizeof))
+  cmd = cast[ptr nk_command_rect_filled](nkCommandBufferPush(b = b, t = commandRectFilled, cmd.sizeof))
   if cmd == nil:
     return
   cmd.rounding = rounding.cushort
@@ -798,7 +798,7 @@ proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_colo
       return
 
   var cmd: ptr nk_command_image
-  cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = NK_COMMAND_IMAGE, cmd.sizeof))
+  cmd = cast[ptr nk_command_image](nkCommandBufferPush(b = b, t = commandImage, cmd.sizeof))
   if cmd == nil:
     return
   cmd.x = r.x.cshort
