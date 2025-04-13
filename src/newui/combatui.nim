@@ -18,7 +18,7 @@
 ## Provides code related to all types of combat, like between the ships,
 ## boarding, giving orders to crew members, etc.
 
-import std/[math, strbasics, tables]
+import std/[math, strbasics, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[combat, config, crewinventory, game, items, maps, messages, shipscrew, shipmodules, shipsmovement, types]
 import coreui, dialogs, errordialog, header, messagesui, themes, utilsui2
@@ -642,7 +642,7 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
   for member in game.enemy.ship.crew:
     ordersList.add(y = "Attack " & member.name)
   ordersList.add(y = "Back to the ship")
-  # The player's ship's crew orders
+  # The player's ship's crew info
   if expandedSection in {0, 1}:
     group(title = "Your crew:", flags = {windowBorder, windowTitle}):
       setLayoutRowStatic(height = 35, cols = 1, width = 35)
@@ -663,6 +663,9 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
       for index, member in playerShip.crew:
         if member.order != boarding:
           continue
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Show information about the crew member.")
         labelButton(title = member.name):
           showBoardingInfo(index = index, dialog = dialog)
         var health: int = member.health
@@ -684,3 +687,39 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
           boardingOrders[orderIndex] = (if newOrder == game.enemy.ship.crew.len: -1
             else: newOrder)
         orderIndex.inc
+  # The enemy's ship's crew info
+  if expandedSection in {0, 2}:
+    group(title = "Your crew:", flags = {windowBorder, windowTitle}):
+      setLayoutRowStatic(height = 35, cols = 1, width = 35)
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Maximize/minimize enemy's ship's crew list")
+      imageButton(image = (if expandedSection == 0: images[expandIcon] else:
+        images[contractIcon])):
+        if expandedSection == 1:
+          expandedSection = 0
+        else:
+          expandedSection = 1
+      setLayoutRowDynamic(height = 25, cols = 3)
+      label(str = "Member", alignment = centered)
+      label(str = "Health", alignment = centered)
+      label(str = "Order", alignment = centered)
+      for index, member in game.enemy.ship.crew:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Show information about the enemy's ship's crew member.")
+        labelButton(title = member.name):
+          showBoardingInfo(index = index, inCrew = false, dialog = dialog)
+        var health: int = member.health
+        changeStyle(field = progressbar,
+          color = (if health == 100: theme.colors[greenColor]
+            elif health > 24: theme.colors[yellowColor]
+            else: theme.colors[redColor])):
+          if gameSettings.showTooltips:
+            addTooltip(bounds = getWidgetBounds(),
+                text = "The enemy's ships's crew member's health.")
+          progressBar(value = health, maxValue = 100, modifyable = false)
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "The enemy's ship's crew member current order.")
+        label(str = ($member.order).capitalizeAscii)
