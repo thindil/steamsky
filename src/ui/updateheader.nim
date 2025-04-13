@@ -23,21 +23,9 @@ import contracts, nimalyzer
 import ../[config, game, maps, messages, shipscargo, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
-proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
-    RootEffect], contractual.} =
-  ## Update in-game header with information about time, state of the crew
-  ## members, etc.
-  var label: string = gameHeader & ".time"
-  tclEval(script = label & " configure -text {" & formattedTime() & "}")
-  if gameSettings.showNumbers:
-    try:
-      discard tclEval(script = label & " configure -text {" & formattedTime() &
-          " Speed: " & $((realSpeed(ship = playerShip) * 60) / 1_000) & " km/h}")
-    except ValueError:
-      showError(message = "Can't show the speed of the ship.")
-      return
-    tclEval(script = "tooltip::tooltip " & label & " \"Game time and current ship speed.\"")
-  label = gameHeader & ".fuel"
+proc showResourcesInfo() {.raises: [], tags: [RootEffect], contractual.} =
+  ## Show information about resources, like fuel, food and drinks
+  var label: string = gameHeader & ".fuel"
   var itemAmount: Natural = try:
         getItemAmount(itemType = fuelType)
       except KeyError:
@@ -94,6 +82,22 @@ proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     tclEval(script = label & " configure -image foodicon -text {" &
         $itemAmount & "} -style Headergreen.TLabel")
     tclEval(script = "tooltip::tooltip " & label & " \"The amount of food in the ship's cargo.\"")
+
+proc updateHeader*() {.raises: [], tags: [WriteIOEffect, TimeEffect,
+    RootEffect], contractual.} =
+  ## Update in-game header with information about time, state of the crew
+  ## members, etc.
+  var label: string = gameHeader & ".time"
+  tclEval(script = label & " configure -text {" & formattedTime() & "}")
+  if gameSettings.showNumbers:
+    try:
+      discard tclEval(script = label & " configure -text {" & formattedTime() &
+          " Speed: " & $((realSpeed(ship = playerShip) * 60) / 1_000) & " km/h}")
+    except ValueError:
+      showError(message = "Can't show the speed of the ship.")
+      return
+    tclEval(script = "tooltip::tooltip " & label & " \"Game time and current ship speed.\"")
+  showResourcesInfo()
   var havePilot, haveEngineer, haveTrader, haveUpgrader, haveCleaner,
     haveRepairman: bool = false
   for member in playerShip.crew:
