@@ -723,3 +723,17 @@ proc showBoarding*(state: var GameState; dialog: var GameDialog) {.raises: [],
           addTooltip(bounds = getWidgetBounds(),
               text = "The enemy's ship's crew member current order.")
         label(str = ($member.order).capitalizeAscii)
+  if not endCombat:
+    setLayoutRowDynamic(height = 35, cols = 1)
+    labelButton(title = "Next turn"):
+      try:
+        combatTurn()
+      except:
+        dialog = setError(message = "Can't make next turn in combat.")
+      if playerShip.crew[0].order != boarding:
+        state = combat
+        updateParties()
+  let heightDiff: float = (if endCombat: 55 else: 90)
+  setLayoutRowDynamic(height = windowHeight - heightDiff - height, cols = 1)
+  showLastMessages(theme = theme, dialog = dialog, inCombat = true)
+  showGameMenu(dialog = dialog)
