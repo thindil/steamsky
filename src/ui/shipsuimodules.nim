@@ -1569,6 +1569,7 @@ proc showAssignAmmoCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't add button.")
   addButton(name = ".close", label = "Close", command = "")
+  tclEval(script = "focus " & ammoMenu & ".close")
   showDialog(dialog = ammoMenu, parentFrame = ".")
   return tclOk
 
