@@ -19,7 +19,7 @@
 ## list of items to trade, info about items, trading itself, etc.
 
 import contracts
-import coreui
+import coreui, dialogs, header
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -30,5 +30,13 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  state = trade
-  dialog = none
+  showHeader(dialog = dialog, close = CloseDestination.map, state = state)
+  if state != GameState.trade:
+    return
+  # Draw dialogs
+  showQuestion(dialog = dialog, state = state)
+  if state != GameState.trade:
+    return
+  showMessage(dialog = dialog)
+  showInfo(dialog = dialog)
+  # Draw UI
