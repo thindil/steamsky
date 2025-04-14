@@ -147,18 +147,14 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
       addTooltip(bounds = getWidgetBounds(),
           text = "One or more guns don't have a gunner.")
     image(image = images[gunnerIcon], padding = NimVec2(x: 5, y: 5))
-  if not haveTrader:
-    if skyMap[playerShip.skyX][playerShip.skyY].baseIndex > 0:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "No trader assigned. You need one to talk/trade.")
-      image(image = images[traderIcon], padding = NimVec2(x: 5, y: 5))
-    elif skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
-        eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType == friendlyShip:
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "No trader assigned. You need one to talk/trade.")
-      image(image = images[traderIcon], padding = NimVec2(x: 5, y: 5))
+  if not haveTrader and (skyMap[playerShip.skyX][playerShip.skyY].baseIndex >
+      0 or (skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
+      eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType ==
+      friendlyShip)):
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "No trader assigned. You need one to talk/trade.")
+    image(image = images[traderIcon], padding = NimVec2(x: 5, y: 5))
   if needRepairs:
     if haveRepairman:
       if gameSettings.showTooltips:
