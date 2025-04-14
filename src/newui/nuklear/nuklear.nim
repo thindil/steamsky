@@ -515,7 +515,7 @@ template `+`[T](p: ptr T; off: nk_size): ptr T =
 {.pop ruleOn: "namedParams".}
 
 proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
-    `type`: nk_buffer_allocation_type): pointer {.raises: [], tags: [],
+    `type`: BufferAllocationType): pointer {.raises: [], tags: [],
     contractual.} =
   ## Align the sekected buffer. Internal use only
   ##
@@ -526,7 +526,7 @@ proc nkBufferAlign(unaligned: pointer; align: nk_size; alignment: var nk_size;
   ##
   ## Returns pointer to aligned buffer
   var memory: pointer = nil
-  if `type` == NK_BUFFER_BACK:
+  if `type` == bufferBack:
     if align == 0:
       memory = unaligned
       alignment = 0
@@ -588,7 +588,7 @@ proc nkBufferRealloc(b: ptr nk_buffer; capacity: nk_size;
     b.size = capacity - backSize
     return temp
 
-proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
+proc nkBufferAlloc(b: ptr nk_buffer; `type`: BufferAllocationType; size,
     align: nk_size): pointer {.raises: [], tags: [RootEffect], contractual.} =
   ## Allocate memory for the selected buffer. Internal use only
   ##
@@ -605,7 +605,7 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
     b.needed += size
     var unaligned: ptr nk_size = nil
     # calculate total size with needed alignment + size
-    if `type` == NK_BUFFER_FRONT:
+    if `type` == bufferFront:
       unaligned = b.memory.`ptr` + b.allocated
     else:
       unaligned = b.memory.`ptr` + (b.size - size)
@@ -615,7 +615,7 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
 
     var full: bool = false
     # check if buffer has enough memory
-    if `type` == NK_BUFFER_FRONT:
+    if `type` == bufferFront:
       full = (b.allocated + size + alignment) > b.size
     else:
       full = (b.size - min(x = b.size, y = (size + alignment))) <= b.allocated
@@ -636,14 +636,14 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: nk_buffer_allocation_type; size,
         return nil
 
       # align newly allocated pointer
-      if `type` == NK_BUFFER_FRONT:
+      if `type` == bufferFront:
         unaligned = b.memory.`ptr` + b.allocated
       else:
         unaligned = b.memory.`ptr` + (b.size - size)
       memory = nkBufferAlign(unaligned = unaligned, align = align,
           alignment = alignment, `type` = `type`)
 
-    if `type` == NK_BUFFER_FRONT:
+    if `type` == bufferFront:
       unaligned = b.memory.`ptr` + b.allocated
     else:
       unaligned = b.memory.`ptr` + (b.size - size)
@@ -669,7 +669,7 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
       return nil
     const align: nk_size = alignOf(x = nk_command)
     let cmd: ptr nk_command = cast[ptr nk_command](nkBufferAlloc(b = b.base,
-        `type` = NK_BUFFER_FRONT, size = size, align = align))
+        `type` = bufferFront, size = size, align = align))
     if cmd == nil:
       return nil
 

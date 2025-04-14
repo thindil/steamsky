@@ -115,9 +115,9 @@ type
       commandArcFilled, commandTriangle, commandTriangleFilled,
       commandPolygon, commandPolygonFilled, commandPolyline,
       commandText, commandImage, commandCustom
-  nk_buffer_allocation_type* = enum
+  BufferAllocationType* = enum
     ## Internal Nuklear type
-    NK_BUFFER_FRONT, NK_BUFFER_BACK, NK_BUFFER_MAX
+    bufferFront, bufferBack, bufferMax
   nk_allocation_type* = enum
     ## Internal Nuklear type
     NK_BUFFER_FIXED, NK_BUFFER_DYNAMIC
