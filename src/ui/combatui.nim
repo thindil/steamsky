@@ -585,7 +585,7 @@ proc updateBoardingUi() {.raises: [], tags: [], contractual.} =
         ordersList & "] -state readonly -width 15")
     tclEval(script = comboBox & " current " & $boardingOrders[orderIndex])
     tclEval(script = "bind " & comboBox &
-        "<<ComboboxSelected>> {SetBoardingOrder " & $(index + 1) & " " & $(
+        " <<ComboboxSelected>> {SetBoardingOrder " & $(index + 1) & " " & $(
         orderIndex + 1) & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"The crew member current order.\"")
     tclEval(script = "grid " & comboBox & " -column 2 -row " & $(index + 1) & " -padx {0 5}")
@@ -770,7 +770,7 @@ proc setBoardingOrderCommand(clientData: cint; interp: PInterp; argc: cint;
       except:
         return showError(message = "Can't get the boarding order for a crew member.")
   try:
-    boardingOrders[($argv[2]).parseInt] = if newOrder >
+    boardingOrders[($argv[2]).parseInt - 1] = if newOrder >
         game.enemy.ship.crew.len: -1 else: newOrder
   except:
     showError(message = "Can't set the boarding order for a crew member.")
