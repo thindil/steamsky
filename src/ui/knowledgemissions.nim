@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,11 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
+import contracts
 import ../[config, game, maps, missions, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the menu with available the selected mission options
   ##
   ## * clientData - the additional data for the Tcl command
@@ -83,7 +85,8 @@ var
   missionsTable: TableWidget
   missionsIndexes: seq[Natural]
 
-proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} =
+proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Update and show list of accepted missions
   ##
   ## * page     - the current page of the missions' list to show
@@ -204,7 +207,7 @@ proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect].} 
 
 proc showMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Show the list of known missions to the player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -238,7 +241,7 @@ var missionsSortOrder: MissionsSortOrders = defaultMissionsSortOrder
 
 proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [
-    RootEffect], cdecl.} =
+    RootEffect], cdecl, contractual.} =
   ## Sort the accepted missions list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -387,7 +390,8 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   updateMissionsList()
   return tclOk
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
     addCommand("ShowMissionMenu", showMissionsMenuCommand)
