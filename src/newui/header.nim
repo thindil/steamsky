@@ -203,12 +203,13 @@ type
     none, combat, map
 
 proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
-    state: var GameState) {.raises: [], tags: [RootEffect], contractual.} =
+    state: var GameState; options: bool = false) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the game's header
   ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ## * close  - the close button's destination. If none, don't show the button
-  ## * state  - the current state of the game
+  ## * dialog  - the current in-game dialog displayed on the screen
+  ## * close   - the close button's destination. If none, don't show the button
+  ## * state   - the current state of the game
+  ## * options - if true, show the button for more options. Default is false
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened or the game's menu is to show.
@@ -301,6 +302,8 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
     rowTemplateStatic(width = 40)
     if close != none:
       rowTemplateStatic(width = 40)
+    if options:
+      rowTemplateStatic(width = 40)
     rowTemplateDynamic()
     rowTemplateStatic(width = 35)
     try:
@@ -354,6 +357,9 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
         state = combat
       else:
         state = map
+  if options:
+    imageButton(image = images[moreOptionsIcon]):
+      showOptions = not showOptions
   if gameSettings.showNumbers:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),

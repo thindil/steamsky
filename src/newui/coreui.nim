@@ -49,6 +49,7 @@ var
   inCombat*: bool = false      ## If true, the player is in combat
   images*: array[menuIcon..IconsNames.high, PImage] ## The images used in the game
   theme*: ThemeData = defaultTheme ## The current game's theme
+  showOptions*: bool = false   ## If true, show more options in the selected screen
 
 proc setDialog*(x: float = windowWidth / 3; y: float = windowHeight /
         4) {.raises: [], tags: [], contractual.} =
