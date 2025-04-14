@@ -147,10 +147,7 @@ proc showNotifications(speed: float; havePilot, haveEngineer, haveTrader,
       addTooltip(bounds = getWidgetBounds(),
           text = "One or more guns don't have a gunner.")
     image(image = images[gunnerIcon], padding = NimVec2(x: 5, y: 5))
-  if not haveTrader and (skyMap[playerShip.skyX][playerShip.skyY].baseIndex >
-      0 or (skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
-      eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType ==
-      friendlyShip)):
+  if not haveTrader:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "No trader assigned. You need one to talk/trade.")
@@ -249,6 +246,11 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       haveRepairman = true
     else:
       discard
+  if not haveTrader and (skyMap[playerShip.skyX][playerShip.skyY].baseIndex ==
+      0 or (skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
+      eventsList[skyMap[playerShip.skyX][playerShip.skyY].eventIndex].eType !=
+      friendlyShip)) or skyMap[playerShip.skyX][playerShip.skyY].eventIndex == 0:
+    haveTrader = true
   var speed: float = 0.0
   let
     faction: FactionData = try:
