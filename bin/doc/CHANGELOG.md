@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Tab key doesn't work in the assing ammo dialog
 - Giving orders to the player's ship's crew members during boarding an enemy's
   ship
+- Hide the module's info dialog with Escape key
 
 ## [10.9] - 2025-03-23
 
