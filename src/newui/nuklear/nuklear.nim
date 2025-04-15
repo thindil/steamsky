@@ -621,9 +621,9 @@ proc nkBufferAlloc(b: ptr nk_buffer; `type`: BufferAllocationType; size,
       full = (b.size - min(x = b.size, y = (size + alignment))) <= b.allocated
 
     if full:
-      if b.`type` != NK_BUFFER_DYNAMIC:
+      if b.`type` != bufferDynamic:
         return nil
-      if b.`type` != NK_BUFFER_DYNAMIC or b.pool.alloc == nil or b.pool.free == nil:
+      if b.`type` != bufferDynamic or b.pool.alloc == nil or b.pool.free == nil:
         return nil
 
       # buffer is full so allocate bigger buffer if dynamic

@@ -116,11 +116,11 @@ type
       commandPolygon, commandPolygonFilled, commandPolyline,
       commandText, commandImage, commandCustom
   BufferAllocationType* = enum
-    ## Internal Nuklear type
+    ## Type of buffer's allocation
     bufferFront, bufferBack, bufferMax
-  nk_allocation_type* = enum
-    ## Internal Nuklear type
-    NK_BUFFER_FIXED, NK_BUFFER_DYNAMIC
+  AllocationType* = enum
+    ## Another type of buffer allocation
+    bufferFixed, bufferDynamic
   nk_keys* = enum
     ## Internal Nuklear type
     NK_KEY_NONE, NK_KEY_SHIFT, NK_KEY_CTRL, NK_KEY_DEL, NK_KEY_ENTER,
@@ -370,7 +370,7 @@ type
     allocated*, needed*: nk_size
     memory*: nk_memory
     size*: nk_size
-    `type`*: nk_allocation_type
+    `type`*: AllocationType
     pool*: nk_allocator
     grow_factor*: cfloat
     calls*: nk_size
