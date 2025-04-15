@@ -18,8 +18,19 @@
 ## Provides code related to trading with bases and ships UI, like showing the
 ## list of items to trade, info about items, trading itself, etc.
 
-import contracts
+import contracts, nuklear/nuklear_sdl_renderer
 import coreui, dialogs, header
+
+var
+  typesList: seq[string] = @["All"]
+  typeIndex: Natural = 0
+  typeSearch: string = ""
+
+proc setTrade*() {.raises: [], tags: [], contractual.} =
+  ## Set the data for trades UI
+  typesList = @["All"]
+  typeIndex = 0
+  typeSearch = ""
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -30,7 +41,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, close = CloseDestination.map, state = state)
+  showHeader(dialog = dialog, close = CloseDestination.map, state = state,
+      options = true)
   if state != GameState.trade:
     return
   # Draw dialogs
@@ -40,3 +52,11 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
   # Draw UI
+  if showOptions:
+    setLayoutRowDynamic(height = 35, cols = 3)
+    label(str = "Type:")
+    let newType = comboList(items = typesList,
+        selected = typeIndex, itemHeight = 25, x = 200, y = 150)
+    if newType != typeIndex:
+      typeIndex = newType
+    editString(text = typeSearch, maxLen = 64)

@@ -23,7 +23,7 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[bases, bases2, basestypes, combat, crewinventory, events, events2,
     game, game2, maps, messages, missions, missions2, shipscargo, shipscrew,
     shipsmovement, statistics, stories, stories2, trades, types, utils]
-import combatui, coreui, dialogs, errordialog
+import combatui, coreui, dialogs, errordialog, tradesui
 
 proc countHeight(baseIndex: ExtendedBasesRange;
     haveTrader: bool; dialog: var GameDialog): Positive {.raises: [], tags: [
@@ -275,6 +275,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
         state = trade
         dialog = none
         closePopup()
+        setTrade()
       labelButton(title = "School"):
         state = school
         dialog = none
@@ -775,6 +776,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               state = trade
               dialog = none
               closePopup()
+              setTrade()
             labelButton(title = "Ask for events"):
               askForEvents(dialog = dialog)
               if dialog != none:
@@ -795,6 +797,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
                   state = trade
                   dialog = none
                   closePopup()
+                  setTrade()
                 labelButton(title = "Ask for bases"):
                   askForBases(dialog = dialog)
                   if dialog != none:
