@@ -353,11 +353,15 @@ proc showHeader*(dialog: var GameDialog; close: CloseDestination = none;
       addTooltip(bounds = getWidgetBounds(),
           text = "Back to the " & $close & " screen")
     imageButton(image = images[exitIcon]):
+      showOptions = false
       if close == combat:
         state = combat
       else:
         state = map
   if options:
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show more options")
     imageButton(image = images[moreOptionsIcon]):
       showOptions = not showOptions
   if gameSettings.showNumbers:
