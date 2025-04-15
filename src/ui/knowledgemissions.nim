@@ -55,7 +55,8 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
         "Transport passenger") & " mission actions", parentName = ".", columns = 3)
 
   proc addButton(name, label, command, icon, tooltipText: string;
-      column: Natural; color: string = "") =
+      column: Natural; color: string = "") {.raises: [], tags: [],
+          contractual.} =
     let button = missionMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & missionMenu & " .;" & command &
@@ -319,7 +320,8 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
         time: mission.time, reward: mission.reward, id: index))
     except:
       return showError(message = "Can't add the local mission.")
-  proc sortMissions(x, y: LocalMissionData): int =
+  proc sortMissions(x, y: LocalMissionData): int {.raises: [], tags: [],
+      contractual.} =
     case missionsSortOrder
     of typeAsc:
       if x.mType < y.mType:
