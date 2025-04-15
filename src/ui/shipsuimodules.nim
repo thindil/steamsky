@@ -635,7 +635,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       labelText = "Repair material: ", row = currentRow, wrapLength = 200,
       yScroll = yScroll, height = height)
   let moduleText: string = moduleFrame & ".info"
-  tclEval(script = "text " & moduleText & " -wrap char -height 5 -width 30")
+  tclEval(script = "text " & moduleText & " -wrap char -height 5 -width 30 -takefocus 0")
   tclEval(script = moduleText & " tag configure red -foreground " & tclGetVar(
       varName = "ttk::theme::" & gameSettings.interfaceTheme &
       "::colors(-red)"))
@@ -662,6 +662,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         tclEval2(script = "font metrics InterfaceFont -linespace").parseInt))
   except:
     return showError(message = "Can't configure moduleText.")
+  tclEval(script = "bind " & moduleText & " <Escape> {" & closeDialogButton & " invoke; break}")
   tclEval(script = "grid " & moduleText & " -row " & $currentRow & " -column 1 -sticky nw")
   var newHeight: Natural = try:
       tclEval2(script = "winfo reqheight " & moduleText).parseInt
