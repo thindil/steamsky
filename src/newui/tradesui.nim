@@ -19,6 +19,7 @@
 ## list of items to trade, info about items, trading itself, etc.
 
 import contracts, nuklear/nuklear_sdl_renderer
+import ../config
 import coreui, dialogs, header
 
 var
@@ -51,12 +52,18 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
-  # Draw UI
+  # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = 35, cols = 3)
+    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
     label(str = "Type:")
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Show only items of the selected type")
     let newType = comboList(items = typesList,
         selected = typeIndex, itemHeight = 25, x = 200, y = 150)
     if newType != typeIndex:
       typeIndex = newType
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Enter a name of an item which you looking for")
     editString(text = typeSearch, maxLen = 64)
