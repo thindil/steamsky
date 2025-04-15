@@ -18,18 +18,56 @@
 ## Provides code related to trading with bases and ships UI, like showing the
 ## list of items to trade, info about items, trading itself, etc.
 
+import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../config
-import coreui, dialogs, header
+import ../[config, game, types]
+import coreui, dialogs, errordialog, header
+
+type ItemsSortOrders = enum
+  nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
+    priceDesc, profitAsc, profitDesc, weightAsc, weightDesc, ownedAsc,
+    ownedDesc, availableAsc, availableDesc, none
+
+const defaultItemsSortOrder: ItemsSortOrders = none
 
 var
   typesList: seq[string] = @["All"]
   typeIndex: Natural = 0
   typeSearch: string = ""
+  itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
+  itemsIndexes: seq[int]
 
-proc setTrade*() {.raises: [], tags: [], contractual.} =
+proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the data for trades UI
   typesList = @["All"]
+  var baseCargo: seq[BaseCargo]
+  if itemsSortOrder == defaultItemsSortOrder:
+    itemsIndexes = @[]
+    for index in playerShip.cargo.low .. playerShip.cargo.high:
+      itemsIndexes.add(y = index)
+    itemsIndexes.add(y = -1)
+    for index in baseCargo.low .. baseCargo.high:
+      itemsIndexes.add(y = index)
+  for i in itemsIndexes:
+    if i == -1:
+      break
+    let
+      protoIndex = playerShip.cargo[i].protoIndex
+      itemType = try:
+          if itemsList[protoIndex].showType.len == 0:
+            itemsList[protoIndex].itemType
+          else:
+            itemsList[protoIndex].showType
+        except:
+          dialog = setError(message = "Can't get item type.")
+          return
+    try:
+      if typesList.find(item = itemType) == -1 and itemsList[
+          protoIndex].price > 0:
+        typesList.add(y = itemType)
+    except:
+      dialog = setError(message = "Can't add item type.")
+      return
   typeIndex = 0
   typeSearch = ""
 

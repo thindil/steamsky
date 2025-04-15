@@ -275,7 +275,7 @@ proc showDockedCommands(baseIndex: ExtendedBasesRange; haveTrader: bool;
         state = trade
         dialog = none
         closePopup()
-        setTrade()
+        setTrade(dialog = dialog)
       labelButton(title = "School"):
         state = school
         dialog = none
@@ -776,7 +776,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
               state = trade
               dialog = none
               closePopup()
-              setTrade()
+              setTrade(dialog = dialog)
             labelButton(title = "Ask for events"):
               askForEvents(dialog = dialog)
               if dialog != none:
@@ -797,7 +797,7 @@ proc showShipOrders*(dialog: var GameDialog; state: var GameState) {.raises: [],
                   state = trade
                   dialog = none
                   closePopup()
-                  setTrade()
+                  setTrade(dialog = dialog)
                 labelButton(title = "Ask for bases"):
                   askForBases(dialog = dialog)
                   if dialog != none:
