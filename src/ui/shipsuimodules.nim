@@ -1040,7 +1040,7 @@ proc showModuleInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       command = "CloseDialog " & moduleDialog, columnSpan = 4,
       row = currentRow + 1)
   tclEval(script = "bind " & closeDialogButton & " <Tab> {focus " &
-      moduleFrame & ".nameinfo.button;break}")
+      moduleFrame & ".namebutton;break}")
   height = try:
       height + tclEval2(script = "winfo reqheight " & moduleFrame &
         ".button").parseInt
