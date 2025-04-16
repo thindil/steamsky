@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Giving orders to the player's ship's crew members during boarding an enemy's
   ship
 - Hide the module's info dialog with Escape key
+- Crash when using Tab key in the module's info dialog
 
 ## [10.9] - 2025-03-23
 
