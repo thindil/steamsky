@@ -20,7 +20,7 @@
 
 import std/tables
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, game, types]
+import ../[basescargo, config, game, items, types]
 import coreui, dialogs, errordialog, header
 
 type ItemsSortOrders = enum
@@ -36,9 +36,15 @@ var
   typeSearch: string = ""
   itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
   itemsIndexes: seq[int]
+  currentPage: Positive = 1
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the data for trades UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   typesList = @["All"]
   var baseCargo: seq[BaseCargo]
   if itemsSortOrder == defaultItemsSortOrder:
@@ -70,6 +76,7 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contrac
       return
   typeIndex = 0
   typeSearch = ""
+  currentPage = 1
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -105,3 +112,68 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter a name of an item which you looking for")
     editString(text = typeSearch, maxLen = 64)
+  var
+    currentItemIndex = 0
+    indexesList: seq[Natural]
+    currentRow = 1
+  let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+  for i in itemsIndexes:
+    currentItemIndex.inc
+    if i == -1:
+      break
+    try:
+      if getPrice(baseType = baseType, itemIndex = playerShip.cargo[
+          i].protoIndex) == 0:
+        continue
+    except:
+      return showError(message = "Can't get price.")
+    let
+      protoIndex = playerShip.cargo[i].protoIndex
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          durability = playerShip.cargo[i].durability)
+    if baseCargoIndex > -1:
+      indexesList.add(y = baseCargoIndex)
+    let itemType = try:
+          if itemsList[protoIndex].showType.len == 0:
+            itemsList[protoIndex].itemType
+          else:
+            itemsList[protoIndex].showType
+        except:
+          return showError(message = "Can't get item type2.")
+    if argc > 1 and argv[1] != "All" and itemType != $argv[1]:
+      continue
+    let itemName = getItemName(item = playerShip.cargo[i], damageInfo = false,
+        toLower = false)
+    if argc == 3 and itemName.toLowerAscii.find(sub = ($argv[
+        2]).toLowerAscii) == -1:
+      continue
+    if currentRow < startRow:
+      currentRow.inc
+      continue
+    var price = 0
+    if baseCargoIndex == -1:
+      try:
+        price = getPrice(baseType = baseType, itemIndex = protoIndex)
+      except:
+        return showError(message = "Can't get price2.")
+    else:
+      price = if baseIndex > 0:
+          skyBases[baseIndex].cargo[baseCargoIndex].price
+        else:
+          traderCargo[baseCargoIndex].price
+    if eventIndex > -1:
+      if eventsList[eventIndex].eType == doublePrice and eventsList[
+          eventIndex].itemIndex == protoIndex:
+        price = price * 2
+    let profit = price - playerShip.cargo[i].price
+    var baseAmount = 0
+    if baseIndex > 0:
+      try:
+        if baseCargoIndex > -1 and isBuyable(baseType = baseType,
+            itemIndex = protoIndex):
+          baseAmount = baseCargo[baseCargoIndex].amount
+      except:
+        return showError(message = "Can't get base amount.")
+    else:
+      if baseCargoIndex > -1:
+        baseAmount = baseCargo[baseCargoIndex].amount
