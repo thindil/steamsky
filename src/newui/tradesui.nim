@@ -18,7 +18,7 @@
 ## Provides code related to trading with bases and ships UI, like showing the
 ## list of items to trade, info about items, trading itself, etc.
 
-import std/tables
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, game, items, maps, types]
 import coreui, dialogs, errordialog, header
@@ -38,6 +38,9 @@ var
   itemsIndexes: seq[int]
   currentPage: Positive = 1
   baseType: string
+  baseIndex: BasesRange
+  baseCargo: seq[BaseCargo]
+  eventIndex: int
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Set the data for trades UI
@@ -47,7 +50,7 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contrac
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   typesList = @["All"]
-  var baseCargo: seq[BaseCargo]
+  baseCargo = @[]
   if itemsSortOrder == defaultItemsSortOrder:
     itemsIndexes = @[]
     for index in playerShip.cargo.low .. playerShip.cargo.high:
@@ -78,7 +81,8 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contrac
   typeIndex = 0
   nameSearch = ""
   currentPage = 1
-  let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
   if baseIndex > 0:
     baseType = skyBases[baseIndex].baseType
     baseCargo = skyBases[baseIndex].cargo
@@ -182,7 +186,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
             itemIndex = protoIndex):
           baseAmount = baseCargo[baseCargoIndex].amount
       except:
-        return showError(message = "Can't get base amount.")
+        dialog = setError(message = "Can't get base amount.")
+        return
     else:
       if baseCargoIndex > -1:
         baseAmount = baseCargo[baseCargoIndex].amount
