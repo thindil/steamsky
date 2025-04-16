@@ -216,7 +216,7 @@ proc showNews*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         fileContent = ""
         return
-  if isKeyPressed(key = NK_KEY_ESCAPE):
+  if isKeyPressed(key = keyEscape):
     state = mainMenu
     fileContent = ""
 
@@ -295,7 +295,7 @@ proc showAbout*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
-  if isKeyPressed(key = NK_KEY_ESCAPE):
+  if isKeyPressed(key = keyEscape):
     state = mainMenu
     return
   showLinkError()
@@ -341,7 +341,7 @@ proc showFile*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         fileContent = ""
         return
-  if isKeyPressed(key = NK_KEY_ESCAPE):
+  if isKeyPressed(key = keyEscape):
     state = mainMenu
     fileContent = ""
 
@@ -375,7 +375,7 @@ proc showHallOfFame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         addTooltip(bounds = getWidgetBounds(), text = "Back to the main menu")
       labelButton(title = "Back to menu"):
         state = mainMenu
-  if isKeyPressed(key = NK_KEY_ESCAPE):
+  if isKeyPressed(key = keyEscape):
     state = mainMenu
 
 type
@@ -537,7 +537,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
         state = mainMenu
         saveClicked = ""
   showQuestion(dialog = dialog, state = state)
-  if isKeyPressed(key = NK_KEY_ESCAPE):
+  if isKeyPressed(key = keyEscape):
     if dialog == none:
       state = mainMenu
       saveClicked = ""
@@ -1030,7 +1030,7 @@ proc newGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = "Back to menu"):
         state = mainMenu
         return
-  if isKeyPressed(key = NK_KEY_ESCAPE) and not editActive:
+  if isKeyPressed(key = keyEscape) and not editActive:
     if dialog == none:
       state = mainMenu
     else:
