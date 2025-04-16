@@ -16,13 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[config, game, maps, missions, tk, types]
 import coreui, dialogs, errordialog, table, utilsui2
 
 proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
+        TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Show the menu with available the selected mission options
   ##
   ## * clientData - the additional data for the Tcl command
