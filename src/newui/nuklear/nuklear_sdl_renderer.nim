@@ -226,62 +226,62 @@ proc nuklearInput*(): UserEvents =
         kEvnt: SDL_KeyboardEvent = cast[SDL_KeyboardEvent](evt)
       case kEvnt.keysym.sym
       of SDLK_RSHIFT.cuint, SDLK_LSHIFT.cuint:
-        nk_input_key(ctx, NK_KEY_SHIFT, down)
+        nk_input_key(ctx, keyShift, down)
       of SDLK_DELETE.cuint:
-        nk_input_key(ctx, NK_KEY_DEL, down)
+        nk_input_key(ctx, keyDel, down)
       of SDLK_RETURN.cuint:
-        nk_input_key(ctx, NK_KEY_ENTER, down)
+        nk_input_key(ctx, keyEnter, down)
       of SDLK_TAB.cuint:
-        nk_input_key(ctx, NK_KEY_TAB, down)
+        nk_input_key(ctx, keyTab, down)
       of SDLK_BACKSPACE.cuint:
-        nk_input_key(ctx, NK_KEY_BACKSPACE, down)
+        nk_input_key(ctx, keyBackspace, down)
       of SDLK_HOME.cuint:
-        nk_input_key(ctx, NK_KEY_TEXT_START, down)
-        nk_input_key(ctx, NK_KEY_SCROLL_START, down)
+        nk_input_key(ctx, keyTextStart, down)
+        nk_input_key(ctx, keyScrollStart, down)
       of SDLK_END.cuint:
-        nk_input_key(ctx, NK_KEY_TEXT_END, down)
-        nk_input_key(ctx, NK_KEY_SCROLL_END, down)
+        nk_input_key(ctx, keyTextEnd, down)
+        nk_input_key(ctx, keyScrollEnd, down)
       of SDLK_PAGEDOWN.cuint:
-        nk_input_key(ctx, NK_KEY_SCROLL_DOWN, down)
+        nk_input_key(ctx, keyScrollDown, down)
       of SDLK_PAGEUP.cuint:
-        nk_input_key(ctx, NK_KEY_SCROLL_UP, down)
+        nk_input_key(ctx, keyScrollUp, down)
       of SDLK_Z.cuint:
-        nk_input_key(ctx, NK_KEY_TEXT_UNDO, (down and (state[
+        nk_input_key(ctx, keyTextUndo, (down and (state[
             SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
       of SDLK_R.cuint:
-        nk_input_key(ctx, NK_KEY_TEXT_REDO, (down and (state[
+        nk_input_key(ctx, keyTextRedo, (down and (state[
             SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
       of SDLK_C.cuint:
-        nk_input_key(ctx, NK_KEY_COPY, (down and (state[
+        nk_input_key(ctx, keyCopy, (down and (state[
             SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
       of SDLK_V.cuint:
-        nk_input_key(ctx, NK_KEY_PASTE, (down and (state[
+        nk_input_key(ctx, keyPaste, (down and (state[
             SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
       of SDLK_X.cuint:
-        nk_input_key(ctx, NK_KEY_CUT, (down and (state[
+        nk_input_key(ctx, keyCut, (down and (state[
             SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
       of SDLK_B.cuint:
-        nk_input_key(ctx, NK_KEY_TEXT_LINE_START, (down and (state[
+        nk_input_key(ctx, keyTextLineStart, (down and (state[
             SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
       of SDLK_E.cuint:
-        nk_input_key(ctx, NK_KEY_TEXT_LINE_END, (down and (state[
+        nk_input_key(ctx, keyTextLineEnd, (down and (state[
             SDL_SCANCODE_LCTRL.ord] == 1)).nk_bool)
       of SDLK_UP.cuint:
-        nk_input_key(ctx, NK_KEY_UP, down)
+        nk_input_key(ctx, keyUp, down)
       of SDLK_DOWN.cuint:
-        nk_input_key(ctx, NK_KEY_DOWN, down)
+        nk_input_key(ctx, keyDown, down)
       of SDLK_LEFT.cuint:
         if state[SDL_SCANCODE_LCTRL.ord] == 1:
-          nk_input_key(ctx, NK_KEY_TEXT_WORD_LEFT, down)
+          nk_input_key(ctx, keyTextWordLeft, down)
         else:
-          nk_input_key(ctx, NK_KEY_LEFT, down)
+          nk_input_key(ctx, keyLeft, down)
       of SDLK_RIGHT.cuint:
         if state[SDL_SCANCODE_LCTRL.ord] == 1:
-          nk_input_key(ctx, NK_KEY_TEXT_WORD_RIGHT, down)
+          nk_input_key(ctx, keyTextWordRight, down)
         else:
-          nk_input_key(ctx, NK_KEY_RIGHT, down)
+          nk_input_key(ctx, keyRight, down)
       of SDLK_ESCAPE.cuint:
-        nk_input_key(ctx, NK_KEY_ESCAPE, down)
+        nk_input_key(ctx, keyEscape, down)
       else:
         result = noEvent
     of SDL_MOUSEBUTTONDOWN.cuint, SDL_MOUSEBUTTONUP.cuint:

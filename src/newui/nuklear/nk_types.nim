@@ -121,17 +121,17 @@ type
   AllocationType* = enum
     ## Another type of buffer allocation
     bufferFixed, bufferDynamic
-  nk_keys* = enum
+  Keys* = enum
     ## Internal Nuklear type
-    NK_KEY_NONE, NK_KEY_SHIFT, NK_KEY_CTRL, NK_KEY_DEL, NK_KEY_ENTER,
-      NK_KEY_TAB, NK_KEY_BACKSPACE, NK_KEY_COPY, NK_KEY_CUT, NK_KEY_PASTE,
-      NK_KEY_UP, NK_KEY_DOWN, NK_KEY_LEFT, NK_KEY_RIGHT,
-      NK_KEY_TEXT_INSERT_MODE, NK_KEY_TEXT_REPLACE_MODE, NK_KEY_TEXT_RESET_MODE,
-      NK_KEY_TEXT_LINE_START, NK_KEY_TEXT_LINE_END, NK_KEY_TEXT_START,
-      NK_KEY_TEXT_END, NK_KEY_TEXT_UNDO, NK_KEY_TEXT_REDO,
-      NK_KEY_TEXT_SELECT_ALL, NK_KEY_TEXT_WORD_LEFT, NK_KEY_TEXT_WORD_RIGHT,
-      NK_KEY_SCROLL_START, NK_KEY_SCROLL_END, NK_KEY_SCROLL_DOWN,
-      NK_KEY_SCROLL_UP, NK_KEY_ESCAPE, NK_KEY_MAX
+    keyNone, keyShift, keyCtrl, keyDel, keyEnter,
+      keyTab, keyBackspace, keyCopy, keyCut, keyPaste,
+      keyUp, keyDown, keyLeft, keyRight,
+      keyTextInsertMode, keyTextReplaceMode, keyTextResetMode,
+      keyTextLineStart, keyTextLineEnd, keyTextStart,
+      keyTextEnd, keyTextUndo, keyTextRedo,
+      keyTextSelectAll, keyTextWordLeft, keyTextWordRight,
+      keyScrollStart, keyScrollEnd, keyScrollDown,
+      keyScrollUp, keyEscape, keyMax
   nk_style_cursor* = enum
     ## Internal Nuklear type
     NK_CURSOR_ARROW,
