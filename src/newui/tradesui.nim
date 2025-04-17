@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, game, items, maps, types]
+import ../[basescargo, basestypes, config, crewinventory, game, items, maps, types]
 import coreui, dialogs, errordialog, header
 
 type ItemsSortOrders = enum
@@ -42,7 +42,8 @@ var
   baseCargo: seq[BaseCargo]
   eventIndex: int
 
-proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the data for trades UI
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -124,6 +125,23 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter a name of an item which you looking for")
     editString(text = nameSearch, maxLen = 64)
+  let
+    moneyIndex2: int = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    moneyText: array[4, string] = ["You have ", $playerShip.cargo[
+        moneyIndex2].amount & " " & moneyName, " Base has ", $skyBases[
+        baseIndex].cargo[0].amount & " " & moneyName]
+    textWidth: array[4, cfloat] = try:
+        [moneyText[0].getTextWidth.cfloat, moneyText[1].getTextWidth.cfloat,
+            moneyText[2].getTextWidth.cfloat, moneyText[3].getTextWidth.cfloat]
+      except:
+        dialog = setError(message = "Can't count the money info width.")
+        return
+  setLayoutRowStatic(height = 35, cols = 4, ratio = textWidth)
+  label(str = moneyText[0])
+  label(str = moneyText[1])
+  label(str = moneyText[2])
+  label(str = moneyText[3])
   var
     currentItemIndex = 0
     indexesList: seq[Natural]
@@ -157,7 +175,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       continue
     let itemName = getItemName(item = playerShip.cargo[i], damageInfo = false,
         toLower = false)
-    if nameSearch.len > 0 and itemName.toLowerAscii.find(sub = nameSearch.toLowerAscii) == -1:
+    if nameSearch.len > 0 and itemName.toLowerAscii.find(
+        sub = nameSearch.toLowerAscii) == -1:
       continue
     if currentRow < startRow:
       currentRow.inc
