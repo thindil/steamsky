@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
   ship
 - Hide the module's info dialog with Escape key
 - Crash when using Tab key in the module's info dialog
+- Tab key traversal in the module's info dialog
 
 ## [10.9] - 2025-03-23
 
