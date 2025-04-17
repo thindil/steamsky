@@ -47,7 +47,7 @@ proc addLabel(name, labelText, yScroll: string; height: var Positive;
   ## Returns the name of the label and modified parameter height if
   ## countHeight was true.
   result = name
-  tclEval(script = "ttk::label " & name & " -text {" & labelText &
+  tclEval(script = "ttk::label " & name & " -takefocus 0 -text {" & labelText &
       "} -wraplength " & (if wrapLength > 0: $wrapLength else: "300") & (
       if secondary: " -style Golden.TLabel" else: ""))
   tclEval(script = "grid " & name & " -sticky w -row " & $row & " -column " &
@@ -147,7 +147,7 @@ proc showModuleDamage(currentRow: var Natural; module: ModuleData; moduleFrame,
     statusTooltip.add(y = " (max upgrade)")
   let progressBar: string = moduleFrame & ".damagebar"
   tclEval(script = "ttk::progressbar " & progressBar &
-      " -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
+      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $damagePercent & "}" & progressBarStyle)
   tclEval(script = "tooltip::tooltip " & progressBar & " \"" & statusTooltip & "\"")
   tclEval(script = "grid " & progressBar & " -row " & $currentRow & " -column 1 -sticky we")
   var infoButton: string = moduleFrame & ".repairbutton"
@@ -307,7 +307,7 @@ proc showModuleUpgrade(currentRow: var Natural; height: var Positive;
         " -style Horizontal.TProgressbar"
     progressBar2: string = moduleFrame & ".upgradebar"
   tclEval(script = "ttk::progressbar " & progressBar2 &
-      " -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
+      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $(upgradePercent.float) &
       "}" & progressBarStyle2)
   tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" & moduleInfo & "\"")
   label = addLabel(name = moduleFrame & ".upgradelbl",
@@ -501,7 +501,7 @@ proc showCabinInfo(currentRow: var Natural; module: ModuleData; label,
     progressBarStyle = ""
   var progressBar2: string = moduleFrame & ".cleanbar"
   tclEval(script = "ttk::progressbar " & progressBar2 &
-      " -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent2) &
+      " -takefocus 0 -orient horizontal -maximum 1.0 -value {" & $(1.0 - damagePercent2) &
       "}" & progressBarStyle)
   tclEval(script = "tooltip::tooltip " & progressBar2 & " \"" &
       newStatusTooltip & "\"")
@@ -510,7 +510,7 @@ proc showCabinInfo(currentRow: var Natural; module: ModuleData; label,
   currentRow.inc
   progressBar2 = moduleFrame & ".qualitybar"
   tclEval(script = "ttk::progressbar " & progressBar2 &
-      " -orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
+      " -takefocus 0 -orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
       $(module.quality.float / 100.0) & "}")
   label = addLabel(name = moduleFrame & ".qualitylbl", labelText = "Quality:",
       row = currentRow, yScroll = yScroll, height = height)
