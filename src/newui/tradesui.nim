@@ -20,8 +20,9 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, crewinventory, game, items, maps, types]
-import coreui, dialogs, errordialog, header
+import ../[basescargo, basestypes, config, crewinventory, game, items, maps,
+    shipscargo, types]
+import coreui, dialogs, errordialog, header, themes
 
 type ItemsSortOrders = enum
   nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
@@ -139,9 +140,18 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         return
   setLayoutRowStatic(height = 35, cols = 4, ratio = textWidth)
   label(str = moneyText[0])
-  label(str = moneyText[1])
+  colorLabel(str = moneyText[1], color = theme.colors[goldenColor])
   label(str = moneyText[2])
-  label(str = moneyText[3])
+  colorLabel(str = moneyText[3], color = theme.colors[goldenColor])
+  var freeSpace = try:
+      freeCargo(amount = 0)
+    except:
+      dialog = setError(message = "Can't get free space.")
+      return
+  if freeSpace < 0:
+    freeSpace = 0
+  let
+    cargoText: array[2, string] = ["Free cargo space is ", $freeSpace & " kg"]
   var
     currentItemIndex = 0
     indexesList: seq[Natural]
