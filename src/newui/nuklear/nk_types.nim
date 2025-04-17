@@ -132,16 +132,11 @@ type
       keyTextSelectAll, keyTextWordLeft, keyTextWordRight,
       keyScrollStart, keyScrollEnd, keyScrollDown,
       keyScrollUp, keyEscape, keyMax
-  nk_style_cursor* = enum
-    ## Internal Nuklear type
-    NK_CURSOR_ARROW,
-    NK_CURSOR_TEXT,
-    NK_CURSOR_MOVE,
-    NK_CURSOR_RESIZE_VERTICAL,
-    NK_CURSOR_RESIZE_HORIZONTAL,
-    NK_CURSOR_RESIZE_TOP_LEFT_DOWN_RIGHT,
-    NK_CURSOR_RESIZE_TOP_RIGHT_DOWN_LEFT,
-    NK_CURSOR_COUNT
+  StyleCursor* = enum
+    ## Types of cursor's styles
+    cursorArrow, cursorText, cursorMove, cursorResizeVertical,
+      cursorResizeHorizontal, cursorResizeTopLeftDownRight,
+      cursorResizeTopRightDownLeft, cursorCount
   nk_button_behavior* = enum
     ## Internal Nuklear type
     NK_BUTTON_DEFAULT,
@@ -411,14 +406,14 @@ type
     ## Pointer to nk_panel structure
   ButtonsArray* = array[Buttons.max, nk_mouse_button]
     ## The array of mouse buttons
-  CursorsArray* = array[NK_CURSOR_COUNT, nk_cursor]
+  CursorsArray* = array[cursorCount, nk_cursor]
     ## The array of mouse buttons
 
 # ---------
 # Constants
 # ---------
 const nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
-    ## An empty rectangle
+  ## An empty rectangle
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
