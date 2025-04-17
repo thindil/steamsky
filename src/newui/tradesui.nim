@@ -152,6 +152,14 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     freeSpace = 0
   let
     cargoText: array[2, string] = ["Free cargo space is ", $freeSpace & " kg"]
+    textWidth2: array[2, cfloat] = try:
+        [cargoText[0].getTextWidth.cfloat, cargoText[1].getTextWidth.cfloat]
+      except:
+        dialog = setError(message = "Can't count the cargo info width.")
+        return
+  setLayoutRowStatic(height = 35, cols = 2, ratio = textWidth2)
+  label(str = cargoText[0])
+  colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   var
     currentItemIndex = 0
     indexesList: seq[Natural]
