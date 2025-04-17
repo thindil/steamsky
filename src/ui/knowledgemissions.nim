@@ -97,7 +97,7 @@ proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
     missionsCanvas = mainPaned & ".knowledgeframe.missions.canvas"
     missionsFrame = missionsCanvas & ".frame"
   var rows = try:
-      tclEval2(script = "grid size " & missionsFrame).split(" ")[1].parseInt
+      tclEval2(script = "grid size " & missionsFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
@@ -396,8 +396,8 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the accepted missions UI
   try:
-    addCommand("ShowMissionMenu", showMissionsMenuCommand)
-    addCommand("ShowMissions", showMissionsCommand)
-    addCommand("SortAccepted_Missions", sortMissionsCommand)
+    addCommand(name = "ShowMissionMenu", nimProc = showMissionsMenuCommand)
+    addCommand(name = "ShowMissions", nimProc = showMissionsCommand)
+    addCommand(name = "SortAccepted_Missions", nimProc = sortMissionsCommand)
   except:
     showError(message = "Can't add a Tcl command.")
