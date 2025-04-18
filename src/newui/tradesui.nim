@@ -42,6 +42,7 @@ var
   baseCargo: seq[BaseCargo] = @[]
   eventIndex, moneyIndex2: int = -1
   moneyText: seq[string] = @[]
+  textWidth: seq[cfloat] = @[]
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -94,6 +95,8 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     baseCargo = traderCargo
     location = "Ship"
   moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  moneyText = @[]
+  textWidth = @[]
   if moneyIndex == -1:
     moneyText.add(y = "You don't have " & moneyName & " to buy anything")
   else:
@@ -103,6 +106,12 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     moneyText.add(y = " " & location & " doesn't have any " & moneyName & " to buy anything")
   else:
     moneyText.add(y = " " & location & " has " & $baseCargo[0].amount & " " & moneyName)
+  for text in moneyText:
+    try:
+      textWidth.add(y = text.getTextWidth)
+    except:
+      dialog = setError(message = "Can't get the width of the money text.")
+      return
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -138,23 +147,13 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter a name of an item which you looking for")
     editString(text = nameSearch, maxLen = 64)
-  if moneyIndex2 > -1:
-    let
-      moneyText: array[4, string] = ["You have ", $playerShip.cargo[
-          moneyIndex2].amount & " " & moneyName, " " & location & " has ",
-          $baseCargo[0].amount & " " & moneyName]
-      textWidth: array[4, cfloat] = try:
-          [moneyText[0].getTextWidth.cfloat, moneyText[1].getTextWidth.cfloat,
-              moneyText[2].getTextWidth.cfloat, moneyText[
-                  3].getTextWidth.cfloat]
-        except:
-          dialog = setError(message = "Can't count the money info width.")
-          return
-    setLayoutRowStatic(height = 35, cols = 4, ratio = textWidth)
-    label(str = moneyText[0])
-    colorLabel(str = moneyText[1], color = theme.colors[goldenColor])
-    label(str = moneyText[2])
-    colorLabel(str = moneyText[3], color = theme.colors[goldenColor])
+  # Show information about money owned by the player and the base
+  setLayoutRowStatic(height = 35, cols = textWidth.len, ratio = textWidth)
+  for index, text in moneyText:
+    if index mod 2 == 0:
+      label(str = text)
+    else:
+      colorLabel(str = text, color = theme.colors[goldenColor])
   var freeSpace = try:
       freeCargo(amount = 0)
     except:
