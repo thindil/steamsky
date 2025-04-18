@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Hide the module's info dialog with Escape key
 - Crash when using Tab key in the module's info dialog
 - Tab key traversal in the module's info dialog
+- Hide the give item's from the player's ship's cargo dialog with Escape key
 
 ## [10.9] - 2025-03-23
 
