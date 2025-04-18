@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the list of accepted missions, like showing it,
+## sorting or showing them on the map.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[config, game, maps, missions, tk, types]
@@ -56,7 +59,16 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addButton(name, label, command, icon, tooltipText: string;
       column: Natural; color: string = "") {.raises: [], tags: [],
-          contractual.} =
+      contractual.} =
+    ## Add a button to the missions' menu
+    ##
+    ## * name        - the Tcl name of the button
+    ## * label       - the text to display on the button
+    ## * command     - the Tcl command to execute when the button was pressed
+    ## * icon        - the icon to show on the button
+    ## * tooltipText - the tooltip text for the button
+    ## * column      - the column in which the button will be show
+    ## * color       - the color of the button's text
     let button = missionMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & missionMenu & " .;" & command &
@@ -322,6 +334,14 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
       return showError(message = "Can't add the local mission.")
   proc sortMissions(x, y: LocalMissionData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two missions and return which should go first, based on the sort
+    ## order of the missions
+    ##
+    ## * x - the first mission to compare
+    ## * y - the second mission to compare
+    ##
+    ## Returns 1 if the first mission should go first, -1 if the second mission
+    ## should go first.
     case missionsSortOrder
     of typeAsc:
       if x.mType < y.mType:
