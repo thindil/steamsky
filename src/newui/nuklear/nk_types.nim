@@ -137,10 +137,6 @@ type
     cursorArrow, cursorText, cursorMove, cursorResizeVertical,
       cursorResizeHorizontal, cursorResizeTopLeftDownRight,
       cursorResizeTopRightDownLeft, cursorCount
-  nk_button_behavior* = enum
-    ## Internal Nuklear type
-    NK_BUTTON_DEFAULT,
-    NK_BUTTON_REPEATER
   nk_widget_states* = enum
     ## Internal Nuklear type
     NK_WIDGET_STATE_MODIFIED = 1 shl 1
