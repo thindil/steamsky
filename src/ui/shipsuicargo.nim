@@ -1,4 +1,4 @@
-# Copyright 2024 Bartek thindil Jasicki
+# Copyright 2024-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -340,7 +340,7 @@ proc showGiveItemCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tooltip::tooltip " & button & " \"Cancel giving and close dialog. \\[Escape key\\]\"")
   tclEval(script = "focus " & button)
   tclEval(script = "bind " & button & " <Tab> {focus .itemdialog.maxbutton;break}")
-  tclEval(script = "bind" & button & " <Escape> {" & button & " invoke;break}")
+  tclEval(script = "bind " & button & " <Escape> {" & button & " invoke;break}")
   showDialog(dialog = itemDialog)
   tclEval(script = "event generate " & crewBox & " <<ComboboxSelected>>")
   return tclOk
