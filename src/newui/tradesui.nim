@@ -44,7 +44,7 @@ var
   moneyText: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
   cargoText: array[2, string] = ["Free cargo space is ", ""]
-  cargoWidth: array[2, cfloat] = [cargoText[0].getTextWidth.cfloat, 0]
+  cargoWidth: array[2, cfloat] = [0.cfloat, 0]
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -122,7 +122,17 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       return
   if freeSpace < 0:
     freeSpace = 0
-  cargoText[1] = $freespace & " kg"
+  cargoWidth[0] = try:
+      cargoText[0].getTextWidth.cfloat
+    except:
+      dialog = setError(message = "Can't get the width of the cargo text.")
+      0.0
+  cargoText[1] = $freeSpace & " kg"
+  cargoWidth[1] = try:
+      cargoText[1].getTextWidth.cfloat
+    except:
+      dialog = setError(message = "Can't get the width of the cargo text.")
+      0.0
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -145,7 +155,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showInfo(dialog = dialog)
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = 35, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
+    setLayoutRowDynamic(height = 25, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
     label(str = "Type:")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -159,27 +169,13 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           text = "Enter a name of an item which you looking for")
     editString(text = nameSearch, maxLen = 64)
   # Show information about money owned by the player and the base
-  setLayoutRowStatic(height = 35, cols = moneyWidth.len, ratio = moneyWidth)
+  setLayoutRowStatic(height = 25, cols = moneyWidth.len, ratio = moneyWidth)
   for index, text in moneyText:
     if index mod 2 == 0:
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
-  var freeSpace = try:
-      freeCargo(amount = 0)
-    except:
-      dialog = setError(message = "Can't get free space.")
-      return
-  if freeSpace < 0:
-    freeSpace = 0
-  let
-    cargoText: array[2, string] = ["Free cargo space is ", $freeSpace & " kg"]
-    textWidth: array[2, cfloat] = try:
-        [cargoText[0].getTextWidth.cfloat, cargoText[1].getTextWidth.cfloat]
-      except:
-        dialog = setError(message = "Can't count the cargo info width.")
-        return
-  setLayoutRowStatic(height = 35, cols = 2, ratio = textWidth)
+  setLayoutRowStatic(height = 25, cols = 2, ratio = cargoWidth)
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   var
