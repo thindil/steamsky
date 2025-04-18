@@ -34,14 +34,14 @@ const defaultItemsSortOrder: ItemsSortOrders = none
 var
   typesList: seq[string] = @["All"]
   typeIndex: Natural = 0
-  nameSearch: string = ""
+  nameSearch, location, baseType: string = ""
   itemsSortOrder: ItemsSortOrders = defaultItemsSortOrder
-  itemsIndexes: seq[int]
+  itemsIndexes: seq[int] = @[]
   currentPage: Positive = 1
-  baseType: string
-  baseIndex: BasesRange
-  baseCargo: seq[BaseCargo]
-  eventIndex: int
+  baseIndex: BasesRange = 1
+  baseCargo: seq[BaseCargo] = @[]
+  eventIndex, moneyIndex2: int = -1
+  moneyText: seq[string] = @[]
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -88,9 +88,21 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if baseIndex > 0:
     baseType = skyBases[baseIndex].baseType
     baseCargo = skyBases[baseIndex].cargo
+    location = "Base"
   else:
     baseType = "0"
     baseCargo = traderCargo
+    location = "Ship"
+  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  if moneyIndex == -1:
+    moneyText.add(y = "You don't have " & moneyName & " to buy anything")
+  else:
+    moneyText.add(y = "You have ")
+    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
+  if baseCargo[0].amount == 0:
+    moneyText.add(y = " " & location & " doesn't have any " & moneyName & " to buy anything")
+  else:
+    moneyText.add(y = " " & location & " has " & $baseCargo[0].amount & " " & moneyName)
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -126,23 +138,11 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addTooltip(bounds = getWidgetBounds(),
           text = "Enter a name of an item which you looking for")
     editString(text = nameSearch, maxLen = 64)
-  let
-    moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
-  var
-    location: string = ""
-    amount: Natural = 0
-  if baseIndex > 0:
-    location = "Base"
-    amount = skyBases[baseIndex].cargo[0].amount
-  else:
-    location = "Ship"
-    amount = traderCargo[0].amount
   if moneyIndex2 > -1:
     let
       moneyText: array[4, string] = ["You have ", $playerShip.cargo[
           moneyIndex2].amount & " " & moneyName, " " & location & " has ",
-          $amount & " " & moneyName]
+          $baseCargo[0].amount & " " & moneyName]
       textWidth: array[4, cfloat] = try:
           [moneyText[0].getTextWidth.cfloat, moneyText[1].getTextWidth.cfloat,
               moneyText[2].getTextWidth.cfloat, moneyText[
