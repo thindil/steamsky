@@ -42,7 +42,9 @@ var
   baseCargo: seq[BaseCargo] = @[]
   eventIndex, moneyIndex2: int = -1
   moneyText: seq[string] = @[]
-  textWidth: seq[cfloat] = @[]
+  moneyWidth: seq[cfloat] = @[]
+  cargoText: array[2, string] = ["Free cargo space is ", ""]
+  cargoWidth: array[2, cfloat] = [cargoText[0].getTextWidth.cfloat, 0]
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -96,7 +98,7 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     location = "Ship"
   moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
   moneyText = @[]
-  textWidth = @[]
+  moneyWidth = @[]
   if moneyIndex == -1:
     moneyText.add(y = "You don't have " & moneyName & " to buy anything")
   else:
@@ -105,13 +107,22 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   if baseCargo[0].amount == 0:
     moneyText.add(y = " " & location & " doesn't have any " & moneyName & " to buy anything")
   else:
-    moneyText.add(y = " " & location & " has " & $baseCargo[0].amount & " " & moneyName)
+    moneyText.add(y = " " & location & " has ")
+    moneyText.add(y = $baseCargo[0].amount & " " & moneyName)
   for text in moneyText:
     try:
-      textWidth.add(y = text.getTextWidth)
+      moneyWidth.add(y = text.getTextWidth)
     except:
       dialog = setError(message = "Can't get the width of the money text.")
       return
+  var freeSpace = try:
+      freeCargo(amount = 0)
+    except:
+      dialog = setError(message = "Can't get free space.")
+      return
+  if freeSpace < 0:
+    freeSpace = 0
+  cargoText[1] = $freespace & " kg"
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -148,7 +159,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           text = "Enter a name of an item which you looking for")
     editString(text = nameSearch, maxLen = 64)
   # Show information about money owned by the player and the base
-  setLayoutRowStatic(height = 35, cols = textWidth.len, ratio = textWidth)
+  setLayoutRowStatic(height = 35, cols = moneyWidth.len, ratio = moneyWidth)
   for index, text in moneyText:
     if index mod 2 == 0:
       label(str = text)
