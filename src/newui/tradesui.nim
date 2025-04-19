@@ -169,7 +169,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           text = "Enter a name of an item which you looking for")
     editString(text = nameSearch, maxLen = 64)
   # Show information about money owned by the player and the base
-  setLayoutRowDynamic(height = 25, cols = moneyWidth.len, ratio = moneyWidth)
+  setLayoutRowStatic(height = 25, cols = moneyWidth.len, ratio = moneyWidth)
   for index, text in moneyText:
     if index mod 2 == 0:
       label(str = text)
@@ -182,7 +182,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   # Show the list of items for trade
   setLayoutRowDynamic(height = (windowHeight - 70).float, cols = 1)
   group(title = "TradeGroup", flags = {windowNoFlags}):
-    setLayoutRowDynamic(height = 30, cols = 8)
+    setLayoutRowDynamic(height = 25, cols = 8)
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Press mouse button to sort the items.")
