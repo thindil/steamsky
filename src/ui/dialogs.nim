@@ -378,6 +378,7 @@ proc showManipulateItem*(title, command, action: string; itemIndex: Natural;
   let allButton: string = amountFrame & ".button" & $newMaxAmount
   tclEval(script = "ttk::button " & allButton & " -text {Max} -command {" &
       amountBox & " set " & $newMaxAmount & ";" & amountBox & " validate} -style Dialog.TButton")
+  tclEval(script = "bind " & allButton & " <Escape> {" & itemDialog & ".cancelbutton invoke;break}")
   tclEval(script = "grid " & allButton & " -padx {5 0} -row 0 -column " &
       $column & " -sticky w")
   tclEval(script = "grid " & amountFrame & " -padx 5 -pady 5 -columnspan 2")
