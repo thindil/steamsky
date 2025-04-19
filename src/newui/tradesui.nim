@@ -179,6 +179,26 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowStatic(height = 25, cols = 2, ratio = cargoWidth)
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
+  # Show the list of items for trade
+  setLayoutRowDynamic(height = (windowHeight - 70).float, cols = 1)
+  group(title = "TradeGroup", flags = {windowNoFlags}):
+    setLayoutRowDynamic(height = 30, cols = 2)
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Press mouse button to sort the items.")
+    labelButton(title = "Name"):
+      if itemsSortOrder == nameAsc:
+        itemsSortOrder = nameDesc
+      else:
+        itemsSortOrder = nameAsc
+    if gameSettings.showTooltips:
+      addTooltip(bounds = getWidgetBounds(),
+          text = "Press mouse button to sort the items.")
+    labelButton(title = "Type"):
+      if itemsSortOrder == typeAsc:
+        itemsSortOrder = typeDesc
+      else:
+        itemsSortOrder = typeAsc
   var
     currentItemIndex = 0
     indexesList: seq[Natural]
