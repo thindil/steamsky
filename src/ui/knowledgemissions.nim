@@ -39,12 +39,12 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowMissionMenu missionindex
   ## MissionIndex is the index of the mission's menu to show
   let
-    missionIndex = try:
+    missionIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the mission's index.")
-    acceptedMission = acceptedMissions[missionIndex]
-    missionMenu = createDialog(name = ".missionslistmenu", title = (
+    acceptedMission: MissionData = acceptedMissions[missionIndex]
+    missionMenu: string = createDialog(name = ".missionslistmenu", title = (
       case acceptedMission.mType
       of deliver:
         "Deliver item"
@@ -69,7 +69,7 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * tooltipText - the tooltip text for the button
     ## * column      - the column in which the button will be show
     ## * color       - the color of the button's text
-    let button = missionMenu & name
+    let button: string = missionMenu & name
     tclEval(script = "ttk::button " & button & " -text {" & label &
         "} -command {CloseDialog " & missionMenu & " .;" & command &
         "} -image " & icon & "icon -style Dialog" & color & ".TButton")
@@ -94,9 +94,11 @@ proc showMissionsMenuCommand(clientData: cint; interp: PInterp; argc: cint;
   showDialog(dialog = missionMenu, parentFrame = ".")
   return tclOk
 
+{.push ruleOff: "varDeclared".}
 var
   missionsTable: TableWidget
-  missionsIndexes: seq[Natural]
+  missionsIndexes: seq[Natural] = @[]
+{.pop ruleOn: "varDeclared".}
 
 proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -106,16 +108,16 @@ proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
   if missionsTable.row > 1:
     clearTable(table = missionsTable)
   let
-    missionsCanvas = mainPaned & ".knowledgeframe.missions.canvas"
-    missionsFrame = missionsCanvas & ".frame"
-  var rows = try:
+    missionsCanvas: string = mainPaned & ".knowledgeframe.missions.canvas"
+    missionsFrame: string = missionsCanvas & ".frame"
+  var rows: int = try:
       tclEval2(script = "grid size " & missionsFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = missionsFrame)
   if acceptedMissions.len == 0:
-    let label = missionsFrame & ".nomissions"
+    let label: string = missionsFrame & ".nomissions"
     tclEval(script = "ttk::label " & label & " -text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350")
     tclEval(script = "grid " & label & " -padx 10")
     tclEval(script = "bind " & missionsCanvas & " <Configure> {" & label &
@@ -132,17 +134,17 @@ proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
       for index, _ in acceptedMissions:
         missionsIndexes.add(y = index)
     var
-      row = 2
-      rows = 0
-      currentRow = 1
-    let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+      row: Natural = 2
+      rows: Natural = 0
+      currentRow: Positive = 1
+    let startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
     for index in missionsIndexes:
       if currentRow < startRow:
         currentRow.inc
         continue
       let
-        acceptedMission = acceptedMissions[index]
-        color = (if acceptedMission.targetX == playerShip.skyX and
+        acceptedMission: MissionData = acceptedMissions[index]
+        color: string = (if acceptedMission.targetX == playerShip.skyX and
             acceptedMission.targetY == playerShip.skyY: "yellow" else: "")
       addButton(table = missionsTable, text = getMissionType(
           mType = acceptedMission.mType), tooltip = "Show the mission's menu",
@@ -188,7 +190,7 @@ proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
           " Y: " & $acceptedMission.targetY,
           tooltip = "The coordinates of the mission on the map",
           command = "ShowMissionMenu " & $(row - 1), column = 3, color = color)
-      var missionTime = ""
+      var missionTime: string = ""
       minutesToDate(minutes = acceptedMission.time, infoText = missionTime)
       addButton(table = missionsTable, text = missionTime,
           tooltip = "The time limit for finish and return the mission",
@@ -267,7 +269,7 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## SortAccepted_Missions x
   ## X is X axis coordinate where the player clicked the mouse button
-  let column = try:
+  let column: int = try:
         getColumnNumber(table = missionsTable, xPosition = ($argv[1]).parseInt)
       except:
         return showError(message = "Can't get the column number.")
@@ -312,7 +314,7 @@ proc sortMissionsCommand(clientData: cint; interp: PInterp; argc: cint;
     time: Natural
     reward: Natural
     id: Natural
-  var localMissions: seq[LocalMissionData]
+  var localMissions: seq[LocalMissionData] = @[]
   for index, mission in acceptedMissions:
     try:
       localMissions.add(y = LocalMissionData(mType: mission.mType,
