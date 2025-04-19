@@ -72,8 +72,8 @@ type
   nk_bool* = enum
     ## Internal Nuklear type
     nkFalse, nkTrue
-  nk_modify* = enum
-    ## Internal Nuklear type
+  Modify* = enum
+    ## Modify states
     fixed, modifiable
   CollapseStates* = enum
     ## The states of a tree's content
@@ -83,7 +83,7 @@ type
     none, x, underscore, circleSolid, circleOutline, rectSolid, rectOutline,
       triangleUp, triangleDown, triangleLeft, triangleRight, plus, minus, max
   StyleItemType* = enum
-    ## Internal Nuklear type
+    ## Style's item's types
     itemColor, itemImage, itemNineSlice
   colorFormat* = enum
     ## Colors formats
@@ -97,7 +97,7 @@ type
     ## Types of buttoons
     left, middle, right, double, max
   nk_anti_aliasing* = enum
-    ## Internal Nuklear type
+    ## Antialiasing state
     antiAliasingOff, antiAliasingOn
   WindowFlags* = enum
     ## Flags related to windows
@@ -122,7 +122,7 @@ type
     ## Another type of buffer allocation
     bufferFixed, bufferDynamic
   Keys* = enum
-    ## Internal Nuklear type
+    ## Special keys
     keyNone, keyShift, keyCtrl, keyDel, keyEnter,
       keyTab, keyBackspace, keyCopy, keyCut, keyPaste,
       keyUp, keyDown, keyLeft, keyRight,
@@ -137,8 +137,8 @@ type
     cursorArrow, cursorText, cursorMove, cursorResizeVertical,
       cursorResizeHorizontal, cursorResizeTopLeftDownRight,
       cursorResizeTopRightDownLeft, cursorCount
-  nk_widget_states* = enum
-    ## Internal Nuklear type
+  WidgetStates* = enum
+    ## States of a widget
     NK_WIDGET_STATE_MODIFIED = 1 shl 1
     NK_WIDGET_STATE_INACTIVE = 1 shl 2
     NK_WIDGET_STATE_ENTERED = 1 shl 3
