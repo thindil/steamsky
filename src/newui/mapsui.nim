@@ -838,12 +838,12 @@ proc showMap*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Make the map smaller by one row.")
-  labelButton(title = "\u25b2"):
+  imageButtonCentered(image = images[contract2Icon]):
     gameSettings.messagesPosition += height
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Make the map bigger by one row.")
-  labelButton(title = "\u25bc"):
+  imageButtonCentered(image = images[expand2Icon]):
     gameSettings.messagesPosition -= height
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
