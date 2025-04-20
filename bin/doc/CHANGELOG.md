@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Updated color of no pilot warning icon to match the default colors of the
   game
 - Added money name to reward info in the mission's info dialog
+- Updated README.md
 
 ### Fixed
 - Removed colon from the end of lists of boarding party and defenders in the
