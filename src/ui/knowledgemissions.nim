@@ -110,12 +110,12 @@ proc updateMissionsList*(page: Positive = 1) {.raises: [], tags: [RootEffect],
   let
     missionsCanvas: string = mainPaned & ".knowledgeframe.missions.canvas"
     missionsFrame: string = missionsCanvas & ".frame"
-  var rows: int = try:
+  let rowsToDelete: int = try:
       tclEval2(script = "grid size " & missionsFrame).split(sep = " ")[1].parseInt
     except:
       showError(message = "Can't get the amount of rows.")
       return
-  deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = missionsFrame)
+  deleteWidgets(startIndex = 1, endIndex = rowsToDelete - 1, frame = missionsFrame)
   if acceptedMissions.len == 0:
     let label: string = missionsFrame & ".nomissions"
     tclEval(script = "ttk::label " & label & " -text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350")
