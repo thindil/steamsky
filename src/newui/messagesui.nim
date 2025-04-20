@@ -22,6 +22,20 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[config, messages, types]
 import coreui, errordialog, themes
 
+proc showMessagesButtons*() {.raises: [], tags: [], contractual.} =
+  ## Show the buttons to resize the last messages window
+  setLayoutRowDynamic(height = 20, cols = 2)
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Make the list of messages bigger.")
+  imageButtonCentered(image = images[contract2Icon]):
+    gameSettings.messagesPosition += gameSettings.interfaceFontSize + 10
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Make the list of messages smaller.")
+  imageButtonCentered(image = images[expand2Icon]):
+    gameSettings.messagesPosition -= gameSettings.interfaceFontSize + 10
+
 proc showLastMessages*(theme: ThemeData; dialog: var GameDialog;
     inCombat: bool = false) {.raises: [], tags: [RootEffect], contractual.} =
   ## Show the last in-game messages to the player
