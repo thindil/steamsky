@@ -211,12 +211,14 @@ proc showRecruitInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1")
   frame = recruitDialog & ".buttonbox2"
   tclEval(script = "ttk::frame " & frame)
-  let button: string = recruitDialog & ".buttonbox2.hirebutton"
+  let
+    button: string = recruitDialog & ".buttonbox2.hirebutton"
+    dialogCloseButton: string = recruitDialog & ".buttonbox2.button"
   tclEval(script = "ttk::button " & button &
       " -text Negotiate -command {CloseDialog " & recruitDialog & ";Negotiate} -image negotiateicon -style Dialog.TButton")
   tclEval(script = "grid " & button)
+  tclEval(script = "bind " & button & " <Escape> {" & dialogCloseButton & " invoke;break}")
   tclEval(script = "tooltip::tooltip " & button & " \"Start hiring negotiating.\"")
-  let dialogCloseButton: string = recruitDialog & ".buttonbox2.button"
   tclEval(script = "ttk::button " & dialogCloseButton &
       " -text Close -command {CloseDialog " & recruitDialog & "} -image exiticon -style Dialog.TButton")
   tclEval(script = "grid " & dialogCloseButton & " -row 0 -column 1")
