@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [11.0] - 2025-04-20
 
 ### Changed
 - Updated color of no pilot warning icon to match the default colors of the
