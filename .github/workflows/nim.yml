@@ -1,4 +1,4 @@
-name: Continuous Integration - development version
+name: Continuous Integration - stable version
 
 on:
   push:
@@ -19,9 +19,6 @@ jobs:
       run: |
         git config --global --add safe.directory /__w/steamsky/steamsky
         nimble debug -y
-
-    - name: Check with Nimalyzer
-      run: /root/.nimble/bin/nimalyzer others/nimalyzer.cfg
 
     - name: Upload the log
       uses: actions/upload-artifact@v4
