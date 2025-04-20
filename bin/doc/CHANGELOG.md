@@ -45,6 +45,8 @@ All notable changes to this project will be documented in this file.
 - Tab key traversal in the module's info dialog
 - Hide the give item's from the player's ship's cargo dialog with Escape key
 - Hide buying or selling dialogs with Escape key when Max button is selected
+- Hide the recruit's info dialog with Escape key when Negotiate button is
+  selected
 
 ## [10.9] - 2025-03-23
 
