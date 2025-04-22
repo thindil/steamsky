@@ -18,7 +18,7 @@
 ## Provides code related to trading with bases and ships UI, like showing the
 ## list of items to trade, info about items, trading itself, etc.
 
-import std/[strutils, tables]
+import std/[colors, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, crewinventory, game, items, maps,
     shipscargo, types]
@@ -254,6 +254,15 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       indexesList: seq[Natural]
       currentRow = 1
     let startRow = ((currentPage - 1) * gameSettings.listsLimit) + 1
+    saveButtonStyle()
+    setButtonStyle(field = borderColor, a = 0)
+    try:
+      setButtonStyle(field = normal, color = "#120d0d".parseColor)
+    except:
+      dialog = setError(message = "Can't set table color")
+      return
+    setButtonStyle(field = rounding, value = 0)
+    setButtonStyle(field = border, value = 0)
     for i in itemsIndexes:
       currentItemIndex.inc
       if i == -1:
@@ -317,23 +326,48 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         if baseCargoIndex > -1:
           baseAmount = baseCargo[baseCargoIndex].amount
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available options of item.")
       labelButton(title = itemName):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available options of item.")
       labelButton(title = itemType):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available options of item.")
       labelButton(title = "Placeholder"):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available options of item.")
       labelButton(title = $price):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available options of item.")
       labelButton(title = $profit):
         discard
       try:
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = "Show available options of item.")
         labelButton(title = $itemsList[protoIndex].weight & " kg"):
           discard
       except:
         dialog = setError(message = "Can't show weight")
         return
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available options of item.")
       labelButton(title = $playerShip.cargo[i].amount):
         discard
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Show available options of item.")
       labelButton(title = $baseAmount):
         discard
+    restoreButtonStyle()
