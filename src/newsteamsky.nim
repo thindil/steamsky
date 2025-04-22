@@ -137,7 +137,6 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
   windowHeight = menuHeight.float
   var
     redrawTime: float = 1_000.0
-    windowFlags: set[PanelFlags] = {windowNoFlags}
   while true:
     let started: float = cpuTime()
     if redraw:
@@ -149,14 +148,9 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
       showWaitMenu(dialog = dialog)
       showError(dialog = dialog)
 
-      if state < trade:
-        windowFlags = {windowNoScrollbar}
-      else:
-        windowFlags = {windowNoFlags}
-
       # The main window
       window(name = "Main", x = 0, y = 0, w = windowWidth,
-          h = windowHeight, flags = windowFlags):
+          h = windowHeight, flags = {windowNoScrollbar}):
         let
           oldState: GameState = state
           oldDialog: GameDialog = dialog
