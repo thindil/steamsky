@@ -1,4 +1,4 @@
-import ../src/[careers, factions, items, shipmodules]
+import ../src/[careers, factions, items, reputation, shipmodules]
 import unittest2
 include ../src/missions
 
@@ -31,7 +31,8 @@ suite "Unit tests for missions module":
   playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
       durability: 100))
   skyMap[1][1].baseIndex = 1
-  skyBases[1] = BaseRecord(skyX: 1, skyY: 1)
+  skyBases[1] = BaseRecord(skyX: 1, skyY: 1, owner: "POLEIS")
+  resetReputations()
 
   test "Deleting a mission.":
     acceptedMissions = @[]
