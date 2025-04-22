@@ -139,16 +139,16 @@ type
       cursorResizeTopRightDownLeft, cursorCount
   WidgetStates* = enum
     ## States of a widget
-    NK_WIDGET_STATE_MODIFIED = 1 shl 1
-    NK_WIDGET_STATE_INACTIVE = 1 shl 2
-    NK_WIDGET_STATE_ENTERED = 1 shl 3
-    NK_WIDGET_STATE_HOVER = 1 shl 4
-    NK_WIDGET_STATE_ACTIVED = 1 shl 5
-    NK_WIDGET_STATE_LEFT = 1 shl 6
-    NK_WIDGET_STATE_HOVERED = NK_WIDGET_STATE_HOVER.int or
-        NK_WIDGET_STATE_MODIFIED.int
-    NK_WIDGET_STATE_ACTIVE = NK_WIDGET_STATE_ACTIVED.int or
-        NK_WIDGET_STATE_MODIFIED.int
+    widgetStateModified = 1 shl 1
+    widgetStateInactive = 1 shl 2
+    widgetStateEntered = 1 shl 3
+    widgetStateHover = 1 shl 4
+    widgetStateActived = 1 shl 5
+    widgetStateLeft = 1 shl 6
+    widgetStateHovered = widgetStateHover.int or
+        widgetStateModified.int
+    widgetStateActive = widgetStateActived.int or
+        widgetStateModified.int
 
 # -------
 # Objects

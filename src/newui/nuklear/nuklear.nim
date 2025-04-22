@@ -399,10 +399,10 @@ proc nkWidgetStateReset(s: var nk_flags) {.raises: [], tags: [], contractual.} =
   ## * s - the state to reset
   ##
   ## Returns the modified parameter s
-  if (s and NK_WIDGET_STATE_MODIFIED.int).bool:
-    s = NK_WIDGET_STATE_INACTIVE.int or NK_WIDGET_STATE_MODIFIED.int
+  if (s and widgetStateModified.int).bool:
+    s = widgetStateInactive.int or widgetStateModified.int
   else:
-    s = NK_WIDGET_STATE_INACTIVE.ord
+    s = widgetStateInactive.ord
 
 # ----
 # Math
@@ -1127,9 +1127,9 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
   if i == nil:
     return
   if isMouseHovering(rect = r):
-    state = NK_WIDGET_STATE_HOVERED.nk_flags
+    state = widgetStateHovered.nk_flags
     if isMouseDown(id = left):
-      state = NK_WIDGET_STATE_ACTIVE.nk_flags
+      state = widgetStateActive.nk_flags
       if hasMouseClickDownInRect(id = left, rect = nk_rect(x: r.x, y: r.y, w: r.w, h: r.h), down = nkTrue):
         if behavior != default:
           result = isMouseDown(id = left)
@@ -1138,10 +1138,10 @@ proc nkButtonBehavior(state: var nk_flags; r: NimRect; i: ptr nk_input;
             result = isMouseReleased(id = left)
           else:
             result = isMousePressed(id = left)
-  if (state and NK_WIDGET_STATE_HOVER.ord).nk_bool and not isMousePrevHovering(rect = r):
-    state = state or NK_WIDGET_STATE_ENTERED.ord
+  if (state and widgetStateHover.ord).nk_bool and not isMousePrevHovering(rect = r):
+    state = state or widgetStateEntered.ord
   elif isMousePrevHovering(rect = r):
-    state = state or NK_WIDGET_STATE_LEFT.ord
+    state = state or widgetStateLeft.ord
 
 proc nkDoButton(state: var nk_flags; `out`: ptr nk_command_buffer; r: NimRect;
   style: ptr nk_style_button; `in`: ptr nk_input; behavior: ButtonBehavior;
@@ -1187,9 +1187,9 @@ proc nkDrawButton(`out`: ptr nk_command_buffer; bounds: NimRect;
   ## * style    - the style of the button
   ##
   ## Returns the style of the button
-  if (state and NK_WIDGET_STATE_HOVER.ord).nk_bool:
+  if (state and widgetStateHover.ord).nk_bool:
     result = style.hover
-  elif (state and NK_WIDGET_STATE_ACTIVED.ord).nk_bool:
+  elif (state and widgetStateActived.ord).nk_bool:
     result = style.active
   else:
     result = style.normal
@@ -1265,8 +1265,8 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: var NimRe
   let bg: nk_color = (if background.`type` == itemColor:
     cast[nk_style_item_data](background.data).color else: style.text_background)
 
-  var sym: nk_color = (if (state and NK_WIDGET_STATE_HOVER.ord).bool:
-    style.text_hover elif (state and NK_WIDGET_STATE_ACTIVE.ord).bool:
+  var sym: nk_color = (if (state and widgetStateHover.ord).bool:
+    style.text_hover elif (state and widgetStateActive.ord).bool:
       style.text_active else: style.text_normal)
 
   sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
