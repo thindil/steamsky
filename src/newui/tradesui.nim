@@ -317,3 +317,23 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         if baseCargoIndex > -1:
           baseAmount = baseCargo[baseCargoIndex].amount
+      labelButton(title = itemName):
+        discard
+      labelButton(title = itemType):
+        discard
+      labelButton(title = "Placeholder"):
+        discard
+      labelButton(title = $price):
+        discard
+      labelButton(title = $profit):
+        discard
+      try:
+        labelButton(title = $itemsList[protoIndex].weight & " kg"):
+          discard
+      except:
+        dialog = setError(message = "Can't show weight")
+        return
+      labelButton(title = $playerShip.cargo[i].amount):
+        discard
+      labelButton(title = $baseAmount):
+        discard
