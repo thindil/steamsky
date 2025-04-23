@@ -134,6 +134,21 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't get the width of the cargo text.")
       0.0
 
+proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [], tags: [], contractual.} =
+  ## Add a header to the list of items for trade
+  ##
+  ## * label    - the text to show on the header
+  ## * sortAsc  - the sorting column ascending
+  ## * sortDesc - the sorting column descending
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Press mouse button to sort the items.")
+  labelButton(title = label):
+    if itemsSortOrder == sortAsc:
+      itemsSortOrder = sortDesc
+    else:
+      itemsSortOrder = sortAsc
+
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the trading UI
