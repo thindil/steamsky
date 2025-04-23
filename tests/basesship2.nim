@@ -1,6 +1,6 @@
 import unittest2
-import ../src/[basestypes, careers, crafts, factions, items, mobs, ships,
-    shipmodules, utils]
+import ../src/[basestypes, careers, crafts, factions, items, mobs, reputation,
+    ships, shipmodules, utils]
 include ../src/basesship2
 
 suite "Unit tests for basesship2 module":
@@ -79,6 +79,7 @@ suite "Unit tests for basesship2 module":
   generateCargo()
   skyBases[1].cargo[0].amount = 10_000
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  resetReputations()
 
   test "Repairing the player's ship's module in the base.":
     playerShip.modules[0].durability -= 5
