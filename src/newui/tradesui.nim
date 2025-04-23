@@ -134,7 +134,8 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't get the width of the cargo text.")
       0.0
 
-proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [], tags: [], contractual.} =
+proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [],
+    tags: [], contractual.} =
   ## Add a header to the list of items for trade
   ##
   ## * label    - the text to show on the header
@@ -200,70 +201,16 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "TradeGroup", flags = {windowNoFlags}):
     setLayoutRowStatic(height = 30, cols = 8, ratio = [200.cfloat, 200, 200,
         200, 200, 200, 200, 200])
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Name"):
-      if itemsSortOrder == nameAsc:
-        itemsSortOrder = nameDesc
-      else:
-        itemsSortOrder = nameAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Type"):
-      if itemsSortOrder == typeAsc:
-        itemsSortOrder = typeDesc
-      else:
-        itemsSortOrder = typeAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Durability"):
-      if itemsSortOrder == durabilityAsc:
-        itemsSortOrder = durabilityDesc
-      else:
-        itemsSortOrder = durabilityAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Price"):
-      if itemsSortOrder == priceAsc:
-        itemsSortOrder = priceDesc
-      else:
-        itemsSortOrder = priceAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Profit"):
-      if itemsSortOrder == profitAsc:
-        itemsSortOrder = profitDesc
-      else:
-        itemsSortOrder = profitAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Weight"):
-      if itemsSortOrder == weightAsc:
-        itemsSortOrder = weightDesc
-      else:
-        itemsSortOrder = weightAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Owned"):
-      if itemsSortOrder == ownedAsc:
-        itemsSortOrder = ownedDesc
-      else:
-        itemsSortOrder = ownedAsc
-    if gameSettings.showTooltips:
-      addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
-    labelButton(title = "Available"):
-      if itemsSortOrder == availableAsc:
-        itemsSortOrder = availableDesc
-      else:
-        itemsSortOrder = availableAsc
+    addHeader(label = "Name", sortAsc = nameAsc, sortDesc = nameDesc)
+    addHeader(label = "Type", sortAsc = typeAsc, sortDesc = typeDesc)
+    addHeader(label = "Durability", sortAsc = durabilityAsc,
+        sortDesc = durabilityDesc)
+    addHeader(label = "Price", sortAsc = priceAsc, sortDesc = priceDesc)
+    addHeader(label = "Profit", sortAsc = profitAsc, sortDesc = profitDesc)
+    addHeader(label = "Weight", sortAsc = weightAsc, sortDesc = weightDesc)
+    addHeader(label = "Owned", sortAsc = ownedAsc, sortDesc = ownedDesc)
+    addHeader(label = "Available", sortAsc = availableAsc,
+        sortDesc = availableDesc)
     var
       currentItemIndex = 0
       indexesList: seq[Natural]
