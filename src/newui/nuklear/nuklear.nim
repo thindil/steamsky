@@ -392,7 +392,6 @@ template disabled*(content: untyped) =
 # ------
 # Widget
 # ------
-
 proc nkWidgetStateReset(s: var nk_flags) {.raises: [], tags: [], contractual.} =
   ## Reset the state of a widget. Internal use only
   ##
@@ -407,7 +406,6 @@ proc nkWidgetStateReset(s: var nk_flags) {.raises: [], tags: [], contractual.} =
 # ----
 # Math
 # ----
-
 proc nkIntersect(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [], tags: [], contractual.} =
   ## Check if the rectangle is inside the second rectangle
   ##
@@ -421,7 +419,6 @@ proc nkIntersect(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [], tag
 # -------
 # Windows
 # -------
-
 proc windowHasFocus*(): bool {.raises: [], tags: [], contractual.} =
   ## Check if the currently processed window is currently active
   ##
@@ -880,6 +877,7 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
   ## * sepCount  - the amount of separators
   ##
   ## Returns the new length of the text
+  # TODO: continue here
   discard
 
 proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
