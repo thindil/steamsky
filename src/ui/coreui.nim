@@ -18,15 +18,17 @@
 ## Provides some constants and variables widely used in the game's UI.
 
 const
-  mainPaned* = ".gameframe.paned"
+  mainPaned*: string = ".gameframe.paned"
     ## The name of the main Tk paned widget of the game
-  gameHeader* = ".gameframe.header"
+  gameHeader*: string = ".gameframe.header"
     ## The name of the header Tk frame (with menu button, time, icons, etc.)
-  closeButton* = gameHeader & ".closebutton"
+  closeButton*: string = gameHeader & ".closebutton"
     ## The name of the button used to close all screens in the game
 
 var
   generalAccelerators*: array[4, string] = ["Alt-a", "Alt-b", "Alt-c", "Alt-d"]
     ## The list of keyboard shortcuts used in some places
-  startX*, startY*: int           ## Coordinates of the top left point on the map
-  centerX*, centerY*: Positive          ## Coordinates of the center point on the map
+  startX*, startY*: int = 0
+    ## Coordinates of the top left point on the map
+  centerX*, centerY*: Positive = 1
+    ## Coordinates of the center point on the map
