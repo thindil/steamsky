@@ -32,7 +32,8 @@ type
       tooltipColor, groupBorderColor, headerTextColor, groupTextColor,
       selectActiveTextColor, propertyTextColor, toggleColor, toggleHoverColor,
       toggleCursorColor, goldenColor, redColor, mapInfoBorderColor,
-      mapInfoColor, pinkColor, yellowColor, blueColor, cyanColor, grayColor
+      mapInfoColor, pinkColor, yellowColor, blueColor, cyanColor, grayColor,
+      tableRowColor
   MapColorsNames* = enum
     ## Names of colors used in the game's map
     mapVisitedColor, mapUnvisitedColor, mapDefaultColor, mapGreenColor,
@@ -120,7 +121,7 @@ let
       "#ffdf00".parseColor, "#ffdf00".parseColor, "#fb4934".parseColor,
       "#7f8c8d".parseColor, "#000000".parseColor, "#b16286".parseColor,
       "#d79921".parseColor, "#458588".parseColor, "#00ffff".parseColor,
-      "#7f8c8d".parseColor],
+      "#7f8c8d".parseColor, "#120d0d".parseColor],
       fonts: [defaultThemeFontPath & "Amarante-Regular.ttf",
       defaultThemeFontPath & "Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"],
       mapIcons: ["\uf135", " ", "\uf05b", "\uf059", "\uf53b", "\ufc6a",
