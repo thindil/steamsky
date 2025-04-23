@@ -18,7 +18,7 @@
 ## Provides code related to trading with bases and ships UI, like showing the
 ## list of items to trade, info about items, trading itself, etc.
 
-import std/[colors, strutils, tables]
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, crewinventory, game, items, maps,
     shipscargo, types]
@@ -155,7 +155,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showInfo(dialog = dialog)
   # Show advanced options if needed
   if showOptions:
-    setLayoutRowDynamic(height = 25, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
+    setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
     label(str = "Type:")
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -169,21 +169,21 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           text = "Enter a name of an item which you looking for")
     editString(text = nameSearch, maxLen = 64)
   # Show information about money owned by the player and the base
-  setLayoutRowStatic(height = 25, cols = moneyWidth.len, ratio = moneyWidth)
+  setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
   for index, text in moneyText:
     if index mod 2 == 0:
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
   # Show information about free cargo space in the player's ship
-  setLayoutRowStatic(height = 25, cols = 2, ratio = cargoWidth)
+  setLayoutRowStatic(height = 30, cols = 2, ratio = cargoWidth)
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items for trade
   setLayoutRowDynamic(height = windowHeight - 140 - (
       if showOptions: 45 else: 0), cols = 1)
   group(title = "TradeGroup", flags = {windowNoFlags}):
-    setLayoutRowStatic(height = 25, cols = 8, ratio = [200.cfloat, 200, 200,
+    setLayoutRowStatic(height = 30, cols = 8, ratio = [200.cfloat, 200, 200,
         200, 200, 200, 200, 200])
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
@@ -257,7 +257,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     saveButtonStyle()
     setButtonStyle(field = borderColor, a = 0)
     try:
-      setButtonStyle(field = normal, color = "#120d0d".parseColor)
+      setButtonStyle(field = normal, color = theme.colors[tableRowColor])
     except:
       dialog = setError(message = "Can't set table color")
       return
