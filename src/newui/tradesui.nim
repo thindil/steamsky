@@ -209,13 +209,17 @@ proc sortItems(x, y: string): int {.raises: [], tags: [], contractual.} =
   of none:
     return 1
 
-proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [],
-    tags: [], contractual.} =
+proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders, dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Add a header to the list of items for trade
   ##
   ## * label    - the text to show on the header
   ## * sortAsc  - the sorting column ascending
   ## * sortDesc - the sorting column descending
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Press mouse button to sort the items.")
@@ -249,7 +253,8 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [],
         price = try:
             getPrice(baseType = baseType, itemIndex = protoIndex)
           except:
-            return showError(message = "Can't get price.")
+            dialog = setError(message = "Can't get price.")
+            return
       if eventIndex > -1:
         if eventsList[eventIndex].eType == doublePrice and eventsList[
             eventIndex].itemIndex == protoIndex:
@@ -263,7 +268,8 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [],
             owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
             baseCargoIndex].amount else: 0), id: index))
       except:
-        return showError(message = "Can't add item from the player's ship's cargo.")
+        dialog = setError(message = "Can't add item from the player's ship's cargo.")
+        return
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -316,16 +322,16 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "TradeGroup", flags = {windowNoFlags}):
     setLayoutRowStatic(height = 30, cols = 8, ratio = [200.cfloat, 200, 200,
         200, 200, 200, 200, 200])
-    addHeader(label = "Name", sortAsc = nameAsc, sortDesc = nameDesc)
-    addHeader(label = "Type", sortAsc = typeAsc, sortDesc = typeDesc)
+    addHeader(label = "Name", sortAsc = nameAsc, sortDesc = nameDesc, dialog = dialog)
+    addHeader(label = "Type", sortAsc = typeAsc, sortDesc = typeDesc, dialog = dialog)
     addHeader(label = "Durability", sortAsc = durabilityAsc,
-        sortDesc = durabilityDesc)
-    addHeader(label = "Price", sortAsc = priceAsc, sortDesc = priceDesc)
-    addHeader(label = "Profit", sortAsc = profitAsc, sortDesc = profitDesc)
-    addHeader(label = "Weight", sortAsc = weightAsc, sortDesc = weightDesc)
-    addHeader(label = "Owned", sortAsc = ownedAsc, sortDesc = ownedDesc)
+        sortDesc = durabilityDesc, dialog = dialog)
+    addHeader(label = "Price", sortAsc = priceAsc, sortDesc = priceDesc, dialog = dialog)
+    addHeader(label = "Profit", sortAsc = profitAsc, sortDesc = profitDesc, dialog = dialog)
+    addHeader(label = "Weight", sortAsc = weightAsc, sortDesc = weightDesc, dialog = dialog)
+    addHeader(label = "Owned", sortAsc = ownedAsc, sortDesc = ownedDesc, dialog = dialog)
     addHeader(label = "Available", sortAsc = availableAsc,
-        sortDesc = availableDesc)
+        sortDesc = availableDesc, dialog = dialog)
     var
       currentItemIndex = 0
       indexesList: seq[Natural]
