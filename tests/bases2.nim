@@ -1,4 +1,4 @@
-import ../src/[careers, crafts, items, mobs, ships, shipmodules]
+import ../src/[careers, crafts, items, mobs, reputation, ships, shipmodules]
 import unittest2
 include ../src/bases2
 
@@ -58,6 +58,7 @@ suite "Unit tests for bases2 module":
     base.owner = "POLEIS"
     base.population = getRandom(100, 400)
     skyMap[base.skyX][base.skyY].baseIndex = index
+  resetReputations()
 
   test "Asking for events in a base.":
     askForEvents()
