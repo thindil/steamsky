@@ -686,6 +686,20 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
     b.`end` = cmd.next
     return cmd
 
+# ---
+# UTF
+# ---
+proc nkUtfDecode(c: char; u: nk_rune; clen: int): Natural {.raises: [], tags: [], contractual.} =
+  ## Decode UTF character
+  ##
+  ## * c    - the text to decode
+  ## * u    - the UTF rune to decode
+  ## * clen - the length of the text
+  ##
+  ## Returns the lenght of the glyph in characters
+  # TODO: continue here
+  discard
+
 # ----
 # Misc
 # ----
