@@ -150,6 +150,81 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [],
     else:
       itemsSortOrder = sortAsc
 
+proc sortItems(x, y: string): int {.raises: [], tags: [], contractual.} =
+  ## Check how to sort the selected items on the list
+  ##
+  ## * x - the first item to sort
+  ## * y - the second item to sort
+  ##
+  ## Returns 1 if the x item should go first, otherwise -1
+  case itemsSortOrder
+  of nameAsc:
+    if x < y:
+      return 1
+    return -1
+  of nameDesc:
+    if x > y:
+      return 1
+    return -1
+  of typeAsc:
+    if x < y:
+      return 1
+    return -1
+  of typeDesc:
+    if x > y:
+      return 1
+    return -1
+  of durabilityAsc:
+    if x < y:
+      return 1
+    return -1
+  of durabilityDesc:
+    if x > y:
+      return 1
+    return -1
+  of priceAsc:
+    if x < y:
+      return 1
+    return -1
+  of priceDesc:
+    if x > y:
+      return 1
+    return -1
+  of profitAsc:
+    if x < y:
+      return 1
+    return -1
+  of profitDesc:
+    if x > y:
+      return 1
+    return -1
+  of weightAsc:
+    if x < y:
+      return 1
+    return -1
+  of weightDesc:
+    if x > y:
+      return 1
+    return -1
+  of ownedAsc:
+    if x < y:
+      return 1
+    return -1
+  of ownedDesc:
+    if x > y:
+      return 1
+    return -1
+  of availableAsc:
+    if x < y:
+      return 1
+    return -1
+  of availableDesc:
+    if x > y:
+      return 1
+    return -1
+  of none:
+    return 1
+
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the trading UI
