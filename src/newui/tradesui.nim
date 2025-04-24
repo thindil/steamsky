@@ -134,22 +134,6 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't get the width of the cargo text.")
       0.0
 
-proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [],
-    tags: [], contractual.} =
-  ## Add a header to the list of items for trade
-  ##
-  ## * label    - the text to show on the header
-  ## * sortAsc  - the sorting column ascending
-  ## * sortDesc - the sorting column descending
-  if gameSettings.showTooltips:
-    addTooltip(bounds = getWidgetBounds(),
-        text = "Press mouse button to sort the items.")
-  labelButton(title = label):
-    if itemsSortOrder == sortAsc:
-      itemsSortOrder = sortDesc
-    else:
-      itemsSortOrder = sortAsc
-
 proc sortItems(x, y: string): int {.raises: [], tags: [], contractual.} =
   ## Check how to sort the selected items on the list
   ##
@@ -224,6 +208,62 @@ proc sortItems(x, y: string): int {.raises: [], tags: [], contractual.} =
     return -1
   of none:
     return 1
+
+proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders) {.raises: [],
+    tags: [], contractual.} =
+  ## Add a header to the list of items for trade
+  ##
+  ## * label    - the text to show on the header
+  ## * sortAsc  - the sorting column ascending
+  ## * sortDesc - the sorting column descending
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Press mouse button to sort the items.")
+  labelButton(title = label):
+    if itemsSortOrder == sortAsc:
+      itemsSortOrder = sortDesc
+    else:
+      itemsSortOrder = sortAsc
+    type LocalItemData = object
+      name: string
+      iType: string
+      damage: float
+      price: Natural
+      profit: int
+      weight: Positive = 1
+      owned: Natural
+      available: Natural
+      id: Natural
+    var localItems: seq[LocalItemData]
+    var indexesList: seq[Natural]
+    for index, item in playerShip.cargo:
+      let
+        protoIndex = item.protoIndex
+        baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+            durability = item.durability)
+      var price: int
+      if baseCargoIndex > -1:
+        indexesList.add(y = baseCargoIndex)
+        price = baseCargo[baseCargoIndex].price
+      else:
+        price = try:
+            getPrice(baseType = baseType, itemIndex = protoIndex)
+          except:
+            return showError(message = "Can't get price.")
+      if eventIndex > -1:
+        if eventsList[eventIndex].eType == doublePrice and eventsList[
+            eventIndex].itemIndex == protoIndex:
+          price = price * 2
+      try:
+        localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
+            if itemsList[protoIndex].showType.len == 0: itemsList[
+            protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+            item.durability.float / defaultItemDurability.float), price: price,
+            profit: price - item.price, weight: itemsList[protoIndex].weight,
+            owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
+            baseCargoIndex].amount else: 0), id: index))
+      except:
+        return showError(message = "Can't add item from the player's ship's cargo.")
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
