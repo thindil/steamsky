@@ -134,8 +134,8 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't get the width of the cargo text.")
       0.0
 
-proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders, dialog: var GameDialog) {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a header to the list of items for trade
   ##
   ## * label    - the text to show on the header
@@ -185,9 +185,10 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders, dialog: var Ga
             eventIndex].itemIndex == protoIndex:
           price = price * 2
       try:
-        localItems.add(y = LocalItemData(name: getItemName(item = item), iType: (
-            if itemsList[protoIndex].showType.len == 0: itemsList[
-            protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+        localItems.add(y = LocalItemData(name: getItemName(item = item),
+            iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
+            protoIndex].itemType else: itemsList[protoIndex].showType),
+                damage: (
             item.durability.float / defaultItemDurability.float), price: price,
             profit: price - item.price, weight: itemsList[protoIndex].weight,
             owned: item.amount, available: (if baseCargoIndex > -1: baseCargo[
@@ -305,7 +306,8 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders, dialog: var Ga
       try:
         localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
             iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
-            protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+            protoIndex].itemType else: itemsList[protoIndex].showType),
+                damage: (
             item.durability.float / defaultItemDurability.float), price: price,
             profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
             available: item.amount, id: index))
@@ -365,16 +367,22 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   setLayoutRowDynamic(height = windowHeight - 140 - (
       if showOptions: 45 else: 0), cols = 1)
   group(title = "TradeGroup", flags = {windowNoFlags}):
-    setLayoutRowStatic(height = 30, cols = 8, ratio = [200.cfloat, 200, 200,
+    setLayoutRowStatic(height = 30, cols = 8, ratio = [300.cfloat, 200, 200,
         200, 200, 200, 200, 200])
-    addHeader(label = "Name", sortAsc = nameAsc, sortDesc = nameDesc, dialog = dialog)
-    addHeader(label = "Type", sortAsc = typeAsc, sortDesc = typeDesc, dialog = dialog)
+    addHeader(label = "Name", sortAsc = nameAsc, sortDesc = nameDesc,
+        dialog = dialog)
+    addHeader(label = "Type", sortAsc = typeAsc, sortDesc = typeDesc,
+        dialog = dialog)
     addHeader(label = "Durability", sortAsc = durabilityAsc,
         sortDesc = durabilityDesc, dialog = dialog)
-    addHeader(label = "Price", sortAsc = priceAsc, sortDesc = priceDesc, dialog = dialog)
-    addHeader(label = "Profit", sortAsc = profitAsc, sortDesc = profitDesc, dialog = dialog)
-    addHeader(label = "Weight", sortAsc = weightAsc, sortDesc = weightDesc, dialog = dialog)
-    addHeader(label = "Owned", sortAsc = ownedAsc, sortDesc = ownedDesc, dialog = dialog)
+    addHeader(label = "Price", sortAsc = priceAsc, sortDesc = priceDesc,
+        dialog = dialog)
+    addHeader(label = "Profit", sortAsc = profitAsc, sortDesc = profitDesc,
+        dialog = dialog)
+    addHeader(label = "Weight", sortAsc = weightAsc, sortDesc = weightDesc,
+        dialog = dialog)
+    addHeader(label = "Owned", sortAsc = ownedAsc, sortDesc = ownedDesc,
+        dialog = dialog)
     addHeader(label = "Available", sortAsc = availableAsc,
         sortDesc = availableDesc, dialog = dialog)
     var
@@ -391,6 +399,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       return
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
+    var row: Positive = 1
     for i in itemsIndexes:
       currentItemIndex.inc
       if i == -1:
@@ -465,10 +474,13 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       labelButton(title = itemType):
         discard
       if gameSettings.showTooltips:
+        let itemDurability = (if playerShip.cargo[i].durability <
+            100: getItemDamage(itemDurability = playerShip.cargo[
+            i].durability) else: "Unused")
         addTooltip(bounds = getWidgetBounds(),
-            text = "Show available options of item.")
-      labelButton(title = "Placeholder"):
-        discard
+            text = itemDurability)
+      progressBar(value = playerShip.cargo[i].durability,
+          maxValue = defaultItemDurability, modifyable = false)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Show available options of item.")
@@ -498,4 +510,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
             text = "Show available options of item.")
       labelButton(title = $baseAmount):
         discard
+      row.inc
+      if row == gameSettings.listsLimit + 1:
+        break
     restoreButtonStyle()
