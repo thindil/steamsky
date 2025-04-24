@@ -18,7 +18,7 @@
 ## Provides code related to trading with bases and ships UI, like showing the
 ## list of items to trade, info about items, trading itself, etc.
 
-import std/[strutils, tables]
+import std/[algorithm, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, crewinventory, game, items, maps,
     shipscargo, types]
@@ -134,81 +134,6 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't get the width of the cargo text.")
       0.0
 
-proc sortItems(x, y: string): int {.raises: [], tags: [], contractual.} =
-  ## Check how to sort the selected items on the list
-  ##
-  ## * x - the first item to sort
-  ## * y - the second item to sort
-  ##
-  ## Returns 1 if the x item should go first, otherwise -1
-  case itemsSortOrder
-  of nameAsc:
-    if x < y:
-      return 1
-    return -1
-  of nameDesc:
-    if x > y:
-      return 1
-    return -1
-  of typeAsc:
-    if x < y:
-      return 1
-    return -1
-  of typeDesc:
-    if x > y:
-      return 1
-    return -1
-  of durabilityAsc:
-    if x < y:
-      return 1
-    return -1
-  of durabilityDesc:
-    if x > y:
-      return 1
-    return -1
-  of priceAsc:
-    if x < y:
-      return 1
-    return -1
-  of priceDesc:
-    if x > y:
-      return 1
-    return -1
-  of profitAsc:
-    if x < y:
-      return 1
-    return -1
-  of profitDesc:
-    if x > y:
-      return 1
-    return -1
-  of weightAsc:
-    if x < y:
-      return 1
-    return -1
-  of weightDesc:
-    if x > y:
-      return 1
-    return -1
-  of ownedAsc:
-    if x < y:
-      return 1
-    return -1
-  of ownedDesc:
-    if x > y:
-      return 1
-    return -1
-  of availableAsc:
-    if x < y:
-      return 1
-    return -1
-  of availableDesc:
-    if x > y:
-      return 1
-    return -1
-  of none:
-    return 1
-
 proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders, dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Add a header to the list of items for trade
@@ -270,6 +195,126 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders, dialog: var Ga
       except:
         dialog = setError(message = "Can't add item from the player's ship's cargo.")
         return
+
+    proc sortItems(x, y: LocalItemData): int =
+      ## Check how to sort the selected items on the list
+      ##
+      ## * x - the first item to sort
+      ## * y - the second item to sort
+      ##
+      ## Returns 1 if the x item should go first, otherwise -1
+      case itemsSortOrder
+      of nameAsc:
+        if x.name < y.name:
+          return 1
+        else:
+          return -1
+      of nameDesc:
+        if x.name > y.name:
+          return 1
+        else:
+          return -1
+      of typeAsc:
+        if x.iType < y.iType:
+          return 1
+        else:
+          return -1
+      of typeDesc:
+        if x.iType > y.iType:
+          return 1
+        else:
+          return -1
+      of durabilityAsc:
+        if x.damage < y.damage:
+          return 1
+        else:
+          return -1
+      of durabilityDesc:
+        if x.damage > y.damage:
+          return 1
+        else:
+          return -1
+      of priceAsc:
+        if x.price < y.price:
+          return 1
+        else:
+          return -1
+      of priceDesc:
+        if x.price > y.price:
+          return 1
+        else:
+          return -1
+      of profitAsc:
+        if x.profit < y.profit:
+          return 1
+        else:
+          return -1
+      of profitDesc:
+        if x.profit > y.profit:
+          return 1
+        else:
+          return -1
+      of weightAsc:
+        if x.weight < y.weight:
+          return 1
+        else:
+          return -1
+      of weightDesc:
+        if x.weight > y.weight:
+          return 1
+        else:
+          return -1
+      of ownedAsc:
+        if x.owned < y.owned:
+          return 1
+        else:
+          return -1
+      of ownedDesc:
+        if x.owned > y.owned:
+          return 1
+        else:
+          return -1
+      of availableAsc:
+        if x.available < y.available:
+          return 1
+        else:
+          return -1
+      of availableDesc:
+        if x.available > y.available:
+          return 1
+        else:
+          return -1
+      of none:
+        return -1
+
+    localItems.sort(cmp = sortItems)
+    itemsIndexes = @[]
+    for item in localItems:
+      itemsIndexes.add(y = item.id)
+    itemsIndexes.add(y = -1)
+    localItems = @[]
+    for index, item in baseCargo:
+      if index in indexesList:
+        continue
+      let protoIndex = item.protoIndex
+      var price = item.price
+      if eventIndex > -1:
+        if eventsList[eventIndex].eType == doublePrice and eventsList[
+            eventIndex].itemIndex == protoIndex:
+          price = price * 2
+      try:
+        localItems.add(y = LocalItemData(name: itemsList[protoIndex].name,
+            iType: (if itemsList[protoIndex].showType.len == 0: itemsList[
+            protoIndex].itemType else: itemsList[protoIndex].showType), damage: (
+            item.durability.float / defaultItemDurability.float), price: price,
+            profit: -price, weight: itemsList[protoIndex].weight, owned: 0,
+            available: item.amount, id: index))
+      except:
+        dialog = setError(message = "Can't add item from the base's cargo.")
+        return
+    localItems.sort(cmp = sortItems)
+    for item in localItems:
+      itemsIndexes.add(y = item.id)
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
