@@ -489,8 +489,14 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Show available options of item.")
+      if profit > 0:
+        setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+      elif profit < 0:
+        setButtonStyle(field = textNormal, color = theme.colors[redColor])
       labelButton(title = $profit):
         discard
+      setButtonStyle(field = textNormal, color = theme.colors[
+          ColorsNames.buttonTextColor])
       try:
         if gameSettings.showTooltips:
           addTooltip(bounds = getWidgetBounds(),
