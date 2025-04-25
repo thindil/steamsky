@@ -318,27 +318,6 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
-proc showTradeMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
-    RootEffect], contractual.} =
-  ## Show the menu for the selected item
-  ##
-  ## * dialog - the current in-game dialog displayed on the screen
-  ## * bounds - the rectangle in which the player should click the mouse's
-  ##            button to show the menu
-  ##
-  ## Returns the parameter dialog. It is modified only when the player select
-  ## any option from the menu.
-  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
-      triggerBounds = bounds, button = (
-      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
-    setLayoutRowDynamic(25, 1)
-    contextualItemLabel(label = "A", align = centered):
-      dialog = none
-    contextualItemLabel(label = "B", align = centered):
-        dialog = none
-    contextualItemLabel(label = "Close", align = centered):
-      discard
-
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the trading UI
@@ -540,7 +519,25 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
+    currentItemIndex = playerShip.cargo.len + 1
+    for i in currentItemIndex..itemsIndexes.high:
+      let
+        protoIndex = baseCargo[itemsIndexes[i]].protoIndex
+        itemType = try:
+            if itemsList[protoIndex].showType.len == 0:
+              itemsList[protoIndex].itemType
+            else:
+              itemsList[protoIndex].showType
+          except:
+            dialog = setError(message = "Can't get item type3.")
+            return
+      try:
+        discard
+#        if isBuyable(baseType = baseType, itemIndex = protoIndex,
+#            baseIndex = baseIndex) and baseCargo[itemsIndexes[i]].amount > 0 and
+#            itemsTypes.find(sub = "{" & itemType & "}") == -1:
+#          itemsTypes.add(y = " {" & itemType & "}")
+      except:
+        dialog = setError(message = "Can't check if item is buyable.")
+        return
     restoreButtonStyle()
-  let bounds: NimRect = NimRect(x: 0, y: windowHeight - tableHeight,
-      w: windowWidth, h: tableHeight)
-  showTradeMenu(dialog = dialog, bounds = bounds)
