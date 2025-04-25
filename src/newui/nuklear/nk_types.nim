@@ -437,7 +437,7 @@ type
     x*, y*: cfloat
   ButtonStyle* = object
     ## Used to store information about a button's style.
-    borderColor*: NimColor
+    borderColor*, textNormal*, textHover*: NimColor
     rounding*: float
     padding*: NimVec2
     imagePadding*: NimVec2
