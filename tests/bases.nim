@@ -26,6 +26,7 @@ suite "Unit tests for bases module":
   skyBases[1].owner = "POLEIS"
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   skyBases[1].recruits = @[]
+  resetReputations()
 
   test "Generate name for a base.":
     check:
