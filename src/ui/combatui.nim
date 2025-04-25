@@ -797,9 +797,9 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
     crewDialog: string = createDialog(name = ".boardingdialog",
         title = "Assign a crew members to " & (if argv[1] ==
         "boarding": "boarding party" else: "defenders"), titleWidth = 245)
-    buttonsFrame = crewDialog & ".selectframe"
+    buttonsFrame: string = crewDialog & ".selectframe"
   tclEval(script = "ttk::frame " & buttonsFrame)
-  var button = buttonsFrame & ".selectallbutton"
+  var button: string = buttonsFrame & ".selectallbutton"
   tclEval(script = "ttk::button " & button &
       " -image selectallicon -command {ToggleAllCombat select " & $argv[1] & "} -style Small.TButton")
 
@@ -812,37 +812,37 @@ proc setCombatPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "tooltip::tooltip " & button & " \"Unselect all crew members.\"")
   tclEval(script = "grid " & button & " -sticky w -row 0 -column 1")
   tclEval(script = "grid " & buttonsFrame & " -columnspan 2 -sticky w")
-  let yScroll = crewDialog & ".yscroll"
+  let yScroll: string = crewDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll &
       " -orien vertical -command [list " & crewDialog & ".canvas yview]")
-  let crewCanvas = crewDialog & ".canvas"
+  let crewCanvas: string = crewDialog & ".canvas"
   tclEval(script = "canvas " & crewCanvas & " -yscrollcommand [list " &
       yScroll & " set]")
   tclEval(script = "grid " & crewCanvas & " -sticky nwes -padx 5 -pady  5")
   tclEval(script = "grid " & yScroll & " -sticky ns -padx {0 5} -pady {5 0} -row 2 -column 1")
-  let buttonsBox2 = crewDialog & ".buttons"
+  let buttonsBox2: string = crewDialog & ".buttons"
   tclEval(script = "ttk::frame " & buttonsBox2)
   tclEval(script = "grid " & buttonsBox2 & " -pady {0 5} -columnspan 2")
-  let acceptButton = crewDialog & ".buttons.button2"
+  let acceptButton: string = crewDialog & ".buttons.button2"
   tclEval(script = "ttk::button " & acceptButton &
       " -text Assign -command {SetParty " & $argv[1] & "; CloseDialog " &
       crewDialog & "} -image giveordericon -style Dialog.TButton")
   tclEval(script = "grid " & acceptButton & " -padx {5 2}")
-  let closeDialogButton = crewDialog & ".buttons.button"
+  let closeDialogButton: string = crewDialog & ".buttons.button"
   tclEval(script = "ttk::button " & closeDialogButton &
       " -text Cancel -command {CloseDialog " & crewDialog & "} -image cancelicon -style Dialog.TButton")
   tclEval(script = "grid " & closeDialogButton & " -sticky w -row 0 -column 1")
   tclEval(script = "focus " & closeDialogButton)
   tclEval(script = "::autoscroll::autoscroll " & yScroll)
   let
-    order = (if argv[1] == "boarding": boarding else: defend)
-    crewFrame = crewCanvas & ".frame"
+    order: CrewOrders = (if argv[1] == "boarding": boarding else: defend)
+    crewFrame: string = crewCanvas & ".frame"
   tclEval(script = "ttk::frame " & crewFrame)
   var
-    height = 10
-    width = 250
+    height: Positive = 10
+    width: Positive = 250
   for index, member in playerShip.crew:
-    let crewButton = crewFrame & ".crewbutton" & $(index + 1)
+    let crewButton: string = crewFrame & ".crewbutton" & $(index + 1)
     tclEval(script = "ttk::checkbutton " & crewButton & " -text {" &
         member.name & "}")
     if member.order == order:
@@ -890,11 +890,11 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetCombatPosition position ?gunindex?
   ## Position is the combat crew member position which will be set. For gunner
   ## additional parameter is gunindex, index of the gun to take
-  let frameName = ".gameframe.paned.combatframe.crew.canvas.frame"
-  var comboBox = ""
+  let frameName: string = ".gameframe.paned.combatframe.crew.canvas.frame"
+  var comboBox: string = ""
   if argv[1] == "pilot":
     comboBox = frameName & ".pilotcrew"
-    var crewIndex = try:
+    var crewIndex: int = try:
         tclEval2(script = comboBox & " current").parseInt - 1
       except:
         return showError(message = "Can't get the pilot index.")
@@ -914,7 +914,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't give rest order to the pilot.")
   elif argv[1] == "engineer":
     comboBox = frameName & ".engineercrew"
-    var crewIndex = try:
+    var crewIndex: int = try:
         tclEval2(script = comboBox & " current").parseInt - 1
       except:
         return showError(message = "Can't get the engineer index.")
@@ -934,11 +934,11 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
           return showError(message = "Can't give rest order to the engineer.")
   else:
     comboBox = frameName & ".guncrew" & $argv[2]
-    let gunIndex = try:
+    let gunIndex: int = try:
         ($argv[2]).parseInt - 1
       except:
         return showError(message = "Can't get the gun index.")
-    var crewIndex = try:
+    var crewIndex: int = try:
           tclEval2(script = comboBox & " current").parseInt - 1
         except:
           return showError(message = "Can't get the gunner index.")
@@ -976,11 +976,11 @@ proc showCombatInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowCombatInfo player|enemy index
   ## Player or enemy means to show information about the mob from the player's
   ## ship or the enemy's ship. Index is the index of the mob in the ship's crew
-  let crewIndex = try:
+  let crewIndex: int = try:
       ($argv[2]).parseInt - 1
     except:
       return showError(message = "Can't get the idnex of the crew member.")
-  var info = "Uses: "
+  var info: string = "Uses: "
   if argv[1] == "player":
     for item in playerShip.crew[crewIndex].equipment:
       if item > -1:
@@ -1021,13 +1021,14 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     boardingFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "left",
         column: 0, row: 0), FrameInfo(name: "right", column: 1, row: 0),
         FrameInfo(name: "", column: 0, row: 0), FrameInfo(name: "", column: 0, row: 0)]
-    frames = (if argv[3] == "combat": combatFrames else: boardingFrames)
-    button = mainPaned & ".combatframe." & $argv[1] & ".canvas.frame.maxmin"
+    frames: array[1..4, FrameInfo] = (if argv[3] ==
+        "combat": combatFrames else: boardingFrames)
+    button: string = mainPaned & ".combatframe." & $argv[1] & ".canvas.frame.maxmin"
   if argv[2] == "show":
     for frameInfo in frames:
       if frameInfo.name.len == 0:
         break
-      let frameName = mainPaned & ".combatframe." & frameInfo.name
+      let frameName: string = mainPaned & ".combatframe." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frameName & " -columnspan 2 -rowspan 2 -row 0 -column 0")
       else:
@@ -1038,7 +1039,7 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     for frameInfo in frames:
       if frameInfo.name.len == 0:
         break
-      let frameName = mainPaned & ".combatframe." & frameInfo.name
+      let frameName: string = mainPaned & ".combatframe." & frameInfo.name
       if frameInfo.name == $argv[1]:
         tclEval(script = "grid configure " & frameName &
             " -columnspan 1 -rowspan 1 -column " & $frameInfo.column &
@@ -1089,9 +1090,9 @@ proc setPartyCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Order is the order to give to the player's ship crew. Possible
   ## values are boarding and defending.
   boardingOrders = @[]
-  let order = (if argv[1] == "boarding": boarding else: defend)
+  let order: CrewOrders = (if argv[1] == "boarding": boarding else: defend)
   for index, member in playerShip.crew:
-    let selected = tclGetVar(varName = ".boardingdialog.canvas.frame.crewbutton" &
+    let selected: bool = tclGetVar(varName = ".boardingdialog.canvas.frame.crewbutton" &
         $(index + 1)) == "1"
     if member.order == order and not selected:
       try:
@@ -1115,8 +1116,8 @@ proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [],
   ##
   ## * newCombat - if true, the combat started, default value is true
   tclEval(script = "grid remove " & closeButton)
-  var combatStarted = false
-  let combatFrame = mainPaned & ".combatframe"
+  var combatStarted: bool = false
+  let combatFrame: string = mainPaned & ".combatframe"
   if newCombat:
     try:
       if skyMap[playerShip.skyX][playerShip.skyY].eventIndex > -1 and
@@ -1351,8 +1352,8 @@ proc showCombatUi(newCombat: bool = true) {.raises: [], tags: [],
         return
     else:
       let
-        button = combatFrame & ".next"
-        enemyFrame = combatFrame & ".status"
+        button: string = combatFrame & ".next"
+        enemyFrame: string = combatFrame & ".status"
       tclEval(script = "grid " & button)
       tclEval(script = "grid " & enemyFrame)
     tclEval(script = closeButton & " configure -command ShowCombatUI")
