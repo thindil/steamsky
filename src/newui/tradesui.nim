@@ -318,6 +318,27 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
+proc showTradeMenu(dialog: var GameDialog; bounds: NimRect) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the menu for the selected item
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ## * bounds - the rectangle in which the player should click the mouse's
+  ##            button to show the menu
+  ##
+  ## Returns the parameter dialog. It is modified only when the player select
+  ## any option from the menu.
+  contextualMenu(flags = {windowNoFlags}, x = 150, y = 150,
+      triggerBounds = bounds, button = (
+      if gameSettings.rightButton: Buttons.right else: Buttons.left)):
+    setLayoutRowDynamic(25, 1)
+    contextualItemLabel(label = "A", align = centered):
+      dialog = none
+    contextualItemLabel(label = "B", align = centered):
+        dialog = none
+    contextualItemLabel(label = "Close", align = centered):
+      discard
+
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the trading UI
@@ -364,8 +385,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items for trade
-  setLayoutRowDynamic(height = windowHeight - 140 - (
-      if showOptions: 45 else: 0), cols = 1)
+  let tableHeight: float = windowHeight - 140 - (if showOptions: 45 else: 0)
+  setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "TradeGroup", flags = {windowNoFlags}):
     setLayoutRowStatic(height = 30, cols = 8, ratio = [300.cfloat, 200, 200,
         200, 200, 200, 200, 200])
@@ -520,3 +541,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if row == gameSettings.listsLimit + 1:
         break
     restoreButtonStyle()
+  let bounds: NimRect = NimRect(x: 0, y: windowHeight - tableHeight,
+      w: windowWidth, h: tableHeight)
+  showTradeMenu(dialog = dialog, bounds = bounds)
