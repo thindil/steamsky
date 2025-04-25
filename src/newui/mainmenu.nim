@@ -504,6 +504,7 @@ proc showLoadGame*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = borderColor, a = 0)
     try:
       setButtonStyle(field = normal, color = theme.colors[tableRowColor])
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
     except:
       dialog = setError(message = "Can't set table color")
       return
