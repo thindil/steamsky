@@ -56,6 +56,19 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## happened.
   typesList = @["All"]
   baseCargo = @[]
+  typeIndex = 0
+  nameSearch = ""
+  currentPage = 1
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  if baseIndex > 0:
+    baseType = skyBases[baseIndex].baseType
+    baseCargo = skyBases[baseIndex].cargo
+    location = "Base"
+  else:
+    baseType = "0"
+    baseCargo = traderCargo
+    location = "Ship"
   if itemsSortOrder == defaultItemsSortOrder:
     itemsIndexes = @[]
     for index in playerShip.cargo.low .. playerShip.cargo.high:
@@ -83,19 +96,26 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't add item type.")
       return
-  typeIndex = 0
-  nameSearch = ""
-  currentPage = 1
-  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-  if baseIndex > 0:
-    baseType = skyBases[baseIndex].baseType
-    baseCargo = skyBases[baseIndex].cargo
-    location = "Base"
-  else:
-    baseType = "0"
-    baseCargo = traderCargo
-    location = "Ship"
+  let currentItemIndex: Positive = playerShip.cargo.len + 1
+  for i in currentItemIndex..itemsIndexes.high:
+    let
+      protoIndex = baseCargo[itemsIndexes[i]].protoIndex
+      itemType = try:
+          if itemsList[protoIndex].showType.len == 0:
+            itemsList[protoIndex].itemType
+          else:
+            itemsList[protoIndex].showType
+        except:
+          dialog = setError(message = "Can't get item type3.")
+          return
+    try:
+      if isBuyable(baseType = baseType, itemIndex = protoIndex,
+          baseIndex = baseIndex) and baseCargo[itemsIndexes[i]].amount > 0 and
+          typesList.find(item = itemType) == -1:
+        typesList.add(y = itemType)
+    except:
+      dialog = setError(message = "Can't check if item is buyable.")
+      return
   moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
   moneyText = @[]
   moneyWidth = @[]
@@ -520,24 +540,4 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if row == gameSettings.listsLimit + 1:
         break
     currentItemIndex = playerShip.cargo.len + 1
-    for i in currentItemIndex..itemsIndexes.high:
-      let
-        protoIndex = baseCargo[itemsIndexes[i]].protoIndex
-        itemType = try:
-            if itemsList[protoIndex].showType.len == 0:
-              itemsList[protoIndex].itemType
-            else:
-              itemsList[protoIndex].showType
-          except:
-            dialog = setError(message = "Can't get item type3.")
-            return
-      try:
-        discard
-#        if isBuyable(baseType = baseType, itemIndex = protoIndex,
-#            baseIndex = baseIndex) and baseCargo[itemsIndexes[i]].amount > 0 and
-#            itemsTypes.find(sub = "{" & itemType & "}") == -1:
-#          itemsTypes.add(y = " {" & itemType & "}")
-      except:
-        dialog = setError(message = "Can't check if item is buyable.")
-        return
     restoreButtonStyle()
