@@ -689,16 +689,33 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
 # ---
 # UTF
 # ---
-proc nkUtfDecode(c: char; u: nk_rune; clen: int): Natural {.raises: [], tags: [], contractual.} =
-  ## Decode UTF character
+proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
+  contractual.} =
+  ## Decode one UTF byte
+  ##
+  ## * c - the character to decode
+  ## * i - the lenght of the text
+  ##
+  ## Returns modified parameter i and UTF rune
+  # TODO: continue here
+  discard
+
+proc nkUtfDecode(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
+  tags: [], contractual.} =
+  ## Decode UTF text
   ##
   ## * c    - the text to decode
   ## * u    - the UTF rune to decode
   ## * clen - the length of the text
   ##
   ## Returns the lenght of the glyph in characters
-  # TODO: continue here
-  discard
+  if c == "" or u == 0 or clen == 0:
+    return 0
+  u = nkUtfInvalid
+  var
+    len: int = 0
+    udecoded: nk_rune = nkUtfDecodeByte(c = c[0], len)
+  # TODO: continue here after nkUtfDecodeByte
 
 # ----
 # Misc
@@ -891,8 +908,10 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
   ## * sepCount  - the amount of separators
   ##
   ## Returns the new length of the text
-  # TODO: continue here
-  discard
+  var
+    unicode: nk_rune = 0
+    glyphLen: int = nkUtfDecode(c = text, u = unicode, clen = textLen)
+  # TODO: continue here after nkUtfDecode
 
 proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],

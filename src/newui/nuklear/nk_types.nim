@@ -408,8 +408,11 @@ type
 # ---------
 # Constants
 # ---------
-const nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
-  ## An empty rectangle
+const
+  nkNullRect*: nk_rect = nk_rect(x: -8192.0, y: -8192.0, w: -8192.0, h: -8192.0)
+    ## An empty rectangle
+  nkUtfInvalid*: nk_rune = 0xfffd
+    ## An invalid utf8 rune
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
