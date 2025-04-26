@@ -1,4 +1,4 @@
-import ../src/[careers, crafts, factions, items, mobs, shipmodules]
+import ../src/[careers, crafts, factions, items, mobs, reputation, shipmodules]
 import unittest2
 include ../src/trades
 
@@ -54,6 +54,7 @@ suite "Unit tests for trades module":
     skyBases[i].population = 100
   generateCargo()
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  resetReputations()
 
   test "Generating a trader's cargo.":
     generateTraderCargo(96)
