@@ -18,10 +18,9 @@
 ## Provides code related to trading with bases and ships UI, like showing the
 ## list of items to trade, info about items, trading itself, etc.
 
-import std/[algorithm, strutils, tables]
+import std/[algorithm, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basescargo, basestypes, config, crewinventory, game, items, maps,
-    shipscargo, types]
+import ../[bases, basescargo, basestypes, config, crewinventory, game, items, maps, shipscargo, shipscrew, types]
 import coreui, dialogs, errordialog, header, themes
 
 type ItemsSortOrders = enum
@@ -45,6 +44,7 @@ var
   moneyWidth: seq[cfloat] = @[]
   cargoText: array[2, string] = ["Free cargo space is ", ""]
   cargoWidth: array[2, cfloat] = [0.cfloat, 0]
+  itemIndex: int = -1
 
 proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -338,17 +338,214 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
-proc addButton(label: string; itemIndex: int) {.raises: [], tags: [],
+proc addButton(label: string; iIndex: int): GameDialog {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Add a button to the list of items for trade
   ##
-  ## * label      - the text to show on the button
-  ## * itemIndex  - the index of the item on the list
+  ## * label   - the text to show on the button
+  ## * iIndex  - the index of the item on the list
+  ##
+  ## Returns the current dialog to show.
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Show available options of item.")
   labelButton(title = label):
-    discard
+    itemIndex = iIndex
+    if itemIndex < 0:
+      itemIndex.inc
+    else:
+      itemIndex.dec
+    var baseCargoIndex, cargoIndex: int = -1
+    if itemIndex < 0:
+      baseCargoIndex = itemIndex.abs
+    else:
+      cargoIndex = itemIndex
+    if cargoIndex > playerShip.cargo.high:
+      return none
+    let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+    if baseIndex == 0 and baseCargoIndex > traderCargo.high:
+      return none
+    elif baseIndex > 0 and baseCargoIndex > skyBases[baseIndex].cargo.high:
+      return none
+    var protoIndex = 0
+    if cargoIndex > -1:
+      protoIndex = playerShip.cargo[cargoIndex].protoIndex
+    else:
+      protoIndex = (if baseIndex == 0: traderCargo[
+          baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
+          baseCargoIndex].protoIndex)
+    var itemInfo = ""
+    try:
+      if itemsList[protoIndex].itemType == weaponType:
+        itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[
+            3]].name & "/" & attributesList[skillsList[itemsList[
+                protoIndex].value[
+            3]].attribute].name & (if itemsList[protoIndex].value[4] ==
+            1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
+        case itemsList[protoIndex].value[5]
+        of 1:
+          itemInfo.add(y = "cutting")
+        of 2:
+          itemInfo.add(y = "impaling")
+        of 3:
+          itemInfo.add(y = "blunt")
+        else:
+          discard
+        itemInfo.add(y = "{/gold}")
+    except:
+      return setError(message = "Can't show weapon info.")
+    let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
+        armsArmor, legsArmor, shieldType]
+    for itemType in itemTypes:
+      try:
+        if itemsList[protoIndex].itemType == itemType:
+          if itemInfo.len > 0:
+            itemInfo.add(y = "\n")
+          itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+              itemData = itemsList[protoIndex].value[1]) &
+              "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+          break
+      except:
+        return setError(message = "Can't get damage chance.")
+    try:
+      if itemsList[protoIndex].itemType in toolsList:
+        if itemInfo.len > 0:
+          itemInfo.add(y = "\n")
+        itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+            itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+    except:
+      dialog = setError(message = "Can't get tool info.")
+      return
+    try:
+      if itemsList[protoIndex].itemType.len > 4 and (itemsList[
+          protoIndex].itemType[0..3] == "Ammo" or itemsList[
+          protoIndex].itemType == "Harpoon"):
+        if itemInfo.len > 0:
+          itemInfo.add(y = "\n")
+        itemInfo.add(y = "Strength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+    except:
+      dialog = setError(message = "Can't get ammo info.")
+      return
+    try:
+      if itemsList[protoIndex].description.len > 0:
+        if itemInfo.len > 0:
+          itemInfo.add(y = "\n\n")
+        itemInfo.add(y = itemsList[protoIndex].description)
+    except:
+      dialog = setError(message = "Can't get the description.")
+      return
+    let baseType = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
+    var price = 0
+    if itemIndex > -1:
+      baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
+          durability = playerShip.cargo[cargoIndex].durability)
+      if baseCargoIndex > -1:
+        price = (if baseIndex > 0: skyBases[baseIndex].cargo[
+            baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
+      else:
+        price = try:
+            getPrice(baseType = baseType, itemIndex = protoIndex)
+          except:
+            dialog = setError(message = "Can't get price.")
+            return
+    else:
+      itemIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex,
+          durability = (if baseIndex > 0: skyBases[baseIndex].cargo[
+          baseCargoIndex].durability else: traderCargo[
+          baseCargoIndex].durability))
+      price = (if baseIndex > 0: skyBases[baseIndex].cargo[
+          baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
+    var maxSellAmount = 0
+    if itemIndex > -1:
+      maxSellAmount = playerShip.cargo[itemIndex].amount
+      var maxPrice: Natural = maxSellAmount * price
+      try:
+        countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+            reduce = false)
+      except:
+        dialog = setError(message = "Can't count price.")
+        return
+      if baseIndex > 0 and maxPrice > skyBases[baseIndex].cargo[0].amount:
+        maxSellAmount = (maxSellAmount.float * (skyBases[baseIndex].cargo[
+            0].amount.float / maxPrice.float)).floor.int
+      elif baseIndex == 0 and maxPrice > traderCargo[0].amount:
+        maxSellAmount = (maxSellAmount.float * (traderCargo[0].amount.float /
+            maxPrice.float)).floor.int
+      maxPrice = maxSellAmount * price
+      if maxPrice > 0:
+        try:
+          countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+              reduce = false)
+        except:
+          return showError(message = "Can't count price 2.")
+      var weight = try:
+            freeCargo(amount = (itemsList[protoIndex].weight * maxSellAmount) - maxPrice)
+          except:
+            return showError(message = "Can't get free cargo space.")
+      while weight < 0:
+        maxSellAmount = (maxSellAmount.float * ((maxPrice + weight).float /
+            maxPrice.float)).floor.int
+        if maxSellAmount < 1:
+          break
+        maxPrice = maxSellAmount * price
+        try:
+          countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+              reduce = false)
+        except:
+          return showError(message = "Can't count price 3.")
+        weight = try:
+            freeCargo(amount = (itemsList[protoIndex].weight * maxSellAmount) - maxPrice)
+          except:
+            return showError(message = "Can't get free cargo space 2.")
+    let moneyIndex2 = findItem(inventory = playerShip.cargo,
+        protoIndex = moneyIndex)
+    var maxBuyAmount: int = 0
+    try:
+      if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
+          isBuyable(baseType = baseType, itemIndex = protoIndex)) or baseIndex == 0):
+        maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / price).int
+        var maxPrice: Natural = maxBuyAmount * price
+        if maxBuyAmount > 0:
+          countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+          if maxPrice < maxBuyAmount * price:
+            maxBuyAmount = (maxBuyAmount.float * ((maxBuyAmount.float *
+                price.float) / maxPrice.float)).floor.int
+          if baseIndex > 0 and maxBuyAmount > skyBases[baseIndex].cargo[
+              baseCargoIndex].amount:
+            maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
+          elif baseIndex == 0 and maxBuyAmount > traderCargo[
+              baseCargoIndex].amount:
+            maxBuyAmount = traderCargo[baseCargoIndex].amount
+          maxPrice = maxBuyAmount * price
+          countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+          var weight = freeCargo(amount = maxPrice - (itemsList[
+              protoIndex].weight * maxBuyAmount))
+          while weight < 0:
+            maxBuyAmount = maxBuyAmount + (weight / itemsList[
+                protoIndex].weight).int - 1
+            if maxBuyAmount < 0:
+              maxBuyAmount = 0
+            if maxBuyAmount == 0:
+              break
+            maxPrice = maxBuyAmount * price
+            countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+            weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
+        if itemIndex == -1:
+          itemIndex = -(baseCargoIndex)
+    except:
+      return setError(message = "Can't count max buy amount")
+    try:
+      return setInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
+          if maxBuyAmount == 0: emptyButtonSettings else: ButtonSettings(
+          tooltip: "Buy item from the base", command: "TradeAmount buy " &
+          $maxBuyAmount & " " & $price, icon: "buy2icon", text: "Buy",
+          color: "")),
+          button2 = (if maxSellAmount ==
+          0: emptyButtonSettings else: ButtonSettings(
+          tooltip: "Sell item from the ship cargo", command: "TradeAmount sell " &
+          $maxSellAmount & " " & $price, icon: "sell2icon", text: "Sell", color: "")))
+    except:
+      return setError(message = "Can't show the item's info.")
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -514,13 +711,12 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $profit, itemIndex = i)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-        addButton(label = $itemsList[protoIndex].weight & " kg",
-            protoIndex = protoIndex)
+        addButton(label = $itemsList[protoIndex].weight & " kg", itemIndex = i)
       except:
         dialog = setError(message = "Can't show weight")
         return
-      addButton(label = $playerShip.cargo[i].amount, protoIndex = protoIndex)
-      addButton(label = $baseAmount, protoIndex = protoIndex)
+      addButton(label = $playerShip.cargo[i].amount, itemIndex = i)
+      addButton(label = $baseAmount, itemIndex = i)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
