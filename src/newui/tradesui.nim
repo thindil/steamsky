@@ -338,6 +338,17 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
+proc addButton(label: string; protoIndex: Natural) {.raises: [], tags: [], contractual.} =
+  ## Add a button to the list of items for trade
+  ##
+  ## * label      - the text to show on the button
+  ## * protoIndex - the index of the prototype of the item
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Show available options of item.")
+  labelButton(title = label):
+    discard
+
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the trading UI
@@ -432,7 +443,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       except:
         dialog = setError(message = "Can't get price.")
       let
-        protoIndex = playerShip.cargo[i].protoIndex
+        protoIndex: Natural = playerShip.cargo[i].protoIndex
         baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
             durability = playerShip.cargo[i].durability)
       if baseCargoIndex > -1:
@@ -484,11 +495,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         if baseCargoIndex > -1:
           baseAmount = baseCargo[baseCargoIndex].amount
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show available options of item.")
-      labelButton(title = itemName):
-        discard
+      addButton(label = itemName, protoIndex = protoIndex)
       if gameSettings.showTooltips:
         addTooltip(bounds = getWidgetBounds(),
             text = "Show available options of item.")
