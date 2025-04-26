@@ -338,11 +338,12 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
-proc addButton(label: string; protoIndex: Natural) {.raises: [], tags: [], contractual.} =
+proc addButton(label: string; itemIndex: int) {.raises: [], tags: [],
+    contractual.} =
   ## Add a button to the list of items for trade
   ##
   ## * label      - the text to show on the button
-  ## * protoIndex - the index of the prototype of the item
+  ## * itemIndex  - the index of the item on the list
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Show available options of item.")
@@ -495,12 +496,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       else:
         if baseCargoIndex > -1:
           baseAmount = baseCargo[baseCargoIndex].amount
-      addButton(label = itemName, protoIndex = protoIndex)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show available options of item.")
-      labelButton(title = itemType):
-        discard
+      addButton(label = itemName, itemIndex = i)
+      addButton(label = itemType, itemIndex = i)
       if gameSettings.showTooltips:
         let itemDurability = (if playerShip.cargo[i].durability <
             100: getItemDamage(itemDurability = playerShip.cargo[
@@ -509,40 +506,21 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
             text = itemDurability)
       progressBar(value = playerShip.cargo[i].durability,
           maxValue = defaultItemDurability, modifyable = false)
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show available options of item.")
-      labelButton(title = $price):
-        discard
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show available options of item.")
+      addButton(label = $price, itemIndex = i)
       if profit > 0:
         setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       elif profit < 0:
         setButtonStyle(field = textNormal, color = theme.colors[redColor])
-      labelButton(title = $profit):
-        discard
+      addButton(label = $profit, itemIndex = i)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-        if gameSettings.showTooltips:
-          addTooltip(bounds = getWidgetBounds(),
-              text = "Show available options of item.")
-        labelButton(title = $itemsList[protoIndex].weight & " kg"):
-          discard
+        addButton(label = $itemsList[protoIndex].weight & " kg",
+            protoIndex = protoIndex)
       except:
         dialog = setError(message = "Can't show weight")
         return
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show available options of item.")
-      labelButton(title = $playerShip.cargo[i].amount):
-        discard
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Show available options of item.")
-      labelButton(title = $baseAmount):
-        discard
+      addButton(label = $playerShip.cargo[i].amount, protoIndex = protoIndex)
+      addButton(label = $baseAmount, protoIndex = protoIndex)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
