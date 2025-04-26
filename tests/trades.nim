@@ -1,4 +1,4 @@
-import ../src/[careers, crafts, factions, items, mobs, shipmodules]
+import ../src/[careers, crafts, factions, items, mobs, reputation, shipmodules]
 import unittest2
 include ../src/trades
 
@@ -20,13 +20,16 @@ suite "Unit tests for trades module":
   playerShip.crew = @[]
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 2, 1, 1,
-      1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4, level: 4,
-      experience: 0)], attributes: @[MobAttributeRecord(level: 3, experience: 0),
+      1, 0, 0], order: talk, loyalty: 100, skills: @[SkillInfo(index: 4,
+      level: 4,
+      experience: 0)], attributes: @[MobAttributeRecord(level: 3,
+          experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
   playerShip.crew.add(MemberData(morale: [1: 50.Natural, 2: 0.Natural],
       homeBase: 1, faction: "POLEIS", orders: [0.Natural, 0, 0, 1, 1, 1, 0, 1, 1,
-      1, 0, 0], order: gunner, loyalty: 100, attributes: @[MobAttributeRecord(level: 3, experience: 0),
+      1, 0, 0], order: gunner, loyalty: 100, attributes: @[MobAttributeRecord(
+          level: 3, experience: 0),
       MobAttributeRecord(level: 3, experience: 0), MobAttributeRecord(level: 3,
       experience: 0), MobAttributeRecord(level: 3, experience: 0)], health: 100))
   playerShip.modules = @[]
@@ -34,15 +37,17 @@ suite "Unit tests for trades module":
       durability: 100, maxModules: 10))
   playerShip.modules.add(ModuleData(mType: cargoRoom, protoIndex: 7,
       durability: 100, maxDurability: 100))
-  playerShip.modules.add(ModuleData(mType: turret, protoIndex: 8, durability: 100,
-      maxDurability: 100, gunIndex: 3))
+  playerShip.modules.add(ModuleData(mType: turret, protoIndex: 8,
+      durability: 100, maxDurability: 100, gunIndex: 3))
   playerShip.modules.add(ModuleData(mType: gun, protoIndex: 9, durability: 100,
       maxDurability: 100, damage: 10, owner: @[1]))
   playerShip.modules.add(ModuleData(mType: ModuleType2.cabin, protoIndex: 4,
       durability: 100, owner: @[0]))
   playerShip.cargo = @[]
-  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100, durability: 100))
-  playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200, durability: 100))
+  playerShip.cargo.add(InventoryData(protoIndex: 1, amount: 100,
+      durability: 100))
+  playerShip.cargo.add(InventoryData(protoIndex: 3, amount: 200,
+      durability: 100))
   playerShip.speed = docked
   skyMap[1][1].baseIndex = 1
   skyMap[1][1].eventIndex = -1
@@ -54,6 +59,7 @@ suite "Unit tests for trades module":
     skyBases[i].population = 100
   generateCargo()
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
+  resetReputations()
 
   test "Generating a trader's cargo.":
     generateTraderCargo(96)

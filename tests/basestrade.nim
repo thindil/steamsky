@@ -1,5 +1,5 @@
 import unittest2
-import ../src/[careers, crafts, factions, mobs, ships, shipmodules]
+import ../src/[careers, crafts, factions, mobs, reputation, ships, shipmodules]
 include ../src/basestrade
 
 suite "Unit tests for basestrade module":
@@ -54,6 +54,7 @@ suite "Unit tests for basestrade module":
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   playerCareer = "general"
   generateCargo()
+  resetReputations()
 
   test "Check money in a base.":
     check:

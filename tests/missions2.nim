@@ -1,4 +1,4 @@
-import ../src/[basestypes, careers, factions, items, shipmodules]
+import ../src/[basestypes, careers, factions, items, reputation, shipmodules]
 import unittest2
 include ../src/missions2
 
@@ -53,6 +53,7 @@ suite "Unit tests for missions2 module":
   skyMap[2][2].missionIndex = 0
   gameDate = DateRecord(year: 1600, month: 1, day: 1, hour: 8, minutes: 0)
   skyBases[1].missionsDate = gameDate
+  resetReputations()
 
   test "Finish an accepted mission":
     acceptedMissions = @[]
