@@ -43,7 +43,7 @@ proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
     ## Show the selected message
     ##
     ## * message - the message to show
-    let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
+    const tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.message.startsWith(prefix = currentTurnTime):
       if message.color == white:
         tclEval(script = messagesView & " insert end {" & message.message & "}")
@@ -135,7 +135,7 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   var
     haveAmmo, hasGunner: bool = false
     ammoAmount: int = 0
-  let gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ",
+  const gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ",
       "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
 
   proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
@@ -490,7 +490,7 @@ proc showCombatFrame(frameName: string) {.raises: [], tags: [], contractual.} =
   ## elements and show the new
   ##
   ## * frameName - the name of the UI's frame to show
-  let
+  const
     combatFrame: string = ".gameframe.paned.combatframe"
     combatChildren: array[5, string] = [".crew", ".damage", ".enemy", ".status", ".next"]
     boardingChildren: array[3, string] = [".left", ".right", ".next"]
@@ -890,7 +890,7 @@ proc setCombatPositionCommand(clientData: cint; interp: PInterp; argc: cint;
   ## SetCombatPosition position ?gunindex?
   ## Position is the combat crew member position which will be set. For gunner
   ## additional parameter is gunindex, index of the gun to take
-  let frameName: string = ".gameframe.paned.combatframe.crew.canvas.frame"
+  const frameName: string = ".gameframe.paned.combatframe.crew.canvas.frame"
   var comboBox: string = ""
   if argv[1] == "pilot":
     comboBox = frameName & ".pilotcrew"
@@ -1014,13 +1014,14 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     name: string
     column: Natural
     row: Natural
-  let
+  const
     combatFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "crew", column: 0,
         row: 0), FrameInfo(name: "damage", column: 0, row: 1), FrameInfo(
         name: "enemy", column: 1, row: 0), FrameInfo(name: "status", column: 1, row: 1)]
     boardingFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "left",
         column: 0, row: 0), FrameInfo(name: "right", column: 1, row: 0),
         FrameInfo(name: "", column: 0, row: 0), FrameInfo(name: "", column: 0, row: 0)]
+  let
     frames: array[1..4, FrameInfo] = (if argv[3] ==
         "combat": combatFrames else: boardingFrames)
     button: string = mainPaned & ".combatframe." & $argv[1] & ".canvas.frame.maxmin"
