@@ -359,8 +359,22 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       if infoData.button2 == emptyButtonSettings:
         cols.dec
       setLayoutRowDynamic(height = 30, cols = cols)
+      if infoData.button1 != emptyButtonSettings:
+        let button: ButtonSettings = infoData.button1
+        if button.icon > -1:
+          if button.text.len == 0:
+            imageButton(image = theme.icons[button.icon.IconsNames]):
+              button.code(dialog = dialog)
+          else:
+            imageLabelButton(image = theme.icons[button.icon.IconsNames], label = button.text):
+              button.code(dialog = dialog)
+        else:
+          labelButton(title = button.text):
+            button.code(dialog = dialog)
       labelButton(title = "Close"):
         closePopup()
         dialog = none
+      if infoData.button2 != emptyButtonSettings:
+        discard
   except:
     dialog = setError(message = "Can't show the info")
