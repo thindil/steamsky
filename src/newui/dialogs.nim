@@ -341,8 +341,8 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       height += (30 * data.lines).float
     updateDialog(width = infoWidth, height = height)
     popup(pType = staticPopup, title = infoData.title, x = dialogX,
-        y = dialogY, w = infoWidth, h = height, flags = {windowBorder, windowTitle,
-        windowNoScrollbar}):
+        y = dialogY, w = infoWidth, h = height, flags = {windowBorder,
+        windowTitle, windowNoScrollbar}):
       var index: Natural = 0
       for wAmount in infoData.widgetsAmount:
         if wAmount == 1:
@@ -359,22 +359,37 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       if infoData.button2 == emptyButtonSettings:
         cols.dec
       setLayoutRowDynamic(height = 30, cols = cols)
+      # Draw the first optional button
       if infoData.button1 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button1
         if button.icon > -1:
           if button.text.len == 0:
-            imageButton(image = theme.icons[button.icon.IconsNames]):
+            imageButton(image = images[button.icon.IconsNames]):
               button.code(dialog = dialog)
           else:
-            imageLabelButton(image = theme.icons[button.icon.IconsNames], label = button.text):
+            imageLabelButton(image = images[button.icon.IconsNames],
+                text = button.text, alignment = right):
               button.code(dialog = dialog)
         else:
           labelButton(title = button.text):
             button.code(dialog = dialog)
+      # Draw close button
       labelButton(title = "Close"):
         closePopup()
         dialog = none
+      # Draw the second optional button
       if infoData.button2 != emptyButtonSettings:
-        discard
+        let button: ButtonSettings = infoData.button2
+        if button.icon > -1:
+          if button.text.len == 0:
+            imageButton(image = images[button.icon.IconsNames]):
+              button.code(dialog = dialog)
+          else:
+            imageLabelButton(image = images[button.icon.IconsNames],
+                text = button.text, alignment = right):
+              button.code(dialog = dialog)
+        else:
+          labelButton(title = button.text):
+            button.code(dialog = dialog)
   except:
     dialog = setError(message = "Can't show the info")
