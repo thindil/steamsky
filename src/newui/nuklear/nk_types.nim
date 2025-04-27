@@ -413,6 +413,12 @@ const
     ## An empty rectangle
   nkUtfInvalid*: nk_rune = 0xfffd
     ## An invalid utf8 rune
+  nkUtfSize*: Positive = 4
+    ## The number of bytes of UTF glyph
+  nkUtfMask*: array[nkUtfSize + 1, nk_byte] = [0xc0, 0x80, 0xe0, 0xf0, 0xf8]
+    ## The list of UTF mask bytes
+  nkUtfByte*: array[nkUtfSize + 1, nk_byte] = [0x80, 0, 0xc0, 0xe0, 0xf0]
+    ## The list of UTF bytes
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding
