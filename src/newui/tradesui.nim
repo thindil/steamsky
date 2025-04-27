@@ -20,7 +20,8 @@
 
 import std/[algorithm, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, basescargo, basestypes, config, crewinventory, game, items, maps, shipscargo, shipscrew, types]
+import ../[bases, basescargo, basestypes, config, crewinventory, game, items,
+    maps, shipscargo, shipscrew, types]
 import coreui, dialogs, errordialog, header, themes
 
 type ItemsSortOrders = enum
@@ -338,8 +339,8 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
-proc addButton(label: string; iIndex: int): GameDialog {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc addButton(label: string; iIndex: int): GameDialog {.raises: [], tags: [
+    RootEffect], contractual.} =
   ## Add a button to the list of items for trade
   ##
   ## * label   - the text to show on the button
@@ -377,9 +378,9 @@ proc addButton(label: string; iIndex: int): GameDialog {.raises: [], tags: [Root
     var itemInfo = ""
     try:
       if itemsList[protoIndex].itemType == weaponType:
-        itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[protoIndex].value[
-            3]].name & "/" & attributesList[skillsList[itemsList[
-                protoIndex].value[
+        itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[
+            protoIndex].value[3]].name & "/" & attributesList[skillsList[
+                itemsList[protoIndex].value[
             3]].attribute].name & (if itemsList[protoIndex].value[4] ==
             1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
         case itemsList[protoIndex].value[5]
@@ -445,8 +446,9 @@ proc addButton(label: string; iIndex: int): GameDialog {.raises: [], tags: [Root
           except:
             return setError(message = "Can't get price.")
     else:
-      itemIndex = findItem(inventory = playerShip.cargo, protoIndex = protoIndex,
-          durability = (if baseIndex > 0: skyBases[baseIndex].cargo[
+      itemIndex = findItem(inventory = playerShip.cargo,
+          protoIndex = protoIndex, durability = (if baseIndex > 0: skyBases[
+              baseIndex].cargo[
           baseCargoIndex].durability else: traderCargo[
           baseCargoIndex].durability))
       price = (if baseIndex > 0: skyBases[baseIndex].cargo[
@@ -497,7 +499,8 @@ proc addButton(label: string; iIndex: int): GameDialog {.raises: [], tags: [Root
     var maxBuyAmount: int = 0
     try:
       if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
-          isBuyable(baseType = baseType, itemIndex = protoIndex)) or baseIndex == 0):
+          isBuyable(baseType = baseType, itemIndex = protoIndex)) or
+              baseIndex == 0):
         maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / price).int
         var maxPrice: Natural = maxBuyAmount * price
         if maxBuyAmount > 0:
@@ -524,23 +527,23 @@ proc addButton(label: string; iIndex: int): GameDialog {.raises: [], tags: [Root
               break
             maxPrice = maxBuyAmount * price
             countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-            weight = freeCargo(amount = maxPrice - (itemsList[protoIndex].weight * maxBuyAmount))
+            weight = freeCargo(amount = maxPrice - (itemsList[
+                protoIndex].weight * maxBuyAmount))
         if itemIndex == -1:
           itemIndex = -(baseCargoIndex)
     except:
       return setError(message = "Can't count max buy amount")
-#    try:
-#      return setInfo(text = itemInfo, title = itemsList[protoIndex].name, button1 = (
-#          if maxBuyAmount == 0: emptyButtonSettings else: ButtonSettings(
-#          tooltip: "Buy item from the base", command: "TradeAmount buy " &
-#          $maxBuyAmount & " " & $price, icon: "buy2icon", text: "Buy",
-#          color: "")),
-#          button2 = (if maxSellAmount ==
-#          0: emptyButtonSettings else: ButtonSettings(
-#          tooltip: "Sell item from the ship cargo", command: "TradeAmount sell " &
-#          $maxSellAmount & " " & $price, icon: "sell2icon", text: "Sell", color: "")))
-#    except:
-#      return setError(message = "Can't show the item's info.")
+    try:
+      return setInfo(text = itemInfo, title = itemsList[protoIndex].name,
+          button1 = (if maxBuyAmount ==
+          0: emptyButtonSettings else: ButtonSettings(
+          tooltip: "Buy item from the base", code: nil,
+          icon: buyDefaultIcon.ord, text: "Buy", color: "")), button2 = (
+          if maxSellAmount == 0: emptyButtonSettings else: ButtonSettings(
+          tooltip: "Sell item from the ship cargo", code: nil,
+          icon: sellDefaultIcon.ord, text: "Sell", color: "")))
+    except:
+      return setError(message = "Can't show the item's info.")
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
