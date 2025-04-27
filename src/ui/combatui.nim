@@ -198,22 +198,22 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
         gun[1]].name & ": \n(Ammo: " & $ammoAmount & ")}")
     tclEval(script = "grid " & label & " -row " & $(gunIndex + 4) & " -padx {5 0}")
     tclEval(script = "SetScrollbarBindings " & label & " $combatframe.crew.scrolly")
-    var comboBox: string = frame & ".guncrew" & $(gunIndex + 1)
-    tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
+    var comboBox2: string = frame & ".guncrew" & $(gunIndex + 1)
+    tclEval(script = "ttk::combobox " & comboBox2 & " -values [list " &
         getCrewList(position = 2) & "] -width 10 -state readonly")
     if playerShip.modules[gun[1]].owner[0] == -1:
-      tclEval(script = comboBox & " current 0")
+      tclEval(script = comboBox2 & " current 0")
     else:
       if playerShip.crew[playerShip.modules[gun[1]].owner[0]].order == gunner:
-        tclEval(script = comboBox & " current " & $(playerShip.modules[gun[
+        tclEval(script = comboBox2 & " current " & $(playerShip.modules[gun[
             1]].owner[0] + 1))
         hasGunner = true
       else:
-        tclEval(script = comboBox & " current 0")
-    tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 1")
-    tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
+        tclEval(script = comboBox2 & " current 0")
+    tclEval(script = "grid " & comboBox2 & " -row " & $(gunIndex + 4) & " -column 1")
+    tclEval(script = "bind " & comboBox2 & " <Return> {InvokeButton " &
         mainPaned & ".combatframe.next}")
-    tclEval(script = "bind " & comboBox &
+    tclEval(script = "bind " & comboBox2 &
         " <<ComboboxSelected>> {SetCombatPosition gunner " & $(gunIndex + 1) & "}")
     tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the crew member which will be the operate the gun during\nthe combat. The sign + after name means that this crew member\nhas gunnery skill, the sign ++ after name means that they\ngunnery skill is the best in the crew\"")
     var gunnerOrders: string = ""
@@ -224,20 +224,20 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       except:
         showError(message = "Can't show gunner's order.")
         return
-    comboBox = frame & ".gunorder" & $(gunIndex + 1)
-    if tclEval2(script = "winfo exists " & comboBox) == "0":
-      tclEval(script = "ttk::combobox " & comboBox & " -values [list " &
+    comboBox2 = frame & ".gunorder" & $(gunIndex + 1)
+    if tclEval2(script = "winfo exists " & comboBox2) == "0":
+      tclEval(script = "ttk::combobox " & comboBox2 & " -values [list " &
           gunnerOrders & "] -state readonly")
-    tclEval(script = comboBox & " current " & $(gun[2] - 1))
+    tclEval(script = comboBox2 & " current " & $(gun[2] - 1))
     if hasGunner:
-      tclEval(script = "grid " & comboBox & " -row " & $(gunIndex + 4) & " -column 2 -padx {0 5}")
+      tclEval(script = "grid " & comboBox2 & " -row " & $(gunIndex + 4) & " -column 2 -padx {0 5}")
     else:
-      tclEval(script = "grid remove " & comboBox)
-    tclEval(script = "bind " & comboBox & " <Return> {InvokeButton " &
+      tclEval(script = "grid remove " & comboBox2)
+    tclEval(script = "bind " & comboBox2 & " <Return> {InvokeButton " &
         mainPaned & ".combatframe.next}")
-    tclEval(script = "bind " & comboBox &
+    tclEval(script = "bind " & comboBox2 &
         " <<ComboboxSelected>> {SetCombatOrder " & $(gunIndex + 1) & "}")
-    tclEval(script = "tooltip::tooltip " & comboBox & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
+    tclEval(script = "tooltip::tooltip " & comboBox2 & " \"Select the order for the gunner. Shooting in the selected\npart of enemy ship is less precise but always hit the\nselected part.\"")
   # Show boarding/defending settings
   try:
     if (harpoonDuration > 0 or game.enemy.harpoonDuration > 0) and
@@ -627,8 +627,8 @@ proc nextTurnCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = closeButton & " configure -command {ShowSkyMap}")
     tclSetVar(varName = "gamestate", newValue = "general")
     tclEval(script = "grid " & closeButton & " -row 0 -column 1")
-    let frame: string = combatFrame & ".left"
-    if tclEval2(script = "winfo ismapped " & frame) == "1":
+    let frame2: string = combatFrame & ".left"
+    if tclEval2(script = "winfo ismapped " & frame2) == "1":
       showCombatFrame(frameName = ".combat")
     let nextButton: string = combatFrame & ".next"
     tclEval(script = "grid remove " & nextButton)
