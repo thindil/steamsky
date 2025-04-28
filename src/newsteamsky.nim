@@ -160,13 +160,14 @@ proc steamsky() {.raises: [], tags: [ReadIOEffect, RootEffect], contractual.} =
         # Add the tooltips, if enabled
         if gameSettings.showTooltips:
           showTooltips()
+        # Set the UI to redraw if state or dialog changed
         if oldState != state or oldDialog != dialog:
           redraw = true
 
-        # Start loading the game
-        if dialog == loading:
-          state = loadingGame
-          dialog = none
+      # Start loading the game
+      if dialog == loading:
+        state = loadingGame
+        dialog = none
 
       # Quit from the game
       if state == quitGame:
