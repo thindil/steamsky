@@ -321,9 +321,9 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         lineWidth = 0
     infoData = InfoData(data: parts, button1: button1, button2: button2,
         widgetsAmount: widgetsAmount, title: title)
-    result = infoDialog
+    return infoDialog
   except:
-    result = setError(message = "Can't set the message.")
+    return setError(message = "Can't set the message.")
 
 proc showInfo*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
