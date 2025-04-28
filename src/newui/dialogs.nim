@@ -362,6 +362,9 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       # Draw the first optional button
       if infoData.button1 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button1
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = button.tooltip)
         if button.icon > -1:
           if button.text.len == 0:
             imageButton(image = images[button.icon.IconsNames]):
@@ -374,12 +377,18 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
           labelButton(title = button.text):
             button.code(dialog = dialog)
       # Draw close button
+      if gameSettings.showTooltips:
+        addTooltip(bounds = getWidgetBounds(),
+            text = "Close the dialog [Escape key]")
       labelButton(title = "Close"):
         closePopup()
         dialog = none
       # Draw the second optional button
       if infoData.button2 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button2
+        if gameSettings.showTooltips:
+          addTooltip(bounds = getWidgetBounds(),
+              text = button.tooltip)
         if button.icon > -1:
           if button.text.len == 0:
             imageButton(image = images[button.icon.IconsNames]):
