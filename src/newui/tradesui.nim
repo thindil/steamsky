@@ -361,7 +361,7 @@ proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
     if itemIndex < 0:
       baseCargoIndex = itemIndex.abs
     else:
-      cargoIndex = itemIndex
+      cargoIndex = itemIndex + 1
     if cargoIndex > playerShip.cargo.high:
       return
     let baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
