@@ -111,20 +111,20 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
       showError(message = "Can't update combat UI, no faction: " &
           playerShip.crew[0].faction, e = nil)
       return
-  if "sentientships" notin faction.flags and findMember(order = pilot) == -1:
-    tclEval(script = "grid remove " & comboBox)
-  else:
+  if "sentientships" in faction.flags or findMember(order = pilot) > -1:
     tclEval(script = "grid " & comboBox)
+  else:
+    tclEval(script = "grid remove " & comboBox)
   comboBox = frame & ".engineercrew"
   tclEval(script = comboBox & " configure -values [list " & getCrewList(
       position = 1) & "]")
   tclEval(script = comboBox & " current " & $(findMember(order = engineer) + 1))
   comboBox = frame & ".engineerorder"
   tclEval(script = comboBox & " current " & $(engineerOrder - 1))
-  if "sentientships" notin faction.flags and findMember(order = engineer) == -1:
-    tclEval(script = "grid remove " & comboBox)
-  else:
+  if "sentientships" in faction.flags or findMember(order = engineer) > -1:
     tclEval(script = "grid " & comboBox)
+  else:
+    tclEval(script = "grid remove " & comboBox)
   var
     tclResult: seq[string] = tclEval2(script = "grid size " & frame).split(sep = " ")
     rows: Positive = try:
