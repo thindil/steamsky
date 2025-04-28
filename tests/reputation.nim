@@ -16,3 +16,17 @@ suite "Unit tests for reputation module":
     resetReputations()
     check:
       getReputation(factionIndex = newGameSettings.playerFaction) == 1
+
+  test "Gaining reputation with a faction.":
+    updateReputation(baseIndex = 1, amount = 501)
+    check:
+      getReputation(factionIndex = newGameSettings.playerFaction) == 2
+
+  test "Losing reputation with a faction.":
+    updateReputation(baseIndex = 1, amount = -2)
+    check:
+      getReputation(factionIndex = newGameSettings.playerFaction) == 1
+
+  test "Get reputation's level's text":
+    check:
+      getReputationText(reputationLevel = -70) == "Outlaw"
