@@ -217,6 +217,20 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     answered = true
     dialog = setError(message = "Can't show the question")
 
+proc addCloseButton(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Add the close button to the dialog
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the parameter dialog. It is modified only when the player closed
+  ## the dialog.
+  if gameSettings.showTooltips:
+    addTooltip(bounds = getWidgetBounds(),
+        text = "Close the dialog [Escape key]")
+  labelButton(title = "Close"):
+    closePopup()
+    dialog = none
+
 proc showMessage*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the current question to the player
@@ -239,9 +253,7 @@ proc showMessage*(dialog: var GameDialog) {.raises: [],
       setLayoutRowDynamic(height = 30 * messageData.lines, cols = 1)
       wrapLabel(str = messageData.text)
       setLayoutRowDynamic(height = 30, cols = 1)
-      labelButton(title = "Close"):
-        closePopup()
-        dialog = none
+      addCloseButton(dialog = dialog)
   except:
     dialog = setError(message = "Can't show the message")
 
@@ -377,12 +389,7 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
           labelButton(title = button.text):
             button.code(dialog = dialog)
       # Draw close button
-      if gameSettings.showTooltips:
-        addTooltip(bounds = getWidgetBounds(),
-            text = "Close the dialog [Escape key]")
-      labelButton(title = "Close"):
-        closePopup()
-        dialog = none
+      addCloseButton(dialog = dialog)
       # Draw the second optional button
       if infoData.button2 != emptyButtonSettings:
         let button: ButtonSettings = infoData.button2
