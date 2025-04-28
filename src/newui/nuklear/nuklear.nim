@@ -699,7 +699,12 @@ proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
   ## Returns modified parameter i and UTF rune
   if i == 0:
     return 0
-  # TODO: continue here
+  i = 0
+  for index, rune in nkUtfMask:
+    i = index
+    if (c.nk_byte and rune) == nkUtfByte[index]:
+      return (c.nk_byte and not rune)
+  return 0
 
 proc nkUtfDecode(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
   tags: [], contractual.} =
