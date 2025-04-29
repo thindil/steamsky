@@ -318,7 +318,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
     var
       widgetsAmount: seq[Positive] = @[]
       lineWidth, wAmount: Natural = 0
-    for part in parts.mitems:
+    for part in parts:
       if part.lines > 1:
         widgetsAmount.add(y = 1)
         lineWidth = 0
@@ -331,6 +331,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         widgetsAmount.add(y = wAmount)
         wAmount = 0
         lineWidth = 0
+    if wAmount > 0:
+      widgetsAmount.add(y = wAmount)
     infoData = InfoData(data: parts, button1: button1, button2: button2,
         widgetsAmount: widgetsAmount, title: title)
     return infoDialog
