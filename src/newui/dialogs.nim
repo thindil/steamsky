@@ -307,6 +307,7 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         wAmount = 0
         lineWidth = 0
       if tagIndex == text.len:
+        widgetsAmount.add(y = wAmount)
         break
       startIndex = tagIndex
       tagIndex = text.find(sub = '}', start = startIndex)
@@ -326,10 +327,20 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
           theme.colors[redColor]
         else:
           theme.colors[foregroundColor], lines: needLines))
+      if needLines > 1:
+        widgetsAmount.add(y = 1)
+        lineWidth = 0
+        wAmount = 0
+      lineWidth += getTextWidth(text = partText).Natural
+      if lineWidth <= infoWidth.Natural:
+        wAmount.inc
+        widgetsAmount.add(y = wAmount)
+      else:
+        widgetsAmount.add(y = wAmount)
+        wAmount = 0
+        lineWidth = 0
       startIndex = tagIndex + tagName.len + 3
       tagIndex = text.find(sub = '{', start = startIndex)
-    if wAmount > 0:
-      widgetsAmount.add(y = wAmount)
     infoData = InfoData(data: parts, button1: button1, button2: button2,
         widgetsAmount: widgetsAmount, title: title)
     echo infoData
