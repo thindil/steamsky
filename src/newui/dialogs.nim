@@ -217,7 +217,8 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     answered = true
     dialog = setError(message = "Can't show the question")
 
-proc addCloseButton(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc addCloseButton(dialog: var GameDialog) {.raises: [], tags: [],
+    contractual.} =
   ## Add the close button to the dialog
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -295,10 +296,6 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         needLines = newLines
       parts.add(y = TextData(text: partText, color: theme.colors[
           foregroundColor], lines: needLines))
-      if needLines > 1:
-        widgetsAmount.add(y = 1)
-        lineWidth = 0
-        wAmount = 0
       lineWidth += getTextWidth(text = partText).Natural
       if lineWidth <= infoWidth.Natural:
         wAmount.inc
@@ -308,6 +305,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
         lineWidth = 0
       if tagIndex == text.len:
         widgetsAmount.add(y = wAmount)
+        wAmount = 0
+        lineWidth = 0
         break
       startIndex = tagIndex
       tagIndex = text.find(sub = '}', start = startIndex)
@@ -334,16 +333,13 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       lineWidth += getTextWidth(text = partText).Natural
       if lineWidth <= infoWidth.Natural:
         wAmount.inc
-        widgetsAmount.add(y = wAmount)
-      else:
-        widgetsAmount.add(y = wAmount)
-        wAmount = 0
-        lineWidth = 0
+      widgetsAmount.add(y = wAmount)
+      wAmount = 0
+      lineWidth = 0
       startIndex = tagIndex + tagName.len + 3
       tagIndex = text.find(sub = '{', start = startIndex)
     infoData = InfoData(data: parts, button1: button1, button2: button2,
         widgetsAmount: widgetsAmount, title: title)
-    echo infoData
     return infoDialog
   except:
     return setError(message = "Can't set the message.")
@@ -370,11 +366,12 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
       for wAmount in infoData.widgetsAmount:
         if wAmount == 1:
           setLayoutRowDynamic(height = 30 * infoData.data[index].lines, cols = 1)
-          wrapLabel(str = infoData.data[index].text)
+          colorWrapLabel(str = infoData.data[index].text, color = infoData.data[index].color)
         else:
           setLayoutRowDynamic(height = 30, cols = wAmount)
           for index2 in index..index + wAmount - 1:
-            wrapLabel(str = infoData.data[index2].text)
+            colorWrapLabel(str = infoData.data[index2].text,
+                color = infoData.data[index2].color)
         index += wAmount
       var cols: Positive = 3
       if infoData.button1 == emptyButtonSettings:
