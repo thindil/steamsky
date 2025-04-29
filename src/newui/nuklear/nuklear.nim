@@ -689,6 +689,17 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
 # ---
 # UTF
 # ---
+proc nkUtfValidate(u: nk_rune; i: int): int {.raises: [], tags: [], contractual,
+  discardable.} =
+  ## Validate UTF rune
+  ##
+  ## * u - the rune to validate
+  ## * i - the index of the rune
+  ##
+  ## Returns 0 if rune is invalid, otherwise return i
+  discard
+  # TODO: continue here
+
 proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
   contractual.} =
   ## Decode one UTF byte
@@ -721,7 +732,24 @@ proc nkUtfDecode(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
   var
     len: int = 0
     udecoded: nk_rune = nkUtfDecodeByte(c = c[0], len)
-  # TODO: continue here after nkUtfDecodeByte
+  if len in 1..nkUtfSize:
+    return 1
+
+  var j: int = 1
+  for i in 1..clen:
+    j = i
+    if j >= len:
+      break
+    var `type`: int = 0
+    udecoded = (udecoded shl 6) or nkUtfDecodeByte(c[i], `type`)
+    if `type` != 0:
+      return j
+
+  if j < len:
+    return 0
+  u = udecoded
+  nkUtfValidate(u = u, i = len)
+  return len
 
 # ----
 # Misc
