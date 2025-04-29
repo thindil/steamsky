@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+- Possible crash when updating population in bases
+
 ## [11.0] - 2025-04-20
 
 ### Changed
