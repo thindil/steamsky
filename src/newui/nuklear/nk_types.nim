@@ -419,6 +419,10 @@ const
     ## The list of UTF mask bytes
   nkUtfByte*: array[nkUtfSize + 1, nk_byte] = [0x80, 0, 0xc0, 0xe0, 0xf0]
     ## The list of UTF bytes
+  nkUtfMin*: array[nkUtfSize + 1, nk_uint] = [0, 0, 0x80, 0x800, 0x10000]
+    ## The list of start UTF bytes
+  nkUtfMax*: array[nkUtfSize + 1, nk_uint] = [0x10ffff, 0x7f, 0x7ff, 0xffff, 0x10ffff]
+    ## The list of end UTF bytes
 
 # ------------------------------------------------------------------
 # High level bindings. The new version of the binding

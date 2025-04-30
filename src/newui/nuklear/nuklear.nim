@@ -689,7 +689,7 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
 # ---
 # UTF
 # ---
-proc nkUtfValidate(u: nk_rune; i: int): int {.raises: [], tags: [], contractual,
+proc nkUtfValidate(u: var nk_rune; i: int): int {.raises: [], tags: [], contractual,
   discardable.} =
   ## Validate UTF rune
   ##
@@ -697,7 +697,11 @@ proc nkUtfValidate(u: nk_rune; i: int): int {.raises: [], tags: [], contractual,
   ## * i - the index of the rune
   ##
   ## Returns 0 if rune is invalid, otherwise return i
-  discard
+  if u == 0:
+    return 0
+  if u notin nkUtfMin[i]..nkUtfMax[i] or u notin 0xd800.nk_rune..0xdfff.nk_rune:
+    u = nkUtfInvalid
+  result = i
   # TODO: continue here
 
 proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
