@@ -339,6 +339,22 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
+proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Set the dialog for buying items
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  dialog = buyDialog
+
+proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+  ## Set the dialog for selling items
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog.
+  dialog = sellDialog
+
 proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
   ## Add a button to the list of items for trade
@@ -550,10 +566,10 @@ proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
       dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
           button1 = (if maxBuyAmount ==
           0: emptyButtonSettings else: ButtonSettings(
-          tooltip: "Buy item from the base", code: nil,
+          tooltip: "Buy item from the base", code: setBuyDialog,
           icon: buyDefaultIcon.ord, text: "Buy", color: "")), button2 = (
           if maxSellAmount == 0: emptyButtonSettings else: ButtonSettings(
-          tooltip: "Sell item from the ship cargo", code: nil,
+          tooltip: "Sell item from the ship cargo", code: setSellDialog,
           icon: sellDefaultIcon.ord, text: "Sell", color: "")))
     except:
       dialog = setError(message = "Can't show the item's info.")
