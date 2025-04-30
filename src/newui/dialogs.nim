@@ -50,6 +50,11 @@ type
     title: string
     button1, button2: ButtonSettings
     widgetsAmount: seq[Positive]
+  ManipulateData = object
+    itemIndex: int
+    maxAmount: Natural
+    cost: Natural
+    title: string
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
     icon: -1, tooltip: "",
@@ -417,3 +422,17 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
             button.code(dialog = dialog)
   except:
     dialog = setError(message = "Can't show the info")
+
+proc setManipulate*(): GameDialog {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Set the data related to the current in-game manipulate item dialog
+  ##
+  ## * text    - the text to show in the dialog. Can use special tags for
+  ##             colors, like `{gold}{/gold}`
+  ## * title   - the title of the dialog
+  ## * button1 - the settings for the first optional button. If empty, the
+  ##             button will not show
+  ## * button2 - the settings for the second optional button. If empty, the
+  ##             button will not show
+  ##
+  ## Returns the type of dialog if the dialog was set, otherwise errorDialog
