@@ -50,6 +50,9 @@ type
     title: string
     button1, button2: ButtonSettings
     widgetsAmount: seq[Positive]
+  ManipulateType* = enum
+    ## Types of action, used to manipulate items, like selling or buying items
+    sellAction, buyAction
   ManipulateData = object
     itemIndex: int
     maxAmount: Natural
@@ -66,6 +69,8 @@ var
   answered*: bool = false ## If true, the question was answered
   infoData: InfoData = InfoData(data: @[], title: "",
       button1: emptyButtonSettings, button2: emptyButtonSettings)
+  manipulateData: ManipulateData = ManipulateData(itemIndex: 0, maxAmount: 0,
+      cost: 0, title: "")
 
 proc setQuestion*(question: string; qType: QuestionType;
     data: string = ""): GameDialog {.raises: [], tags: [RootEffect],
@@ -423,16 +428,16 @@ proc showInfo*(dialog: var GameDialog) {.raises: [],
   except:
     dialog = setError(message = "Can't show the info")
 
-proc setManipulate*(): GameDialog {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
+    ], tags: [], contractual.} =
   ## Set the data related to the current in-game manipulate item dialog
   ##
-  ## * text    - the text to show in the dialog. Can use special tags for
-  ##             colors, like `{gold}{/gold}`
-  ## * title   - the title of the dialog
-  ## * button1 - the settings for the first optional button. If empty, the
-  ##             button will not show
-  ## * button2 - the settings for the second optional button. If empty, the
-  ##             button will not show
+  ## * action - the action used to manipulate items, like selling or buying
+  ## * iIndex - the index of the item to manipulate, in the player's ship's
+  ##            cargo (if positive) or in a trader's cargo (if negative)
   ##
   ## Returns the type of dialog if the dialog was set, otherwise errorDialog
+  if action == buyAction:
+    return buyDialog
+  else:
+    return sellDialog

@@ -345,7 +345,7 @@ proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} 
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  dialog = buyDialog
+  dialog = setManipulate(action = buyAction, iIndex = itemIndex)
 
 proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
   ## Set the dialog for selling items
@@ -353,7 +353,7 @@ proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.}
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
-  dialog = sellDialog
+  dialog = setManipulate(action = sellAction, iIndex = itemIndex)
 
 proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [], tags: [
     RootEffect], contractual.} =
