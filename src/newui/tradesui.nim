@@ -339,7 +339,8 @@ proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
     for item in localItems:
       itemsIndexes.add(y = item.id)
 
-proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the dialog for buying items
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -347,7 +348,8 @@ proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} 
   ## Returns the modified parameter dialog.
   dialog = setManipulate(action = buyAction, iIndex = itemIndex)
 
-proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.} =
+proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Set the dialog for selling items
   ##
   ## * dialog - the current in-game dialog displayed on the screen
@@ -355,8 +357,8 @@ proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [], contractual.}
   ## Returns the modified parameter dialog.
   dialog = setManipulate(action = sellAction, iIndex = itemIndex)
 
-proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [], tags: [
-    RootEffect], contractual.} =
+proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Add a button to the list of items for trade
   ##
   ## * label  - the text to show on the button
@@ -738,11 +740,13 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $profit, iIndex = i, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-        addButton(label = $itemsList[protoIndex].weight & " kg", iIndex = i, dialog = dialog)
+        addButton(label = $itemsList[protoIndex].weight & " kg", iIndex = i,
+            dialog = dialog)
       except:
         dialog = setError(message = "Can't show weight")
         return
-      addButton(label = $playerShip.cargo[i].amount, iIndex = i, dialog = dialog)
+      addButton(label = $playerShip.cargo[i].amount, iIndex = i,
+          dialog = dialog)
       addButton(label = $baseAmount, iIndex = i, dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
