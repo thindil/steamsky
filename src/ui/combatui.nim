@@ -345,12 +345,17 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   tclEval(script = label & " insert end {" & skyBases[
       game.enemy.ship.homeBase].name & "} [list gold]")
   tclEval(script = label & " insert end {\nDistance: }")
-  tclEval(script = label & " insert end {" & (
-      if game.enemy.distance >= 15_000: "Escaped" elif game.enemy.distance in
-      10_000 ..
-      15_000: "Long" elif game.enemy.distance in 5_000 ..
-      10_000: "Medium" elif game.enemy.distance in 1_000 ..
-      5_000: "Short" else: "Close") & "} [list gold]")
+  tclEval(script = label & " insert end {" & (case game.enemy.distance
+      of 15_001..100_000:
+        "Escaped"
+      of 10_001..15_000:
+        "Long"
+      of 5_001..10_000:
+        "Medium"
+      of 1_001..5_000:
+        "Short"
+      else:
+        "Close") & "} [list gold]")
   tclEval(script = label & " insert end {\nStatus: }")
   var enemyInfo: string = ""
   if game.enemy.distance < 15_000:
@@ -404,13 +409,14 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
         except:
           showError(message = "Can't count the speed difference.")
           return
-      if speedDiff > 250:
+      case speedDiff
+      of 251..100_000:
         enemyInfo &= " (much faster)"
-      elif speedDiff > 0:
+      of 1..250:
         enemyInfo &= " (faster)"
-      elif speedDiff == 0:
+      of 0:
         enemyInfo &= " (equal)"
-      elif speedDiff > -250:
+      of -249.. -1:
         enemyInfo &= " (slower)"
       else:
         enemyInfo &= " (much slower)"
