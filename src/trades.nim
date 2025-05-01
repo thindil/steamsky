@@ -245,12 +245,16 @@ proc buyItems*(baseItemIndex: Natural; amount: string) {.raises: [
     eventsList[eventIndex].time += 5
   updateGame(minutes = 5)
 
-proc getTradeData*(iIndex: int): tuple[protoIndex: int, maxSellAmount: int, maxBuyAmount: int] {.raises: [KeyError], tags: [], contractual.} =
+proc getTradeData*(iIndex: int): tuple[protoIndex: int, maxSellAmount: int,
+  maxBuyAmount: int] {.raises: [KeyError], tags: [], contractual.} =
   ## get the data related to the item during trading
   ##
   ## * iIndex - the index of the item which data will be get. If positive, the
   ##            item is in the player's ship's cargo, negative in the trader's
   ##            cargo.
+  ##
+  ## Returns tuple with trade data: proto index of the item, max amount of item
+  ## to sell and max amount item to buy.
   result = (-1, 0, 0)
   var baseCargoIndex, cargoIndex: int = -1
   if iIndex < 0:
@@ -271,82 +275,81 @@ proc getTradeData*(iIndex: int): tuple[protoIndex: int, maxSellAmount: int, maxB
     result.protoIndex = (if baseIndex == 0: traderCargo[
         baseCargoIndex].protoIndex else: skyBases[baseIndex].cargo[
         baseCargoIndex].protoIndex)
-    let baseType: string = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
-    var price: int = 0
-    if iIndex > -1:
-      baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
-          durability = playerShip.cargo[cargoIndex].durability)
-      if baseCargoIndex > -1:
-        price = (if baseIndex > 0: skyBases[baseIndex].cargo[
-            baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
-      else:
-        price = getPrice(baseType = baseType, itemIndex = result.protoIndex)
-    else:
-      itemIndex = findItem(inventory = playerShip.cargo,
-          protoIndex = result.protoIndex, durability = (if baseIndex > 0: skyBases[
-              baseIndex].cargo[
-          baseCargoIndex].durability else: traderCargo[
-          baseCargoIndex].durability))
+  let baseType: string = (if baseIndex > 0: skyBases[baseIndex].baseType else: "0")
+  var price: int = 0
+  if iIndex > -1:
+    baseCargoIndex = findBaseCargo(protoIndex = result.protoIndex,
+        durability = playerShip.cargo[cargoIndex].durability)
+    if baseCargoIndex > -1:
       price = (if baseIndex > 0: skyBases[baseIndex].cargo[
           baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
-    if itemIndex > -1:
-      result.maxSellAmount = playerShip.cargo[itemIndex].amount
-      var maxPrice: Natural = result.maxSellAmount * price
+    else:
+      price = getPrice(baseType = baseType, itemIndex = result.protoIndex)
+  else:
+    itemIndex = findItem(inventory = playerShip.cargo,
+        protoIndex = result.protoIndex, durability = (if baseIndex > 0: skyBases[
+            baseIndex].cargo[
+        baseCargoIndex].durability else: traderCargo[
+        baseCargoIndex].durability))
+    price = (if baseIndex > 0: skyBases[baseIndex].cargo[
+        baseCargoIndex].price else: traderCargo[baseCargoIndex].price)
+  if itemIndex > -1:
+    result.maxSellAmount = playerShip.cargo[itemIndex].amount
+    var maxPrice: Natural = result.maxSellAmount * price
+    countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+        reduce = false)
+    if baseIndex > 0 and maxPrice > skyBases[baseIndex].cargo[0].amount:
+      result.maxSellAmount = (result.maxSellAmount.float * (skyBases[baseIndex].cargo[
+          0].amount.float / maxPrice.float)).floor.int
+    elif baseIndex == 0 and maxPrice > traderCargo[0].amount:
+      result.maxSellAmount = (result.maxSellAmount.float * (traderCargo[0].amount.float /
+          maxPrice.float)).floor.int
+    maxPrice = result.maxSellAmount * price
+    if maxPrice > 0:
       countPrice(price = maxPrice, traderIndex = findMember(order = talk),
           reduce = false)
-      if baseIndex > 0 and maxPrice > skyBases[baseIndex].cargo[0].amount:
-        result.maxSellAmount = (result.maxSellAmount.float * (skyBases[baseIndex].cargo[
-            0].amount.float / maxPrice.float)).floor.int
-      elif baseIndex == 0 and maxPrice > traderCargo[0].amount:
-        result.maxSellAmount = (result.maxSellAmount.float * (traderCargo[0].amount.float /
-            maxPrice.float)).floor.int
+    var weight: int = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
+    while weight < 0:
+      result.maxSellAmount = (result.maxSellAmount.float * ((maxPrice + weight).float /
+          maxPrice.float)).floor.int
+      if result.maxSellAmount < 1:
+        break
       maxPrice = result.maxSellAmount * price
-      if maxPrice > 0:
-        countPrice(price = maxPrice, traderIndex = findMember(order = talk),
-            reduce = false)
-      var weight: int = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk),
+          reduce = false)
+      weight = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
+  let moneyIndex2: int = findItem(inventory = playerShip.cargo,
+      protoIndex = moneyIndex)
+  if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
+      isBuyable(baseType = baseType, itemIndex = result.protoIndex)) or
+          baseIndex == 0):
+    result.maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / price).int
+    var maxPrice: Natural = result.maxBuyAmount * price
+    if result.maxBuyAmount > 0:
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+      if maxPrice < result.maxBuyAmount * price:
+        result.maxBuyAmount = (result.maxBuyAmount.float * ((result.maxBuyAmount.float *
+            price.float) / maxPrice.float)).floor.int
+      if baseIndex > 0 and result.maxBuyAmount > skyBases[baseIndex].cargo[
+          baseCargoIndex].amount:
+        result.maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
+      elif baseIndex == 0 and result.maxBuyAmount > traderCargo[
+          baseCargoIndex].amount:
+        result.maxBuyAmount = traderCargo[baseCargoIndex].amount
+      maxPrice = result.maxBuyAmount * price
+      countPrice(price = maxPrice, traderIndex = findMember(order = talk))
+      var weight: int = freeCargo(amount = maxPrice - (itemsList[
+          result.protoIndex].weight * result.maxBuyAmount))
       while weight < 0:
-        result.maxSellAmount = (result.maxSellAmount.float * ((maxPrice + weight).float /
-            maxPrice.float)).floor.int
-        if result.maxSellAmount < 1:
+        result.maxBuyAmount = result.maxBuyAmount + (weight / itemsList[
+            result.protoIndex].weight).int - 1
+        if result.maxBuyAmount < 0:
+          result.maxBuyAmount = 0
+        if result.maxBuyAmount == 0:
           break
-        maxPrice = result.maxSellAmount * price
-        countPrice(price = maxPrice, traderIndex = findMember(order = talk),
-            reduce = false)
-        weight = freeCargo(amount = (itemsList[result.protoIndex].weight * result.maxSellAmount) - maxPrice)
-    let moneyIndex2: int = findItem(inventory = playerShip.cargo,
-        protoIndex = moneyIndex)
-    var maxBuyAmount: int = 0
-    if baseCargoIndex > -1 and moneyIndex2 > -1 and ((baseIndex > -1 and
-        isBuyable(baseType = baseType, itemIndex = result.protoIndex)) or
-            baseIndex == 0):
-      maxBuyAmount = (playerShip.cargo[moneyIndex2].amount / price).int
-      var maxPrice: Natural = maxBuyAmount * price
-      if maxBuyAmount > 0:
+        maxPrice = result.maxBuyAmount * price
         countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-        if maxPrice < maxBuyAmount * price:
-          maxBuyAmount = (maxBuyAmount.float * ((maxBuyAmount.float *
-              price.float) / maxPrice.float)).floor.int
-        if baseIndex > 0 and maxBuyAmount > skyBases[baseIndex].cargo[
-            baseCargoIndex].amount:
-          maxBuyAmount = skyBases[baseIndex].cargo[baseCargoIndex].amount
-        elif baseIndex == 0 and maxBuyAmount > traderCargo[
-            baseCargoIndex].amount:
-          maxBuyAmount = traderCargo[baseCargoIndex].amount
-        maxPrice = maxBuyAmount * price
-        countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-        var weight: int = freeCargo(amount = maxPrice - (itemsList[
-            result.protoIndex].weight * maxBuyAmount))
-        while weight < 0:
-          maxBuyAmount = maxBuyAmount + (weight / itemsList[
-              result.protoIndex].weight).int - 1
-          if maxBuyAmount < 0:
-            maxBuyAmount = 0
-          if maxBuyAmount == 0:
-            break
-          maxPrice = maxBuyAmount * price
-          countPrice(price = maxPrice, traderIndex = findMember(order = talk))
-          weight = freeCargo(amount = maxPrice - (itemsList[
-              result.protoIndex].weight * maxBuyAmount))
-      if itemIndex == -1:
-        itemIndex = -(baseCargoIndex)
+        weight = freeCargo(amount = maxPrice - (itemsList[
+            result.protoIndex].weight * result.maxBuyAmount))
+    if itemIndex == -1:
+      itemIndex = -(baseCargoIndex)
