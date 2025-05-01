@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Bartek thindil Jasicki
+# Copyright 2022-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -329,7 +329,7 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
     for i in weapon..legs:
       if result.equipment[i] == -1:
         var equipmentItemIndex: Natural = 0
-        if getRandom(min = 1, max = 100) > 95:
+        if getRandom(min = 1, max = 100) < 95:
           let equipmentItemsList: seq[Positive] = case i
             of weapon:
               weaponsList
