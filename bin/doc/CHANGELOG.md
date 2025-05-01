@@ -9,3 +9,4 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Possible crash when updating population in bases
+- Generating enemies' equipment
