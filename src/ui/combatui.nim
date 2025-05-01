@@ -69,6 +69,46 @@ proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
 
+proc getCrewList(position: Natural): string {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+  ## Get the list of crew members with info about they level in the selected skill
+  ##
+  ## * position - the crew member's position on the ship, 0 - pilot, 1 -
+  ##              engineer, 2 - gunner
+  ##
+  ## Returns the string with the list of crew members and the symbol related
+  ## to the selected skill.
+  result = "Nobody"
+  for index, member in playerShip.crew:
+    if member.skills.len > 0:
+      result = result & " {" & member.name & getSkillMarks(skillIndex = (
+          if position == 0: pilotingSkill elif position ==
+          1: engineeringSkill else: gunnerySkill), memberIndex = index) & "}"
+
+proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
+    KeyError], tags: [], contractual.} =
+  ## Get the information about the fire rate of the selected gun
+  ##
+  ## * position - the index of the gun on the guns list
+  ## * index    - the index of the order for the gun
+  ##
+  ## Returns the string with information about the gun's speed.
+  result = ""
+  var gunSpeed: int = modulesList[playerShip.modules[guns[position][
+      1]].protoIndex].speed
+  case index
+  of 1:
+    gunSpeed = 0
+  of 3:
+    discard
+  else:
+    gunSpeed = (if gunSpeed > 0: (gunSpeed.float /
+        2.0).ceil.int else: gunSpeed - 1)
+  if gunSpeed > 0:
+    return "(" & $gunSpeed & "/round)"
+  elif gunSpeed < 0:
+    return "(1/" & $gunSpeed & " rounds)"
+
 proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     RootEffect], contractual.} =
   ## Update the combat UI, remove the old elements and add new, depending
@@ -83,22 +123,6 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
   tclEval(script = "bind . <" & generalAccelerators[3] & "> {InvokeButton " &
       mainPaned & ".combatframe.status.canvas.frame.maxmin}")
   var comboBox: string = frame & ".pilotcrew"
-
-  proc getCrewList(position: Natural): string {.raises: [], tags: [
-      WriteIOEffect, TimeEffect, RootEffect], contractual.} =
-    ## Get the list of crew members with info about they level in the selected skill
-    ##
-    ## * position - the crew member's position on the ship, 0 - pilot, 1 -
-    ##              engineer, 2 - gunner
-    ##
-    ## Returns the string with the list of crew members and the symbol related
-    ## to the selected skill.
-    result = "Nobody"
-    for index, member in playerShip.crew:
-      if member.skills.len > 0:
-        result = result & " {" & member.name & getSkillMarks(skillIndex = (
-            if position == 0: pilotingSkill elif position ==
-            1: engineeringSkill else: gunnerySkill), memberIndex = index) & "}"
 
   tclEval(script = comboBox & " configure -values [list " & getCrewList(
       position = 0) & "]")
@@ -137,30 +161,6 @@ proc updateCombatUi() {.raises: [], tags: [WriteIOEffect, TimeEffect,
     ammoAmount: int = 0
   const gunnersOrders: array[1..6, string] = ["{Don't shoot", "{Precise fire ",
       "{Fire at will ", "{Aim for their engine ", "{Aim for their weapon ", "{Aim for their hull "]
-
-  proc getGunSpeed(position: Natural; index: Positive): string {.raises: [
-      KeyError], tags: [], contractual.} =
-    ## Get the information about the fire rate of the selected gun
-    ##
-    ## * position - the index of the gun on the guns list
-    ## * index    - the index of the order for the gun
-    ##
-    ## Returns the string with information about the gun's speed.
-    result = ""
-    var gunSpeed: int = modulesList[playerShip.modules[guns[position][
-        1]].protoIndex].speed
-    case index
-    of 1:
-      gunSpeed = 0
-    of 3:
-      discard
-    else:
-      gunSpeed = (if gunSpeed > 0: (gunSpeed.float /
-          2.0).ceil.int else: gunSpeed - 1)
-    if gunSpeed > 0:
-      return "(" & $gunSpeed & "/round)"
-    elif gunSpeed < 0:
-      return "(1/" & $gunSpeed & " rounds)"
 
   # Show the guns settings
   for gunIndex, gun in guns:
