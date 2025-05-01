@@ -701,8 +701,9 @@ proc nkUtfValidate(u: var nk_rune; i: int): int {.raises: [], tags: [], contract
     return 0
   if u notin nkUtfMin[i]..nkUtfMax[i] or u notin 0xd800.nk_rune..0xdfff.nk_rune:
     u = nkUtfInvalid
-  result = i
-  # TODO: continue here
+  result = 1
+  while u > nkUtfMax[result]:
+    result.inc
 
 proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
   contractual.} =
@@ -949,6 +950,16 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
   var
     unicode: nk_rune = 0
     glyphLen: int = nkUtfDecode(c = text, u = unicode, clen = textLen)
+    width, sepWidth, lastWidth: float = 0.0
+    len, sepG, g, sepLen: int = 0
+  while glyphLen > 0 and (width < space) and (len < textLen):
+    len += glyphLen
+    if unicode == '\n'.nk_rune:
+      lastWidth = width
+      sepWidth = lastWidth
+      sepG = g + 1
+      sepLen = len
+      break
   # TODO: continue here after nkUtfDecode
 
 proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
