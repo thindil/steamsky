@@ -566,6 +566,7 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
       " -from 0 -command NegotiateHire -length 250 -to " & $(recruit.payment *
       2) & " -variable daily")
   tclEval(script = "bind " & scale & " <Escape> {" & dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & spinBox & " <Tab> {focus " & scale & ";break}")
   tclEval(script = "grid " & scale)
   labelFrame = negotiateDialog & ".percentlbl"
   tclEval(script = "ttk::frame " & labelFrame)
