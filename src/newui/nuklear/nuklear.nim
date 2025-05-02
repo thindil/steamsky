@@ -689,21 +689,19 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
 # ---
 # UTF
 # ---
-proc nkUtfValidate(u: var nk_rune; i: int): int {.raises: [], tags: [], contractual,
-  discardable.} =
+proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [], contractual.} =
   ## Validate UTF rune
   ##
   ## * u - the rune to validate
   ## * i - the index of the rune
   ##
-  ## Returns 0 if rune is invalid, otherwise return i
-  if u == 0:
-    return 0
+  ## Returns 1 if rune is invalid, otherwise return i
   if u notin nkUtfMin[i]..nkUtfMax[i] or u notin 0xd800.nk_rune..0xdfff.nk_rune:
     u = nkUtfInvalid
-  result = 1
-  while u > nkUtfMax[result]:
-    result.inc
+  i = 1
+  while u > nkUtfMax[i]:
+    i.inc
+  return i
 
 proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
   contractual.} =
@@ -713,9 +711,6 @@ proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
   ## * i - the lenght of the text
   ##
   ## Returns modified parameter i and UTF rune
-  if i == 0:
-    return 0
-  i = 0
   for index, rune in nkUtfMask:
     i = index
     if (c.nk_byte and rune) == nkUtfByte[index]:
@@ -730,31 +725,33 @@ proc nkUtfDecode(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
   ## * u    - the UTF rune to decode
   ## * clen - the length of the text
   ##
-  ## Returns the lenght of the glyph in characters
-  if c == "" or u == 0 or clen == 0:
+  ## Returns the length of the rune in bytes
+  if c == "" or clen == 0:
     return 0
   u = nkUtfInvalid
   var
     len: int = 0
     udecoded: nk_rune = nkUtfDecodeByte(c = c[0], len)
-  if len in 1..nkUtfSize:
+  if len notin 1..nkUtfSize:
     return 1
 
-  var j: int = 1
-  for i in 1..clen:
-    j = i
-    if j >= len:
-      break
+  var i, j: int = 0
+  while i < clen and j < len:
     var `type`: int = 0
     udecoded = (udecoded shl 6) or nkUtfDecodeByte(c[i], `type`)
     if `type` != 0:
       return j
+    i.inc
+    j.inc
 
   if j < len:
     return 0
   u = udecoded
-  nkUtfValidate(u = u, i = len)
-  return len
+  return nkUtfValidate(u = u, i = len)
+
+#proc nk_utf_decode(c: cstring; u: var nk_rune; clen: cint): cint {.raises: [],
+#  tags: [], contractual, exportc.} =
+#  return nkUtfDecode(c = $c, u = u, clen = clen.int).cint
 
 # ----
 # Misc
