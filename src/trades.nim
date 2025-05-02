@@ -260,7 +260,7 @@ proc getTradeData*(iIndex: int): tuple[protoIndex: int, maxSellAmount: int,
   if iIndex < 0:
     baseCargoIndex = iIndex.abs
   else:
-    cargoIndex = iIndex + 1
+    cargoIndex = iIndex
   if cargoIndex > playerShip.cargo.high:
     return
   let baseIndex: int = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
