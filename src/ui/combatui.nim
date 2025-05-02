@@ -43,7 +43,7 @@ proc updateCombatMessages() {.raises: [], tags: [], contractual.} =
     ## Show the selected message
     ##
     ## * message - the message to show
-    const tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
+    const tagNames: array[1..5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.message.startsWith(prefix = currentTurnTime):
       if message.color == white:
         tclEval(script = messagesView & " insert end {" & message.message & "}")
@@ -1021,10 +1021,10 @@ proc combatMaxMinCommand(clientData: cint; interp: PInterp; argc: cint;
     column: Natural
     row: Natural
   const
-    combatFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "crew", column: 0,
+    combatFrames: array[1..4, FrameInfo] = [FrameInfo(name: "crew", column: 0,
         row: 0), FrameInfo(name: "damage", column: 0, row: 1), FrameInfo(
         name: "enemy", column: 1, row: 0), FrameInfo(name: "status", column: 1, row: 1)]
-    boardingFrames: array[1 .. 4, FrameInfo] = [FrameInfo(name: "left",
+    boardingFrames: array[1..4, FrameInfo] = [FrameInfo(name: "left",
         column: 0, row: 0), FrameInfo(name: "right", column: 1, row: 0),
         FrameInfo(name: "", column: 0, row: 0), FrameInfo(name: "", column: 0, row: 0)]
   let
