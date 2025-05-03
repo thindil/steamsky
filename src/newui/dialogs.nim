@@ -215,6 +215,7 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
           discard
       labelButton(title = "No"):
         if questionData.qType == showDeadStats:
+          endGame(save = false)
           setMainMenu(dialog = dialog, state = state)
         else:
           closePopup()
