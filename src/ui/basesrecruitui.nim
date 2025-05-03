@@ -643,6 +643,8 @@ proc negotiateCommand(clientData: cint; interp: PInterp; argc: cint;
       dialogCloseButton & " invoke;break}")
   tclEval(script = "bind " & dialogCloseButton & " <Escape> {" &
       dialogCloseButton & " invoke;break}")
+  tclEval(script = "bind " & hireButton & " <Escape> {" &
+      dialogCloseButton & " invoke;break}")
   showDialog(dialog = negotiateDialog, relativeY = 0.2)
   return tclOk
 
