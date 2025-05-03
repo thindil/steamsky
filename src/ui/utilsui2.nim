@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -16,12 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
+import contracts
 import ../[config, crew, game, items, messages, shipscrew, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
 type TravelArray* = array[1..2, Natural]
 
-proc showScreen*(newScreenName: string) {.raises: [], tags: [].} =
+proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
   ## Clear the old screen and show the selected to the player
   ##
   ## * newScreenName - the Tcl name of the screen which will be show
@@ -67,7 +68,7 @@ proc showScreen*(newScreenName: string) {.raises: [], tags: [].} =
     if tclEval(script = "grid remove " & paned) == tclError:
       return
 
-proc updateMessages*() {.raises: [], tags: [].} =
+proc updateMessages*() {.raises: [], tags: [], contractual.} =
   ## Update the list of in-game messages, delete old ones and show the
   ## newest to the player
   let messagesView = mainPaned & ".controls.messages.view"
@@ -102,7 +103,7 @@ proc updateMessages*() {.raises: [], tags: [].} =
   tclEval(script = messagesView & " configure -state disable")
 
 proc getSkillMarks*(skillIndex: Positive;
-    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Get the marks with information about the skill level for the selected
   ## skill for the selected crew member
   ##
@@ -129,7 +130,7 @@ proc getSkillMarks*(skillIndex: Positive;
   if memberIndex == crewIndex:
     result = result & "+"
 
-proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
   ## * Distance - Distance in map fields to destination point
@@ -192,7 +193,7 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [WriteIOEff
   result[2] = abs(distance * countFuelNeeded()) + (rests * (restTime / 10).int)
 
 proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
-    ], tags: [].} =
+    ], tags: [], contractual.} =
   ## Convert the game minutes to the game time in days, hours, etc
   ##
   ## * minutes  - the amount of minutes to convert
@@ -252,7 +253,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
 proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
     memberIndex: int; button1: ButtonSettings = emptyButtonSettings;
     button2: ButtonSettings = emptyButtonSettings) {.raises: [
-    KeyError], tags: [WriteIOEffect, TimeEffect, RootEffect].} =
+    KeyError], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Show info about selected item in ship cargo or crew member inventory
   ##
   ## * Parent       - The name of the parent widget
@@ -325,7 +326,7 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
         toLower = false)), button1 = button1, button2 = button2)
 
 proc setFonts*(newSize: Positive; fontType: FontTypes) {.raises: [],
-    tags: [].} =
+    tags: [], contractual.} =
   ##  Set all the game fonts to the selected size
   ##
   ##  newSize  - The new size of the selected font's type
