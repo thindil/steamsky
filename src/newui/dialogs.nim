@@ -306,17 +306,11 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       parts.add(y = TextData(text: partText, color: theme.colors[
           foregroundColor], lines: needLines))
       lineWidth += getTextWidth(text = partText).Natural
-      if lineWidth <= infoWidth.Natural:
+      if lineWidth > infoWidth.Natural or tagIndex == text.len:
         wAmount.inc
-      else:
-        widgetsAmount.add(y = wAmount)
-        wAmount = 0
-        lineWidth = 0
-      if tagIndex == text.len:
-        widgetsAmount.add(y = wAmount)
-        wAmount = 0
-        lineWidth = 0
-        break
+        if tagIndex == text.len:
+          widgetsAmount.add(y = wAmount)
+          break
       startIndex = tagIndex
       tagIndex = text.find(sub = '}', start = startIndex)
       let tagName: string = text[startIndex + 1..tagIndex - 1]
