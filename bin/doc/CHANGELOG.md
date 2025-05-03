@@ -11,3 +11,4 @@ All notable changes to this project will be documented in this file.
 - Possible crash when updating population in bases
 - Generating enemies' equipment
 - Tab key traversal in the negotiate hire a recruit dialog
+- Hide the negotiate dialog with Escape key when Hire button is selected
