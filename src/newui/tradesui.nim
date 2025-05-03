@@ -373,8 +373,6 @@ proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
     itemIndex = iIndex
     if itemIndex < 0:
       itemIndex.inc
-    else:
-      itemIndex.dec
     let (protoIndex, maxSellAmount, maxBuyAmount, _) = try:
         getTradeData(iIndex = itemIndex)
       except:
