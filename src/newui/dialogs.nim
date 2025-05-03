@@ -307,9 +307,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       parts.add(y = TextData(text: partText, color: theme.colors[
           foregroundColor], lines: needLines))
       lineWidth += getTextWidth(text = partText).Natural
+      wAmount.inc
       if lineWidth > infoWidth.Natural or tagIndex == text.len:
-        wAmount.inc
-        if tagIndex == text.len:
           widgetsAmount.add(y = wAmount)
           break
       startIndex = tagIndex
