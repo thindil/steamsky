@@ -23,7 +23,7 @@
 # OR TORT *(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import std/[colors, hashes, macros]
+import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
 import nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
 export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
@@ -695,63 +695,53 @@ proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [], cont
   ## * u - the rune to validate
   ## * i - the index of the rune
   ##
-  ## Returns 1 if rune is invalid, otherwise return i
-  if u notin nkUtfMin[i]..nkUtfMax[i] or u notin 0xd800.nk_rune..0xdfff.nk_rune:
+  ## Returns i
+  if u notin nkUtfMin[i]..nkUtfMax[i] or u in 0xd800.nk_rune..0xdfff.nk_rune:
     u = nkUtfInvalid
-  i = 1
   while u > nkUtfMax[i]:
     i.inc
   return i
 
-proc nkUtfDecodeByte(c: char, i: var int): nk_rune {.raises: [], tags: [],
+proc nkUtfDecodeByte(c: Rune, i: var int): nk_rune {.raises: [], tags: [],
   contractual.} =
-  ## Decode one UTF byte
+  ## Decode one UTF rune
   ##
-  ## * c - the character to decode
+  ## * c - the UTF rune to decode
   ## * i - the lenght of the text
   ##
-  ## Returns modified parameter i and UTF rune
-  for index, rune in nkUtfMask:
-    i = index
-    if (c.nk_byte and rune) == nkUtfByte[index]:
-      return (c.nk_byte and not rune)
-  return 0
+  ## Returns modified parameter i and UTF code of the rune
+  let
+    s = c.toUTF8
+    a = @(s.toOpenArrayByte(0, s.high))
+  i = a.len
+  return c.nk_rune
 
 proc nkUtfDecode(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
   tags: [], contractual.} =
   ## Decode UTF text
   ##
   ## * c    - the text to decode
-  ## * u    - the UTF rune to decode
-  ## * clen - the length of the text
+  ## * u    - the UTF code
+  ## * clen - the lenght of the text
   ##
   ## Returns the length of the rune in bytes
-  if c == "" or clen == 0:
+  if c == "":
     return 0
-  u = nkUtfInvalid
-  var
-    len: int = 0
-    udecoded: nk_rune = nkUtfDecodeByte(c = c[0], len)
-  if len notin 1..nkUtfSize:
-    return 1
+  var len: int = 0
+  u = nkUtfDecodeByte(c = c.toRunes[0], i = len)
+  return len
 
-  var i, j: int = 0
-  while i < clen and j < len:
-    var `type`: int = 0
-    udecoded = (udecoded shl 6) or nkUtfDecodeByte(c[i], `type`)
-    if `type` != 0:
-      return j
-    i.inc
-    j.inc
-
-  if j < len:
-    return 0
-  u = udecoded
-  return nkUtfValidate(u = u, i = len)
-
-#proc nk_utf_decode(c: cstring; u: var nk_rune; clen: cint): cint {.raises: [],
-#  tags: [], contractual, exportc.} =
-#  return nkUtfDecode(c = $c, u = u, clen = clen.int).cint
+proc nk_utf_decode(c: pointer; u: var nk_rune; clen: cint): cint {.raises: [],
+  tags: [], contractual, exportc.} =
+  ## Temporary C binding. Internal use only
+  ##
+  ## * c    - the text to decode
+  ## * u    - the UTF code
+  ## * clen - the lenght of the text
+  ##
+  ## Returns the length of the rune in bytes
+  let text = cast[cstring](c)
+  return nkUtfDecode(c = $text, u = u, clen = clen.int).cint
 
 # ----
 # Misc

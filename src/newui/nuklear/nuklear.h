@@ -3868,7 +3868,6 @@ NK_API int nk_strmatch_fuzzy_text(const char *txt, int txt_len, const char *patt
  *                                  UTF-8
  *
  * ============================================================================= */
-NK_API int nk_utf_decode(const char*, nk_rune*, int);
 NK_API int nk_utf_encode(nk_rune, char*, int);
 NK_API int nk_utf_len(const char*, int byte_len);
 NK_API const char* nk_utf_at(const char *buffer, int length, int index, nk_rune *unicode, int *len);
@@ -8233,34 +8232,6 @@ nk_utf_decode_byte(char c, int *i)
             return (nk_byte)(c & ~nk_utfmask[*i]);
     }
     return 0;
-}
-NK_API int
-nk_utf_decode(const char *c, nk_rune *u, int clen)
-{
-    int i, j, len, type=0;
-    nk_rune udecoded;
-
-    NK_ASSERT(c);
-    NK_ASSERT(u);
-
-    if (!c || !u) return 0;
-    if (!clen) return 0;
-    *u = NK_UTF_INVALID;
-
-    udecoded = nk_utf_decode_byte(c[0], &len);
-    if (!NK_BETWEEN(len, 1, NK_UTF_SIZE))
-        return 1;
-
-    for (i = 1, j = 1; i < clen && j < len; ++i, ++j) {
-        udecoded = (udecoded << 6) | nk_utf_decode_byte(c[i], &type);
-        if (type != 0)
-            return j;
-    }
-    if (j < len)
-        return 0;
-    *u = udecoded;
-    nk_utf_validate(u, len);
-    return len;
 }
 NK_INTERN char
 nk_utf_encode_byte(nk_rune u, int i)
