@@ -431,6 +431,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   ##            cargo (if positive) or in a trader's cargo (if negative)
   ##
   ## Returns the type of dialog if the dialog was set, otherwise errorDialog
+  setDialog()
   let (protoIndex, maxSellAmount, maxBuyAmount, price) = try:
       getTradeData(iIndex = iIndex)
     except:
@@ -438,10 +439,35 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   try:
     manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (if action ==
         buyAction: maxBuyAmount else: maxSellAmount), cost: price, title: (
-        if action == buyAction: "Buy " else: "Sell ") & itemsList[protoIndex].name)
+        if action == buyAction: "Buy " else: "Sell ") & itemsList[
+            protoIndex].name)
   except:
     return setError(message = "Can't set the manipulate data.")
   if action == buyAction:
     return buyDialog
   else:
     return sellDialog
+
+proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
+  ## Show the dialog to manipulate the selected item(s) to the player
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the parameter dialog. It is modified only when the player closed
+  ## the dialog.
+  if dialog notin {buyDialog, sellDialog}:
+    return
+  try:
+    const
+      width: float = 250
+      height: float = 150
+    updateDialog(width = width, height = height)
+    popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
+        y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
+        windowNoScrollbar}):
+      setLayoutRowDynamic(height = 30, cols = 1)
+      # Draw close button
+      addCloseButton(dialog = dialog)
+  except:
+    dialog = setError(message = "Can't show the info")

@@ -471,6 +471,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
+  showManipulateItem(dialog = dialog)
   # Show advanced options if needed
   if showOptions:
     setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
