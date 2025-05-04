@@ -431,7 +431,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   ##            cargo (if positive) or in a trader's cargo (if negative)
   ##
   ## Returns the type of dialog if the dialog was set, otherwise errorDialog
-  setDialog()
+  setDialog(x = windowWidth / 5.0)
   let (protoIndex, maxSellAmount, maxBuyAmount, price) = try:
       getTradeData(iIndex = iIndex)
     except:
@@ -459,8 +459,8 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
   if dialog notin {buyDialog, sellDialog}:
     return
   try:
-    const
-      width: float = 250
+    let
+      width = windowWidth / 1.5
       height: float = 150
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,

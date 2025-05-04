@@ -346,6 +346,7 @@ proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
+  closePopup()
   dialog = setManipulate(action = buyAction, iIndex = itemIndex)
 
 proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
@@ -355,6 +356,7 @@ proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
+  closePopup()
   dialog = setManipulate(action = sellAction, iIndex = itemIndex)
 
 proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
