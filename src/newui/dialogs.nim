@@ -17,9 +17,10 @@
 
 ## Provides code related to the game's dialogs, like showing questions, etc.
 
-import std/[colors, os, math, strutils]
+import std/[colors, os, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crewinventory, game, game2, maps, messages, shipscargo, shipscrew, shipscrew2, types, trades]
+import ../[config, crewinventory, game, game2, maps, messages, shipscargo,
+    shipscrew, shipscrew2, types, trades]
 import coreui, errordialog, themes
 
 type
@@ -309,8 +310,8 @@ proc setInfo*(text, title: string; button1: ButtonSettings = emptyButtonSettings
       lineWidth += getTextWidth(text = partText).Natural
       wAmount.inc
       if lineWidth > infoWidth.Natural or tagIndex == text.len:
-          widgetsAmount.add(y = wAmount)
-          break
+        widgetsAmount.add(y = wAmount)
+        break
       startIndex = tagIndex
       tagIndex = text.find(sub = '}', start = startIndex)
       let tagName: string = text[startIndex + 1..tagIndex - 1]
@@ -434,6 +435,12 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
       getTradeData(iIndex = iIndex)
     except:
       return setError(message = "Can't get the trade's data.")
+  try:
+    manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (if action ==
+        buyAction: maxBuyAmount else: maxSellAmount), cost: price, title: (
+        if action == buyAction: "Buy " else: "Sell ") & itemsList[protoIndex].name)
+  except:
+    return setError(message = "Can't set the manipulate data.")
   if action == buyAction:
     return buyDialog
   else:
