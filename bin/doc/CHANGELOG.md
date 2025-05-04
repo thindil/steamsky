@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Generating enemies' equipment
 - Tab key traversal in the negotiate hire a recruit dialog
 - Hide the negotiate dialog with Escape key when Hire button is selected
+- Don't generate shield for enemies if they use two handed weapons
 
 ## [11.0] - 2025-04-20
 
