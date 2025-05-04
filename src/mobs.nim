@@ -23,7 +23,7 @@ import contracts
 import factions, game, items, log, shipscrew, types, utils
 
 proc loadSkills(mobNode: XmlNode; mob: var ProtoMobRecord;
-    mobAction: DataAction;mobIndex: Natural) {.raises: [DataLoadingError],
+    mobAction: DataAction; mobIndex: Natural) {.raises: [DataLoadingError],
         tags: [], contractual.} =
   ## Load skills of the selected mobile's prototype
   ##
@@ -328,6 +328,10 @@ proc generateMob*(mobIndex: Natural; factionIndex: string): MemberData {.raises:
     result.equipment = protoMob.equipment
     for i in weapon..legs:
       if result.equipment[i] == -1:
+        # Don't generate shield if the mob uses two-handed weapon
+        if i == shield and result.equipment[weapon] > -1 and itemsList[
+            result.inventory[result.equipment[weapon]].protoIndex].value[4] == 2:
+          continue
         var equipmentItemIndex: Natural = 0
         if getRandom(min = 1, max = 100) < 95:
           let equipmentItemsList: seq[Positive] = case i
