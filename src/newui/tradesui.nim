@@ -435,7 +435,7 @@ proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
     try:
       if itemsList[protoIndex].description.len > 0:
         if itemInfo.len > 0:
-          itemInfo.add(y = "\n\n")
+          itemInfo.add(y = "\n")
         itemInfo.add(y = itemsList[protoIndex].description)
     except:
       dialog = setError(message = "Can't get the description.")
