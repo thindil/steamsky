@@ -80,7 +80,7 @@ proc updateMessages*() {.raises: [], tags: [], contractual.} =
   if loopStart < -10:
     loopStart = -10
 
-  proc showMessage(message: MessageData) =
+  proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
     let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.color == white:
       tclEval(script = messagesView & " insert end {" & message.message & "}")
@@ -103,7 +103,8 @@ proc updateMessages*() {.raises: [], tags: [], contractual.} =
   tclEval(script = messagesView & " configure -state disable")
 
 proc getSkillMarks*(skillIndex: Positive;
-    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    memberIndex: Natural): string {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], contractual.} =
   ## Get the marks with information about the skill level for the selected
   ## skill for the selected crew member
   ##
@@ -130,7 +131,8 @@ proc getSkillMarks*(skillIndex: Positive;
   if memberIndex == crewIndex:
     result = result & "+"
 
-proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
+    WriteIOEffect, TimeEffect, RootEffect], contractual.} =
   ## Count the ETA and the fuel usage for the selected distance
   ##
   ## * Distance - Distance in map fields to destination point
