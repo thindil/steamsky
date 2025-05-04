@@ -25,7 +25,7 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
+import nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
 
 # Temporary disable unused warnings
@@ -685,63 +685,6 @@ proc nkCommandBufferPush(b: ptr nk_command_buffer; t: CommandType;
       cmd.userdata = b.userdata
     b.`end` = cmd.next
     return cmd
-
-# ---
-# UTF
-# ---
-proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [], contractual.} =
-  ## Validate UTF rune
-  ##
-  ## * u - the rune to validate
-  ## * i - the index of the rune
-  ##
-  ## Returns i
-  if u notin nkUtfMin[i]..nkUtfMax[i] or u in 0xd800.nk_rune..0xdfff.nk_rune:
-    u = nkUtfInvalid
-  while u > nkUtfMax[i]:
-    i.inc
-  return i
-
-proc nkUtfDecodeByte(c: Rune, i: var int): nk_rune {.raises: [], tags: [],
-  contractual.} =
-  ## Decode one UTF rune
-  ##
-  ## * c - the UTF rune to decode
-  ## * i - the lenght of the text
-  ##
-  ## Returns modified parameter i and UTF code of the rune
-  let
-    s = c.toUTF8
-    a = @(s.toOpenArrayByte(0, s.high))
-  i = a.len
-  return c.nk_rune
-
-proc nkUtfDecode(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
-  tags: [], contractual.} =
-  ## Decode UTF text
-  ##
-  ## * c    - the text to decode
-  ## * u    - the UTF code
-  ## * clen - the lenght of the text
-  ##
-  ## Returns the length of the rune in bytes
-  if c == "":
-    return 0
-  var len: int = 0
-  u = nkUtfDecodeByte(c = c.toRunes[0], i = len)
-  return len
-
-proc nk_utf_decode(c: pointer; u: var nk_rune; clen: cint): cint {.raises: [],
-  tags: [], contractual, exportc.} =
-  ## Temporary C binding. Internal use only
-  ##
-  ## * c    - the text to decode
-  ## * u    - the UTF code
-  ## * clen - the lenght of the text
-  ##
-  ## Returns the length of the rune in bytes
-  let text = cast[cstring](c)
-  return nkUtfDecode(c = $text, u = u, clen = clen.int).cint
 
 # ----
 # Misc
