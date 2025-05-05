@@ -27,7 +27,8 @@ import std/unicode
 import contracts
 import nk_types
 
-proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [], contractual.} =
+proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [],
+    contractual.} =
   ## Validate UTF rune
   ##
   ## * u - the rune to validate
@@ -40,7 +41,7 @@ proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [], cont
     i.inc
   return i
 
-proc nkUtfDecodeByte(c: Rune, i: var int): nk_rune {.raises: [], tags: [],
+proc nkUtfDecodeByte(c: Rune; i: var int): nk_rune {.raises: [], tags: [],
   contractual.} =
   ## Decode one UTF rune
   ##
@@ -68,6 +69,22 @@ proc nkUtfDecode*(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
   var len: int = 0
   u = nkUtfDecodeByte(c = c.toRunes[0], i = len)
   return nkUtfValidate(u = u, i = len)
+
+# --------------------------------
+# Temporary exports for old C code
+# --------------------------------
+
+proc nk_utf_validate(u: var nk_rune; i: var cint): cint {.raises: [], tags: [],
+    contractual, exportc.} =
+  ## Temporary C binding. Internal use only
+  ##
+  ## * u - the rune to validate
+  ## * i - the index of the rune
+  ##
+  ## Returns i
+  var tempI: int = i.int
+  result = nkUtfValidate(u = u, i = tempI).cint
+  i = tempI.cint
 
 proc nk_utf_decode(c: pointer; u: var nk_rune; clen: cint): cint {.raises: [],
   tags: [], contractual, exportc.} =

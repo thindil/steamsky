@@ -925,6 +925,7 @@ proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var i
         glyphs: int = 0
         txtWidth: float = textWidth
       length = nkTextClamp(font, str, length, r.w, glyphs, txtWidth, 0, 0)
+      # TODO: continue here after nkTextClamp
 
 # -----
 # Input
@@ -1118,6 +1119,7 @@ proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: va
 
     nkDrawText(b = o, r = label, str = str, length = len, font = f,
       bg = t.background, fg = t.text)
+    # TODO: continue here after nkDrawText
 
 # -------
 # Buttons
@@ -1254,6 +1256,7 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     var length: Positive = 1
     nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
       a = centered, f = font)
+    # TODO: continue here after nkWidgetText
   else:
     discard
 
@@ -1282,6 +1285,7 @@ proc nkDrawButtonSymbol(`out`: ptr nk_command_buffer; bounds, content: var NimRe
   sym = nk_rgb_factor(col = sym, factor = style.color_factor_text)
   nkDrawSymbol(`out` = `out`, `type` = `type`, content = content,
     background = bg, foreground = sym, borderWidth = 1, font = font)
+  # TODO: continue here after nkDrawSymbol
 
 proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds: var NimRect,
   symbol: SymbolType; behavior: ButtonBehavior; style: ptr nk_style_button;
@@ -1310,6 +1314,7 @@ proc nkDoButtonSymbol(state: var nk_flags; `out`: ptr nk_command_buffer; bounds:
     #   style.draw_begin(b = `out`, style.userdata)
     nkDrawButtonSymbol(`out` = `out`, bounds = bounds, content = content,
       state = state, style = style, `type` = symbol, font = font)
+    # TODO: continue here after nkDrawButtonSymbol
     # TODO
     # if style.draw_end != nil:
     #   style.draw_end(b = `out`, style.userdata)
@@ -1561,6 +1566,7 @@ proc nkPanelBegin(ctx; title: string; panelType: PanelType): bool {.raises: [
           font = style.font) and not(win.flags and windowRom.cint).nk_bool:
           layout.flags = layout.flags or windowHidden.cint
           layout.flags = layout.flags and not windowMinimized.cint
+    # TODO: continue here after nkDoButtonSymbol
     return true
 
 # ------
