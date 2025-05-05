@@ -228,18 +228,19 @@ proc showQuestion*(dialog: var GameDialog; state: var GameState) {.raises: [],
     answered = true
     dialog = setError(message = "Can't show the question")
 
-proc addCloseButton(dialog: var GameDialog) {.raises: [], tags: [],
-    contractual.} =
+proc addCloseButton(dialog: var GameDialog;
+    icon: IconsNames = exitIcon) {.raises: [], tags: [], contractual.} =
   ## Add the close button to the dialog
   ##
   ## * dialog - the current in-game dialog displayed on the screen
+  ## * icon   - the icon used on the button. Default is exitIcon
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
   ## the dialog.
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(),
         text = "Close the dialog [Escape key]")
-  labelButton(title = "Close"):
+  imageLabelButton(image = images[icon], text = "Close", alignment = right):
     closePopup()
     dialog = none
 
