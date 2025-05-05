@@ -471,8 +471,13 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
-      setLayoutRowDynamic(height = 30, cols = 1)
-      # Draw close button
-      addCloseButton(dialog = dialog, icon = cancelIcon)
+      setLayoutRowDynamic(height = 30, cols = 2)
+      # Action (buy, sell, etc) button
+      setButtonStyle(field = textNormal, color = theme.colors[greenColor])
+      labelButton(title = "Buy"):
+        discard
+      restoreButtonStyle()
+      # Close button
+      addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor)
   except:
     dialog = setError(message = "Can't show the info")
