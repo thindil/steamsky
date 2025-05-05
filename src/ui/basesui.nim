@@ -495,7 +495,7 @@ proc showBaseMenuCommand(clientData: cint; interp: PInterp; argc: cint;
         "} -command {CloseDialog " & baseMenu & " .;" & command & "}")
     tclEval(script = "grid " & button & " -sticky we -padx 5" & (
         if command.len == 0: " -pady {0 3}" else: ""))
-    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & baseMenu & ".;break}")
+    tclEval(script = "bind " & button & " <Escape> {CloseDialog " & baseMenu & " .;break}")
     if command.len == 0:
       tclEval(script = "bind " & button & " <Tab> {focus " & baseMenu & ".action;break}")
       tclEval(script = "focus " & button)
