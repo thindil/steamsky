@@ -469,6 +469,6 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 30, cols = 1)
       # Draw close button
-      addCloseButton(dialog = dialog)
+      addCloseButton(dialog = dialog, icon = cancelIcon)
   except:
     dialog = setError(message = "Can't show the info")
