@@ -90,14 +90,14 @@ proc updateMessages*() {.raises: [], tags: [], contractual.} =
 
   if gameSettings.messagesOrder == olderFirst:
     for i in loopStart .. -1:
-      showMessage(getMessage(messageIndex = i + 1))
+      showMessage(message = getMessage(messageIndex = i + 1))
       if i < -1:
         tclEval(script = messagesView & " insert end {\n}")
     tclEval(script = "update")
     tclEval(script = messagesView & " see end")
   else:
-    for i in countdown(-1, loopStart):
-      showMessage(getMessage(messageIndex = i + 1))
+    for i in countdown(a = -1, b = loopStart):
+      showMessage(message = getMessage(messageIndex = i + 1))
       if i > loopStart:
         tclEval(script = messagesView & " insert end {\n}")
   tclEval(script = messagesView & " configure -state disable")
@@ -192,7 +192,7 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
       if tempTime > restTime:
         restTime = tempTime
   result[1] = minutesDiff + (rests * restTime)
-  result[2] = abs(distance * countFuelNeeded()) + (rests * (restTime / 10).int)
+  result[2] = abs(x = distance * countFuelNeeded()) + (rests * (restTime / 10).int)
 
 proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
     ], tags: [], contractual.} =
