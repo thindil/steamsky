@@ -461,6 +461,7 @@ proc missionMoreInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & button & " <Tab> {focus " & buttonsFrame & ".button1;break}")
     tclEval(script = "bind " & button & " <Escape> {" & buttonsFrame & ".button invoke;break}")
   tclEval(script = "grid " & buttonsFrame & " -padx 5 -pady 5")
+  tclEval(script = "bind " & label & " <Escape> {" & buttonsFrame & ".button invoke;break}")
   showDialog(dialog = missionDialog)
   return tclOk
 
