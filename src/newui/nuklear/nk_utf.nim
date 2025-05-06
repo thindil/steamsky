@@ -27,7 +27,7 @@ import std/unicode
 import contracts
 import nk_types
 
-proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [],
+proc nkUtfValidate(u: var nk_rune; i: int): int {.raises: [], tags: [],
     contractual.} =
   ## Validate UTF rune
   ##
@@ -37,9 +37,9 @@ proc nkUtfValidate(u: var nk_rune; i: var int): int {.raises: [], tags: [],
   ## Returns i
   if u notin nkUtfMin[i]..nkUtfMax[i] or u in 0xd800.nk_rune..0xdfff.nk_rune:
     u = nkUtfInvalid
-  while u > nkUtfMax[i]:
-    i.inc
-  return i
+  result = 1
+  while u > nkUtfMax[result]:
+    result.inc
 
 proc nkUtfDecodeByte(c: Rune; i: var int): nk_rune {.raises: [], tags: [],
   contractual.} =
@@ -74,7 +74,7 @@ proc nkUtfDecode*(c: string; u: var nk_rune): Natural {.raises: [],
 # Temporary exports for old C code
 # --------------------------------
 
-proc nk_utf_validate(u: var nk_rune; i: var cint): cint {.raises: [], tags: [],
+proc nk_utf_validate(u: var nk_rune; i: cint): cint {.raises: [], tags: [],
     contractual, exportc.} =
   ## Temporary C binding. Internal use only
   ##
@@ -82,9 +82,7 @@ proc nk_utf_validate(u: var nk_rune; i: var cint): cint {.raises: [], tags: [],
   ## * i - the index of the rune
   ##
   ## Returns i
-  var tempI: int = i.int
-  result = nkUtfValidate(u = u, i = tempI).cint
-  i = tempI.cint
+  return nkUtfValidate(u = u, i = i.int).cint
 
 proc nk_utf_decode(c: pointer; u: var nk_rune; clen: cint): cint {.raises: [],
   tags: [], contractual, exportc.} =
