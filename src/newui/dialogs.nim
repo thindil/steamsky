@@ -475,9 +475,15 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
       let newValue: int = property2(name = "#", min = 1,
-          val = manipulateData.amount, max = 500, step = 1, incPerPixel = 1)
+          val = manipulateData.amount, max = manipulateData.maxAmount, step = 1,
+          incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
+      const amounts: array[3, Positive] = [100, 500, 1000]
+      var cols: Positive = 1
+      for amount in amounts:
+        if amount < manipulateData.maxAmount:
+          cols.inc
       setLayoutRowDynamic(height = 30, cols = 2)
       # Action (buy, sell, etc) button
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
