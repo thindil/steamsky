@@ -55,7 +55,7 @@ proc nkUtfDecodeByte(c: Rune; i: var int): nk_rune {.raises: [], tags: [],
   i = a.len
   return c.nk_rune
 
-proc nkUtfDecode*(c: string; u: var nk_rune; clen: int): Natural {.raises: [],
+proc nkUtfDecode*(c: string; u: var nk_rune): Natural {.raises: [],
   tags: [], contractual.} =
   ## Decode UTF text
   ##
@@ -96,4 +96,4 @@ proc nk_utf_decode(c: pointer; u: var nk_rune; clen: cint): cint {.raises: [],
   ##
   ## Returns the length of the rune in bytes
   let text = cast[cstring](c)
-  return nkUtfDecode(c = $text, u = u, clen = clen.int).cint
+  return nkUtfDecode(c = $text, u = u).cint

@@ -879,7 +879,7 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
   ## Returns the new length of the text
   var
     unicode: nk_rune = 0
-    glyphLen: int = nkUtfDecode(c = text, u = unicode, clen = textLen)
+    glyphLen: int = nkUtfDecode(c = text, u = unicode)
     width, sepWidth, lastWidth: float = 0.0
     len, sepG, g, sepLen: int = 0
   while glyphLen > 0 and (width < space) and (len < textLen):
