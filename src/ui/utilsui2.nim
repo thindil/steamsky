@@ -15,12 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides various procedures related to the game's UI, like showing a screen,
+## updating the messages list, convert amount of minutes to date etc.  Split
+## from the utilsui module to avoid circular dependencies.
+
 import std/[strutils, tables]
 import contracts
 import ../[config, crew, game, items, messages, shipscrew, shipsmovement, tk, types]
 import coreui, dialogs, errordialog
 
-type TravelArray* = array[1..2, Natural]
+type
+  TravelArray* = array[1..2, Natural]
+    ## Used to store data about travel: first is amount of minutes needed to
+    ## reach, the second is amount of fuel needed.
 
 proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
   ## Clear the old screen and show the selected to the player
@@ -81,6 +88,9 @@ proc updateMessages*() {.raises: [], tags: [], contractual.} =
     loopStart = -10
 
   proc showMessage(message: MessageData) {.raises: [], tags: [], contractual.} =
+    ## Show the selected message
+    ##
+    ## * message - the message to show
     let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.color == white:
       tclEval(script = messagesView & " insert end {" & message.message & "}")
