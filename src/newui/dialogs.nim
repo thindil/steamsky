@@ -56,6 +56,7 @@ type
   ManipulateData = object
     itemIndex: int
     maxAmount: Natural
+    amount: Natural
     cost: Natural
     title: string
 
@@ -445,7 +446,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
     manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (if action ==
         buyAction: maxBuyAmount else: maxSellAmount), cost: price, title: (
         if action == buyAction: "Buy " else: "Sell ") & itemsList[
-            protoIndex].name)
+            protoIndex].name, amount: 1)
   except:
     return setError(message = "Can't set the manipulate data.")
   if action == buyAction:
@@ -472,10 +473,18 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 30, cols = 2)
+      label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
+      let newValue: int = property2(name = "#", min = 1,
+          val = manipulateData.amount, max = 500, step = 1, incPerPixel = 1)
+      if newValue != manipulateData.amount:
+        manipulateData.amount = newValue
+      setLayoutRowDynamic(height = 30, cols = 2)
       # Action (buy, sell, etc) button
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-      labelButton(title = "Buy"):
-        discard
+      imageLabelButton(image = images[(if dialog ==
+          buyDialog: buyIcon else: sellIcon)], text = (if dialog ==
+          buyDialog: "Buy" else: "Sell"), alignment = right):
+        echo "button"
       restoreButtonStyle()
       # Close button
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor)
