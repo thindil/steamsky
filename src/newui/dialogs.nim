@@ -479,11 +479,18 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-      const amounts: array[3, Positive] = [100, 500, 1000]
+      # Amount buttons
+      const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
       for amount in amounts:
         if amount < manipulateData.maxAmount:
           cols.inc
+      setLayoutRowDynamic(height = 30, cols = cols)
+      for i in 1..cols - 1:
+        labelButton(title = $amounts[i]):
+          manipulateData.amount = amounts[i]
+      labelButton(title = "Max"):
+        manipulateData.amount = manipulateData.maxAmount
       setLayoutRowDynamic(height = 30, cols = 2)
       # Action (buy, sell, etc) button
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
