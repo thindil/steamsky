@@ -19,8 +19,8 @@
 
 import std/[colors, os, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[config, crewinventory, game, game2, maps, messages, shipscargo,
-    shipscrew, shipscrew2, types, trades]
+import ../[bases, config, crewinventory, game, game2, maps, messages,
+    shipscargo, shipscrew, shipscrew2, types, trades]
 import coreui, errordialog, themes
 
 type
@@ -467,7 +467,7 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
   try:
     let
       width = windowWidth / 1.5
-      height: float = 150
+      height: float = 210
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
@@ -495,8 +495,10 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
         label(str = "Total " & (if dialog == buyDialog: "cost:" else: "gain:"))
-        colorLabel(str = $manipulateData.cost & " " & moneyName,
-            color = theme.colors[goldenColor])
+        var cost: Natural = manipulateData.amount * manipulateData.cost
+        countPrice(price = cost, traderIndex = findMember(order = talk),
+            reduce = dialog == buyDialog)
+        colorLabel(str = $cost & " " & moneyName, color = theme.colors[goldenColor])
       # Action (buy, sell, etc) button
       setLayoutRowDynamic(height = 30, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
