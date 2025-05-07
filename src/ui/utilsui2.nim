@@ -36,15 +36,15 @@ proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
   if tclGetVar(varName = "mappreview") == "1" and newScreenName != "mapframe":
     tclUnsetVar(varName = "mappreview")
   const
-    paned = mainPaned & ".controls.buttons"
-    messagesFrame = mainPaned & ".controls.messages"
-  let interp = getInterp()
+    paned: string = mainPaned & ".controls.buttons"
+    messagesFrame: string = mainPaned & ".controls.messages"
+  let interp: PInterp = getInterp()
   if tclEval(script = mainPaned & " panes") == tclError:
     return
   let
-    tclResult = $interp.tclGetResult()
-    oldSubWindow = tclResult.split()[0]
-    subWindow = mainPaned & "." & $newScreenName
+    tclResult: string = $interp.tclGetResult()
+    oldSubWindow: string = tclResult.split()[0]
+    subWindow: string = mainPaned & "." & $newScreenName
   if tclEval(script = mainPaned & " forget " & oldSubWindow) == tclError:
     return
   if tclEval(script = mainPaned & " insert 0 " & subWindow &
@@ -57,7 +57,7 @@ proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
     if newScreenName != "mapframe":
       if tclEval(script = "winfo height " & mainPaned) == tclError:
         return
-      let newPos = $interp.tclGetResult()
+      let newPos: string = $interp.tclGetResult()
       if tclEval(script = mainPaned & " sashpos 0 " & newPos) == tclError:
         return
   else:
@@ -78,10 +78,10 @@ proc showScreen*(newScreenName: string) {.raises: [], tags: [], contractual.} =
 proc updateMessages*() {.raises: [], tags: [], contractual.} =
   ## Update the list of in-game messages, delete old ones and show the
   ## newest to the player
-  let messagesView = mainPaned & ".controls.messages.view"
+  let messagesView: string = mainPaned & ".controls.messages.view"
   tclEval(script = messagesView & " configure -state normal")
   tclEval(script = messagesView & " delete 1.0 end")
-  var loopStart = 0 - messagesAmount()
+  var loopStart: int = 0 - messagesAmount()
   if loopStart == 0:
     return
   if loopStart < -10:
@@ -125,8 +125,8 @@ proc getSkillMarks*(skillIndex: Positive;
   ## string with twi "+" sings if the crew member has the highest level in
   ## the skill of the all crew members. Otherwise return an empty string.
   var
-    skillValue = 0
-    crewIndex = -1
+    skillValue: int = 0
+    crewIndex: int = -1
   try:
     for index, member in playerShip.crew:
       if getSkillLevel(member = member, skillIndex = skillIndex) > skillValue:
@@ -153,7 +153,7 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
   result = [0, 0]
   if distance == 0:
     return
-  let speed = try:
+  let speed: float = try:
       realSpeed(ship = playerShip, infoOnly = true) / 1_000
     except:
       showError(message = "Can't count the player's ship speed.")
@@ -174,21 +174,21 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
   else:
     discard
   minutesDiff = minutesDiff * distance
-  var rests, restTime = 0
+  var rests, restTime: int = 0
   for index, member in playerShip.crew:
     if member.order notin {pilot, engineer}:
       continue
-    let tired = (minutesDiff / 15).int + member.tired
+    let tired: int = (minutesDiff / 15).int + member.tired
     if (tired / (80 + member.attributes[conditionIndex].level)).int > rests:
       rests = (tired / (80 + member.attributes[conditionIndex].level)).int
     if rests > 0:
-      let cabinIndex = findCabin(memberIndex = index)
+      let cabinIndex: int = findCabin(memberIndex = index)
       var tempTime: int = 0
       if cabinIndex > -1:
         let
-          damage = 1.0 - (playerShip.modules[cabinIndex].durability.float /
+          damage: float = 1.0 - (playerShip.modules[cabinIndex].durability.float /
               playerShip.modules[cabinIndex].maxDurability.float)
-        var cabinBonus = playerShip.modules[cabinIndex].cleanliness - (
+        var cabinBonus: int = playerShip.modules[cabinIndex].cleanliness - (
             playerShip.modules[cabinIndex].cleanliness.float * damage).int
         if cabinBonus == 0:
           cabinBonus = 1
@@ -214,7 +214,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
   ## Returns the updated infoText paramater with converted minutes to the game
   ## time
   var
-    travelTime: DateRecord
+    travelTime: DateRecord = DateRecord()
     minutesDiff: int = minutes
   while minutesDiff > 0:
     if minutesDiff > 518_400:
@@ -277,7 +277,7 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
   ## * Button_2     - The setting for the second optional button. If empty,
   ##                  the button will not show. Default value is empty.
   var
-    protoIndex: Natural
+    protoIndex: Natural = 0
     itemInfo: string = ""
   if memberIndex > -1:
     protoIndex = playerShip.crew[memberIndex].inventory[itemIndex].protoIndex
@@ -309,7 +309,7 @@ proc showInventoryItemInfo*(parent: string; itemIndex: Natural;
       else:
         "")
     itemInfo.add(y = "{/gold}")
-  let itemTypes = [weaponType, chestArmor, headArmor, armsArmor, legsArmor, shieldType]
+  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor, armsArmor, legsArmor, shieldType]
   for itemType in itemTypes:
     if itemsList[protoIndex].itemType == itemType:
       itemInfo.add(y = "\nDamage chance: {gold}" & getItemChanceToDamage(
