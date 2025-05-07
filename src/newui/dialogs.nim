@@ -454,6 +454,21 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   else:
     return sellDialog
 
+proc updateCost(price, amount: Natural; buying: bool): Natural {.raises: [
+    KeyError], tags: [], contractual.} =
+  ## Update cost of the item
+  ##
+  ## * price  - the price of the item
+  ## * amount - the amount of the item
+  ## * buying - if true, the item will be bought, otherwise false
+  ##
+  ## Returns the new cost of an item
+  if price == 0:
+    return 0
+  result = manipulateData.amount * manipulateData.cost
+  countPrice(price = result, traderIndex = findMember(order = talk),
+      reduce = buying)
+
 proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the dialog to manipulate the selected item(s) to the player
@@ -474,11 +489,14 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
+      var cost: Natural = manipulateData.amount * manipulateData.cost
       let newValue: int = property2(name = "#", min = 1,
           val = manipulateData.amount, max = manipulateData.maxAmount, step = 1,
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
+        cost = updateCost(price = manipulateData.cost, amount = newValue,
+            buying = dialog == buyDialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -489,13 +507,14 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
+          cost = updateCost(price = manipulateData.cost, amount = amounts[i],
+              buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
         label(str = "Total " & (if dialog == buyDialog: "cost:" else: "gain:"))
-        var cost: Natural = manipulateData.amount * manipulateData.cost
         countPrice(price = cost, traderIndex = findMember(order = talk),
             reduce = dialog == buyDialog)
         colorLabel(str = $cost & " " & moneyName, color = theme.colors[goldenColor])
