@@ -504,6 +504,7 @@ proc acceptMissionCommand(clientData: cint; interp: PInterp; argc: cint;
       " -from 0 -to 200 -textvariable reward -validate key -validatecommand {ValidateSpinbox %W %P " &
       button & "} -width 3")
   tclEval(script = "tooltip::tooltip " & rewardField & " \"Lower value - more reputation from mission but less money,\nhigher value - more money from mission but less reputation.\"")
+  tclEval(script = "bind " & rewardScale & " <Tab> {focus " & rewardField & ";break}")
   let rewardBox: string = missionDialog & ".rewardbox"
   tclEval(script = "ttk::frame " & rewardBox)
   var rewardLabel: string = rewardBox & ".rewardlbl"
