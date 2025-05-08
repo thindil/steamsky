@@ -454,24 +454,22 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   else:
     return sellDialog
 
-proc updateCost(price, amount: Natural; buying: bool): tuple[cost: Natural;
-    warning: string] {.raises: [KeyError], tags: [], contractual.} =
+proc updateCost(amount: Natural; buying: bool) {.raises: [KeyError], tags: [],
+    contractual.} =
   ## Update cost of the item
   ##
-  ## * price  - the price of the item
   ## * amount - the amount of the item
   ## * buying - if true, the item will be bought, otherwise false
-  ##
-  ## Returns the new cost of an item
-  result = (cost: 0, warning: "")
-  if price == 0:
+  if manipulateData.cost == 0:
     return
-  result.cost = manipulateData.amount * manipulateData.cost
-  countPrice(price = result.cost, traderIndex = findMember(order = talk),
-      reduce = buying)
-  if buying and getItemAmount(itemType = fuelType) - result.cost <=
+  manipulateData.allCost = manipulateData.amount * manipulateData.cost
+  countPrice(price = manipulateData.allCost, traderIndex = findMember(
+      order = talk), reduce = buying)
+  if buying and getItemAmount(itemType = fuelType) - manipulateData.allCost <=
       gameSettings.lowFuel:
-    result.warning = "You will spend " & moneyName & " below low level of fuel."
+    manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
+  else:
+    manipulateData.warning = ""
 
 proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -498,8 +496,7 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        (manipulateData.allCost, manipulateData.warning) = updateCost(
-            price = manipulateData.cost, amount = newValue, buying = dialog == buyDialog)
+        updateCost(amount = newValue, buying = dialog == buyDialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -510,14 +507,10 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          (manipulateData.allCost, manipulateData.warning) = updateCost(
-              price = manipulateData.cost, amount = amounts[i],
-              buying = dialog == buyDialog)
+          updateCost(amount = amounts[i], buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
-        (manipulateData.allCost, manipulateData.warning) = updateCost(
-            price = manipulateData.cost, amount = manipulateData.amount,
-            buying = dialog == buyDialog)
+        updateCost(amount = manipulateData.amount, buying = dialog == buyDialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
