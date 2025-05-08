@@ -57,8 +57,8 @@ type
     itemIndex: int
     maxAmount: Natural
     amount: Natural
-    cost: Natural
-    title: string
+    cost, allCost: Natural
+    title, warning: string
 
 const emptyButtonSettings*: ButtonSettings = ButtonSettings(text: "", code: nil,
     icon: -1, tooltip: "",
@@ -446,7 +446,7 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
     manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (if action ==
         buyAction: maxBuyAmount else: maxSellAmount), cost: price, title: (
         if action == buyAction: "Buy " else: "Sell ") & itemsList[
-            protoIndex].name, amount: 1)
+            protoIndex].name, amount: 1, warning: "", allCost: price)
   except:
     return setError(message = "Can't set the manipulate data.")
   if action == buyAction:
@@ -493,16 +493,13 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
-      var
-        cost: Natural = manipulateData.amount * manipulateData.cost
-        warningText: string = ""
       let newValue: int = property2(name = "#", min = 1,
           val = manipulateData.amount, max = manipulateData.maxAmount, step = 1,
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        (cost, warningText) = updateCost(price = manipulateData.cost,
-            amount = newValue, buying = dialog == buyDialog)
+        (manipulateData.allCost, manipulateData.warning) = updateCost(
+            price = manipulateData.cost, amount = newValue, buying = dialog == buyDialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -513,18 +510,20 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          (cost, warningText) = updateCost(price = manipulateData.cost,
-              amount = amounts[i], buying = dialog == buyDialog)
+          (manipulateData.allCost, manipulateData.warning) = updateCost(
+              price = manipulateData.cost, amount = amounts[i],
+              buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
         label(str = "Total " & (if dialog == buyDialog: "cost:" else: "gain:"))
-        countPrice(price = cost, traderIndex = findMember(order = talk),
-            reduce = dialog == buyDialog)
-        colorLabel(str = $cost & " " & moneyName, color = theme.colors[goldenColor])
-      colorLabel(str = warningText, color = theme.colors[redColor])
+        countPrice(price = manipulateData.allCost, traderIndex = findMember(
+            order = talk), reduce = dialog == buyDialog)
+        colorLabel(str = $manipulateData.cost & " " & moneyName,
+            color = theme.colors[goldenColor])
+      colorLabel(str = manipulateData.warning, color = theme.colors[redColor])
       # Action (buy, sell, etc) button
       setLayoutRowDynamic(height = 30, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
