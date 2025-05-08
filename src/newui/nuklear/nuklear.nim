@@ -25,7 +25,7 @@
 
 import std/[colors, hashes, macros, unicode]
 import contracts, nimalyzer
-import nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_utf, nk_widget
+import nk_button, nk_colors, nk_context, nk_layout, nk_misc, nk_tooltip, nk_types, nk_utf, nk_widget
 export nk_button, nk_colors, nk_context, nk_layout, nk_tooltip, nk_types, nk_widget
 
 # Temporary disable unused warnings
@@ -737,21 +737,6 @@ proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
   cmd.w = max(x = 0.cushort, y = rect.w.cushort)
   cmd.h = max(x = 0.cushort, y = rect.h.cushort)
   cmd.color = c
-
-proc nkShrinkRect(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], contractual.} =
-  ## Shrink the selected rectangle. Internal use only
-  ##
-  ## * r      - the rectangle to shrink
-  ## * amount - the size of which the rectangle will be shrinked
-  ##
-  ## Returns the shrinked rectangle
-  let
-    w = max(r.w, 2 * amount)
-    h = max(r.h, 2 * amount)
-  result.x = r.x + amount
-  result.y = r.y + amount
-  result.w = w - 2 * amount
-  result.h = h - 2 * amount
 
 proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
