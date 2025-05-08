@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Closing the buying recipes dialog with Escape key
 - Hide the dialog with information about a mission in a base with Escape key
 - Tab key traversal in the accept a mission in a base dialog
+- Tab key traversal in the crew member info dialog
 
 ## [11.0] - 2025-04-20
 
