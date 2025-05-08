@@ -692,7 +692,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "bind " & infoButton & " <Escape> {" & closeButton & " invoke;break}")
       if index < member.attributes.high:
         tclEval(script = "bind " & infoButton & " <Tab> {focus " & frame &
-            ".statinfo" & $(index + 1) & ";break}")
+            ".statinfo" & $(index + 1) & ".button;break}")
       else:
         tclEval(script = "bind " & infoButton & " <Tab> {focus " &
             buttonsFrame & ".button1;break}")
@@ -757,7 +757,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "SetScrollbarBindings " & infoButton & " " & yScroll)
       if index < member.skills.high:
         tclEval(script = "bind " & infoButton & " <Tab> {focus " & frame &
-            ".skillinfo" & $(index + 1) & ";break}")
+            ".skillinfo" & $(index + 1) & ".button;break}")
       else:
         tclEval(script = "bind " & infoButton & " <Tab> {focus " &
             buttonsFrame & ".button1;break}")
