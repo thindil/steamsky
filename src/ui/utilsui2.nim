@@ -91,7 +91,7 @@ proc updateMessages*() {.raises: [], tags: [], contractual.} =
     ## Show the selected message
     ##
     ## * message - the message to show
-    let tagNames: array[1 .. 5, string] = ["yellow", "green", "red", "blue", "cyan"]
+    const tagNames: array[1..5, string] = ["yellow", "green", "red", "blue", "cyan"]
     if message.color == white:
       tclEval(script = messagesView & " insert end {" & message.message & "}")
     else:
@@ -139,7 +139,7 @@ proc getSkillMarks*(skillIndex: Positive;
     showError(message = "Can't get the crew member skill level.")
     return ""
   if memberIndex == crewIndex:
-    result = result & "+"
+    result &= "+"
 
 proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
     WriteIOEffect, TimeEffect, RootEffect], contractual.} =
@@ -173,7 +173,7 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
       minutesDiff = 15
   else:
     discard
-  minutesDiff = minutesDiff * distance
+  minutesDiff *= distance
   var rests, restTime: int = 0
   for index, member in playerShip.crew:
     if member.order notin {pilot, engineer}:
@@ -198,7 +198,7 @@ proc travelInfo*(distance: Natural): TravelArray {.raises: [], tags: [
           tempTime = 15
       else:
         tempTime = (80 + member.attributes[conditionIndex].level) * 15
-      tempTime = tempTime + 15
+      tempTime += 15
       if tempTime > restTime:
         restTime = tempTime
   result[1] = minutesDiff + (rests * restTime)
@@ -218,16 +218,16 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
     minutesDiff: int = minutes
   while minutesDiff > 0:
     if minutesDiff > 518_400:
-      minutesDiff = minutesDiff - 518_400
+      minutesDiff -= 518_400
       travelTime.year.inc()
-    elif minutesDiff in 43_201 .. 518_400:
-      minutesDiff = minutesDiff - 43_200
+    elif minutesDiff in 43_201..518_400:
+      minutesDiff -= 43_200
       travelTime.month.inc()
       if travelTime.month > 12:
         travelTime.year.inc()
         travelTime.month = 1
     elif minutesDiff in 1_441..43_200:
-      minutesDiff = minutesDiff - 1_440
+      minutesDiff -= 1_440
       travelTime.day.inc()
       if travelTime.day > 31:
         travelTime.month.inc()
@@ -235,7 +235,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
           travelTime.year.inc()
           travelTime.month = 1
     elif minutesDiff in 61..1_440:
-      minutesDiff = minutesDiff - 60
+      minutesDiff -= 60
       travelTime.hour.inc()
       if travelTime.hour > 23:
         travelTime.hour = 0
