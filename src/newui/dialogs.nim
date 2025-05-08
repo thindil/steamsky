@@ -515,14 +515,16 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
               buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
+        (manipulateData.allCost, manipulateData.warning) = updateCost(
+            price = manipulateData.cost, amount = manipulateData.amount,
+            buying = dialog == buyDialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
         label(str = "Total " & (if dialog == buyDialog: "cost:" else: "gain:"))
-        countPrice(price = manipulateData.allCost, traderIndex = findMember(
-            order = talk), reduce = dialog == buyDialog)
-        colorLabel(str = $manipulateData.cost & " " & moneyName,
+        colorLabel(str = $manipulateData.allCost & " " & moneyName,
             color = theme.colors[goldenColor])
+      setLayoutRowDynamic(height = 30, cols = 1)
       colorLabel(str = manipulateData.warning, color = theme.colors[redColor])
       # Action (buy, sell, etc) button
       setLayoutRowDynamic(height = 30, cols = 2)
