@@ -454,8 +454,8 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   else:
     return sellDialog
 
-proc updateCost(price, amount: Natural; buying: bool): Natural {.raises: [
-    KeyError], tags: [], contractual.} =
+proc updateCost(price, amount: Natural; buying: bool): tuple[cost: Natural;
+    warning: string] {.raises: [KeyError], tags: [], contractual.} =
   ## Update cost of the item
   ##
   ## * price  - the price of the item
@@ -463,11 +463,15 @@ proc updateCost(price, amount: Natural; buying: bool): Natural {.raises: [
   ## * buying - if true, the item will be bought, otherwise false
   ##
   ## Returns the new cost of an item
+  result = (cost: 0, warning: "")
   if price == 0:
-    return 0
-  result = manipulateData.amount * manipulateData.cost
-  countPrice(price = result, traderIndex = findMember(order = talk),
+    return
+  result.cost = manipulateData.amount * manipulateData.cost
+  countPrice(price = result.cost, traderIndex = findMember(order = talk),
       reduce = buying)
+  if buying and getItemAmount(itemType = fuelType) - result.cost <=
+      gameSettings.lowFuel:
+    result.warning = "You will spend " & moneyName & " below low level of fuel."
 
 proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -482,21 +486,23 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
   try:
     let
       width = windowWidth / 1.5
-      height: float = 210
+      height: float = 220
     updateDialog(width = width, height = height)
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
-      var cost: Natural = manipulateData.amount * manipulateData.cost
+      var
+        cost: Natural = manipulateData.amount * manipulateData.cost
+        warningText: string = ""
       let newValue: int = property2(name = "#", min = 1,
           val = manipulateData.amount, max = manipulateData.maxAmount, step = 1,
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        cost = updateCost(price = manipulateData.cost, amount = newValue,
-            buying = dialog == buyDialog)
+        (cost, warningText) = updateCost(price = manipulateData.cost,
+            amount = newValue, buying = dialog == buyDialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -507,8 +513,8 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          cost = updateCost(price = manipulateData.cost, amount = amounts[i],
-              buying = dialog == buyDialog)
+          (cost, warningText) = updateCost(price = manipulateData.cost,
+              amount = amounts[i], buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
       # Labels
@@ -518,6 +524,7 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
         countPrice(price = cost, traderIndex = findMember(order = talk),
             reduce = dialog == buyDialog)
         colorLabel(str = $cost & " " & moneyName, color = theme.colors[goldenColor])
+      colorLabel(str = warningText, color = theme.colors[redColor])
       # Action (buy, sell, etc) button
       setLayoutRowDynamic(height = 30, cols = 2)
       setButtonStyle(field = textNormal, color = theme.colors[greenColor])
