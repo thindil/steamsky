@@ -548,6 +548,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           continue
       except:
         dialog = setError(message = "Can't get price.")
+        break
       let
         protoIndex: Natural = playerShip.cargo[i].protoIndex
         baseCargoIndex = findBaseCargo(protoIndex = protoIndex,
