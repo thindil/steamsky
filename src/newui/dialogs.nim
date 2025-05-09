@@ -454,22 +454,41 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
   else:
     return sellDialog
 
-proc updateCost(amount: Natural; buying: bool) {.raises: [KeyError], tags: [],
+proc updateCost(amount, cargoIndex: Natural; buying: bool) {.raises: [KeyError], tags: [],
     contractual.} =
-  ## Update cost of the item
+  ## Update cost of the item and the warning message
   ##
-  ## * amount - the amount of the item
-  ## * buying - if true, the item will be bought, otherwise false
+  ## * amount     - the amount of the item
+  ## * cargoIndex - the index of the item in the player's ship's cargo
+  ## * buying     - if true, the item will be bought, otherwise false
   if manipulateData.cost == 0:
     return
   manipulateData.allCost = manipulateData.amount * manipulateData.cost
   countPrice(price = manipulateData.allCost, traderIndex = findMember(
       order = talk), reduce = buying)
-  if buying and getItemAmount(itemType = fuelType) - manipulateData.allCost <=
-      gameSettings.lowFuel:
-    manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
+  manipulateData.warning = ""
+  if buying:
+    if getItemAmount(itemType = fuelType) - manipulateData.allCost <= gameSettings.lowFuel:
+      manipulateData.warning = "You will spend " & moneyName & " below low level of fuel."
   else:
-    manipulateData.warning = ""
+    if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType == fuelType:
+      let amount: int = getItemAmount(itemType = fuelType) - amount
+      if amount <= gameSettings.lowFuel:
+        manipulateData.warning = "You will sell amount below low lewel of fuel."
+    for member in playerShip.crew:
+      let faction: FactionData = factionsList[member.faction]
+      if itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
+          faction.drinksTypes:
+        let amount: int = getItemsAmount(iType = "Drinks") - amount
+        if amount <= gameSettings.lowDrinks:
+          manipulateData.warning = "You will sell amount below low lewel of drinks."
+          break
+      elif itemsList[playerShip.cargo[cargoIndex].protoIndex].itemType in
+          faction.foodTypes:
+        let amount: int = getItemsAmount(iType = "Food") - amount
+        if amount <= gameSettings.lowFood:
+          manipulateData.warning = "You will sell amount below low lewel of food."
+          break
 
 proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -489,6 +508,15 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
     popup(pType = staticPopup, title = manipulateData.title, x = dialogX,
         y = dialogY, w = width, h = height, flags = {windowBorder, windowTitle,
         windowNoScrollbar}):
+      var baseCargoIndex, cargoIndex: int = -1
+      if manipulateData.itemIndex < 0:
+        baseCargoIndex = manipulateData.itemIndex.abs
+      else:
+        cargoIndex = manipulateData.itemIndex
+      if cargoIndex > -1:
+        let protoIndex: int = playerShip.cargo[cargoIndex].protoIndex
+        if baseCargoIndex == -1:
+          baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
       setLayoutRowDynamic(height = 30, cols = 2)
       label(str = "Amount (max: " & $manipulateData.maxAmount & "):")
       let newValue: int = property2(name = "#", min = 1,
@@ -496,7 +524,7 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
           incPerPixel = 1)
       if newValue != manipulateData.amount:
         manipulateData.amount = newValue
-        updateCost(amount = newValue, buying = dialog == buyDialog)
+        updateCost(amount = newValue, cargoIndex = cargoIndex, buying = dialog == buyDialog)
       # Amount buttons
       const amounts: array[1..3, Positive] = [100, 500, 1000]
       var cols: Positive = 1
@@ -507,10 +535,10 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       for i in 1..cols - 1:
         labelButton(title = $amounts[i]):
           manipulateData.amount = amounts[i]
-          updateCost(amount = amounts[i], buying = dialog == buyDialog)
+          updateCost(amount = amounts[i], cargoIndex = cargoIndex, buying = dialog == buyDialog)
       labelButton(title = "Max"):
         manipulateData.amount = manipulateData.maxAmount
-        updateCost(amount = manipulateData.amount, buying = dialog == buyDialog)
+        updateCost(amount = manipulateData.amount, cargoIndex = cargoIndex, buying = dialog == buyDialog)
       # Labels
       if manipulateData.cost > 0:
         setLayoutRowDynamic(height = 30, cols = 2)
@@ -527,15 +555,6 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
           buyDialog: "Buy" else: "Sell"), alignment = right):
         closePopup()
         dialog = none
-        var baseCargoIndex, cargoIndex: int = -1
-        if manipulateData.itemIndex < 0:
-          baseCargoIndex = manipulateData.itemIndex.abs
-        else:
-          cargoIndex = manipulateData.itemIndex
-        if cargoIndex > -1:
-          let protoIndex: int = playerShip.cargo[cargoIndex].protoIndex
-          if baseCargoIndex == -1:
-            baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
         if dialog == buyDialog:
           buyItems(baseItemIndex = manipulateData.itemIndex,
               amount = $manipulateData.amount)
