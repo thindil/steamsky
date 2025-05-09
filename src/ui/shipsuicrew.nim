@@ -407,7 +407,7 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
   elif tabName == "skills":
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.skills.skillinfo1.button;break}")
   elif tabName == "priorities":
-    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.priorities.level1.button;break}")
+    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.priorities.level1;break}")
   return tclOk
 
 proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
@@ -807,7 +807,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     for index, order in member.orders:
       var memberLabel = frame & ".name" & $index
       tclEval(script = "ttk::label " & memberLabel & " -text {" &
-          prioritesNames[index] & "} -takefocus 0}")
+          prioritesNames[index] & "} -takefocus 0")
       tclEval(script = "grid " & memberLabel & " -sticky w -padx {5 0}")
       tclEval(script = "SetScrollbarBindings " & memberLabel & " " & yScroll)
       comboBox = frame & ".level" & $index
