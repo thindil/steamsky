@@ -19,8 +19,8 @@
 
 import std/[colors, os, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[bases, config, crewinventory, game, game2, maps, messages,
-    shipscargo, shipscrew, shipscrew2, types, trades]
+import ../[bases, basescargo, config, crewinventory, game, game2, maps,
+    messages, shipscargo, shipscrew, shipscrew2, types, trades]
 import coreui, errordialog, themes
 
 type
@@ -443,10 +443,10 @@ proc setManipulate*(action: ManipulateType; iIndex: int): GameDialog {.raises: [
     except:
       return setError(message = "Can't get the trade's data.")
   try:
-    manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (if action ==
-        buyAction: maxBuyAmount else: maxSellAmount), cost: price, title: (
-        if action == buyAction: "Buy " else: "Sell ") & itemsList[
-            protoIndex].name, amount: 1, warning: "", allCost: price)
+    manipulateData = ManipulateData(itemIndex: iIndex, maxAmount: (
+        if action == buyAction: maxBuyAmount else: maxSellAmount), cost: price,
+        title: (if action == buyAction: "Buy " else: "Sell ") & itemsList[
+        protoIndex].name, amount: 1, warning: "", allCost: price)
   except:
     return setError(message = "Can't set the manipulate data.")
   if action == buyAction:
@@ -525,7 +525,23 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
       imageLabelButton(image = images[(if dialog ==
           buyDialog: buyIcon else: sellIcon)], text = (if dialog ==
           buyDialog: "Buy" else: "Sell"), alignment = right):
-        echo "button"
+        closePopup()
+        dialog = none
+        var baseCargoIndex, cargoIndex: int = -1
+        if manipulateData.itemIndex < 0:
+          baseCargoIndex = manipulateData.itemIndex.abs
+        else:
+          cargoIndex = manipulateData.itemIndex
+        if cargoIndex > -1:
+          let protoIndex: int = playerShip.cargo[cargoIndex].protoIndex
+          if baseCargoIndex == -1:
+            baseCargoIndex = findBaseCargo(protoIndex = protoIndex)
+        if dialog == buyDialog:
+          buyItems(baseItemIndex = manipulateData.itemIndex,
+              amount = $manipulateData.amount)
+        else:
+          sellItems(itemIndex = manipulateData.itemIndex,
+              amount = $manipulateData.amount)
       restoreButtonStyle()
       # Close button
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor)
