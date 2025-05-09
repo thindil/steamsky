@@ -403,9 +403,9 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
   if tabName == "general":
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.general.nameinfo.button;break}")
   elif tabName == "stats":
-    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.stats.statinfo1.button;break}")
+    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.stats.statinfo0.button;break}")
   elif tabName == "skills":
-    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.skills.skillinfo1.button;break}")
+    tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.skills.skillinfo0.button;break}")
   elif tabName == "priorities":
     tclEval(script = "bind " & tabButton & " <Tab> {focus .memberdialog.canvas.priorities.level1;break}")
   return tclOk
