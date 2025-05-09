@@ -217,16 +217,17 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
     travelTime: DateRecord = DateRecord()
     minutesDiff: int = minutes
   while minutesDiff > 0:
-    if minutesDiff > 518_400:
+    case minutesDiff:
+    of 518_401..int.high:
       minutesDiff -= 518_400
       travelTime.year.inc()
-    elif minutesDiff in 43_201..518_400:
+    of 43_201..518_400:
       minutesDiff -= 43_200
       travelTime.month.inc()
       if travelTime.month > 12:
         travelTime.year.inc()
         travelTime.month = 1
-    elif minutesDiff in 1_441..43_200:
+    of 1_441..43_200:
       minutesDiff -= 1_440
       travelTime.day.inc()
       if travelTime.day > 31:
@@ -234,7 +235,7 @@ proc minutesToDate*(minutes: int; infoText: var string) {.raises: [
         if travelTime.month > 12:
           travelTime.year.inc()
           travelTime.month = 1
-    elif minutesDiff in 61..1_440:
+    of 61..1_440:
       minutesDiff -= 60
       travelTime.hour.inc()
       if travelTime.hour > 23:
