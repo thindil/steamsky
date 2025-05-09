@@ -17,3 +17,4 @@ All notable changes to this project will be documented in this file.
 - Hide the dialog with information about a mission in a base with Escape key
 - Tab key traversal in the accept a mission in a base dialog
 - Tab key traversal in the crew member info dialog
+- Crash on Tab key traversal in the crew member priorities list
