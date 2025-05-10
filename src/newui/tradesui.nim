@@ -539,6 +539,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     setButtonStyle(field = rounding, value = 0)
     setButtonStyle(field = border, value = 0)
     var row: Positive = 1
+    # Show the list of items in the player's ship's cargo
     for i in itemsIndexes:
       currentItemIndex.inc
       if i == -1:
@@ -634,6 +635,84 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         break
     currentItemIndex = playerShip.cargo.len + 1
     restoreButtonStyle()
+    # Show the list of items in the base's cargo
+    for i in playerShip.cargo.len + 1 .. itemsIndexes.high:
+      if row == gameSettings.listsLimit + 1:
+        break
+      try:
+        if itemsIndexes[i] in indexesList or not isBuyable(baseType = baseType,
+            itemIndex = baseCargo[itemsIndexes[i]].protoIndex,
+            baseIndex = baseIndex) or baseCargo[itemsIndexes[i]].amount == 0:
+          continue
+      except:
+        dialog = setError(message = "Can't check if item is buyable2.")
+        return
+      let
+        protoIndex = baseCargo[itemsIndexes[i]].protoIndex
+        itemType = try:
+            if itemsList[protoIndex].showType.len == 0:
+              itemsList[protoIndex].itemType
+            else:
+              itemsList[protoIndex].showType
+          except:
+            dialog = setError(message = "Can't get item type4.")
+            return
+      if typeIndex > 0 and itemType != typesList[typeIndex]:
+        continue
+      let itemName = try:
+            itemsList[protoIndex].name
+          except:
+            dialog = setError(message = "Can't get item name2.")
+            return
+      if nameSearch.len > 0 and itemName.toLowerAscii.find(
+          sub = nameSearch.toLowerAscii) == -1:
+        continue
+      if currentRow < startRow:
+        currentRow.inc
+        continue
+      var price = if baseIndex > 0:
+          skyBases[baseIndex].cargo[itemsIndexes[i]].price
+        else:
+          traderCargo[itemsIndexes[i]].price
+      if eventIndex > -1:
+        if eventsList[eventIndex].eType == doublePrice and eventsList[
+            eventIndex].itemIndex == protoIndex:
+          price = price * 2
+      let baseAmount = (if baseIndex == 0: traderCargo[itemsIndexes[
+          i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
+      addButton(table = tradeTable, text = itemName,
+          tooltip = "Show available options for item",
+          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 1)
+      addButton(table = tradeTable, text = itemType,
+          tooltip = "Show available options for item",
+          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 2)
+      let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
+          100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
+          i]].durability) else: "Unused")
+      addProgressbar(table = tradeTable, value = baseCargo[itemsIndexes[
+          i]].durability, maxValue = defaultItemDurability,
+          tooltip = itemDurability, command = "ShowTradeItemInfo -" &
+          $(itemsIndexes[i] + 1), column = 3)
+      addButton(table = tradeTable, text = $price,
+          tooltip = "Show available options for item",
+          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 4)
+      addButton(table = tradeTable, text = $(-price),
+          tooltip = "Show available options for item",
+          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 5,
+          newRow = false, color = tclGetVar(varName = "ttk::theme::" &
+          gameSettings.interfaceTheme & "::colors(-red)"))
+      try:
+        addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
+            " kg", tooltip = "Show available options for item",
+            command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 6)
+      except:
+        return showError(message = "Can't show item weight2.")
+      addButton(table = tradeTable, text = "0",
+          tooltip = "Show available options for item",
+          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 7)
+      addButton(table = tradeTable, text = $baseAmount,
+          tooltip = "Show available options for item",
+          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 8, newRow = true)
   showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
