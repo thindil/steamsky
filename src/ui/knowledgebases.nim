@@ -284,6 +284,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       tclEval(script = "ttk::label " & reputationLabel)
       if skyBases[baseIndex].reputation.level == 0:
         tclEval(script = reputationLabel & " configure -text {Reputation: Unknown}")
+        tclEval(script = "grid " & reputationLabel & " -row 2 -sticky w -padx {5 0} -columnspan 2")
       else:
         tclEval(script = reputationLabel & " configure -text {Reputation:}")
         let reputationBar: string = baseDialog & ".reputation"
@@ -302,7 +303,7 @@ proc showBaseInfoCommand(clientData: cint; interp: PInterp; argc: cint;
               skyBases[baseIndex].reputation.level) & " 0} -pady 3")
         tclEval(script = "tooltip::tooltip " & reputationBar & " \"" &
             reputationText & "\"")
-      tclEval(script = "grid " & reputationLabel & " -row 2 -sticky w -padx {5 0}")
+        tclEval(script = "grid " & reputationLabel & " -row 2 -sticky w -padx {5 0}")
 
     setReputationText(reputationText = getReputationText(
         reputationLevel = skyBases[baseIndex].reputation.level))
