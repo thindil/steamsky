@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Tab key traversal in the accept a mission in a base dialog
 - Tab key traversal in the crew member info dialog
 - Crash on Tab key traversal in the crew member priorities list
+- Look of the base's info dialog when the player is unknown in the base
 
 ## [11.0] - 2025-04-20
 
