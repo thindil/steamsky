@@ -680,39 +680,31 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           price = price * 2
       let baseAmount = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].amount else: skyBases[baseIndex].cargo[itemsIndexes[i]].amount)
-      addButton(table = tradeTable, text = itemName,
-          tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 1)
-      addButton(table = tradeTable, text = itemType,
-          tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 2)
-      let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
-          100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
-          i]].durability) else: "Unused")
-      addProgressbar(table = tradeTable, value = baseCargo[itemsIndexes[
-          i]].durability, maxValue = defaultItemDurability,
-          tooltip = itemDurability, command = "ShowTradeItemInfo -" &
-          $(itemsIndexes[i] + 1), column = 3)
-      addButton(table = tradeTable, text = $price,
-          tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 4)
-      addButton(table = tradeTable, text = $(-price),
-          tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 5,
-          newRow = false, color = tclGetVar(varName = "ttk::theme::" &
-          gameSettings.interfaceTheme & "::colors(-red)"))
+      addButton(label = itemName, iIndex = i, dialog = dialog)
+      addButton(label = itemType, iIndex = i, dialog = dialog)
+      if gameSettings.showTooltips:
+        let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
+            100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
+            i]].durability) else: "Unused")
+        addTooltip(bounds = getWidgetBounds(),
+            text = itemDurability)
+      var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
+          i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
+      progressBar(value = durability,
+          maxValue = defaultItemDurability, modifyable = false)
+      addButton(label = $price, iIndex = i, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[redColor])
+      addButton(label = $(-price), iIndex = i, dialog = dialog)
+      setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-        addButton(table = tradeTable, text = $itemsList[protoIndex].weight &
-            " kg", tooltip = "Show available options for item",
-            command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 6)
+        addButton(label = $itemsList[protoIndex].weight & " kg", iIndex = i,
+            dialog = dialog)
       except:
-        return showError(message = "Can't show item weight2.")
-      addButton(table = tradeTable, text = "0",
-          tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 7)
-      addButton(table = tradeTable, text = $baseAmount,
-          tooltip = "Show available options for item",
-          command = "ShowTradeItemInfo -" & $(itemsIndexes[i] + 1), column = 8, newRow = true)
+        dialog = setError(message = "Can't show weight")
+        return
+      addButton(label = "0", iIndex = i, dialog = dialog)
+      addButton(label = $baseAmount, iIndex = i, dialog = dialog)
+      row.inc
   showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
