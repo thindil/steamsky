@@ -22,7 +22,7 @@ import std/[algorithm, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, crewinventory, game, items, maps,
     shipscargo, types, trades]
-import coreui, dialogs, errordialog, header, themes
+import coreui, dialogs, errordialog, header, messagesui, themes
 
 type ItemsSortOrders = enum
   nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
@@ -501,7 +501,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   label(str = cargoText[0])
   colorLabel(str = cargoText[1], color = theme.colors[goldenColor])
   # Show the list of items for trade
-  let tableHeight: float = windowHeight - 140 - (if showOptions: 45 else: 0)
+  let tableHeight: float = windowHeight - 140 - (if showOptions: 45 else: 0) -
+      gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "TradeGroup", flags = {windowNoFlags}):
     setLayoutRowStatic(height = 30, cols = 8, ratio = [300.cfloat, 200, 200,
@@ -633,3 +634,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         break
     currentItemIndex = playerShip.cargo.len + 1
     restoreButtonStyle()
+  showMessagesButtons()
+  setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
+  showLastMessages(theme = theme, dialog = dialog)
+  showGameMenu(dialog = dialog)
