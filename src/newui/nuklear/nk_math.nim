@@ -26,7 +26,8 @@
 import contracts
 import nk_types
 
-proc nkShrinkRect*(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], contractual.} =
+proc nkShrinkRect*(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [],
+    contractual.} =
   ## Shrink the selected rectangle. Internal use only
   ##
   ## * r      - the rectangle to shrink
@@ -41,3 +42,14 @@ proc nkShrinkRect*(r: nk_rect; amount: cfloat): nk_rect {.raises: [], tags: [], 
   result.w = w - 2 * amount
   result.h = h - 2 * amount
 
+proc nkIntersect*(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [],
+    tags: [], contractual.} =
+  ## Check if the rectangle is inside the second rectangle
+  ##
+  ## * x0, y0, w0, h0 - the coordinates of the rectangle to check
+  ## * x1, y1, w1, h1 - the coordinates of the second rectangle
+  ##
+  ## Returns true if the rectangle is inside the second rectangle, otherwise
+  ## false.
+  return ((x1 < (x0 + w0)) and (x0 < (x1 + w1)) and (y1 < (y0 + h0)) and (y0 < (
+      y1 + h1)))

@@ -403,19 +403,6 @@ proc nkWidgetStateReset(s: var nk_flags) {.raises: [], tags: [], contractual.} =
   else:
     s = widgetStateInactive.ord
 
-# ----
-# Math
-# ----
-proc nkIntersect(x0, y0, w0, h0, x1, y1, w1, h1: cfloat): bool {.raises: [], tags: [], contractual.} =
-  ## Check if the rectangle is inside the second rectangle
-  ##
-  ## * x0, y0, w0, h0 - the coordinates of the rectangle to check
-  ## * x1, y1, w1, h1 - the coordinates of the second rectangle
-  ##
-  ## Returns true if the rectangle is inside the second rectangle, otherwise
-  ## false.
-  return ((x1 < (x0 + w0)) and (x0 < (x1 + w1)) and (y1 < (y0 + h0)) and (y0 < (y1 + h1)))
-
 # -------
 # Windows
 # -------
