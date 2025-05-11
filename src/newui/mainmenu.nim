@@ -777,7 +777,7 @@ proc newGamePlayer(dialog: var GameDialog) {.raises: [],
       label(str = "Starting base type:")
       bounds[7] = getWidgetBounds()
       newBase = comboList(items = playerBases, selected = currentBase,
-          itemHeight = 25, x = 200, y = 90)
+          itemHeight = 25, x = 200, y = 60)
       if newBase != currentBase or mouseClicked(id = left, rect = bounds[
           7]):
         currentBase = -1
