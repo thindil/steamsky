@@ -11,8 +11,7 @@ are: "add" (add this entry, default option), "remove" (remove this entry) or
 - Attribute "name": Type of ship. Will be visible during combat information.
 If you want that ship will be used in friendly trader random event, you must
 have word which you set in *game.dat* as *TraderNames* in ship name. Example:
-if you use *trader* word, ship name can be *small poleis trader*. The maximum
-length is 64 characters.
+if you use *trader* word, ship name can be *small poleis trader*.
 - Attribute "accuracy": Bonus to accuracy for ship.
 - Attributes "minaccuracy" and "maxaccuracy": If bonus to accuracy for ship
 should be random, add attribute "minaccuracy" for minimum value and
@@ -58,16 +57,14 @@ are: "add" (add this entry, default option) or "remove" (remove this entry).
   <module amount="2" index="7"/>
   <module index="8"/>
   <module index="9"/>
-<!-- Tag "cargo": Item in cargo of ship. Each ship can contains max 32
-different items.
+<!-- Tag "cargo": Item in cargo of ship.
 - Attribute "index" is index of item from files from *items* directory.
 - If amount of that item should be constant, add attribute "amount" with proper
 value. If amount of that item should be random, add attributes "minamount" with
 minimum amount and attribute "maxamount" with maximum amount of that item.
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
-"update" (update selected entry). The maximum amount of the selected item in
-the cargo is 100_000.
+"update" (update selected entry).
 -->
   <cargo amount="2000" index="1"/>
   <cargo amount="100" index="2"/>
@@ -121,7 +118,7 @@ are: "add" (add this entry, default option), "remove" (remove this entry) or
   <member index="5"/>
   <member amount="2" index="6"/>
 <!-- Tag "description": Description of ship (NPC ships only). Will be displayed
-during combat. Max length is 512 characters. -->
+during combat. -->
   <description>Smallest known pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
  <ship combatai="BERSERKER" index="3" maxloot="100" minloot="10" name="Tiny undead ship" owner="UNDEAD">
