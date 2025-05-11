@@ -16,13 +16,13 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[basestypes, events, game, gamesaveload, items, maps, shipscargo, tk, types]
 import errordialog, mapsui
 
 proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
-        TimeEffect, RootEffect], cdecl, contractual.} =
+    TimeEffect, RootEffect], cdecl, contractual, ruleOff: "params".} =
   ## Refresh the information about selected module
   ##
   ## * clientData - the additional data for the Tcl command
