@@ -862,7 +862,8 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
       sepG = g + 1
       sepLen = len
       break
-  # TODO: continue here after nkUtfDecode
+  #  let s = font.width(arg1 = font.userdata, h = font.height, argc3 = text.cstring, len = len.cint)
+  # TODO: continue here after font.width
 
 proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],

@@ -201,11 +201,7 @@ type
     texture*: nk_handle
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle
-  nk_draw_begin* = proc(b: ptr nk_command_buffer;
-      userData: nk_handle): nk_draw_command {.cdecl.}
-    ## Internal Nuklear type
-  nk_draw_end* = proc(b: ptr nk_command_buffer;
-      userData: nk_handle): nk_draw_command {.cdecl.}
+  nk_draw_f* = proc(b: ptr nk_command_buffer; userData: nk_handle) {.cdecl.}
     ## Internal Nuklear type
   nk_style_button* {.importc: "struct nk_style_button", nodecl.} = object
     ## Internal Nuklear type
@@ -217,7 +213,7 @@ type
     image_padding*: nk_vec2
     touch_padding*: nk_vec2
     # TODO
-    #draw_begin*: nk_draw_begin
+    #draw_begin*: nk_draw_f
     #draw_end*: nk_draw_end
     when defined(nkIncludeCommandUserData):
       userdata*: nk_handle
