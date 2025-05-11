@@ -372,9 +372,9 @@ proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
     addTooltip(bounds = getWidgetBounds(),
         text = "Show available options of item.")
   labelButton(title = label):
-    itemIndex = iIndex
-    if itemIndex < 0:
-      itemIndex.inc
+    itemIndex = itemsIndexes[iIndex]
+    if iIndex > playerShip.cargo.len:
+      itemIndex *= -1
     let (protoIndex, maxSellAmount, maxBuyAmount, _) = try:
         getTradeData(iIndex = itemIndex)
       except:
@@ -634,7 +634,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       if row == gameSettings.listsLimit + 1:
         break
     currentItemIndex = playerShip.cargo.len + 1
-    restoreButtonStyle()
     # Show the list of items in the base's cargo
     for i in playerShip.cargo.len + 1 .. itemsIndexes.high:
       if row == gameSettings.listsLimit + 1:
@@ -705,6 +704,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = "0", iIndex = i, dialog = dialog)
       addButton(label = $baseAmount, iIndex = i, dialog = dialog)
       row.inc
+  restoreButtonStyle()
   showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
