@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated color of cleaning ship icon to match the default colors of the
   game
+- Updated modding guide
 
 ### Fixed
 - Possible crash when updating population in bases
