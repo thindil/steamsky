@@ -405,7 +405,6 @@ Value must be an existing skill name.
   file in *data* directory or in modification file (better option) add tag
   `ship` with attribute `index` which value will be the index of selected ship
   and attribute `action`. Then, if you modify an existing ship, add changed values.
-* The maximum length of the ship's description is 512 characters.
 
 ### Ship data structure
 * Each ship is between `ship` tags.
@@ -418,8 +417,7 @@ Value must be an existing skill name.
 * Attribute `name`: Type of ship. Will be visible during combat information.
   If you want that ship will be used in friendly trader random event, you must
   set the word which you set in *game.dat* as *TraderNames* in ship name. Example:
-  if you use *trader* word, ship name can be *small poleis' trader*. The maximum
-  length of the name is 64 characters.
+  if you use *trader* word, ship name can be *small poleis' trader*.
 * Tags `module`: List of ship modules installed on selected ship.
     * Attribute`index` is module index from files from *shipmodules* directory.
     * Attribute `amount` is optional: If ship should have more than one that
@@ -452,14 +450,12 @@ Value must be an existing skill name.
 * Attributes `minperception` and `maxperception`: If bonus to perception for
   ship should be random, add attribute `minperception` for minimum value and
   `maxperception` for maximum value.
-* Tags `cargo`: List of items in cargo of ship. Each ship can contain max 32
-  different items
+* Tags `cargo`: List of items in cargo of ship.
     * Attribute `index` is index of item from files from *items* directory. If
       amount of that item should be constant, add attribute `amount` with
       proper value. If amount of that item should be random, add attributes
       `minamount` with minimum amount and attribute `maxamount` with maximum
-      amount of that item. The maximum amount of the selected item in the
-      cargo is 100_000.
+      amount of that item.
     * Optional attribute `action`: What to do with this item. Possible values
       are: "add" (add this item, default option), "remove" (remove this item)
       or "update" (update selected item).
