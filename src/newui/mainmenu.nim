@@ -76,7 +76,6 @@ proc setMainMenu*(dialog: var GameDialog) {.raises: [], tags: [
             break
           if baseType == newGameSettings.startingBase:
             currentBase = i
-            break
           i.inc
     playerFactions.add(y = "Random")
   showLoadButton = walkFiles(pattern = saveDirectory & "*.sav").toSeq.len > 0
