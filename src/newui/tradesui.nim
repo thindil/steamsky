@@ -22,7 +22,7 @@ import std/[algorithm, math, strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[basescargo, basestypes, config, crewinventory, game, items, maps,
     shipscargo, types, trades]
-import coreui, dialogs, errordialog, header, messagesui, themes
+import coreui, dialogs, errordialog, header, messagesui, table, themes
 
 type ItemsSortOrders = enum
   nameAsc, nameDesc, typeAsc, typeDesc, durabilityAsc, durabilityDesc, priceAsc,
@@ -705,27 +705,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $baseAmount, iIndex = i, dialog = dialog)
       row.inc
     restoreButtonStyle()
-    var cols: Natural = 0
-    if currentPage > 1:
-      if row < gameSettings.listsLimit + 1:
-        cols = 1
-      else:
-        cols = 2
-    elif row == gameSettings.listsLimit + 1:
-      cols = 1
-    setLayoutRowDynamic(height = 30, cols = cols)
-    if currentPage > 1:
-      if row < gameSettings.listsLimit + 1:
-        labelButton(title = "Previous"):
-          currentPage.dec
-      else:
-        labelButton(title = "Previous"):
-          currentPage.dec
-        labelButton(title = "Next"):
-          currentPage.inc
-    elif row == gameSettings.listsLimit + 1:
-      labelButton(title = "Next"):
-        currentPage.inc
+    addPagination(page = currentPage, row = row)
   showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
