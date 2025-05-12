@@ -705,6 +705,27 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $baseAmount, iIndex = i, dialog = dialog)
       row.inc
     restoreButtonStyle()
+    var cols: Natural = 0
+    if currentPage > 1:
+      if row < gameSettings.listsLimit + 1:
+        cols = 1
+      else:
+        cols = 2
+    elif row == gameSettings.listsLimit + 1:
+      cols = 1
+    setLayoutRowDynamic(height = 30, cols = cols)
+    if currentPage > 1:
+      if row < gameSettings.listsLimit + 1:
+        labelButton(title = "Previous"):
+          currentPage.dec
+      else:
+        labelButton(title = "Previous"):
+          currentPage.dec
+        labelButton(title = "Next"):
+          currentPage.inc
+    elif row == gameSettings.listsLimit + 1:
+      labelButton(title = "Next"):
+        currentPage.inc
   showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
