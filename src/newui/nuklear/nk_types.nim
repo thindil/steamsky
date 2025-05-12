@@ -208,15 +208,13 @@ type
     normal*, hover*, active*: nk_style_item
     border_color*, text_background*, text_normal*, text_hover*,
       text_active*: nk_color
-    rounding*, border*, color_factor_background*, color_factor_text*: cfloat
-    padding*: nk_vec2
-    image_padding*: nk_vec2
-    touch_padding*: nk_vec2
+    rounding*, border*, color_factor_background*, color_factor_text*, disabled_factor*: cfloat
+    padding*, image_padding*, touch_padding*: nk_vec2
+    alignment*: nk_flags
     # TODO
+    #userdata*: nk_handle
     #draw_begin*: nk_draw_f
     #draw_end*: nk_draw_end
-    when defined(nkIncludeCommandUserData):
-      userdata*: nk_handle
   nk_style_progress* {.importc: "struct nk_style_progress", nodecl.} = object
     cursor_normal*: nk_style_item
     ## Internal Nuklear type
