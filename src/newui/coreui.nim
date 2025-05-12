@@ -21,18 +21,19 @@
 import contracts, nuklear/nuklear_sdl_renderer
 import themes
 
-type GameState* = enum
-  ## Used to determine the current game's state.
-  quitGame, mainMenu, news, allNews, about, showFile, hallOfFame, loadGame,
-      loadingGame, newGame, map, endGame, combat, boarding, trade, school,
-      recruits, healWounded, repairShip, shipyard, buyRecipes, baseMissions,
-      loot
+type
+  GameState* = enum
+    ## Used to determine the current game's state.
+    quitGame, mainMenu, news, allNews, about, showFile, hallOfFame, loadGame,
+        loadingGame, newGame, map, endGame, combat, boarding, trade, school,
+        recruits, healWounded, repairShip, shipyard, buyRecipes, baseMissions,
+        loot
 
-type GameDialog* = enum
-  ## Used to show any in-game dialog window
-  none, loading, errorDialog, gameMenuDialog, questionDialog, newGoalDialog,
-    ordersDialog, destinationDialog, messageDialog, waitDialog, infoDialog,
-    boardingDialog, defendingDialog, buyDialog, sellDialog
+  GameDialog* = enum
+    ## Used to show any in-game dialog window
+    none, loading, errorDialog, gameMenuDialog, questionDialog, newGoalDialog,
+      ordersDialog, destinationDialog, messageDialog, waitDialog, infoDialog,
+      boardingDialog, defendingDialog, buyDialog, sellDialog
 
 const
   dtime*: float = 20.0        ## The length in miliseconds of one game's frame
