@@ -704,7 +704,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = "0", iIndex = i, dialog = dialog)
       addButton(label = $baseAmount, iIndex = i, dialog = dialog)
       row.inc
-  restoreButtonStyle()
+    restoreButtonStyle()
   showMessagesButtons()
   setLayoutRowDynamic(height = windowHeight - tableHeight - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
