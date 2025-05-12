@@ -37,8 +37,11 @@ that ship should be random, add attribute "minloot" for minimum value and
 - Attributes "minperception" and "maxperception": If bonus to perception for
 ship should be random, add attribute "minperception" for minimum value and
 "maxperception" for maximum value.
-- Attribute "owner": Which fraction own ship. Possible values are: Poleis,
+- Attribute "owner": Which faction own ship. Possible values are: Poleis,
 Independent, Pirates, Undead, Drones, Inquisition.
+- Attribute "reputation": The maximum level of reputation with the faction
+which own the ship required to meet the ship as an enemy. Values are between
+-100 to 0. 0 means it will be always possible to meet the ship as enemy.
 -->
  <ship index="1" name="Player Ship" owner="POLEIS">
 <!-- Tag "module": Ship module installed on selected ship.
@@ -182,7 +185,7 @@ during combat. -->
   <cargo index="1" maxamount="1000" minamount="500"/>
   <description>Small flying clockwork drone. Dangerous at close range.</description>
  </ship>
- <ship combatai="DISARMER" index="8" maxloot="200" minloot="100" name="Pirate ship" owner="PIRATES">
+ <ship combatai="DISARMER" index="8" maxloot="200" minloot="100" name="Pirate ship" owner="PIRATES" reputation="-5">
   <module index="17"/>
   <module index="15"/>
   <module amount="4" index="237"/>
@@ -204,7 +207,7 @@ during combat. -->
   <member index="57" maxamount="5" minamount="3"/>
   <description>Standard pirate vessel. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
- <ship combatai="DISARMER" index="9" maxloot="300" minloot="150" name="Armored pirate ship" owner="PIRATES">
+ <ship combatai="DISARMER" index="9" maxloot="300" minloot="150" name="Armored pirate ship" owner="PIRATES" reputation="-15">
   <module index="17"/>
   <module index="25"/>
   <module index="15"/>
@@ -227,7 +230,7 @@ during combat. -->
   <member index="58" maxamount="5" minamount="3"/>
   <description>Armored version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
- <ship combatai="BERSERKER" index="10" maxaccuracy="10" maxevasion="10" maxloot="200" maxperception="10" minaccuracy="5" minevasion="5" minloot="20" minperception="5" name="Small attacking drone" owner="DRONES">
+ <ship combatai="BERSERKER" index="10" maxaccuracy="10" maxevasion="10" maxloot="200" maxperception="10" minaccuracy="5" minevasion="5" minloot="20" minperception="5" name="Small attacking drone" owner="DRONES" reputation="-5">
   <module index="1"/>
   <module index="3"/>
   <module index="7"/>
@@ -238,7 +241,7 @@ during combat. -->
   <cargo index="14" maxamount="500" minamount="200"/>
   <description>Small, more aggresive version of clockwork drone.</description>
  </ship>
- <ship combatai="BERSERKER" index="11" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone" owner="DRONES">
+ <ship combatai="BERSERKER" index="11" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone" owner="DRONES" reputation="-10">
   <module index="17"/>
   <module index="15"/>
   <module index="219"/>
@@ -249,7 +252,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="100"/>
   <description>Standard, very aggresive version of clockwork drone.</description>
  </ship>
- <ship combatai="BERSERKER" index="12" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone" owner="DRONES">
+ <ship combatai="BERSERKER" index="12" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone" owner="DRONES" reputation="-15">
   <module index="17"/>
   <module index="2"/>
   <module index="15"/>
@@ -291,7 +294,7 @@ during combat. -->
   <member amount="3" index="59"/>
   <description>Small flying vessel of inquisition, dangerous at close range.</description>
  </ship>
- <ship combatai="ATTACKER" index="15" maxloot="200" minloot="100" name="Inquisition ship" owner="INQUISITION">
+ <ship combatai="ATTACKER" index="15" maxloot="200" minloot="100" name="Inquisition ship" owner="INQUISITION" reputation="-10">
   <module index="17"/>
   <module index="15"/>
   <module amount="4" index="237"/>
@@ -311,7 +314,7 @@ during combat. -->
   <member index="60" maxamount="8" minamount="4"/>
   <description>Standard ship of inquisition.</description>
  </ship>
- <ship combatai="ATTACKER" index="16" maxloot="240" minloot="120" name="Armored inquisition ship" owner="INQUISITION">
+ <ship combatai="ATTACKER" index="16" maxloot="240" minloot="120" name="Armored inquisition ship" owner="INQUISITION" reputation="-25">
   <module index="17"/>
   <module index="2"/>
   <module index="15"/>
