@@ -211,10 +211,10 @@ type
     rounding*, border*, color_factor_background*, color_factor_text*, disabled_factor*: cfloat
     padding*, image_padding*, touch_padding*: nk_vec2
     alignment*: nk_flags
-    # TODO
-    #userdata*: nk_handle
-    #draw_begin*: nk_draw_f
-    #draw_end*: nk_draw_end
+    # TODO: should be nk_handle, nk_draw_f
+    userdata*: cint
+    draw_begin*: cint
+    draw_end*: cint
   nk_style_progress* {.importc: "struct nk_style_progress", nodecl.} = object
     cursor_normal*: nk_style_item
     ## Internal Nuklear type
