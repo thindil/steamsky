@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code for debug UI, like showing the UI, changing various things in
+## the game, etc.
+
 import std/[strutils, tables]
 import contracts, nimalyzer
 import ../[basestypes, events, game, gamesaveload, items, maps, shipscargo, tk, types]
