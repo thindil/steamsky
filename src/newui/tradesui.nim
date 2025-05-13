@@ -155,6 +155,108 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
       dialog = setError(message = "Can't get the width of the cargo text.")
       0.0
 
+type LocalItemData = object
+  name: string
+  iType: string
+  damage: float
+  price: Natural
+  profit: int
+  weight: Positive = 1
+  owned: Natural
+  available: Natural
+  id: Natural
+
+proc sortItems(x, y: LocalItemData): int =
+  ## Check how to sort the selected items on the list
+  ##
+  ## * x - the first item to sort
+  ## * y - the second item to sort
+  ##
+  ## Returns 1 if the x item should go first, otherwise -1
+  case itemsSortOrder
+  of nameAsc:
+    if x.name < y.name:
+      return 1
+    else:
+      return -1
+  of nameDesc:
+    if x.name > y.name:
+      return 1
+    else:
+      return -1
+  of typeAsc:
+    if x.iType < y.iType:
+      return 1
+    else:
+      return -1
+  of typeDesc:
+    if x.iType > y.iType:
+      return 1
+    else:
+      return -1
+  of durabilityAsc:
+    if x.damage < y.damage:
+      return 1
+    else:
+      return -1
+  of durabilityDesc:
+    if x.damage > y.damage:
+      return 1
+    else:
+      return -1
+  of priceAsc:
+    if x.price < y.price:
+      return 1
+    else:
+      return -1
+  of priceDesc:
+    if x.price > y.price:
+      return 1
+    else:
+      return -1
+  of profitAsc:
+    if x.profit < y.profit:
+      return 1
+    else:
+      return -1
+  of profitDesc:
+    if x.profit > y.profit:
+      return 1
+    else:
+      return -1
+  of weightAsc:
+    if x.weight < y.weight:
+      return 1
+    else:
+      return -1
+  of weightDesc:
+    if x.weight > y.weight:
+      return 1
+    else:
+      return -1
+  of ownedAsc:
+    if x.owned < y.owned:
+      return 1
+    else:
+      return -1
+  of ownedDesc:
+    if x.owned > y.owned:
+      return 1
+    else:
+      return -1
+  of availableAsc:
+    if x.available < y.available:
+      return 1
+    else:
+      return -1
+  of availableDesc:
+    if x.available > y.available:
+      return 1
+    else:
+      return -1
+  of none:
+    return -1
+
 proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort items on the trades list
@@ -162,16 +264,6 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     itemsSortOrder = sortDesc
   else:
     itemsSortOrder = sortAsc
-  type LocalItemData = object
-    name: string
-    iType: string
-    damage: float
-    price: Natural
-    profit: int
-    weight: Positive = 1
-    owned: Natural
-    available: Natural
-    id: Natural
   var localItems: seq[LocalItemData]
   var indexesList: seq[Natural]
   for index, item in playerShip.cargo:
@@ -205,98 +297,6 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     except:
       dialog = setError(message = "Can't add item from the player's ship's cargo.")
       return
-
-  proc sortItems(x, y: LocalItemData): int =
-    ## Check how to sort the selected items on the list
-    ##
-    ## * x - the first item to sort
-    ## * y - the second item to sort
-    ##
-    ## Returns 1 if the x item should go first, otherwise -1
-    case itemsSortOrder
-    of nameAsc:
-      if x.name < y.name:
-        return 1
-      else:
-        return -1
-    of nameDesc:
-      if x.name > y.name:
-        return 1
-      else:
-        return -1
-    of typeAsc:
-      if x.iType < y.iType:
-        return 1
-      else:
-        return -1
-    of typeDesc:
-      if x.iType > y.iType:
-        return 1
-      else:
-        return -1
-    of durabilityAsc:
-      if x.damage < y.damage:
-        return 1
-      else:
-        return -1
-    of durabilityDesc:
-      if x.damage > y.damage:
-        return 1
-      else:
-        return -1
-    of priceAsc:
-      if x.price < y.price:
-        return 1
-      else:
-        return -1
-    of priceDesc:
-      if x.price > y.price:
-        return 1
-      else:
-        return -1
-    of profitAsc:
-      if x.profit < y.profit:
-        return 1
-      else:
-        return -1
-    of profitDesc:
-      if x.profit > y.profit:
-        return 1
-      else:
-        return -1
-    of weightAsc:
-      if x.weight < y.weight:
-        return 1
-      else:
-        return -1
-    of weightDesc:
-      if x.weight > y.weight:
-        return 1
-      else:
-        return -1
-    of ownedAsc:
-      if x.owned < y.owned:
-        return 1
-      else:
-        return -1
-    of ownedDesc:
-      if x.owned > y.owned:
-        return 1
-      else:
-        return -1
-    of availableAsc:
-      if x.available < y.available:
-        return 1
-      else:
-        return -1
-    of availableDesc:
-      if x.available > y.available:
-        return 1
-      else:
-        return -1
-    of none:
-      return -1
-
   localItems.sort(cmp = sortItems)
   itemsIndexes = @[]
   for item in localItems:
