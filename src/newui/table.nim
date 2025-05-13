@@ -17,6 +17,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
+import coreui
 
 proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [],
     contractual.} =
@@ -58,19 +59,24 @@ proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [],
         page.inc
 
 type
-  headerCode*[T] = proc (sortOrder: var T) {.raises: [], contractual.}
+  headerCode*[T] = proc (sortAsc, sortDesc: T;
+      dialog: var GameDialog) {.raises: [], contractual.}
+  sortValues*[T] = tuple
+    sortAsc: T
+    sortDesc: T
 
-proc addHeader*(labels: seq[string]; tooltip: string; code: headerCode) {.raises: [], tags: [],
-    contractual.} =
+proc addHeader*(labels: openArray[string]; sorts: openArray[sortValues];
+    tooltip: string; code: headerCode) {.raises: [], tags: [], contractual.} =
   ## Add the header to the table
   ##
   ## * headers    - the list of labels to show on headers
+  ## * sorts      - the list of values which will be assigned to sorting order
   ## * tooltip    - the name of things to sort, like items, etc. Will be added to
   ##                the headers' tooltips
   ## * headerCode - the code executed when a header was clicked
   for label in labels:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
-          text = "Press mouse button to sort the items.")
+          text = "Press mouse button to sort the " & tooltip & ".")
     labelButton(title = label):
       code()
