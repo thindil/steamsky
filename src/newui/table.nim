@@ -59,28 +59,31 @@ proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [],
         page.inc
 
 type
-  headerCode*[T] = proc (sortAsc, sortDesc: T;
+  HeaderCode*[T] = proc (sortAsc, sortDesc: T;
       dialog: var GameDialog) {.raises: [], contractual.}
-  sortValues*[T] = tuple
-    sortAsc: T
-    sortDesc: T
+  HeaderData*[T] = object
+    label*: string
+    sortAsc*: T
+    sortDesc*: T
+    ratio*: cfloat
 
-proc addHeader*(labels: openArray[string]; sorts: openArray[sortValues];
-    ratio: openArray[cfloat]; tooltip: string; code: headerCode; dialog: var GameDialog) {.raises: [],
-    tags: [RootEffect], contractual.} =
+proc addHeader*(headers: openArray[HeaderData]; tooltip: string;
+    code: HeaderCode; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Add the header to the table
   ##
-  ## * headers    - the list of labels to show on headers
-  ## * sorts      - the list of values which will be assigned to sorting order
-  ## * ratio      - the list of width of each column
+  ## * headers    - the list of headers to add
   ## * tooltip    - the name of things to sort, like items, etc. Will be added to
   ##                the headers' tooltips
   ## * headerCode - the code executed when a header was clicked
-  setLayoutRowStatic(height = 30, cols = labels.len, ratio = ratio)
-  for index, label in labels:
+  var ratio: seq[cfloat]
+  for header in headers:
+    ratio.add(y = header.ratio)
+  setLayoutRowStatic(height = 30, cols = headers.len, ratio = ratio)
+  for header in headers:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Press mouse button to sort the " & tooltip & ".")
-    labelButton(title = label):
-      code(sortAsc = sorts[index].sortAsc, sortDesc = sorts[index].sortDesc,
+    labelButton(title = header.label):
+      code(sortAsc = header.sortAsc, sortDesc = header.sortDesc,
           dialog = dialog)
