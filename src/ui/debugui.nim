@@ -38,19 +38,19 @@ proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## RefreshModule
   let
-    frameName = ".debugdialog.main.ship"
-    moduleCombo = frameName & ".module"
-    moduleIndex = try:
+    frameName: string = ".debugdialog.main.ship"
+    moduleCombo: string = frameName & ".module"
+    moduleIndex: int = try:
         tclEval2(script = moduleCombo & " current").parseInt
       except:
         return showError(message = "Can't get the module's index.")
-    protoCombo = frameName & ".proto"
+    protoCombo: string = frameName & ".proto"
   try:
     tclEval(script = protoCombo & " set {" & modulesList[playerShip.modules[
         moduleIndex].protoIndex].name & "}")
   except:
     return showError(message = "Can't get the proto module.")
-  var spinBox = frameName & ".weight"
+  var spinBox: string = frameName & ".weight"
   tclEval(script = spinBox & " set " & $playerShip.modules[moduleIndex].weight)
   spinBox = frameName & ".dur"
   tclEval(script = spinBox & " set " & $playerShip.modules[
@@ -77,15 +77,15 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## RefreshMember
-  let frameName = ".debugdialog.main.crew"
-  var comboBox = frameName & ".member"
+  let frameName: string = ".debugdialog.main.crew"
+  var comboBox: string = frameName & ".member"
   let
-    memberIndex = try:
+    memberIndex: int = try:
         tclEval2(script = comboBox & " current").parseInt
       except:
         return showError(message = "Can't get the member index.")
-    member = playerShip.crew[memberIndex]
-  var spinBox = frameName & ".stats2.health"
+    member: MemberData = playerShip.crew[memberIndex]
+  var spinBox: string = frameName & ".stats2.health"
   tclEval(script = spinBox & " set " & $member.health)
   spinBox = frameName & ".stats2.thirst"
   tclEval(script = spinBox & " set " & $member.thirst)
@@ -98,14 +98,14 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   spinBox = frameName & ".stats2.loyalty"
   tclEval(script = spinBox & " set " & $member.loyalty)
   var
-    memberFrame = frameName & ".stats"
-    rows = try:
+    memberFrame: string = frameName & ".stats"
+    rows: Natural = try:
         tclEval2(script = "grid size " & memberFrame).split[1].parseInt
       except:
         return showError(message = "Can't get the amount of rows.")
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = memberFrame)
   for index, attribute in member.attributes:
-    let label = memberFrame & ".label" & $(index + 1)
+    let label: string = memberFrame & ".label" & $(index + 1)
     tclEval(script = "ttk::label " & label & " -text {" & attributesList[
         index].name & "}")
     tclEval(script = "grid " & label)
@@ -121,9 +121,9 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
     except:
       return showError(message = "Can't get the amount of rows (2).")
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = memberFrame)
-  var skillsIndexes: seq[Natural]
+  var skillsIndexes: seq[Natural] = @[]
   for index, skill in member.skills:
-    let label = memberFrame & ".label" & $(index + 1)
+    let label: string = memberFrame & ".label" & $(index + 1)
     try:
       tclEval(script = "ttk::label " & label & " -text {" & skillsList[
           skill.index].name & "}")
@@ -137,7 +137,7 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = spinBox & " set " & $skill.level)
     tclEval(script = "grid " & spinBox & " -column 1 -row " & $(index + 1))
     skillsIndexes.add(y = skill.index)
-  var skillsListValues = ""
+  var skillsListValues: string = ""
   for index, skill in skillsList:
     if index notin skillsIndexes:
       skillsListValues.add(y = " " & skill.name)
@@ -161,13 +161,13 @@ proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## RefreshCargo
   let
-    frameName = ".debugdialog.main.cargo"
-    cargoCombo = frameName & ".update"
-    itemIndex = try:
+    frameName: string = ".debugdialog.main.cargo"
+    cargoCombo: string = frameName & ".update"
+    itemIndex: Natural = try:
         tclEval2(script = cargoCombo & " current").parseInt
       except:
         return showError(message = "Can't get the item index.")
-    amountBox = frameName & ".updateamount"
+    amountBox: string = frameName & ".updateamount"
   tclEval(script = amountBox & " set " & $playerShip.cargo[itemIndex].amount)
   return tclOk
 
@@ -186,16 +186,16 @@ proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## RefreshEvents
   let
-    frameName = ".debugdialog.main.world.deleteevent"
-    eventsButton = frameName & ".deleteevent"
-    eventsBox = frameName & ".delete"
+    frameName: string = ".debugdialog.main.world.deleteevent"
+    eventsButton: string = frameName & ".deleteevent"
+    eventsBox: string = frameName & ".delete"
   if eventsList.len == 0:
     tclEval(script = "grid remove " & eventsButton)
     tclEval(script = "grid remove " & eventsBox)
     return tclOk
   tclEval(script = "grid " & eventsButton)
   tclEval(script = "grid " & eventsBox)
-  var valuesList = ""
+  var valuesList: string = ""
   for index, event in eventsList:
     try:
       case event.eType
@@ -244,15 +244,15 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## Refresh
-  let frameName = ".debugdialog.main"
-  var spinBox = frameName & ".ship.x"
+  let frameName: string = ".debugdialog.main"
+  var spinBox: string = frameName & ".ship.x"
   tclEval(script = spinBox & " set " & $playerShip.skyX)
   spinBox = frameName & ".ship.y"
   tclEval(script = spinBox & " set " & $playerShip.skyY)
-  var valuesList = ""
+  var valuesList: string = ""
   for module in playerShip.modules:
     valuesList.add(y = " {" & module.name & "}")
-  var comboBox = frameName & ".ship.module"
+  var comboBox: string = frameName & ".ship.module"
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
   tclEval(script = comboBox & " current 0")
   discard refreshModuleCommand(clientData = clientData, interp = interp,
@@ -293,10 +293,10 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## RefreshBase
   let
-    frameName = ".debugdialog.main.bases"
-    nameEntry = frameName & ".name"
-    baseName = tclEval2(script = nameEntry & " get")
-  var baseIndex = 0
+    frameName: string = ".debugdialog.main.bases"
+    nameEntry: string = frameName & ".name"
+    baseName: string = tclEval2(script = nameEntry & " get")
+  var baseIndex: int = 0
   for index, base in skyBases:
     if base.name == baseName:
       baseIndex = index
