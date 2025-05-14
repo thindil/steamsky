@@ -67,18 +67,15 @@ type
     sortDesc*: T
     ratio*: cfloat
 
-proc addHeader*(headers: openArray[HeaderData]; tooltip: string;
-    code: HeaderCode; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
+proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
+    tooltip: string; code: HeaderCode; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Add the header to the table
   ##
   ## * headers    - the list of headers to add
   ## * tooltip    - the name of things to sort, like items, etc. Will be added to
   ##                the headers' tooltips
   ## * headerCode - the code executed when a header was clicked
-  var ratio: seq[cfloat]
-  for header in headers:
-    ratio.add(y = header.ratio)
   setLayoutRowStatic(height = 30, cols = headers.len, ratio = ratio)
   for header in headers:
     if gameSettings.showTooltips:
