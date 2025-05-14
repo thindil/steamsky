@@ -460,15 +460,7 @@ proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
       dialog = setError(message = "Can't show the item's info.")
 
 const
-  ratio: array[8, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200]
-  headers: array[8, string] = ["Name", "Type", "Durability", "Price", "Profit",
-      "Weight", "Owned", "Available"]
-  sorts: array[8, sortValues[ItemsSortOrders]] = [(sortAsc: nameAsc,
-      sortDesc: nameDesc), (sortAsc: nameAsc, sortDesc: nameDesc), (
-      sortAsc: nameAsc, sortDesc: nameDesc), (sortAsc: nameAsc,
-      sortDesc: nameDesc), (sortAsc: nameAsc, sortDesc: nameDesc), (
-      sortAsc: nameAsc, sortDesc: nameDesc), (sortAsc: nameAsc,
-      sortDesc: nameDesc), (sortAsc: nameAsc, sortDesc: nameDesc)]
+  headers: array[8, HeaderData[ItemsSortOrders]] = [HeaderData[ItemsSortOrders](label: "Name", ratio: 300.cfloat, sortAsc: nameAsc, sortDesc: nameDesc), HeaderData[ItemsSortOrders](label: "Type", ratio: 200.cfloat, sortAsc: typeAsc, sortDesc: typeDesc), HeaderData[ItemsSortOrders](label: "Durability", ratio: 200.cfloat, sortAsc: durabilityAsc, sortDesc: durabilityDesc), HeaderData[ItemsSortOrders](label: "Name2", ratio: 200.cfloat, sortAsc: nameAsc, sortDesc: nameDesc), HeaderData[ItemsSortOrders](label: "Name3", ratio: 200.cfloat, sortAsc: nameAsc, sortDesc: nameDesc), HeaderData[ItemsSortOrders](label: "Name4", ratio: 200.cfloat, sortAsc: nameAsc, sortDesc: nameDesc), HeaderData[ItemsSortOrders](label: "Name5", ratio: 200.cfloat, sortAsc: nameAsc, sortDesc: nameDesc), HeaderData[ItemsSortOrders](label: "Name6", ratio: 200.cfloat, sortAsc: nameAsc, sortDesc: nameDesc)]
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -521,8 +513,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       gameSettings.messagesPosition.float
   setLayoutRowDynamic(height = tableHeight, cols = 1)
   group(title = "TradeGroup", flags = {windowNoFlags}):
-    addHeader(labels = headers, sorts = sorts, ratio = ratio, tooltip = "items",
-      code = sortTrades, dialog = dialog)
+    addHeader(headers = headers, tooltip = "items", code = sortTrades, dialog = dialog)
 #    setLayoutRowStatic(height = 30, cols = 8, ratio = ratio)
 #    addHeader(label = "Name", sortAsc = nameAsc, sortDesc = nameDesc,
 #        dialog = dialog)
