@@ -668,6 +668,8 @@ type
     ## * description  - The ship's description
     ## * owner        - The faction to which the ship belongs
     ## * knownRecipes - The list of known recipes (used only by the player's ship)
+    ## * reputation   - The level of reputation at which the ship will appear.
+    ##                  an enemy, it is negative value, for friendly positive
     name*: string
     modules*: seq[Positive]
     accuracy*: ShipBonusData
@@ -681,6 +683,7 @@ type
     description*: string
     owner*: string
     knownRecipes*: seq[string]
+    reputation*: Natural
 
   ProtoMobRecord* = object
     ## Used to store data about mobs prototypes
