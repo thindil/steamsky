@@ -66,17 +66,21 @@ type
     sortDesc: T
 
 proc addHeader*(labels: openArray[string]; sorts: openArray[sortValues];
-    tooltip: string; code: headerCode) {.raises: [], tags: [], contractual.} =
+    ratio: openArray[cfloat]; tooltip: string; code: headerCode; dialog: var GameDialog) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Add the header to the table
   ##
   ## * headers    - the list of labels to show on headers
   ## * sorts      - the list of values which will be assigned to sorting order
+  ## * ratio      - the list of width of each column
   ## * tooltip    - the name of things to sort, like items, etc. Will be added to
   ##                the headers' tooltips
   ## * headerCode - the code executed when a header was clicked
-  for label in labels:
+  setLayoutRowStatic(height = 30, cols = labels.len, ratio = ratio)
+  for index, label in labels:
     if gameSettings.showTooltips:
       addTooltip(bounds = getWidgetBounds(),
           text = "Press mouse button to sort the " & tooltip & ".")
     labelButton(title = label):
-      code()
+      code(sortAsc = sorts[index].sortAsc, sortDesc = sorts[index].sortDesc,
+          dialog = dialog)
