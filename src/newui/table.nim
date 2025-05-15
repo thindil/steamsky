@@ -61,11 +61,18 @@ proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [],
 type
   HeaderCode*[T] = proc (sortAsc, sortDesc: T;
       dialog: var GameDialog) {.raises: [], contractual.}
+    ## Code executed when the table's header was pressed
   HeaderData*[T] = object
+    ## Used to store data about the table's header
+    ##
+    ## * label    - the label to show on the header
+    ## * sortAsc  - the sorting ascending value when the player's click on the
+    ##              header
+    ## * sortDesc - the sorting descending value when the player's click on the
+    ##              header
     label*: string
     sortAsc*: T
     sortDesc*: T
-    ratio*: cfloat
 
 proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
     tooltip: string; code: HeaderCode; dialog: var GameDialog) {.raises: [],
@@ -73,6 +80,7 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ## Add the header to the table
   ##
   ## * headers    - the list of headers to add
+  ## * ratio      - the list of width for each column in the table
   ## * tooltip    - the name of things to sort, like items, etc. Will be added to
   ##                the headers' tooltips
   ## * headerCode - the code executed when a header was clicked
