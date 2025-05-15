@@ -303,7 +303,7 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
       break
   if baseIndex == 0:
     return tclOk
-  var comboBox = frameName & ".type"
+  var comboBox: string = frameName & ".type"
   try:
     tclEval(script = comboBox & " set " & basesTypesList[skyBases[
         baseIndex].baseType].name)
@@ -317,7 +317,7 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
     return showError(message = "Can't set owner's name.")
   comboBox = frameName & ".size"
   tclEval(script = comboBox & " current " & $(skyBases[baseIndex].size.ord))
-  var spinBox = frameName & ".population"
+  var spinBox: string = frameName & ".population"
   tclEval(script = spinBox & " set " & $skyBases[baseIndex].population)
   spinBox = frameName & ".reputation"
   tclEval(script = spinBox & " set " & $skyBases[baseIndex].reputation.level)
@@ -362,8 +362,8 @@ proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugMoveShip
-  let frameName = ".debugdialog.main.ship"
-  var spinBox = frameName & ".x"
+  let frameName: string = ".debugdialog.main.ship"
+  var spinBox: string = frameName & ".x"
   playerShip.skyX = try:
       tclEval2(script = spinBox & " get").parseInt
     except:
@@ -391,20 +391,20 @@ proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DebugUpdateModule
   let
-    frameName = ".debugdialog.main.ship"
-    moduleBox = frameName & ".module"
-    moduleIndex = try:
+    frameName: string = ".debugdialog.main.ship"
+    moduleBox: string = frameName & ".module"
+    moduleIndex: int = try:
         tclEval2(script = moduleBox & " current").parseInt
       except:
         return showError(message = "Can't get module index.")
-    protoCombo = frameName & ".proto"
-  var value = tclEval2(script = protoCombo & " get")
+    protoCombo: string = frameName & ".proto"
+  var value: string = tclEval2(script = protoCombo & " get")
   for index, module in modulesList:
     if module.name == value:
       value = ""
       playerShip.modules[moduleIndex].protoIndex = index
       break
-  var spinBox = frameName & ".weight"
+  var spinBox: string = frameName & ".weight"
   playerShip.modules[moduleIndex].weight = try:
       tclEval2(script = spinBox &
         " get").parseInt
@@ -444,14 +444,14 @@ proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugAddSkill
-  let frameName = ".debugdialog.main.crew"
-  var comboBox = frameName & ".member"
-  let memberIndex = try:
+  let frameName: string = ".debugdialog.main.crew"
+  var comboBox: string = frameName & ".member"
+  let memberIndex: int = try:
       tclEval2(script = comboBox & " current").parseInt
     except:
       return showError(message = "Can't get member index.")
   comboBox = frameName & ".addskill.skills"
-  var skillName = tclEval2(script = comboBox & " get")
+  var skillName: string = tclEval2(script = comboBox & " get")
   for index, skill in skillsList:
     if skill.name == skillName:
       playerShip.crew[memberIndex].skills.add(y = SkillInfo(index: index,
@@ -475,13 +475,13 @@ proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DebugUpdateMember
   let
-    frameName = ".debugdialog.main.crew"
-    comboBox = frameName & ".member"
-    memberIndex = try:
+    frameName: string = ".debugdialog.main.crew"
+    comboBox: string = frameName & ".member"
+    memberIndex: int = try:
         tclEval2(script = comboBox & " current").parseInt
       except:
         return showError(message = "Can't get member index.")
-  var spinBox = frameName & ".stats2.health"
+  var spinBox: string = frameName & ".stats2.health"
   try:
     playerShip.crew[memberIndex].health = tclEval2(script = spinBox &
         " get").parseInt
@@ -546,11 +546,11 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DebugAddItem
   let
-    frameName = ".debugdialog.main.cargo"
-    itemEntry = frameName & ".add"
-    itemBox = frameName & ".amount"
-    itemName = tclEval2(script = itemEntry & " get")
-  var itemIndex = -1
+    frameName: string = ".debugdialog.main.cargo"
+    itemEntry: string = frameName & ".add"
+    itemBox: string = frameName & ".amount"
+    itemName: string = tclEval2(script = itemEntry & " get")
+  var itemIndex: int = -1
   for index, item in itemsList:
     if item.name == itemName:
       itemIndex = index
@@ -579,10 +579,10 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DebugUpdateItem
   let
-    frameName = ".debugdialog.main.cargo"
-    itemCombo = frameName & ".update"
-    itemBox = frameName & ".updateamount"
-    itemIndex = try:
+    frameName: string = ".debugdialog.main.cargo"
+    itemCombo: string = frameName & ".update"
+    itemBox: string = frameName & ".updateamount"
+    itemIndex: int = try:
         tclEval2(script = itemCombo & " current").parseInt
       except:
         return showError(message = "Can't geet item index.")
@@ -608,17 +608,17 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DebugUpdateBase
   let
-    frameName = ".debugdialog.main.bases"
-    baseEntry = frameName & ".name"
-    baseName = tclEval2(script = baseEntry & " get")
-  var baseIndex = 0
+    frameName: string = ".debugdialog.main.bases"
+    baseEntry: string = frameName & ".name"
+    baseName: string = tclEval2(script = baseEntry & " get")
+  var baseIndex: ExtendedBasesRange = 0
   for index, base in skyBases:
     if base.name == baseName:
       baseIndex = index
       break
   if baseIndex == 0:
     return tclOk
-  var baseCombo = frameName & ".type"
+  var baseCombo: string = frameName & ".type"
   for index, baseType in basesTypesList:
     if baseType.name == tclEval2(script = baseCombo & " get"):
       skyBases[baseIndex].baseType = index
@@ -634,7 +634,7 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
         script = baseCombo & " get").toLowerAscii)
   except:
     return showError(message = "Can't set the base's size.")
-  var baseBox = frameName & ".population"
+  var baseBox: string = frameName & ".population"
   try:
     skyBases[baseIndex].population = tclEval2(script = baseBox &
         " get").parseInt
@@ -669,10 +669,10 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DebugAddShip
   let
-    frameName = ".debugdialog.main.world"
-    shipEntry = frameName & ".ship"
-    shipName = tclEval2(script = shipEntry & " get")
-  var shipBox = frameName & ".x"
+    frameName: string = ".debugdialog.main.world"
+    shipEntry: string = frameName & ".ship"
+    shipName: string = tclEval2(script = shipEntry & " get")
+  var shipBox: string = frameName & ".x"
   let npcShipX = try:
       tclEval2(script = shipBox & " get").parseInt
     except:
