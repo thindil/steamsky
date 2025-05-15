@@ -327,23 +327,6 @@ proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
   for item in localItems:
     itemsIndexes.add(y = item.id)
 
-#proc addHeader(label: string; sortAsc, sortDesc: ItemsSortOrders;
-#    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
-#  ## Add a header to the list of items for trade
-#  ##
-#  ## * label    - the text to show on the header
-#  ## * sortAsc  - the sorting column ascending
-#  ## * sortDesc - the sorting column descending
-#  ## * dialog   - the current in-game dialog displayed on the screen
-#  ##
-#  ## Returns the modified parameter dialog. It is modified if any error
-#  ## happened.
-#  if gameSettings.showTooltips:
-#    addTooltip(bounds = getWidgetBounds(),
-#        text = "Press mouse button to sort the items.")
-#  labelButton(title = label):
-#    sortTrades(sortAsc = sortAsc, sortDesc = sortDesc, dialog = dialog)
-
 proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the dialog for buying items
@@ -524,23 +507,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   group(title = "TradeGroup", flags = {windowNoFlags}):
     addHeader(headers = headers, ratio = ratio, tooltip = "items",
       code = sortTrades, dialog = dialog)
-#    setLayoutRowStatic(height = 30, cols = 8, ratio = ratio)
-#    addHeader(label = "Name", sortAsc = nameAsc, sortDesc = nameDesc,
-#        dialog = dialog)
-#    addHeader(label = "Type", sortAsc = typeAsc, sortDesc = typeDesc,
-#        dialog = dialog)
-#    addHeader(label = "Durability", sortAsc = durabilityAsc,
-#        sortDesc = durabilityDesc, dialog = dialog)
-#    addHeader(label = "Price", sortAsc = priceAsc, sortDesc = priceDesc,
-#        dialog = dialog)
-#    addHeader(label = "Profit", sortAsc = profitAsc, sortDesc = profitDesc,
-#        dialog = dialog)
-#    addHeader(label = "Weight", sortAsc = weightAsc, sortDesc = weightDesc,
-#        dialog = dialog)
-#    addHeader(label = "Owned", sortAsc = ownedAsc, sortDesc = ownedDesc,
-#        dialog = dialog)
-#    addHeader(label = "Available", sortAsc = availableAsc,
-#        sortDesc = availableDesc, dialog = dialog)
     var
       currentItemIndex = 0
       indexesList: seq[Natural]
