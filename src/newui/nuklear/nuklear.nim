@@ -835,7 +835,7 @@ proc nkDrawNineSlice(b: ptr nk_command_buffer; r: NimRect; slc: ptr nk_nine_slic
   nkDrawImage(b = b, r = NimRect(x: r.x + r.w - slc.r.float, y: r.y + r.h - slc.b.float, w: slc.r.float, h: slc.b.float), img = img.addr, col = col)
 
 proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
-  space: float; glyphs: var int; textWidth: var float; sepList: nk_rune;
+  space: float; glyphs: var int; textWidth: var float; sepList: seq[nk_rune];
   sepCount: int): int {.raises: [], tags: [RootEffect], contractual.} =
   ## Clamp the selected text
   ##
@@ -866,7 +866,11 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
         font.width(arg1 = font.userdata, h = font.height, arg3 = text.cstring, len = len.cint)
       except:
         return
-  # TODO: continue here after font.width
+    var i: Natural = 0
+    for sep in sepList:
+      i.inc
+      if unicode != sep:
+        continue
 
 proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
@@ -900,7 +904,8 @@ proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var i
       var
         glyphs: int = 0
         txtWidth: float = textWidth
-      length = nkTextClamp(font, str, length, r.w, glyphs, txtWidth, 0, 0)
+      length = nkTextClamp(font = font, text = str, textLen = length,
+        space = r.w, glyphs = glyphs, textWidth = txtWidth, sepList = @[], sepCount = 0)
       # TODO: continue here after nkTextClamp
 
 # -----
