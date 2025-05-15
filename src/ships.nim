@@ -405,6 +405,13 @@ proc loadShips*(fileName: string) {.raises: [DataLoadingError],
         if ship.perception.maxValue < ship.perception.minValue:
           raise newException(exceptn = DataLoadingError,
               message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid range for ship bonus perception.")
+      attribute = shipNode.attr(name = "reputation")
+      if attribute.len() > 0:
+        ship.reputation = try:
+            attribute.parseInt()
+        except ValueError:
+          raise newException(exceptn = DataLoadingError,
+              message = "Can't " & $shipAction & " ship '" & $shipIndex & "', invalid value for ship reputation.")
       loadShipCargo(shipNode = shipNode, shipAction = shipAction,
           shipIndex = shipIndex, ship = ship)
       attribute = shipNode.attr(name = "owner")
