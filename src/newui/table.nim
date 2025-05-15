@@ -84,6 +84,8 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ## * tooltip    - the name of things to sort, like items, etc. Will be added to
   ##                the headers' tooltips
   ## * headerCode - the code executed when a header was clicked
+  ##
+  ## Returns the modified parameter dialog.
   setLayoutRowStatic(height = 30, cols = headers.len, ratio = ratio)
   for header in headers:
     if gameSettings.showTooltips:
