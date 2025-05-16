@@ -260,6 +260,13 @@ proc sortItems(x, y: LocalItemData): int =
 proc sortTrades(sortAsc, sortDesc: ItemsSortOrders;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Sort items on the trades list
+  ##
+  ## * sortAsc  - the sorting value for ascending sort
+  ## * sortDesc - the sorting value for descending sort
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   if itemsSortOrder == sortAsc:
     itemsSortOrder = sortDesc
   else:
