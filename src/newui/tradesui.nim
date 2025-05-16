@@ -354,6 +354,97 @@ proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   closePopup()
   dialog = setManipulate(action = sellAction, iIndex = itemIndex)
 
+proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
+    RootEffect], contractual.} =
+  ## Show the selected item information
+  ##
+  ## * data   - the index of the selected item
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  itemIndex = itemsIndexes[data]
+  if data > playerShip.cargo.len:
+    itemIndex *= -1
+  let (protoIndex, maxSellAmount, maxBuyAmount, _) = try:
+      getTradeData(iIndex = itemIndex)
+    except:
+      dialog = setError(message = "Can't get the trade's data.")
+      return
+  var itemInfo = ""
+  try:
+    if itemsList[protoIndex].itemType == weaponType:
+      itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[
+          protoIndex].value[3]].name & "/" & attributesList[skillsList[
+              itemsList[protoIndex].value[
+          3]].attribute].name & (if itemsList[protoIndex].value[4] ==
+          1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
+      case itemsList[protoIndex].value[5]
+      of 1:
+        itemInfo.add(y = "cutting")
+      of 2:
+        itemInfo.add(y = "impaling")
+      of 3:
+        itemInfo.add(y = "blunt")
+      else:
+        discard
+      itemInfo.add(y = "{/gold}")
+  except:
+    dialog = setError(message = "Can't show weapon info.")
+    return
+  let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
+      armsArmor, legsArmor, shieldType]
+  for itemType in itemTypes:
+    try:
+      if itemsList[protoIndex].itemType == itemType:
+        if itemInfo.len > 0:
+          itemInfo.add(y = "\n")
+        itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+            itemData = itemsList[protoIndex].value[1]) &
+            "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
+        break
+    except:
+      dialog = setError(message = "Can't get damage chance.")
+      return
+  try:
+    if itemsList[protoIndex].itemType in toolsList:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
+          itemData = itemsList[protoIndex].value[1]) & "{/gold}")
+  except:
+    dialog = setError(message = "Can't get tool info.")
+    return
+  try:
+    if itemsList[protoIndex].itemType.len > 4 and (itemsList[
+        protoIndex].itemType[0..3] == "Ammo" or itemsList[
+        protoIndex].itemType == "Harpoon"):
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = "Strength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
+  except:
+    dialog = setError(message = "Can't get ammo info.")
+    return
+  try:
+    if itemsList[protoIndex].description.len > 0:
+      if itemInfo.len > 0:
+        itemInfo.add(y = "\n")
+      itemInfo.add(y = itemsList[protoIndex].description)
+  except:
+    dialog = setError(message = "Can't get the description.")
+    return
+  try:
+    dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
+        button1 = (if maxBuyAmount ==
+        0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Buy item from the base", code: setBuyDialog,
+        icon: buyDefaultIcon.ord, text: "Buy", color: "")), button2 = (
+        if maxSellAmount == 0: emptyButtonSettings else: ButtonSettings(
+        tooltip: "Sell item from the ship cargo", code: setSellDialog,
+        icon: sellDefaultIcon.ord, text: "Sell", color: "")))
+  except:
+    dialog = setError(message = "Can't show the item's info.")
+
 proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Add a button to the list of items for trade
@@ -367,98 +458,26 @@ proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
     addTooltip(bounds = getWidgetBounds(),
         text = "Show available options of item.")
   labelButton(title = label):
-    itemIndex = itemsIndexes[iIndex]
-    if iIndex > playerShip.cargo.len:
-      itemIndex *= -1
-    let (protoIndex, maxSellAmount, maxBuyAmount, _) = try:
-        getTradeData(iIndex = itemIndex)
-      except:
-        dialog = setError(message = "Can't get the trade's data.")
-        return
-    var itemInfo = ""
-    try:
-      if itemsList[protoIndex].itemType == weaponType:
-        itemInfo.add(y = "Skill: {gold}" & skillsList[itemsList[
-            protoIndex].value[3]].name & "/" & attributesList[skillsList[
-                itemsList[protoIndex].value[
-            3]].attribute].name & (if itemsList[protoIndex].value[4] ==
-            1: "\nCan be used with shield." else: "\nCan't be used with shield (two-handed weapon).") & "\n{/gold}Damage type: {gold}")
-        case itemsList[protoIndex].value[5]
-        of 1:
-          itemInfo.add(y = "cutting")
-        of 2:
-          itemInfo.add(y = "impaling")
-        of 3:
-          itemInfo.add(y = "blunt")
-        else:
-          discard
-        itemInfo.add(y = "{/gold}")
-    except:
-      dialog = setError(message = "Can't show weapon info.")
-      return
-    let itemTypes: array[6, string] = [weaponType, chestArmor, headArmor,
-        armsArmor, legsArmor, shieldType]
-    for itemType in itemTypes:
-      try:
-        if itemsList[protoIndex].itemType == itemType:
-          if itemInfo.len > 0:
-            itemInfo.add(y = "\n")
-          itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-              itemData = itemsList[protoIndex].value[1]) &
-              "\n{/gold}Strength: {gold}" & $itemsList[protoIndex].value[2] & "{/gold}")
-          break
-      except:
-        dialog = setError(message = "Can't get damage chance.")
-        return
-    try:
-      if itemsList[protoIndex].itemType in toolsList:
-        if itemInfo.len > 0:
-          itemInfo.add(y = "\n")
-        itemInfo.add(y = "Damage chance: {gold}" & getItemChanceToDamage(
-            itemData = itemsList[protoIndex].value[1]) & "{/gold}")
-    except:
-      dialog = setError(message = "Can't get tool info.")
-      return
-    try:
-      if itemsList[protoIndex].itemType.len > 4 and (itemsList[
-          protoIndex].itemType[0..3] == "Ammo" or itemsList[
-          protoIndex].itemType == "Harpoon"):
-        if itemInfo.len > 0:
-          itemInfo.add(y = "\n")
-        itemInfo.add(y = "Strength: {gold}" & $itemsList[protoIndex].value[1] & "{/gold}")
-    except:
-      dialog = setError(message = "Can't get ammo info.")
-      return
-    try:
-      if itemsList[protoIndex].description.len > 0:
-        if itemInfo.len > 0:
-          itemInfo.add(y = "\n")
-        itemInfo.add(y = itemsList[protoIndex].description)
-    except:
-      dialog = setError(message = "Can't get the description.")
-      return
-    try:
-      dialog = setInfo(text = itemInfo, title = itemsList[protoIndex].name,
-          button1 = (if maxBuyAmount ==
-          0: emptyButtonSettings else: ButtonSettings(
-          tooltip: "Buy item from the base", code: setBuyDialog,
-          icon: buyDefaultIcon.ord, text: "Buy", color: "")), button2 = (
-          if maxSellAmount == 0: emptyButtonSettings else: ButtonSettings(
-          tooltip: "Sell item from the ship cargo", code: setSellDialog,
-          icon: sellDefaultIcon.ord, text: "Sell", color: "")))
-    except:
-      dialog = setError(message = "Can't show the item's info.")
+    showItemInfo(data = iIndex, dialog = dialog)
 
 const
   headers: array[8, HeaderData[ItemsSortOrders]] = [
-    HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc, sortDesc: nameDesc),
-    HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc, sortDesc: typeDesc),
-    HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc, sortDesc: durabilityDesc),
-    HeaderData[ItemsSortOrders](label: "Price", sortAsc: priceAsc, sortDesc: priceDesc),
-    HeaderData[ItemsSortOrders](label: "Profit", sortAsc: profitAsc, sortDesc: profitDesc),
-    HeaderData[ItemsSortOrders](label: "Weight", sortAsc: weightAsc, sortDesc: weightDesc),
-    HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc, sortDesc: ownedDesc),
-    HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc, sortDesc: availableDesc)]
+    HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
+        sortDesc: nameDesc),
+    HeaderData[ItemsSortOrders](label: "Type", sortAsc: typeAsc,
+        sortDesc: typeDesc),
+    HeaderData[ItemsSortOrders](label: "Durability", sortAsc: durabilityAsc,
+        sortDesc: durabilityDesc),
+    HeaderData[ItemsSortOrders](label: "Price", sortAsc: priceAsc,
+        sortDesc: priceDesc),
+    HeaderData[ItemsSortOrders](label: "Profit", sortAsc: profitAsc,
+        sortDesc: profitDesc),
+    HeaderData[ItemsSortOrders](label: "Weight", sortAsc: weightAsc,
+        sortDesc: weightDesc),
+    HeaderData[ItemsSortOrders](label: "Owned", sortAsc: ownedAsc,
+        sortDesc: ownedDesc),
+    HeaderData[ItemsSortOrders](label: "Available", sortAsc: availableAsc,
+        sortDesc: availableDesc)]
   ratio: array[8, cfloat] = [300.cfloat, 200, 200, 200, 200, 200, 200, 200]
 
 proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
