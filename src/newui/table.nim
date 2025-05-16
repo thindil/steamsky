@@ -95,18 +95,24 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
       code(sortAsc = header.sortAsc, sortDesc = header.sortDesc,
           dialog = dialog)
 
-proc addButton*(label, tooltip: string; data: int; dialog: var GameDialog) {.raises: [],
-    tags: [RootEffect], contractual.} =
+type
+  ButtonCode* = proc(data: int; dialog: var GameDialog) {.raises: [], tags: [
+      RootEffect], contractual.}
+    ## Code executed when the button was pressed
+
+proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a button to the table
   ##
-  ## * label   - the text to show on the button
-  ## * tooltip - the text to show as a tooltip for the button
-  ## * data    - the data passed to the code executed after clikcking the
-  ##             button
-  ## * dialog  - the current in-game dialog displayed on the screen
+  ## * label      - the text to show on the button
+  ## * tooltip    - the text to show as a tooltip for the button
+  ## * data       - the data passed to the code executed after clikcking the
+  ##                button
+  ## * buttonCode - the code executed when a header was clicked
+  ## * dialog     - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog.
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltip)
   labelButton(title = label):
-    discard
+    code(data = data, dialog = dialog)
