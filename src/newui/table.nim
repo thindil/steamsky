@@ -96,8 +96,7 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
           dialog = dialog)
 
 type
-  ButtonCode* = proc(data: int; dialog: var GameDialog) {.raises: [], tags: [
-      RootEffect], contractual.}
+  ButtonCode* = proc(data: int; dialog: var GameDialog) {.raises: [], contractual.}
     ## Code executed when the button was pressed
 
 proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
