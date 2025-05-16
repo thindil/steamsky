@@ -863,7 +863,8 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
       sepLen = len
       break
     let s: float = try:
-        font.width(arg1 = font.userdata, h = font.height, arg3 = text.cstring, len = len.cint)
+        font.width(arg1 = font.userdata, h = font.height, arg3 = text.cstring,
+          len = len.cint)
       except:
         return
     var i: Natural = 0
@@ -871,6 +872,18 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
       i.inc
       if unicode != sep:
         continue
+      lastWidth = width
+      sepWidth = lastWidth
+      sepG = g + 1
+      sepLen = len
+      break
+    if i == sepCount:
+      sepWidth = width
+      lastWidth = sepWidth
+      sepG = g + 1
+    width = s
+    glyphLen = nkUtfDecode(c = $text[len], u = unicode)
+    g.inc
 
 proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
