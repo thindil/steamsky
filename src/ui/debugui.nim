@@ -673,17 +673,17 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
     shipEntry: string = frameName & ".ship"
     shipName: string = tclEval2(script = shipEntry & " get")
   var shipBox: string = frameName & ".x"
-  let npcShipX = try:
+  let npcShipX: int = try:
       tclEval2(script = shipBox & " get").parseInt
     except:
       return showError(message = "Can't get X coord.")
   shipBox = frameName & ".y"
-  let npcShipY = try:
+  let npcShipY: int = try:
       tclEval2(script = shipBox & " get").parseInt
     except:
       return showError(message = "Can't get Y coord.")
   shipBox = frameName & ".duration"
-  let duration = try:
+  let duration: int = try:
       tclEval2(script = shipBox & " get").parseInt
     except:
       return showError(message = "Can't get duration.")
@@ -718,10 +718,10 @@ proc toggleItemEntryCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## ToggleItemEntry
   let
-    frameName = ".debugdialog.main.world"
-    eventCombo = frameName & ".event"
-    itemEntry = frameName & ".item"
-    itemLabel = frameName & ".itemlbl"
+    frameName: string = ".debugdialog.main.world"
+    eventCombo: string = frameName & ".event"
+    itemEntry: string = frameName & ".item"
+    itemLabel: string = frameName & ".itemlbl"
   if tclEval2(script = eventCombo & " current") == "1":
     tclEval(script = "grid " & itemLabel)
     tclEval(script = "grid " & itemEntry)
@@ -745,29 +745,29 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Tcl:
   ## DebugAddEvent
   let
-    frameName = ".debugdialog.main.world"
-    eventEntry = frameName & ".base"
+    frameName: string = ".debugdialog.main.world"
+    eventEntry: string = frameName & ".base"
   var
-    eventName = tclEval2(script = eventEntry & " get")
-    baseIndex = 0
+    eventName: string = tclEval2(script = eventEntry & " get")
+    baseIndex: ExtendedBasesRange = 0
   for index, base in skyBases:
     if base.name == eventName:
       baseIndex = index
       break
   if baseIndex == 0:
     return tclOk
-  var eventBox = frameName & ".event"
+  var eventBox: string = frameName & ".event"
   let
-    eventType = try:
+    eventType: int = try:
         tclEval2(script = eventBox & " current").parseInt
       except:
         return showError(message = "Can't get event type.")
-    durationBox = frameName & ".baseduration"
-    duration = try:
+    durationBox: string = frameName & ".baseduration"
+    duration: int = try:
         tclEval2(script = durationBox & " get").parseInt
       except:
         return showError(message = "Can't get event duration.")
-  var added = true
+  var added: bool = true
   case eventType
   of 0:
     eventsList.add(y = EventData(skyX: skyBases[baseIndex].skyX, skyY: skyBases[
@@ -807,7 +807,7 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugDeleteEvent
-  let eventBox = ".debugdialog.main.world.deleteevent.delete"
+  let eventBox: string = ".debugdialog.main.world.deleteevent.delete"
   try:
     deleteEvent(eventIndex = tclEval2(script = eventBox & " current").parseInt)
   except:
@@ -1020,11 +1020,11 @@ proc showDebugUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     addCommand(name = "DebugDeleteEvent", nimProc = debugDeleteEventCommand)
   except:
     showError(message = "Can't add a Tcl command.")
-  var valuesList = ""
+  var valuesList: string = ""
   for baseType in basesTypesList.values:
     valuesList.add(y = " {" & baseType.name & "}")
-  let frameName = ".debugdialog.main.bases"
-  var comboBox = frameName & ".type"
+  let frameName: string = ".debugdialog.main.bases"
+  var comboBox: string = frameName & ".type"
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
   valuesList = ""
   comboBox = frameName & ".owner"
