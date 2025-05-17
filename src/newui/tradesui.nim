@@ -445,21 +445,6 @@ proc showItemInfo(data: int; dialog: var GameDialog) {.raises: [], tags: [
   except:
     dialog = setError(message = "Can't show the item's info.")
 
-#proc addButton(label: string; iIndex: int; dialog: var GameDialog) {.raises: [],
-#    tags: [RootEffect], contractual.} =
-  ## Add a button to the list of items for trade
-  ##
-  ## * label  - the text to show on the button
-  ## * iIndex - the index of the item on the list
-  ## * dialog - the current in-game dialog displayed on the screen
-  ##
-  ## Returns the modified parameter dialog.
-#  if gameSettings.showTooltips:
-#    addTooltip(bounds = getWidgetBounds(),
-#        text = "Show available options of item.")
-#  labelButton(title = label):
-#    showItemInfo(data = iIndex, dialog = dialog)
-
 const
   headers: array[8, HeaderData[ItemsSortOrders]] = [
     HeaderData[ItemsSortOrders](label: "Name", sortAsc: nameAsc,
@@ -618,8 +603,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = itemType, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = itemName, iIndex = i, dialog = dialog)
-#      addButton(label = itemType, iIndex = i, dialog = dialog)
       if gameSettings.showTooltips:
         let itemDurability = (if playerShip.cargo[i].durability <
             100: getItemDamage(itemDurability = playerShip.cargo[
@@ -630,18 +613,14 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           maxValue = defaultItemDurability, modifyable = false)
       addButton(label = $price, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = $price, iIndex = i, dialog = dialog)
       if profit > 0:
         setButtonStyle(field = textNormal, color = theme.colors[greenColor])
       elif profit < 0:
         setButtonStyle(field = textNormal, color = theme.colors[redColor])
       addButton(label = $profit, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = $profit, iIndex = i, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-#        addButton(label = $itemsList[protoIndex].weight & " kg", iIndex = i,
-#            dialog = dialog)
         addButton(label = $itemsList[protoIndex].weight & " kg",
           tooltip = "Show available options of item.", data = i,
           code = showItemInfo, dialog = dialog)
@@ -651,11 +630,8 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
       addButton(label = $playerShip.cargo[i].amount,
         tooltip = "Show available options of item.", data = i,
         code = showItemInfo, dialog = dialog)
-#      addButton(label = $playerShip.cargo[i].amount, iIndex = i,
-#          dialog = dialog)
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = $baseAmount, iIndex = i, dialog = dialog)
       row.inc
       if row == gameSettings.listsLimit + 1:
         break
@@ -709,8 +685,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = itemType, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = itemName, iIndex = i, dialog = dialog)
-#      addButton(label = itemType, iIndex = i, dialog = dialog)
       if gameSettings.showTooltips:
         let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
             100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
@@ -723,27 +697,21 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
           maxValue = defaultItemDurability, modifyable = false)
       addButton(label = $price, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = $price, iIndex = i, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[redColor])
       addButton(label = $(-price), tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = $(-price), iIndex = i, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
-#        addButton(label = $itemsList[protoIndex].weight & " kg", iIndex = i,
-#            dialog = dialog)
         addButton(label = $itemsList[protoIndex].weight & " kg",
           tooltip = "Show available options of item.", data = i,
           code = showItemInfo, dialog = dialog)
       except:
         dialog = setError(message = "Can't show weight")
         return
-#      addButton(label = "0", iIndex = i, dialog = dialog)
       addButton(label = "0", tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = $baseAmount, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-#      addButton(label = $baseAmount, iIndex = i, dialog = dialog)
       row.inc
     restoreButtonStyle()
     addPagination(page = currentPage, row = row)
