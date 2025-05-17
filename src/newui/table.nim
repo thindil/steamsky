@@ -117,3 +117,25 @@ proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
     addTooltip(bounds = getWidgetBounds(), text = tooltip)
   labelButton(title = label):
     code(data = data, dialog = dialog)
+
+proc addProgressBar*(tooltip: string; value, maxValue, data: int; code: ButtonCode;
+    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Add a progress abr to the table
+  ##
+  ## * tooltip  - the text to show as a tooltip for the progess bar
+  ## * value    - the current value of the progress bar
+  ## * maxValue - the maximum value of the progress bar
+  ## * data     - the data passed to the code executed after clikcking the
+  ##              button
+  ## * code     - the code executed when the progress bar was clicked
+  ## * dialog   - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  let bounds: NimRect = getWidgetBounds()
+  if gameSettings.showTooltips:
+    addTooltip(bounds = bounds, text = tooltip)
+  var val: int = value
+  progressBar(value = val, maxValue = maxValue, modifyable = false)
+  if mouseClicked(id = left, rect = bounds):
+    code(data = data, dialog = dialog)
