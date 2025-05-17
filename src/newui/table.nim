@@ -118,8 +118,9 @@ proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
   labelButton(title = label):
     code(data = data, dialog = dialog)
 
-proc addProgressBar*(tooltip: string; value, maxValue, data: int; code: ButtonCode;
-    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+proc addProgressBar*(tooltip: string; value, maxValue, data: int;
+    code: ButtonCode; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
   ## Add a progress abr to the table
   ##
   ## * tooltip  - the text to show as a tooltip for the progess bar
@@ -137,5 +138,6 @@ proc addProgressBar*(tooltip: string; value, maxValue, data: int; code: ButtonCo
     addTooltip(bounds = bounds, text = tooltip)
   var val: int = value
   progressBar(value = val, maxValue = maxValue, modifyable = false)
-  if mouseClicked(id = left, rect = bounds):
+  if mouseClicked(id = (if gameSettings.rightButton: Buttons.right else: left),
+      rect = bounds):
     code(data = data, dialog = dialog)
