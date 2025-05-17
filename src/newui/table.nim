@@ -85,7 +85,8 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
   ##                the headers' tooltips
   ## * headerCode - the code executed when a header was clicked
   ##
-  ## Returns the modified parameter dialog.
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   setLayoutRowStatic(height = 30, cols = headers.len, ratio = ratio)
   for header in headers:
     if gameSettings.showTooltips:
@@ -103,14 +104,15 @@ proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
     dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
   ## Add a button to the table
   ##
-  ## * label      - the text to show on the button
-  ## * tooltip    - the text to show as a tooltip for the button
-  ## * data       - the data passed to the code executed after clikcking the
-  ##                button
-  ## * buttonCode - the code executed when a header was clicked
-  ## * dialog     - the current in-game dialog displayed on the screen
+  ## * label   - the text to show on the button
+  ## * tooltip - the text to show as a tooltip for the button
+  ## * data    - the data passed to the code executed after clikcking the
+  ##             button
+  ## * code    - the code executed when the button was clicked
+  ## * dialog  - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter dialog.
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltip)
   labelButton(title = label):
