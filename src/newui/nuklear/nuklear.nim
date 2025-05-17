@@ -884,6 +884,14 @@ proc nkTextClamp(font: ptr nk_user_font; text: string; textLen: int;
     width = s
     glyphLen = nkUtfDecode(c = $text[len], u = unicode)
     g.inc
+  if len >= textLen:
+    glyphs = g
+    textWidth = lastWidth
+    return len
+  else:
+    glyphs = sepG
+    textWidth = sepWidth
+    return if sepLen == 0: len else: sepLen
 
 proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var int;
   font: ptr nk_user_font; bg, fg: nk_color) {.raises: [], tags: [RootEffect],
