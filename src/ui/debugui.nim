@@ -37,9 +37,10 @@ proc refreshModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## RefreshModule
-  let
+  const
     frameName: string = ".debugdialog.main.ship"
     moduleCombo: string = frameName & ".module"
+  let
     moduleIndex: int = try:
         tclEval2(script = moduleCombo & " current").parseInt
       except:
@@ -77,7 +78,7 @@ proc refreshMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## RefreshMember
-  let frameName: string = ".debugdialog.main.crew"
+  const frameName: string = ".debugdialog.main.crew"
   var comboBox: string = frameName & ".member"
   let
     memberIndex: int = try:
@@ -160,9 +161,10 @@ proc refreshCargoCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## RefreshCargo
-  let
+  const
     frameName: string = ".debugdialog.main.cargo"
     cargoCombo: string = frameName & ".update"
+  let
     itemIndex: Natural = try:
         tclEval2(script = cargoCombo & " current").parseInt
       except:
@@ -185,7 +187,7 @@ proc refreshEventsCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## RefreshEvents
-  let
+  const
     frameName: string = ".debugdialog.main.world.deleteevent"
     eventsButton: string = frameName & ".deleteevent"
     eventsBox: string = frameName & ".delete"
@@ -244,7 +246,7 @@ proc refreshCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## Refresh
-  let frameName: string = ".debugdialog.main"
+  const frameName: string = ".debugdialog.main"
   var spinBox: string = frameName & ".ship.x"
   tclEval(script = spinBox & " set " & $playerShip.skyX)
   spinBox = frameName & ".ship.y"
@@ -292,10 +294,10 @@ proc refreshBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## RefreshBase
-  let
+  const
     frameName: string = ".debugdialog.main.bases"
     nameEntry: string = frameName & ".name"
-    baseName: string = tclEval2(script = nameEntry & " get")
+  let baseName: string = tclEval2(script = nameEntry & " get")
   var baseIndex: int = 0
   for index, base in skyBases:
     if base.name == baseName:
@@ -362,7 +364,7 @@ proc debugMoveShipCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugMoveShip
-  let frameName: string = ".debugdialog.main.ship"
+  const frameName: string = ".debugdialog.main.ship"
   var spinBox: string = frameName & ".x"
   playerShip.skyX = try:
       tclEval2(script = spinBox & " get").parseInt
@@ -390,9 +392,10 @@ proc debugUpdateModuleCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugUpdateModule
-  let
+  const
     frameName: string = ".debugdialog.main.ship"
     moduleBox: string = frameName & ".module"
+  let
     moduleIndex: int = try:
         tclEval2(script = moduleBox & " current").parseInt
       except:
@@ -444,7 +447,7 @@ proc debugAddSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugAddSkill
-  let frameName: string = ".debugdialog.main.crew"
+  const frameName: string = ".debugdialog.main.crew"
   var comboBox: string = frameName & ".member"
   let memberIndex: int = try:
       tclEval2(script = comboBox & " current").parseInt
@@ -474,9 +477,10 @@ proc debugUpdateMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugUpdateMember
-  let
+  const
     frameName: string = ".debugdialog.main.crew"
     comboBox: string = frameName & ".member"
+  let
     memberIndex: int = try:
         tclEval2(script = comboBox & " current").parseInt
       except:
@@ -545,11 +549,11 @@ proc debugAddItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugAddItem
-  let
+  const
     frameName: string = ".debugdialog.main.cargo"
     itemEntry: string = frameName & ".add"
     itemBox: string = frameName & ".amount"
-    itemName: string = tclEval2(script = itemEntry & " get")
+  let itemName: string = tclEval2(script = itemEntry & " get")
   var itemIndex: int = -1
   for index, item in itemsList:
     if item.name == itemName:
@@ -578,10 +582,11 @@ proc debugUpdateItemCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugUpdateItem
-  let
+  const
     frameName: string = ".debugdialog.main.cargo"
     itemCombo: string = frameName & ".update"
     itemBox: string = frameName & ".updateamount"
+  let
     itemIndex: int = try:
         tclEval2(script = itemCombo & " current").parseInt
       except:
@@ -607,10 +612,10 @@ proc debugUpdateBaseCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugUpdateBase
-  let
+  const
     frameName: string = ".debugdialog.main.bases"
     baseEntry: string = frameName & ".name"
-    baseName: string = tclEval2(script = baseEntry & " get")
+  let baseName: string = tclEval2(script = baseEntry & " get")
   var baseIndex: ExtendedBasesRange = 0
   for index, base in skyBases:
     if base.name == baseName:
@@ -668,10 +673,10 @@ proc debugAddShipCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugAddShip
-  let
+  const
     frameName: string = ".debugdialog.main.world"
     shipEntry: string = frameName & ".ship"
-    shipName: string = tclEval2(script = shipEntry & " get")
+  let shipName: string = tclEval2(script = shipEntry & " get")
   var shipBox: string = frameName & ".x"
   let npcShipX: int = try:
       tclEval2(script = shipBox & " get").parseInt
@@ -717,7 +722,7 @@ proc toggleItemEntryCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ToggleItemEntry
-  let
+  const
     frameName: string = ".debugdialog.main.world"
     eventCombo: string = frameName & ".event"
     itemEntry: string = frameName & ".item"
@@ -744,7 +749,7 @@ proc debugAddEventCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugAddEvent
-  let
+  const
     frameName: string = ".debugdialog.main.world"
     eventEntry: string = frameName & ".base"
   var
@@ -807,7 +812,7 @@ proc debugDeleteEventCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## DebugDeleteEvent
-  let eventBox: string = ".debugdialog.main.world.deleteevent.delete"
+  const eventBox: string = ".debugdialog.main.world.deleteevent.delete"
   try:
     deleteEvent(eventIndex = tclEval2(script = eventBox & " current").parseInt)
   except:
@@ -1023,7 +1028,7 @@ proc showDebugUi*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
   var valuesList: string = ""
   for baseType in basesTypesList.values:
     valuesList.add(y = " {" & baseType.name & "}")
-  let frameName: string = ".debugdialog.main.bases"
+  const frameName: string = ".debugdialog.main.bases"
   var comboBox: string = frameName & ".type"
   tclEval(script = comboBox & " configure -values [list" & valuesList & "]")
   valuesList = ""
