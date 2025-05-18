@@ -927,7 +927,14 @@ proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var i
         txtWidth: float = textWidth
       length = nkTextClamp(font = font, text = str, textLen = length,
         space = r.w, glyphs = glyphs, textWidth = txtWidth, sepList = @[], sepCount = 0)
-      # TODO: continue here after nkTextClamp
+
+    if length == 0:
+      return
+    let cmd: ptr nk_command_text = cast[ptr nk_command_text](
+        nkCommandBufferPush(b = b, t = commandText,
+            size = nk_command_text.sizeof + (length + 1).nk_size))
+    cmd.x = r.x.cshort
+    cmd.y = r.y.cshort
 
 # -----
 # Input

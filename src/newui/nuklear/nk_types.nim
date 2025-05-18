@@ -306,6 +306,9 @@ type
     rounding*, w*, h*: cushort
     x*, y*: cshort
     color*: nk_color
+  nk_command_text* {.importc: "struct nk_command_text".} = object
+    ## Internal Nuklear type
+    x*, y*: cshort
   nk_row_layout* {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
