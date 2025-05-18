@@ -296,7 +296,7 @@ during combat. -->
   <member amount="3" index="59"/>
   <description>Small flying vessel of inquisition, dangerous at close range.</description>
  </ship>
- <ship combatai="ATTACKER" index="15" maxloot="200" minloot="100" name="Inquisition ship" owner="INQUISITION" reputation="5">
+ <ship combatai="ATTACKER" index="15" maxloot="200" minloot="100" name="Inquisition ship" owner="INQUISITION" reputation="10">
   <module index="17"/>
   <module index="15"/>
   <module amount="4" index="237"/>
@@ -730,7 +730,7 @@ during combat. -->
   <cargo index="1" maxamount="1000" minamount="500"/>
   <description>Small flying clockwork drone (upgraded version). Dangerous at close range.</description>
  </ship>
- <ship combatai="DISARMER" index="40" maxloot="200" minloot="100" name="Pirate ship mk II" owner="PIRATES">
+ <ship combatai="DISARMER" index="40" maxloot="200" minloot="100" name="Pirate ship mk II" owner="PIRATES" reputation="10">
   <module index="66"/>
   <module index="74"/>
   <module amount="4" index="241"/>
@@ -751,7 +751,7 @@ during combat. -->
   <member index="57" maxamount="5" minamount="3"/>
   <description>Standard pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
- <ship combatai="DISARMER" index="41" maxloot="300" minloot="150" name="Armored pirate ship mk II" owner="PIRATES">
+ <ship combatai="DISARMER" index="41" maxloot="300" minloot="150" name="Armored pirate ship mk II" owner="PIRATES" reputation="15">
   <module index="66"/>
   <module index="56"/>
   <module index="74"/>
@@ -784,7 +784,7 @@ during combat. -->
   <cargo index="14" maxamount="500" minamount="200"/>
   <description>Small, more aggresive, upgraded version of clockwork drone.</description>
  </ship>
- <ship combatai="BERSERKER" index="43" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone mk II" owner="DRONES">
+ <ship combatai="BERSERKER" index="43" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone mk II" owner="DRONES" reputation="15">
   <module index="66"/>
   <module index="74"/>
   <module index="220"/>
@@ -795,7 +795,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="100"/>
   <description>Standard, very aggresive, upgraded version of clockwork drone.</description>
  </ship>
- <ship combatai="BERSERKER" index="44" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone mk II" owner="DRONES">
+ <ship combatai="BERSERKER" index="44" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone mk II" owner="DRONES" reputation="25">
   <module index="66"/>
   <module index="55"/>
   <module index="74"/>
@@ -836,7 +836,7 @@ during combat. -->
   <member index="59" maxamount="4" minamount="2"/>
   <description>Small flying vessel of inquisition (upgraded version), dangerous at close range.</description>
  </ship>
- <ship combatai="ATTACKER" index="47" maxloot="200" minloot="100" name="Inquisition ship mk II" owner="INQUISITION">
+ <ship combatai="ATTACKER" index="47" maxloot="200" minloot="100" name="Inquisition ship mk II" owner="INQUISITION" reputation="10">
   <module index="66"/>
   <module index="74"/>
   <module amount="4" index="241"/>
@@ -855,7 +855,7 @@ during combat. -->
   <member index="60" maxamount="8" minamount="4"/>
   <description>Standard ship of inquisition (upgraded version).</description>
  </ship>
- <ship combatai="ATTACKER" index="48" maxloot="240" minloot="120" name="Armored inquisition ship mk II" owner="INQUISITION">
+ <ship combatai="ATTACKER" index="48" maxloot="240" minloot="120" name="Armored inquisition ship mk II" owner="INQUISITION" reputation="15">
   <module index="66"/>
   <module index="55"/>
   <module index="74"/>
@@ -875,7 +875,7 @@ during combat. -->
   <member index="60" maxamount="8" minamount="4"/>
   <description>Armored and upgraded version of standard flying vessel of inquisition.</description>
  </ship>
- <ship combatai="BERSERKER" index="49" maxaccuracy="25" maxevasion="25" maxloot="400" maxperception="35" minaccuracy="15" minevasion="15" minloot="200" minperception="25" name="Large clockwork drone mk II" owner="DRONES">
+ <ship combatai="BERSERKER" index="49" maxaccuracy="25" maxevasion="25" maxloot="400" maxperception="35" minaccuracy="15" minevasion="15" minloot="200" minperception="25" name="Large clockwork drone mk II" owner="DRONES" reputation="25">
   <module index="68"/>
   <module index="56"/>
   <module index="76"/>
@@ -889,7 +889,7 @@ during combat. -->
   <cargo index="13" maxamount="250" minamount="120"/>
   <description>Large, well armored upgraded and aggresive clockwork drone.</description>
  </ship>
- <ship combatai="DISARMER" index="50" maxloot="500" minloot="300" name="Large pirate ship mk II" owner="PIRATES">
+ <ship combatai="DISARMER" index="50" maxloot="500" minloot="300" name="Large pirate ship mk II" owner="PIRATES" reputation="25">
   <module index="68"/>
   <module index="57"/>
   <module index="76"/>
@@ -912,7 +912,7 @@ during combat. -->
   <member index="61" maxamount="5" minamount="3"/>
   <description>Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
- <ship combatai="BERSERKER" index="51" maxloot="300" minloot="100" name="Undead ship mk II" owner="UNDEAD">
+ <ship combatai="BERSERKER" index="51" maxloot="300" minloot="100" name="Undead ship mk II" owner="UNDEAD" reputation="10">
   <module index="66"/>
   <module index="56"/>
   <module index="74"/>
@@ -925,7 +925,7 @@ during combat. -->
   <member index="62" maxamount="10" minamount="6"/>
   <description>Upgraded version of undead flying vessel. Dangerous at close range.</description>
  </ship>
- <ship combatai="BERSERKER" index="52" maxloot="400" minloot="200" name="Large undead ship mk II" owner="UNDEAD">
+ <ship combatai="BERSERKER" index="52" maxloot="400" minloot="200" name="Large undead ship mk II" owner="UNDEAD" reputation="25">
   <module index="68"/>
   <module index="57"/>
   <module index="76"/>
@@ -938,7 +938,7 @@ during combat. -->
   <member index="63" maxamount="12" minamount="8"/>
   <description>Large, well armored upgraded version of undead flying vessel. Dangerous at close range.</description>
  </ship>
- <ship combatai="ATTACKER" index="53" maxloot="500" minloot="250" name="Large inquisition ship mk II" owner="INQUISITION">
+ <ship combatai="ATTACKER" index="53" maxloot="500" minloot="250" name="Large inquisition ship mk II" owner="INQUISITION" reputation="25">
   <module index="68"/>
   <module index="57"/>
   <module index="76"/>
@@ -959,7 +959,7 @@ during combat. -->
   <member index="64" maxamount="9" minamount="5"/>
   <description>Large, well armored upgraded version of inquisition flying vessel.</description>
  </ship>
- <ship combatai="BERSERKER" index="54" maxaccuracy="35" maxevasion="35" maxloot="450" maxperception="50" minaccuracy="25" minevasion="25" minloot="250" minperception="40" name="Large attacking drone mk II" owner="DRONES">
+ <ship combatai="BERSERKER" index="54" maxaccuracy="35" maxevasion="35" maxloot="450" maxperception="50" minaccuracy="25" minevasion="25" minloot="250" minperception="40" name="Large attacking drone mk II" owner="DRONES" reputation="25">
   <module index="68"/>
   <module index="57"/>
   <module index="76"/>
@@ -972,7 +972,7 @@ during combat. -->
   <cargo index="13" maxamount="300" minamount="150"/>
   <description>Large, well armored upgraded version of attacking clockwork drone.</description>
  </ship>
- <ship combatai="BERSERKER" index="55" maxaccuracy="25" maxevasion="25" maxloot="250" maxperception="50" minaccuracy="15" minevasion="15" minloot="100" minperception="40" name="Advanced attacking drone mk II" owner="DRONES">
+ <ship combatai="BERSERKER" index="55" maxaccuracy="25" maxevasion="25" maxloot="250" maxperception="50" minaccuracy="15" minevasion="15" minloot="100" minperception="40" name="Advanced attacking drone mk II" owner="DRONES" reputation="15">
   <module index="67"/>
   <module index="56"/>
   <module index="75"/>
@@ -986,7 +986,7 @@ during combat. -->
   <cargo index="13" maxamount="200" minamount="100"/>
   <description>Advanced and upgraded version of standard attacking clockwork drone.</description>
  </ship>
- <ship combatai="DISARMER" index="56" maxloot="250" minloot="200" name="Advanced pirate ship mk II" owner="PIRATES">
+ <ship combatai="DISARMER" index="56" maxloot="250" minloot="200" name="Advanced pirate ship mk II" owner="PIRATES" reputation="15">
   <module index="67"/>
   <module index="56"/>
   <module index="75"/>
@@ -1009,7 +1009,7 @@ during combat. -->
   <member amount="2" index="65"/>
   <description>Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
- <ship combatai="BERSERKER" index="57" maxloot="300" minloot="200" name="Advanced undead ship mk II" owner="UNDEAD">
+ <ship combatai="BERSERKER" index="57" maxloot="300" minloot="200" name="Advanced undead ship mk II" owner="UNDEAD" reputation="15">
   <module index="67"/>
   <module index="56"/>
   <module index="75"/>
@@ -1023,7 +1023,7 @@ during combat. -->
   <member index="66" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of standard undead ship. Dangerous at close range.</description>
  </ship>
- <ship accuracy="15" combatai="ATTACKER" evasion="15" index="58" maxloot="240" minloot="120" name="Advanced inquisition ship mk II" owner="INQUISITION" perception="15">
+ <ship accuracy="15" combatai="ATTACKER" evasion="15" index="58" maxloot="240" minloot="120" name="Advanced inquisition ship mk II" owner="INQUISITION" perception="15" reputation="15">
   <module index="67"/>
   <module index="56"/>
   <module index="75"/>
@@ -1043,7 +1043,7 @@ during combat. -->
   <member index="67" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of standard flying vessel of inquisition.</description>
  </ship>
- <ship combatai="DISARMER" index="59" maxloot="1000" minloot="500" name="Huge pirate ship mk II" owner="PIRATES">
+ <ship combatai="DISARMER" index="59" maxloot="1000" minloot="500" name="Huge pirate ship mk II" owner="PIRATES" reputation="35">
   <module index="70"/>
   <module index="57"/>
   <module amount="2" index="78"/>
@@ -1066,7 +1066,7 @@ during combat. -->
   <member index="68" maxamount="9" minamount="5"/>
   <description>Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
- <ship combatai="DISARMER" index="60" maxloot="1200" minloot="750" name="Advanced huge pirate ship mk II" owner="PIRATES">
+ <ship combatai="DISARMER" index="60" maxloot="1200" minloot="750" name="Advanced huge pirate ship mk II" owner="PIRATES" reputation="40">
   <module index="71"/>
   <module index="57"/>
   <module amount="2" index="79"/>
@@ -1088,7 +1088,7 @@ during combat. -->
   <member index="69" maxamount="11" minamount="7"/>
   <description>Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
- <ship combatai="BERSERKER" index="61" maxloot="750" minloot="500" name="Huge undead ship mk II" owner="UNDEAD">
+ <ship combatai="BERSERKER" index="61" maxloot="750" minloot="500" name="Huge undead ship mk II" owner="UNDEAD" reputation="35">
   <module index="70"/>
   <module index="57"/>
   <module index="78"/>
@@ -1102,7 +1102,7 @@ during combat. -->
   <member index="70" maxamount="14" minamount="10"/>
   <description>Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.</description>
  </ship>
- <ship combatai="BERSERKER" index="62" maxaccuracy="80" maxevasion="80" maxloot="900" maxperception="80" minaccuracy="60" minevasion="60" minloot="500" minperception="60" name="Huge attacking drone mk II" owner="DRONES">
+ <ship combatai="BERSERKER" index="62" maxaccuracy="80" maxevasion="80" maxloot="900" maxperception="80" minaccuracy="60" minevasion="60" minloot="500" minperception="60" name="Huge attacking drone mk II" owner="DRONES" reputation="55">
   <module index="70"/>
   <module index="57"/>
   <module index="78"/>
@@ -1116,7 +1116,7 @@ during combat. -->
   <cargo index="13" maxamount="750" minamount="500"/>
   <description>Huge, well armored and upgraded version of attacking clockwork drone.</description>
  </ship>
- <ship combatai="BERSERKER" index="63" maxloot="900" minloot="600" name="Advanced huge undead ship mk II" owner="UNDEAD">
+ <ship combatai="BERSERKER" index="63" maxloot="900" minloot="600" name="Advanced huge undead ship mk II" owner="UNDEAD" reputation="40">
   <module index="71"/>
   <module index="57"/>
   <module index="79"/>
@@ -1130,7 +1130,7 @@ during combat. -->
   <member index="71" maxamount="15" minamount="11"/>
   <description>Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.</description>
  </ship>
- <ship combatai="BERSERKER" index="64" maxaccuracy="90" maxevasion="90" maxloot="1000" maxperception="90" minaccuracy="75" minevasion="75" minloot="600" minperception="75" name="Advanced huge attacking drone mk II" owner="DRONES">
+ <ship combatai="BERSERKER" index="64" maxaccuracy="90" maxevasion="90" maxloot="1000" maxperception="90" minaccuracy="75" minevasion="75" minloot="600" minperception="75" name="Advanced huge attacking drone mk II" owner="DRONES" reputation="75">
   <module index="71"/>
   <module index="57"/>
   <module index="79"/>
@@ -1143,7 +1143,7 @@ during combat. -->
   <cargo index="13" maxamount="800" minamount="600"/>
   <description>Advanced and upgraded version of huge, well armored attacking clockwork drone.</description>
  </ship>
- <ship combatai="ATTACKER" index="65" maxloot="1000" minloot="750" name="Huge inquisition ship mk II" owner="INQUISITION">
+ <ship combatai="ATTACKER" index="65" maxloot="1000" minloot="750" name="Huge inquisition ship mk II" owner="INQUISITION" reputation="35">
   <module index="70"/>
   <module index="57"/>
   <module index="78"/>
@@ -1164,7 +1164,7 @@ during combat. -->
   <member index="72" maxamount="10" minamount="6"/>
   <description>Huge, well armored and upgraded version of inquisition flying vessel.</description>
  </ship>
- <ship combatai="ATTACKER" index="66" maxloot="1200" minloot="900" name="Advanced huge inquisition ship mk II" owner="INQUISITION">
+ <ship combatai="ATTACKER" index="66" maxloot="1200" minloot="900" name="Advanced huge inquisition ship mk II" owner="INQUISITION" reputation="40">
   <module index="71"/>
   <module index="57"/>
   <module index="79"/>
