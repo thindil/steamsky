@@ -610,12 +610,9 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = dialog)
       addButton(label = $price, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-      if profit > 0:
-        setButtonStyle(field = textNormal, color = theme.colors[greenColor])
-      elif profit < 0:
-        setButtonStyle(field = textNormal, color = theme.colors[redColor])
       addButton(label = $profit, tooltip = "Show available options of item.",
-        data = i, code = showItemInfo, dialog = dialog)
+          data = i, code = showItemInfo, dialog = dialog, color = (if profit >
+          0: greenColor elif profit < 0: redColor else: tableTextColor))
       setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
       try:
         addButton(label = $itemsList[protoIndex].weight & " kg",
