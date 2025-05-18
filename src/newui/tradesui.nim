@@ -608,14 +608,6 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         else: "Unused"), value = playerShip.cargo[i].durability,
         maxValue = defaultItemDurability, data = i, code = showItemInfo,
         dialog = dialog)
-#      if gameSettings.showTooltips:
-#        let itemDurability = (if playerShip.cargo[i].durability <
-#            100: getItemDamage(itemDurability = playerShip.cargo[
-#            i].durability) else: "Unused")
-#        addTooltip(bounds = getWidgetBounds(),
-#            text = itemDurability)
-#      progressBar(value = playerShip.cargo[i].durability,
-#          maxValue = defaultItemDurability, modifyable = false)
       addButton(label = $price, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       if profit > 0:
