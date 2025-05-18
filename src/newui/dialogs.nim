@@ -558,13 +558,13 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
           buyDialog: buyIcon else: sellIcon)], text = (if dialog ==
           buyDialog: "Buy" else: "Sell"), alignment = right):
         closePopup()
-        dialog = none
         if dialog == buyDialog:
           buyItems(baseItemIndex = manipulateData.itemIndex,
               amount = $manipulateData.amount)
         else:
           sellItems(itemIndex = manipulateData.itemIndex,
               amount = $manipulateData.amount)
+        dialog = none
       restoreButtonStyle()
       # Close button
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor)
