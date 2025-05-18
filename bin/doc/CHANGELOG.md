@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [11.1] - 2025-05-18
 
 ### Changed
 - Updated color of cleaning ship icon to match the default colors of the
