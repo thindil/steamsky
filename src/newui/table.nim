@@ -17,7 +17,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../config
-import coreui
+import coreui, themes
 
 proc addPagination*(page: var Positive; row: Positive) {.raises: [], tags: [],
     contractual.} =
@@ -101,7 +101,8 @@ type
     ## Code executed when the button was pressed
 
 proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
-    dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+    dialog: var GameDialog; color: ColorsNames = tableTextColor) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Add a button to the table
   ##
   ## * label   - the text to show on the button
@@ -110,13 +111,19 @@ proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
   ##             button
   ## * code    - the code executed when the button was clicked
   ## * dialog  - the current in-game dialog displayed on the screen
+  ## * color   - the color of the text on the button. Can be empty, use then
+  ##             the default color for table buttons.
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   if gameSettings.showTooltips:
     addTooltip(bounds = getWidgetBounds(), text = tooltip)
+  if color != tableTextColor:
+    setButtonStyle(field = textNormal, color = theme.colors[color])
   labelButton(title = label):
     code(data = data, dialog = dialog)
+  if color != tableTextColor:
+    setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
 
 proc addProgressBar*(tooltip: string; value, maxValue, data: int;
     code: ButtonCode; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
