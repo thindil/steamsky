@@ -340,7 +340,8 @@ proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter dialog.
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   closePopup()
   dialog = setManipulate(action = buyAction, iIndex = itemIndex)
 
@@ -350,7 +351,8 @@ proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
-  ## Returns the modified parameter dialog.
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
   closePopup()
   dialog = setManipulate(action = sellAction, iIndex = itemIndex)
 
