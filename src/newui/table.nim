@@ -97,10 +97,10 @@ proc addHeader*(headers: openArray[HeaderData]; ratio: openArray[cfloat];
           dialog = dialog)
 
 type
-  ButtonCode*[T] = proc(data: T; dialog: var GameDialog) {.raises: [], contractual.}
+  ButtonCode* = proc(data: int; dialog: var GameDialog) {.raises: [], contractual.}
     ## Code executed when the button was pressed
 
-proc addButton*[T](label, tooltip: string; data: T; code: ButtonCode;
+proc addButton*(label, tooltip: string; data: int; code: ButtonCode;
     dialog: var GameDialog; color: ColorsNames = tableTextColor) {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Add a button to the table
@@ -125,7 +125,7 @@ proc addButton*[T](label, tooltip: string; data: T; code: ButtonCode;
   if color != tableTextColor:
     setButtonStyle(field = textNormal, color = theme.colors[tableTextColor])
 
-proc addProgressBar*[T](tooltip: string; value, maxValue: int; data: T;
+proc addProgressBar*(tooltip: string; value, maxValue, data: int;
     code: ButtonCode; dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Add a progress abr to the table
