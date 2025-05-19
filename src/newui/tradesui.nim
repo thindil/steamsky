@@ -679,16 +679,13 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
         data = i, code = showItemInfo, dialog = dialog)
       addButton(label = itemType, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
-      if gameSettings.showTooltips:
-        let itemDurability = (if baseCargo[itemsIndexes[i]].durability <
-            100: getItemDamage(itemDurability = baseCargo[itemsIndexes[
-            i]].durability) else: "Unused")
-        addTooltip(bounds = getWidgetBounds(),
-            text = itemDurability)
       var durability: int = (if baseIndex == 0: traderCargo[itemsIndexes[
           i]].durability else: skyBases[baseIndex].cargo[itemsIndexes[i]].durability)
-      progressBar(value = durability,
-          maxValue = defaultItemDurability, modifyable = false)
+      addProgressBar(tooltip = (if baseCargo[itemsIndexes[i]].durability < 100:
+        getItemDamage(itemDurability = baseCargo[itemsIndexes[i]].durability)
+        else: "Unused"), value = durability,
+        maxValue = defaultItemDurability, data = i, code = showItemInfo,
+        dialog = dialog)
       addButton(label = $price, tooltip = "Show available options of item.",
         data = i, code = showItemInfo, dialog = dialog)
       setButtonStyle(field = textNormal, color = theme.colors[redColor])
