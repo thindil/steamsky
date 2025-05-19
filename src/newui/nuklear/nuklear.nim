@@ -935,6 +935,12 @@ proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var i
             size = nk_command_text.sizeof + (length + 1).nk_size))
     cmd.x = r.x.cshort
     cmd.y = r.y.cshort
+    cmd.w = r.w.cushort
+    cmd.h = r.h.cushort
+    cmd.background = bg
+    cmd.foreground = fg
+    cmd.font = font
+    #TODO: continue here
 
 # -----
 # Input

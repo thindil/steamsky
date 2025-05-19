@@ -309,6 +309,9 @@ type
   nk_command_text* {.importc: "struct nk_command_text".} = object
     ## Internal Nuklear type
     x*, y*: cshort
+    w*, h*: cushort
+    background*, foreground*: nk_color
+    font*: ptr nk_user_font
   nk_row_layout* {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
