@@ -80,10 +80,11 @@ proc getHighestSkill(memberIndex: Natural): string {.raises: [],
   try:
     return skillsList[highestIndex].name
   except KeyError:
-    showError(message = "Can't thge the highest skill. Index: " & $highestIndex )
+    showError(message = "Can't thge the highest skill. Index: " & $highestIndex)
     return "Unknown"
 
-proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [], tags: [RootEffect], contractual.} =
+proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
+    tags: [RootEffect], contractual.} =
   ## Update the list of the player's ship's crew members
   ##
   ## * page  - the current page of the list to show
@@ -241,7 +242,8 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [], tags:
   tclEval(script = shipCanvas & " yview moveto 0.0")
 
 proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Set the selected order for the whole crew or only to the selected crew
   ## members if any is selected
   ##
@@ -287,7 +289,8 @@ proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Select or deselect the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -314,7 +317,8 @@ proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Dismiss the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -337,7 +341,8 @@ proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Set order for the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -375,7 +380,8 @@ proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [], cdecl,
+        contractual.} =
   ## Show the selected information about the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -412,7 +418,8 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show information about the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -493,7 +500,8 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "ttk::frame " & frame)
   var memberLabel: string
 
-  proc addLabel(name, text: string; text2: string = "") =
+  proc addLabel(name, text: string; text2: string = "") {.raises: [], tags: [],
+      contractual.} =
     let labelBox = name
     tclEval(script = "ttk::frame " & labelBox & " -width 440")
     memberLabel = labelBox & ".label1"
@@ -830,7 +838,8 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
       argc = 1, argv = @["ShowMemberTab"].allocCStringArray)
 
 proc showCrewStatsInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the detailed information about the selected crew member statistic
   ##
   ## * clientData - the additional data for the Tcl command
@@ -852,7 +861,8 @@ proc showCrewStatsInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the detailed information about the selected crew member skill
   ##
   ## * clientData - the additional data for the Tcl command
@@ -914,7 +924,8 @@ proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Set the selected priority of the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -960,7 +971,8 @@ proc setPriorityCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc showCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Show the list of the player's ship crew to a player
   ##
   ## * clientData - the additional data for the Tcl command
@@ -990,7 +1002,8 @@ const defaultCrewSortOrder: CrewSortOrders = none
 var crewSortOrder = defaultCrewSortOrder
 
 proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Sort the player's ship's crew list
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1088,7 +1101,9 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
               1], id: index))
     except:
       return showError(message = "Can't add local crew member.")
-  proc sortCrew(x, y: LocalMemberData): int =
+
+  proc sortCrew(x, y: LocalMemberData): int {.raises: [], tags: [],
+      contractual.} =
     case crewSortOrder
     of selectedAsc:
       if x.selected < y.selected:
@@ -1182,6 +1197,7 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
         return -1
     of none:
       return -1
+
   localCrew.sort(cmp = sortCrew)
   crewIndexes = @[]
   for member in localCrew:
@@ -1193,7 +1209,8 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Show the list of the player's ship crew with selected skill from combobox
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1213,7 +1230,8 @@ proc selectCrewSkillCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc setAvailableOrders(memberIndex: Natural; ordersBox,
-    button: string) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+    button: string) {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+        contractual.} =
   ## Set the list of available orders for the selected crew member
   ##
   ## * memberIndex - the index of the crew member for which the list will be set
@@ -1312,7 +1330,8 @@ proc setAvailableOrders(memberIndex: Natural; ordersBox,
       tclCommands & "} " & $(memberIndex + 1) & ";CloseDialog .memberdialog}")
 
 proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [WriteIOEffect,
+        TimeEffect, RootEffect], cdecl, contractual.} =
   ## Show the dialog to change the order of the currently selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1375,7 +1394,8 @@ proc showCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Set the selected order for the selected crew member
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1418,7 +1438,8 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   return tclOk
 
 proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
-    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl, contractual.} =
+    argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
+        contractual.} =
   ## Select or deselect all crew members
   ##
   ## * clientData - the additional data for the Tcl command
@@ -1433,7 +1454,7 @@ proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Action is the action which will be performed. Possible values are
   ## select or deselect
 
-  proc resetSelection() =
+  proc resetSelection() {.raises: [], tags: [], contractual.} =
     for index, _ in playerShip.crew:
       if tclGetVar(varName = "crewindex" & $(index + 1)) == "1":
         tclUnsetVar(varName = "crewindex" & $(index + 1))
@@ -1446,7 +1467,8 @@ proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   return sortCrewCommand(clientData = clientData, interp = interp, argc = 2,
       argv = @["SortShipCrew", "-1"].allocCStringArray)
 
-proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect], contractual.} =
+proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
+    contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
     addCommand("OrderForAll", orderForAllCommand)
