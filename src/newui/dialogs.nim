@@ -491,16 +491,17 @@ proc updateCost(amount, cargoIndex: Natural; buying: bool) {.raises: [KeyError],
           manipulateData.warning = "You will sell amount below low lewel of food."
           break
 
-proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
+proc showManipulateItem*(dialog: var GameDialog): bool {.raises: [],
     tags: [RootEffect], contractual.} =
   ## Show the dialog to manipulate the selected item(s) to the player
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the parameter dialog. It is modified only when the player closed
-  ## the dialog.
+  ## the dialog. Returns true if an item was sold or bought, otherwise false
   if dialog notin {buyDialog, sellDialog}:
-    return
+    return false
+  result = false
   try:
     let
       width = windowWidth / 1.5
@@ -565,6 +566,7 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
           sellItems(itemIndex = manipulateData.itemIndex,
               amount = $manipulateData.amount)
         dialog = none
+        result = true
       restoreButtonStyle()
       # Close button
       addCloseButton(dialog = dialog, icon = cancelIcon, color = redColor)
