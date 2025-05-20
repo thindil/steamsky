@@ -343,7 +343,15 @@ proc setBuyDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   closePopup()
-  dialog = setManipulate(action = buyAction, iIndex = itemIndex)
+  var baseCargoIndex: int = -1
+  if itemIndex > -1:
+    let
+      protoIndex: Natural = playerShip.cargo[itemIndex].protoIndex
+    baseCargoIndex = -findBaseCargo(protoIndex = protoIndex,
+        durability = playerShip.cargo[itemIndex].durability)
+  else:
+    baseCargoIndex = itemIndex
+  dialog = setManipulate(action = buyAction, iIndex = baseCargoIndex)
 
 proc setSellDialog(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =

@@ -559,7 +559,7 @@ proc showManipulateItem*(dialog: var GameDialog) {.raises: [],
           buyDialog: "Buy" else: "Sell"), alignment = right):
         closePopup()
         if dialog == buyDialog:
-          buyItems(baseItemIndex = manipulateData.itemIndex,
+          buyItems(baseItemIndex = manipulateData.itemIndex.abs,
               amount = $manipulateData.amount)
         else:
           sellItems(itemIndex = manipulateData.itemIndex,
