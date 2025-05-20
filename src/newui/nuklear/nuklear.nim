@@ -940,7 +940,9 @@ proc nkDrawText(b: ptr nk_command_buffer; r: NimRect; str: string; length: var i
     cmd.background = bg
     cmd.foreground = fg
     cmd.font = font
-    #TODO: continue here
+    cmd.length = length.cint
+    cmd.height = font.height
+    cmd.str = str[0..length].cstring
 
 # -----
 # Input

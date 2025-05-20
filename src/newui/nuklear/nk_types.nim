@@ -312,6 +312,9 @@ type
     w*, h*: cushort
     background*, foreground*: nk_color
     font*: ptr nk_user_font
+    height*: cfloat
+    length*: cint
+    str*: cstring
   nk_row_layout* {.importc: "struct nk_row_layout".} = object
     ## Internal Nuklear type
     index*, columns*, tree_depth*: cint
