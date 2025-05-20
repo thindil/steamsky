@@ -47,29 +47,13 @@ var
   cargoWidth: array[2, cfloat] = [0.cfloat, 0]
   itemIndex: int = -1
 
-proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
-    contractual.} =
-  ## Set the data for trades UI
+proc refreshItemsList(dialog: var GameDialog) {.raises: [], tags: [RootEffect], contractual.} =
+  ## Set the list of items for trade
   ##
   ## * dialog - the current in-game dialog displayed on the screen
   ##
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
-  typesList = @["All"]
-  baseCargo = @[]
-  typeIndex = 0
-  nameSearch = ""
-  currentPage = 1
-  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
-  eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
-  if baseIndex > 0:
-    baseType = skyBases[baseIndex].baseType
-    baseCargo = skyBases[baseIndex].cargo
-    location = "Base"
-  else:
-    baseType = "0"
-    baseCargo = traderCargo
-    location = "Ship"
   if itemsSortOrder == defaultItemsSortOrder:
     itemsIndexes = @[]
     for index in playerShip.cargo.low .. playerShip.cargo.high:
@@ -154,6 +138,33 @@ proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't get the width of the cargo text.")
       0.0
+
+proc setTrade*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for trades UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  typesList = @["All"]
+  baseCargo = @[]
+  typeIndex = 0
+  nameSearch = ""
+  currentPage = 1
+  baseIndex = skyMap[playerShip.skyX][playerShip.skyY].baseIndex
+  eventIndex = skyMap[playerShip.skyX][playerShip.skyY].eventIndex
+  if baseIndex > 0:
+    baseType = skyBases[baseIndex].baseType
+    baseCargo = skyBases[baseIndex].cargo
+    location = "Base"
+  else:
+    baseType = "0"
+    baseCargo = traderCargo
+    location = "Ship"
+  refreshItemsList(dialog = dialog)
+  if dialog == GameDialog.errorDialog:
+    return
 
 type LocalItemData = object
   name: string
@@ -495,7 +506,7 @@ proc showTrade*(state: var GameState; dialog: var GameDialog) {.raises: [],
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
   if showManipulateItem(dialog = dialog):
-    setTrade(dialog = dialog)
+    refreshItemsList(dialog = dialog)
   # Show advanced options if needed
   if showOptions:
     setLayoutRowDynamic(height = 30, cols = 3, ratio = [0.1.cfloat, 0.3, 0.6])
