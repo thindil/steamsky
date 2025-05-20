@@ -16,7 +16,7 @@
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 import std/[algorithm, strutils, tables]
-import contracts
+import contracts, nimalyzer
 import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
 import coreui, dialogs, errordialog, shipsuicrewinventory, table, updateheader, utilsui2
 
@@ -243,7 +243,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
 
 proc orderForAllCommand(clientData: cint; interp: PInterp; argc: cint;
     argv: cstringArray): TclResults {.raises: [], tags: [RootEffect], cdecl,
-        contractual.} =
+        contractual, ruleOff: "params".} =
   ## Set the selected order for the whole crew or only to the selected crew
   ## members if any is selected
   ##
