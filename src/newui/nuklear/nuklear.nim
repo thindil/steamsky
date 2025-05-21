@@ -1136,7 +1136,6 @@ proc nkWidgetText(o: ptr nk_command_buffer; b: var NimRect; str: string; len: va
 
     nkDrawText(b = o, r = label, str = str, length = len, font = f,
       bg = t.background, fg = t.text)
-    # TODO: continue here after nkDrawText
 
 # -------
 # Buttons
@@ -1273,7 +1272,11 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     var length: Positive = 1
     nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
       a = centered, f = font)
-    # TODO: continue here after nkWidgetText
+  of circleSolid, circleOutline, rectSolid, rectOutline:
+    # simple empty/filled shapes
+    if `type` in [rectSolid, rectOutline]:
+      nkFillRect(b = `out`, rect = content, rounding = 0, c = foreground)
+    # TODO: continue here
   else:
     discard
 
