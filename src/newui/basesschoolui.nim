@@ -18,8 +18,37 @@
 ## Provides code related to training skills in bases, like show the UI,
 ## set the skill to train, etc.
 
-import contracts
-import coreui, dialogs, header
+import contracts, nuklear/nuklear_sdl_renderer
+import ../[crewinventory, game]
+import coreui, dialogs, errordialog, header
+
+var
+  moneyIndex2: int = -1
+  moneyText: seq[string] = @[]
+  moneyWidth: seq[cfloat] = @[]
+
+proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the data for school UI
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  moneyIndex2 = findItem(inventory = playerShip.cargo, protoIndex = moneyIndex)
+  moneyText = @[]
+  moneyWidth = @[]
+  if moneyIndex == -1:
+    moneyText.add(y = "You don't have " & moneyName & " to buy anything")
+  else:
+    moneyText.add(y = "You have ")
+    moneyText.add(y = $playerShip.cargo[moneyIndex2].amount & " " & moneyName)
+  for text in moneyText:
+    try:
+      moneyWidth.add(y = text.getTextWidth)
+    except:
+      dialog = setError(message = "Can't get the width of the money text.")
+      return
 
 proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -30,9 +59,8 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
   ##
   ## Returns the modified parameters state and dialog. The latter is modified if
   ## any error happened.
-  showHeader(dialog = dialog, close = CloseDestination.map, state = state,
-      options = true)
-  if state != GameState.trade:
+  showHeader(dialog = dialog, close = CloseDestination.map, state = state)
+  if state != GameState.school:
     return
   # Draw dialogs
   showQuestion(dialog = dialog, state = state)
