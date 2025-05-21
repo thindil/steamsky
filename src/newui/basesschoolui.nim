@@ -20,7 +20,7 @@
 
 import contracts, nuklear/nuklear_sdl_renderer
 import ../[crewinventory, game]
-import coreui, dialogs, errordialog, header
+import coreui, dialogs, errordialog, header, themes
 
 var
   moneyIndex2: int = -1
@@ -68,3 +68,10 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     return
   showMessage(dialog = dialog)
   showInfo(dialog = dialog)
+  # Show information about money owned by the player
+  setLayoutRowStatic(height = 30, cols = moneyWidth.len, ratio = moneyWidth)
+  for index, text in moneyText:
+    if index mod 2 == 0:
+      label(str = text)
+    else:
+      colorLabel(str = text, color = theme.colors[goldenColor])
