@@ -1,4 +1,4 @@
-# Copyright 2023-2024 Bartek thindil Jasicki
+# Copyright 2023-2025 Bartek thindil Jasicki
 #
 # This file is part of Steam Sky.
 #
@@ -175,7 +175,7 @@ proc updateKilledMobs*(mob: MemberData; factionName: string) {.raises: [], tags:
       gameStats.points += skill.level
     var updated: bool = false
     for killedMob in gameStats.killedMobs.mitems:
-      if killedMob.index.toLowerAscii == factionName.tolowerAscii:
+      if killedMob.index.toLowerAscii == factionName.toLowerAscii:
         killedMob.amount.inc
         updated = true
         break
