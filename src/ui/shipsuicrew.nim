@@ -91,7 +91,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
   ## * skill - the currently selected skill on the list of skills to show
   let
     crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
-    gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(' ')
+    gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(sep = ' ')
     rows = try:
         gridSize[1].parseInt
       except ValueError:
@@ -136,7 +136,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
   tclEval(script = "grid " & ordersLabel & " -padx {5 2}")
   var skills = " {Highest}"
   for skill in skillsList.values:
-    skills.add(" {" & skill.name & "}")
+    skills.add(y = " {" & skill.name & "}")
   let skillBox = crewInfoFrame & ".selectskill.combox"
   tclEval(script = "ttk::combobox " & skillBox &
       " -state readonly -values [list" & skills & "]")
@@ -164,7 +164,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
   if crewIndexes.len != playerShip.crew.len:
     crewIndexes = @[]
     for i in playerShip.crew.low .. playerShip.crew.high:
-      crewIndexes.add(i)
+      crewIndexes.add(y = i)
   var currentRow = 1
   let startRow = ((page - 1) * gameSettings.listsLimit) + 1
   for index, mIndex in crewIndexes:
@@ -916,10 +916,10 @@ proc showCrewSkillInfoCommand(clientData: cint; interp: PInterp; argc: cint;
         except:
           return showError(message = "Can't get the item value.")
     try:
-      messageText.add(itemsList[itemIndex].name)
+      messageText.add(y = itemsList[itemIndex].name)
     except:
       return showError(message = "Can't add the tool name to text.")
-  messageText.add(".\n" & skill.description)
+  messageText.add(y = ".\n" & skill.description)
   showInfo(text = messageText, parentName = $argv[3], title = skill.name)
   return tclOk
 
@@ -1414,10 +1414,10 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     orderIndex = try:
         tclEval2(script = ordersBox & " current").parseInt
       except:
-        return showError("Can't get the index of the order.")
+        return showError(message = "Can't get the index of the order.")
   var arguments = tclEval2(script = "lindex {" & $argv[1] & "} " &
         $orderIndex).split(sep = " ")
-  arguments.insert("SetCrewOrder", 0)
+  arguments.insert(item = "SetCrewOrder", i = 0)
   discard setCrewOrderCommand(clientData = clientData, interp = interp,
       argc = arguments.len.cint, argv = arguments.allocCStringArray)
   let
@@ -1431,7 +1431,7 @@ proc selectCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = orderLabel & " configure -text {" & getCurrentOrder(
         memberIndex = memberIndex) & "}")
   except:
-    return showError("Can't get the current order.")
+    return showError(message = "Can't get the current order.")
   setAvailableOrders(memberIndex = memberIndex, ordersBox = ordersBox,
       button = button)
   tclEval(script = "focus " & ordersBox)
@@ -1471,21 +1471,21 @@ proc addCommands*() {.raises: [], tags: [WriteIOEffect, TimeEffect, RootEffect],
     contractual.} =
   ## Adds Tcl commands related to the crew UI
   try:
-    addCommand("OrderForAll", orderForAllCommand)
-    addCommand("ToggleCrewMember", toggleCrewMemberCommand)
-    addCommand("Dismiss", dismissCommand)
-    addCommand("SetCrewOrder", setCrewOrderCommand)
-    addCommand("ShowMemberTab", showMemberTabCommand)
-    addCommand("ShowMemberInfo", showMemberInfoCommand)
-    addCommand("ShowCrewStatsInfo", showCrewStatsInfoCommand)
-    addCommand("ShowCrewSkillInfo", showCrewSkillInfoCommand)
-    addCommand("SetPriority", setPriorityCommand)
-    addCommand("ShowCrew", showCrewCommand)
-    addCommand("SortShipCrew", sortCrewCommand)
-    addCommand("SelectCrewSkill", selectCrewSkillCommand)
-    addCommand("ShowCrewOrder", showCrewOrderCommand)
-    addCommand("SelectCrewOrder", selectCrewOrderCommand)
-    addCommand("ToggleAllCrew", toggleAllCrewCommand)
+    addCommand(name = "OrderForAll", nimProc = orderForAllCommand)
+    addCommand(name = "ToggleCrewMember", nimProc = toggleCrewMemberCommand)
+    addCommand(name = "Dismiss", nimProc = dismissCommand)
+    addCommand(name = "SetCrewOrder", nimProc = setCrewOrderCommand)
+    addCommand(name = "ShowMemberTab", nimProc = showMemberTabCommand)
+    addCommand(name = "ShowMemberInfo", nimProc = showMemberInfoCommand)
+    addCommand(name = "ShowCrewStatsInfo", nimProc = showCrewStatsInfoCommand)
+    addCommand(name = "ShowCrewSkillInfo", nimProc = showCrewSkillInfoCommand)
+    addCommand(name = "SetPriority", nimProc = setPriorityCommand)
+    addCommand(name = "ShowCrew", nimProc = showCrewCommand)
+    addCommand(name = "SortShipCrew", nimProc = sortCrewCommand)
+    addCommand(name = "SelectCrewSkill", nimProc = selectCrewSkillCommand)
+    addCommand(name = "ShowCrewOrder", nimProc = showCrewOrderCommand)
+    addCommand(name = "SelectCrewOrder", nimProc = selectCrewOrderCommand)
+    addCommand(name = "ToggleAllCrew", nimProc = toggleAllCrewCommand)
     shipsuicrewinventory.addCommands()
   except:
     showError(message = "Can't add a Tcl command.")
