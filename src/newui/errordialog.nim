@@ -61,7 +61,7 @@ proc openLink*(link: string) {.raises: [], tags: [ReadIOEffect, RootEffect],
     link.len > 0
   body:
     let command: string = try:
-          findExe(exe = (if hostOs == "windows": "start" elif hostOs ==
+          findExe(exe = (if hostOS == "windows": "start" elif hostOS ==
             "macosx": "open" else: "xdg-open"))
         except:
           ""
