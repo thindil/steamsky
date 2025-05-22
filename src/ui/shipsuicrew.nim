@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+## Provides code related to the information about the player's ship's crew,
+## like showing information about them, showing the whole list, etc.
+
 import std/[algorithm, strutils, tables]
 import contracts, nimalyzer
 import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
@@ -502,6 +505,12 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc addLabel(name, text: string; text2: string = "") {.raises: [], tags: [],
       contractual.} =
+    ## Add labels to the dialog
+    ##
+    ## * name  - the name of the box which will contain the labels
+    ## * text  - the text to display on the first label
+    ## * text2 - the text to display on the second label. If empty, don't add
+    ##           the second label
     let labelBox = name
     tclEval(script = "ttk::frame " & labelBox & " -width 440")
     memberLabel = labelBox & ".label1"
@@ -1104,6 +1113,14 @@ proc sortCrewCommand(clientData: cint; interp: PInterp; argc: cint;
 
   proc sortCrew(x, y: LocalMemberData): int {.raises: [], tags: [],
       contractual.} =
+    ## Compare two members and return which should go first, members on the sort
+    ## order of the members
+    ##
+    ## * x - the first member to compare
+    ## * y - the second member to compare
+    ##
+    ## Returns 1 if the first member should go first, -1 if the second member
+    ## should go first.
     case crewSortOrder
     of selectedAsc:
       if x.selected < y.selected:
@@ -1455,6 +1472,7 @@ proc toggleAllCrewCommand(clientData: cint; interp: PInterp; argc: cint;
   ## select or deselect
 
   proc resetSelection() {.raises: [], tags: [], contractual.} =
+    ## Reset the selection of the player's ship's crew members
     for index, _ in playerShip.crew:
       if tclGetVar(varName = "crewindex" & $(index + 1)) == "1":
         tclUnsetVar(varName = "crewindex" & $(index + 1))
