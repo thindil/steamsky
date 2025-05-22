@@ -24,8 +24,9 @@ import coreui, dialogs, errordialog, header, themes
 
 var
   moneyIndex2: int = -1
-  moneyText: seq[string] = @[]
+  moneyText, crewList: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
+  crewIndex: Natural = 0
 
 proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -49,6 +50,9 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     except:
       dialog = setError(message = "Can't get the width of the money text.")
       return
+  crewList = @[]
+  for member in playerShip.crew:
+    crewList.add(y = member.name)
 
 proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -75,3 +79,11 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
+  setLayoutRowDynamic(height = 30, cols = 4)
+  labelButton(title = "Train"):
+    discard
+  let newMember = comboList(items = crewList,
+      selected = crewIndex, itemHeight = 25, x = 200, y = 150)
+  if newMember != crewIndex:
+    crewIndex = newMember
+  label(str = "in")
