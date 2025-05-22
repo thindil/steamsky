@@ -18,15 +18,30 @@
 ## Provides code related to training skills in bases, like show the UI,
 ## set the skill to train, etc.
 
+import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[crewinventory, game]
+import ../[crew, crewinventory, game]
 import coreui, dialogs, errordialog, header, themes
 
 var
   moneyIndex2: int = -1
-  moneyText, crewList: seq[string] = @[]
+  moneyText, crewList, schoolSkillsList: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
-  crewIndex: Natural = 0
+  crewIndex, skillIndex: Natural = 0
+
+proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
+  schoolSkillsList = @[]
+  for index, skill in skillsList:
+    var skillLevel = 0
+    for skill2 in playerShip.crew[crewIndex].skills:
+      if skill2.index == index:
+        skillLevel = skill2.level
+        if skillLevel == 100:
+          break
+    if skillLevel != 100:
+      schoolSkillsList.add(y = skill.name & ": " & (if skillLevel ==
+          0: "Untrained" else: getSkillLevelName(
+          skillLevel = skillLevel).strip))
 
 proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
@@ -53,6 +68,7 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   crewList = @[]
   for member in playerShip.crew:
     crewList.add(y = member.name)
+  setSchoolSkills()
 
 proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -86,4 +102,10 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       selected = crewIndex, itemHeight = 25, x = 200, y = 150)
   if newMember != crewIndex:
     crewIndex = newMember
-  label(str = "in")
+    setSchoolSkills()
+  label(str = "in", alignment = centered)
+  let newSkill = comboList(items = schoolSkillsList,
+      selected = skillIndex, itemHeight = 25, x = 250, y = 150)
+  if newSkill != skillIndex:
+    skillIndex = newSkill
+    setSchoolSkills()
