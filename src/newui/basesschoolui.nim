@@ -95,7 +95,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       label(str = text)
     else:
       colorLabel(str = text, color = theme.colors[goldenColor])
-  setLayoutRowDynamic(height = 30, cols = 4)
+  setLayoutRowStatic(height = 30, cols = 4, ratio = [200.cfloat, 200, 50, 250])
   labelButton(title = "Train"):
     discard
   let newMember = comboList(items = crewList,
@@ -104,8 +104,13 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     crewIndex = newMember
     setSchoolSkills()
   label(str = "in", alignment = centered)
+  setLayoutRowDynamic(height = 30, cols = 1)
   let newSkill = comboList(items = schoolSkillsList,
-      selected = skillIndex, itemHeight = 25, x = 250, y = 150)
+      selected = skillIndex, itemHeight = 25, x = 300, y = 150)
   if newSkill != skillIndex:
     skillIndex = newSkill
     setSchoolSkills()
+  if option(label = "Selected amount of times", selected = true):
+    echo "selected"
+  if option(label = "Selected maximum cost of training", selected = false):
+    echo "selected2"
