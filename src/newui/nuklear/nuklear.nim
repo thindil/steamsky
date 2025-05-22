@@ -725,7 +725,8 @@ proc nkStrokeRect(b: ptr nk_command_buffer, rect: NimRect, rounding,
   cmd.h = max(x = 0.cushort, y = rect.h.cushort)
   cmd.color = c
 
-proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
+proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float;
+  c: nk_color) {.raises: [], tags: [RootEffect], contractual.} =
   ## Fill the rectangle with the selected color
   ##
   ## * b        - the command buffer in which the rectangle will be drawn
@@ -736,7 +737,8 @@ proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_
     return
   if b.use_clipping == 1:
     let clip: nk_rect = b.clip
-    if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h, x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
+    if not nkIntersect(x0 = rect.x, y0 = rect.y, w0 = rect.w, h0 = rect.h,
+      x1 = clip.x, y1 = clip.y, w1 = clip.w, h1 = clip.h):
       return
 
   var cmd: ptr nk_command_rect_filled
@@ -749,6 +751,16 @@ proc nkFillRect(b: ptr nk_command_buffer; rect: NimRect; rounding: float; c: nk_
   cmd.w = max(0, rect.w).cushort
   cmd.h = max(0, rect.h).cushort
   cmd.color = c
+
+proc nkFillCircle(b: ptr nk_command_buffer; rect: NimRect; c: nk_color)
+  {.raises: [], tags: [RootEffect], contractual.} =
+  ## Fill the circle with the selected color
+  ##
+  ## * b        - the command buffer in which the rectangle will be drawn
+  ## * rect     - the rectangle for the circle
+  ## * c        - the color to fill the circle
+  discard
+  ## TODO: continue here
 
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
@@ -1273,10 +1285,18 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
     nkWidgetText(o = `out`, b = content, str = $ch, len = length, t = text.addr,
       a = centered, f = font)
   of circleSolid, circleOutline, rectSolid, rectOutline:
+    var drawRect: nk_rect = new_nk_rect(x = content.x, y = content.y,
+      w = content.w, h = content.h)
+    drawRect = nkShrinkRect(r = drawRect, amount = borderWidth)
     # simple empty/filled shapes
     if `type` in [rectSolid, rectOutline]:
       nkFillRect(b = `out`, rect = content, rounding = 0, c = foreground)
-    # TODO: continue here
+      if `type` == rectOutline:
+        nkFillRect(b = `out`, rect = NimRect(x: drawRect.x, y: drawRect.y,
+          w: drawRect.w, h: drawRect.h), rounding = 0, c = background)
+      else:
+        nkFillCircle(b = `out`, rect = content, c = foreground)
+    # TODO: continue here after nkFillCircle
   else:
     discard
 
