@@ -23,11 +23,13 @@ import contracts, nimalyzer
 import ../[config, crew, crewinventory, game, messages, shipscrew, shipscrew2, tk, types]
 import coreui, dialogs, errordialog, shipsuicrewinventory, table, updateheader, utilsui2
 
+{.push ruleOff: "varDeclared".}
 var
   crewTable: TableWidget
     ## The UI table with all members of the player's ship's crew
-  crewIndexes: seq[Natural]
+  crewIndexes: seq[Natural] = @[]
     ## The list of indexes of the crew members
+{.pop ruleOn: "varDeclared".}
 
 proc hasSelection(): bool {.raises: [], tags: [], contractual.} =
   ## Check if there is any crew member selected on the list
