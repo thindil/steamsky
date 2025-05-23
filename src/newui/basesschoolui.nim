@@ -32,7 +32,7 @@ var
   moneyText, crewList, schoolSkillsList: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
   crewIndex, skillIndex: Natural = 0
-  amount, timesCost: Positive = 1
+  amount, timesCost, minCost, oneTrainCost: Positive = 1
   tType: TrainingType = times
 
 proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
@@ -76,11 +76,13 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for member in playerShip.crew:
     crewList.add(y = member.name)
   setSchoolSkills()
-  timesCost = try:
-      trainCost(memberIndex = crewIndex, skillIndex = skillIndex) * amount
+  oneTrainCost = try:
+      trainCost(memberIndex = crewIndex, skillIndex = skillIndex)
     except:
       dialog = setError(message = "Can't count the training cost.")
       return
+  timesCost = oneTrainCost * amount
+  minCost = oneTrainCost
 
 proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -142,3 +144,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tType = cost
   setLayoutRowDynamic(height = 30, cols = 2)
   label(str = "Cost:")
+  let newCost: int = property2(name = "#", min = oneTrainCost, val = minCost,
+      max = oneTrainCost * 10_000, step = oneTrainCost, incPerPixel = 1)
+  if newCost != minCost:
+    minCost = newCost
