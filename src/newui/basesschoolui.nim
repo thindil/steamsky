@@ -23,11 +23,17 @@ import contracts, nuklear/nuklear_sdl_renderer
 import ../[crew, crewinventory, game]
 import coreui, dialogs, errordialog, header, themes
 
+type
+  TrainingType = enum
+    times, cost
+
 var
   moneyIndex2: int = -1
   moneyText, crewList, schoolSkillsList: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
   crewIndex, skillIndex: Natural = 0
+  amount: Positive = 1
+  tType: TrainingType = times
 
 proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
   ## Set the skills list for the selected crew member
@@ -70,6 +76,8 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for member in playerShip.crew:
     crewList.add(y = member.name)
   setSchoolSkills()
+  amount = 1
+  tType = times
 
 proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -111,7 +119,15 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     skillIndex = newSkill
     setSchoolSkills()
   setLayoutRowDynamic(height = 30, cols = 1)
-  if option(label = "Selected amount of times", selected = true):
-    echo "selected"
-  if option(label = "Selected maximum cost of training", selected = false):
-    echo "selected2"
+  if option(label = "Selected amount of times", selected = tType == times):
+    tType = times
+  setLayoutRowDynamic(height = 30, cols = 2)
+  label(str = "Amount:")
+  let newAmount: int = property2(name = "#", min = 1, val = amount, max = 100, step = 1, incPerPixel = 1)
+  if newAmount != amount:
+    amount = newAmount
+  label(str = "Minimal cost:")
+  label(str = "")
+  setLayoutRowDynamic(height = 30, cols = 1)
+  if option(label = "Selected maximum cost of training", selected = tType == cost):
+    tType = cost
