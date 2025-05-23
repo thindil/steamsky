@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[crew, crewinventory, game]
+import ../[basestrade, crew, crewinventory, game]
 import coreui, dialogs, errordialog, header, themes
 
 type
@@ -32,7 +32,7 @@ var
   moneyText, crewList, schoolSkillsList: seq[string] = @[]
   moneyWidth: seq[cfloat] = @[]
   crewIndex, skillIndex: Natural = 0
-  amount: Positive = 1
+  amount, timesCost: Positive = 1
   tType: TrainingType = times
 
 proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
@@ -76,8 +76,11 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for member in playerShip.crew:
     crewList.add(y = member.name)
   setSchoolSkills()
-  amount = 1
-  tType = times
+  timesCost = try:
+      trainCost(memberIndex = crewIndex, skillIndex = skillIndex) * amount
+    except:
+      dialog = setError(message = "Can't count the training cost.")
+      return
 
 proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -123,11 +126,19 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tType = times
   setLayoutRowDynamic(height = 30, cols = 2)
   label(str = "Amount:")
-  let newAmount: int = property2(name = "#", min = 1, val = amount, max = 100, step = 1, incPerPixel = 1)
+  let newAmount: int = property2(name = "#", min = 1, val = amount, max = 100,
+      step = 1, incPerPixel = 1)
   if newAmount != amount:
     amount = newAmount
+    timesCost = try:
+        trainCost(memberIndex = crewIndex, skillIndex = skillIndex) * amount
+      except:
+        dialog = setError(message = "Can't count the new training cost.")
+        return
   label(str = "Minimal cost:")
-  label(str = "")
+  label(str = $timesCost & " " & moneyName)
   setLayoutRowDynamic(height = 30, cols = 1)
   if option(label = "Selected maximum cost of training", selected = tType == cost):
     tType = cost
+  setLayoutRowDynamic(height = 30, cols = 2)
+  label(str = "Cost:")
