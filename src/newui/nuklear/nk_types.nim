@@ -306,6 +306,12 @@ type
     rounding*, w*, h*: cushort
     x*, y*: cshort
     color*: nk_color
+  nk_command_circle_filled* {.importc: "struct nk_command_circle_filled".} = object
+    ## Internal Nuklear type
+    header*: nk_command
+    w*, h*: cushort
+    x*, y*: cshort
+    color*: nk_color
   nk_command_text* {.importc: "struct nk_command_text".} = object
     ## Internal Nuklear type
     x*, y*: cshort
