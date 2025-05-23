@@ -30,6 +30,7 @@ var
   crewIndex, skillIndex: Natural = 0
 
 proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
+  ## Set the skills list for the selected crew member
   schoolSkillsList = @[]
   for index, skill in skillsList:
     var skillLevel = 0
