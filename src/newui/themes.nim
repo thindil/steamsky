@@ -120,7 +120,7 @@ let
       "#7f8c8d".parseColor, "#000000".parseColor, "#006400".parseColor,
       "#458588".parseColor, "#4e9a06".parseColor, "#ffdf00".parseColor,
       "#ffdf00".parseColor, "#372412".parseColor, "#500000".parseColor,
-      "#ffdf00".parseColor, "#ffdf00".parseColor, "#fb4934".parseColor,
+      "#4e9a06".parseColor, "#ffdf00".parseColor, "#fb4934".parseColor,
       "#7f8c8d".parseColor, "#000000".parseColor, "#b16286".parseColor,
       "#d79921".parseColor, "#458588".parseColor, "#00ffff".parseColor,
       "#7f8c8d".parseColor, "#120d0d".parseColor, "#eee8aa".parseColor],
