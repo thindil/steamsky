@@ -45,9 +45,9 @@ proc updateTooltips() {.raises: [], tags: [], contractual.} =
   ## Update the tooltips of the button with order for everyone/selected crew
   ## member in dependency on the selection of the crew members on the list.
   let
-    buttonsFrame = mainPaned & ".shipinfoframe.crew.canvas.frame.ordersbuttons"
-    selection = hasSelection()
-  var button = buttonsFrame & ".label"
+    buttonsFrame: string = mainPaned & ".shipinfoframe.crew.canvas.frame.ordersbuttons"
+    selection: bool = hasSelection()
+  var button: string = buttonsFrame & ".label"
   if tclEval2(script = "winfo exists " & button) == "1":
     tclEval(script = button & " configure -text {Orders for " & (
         if selection: "selected" else: "all") & ":}")
@@ -76,8 +76,8 @@ proc getHighestSkill(memberIndex: Natural): string {.raises: [],
   ##
   ## Returns the name of the highest skill of the selected crew member
   var
-    highestLevel = 1
-    highestIndex = 1
+    highestLevel: Positive = 1
+    highestIndex: Positive = 1
   for skill in playerShip.crew[memberIndex].skills:
     if skill.level > highestLevel:
       highestLevel = skill.level
@@ -95,15 +95,15 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
   ## * page  - the current page of the list to show
   ## * skill - the currently selected skill on the list of skills to show
   let
-    crewInfoFrame = mainPaned & ".shipinfoframe.crew.canvas.frame"
-    gridSize = tclEval2(script = "grid size " & crewInfoFrame).split(sep = ' ')
-    rows = try:
+    crewInfoFrame: string = mainPaned & ".shipinfoframe.crew.canvas.frame"
+    gridSize: seq[string] = tclEval2(script = "grid size " & crewInfoFrame).split(sep = ' ')
+    rows: Natural = try:
         gridSize[1].parseInt
       except ValueError:
         showError(message = "Can't get the size of the grid. Result: " & $gridSize)
         return
   deleteWidgets(startIndex = 1, endIndex = rows - 1, frame = crewInfoFrame)
-  var needRepair, needClean = false
+  var needRepair, needClean: bool = false
   for module in playerShip.modules:
     if module.durability < module.maxDurability:
       needRepair = true
@@ -113,12 +113,12 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
     if needRepair and needClean:
       break
   var
-    buttonsFrame = crewInfoFrame & ".ordersbuttons"
-    ordersLabel = buttonsFrame & ".label"
+    buttonsFrame: string = crewInfoFrame & ".ordersbuttons"
+    ordersLabel: string = buttonsFrame & ".label"
   tclEval(script = "ttk::frame " & buttonsFrame)
   tclEval(script = "ttk::label " & ordersLabel & " -text {Orders for all:}")
   tclEval(script = "grid " & ordersLabel & " -padx {5 2}")
-  var button = buttonsFrame & ".rest"
+  var button: string = buttonsFrame & ".rest"
   tclEval(script = "ttk::button " & button & " -image goresticon -command {OrderForAll Rest}")
   tclEval(script = "grid " & button & " -row 0 -column 1 -padx {0 2}")
   if needClean:
@@ -139,10 +139,10 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
   tclEval(script = "ttk::label " & ordersLabel & " -text {Skill:}")
   tclEval(script = "tooltip::tooltip " & ordersLabel & " \"Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.\"")
   tclEval(script = "grid " & ordersLabel & " -padx {5 2}")
-  var skills = " {Highest}"
+  var skills: string = " {Highest}"
   for skill in skillsList.values:
     skills.add(y = " {" & skill.name & "}")
-  let skillBox = crewInfoFrame & ".selectskill.combox"
+  let skillBox: string = crewInfoFrame & ".selectskill.combox"
   tclEval(script = "ttk::combobox " & skillBox &
       " -state readonly -values [list" & skills & "]")
   tclEval(script = "bind " & skillBox & " <<ComboboxSelected>> SelectCrewSkill")
@@ -170,8 +170,8 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
     crewIndexes = @[]
     for i in playerShip.crew.low .. playerShip.crew.high:
       crewIndexes.add(y = i)
-  var currentRow = 1
-  let startRow = ((page - 1) * gameSettings.listsLimit) + 1
+  var currentRow: Positive = 1
+  let startRow: Positive = ((page - 1) * gameSettings.listsLimit) + 1
   for index, mIndex in crewIndexes:
     if currentRow < startRow:
       currentRow.inc
@@ -206,7 +206,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
         maxValue = SkillRange.high,
         tooltip = "The current health level of the selected crew member",
         command = "ShowMemberInfo " & $(mIndex + 1), column = 5)
-    var tiredLevel = playerShip.crew[mIndex].tired - playerShip.crew[
+    var tiredLevel: int = playerShip.crew[mIndex].tired - playerShip.crew[
         mIndex].attributes[conditionIndex].level
     if tiredLevel < 0:
       tiredLevel = 0
@@ -240,7 +240,7 @@ proc updateCrewInfo*(page: Positive = 1; skill: Natural = 0) {.raises: [],
         " " & $skill)
   updateTable(table = crewTable)
   tclEval(script = "update")
-  let shipCanvas = mainPaned & ".shipinfoframe.crew.canvas"
+  let shipCanvas: string = mainPaned & ".shipinfoframe.crew.canvas"
   tclEval(script = shipCanvas & " configure -scrollregion [list " & tclEval2(
       script = shipCanvas & " bbox all") & "]")
   tclEval(script = shipCanvas & " xview moveto 0.0")
@@ -309,7 +309,7 @@ proc toggleCrewMemberCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ToggleCrewMember rowindex crewindex
   ## Rowindex is the index of the row in which is the selected crew member,
   ## crewindex is the index of the selected crew member.
-  let row = try:
+  let row: int = try:
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get the row.")
@@ -337,7 +337,7 @@ proc dismissCommand(clientData: cint; interp: PInterp; argc: cint;
   ## Dismiss memberindex
   ## Memberindex is the index of the player ship crew member which will be
   ## dismissed
-  let memberIndex = try:
+  let memberIndex: int = try:
       ($argv[1]).parseInt
     except:
       return showError(message = "Can't get the crew member index.")
@@ -363,7 +363,7 @@ proc setCrewOrderCommand(clientData: cint; interp: PInterp; argc: cint;
   ## index of the member in the player ship crew which will be have order set
   ## and optional parameter moduleindex is index of module in player ship
   ## which will be assigned to the crew member
-  var moduleIndex = -1
+  var moduleIndex: int = -1
   if argc == 4:
     moduleIndex = try:
         ($argv[3]).parseInt - 1
@@ -398,17 +398,17 @@ proc showMemberTabCommand(clientData: cint; interp: PInterp; argc: cint;
   ##
   ## Tcl:
   ## ShowMemberTab
-  let memberCanvas = ".memberdialog.canvas"
+  let memberCanvas: string = ".memberdialog.canvas"
   tclEval(script = memberCanvas & " delete info")
   let
-    tabName = tclGetVar(varName = "newtab")
-    frame = memberCanvas & "." & tabName
+    tabName: string = tclGetVar(varName = "newtab")
+    frame: string = memberCanvas & "." & tabName
   tclEval(script = memberCanvas & " create window 32 0 -anchor nw -window " &
       frame & " -tag info")
   tclEval(script = "update")
   tclEval(script = memberCanvas & " configure -scrollregion [list " & tclEval2(
       script = memberCanvas & " bbox all") & "]")
-  var tabButton = ".memberdialog.buttonbox.priorities"
+  var tabButton: string = ".memberdialog.buttonbox.priorities"
   if tclEval2(script = "winfo ismapped " & tabButton) == "0":
     tabButton = ".memberdialog.buttonbox.general"
   tclEval(script = "bind " & tabButton & " <Tab> {}")
@@ -438,29 +438,29 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   ## ShowMemberInfo memberindex
   ## MemberIndex is the index of the crew member to show
   let
-    memberIndex = try:
+    memberIndex: int = try:
         ($argv[1]).parseInt - 1
       except:
         return showError(message = "Can't get the member index.")
-    member = playerShip.crew[memberIndex]
-    memberDialog = createDialog(name = ".memberdialog", title = member.name &
+    member: MemberData = playerShip.crew[memberIndex]
+    memberDialog: string = createDialog(name = ".memberdialog", title = member.name &
         "'s details", columns = 2)
-    yScroll = memberDialog & ".yscroll"
+    yScroll: string = memberDialog & ".yscroll"
   tclEval(script = "ttk::scrollbar " & yScroll & " -orient vertical -command [list .memberdialog.canvas yview]")
   tclEval(script = "SetScrollbarBindings " & memberDialog & " " & yScroll)
-  let memberCanvas = memberDialog & ".canvas"
+  let memberCanvas: string = memberDialog & ".canvas"
   tclEval(script = "canvas " & memberCanvas & " -yscrollcommand [list " &
       yScroll & " set]")
   tclEval(script = "SetScrollbarBindings " & memberCanvas & " " & yScroll)
-  var frame = memberDialog & ".buttonbox"
+  var frame: string = memberDialog & ".buttonbox"
   tclEval(script = "ttk::frame " & frame)
   tclSetVar(varName = "newtab", newValue = "general")
-  var tabButton = frame & ".general"
+  var tabButton: string = frame & ".general"
   tclEval(script = "ttk::radiobutton " & tabButton & " -text General -stat selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab")
   tclEval(script = "grid " & tabButton)
-  let buttonsFrame = memberDialog & ".buttons"
+  let buttonsFrame: string = memberDialog & ".buttons"
   tclEval(script = "ttk::frame " & buttonsFrame)
-  let closeButton = buttonsFrame & ".button"
+  let closeButton: string = buttonsFrame & ".button"
   tclEval(script = "bind " & tabButton & " <Escape> {" & closeButton & " invoke;break}")
   if member.skills.len > 0 and member.contractLength != 0:
     tabButton = frame & ".stats"
@@ -480,7 +480,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   tclEval(script = "grid " & frame & " -pady {5 0} -columnspan 2")
   tclEval(script = "grid " & memberCanvas & " -sticky nwes -pady 5 -padx 5")
   tclEval(script = "grid " & yScroll & " -sticky ns -pady 5 -padx {0 5} -row 2 -column 1")
-  var button = buttonsFrame & ".button1"
+  var button: string = buttonsFrame & ".button1"
   tclEval(script = "ttk::button " & button &
       " -text {Inventory} -image {inventoryicon} -command {" & closeButton &
       " invoke;ShowMemberInventory " & $argv[1] & "} -style Dialog.TButton")
@@ -503,7 +503,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
   # General info about the selected crew member
   frame = memberCanvas & ".general"
   tclEval(script = "ttk::frame " & frame)
-  var memberLabel: string
+  var memberLabel: string = ""
 
   proc addLabel(name, text: string; text2: string = "") {.raises: [], tags: [],
       contractual.} =
@@ -513,7 +513,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     ## * text  - the text to display on the first label
     ## * text2 - the text to display on the second label. If empty, don't add
     ##           the second label
-    let labelBox = name
+    let labelBox: string = name
     tclEval(script = "ttk::frame " & labelBox & " -width 440")
     memberLabel = labelBox & ".label1"
     tclEval(script = "ttk::label " & memberLabel & " -text {" & text & "} -wraplength 220")
@@ -528,7 +528,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "SetScrollbarBindings " & labelBox & " " & yScroll)
 
   addLabel(name = frame & ".nameinfo", text = "Name: ", text2 = member.name)
-  var infoButton = frame & ".nameinfo.button"
+  var infoButton: string = frame & ".nameinfo.button"
   tclEval(script = "ttk::button " & infoButton & " -image editicon -command {" &
       closeButton & " invoke;GetString {Enter a new name for the " &
       member.name & ":} crewname" & $argv[1] & " {Renaming crew member} {Rename}} -style Small.TButton")
@@ -552,7 +552,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
             text2 = "Heavily wounded")
       else:
         discard
-  var tiredPoints = member.tired - member.attributes[conditionIndex].level
+  var tiredPoints: int = member.tired - member.attributes[conditionIndex].level
   if tiredPoints < 0:
     tiredPoints = 0
   if tiredPoints > 0:
@@ -653,7 +653,7 @@ proc showMemberInfoCommand(clientData: cint; interp: PInterp; argc: cint;
     tclEval(script = "bind " & infoButton & " <Tab> {focus " & frame & ".orderinfo.button;break}")
   else:
     tclEval(script = "bind " & infoButton & " <Tab> {focus " & closeButton & ";break}")
-  let faction = try:
+  let faction: FactionData = try:
       factionsList[member.faction]
     except:
       return showError(message = "Can't get the crew member's faction.")
