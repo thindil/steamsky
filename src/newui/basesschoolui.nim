@@ -50,6 +50,23 @@ proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
           0: "Untrained" else: getSkillLevelName(
           skillLevel = skillLevel).strip))
 
+proc setTrainingCost(dialog: var GameDialog){.raises: [], tags: [RootEffect],
+    contractual.} =
+  ## Set the one training session cost for the selected skill of the selected
+  ## crew member
+  ##
+  ## * dialog - the current in-game dialog displayed on the screen
+  ##
+  ## Returns the modified parameter dialog. It is modified if any error
+  ## happened.
+  oneTrainCost = try:
+      trainCost(memberIndex = crewIndex, skillIndex = skillIndex)
+    except:
+      dialog = setError(message = "Can't count the training cost.")
+      return
+  timesCost = oneTrainCost * amount
+  minCost = oneTrainCost
+
 proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
     contractual.} =
   ## Set the data for school UI
@@ -76,13 +93,7 @@ proc setSchool*(dialog: var GameDialog) {.raises: [], tags: [RootEffect],
   for member in playerShip.crew:
     crewList.add(y = member.name)
   setSchoolSkills()
-  oneTrainCost = try:
-      trainCost(memberIndex = crewIndex, skillIndex = skillIndex)
-    except:
-      dialog = setError(message = "Can't count the training cost.")
-      return
-  timesCost = oneTrainCost * amount
-  minCost = oneTrainCost
+  setTrainingCost(dialog = dialog)
 
 proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
     tags: [RootEffect], contractual.} =
@@ -117,12 +128,13 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if newMember != crewIndex:
     crewIndex = newMember
     setSchoolSkills()
+    setTrainingCost(dialog = dialog)
   label(str = "in", alignment = centered)
   let newSkill = comboList(items = schoolSkillsList,
       selected = skillIndex, itemHeight = 25, x = 300, y = 150)
   if newSkill != skillIndex:
     skillIndex = newSkill
-    setSchoolSkills()
+    setTrainingCost(dialog = dialog)
   setLayoutRowDynamic(height = 30, cols = 1)
   if option(label = "Selected amount of times", selected = tType == times):
     tType = times
