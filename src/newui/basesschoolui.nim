@@ -138,7 +138,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
         dialog = setError(message = "Can't count the new training cost.")
         return
   label(str = "Minimal cost:")
-  label(str = $timesCost & " " & moneyName)
+  colorLabel(str = $timesCost & " " & moneyName, color = theme.colors[goldenColor])
   setLayoutRowDynamic(height = 30, cols = 1)
   if option(label = "Selected maximum cost of training", selected = tType == cost):
     tType = cost
