@@ -40,19 +40,16 @@ proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
   ## Set the skills list for the selected crew member
   schoolSkillsList = @[]
   for index, skill in skillsList:
-    var
-      skillLevel: Natural = 0
-      skillIndex: int = -1
-    for index2, skill2 in playerShip.crew[crewIndex].skills:
+    var skillLevel = 0
+    for skill2 in playerShip.crew[crewIndex].skills:
       if skill2.index == index:
         skillLevel = skill2.level
-        skillIndex = index2
         break
-    if skillLevel < 100:
+    if skillLevel != 100:
       schoolSkillsList.add(y = skill.name & ": " & (if skillLevel ==
           0: "Untrained" else: getSkillLevelName(
           skillLevel = skillLevel).strip))
-      skillsIndexes.add(y = skillIndex)
+      skillsIndexes.add(y = index)
 
 proc setTrainingCost(dialog: var GameDialog){.raises: [], tags: [RootEffect],
     contractual.} =
@@ -64,7 +61,7 @@ proc setTrainingCost(dialog: var GameDialog){.raises: [], tags: [RootEffect],
   ## Returns the modified parameter dialog. It is modified if any error
   ## happened.
   oneTrainCost = try:
-      trainCost(memberIndex = crewIndex, skillIndex = skillIndex)
+      trainCost(memberIndex = crewIndex, skillIndex = skillsIndexes[skillIndex])
     except:
       dialog = setError(message = "Can't count the training cost.")
       return
