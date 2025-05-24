@@ -34,21 +34,25 @@ var
   crewIndex, skillIndex: Natural = 0
   amount, timesCost, minCost, oneTrainCost: Positive = 1
   tType: TrainingType = times
+  skillsIndexes: seq[Natural] = @[]
 
 proc setSchoolSkills*(){.raises: [], tags: [], contractual.} =
   ## Set the skills list for the selected crew member
   schoolSkillsList = @[]
   for index, skill in skillsList:
-    var skillLevel = 0
-    for skill2 in playerShip.crew[crewIndex].skills:
+    var
+      skillLevel: Natural = 0
+      skillIndex: int = -1
+    for index2, skill2 in playerShip.crew[crewIndex].skills:
       if skill2.index == index:
         skillLevel = skill2.level
-        if skillLevel == 100:
-          break
-    if skillLevel != 100:
+        skillIndex = index2
+        break
+    if skillLevel < 100:
       schoolSkillsList.add(y = skill.name & ": " & (if skillLevel ==
           0: "Untrained" else: getSkillLevelName(
           skillLevel = skillLevel).strip))
+      skillsIndexes.add(y = skillIndex)
 
 proc setTrainingCost(dialog: var GameDialog){.raises: [], tags: [RootEffect],
     contractual.} =
@@ -144,11 +148,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
       step = 1, incPerPixel = 1)
   if newAmount != amount:
     amount = newAmount
-    timesCost = try:
-        trainCost(memberIndex = crewIndex, skillIndex = skillIndex) * amount
-      except:
-        dialog = setError(message = "Can't count the new training cost.")
-        return
+    timesCost = oneTrainCost * amount
   label(str = "Minimal cost:")
   colorLabel(str = $timesCost & " " & moneyName, color = theme.colors[goldenColor])
   setLayoutRowDynamic(height = 30, cols = 1)
