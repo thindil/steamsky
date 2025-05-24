@@ -773,7 +773,11 @@ proc nkFillCircle(b: ptr nk_command_buffer; rect: NimRect; c: nk_color)
     t = commandCircleFilled, cmd.sizeof))
   if cmd == nil:
     return
-  ## TODO: continue here
+  cmd.x = rect.x.cshort
+  cmd.y = rect.y.cshort
+  cmd.w = max(0, rect.w).cushort
+  cmd.h = max(0, rect.h).cushort
+  cmd.color = c
 
 proc nkDrawImage(b: ptr nk_command_buffer; r: NimRect; img: PImage; col: nk_color)
   {.raises: [], tags: [RootEffect], contractual.} =
@@ -1307,9 +1311,12 @@ proc nkDrawSymbol(`out`: ptr nk_command_buffer; `type`: SymbolType;
       if `type` == rectOutline:
         nkFillRect(b = `out`, rect = NimRect(x: drawRect.x, y: drawRect.y,
           w: drawRect.w, h: drawRect.h), rounding = 0, c = background)
-      else:
-        nkFillCircle(b = `out`, rect = content, c = foreground)
-    # TODO: continue here after nkFillCircle
+    else:
+      nkFillCircle(b = `out`, rect = content, c = foreground)
+      if `type` == circleOutline:
+        nkFillCircle(b = `out`, rect = NimRect(x: drawRect.x, y: drawRect.y,
+          w: drawRect.w, h: drawRect.h), c = background)
+    # TODO: continue here
   else:
     discard
 
