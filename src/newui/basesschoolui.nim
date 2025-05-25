@@ -20,7 +20,7 @@
 
 import std/[strutils, tables]
 import contracts, nuklear/nuklear_sdl_renderer
-import ../[basestrade, crew, crewinventory, game, types]
+import ../[basestrade, config, crew, crewinventory, game, types]
 import coreui, dialogs, errordialog, header, messagesui, themes
 
 type
@@ -169,6 +169,7 @@ proc showSchool*(state: var GameState; dialog: var GameDialog) {.raises: [],
   if newCost != minCost:
     minCost = newCost
   showMessagesButtons()
-  setLayoutRowDynamic(height = windowHeight - 20, cols = 1)
+  setLayoutRowDynamic(height = windowHeight -
+      gameSettings.messagesPosition.float - 20, cols = 1)
   showLastMessages(theme = theme, dialog = dialog)
   showGameMenu(dialog = dialog)
